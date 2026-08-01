@@ -1,0 +1,44 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const base = import.meta.env.BASE_URL;
+---
+
+<Layout page="404" title="找不到頁面">
+  <section class="not-found">
+    <div class="plus">🍀</div>
+    <h1>這一頁不在這裡</h1>
+    <p>網址可能打錯了，或是頁面搬家了。</p>
+    <a href={base} class="home-link">回首頁 →</a>
+  </section>
+</Layout>
+
+<style>
+  .not-found {
+    width: 88%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 120px var(--space-h);
+    text-align: center;
+  }
+  .plus { font-size: 48px; margin-bottom: 24px; }
+  .not-found h1 {
+    font-family: var(--font-head);
+    font-size: var(--fs-32);
+    margin: 0 0 12px;
+  }
+  .not-found p {
+    font-size: var(--fs-17);
+    color: var(--c-body-soft);
+    margin: 0 0 32px;
+  }
+  .home-link {
+    display: inline-block;
+    padding: 14px 28px;
+    border-radius: var(--radius-pill);
+    background: var(--c-brand);
+    color: #fff;
+    font-size: var(--fs-17);
+  }
+  .home-link:hover { color: #fff; }
+</style>

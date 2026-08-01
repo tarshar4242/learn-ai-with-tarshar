@@ -22,6 +22,13 @@ const audiencesJson = JSON.stringify(content.audiences).replace(/</g, '\\u003c')
     {description && <meta name="description" content={description} />}
     {noindex && <meta name="robots" content="noindex,nofollow" />}
     <link rel="icon" href={`${base}favicon.svg`} type="image/svg+xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Learn AI with Tarshar" />
+    <meta property="og:title" content={pageTitle} />
+    {description && <meta property="og:description" content={description} />}
+    <meta property="og:image" content={new URL(`${base}images/hero-illustration.png`, Astro.site)} />
+    <meta name="twitter:card" content="summary_large_image" />
   </head>
   <body>
     <div class="shell">
