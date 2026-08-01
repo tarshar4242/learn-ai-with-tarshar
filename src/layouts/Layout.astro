@@ -41,6 +41,10 @@ const audiencesJson = JSON.stringify(content.audiences).replace(/</g, '\\u003c')
       </div>
     </div>
 
+    {page !== 'admin' && (
+      <a href={`${base}admin/`} class="admin-fab" aria-label="開啟內容後台">⚙ 後台</a>
+    )}
+
     <script is:inline set:html={`window.__AUDIENCES__ = ${audiencesJson}; window.__BASE_URL__ = ${JSON.stringify(base)};`} />
     <script>
       import '../scripts/reveal.js';
@@ -62,4 +66,24 @@ const audiencesJson = JSON.stringify(content.audiences).replace(/</g, '\\u003c')
     min-width: 0;
   }
   main { flex: 1; }
+
+  .admin-fab {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 70;
+    padding: 12px 20px;
+    border-radius: var(--radius-pill);
+    border: 1px solid rgba(31, 107, 69, .16);
+    background: rgba(255, 255, 255, .96);
+    color: var(--c-brand);
+    font-size: var(--fs-15);
+    box-shadow: 0 10px 28px rgba(31, 107, 69, .18);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  .admin-fab:hover { color: var(--c-brand); transform: translateY(-2px); }
+  @media (max-width: 900px) {
+    .admin-fab { right: 14px; bottom: 14px; padding: 10px 16px; font-size: var(--fs-13); }
+  }
 </style>
