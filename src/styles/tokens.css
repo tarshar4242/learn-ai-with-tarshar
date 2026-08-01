@@ -22,11 +22,11 @@
   --c-accent: #7CA85C;
   --c-accent-chip-bg: rgba(124, 191, 106, .14);
   --c-accent-chip-bg-strong: rgba(124, 191, 106, .16);
-  --c-border: rgba(31, 107, 69, .10);
-  --c-border-strong: rgba(31, 107, 69, .12);
+  --c-border: rgba(31, 107, 69, .22);
+  --c-border-strong: rgba(31, 107, 69, .28);
   --c-border-form: rgba(31, 107, 69, .18);
-  --c-shadow: rgba(31, 107, 69, .05);
-  --c-shadow-strong: rgba(31, 107, 69, .12);
+  --c-shadow: rgba(31, 107, 69, .10);
+  --c-shadow-strong: rgba(31, 107, 69, .20);
   --c-warn-text: #8A6220;
   --c-warn-bg: rgba(184, 134, 59, .12);
 
@@ -55,8 +55,15 @@
 
   /* 版面 */
   --sidebar-width: 286px;
-  --content-max: 1040px;
+  --content-max: 1400px;
   --breakpoint-narrow: 900px;
+}
+
+/* 內容容器：填滿可用寬度的 88%，大螢幕不留過多空白，超寬螢幕才封頂 */
+.container-width {
+  width: 88%;
+  max-width: var(--content-max);
+  margin: 0 auto;
 }
 
 * { box-sizing: border-box; }
