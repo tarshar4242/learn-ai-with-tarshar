@@ -1,0 +1,101 @@
+:root {
+  /* 字型 */
+  --font-head: "Noto Serif TC Variable", "Noto Serif TC", serif;
+  --font-body: "Noto Sans TC Variable", "Noto Sans TC", system-ui, sans-serif;
+
+  /* 色彩 */
+  --c-bg: #FAF9F3;
+  --c-bg-soft: #F1F6EE;
+  --c-bg-soft-2: #F3F7F0;
+  --c-bg-soft-3: #F6F8F3;
+  --c-bg-form: #FBFCFA;
+  --c-ink: #24352B;
+  --c-ink-strong: #3B4C42;
+  --c-body: #4A5C51;
+  --c-body-soft: #5A6C61;
+  --c-muted: #6C7E72;
+  --c-faint: #7A8B80;
+  --c-faintest: #8A9A8E;
+  --c-lightest: #9BAA9F;
+  --c-brand: #1F6B45;
+  --c-brand-hover: #2F7A4E;
+  --c-accent: #7CA85C;
+  --c-accent-chip-bg: rgba(124, 191, 106, .14);
+  --c-accent-chip-bg-strong: rgba(124, 191, 106, .16);
+  --c-border: rgba(31, 107, 69, .10);
+  --c-border-strong: rgba(31, 107, 69, .12);
+  --c-border-form: rgba(31, 107, 69, .18);
+  --c-shadow: rgba(31, 107, 69, .05);
+  --c-shadow-strong: rgba(31, 107, 69, .12);
+  --c-warn-text: #8A6220;
+  --c-warn-bg: rgba(184, 134, 59, .12);
+
+  /* 字級固定級距 */
+  --fs-12: 12px;
+  --fs-13: 13px;
+  --fs-15: 15px;
+  --fs-17: 17px;
+  --fs-21: 21px;
+  --fs-26: 26px;
+  --fs-32: 32px;
+  --fs-hero: clamp(32px, 3.8vw, 46px);
+  --fs-page-title: clamp(32px, 4.2vw, 44px);
+  --fs-hero-lg: clamp(36px, 4.4vw, 54px);
+
+  /* 圓角 */
+  --radius-sm: 9px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+
+  /* 間距 */
+  --space-section-desktop: 72px;
+  --space-section-mobile: 48px;
+  --space-h: 32px;
+
+  /* 版面 */
+  --sidebar-width: 286px;
+  --content-max: 1040px;
+  --breakpoint-narrow: 900px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--c-bg);
+  font-family: var(--font-body);
+  color: var(--c-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--c-brand);
+  text-decoration: none;
+  transition: color .2s ease;
+}
+a:hover { color: var(--c-accent); }
+
+img { display: block; max-width: 100%; }
+
+/* 捲動淡入，供 reveal.js 切換 */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity .5s ease, transform .5s ease;
+}
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

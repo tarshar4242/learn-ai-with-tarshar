@@ -1,0 +1,253 @@
+---
+import { NAV_ITEMS } from '../lib/nav.js';
+import content from '../data/content.json';
+
+const base = import.meta.env.BASE_URL;
+const currentPage = Astro.props.page;
+const series = content.series;
+---
+
+<aside class="sidebar" id="sidebar">
+  <div class="brand">
+    <a href={base} aria-label="回首頁">
+      <img src={`${base}images/logo-tarshar.png`} alt="Learn AI with Tarshar" />
+    </a>
+  </div>
+
+  <nav class="nav">
+    {NAV_ITEMS.map((item) => {
+      const active = currentPage === item.key;
+      return (
+        <a href={`${base}${item.href}`} class={active ? 'active' : ''} data-nav-link>
+          <span class="dot"></span>
+          <span>{item.label}</span>
+        </a>
+      );
+    })}
+  </nav>
+
+  <div class="series-list">
+    <div class="series-label">SERIES</div>
+    <div class="series-links">
+      {series.map((s) => (
+        <a href={s.url} class="series-link" data-aud={s.aud.length ? s.aud.join(',') : undefined} hidden={s.aud.length > 0}>
+          <span class="bar" style={`background:${s.accent}`}></span>
+          <span class="title">{s.title}</span>
+        </a>
+      ))}
+    </div>
+  </div>
+
+  <div class="bottom">
+    <div class="identity-badge" id="identity-badge" hidden>
+      <div class="identity-label">你的專屬入口</div>
+      <div class="identity-name" id="identity-name"></div>
+      <div class="identity-hint">這個網址已為你開啟專屬內容</div>
+    </div>
+    <a href={`${base}courses/`} class="cta">{content.text.ctaPrimary}</a>
+    <div class="copyright">© 2026 Learn AI with Tarshar</div>
+  </div>
+</aside>
+
+<div class="scrim" id="nav-scrim"></div>
+
+<button class="hamburger" id="nav-toggle" aria-label="開啟目錄" aria-expanded="false">
+  <span>☰ 目錄</span>
+</button>
+
+<style>
+  .sidebar {
+    width: var(--sidebar-width);
+    flex: 0 0 var(--sidebar-width);
+    display: flex;
+    flex-direction: column;
+    background: var(--c-bg-soft);
+    border-right: 1px solid var(--c-border);
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+
+  .brand { padding: 26px 22px 18px; }
+  .brand img { height: 28px; width: auto; }
+
+  .nav {
+    padding: 8px 14px;
+    display: grid;
+    gap: 4px;
+  }
+  .nav a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 14px;
+    border-radius: 12px;
+    font-size: var(--fs-15);
+    color: var(--c-body);
+    transition: background .2s ease;
+  }
+  .nav a:hover { background: var(--c-accent-chip-bg-strong); color: var(--c-body); }
+  .nav a.active {
+    background: rgba(31, 107, 69, .10);
+    color: var(--c-brand);
+    font-weight: 500;
+  }
+  .nav .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(31, 107, 69, .22);
+    flex: 0 0 auto;
+  }
+  .nav a.active .dot { background: var(--c-brand); }
+
+  .series-list {
+    padding: 20px 22px 8px;
+    margin-top: 14px;
+    border-top: 1px solid var(--c-border);
+  }
+  .series-label {
+    font-size: var(--fs-12);
+    letter-spacing: .2em;
+    color: var(--c-lightest);
+    margin-bottom: 14px;
+  }
+  .series-links { display: grid; gap: 2px; }
+  .series-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 8px;
+    border-radius: 8px;
+    font-size: var(--fs-13);
+    color: var(--c-body-soft);
+    transition: background .2s ease;
+  }
+  .series-link:hover { background: rgba(124, 191, 106, .14); color: var(--c-body-soft); }
+  .series-link .bar {
+    width: 3px;
+    height: 14px;
+    border-radius: 2px;
+    flex: 0 0 auto;
+  }
+  .series-link .title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .bottom {
+    margin-top: auto;
+    padding: 18px 22px 22px;
+  }
+  .identity-badge {
+    padding: 14px 16px;
+    border-radius: var(--radius-md);
+    background: rgba(31, 107, 69, .07);
+    margin-bottom: 14px;
+  }
+  .identity-label {
+    font-size: var(--fs-12);
+    letter-spacing: .16em;
+    color: var(--c-lightest);
+  }
+  .identity-name {
+    font-size: var(--fs-15);
+    color: var(--c-brand);
+    margin-top: 6px;
+  }
+  .identity-hint {
+    font-size: var(--fs-12);
+    color: var(--c-faintest);
+    margin-top: 6px;
+    line-height: 1.7;
+  }
+  .cta {
+    display: block;
+    text-align: center;
+    padding: 13px 18px;
+    border-radius: var(--radius-pill);
+    background: var(--c-brand);
+    color: #fff;
+    font-size: var(--fs-15);
+    font-weight: 500;
+    white-space: nowrap;
+    box-shadow: 0 8px 18px rgba(31, 107, 69, .22);
+    transition: transform .2s ease;
+  }
+  .cta:hover { transform: translateY(-2px); color: #fff; }
+  .copyright {
+    font-size: var(--fs-12);
+    color: var(--c-lightest);
+    text-align: center;
+    margin-top: 16px;
+    letter-spacing: .04em;
+  }
+
+  .scrim { display: none; }
+  .hamburger { display: none; }
+
+  @media (max-width: 900px) {
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      z-index: 60;
+      box-shadow: 0 0 40px rgba(31, 107, 69, .18);
+      transform: translateX(-103%);
+      transition: transform .3s cubic-bezier(.22, .7, .3, 1);
+    }
+    .sidebar.is-open { transform: translateX(0); }
+
+    .scrim {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 55;
+      background: rgba(20, 40, 28, .34);
+    }
+    .scrim.is-open { display: block; }
+
+    .hamburger {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--c-border-form);
+      background: #fff;
+      font-family: inherit;
+      font-size: var(--fs-15);
+      color: var(--c-ink);
+      cursor: pointer;
+      position: fixed;
+      top: 14px;
+      left: 14px;
+      z-index: 65;
+      box-shadow: 0 4px 14px rgba(31, 107, 69, .12);
+    }
+  }
+</style>
+
+<script>
+  const sidebar = document.getElementById('sidebar');
+  const scrim = document.getElementById('nav-scrim');
+  const toggle = document.getElementById('nav-toggle');
+
+  function closeNav() {
+    sidebar?.classList.remove('is-open');
+    scrim?.classList.remove('is-open');
+    toggle?.setAttribute('aria-expanded', 'false');
+  }
+  function openNav() {
+    sidebar?.classList.add('is-open');
+    scrim?.classList.add('is-open');
+    toggle?.setAttribute('aria-expanded', 'true');
+  }
+  toggle?.addEventListener('click', () => {
+    sidebar?.classList.contains('is-open') ? closeNav() : openNav();
+  });
+  scrim?.addEventListener('click', closeNav);
+</script>

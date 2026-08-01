@@ -1,0 +1,57 @@
+---
+import '@fontsource-variable/noto-serif-tc';
+import '@fontsource-variable/noto-sans-tc';
+import Sidebar from '../components/Sidebar.astro';
+import Footer from '../components/Footer.astro';
+import content from '../data/content.json';
+import '../styles/tokens.css';
+
+const { title, description, page } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const pageTitle = title ? `${title} | Learn AI with Tarshar` : 'Learn AI with Tarshar';
+const audiencesJson = JSON.stringify(content.audiences).replace(/</g, '\\u003c');
+---
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{pageTitle}</title>
+    {description && <meta name="description" content={description} />}
+    <link rel="icon" href={`${base}favicon.svg`} type="image/svg+xml" />
+  </head>
+  <body>
+    <div class="shell">
+      <Sidebar page={page} />
+      <div class="main-wrap">
+        <main>
+          <slot />
+        </main>
+        <Footer />
+      </div>
+    </div>
+
+    <script is:inline set:html={`window.__AUDIENCES__ = ${audiencesJson}; window.__BASE_URL__ = ${JSON.stringify(base)};`} />
+    <script>
+      import '../scripts/reveal.js';
+      import '../scripts/audience.js';
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  .shell {
+    display: flex;
+    min-height: 100vh;
+    background: var(--c-bg);
+  }
+  .main-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+  main { flex: 1; }
+</style>
