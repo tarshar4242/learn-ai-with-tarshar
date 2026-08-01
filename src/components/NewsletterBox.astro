@@ -1,0 +1,72 @@
+---
+import content from '../data/content.json';
+const { text } = content;
+---
+
+<div class="newsletter-box">
+  <div class="title">{text.newsletterTitle}</div>
+  <p class="desc">{text.newsletterDesc}</p>
+  <!--
+    TODO（Tarshar 需要做的一步）：
+    這裡串接免費表單服務 Formspree。請到 https://formspree.io 免費註冊一個帳號、
+    建立一個表單，把下面 action 網址裡的 YOUR_FORM_ID 換成她給妳的表單代碼，
+    換完存檔、上傳到 GitHub，表單就會真的把訂閱者的 Email 寄進妳的信箱。
+    這一步需要 Tarshar 本人註冊帳號，不能由 AI 代辦。
+  -->
+  <form class="subscribe-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+    <input type="email" name="email" placeholder="你的 Email" required />
+    <button type="submit">訂閱</button>
+  </form>
+</div>
+
+<style>
+  .newsletter-box {
+    padding: 32px 30px;
+    background: var(--c-brand);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 20px 44px rgba(31, 107, 69, .2);
+  }
+  .title {
+    font-family: var(--font-head);
+    font-size: var(--fs-21);
+    color: #fff;
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+  .desc {
+    font-size: var(--fs-15);
+    line-height: 1.9;
+    color: rgba(255, 255, 255, .78);
+    margin: 0 0 22px;
+  }
+  .subscribe-form {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .subscribe-form input {
+    flex: 1 1 170px;
+    padding: 12px 16px;
+    border-radius: var(--radius-pill);
+    border: 1px solid rgba(255, 255, 255, .28);
+    background: rgba(255, 255, 255, .10);
+    color: #fff;
+    font-size: var(--fs-15);
+    font-family: inherit;
+    outline: none;
+  }
+  .subscribe-form input::placeholder { color: rgba(255, 255, 255, .6); }
+  .subscribe-form button {
+    padding: 12px 22px;
+    border-radius: var(--radius-pill);
+    border: none;
+    background: #fff;
+    color: var(--c-brand);
+    font-size: var(--fs-15);
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    transition: transform .2s ease;
+  }
+  .subscribe-form button:hover { transform: translateY(-2px); }
+</style>

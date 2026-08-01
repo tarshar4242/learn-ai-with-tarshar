@@ -1,0 +1,46 @@
+---
+const { post } = Astro.props;
+const restricted = post.aud && post.aud.length > 0;
+---
+
+<a
+  href={post.url}
+  target="_blank"
+  rel="noopener"
+  class="post-row"
+  data-aud={restricted ? post.aud.join(',') : undefined}
+  hidden={restricted}
+>
+  <span class="date">{post.date}</span>
+  <span class="text">
+    <span class="title">{post.title}</span>
+    <span class="tag">{post.tag}</span>
+  </span>
+</a>
+
+<style>
+  .post-row {
+    display: grid;
+    grid-template-columns: 88px 1fr;
+    gap: 16px;
+    align-items: baseline;
+    padding: 16px 12px;
+    border-radius: 12px;
+    border-bottom: 1px solid var(--c-border);
+    transition: background .2s ease;
+  }
+  .post-row:hover { background: rgba(237, 245, 236, .7); }
+  .date { font-size: var(--fs-13); color: var(--c-faintest); }
+  .title {
+    display: block;
+    font-size: var(--fs-17);
+    color: var(--c-ink);
+    line-height: 1.6;
+  }
+  .tag {
+    display: block;
+    font-size: var(--fs-13);
+    color: var(--c-faintest);
+    margin-top: 6px;
+  }
+</style>
