@@ -6,7 +6,7 @@ import Footer from '../components/Footer.astro';
 import content from '../data/content.json';
 import '../styles/tokens.css';
 
-const { title, description, page } = Astro.props;
+const { title, description, page, noindex } = Astro.props;
 const base = import.meta.env.BASE_URL;
 const pageTitle = title ? `${title} | Learn AI with Tarshar` : 'Learn AI with Tarshar';
 const audiencesJson = JSON.stringify(content.audiences).replace(/</g, '\\u003c');
@@ -20,6 +20,7 @@ const audiencesJson = JSON.stringify(content.audiences).replace(/</g, '\\u003c')
     <meta name="generator" content={Astro.generator} />
     <title>{pageTitle}</title>
     {description && <meta name="description" content={description} />}
+    {noindex && <meta name="robots" content="noindex,nofollow" />}
     <link rel="icon" href={`${base}favicon.svg`} type="image/svg+xml" />
   </head>
   <body>
