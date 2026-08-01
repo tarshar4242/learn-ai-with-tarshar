@@ -9,8 +9,9 @@ const contentJson = JSON.stringify(content).replace(/</g, '\\u003c');
   <section class="admin-page">
     <div class="admin-head">
       <h1>內容後台</h1>
-      <p>改文字、系列、文章、工具、觀眾群這些內容都在這裡。改完按「下載 content.json」，
-      再把下載的檔案上傳到 GitHub 蓋掉 <code>src/data/content.json</code> 就會正式生效。</p>
+      <p>改文字、系列、文章、工具、觀眾群這些內容都在這裡。改完按「存回網站」，
+      內容會直接傳回 GitHub，網站大約 1～2 分鐘後自動更新。
+      （也可以按「下載 content.json」拿到檔案，自己上傳蓋掉 <code>src/data/content.json</code>。）</p>
       <div class="draft-banner" id="draft-banner" hidden>
         <span id="draft-banner-text"></span>
         <div class="draft-actions">
@@ -23,9 +24,32 @@ const contentJson = JSON.stringify(content).replace(/</g, '\\u003c');
     <nav class="tabs" id="admin-tabs"></nav>
     <div class="panel" id="admin-panel"></div>
 
+    <div class="gh-setup" id="gh-setup" hidden>
+      <h3>第一次使用「存回網站」前，先拿一把 GitHub 通行金鑰</h3>
+      <p>白話說明：這顆按鈕會把改好的內容，從妳的瀏覽器直接傳回 GitHub 存檔，
+      完全免費、不經過任何其他伺服器。GitHub 需要一把「通行金鑰」確認是妳本人；
+      金鑰只會存在這台裝置的瀏覽器裡，不會被傳到別的地方。照下面五步拿金鑰（只要做這一次）：</p>
+      <ol>
+        <li>點這裡開啟 GitHub 的金鑰申請頁（要先登入 GitHub）：
+          <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">建立通行金鑰</a></li>
+        <li>「Token name」隨便取，例如 <code>內容後台</code>；「Expiration」選 1 年（到期再來拿一把新的）。</li>
+        <li>「Repository access」選 <strong>Only select repositories</strong>，然後勾選 <code>learn-ai-with-tarshar</code>。</li>
+        <li>展開「Repository permissions」，把 <strong>Contents</strong> 改成 <strong>Read and write</strong>，其他都不用動。</li>
+        <li>按最下面綠色的「Generate token」，把出現的一長串金鑰複製起來，貼到下面欄位按「儲存金鑰」。</li>
+      </ol>
+      <div class="gh-setup-row">
+        <input type="password" id="gh-token-input" placeholder="貼上 github_pat_ 開頭的金鑰" autocomplete="off" />
+        <button type="button" id="gh-token-save">儲存金鑰</button>
+        <button type="button" id="gh-token-cancel">先不要</button>
+      </div>
+      <p class="gh-setup-note" id="gh-setup-note"></p>
+    </div>
+
     <div class="admin-foot">
-      <button type="button" id="download-btn" class="primary">下載 content.json（存檔）</button>
+      <button type="button" id="publish-btn" class="primary">🚀 存回網站</button>
+      <button type="button" id="download-btn">下載 content.json（備用）</button>
       <button type="button" id="reset-btn">還原成檔案裡的內容</button>
+      <button type="button" id="gh-token-manage" class="linkish">⚙️ 金鑰設定</button>
       <span class="save-hint" id="save-hint"></span>
     </div>
   </section>
@@ -280,5 +304,75 @@ const contentJson = JSON.stringify(content).replace(/</g, '\\u003c');
     color: var(--c-faint);
     cursor: pointer;
   }
+  .admin-foot button.linkish {
+    border: none;
+    background: transparent;
+    padding: 10px 6px;
+  }
   .save-hint { font-size: 12px; color: var(--c-brand-hover); }
+
+  .gh-setup {
+    margin-top: 32px;
+    padding: 20px;
+    background: var(--c-bg-soft);
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius-md);
+  }
+  .gh-setup h3 {
+    font-family: var(--font-head);
+    font-size: var(--fs-15);
+    margin: 0 0 10px;
+  }
+  .gh-setup p {
+    font-size: var(--fs-13);
+    line-height: 1.9;
+    color: var(--c-body-soft);
+    margin: 0 0 12px;
+  }
+  .gh-setup ol {
+    margin: 0 0 16px;
+    padding-left: 22px;
+    font-size: var(--fs-13);
+    line-height: 2;
+    color: var(--c-body-soft);
+  }
+  .gh-setup code {
+    background: #fff;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: .9em;
+  }
+  .gh-setup a { color: var(--c-brand); font-weight: 600; }
+  .gh-setup-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .gh-setup-row input {
+    flex: 1 1 240px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid var(--c-border-form);
+    font-family: inherit;
+    font-size: var(--fs-13);
+    background: #fff;
+    outline: none;
+  }
+  .gh-setup-row button {
+    padding: 10px 16px;
+    border-radius: var(--radius-pill);
+    border: none;
+    background: var(--c-brand);
+    color: #fff;
+    font-family: inherit;
+    font-size: var(--fs-13);
+    cursor: pointer;
+  }
+  .gh-setup-row #gh-token-cancel {
+    background: transparent;
+    border: 1px solid var(--c-border-form);
+    color: var(--c-faint);
+  }
+  .gh-setup-note { font-size: 12px; color: var(--c-brand-hover); min-height: 1em; }
 </style>
