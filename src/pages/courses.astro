@@ -1,7 +1,80 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import SeriesCard from '../components/SeriesCard.astro';
+import content from '../data/content.json';
+
+const { text, series } = content;
+const publicCount = series.filter((s) => s.aud.length === 0).length;
+const hiddenCount = series.length - publicCount;
 ---
 
-<Layout page="courses" title="課程筆記館">
-  <p style="padding:72px 32px;">課程系列頁建置中（Phase 4）</p>
+<Layout page="courses" title="課程筆記館" description={text.coursesLead}>
+  <section class="page-section">
+    <div class="head" data-reveal="1">
+      <h1 class="page-title">課程<span class="accent">筆記館</span></h1>
+      <div class="divider"><span class="line"></span>一起輕輕鬆鬆學 AI<span class="line"></span></div>
+      <p class="lead">{text.coursesLead}</p>
+    </div>
+
+    <div class="count-row">
+      <span>你目前看得到 {publicCount} 個系列</span>
+      {hiddenCount > 0 && (
+        <span class="hidden-hint" id="hidden-series-hint" hidden>
+          還有 {hiddenCount} 個系列需要切換身分才看得到
+        </span>
+      )}
+    </div>
+
+    <div class="grid">
+      {series.map((s) => <SeriesCard series={s} />)}
+    </div>
+  </section>
 </Layout>
+
+<style>
+  .page-section {
+    width: 88%;
+    max-width: var(--content-max);
+    margin: 0 auto;
+    padding: 64px var(--space-h) 80px;
+  }
+  .head { text-align: center; margin-bottom: 40px; }
+  .page-title {
+    font-family: var(--font-head);
+    font-size: var(--fs-page-title);
+    margin: 0 0 16px;
+  }
+  .page-title .accent { color: var(--c-brand); }
+  .divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    color: var(--c-accent);
+    font-size: var(--fs-15);
+    letter-spacing: .14em;
+  }
+  .divider .line { width: 44px; height: 1px; background: rgba(124, 168, 92, .5); }
+  .lead {
+    font-size: var(--fs-17);
+    line-height: 2;
+    color: var(--c-body);
+    max-width: 36em;
+    margin: 24px auto 0;
+  }
+  .count-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    font-size: var(--fs-15);
+    color: var(--c-faintest);
+    margin-bottom: 18px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 22px;
+  }
+</style>

@@ -1,7 +1,140 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import content from '../data/content.json';
+
+const { text, contactInfo } = content;
 ---
 
-<Layout page="contact" title="邀約授課與合作">
-  <p style="padding:72px 32px;">聯絡頁建置中（Phase 4）</p>
+<Layout page="contact" title="邀約授課與合作" description={text.contactLead}>
+  <section class="page-section">
+    <div class="head" data-reveal="1">
+      <div class="eyebrow">CONTACT</div>
+      <h1 class="page-title">邀約授課與合作</h1>
+      <p class="lead">{text.contactLead}</p>
+    </div>
+
+    <div class="grid" data-reveal="1">
+      <!--
+        TODO（Tarshar 需要做的一步）：跟首頁電子報訂閱框一樣，
+        這裡也要接免費表單服務 Formspree（https://formspree.io）。
+        註冊帳號、建立表單後，把下面 action 網址的 YOUR_FORM_ID
+        換成妳的表單代碼即可，這樣送出的邀約需求會真的寄進妳的信箱。
+        兩處（這裡跟首頁電子報）可以用同一個 Formspree 帳號建兩個表單。
+      -->
+      <form class="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+        <label>單位／姓名
+          <input type="text" name="name" required />
+        </label>
+        <label>聯絡 Email
+          <input type="email" name="email" required />
+        </label>
+        <label>課程需求
+          <textarea name="message" rows="5" placeholder="對象、人數、時數、希望解決的工作痛點"></textarea>
+        </label>
+        <button type="submit">送出需求</button>
+      </form>
+
+      <div class="info-list">
+        {contactInfo.map((c) => {
+          const restricted = c.aud.length > 0;
+          return (
+            <div class="info-card" data-aud={restricted ? c.aud.join(',') : undefined} hidden={restricted}>
+              <div class="label">{c.label}</div>
+              <div class="value">{c.value}</div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  </section>
 </Layout>
+
+<style>
+  .page-section {
+    width: 88%;
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 64px var(--space-h) 80px;
+  }
+  .head { text-align: center; margin-bottom: 40px; }
+  .eyebrow {
+    font-size: var(--fs-13);
+    letter-spacing: .22em;
+    color: var(--c-accent);
+    margin-bottom: 14px;
+  }
+  .page-title {
+    font-family: var(--font-head);
+    font-size: var(--fs-page-title);
+    margin: 0 0 16px;
+  }
+  .lead {
+    font-size: var(--fs-17);
+    line-height: 2;
+    color: var(--c-body);
+    max-width: 32em;
+    margin: 0 auto;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: 32px;
+    align-items: start;
+  }
+  .contact-form {
+    display: grid;
+    gap: 16px;
+    padding: 30px;
+    background: #fff;
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 6px 22px var(--c-shadow-strong);
+  }
+  .contact-form label {
+    display: grid;
+    gap: 8px;
+    font-size: var(--fs-15);
+    color: var(--c-body-soft);
+  }
+  .contact-form input,
+  .contact-form textarea {
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--c-border-form);
+    font-size: var(--fs-15);
+    font-family: inherit;
+    outline: none;
+    background: var(--c-bg-form);
+    resize: vertical;
+  }
+  .contact-form button {
+    padding: 14px;
+    border-radius: var(--radius-pill);
+    border: none;
+    background: var(--c-brand);
+    color: #fff;
+    font-size: var(--fs-17);
+    font-family: inherit;
+    cursor: pointer;
+    transition: transform .2s ease;
+  }
+  .contact-form button:hover { transform: translateY(-2px); }
+
+  .info-list { display: grid; gap: 16px; }
+  .info-card {
+    padding: 22px 24px;
+    background: rgba(237, 245, 236, .75);
+    border-radius: var(--radius-md);
+  }
+  .info-card .label {
+    font-size: var(--fs-13);
+    letter-spacing: .14em;
+    color: var(--c-accent);
+    margin-bottom: 8px;
+  }
+  .info-card .value {
+    font-size: var(--fs-15);
+    line-height: 1.8;
+    color: var(--c-ink-strong);
+  }
+</style>

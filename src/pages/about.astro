@@ -1,7 +1,114 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import content from '../data/content.json';
+
+const base = import.meta.env.BASE_URL;
+const { text, pillars, timeline } = content;
 ---
 
-<Layout page="about" title="關於 Tarshar">
-  <p style="padding:72px 32px;">關於頁建置中（Phase 4）</p>
+<Layout page="about" title="關於 Tarshar" description={text.aboutLong}>
+  <section class="page-section">
+    <div class="intro" data-reveal="1">
+      <div>
+        <div class="eyebrow">ABOUT</div>
+        <h1 class="page-title">關於 Tarshar</h1>
+        <p class="long-text">{text.aboutLong}</p>
+      </div>
+      <img src={`${base}images/hero-illustration.png`} alt="Tarshar" class="portrait" />
+    </div>
+
+    <div class="block" data-reveal="1">
+      <h2 class="section-title">我怎麼上課</h2>
+      <div class="pillars">
+        {pillars.map((p) => (
+          <div class="pillar-card">
+            <div class="pillar-title">{p.title}</div>
+            <div class="pillar-desc">{p.desc}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div class="block" data-reveal="1">
+      <h2 class="section-title">授課與經歷</h2>
+      <div class="timeline">
+        {timeline.map((i) => (
+          <div class="timeline-row">
+            <div class="year">{i.year}</div>
+            <div>
+              <div class="timeline-title">{i.title}</div>
+              <div class="timeline-desc">{i.desc}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
 </Layout>
+
+<style>
+  .page-section {
+    width: 88%;
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 64px var(--space-h) 80px;
+  }
+  .eyebrow {
+    font-size: var(--fs-13);
+    letter-spacing: .22em;
+    color: var(--c-accent);
+    margin-bottom: 14px;
+  }
+  .page-title {
+    font-family: var(--font-head);
+    font-size: var(--fs-page-title);
+    margin: 0 0 20px;
+    line-height: 1.35;
+  }
+  .long-text { font-size: var(--fs-17); line-height: 2; color: var(--c-body); margin: 0; }
+  .intro {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 40px;
+    align-items: center;
+    margin-bottom: 60px;
+  }
+  .portrait {
+    width: 100%;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 18px 44px rgba(31, 107, 69, .14);
+  }
+
+  .block { margin-bottom: 52px; }
+  .block:last-child { margin-bottom: 0; }
+  .section-title {
+    font-family: var(--font-head);
+    font-size: var(--fs-26);
+    margin: 0 0 22px;
+  }
+  .pillars {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+  }
+  .pillar-card {
+    padding: 24px;
+    background: #fff;
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius-md);
+  }
+  .pillar-title { font-size: var(--fs-17); font-weight: 700; color: var(--c-brand); margin-bottom: 10px; }
+  .pillar-desc { font-size: var(--fs-15); line-height: 1.9; color: var(--c-body-soft); }
+
+  .timeline { display: grid; }
+  .timeline-row {
+    display: grid;
+    grid-template-columns: 92px 1fr;
+    gap: 20px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--c-border);
+  }
+  .year { font-size: var(--fs-15); color: var(--c-accent); letter-spacing: .06em; padding-top: 3px; }
+  .timeline-title { font-size: var(--fs-17); margin-bottom: 6px; }
+  .timeline-desc { font-size: var(--fs-15); color: var(--c-faint); line-height: 1.8; }
+</style>
