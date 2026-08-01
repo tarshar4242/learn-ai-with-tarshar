@@ -1,10 +1,18 @@
 /* 內容後台：純前端，不連任何後端或資料庫。
-   讀取本頁內嵌的 content.json 基準值，編輯結果存在瀏覽器 localStorage 當草稿，
-   按「下載」匯出成可以直接覆蓋 src/data/content.json 的檔案。
-   給非工程師用：所有操作都是點選/打字/下載，沒有指令列。 */
+   讀取本頁內嵌的 content.json 基準值，編輯結果存在瀏覽器 localStorage 當草稿。
+   「存回網站」用使用者自己的 GitHub 金鑰（存在 localStorage）直接把
+   src/data/content.json 傳回 GitHub，推上 main 後 Pages 會自動重新部署；
+   「下載」則是備用路線，匯出檔案讓使用者手動覆蓋。
+   給非工程師用：所有操作都是點選/打字，沒有指令列。 */
 (function () {
   const STORE_KEY = 'tarshar-admin-draft-v1';
   const FP_KEY = 'tarshar-admin-baseline-fp-v1';
+  const TOKEN_KEY = 'tarshar-admin-gh-token-v1';
+  const GH_OWNER = 'tarshar4242';
+  const GH_REPO = 'learn-ai-with-tarshar';
+  const GH_PATH = 'src/data/content.json';
+  const GH_BRANCH = 'main';
+  const GH_API = 'https://api.github.com/repos/' + GH_OWNER + '/' + GH_REPO + '/contents/' + GH_PATH;
 
   const baseline = JSON.parse(document.getElementById('content-baseline').textContent);
 
@@ -329,14 +337,128 @@
   });
 
   document.getElementById('download-btn').addEventListener('click', () => {
-    const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+    const blob = new Blob([exportJson()], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
     a.download = 'content.json';
+    // iPad/iPhone 的 Safari 對沒掛在頁面上的連結，點了可能毫無反應——先掛上再點
+    document.body.appendChild(a);
     a.click();
-    URL.revokeObjectURL(url);
+    setTimeout(() => { a.remove(); URL.revokeObjectURL(url); }, 1000);
   });
+
+  /* ── 存回網站（GitHub）─────────────────────────────── */
+
+  const publishBtn = document.getElementById('publish-btn');
+  const setupEl = document.getElementById('gh-setup');
+  const setupNote = document.getElementById('gh-setup-note');
+  const tokenInput = document.getElementById('gh-token-input');
+
+  function exportJson() {
+    return JSON.stringify(state, null, 2) + '\n';
+  }
+
+  function getToken() {
+    try { return localStorage.getItem(TOKEN_KEY) || ''; } catch (e) { return ''; }
+  }
+
+  // GitHub API 要的 base64；內容有中文，得先轉 UTF-8 位元組再編碼
+  function toBase64(str) {
+    const bytes = new TextEncoder().encode(str);
+    let bin = '';
+    for (let i = 0; i < bytes.length; i += 0x8000) {
+      bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+    }
+    return btoa(bin);
+  }
+
+  function showSetup(message) {
+    setupEl.hidden = false;
+    setupNote.textContent = message || '';
+    tokenInput.value = '';
+    setupEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  document.getElementById('gh-token-save').addEventListener('click', () => {
+    const token = tokenInput.value.trim();
+    if (!token) { setupNote.textContent = '欄位還是空的，先把金鑰貼進來再按儲存。'; return; }
+    try { localStorage.setItem(TOKEN_KEY, token); } catch (e) {
+      setupNote.textContent = '這個瀏覽器不讓我記住金鑰（可能開了無痕模式），換一般視窗再試。';
+      return;
+    }
+    setupEl.hidden = true;
+    saveHint.textContent = '金鑰存好了，再按一次「🚀 存回網站」就會發佈。';
+  });
+
+  document.getElementById('gh-token-cancel').addEventListener('click', () => {
+    setupEl.hidden = true;
+  });
+
+  document.getElementById('gh-token-manage').addEventListener('click', () => {
+    showSetup(getToken()
+      ? '目前已存有一把金鑰。要換新的就貼上後按「儲存金鑰」；不動它就按「先不要」。'
+      : '');
+  });
+
+  async function ghFetch(url, options, token) {
+    const res = await fetch(url, Object.assign({}, options, {
+      headers: Object.assign({
+        Authorization: 'Bearer ' + token,
+        Accept: 'application/vnd.github+json',
+        'X-GitHub-Api-Version': '2022-11-28',
+      }, (options || {}).headers),
+    }));
+    return res;
+  }
+
+  async function publish() {
+    const token = getToken();
+    if (!token) { showSetup(); return; }
+
+    publishBtn.disabled = true;
+    publishBtn.textContent = '存回網站中…';
+    saveHint.textContent = '';
+    try {
+      // 先問 GitHub 現在檔案的版本編號（sha），更新時要一起帶回去
+      const metaRes = await ghFetch(GH_API + '?ref=' + GH_BRANCH, { method: 'GET' }, token);
+      if (metaRes.status === 401 || metaRes.status === 403) {
+        try { localStorage.removeItem(TOKEN_KEY); } catch (e) {}
+        showSetup('這把金鑰 GitHub 不認得（可能過期或權限不夠），照上面步驟重新拿一把貼進來。');
+        return;
+      }
+      if (!metaRes.ok) throw new Error('讀取檔案版本失敗（' + metaRes.status + '）');
+      const sha = (await metaRes.json()).sha;
+
+      const putRes = await ghFetch(GH_API, {
+        method: 'PUT',
+        body: JSON.stringify({
+          message: '更新網站內容（內容後台存檔）',
+          content: toBase64(exportJson()),
+          sha: sha,
+          branch: GH_BRANCH,
+        }),
+      }, token);
+      if (putRes.status === 401 || putRes.status === 403) {
+        try { localStorage.removeItem(TOKEN_KEY); } catch (e) {}
+        showSetup('這把金鑰沒有寫入權限，重新拿金鑰時記得把 Contents 設成 Read and write。');
+        return;
+      }
+      if (!putRes.ok) throw new Error('寫回 GitHub 失敗（' + putRes.status + '）');
+
+      // 存回去的內容就是新的基準，草稿指紋跟著換，重新部署後不會再跳「草稿是舊版」
+      try { localStorage.setItem(FP_KEY, fingerprint(state)); } catch (e) {}
+      saveHint.textContent = '✅ 已存回網站！GitHub 正在重新整理頁面，大約 1～2 分鐘後就能看到新內容。';
+    } catch (err) {
+      saveHint.textContent = '❌ 存回網站沒有成功（' + (err && err.message ? err.message : '網路問題') +
+        '）。先用「下載 content.json（備用）」把改好的內容留住，稍後再試一次。';
+    } finally {
+      publishBtn.disabled = false;
+      publishBtn.textContent = '🚀 存回網站';
+    }
+  }
+
+  publishBtn.addEventListener('click', publish);
 
   renderDraftBanner();
   renderTabs();
