@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>我用 AI 做了一個裝在手機桌面的個人 App｜Tarshar 教案集</title>
+<meta name="description" content="Tarshar 教案集：不會寫程式，也能用 AI 做出一個裝在手機桌面、離線可用、雲端同步的個人 App。記錄小D 從一個學英文的困擾開始，做出自己的英文學習 App 的完整過程，六個章節加行動建議，給零基礎學員的方法教學">
+<style>
+:root{
+  --paper:#f4f0e8; --card:#fffdf7; --card2:#fbf8ef; --ink:#3a3528; --ink2:#766f61; --ink3:#8a8674;
+  --line:#d8d0bf; --accent:#5d8d56; --accent2:#8cbd7d;
+  --code:#fffdf7;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.9}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(244,240,232,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:10px 20px;display:flex;align-items:center;gap:14px}
+.topbar b{font-size:15px}
+.topbar .right{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.topbar a.btn{font-size:12.5px;text-decoration:none;border:1px solid var(--line);border-radius:9px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap}
+.topbar a.btn:hover{border-color:var(--accent);color:var(--accent)}
+.hero{max-width:900px;margin:0 auto;padding:52px 22px 10px;text-align:center}
+.hero .ep{display:inline-block;font-size:12.5px;letter-spacing:3px;color:var(--accent);border:1px solid var(--accent2);border-radius:999px;padding:5px 16px;background:#eef5e9;margin-bottom:18px}
+.hero h1{font-size:clamp(24px,4.4vw,40px);font-weight:900;line-height:1.4;color:var(--ink)}
+.hero .lead{margin-top:14px;font-size:14.5px;color:var(--ink2)}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:18px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+
+.showcase{max-width:900px;margin:26px auto 0;padding:0 22px}
+.showcase-box{background:linear-gradient(120deg,#eef5e9,#fbf8ef);border:1px solid var(--accent2);border-radius:18px;padding:24px 26px;text-align:center}
+.showcase-box .kicker{font-size:12.5px;color:var(--accent);font-weight:800;letter-spacing:1px;margin-bottom:8px}
+.showcase-box p{font-size:14px;color:var(--ink2);margin:6px 0 16px}
+.showcase-box a.cta{display:inline-flex;align-items:center;gap:8px;text-decoration:none;background:var(--accent);color:#fff;font-weight:800;font-size:14.5px;padding:12px 22px;border-radius:999px;box-shadow:0 6px 18px rgba(93,141,86,.28)}
+.showcase-box a.cta:hover{background:#4c7745}
+.showcase-box .url{margin-top:10px;font-size:12.5px;color:var(--ink3)}
+
+.layout{max-width:1120px;margin:30px auto 0;padding:0 22px;display:grid;grid-template-columns:236px 1fr;gap:34px;align-items:start}
+nav.toc{position:sticky;top:66px;border:1px solid var(--line);border-radius:14px;background:var(--card);padding:16px 14px;font-size:13.5px}
+nav.toc .t{font-size:12px;letter-spacing:2px;color:var(--ink3);margin-bottom:10px}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:8px;border-left:3px solid transparent}
+nav.toc a:hover{background:#eef5e9;color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:30px 32px;margin-bottom:26px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:2px;font-weight:700;color:#fff;border-radius:999px;padding:5px 14px;margin-bottom:12px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+h2.ct{font-size:22px;font-weight:900;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:16.5px;font-weight:800;margin:24px 0 10px;padding-left:12px;border-left:4px solid var(--accent2);color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink)}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 24px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"◆";position:absolute;left:4px;font-size:9px;top:12px;color:var(--accent2)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:8px;width:23px;height:23px;border-radius:7px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:800;display:grid;place-items:center}
+.codebox{background:var(--code);border:1px solid var(--line);border-left:4px solid var(--accent2);border-radius:10px;padding:14px 16px;font-family:"Cascadia Code",Consolas,monospace;font-size:12.6px;color:#3a3528;white-space:pre-wrap;line-height:1.8;margin:12px 0;overflow-x:auto}
+.note{display:flex;gap:10px;border-radius:12px;padding:14px 16px;font-size:14px;margin:14px 0;line-height:1.85}
+.note.green{background:#eef5e9;border:1px solid var(--accent2);color:var(--accent)}
+.note.gold{background:#fdf6e7;border:1px solid #eeddb4;color:#7a5b12}
+.golden{background:linear-gradient(120deg,#eef5e9,#fbf8ef);border:1px solid var(--accent2);border-radius:14px;padding:16px 20px;margin:16px 0;text-align:center}
+.golden .q{font-size:17px;font-weight:900;color:var(--accent)}
+.golden .a{font-size:12.5px;color:var(--ink3);margin-top:6px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+@media (max-width:560px){ .grid2{grid-template-columns:1fr} }
+.mini{border:1px solid var(--line);border-radius:14px;padding:14px 16px;background:#fff}
+.mini .n{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:8px;background:var(--accent2);color:#fff;font-weight:800;font-size:12.5px;margin-bottom:6px}
+.mini h5{font-size:14px;font-weight:800;margin-bottom:4px;color:var(--ink)}
+.mini p{font-size:12.8px;color:var(--ink2)}
+.stage{display:inline-block;font-weight:800;font-size:11.5px;color:#fff;background:var(--accent);border-radius:6px;padding:2px 9px;margin-right:7px;letter-spacing:1px;vertical-align:middle}
+.action{border:1px solid var(--accent2);border-radius:16px;padding:18px 20px;background:#fff;margin:14px 0}
+.action .n{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:10px;background:var(--accent);color:#fff;font-weight:900;font-size:15px;margin-bottom:8px}
+.action h4{font-size:15.5px;font-weight:800;color:var(--ink);margin-bottom:4px}
+.action p{font-size:13.5px}
+.backhome{position:fixed;left:14px;bottom:14px;z-index:9999;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;text-decoration:none;color:#fff;background:var(--accent);border:1px solid #4c7745;border-radius:999px;padding:9px 16px;box-shadow:0 4px 18px rgba(0,0,0,.18)}
+.backhome:hover{background:#4c7745}
+footer{max-width:1120px;margin:20px auto 0;padding:30px 22px 70px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:2}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} }
+@media print{ .topbar,nav.toc,.backhome{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../plans/" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📚 Tarshar 教案集</b>
+  <div class="right">
+    <a class="btn" href="../plans/">📚 教案集系列</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">Tarshar 教案集 · 方法教學</span>
+  <h1>不會寫程式，也能用 AI<br>做一個裝在手機桌面的個人 App</h1>
+  <p class="lead">這篇記錄的是我（小D）用 AI 做出一個<b>離線可用、雲端同步的個人英文學習 App</b>的完整過程。這是這個系列裡技術含量比較高的一種，不是點一下就好，是來回改了好幾天才穩下來。為什麼要自己做、什麼是加到手機桌面的網頁、離線為什麼重要、進度怎麼不會不見、還有老實說有多難，六段真實走過的路，加一段給你的行動建議。</p>
+  <div class="meta">
+    <span>🎓 零程式基礎</span>
+    <span>📱 加到手機主畫面</span>
+    <span>☁️ 免費雲端資料庫同步</span>
+    <span>🗓️ 2026</span>
+  </div>
+</header>
+
+<div class="showcase">
+  <div class="showcase-box">
+    <div class="kicker">先看我做出來的東西</div>
+    <p>我英文不差，但讀論文、準備英文簡報的時候，生字永遠是讀過就忘。市面上的背單字 App 都是別人的單字表，不是我正在讀的那篇論文裡的字。我打開 AI，講了這個困擾，這個 App 就開始長出來了。</p>
+    <a class="cta" href="https://tarshar4242.github.io/lingua-buddy/" target="_blank" rel="noopener">📱 打開我的英文學習 App →</a>
+    <div class="url">tarshar4242.github.io/lingua-buddy</div>
+  </div>
+</div>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#c1">1. 為什麼要自己做一個 App</a>
+  <a href="#c2">2. 什麼是「加到手機桌面」</a>
+  <a href="#c3">3. 需求怎麼講給 AI 聽</a>
+  <a href="#c4">4. 離線優先：沒網路也能用</a>
+  <a href="#c5">5. 雲端同步：換手機進度不會不見</a>
+  <a href="#c6">6. 老實說，這關比較難</a>
+  <a href="#c7">7. 你的三步驟行動建議</a>
+</nav>
+
+<article>
+
+<!-- 1 為什麼要自己做 -->
+<section class="chapter" id="c1">
+  <span class="chip">STEP 01</span>
+  <h2 class="ct">為什麼要自己做一個 App</h2>
+  <p class="cd">市面上的 App 是給所有人用的，不是為你正在讀的那份資料做的。</p>
+  <h3>發生什麼事</h3>
+  <p>我需要讀論文的 abstract、準備英文簡報稿、看英文技術文件。我下載過幾個背單字 App，裡面的單字表是別人排好的，跟我正在讀的東西完全對不上。我卡住的不是「我不會背單字」，是「我背的字跟我要用的字不是同一批」。我把這個困擾講給 AI 聽：</p>
+  <ul class="pt">
+    <li>我想貼上正在讀的論文段落或演講稿</li>
+    <li>系統要自己抓出裡面比較難的字</li>
+    <li>累積下來變成我自己的詞彙庫，不是別人的單字表</li>
+    <li>手機上要能用，不想每次都開電腦</li>
+  </ul>
+  <p>AI 給的答案是做一個<b>只服務我一個人的網頁 App</b>：不用上架、不用審核、想改什麼就跟 AI 講一句話。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">不是市面上沒有好工具，是市面上的工具不是為你量身做的。</div><div class="a">需求夠具體，AI 才做得出真的合用的東西</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 你如果也覺得「這個 App 做的事我要，可是不是我要的方式」，先別急著再找下一個 App。把你真正卡住的地方寫成三四條，問 AI「這樣的話，你會建議我自己做一個嗎，要花多少工夫」。</div>
+</section>
+
+<!-- 2 什麼是加到手機桌面 -->
+<section class="chapter" id="c2">
+  <span class="chip">STEP 02</span>
+  <h2 class="ct">什麼是「加到手機桌面」的網頁</h2>
+  <p class="cd">白話講，就是一個網頁，假裝自己是一個 App。</p>
+  <h3>發生什麼事</h3>
+  <p>我一開始以為要做 App，就得去學一整套手機開發，光聽就想放棄。AI 跟我說有一種做法叫 <b>PWA</b>，念起來很唬人，白話翻譯其實很簡單：<b>就是一個網頁，但你可以把它加到手機主畫面，圖示、開啟方式，看起來都跟真的 App 一樣，其實它還是網頁。</b></p>
+  <p>我做完之後，用手機瀏覽器打開網址：</p>
+  <ul class="pt">
+    <li>iPhone 用 Safari 打開，按分享按鈕，選「加入主畫面」</li>
+    <li>Android 用 Chrome 打開，按右上選單，選「加到主畫面」</li>
+  </ul>
+  <p>手機桌面就多了一個圖示，點下去全螢幕開啟，沒有網址列，跟原生 App 幾乎沒有差別。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">你不需要學手機開發，你需要的是一個會假裝的網頁。</div><div class="a">PWA 是網頁，只是穿了一件 App 的外衣</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 跟 AI 說「我要做一個可以加到手機主畫面的網頁 App」，它就知道要幫你做 PWA，會自動處理圖示和設定檔，你不用懂技術名詞，只要會這句話就夠了。</div>
+</section>
+
+<!-- 3 需求怎麼講 -->
+<section class="chapter" id="c3">
+  <span class="chip">STEP 03</span>
+  <h2 class="ct">需求怎麼講給 AI 聽</h2>
+  <p class="cd">先講情境，再講功能，AI 才接得住。</p>
+  <h3>發生什麼事</h3>
+  <p>我沒有一次把所有功能列給 AI，是先講我平常會怎麼用這個 App：</p>
+  <div class="note gold">「我會貼上論文段落或英文演講稿，想要它自動抓出比較難的字，存成我自己的詞彙庫。我也想拍截圖或照片，把圖片裡的英文字抓出來。不熟的字要能存進錯題本，找時間複習。有些句子我想練習念，最好能放出聲音讓我跟讀。」</div>
+  <p>AI 照這段話，把 App 拆成幾個場景讓我選：論文、演講、網頁、簡報詞彙、考試輔助、自由輸入，各自對應不同的抓字邏輯。我沒有講任何一個技術名詞，AI 自己把它翻成功能。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">不是你要懂功能怎麼做，是你要懂自己平常怎麼用。</div><div class="a">情境講清楚，AI 自己會拆成功能</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 講需求的時候，用「我平常會怎麼用」代替「我要什麼功能」。像講故事一樣講一次你的使用情境，AI 拆功能拆得比你自己列清單準。</div>
+</section>
+
+<!-- 4 離線優先 -->
+<section class="chapter" id="c4">
+  <span class="chip">STEP 04</span>
+  <h2 class="ct">離線優先：沒網路也要能用</h2>
+  <p class="cd">白話講，就是東西先存在手機裡，有網路再送出去，不是反過來。</p>
+  <h3>發生什麼事</h3>
+  <p>我常常在通勤、在沒有訊號的地方讀東西，如果 App 一定要連網才能用，那對我根本沒有意義。我跟 AI 說「我希望就算沒有網路，我照樣可以貼文字、看詞彙庫、複習錯題」。AI 跟我解釋一個原則叫<b>離線優先</b>：</p>
+  <div class="note gold">白話說，就是資料<b>先寫進手機瀏覽器自己的儲存空間</b>，畫面立刻更新，你不用等網路。等之後有網路、雲端有設定好，才把這份資料<b>順便</b>送到雲端備份。網路斷掉，App 該做的事一件都沒少，只是雲端那邊還沒收到。</div>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">不是先靠網路再靠手機，是先靠手機，網路只是順便備份。</div><div class="a">順序顛倒過來，App 才不會因為沒訊號就整個當機</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 只要你的 App 是你自己天天要用的，一開始就跟 AI 講清楚「沒網路的時候一樣要能用」，讓它從第一天就照離線優先的順序做，比事後補救省力很多。</div>
+</section>
+
+<!-- 5 雲端同步 -->
+<section class="chapter" id="c5">
+  <span class="chip">STEP 05</span>
+  <h2 class="ct">雲端同步：換手機、換裝置，進度不會不見</h2>
+  <p class="cd">白話講，就是接一個免費的雲端記事本，你的資料多存一份在那裡。</p>
+  <h3>發生什麼事</h3>
+  <p>資料只存在手機瀏覽器裡有個風險，換手機、清瀏覽器資料，之前累積的詞彙庫就沒了。我問 AI「有沒有辦法不用自己管一台伺服器，資料也能備份到雲端」，AI 幫我接上一個<b>免費的雲端資料庫服務</b>，我這邊只要照著它給的步驟，把幾行設定貼進一個網頁表單，資料庫就建好了。</p>
+  <p>接上之後，我在手機瀏覽器裡貼文字、存詞彙、記錄複習進度，這些資料除了先存在手機本機，也會同步一份到雲端。哪天我用另一支手機打開同一個網址，登入之後，之前的詞彙庫和複習紀錄都還在。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">不是你要會架資料庫，是你要知道有免費的雲端服務可以接。</div><div class="a">技術門檻交給 AI，你只要負責照步驟貼設定</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 跟 AI 說「我想要資料能備份到雲端，換裝置也找得回來，但我不想自己管伺服器」，它會建議合適的免費雲端資料庫服務，並且一步一步教你怎麼接，你不用懂資料庫是什麼。</div>
+</section>
+
+<!-- 6 誠實談難度 -->
+<section class="chapter" id="c6">
+  <span class="chip">STEP 06</span>
+  <h2 class="ct">老實說，這關比前幾篇難一點</h2>
+  <p class="cd">這是這個系列裡技術含量比較高的一種，會卡住是正常的，不是你不行。</p>
+  <h3>發生什麼事</h3>
+  <p>我不想騙你這個很簡單。跟之前做論文研讀庫網站比，這次多了三個真的會卡住的地方：</p>
+  <ul class="pt">
+    <li>掃描出來的 PDF 有時候抽不出文字，因為它其實是一張圖片，不是文字，這時候要改用拍照辨識</li>
+    <li>拍照辨識第一次使用會先下載一個辨識模型，在手機上可能要等一下，看起來像卡住，其實是在下載</li>
+    <li>語音辨識的準不準，跟你用哪個瀏覽器有關，同一支手機換個瀏覽器結果可能不一樣</li>
+  </ul>
+  <p>我卡住的時候，做法跟之前一樣：截圖丟給 AI，問「為什麼會這樣」，不是只求「幫我修好」。這次來回的次數確實比較多，有時候一個功能要改三四次才順。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">不是這個系列前面幾篇教錯了，是有些功能本來就得多花幾天磨。</div><div class="a">卡住的次數跟功能的技術含量成正比，跟你聰不聰明沒關係</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 遇到「離線」「同步」「照片辨識」這類功能，先跟自己說一聲「這比較難，會卡是正常的」。卡住就截圖問原因，一次不順就再問一次，不用一次到位，這種功能本來就是磨出來的。</div>
+</section>
+
+<!-- 7 行動建議 -->
+<section class="chapter" id="c7">
+  <span class="chip">TAKE ACTION</span>
+  <h2 class="ct">給你的三步驟行動建議：明天就能開始</h2>
+  <p class="cd">這個 App 記錄的不只是一個背單字工具。它記錄的是一個人，把自己每天真的會卡住的小困擾，變成一個天天在用的東西。你也可以，從明天開始。</p>
+
+  <div class="action">
+    <div class="n">1</div>
+    <h4>寫下你天天會用、但市面工具都不合用的一件小事</h4>
+    <p>不用想「App」這兩個字，先想「我每天卡住的是什麼」（像我卡的是背的字跟要用的字對不上），越具體越好。</p>
+  </div>
+  <div class="action">
+    <div class="n">2</div>
+    <h4>跟 AI 講一次你平常怎麼用，不要先列功能清單</h4>
+    <p>用講故事的方式講一次你的使用情境，讓 AI 自己拆成功能，你不用懂 PWA、離線優先、雲端同步這些字。</p>
+  </div>
+  <div class="action">
+    <div class="n">3</div>
+    <h4>先求能用，卡住就截圖問原因，慢慢磨</h4>
+    <p>這類 App 本來就會比做一個網站多花幾天。卡住不代表你不行，截圖問 AI「為什麼」，一次不順就再來一次，穩下來的那一刻你會知道值得。</p>
+  </div>
+
+  <div class="golden"><div class="q">你不需要是工程師。你需要的只是一個天天卡住你的小事，然後開始問。</div><div class="a">慢慢來，比較快</div></div>
+</section>
+
+</article>
+</div>
+
+<footer>
+  不會寫程式，也能用 AI 做一個裝在手機桌面的個人 App・Tarshar 教案集・2026<br>
+  🍀 Learn AI with Tarshar｜我不是工程師，我跟各位一樣是被工作追著跑的人，所以我只教明天就能用的東西
+</footer>
+
+</body>
+</html>

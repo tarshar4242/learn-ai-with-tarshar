@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 開機日．蘆洲監理所｜教案</title>
+<meta name="description" content="Tarshar 教案集：AI 開機日．蘆洲監理所——兩小時公部門 AI 體驗工作坊，起承轉合教學流程、四大秘訣、進階帶回家 11 招，含完整簡報與學員講義">
+<style>
+:root{
+  --paper:#faf7f2; --card:#ffffff; --ink:#2b2a33; --ink2:#5a5866; --ink3:#8a879a;
+  --line:#e7e2d8; --accent:#e07b39; --accent2:#f0a868;
+  --cyan:#0aa6c9; --pink:#d4508e; --purple:#7a4fd6; --green:#1d9e6f; --amber:#c98a0a; --blue:#2f6df0;
+  --code:#fdf1e7;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.9}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(250,247,242,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:10px 20px;display:flex;align-items:center;gap:14px}
+.topbar b{font-size:15px}
+.topbar .right{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.topbar a.btn{font-size:12.5px;text-decoration:none;border:1px solid var(--line);border-radius:9px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap}
+.topbar a.btn:hover{border-color:var(--accent);color:var(--accent)}
+.hero{max-width:900px;margin:0 auto;padding:52px 22px 10px;text-align:center}
+.hero .ep{display:inline-block;font-size:12.5px;letter-spacing:3px;color:var(--accent);border:1px solid var(--accent2);border-radius:999px;padding:5px 16px;background:#fdf0e5;margin-bottom:18px}
+.hero h1{font-size:clamp(26px,4.6vw,42px);font-weight:900;line-height:1.35}
+.hero h1 span{background:linear-gradient(90deg,var(--accent),var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .lead{margin-top:14px;font-size:14.5px;color:var(--ink2)}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:18px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:1120px;margin:30px auto 0;padding:0 22px;display:grid;grid-template-columns:236px 1fr;gap:34px;align-items:start}
+nav.toc{position:sticky;top:66px;border:1px solid var(--line);border-radius:14px;background:var(--card);padding:16px 14px;font-size:13.5px}
+nav.toc .t{font-size:12px;letter-spacing:2px;color:var(--ink3);margin-bottom:10px}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:8px;border-left:3px solid transparent}
+nav.toc a:hover{background:#fdf0e5;color:var(--accent)}
+nav.toc a.sub{padding-left:24px;font-size:12.8px}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:30px 32px;margin-bottom:26px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:2px;font-weight:700;color:#fff;border-radius:999px;padding:5px 14px;margin-bottom:12px}
+h2.ct{font-size:23px;font-weight:900;margin-bottom:4px}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:18px;font-weight:800;margin:30px 0 10px;padding-left:12px;border-left:4px solid var(--accent)}
+h4{font-size:15.5px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink)}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 24px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"◆";position:absolute;left:4px;font-size:9px;top:12px;color:var(--accent2)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:8px;width:23px;height:23px;border-radius:7px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:800;display:grid;place-items:center}
+.prompt{background:var(--code);border:1px solid #f3d9c0;border-left:4px solid var(--accent);border-radius:10px;padding:13px 16px;font-family:"Cascadia Code",Consolas,monospace;font-size:12.6px;color:#8a4b1e;white-space:pre-wrap;line-height:1.8;margin:10px 0;overflow-x:auto}
+.note{display:flex;gap:10px;border-radius:12px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.85}
+.note.gold{background:#fdf6e7;border:1px solid #eeddb4;color:#7a5b12}
+.note.blue{background:#eef6fd;border:1px solid #c9e3f7;color:#1d5e8f}
+.note.green{background:#eafaf2;border:1px solid #bfe8d4;color:#166a4c}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:#fdf0e5;padding:9px 12px;text-align:left;font-size:12.8px;border:1px solid var(--line);color:var(--ink)}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+/* 段落徽章 */
+.stage{display:inline-block;font-weight:800;font-size:12px;color:#fff;background:var(--accent);border-radius:6px;padding:2px 9px;margin-right:7px;letter-spacing:1px;vertical-align:middle}
+/* 金句海報 */
+.poster{background:linear-gradient(120deg,#fdf0e5,#fdeef4);border:1px solid #f2d7c4;border-radius:14px;padding:22px 24px;margin:16px 0;text-align:center}
+.poster .big{font-size:20px;font-weight:900;color:var(--accent);line-height:1.5}
+.poster .sub{font-size:13px;color:var(--ink2);margin-top:6px}
+/* 四招卡 */
+.grid4{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+@media (max-width:560px){ .grid4{grid-template-columns:1fr} }
+.tip{border:1px solid var(--line);border-radius:14px;padding:16px 18px;background:#fff}
+.tip .n{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:8px;background:var(--accent);color:#fff;font-weight:800;font-size:13px;margin-bottom:8px}
+.tip h5{font-size:15px;font-weight:800;margin-bottom:4px}
+.tip p{font-size:13px;color:var(--ink2)}
+.embed{margin:14px 0;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#111}
+.embed iframe{display:block;width:100%;aspect-ratio:16/9;border:0}
+.embed .cap{font-size:12.5px;color:var(--ink3);padding:10px 16px;background:#fdfaf6;border-top:1px solid var(--line)}
+.reslist{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+@media (max-width:560px){ .reslist{grid-template-columns:1fr} }
+.reslist a{display:flex;gap:10px;align-items:center;text-decoration:none;border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:#fff;color:var(--ink2);font-size:13.5px;transition:.2s}
+.reslist a:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px)}
+.reslist a b{display:block;color:var(--ink);font-size:14px}
+.golden{background:linear-gradient(120deg,#fdf0e5,#f3eeff);border:1px solid #f2d7c4;border-radius:14px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:800;color:var(--accent)}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+.backhome{position:fixed;left:14px;bottom:14px;z-index:9999;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;text-decoration:none;color:#fff;background:var(--accent);border:1px solid #c96a2c;border-radius:999px;padding:9px 16px;box-shadow:0 4px 18px rgba(0,0,0,.18)}
+.backhome:hover{background:#c96a2c}
+footer{max-width:1120px;margin:20px auto 0;padding:30px 22px 60px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:2}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} }
+@media print{ .topbar,nav.toc,.backhome{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+<a href="../plans/" class="clv-home" style="position:fixed;top:14px;left:14px;z-index:99999;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.96);color:#3f6b2e;border:1.5px solid #a8c686;border-radius:999px;padding:8px 15px;font-size:13.5px;font-weight:700;text-decoration:none;box-shadow:0 4px 16px rgba(0,0,0,.22);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);font-family:'Noto Sans TC','PingFang TC',system-ui,sans-serif" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+
+<div class="topbar">
+  <b>📚 Tarshar 教案集</b>
+  <div class="right">
+    <a class="btn" href="../plans/">📚 教案集系列</a>
+    </div>
+</div>
+
+<header class="hero">
+  <span class="ep">Tarshar 教案集 · 公部門 AI 工作坊</span>
+  <h1>AI 開機日<span>．蘆洲監理所</span></h1>
+  <p class="lead">「兩小時，跟上 AI 那班車」——為公部門行政同仁設計的 <b>AI 體驗工作坊</b>。用<b>起承轉合</b>四段把小白帶進門：兩個小魔法破冰、一個蘋果比喻講懂 AI、四招心法、現場動手做，最後給一份「帶回家 11 招」工具書。本頁是這場課的<b>完整教案</b>。</p>
+  <div class="meta">
+    <span>🏛️ 蘆洲監理所</span>
+    <span>⏱️ 兩小時體驗工作坊</span>
+    <span>📄 41 頁講義（現場 26＋帶回家 15）</span>
+    <span>🗓️ 2026/05</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 教案資訊與教材</a>
+  <a href="#sec-map">1. 一頁看懂這堂課</a>
+  <a href="#sec-flow">2. 教學流程（起承轉合）</a>
+  <a class="sub" href="#f-open">起｜兩個小魔法</a>
+  <a class="sub" href="#f-what">承｜AI 是什麼＋小美</a>
+  <a class="sub" href="#f-do">轉｜換你動手</a>
+  <a class="sub" href="#f-close">合｜帶回家</a>
+  <a href="#sec-4tips">3. 四大秘訣心法</a>
+  <a href="#sec-adv">4. 進階帶回家 11 招</a>
+  <a href="#sec-lines">5. 金句與收尾</a>
+  <a href="#sec-deck">6. 完整簡報與講義</a>
+</nav>
+
+<article>
+
+<!-- 0 資訊 -->
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--pink))">LESSON INFO</span>
+  <h2 class="ct">0. 教案資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>AI 開機日．蘆洲監理所（「兩小時跟上 AI 那班車」體驗工作坊）</td></tr>
+    <tr><th>對象</th><td>公部門／監理所行政同仁——多為 AI 初學者（小白友善）</td></tr>
+    <tr><th>時長／形式</th><td>約兩小時，體驗式工作坊：講述＋現場示範＋學員動手做</td></tr>
+    <tr><th>講義結構</th><td>主講義 <b>P1–26（現場走）</b>＋ 進階帶回家 <b>P27–41（示範不操作、帶回家自用）</b></td></tr>
+    <tr><th>設計骨架</th><td><b>起</b>（兩個小魔法破冰）→ <b>承</b>（AI 是什麼＋公務員小美＋四招）→ <b>轉</b>（動手實作）→ <b>合</b>（收尾＋啟後）</td></tr>
+    <tr><th>核心工具</th><td>ChatGPT（一問一答）、NotebookLM（雜亂→紀錄）、Gemini（Google 生態）</td></tr>
+  </table></div>
+  <div class="note gold">🎯 設計主張：對公部門小白，<b>不教名詞、先給「哇」</b>——用冰箱拍照給菜單、鬼畫符變整齊文字兩個小魔法破冰，再把「你會講話，你就會用 AI」定錨成整堂課的信心關鍵句。</div>
+</section>
+
+<!-- 1 全景 -->
+<section class="chapter" id="sec-map">
+  <span class="chip" style="background:linear-gradient(90deg,var(--cyan),var(--accent))">OVERVIEW</span>
+  <h2 class="ct">1. 一頁看懂這堂課</h2>
+  <p class="cd">一條「從怕到敢」的路徑：先讓學員親眼看到 AI 的魔法（降低恐懼）→ 用生活比喻講懂它是什麼（建立正確認知）→ 給四招可複用心法（帶得走）→ 現場成功一次（建立信心）→ 一份帶回家工具書（延續動能）。</p>
+  <figure style="margin:18px 0;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff">
+    <svg viewBox="0 0 920 300" xmlns="http://www.w3.org/2000/svg" font-family="'Noto Sans TC',sans-serif">
+      <defs>
+        <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e07b39"/><stop offset="1" stop-color="#c98a0a"/></linearGradient>
+        <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d4508e"/><stop offset="1" stop-color="#e07b39"/></linearGradient>
+        <linearGradient id="g3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7a4fd6"/><stop offset="1" stop-color="#d4508e"/></linearGradient>
+        <linearGradient id="g4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1d9e6f"/><stop offset="1" stop-color="#0aa6c9"/></linearGradient>
+        <marker id="arw" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#c9a98f"/></marker>
+      </defs>
+      <rect width="920" height="300" fill="#fffaf5"/>
+      <text x="460" y="40" text-anchor="middle" font-size="20" font-weight="900" fill="#2b2a33">起 → 承 → 轉 → 合：從「怕」到「敢」的兩小時</text>
+      <g>
+        <rect x="34" y="80" width="200" height="150" rx="16" fill="url(#g1)"/>
+        <text x="134" y="116" text-anchor="middle" font-size="17" font-weight="900" fill="#fff">起 · 破冰</text>
+        <text x="134" y="144" text-anchor="middle" font-size="11.5" fill="#fff5ec">兩個小魔法</text>
+        <text x="134" y="166" text-anchor="middle" font-size="11.5" fill="#fff5ec">冰箱→菜單</text>
+        <text x="134" y="186" text-anchor="middle" font-size="11.5" fill="#fff5ec">鬼畫符→整齊字</text>
+        <text x="134" y="212" text-anchor="middle" font-size="11.5" fill="#fff5ec">「你會講話就會用」</text>
+      </g>
+      <g>
+        <rect x="252" y="80" width="200" height="150" rx="16" fill="url(#g2)"/>
+        <text x="352" y="116" text-anchor="middle" font-size="17" font-weight="900" fill="#fff">承 · 觀念</text>
+        <text x="352" y="144" text-anchor="middle" font-size="11.5" fill="#fdeef4">蘋果比喻</text>
+        <text x="352" y="166" text-anchor="middle" font-size="11.5" fill="#fdeef4">公務員小美的一天</text>
+        <text x="352" y="186" text-anchor="middle" font-size="11.5" fill="#fdeef4">公文／英文信／紀錄</text>
+        <text x="352" y="212" text-anchor="middle" font-size="11.5" fill="#fdeef4">四招心法</text>
+      </g>
+      <g>
+        <rect x="470" y="80" width="200" height="150" rx="16" fill="url(#g3)"/>
+        <text x="570" y="116" text-anchor="middle" font-size="17" font-weight="900" fill="#fff">轉 · 動手</text>
+        <text x="570" y="144" text-anchor="middle" font-size="11.5" fill="#efe9ff">先成功一次</text>
+        <text x="570" y="166" text-anchor="middle" font-size="11.5" fill="#efe9ff">改一句話</text>
+        <text x="570" y="186" text-anchor="middle" font-size="11.5" fill="#efe9ff">NotebookLM 變紀錄</text>
+        <text x="570" y="212" text-anchor="middle" font-size="11.5" fill="#efe9ff">轉頭給同事看</text>
+      </g>
+      <g>
+        <rect x="688" y="80" width="200" height="150" rx="16" fill="url(#g4)"/>
+        <text x="788" y="116" text-anchor="middle" font-size="17" font-weight="900" fill="#fff">合 · 帶走</text>
+        <text x="788" y="144" text-anchor="middle" font-size="11.5" fill="#e8fff5">今晚做一件就好</text>
+        <text x="788" y="166" text-anchor="middle" font-size="11.5" fill="#e8fff5">慢慢來比較快</text>
+        <text x="788" y="186" text-anchor="middle" font-size="11.5" fill="#e8fff5">帶回家 11 招</text>
+        <text x="788" y="212" text-anchor="middle" font-size="11.5" fill="#e8fff5">包班鉤子</text>
+      </g>
+      <line x1="234" y1="155" x2="252" y2="155" stroke="#c9a98f" stroke-width="2.5" marker-end="url(#arw)"/>
+      <line x1="452" y1="155" x2="470" y2="155" stroke="#c9a98f" stroke-width="2.5" marker-end="url(#arw)"/>
+      <line x1="670" y1="155" x2="688" y2="155" stroke="#c9a98f" stroke-width="2.5" marker-end="url(#arw)"/>
+      <text x="460" y="270" text-anchor="middle" font-size="12.5" fill="#8a879a">主講義 P1–26 現場走完這四段；P27–41 是帶回家的進階工具書</text>
+    </svg>
+    <figcaption style="font-size:12.5px;color:var(--ink3);padding:10px 16px;border-top:1px dashed var(--line);background:#fdfaf6">圖 1｜教案骨架：起承轉合四段（依 41 頁分鏡表整理）</figcaption>
+  </figure>
+  <div class="golden"><div class="q">「你會講話，你就會用 AI。」</div><div class="a">全課定錨金句（P6）</div></div>
+</section>
+
+<!-- 2 流程 -->
+<section class="chapter" id="sec-flow">
+  <span class="chip" style="background:linear-gradient(90deg,#e07b39,#c98a0a)">TEACHING FLOW</span>
+  <h2 class="ct">2. 教學流程（起承轉合）</h2>
+
+  <h3 id="f-open"><span class="stage">起</span>兩個小魔法（P3–6）</h3>
+  <ul class="pt">
+    <li><b>小魔法①「拍個冰箱，它給你今晚菜單」（P4）</b>：最輕鬆的破冰，讓學員看到 AI 讀圖給建議。</li>
+    <li><b>小魔法②「你的鬼畫符，它也讀得懂」（P5）</b>：手寫→整齊文字，製造「哇」，橋接到工作場景。</li>
+    <li><b>定錨金句（P6）</b>：「你會講話，你就會用 AI」——把門檻一次打掉。</li>
+  </ul>
+
+  <h3 id="f-what"><span class="stage">承</span>AI 是什麼＋公務員小美＋四招（P7–16）</h3>
+  <ul class="pt">
+    <li><b>用「蘋果」就懂（P8）</b>：左右兩色塊對比，把 AI 的核心觀念用一顆蘋果講清楚。</li>
+    <li><b>安心關鍵句（P9，深色金句海報）</b>：「以前要會寫程式，現在只要會講人話。」</li>
+    <li><b>公務員小美的一天（P10）</b>：以「公文、英文信、會議紀錄」三個痛點鎖定行政日常。</li>
+    <li><b>四招心法（P11–15）</b>：小美用的就是這四招（見下一節），P15 呼應主金句。</li>
+    <li><b>四招一張記住（P16）</b>：2×2 四色卡，設計成可拍照帶走。</li>
+  </ul>
+
+  <h3 id="f-do"><span class="stage">轉</span>換你動手了（P17–22）</h3>
+  <ol class="st">
+    <li><b>實作①「先成功一次：改一句話」（P19）</b>：保證成功、給甜頭，建立信心。</li>
+    <li><b>實作② NotebookLM「雜亂對話變紀錄」（P20）</b>：必做 demo，直擊會議紀錄痛點。</li>
+    <li><b>「轉頭給旁邊的人看你做出什麼」（P21）</b>：同儕炫耀時刻，強化成就感。</li>
+    <li><b>兩個工具這樣分（P22）</b>：ChatGPT 卡＋NotebookLM 卡＋Gemini 一句話，收束工具定位。</li>
+  </ol>
+  <div class="note blue">💡 實作設計原則：<b>小到不會失敗</b>。第一個動作只是「改一句話」，先讓每個人都成功一次，再往上加。</div>
+
+  <h3 id="f-close"><span class="stage">合</span>帶著第一步回家（P23–26）</h3>
+  <ul class="pt">
+    <li><b>今晚做一件就好（P24）</b>：三張任務卡，小到不會失敗的回家任務。</li>
+    <li><b>招牌收尾句（P25）</b>：「慢慢來，比較快。」</li>
+    <li><b>這只是開始（P26）</b>：給同仁卡＋給單位卡＋QR，同時是「包班鉤子」與給長官的價值。</li>
+  </ul>
+</section>
+
+<!-- 3 四招 -->
+<section class="chapter" id="sec-4tips">
+  <span class="chip" style="background:linear-gradient(90deg,#d4508e,#7a4fd6)">4 KEY TIPS</span>
+  <h2 class="ct">3. 四大秘訣心法（小美用的就是這四招）</h2>
+  <div class="grid4">
+    <div class="tip"><span class="n">1</span><h5>講越清楚，它做越準</h5><p>把需求講具體（對象、格式、限制），AI 就不會亂猜。對比「❌ 模糊 / ✅ 清楚」兩種問法。</p></div>
+    <div class="tip"><span class="n">2</span><h5>不滿意，直接跟它說</h5><p>不用重寫，直接回「太長了／再正式一點／改成三點」——越聊越好。</p></div>
+    <div class="tip"><span class="n">3</span><h5>卡住了，開新對話</h5><p>越聊越歪時，按「＋新對話」重來，比在原對話硬凹更快。</p></div>
+    <div class="tip"><span class="n">4</span><h5>重要的事，自己要查</h5><p>數字、法規、日期、金額一定人工核對——呼應「重要的事自己查」主金句。</p></div>
+  </div>
+  <div class="prompt">秘訣 1 的示範對比：
+❌「幫我寫個公文」
+✅「幫我寫一份通知民眾臨櫃補件的公文，語氣正式、條列需備文件、300 字內」</div>
+</section>
+
+<!-- 4 進階 -->
+<section class="chapter" id="sec-adv">
+  <span class="chip" style="background:linear-gradient(90deg,#1d9e6f,#0aa6c9)">TAKE-HOME 11</span>
+  <h2 class="ct">4. 進階帶回家 11 招（P27–41）</h2>
+  <p class="cd">現場示範、不強迫操作，讓學員帶回辦公室自己玩。每一招都對準行政高頻痛點。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:44px">招</th><th>招式</th><th>情境（kicker）</th></tr>
+    <tr><td>01</td><td>公文一次生四種對象版本</td><td>行政必備（最對監理所胃口）</td></tr>
+    <tr><td>02</td><td>長文 / PDF 一鍵抓重點</td><td>告別讀長文（NotebookLM 場景）</td></tr>
+    <tr><td>03</td><td>民眾英文信，這樣回</td><td>櫃台救星（涉外洽公）</td></tr>
+    <tr><td>04</td><td>把資料變成簡報大綱</td><td>臨時被交辦（接 Gamma 等工具）</td></tr>
+    <tr><td>05</td><td>Excel 公式，叫 AI 寫</td><td>不用再問同事（行政高頻痛點）</td></tr>
+    <tr><td>06</td><td>拍照變文字（手寫也行）</td><td>告別打字（呼應破冰小魔法）</td></tr>
+    <tr><td>07</td><td>email / Line 語氣改寫</td><td>一句話百變（對上對下都得體）</td></tr>
+    <tr><td>08</td><td>一堆雜訊變待辦清單</td><td>腦袋清空（紅黃綠輕重緩急）</td></tr>
+    <tr><td>09</td><td>筆記變知識圖卡</td><td>小D 工具・GEM</td></tr>
+    <tr><td>10</td><td>照片變寫真圖卡</td><td>小D 工具・GEM</td></tr>
+    <tr><td>11</td><td>做一張心智圖</td><td>幫自己想事情（規劃複雜事）</td></tr>
+  </table></div>
+  <div class="note green">✅ P39 是「11 招回家對照用」四色索引卡＋QR（掃我拿全部提示詞）；P40 放 iPAS 生活應用完整地圖當彩蛋。</div>
+</section>
+
+<!-- 5 金句 -->
+<section class="chapter" id="sec-lines">
+  <span class="chip" style="background:linear-gradient(90deg,#c98a0a,#d4508e)">GOLDEN LINES</span>
+  <h2 class="ct">5. 金句與收尾</h2>
+  <div class="poster"><div class="big">「你會講話，你就會用 AI。」</div><div class="sub">P6 · 全課定錨，打掉門檻</div></div>
+  <div class="poster"><div class="big">「以前要會寫程式，現在只要會講人話。」</div><div class="sub">P9 · 安心關鍵句</div></div>
+  <div class="poster"><div class="big">「慢慢來，比較快。」</div><div class="sub">P25 · 溫暖收尾招牌句</div></div>
+  <div class="golden"><div class="q">「今晚做一件就好。」</div><div class="a">回家任務設計哲學——小到不會失敗，才會真的開始（P24）</div></div>
+</section>
+
+<!-- 6 簡報 -->
+<section class="chapter" id="sec-deck">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5a5866)">DECK & HANDOUT</span>
+  <h2 class="ct">6. 完整簡報與學員講義</h2>
+  <div class="embed">
+    <iframe src="https://drive.google.com/file/d/14H9UXJY8jSCGBEOdSDLahSgrBkoLeRLK/preview" allow="autoplay" loading="lazy" title="AI 開機日．蘆洲監理所 簡報預覽"></iframe>
+    <div class="cap">AI開機日_蘆洲監理所（達人完整版，41 頁）— 需以你的 Google 帳號登入才會顯示。</div>
+  </div>
+  <div class="reslist">
+    <a href="https://drive.google.com/file/d/1uvYoZQapL1RNNF10AaW9nKl_lQSjb3eV/view" target="_blank" rel="noopener"><span>📄</span><span><b>學員講義（A4）</b>AI開機日_蘆洲監理所_20260526.pdf</span></a>
+    <a href="https://drive.google.com/file/d/14H9UXJY8jSCGBEOdSDLahSgrBkoLeRLK/view" target="_blank" rel="noopener"><span>📊</span><span><b>達人完整版簡報</b>41 頁修正版 PDF</span></a>
+    <a href="https://docs.google.com/presentation/d/1GjAp1GW-IGkVYzl1HVjm1MThJOS4CGKE3EYYAEZKtQM/edit" target="_blank" rel="noopener"><span>✏️</span><span><b>可編輯簡報</b>Google 簡報（達人完整版）</span></a>
+    <a href="../plans/"><span>📚</span><span><b>回教案集系列</b>看更多 Tarshar 教案</span></a>
+  </div>
+  <div class="note gold">📌 製作備註（給後製自己）：講義含 6 處插圖位（公仔、主視覺、冰箱、手寫對比、兩張 GEM 成品圖、iPAS 地圖）與 4 處 QR 真碼（手機版講義、練習頁、看更多、全部提示詞），網址底定後一次生碼補上。</div>
+</section>
+
+</article>
+</div>
+
+<footer>
+  AI 開機日．蘆洲監理所・Tarshar 教案集・2026/05<br>
+  🍀 Learn AI with Tarshar｜公部門 AI 體驗工作坊教案
+</footer>
+
+</body>
+</html>

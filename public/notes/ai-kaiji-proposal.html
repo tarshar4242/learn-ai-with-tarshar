@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 開機日｜機關投案版完整教案</title>
+<meta name="description" content="Tarshar 教案集：AI 開機日——兩小時跟上 AI 那班車。機關單位／公部門投案版完整教案：課程目標、分鐘級流程表、教學設計理念、實作與評量、設備需求、投案附件清單，含蘆洲監理所實證場次成果。">
+<style>
+:root{
+  --paper:#faf7f2; --card:#ffffff; --ink:#2b2a33; --ink2:#5a5866; --ink3:#8a879a;
+  --line:#e7e2d8; --accent:#e07b39; --accent2:#f0a868;
+  --cyan:#0aa6c9; --pink:#d4508e; --purple:#7a4fd6; --green:#1d9e6f; --amber:#c98a0a; --blue:#2f6df0;
+  --code:#fdf1e7;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.9}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(250,247,242,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:10px 20px;display:flex;align-items:center;gap:14px}
+.topbar b{font-size:15px}
+.topbar .right{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.topbar a.btn{font-size:12.5px;text-decoration:none;border:1px solid var(--line);border-radius:9px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap}
+.topbar a.btn:hover{border-color:var(--accent);color:var(--accent)}
+.hero{max-width:900px;margin:0 auto;padding:52px 22px 10px;text-align:center}
+.hero .ep{display:inline-block;font-size:12.5px;letter-spacing:3px;color:var(--accent);border:1px solid var(--accent2);border-radius:999px;padding:5px 16px;background:#fdf0e5;margin-bottom:18px}
+.hero h1{font-size:clamp(26px,4.6vw,42px);font-weight:900;line-height:1.35}
+.hero h1 span{background:linear-gradient(90deg,var(--accent),var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .lead{margin-top:14px;font-size:14.5px;color:var(--ink2)}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:18px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:1120px;margin:30px auto 0;padding:0 22px;display:grid;grid-template-columns:236px 1fr;gap:34px;align-items:start}
+nav.toc{position:sticky;top:66px;border:1px solid var(--line);border-radius:14px;background:var(--card);padding:16px 14px;font-size:13.5px}
+nav.toc .t{font-size:12px;letter-spacing:2px;color:var(--ink3);margin-bottom:10px}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:8px;border-left:3px solid transparent}
+nav.toc a:hover{background:#fdf0e5;color:var(--accent)}
+nav.toc a.sub{padding-left:24px;font-size:12.8px}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:30px 32px;margin-bottom:26px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:2px;font-weight:700;color:#fff;border-radius:999px;padding:5px 14px;margin-bottom:12px}
+h2.ct{font-size:23px;font-weight:900;margin-bottom:4px}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:18px;font-weight:800;margin:30px 0 10px;padding-left:12px;border-left:4px solid var(--accent)}
+h4{font-size:15.5px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink)}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 24px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"◆";position:absolute;left:4px;font-size:9px;top:12px;color:var(--accent2)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:8px;width:23px;height:23px;border-radius:7px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:800;display:grid;place-items:center}
+.prompt{background:var(--code);border:1px solid #f3d9c0;border-left:4px solid var(--accent);border-radius:10px;padding:13px 16px;font-family:"Cascadia Code",Consolas,monospace;font-size:12.6px;color:#8a4b1e;white-space:pre-wrap;line-height:1.8;margin:10px 0;overflow-x:auto}
+.note{display:flex;gap:10px;border-radius:12px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.85}
+.note.gold{background:#fdf6e7;border:1px solid #eeddb4;color:#7a5b12}
+.note.blue{background:#eef6fd;border:1px solid #c9e3f7;color:#1d5e8f}
+.note.green{background:#eafaf2;border:1px solid #bfe8d4;color:#166a4c}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:#fdf0e5;padding:9px 12px;text-align:left;font-size:12.8px;border:1px solid var(--line);color:var(--ink)}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.stage{display:inline-block;font-weight:800;font-size:12px;color:#fff;background:var(--accent);border-radius:6px;padding:2px 9px;margin-right:7px;letter-spacing:1px;vertical-align:middle}
+.poster{background:linear-gradient(120deg,#fdf0e5,#fdeef4);border:1px solid #f2d7c4;border-radius:14px;padding:22px 24px;margin:16px 0;text-align:center}
+.poster .big{font-size:20px;font-weight:900;color:var(--accent);line-height:1.5}
+.poster .sub{font-size:13px;color:var(--ink2);margin-top:6px}
+.grid4{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+@media (max-width:560px){ .grid4{grid-template-columns:1fr} }
+.tip{border:1px solid var(--line);border-radius:14px;padding:16px 18px;background:#fff}
+.tip .n{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:8px;background:var(--accent);color:#fff;font-weight:800;font-size:13px;margin-bottom:8px}
+.tip h5{font-size:15px;font-weight:800;margin-bottom:4px}
+.tip p{font-size:13px;color:var(--ink2)}
+.reslist{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+@media (max-width:560px){ .reslist{grid-template-columns:1fr} }
+.reslist a{display:flex;gap:10px;align-items:center;text-decoration:none;border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:#fff;color:var(--ink2);font-size:13.5px;transition:.2s}
+.reslist a:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px)}
+.reslist a b{display:block;color:var(--ink);font-size:14px}
+.golden{background:linear-gradient(120deg,#fdf0e5,#f3eeff);border:1px solid #f2d7c4;border-radius:14px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:800;color:var(--accent)}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+footer{max-width:1120px;margin:20px auto 0;padding:30px 22px 60px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:2}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} }
+@media print{ .topbar,nav.toc,.clv-home{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+<a href="../plans/" class="clv-home" style="position:fixed;top:14px;left:14px;z-index:99999;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.96);color:#3f6b2e;border:1.5px solid #a8c686;border-radius:999px;padding:8px 15px;font-size:13.5px;font-weight:700;text-decoration:none;box-shadow:0 4px 16px rgba(0,0,0,.22);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);font-family:'Noto Sans TC','PingFang TC',system-ui,sans-serif" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+
+<div class="topbar">
+  <b>📚 Tarshar 教案集</b>
+  <div class="right">
+    <a class="btn" href="luzhou-ai-startup.html">🏛️ 蘆洲實證場教案</a>
+    <a class="btn" href="../plans/">📚 教案集系列</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">Tarshar 教案集 · 機關投案版</span>
+  <h1>AI 開機日<span>．兩小時跟上 AI 那班車</span></h1>
+  <p class="lead">為<b>機關單位／公部門行政同仁</b>設計的 AI 體驗工作坊——<b>投案版完整教案</b>。含課程目標、分鐘級流程表、教學設計理念、實作與評量、設備需求與投案附件清單。已於 <b>2026/05 蘆洲監理所</b>實際開課驗證，本頁可直接列印作為投案文件。</p>
+  <div class="meta">
+    <span>🏛️ 機關單位通用</span>
+    <span>⏱️ 120 分鐘（可客製）</span>
+    <span>👥 建議 20–40 人</span>
+    <span>📄 41 頁講義（現場 26＋帶回家 15）</span>
+    <span>✅ 蘆洲監理所實證</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-basic">1. 課程基本資料</a>
+  <a href="#sec-goal">2. 課程目標與預期效益</a>
+  <a href="#sec-run">3. 分鐘級課程流程表</a>
+  <a class="sub" href="#r-open">起｜破冰 20 分</a>
+  <a class="sub" href="#r-idea">承｜觀念 35 分</a>
+  <a class="sub" href="#r-do">轉｜實作 45 分</a>
+  <a class="sub" href="#r-close">合｜收尾 15 分</a>
+  <a href="#sec-design">4. 教學設計理念</a>
+  <a href="#sec-tips">5. 四招心法＋提示語範本</a>
+  <a href="#sec-assess">6. 實作活動與評量</a>
+  <a href="#sec-adv">7. 延伸：帶回家 11 招</a>
+  <a href="#sec-need">8. 教材與設備需求</a>
+  <a href="#sec-proof">9. 實證場次與講師</a>
+  <a href="#sec-attach">10. 投案附件清單</a>
+</nav>
+
+<article>
+
+<!-- 1 基本資料 -->
+<section class="chapter" id="sec-basic">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--pink))">COURSE INFO</span>
+  <h2 class="ct">1. 課程基本資料</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:120px">課程名稱</th><td>AI 開機日——「兩小時，跟上 AI 那班車」機關 AI 體驗工作坊</td></tr>
+    <tr><th>適用對象</th><td>機關單位／公部門行政同仁，<b>零 AI 經驗可</b>（小白友善設計）</td></tr>
+    <tr><th>建議人數</th><td>20–40 人（超過 40 人建議分梯，確保實作段每人都被照顧到）</td></tr>
+    <tr><th>時數／形式</th><td>120 分鐘體驗式工作坊：講述＋現場示範＋<b>學員動手做</b>；可客製為半日班或系列包班（見第 10 節）</td></tr>
+    <tr><th>教學骨架</th><td><b>起</b>（兩個小魔法破冰）→ <b>承</b>（一顆蘋果講懂 AI＋公務員情境＋四招心法）→ <b>轉</b>(現場動手、先成功一次）→ <b>合</b>（回家任務＋帶回家 11 招工具書）</td></tr>
+    <tr><th>使用工具</th><td>ChatGPT（一問一答）、NotebookLM（雜亂資料變紀錄）、Gemini（Google 生態）——全部使用<b>免費版</b>即可完成課程，無需單位採購</td></tr>
+    <tr><th>講義</th><td>共 41 頁：主講義 P1–26（現場逐頁走）＋進階 P27–41（示範不強迫操作，帶回家自用的 11 招工具書）</td></tr>
+    <tr><th>學員產出</th><td>每位學員現場完成至少一次 AI 改寫任務＋一份 NotebookLM 自動會議紀錄（詳第 6 節）</td></tr>
+  </table></div>
+</section>
+
+<!-- 2 目標 -->
+<section class="chapter" id="sec-goal">
+  <span class="chip" style="background:linear-gradient(90deg,var(--cyan),var(--accent))">GOALS</span>
+  <h2 class="ct">2. 課程目標與預期效益</h2>
+  <h3>學員面（下課即帶走）</h3>
+  <ol class="st">
+    <li><b>破除恐懼</b>：親眼見證兩個「小魔法」，理解「你會講話，你就會用 AI」——不必會程式。</li>
+    <li><b>建立正確認知</b>：用生活比喻聽懂 AI 是什麼、擅長與不擅長什麼，知道「重要的事要自己查」。</li>
+    <li><b>四招帶得走的心法</b>：講清楚、直接回饋、卡住開新對話、重要資訊人工核對。</li>
+    <li><b>現場成功經驗</b>：每人至少完成一次 AI 任務（改寫公文語句／生成會議紀錄），信心從做中來。</li>
+    <li><b>延續動能</b>：帶回家 11 招工具書＋「今晚做一件就好」任務卡，回辦公室立刻能用。</li>
+  </ol>
+  <h3>單位面（給長官的價值）</h3>
+  <ul class="pt">
+    <li><b>行政效率</b>：11 招全部對準行政高頻痛點——公文四版本、長文抓重點、英文信回覆、Excel 公式、會議紀錄自動化。</li>
+    <li><b>低導入成本</b>：全程使用免費工具、學員自帶手機即可，無需採購軟硬體。</li>
+    <li><b>風險意識同步建立</b>：課程內建「重要的事自己查」查核觀念，AI 使用與公務嚴謹並行。</li>
+    <li><b>可延續</b>：課後提供線上導覽台（簡報、講義、提示詞隨掃隨用），學習不因下課中斷。</li>
+  </ul>
+  <div class="golden"><div class="q">「你會講話，你就會用 AI。」</div><div class="a">全課定錨金句——課程目標一句話版</div></div>
+</section>
+
+<!-- 3 流程表 -->
+<section class="chapter" id="sec-run">
+  <span class="chip" style="background:linear-gradient(90deg,#e07b39,#c98a0a)">RUNDOWN 120'</span>
+  <h2 class="ct">3. 分鐘級課程流程表（120 分鐘）</h2>
+  <p class="cd">依 41 頁分鏡簡報逐段對應。時間為建議配置，可依單位作息（如中場休息長度）微調。</p>
+
+  <h3 id="r-open"><span class="stage">起</span>破冰——兩個小魔法（0:00–0:20，P1–6）</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:90px">時間</th><th>內容</th><th style="width:120px">方法</th><th style="width:70px">頁碼</th></tr>
+    <tr><td>0:00–0:05</td><td>開場：講師自介＋「今天不教名詞，先看魔法」</td><td>講述</td><td>P1–3</td></tr>
+    <tr><td>0:05–0:12</td><td>小魔法①「拍個冰箱，它給你今晚菜單」：現場示範 AI 讀圖給建議</td><td>現場示範</td><td>P4</td></tr>
+    <tr><td>0:12–0:18</td><td>小魔法②「你的鬼畫符，它也讀得懂」：手寫便條→整齊文字</td><td>現場示範</td><td>P5</td></tr>
+    <tr><td>0:18–0:20</td><td>定錨金句：「你會講話，你就會用 AI」</td><td>金句海報</td><td>P6</td></tr>
+  </table></div>
+
+  <h3 id="r-idea"><span class="stage">承</span>觀念——AI 是什麼＋公務員小美＋四招（0:20–0:55，P7–16）</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:90px">時間</th><th>內容</th><th style="width:120px">方法</th><th style="width:70px">頁碼</th></tr>
+    <tr><td>0:20–0:28</td><td>「用一顆蘋果就懂」：AI 核心觀念的生活比喻；安心關鍵句「以前要會寫程式，現在只要會講人話」</td><td>比喻講述</td><td>P8–9</td></tr>
+    <tr><td>0:28–0:38</td><td>「公務員小美的一天」：公文、英文信、會議紀錄三個行政痛點情境劇</td><td>情境敘事</td><td>P10</td></tr>
+    <tr><td>0:38–0:52</td><td>四招心法逐招講解（每招含 ❌/✅ 對比示範）</td><td>示範對比</td><td>P11–15</td></tr>
+    <tr><td>0:52–0:55</td><td>「四招一張記住」2×2 四色卡——請學員拍照帶走</td><td>拍照時刻</td><td>P16</td></tr>
+  </table></div>
+  <div class="note blue">☕ 建議此處安排 10 分鐘中場休息（0:55–1:05）；休息前預告「下半場換你動手」，並請學員先登入 ChatGPT。</div>
+
+  <h3 id="r-do"><span class="stage">轉</span>實作——換你動手了（1:05–1:50，P17–22）</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:90px">時間</th><th>內容</th><th style="width:120px">方法</th><th style="width:70px">頁碼</th></tr>
+    <tr><td>1:05–1:20</td><td>實作①「先成功一次：改一句話」——每人把一句生硬公文句丟給 AI 改寫（保證成功設計）</td><td>全員實作</td><td>P19</td></tr>
+    <tr><td>1:20–1:35</td><td>實作② NotebookLM「雜亂對話變會議紀錄」——講師示範＋學員跟做</td><td>示範＋跟做</td><td>P20</td></tr>
+    <tr><td>1:35–1:42</td><td>「轉頭給旁邊的人看你做出什麼」——同儕分享，強化成就感</td><td>同儕分享</td><td>P21</td></tr>
+    <tr><td>1:42–1:50</td><td>兩個工具這樣分：ChatGPT／NotebookLM／Gemini 定位收束</td><td>總結卡</td><td>P22</td></tr>
+  </table></div>
+
+  <h3 id="r-close"><span class="stage">合</span>收尾——帶著第一步回家（1:50–2:00，P23–26）</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:90px">時間</th><th>內容</th><th style="width:120px">方法</th><th style="width:70px">頁碼</th></tr>
+    <tr><td>1:50–1:55</td><td>「今晚做一件就好」三張任務卡＋快速預覽帶回家 11 招（P27–41 示範不操作）</td><td>任務指派</td><td>P24, P27–41</td></tr>
+    <tr><td>1:55–2:00</td><td>招牌收尾句「慢慢來，比較快」＋「這只是開始」：給同仁卡、給單位卡、QR 掃碼帶走全部資源</td><td>金句收尾</td><td>P25–26</td></tr>
+  </table></div>
+</section>
+
+<!-- 4 設計理念 -->
+<section class="chapter" id="sec-design">
+  <span class="chip" style="background:linear-gradient(90deg,#d4508e,#7a4fd6)">DESIGN</span>
+  <h2 class="ct">4. 教學設計理念</h2>
+  <ul class="pt">
+    <li><b>不教名詞，先給「哇」</b>：對零經驗學員，第一個接觸點是親眼看到魔法，不是投影片上的專有名詞。恐懼降下來，耳朵才會打開。</li>
+    <li><b>小到不會失敗</b>：第一個實作只是「改一句話」——先讓每個人都成功一次，再往上加難度。成功經驗是成人學習最強的動機。</li>
+    <li><b>情境完全在地化</b>：所有範例都是行政日常（公文、英文信、會議紀錄、Excel），學員不需要「翻譯」成自己的工作場景。</li>
+    <li><b>金句定錨</b>：三句話貫穿全場（開場「你會講話就會用 AI」、中段「只要會講人話」、收尾「慢慢來比較快」），下課後學員留下的是句子，不是頁數。</li>
+    <li><b>雙講義結構</b>：現場 26 頁走完課程，帶回家 15 頁是延伸工具書——課程結束不是學習結束。</li>
+    <li><b>嚴謹並行</b>：四招心法中「重要的事，自己要查」明確建立查核習慣，回應公部門對正確性的要求。</li>
+  </ul>
+</section>
+
+<!-- 5 四招 -->
+<section class="chapter" id="sec-tips">
+  <span class="chip" style="background:linear-gradient(90deg,#c98a0a,#d4508e)">4 KEY TIPS</span>
+  <h2 class="ct">5. 四招心法＋提示語範本</h2>
+  <div class="grid4">
+    <div class="tip"><span class="n">1</span><h5>講越清楚，它做越準</h5><p>把需求講具體（對象、格式、限制），AI 就不會亂猜。</p></div>
+    <div class="tip"><span class="n">2</span><h5>不滿意，直接跟它說</h5><p>不用重寫，直接回「太長了／再正式一點／改成三點」。</p></div>
+    <div class="tip"><span class="n">3</span><h5>卡住了，開新對話</h5><p>越聊越歪時按「＋新對話」重來，比硬凹更快。</p></div>
+    <div class="tip"><span class="n">4</span><h5>重要的事，自己要查</h5><p>數字、法規、日期、金額一定人工核對。</p></div>
+  </div>
+  <h4>課堂示範提示語（節錄）</h4>
+  <div class="prompt">秘訣 1 對比示範：
+❌「幫我寫個公文」
+✅「幫我寫一份通知民眾臨櫃補件的公文，語氣正式、條列需備文件、300 字內」</div>
+  <div class="prompt">實作①「先成功一次」：
+「請把這句話改得更客氣、更好懂，給洽公民眾看：
+　『未依規定期限辦理換照者，依法逕行註銷。』」</div>
+  <div class="prompt">實作② NotebookLM 會議紀錄：
+「把我貼上的討論內容整理成會議紀錄：
+　條列決議事項、待辦（含負責人）、下次會議時間。」</div>
+</section>
+
+<!-- 6 評量 -->
+<section class="chapter" id="sec-assess">
+  <span class="chip" style="background:linear-gradient(90deg,#1d9e6f,#0aa6c9)">OUTPUT</span>
+  <h2 class="ct">6. 實作活動與評量方式</h2>
+  <div class="twrap"><table>
+    <tr><th>學員產出物</th><th>對應活動</th><th>檢核方式</th></tr>
+    <tr><td>一句 AI 改寫的公文語句</td><td>實作①「先成功一次」</td><td>現場舉手回報完成＋同儕互看</td></tr>
+    <tr><td>一份 AI 生成的會議紀錄</td><td>實作② NotebookLM</td><td>講師巡場確認每組完成</td></tr>
+    <tr><td>四招心法照片</td><td>P16 拍照時刻</td><td>「拍下來才算帶走」全員拍照</td></tr>
+    <tr><td>回家任務承諾</td><td>「今晚做一件就好」任務卡</td><td>學員自選一張卡並向鄰座說出</td></tr>
+  </table></div>
+  <div class="note green">✅ 評量哲學：體驗工作坊不考試——以「每個人現場成功一次＋帶走可執行的下一步」為成功標準；可另配合單位需求提供課後滿意度問卷。</div>
+</section>
+
+<!-- 7 帶回家 -->
+<section class="chapter" id="sec-adv">
+  <span class="chip" style="background:linear-gradient(90deg,#7a4fd6,#2f6df0)">TAKE-HOME 11</span>
+  <h2 class="ct">7. 延伸：帶回家 11 招（P27–41）</h2>
+  <p class="cd">現場快速示範、不強迫操作；每招附提示詞 QR，回辦公室掃碼即用。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:44px">招</th><th>招式</th><th>行政情境</th></tr>
+    <tr><td>01</td><td>公文一次生四種對象版本</td><td>行政必備</td></tr>
+    <tr><td>02</td><td>長文 / PDF 一鍵抓重點</td><td>告別讀長文</td></tr>
+    <tr><td>03</td><td>民眾英文信，這樣回</td><td>櫃台救星</td></tr>
+    <tr><td>04</td><td>把資料變成簡報大綱</td><td>臨時被交辦</td></tr>
+    <tr><td>05</td><td>Excel 公式，叫 AI 寫</td><td>不用再問同事</td></tr>
+    <tr><td>06</td><td>拍照變文字（手寫也行）</td><td>告別打字</td></tr>
+    <tr><td>07</td><td>email / Line 語氣改寫</td><td>一句話百變</td></tr>
+    <tr><td>08</td><td>一堆雜訊變待辦清單</td><td>腦袋清空</td></tr>
+    <tr><td>09</td><td>筆記變知識圖卡</td><td>加值示範</td></tr>
+    <tr><td>10</td><td>照片變寫真圖卡</td><td>加值示範</td></tr>
+    <tr><td>11</td><td>做一張心智圖</td><td>幫自己想事情</td></tr>
+  </table></div>
+</section>
+
+<!-- 8 需求 -->
+<section class="chapter" id="sec-need">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5a5866)">LOGISTICS</span>
+  <h2 class="ct">8. 教材與設備需求</h2>
+  <h3>講師自備</h3>
+  <ul class="pt">
+    <li>41 頁簡報（含現場示範用素材）＋A4 學員講義印刷檔</li>
+    <li>課後線上導覽台網站（簡報、講義、全部提示詞，掃 QR 即達）</li>
+  </ul>
+  <h3>請單位協助</h3>
+  <ul class="pt">
+    <li>投影設備（HDMI）＋麥克風＋<b>可上網的 Wi-Fi</b>（實作段學員需連線）</li>
+    <li>學員每人自帶<b>智慧型手機</b>（免安裝 App，用瀏覽器即可）；有筆電更佳、非必要</li>
+    <li>講義印刷：A4 每人一份（亦可提供電子版由單位自印）</li>
+    <li>場地座位建議可交談（實作段有同儕分享）</li>
+  </ul>
+  <div class="note gold">💰 成本說明：課程全程使用免費版 AI 工具，單位<b>無需採購任何軟體授權</b>；學員也不需註冊付費帳號。</div>
+</section>
+
+<!-- 9 實證 -->
+<section class="chapter" id="sec-proof">
+  <span class="chip" style="background:linear-gradient(90deg,var(--green),var(--cyan))">TRACK RECORD</span>
+  <h2 class="ct">9. 實證場次與講師</h2>
+  <h3>實證場次：蘆洲監理所（2026/05/26）</h3>
+  <ul class="pt">
+    <li>對象：監理所行政同仁；形式：兩小時體驗工作坊，全程照本教案執行。</li>
+    <li>課後產出：41 頁完整簡報＋A4 學員講義＋線上導覽台（學員掃碼延續學習）。</li>
+    <li>課後迭代：依現場回饋完成前 40 頁逐頁修改與 50 分鐘 demo 講稿，教案為迭代後版本。</li>
+  </ul>
+  <div class="reslist">
+    <a href="luzhou-ai-startup.html"><span>🏛️</span><span><b>蘆洲實證場完整教案</b>教學流程與簡報講義全紀錄</span></a>
+    <a href="https://tarshar4242.github.io/ai-kaiji-luzhou/" target="_blank" rel="noopener"><span>🧭</span><span><b>學員線上導覽台</b>課後延續學習網站（實際成品）</span></a>
+  </div>
+  <h3>講師：Tarshar（羅靜娟）</h3>
+  <ul class="pt">
+    <li>AI 講師・「Learn AI with Tarshar」品牌主理人；淡江大學 EMBA 資訊管理研究生。</li>
+    <li>專長：零基礎 AI 入門教學、公部門行政情境課程設計、AI 工作流實作。</li>
+    <li>教學風格：生活比喻講觀念（不堆術語）、保證成功的實作設計、陪跑式帶課。</li>
+  </ul>
+</section>
+
+<!-- 10 附件 -->
+<section class="chapter" id="sec-attach">
+  <span class="chip" style="background:linear-gradient(90deg,var(--amber),var(--accent))">ATTACHMENTS</span>
+  <h2 class="ct">10. 投案附件清單與客製選項</h2>
+  <h3>投案時隨案檢附</h3>
+  <ol class="st">
+    <li>本教案（本頁列印版即可，已含課程目標、流程表、設備需求）</li>
+    <li>講師簡歷＋相關證照（另附）</li>
+    <li>實證場成品連結：蘆洲場教案頁＋學員導覽台（見第 9 節）</li>
+    <li>41 頁簡報樣張／學員講義樣張（依單位需求提供）</li>
+  </ol>
+  <h3>客製選項</h3>
+  <div class="twrap"><table>
+    <tr><th>方案</th><th>時數</th><th>內容差異</th></tr>
+    <tr><td><b>A 體驗班</b>（本教案）</td><td>120 分鐘</td><td>起承轉合完整走一輪，兩個實作</td></tr>
+    <tr><td><b>B 半日班</b></td><td>3–4 小時</td><td>實作段擴充：帶回家 11 招挑 3–4 招現場做完</td></tr>
+    <tr><td><b>C 系列包班</b></td><td>依需求</td><td>依單位業務痛點客製系列課（如公文班、會議紀錄班、Excel 班）</td></tr>
+  </table></div>
+  <div class="note blue">📮 課程洽詢與客製討論，歡迎透過單位既有聯繫管道與講師接洽；教案內容可依機關屬性（監理、戶政、稅務…）替換在地化範例。</div>
+</section>
+
+</article>
+</div>
+
+<footer>
+  AI 開機日．機關投案版完整教案・Tarshar 教案集・2026/07<br>
+  🍀 Learn AI with Tarshar｜公部門 AI 體驗工作坊
+</footer>
+
+</body>
+</html>

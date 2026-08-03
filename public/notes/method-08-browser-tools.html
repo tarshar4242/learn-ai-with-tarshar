@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>不用後端、不用資料庫：用 AI 做一個跑在瀏覽器裡的小工具｜Tarshar 教案集</title>
+<meta name="description" content="Tarshar 教案集：不會寫程式，也能用 AI 做出跑在瀏覽器裡的純前端小工具。記錄小D 做台股回測工具、QR code 產生器的完整做法，什麼是純前端、怎麼跟 AI 描述需求、怎麼串公開資料、怎麼部署分享，給零基礎學員的方法教學">
+<style>
+:root{
+  --paper:#f4f0e8; --card:#fffdf7; --card2:#fbf8ef; --ink:#3a3528; --ink2:#766f61; --ink3:#8a8674;
+  --line:#d8d0bf; --accent:#5d8d56; --accent2:#8cbd7d;
+  --code:#fffdf7;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.9}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(244,240,232,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:10px 20px;display:flex;align-items:center;gap:14px}
+.topbar b{font-size:15px}
+.topbar .right{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.topbar a.btn{font-size:12.5px;text-decoration:none;border:1px solid var(--line);border-radius:9px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap}
+.topbar a.btn:hover{border-color:var(--accent);color:var(--accent)}
+.hero{max-width:900px;margin:0 auto;padding:52px 22px 10px;text-align:center}
+.hero .ep{display:inline-block;font-size:12.5px;letter-spacing:3px;color:var(--accent);border:1px solid var(--accent2);border-radius:999px;padding:5px 16px;background:#eef5e9;margin-bottom:18px}
+.hero h1{font-size:clamp(24px,4.4vw,40px);font-weight:900;line-height:1.4;color:var(--ink)}
+.hero .lead{margin-top:14px;font-size:14.5px;color:var(--ink2)}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:18px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+
+.showcase{max-width:900px;margin:26px auto 0;padding:0 22px}
+.showcase-box{background:linear-gradient(120deg,#eef5e9,#fbf8ef);border:1px solid var(--accent2);border-radius:18px;padding:24px 26px;text-align:center;margin-bottom:14px}
+.showcase-box .kicker{font-size:12.5px;color:var(--accent);font-weight:800;letter-spacing:1px;margin-bottom:8px}
+.showcase-box p{font-size:14px;color:var(--ink2);margin:6px 0 16px}
+.showcase-box a.cta{display:inline-flex;align-items:center;gap:8px;text-decoration:none;background:var(--accent);color:#fff;font-weight:800;font-size:14.5px;padding:12px 22px;border-radius:999px;box-shadow:0 6px 18px rgba(93,141,86,.28)}
+.showcase-box a.cta:hover{background:#4c7745}
+.showcase-box .url{margin-top:10px;font-size:12.5px;color:var(--ink3)}
+.showcase-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:640px){ .showcase-row{grid-template-columns:1fr} }
+
+.layout{max-width:1120px;margin:30px auto 0;padding:0 22px;display:grid;grid-template-columns:236px 1fr;gap:34px;align-items:start}
+nav.toc{position:sticky;top:66px;border:1px solid var(--line);border-radius:14px;background:var(--card);padding:16px 14px;font-size:13.5px}
+nav.toc .t{font-size:12px;letter-spacing:2px;color:var(--ink3);margin-bottom:10px}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:8px;border-left:3px solid transparent}
+nav.toc a:hover{background:#eef5e9;color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:30px 32px;margin-bottom:26px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:2px;font-weight:700;color:#fff;border-radius:999px;padding:5px 14px;margin-bottom:12px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+h2.ct{font-size:22px;font-weight:900;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:16.5px;font-weight:800;margin:24px 0 10px;padding-left:12px;border-left:4px solid var(--accent2);color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink)}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 24px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"◆";position:absolute;left:4px;font-size:9px;top:12px;color:var(--accent2)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:8px;width:23px;height:23px;border-radius:7px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:800;display:grid;place-items:center}
+.codebox{background:var(--code);border:1px solid var(--line);border-left:4px solid var(--accent2);border-radius:10px;padding:14px 16px;font-family:"Cascadia Code",Consolas,monospace;font-size:12.6px;color:#3a3528;white-space:pre-wrap;line-height:1.8;margin:12px 0;overflow-x:auto}
+.note{display:flex;gap:10px;border-radius:12px;padding:14px 16px;font-size:14px;margin:14px 0;line-height:1.85}
+.note.green{background:#eef5e9;border:1px solid var(--accent2);color:var(--accent)}
+.note.gold{background:#fdf6e7;border:1px solid #eeddb4;color:#7a5b12}
+.golden{background:linear-gradient(120deg,#eef5e9,#fbf8ef);border:1px solid var(--accent2);border-radius:14px;padding:16px 20px;margin:16px 0;text-align:center}
+.golden .q{font-size:17px;font-weight:900;color:var(--accent)}
+.golden .a{font-size:12.5px;color:var(--ink3);margin-top:6px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+@media (max-width:560px){ .grid2{grid-template-columns:1fr} }
+.mini{border:1px solid var(--line);border-radius:14px;padding:14px 16px;background:#fff}
+.mini .n{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:8px;background:var(--accent2);color:#fff;font-weight:800;font-size:12.5px;margin-bottom:6px}
+.mini h5{font-size:14px;font-weight:800;margin-bottom:4px;color:var(--ink)}
+.mini p{font-size:12.8px;color:var(--ink2)}
+.stage{display:inline-block;font-weight:800;font-size:11.5px;color:#fff;background:var(--accent);border-radius:6px;padding:2px 9px;margin-right:7px;letter-spacing:1px;vertical-align:middle}
+.action{border:1px solid var(--accent2);border-radius:16px;padding:18px 20px;background:#fff;margin:14px 0}
+.action .n{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:10px;background:var(--accent);color:#fff;font-weight:900;font-size:15px;margin-bottom:8px}
+.action h4{font-size:15.5px;font-weight:800;color:var(--ink);margin-bottom:4px}
+.action p{font-size:13.5px}
+.backhome{position:fixed;left:14px;bottom:14px;z-index:9999;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;text-decoration:none;color:#fff;background:var(--accent);border:1px solid #4c7745;border-radius:999px;padding:9px 16px;box-shadow:0 4px 18px rgba(0,0,0,.18)}
+.backhome:hover{background:#4c7745}
+footer{max-width:1120px;margin:20px auto 0;padding:30px 22px 70px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:2}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} }
+@media print{ .topbar,nav.toc,.backhome{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../plans/" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📚 Tarshar 教案集</b>
+  <div class="right">
+    <a class="btn" href="../plans/">📚 教案集系列</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">Tarshar 教案集 · 方法教學 08</span>
+  <h1>不用後端、不用資料庫<br>用 AI 做一個跑在瀏覽器裡的小工具</h1>
+  <p class="lead">這篇記錄的是我（小D）怎麼用 AI 做出「純前端小工具」，整個工具就是一個 HTML 檔，打開就能用，不用租主機、不用架資料庫。手上真的活著、能點開來用的兩個成品：台股策略回測工具、QR code 產生器。這篇把做法拆給你看。</p>
+  <div class="meta">
+    <span>🎓 零程式基礎</span>
+    <span>🌐 純前端＝一個檔案打開就能用</span>
+    <span>💰 免費 GitHub Pages 部署</span>
+    <span>🗓️ 2026</span>
+  </div>
+</header>
+
+<div class="showcase">
+  <div class="showcase-row">
+    <div class="showcase-box">
+      <div class="kicker">先看我做出來的東西 · 1</div>
+      <p>串公開資料、算策略、畫圖表，全部在瀏覽器裡發生。</p>
+      <a class="cta" href="https://tarshar4242.github.io/give-me-money/" target="_blank" rel="noopener">💰 台股策略回測工具 →</a>
+      <div class="url">tarshar4242.github.io/give-me-money</div>
+    </div>
+    <div class="showcase-box">
+      <div class="kicker">先看我做出來的東西 · 2</div>
+      <p>貼網址、按產生、下載圖檔，三步驟做完。</p>
+      <a class="cta" href="https://tarshar4242.github.io/renmei-qrcode-generator/" target="_blank" rel="noopener">🔳 QR code 產生器 →</a>
+      <div class="url">tarshar4242.github.io/renmei-qrcode-generator</div>
+    </div>
+  </div>
+</div>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#c1">1. 什麼叫「純前端」小工具</a>
+  <a href="#c2">2. 什麼需求適合做成小工具</a>
+  <a href="#c3">3. 怎麼跟 AI 開口要一個工具</a>
+  <a href="#c4">4. 串公開資料：台股回測實例</a>
+  <a href="#c5">5. 借現成的功能，不用自己重寫</a>
+  <a href="#c6">6. 部署分享：丟上 GitHub Pages 就是網址</a>
+  <a href="#c7">7. 工具箱思維：不是每個都能純前端到底</a>
+  <a href="#c8">8. 你的三步驟行動建議</a>
+</nav>
+
+<article>
+
+<!-- 1 -->
+<section class="chapter" id="c1">
+  <span class="chip">STEP 01</span>
+  <h2 class="ct">什麼叫「純前端」小工具</h2>
+  <p class="cd">先弄懂這個詞在講什麼，你才知道自己適不適合做。</p>
+  <h3>發生什麼事</h3>
+  <p>我以前一聽到「做一個工具」，腦中就浮出一堆讓我卻步的關鍵字：要架伺服器、要開資料庫、要買主機。後來我才發現，我真正需要的東西根本不用這些。整個工具可以只是<b>一個 HTML 檔</b>，你打開瀏覽器，它就能動，不用安裝、不用註冊主機、不用付錢租空間。這種做法有個名字，叫「純前端」，白話講就是：所有事情都在你打開的那個網頁畫面裡發生，沒有另外一台機器在背後幫你算。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">不是每個工具都要一台伺服器，是大部分我想要的小工具，一個檔案就夠。</div><div class="a">先弄懂這個詞，你會發現自己早就跨過了那道門檻</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 下次想做一個小工具，先問自己一句：「這個東西，打開瀏覽器就能直接用嗎？」如果答案是可以，你要的多半就是一支 HTML 檔，不用先去想什麼後端、什麼資料庫。</div>
+</section>
+
+<!-- 2 -->
+<section class="chapter" id="c2">
+  <span class="chip">STEP 02</span>
+  <h2 class="ct">什麼需求適合做成小工具</h2>
+  <p class="cd">不是所有需求都適合純前端，這裡是我自己抓出來的判斷點。</p>
+  <h3>發生什麼事</h3>
+  <p>我把手上想做、或已經做出來的東西攤開來看，抓到三個判斷點：</p>
+  <ul class="pt">
+    <li>這個東西是我自己用，還是要給很多人同時看到同一份資料？（自己用最適合）</li>
+    <li>資料要不要長期留著、給下次的我或別人看？（大多只需要暫存在這台裝置的瀏覽器裡就夠）</li>
+    <li>有沒有現成、公開、免費的資料可以直接串進來？（有的話，工具馬上就有真實內容，不是空殼）</li>
+  </ul>
+  <p>台股回測工具跟 QR code 產生器，剛好都符合「自己用、不用長期共享一份資料庫」這個條件，所以純前端做起來剛剛好。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">不是工具越複雜越厲害，是需求越單純，越該做成一個檔案就好。</div><div class="a">先看需求的大小，再決定要不要動用複雜的技術</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 把你手上想做的小工具列一張清單，每個都問自己「這是我自己用，還是要很多人一起用同一份資料」。多半答案是「自己用」，那就是純前端最適合出手的位置。</div>
+</section>
+
+<!-- 3 -->
+<section class="chapter" id="c3">
+  <span class="chip">STEP 03</span>
+  <h2 class="ct">怎麼跟 AI 開口要一個工具</h2>
+  <p class="cd">不用懂任何程式語言的名字，你只要會講一句人話。</p>
+  <h3>發生什麼事</h3>
+  <p>我不會寫程式，但我發現只要把「我要什麼」講清楚，AI 就能把工具生出來。像 QR code 產生器，我跟 AI 說的大概就是這樣一句話：</p>
+  <div class="note gold">「我要一個網頁，貼上一個網址，就產生一張 QR code 圖，可以下載存成圖檔。」</div>
+  <p>我沒有講任何一個程式語言的名字，也沒有講任何技術規格，就只是把「輸入什麼、按了什麼會發生什麼、結果長什麼樣」講清楚。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">你不用會寫程式，你只要會把需求講成一句人話。</div><div class="a">越具體，AI 給你的成品越接近你要的樣子</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 開口跟 AI 要工具時，講清楚三件事：輸入什麼、按了什麼會發生什麼、結果要長什麼樣。這三件事講清楚，比會不會用術語重要一百倍。</div>
+</section>
+
+<!-- 4 -->
+<section class="chapter" id="c4">
+  <span class="chip">STEP 04</span>
+  <h2 class="ct">串公開資料：API 是什麼的白話版，台股回測實例</h2>
+  <p class="cd">「串 API」聽起來很技術，其實是跟別人說好一句暗號。</p>
+  <h3>發生什麼事</h3>
+  <p>台股回測工具會去抓股票的歷史價格，這個「去別人那邊拿資料」的動作，術語叫「串 API」。白話講就是：網路上有些單位把資料整理好放著，你的網頁打個招呼（送一個網址，附上一把通行證），對方就把一份乾淨的資料送回來。我的回測工具串的是一個叫 FinMind 的公開資料源，拿到股價之後，接下來算策略、畫圖表全部在瀏覽器裡自己完成，資料完全不經過我自己的伺服器，因為我根本沒有伺服器。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">串 API 不是什麼高深技術，是跟別人說好一句暗號，資料就送過來。</div><div class="a">技術名詞聽起來嚇人，拆開看常常就是一句話的事</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 想讓工具有真實內容而不是空殼，先問 AI：「這個主題有沒有公開、免費的資料可以查？」通常真的有，你要做的只是把那份規則抄一次給 AI，剩下讓它去處理。</div>
+</section>
+
+<!-- 5 -->
+<section class="chapter" id="c5">
+  <span class="chip">STEP 05</span>
+  <h2 class="ct">借現成的功能，不用自己重寫</h2>
+  <p class="cd">別人已經寫好、願意公開讓大家用，你只要負責掛上去。</p>
+  <h3>發生什麼事</h3>
+  <p>QR code 產生器裡，「怎麼把一個網址變成一張 QR code 圖」這段邏輯，我完全沒有自己想過。因為網路上早就有人把這段邏輯寫好、免費公開讓大家用，這種東西有個名字叫「函式庫」。我要做的只是在我的網頁裡掛一行，告訴瀏覽器「去載這個別人寫好的功能」，剩下的排版、加下載按鈕，才是我自己動手的部分。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">不是每個功能都要自己生出來，是先看有沒有人已經做好，願意借你用。</div><div class="a">會借東西，跟會做東西一樣重要</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 做小工具卡關時先問 AI：「這個功能有沒有現成、免費、別人已經寫好的東西可以直接用？」常常真的有，你只負責排版跟串起來，不用從零發明一次。</div>
+</section>
+
+<!-- 6 -->
+<section class="chapter" id="c6">
+  <span class="chip">STEP 06</span>
+  <h2 class="ct">部署分享：丟上 GitHub Pages 就是網址</h2>
+  <p class="cd">工具做在自己電腦裡，只有自己看得到，要分享得再做一步。</p>
+  <h3>發生什麼事</h3>
+  <p>工具寫好放在自己電腦裡，別人打不開。要讓它變成一個誰都能點開的連結，跟我做論文研讀庫那次一樣，一樣是那三行指令：</p>
+  <div class="codebox">git add .
+git commit -m "更新工具"
+git push origin main</div>
+  <p>打完這三行，兩分鐘後就變成一個網址，不用密碼、不用付費、不用管主機。我手上現在就有兩個這樣活著的網址：</p>
+  <ul class="pt">
+    <li>tarshar4242.github.io/give-me-money（台股回測工具）</li>
+    <li>tarshar4242.github.io/renmei-qrcode-generator（QR code 產生器）</li>
+  </ul>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">一個小工具，做完不分享，等於只做了一半。</div><div class="a">部署這一步，門檻比想像中低很多</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 工具做完別急著想「夠不夠好」，先丟上 GitHub Pages 變成一個網址，自己先用個幾天。有問題再回頭改，反正修改一樣是那三行指令，不用怕動了就壞掉。</div>
+</section>
+
+<!-- 7 -->
+<section class="chapter" id="c7">
+  <span class="chip">STEP 07</span>
+  <h2 class="ct">工具箱思維：不是每個都能純前端到底</h2>
+  <p class="cd">誠實面對純前端的邊界，遇到限制加一點點最輕量的幫手就好。</p>
+  <h3>發生什麼事</h3>
+  <p>純前端很方便，但不是萬能。我另外做過一個下載 YouTube 字幕的小工具，一開始想直接在瀏覽器裡跟 YouTube 要資料，結果瀏覽器基於安全限制不給這樣做（這叫「跨域限制」，白話講是網站之間互相設了門檻，不能隨便跨過去拿別人的資料）。這個工具後來多加了一支很輕量的本機小程式幫忙開門：網頁負責操作畫面，那支小程式負責去跟 YouTube 要資料，兩個檔案一起動才能用。它不算完全的純前端，但也遠遠沒有到「要架一整套後端系統」那麼重，開電腦跑一行指令就能動。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">不是所有工具都能純前端到底，是遇到限制時，加一點點最輕量的幫手就好，不用整套升級成大型系統。</div><div class="a">先誠實面對限制，再找最小的解法</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 遇到「瀏覽器不給做」的狀況，先別自己亂猜是哪裡壞了，把狀況講給 AI 聽，問它：「這是瀏覽器的限制嗎？有沒有最輕量的解法？」通常會有一個比「整套架伺服器」小得多的答案。</div>
+</section>
+
+<!-- 8 行動建議 -->
+<section class="chapter" id="c8">
+  <span class="chip">TAKE ACTION</span>
+  <h2 class="ct">給你的三步驟行動建議：明天就能開始</h2>
+  <p class="cd">這篇記錄的不只是兩個網址。它記錄的是一個非工程師，發現「做工具」的門檻其實比想像中低很多。你也可以，從明天開始。</p>
+
+  <div class="action">
+    <div class="n">1</div>
+    <h4>寫下一個你重複在做、但很單純的小任務</h4>
+    <p>轉檔、查資料、產生某個東西，只要是你自己會重複動手做的小事，就是你的第一個小工具候選。</p>
+  </div>
+  <div class="action">
+    <div class="n">2</div>
+    <h4>把「輸入什麼、按了什麼會發生什麼、結果長什麼樣」講給 AI 聽</h4>
+    <p>不用學任何術語，照這篇第三章的方式開口，請 AI 幫你生出一支 HTML 工具。</p>
+  </div>
+  <div class="action">
+    <div class="n">3</div>
+    <h4>做完丟上 GitHub Pages，變成一個網址</h4>
+    <p>自己先用個幾天，有需要再回頭調整，反正修改一樣是那三行指令，跟這篇第六章一模一樣。</p>
+  </div>
+
+  <div class="golden"><div class="q">你不需要是工程師。你需要的只是一個重複在做的小任務，然後開始問。</div><div class="a">慢慢來，比較快</div></div>
+</section>
+
+</article>
+</div>
+
+<footer>
+  不用後端、不用資料庫：用 AI 做一個跑在瀏覽器裡的小工具・Tarshar 教案集・2026<br>
+  🍀 Learn AI with Tarshar｜我不是工程師，我跟各位一樣是被工作追著跑的人，所以我只教明天就能用的東西
+</footer>
+
+<a class="backhome" href="../plans/" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+
+</body>
+</html>

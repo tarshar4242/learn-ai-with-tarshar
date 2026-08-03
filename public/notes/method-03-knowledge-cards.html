@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>一個主題，怎麼變成一套圖卡，再變成一座網站｜Tarshar 教案集</title>
+<meta name="description" content="Tarshar 教案集：記錄小D 怎麼把一個主題拆成一套知識圖卡，再把圖卡整理成一頁式線上展示館。從念頭拆解、卡片骨架、風格描述、命名版本、圖卡到網頁、歸檔分享六個章節，給零基礎學員的方法教學">
+<style>
+:root{
+  --paper:#f4f0e8; --card:#fffdf7; --card2:#fbf8ef; --ink:#3a3528; --ink2:#766f61; --ink3:#8a8674;
+  --line:#d8d0bf; --accent:#5d8d56; --accent2:#8cbd7d;
+  --code:#fffdf7;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.9}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(244,240,232,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:10px 20px;display:flex;align-items:center;gap:14px}
+.topbar b{font-size:15px}
+.topbar .right{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.topbar a.btn{font-size:12.5px;text-decoration:none;border:1px solid var(--line);border-radius:9px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap}
+.topbar a.btn:hover{border-color:var(--accent);color:var(--accent)}
+.hero{max-width:900px;margin:0 auto;padding:52px 22px 10px;text-align:center}
+.hero .ep{display:inline-block;font-size:12.5px;letter-spacing:3px;color:var(--accent);border:1px solid var(--accent2);border-radius:999px;padding:5px 16px;background:#eef5e9;margin-bottom:18px}
+.hero h1{font-size:clamp(24px,4.4vw,40px);font-weight:900;line-height:1.4;color:var(--ink)}
+.hero .lead{margin-top:14px;font-size:14.5px;color:var(--ink2)}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:18px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+
+.showcase{max-width:900px;margin:26px auto 0;padding:0 22px}
+.showcase-box{background:linear-gradient(120deg,#eef5e9,#fbf8ef);border:1px solid var(--accent2);border-radius:18px;padding:24px 26px;text-align:center}
+.showcase-box .kicker{font-size:12.5px;color:var(--accent);font-weight:800;letter-spacing:1px;margin-bottom:8px}
+.showcase-box p{font-size:14px;color:var(--ink2);margin:6px 0 16px}
+.showcase-box a.cta{display:inline-flex;align-items:center;gap:8px;text-decoration:none;background:var(--accent);color:#fff;font-weight:800;font-size:14.5px;padding:12px 22px;border-radius:999px;box-shadow:0 6px 18px rgba(93,141,86,.28)}
+.showcase-box a.cta:hover{background:#4c7745}
+.showcase-box .url{margin-top:10px;font-size:12.5px;color:var(--ink3)}
+
+.layout{max-width:1120px;margin:30px auto 0;padding:0 22px;display:grid;grid-template-columns:236px 1fr;gap:34px;align-items:start}
+nav.toc{position:sticky;top:66px;border:1px solid var(--line);border-radius:14px;background:var(--card);padding:16px 14px;font-size:13.5px}
+nav.toc .t{font-size:12px;letter-spacing:2px;color:var(--ink3);margin-bottom:10px}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:8px;border-left:3px solid transparent}
+nav.toc a:hover{background:#eef5e9;color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:30px 32px;margin-bottom:26px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:2px;font-weight:700;color:#fff;border-radius:999px;padding:5px 14px;margin-bottom:12px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+h2.ct{font-size:22px;font-weight:900;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:16.5px;font-weight:800;margin:24px 0 10px;padding-left:12px;border-left:4px solid var(--accent2);color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink)}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 24px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"◆";position:absolute;left:4px;font-size:9px;top:12px;color:var(--accent2)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:8px;width:23px;height:23px;border-radius:7px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:800;display:grid;place-items:center}
+.codebox{background:var(--code);border:1px solid var(--line);border-left:4px solid var(--accent2);border-radius:10px;padding:14px 16px;font-family:"Cascadia Code",Consolas,monospace;font-size:12.6px;color:#3a3528;white-space:pre-wrap;line-height:1.8;margin:12px 0;overflow-x:auto}
+.note{display:flex;gap:10px;border-radius:12px;padding:14px 16px;font-size:14px;margin:14px 0;line-height:1.85}
+.note.green{background:#eef5e9;border:1px solid var(--accent2);color:var(--accent)}
+.note.gold{background:#fdf6e7;border:1px solid #eeddb4;color:#7a5b12}
+.golden{background:linear-gradient(120deg,#eef5e9,#fbf8ef);border:1px solid var(--accent2);border-radius:14px;padding:16px 20px;margin:16px 0;text-align:center}
+.golden .q{font-size:17px;font-weight:900;color:var(--accent)}
+.golden .a{font-size:12.5px;color:var(--ink3);margin-top:6px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+@media (max-width:560px){ .grid2{grid-template-columns:1fr} }
+.mini{border:1px solid var(--line);border-radius:14px;padding:14px 16px;background:#fff}
+.mini .n{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:8px;background:var(--accent2);color:#fff;font-weight:800;font-size:12.5px;margin-bottom:6px}
+.mini h5{font-size:14px;font-weight:800;margin-bottom:4px;color:var(--ink)}
+.mini p{font-size:12.8px;color:var(--ink2)}
+.stage{display:inline-block;font-weight:800;font-size:11.5px;color:#fff;background:var(--accent);border-radius:6px;padding:2px 9px;margin-right:7px;letter-spacing:1px;vertical-align:middle}
+.action{border:1px solid var(--accent2);border-radius:16px;padding:18px 20px;background:#fff;margin:14px 0}
+.action .n{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:10px;background:var(--accent);color:#fff;font-weight:900;font-size:15px;margin-bottom:8px}
+.action h4{font-size:15.5px;font-weight:800;color:var(--ink);margin-bottom:4px}
+.action p{font-size:13.5px}
+.backhome{position:fixed;left:14px;bottom:14px;z-index:9999;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;text-decoration:none;color:#fff;background:var(--accent);border:1px solid #4c7745;border-radius:999px;padding:9px 16px;box-shadow:0 4px 18px rgba(0,0,0,.18)}
+.backhome:hover{background:#4c7745}
+footer{max-width:1120px;margin:20px auto 0;padding:30px 22px 70px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:2}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} }
+@media print{ .topbar,nav.toc,.backhome{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../plans/" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📚 Tarshar 教案集</b>
+  <div class="right">
+    <a class="btn" href="../plans/">📚 教案集系列</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">Tarshar 教案集 · 方法教學 · 第 3 篇</span>
+  <h1>一個主題，怎麼變成一套圖卡<br>再變成一座線上展示館</h1>
+  <p class="lead">這篇記錄的是我（小D）重複做最多次、最熟練的一套做法：把一個主題拆成一套「執行手冊圖卡」，審查、命名、歸檔，再把圖卡整理成一頁式網頁展示館。這套做法我已經做過幾十套圖卡、九個 webcard 網站，這篇把整套流程攤開給你看。</p>
+  <div class="meta">
+    <span>🎓 零基礎可學</span>
+    <span>🗂️ 幾十套圖卡經驗</span>
+    <span>🌐 九個 webcard 網站</span>
+    <span>🗓️ 2026</span>
+  </div>
+</header>
+
+<div class="showcase">
+  <div class="showcase-box">
+    <div class="kicker">先看我蓋出來的東西</div>
+    <p>圖卡是拿來看的，網頁是拿來分享的。同一套內容，我用同一套方法做成圖卡、再做成網頁，這是其中一個成品。</p>
+    <a class="cta" href="https://tarshar4242.github.io/tar-webcard/" target="_blank" rel="noopener">🗂️ 打開我做的展示館範例 →</a>
+    <div class="url">tarshar4242.github.io/tar-webcard</div>
+  </div>
+</div>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#c1">1. 為什麼是圖卡：一張卡一個念頭</a>
+  <a href="#c2">2. 一套圖卡的骨架</a>
+  <a href="#c3">3. 怎麼跟 AI 描述風格</a>
+  <a href="#c4">4. 命名與版本管理</a>
+  <a href="#c5">5. 從圖卡到展示館網頁</a>
+  <a href="#c6">6. 歸檔與分享</a>
+  <a href="#c7">7. 你的三步驟行動建議</a>
+</nav>
+
+<article>
+
+<!-- 1 為什麼是圖卡 -->
+<section class="chapter" id="c1">
+  <span class="chip">STEP 01</span>
+  <h2 class="ct">為什麼是圖卡：一張卡一個念頭</h2>
+  <p class="cd">資訊不是塞越多越好，是拆得夠細才記得住。</p>
+  <h3>發生什麼事</h3>
+  <p>我一開始也想過把整套做法寫成一篇長文，寫著寫著發現，學員打開一看是滿滿的字，滑兩下就關掉了。後來我改成一張卡只放一個念頭：封面用一句話講清楚這套卡在解決什麼問題，接下來每一張卡只回答一個子問題，看完一整套卡，等於跟著走過一次完整的方法。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">一張卡只能承載一個念頭，貪心塞兩個，兩個都記不住。</div><div class="a">拆得越細，學員越容易帶走</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 動筆前先把你要教的東西拆成一句一句的念頭清單，每句話獨立看都要能懂。這份清單就是你這套圖卡的大綱，一句念頭對一張卡。</div>
+</section>
+
+<!-- 2 骨架 -->
+<section class="chapter" id="c2">
+  <span class="chip">STEP 02</span>
+  <h2 class="ct">一套圖卡的骨架：封面、內容卡、結尾卡</h2>
+  <p class="cd">骨架固定，內容量身。</p>
+  <h3>發生什麼事</h3>
+  <p>每一套圖卡我都用同一個骨架：<b>封面卡</b>定位「這套卡在講什麼、給誰看」；中間是<b>內容卡</b>，每張回答一個子問題，常見的排法是角色與問題、準備與交接、判斷邏輯與步驟、驗證與心得；最後一張<b>結尾卡</b>收斂成一句可以帶走的方法或行動呼籲。卡片數量不用每套都一樣，主題簡單的四張卡就講完（封面加三張內容卡），主題複雜的可以到九張。</p>
+  <div class="codebox">案例A：指揮AI四步驟_體驗課_整理圖卡
+A00 主封面 → A01 問對問題 → A02 打造專業分身
+→ A03 多角度組隊思考 → A04 互動學習
+
+案例B：AI論文圖書館_網頁製作課
+A00 主封面 → A01 起點 → A02 架構 → A03 視覺設計
+→ A04 踩坑 → A05 搜尋功能 → A06 部署
+→ A07 工作流程 → A08 結尾卡</div>
+  <p>兩套卡數不一樣，但骨架一樣：都有封面、都有收尾，中間內容卡跟著主題的複雜度增減。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">有骨架，學員才不會迷路。</div><div class="a">卡數不用硬套，複雜度決定張數</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 先寫封面（一句話講這套卡要解決什麼）跟結尾（一句話講學完可以帶走什麼），中間內容卡就是把「怎麼從封面走到結尾」拆成幾步，一步一張卡。</div>
+</section>
+
+<!-- 3 風格描述 -->
+<section class="chapter" id="c3">
+  <span class="chip">STEP 03</span>
+  <h2 class="ct">怎麼跟 AI 描述風格</h2>
+  <p class="cd">你不用學設計語言，你只要形容你想要的感覺。</p>
+  <h3>發生什麼事</h3>
+  <p>我不懂配色理論，也不會用設計軟體。跟 AI 溝通視覺風格，我就是丟形容詞跟感覺，比如像下面這樣說：</p>
+  <div class="note gold">奶白薄荷、文青感、像獨立書店或日系雜貨店，不要太科技感。</div>
+  <p>AI 會把這句話翻成具體的顏色代碼、字體、版型間距。同一個主題我常會請 AI 一次做兩種視覺版本（A版、B版），排在一起比較，我再挑一個定案，或是留著兩版給不同場合用。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">形容詞是你跟 AI 之間最快的共同語言。</div><div class="a">不用學名詞，先形容感覺</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 想不出配色名詞沒關係，找一個你喜歡的地方當比喻（咖啡店、書店、雜貨舖），直接跟 AI 說「像那種感覺」。一次請它做兩種風格版本，比較之後再挑一個。</div>
+</section>
+
+<!-- 4 命名版本 -->
+<section class="chapter" id="c4">
+  <span class="chip">STEP 04</span>
+  <h2 class="ct">命名與版本管理</h2>
+  <p class="cd">檔名要一眼看出是哪套、第幾張、講什麼。</p>
+  <h3>發生什麼事</h3>
+  <p>圖卡一多，最容易亂的是檔名跟版本。我固定用「案例名稱_系列代碼序號_短標題」這個格式，序號固定用兩位數，方便排序也方便一眼認出順序：</p>
+  <div class="codebox">AI論文圖書館_網頁製作課_A00_主封面.svg
+AI論文圖書館_網頁製作課_A01_起點.svg
+AI論文圖書館_網頁製作課_A02_架構.svg
+...
+AI論文圖書館_網頁製作課_A08_結尾卡.svg</div>
+  <p>改過內容的卡不會直接洗掉舊檔，是加版本後綴（像 _v2、_v3）另存一個新檔，舊版留著不刪。也不會用「final」「最新版」這種模糊字眼當檔名，因為半年後回頭看，你根本不知道哪個才是真的最新。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">命名的規矩不是龜毛，是給未來的自己一條路。</div><div class="a">自己記得住不算數，檔名要能自己說話</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 命名前先定好案例名稱，剩下每張卡就是「案例名稱_序號_短標題」照樣造句。改版不要覆蓋舊檔，加版本號另存新檔就好。</div>
+</section>
+
+<!-- 5 圖卡到網頁 -->
+<section class="chapter" id="c5">
+  <span class="chip">STEP 05</span>
+  <h2 class="ct">從圖卡到展示館網頁</h2>
+  <p class="cd">圖卡是講給一個人聽，網頁是講給所有人看。</p>
+  <h3>發生什麼事</h3>
+  <p>圖卡做完不是結束，是換一個容器。我會把整套卡整理成一頁式網頁，讓學員或教授不用下載檔案，點一個連結就能滑過整套方法。做法跟做圖卡是同一套邏輯：資料夾就是設計圖，先把素材分類好，再讓 AI 照這個結構把它變成網頁骨架，通常排成 hero 開場、先看成品的展示區、章節卡三段。這套流程我重複用了九次，做出九個 webcard 網站。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">圖卡跟網頁不是重做一次，是同一套內容換一個容器。</div><div class="a">骨架不用重想，圖卡的順序就是網頁的章節順序</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 圖卡定稿後，把每張卡的念頭跟金句抽出來，就是網頁每個章節的內容。你不用重新構思架構，圖卡的封面、內容卡、結尾卡順序，直接對應網頁的 hero、章節、行動呼籲。</div>
+</section>
+
+<!-- 6 歸檔分享 -->
+<section class="chapter" id="c6">
+  <span class="chip">STEP 06</span>
+  <h2 class="ct">歸檔與分享：雲端資料夾怎麼放</h2>
+  <p class="cd">歸檔的規矩比做圖卡本身還重要，亂放的圖卡等於沒做。</p>
+  <h3>發生什麼事</h3>
+  <p>圖卡做完不是丟在電腦裡就結束，要進固定的雲端資料夾，一個案例一個資料夾，裡面依視覺版本（A版、B版）再分子資料夾，不會把不同案例的卡混放在同一層：</p>
+  <div class="codebox">TAR_私房圖卡/
+└── 案例名稱/
+    ├── A版_風格名稱/
+    │   ├── 案例_A01_主題.png
+    │   └── 案例_A02_主題.png
+    └── B版_風格名稱/
+        └── 案例_B01_主題.png</div>
+  <p>上傳前我一定先列出雲端資料夾現有的檔案，跟手上要傳的比對，原本已經有的絕對不動，只補沒有的。確認上傳完成之後，我會回頭把資料夾打開來看一次，確認檔名跟位置都對，才算真的歸檔完成。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">做完不等於歸檔完，回頭看一次才算數。</div><div class="a">先比對、後上傳、再驗證，順序不能倒</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 上傳前先列出雲端資料夾裡現有的檔案清單，跟你手上要傳的比對，只補沒有的，原本已經有的絕對不要覆蓋。傳完回頭打開資料夾確認一次再收工。</div>
+</section>
+
+<!-- 7 行動建議 -->
+<section class="chapter" id="c7">
+  <span class="chip">TAKE ACTION</span>
+  <h2 class="ct">給你的三步驟行動建議：明天就能開始</h2>
+  <p class="cd">這套流程記錄的不只是圖卡怎麼做。它記錄的是一個人把「腦中的方法」變成任何人都能點開、看得懂、帶得走的東西。你也可以，從明天開始。</p>
+
+  <div class="action">
+    <div class="n">1</div>
+    <h4>把你要教的東西拆成一句一句的念頭清單</h4>
+    <p>每句話獨立看都要能懂，一句只講一件事。這份清單就是你這套圖卡的大綱，先寫封面那句和結尾那句，中間再補幾步。</p>
+  </div>
+  <div class="action">
+    <div class="n">2</div>
+    <h4>找一個你喜歡的地方當風格比喻，跟 AI 描述感覺</h4>
+    <p>不用學設計、不用學配色理論，一次請 AI 做兩種視覺版本，比較之後挑一個。做完的卡按「案例名稱_序號_短標題」固定命名存檔。</p>
+  </div>
+  <div class="action">
+    <div class="n">3</div>
+    <h4>圖卡定稿後，把念頭跟金句抽出來變成網頁章節</h4>
+    <p>骨架不用重想，圖卡的封面、內容卡、結尾卡順序就是網頁的 hero、章節、行動呼籲順序。上傳前先比對雲端資料夾，只補沒有的，傳完回頭確認一次。</p>
+  </div>
+
+  <div class="golden"><div class="q">你不需要是設計師，你需要的是一套一以貫之的念頭，和固定的規矩。</div><div class="a">慢慢來，比較快</div></div>
+</section>
+
+</article>
+</div>
+
+<footer>
+  一個主題，怎麼變成一套圖卡再變成一座網站・Tarshar 教案集・2026<br>
+  🍀 Learn AI with Tarshar｜我不是工程師，我跟各位一樣是被工作追著跑的人，所以我只教明天就能用的東西
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>一百多篇論文，AI 幫你一天篩完：批次文獻篩選法｜Tarshar 教案集</title>
+<meta name="description" content="Tarshar 教案集：不是讀得快，是先知道哪些不用讀。記錄小D 用 AI 一天篩完一整場學術研討會 164 篇論文的做法，從定義相關性標準、批次處理、總表產出到人的把關位置，給非工程師的文獻初篩方法">
+<style>
+:root{
+  --paper:#f4f0e8; --card:#fffdf7; --card2:#fbf8ef; --ink:#3a3528; --ink2:#766f61; --ink3:#8a8674;
+  --line:#d8d0bf; --accent:#5d8d56; --accent2:#8cbd7d;
+  --code:#fffdf7;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.9}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(244,240,232,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:10px 20px;display:flex;align-items:center;gap:14px}
+.topbar b{font-size:15px}
+.topbar .right{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.topbar a.btn{font-size:12.5px;text-decoration:none;border:1px solid var(--line);border-radius:9px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap}
+.topbar a.btn:hover{border-color:var(--accent);color:var(--accent)}
+.hero{max-width:900px;margin:0 auto;padding:52px 22px 10px;text-align:center}
+.hero .ep{display:inline-block;font-size:12.5px;letter-spacing:3px;color:var(--accent);border:1px solid var(--accent2);border-radius:999px;padding:5px 16px;background:#eef5e9;margin-bottom:18px}
+.hero h1{font-size:clamp(24px,4.4vw,40px);font-weight:900;line-height:1.4;color:var(--ink)}
+.hero .lead{margin-top:14px;font-size:14.5px;color:var(--ink2)}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:18px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+
+.showcase{max-width:900px;margin:26px auto 0;padding:0 22px}
+.showcase-box{background:linear-gradient(120deg,#eef5e9,#fbf8ef);border:1px solid var(--accent2);border-radius:18px;padding:24px 26px;text-align:center}
+.showcase-box .kicker{font-size:12.5px;color:var(--accent);font-weight:800;letter-spacing:1px;margin-bottom:8px}
+.showcase-box p{font-size:14px;color:var(--ink2);margin:6px 0 16px}
+
+.layout{max-width:1120px;margin:30px auto 0;padding:0 22px;display:grid;grid-template-columns:236px 1fr;gap:34px;align-items:start}
+nav.toc{position:sticky;top:66px;border:1px solid var(--line);border-radius:14px;background:var(--card);padding:16px 14px;font-size:13.5px}
+nav.toc .t{font-size:12px;letter-spacing:2px;color:var(--ink3);margin-bottom:10px}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:8px;border-left:3px solid transparent}
+nav.toc a:hover{background:#eef5e9;color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:30px 32px;margin-bottom:26px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:2px;font-weight:700;color:#fff;border-radius:999px;padding:5px 14px;margin-bottom:12px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+h2.ct{font-size:22px;font-weight:900;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:16.5px;font-weight:800;margin:24px 0 10px;padding-left:12px;border-left:4px solid var(--accent2);color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink)}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 24px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"◆";position:absolute;left:4px;font-size:9px;top:12px;color:var(--accent2)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:8px;width:23px;height:23px;border-radius:7px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:800;display:grid;place-items:center}
+.codebox{background:var(--code);border:1px solid var(--line);border-left:4px solid var(--accent2);border-radius:10px;padding:14px 16px;font-family:"Cascadia Code",Consolas,monospace;font-size:12.6px;color:#3a3528;white-space:pre-wrap;line-height:1.8;margin:12px 0;overflow-x:auto}
+.note{display:flex;gap:10px;border-radius:12px;padding:14px 16px;font-size:14px;margin:14px 0;line-height:1.85}
+.note.green{background:#eef5e9;border:1px solid var(--accent2);color:var(--accent)}
+.note.gold{background:#fdf6e7;border:1px solid #eeddb4;color:#7a5b12}
+.golden{background:linear-gradient(120deg,#eef5e9,#fbf8ef);border:1px solid var(--accent2);border-radius:14px;padding:16px 20px;margin:16px 0;text-align:center}
+.golden .q{font-size:17px;font-weight:900;color:var(--accent)}
+.golden .a{font-size:12.5px;color:var(--ink3);margin-top:6px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+@media (max-width:560px){ .grid2{grid-template-columns:1fr} }
+.mini{border:1px solid var(--line);border-radius:14px;padding:14px 16px;background:#fff}
+.mini .n{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:8px;background:var(--accent2);color:#fff;font-weight:800;font-size:12.5px;margin-bottom:6px}
+.mini h5{font-size:14px;font-weight:800;margin-bottom:4px;color:var(--ink)}
+.mini p{font-size:12.8px;color:var(--ink2)}
+table.demo{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px}
+table.demo th{background:#eef5e9;color:var(--accent);font-weight:800;text-align:left;padding:9px 10px;border:1px solid var(--line)}
+table.demo td{padding:9px 10px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.tag{display:inline-block;font-size:11.5px;font-weight:800;border-radius:6px;padding:2px 8px;color:#fff}
+.tag.high{background:var(--accent)}
+.tag.mid{background:#c9a227}
+.tag.low{background:#a89a86}
+.action{border:1px solid var(--accent2);border-radius:16px;padding:18px 20px;background:#fff;margin:14px 0}
+.action .n{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:10px;background:var(--accent);color:#fff;font-weight:900;font-size:15px;margin-bottom:8px}
+.action h4{font-size:15.5px;font-weight:800;color:var(--ink);margin-bottom:4px}
+.action p{font-size:13.5px}
+.backhome{position:fixed;left:14px;bottom:14px;z-index:9999;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;text-decoration:none;color:#fff;background:var(--accent);border:1px solid #4c7745;border-radius:999px;padding:9px 16px;box-shadow:0 4px 18px rgba(0,0,0,.18)}
+.backhome:hover{background:#4c7745}
+footer{max-width:1120px;margin:20px auto 0;padding:30px 22px 70px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:2}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} }
+@media print{ .topbar,nav.toc,.backhome{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../plans/" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📚 Tarshar 教案集</b>
+  <div class="right">
+    <a class="btn" href="../plans/">📚 教案集系列</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">Tarshar 教案集 · 方法教學 #18</span>
+  <h1>一百多篇論文，AI 幫你<br>一天篩完：批次文獻篩選法</h1>
+  <p class="lead">這篇記錄的是我（小D）遇到一場學術研討會，投稿論文有 164 篇，我需要知道哪些跟我的研究題目有關。我沒有一篇一篇點開讀，而是用 AI 批次處理，做出一張相關性總表，只精讀被判定高相關的那幾篇。這篇記錄我怎麼跟 AI 講清楚「什麼算相關」、怎麼分批餵、怎麼看懂總表，以及人在這個流程裡該站在哪個位置。</p>
+  <div class="meta">
+    <span>🎓 非工程師也能做</span>
+    <span>📄 164 篇論文</span>
+    <span>⏱️ 一天篩完</span>
+    <span>🗓️ 2026</span>
+  </div>
+</header>
+
+<div class="showcase">
+  <div class="showcase-box">
+    <div class="kicker">先講結論</div>
+    <p>這招不是叫 AI 幫我讀論文，是叫 AI 幫我決定「這 164 篇裡面，哪幾篇值得我花時間讀」。讀論文的力氣，還是我自己出。</p>
+  </div>
+</div>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#c1">1. 一百多篇論文的絕望感</a>
+  <a href="#c2">2. 先講清楚什麼叫「相關」</a>
+  <a href="#c3">3. 分批餵、逐篇判：批次處理怎麼跑</a>
+  <a href="#c4">4. 總表：一張表看到全部</a>
+  <a href="#c5">5. 人在哪裡：AI 初篩，人把關</a>
+  <a href="#c6">6. 這招不是只能篩論文</a>
+  <a href="#c7">7. 給你的三步驟行動建議</a>
+</nav>
+
+<article>
+
+<!-- 1 痛點 -->
+<section class="chapter" id="c1">
+  <span class="chip">STEP 01</span>
+  <h2 class="ct">一百多篇論文的絕望感</h2>
+  <p class="cd">先承認這件事有多累，才知道自己在解決什麼問題。</p>
+  <h3>發生什麼事</h3>
+  <p>我要投稿或參加一場學術研討會，主辦單位公布了全部投稿論文的清單，一百六十四篇。我的任務是從裡面挑出跟我論文題目相關的文獻，當作文獻回顧的素材。</p>
+  <p>以前我會怎麼做？打開第一篇，讀標題、讀摘要、猜相不相關，點開下一篇，再猜一次。一百六十四篇，光是點開又點開，我就先花掉半天，眼睛花了，腦子也還沒真的開始做研究，先累在「篩選」這一步。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">不是讀得快，是先知道哪些不用讀。</div><div class="a">篩選跟精讀是兩件事，不要用精讀的力氣做篩選的工作</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 手上一堆待讀資料時，先別急著點開第一篇。停下來問自己一句：「我現在要的是全部讀懂，還是先知道哪些值得讀？」這句話會決定你接下來要用什麼方法，答案通常是後者。</div>
+</section>
+
+<!-- 2 定義相關性 -->
+<section class="chapter" id="c2">
+  <span class="chip">STEP 02</span>
+  <h2 class="ct">先講清楚什麼叫「相關」</h2>
+  <p class="cd">AI 不是不懂你的題目，是你還沒把「相關」講清楚。</p>
+  <h3>發生什麼事</h3>
+  <p>我第一次直接把論文清單丟給 AI，說「幫我看哪些跟我的題目有關」，結果它給我的答案很模糊，因為它根本不知道我心裡「相關」的標準是什麼。我後來把我的判斷邏輯拆成三塊，寫清楚：</p>
+  <ul class="pt">
+    <li><b>主題關鍵詞</b>：我的論文核心概念是什麼，同義詞、相近說法也列進去</li>
+    <li><b>研究對象</b>：我關心的是哪一種場域或哪一群人，不是隨便哪個產業都算</li>
+    <li><b>研究方法</b>：我在意這篇是用什麼方式做研究的，跟我自己論文的方法論搭不搭得上</li>
+  </ul>
+  <p>把這三條講清楚以後，AI 判斷的準確度完全不一樣，因為我把自己腦子裡那把「隱形的尺」，變成一把它拿得到、量得出來的尺。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">你不需要懂技術，你需要懂自己的判斷標準。</div><div class="a">AI 篩得準不準，取決於你講得清不清楚，不是它聰不聰明</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 開口叫 AI 篩選之前，先自己寫三行：我要的主題關鍵詞是什麼、我關心的對象是誰、我在意的方法是什麼。這三行不用寫得多學術，寫成你自己看得懂的白話就好，AI 看得懂。</div>
+</section>
+
+<!-- 3 批次處理流程 -->
+<section class="chapter" id="c3">
+  <span class="chip">STEP 03</span>
+  <h2 class="ct">分批餵、逐篇判：批次處理怎麼跑</h2>
+  <p class="cd">一百六十四篇不是一次丟進去，是分批、逐篇、統一格式。</p>
+  <h3>發生什麼事</h3>
+  <p>清單訂好標準以後，我把 164 篇的篇名跟摘要分批交給 AI，一批處理一部分，不是整包一次塞進去。每一批我都請它照同一個流程走：</p>
+  <ol class="st">
+    <li>逐篇對照我在第二步給的三條標準，一篇一篇判斷</li>
+    <li>每篇都要給出「相關度」，不是只回答是或否，是分等級</li>
+    <li>每篇都要寫「為什麼」，一句話講清楚判斷理由，不能只給結論</li>
+    <li>每篇都標出用的是什麼研究方法，方便我之後對照自己的方法論</li>
+  </ol>
+  <p>分批做的好處是，我可以每批都檢查一下判斷準不準，準的話標準不用調，不準的話馬上修正標準再繼續跑下一批，不會等到 164 篇全部跑完才發現方向偏了。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">批次不是一次做完，是重複同一套流程很多次。</div><div class="a">分批讓我隨時能檢查、隨時能修正，而不是賭到最後才知道對不對</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 資料量大的時候，先切一小批（例如十幾筆）試跑，人工檢查判斷準不準。標準對了再往下一批推進，比一次全部丟進去、最後才發現整批要重做，省很多時間。</div>
+</section>
+
+<!-- 4 總表長什麼樣 -->
+<section class="chapter" id="c4">
+  <span class="chip">STEP 04</span>
+  <h2 class="ct">總表：一張表看到全部</h2>
+  <p class="cd">篩選的成果不是一堆對話紀錄，是一張可以掃過去的表。</p>
+  <h3>發生什麼事</h3>
+  <p>批次跑完以後，我不要一篇一篇的判斷散在對話紀錄裡，我要一張統一格式的總表，欄位固定：篇名、相關度、判斷理由、研究方法。這樣我打開一張表，眼睛從上掃到下，就知道整場研討會的樣貌。</p>
+  <table class="demo">
+    <tr><th>篇名</th><th>相關度</th><th>理由</th><th>研究方法</th></tr>
+    <tr><td>（範例）某產業知識傳承相關研究</td><td><span class="tag high">高</span></td><td>主題與研究對象都對上，方法論可直接對照</td><td>質性訪談</td></tr>
+    <tr><td>（範例）某流程優化相關研究</td><td><span class="tag mid">中</span></td><td>主題部分重疊，對象不同領域</td><td>問卷調查</td></tr>
+    <tr><td>（範例）某技術應用相關研究</td><td><span class="tag low">低</span></td><td>關鍵詞有出現，但研究對象與方法都對不上</td><td>個案分析</td></tr>
+  </table>
+  <p>這張表不是最終答案，是我接下來精讀順序的地圖。相關度高的排前面，先讀；中等的留著備用；低的先擱一邊，但不是刪掉。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">格式統一，才看得出全貌。</div><div class="a">一百多篇論文的價值，是被排在同一張表上才顯現出來的</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 請 AI 輸出結果的時候，先講清楚你要的欄位，例如「每一筆都給我名稱、等級、理由、類別這四欄」。欄位固定了，你才能把幾十幾百筆結果並排比較，不然每筆格式都不一樣，等於白做。</div>
+</section>
+
+<!-- 5 人的位置 -->
+<section class="chapter" id="c5">
+  <span class="chip">STEP 05</span>
+  <h2 class="ct">人在哪裡：AI 初篩，人把關</h2>
+  <p class="cd">AI 篩得再快，最後拍板的人還是我。</p>
+  <h3>發生什麼事</h3>
+  <p>總表出來以後，我沒有直接照著「高相關」的標籤就開始寫文獻回顧。我做了兩件事：</p>
+  <ul class="pt">
+    <li><b>複核高相關的那幾篇</b>：這些是我真的要花時間精讀的，我自己重新看一次判斷理由，確認 AI 沒有理解錯我的題目</li>
+    <li><b>抽查低相關的幾篇</b>：不是完全不看，是隨機挑幾篇被判定不相關的，自己看一眼，確認沒有把真正有用的文獻誤殺</li>
+  </ul>
+  <p>這個抽查的動作很重要。AI 篩選速度快，但它有時候會漏掉一些你自己一眼就看得出來相關的文章，因為它只看得到文字表面，看不到你腦子裡那些沒寫進標準裡的直覺。抽查就是幫自己補這一塊。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">AI 幫我把一百多篇縮小到十幾篇，最後選哪幾篇讀，還是我決定。</div><div class="a">篩選省的是你翻找的力氣，不是你判斷的責任</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 用 AI 篩完之後，一定留一步「人工複核」：精讀清單自己再看一次理由，被排除的清單抽幾筆確認沒有誤殺。這一步不用花太多時間，但省下的是「因為 AI 篩錯了，重要文獻整篇漏掉」的風險。</div>
+</section>
+
+<!-- 6 這招用在哪 -->
+<section class="chapter" id="c6">
+  <span class="chip">STEP 06</span>
+  <h2 class="ct">這招不是只能篩論文</h2>
+  <p class="cd">批次篩選法，是任何「量大、要先分出輕重緩急」的場合都能用的招式。</p>
+  <h3>發生什麼事</h3>
+  <p>做完這張總表以後我發現，這套流程的骨架其實跟論文本身沒關係，換掉素材，同一套邏輯照樣能跑：</p>
+  <div class="grid2">
+    <div class="mini"><span class="n">1</span><h5>文獻回顧</h5><p>一場研討會、一個資料庫的搜尋結果，先篩相關度再精讀</p></div>
+    <div class="mini"><span class="n">2</span><h5>市場調查</h5><p>一堆競品或案例資料，先分出跟你的產品真正相關的那幾個</p></div>
+    <div class="mini"><span class="n">3</span><h5>大量資料初篩</h5><p>任何「一次要看的東西太多，但你只想先知道哪些值得看」的場合</p></div>
+  </div>
+  <p>核心邏輯都一樣：先講清楚你的判斷標準，再讓 AI 分批照標準跑一遍，輸出成統一格式的表，最後人來複核跟拍板。素材可以換，這套順序不用換。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">學會的不是「怎麼篩論文」，是「怎麼面對量大的資料」。</div><div class="a">方法一旦練熟，換了場景照樣能用</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 下次遇到任何「一堆東西要先分輕重」的任務，不管是文獻、案例、還是客戶名單，都可以套這套順序：講標準 → 分批跑 → 統一表 → 人複核。你不用每次都重新想方法。</div>
+</section>
+
+<!-- 7 行動建議 -->
+<section class="chapter" id="c7">
+  <span class="chip">TAKE ACTION</span>
+  <h2 class="ct">給你的三步驟行動建議：明天就能開始</h2>
+  <p class="cd">這張總表記錄的不只是 164 篇論文的篩選結果。它記錄的是我把「篩選」跟「精讀」拆成兩件事之後，重新拿回來的時間。你也可以，從明天開始。</p>
+
+  <div class="action">
+    <div class="n">1</div>
+    <h4>寫下你的三條判斷標準</h4>
+    <p>不管你要篩的是論文、案例還是資料，先花五分鐘寫清楚你在意的關鍵詞、對象、方法（或換成你自己領域對應的三個維度），寫成 AI 看得懂的白話。</p>
+  </div>
+  <div class="action">
+    <div class="n">2</div>
+    <h4>切一小批試跑，確認標準對不對</h4>
+    <p>先拿十幾筆資料試跑，人工檢查判斷準不準，標準對了再往下一批推進，不要一次把全部資料都丟進去賭。</p>
+  </div>
+  <div class="action">
+    <div class="n">3</div>
+    <h4>跑完一定複核，不要照單全收</h4>
+    <p>精讀清單自己重看一次理由，被排除的清單抽幾筆確認沒有誤殺。篩選幫你省的是找的力氣，判斷的責任還是你的。</p>
+  </div>
+
+  <div class="golden"><div class="q">不是讀得快，是先知道哪些不用讀。</div><div class="a">慢慢來，比較快</div></div>
+</section>
+
+</article>
+</div>
+
+<footer>
+  一百多篇論文，AI 幫你一天篩完：批次文獻篩選法・Tarshar 教案集・2026<br>
+  🍀 Learn AI with Tarshar｜我不是工程師，我跟各位一樣是被工作追著跑的人，所以我只教明天就能用的東西
+</footer>
+
+</body>
+</html>

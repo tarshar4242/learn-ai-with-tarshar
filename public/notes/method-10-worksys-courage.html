@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>我不是工程師，但我最懂這條流程｜Tarshar 教案集</title>
+<meta name="description" content="Tarshar 教案集：非工程師也能用 AI 把自己最熟的工作流程做成系統雛形。記錄小D 在製造業繞了一圈的經歷，怎麼用六個資料夾、一次次重來，把進料、品檢、報工這些日常流程做成看得見的網頁雛形。不教技術，教方法與敢重來的勇氣。">
+<style>
+:root{
+  --paper:#f4f0e8; --card:#fffdf7; --card2:#fbf8ef; --ink:#3a3528; --ink2:#766f61; --ink3:#8a8674;
+  --line:#d8d0bf; --accent:#5d8d56; --accent2:#8cbd7d;
+  --code:#fffdf7;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.9}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(244,240,232,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:10px 20px;display:flex;align-items:center;gap:14px}
+.topbar b{font-size:15px}
+.topbar .right{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.topbar a.btn{font-size:12.5px;text-decoration:none;border:1px solid var(--line);border-radius:9px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap}
+.topbar a.btn:hover{border-color:var(--accent);color:var(--accent)}
+.hero{max-width:900px;margin:0 auto;padding:52px 22px 10px;text-align:center}
+.hero .ep{display:inline-block;font-size:12.5px;letter-spacing:3px;color:var(--accent);border:1px solid var(--accent2);border-radius:999px;padding:5px 16px;background:#eef5e9;margin-bottom:18px}
+.hero h1{font-size:clamp(24px,4.4vw,40px);font-weight:900;line-height:1.4;color:var(--ink)}
+.hero .lead{margin-top:14px;font-size:14.5px;color:var(--ink2)}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:18px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+
+.showcase{max-width:900px;margin:26px auto 0;padding:0 22px}
+.showcase-box{background:linear-gradient(120deg,#eef5e9,#fbf8ef);border:1px solid var(--accent2);border-radius:18px;padding:24px 26px;text-align:center}
+.showcase-box .kicker{font-size:12.5px;color:var(--accent);font-weight:800;letter-spacing:1px;margin-bottom:8px}
+.showcase-box p{font-size:14px;color:var(--ink2);margin:6px 0 16px}
+.showcase-box a.cta{display:inline-flex;align-items:center;gap:8px;text-decoration:none;background:var(--accent);color:#fff;font-weight:800;font-size:14.5px;padding:12px 22px;border-radius:999px;box-shadow:0 6px 18px rgba(93,141,86,.28)}
+.showcase-box a.cta:hover{background:#4c7745}
+.showcase-box .url{margin-top:10px;font-size:12.5px;color:var(--ink3)}
+
+.layout{max-width:1120px;margin:30px auto 0;padding:0 22px;display:grid;grid-template-columns:236px 1fr;gap:34px;align-items:start}
+nav.toc{position:sticky;top:66px;border:1px solid var(--line);border-radius:14px;background:var(--card);padding:16px 14px;font-size:13.5px}
+nav.toc .t{font-size:12px;letter-spacing:2px;color:var(--ink3);margin-bottom:10px}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:8px;border-left:3px solid transparent}
+nav.toc a:hover{background:#eef5e9;color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:30px 32px;margin-bottom:26px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:2px;font-weight:700;color:#fff;border-radius:999px;padding:5px 14px;margin-bottom:12px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+h2.ct{font-size:22px;font-weight:900;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:16.5px;font-weight:800;margin:24px 0 10px;padding-left:12px;border-left:4px solid var(--accent2);color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink)}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 24px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"◆";position:absolute;left:4px;font-size:9px;top:12px;color:var(--accent2)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:8px;width:23px;height:23px;border-radius:7px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:800;display:grid;place-items:center}
+.codebox{background:var(--code);border:1px solid var(--line);border-left:4px solid var(--accent2);border-radius:10px;padding:14px 16px;font-family:"Cascadia Code",Consolas,monospace;font-size:12.6px;color:#3a3528;white-space:pre-wrap;line-height:1.8;margin:12px 0;overflow-x:auto}
+.note{display:flex;gap:10px;border-radius:12px;padding:14px 16px;font-size:14px;margin:14px 0;line-height:1.85}
+.note.green{background:#eef5e9;border:1px solid var(--accent2);color:var(--accent)}
+.note.gold{background:#fdf6e7;border:1px solid #eeddb4;color:#7a5b12}
+.golden{background:linear-gradient(120deg,#eef5e9,#fbf8ef);border:1px solid var(--accent2);border-radius:14px;padding:16px 20px;margin:16px 0;text-align:center}
+.golden .q{font-size:17px;font-weight:900;color:var(--accent)}
+.golden .a{font-size:12.5px;color:var(--ink3);margin-top:6px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+@media (max-width:560px){ .grid2{grid-template-columns:1fr} }
+.mini{border:1px solid var(--line);border-radius:14px;padding:14px 16px;background:#fff}
+.mini .n{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:8px;background:var(--accent2);color:#fff;font-weight:800;font-size:12.5px;margin-bottom:6px}
+.mini h5{font-size:14px;font-weight:800;margin-bottom:4px;color:var(--ink)}
+.mini p{font-size:12.8px;color:var(--ink2)}
+.timeline{margin:14px 0;border-left:3px solid var(--accent2);padding-left:18px}
+.tl-item{position:relative;margin-bottom:16px}
+.tl-item::before{content:"";position:absolute;left:-23px;top:5px;width:10px;height:10px;border-radius:50%;background:var(--accent)}
+.tl-item .tl-date{font-size:12px;font-weight:800;color:var(--accent);letter-spacing:1px}
+.tl-item .tl-body{font-size:14px;color:var(--ink2);margin-top:2px}
+.tl-item.dim .tl-date{color:var(--ink3)}
+.tl-item.dim::before{background:var(--ink3)}
+.stage{display:inline-block;font-weight:800;font-size:11.5px;color:#fff;background:var(--accent);border-radius:6px;padding:2px 9px;margin-right:7px;letter-spacing:1px;vertical-align:middle}
+.action{border:1px solid var(--accent2);border-radius:16px;padding:18px 20px;background:#fff;margin:14px 0}
+.action .n{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:10px;background:var(--accent);color:#fff;font-weight:900;font-size:15px;margin-bottom:8px}
+.action h4{font-size:15.5px;font-weight:800;color:var(--ink);margin-bottom:4px}
+.action p{font-size:13.5px}
+.backhome{position:fixed;left:14px;bottom:14px;z-index:9999;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;text-decoration:none;color:#fff;background:var(--accent);border:1px solid #4c7745;border-radius:999px;padding:9px 16px;box-shadow:0 4px 18px rgba(0,0,0,.18)}
+.backhome:hover{background:#4c7745}
+footer{max-width:1120px;margin:20px auto 0;padding:30px 22px 70px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:2}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} }
+@media print{ .topbar,nav.toc,.backhome{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../plans/" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📚 Tarshar 教案集</b>
+  <div class="right">
+    <a class="btn" href="../plans/">📚 教案集系列</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">Tarshar 教案集 · 方法教學</span>
+  <h1>我不是工程師<br>但我最懂這條流程</h1>
+  <p class="lead">這篇記錄的不是怎麼寫程式。是我（小D）在製造業繞了一圈，帶著進料、品檢、報工這些天天在做的流程知識，一次又一次打開 AI，把它們做成看得見的網頁雛形的過程。六個資料夾，不是每個都成功，這正是這篇想記下來的重點。</p>
+  <div class="meta">
+    <span>🏭 非工程師</span>
+    <span>🔁 六個資料夾的迭代</span>
+    <span>🎯 教方法不教技術</span>
+    <span>🗓️ 2025</span>
+  </div>
+</header>
+
+<div class="showcase">
+  <div class="showcase-box">
+    <div class="kicker">先說清楚這篇不是什麼</div>
+    <p>這篇不會教你 MES、QMS、WMS 是什麼系統、要怎麼串接。那是專業廠商的事，不是這篇的重點。這篇要留下的，是一個非工程師怎麼把自己最熟的工作，講給 AI 聽，講到它願意動手幫你做出第一個雛形。方法比技術重要，勇氣比正確重要。</p>
+    <div class="url">方法教案・不是技術教案</div>
+  </div>
+</div>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#c1">1. 我最懂的不是程式，是這條流程</a>
+  <a href="#c2">2. 第一版很醜，沒關係</a>
+  <a href="#c3">3. 怎麼把流程講給 AI 聽</a>
+  <a href="#c4">4. 六個資料夾，不是每次重來都成功</a>
+  <a href="#c5">5. 雛形能幹嘛：讓別人看到你腦子裡在想什麼</a>
+  <a href="#c6">6. 界線：雛形不是正式系統</a>
+  <a href="#c7">7. 你的三步驟行動建議</a>
+</nav>
+
+<article>
+
+<!-- 1 -->
+<section class="chapter" id="c1">
+  <span class="chip">STEP 01</span>
+  <h2 class="ct">我最懂的不是程式，是這條流程</h2>
+  <p class="cd">專業知識是你的本錢，不是你不會寫程式這件事的缺點。</p>
+  <h3>發生什麼事</h3>
+  <p>我在製造業那些年，繞了一整圈：製造、客服、採購、品質、研發、製程設計，每個位置都待過。我沒學過寫程式，但我知道一張報工表怎麼填才對、哪個班別的異常最常被忽略、哪個環節出問題會一路影響到出貨。這些都是我天天在處理的事，不是我需要另外去學的知識。</p>
+  <p>有一天我看著一份 Excel 匯出的報工資料，想的不是「這要交給資訊部門做系統」，而是「我自己就懂這張表在講什麼，我能不能自己先做出一個雛形」。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">不是我會寫程式，是我懂流程。</div><div class="a">懂流程的人，才知道系統該長什麼樣子</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 打開 AI 之前，先問自己一句話：「我做這份工作幾年了，我比誰都清楚哪裡會出問題？」把這個答案當成你的本錢，而不是覺得自己「不懂技術」就矮人一截。你的專業知識，才是 AI 做不出雛形的那一半。</div>
+</section>
+
+<!-- 2 -->
+<section class="chapter" id="c2">
+  <span class="chip">STEP 02</span>
+  <h2 class="ct">第一版很醜，沒關係</h2>
+  <p class="cd">雛形的意義是「看得見」，不是「做得美」。</p>
+  <h3>發生什麼事</h3>
+  <p>2025 年 7 月底，我開了第一個資料夾，做了一個很單純的小工具：上傳一份 MES 匯出的 Excel 報工檔，自動幫我算出每個作業員的工時明細表。畫面很陽春，一個拖拉上傳區、一個處理按鈕、算完跳出幾張統計卡片和一張表格。就這樣。</p>
+  <p>接下來一週我陸續改了五次，每次都只是「這裡怪怪的，再調一下」。沒有一次是重新設計，都是在同一個雛形上小修小補。</p>
+  <div class="note gold">📄 每日作業員工時明細表產生器（2025-07-30 起，一週內修了 5 次）<br>上傳 Excel → 自動處理 → 跳出統計卡片與明細表，就這麼簡單。</div>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">雛形不是要交出去的作品，是要讓你自己先看見。</div><div class="a">醜沒關係，能跑、能看懂，就已經贏過只放在腦子裡的想法</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 第一版不要求完整，只求能跑。跟 AI 說「先幫我做一個最簡單能動的版本」，你上傳資料，它跑出結果，你就已經有東西可以指著螢幕討論了。不用等到想清楚全部細節才開始。</div>
+</section>
+
+<!-- 3 -->
+<section class="chapter" id="c3">
+  <span class="chip">STEP 03</span>
+  <h2 class="ct">怎麼把流程講給 AI 聽</h2>
+  <p class="cd">用你天天在做的事描述，不用學術語、不用先懂技術。</p>
+  <h3>發生什麼事</h3>
+  <p>第一版的時候，我跟 AI 講的話很簡單，大概就是「幫我把這張報工表變成一個統計工具」。它聽得懂，但做出來的東西也就是「聽得懂」的程度。</p>
+  <p>做到後面幾版，我發現講得越具體，AI 做出來的東西越貼近我真正要的。我開始會講「兩個廠要左右對比」「早班要併進日班一起算」「發生超過三次的人要特別標出來」，這些都不是技術語言，是我在現場真正在意的判斷標準。我甚至把這些要求整理成一份完整的說明留下來，之後要做類似的分析，直接照這份說明講一次就好。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">你不需要懂程式語言，你只需要懂你自己的判斷標準。</div><div class="a">把「我在意什麼」講清楚，比把「技術要求」講清楚更重要</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 描述需求時，講你在現場真正會盯著看的那個細節（哪班要特別看、哪個數字超過多少要標紅），不用先想「這個技術上要怎麼實現」。這些細節你講得出來，AI 就有辦法接住。講過一次滿意的版本，記得留一份說明，下次不用重新想過一遍。</div>
+</section>
+
+<!-- 4 -->
+<section class="chapter" id="c4">
+  <span class="chip">STEP 04</span>
+  <h2 class="ct">六個資料夾，不是每次重來都成功</h2>
+  <p class="cd">敢重來，不代表每次重來都會成功，這也是真實的過程。</p>
+  <h3>發生什麼事</h3>
+  <p>我一路總共開了六個資料夾，橫跨大約一個半月。老實說，真正做出東西、看得到成果的只有兩個：最早的工時明細表，還有後來更完整的兩廠報工異常分析。中間有一天，我一口氣新開了四個資料夾，想換個方式重做，但都只開了頭，沒有繼續做下去。</p>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-date">7月底</div><div class="tl-body">第一個資料夾。做出工時明細表雛形，一週內改了 5 次。</div></div>
+    <div class="tl-item dim"><div class="tl-date">8月初・同一天</div><div class="tl-body">一口氣開了四個新資料夾，想換方式重做。都只開了頭，沒有留下內容。</div></div>
+    <div class="tl-item"><div class="tl-date">9月中</div><div class="tl-body">新的資料夾。做出更完整的兩廠報工異常分析儀表板，還留下一份自己寫的完整說明。</div></div>
+  </div>
+  <p>如果只看結果，會覺得「中間那四次浪費了」。但我自己知道，那四次是我在想「上一版哪裡不夠好」，只是那次沒想清楚就沒繼續。真正讓我做出更好版本的，不是一次到位，是敢一直重來，就算有幾次重來到一半又停下。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">不是每次重練都要有成果，是要敢一直重來。</div><div class="a">六個資料夾，兩個活下來，這個比例很正常</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 不滿意就開新的來試，不用逼自己在舊版上硬改到完美。試到一半發現方向不對，停下來也沒關係，那不算失敗，是你篩掉了一個不適合的做法。真正的進步，是把「敢重來」變成習慣，不是每一次重來都要交出成果。</div>
+</section>
+
+<!-- 5 -->
+<section class="chapter" id="c5">
+  <span class="chip">STEP 05</span>
+  <h2 class="ct">雛形能幹嘛：讓別人看到你腦子裡在想什麼</h2>
+  <p class="cd">雛形是溝通神器，不是最終產品。</p>
+  <h3>發生什麼事</h3>
+  <p>9 月中做出來的那一版，已經不只是算工時了。它把兩個廠的成型部門、組裝部門左右對比，班別統計、問題類型統計、還有需要特別留意的人員名單都放在同一個畫面上，一眼就能看出哪裡不對勁。</p>
+  <p>這個雛形最有價值的地方，不是它算得多準，是我終於有一個畫面可以拿給同事和主管看，說「我在意的是這幾件事，你們覺得呢」。以前這些想法只在我腦子裡，講出來別人未必聽得懂；有了雛形，大家看畫面就懂了七八成。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">雛形不是拿來取代系統，是拿來取代「我口頭解釋半天」。</div><div class="a">一個能點開來看的畫面，比十分鐘的口頭說明有效</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 雛形做出來以後，找一個同事或主管，直接把畫面點給他們看，不要先講一大串背景。讓畫面自己說話，你再補充「這是我在意的重點」。這比你準備一份簡報去解釋你的想法，快得多，也具體得多。</div>
+</section>
+
+<!-- 6 -->
+<section class="chapter" id="c6">
+  <span class="chip">STEP 06</span>
+  <h2 class="ct">界線：雛形不是正式系統</h2>
+  <p class="cd">知道什麼時候該找專業的來，也是一種專業判斷。</p>
+  <h3>發生什麼事</h3>
+  <p>我很清楚這些雛形是什麼、不是什麼。它們是我用來驗證想法、跟人溝通的工具，不是可以直接上線給整個廠使用的正式系統。資料怎麼存、權限怎麼分、出錯了誰負責，這些都不是我一個人開個網頁雛形就能扛下來的事。</p>
+  <p>真的要變成一家製造業公司天天在用的系統，還是要交給資訊部門或專業廠商，照他們的規格重新蓋一次。我做的雛形，價值在於幫他們少走一段「猜我到底要什麼」的路，不是取代他們的專業。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">雛形做到能溝通就夠了，不用逼自己做到能上線。</div><div class="a">分清楚「驗證想法」跟「正式系統」，你才敢放心一直試</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 做雛形之前先在心裡畫一條線：這是用來給自己想清楚、給別人看懂的，不是要拿去正式上線的。線畫清楚了，你才不會因為怕出錯、怕不夠嚴謹而不敢動手。真正要上線的那一步，本來就該交給專業的人。</div>
+</section>
+
+<!-- 7 行動建議 -->
+<section class="chapter" id="c7">
+  <span class="chip">TAKE ACTION</span>
+  <h2 class="ct">給你的三步驟行動建議：明天就能開始</h2>
+  <p class="cd">這篇記錄的不是一套系統怎麼做出來，是一個非工程師怎麼把自己最熟的工作，一次次講給 AI 聽，講到它願意幫你動手。你也有一條你最熟的流程，從明天開始，你也可以試試看。</p>
+
+  <div class="action">
+    <div class="n">1</div>
+    <h4>寫下你最熟的那條流程</h4>
+    <p>不用是整個系統，一段你天天在做、閉著眼睛都知道哪裡容易出錯的流程就好。你的專業知識，就是雛形能不能做對的關鍵。</p>
+  </div>
+  <div class="action">
+    <div class="n">2</div>
+    <h4>找一份你手上現成的資料，講給 AI 聽</h4>
+    <p>一份 Excel、一張表都可以。跟 AI 說「先幫我做一個最簡單能動的版本」，不用一次講完全部要求，做出第一版再慢慢加你在意的細節。</p>
+  </div>
+  <div class="action">
+    <div class="n">3</div>
+    <h4>做出來就拿給人看，不滿意就開新的來試</h4>
+    <p>雛形做出來，直接點給同事或主管看，讓畫面自己說話。不滿意也沒關係，開新的資料夾再試一次，敢重來比一次做對更重要。</p>
+  </div>
+
+  <div class="golden"><div class="q">你不需要是工程師。你需要的，是敢把自己最熟的事，講給 AI 聽。</div><div class="a">慢慢來，比較快</div></div>
+</section>
+
+</article>
+</div>
+
+<footer>
+  我不是工程師，但我最懂這條流程・Tarshar 教案集・2025<br>
+  🍀 Learn AI with Tarshar｜我不是工程師，我跟各位一樣是被工作追著跑的人，所以我只教明天就能用的東西
+</footer>
+
+</body>
+</html>

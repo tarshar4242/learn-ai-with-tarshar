@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>一場課的簡報講義，AI 從投案陪我做到上架：全歷程實錄｜Tarshar 教案集</title>
+<meta name="description" content="Tarshar 教案集：蘆洲監理所「AI 開機日」的簡報與講義是怎麼跟 AI 一起寫出來的——投案、整套教材包、41頁分鏡表、多版本比稿、課後迭代、上架導覽台，從零到完成的真實協作全紀錄，教你怎麼用 AI 走完一件事的全歷程。">
+<style>
+:root{
+  --paper:#f4f0e8; --card:#fffdf7; --card2:#fbf8ef; --ink:#3a3528; --ink2:#766f61; --ink3:#8a8674;
+  --line:#d8d0bf; --accent:#5d8d56; --accent2:#8cbd7d;
+  --code:#fffdf7;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.9}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(244,240,232,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:10px 20px;display:flex;align-items:center;gap:14px}
+.topbar b{font-size:15px}
+.topbar .right{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.topbar a.btn{font-size:12.5px;text-decoration:none;border:1px solid var(--line);border-radius:9px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap}
+.topbar a.btn:hover{border-color:var(--accent);color:var(--accent)}
+.hero{max-width:900px;margin:0 auto;padding:52px 22px 10px;text-align:center}
+.hero .ep{display:inline-block;font-size:12.5px;letter-spacing:3px;color:var(--accent);border:1px solid var(--accent2);border-radius:999px;padding:5px 16px;background:#eef5e9;margin-bottom:18px}
+.hero h1{font-size:clamp(24px,4.4vw,40px);font-weight:900;line-height:1.4;color:var(--ink)}
+.hero .lead{margin-top:14px;font-size:14.5px;color:var(--ink2)}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:18px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.showcase{max-width:900px;margin:26px auto 0;padding:0 22px}
+.showcase-box{background:linear-gradient(120deg,#eef5e9,#fbf8ef);border:1px solid var(--accent2);border-radius:18px;padding:24px 26px;text-align:center}
+.showcase-box .kicker{font-size:12.5px;color:var(--accent);font-weight:800;letter-spacing:1px;margin-bottom:8px}
+.showcase-box p{font-size:14px;color:var(--ink2);margin:6px 0 16px}
+.showcase-box .ctarow{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.showcase-box a.cta{display:inline-flex;align-items:center;gap:8px;text-decoration:none;background:var(--accent);color:#fff;font-weight:800;font-size:14.5px;padding:12px 22px;border-radius:999px;box-shadow:0 6px 18px rgba(93,141,86,.28)}
+.showcase-box a.cta:hover{background:#4c7745}
+.showcase-box a.cta.alt{background:#fff;color:var(--accent);border:1px solid var(--accent2);box-shadow:none}
+.showcase-box a.cta.alt:hover{background:#eef5e9}
+.layout{max-width:1120px;margin:30px auto 0;padding:0 22px;display:grid;grid-template-columns:236px 1fr;gap:34px;align-items:start}
+nav.toc{position:sticky;top:66px;border:1px solid var(--line);border-radius:14px;background:var(--card);padding:16px 14px;font-size:13.5px}
+nav.toc .t{font-size:12px;letter-spacing:2px;color:var(--ink3);margin-bottom:10px}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:8px;border-left:3px solid transparent}
+nav.toc a:hover{background:#eef5e9;color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:30px 32px;margin-bottom:26px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:2px;font-weight:700;color:#fff;border-radius:999px;padding:5px 14px;margin-bottom:12px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+h2.ct{font-size:22px;font-weight:900;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:16.5px;font-weight:800;margin:24px 0 10px;padding-left:12px;border-left:4px solid var(--accent2);color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink)}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 24px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"◆";position:absolute;left:4px;font-size:9px;top:12px;color:var(--accent2)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:8px;width:23px;height:23px;border-radius:7px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:800;display:grid;place-items:center}
+.codebox{background:var(--code);border:1px solid var(--line);border-left:4px solid var(--accent2);border-radius:10px;padding:14px 16px;font-family:"Cascadia Code",Consolas,monospace;font-size:12.6px;color:#3a3528;white-space:pre-wrap;line-height:1.8;margin:12px 0;overflow-x:auto}
+.note{display:flex;gap:10px;border-radius:12px;padding:14px 16px;font-size:14px;margin:14px 0;line-height:1.85}
+.note.green{background:#eef5e9;border:1px solid var(--accent2);color:var(--accent)}
+.note.gold{background:#fdf6e7;border:1px solid #eeddb4;color:#7a5b12}
+.golden{background:linear-gradient(120deg,#eef5e9,#fbf8ef);border:1px solid var(--accent2);border-radius:14px;padding:16px 20px;margin:16px 0;text-align:center}
+.golden .q{font-size:17px;font-weight:900;color:var(--accent)}
+.golden .a{font-size:12.5px;color:var(--ink3);margin-top:6px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+@media (max-width:560px){ .grid2{grid-template-columns:1fr} }
+.mini{border:1px solid var(--line);border-radius:14px;padding:14px 16px;background:#fff}
+.mini .n{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:8px;background:var(--accent2);color:#fff;font-weight:800;font-size:12.5px;margin-bottom:6px}
+.mini h5{font-size:14px;font-weight:800;margin-bottom:4px;color:var(--ink)}
+.mini p{font-size:12.8px;color:var(--ink2)}
+.stage{display:inline-block;font-weight:800;font-size:11.5px;color:#fff;background:var(--accent);border-radius:6px;padding:2px 9px;margin-right:7px;letter-spacing:1px;vertical-align:middle}
+.action{border:1px solid var(--accent2);border-radius:16px;padding:18px 20px;background:#fff;margin:14px 0}
+.action .n{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:10px;background:var(--accent);color:#fff;font-weight:900;font-size:15px;margin-bottom:8px}
+.action h4{font-size:15.5px;font-weight:800;color:var(--ink);margin-bottom:4px}
+.action p{font-size:13.5px}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:#eef5e9;padding:9px 12px;text-align:left;font-size:12.8px;border:1px solid var(--line);color:var(--ink)}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.backhome{position:fixed;left:14px;bottom:14px;z-index:9999;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;text-decoration:none;color:#fff;background:var(--accent);border:1px solid #4c7745;border-radius:999px;padding:9px 16px;box-shadow:0 4px 18px rgba(0,0,0,.18)}
+.backhome:hover{background:#4c7745}
+footer{max-width:1120px;margin:20px auto 0;padding:30px 22px 70px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:2}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} }
+@media print{ .topbar,nav.toc,.backhome{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<a href="../plans/" class="backhome" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+
+<div class="topbar">
+  <b>📚 Tarshar 教案集</b>
+  <div class="right">
+    <a class="btn" href="../plans/">📚 教案集系列</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">Tarshar 教案集 · 方法教學 #19</span>
+  <h1>一場課的簡報和講義，<br>AI 從投案陪我做到上架</h1>
+  <p class="lead">蘆洲監理所「AI 開機日」那 41 頁簡報和講義，不是坐下來一次寫完的。從 5/12 準備投案資料，到 5/26 上課當天中午還在出修正版，再到課後迭代、上架成線上教案——<b>兩個半月、五個階段，AI 全程都在</b>。這篇不教課程內容，教的是<b>那個過程</b>：怎麼用 AI 把一件事從零做到完成。全部是真實發生的紀錄，含日期、檔名、每一步的做法。</p>
+  <div class="meta">
+    <span>🎓 零程式基礎</span>
+    <span>🗂️ 真實案例全紀錄</span>
+    <span>📅 2026/05/12–07/24</span>
+    <span>🤖 AI 對話＋Claude Code</span>
+  </div>
+</header>
+
+<div class="showcase">
+  <div class="showcase-box">
+    <div class="kicker">先看這個過程最後做出了什麼</div>
+    <p>下面都是這段歷程的真實成品：那場課的完整教案、學員導覽台、還有整理成投案文件的版本。</p>
+    <div class="ctarow">
+      <a class="cta" href="luzhou-ai-startup.html">🏛️ 那場課的完整教案 →</a>
+      <a class="cta alt" href="https://tarshar4242.github.io/ai-kaiji-luzhou/" target="_blank" rel="noopener">🧭 學員導覽台 →</a>
+      <a class="cta alt" href="ai-kaiji-proposal.html">📋 投案版教案 →</a>
+    </div>
+  </div>
+</div>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#c0">0. 五個階段一張圖</a>
+  <a href="#c1">1. 投案：先把敲門資料弄整齊</a>
+  <a href="#c2">2. 一次生成整套教材包</a>
+  <a href="#c3">3. 先寫分鏡表，再做簡報</a>
+  <a href="#c4">4. 多版本比稿，改到上課當天</a>
+  <a href="#c5">5. 課後迭代：課教完才是一半</a>
+  <a href="#c6">6. 上架：讓成果有個家</a>
+  <a href="#c7">7. 全歷程心法與工具分工</a>
+  <a href="#c8">8. 你的三步驟行動建議</a>
+</nav>
+
+<article>
+
+<!-- 0 總覽 -->
+<section class="chapter" id="c0">
+  <span class="chip">OVERVIEW</span>
+  <h2 class="ct">0. 五個階段一張圖</h2>
+  <p class="cd">一場兩小時的課，背後是兩個半月的協作。每個階段 AI 扮演的角色不一樣。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:60px">階段</th><th style="width:110px">時間</th><th>做什麼</th><th style="width:150px">AI 在哪裡幫忙</th></tr>
+    <tr><td><b>0</b></td><td>5/12</td><td>投案準備：簡歷、證照、開專案資料夾</td><td>AI 對話（整理資料）</td></tr>
+    <tr><td><b>1</b></td><td>5/14–15</td><td>一次生成整套教材包（腳本＋講義＋簡報＋問卷＋抽獎頁＋Gem 設定）</td><td>AI 對話（一次生全套）</td></tr>
+    <tr><td><b>2</b></td><td>5/24–26</td><td>41 頁分鏡表 → 正式簡報＋講義，多版本比稿</td><td>AI 對話（文字先行）</td></tr>
+    <tr><td><b>3</b></td><td>5/28–6/02</td><td>課後迭代：錄音檢討、逐頁修改清單、三版演進</td><td>AI 對話（迭代打磨）</td></tr>
+    <tr><td><b>4</b></td><td>7/22–24</td><td>上架：教案進筆記館、學員導覽台、投案版</td><td>Claude Code（蓋網站）</td></tr>
+  </table></div>
+  <div class="golden"><div class="q">「AI 協作不是『幫我寫一份簡報』那一句話，是陪你走完整條路。」</div><div class="a">這篇教案的一句話版</div></div>
+</section>
+
+<!-- 1 投案 -->
+<section class="chapter" id="c1">
+  <span class="chip">STAGE 00 · 5/12</span>
+  <h2 class="ct">1. 投案：先把敲門資料弄整齊</h2>
+  <p class="cd">課還沒開始教，協作就開始了。</p>
+  <h3>發生什麼事</h3>
+  <p>5 月 12 日，我在雲端硬碟開了「蘆洲監理所」專案資料夾——這是整段歷程的第一個動作。裡面放的不是課程內容，是<b>敲門的資料</b>：公家機關版簡歷、證照列表、形象照。要讓單位點頭，先讓對方一眼看懂「我是誰、我憑什麼教這堂課」。</p>
+  <h3>我學到什麼</h3>
+  <p>很多人以為 AI 協作從「幫我做簡報」開始，其實從「幫我把簡歷改成公家機關看得懂的版本」就開始了。而且<b>第一天就開專案資料夾</b>這個小動作，後來救了我——兩個月後我要回頭找「當初怎麼做的」，就是靠這個資料夾把整段過程重建回來的。</p>
+  <h3>可複製的做法</h3>
+  <ol class="st">
+    <li>接到機會的當天，先開一個以案子命名的雲端資料夾，之後所有產出都丟進去。</li>
+    <li>把現有簡歷丟給 AI：「幫我改成給◯◯（對方單位）看的版本，強調跟這個案子相關的經歷。」</li>
+    <li>證照、照片這些「證明文件」一次整理好放進資料夾，之後每次投案直接拿。</li>
+  </ol>
+</section>
+
+<!-- 2 教材包 -->
+<section class="chapter" id="c2">
+  <span class="chip">STAGE 01 · 5/14–15</span>
+  <h2 class="ct">2. 一次生成整套教材包，先求有再求好</h2>
+  <p class="cd">兩天，從零到一整套 zip。</p>
+  <h3>發生什麼事</h3>
+  <p>5 月 14 日，我跟 AI 在對話裡把整堂課的骨架講清楚之後，一口氣生出了<b>一整套教材包</b>：課程簡介、教師版腳本、學員講義、課堂簡報、課後問卷頁、抽獎大會頁，連課堂上要示範的 5 隻 Gem 機器人設定檔都有，最後打包成一個 zip（<span style="font-family:monospace;font-size:12.5px">AI開機日_完整教材包_20260514.zip</span>）。注意檔名裡的「v3」——光是課程簡介和教師腳本，在對話裡就已經來回改到第三版了。</p>
+  <h3>我學到什麼</h3>
+  <p>第一步<b>不要追求任何一件完美，要追求「全套都有」</b>。整套骨架攤在眼前，你才看得出哪裡厚、哪裡薄、哪段跟哪段接不起來。另外一件重要的事：這套「一次生全套」的做法我後來請 AI 固化成一個<b>常駐技能</b>（機關教案生成器），之後再投別的單位，一句「再做一份公部門教案」就能重跑整套流程——<b>好的做法要讓 AI 記住，不是每次重教。</b></p>
+  <h3>可複製的做法</h3>
+  <ol class="st">
+    <li>跟 AI 講清楚：對象是誰、幾小時、要達成什麼、有什麼限制（場地、設備、學員程度）。</li>
+    <li>請它<b>列出這堂課需要的所有交付物清單</b>，你確認清單，再請它一件一件生出來。</li>
+    <li>全套生完先通讀一遍，標出「這段不對」的地方回去改——改個兩三輪很正常，檔名記得標版本。</li>
+    <li>流程跑順之後，請 AI 把做法整理成一份「下次照做」的指令或技能，存起來。</li>
+  </ol>
+</section>
+
+<!-- 3 分鏡表 -->
+<section class="chapter" id="c3">
+  <span class="chip">STAGE 02a · 5/24</span>
+  <h2 class="ct">3. 先寫分鏡表，再做簡報——文字先行</h2>
+  <p class="cd">這是整段歷程裡最重要的一招。</p>
+  <h3>發生什麼事</h3>
+  <p>到了要做正式簡報的時候，我沒有直接開始排版面，而是先跟 AI 把一份 <b>41 頁的「分鏡表」</b>寫出來（<span style="font-family:monospace;font-size:12.5px">完整版講義_41頁分鏡表_20260524</span>）——每一頁要講什麼、放什麼元素、哪一頁放金句、哪一頁讓學員拍照，全部先用<b>文字</b>定案。起承轉合的結構、「兩個小魔法」開場、「你會講話就會用 AI」這句金句放第 6 頁——都是在分鏡表階段就決定的。簡報和講義，是從這份分鏡表「長」出來的。</p>
+  <h3>我學到什麼</h3>
+  <p><b>內容和版面分開處理，各自都變簡單。</b>在文字階段改結構，是改幾行字；在簡報軟體裡改結構，是拖半天版面。而且這份分鏡表後來一魚多吃：正式簡報用它、講義用它、兩個月後上架的線上教案頁也是直接從它轉出來的。<b>文字版的骨架是資產，版面只是它的其中一種穿搭。</b></p>
+  <h3>可複製的做法</h3>
+  <div class="codebox">「我要做一份◯◯頁的簡報，先不要排版面。
+請先幫我做一份分鏡表：每一頁一行，寫清楚
+　頁碼｜這頁要講的一句話｜放什麼元素（圖／表／金句／示範）
+結構照［你的課程骨架］走。我們把分鏡表改到滿意，再開始做簡報。」</div>
+</section>
+
+<!-- 4 比稿 -->
+<section class="chapter" id="c4">
+  <span class="chip">STAGE 02b · 5/24–26</span>
+  <h2 class="ct">4. 多版本比稿，改到上課當天中午</h2>
+  <p class="cd">定稿不是選出來的，是比出來的。</p>
+  <h3>發生什麼事</h3>
+  <p>分鏡表定案後開始出成品，我讓 AI 一次做了<b>好幾個版本互相比</b>：講義有 A4 直式版、橫式 B 版、還有「簡報講義兩用」的橫式 C 版；簡報的視覺風格也有多個候選，其中一個檔名我直接標了「###（首選3）」——當時就是把候選攤開來挑。最後定稿：直式 A4 學員講義＋41 頁達人完整版簡報。然後是我最想講的細節：<b>5 月 26 日上課當天 13:10，我還在存「修正版」</b>——前一晚和當天早上過一遍流程，發現哪裡不順就再改。</p>
+  <h3>我學到什麼</h3>
+  <p>AI 時代「多做幾版」的成本极低，<b>比稿不是浪費，是最快的收斂方式</b>——看著三個版本挑毛病，比對著一個版本空想「還能更好嗎」快得多。還有：改到最後一刻不是準備不足，是<b>把「可以再好一點」用到截止前的每一分鐘</b>。檔名標好「修正版」「首選3」，就不會亂。</p>
+  <h3>可複製的做法</h3>
+  <ol class="st">
+    <li>同一份內容，請 AI 出 2–3 個版本（直式／橫式、簡潔／豐富），實際印出來或投影看。</li>
+    <li>挑的時候問自己一個問題就好：「坐在台下的那個人，哪一版對他最好用？」</li>
+    <li>版本命名要讓未來的你看得懂：日期＋狀態（草稿／首選／修正版／定稿）。</li>
+  </ol>
+</section>
+
+<!-- 5 迭代 -->
+<section class="chapter" id="c5">
+  <span class="chip">STAGE 03 · 5/28–6/02</span>
+  <h2 class="ct">5. 課後迭代：課教完，教材才做到一半</h2>
+  <p class="cd">回饋不是拿來聽的，是拿來改版的。</p>
+  <h3>發生什麼事</h3>
+  <p>5/26 上完課，我沒有把資料夾關起來。5/28 跟相關夥伴開了檢討會（有錄音），然後跟 AI 一起做了兩份文件：<b>「前 40 頁逐頁修改對照清單」</b>——每一頁哪裡要改、為什麼改，一頁一頁列；還有一份<b>「50 分鐘現場 demo 講稿」</b>。接下來一週，簡報連續演進了三版：5/29 刪減版 → 6/01 統一感調整版（順手加做了 Gemini Gems 教學講稿雙版本）→ 6/02 上連結、加 QR 碼的最終版。</p>
+  <h3>我學到什麼</h3>
+  <p>「逐頁修改對照清單」這個做法特別好用：把模糊的「感覺可以更好」變成<b>一頁一條的待辦</b>，AI 照著清單改，你照著清單驗收，不會漏。而且迭代後的教材是「打過實戰又修正過」的版本——下一場課直接從這裡出發，起點比上一場高。</p>
+  <h3>可複製的做法</h3>
+  <ol class="st">
+    <li>課後 48 小時內做檢討（記憶還熱），錄音或筆記丟給 AI 整理成重點。</li>
+    <li>請 AI 產出「逐頁修改對照清單」：頁碼｜現況｜要改成什麼｜原因。</li>
+    <li>照清單改出新版，檔名寫清楚這版改了什麼（刪減版／統一感／上連結）。</li>
+  </ol>
+</section>
+
+<!-- 6 上架 -->
+<section class="chapter" id="c6">
+  <span class="chip">STAGE 04 · 7/22–24</span>
+  <h2 class="ct">6. 上架：讓成果有個家</h2>
+  <p class="cd">兩個月後回頭，把整件事變成永久資產。</p>
+  <h3>發生什麼事</h3>
+  <p>7 月下旬，我換了一個工具——從「跟 AI 對話」換成 <b>Claude Code</b>（會直接動手改網站的那種 AI）。它把 5 月那份 41 頁分鏡表直接轉成了<b>線上教案頁</b>掛進我的筆記館，又幫學員蓋了一個<b>導覽台網站</b>（簡報、講義、提示詞，掃 QR 就到），最後還把整段經驗整理成<b>機關通用的投案版教案</b>——下次要投別的單位，直接列印就能送。</p>
+  <h3>我學到什麼</h3>
+  <p>紙本講義會被壓在公文底下，簡報檔會沉在硬碟裡，但<b>網址不會弄丟</b>。上架這一步做完，這場課才從「教過的一場課」變成「可以一直用的資產」：學員回得去、我下次投案拿得出來、別人想學做法也看得到。另外，<b>對話型 AI 和動手型 AI 是分工的</b>——寫內容用對話，蓋網站、上架這種要動檔案的活，交給 Claude Code。</p>
+  <h3>可複製的做法</h3>
+  <ol class="st">
+    <li>案子收尾時問自己：「這次的成果，放在哪裡可以被重複使用？」</li>
+    <li>把最終版整理上線（做法見<a href="method-07-workshop-hub.html">方法教案 #07：幫工作坊蓋導覽台</a>）。</li>
+    <li>順手把「這次怎麼做的」也寫下來——就是你現在在讀的這篇。</li>
+  </ol>
+</section>
+
+<!-- 7 心法 -->
+<section class="chapter" id="c7">
+  <span class="chip">PLAYBOOK</span>
+  <h2 class="ct">7. 全歷程心法與工具分工</h2>
+  <p class="cd">把五個階段收成一張可以帶走的表。</p>
+  <h3>五條心法</h3>
+  <div class="grid2">
+    <div class="mini"><span class="n">1</span><h5>第一天就開資料夾</h5><p>所有產出集中放。兩個月後要回顧、要複製做法，全靠它。</p></div>
+    <div class="mini"><span class="n">2</span><h5>先求全套，再逐件打磨</h5><p>一次生成所有交付物的骨架，看全貌再改細節。</p></div>
+    <div class="mini"><span class="n">3</span><h5>文字先行，版面後行</h5><p>分鏡表定案再做簡報。文字骨架是資產，可以轉成任何形式。</p></div>
+    <div class="mini"><span class="n">4</span><h5>比稿收斂＋迭代到底</h5><p>多版本挑毛病，比單版本空想快；課後照「逐頁清單」再改版。</p></div>
+    <div class="mini"><span class="n">5</span><h5>成果要有家，做法要留痕</h5><p>上架成網址、把流程固化成技能——下次從更高的起點開始。</p></div>
+    <div class="mini"><span class="n">✚</span><h5>過程記錄的教訓</h5><p>這篇全紀錄是事後靠雲端檔案軌跡「考古」重建的。如果當時就邊做邊記，會更輕鬆——邊走邊留紀錄，比事後回想可靠。</p></div>
+  </div>
+  <h3>工具分工表</h3>
+  <div class="twrap"><table>
+    <tr><th>你要做的事</th><th>用哪種 AI</th><th>本案的實例</th></tr>
+    <tr><td>改簡歷、寫腳本、生講義內容</td><td>AI 對話（聊天視窗）</td><td>階段 0–1 的全部產出</td></tr>
+    <tr><td>結構規劃、逐頁修改</td><td>AI 對話＋清單化</td><td>41 頁分鏡表、逐頁修改對照清單</td></tr>
+    <tr><td>蓋網站、上架、動檔案</td><td>Claude Code（動手型）</td><td>教案頁、導覽台、投案版</td></tr>
+    <tr><td>重複性流程</td><td>固化成技能／指令</td><td>機關教案生成器技能</td></tr>
+  </table></div>
+  <div class="golden"><div class="q">「簡報是一天做出來的，但那堂課是兩個半月做出來的。」</div><div class="a">全歷程協作的真相：AI 沒有取代過程，它讓每一段過程都變快、變好</div></div>
+</section>
+
+<!-- 8 行動 -->
+<section class="chapter" id="c8">
+  <span class="chip">ACTION</span>
+  <h2 class="ct">8. 你的三步驟行動建議</h2>
+  <p class="cd">不用等到接了一場課才開始，手上任何一件「要做出東西」的事都適用。</p>
+  <div class="action"><span class="n">1</span><h4>今天：幫手上的案子開一個資料夾</h4><p>不管是報告、活動還是課程，先開一個以案子命名的雲端資料夾，之後每個產出都丟進去。這是全歷程的地基。</p></div>
+  <div class="action"><span class="n">2</span><h4>這週：用「先列清單、再生全套」開工</h4><p>跟 AI 講清楚目標和限制，請它先列出「這件事需要的所有交付物」，你確認後再請它一件一件生出來。體驗一次「先求全套」的感覺。</p></div>
+  <div class="action"><span class="n">3</span><h4>做完：留一條回得去的路</h4><p>結案時把最終版上架（或至少整理進資料夾），並花十分鐘請 AI 把「這次怎麼做的」寫成紀錄。下次同類的案子，你就不是從零開始。</p></div>
+  <div class="note green">🌱 這一整篇，本身就是步驟 3 的示範——你正在讀的，就是那份「這次怎麼做的」紀錄。</div>
+</section>
+
+</article>
+</div>
+
+<footer>
+  方法教案 #19・一場課的簡報和講義，AI 從投案陪我做到上架・Tarshar 教案集・2026/07<br>
+  🍀 Learn AI with Tarshar｜用 AI 走完一件事的全歷程
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>一堂直播課，變成一座可以逛的互動筆記館｜Tarshar 教案集</title>
+<meta name="description" content="Tarshar 教案集：逐幀課堂筆記法。記錄小D 怎麼用 AI 把一集直播課的錄影、簡報、逐字稿，變成一頁逐幀筆記＋一張互動節點地圖，再上架成一座隨時能逛的筆記館。給零基礎學員的方法教學">
+<style>
+:root{
+  --paper:#f4f0e8; --card:#fffdf7; --card2:#fbf8ef; --ink:#3a3528; --ink2:#766f61; --ink3:#8a8674;
+  --line:#d8d0bf; --accent:#5d8d56; --accent2:#8cbd7d;
+  --code:#fffdf7;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.9}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(244,240,232,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:10px 20px;display:flex;align-items:center;gap:14px}
+.topbar b{font-size:15px}
+.topbar .right{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.topbar a.btn{font-size:12.5px;text-decoration:none;border:1px solid var(--line);border-radius:9px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap}
+.topbar a.btn:hover{border-color:var(--accent);color:var(--accent)}
+.hero{max-width:900px;margin:0 auto;padding:52px 22px 10px;text-align:center}
+.hero .ep{display:inline-block;font-size:12.5px;letter-spacing:3px;color:var(--accent);border:1px solid var(--accent2);border-radius:999px;padding:5px 16px;background:#eef5e9;margin-bottom:18px}
+.hero h1{font-size:clamp(24px,4.4vw,40px);font-weight:900;line-height:1.4;color:var(--ink)}
+.hero .lead{margin-top:14px;font-size:14.5px;color:var(--ink2)}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:18px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+
+.showcase{max-width:900px;margin:26px auto 0;padding:0 22px}
+.showcase-box{background:linear-gradient(120deg,#eef5e9,#fbf8ef);border:1px solid var(--accent2);border-radius:18px;padding:24px 26px;text-align:center}
+.showcase-box .kicker{font-size:12.5px;color:var(--accent);font-weight:800;letter-spacing:1px;margin-bottom:8px}
+.showcase-box p{font-size:14px;color:var(--ink2);margin:6px 0 16px}
+.showcase-box .ctas{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.showcase-box a.cta{display:inline-flex;align-items:center;gap:8px;text-decoration:none;background:var(--accent);color:#fff;font-weight:800;font-size:14.5px;padding:12px 22px;border-radius:999px;box-shadow:0 6px 18px rgba(93,141,86,.28)}
+.showcase-box a.cta:hover{background:#4c7745}
+.showcase-box a.cta.ghost{background:#fff;color:var(--accent);border:1px solid var(--accent2);box-shadow:none}
+.showcase-box a.cta.ghost:hover{background:#eef5e9}
+.showcase-box .url{margin-top:10px;font-size:12.5px;color:var(--ink3)}
+
+.layout{max-width:1120px;margin:30px auto 0;padding:0 22px;display:grid;grid-template-columns:236px 1fr;gap:34px;align-items:start}
+nav.toc{position:sticky;top:66px;border:1px solid var(--line);border-radius:14px;background:var(--card);padding:16px 14px;font-size:13.5px}
+nav.toc .t{font-size:12px;letter-spacing:2px;color:var(--ink3);margin-bottom:10px}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:8px;border-left:3px solid transparent}
+nav.toc a:hover{background:#eef5e9;color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:30px 32px;margin-bottom:26px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:2px;font-weight:700;color:#fff;border-radius:999px;padding:5px 14px;margin-bottom:12px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+h2.ct{font-size:22px;font-weight:900;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:16.5px;font-weight:800;margin:24px 0 10px;padding-left:12px;border-left:4px solid var(--accent2);color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink)}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 24px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"◆";position:absolute;left:4px;font-size:9px;top:12px;color:var(--accent2)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:8px;width:23px;height:23px;border-radius:7px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:800;display:grid;place-items:center}
+.codebox{background:var(--code);border:1px solid var(--line);border-left:4px solid var(--accent2);border-radius:10px;padding:14px 16px;font-family:"Cascadia Code",Consolas,monospace;font-size:12.6px;color:#3a3528;white-space:pre-wrap;line-height:1.8;margin:12px 0;overflow-x:auto}
+.note{display:flex;gap:10px;border-radius:12px;padding:14px 16px;font-size:14px;margin:14px 0;line-height:1.85}
+.note.green{background:#eef5e9;border:1px solid var(--accent2);color:var(--accent)}
+.note.gold{background:#fdf6e7;border:1px solid #eeddb4;color:#7a5b12}
+.golden{background:linear-gradient(120deg,#eef5e9,#fbf8ef);border:1px solid var(--accent2);border-radius:14px;padding:16px 20px;margin:16px 0;text-align:center}
+.golden .q{font-size:17px;font-weight:900;color:var(--accent)}
+.golden .a{font-size:12.5px;color:var(--ink3);margin-top:6px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+@media (max-width:560px){ .grid2{grid-template-columns:1fr} }
+.mini{border:1px solid var(--line);border-radius:14px;padding:14px 16px;background:#fff}
+.mini .n{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:8px;background:var(--accent2);color:#fff;font-weight:800;font-size:12.5px;margin-bottom:6px}
+.mini h5{font-size:14px;font-weight:800;margin-bottom:4px;color:var(--ink)}
+.mini p{font-size:12.8px;color:var(--ink2)}
+.stage{display:inline-block;font-weight:800;font-size:11.5px;color:#fff;background:var(--accent);border-radius:6px;padding:2px 9px;margin-right:7px;letter-spacing:1px;vertical-align:middle}
+.action{border:1px solid var(--accent2);border-radius:16px;padding:18px 20px;background:#fff;margin:14px 0}
+.action .n{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:10px;background:var(--accent);color:#fff;font-weight:900;font-size:15px;margin-bottom:8px}
+.action h4{font-size:15.5px;font-weight:800;color:var(--ink);margin-bottom:4px}
+.action p{font-size:13.5px}
+.backhome{position:fixed;left:14px;bottom:14px;z-index:9999;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;text-decoration:none;color:#fff;background:var(--accent);border:1px solid #4c7745;border-radius:999px;padding:9px 16px;box-shadow:0 4px 18px rgba(0,0,0,.18)}
+.backhome:hover{background:#4c7745}
+footer{max-width:1120px;margin:20px auto 0;padding:30px 22px 70px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:2}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} }
+@media print{ .topbar,nav.toc,.backhome{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../plans/" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📚 Tarshar 教案集</b>
+  <div class="right">
+    <a class="btn" href="../plans/">📚 教案集系列</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">Tarshar 教案集 · 方法教學</span>
+  <h1>一堂直播課，變成一座<br>可以逛的互動筆記館</h1>
+  <p class="lead">這篇記錄的是我（小D）怎麼把一集聽過就過去的直播課，用 AI 拆成一張張照片親眼看過，再變成一頁<b>逐幀課堂筆記</b>＋一張<b>互動節點地圖</b>，最後掛進一座隨時能回頭逛的筆記館。不是聽完就結束，是聽完之後還找得回來。</p>
+  <div class="meta">
+    <span>🎬 逐幀親眼判讀</span>
+    <span>🗺️ 互動節點地圖</span>
+    <span>🌐 GitHub Pages 免費上架</span>
+    <span>🗓️ 2026</span>
+  </div>
+</header>
+
+<div class="showcase">
+  <div class="showcase-box">
+    <div class="kicker">先看我做出來的東西</div>
+    <p>同一集直播課，我做出了兩個頁面：一頁是照時間軸走的逐幀筆記，每張截圖都對得到錄影的那一秒；一頁是把整堂課拆成一顆顆節點的互動地圖，點哪顆看哪顆。兩個頁面都掛在同一座筆記館裡。</p>
+    <div class="ctas">
+      <a class="cta" href="https://tarshar4242.github.io/kt-sweet-journey/ep45-notes.html" target="_blank" rel="noopener">📝 打開逐幀筆記頁 →</a>
+      <a class="cta ghost" href="https://tarshar4242.github.io/kt-sweet-journey/lessons.html" target="_blank" rel="noopener">🏛️ 逛整座筆記館 →</a>
+    </div>
+    <div class="url">tarshar4242.github.io/kt-sweet-journey</div>
+  </div>
+</div>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#c1">1. 為什麼上完課，筆記還是散的</a>
+  <a href="#c2">2. 什麼叫「逐幀」</a>
+  <a href="#c3">3. 素材怎麼收：三樣缺一不可</a>
+  <a href="#c4">4. AI 怎麼把畫面變成一頁筆記</a>
+  <a href="#c5">5. 互動地圖是什麼</a>
+  <a href="#c6">6. 上架與分享</a>
+  <a href="#c7">7. 你的三步驟行動建議</a>
+</nav>
+
+<article>
+
+<!-- 1 為什麼上完課筆記還是散的 -->
+<section class="chapter" id="c1">
+  <span class="chip">STEP 01</span>
+  <h2 class="ct">為什麼上完課，筆記還是散的</h2>
+  <p class="cd">先搞清楚真正卡住我的是什麼，不是先找工具。</p>
+  <h3>發生什麼事</h3>
+  <p>我每週都會聽一堂直播課，講的是最新的 AI 工具。當下聽都聽得懂，老師示範什麼、講了什麼金句，我點頭如搗蒜。問題是隔了一週再想起來，只記得「好像有講到一個很厲害的功能」，畫面在哪一秒、老師原話怎麼說，全部忘光。手機相簿裡零星幾張截圖，前後都沒有文字，過三天連我自己都看不懂那張圖在講什麼。</p>
+  <p>我發現問題不是我不夠認真，是我聽完之後，從來沒有一個地方能讓我「回頭找」。截圖散在相簿，重點留在腦子裡，腦子會忘記，相簿也不會告訴我那張圖是第幾分鐘的事。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">學過不等於學到，學到的是後來還找得回來的部分。</div><div class="a">耳朵會忘記，畫面配上時間戳才不會</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 下次上完一堂課，先別急著問「要用什麼工具整理」，先問自己「三天後我最容易忘記的是哪一段」。那一段，就是你真正需要留住的東西。</div>
+</section>
+
+<!-- 2 什麼叫逐幀 -->
+<section class="chapter" id="c2">
+  <span class="chip">STEP 02</span>
+  <h2 class="ct">什麼叫「逐幀」：不是聽一遍抓重點</h2>
+  <p class="cd">白話說，就是把整支影片切成一張張照片，每一張都親眼看過一次。</p>
+  <h3>發生什麼事</h3>
+  <p>一開始我以為「整理筆記」就是把影片看過一遍，憑印象寫下重點。後來我發現這樣一定會漏東西，因為人的注意力沒辦法 37 分鐘都在線上，總有幾秒鐘是恍神帶過去的。我跟 AI 講的做法是「逐幀」：把整支課程錄影，依照內容切換的節點，抽成一張張畫面，然後我（或者說我請 AI）一張一張真的看過去，不是快轉抓重點，是每一格都看。</p>
+  <p>這跟看一次影片憑印象寫筆記，是完全不同的兩件事。逐幀等於把「我應該有看到」變成「我真的每一秒都看過」。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">逐幀不是慢，是不放過任何一格畫面。</div><div class="a">看得仔細不是天賦，是拆得夠細</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 不用整支課都逐幀，先挑「老師實際操作示範」的那幾段（通常是最容易忘記細節、也最有價值的部分），從這幾段開始一張張看，效果最明顯。</div>
+</section>
+
+<!-- 3 素材怎麼收 -->
+<section class="chapter" id="c3">
+  <span class="chip">STEP 03</span>
+  <h2 class="ct">素材怎麼收：三樣東西缺一不可</h2>
+  <p class="cd">錄影、簡報、逐字稿，各自負責不同的工作。</p>
+  <h3>發生什麼事</h3>
+  <p>我發現只靠錄影是不夠的。錄影負責「畫面長什麼樣」，但老師講話的原句，光看畫面經常聽不清楚；如果那堂課有搭配簡報，簡報裡的原始圖表比我從影片截圖清楚很多；老師講的每一句話，最準確的紀錄方式是逐字稿，把整段錄音轉成一字一句的文字稿，之後要引用「老師原話」才有憑有據，不是我用自己的話轉述。</p>
+  <ul class="pt">
+    <li>錄影：抽出操作畫面的截圖，證明「這件事真的發生過」</li>
+    <li>簡報（如果有）：直接拿原始圖表，比截圖乾淨清楚</li>
+    <li>逐字稿：老師講的每一句話都留下原文，不是我憑印象轉述</li>
+  </ul>
+  <p>三樣裡少一樣，筆記就會有洞：沒有錄影，畫面就只能用文字形容；沒有逐字稿，重點金句就會變成我自己的解讀而不是老師的原話。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">筆記有沒有漏東西，不是憑印象，是三樣素材有沒有收齊。</div><div class="a">畫面、原話、原圖，三個對得起來才算數</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 上課前先想好「這堂課結束後，我要拿到哪三樣東西」：錄影連結、簡報檔（有的話）、逐字稿或錄音。三樣都留住，之後要整理筆記才不會缺角。</div>
+</section>
+
+<!-- 4 AI 怎麼把畫面變成筆記 -->
+<section class="chapter" id="c4">
+  <span class="chip">STEP 04</span>
+  <h2 class="ct">AI 怎麼把畫面變成一頁筆記</h2>
+  <p class="cd">抽格、親眼判讀、對照逐字稿配文字，三步驟疊出一頁課堂筆記。</p>
+  <h3>發生什麼事</h3>
+  <p>拿到錄影之後，我請 AI 用一個叫 ffmpeg 的小工具，每隔固定秒數（或者照內容切換的節點）把整支影片切成一張張畫面：</p>
+  <div class="codebox">ffmpeg -i 直播錄影.mp4 -vf fps=1/15 frame%03d.png
+（意思是：每 15 秒抽一張畫面，存成一張一張的照片）</div>
+  <p>接下來最花時間、但也最關鍵的一步：AI 把這些畫面一張一張「親眼」看過去，不是用檔名猜內容，是真的打開每一張圖判讀畫面上發生了什麼事。判讀完，再對照逐字稿，把老師在那個時間點講的原話配上去，標上錄影的時間戳（像 07:35 這樣的 mm:ss），寫成一段筆記。這樣每一張截圖都能回頭對到「原始錄影的那一秒」，不是我事後憑印象拼湊的畫面。</p>
+  <div class="note gold">如果那堂課有搭配簡報檔，我會請 AI 把簡報檔裡的原始圖表直接抓出來用，畫質比我從影片裡截圖清楚很多，筆記看起來也更像一份正式教材，而不是一堆手機截圖拼接。</div>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">筆記可信不可信，不是寫得順不順，是每張圖對不對得到時間戳。</div><div class="a">我不用會剪片，我只要願意一張一張盯著看</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 請 AI 幫你抽格、判讀、配逐字稿的時候，一定要求它把時間戳標出來。之後不管是你自己回頭找，還是分享給別人，都能直接對到影片的那一秒，不會變成一段沒有來源的空話。</div>
+</section>
+
+<!-- 5 互動地圖是什麼 -->
+<section class="chapter" id="c5">
+  <span class="chip">STEP 05</span>
+  <h2 class="ct">互動地圖是什麼：不是塞更多，是拆更細</h2>
+  <p class="cd">同一堂課的第二個頁面，讓你自己決定先點哪一顆。</p>
+  <h3>發生什麼事</h3>
+  <p>逐幀筆記頁做完之後，我還做了第二個頁面：互動節點地圖。差別在於，逐幀筆記頁是照時間軸從頭排到尾，適合「我要重看一次整堂課」；互動地圖則是把整堂課拆成一顆顆可以點開的節點（像是「輸入加速的小技巧」「官方展示的工具」「進階實作案例」各自一顆），我不會把所有內容一次攤開塞滿整頁，而是先讓你看到節點的名字，你想先看哪一顆，點下去才展開細節。</p>
+  <p>這對「不知道自己想找什麼」的人特別有用：不用從頭滑到尾，看到有興趣的節點名字，直接點進去就好。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">看得懂不是塞得多，是拆得夠細，讓你自己選。</div><div class="a">地圖不用一次攤開，先讓你找到在意的那一顆</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 筆記寫完之後，試著問自己「如果別人只有三分鐘，我會先讓他看哪一段」，把課程內容拆成幾個一看標題就懂在講什麼的節點，這就是互動地圖的雛形。</div>
+</section>
+
+<!-- 6 上架與分享 -->
+<section class="chapter" id="c6">
+  <span class="chip">STEP 06</span>
+  <h2 class="ct">上架與分享：改一個入口頁，全世界都看得到</h2>
+  <p class="cd">兩個頁面做好，最後一步是掛進筆記館，讓別人點得到。</p>
+  <h3>發生什麼事</h3>
+  <p>兩頁筆記做好只是放在我自己的電腦裡，還沒有人看得到。我有一個固定的「筆記館入口頁」，分成兩層：第一層先選系列（像是「直播電台」「教案集」「生活應用」），第二層才是這個系列底下的一集一集。每做完新一集，我就請 AI 把新的一張卡片插進對應系列的最前面，最新的永遠排在最上面，然後跟做網站一樣，打幾行指令把改動送上 GitHub，兩分鐘後網址就自動更新。</p>
+  <div class="note gold">這件事後來變成一套固定流程：只要我丟出一堂課的錄影連結，說一句「幫我做這集筆記」，接下來抽格、判讀、寫筆記、做地圖、掛上筆記館入口、送上網，全部一次跑完，不用我每次重新交代一遍步驟。</div>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">做完不是結束，是要有人真的點得到。</div><div class="a">一個入口，所有集數，越看越像一座館</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 幫自己的筆記固定一個「家」，不管是一個網頁、一個資料夾、還是一個 Notion 頁面，新的筆記做好一律插進同一個地方的最前面，久了自然會變成一座你自己的資料館，而不是散落各處的檔案。</div>
+</section>
+
+<!-- 7 行動建議 -->
+<section class="chapter" id="c7">
+  <span class="chip">TAKE ACTION</span>
+  <h2 class="ct">給你的三步驟行動建議：下一堂課就能開始</h2>
+  <p class="cd">這篇記錄的不只是一集直播課的筆記做法。它記錄的是我從「聽完就忘」走到「聽完還找得回來」的過程。你也可以，從下一堂課開始。</p>
+
+  <div class="action">
+    <div class="n">1</div>
+    <h4>下一堂課，先把三樣東西收好</h4>
+    <p>錄影連結、簡報檔（如果有）、逐字稿或錄音，三樣缺一不可。這是後面所有筆記的原始素材，收不齊，後面做什麼都會有洞。</p>
+  </div>
+  <div class="action">
+    <div class="n">2</div>
+    <h4>挑幾張最關鍵的畫面，標上時間，寫下老師原話</h4>
+    <p>不用整堂課都逐幀，先挑你最容易忘記、也最有價值的那幾段開始，每張畫面配一句老師的原話和時間點，就是一份可信的筆記。</p>
+  </div>
+  <div class="action">
+    <div class="n">3</div>
+    <h4>幫自己的筆記固定一個「家」</h4>
+    <p>不用馬上學做網站，先找一個固定的地方（資料夾、Notion、任何你熟悉的工具都可以），每次做完新筆記就放進同一個地方的最前面，慢慢就會變成一座你自己的筆記館。</p>
+  </div>
+
+  <div class="golden"><div class="q">你不需要會剪片，也不需要會寫程式。你需要的是，願意把一堂課再看一次。</div><div class="a">慢慢來，比較快</div></div>
+</section>
+
+</article>
+</div>
+
+<footer>
+  一堂直播課，變成一座可以逛的互動筆記館・Tarshar 教案集・2026<br>
+  🍀 Learn AI with Tarshar｜我不是工程師，我跟各位一樣是被工作追著跑的人，所以我只教明天就能用的東西
+</footer>
+
+</body>
+</html>

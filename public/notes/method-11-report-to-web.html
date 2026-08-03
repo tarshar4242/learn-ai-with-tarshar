@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>工具吐出來的分析報告，我讓它變成手機一頁看完的網頁｜Tarshar 教案集</title>
+<meta name="description" content="Tarshar 教案集：非工程師也能把工具自動產出的分析報告，變成一頁手機能滑完、還能分享出去的網頁。記錄小D 把 Claude Code 的使用洞察報告，翻成中文、重新編排、部署成網址的完整做法，方法教案 #11。">
+<style>
+:root{
+  --paper:#f4f0e8; --card:#fffdf7; --card2:#fbf8ef; --ink:#3a3528; --ink2:#766f61; --ink3:#8a8674;
+  --line:#d8d0bf; --accent:#5d8d56; --accent2:#8cbd7d;
+  --code:#fffdf7;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.9}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(244,240,232,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:10px 20px;display:flex;align-items:center;gap:14px}
+.topbar b{font-size:15px}
+.topbar .right{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.topbar a.btn{font-size:12.5px;text-decoration:none;border:1px solid var(--line);border-radius:9px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap}
+.topbar a.btn:hover{border-color:var(--accent);color:var(--accent)}
+.hero{max-width:900px;margin:0 auto;padding:52px 22px 10px;text-align:center}
+.hero .ep{display:inline-block;font-size:12.5px;letter-spacing:3px;color:var(--accent);border:1px solid var(--accent2);border-radius:999px;padding:5px 16px;background:#eef5e9;margin-bottom:18px}
+.hero h1{font-size:clamp(24px,4.4vw,40px);font-weight:900;line-height:1.4;color:var(--ink)}
+.hero .lead{margin-top:14px;font-size:14.5px;color:var(--ink2)}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:18px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+
+.showcase{max-width:900px;margin:26px auto 0;padding:0 22px}
+.showcase-box{background:linear-gradient(120deg,#eef5e9,#fbf8ef);border:1px solid var(--accent2);border-radius:18px;padding:24px 26px;text-align:center}
+.showcase-box .kicker{font-size:12.5px;color:var(--accent);font-weight:800;letter-spacing:1px;margin-bottom:8px}
+.showcase-box p{font-size:14px;color:var(--ink2);margin:6px 0 16px}
+.showcase-box a.cta{display:inline-flex;align-items:center;gap:8px;text-decoration:none;background:var(--accent);color:#fff;font-weight:800;font-size:14.5px;padding:12px 22px;border-radius:999px;box-shadow:0 6px 18px rgba(93,141,86,.28)}
+.showcase-box a.cta:hover{background:#4c7745}
+.showcase-box .url{margin-top:10px;font-size:12.5px;color:var(--ink3)}
+
+.layout{max-width:1120px;margin:30px auto 0;padding:0 22px;display:grid;grid-template-columns:236px 1fr;gap:34px;align-items:start}
+nav.toc{position:sticky;top:66px;border:1px solid var(--line);border-radius:14px;background:var(--card);padding:16px 14px;font-size:13.5px}
+nav.toc .t{font-size:12px;letter-spacing:2px;color:var(--ink3);margin-bottom:10px}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:8px;border-left:3px solid transparent}
+nav.toc a:hover{background:#eef5e9;color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:30px 32px;margin-bottom:26px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:2px;font-weight:700;color:#fff;border-radius:999px;padding:5px 14px;margin-bottom:12px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+h2.ct{font-size:22px;font-weight:900;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:16.5px;font-weight:800;margin:24px 0 10px;padding-left:12px;border-left:4px solid var(--accent2);color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink)}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 24px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"◆";position:absolute;left:4px;font-size:9px;top:12px;color:var(--accent2)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:8px;width:23px;height:23px;border-radius:7px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:800;display:grid;place-items:center}
+.codebox{background:var(--code);border:1px solid var(--line);border-left:4px solid var(--accent2);border-radius:10px;padding:14px 16px;font-family:"Cascadia Code",Consolas,monospace;font-size:12.6px;color:#3a3528;white-space:pre-wrap;line-height:1.8;margin:12px 0;overflow-x:auto}
+.note{display:flex;gap:10px;border-radius:12px;padding:14px 16px;font-size:14px;margin:14px 0;line-height:1.85}
+.note.green{background:#eef5e9;border:1px solid var(--accent2);color:var(--accent)}
+.note.gold{background:#fdf6e7;border:1px solid #eeddb4;color:#7a5b12}
+.golden{background:linear-gradient(120deg,#eef5e9,#fbf8ef);border:1px solid var(--accent2);border-radius:14px;padding:16px 20px;margin:16px 0;text-align:center}
+.golden .q{font-size:17px;font-weight:900;color:var(--accent)}
+.golden .a{font-size:12.5px;color:var(--ink3);margin-top:6px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+@media (max-width:560px){ .grid2{grid-template-columns:1fr} }
+.mini{border:1px solid var(--line);border-radius:14px;padding:14px 16px;background:#fff}
+.mini .n{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:8px;background:var(--accent2);color:#fff;font-weight:800;font-size:12.5px;margin-bottom:6px}
+.mini h5{font-size:14px;font-weight:800;margin-bottom:4px;color:var(--ink)}
+.mini p{font-size:12.8px;color:var(--ink2)}
+.stage{display:inline-block;font-weight:800;font-size:11.5px;color:#fff;background:var(--accent);border-radius:6px;padding:2px 9px;margin-right:7px;letter-spacing:1px;vertical-align:middle}
+.action{border:1px solid var(--accent2);border-radius:16px;padding:18px 20px;background:#fff;margin:14px 0}
+.action .n{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:10px;background:var(--accent);color:#fff;font-weight:900;font-size:15px;margin-bottom:8px}
+.action h4{font-size:15.5px;font-weight:800;color:var(--ink);margin-bottom:4px}
+.action p{font-size:13.5px}
+.backhome{position:fixed;left:14px;bottom:14px;z-index:9999;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;text-decoration:none;color:#fff;background:var(--accent);border:1px solid #4c7745;border-radius:999px;padding:9px 16px;box-shadow:0 4px 18px rgba(0,0,0,.18)}
+.backhome:hover{background:#4c7745}
+footer{max-width:1120px;margin:20px auto 0;padding:30px 22px 70px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:2}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} }
+@media print{ .topbar,nav.toc,.backhome{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../plans/" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📚 Tarshar 教案集</b>
+  <div class="right">
+    <a class="btn" href="../plans/">📚 教案集系列</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">Tarshar 教案集 · 方法教學 · 教案 #11</span>
+  <h1>工具吐出來的分析報告<br>我讓它變成手機一頁看完的網頁</h1>
+  <p class="lead">工具自己生的分析報告，通常長得像給工程師看的。這篇記錄的是我（小D）怎麼把 Claude Code 自動產出的一份使用洞察報告，翻成中文、重新編排、變成一頁手機滑得完、還能分享給別人看的網頁。不是特例，是一套任何報告都能用的方法。</p>
+  <div class="meta">
+    <span>📊 從報告到網頁</span>
+    <span>🇹🇼 全繁中重排</span>
+    <span>📱 手機一頁看完</span>
+    <span>🌐 部署成可分享網址</span>
+  </div>
+</header>
+
+<div class="showcase">
+  <div class="showcase-box">
+    <div class="kicker">先看我做出來的東西</div>
+    <p>Claude Code 有個功能會分析我這陣子怎麼用它，自動生一份報告給我。我把那份報告的內容，重新排成一頁中文網頁，現在誰都能點開看懂，不用先學會怎麼讀工程師的報表。</p>
+    <a class="cta" href="https://tarshar4242-rgb.github.io/claude-code-insights/" target="_blank" rel="noopener">📊 打開我的使用洞察報告（繁中版）→</a>
+    <div class="url">tarshar4242-rgb.github.io/claude-code-insights</div>
+  </div>
+</div>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#c1">1. 痛點：報告是給工程師看的</a>
+  <a href="#c2">2. 報告裡其實藏著故事</a>
+  <a href="#c3">3. 怎麼請 AI 重新編排</a>
+  <a href="#c4">4. 手機可讀的排版原則</a>
+  <a href="#c5">5. 部署成可分享網址</a>
+  <a href="#c6">6. 這招用在哪些報告都行</a>
+  <a href="#c7">7. 我沒有全部照單全收</a>
+  <a href="#c8">8. 你的三步驟行動建議</a>
+</nav>
+
+<article>
+
+<!-- 1 痛點 -->
+<section class="chapter" id="c1">
+  <span class="chip">STEP 01</span>
+  <h2 class="ct">痛點：報告是給工程師看的</h2>
+  <p class="cd">好工具第一次見面，常常長得不像給你用的。</p>
+  <h3>發生什麼事</h3>
+  <p>Claude Code 有一個 /insights 功能，會把我這段時間怎麼用它整理成一份分析報告，多少場次、花了多少小時、哪裡做得好、哪裡卡住，全部自動生出來。聽起來很貼心，我打開一看卻笑不出來，滿版英文，格式像後台紀錄，一堆專有名詞疊在一起，我念不到三行就想關掉。</p>
+  <p>不是內容不好，是這份東西根本不是寫給我看的。它是工具原本設計給工程師用的格式，我拿到手上，語言先卡住了。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">工具幫你做了分析，不代表它幫你做了翻譯。</div><div class="a">看不懂不是你的問題，是格式沒有對齊你</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 收到任何工具自動吐出來的分析報告，先不要急著關掉或跳過。丟給 AI 一句「這份是英文、給工程師看的格式，幫我先讀懂，再用我看得懂的方式講給我聽」。</div>
+</section>
+
+<!-- 2 藏著故事 -->
+<section class="chapter" id="c2">
+  <span class="chip">STEP 02</span>
+  <h2 class="ct">報告裡其實藏著故事</h2>
+  <p class="cd">資料本來就在說話，只是你聽不懂它的語言。</p>
+  <h3>發生什麼事</h3>
+  <p>我請 AI 把整份報告讀一遍講給我聽，才發現裡面不是冷冰冰的數字。幾十個工作場次、幾百則訊息、幾百個小時、幾十次提交，這些數字背後是我這段時間真的怎麼用這個工具、卡在哪裡、又是怎麼把問題解掉的。報告裡還有一段像教練講評，寫我「做得好的地方」跟「卡住我的地方」，翻成中文之後我才第一次看懂，原來每一次卡關，工具都幫我記下來了。</p>
+  <p>那一刻我才意識到，這份報告不是流水帳，是一面鏡子，只是原本用英文照著我，我看不清楚自己的樣子。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">資料本來就在說話，只是你聽不懂它的語言。</div><div class="a">翻譯這個動作，做的不是文字，是理解</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 拿到一份陌生的報告，先問 AI「這份報告最想告訴我的三件事是什麼」，讓它先幫你抓重點，你再決定要不要往下細看每一段。</div>
+</section>
+
+<!-- 3 重新編排 -->
+<section class="chapter" id="c3">
+  <span class="chip">STEP 03</span>
+  <h2 class="ct">怎麼請 AI 重新編排</h2>
+  <p class="cd">你負責講清楚想要的樣子，AI 負責把材料排成那個樣子。</p>
+  <h3>發生什麼事</h3>
+  <p>光是翻成中文還不夠，我不想要一份逐字翻譯、還是很長很難讀的文件。我具體跟 AI 講了我想要的順序：先讓我一眼看懂重點，再分「做得好的地方」「卡住我的地方」「接下來的建議」三塊，每一條建議都要附一句為什麼，不要只丟結論。</p>
+  <div class="codebox">先做一個「一眼看懂」區塊放最前面
+分成三個標籤：做得好的地方／卡住我的地方／快速上手的建議
+每個建議都要附原因，不要只給結論
+全部翻成繁體中文，用我平常說話的方式，不要生硬</div>
+  <p>AI 照著這個順序，把原本混在一起的長篇報告，拆成一塊一塊我看得懂、也找得到重點的內容。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">你負責講清楚想要的樣子，AI 負責把材料排成那個樣子。</div><div class="a">先講「順序」，AI 才知道怎麼幫你排</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 不要只說「幫我排好看一點」，具體條列你想要的順序，例如「先讓我一眼看懂重點，細節放後面，每一條建議都要附原因」，AI 才有東西可以照著做。</div>
+</section>
+
+<!-- 4 手機可讀 -->
+<section class="chapter" id="c4">
+  <span class="chip">STEP 04</span>
+  <h2 class="ct">手機可讀的排版原則</h2>
+  <p class="cd">手機看得完的東西，才是真的會被看完的東西。</p>
+  <h3>發生什麼事</h3>
+  <p>就算內容排好了，如果最後還是一份要放大縮小才看得清楚的電腦簡報，我還是不會想打開第二次。我跟 AI 說清楚，這份東西最後要能在手機上一頁滑到底看完，不能分頁、不能等載入、字不能太小，重點要有顏色跟標籤幫我一眼認出來。</p>
+  <p>AI 把「做得好的地方」用綠色標籤、「卡住我的地方」用橘色標籤、每一段都裝進一張卡片裡，字級也放大到手機上不用瞇眼睛就看得清楚。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">手機看得完的東西，才是真的會被看完的東西。</div><div class="a">排版是為了被看完，不是為了看起來厲害</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 交代 AI 的時候明講「這份要能在手機上一頁滑完看懂，字不要太小，重點用色塊或標籤標出來」，不要預設它會自動幫你做到。</div>
+</section>
+
+<!-- 5 部署分享 -->
+<section class="chapter" id="c5">
+  <span class="chip">STEP 05</span>
+  <h2 class="ct">部署成可分享網址</h2>
+  <p class="cd">做完不代表能分享，能分享才算做完。</p>
+  <h3>發生什麼事</h3>
+  <p>排版排好的網頁，一開始只存在我自己的電腦裡，別人根本看不到，我也沒辦法隨手傳給誰。我請 AI 把這份網頁部署上 GitHub Pages，過程就是把檔案推上去，等個一兩分鐘，它就變成一個誰都能點開的網址，不用我重新傳檔案，也不用對方裝什麼軟體。</p>
+  <p>現在這份報告變成上面那個可以直接打開的連結，我想給誰看，傳一個網址過去就好。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">做完不代表能分享，能分享才算做完。</div><div class="a">存在你的電腦裡，跟存在世界看得到的地方，是兩件事</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 任何你想給別人看的整理成果，做完後多問一句「怎麼讓別人不用裝任何東西就能打開看」，通常答案就是把它變成一個網址。</div>
+</section>
+
+<!-- 6 舉一反三 -->
+<section class="chapter" id="c6">
+  <span class="chip">STEP 06</span>
+  <h2 class="ct">這招用在哪些報告都行</h2>
+  <p class="cd">學會一次翻譯的方法，以後每份報告都能用。</p>
+  <h3>發生什麼事</h3>
+  <p>做完這一份之後我才發現，這套做法完全不限於使用洞察報告。任何工具自動產出、格式又不是為我設計的分析報告，都可以照同一套順序走一遍：先請 AI 讀懂內容，再翻成我看得懂的語言，再照我要的順序重新編排，最後排成手機能看的一頁，部署成一個網址。</p>
+  <p>對我來說，這不再是「處理一份報告」，而是多了一個固定流程，以後遇到看不懂或不想看的自動報告，我知道要怎麼把它變成我真的會打開來看的東西。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">學會一次翻譯的方法，以後每份報告都能用。</div><div class="a">方法比單一成品更值得留下來</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 下次遇到任何看不懂或不想看的自動產出報告，先問自己「我要它變成什麼樣子我才會想看」，再照這篇前面的步驟走一次。</div>
+</section>
+
+<!-- 7 誠實的但書 -->
+<section class="chapter" id="c7">
+  <span class="chip">STEP 07</span>
+  <h2 class="ct">我沒有全部照單全收</h2>
+  <p class="cd">翻譯是為了看懂，不是為了照做。</p>
+  <h3>發生什麼事</h3>
+  <p>報告翻好、排版排好之後，裡面有些建議我看完是點頭的，也有些我看完覺得跟我實際的狀況對不太上，就沒有照著做。AI 幫我把報告變得看得懂，但看懂之後要不要採納，那個判斷還是我自己做，不是報告說什麼我就照做什麼。</p>
+  <p>我提醒自己，翻譯跟排版解決的是「看不懂」的問題，不是幫我做決定，這兩件事不能混在一起。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">翻譯是為了看懂，不是為了照做。</div><div class="a">看懂之後，怎麼用，還是你自己拍板</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 報告翻好排好之後，記得多問自己一句「這條建議跟我實際的狀況對得上嗎」，看得懂不等於全部要照做。</div>
+</section>
+
+<!-- 8 行動建議 -->
+<section class="chapter" id="c8">
+  <span class="chip">TAKE ACTION</span>
+  <h2 class="ct">給你的三步驟行動建議：明天就能開始</h2>
+  <p class="cd">這篇記錄的不只是一份使用洞察報告。它記錄的是任何一份你打開就想關掉的分析報告，其實都能被翻成你看得懂、看得完、還能分享出去的樣子。你也可以，從明天開始。</p>
+
+  <div class="action">
+    <div class="n">1</div>
+    <h4>找一份你正在放著不管的報告</h4>
+    <p>工具自動產出的、格式看起來不是給你用的，只要是那種你打開一次就想關掉的東西都算，先挑一份出來。</p>
+  </div>
+  <div class="action">
+    <div class="n">2</div>
+    <h4>跟 AI 講清楚你想要的呈現方式</h4>
+    <p>先讓我一眼看懂重點、分區塊、每個建議附原因、要能在手機上一頁看完，把這些具體講出來，不要只說「排好看一點」。</p>
+  </div>
+  <div class="action">
+    <div class="n">3</div>
+    <h4>做完之後，部署成一個網址</h4>
+    <p>問 AI「怎麼讓別人不用裝任何東西就能打開看」，把成果變成一個網址存起來，或直接分享出去。</p>
+  </div>
+
+  <div class="golden"><div class="q">看不懂的報告，不是你的問題，是它還沒被翻譯成你的語言。</div><div class="a">慢慢來，比較快</div></div>
+</section>
+
+</article>
+</div>
+
+<footer>
+  工具吐出來的分析報告，我讓它變成手機一頁看完的網頁・Tarshar 教案集・2026<br>
+  🍀 Learn AI with Tarshar｜我不是工程師，我跟各位一樣是被工作追著跑的人，所以我只教明天就能用的東西
+</footer>
+
+<a class="backhome" href="../plans/" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>官網改版專案　週會</title><style>
+:root{
+  --bg:#f6f8f1;--card:#fff;--ink:#242a1f;--muted:#6c7364;--line:#e2e7d6;
+  --accent:#8fb15e;--accent-deep:#5f8038;--accent-soft:#eef3e2;
+  --good:#6f9350;--warn:#c9a24b;--bad:#c76b6b;--info:#6a97c2;
+  --shadow:0 1px 2px rgba(40,50,30,.05),0 6px 20px rgba(40,50,30,.06);--radius:14px;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#151812;--card:#1e221a;--ink:#e9ede0;--muted:#9aa38c;--line:#2f3527;
+  --accent:#a8c686;--accent-deep:#bcd79b;--accent-soft:#26301c;
+  --good:#8fb570;--warn:#d8bd6e;--bad:#e08d8d;--info:#8fb6dd;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.28);
+}}
+:root[data-theme="dark"]{
+  --bg:#151812;--card:#1e221a;--ink:#e9ede0;--muted:#9aa38c;--line:#2f3527;
+  --accent:#a8c686;--accent-deep:#bcd79b;--accent-soft:#26301c;
+  --good:#8fb570;--warn:#d8bd6e;--bad:#e08d8d;--info:#8fb6dd;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.28);
+}
+:root[data-theme="light"]{
+  --bg:#f6f8f1;--card:#fff;--ink:#242a1f;--muted:#6c7364;--line:#e2e7d6;
+  --accent:#8fb15e;--accent-deep:#5f8038;--accent-soft:#eef3e2;
+  --good:#6f9350;--warn:#c9a24b;--bad:#c76b6b;--info:#6a97c2;
+  --shadow:0 1px 2px rgba(40,50,30,.05),0 6px 20px rgba(40,50,30,.06);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;
+  line-height:1.7;-webkit-font-smoothing:antialiased}
+.wrap{max-width:860px;margin:0 auto;padding:clamp(22px,5vw,52px) clamp(16px,4vw,30px)}
+.kicker{font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent-deep);font-weight:700}
+h1.doc{font-size:clamp(1.7rem,4vw,2.5rem);margin:.28em 0 .12em;line-height:1.16;text-wrap:balance;font-weight:800}
+.docsub{color:var(--muted);font-size:1.02rem;margin:0 0 8px}
+section.blk{margin-top:34px}
+h2.blk{font-size:1.28rem;font-weight:800;margin:0 0 12px;display:flex;align-items:center;gap:.5em}
+h2.blk .ic{font-size:1.1em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+/* info table */
+table.info{width:100%;border-collapse:collapse;overflow:hidden;border-radius:var(--radius)}
+table.info td{border:1px solid var(--line);padding:9px 12px;font-size:.95rem}
+table.info td.k{background:var(--accent-soft);font-weight:700;width:22%;white-space:nowrap;color:var(--accent-deep)}
+/* dashboard */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center;box-shadow:var(--shadow)}
+.tile b{display:block;font-size:1.7rem;font-weight:800;color:var(--accent-deep);font-variant-numeric:tabular-nums;line-height:1.1}
+.tile span{font-size:.78rem;color:var(--muted)}
+.tile.warn b{color:var(--warn)}.tile.bad b{color:var(--bad)}.tile.good b{color:var(--good)}
+/* gantt */
+.gantt{display:flex;flex-direction:column;gap:9px}
+.grow{display:grid;grid-template-columns:130px 1fr;align-items:center;gap:10px;font-size:.86rem}
+.gtrack{position:relative;height:16px;background:var(--accent-soft);border-radius:8px}
+.gbar{position:absolute;height:16px;border-radius:8px;background:linear-gradient(90deg,var(--accent),var(--accent-deep));display:flex;align-items:center;padding:0 7px;font-size:.68rem;color:#fff;white-space:nowrap;overflow:hidden}
+/* timeline */
+.tl{position:relative;padding-left:22px;margin:0}
+.tl::before{content:"";position:absolute;left:6px;top:4px;bottom:4px;width:2px;background:var(--accent)}
+.tl li{position:relative;list-style:none;margin:0 0 12px;padding:0}
+.tl li::before{content:"";position:absolute;left:-22px;top:7px;width:10px;height:10px;border-radius:50%;background:var(--accent-deep);border:2px solid var(--card)}
+.tl .t{font-weight:700;color:var(--accent-deep);font-size:.82rem;margin-right:8px}
+/* mindmap (nested) */
+.mind{padding:16px}
+.mnode{font-weight:800;font-size:1.05rem;color:var(--accent-deep);margin-bottom:10px}
+.mbranch{border-left:2px solid var(--line);margin-left:8px;padding-left:14px}
+.mbranch>.mb{margin:8px 0}
+.mb-h{font-weight:700}
+.mb-h::before{content:"◆ ";color:var(--accent)}
+.mb ul{margin:4px 0 0;padding-left:18px}
+.mb li{font-size:.9rem;margin:2px 0}
+/* quotes */
+.quote{border-left:4px solid var(--accent-deep);background:var(--accent-soft);border-radius:0 10px 10px 0;padding:11px 15px;margin:0 0 10px;font-size:.98rem;font-style:italic}
+.quote .who{display:block;font-style:normal;font-size:.8rem;color:var(--muted);margin-top:4px}
+/* checklist */
+ul.check{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
+ul.check li{display:flex;gap:10px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 13px}
+.cbox{width:17px;height:17px;border-radius:5px;border:2px solid var(--accent-deep);flex:none;margin-top:2px;position:relative}
+.cbox.on{background:var(--accent-deep)}
+.cbox.on::after{content:"✓";color:var(--card);font-size:12px;position:absolute;top:-2px;left:2px}
+/* glossary */
+table.gl{width:100%;border-collapse:collapse}
+table.gl td{border-bottom:1px solid var(--line);padding:8px 10px;font-size:.92rem;vertical-align:top}
+table.gl td.term{font-weight:700;color:var(--accent-deep);width:30%;white-space:nowrap}
+/* actions / generic table */
+table.grid{width:100%;border-collapse:collapse;font-size:.9rem}
+table.grid th{background:var(--accent-soft);color:var(--accent-deep);font-weight:700;text-align:left;padding:9px 11px;border:1px solid var(--line)}
+table.grid td{padding:8px 11px;border:1px solid var(--line)}
+.prio{font-size:.72rem;padding:2px 8px;border-radius:12px;font-weight:700}
+.prio.高{background:var(--bad);color:#fff}.prio.中{background:var(--warn);color:#fff}.prio.低{background:var(--good);color:#fff}
+/* risk matrix */
+.risk{display:grid;grid-template-columns:auto 1fr 1fr 1fr;gap:5px;font-size:.8rem}
+.risk .hd{font-weight:700;color:var(--muted);display:flex;align-items:center;justify-content:center;text-align:center;padding:4px}
+.risk .cell{border-radius:8px;padding:8px;min-height:52px;color:#fff;font-size:.76rem}
+.risk .lo{background:var(--good)}.risk .mid{background:var(--warn)}.risk .hi{background:var(--bad)}
+/* bullets / tldr */
+ul.bul{margin:0;padding-left:20px}ul.bul li{margin:5px 0}
+.tldr{background:var(--accent-soft);border-radius:12px;padding:15px 18px;font-size:1.05rem;font-weight:600;line-height:1.6}
+.disc{border:1px dashed var(--bad);border-radius:12px;padding:12px 15px;color:var(--bad);font-size:.88rem;background:transparent}
+.overflow{overflow-x:auto}
+footer.doc{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:.82rem;text-align:center}
+/* 完整實錄 */
+.record{display:flex;flex-direction:column;gap:6px}
+.rec{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px 22px;box-shadow:var(--shadow);margin-bottom:10px}
+.rec-h{display:flex;align-items:center;gap:10px;margin:0 0 10px;font-size:1.08rem;font-weight:800;color:var(--accent-deep)}
+.rec-n{background:var(--accent-soft);color:var(--accent-deep);width:1.8em;height:1.8em;border-radius:8px;display:grid;place-items:center;font-size:.8rem;flex:none}
+.rec p{margin:0 0 10px;font-size:.96rem;text-align:justify}
+.rec p:last-child{margin-bottom:0}
+/* 工具列：版本切換 + 列印 */
+.toolbar{position:sticky;top:0;z-index:30;display:flex;flex-wrap:wrap;gap:10px;align-items:center;
+  background:var(--card);border:1px solid var(--line);border-radius:12px;padding:9px 12px;margin-bottom:8px;box-shadow:var(--shadow)}
+.seg{display:inline-flex;background:var(--accent-soft);border-radius:9px;padding:3px}
+.seg button{border:none;background:transparent;color:var(--muted);font-weight:700;font-size:.86rem;
+  padding:6px 14px;border-radius:7px;cursor:pointer;font-family:inherit}
+.seg button.on{background:var(--card);color:var(--accent-deep);box-shadow:var(--shadow)}
+.tbtn{border:1px solid var(--accent-deep);background:var(--accent-deep);color:#fff;
+  font-weight:700;font-size:.86rem;padding:8px 14px;border-radius:9px;cursor:pointer;font-family:inherit}
+.tbtn.first{margin-left:auto}
+.tbtn.ghost{background:transparent;color:var(--accent-deep)}
+.tbtn:hover{filter:brightness(1.06)}
+.hint{width:100%;font-size:.76rem;color:var(--muted);margin:2px 2px 0}
+/* 簡易模式：隱藏 detail 區塊 */
+body.simple section.detail{display:none}
+/* 簽核區（列印公文版時才出現） */
+.sign{display:none}
+/* ── 列印／存 PDF ── 兩種模式：pc=彩色網頁版（跟畫面一樣）、pf=正式公文版（黑字白底＋核章） */
+@media print{
+  @page{margin:14mm 13mm}
+  .toolbar,.home{display:none!important}
+  .wrap{max-width:none;padding:0}
+  section.blk{break-inside:avoid}
+  section.blk:has(.record){break-inside:auto}
+  .rec{break-inside:auto}
+  tr,li,.quote,.rec-h{break-inside:avoid}
+  /* ── 彩色網頁版（預設）：強制保留螢幕的顏色與底色，PDF 就跟畫面一模一樣 ── */
+  body.pc,body.pc *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  body.pc .sign{display:none}
+  /* ── 正式公文版：黑字白底、實線框、加核章欄 ── */
+  body.pf{background:#fff!important;color:#000!important;font-size:11.5pt}
+  body.pf .kicker,body.pf footer.doc{color:#000}
+  body.pf h1.doc{font-size:20pt}
+  body.pf h2.blk{font-size:13pt;border-bottom:1.5px solid #000;padding-bottom:3px}
+  body.pf .card,body.pf .tile,body.pf ul.check li,body.pf .rec{box-shadow:none!important;border:1px solid #666!important;background:#fff!important}
+  body.pf .tldr,body.pf .quote,body.pf .disc,body.pf table.info td.k,body.pf .tag,body.pf .prio,body.pf .rec-n{background:#fff!important;color:#000!important;border:1px solid #999}
+  body.pf .tile b,body.pf .mnode,body.pf .tl .t,body.pf table.gl td.term,body.pf .rec-h{color:#000!important}
+  body.pf table.grid th{background:#eee!important;color:#000!important}
+  body.pf .gbar{background:#555!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body.pf .gtrack{background:#eee!important}
+  body.pf .risk .cell{color:#000!important;border:1px solid #999;background:#fff!important}
+  body.pf .cbox{border-color:#000!important}
+  body.pf .cbox.on{background:#000!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body.pf .sign{display:block!important;margin-top:26px;border-top:1px solid #000;padding-top:12px;font-size:11pt}
+  body.pf .sign .r{display:flex;gap:40px;margin-top:22px}
+}
+</style></head><body class="pc">
+<div class="wrap">
+<div class="toolbar"><div class="seg"><button id="btnFull" class="on" onclick="setView(0)">詳細版</button><button id="btnLite" onclick="setView(1)">簡易重點版</button></div><button class="tbtn first" onclick="pdfWeb()">🖨️ 存成網頁版 PDF</button><button class="tbtn ghost" onclick="pdfDoc()">🏛️ 存成公文版 PDF</button><div class="hint">切「簡易重點版」只留精華、「詳細版」展開全部。「網頁版 PDF」＝跟畫面一樣的彩色版；「公文版 PDF」＝黑字白底、有核章的正式公文。按下去後在列印視窗選「儲存為 PDF」即可。</div></div>
+<div class="kicker">🍀 地端 AI · 專案會議記錄</div>
+<h1 class="doc">官網改版專案　週會</h1>
+<p class="docsub">2026/07/22　·　主持：專案經理 林經理</p>
+<section class="blk"><table class="info"><tr><td class="k">專案</td><td>官方網站改版</td></tr><tr><td class="k">階段</td><td>開發中（第 3 衝刺）</td></tr><tr><td class="k">會議日期</td><td>2026/07/22</td></tr><tr><td class="k">主持</td><td>林經理</td></tr></table></section><section class="blk"><h2 class="blk"><span class="ic">📊</span>專案儀表板</h2><div class="tiles"><div class="tile "><b>62%</b><span>整體進度</span></div><div class="tile warn"><b>2</b><span>風險項</span></div><div class="tile bad"><b>1</b><span>延遲項</span></div><div class="tile good"><b>5</b><span>本週完成</span></div></div></section><section class="blk"><h2 class="blk"><span class="ic">✅</span>行動項 Action Items</h2><div class="overflow"><table class="grid"><tr><th>#</th><th>事項</th><th>負責人</th><th>期限</th><th>優先</th></tr><tr><td>1</td><td>催金流廠商提供正式串接文件</td><td>林經理</td><td>7/25</td><td><span class="prio 高">高</span></td></tr><tr><td>2</td><td>凍結設計稿，改版走變更流程</td><td>設計組</td><td>7/24</td><td><span class="prio 中">中</span></td></tr><tr><td>3</td><td>完成購物車前端串接</td><td>阿哲</td><td>7/29</td><td><span class="prio 高">高</span></td></tr><tr><td>4</td><td>撰寫上線前測試案例</td><td>小美</td><td>8/1</td><td><span class="prio 低">低</span></td></tr></table></div></section><section class="blk detail"><h2 class="blk"><span class="ic">📚</span>完整會議實錄（整理版）</h2><div class="record"><div class="rec"><h3 class="rec-h"><span class="rec-n">1</span>開場與上次行動項檢視</h3><p>林經理開場確認本週議程：前端進度、API 串接、設計稿問題、金流文件、上線日評估。先檢視上次行動項：三項完成、一項延遲（金流文件，本次列為重點議題）。</p><p>上次決議的「每日站會改為線上非同步回報」已實施一週，成員普遍反映省時間，維持現制。</p></div><div class="rec"><h3 class="rec-h"><span class="rec-n">2</span>議題一：前端切版進度（阿哲報告）</h3><p>阿哲報告：首頁與產品頁切版完成，已部署到測試環境。桌機版與設計稿比對通過；手機版在 iPhone SE 這類小螢幕上，產品卡片的間距會擠壓，已用彈性布局修正。</p><p>討論到瀏覽器相容性：客戶端仍有少量使用者用舊版瀏覽器，會議確認以近兩年主流版本為支援基準，舊版只保證「可讀可用」不保證版面一致——林經理裁示照此標準寫進驗收文件。</p></div><div class="rec"><h3 class="rec-h"><span class="rec-n">3</span>議題二：會員登入 API 串接</h3><p>後端報告：會員登入 API 已完成串接並通過基本測試，包含註冊、登入、忘記密碼三條流程。第三方社群登入（Google）下週開工。</p><p>測試中發現一個時區問題：登入紀錄的時間戳記在資料庫是 UTC，前端顯示未轉換，造成顯示差八小時。已修正並補了自動化測試。會議提醒所有時間欄位統一走同一個轉換函式，避免同類問題再發生。</p></div><div class="rec"><h3 class="rec-h"><span class="rec-n">4</span>議題三：設計稿頻繁變更的處理</h3><p>阿哲反映：設計稿兩週內改了三版，前端跟著返工，本衝刺已因此耗掉約兩人日。設計組說明變更多來自客戶窗口的臨時意見。</p><p>討論後決議：即日起設計稿「凍結」，此後任何修改一律走變更申請流程——由林經理評估影響（工時、時程）後才排入，不再口頭改。設計組 7/24 前把現行第二版標記為凍結基準版。</p><p>林經理補充：這不是限制設計，而是保護時程；客戶臨時意見統一收斂到每週五的客戶會議一次談。</p></div><div class="rec"><h3 class="rec-h"><span class="rec-n">5</span>議題四：金流串接文件延遲（本週最大風險）</h3><p>後端報告：金流廠商的正式串接文件原訂上週提供，至今只給了舊版草稿，結帳功能無法開工。依時程推算，文件若 7/28 前仍未到位，結帳功能將壓縮到測試期，威脅 8/20 上線日。</p><p>討論了三個方案：一、繼續等文件；二、先依舊版草稿開發、文件到位後修正；三、上線日順延。會議評估後決議採「催件＋備案」並行：林經理 7/25 前直接聯繫廠商窗口主管催正式文件；後端同步依舊版草稿先搭串接骨架，把可確定的部分（訂單建立、狀態查詢）先做，把風險集中在最小範圍。</p><p>同時列為高風險項持續追蹤，若 7/28 文件仍未到，下次會議啟動上線日重新評估。</p></div><div class="rec"><h3 class="rec-h"><span class="rec-n">6</span>議題五：里程碑與上線日評估</h3><p>檢視整體時程：需求與設計已完成；前端開發進度 62%，符合預期；後端串接因金流文件延遲落後約一週；測試與上線維持 8/20 目標。</p><p>會議共識：目前 8/20 還守得住，但沒有再吃延遲的空間。測試案例撰寫提前開工（小美 8/1 前完成），讓測試期可以無縫接上。</p></div><div class="rec"><h3 class="rec-h"><span class="rec-n">7</span>行動項確認與散會</h3><p>會議最後逐項確認行動項：林經理 7/25 前催金流正式文件（高）；設計組 7/24 前凍結設計稿基準版（中）；阿哲 7/29 前完成購物車前端串接（高）；小美 8/1 前完成上線前測試案例（低）。</p><p>下次週會 7/29 同一時間，金流文件狀態列首項議題。散會。</p></div></div></section><section class="blk detail"><h2 class="blk"><span class="ic">•</span>本次進度更新</h2><ul class="bul"><li>完成首頁與產品頁的前端切版</li><li>串接會員登入 API，通過基本測試</li><li>設計團隊交付第二版視覺稿</li></ul></section><section class="blk detail"><h2 class="blk"><span class="ic">📈</span>里程碑時程</h2><div class="gantt card" style="padding:14px"><div class="grow"><div>需求與設計</div><div class="gtrack"><div class="gbar" style="left:0%;width:25.0%">已完成</div></div></div><div class="grow"><div>前端開發</div><div class="gtrack"><div class="gbar" style="left:22.0%;width:33.0%">進行中</div></div></div><div class="grow"><div>後端串接</div><div class="gtrack"><div class="gbar" style="left:40.0%;width:30.0%">進行中</div></div></div><div class="grow"><div>測試與上線</div><div class="gtrack"><div class="gbar" style="left:70.0%;width:30.0%">8/20 上線</div></div></div></div></section><section class="blk detail"><h2 class="blk"><span class="ic">🎯</span>風險與議題</h2><div class="risk"><div class="hd"></div><div class="hd">可能性低</div><div class="hd">可能性中</div><div class="hd">可能性高</div><div class="hd">影響高</div><div class="cell mid"></div><div class="cell hi">金流串接文件延遲，恐影響結帳功能</div><div class="cell hi"></div><div class="hd">影響中</div><div class="cell mid"></div><div class="cell mid"></div><div class="cell hi">設計稿頻繁變更，拖慢前端</div><div class="hd">影響低</div><div class="cell lo"></div><div class="cell mid"></div><div class="cell mid"></div></div></section>
+<div class="sign">記錄：＿＿＿＿＿＿　　主管核章：<div class="r"><span>＿＿＿＿＿＿＿＿</span><span>＿＿＿＿＿＿＿＿</span></div></div>
+<footer class="doc">🍀 由地端 AI 語音轉紀錄平台自動產生　·　全程離線</footer>
+</div><script>function setView(lite){document.body.classList.toggle('simple',!!lite);document.getElementById('btnLite').classList.toggle('on',!!lite);document.getElementById('btnFull').classList.toggle('on',!lite);}function pdfWeb(){document.body.classList.remove('pf');document.body.classList.add('pc');window.print();}function pdfDoc(){document.body.classList.remove('pc');document.body.classList.add('pf');window.print();}</script></body></html>

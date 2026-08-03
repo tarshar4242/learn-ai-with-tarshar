@@ -1,0 +1,162 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>論文第三章　研究方法討論</title><style>
+:root{
+  --bg:#f6f8f1;--card:#fff;--ink:#242a1f;--muted:#6c7364;--line:#e2e7d6;
+  --accent:#8fb15e;--accent-deep:#5f8038;--accent-soft:#eef3e2;
+  --good:#6f9350;--warn:#c9a24b;--bad:#c76b6b;--info:#6a97c2;
+  --shadow:0 1px 2px rgba(40,50,30,.05),0 6px 20px rgba(40,50,30,.06);--radius:14px;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#151812;--card:#1e221a;--ink:#e9ede0;--muted:#9aa38c;--line:#2f3527;
+  --accent:#a8c686;--accent-deep:#bcd79b;--accent-soft:#26301c;
+  --good:#8fb570;--warn:#d8bd6e;--bad:#e08d8d;--info:#8fb6dd;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.28);
+}}
+:root[data-theme="dark"]{
+  --bg:#151812;--card:#1e221a;--ink:#e9ede0;--muted:#9aa38c;--line:#2f3527;
+  --accent:#a8c686;--accent-deep:#bcd79b;--accent-soft:#26301c;
+  --good:#8fb570;--warn:#d8bd6e;--bad:#e08d8d;--info:#8fb6dd;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.28);
+}
+:root[data-theme="light"]{
+  --bg:#f6f8f1;--card:#fff;--ink:#242a1f;--muted:#6c7364;--line:#e2e7d6;
+  --accent:#8fb15e;--accent-deep:#5f8038;--accent-soft:#eef3e2;
+  --good:#6f9350;--warn:#c9a24b;--bad:#c76b6b;--info:#6a97c2;
+  --shadow:0 1px 2px rgba(40,50,30,.05),0 6px 20px rgba(40,50,30,.06);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;
+  line-height:1.7;-webkit-font-smoothing:antialiased}
+.wrap{max-width:860px;margin:0 auto;padding:clamp(22px,5vw,52px) clamp(16px,4vw,30px)}
+.kicker{font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent-deep);font-weight:700}
+h1.doc{font-size:clamp(1.7rem,4vw,2.5rem);margin:.28em 0 .12em;line-height:1.16;text-wrap:balance;font-weight:800}
+.docsub{color:var(--muted);font-size:1.02rem;margin:0 0 8px}
+section.blk{margin-top:34px}
+h2.blk{font-size:1.28rem;font-weight:800;margin:0 0 12px;display:flex;align-items:center;gap:.5em}
+h2.blk .ic{font-size:1.1em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+/* info table */
+table.info{width:100%;border-collapse:collapse;overflow:hidden;border-radius:var(--radius)}
+table.info td{border:1px solid var(--line);padding:9px 12px;font-size:.95rem}
+table.info td.k{background:var(--accent-soft);font-weight:700;width:22%;white-space:nowrap;color:var(--accent-deep)}
+/* dashboard */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center;box-shadow:var(--shadow)}
+.tile b{display:block;font-size:1.7rem;font-weight:800;color:var(--accent-deep);font-variant-numeric:tabular-nums;line-height:1.1}
+.tile span{font-size:.78rem;color:var(--muted)}
+.tile.warn b{color:var(--warn)}.tile.bad b{color:var(--bad)}.tile.good b{color:var(--good)}
+/* gantt */
+.gantt{display:flex;flex-direction:column;gap:9px}
+.grow{display:grid;grid-template-columns:130px 1fr;align-items:center;gap:10px;font-size:.86rem}
+.gtrack{position:relative;height:16px;background:var(--accent-soft);border-radius:8px}
+.gbar{position:absolute;height:16px;border-radius:8px;background:linear-gradient(90deg,var(--accent),var(--accent-deep));display:flex;align-items:center;padding:0 7px;font-size:.68rem;color:#fff;white-space:nowrap;overflow:hidden}
+/* timeline */
+.tl{position:relative;padding-left:22px;margin:0}
+.tl::before{content:"";position:absolute;left:6px;top:4px;bottom:4px;width:2px;background:var(--accent)}
+.tl li{position:relative;list-style:none;margin:0 0 12px;padding:0}
+.tl li::before{content:"";position:absolute;left:-22px;top:7px;width:10px;height:10px;border-radius:50%;background:var(--accent-deep);border:2px solid var(--card)}
+.tl .t{font-weight:700;color:var(--accent-deep);font-size:.82rem;margin-right:8px}
+/* mindmap (nested) */
+.mind{padding:16px}
+.mnode{font-weight:800;font-size:1.05rem;color:var(--accent-deep);margin-bottom:10px}
+.mbranch{border-left:2px solid var(--line);margin-left:8px;padding-left:14px}
+.mbranch>.mb{margin:8px 0}
+.mb-h{font-weight:700}
+.mb-h::before{content:"◆ ";color:var(--accent)}
+.mb ul{margin:4px 0 0;padding-left:18px}
+.mb li{font-size:.9rem;margin:2px 0}
+/* quotes */
+.quote{border-left:4px solid var(--accent-deep);background:var(--accent-soft);border-radius:0 10px 10px 0;padding:11px 15px;margin:0 0 10px;font-size:.98rem;font-style:italic}
+.quote .who{display:block;font-style:normal;font-size:.8rem;color:var(--muted);margin-top:4px}
+/* checklist */
+ul.check{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
+ul.check li{display:flex;gap:10px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 13px}
+.cbox{width:17px;height:17px;border-radius:5px;border:2px solid var(--accent-deep);flex:none;margin-top:2px;position:relative}
+.cbox.on{background:var(--accent-deep)}
+.cbox.on::after{content:"✓";color:var(--card);font-size:12px;position:absolute;top:-2px;left:2px}
+/* glossary */
+table.gl{width:100%;border-collapse:collapse}
+table.gl td{border-bottom:1px solid var(--line);padding:8px 10px;font-size:.92rem;vertical-align:top}
+table.gl td.term{font-weight:700;color:var(--accent-deep);width:30%;white-space:nowrap}
+/* actions / generic table */
+table.grid{width:100%;border-collapse:collapse;font-size:.9rem}
+table.grid th{background:var(--accent-soft);color:var(--accent-deep);font-weight:700;text-align:left;padding:9px 11px;border:1px solid var(--line)}
+table.grid td{padding:8px 11px;border:1px solid var(--line)}
+.prio{font-size:.72rem;padding:2px 8px;border-radius:12px;font-weight:700}
+.prio.高{background:var(--bad);color:#fff}.prio.中{background:var(--warn);color:#fff}.prio.低{background:var(--good);color:#fff}
+/* risk matrix */
+.risk{display:grid;grid-template-columns:auto 1fr 1fr 1fr;gap:5px;font-size:.8rem}
+.risk .hd{font-weight:700;color:var(--muted);display:flex;align-items:center;justify-content:center;text-align:center;padding:4px}
+.risk .cell{border-radius:8px;padding:8px;min-height:52px;color:#fff;font-size:.76rem}
+.risk .lo{background:var(--good)}.risk .mid{background:var(--warn)}.risk .hi{background:var(--bad)}
+/* bullets / tldr */
+ul.bul{margin:0;padding-left:20px}ul.bul li{margin:5px 0}
+.tldr{background:var(--accent-soft);border-radius:12px;padding:15px 18px;font-size:1.05rem;font-weight:600;line-height:1.6}
+.disc{border:1px dashed var(--bad);border-radius:12px;padding:12px 15px;color:var(--bad);font-size:.88rem;background:transparent}
+.overflow{overflow-x:auto}
+footer.doc{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:.82rem;text-align:center}
+/* 完整實錄 */
+.record{display:flex;flex-direction:column;gap:6px}
+.rec{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px 22px;box-shadow:var(--shadow);margin-bottom:10px}
+.rec-h{display:flex;align-items:center;gap:10px;margin:0 0 10px;font-size:1.08rem;font-weight:800;color:var(--accent-deep)}
+.rec-n{background:var(--accent-soft);color:var(--accent-deep);width:1.8em;height:1.8em;border-radius:8px;display:grid;place-items:center;font-size:.8rem;flex:none}
+.rec p{margin:0 0 10px;font-size:.96rem;text-align:justify}
+.rec p:last-child{margin-bottom:0}
+/* 工具列：版本切換 + 列印 */
+.toolbar{position:sticky;top:0;z-index:30;display:flex;flex-wrap:wrap;gap:10px;align-items:center;
+  background:var(--card);border:1px solid var(--line);border-radius:12px;padding:9px 12px;margin-bottom:8px;box-shadow:var(--shadow)}
+.seg{display:inline-flex;background:var(--accent-soft);border-radius:9px;padding:3px}
+.seg button{border:none;background:transparent;color:var(--muted);font-weight:700;font-size:.86rem;
+  padding:6px 14px;border-radius:7px;cursor:pointer;font-family:inherit}
+.seg button.on{background:var(--card);color:var(--accent-deep);box-shadow:var(--shadow)}
+.tbtn{border:1px solid var(--accent-deep);background:var(--accent-deep);color:#fff;
+  font-weight:700;font-size:.86rem;padding:8px 14px;border-radius:9px;cursor:pointer;font-family:inherit}
+.tbtn.first{margin-left:auto}
+.tbtn.ghost{background:transparent;color:var(--accent-deep)}
+.tbtn:hover{filter:brightness(1.06)}
+.hint{width:100%;font-size:.76rem;color:var(--muted);margin:2px 2px 0}
+/* 簡易模式：隱藏 detail 區塊 */
+body.simple section.detail{display:none}
+/* 簽核區（列印公文版時才出現） */
+.sign{display:none}
+/* ── 列印／存 PDF ── 兩種模式：pc=彩色網頁版（跟畫面一樣）、pf=正式公文版（黑字白底＋核章） */
+@media print{
+  @page{margin:14mm 13mm}
+  .toolbar,.home{display:none!important}
+  .wrap{max-width:none;padding:0}
+  section.blk{break-inside:avoid}
+  section.blk:has(.record){break-inside:auto}
+  .rec{break-inside:auto}
+  tr,li,.quote,.rec-h{break-inside:avoid}
+  /* ── 彩色網頁版（預設）：強制保留螢幕的顏色與底色，PDF 就跟畫面一模一樣 ── */
+  body.pc,body.pc *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  body.pc .sign{display:none}
+  /* ── 正式公文版：黑字白底、實線框、加核章欄 ── */
+  body.pf{background:#fff!important;color:#000!important;font-size:11.5pt}
+  body.pf .kicker,body.pf footer.doc{color:#000}
+  body.pf h1.doc{font-size:20pt}
+  body.pf h2.blk{font-size:13pt;border-bottom:1.5px solid #000;padding-bottom:3px}
+  body.pf .card,body.pf .tile,body.pf ul.check li,body.pf .rec{box-shadow:none!important;border:1px solid #666!important;background:#fff!important}
+  body.pf .tldr,body.pf .quote,body.pf .disc,body.pf table.info td.k,body.pf .tag,body.pf .prio,body.pf .rec-n{background:#fff!important;color:#000!important;border:1px solid #999}
+  body.pf .tile b,body.pf .mnode,body.pf .tl .t,body.pf table.gl td.term,body.pf .rec-h{color:#000!important}
+  body.pf table.grid th{background:#eee!important;color:#000!important}
+  body.pf .gbar{background:#555!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body.pf .gtrack{background:#eee!important}
+  body.pf .risk .cell{color:#000!important;border:1px solid #999;background:#fff!important}
+  body.pf .cbox{border-color:#000!important}
+  body.pf .cbox.on{background:#000!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body.pf .sign{display:block!important;margin-top:26px;border-top:1px solid #000;padding-top:12px;font-size:11pt}
+  body.pf .sign .r{display:flex;gap:40px;margin-top:22px}
+}
+</style></head><body class="pc">
+<div class="wrap">
+<div class="toolbar"><div class="seg"><button id="btnFull" class="on" onclick="setView(0)">詳細版</button><button id="btnLite" onclick="setView(1)">簡易重點版</button></div><button class="tbtn first" onclick="pdfWeb()">🖨️ 存成網頁版 PDF</button><button class="tbtn ghost" onclick="pdfDoc()">🏛️ 存成公文版 PDF</button><div class="hint">切「簡易重點版」只留精華、「詳細版」展開全部。「網頁版 PDF」＝跟畫面一樣的彩色版；「公文版 PDF」＝黑字白底、有核章的正式公文。按下去後在列印視窗選「儲存為 PDF」即可。</div></div>
+<div class="kicker">🍀 地端 AI · 論文 Meeting 記錄</div>
+<h1 class="doc">論文第三章　研究方法討論</h1>
+<p class="docsub">2026/07/20　·　指導教授：王教授</p>
+<section class="blk"><table class="info"><tr><td class="k">日期</td><td>2026/07/20</td></tr><tr><td class="k">指導教授</td><td>王教授</td></tr><tr><td class="k">討論主題</td><td>第三章研究方法與個案選擇</td></tr></table></section><section class="blk"><h2 class="blk"><span class="ic">•</span>教授回饋與指正</h2><ul class="bul"><li>研究問題還是太大，要再收斂到一個可回答的核心問題</li><li>個案選擇的理由要寫清楚，不能只說「因為方便取得」</li><li>研究方法章節要先交代研究典範，再談資料蒐集</li></ul></section><section class="blk"><h2 class="blk"><span class="ic">☑️</span>待修改清單</h2><ul class="check"><li><span class="cbox "></span><span>把研究問題從三個收斂成一個核心問題</span></li><li><span class="cbox "></span><span>補寫個案選擇的理論依據</span></li><li><span class="cbox "></span><span>第三章開頭加一段研究典範說明</span></li></ul></section><section class="blk"><h2 class="blk"><span class="ic">•</span>下次進度目標</h2><ul class="bul"><li>兩週內交出收斂後的研究問題與修訂版第三章架構</li></ul></section><section class="blk detail"><h2 class="blk"><span class="ic">📚</span>完整討論實錄（整理版）</h2><div class="record"><div class="rec"><h3 class="rec-h"><span class="rec-n">1</span>開場：進度報告</h3><p>學生先報告兩週進度：完成第三章研究方法初稿架構，包含研究設計、個案選擇、資料蒐集三節；並整理了十二篇個案研究法相關文獻的閱讀筆記。</p><p>教授肯定進度節奏，但提醒：「架構有了，靈魂還沒有——你要先說服我為什麼是這個問題、這個個案。」本次討論就聚焦在這兩點。</p></div><div class="rec"><h3 class="rec-h"><span class="rec-n">2</span>研究問題太大：收斂的過程</h3><p>學生原本列了三個研究問題：個人知識庫如何建立、使用歷程如何演變、對知識工作效率的影響。教授指出這是三篇論文的量，一篇碩論只能回答一個核心問題。</p><p>教授帶著學生逐一檢視：第一個問題偏向操作手冊，學術貢獻弱；第三個問題「效率影響」需要量化測量，單一個案很難成立；第二個「使用歷程的演變」最適合質性個案研究——有時間軸、有轉折、有可以深描的素材。</p><p>教授給的收斂原則：「好的研究問題要小到你能挖深，深到別人覺得有東西。」學生當場把問題初步改寫為「個人知識庫在長期使用中，人與系統的協作型態如何演變」，教授認為方向對了，要求回去再精煉措辭。</p></div><div class="rec"><h3 class="rec-h"><span class="rec-n">3</span>個案選擇的正當性</h3><p>教授指出初稿最弱的一段：個案選擇理由只寫了「資料取得便利」。這在審查時一定被挑戰——方便抽樣要有學理包裝，不能裸寫。</p><p>教授建議引用 Yin 的個案研究法，論證這是「獨特個案（unique case）」或「啟示性個案（revelatory case）」：研究者本人長期、高頻使用個人知識庫，能取得外人拿不到的縱深資料，這是這個個案的不可替代性。</p><p>同時要誠實面對自我研究的限制：加一節說明研究者角色與偏誤控制（例如以系統日誌、文件軌跡做三角驗證，不只靠回憶）。</p></div><div class="rec"><h3 class="rec-h"><span class="rec-n">4</span>研究方法章節的結構調整</h3><p>教授看初稿目錄後指出順序問題：現在是直接跳到資料蒐集，缺了「研究典範」的交代。質性研究要先講清楚立場——是詮釋主義取向，關注意義的建構，再往下談為什麼選個案研究策略、為什麼是單一個案。</p><p>指示的新結構：3.1 研究典範與取向 → 3.2 研究策略（個案研究法）→ 3.3 個案選擇 → 3.4 資料蒐集 → 3.5 資料分析 → 3.6 研究品質與倫理。學生依此重排。</p></div><div class="rec"><h3 class="rec-h"><span class="rec-n">5</span>資料蒐集方式的討論</h3><p>確認三種資料來源做三角驗證：一、系統內的文件與紀錄（知識庫條目、版本歷史、對話紀錄）；二、研究者的使用日誌（回溯＋前瞻並行，即日起每週固定寫）；三、半結構式的自我訪談與同儕檢核（請一位同學定期擔任批判性朋友，檢視詮釋是否過度）。</p><p>教授特別提醒：資料蒐集要「現在就開始」，不要等第三章寫完——歷程研究最怕事後重建記憶。</p></div><div class="rec"><h3 class="rec-h"><span class="rec-n">6</span>下次進度與確認</h3><p>議定兩週後交：收斂後的研究問題（一句話版＋一段說明）、依新結構重排的第三章、開始記錄的第一批使用日誌。</p><p>學生提出待拍板問題：核心問題聚焦「使用歷程」還是「知識沉澱效果」？教授初步傾向歷程，但要求學生把兩個版本各寫一段研究問題陳述，下次一起比較後定案。</p></div></div></section><section class="blk detail"><h2 class="blk"><span class="ic">•</span>本次討論重點</h2><ul class="bul"><li>報告第三章研究方法的初稿架構</li><li>討論以個人知識庫作為研究個案的適切性</li><li>確認質性資料的蒐集方式</li></ul></section><section class="blk detail"><h2 class="blk"><span class="ic">•</span>文獻與方法建議</h2><ul class="bul"><li>參考 Yin 的個案研究法，補強單一個案的正當性</li><li>資料蒐集可用半結構訪談＋文件分析三角驗證</li></ul></section><section class="blk detail"><h2 class="blk"><span class="ic">•</span>要向教授拍板的問題</h2><ul class="bul"><li>核心研究問題聚焦在「使用歷程」還是「知識沉澱效果」，請教授定調</li></ul></section>
+
+<footer class="doc">🍀 由地端 AI 語音轉紀錄平台自動產生　·　全程離線</footer>
+</div><script>function setView(lite){document.body.classList.toggle('simple',!!lite);document.getElementById('btnLite').classList.toggle('on',!!lite);document.getElementById('btnFull').classList.toggle('on',!lite);}function pdfWeb(){document.body.classList.remove('pf');document.body.classList.add('pc');window.print();}function pdfDoc(){document.body.classList.remove('pc');document.body.classList.add('pf');window.print();}</script></body></html>

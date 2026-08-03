@@ -1,0 +1,158 @@
+---
+import Layout from '../layouts/Layout.astro';
+import plans from '../data/plans.json';
+
+const base = import.meta.env.BASE_URL;
+const lead =
+  '對外授課的完整教案——公部門、機關單位的 AI 體驗工作坊，加上方法教學系列。每一份都是可直接照著上的教學設計（流程、金句、學員產出、帶回家）。';
+---
+
+<Layout page="courses" title="Tarshar 教案集" description={lead}>
+  <section class="page-section">
+    <div class="head" data-reveal="1">
+      <h1 class="page-title">Tarshar <span class="accent">教案集</span></h1>
+      <div class="divider"><span class="line"></span>公部門・機關工作坊・方法教學<span class="line"></span></div>
+      <p class="lead">{lead}</p>
+    </div>
+
+    <div class="count-row">
+      <span>共 {plans.length} 份教案</span>
+      <a class="back-link" href={`${base}courses/`}>‹ 回課程筆記館</a>
+    </div>
+
+    <div class="grid">
+      {plans.map((p) => (
+        <div class="ep-card" style={`--c:${p.accent}`}>
+          <div class="top"></div>
+          <div class="body">
+            <span class="code">{p.ep}</span>
+            <div class="title">{p.title}</div>
+            <div class="desc">{p.desc}</div>
+            {p.tags.length > 0 && (
+              <div class="tags">
+                {p.tags.map((t) => <span>{t}</span>)}
+              </div>
+            )}
+            {p.date && <div class="date">{p.date}</div>}
+          </div>
+          <div class="links">
+            {p.links.map((l) => <a href={`${base}notes/${l.href}`}>{l.label}</a>)}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .page-section {
+    width: 88%;
+    max-width: var(--content-max);
+    margin: 0 auto;
+    padding: 64px var(--space-h) 80px;
+  }
+  .head { text-align: center; margin-bottom: 40px; }
+  .page-title {
+    font-family: var(--font-head);
+    font-size: var(--fs-page-title);
+    margin: 0 0 16px;
+  }
+  .page-title .accent { color: var(--c-brand); }
+  .divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    color: var(--c-accent);
+    font-size: var(--fs-15);
+    letter-spacing: .14em;
+  }
+  .divider .line { width: 44px; height: 1px; background: rgba(124, 168, 92, .5); }
+  .lead {
+    font-size: var(--fs-17);
+    line-height: 2;
+    color: var(--c-body);
+    max-width: 36em;
+    margin: 24px auto 0;
+  }
+  .count-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    font-size: var(--fs-15);
+    color: var(--c-faintest);
+    margin-bottom: 18px;
+  }
+  .back-link { font-size: var(--fs-15); }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 22px;
+  }
+  .ep-card {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: 0 2px 10px var(--c-shadow);
+    transition: transform .25s ease, box-shadow .25s ease;
+  }
+  .ep-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 34px var(--c-shadow-strong);
+  }
+  .ep-card .top { height: 5px; background: var(--c); }
+  .ep-card .body { padding: 22px 22px 16px; flex: 1; }
+  .ep-card .code {
+    font-size: var(--fs-12);
+    letter-spacing: .14em;
+    color: var(--c);
+    font-weight: 600;
+  }
+  .ep-card .title {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: var(--fs-17);
+    color: var(--c-ink-strong);
+    line-height: 1.6;
+    margin: 10px 0 10px;
+  }
+  .ep-card .desc {
+    font-size: var(--fs-13);
+    line-height: 1.9;
+    color: var(--c-body-soft);
+  }
+  .ep-card .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 12px;
+  }
+  .ep-card .tags span {
+    font-size: var(--fs-12);
+    padding: 3px 10px;
+    border-radius: var(--radius-pill);
+    background: var(--c-accent-chip-bg);
+    color: var(--c-body-soft);
+  }
+  .ep-card .date {
+    font-size: var(--fs-12);
+    color: var(--c-faintest);
+    margin-top: 12px;
+  }
+  .ep-card .links {
+    display: flex;
+    border-top: 1px solid var(--c-border);
+  }
+  .ep-card .links a {
+    flex: 1;
+    text-align: center;
+    padding: 12px 8px;
+    font-size: var(--fs-15);
+  }
+  .ep-card .links a + a { border-left: 1px solid var(--c-border); }
+</style>

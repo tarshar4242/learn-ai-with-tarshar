@@ -1,0 +1,162 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>金融科技課程：股票與期貨交易實務</title><style>
+:root{
+  --bg:#f6f8f1;--card:#fff;--ink:#242a1f;--muted:#6c7364;--line:#e2e7d6;
+  --accent:#8fb15e;--accent-deep:#5f8038;--accent-soft:#eef3e2;
+  --good:#6f9350;--warn:#c9a24b;--bad:#c76b6b;--info:#6a97c2;
+  --shadow:0 1px 2px rgba(40,50,30,.05),0 6px 20px rgba(40,50,30,.06);--radius:14px;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#151812;--card:#1e221a;--ink:#e9ede0;--muted:#9aa38c;--line:#2f3527;
+  --accent:#a8c686;--accent-deep:#bcd79b;--accent-soft:#26301c;
+  --good:#8fb570;--warn:#d8bd6e;--bad:#e08d8d;--info:#8fb6dd;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.28);
+}}
+:root[data-theme="dark"]{
+  --bg:#151812;--card:#1e221a;--ink:#e9ede0;--muted:#9aa38c;--line:#2f3527;
+  --accent:#a8c686;--accent-deep:#bcd79b;--accent-soft:#26301c;
+  --good:#8fb570;--warn:#d8bd6e;--bad:#e08d8d;--info:#8fb6dd;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.28);
+}
+:root[data-theme="light"]{
+  --bg:#f6f8f1;--card:#fff;--ink:#242a1f;--muted:#6c7364;--line:#e2e7d6;
+  --accent:#8fb15e;--accent-deep:#5f8038;--accent-soft:#eef3e2;
+  --good:#6f9350;--warn:#c9a24b;--bad:#c76b6b;--info:#6a97c2;
+  --shadow:0 1px 2px rgba(40,50,30,.05),0 6px 20px rgba(40,50,30,.06);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;
+  line-height:1.7;-webkit-font-smoothing:antialiased}
+.wrap{max-width:860px;margin:0 auto;padding:clamp(22px,5vw,52px) clamp(16px,4vw,30px)}
+.kicker{font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent-deep);font-weight:700}
+h1.doc{font-size:clamp(1.7rem,4vw,2.5rem);margin:.28em 0 .12em;line-height:1.16;text-wrap:balance;font-weight:800}
+.docsub{color:var(--muted);font-size:1.02rem;margin:0 0 8px}
+section.blk{margin-top:34px}
+h2.blk{font-size:1.28rem;font-weight:800;margin:0 0 12px;display:flex;align-items:center;gap:.5em}
+h2.blk .ic{font-size:1.1em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+/* info table */
+table.info{width:100%;border-collapse:collapse;overflow:hidden;border-radius:var(--radius)}
+table.info td{border:1px solid var(--line);padding:9px 12px;font-size:.95rem}
+table.info td.k{background:var(--accent-soft);font-weight:700;width:22%;white-space:nowrap;color:var(--accent-deep)}
+/* dashboard */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center;box-shadow:var(--shadow)}
+.tile b{display:block;font-size:1.7rem;font-weight:800;color:var(--accent-deep);font-variant-numeric:tabular-nums;line-height:1.1}
+.tile span{font-size:.78rem;color:var(--muted)}
+.tile.warn b{color:var(--warn)}.tile.bad b{color:var(--bad)}.tile.good b{color:var(--good)}
+/* gantt */
+.gantt{display:flex;flex-direction:column;gap:9px}
+.grow{display:grid;grid-template-columns:130px 1fr;align-items:center;gap:10px;font-size:.86rem}
+.gtrack{position:relative;height:16px;background:var(--accent-soft);border-radius:8px}
+.gbar{position:absolute;height:16px;border-radius:8px;background:linear-gradient(90deg,var(--accent),var(--accent-deep));display:flex;align-items:center;padding:0 7px;font-size:.68rem;color:#fff;white-space:nowrap;overflow:hidden}
+/* timeline */
+.tl{position:relative;padding-left:22px;margin:0}
+.tl::before{content:"";position:absolute;left:6px;top:4px;bottom:4px;width:2px;background:var(--accent)}
+.tl li{position:relative;list-style:none;margin:0 0 12px;padding:0}
+.tl li::before{content:"";position:absolute;left:-22px;top:7px;width:10px;height:10px;border-radius:50%;background:var(--accent-deep);border:2px solid var(--card)}
+.tl .t{font-weight:700;color:var(--accent-deep);font-size:.82rem;margin-right:8px}
+/* mindmap (nested) */
+.mind{padding:16px}
+.mnode{font-weight:800;font-size:1.05rem;color:var(--accent-deep);margin-bottom:10px}
+.mbranch{border-left:2px solid var(--line);margin-left:8px;padding-left:14px}
+.mbranch>.mb{margin:8px 0}
+.mb-h{font-weight:700}
+.mb-h::before{content:"◆ ";color:var(--accent)}
+.mb ul{margin:4px 0 0;padding-left:18px}
+.mb li{font-size:.9rem;margin:2px 0}
+/* quotes */
+.quote{border-left:4px solid var(--accent-deep);background:var(--accent-soft);border-radius:0 10px 10px 0;padding:11px 15px;margin:0 0 10px;font-size:.98rem;font-style:italic}
+.quote .who{display:block;font-style:normal;font-size:.8rem;color:var(--muted);margin-top:4px}
+/* checklist */
+ul.check{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
+ul.check li{display:flex;gap:10px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 13px}
+.cbox{width:17px;height:17px;border-radius:5px;border:2px solid var(--accent-deep);flex:none;margin-top:2px;position:relative}
+.cbox.on{background:var(--accent-deep)}
+.cbox.on::after{content:"✓";color:var(--card);font-size:12px;position:absolute;top:-2px;left:2px}
+/* glossary */
+table.gl{width:100%;border-collapse:collapse}
+table.gl td{border-bottom:1px solid var(--line);padding:8px 10px;font-size:.92rem;vertical-align:top}
+table.gl td.term{font-weight:700;color:var(--accent-deep);width:30%;white-space:nowrap}
+/* actions / generic table */
+table.grid{width:100%;border-collapse:collapse;font-size:.9rem}
+table.grid th{background:var(--accent-soft);color:var(--accent-deep);font-weight:700;text-align:left;padding:9px 11px;border:1px solid var(--line)}
+table.grid td{padding:8px 11px;border:1px solid var(--line)}
+.prio{font-size:.72rem;padding:2px 8px;border-radius:12px;font-weight:700}
+.prio.高{background:var(--bad);color:#fff}.prio.中{background:var(--warn);color:#fff}.prio.低{background:var(--good);color:#fff}
+/* risk matrix */
+.risk{display:grid;grid-template-columns:auto 1fr 1fr 1fr;gap:5px;font-size:.8rem}
+.risk .hd{font-weight:700;color:var(--muted);display:flex;align-items:center;justify-content:center;text-align:center;padding:4px}
+.risk .cell{border-radius:8px;padding:8px;min-height:52px;color:#fff;font-size:.76rem}
+.risk .lo{background:var(--good)}.risk .mid{background:var(--warn)}.risk .hi{background:var(--bad)}
+/* bullets / tldr */
+ul.bul{margin:0;padding-left:20px}ul.bul li{margin:5px 0}
+.tldr{background:var(--accent-soft);border-radius:12px;padding:15px 18px;font-size:1.05rem;font-weight:600;line-height:1.6}
+.disc{border:1px dashed var(--bad);border-radius:12px;padding:12px 15px;color:var(--bad);font-size:.88rem;background:transparent}
+.overflow{overflow-x:auto}
+footer.doc{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:.82rem;text-align:center}
+/* 完整實錄 */
+.record{display:flex;flex-direction:column;gap:6px}
+.rec{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px 22px;box-shadow:var(--shadow);margin-bottom:10px}
+.rec-h{display:flex;align-items:center;gap:10px;margin:0 0 10px;font-size:1.08rem;font-weight:800;color:var(--accent-deep)}
+.rec-n{background:var(--accent-soft);color:var(--accent-deep);width:1.8em;height:1.8em;border-radius:8px;display:grid;place-items:center;font-size:.8rem;flex:none}
+.rec p{margin:0 0 10px;font-size:.96rem;text-align:justify}
+.rec p:last-child{margin-bottom:0}
+/* 工具列：版本切換 + 列印 */
+.toolbar{position:sticky;top:0;z-index:30;display:flex;flex-wrap:wrap;gap:10px;align-items:center;
+  background:var(--card);border:1px solid var(--line);border-radius:12px;padding:9px 12px;margin-bottom:8px;box-shadow:var(--shadow)}
+.seg{display:inline-flex;background:var(--accent-soft);border-radius:9px;padding:3px}
+.seg button{border:none;background:transparent;color:var(--muted);font-weight:700;font-size:.86rem;
+  padding:6px 14px;border-radius:7px;cursor:pointer;font-family:inherit}
+.seg button.on{background:var(--card);color:var(--accent-deep);box-shadow:var(--shadow)}
+.tbtn{border:1px solid var(--accent-deep);background:var(--accent-deep);color:#fff;
+  font-weight:700;font-size:.86rem;padding:8px 14px;border-radius:9px;cursor:pointer;font-family:inherit}
+.tbtn.first{margin-left:auto}
+.tbtn.ghost{background:transparent;color:var(--accent-deep)}
+.tbtn:hover{filter:brightness(1.06)}
+.hint{width:100%;font-size:.76rem;color:var(--muted);margin:2px 2px 0}
+/* 簡易模式：隱藏 detail 區塊 */
+body.simple section.detail{display:none}
+/* 簽核區（列印公文版時才出現） */
+.sign{display:none}
+/* ── 列印／存 PDF ── 兩種模式：pc=彩色網頁版（跟畫面一樣）、pf=正式公文版（黑字白底＋核章） */
+@media print{
+  @page{margin:14mm 13mm}
+  .toolbar,.home{display:none!important}
+  .wrap{max-width:none;padding:0}
+  section.blk{break-inside:avoid}
+  section.blk:has(.record){break-inside:auto}
+  .rec{break-inside:auto}
+  tr,li,.quote,.rec-h{break-inside:avoid}
+  /* ── 彩色網頁版（預設）：強制保留螢幕的顏色與底色，PDF 就跟畫面一模一樣 ── */
+  body.pc,body.pc *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  body.pc .sign{display:none}
+  /* ── 正式公文版：黑字白底、實線框、加核章欄 ── */
+  body.pf{background:#fff!important;color:#000!important;font-size:11.5pt}
+  body.pf .kicker,body.pf footer.doc{color:#000}
+  body.pf h1.doc{font-size:20pt}
+  body.pf h2.blk{font-size:13pt;border-bottom:1.5px solid #000;padding-bottom:3px}
+  body.pf .card,body.pf .tile,body.pf ul.check li,body.pf .rec{box-shadow:none!important;border:1px solid #666!important;background:#fff!important}
+  body.pf .tldr,body.pf .quote,body.pf .disc,body.pf table.info td.k,body.pf .tag,body.pf .prio,body.pf .rec-n{background:#fff!important;color:#000!important;border:1px solid #999}
+  body.pf .tile b,body.pf .mnode,body.pf .tl .t,body.pf table.gl td.term,body.pf .rec-h{color:#000!important}
+  body.pf table.grid th{background:#eee!important;color:#000!important}
+  body.pf .gbar{background:#555!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body.pf .gtrack{background:#eee!important}
+  body.pf .risk .cell{color:#000!important;border:1px solid #999;background:#fff!important}
+  body.pf .cbox{border-color:#000!important}
+  body.pf .cbox.on{background:#000!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body.pf .sign{display:block!important;margin-top:26px;border-top:1px solid #000;padding-top:12px;font-size:11pt}
+  body.pf .sign .r{display:flex;gap:40px;margin-top:22px}
+}
+</style></head><body class="pc">
+<div class="wrap">
+<div class="toolbar"><div class="seg"><button id="btnFull" class="on" onclick="setView(0)">詳細版</button><button id="btnLite" onclick="setView(1)">簡易重點版</button></div><button class="tbtn first" onclick="pdfWeb()">🖨️ 存成網頁版 PDF</button><button class="tbtn ghost" onclick="pdfDoc()">🏛️ 存成公文版 PDF</button><div class="hint">切「簡易重點版」只留精華、「詳細版」展開全部。「網頁版 PDF」＝跟畫面一樣的彩色版；「公文版 PDF」＝黑字白底、有核章的正式公文。按下去後在列印視窗選「儲存為 PDF」即可。</div></div>
+<div class="kicker">🍀 地端 AI · 課堂筆記</div>
+<h1 class="doc">金融科技課程：股票與期貨交易實務</h1>
+<p class="docsub">鄭老師　·　2026/03/05　·　晨學講堂</p>
+<section class="blk"><table class="info"><tr><td class="k">講者</td><td>鄭老師</td></tr><tr><td class="k">日期</td><td>2026/03/05</td></tr><tr><td class="k">主題</td><td>股票與期貨交易實務、財務報表入門</td></tr></table></section><section class="blk"><h2 class="blk"><span class="ic">⚡</span>一句話總覽</h2><div class="tldr">從股票夜盤、期貨保證金談到財報三大表，帶小白建立交易基本觀念與風險紀律。</div></section><section class="blk"><h2 class="blk"><span class="ic">🧠</span>知識地圖</h2><div class="mind card"><div class="mnode">🧠 金融交易基礎</div><div class="mbranch"><div class="mb"><div class="mb-h">股票交易</div><ul><li>以「一張」為核心單位</li><li>成交後 T+2 扣款</li><li>忘記放錢＝違約交割，可大可小</li></ul></div><div class="mb"><div class="mb-h">期貨</div><ul><li>以「一口」計價，須先付保證金</li><li>原始／維持保證金兩種</li><li>跌破水位觸發 Margin Call 補錢</li></ul></div><div class="mb"><div class="mb-h">交易方式</div><ul><li>現價 vs 市價</li><li>市價有滑價風險</li><li>當沖：當日買賣結清</li></ul></div><div class="mb"><div class="mb-h">財務報表</div><ul><li>資產負債表：某時間點快照</li><li>損益表、現金流量表</li><li>資產＝負債＋權益</li></ul></div></div></div></section><section class="blk"><h2 class="blk"><span class="ic">•</span>核心觀念</h2><ul class="bul"><li>保證金：買期貨前要先押的本錢，分「原始保證金」與「維持保證金」，跌破維持水位就要補錢。</li><li>違約交割：成交後忘記放錢，輕則信用污點、重則涉及刑事責任，務必留足款項。</li><li>維持保證金與斷頭：帳戶價值跌破維持水位會被通知補錢，不補會被券商強制平倉。</li><li>滑價：用市價下單時，實際成交價可能跟你看到的價格差一截，是市價單最大的風險。</li><li>當沖：同一天買進又賣出、不必負擔本金，但若當天賣不掉會被迫轉融資，風險放大。</li><li>下單條件 ROD／IOC／FOK：分別是當日有效、立即成交否則取消、全部成交否則取消。</li><li>tick 跳動單位：股價落在不同區間，每次最小跳動的金額不同，價位越高一跳越多錢。</li><li>資產＝負債＋權益：資產負債表最高原則，左邊資產總額恆等於右邊負債加權益。</li></ul></section><section class="blk detail"><h2 class="blk"><span class="ic">📚</span>完整課堂實錄（整理版）</h2><div class="record"><div class="rec"><h3 class="rec-h"><span class="rec-n">1</span>開場：夜盤時段與台股的共振</h3><p>台股期貨的夜盤從下午三點開盤，一路持續到隔天凌晨五點。之所以這麼長，是因為要配合美股的交易時間——美股大約在台灣時間晚上九點、十點開盤（依日光節約時間調整）。</p><p>夜盤與美股同步交易時，就像共振一樣：看到美股的走勢，台股期貨通常不會偏離太多。夜盤交易的都是指數期貨，這也是每天行情的起點。</p></div><div class="rec"><h3 class="rec-h"><span class="rec-n">2</span>股票與期貨的交易單位</h3><p>股票交易以「一張」（一千股）為主要核心單位。但如果是像 5274（一股 9,800 元）這種高價股，一張要價 980 萬，一般人不可能動輒拿 980 萬出來，所以這類股票大多改用「零股」交易。</p><p>期貨則完全不同：以「一口」為計價單位，而且每一口都有固定的保證金。想買一口，就要先在戶頭裡把那一口的保證金墊好——這是期貨與股票在金流上最大的差別。</p></div><div class="rec"><h3 class="rec-h"><span class="rec-n">3</span>T+2 扣款與違約交割</h3><p>股票是「成交後兩天」才扣款。假設 3 月 5 日星期四成交了一張股票，券商會在 3 月 9 日（下下個交易日）扣款。</p><p>所以千萬不要忘記把錢放進交割戶。忘記放錢就是「違約交割」，可大可小，但問題通通都很大：老師舉例，在航運最紅的年代，曾有大學生違約交割六千多萬元，這輩子的信用紀錄都留下污點，還有民事與刑事責任。請務必小心，不要忘記放錢。</p></div><div class="rec"><h3 class="rec-h"><span class="rec-n">4</span>持有期間：股票可以抱一輩子，期貨有到期日</h3><p>股票只要該公司沒有下市、停止交易，你的持股就一直有效。老師開玩笑說：如果爸媽當年在二十塊買了台積電抱到現在，他今天就不用坐在這裡上課了。有機會當先知就不要客氣，一張好股票可以保障下一代十年無憂。</p><p>期貨商品則有「停止交易期間」：最遠可以買到三個季月，最近是近兩個月。例如三月下單，可以買三月、四月、六月、九月、十二月這些月份的商品。每個月的第三個星期三是到期日，有部位的人要特別注意。</p></div><div class="rec"><h3 class="rec-h"><span class="rec-n">5</span>期貨保證金：原始、維持、結算三種</h3><p>期貨（和選擇權）每種商品都有對應的保證金。以老師手上的舊資料（台股剛破三萬點時）為例：想買一口台股期貨（台指期），要放「原始保證金」356,000 元。</p><p>放了錢不代表沒事。期貨盤中不斷跳動，保證金會隨每一點的損益即時增減，這就牽動第二種——「維持保證金」：當帳戶價值跌破維持水位，期貨商會發通知（Margin Call），要求你「當日」把保證金補回原始水位。</p><p>第三種「結算保證金」則是期貨商對交易所要支付的最低金額：你買一口台指期付 356,000 元，期貨商會把其中約 263,000 元押到交易所。這些金額不是固定的，每逢月結（第三個星期三）或行情劇烈變動時，期交所會公告更新。</p></div><div class="rec"><h3 class="rec-h"><span class="rec-n">6</span>期交所官網實查：保證金一覽表與契約規格</h3><p>老師現場示範從台灣期貨交易所官網查資料：左邊「市場資訊」裡有「保證金一覽表」，就是買每種商品要先墊付的金額。台股站上三萬五後，台指期一口的原始保證金已經拉高到 412,000 元——金額墊高是為了讓保證金與商品價值相稱，是交易所算出來的安全數字。</p><p>再從「股價指數期貨」頁籤點進台股期貨，往下拉可以看到「契約規格」：台指期的代碼是 TX，最重要的是「契約價值」——台指期每一點的價值是新台幣 200 元。這個數字關係著這支商品的損益怎麼算。</p></div><div class="rec"><h3 class="rec-h"><span class="rec-n">7</span>一口台指期的損益試算：心臟要夠大</h3><p>用昨天的大崩盤舉例：台股一次跌了 1,300 點，是史上第二兇的下跌。假設你在最低點 33,000 買進一口台指期（押 412,000 元），今天開盤指數上漲 1,400 點，在 34,400 賣掉——1,400 點 × 每點 200 元 = 28 萬元。早上九點開盤賣掉就下班，這個月不用做了。</p><p>但反過來看：前天指數約 35,000，昨天跌到 33,800 多，做多的人一天就是賠 26 萬。所以老師說：「玩期貨，心臟要夠大。」不擅長玩心臟大的遊戲，就先不要碰。</p><p>政府也知道不是每個人都玩得起大台，所以有階梯：台指期每點 200 元、小型台指期（小台）每點 50 元、微型台指期每點 10 元。想練手感、手上有十萬閒錢，可以從小台微台開始——同樣跌 1,400 點，小台是 7 萬，感覺就沒那麼痛。但老師仍建議新手先不要碰。</p><p>保證金越大的商品越刺激：例如電子期保證金 576,000 元，每一點價值 4,000 元。電子期今天才漲 61 點，61 × 4,000 就能算出當天的損益規模。每種期貨類型都對應一群股票——半導體多對應到電子期，另外還有金融期、上櫃期等，可以在閒暇時先了解各自的特色。</p></div><div class="rec"><h3 class="rec-h"><span class="rec-n">8</span>Margin Call 實例與斷頭（強制平倉）</h3><p>課本的小範例：9 點在 12,000 點買進一口，當時原始保證金 184,000 元（真實歷史數據），每點損益 200 元。10 點半遇到大跌 220 點，損失 44,000 元，帳戶剩 140,000 元——已經跌破期交所要求的維持保證金 141,000 元。</p><p>這時不用擔心，因為「券商會比你更擔心」：它會通知你把戶頭補回 184,000 元（注意：是補回原始保證金水位，不是補到維持水位就好）。收到 Margin Call 的持倉者必須把水位補滿。</p><p>所以老師以前公司的老闆說：想玩期貨，要準備「兩倍以上」的保證金放著給它扣——以現在來說，買一口就準備 80 萬，以防帳戶價值跌破水位。</p><p>如果死不補錢，或帳戶價值跌到低於原始保證金的 25%（約 46,000 元的水位），期貨商會直接把你的部位強制平倉，俗稱「斷頭」。系統自動幫你賣掉，剩餘價值被吸收，你等於歸零出場，只能默默認賠。</p><p>老師也分享自身經歷：曾與一位財經系老師合作操作選擇權，用特定方法每天有 3% 到 5% 的利潤，輝煌了兩個月，然後遇到一次大跌，全部歸零。結論有二：第一要看得準，第二要能及時止損——「我們做交易，就是要有紀律。」</p></div><div class="rec"><h3 class="rec-h"><span class="rec-n">9</span>現價與市價：滑價風險</h3><p>下單時要決定價格模式。「限價（現價）」是指定一個價格：出 23 元買市價 22 元的商品，會用 22 元成交（以較優價格成交）；出的價比市場低就不會成交，單子會掛著等。</p><p>「市價」則是用最佳價格立刻成交：買單用漲停價、賣單用跌停價去搶（台股漲跌幅限制正負 10%，開盤參考價 20 元的話，當天區間就是 18 到 22 元）。</p><p>理論上市價單會照當下行情成交，但 2020 年 3 月 23 日起台股改成「逐筆撮合」，行情快的時候，你眨個眼的時間，下一筆成交價可能已經跳走。你看著 21.3 下市價單，實際卻在 21.9 成交——這 0.6 元的差距就叫「滑價」。</p><p>滑價可大可小：0.6 元或許無感，但像 5274 這種高價股，最低價 8,670、下一筆回到 8,900，一張就差了 23 萬。老師實際看過有人測程式時不小心用市價下單，直接被市場上「守株待兔」的人用極端價格成交。所以：市價下單是風險最高的時刻，務必考慮承受範圍，或謹慎改用限價。</p></div><div class="rec"><h3 class="rec-h"><span class="rec-n">10</span>tick：價格跳動單位（含課堂 QA）</h3><p>台股有個隱藏規則：不同價位區間的股票，每次跳動的最小單位（tick）不一樣——0.01 到 10 元每跳 0.01；10 到 50 元每跳 0.05；50 到 100 元每跳 0.1；100 到 500 元每跳 0.5；500 到 1000 元每跳 1 元；1000 元以上每跳 5 元。</p><p>換算成一張（一千股），1000 元以上的股票每跳一次就是 5,000 元。所以商品價位越高，每個 tick 的金額越大——一般散戶做短線，100 到 1000 元的股票相對活躍，每跳一次 500 或 1000 元，獲利也比較「有感」。</p><p>tick 這個詞有兩種用法：一是指「價格的最小跳動」，二是指「每一筆成交」（逐筆撮合下每三秒撮合一次，每筆成交也稱一個 tick）——看上下文分辨。</p><p>課堂 QA：①上櫃股票報價 26.6 元，想往上加價買進，至少要出 26.65（這個區間每跳 0.05）。②鴻海若在 139 元想加碼，每跳是 0.5 元。③台積電開盤 888 元，掛 901.28 能不能委託成功？不行——1000 元以下每跳 1 元，小數點後的零頭不合法。實務上下單軟體會自動幫你對齊跳動單位，但有這個 sense，出手時就不容易出錯。</p></div><div class="rec"><h3 class="rec-h"><span class="rec-n">11</span>下單三條件：ROD、IOC、FOK</h3><p>ROD（當日有效單）：盤前盤中都可掛，沒成交就一直留著，直到收盤才失效。例如掛買十張大立光，先成交六張，剩下四張繼續等價格來，收盤前都有效。</p><p>IOC（立即成交否則取消）：委託送進交易所撮合一輪（逐筆撮合約三秒一輪），能成交幾張算幾張，剩下的立刻取消。流程是：先收到「委託回報」，撮合後收到「成交回報：六張」，然後馬上收到「委託取消：四張」。</p><p>FOK（全部成交否則取消）：最硬派——指定數量必須一次全部成交，否則整筆取消。掛買十張台積電，市場上只有七張符合價格，就整筆取消、一張都不成交。這種下單最常出現在電影裡「多少錢全下、全部吃掉」的場面；實務上據老師所知只有少數大戶在用。</p><p>限價與市價可以搭配 ROD／IOC／FOK 組合使用。最常用的還是「限價＋ROD」：像老師要上班上課，就上課前掛好單，下課回來看成交結果。</p></div><div class="rec"><h3 class="rec-h"><span class="rec-n">12</span>交易稅與手續費</h3><p>「中華民國萬萬稅」：股票在賣出時課千分之三的證券交易稅；期貨則是買與賣都要課稅，稅基是契約總值（點數 × 每點價值）乘以十萬分之二。這些是國家收的，逃不掉。2021 年交易所大肆宣傳突破一千萬開戶數，因為有開戶就有交易、有交易就有稅收。</p><p>手續費是付給券商的，可以談：公定價是成交金額的千分之 1.425，數位下單通常打折，常見折到 20 元以下；之前券商搶客戶甚至推出過一元手續費。老師自己用國泰帳戶下單，手續費就是一塊錢。期貨的手續費按商品計，例如台指期一口收 60 元。</p></div><div class="rec"><h3 class="rec-h"><span class="rec-n">13</span>融資、融券與當沖</h3><p>一般成年人買股票，用的是無礙生活的閒錢，本金充裕，能負擔本金加交易稅與損益。但也有人用「融資」開槓桿：券商出六成資金，自己出四成就能買進，代價是要付利息、承受放大的損益——前年記憶體題材那波，就有人融資賠掉四千多萬違約交割。想「放空」（融券）則要準備九成資金，門檻更高，通常是空軍針對漲太兇的股票操作。</p><p>另外有個很誘人的詞叫「當沖」：股票若標示開放當沖，可以在同一天內完成買與賣，不必負擔本金，只要付手續費和價差損益。假設 5274 開放當沖，880 萬買進、940 萬賣出，一天現賺 60 萬，一個月薪水就有了。</p><p>但人算不如天算：如果當天賣不掉——原本 8,800 漲到 9,400，突然跌到 8,600——你就得把部位轉成融資或借券，要生出本金來，生不出來就是直接違約 880 萬。所以當沖的優點是不用本金、缺點是一旦出不掉就可能瞬間死掉，要非常非常小心。</p><p>監理機關也有煞車機制：短期漲幅超過一定程度（如 30%），會啟動處置措施——五分鐘、十分鐘撮合一次，最嚴重二十分鐘人工撮合一次，像美股日股韓股的熔斷機制一樣，用來冷卻市場的瘋狂。</p></div><div class="rec"><h3 class="rec-h"><span class="rec-n">14</span>財報入門：財管是駕駛，會計是後照鏡</h3><p>下半場進入財務報表。教材採用政大許崇源教授參與編著的《現代財務管理》章節，本段不考試，目的是補基本觀念。</p><p>一個好記的比喻：做財務管理就像開車的駕駛，往前看；會計則是後照鏡，讓你了解來時路。財報之所以重要，是因為它留下痕跡讓你能追蹤過去，再從過去的基礎探討未來的經營方向。</p><p>會計面向有三張表：資產負債表、損益表、現金流量表。認真上可以教一學期，這裡先建立概念、看懂報表的呈現。</p></div><div class="rec"><h3 class="rec-h"><span class="rec-n">15</span>資產負債表：資產＝負債＋權益</h3><p>資產負債表（Balance Sheet）是「特定時間點」的快照。台灣自 2013 年起接軌國際會計準則 IFRS，所以 2013 年前後的報表名稱可能對不上，但項目有對應關係。</p><p>以台積電 109、110 年報表為例，整張表分三大塊：左邊是資產（流動資產＋非流動資產），右邊是負債（流動負債＋非流動負債）與權益。最高原則：左邊資產總額恆等於右邊負債加權益——110 年台積電總資產 37,255 億元，兩邊完全相等。</p><p>「流動」的定義是一年內能變現（或要償還）：流動資產包含現金及約當現金（錢和很快能換成錢的東西，如國庫券、可轉讓定存單）、短期金融資產、應收帳款（錢還沒到位但一年內會收到）、存貨等；流動負債包含短期借款、應付帳款、本期所得稅負債等。</p><p>「淨營運資金＝流動資產－流動負債」：一年內會進來的錢扣掉一年內要付出去的，剩下就是公司能靈活運用的資金。老師連結到個人理財：所謂財務自由，就是扣掉基本生活支出後，你還有多少錢可以自由分配——那就是個人版的淨營運資金。</p><p>非流動資產無法快速變現：不動產、廠房、設備（如航空公司的飛機、維修廠）與無形資產（如品牌口碑——搜尋引擎打個關鍵字第一個跳出來的公司，無形資產一定很高）。非流動負債則是長期借款：台積電買一台 ASML 設備動輒幾億，若要求一年付清會卡死營運資金，所以把負債攤成好幾年慢慢還，超過一年的放非流動。</p><p>右下角的權益＝資產－負債，是還完債後剩下屬於股東的部分。假設公司破產清算，賣掉所有資產、還完負債後剩的錢，股東可以請求分配。老師順帶分享：六年前曾有個「價值投資學院」宣傳美股價值投資，入會費兩萬，主打的就是找「清算價值大於市值」的公司——理論上怎麼買都不賠，但他基於不信任沒加入，投資風格人各有志。</p></div><div class="rec"><h3 class="rec-h"><span class="rec-n">16</span>股東權益細部：特別股、股本溢價、保留盈餘、庫藏股</h3><p>股東權益裡，普通股股東可以在股東會上投票（理論上可以「幹掉老闆」），特別股股東通常沒有投票權，但公司清算時可以優先受償——各有取捨。</p><p>「股本溢價（資本公積）」：股票原始發行價（面額）通常是 10 元，現在台積電市價上千元，發行價與市價的差額累積起來就是資本公積。資本公積越高，通常代表股價遠高於發行價，是市場給公司的肯定。</p><p>「保留盈餘」分三種：法定盈餘公積（公司法規定每年提撥 10% 保留作營運資金，累積超過實收資本額後才可不提）、特別盈餘公積（指定用途，例如擴產買設備——看到台積電股東會提撥這筆，就知道訂單多到要擴產，是利多訊號）、未分配盈餘（前面都提完後，可以拿來發股利的部分，通常也不會全發，會留一手作其他用途）。</p><p>「庫藏股」是公司從市場買回自己的股票，放在權益項下的減項。三種用途：①轉發給員工當獎酬（避免發新股稀釋獲利）；②供可轉換公司債轉換；③股價太低時買回，等回升再釋出，公司自己賺價差。老師以宏達電（HTC）為例：當年千金股時代買回庫藏股，但如果每股淨值低於買回價，等於花更多的錢買低價值的東西，反而傷害資本公積與配息——這是當年讓人困惑的操作。</p><p>延伸知識：早年科技業盛行「員工分紅配股」，把分紅股票列在權益項下而非費用，等於稀釋每股盈餘（EPS），股東無感地被稀釋，引發不滿。民國 97 年起改制：分紅費用化，直接從獲利裡扣。2010 年聯發科就宣布把稅後分紅比率從 20% 調降，調整分紅架構。股票發行的基礎知識：一股面額 10 元、一張一千股，持股超過 50% 就能掌控公司，所以創辦人通常要自己吃下一半以上；很多新創死在 IPO 籌資這關——募資的交換條件就是稀釋持股，都是很現實的商業行為。民國 102 年起放寬，發行價不再限定 10 元。看看蘋果、臉書、Google 當年的發行價——當初閉著眼睛買十股抱到今天，在台北市買房都不是問題；以後看到「車庫裡研發」的小公司，或許有機會。</p></div><div class="rec"><h3 class="rec-h"><span class="rec-n">17</span>個案警訊：從兩張表看出營運惡化</h3><p>老師帶了一個真實個案：某公司從 90 年第三季到 93 年第二季，流動資產從 2,412 掉到 1,043，固定資產卻從 50 暴增到 159——錢大量灌進設備。</p><p>同時長期負債從 1,886 逐期減少（大額資金到期慢慢還，合理），但流動負債卻逐年增加（400→566→700）。兩個可能：一是改借短債來償長債，二是營收不佳導致負債持續墊高。</p><p>單從資產面與負債面交叉看，就能推斷這家公司的營收狀況不太妙。這就是財報分析的價值：淨營運資金應該為正且越多越好，資產扣掉負債的餘額越多，公司越有本錢靈活操作。</p></div><div class="rec"><h3 class="rec-h"><span class="rec-n">18</span>損益表：從營收一路算到 EPS</h3><p>損益表（Income Statement）衡量「一年內」的營運績效：這一年所有的收入與支出都列在這張表，最後對應到每股盈餘（EPS）。</p><p>以台積電為例逐層往下算：營業收入合計 15,874 億，減營業成本 7,679 億，得毛利 8,195 億；再扣營業費用得營業利益 6,500 億；加業外收支 131 億，稅前淨利 6,631 億；扣約 10% 所得稅，本期淨利 5,971 億；再調整子公司投資損益後，歸屬母公司業主淨利 5,965 億，非控制權益約 5 億——最後算出每股盈餘 23.01 元。這個數字直接關係到當年度發放股利的能力，也是損益表與資產負債表的連結點。</p><p>損益表兩大部分、四大類：收入面分「銷貨收入」（本業）與「利益」（業外）；支出面分「費用」（本業：銷貨成本、營業費用如人事行政）與「損失」（業外）。看到專有名詞就能判斷這筆錢是本業賺的，還是投資或其他來源。</p><p>公式鏈：營業收入－營業成本＝營業毛利；毛利－營業費用＝營業利益（本業）；業外收入－業外支出＝業外收益；相加為稅前淨利；扣所得稅為稅後淨利；稅後淨利再扣股利，剩下的進「未分配盈餘」回到資產負債表的股東權益——兩張表就此串起來。</p><p>補充案例（博達案）：台灣曾有公司自己製造假的交易對象，把錢捲走、無力償還債務後宣告破產——這是財報舞弊的經典教訓，附錄可自行閱讀。</p></div><div class="rec"><h3 class="rec-h"><span class="rec-n">19</span>用營收看產業：龍頭股與景氣訊號</h3><p>銷貨收入的變化能看出公司的成長力道：每季每年都在成長，未來可期；成長掉到 5-10% 以下，就進入穩定期或衰退期。</p><p>龍頭產業的營收變化最能反映整個行業的景氣：講半導體想到台積電，講記憶體想到大廠，講航運想到長榮——追蹤龍頭就能掌握當季的行業變化。</p><p>注意資訊有時間差：月營收在次月 10 日前公告、季報在下一季第一個月提報。拿到財報時行情往往已反映，財報的功能是「驗證」你當初的投資想法對不對。</p><p>時事連結：黃仁勳說台灣想搞 AI 但缺電，蓋了總部卻難成最大 AI 營運站。缺電概念延伸出「重電股」行情——發電模組跳掉、電網出狀況（甚至真實發生過松鼠咬斷電線的生態案例），重電設備廠（華城、中興電工等）就有表現空間。從各種情境推導受惠股票類型，是產業分析的日常練習。</p></div><div class="rec"><h3 class="rec-h"><span class="rec-n">20</span>課後作業與下週預告</h3><p>作業：針對四大類型的災難——戰爭、地震颱風、火災、缺電——各找出：①受惠或受影響的股票「類型」（如重電股、散裝航運），②原因（為什麼跟這個災難有關，要寫到看得懂），③列出該類型的龍頭股或代表個股。</p><p>舉例示範：伊朗戰爭 → 天然氣進口受阻 → 需要燒煤 → 散裝航運（慧洋、裕民）受惠；不想進口煤炭 → 替代能源概念（如 6806）。</p><p>形式不拘，可以用表格或文件，但「請不要只給一頁投影片」——就算用 AI 幫忙，也要假裝有認真做。繳交方式：iClass 還沒開通前先傳 LINE 群組，一樣列入平時分數。</p><p>下週把財報講義上網，第四週開始講技術指標與看盤平台。</p></div></div></section><section class="blk detail"><h2 class="blk"><span class="ic">💬</span>老師金句</h2><div class="quote">「玩期貨，心臟要夠大。」<span class="who">— 鄭老師</span></div><div class="quote">「我們做交易就是要有紀律。」<span class="who">— 鄭老師</span></div></section><section class="blk detail"><h2 class="blk"><span class="ic">📖</span>名詞白話對照</h2><div class="overflow"><table class="gl"><tr><td class="term">保證金</td><td>買期貨先押在戶頭裡的本錢。</td></tr><tr><td class="term">維持保證金</td><td>帳戶價值必須維持的最低水位，跌破就被通知補錢。</td></tr><tr><td class="term">Margin Call</td><td>保證金不足時，券商要求當日補足的通知。</td></tr><tr><td class="term">滑價</td><td>市價下單時實際成交價與預期價格的落差。</td></tr><tr><td class="term">當沖</td><td>同一天內完成買進與賣出，不必負擔本金。</td></tr><tr><td class="term">tick</td><td>價格的最小跳動單位，隨股價區間不同而不同。</td></tr></table></div></section><section class="blk"><h2 class="blk"><span class="ic">☑️</span>課後延伸與待複習</h2><ul class="check"><li><span class="cbox "></span><span>複習 ROD／IOC／FOK 三種下單條件的差別</span></li><li><span class="cbox "></span><span>看懂台積電資產負債表的資產、負債、權益三塊</span></li><li><span class="cbox "></span><span>到期交所網站查各期貨商品的保證金一覽表</span></li></ul></section>
+
+<footer class="doc">🍀 由地端 AI 語音轉紀錄平台自動產生　·　全程離線</footer>
+</div><script>function setView(lite){document.body.classList.toggle('simple',!!lite);document.getElementById('btnLite').classList.toggle('on',!!lite);document.getElementById('btnFull').classList.toggle('on',!lite);}function pdfWeb(){document.body.classList.remove('pf');document.body.classList.add('pc');window.print();}function pdfDoc(){document.body.classList.remove('pc');document.body.classList.add('pf');window.print();}</script></body></html>

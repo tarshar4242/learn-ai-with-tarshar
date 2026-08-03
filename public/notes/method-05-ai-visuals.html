@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>用 AI 生成影片與視覺素材：從參考圖到提示詞的完整流程｜Tarshar 教案集</title>
+<meta name="description" content="Tarshar 教案集：記錄小D 怎麼準備參考素材、寫生成提示詞，讓 AI 產出風格一致的影片與圖像。從缺參考錨點的問題、素材分類收集、原始影片抽格、提示詞結構、角色一致性到驗收挑選六個章節，給零基礎學員的方法教學">
+<style>
+:root{
+  --paper:#f4f0e8; --card:#fffdf7; --card2:#fbf8ef; --ink:#3a3528; --ink2:#766f61; --ink3:#8a8674;
+  --line:#d8d0bf; --accent:#5d8d56; --accent2:#8cbd7d;
+  --code:#fffdf7;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.9}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(244,240,232,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:10px 20px;display:flex;align-items:center;gap:14px}
+.topbar b{font-size:15px}
+.topbar .right{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.topbar a.btn{font-size:12.5px;text-decoration:none;border:1px solid var(--line);border-radius:9px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap}
+.topbar a.btn:hover{border-color:var(--accent);color:var(--accent)}
+.hero{max-width:900px;margin:0 auto;padding:52px 22px 10px;text-align:center}
+.hero .ep{display:inline-block;font-size:12.5px;letter-spacing:3px;color:var(--accent);border:1px solid var(--accent2);border-radius:999px;padding:5px 16px;background:#eef5e9;margin-bottom:18px}
+.hero h1{font-size:clamp(24px,4.4vw,40px);font-weight:900;line-height:1.4;color:var(--ink)}
+.hero .lead{margin-top:14px;font-size:14.5px;color:var(--ink2)}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:18px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+
+.showcase{max-width:900px;margin:26px auto 0;padding:0 22px}
+.showcase-box{background:linear-gradient(120deg,#eef5e9,#fbf8ef);border:1px solid var(--accent2);border-radius:18px;padding:24px 26px;text-align:center}
+.showcase-box .kicker{font-size:12.5px;color:var(--accent);font-weight:800;letter-spacing:1px;margin-bottom:8px}
+.showcase-box p{font-size:14px;color:var(--ink2);margin:6px 0 0}
+
+.layout{max-width:1120px;margin:30px auto 0;padding:0 22px;display:grid;grid-template-columns:236px 1fr;gap:34px;align-items:start}
+nav.toc{position:sticky;top:66px;border:1px solid var(--line);border-radius:14px;background:var(--card);padding:16px 14px;font-size:13.5px}
+nav.toc .t{font-size:12px;letter-spacing:2px;color:var(--ink3);margin-bottom:10px}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:8px;border-left:3px solid transparent}
+nav.toc a:hover{background:#eef5e9;color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:30px 32px;margin-bottom:26px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:2px;font-weight:700;color:#fff;border-radius:999px;padding:5px 14px;margin-bottom:12px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+h2.ct{font-size:22px;font-weight:900;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:16.5px;font-weight:800;margin:24px 0 10px;padding-left:12px;border-left:4px solid var(--accent2);color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink)}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 24px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"◆";position:absolute;left:4px;font-size:9px;top:12px;color:var(--accent2)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:8px;width:23px;height:23px;border-radius:7px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:800;display:grid;place-items:center}
+.codebox{background:var(--code);border:1px solid var(--line);border-left:4px solid var(--accent2);border-radius:10px;padding:14px 16px;font-family:"Cascadia Code",Consolas,monospace;font-size:12.6px;color:#3a3528;white-space:pre-wrap;line-height:1.8;margin:12px 0;overflow-x:auto}
+.note{display:flex;gap:10px;border-radius:12px;padding:14px 16px;font-size:14px;margin:14px 0;line-height:1.85}
+.note.green{background:#eef5e9;border:1px solid var(--accent2);color:var(--accent)}
+.note.gold{background:#fdf6e7;border:1px solid #eeddb4;color:#7a5b12}
+.golden{background:linear-gradient(120deg,#eef5e9,#fbf8ef);border:1px solid var(--accent2);border-radius:14px;padding:16px 20px;margin:16px 0;text-align:center}
+.golden .q{font-size:17px;font-weight:900;color:var(--accent)}
+.golden .a{font-size:12.5px;color:var(--ink3);margin-top:6px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+@media (max-width:560px){ .grid2{grid-template-columns:1fr} }
+.mini{border:1px solid var(--line);border-radius:14px;padding:14px 16px;background:#fff}
+.mini .n{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:8px;background:var(--accent2);color:#fff;font-weight:800;font-size:12.5px;margin-bottom:6px}
+.mini h5{font-size:14px;font-weight:800;margin-bottom:4px;color:var(--ink)}
+.mini p{font-size:12.8px;color:var(--ink2)}
+.stage{display:inline-block;font-weight:800;font-size:11.5px;color:#fff;background:var(--accent);border-radius:6px;padding:2px 9px;margin-right:7px;letter-spacing:1px;vertical-align:middle}
+.action{border:1px solid var(--accent2);border-radius:16px;padding:18px 20px;background:#fff;margin:14px 0}
+.action .n{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:10px;background:var(--accent);color:#fff;font-weight:900;font-size:15px;margin-bottom:8px}
+.action h4{font-size:15.5px;font-weight:800;color:var(--ink);margin-bottom:4px}
+.action p{font-size:13.5px}
+.backhome{position:fixed;left:14px;bottom:14px;z-index:9999;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;text-decoration:none;color:#fff;background:var(--accent);border:1px solid #4c7745;border-radius:999px;padding:9px 16px;box-shadow:0 4px 18px rgba(0,0,0,.18)}
+.backhome:hover{background:#4c7745}
+footer{max-width:1120px;margin:20px auto 0;padding:30px 22px 70px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:2}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} }
+@media print{ .topbar,nav.toc,.backhome{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<a href="../plans/" class="backhome" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+
+<div class="topbar">
+  <b>📚 Tarshar 教案集</b>
+  <div class="right">
+    <a class="btn" href="../plans/">📚 教案集系列</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">Tarshar 教案集 · 方法教學 · 第 5 篇</span>
+  <h1>用 AI 生成影片與視覺素材<br>從參考圖到提示詞的完整流程</h1>
+  <p class="lead">這篇記錄的是我（小D）怎麼準備參考素材、怎麼寫提示詞，讓 AI 產出風格一致、不跑掉的影片和圖像。案例是我幫一位傳統戲曲表演者做的動作影片生成包，還有我自己品牌圖上重複在用的公仔一致性做法。兩件事看起來不一樣，背後是同一套邏輯。</p>
+  <div class="meta">
+    <span>🎬 影片生成實例</span>
+    <span>🖼️ 品牌產圖實例</span>
+    <span>🎓 零基礎可學</span>
+    <span>🗓️ 2026</span>
+  </div>
+</header>
+
+<div class="showcase">
+  <div class="showcase-box">
+    <div class="kicker">先講結論</div>
+    <p>AI 生圖生影片會跑掉，通常不是工具不夠好，是你沒給它「錨點」。這篇教你怎麼收錨點、怎麼寫提示詞，讓 AI 照著你要的樣子生，而不是每次都開盲盒。</p>
+  </div>
+</div>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#c1">1. 為什麼 AI 生圖總是不像你要的</a>
+  <a href="#c2">2. 參考素材怎麼準備：分開收</a>
+  <a href="#c3">3. 原始影片抽格，當你的動作字典</a>
+  <a href="#c4">4. 提示詞怎麼寫：描述＋參考＋禁止</a>
+  <a href="#c5">5. 角色一致性：固定設定檔的做法</a>
+  <a href="#c6">6. 產出驗收與挑選</a>
+  <a href="#c7">7. 你的三步驟行動建議</a>
+</nav>
+
+<article>
+
+<!-- 1 為什麼不像 -->
+<section class="chapter" id="c1">
+  <span class="chip">STEP 01</span>
+  <h2 class="ct">為什麼 AI 生圖總是不像你要的</h2>
+  <p class="cd">缺的不是更好的工具，是錨點。</p>
+  <h3>發生什麼事</h3>
+  <p>剛開始用 AI 生圖、生影片的時候，我以為問題出在我的提示詞寫得不夠好，或是這個工具不夠強。後來我發現真正的問題是，我每次都只丟一句話的形容詞，卻要求 AI 記住一張臉、一套衣服、一段動作的樣子。它當然記不住，因為我根本沒給它東西可以記。</p>
+  <p>後來我幫一位傳統戲曲表演者做動作影片生成包，才真正理解這件事。她要生成的是一段水袖身段，臉不能變、衣服不能換、動作節奏要對。如果只靠一句話描述，AI 生十次會有十種臉、十種袖子甩法。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">不是 AI 記性不好，是你沒把樣子先釘住。</div><div class="a">一張參考圖，抵過一百個形容詞</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 下次生成前，先問自己一句：我有沒有給 AI 一張「這就是我要的樣子」的圖？沒有的話，先去找或先去拍一張，再開始寫提示詞。</div>
+</section>
+
+<!-- 2 素材分開收 -->
+<section class="chapter" id="c2">
+  <span class="chip">STEP 02</span>
+  <h2 class="ct">參考素材怎麼準備：臉部、服飾、動作分開收</h2>
+  <p class="cd">一鍋粥不如三個碗。</p>
+  <h3>發生什麼事</h3>
+  <p>那個生成包裡，我把素材分成四個資料夾，每個資料夾只做一件事：</p>
+  <div class="codebox">01_臉部服飾參考/   ← 正面妝造、側臉水袖細節
+02_動作參考/       ← 七張不同身段動作，近景、全身、彎腰、大弧線各一種
+03_原始影片與抽格/ ← 原始表演錄影＋每 2 秒一張的畫格總覽
+04_生成提示詞/     ← 寫好、可以直接貼給 AI 影片工具的完整提示詞</div>
+  <p>一開始我也想過乾脆把所有照片丟進同一個資料夾，讓 AI 自己看著辦。試了才知道行不通，AI 會把「這個人的臉」和「這個動作」混在一起判斷，生出來的東西五官對不上、動作也走樣。分開收之後，我可以清楚告訴 AI：這幾張是臉的參考，這幾張是衣服的參考，這幾張是動作的參考，各自對應各自的角色，不要互相干擾。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">分類收集，AI 才不會把不同的事情混在一起判斷。</div><div class="a">你負責分類，AI 負責照著類別生成</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 收集參考圖時先開三個資料夾：臉／服裝、動作姿勢、環境氛圍。每張圖只歸進一類，之後跟 AI 工具說明時就能講得很清楚：「這是臉的參考，這是動作的參考」，AI 才不會搞混。</div>
+</section>
+
+<!-- 3 原始影片抽格 -->
+<section class="chapter" id="c3">
+  <span class="chip">STEP 03</span>
+  <h2 class="ct">原始影片抽格，當你的動作字典</h2>
+  <p class="cd">AI 不會創造你要的動作，除非你先把動作攤開給它看。</p>
+  <h3>發生什麼事</h3>
+  <p>光有靜態照片還不夠，因為動作是連續的，靜態圖只能給出「某一個瞬間」的姿勢，沒辦法告訴 AI 動作是怎麼銜接的。我的做法是把原始表演錄影每隔兩秒抽一張畫格，排成一張總覽圖，一眼就能看到整段動作從起勢、甩袖、彎腰到收袖的節奏和轉折點。</p>
+  <p>這張抽格總覽圖，我拿它當「動作參考」餵給支援 video-to-video 的工具，讓 AI 照著這個節奏去生成，而不是憑空編一段它以為合理的動作。同時我也提醒自己不要一次要求生成太長的片段，拆成幾段、每段五到八秒，臉和動作都會比較穩。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">動作是連續的，參考也要是連續的。</div><div class="a">一張抽格總覽圖，比十句「動作要流暢」有用</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 如果你要生成的是一段動作而不是一張定格畫面，先把原始影片（自己拍的、學員動作示範都可以）每隔一到兩秒抽一張格，拼成一張總覽圖，當作動作參考餵給 AI，比只用文字描述動作準確很多。</div>
+</section>
+
+<!-- 4 提示詞怎麼寫 -->
+<section class="chapter" id="c4">
+  <span class="chip">STEP 04</span>
+  <h2 class="ct">提示詞怎麼寫：描述＋參考＋禁止事項</h2>
+  <p class="cd">「不要什麼」和「要什麼」一樣重要。</p>
+  <h3>發生什麼事</h3>
+  <p>我發現一份能用的提示詞，其實有固定的骨架，不是憑感覺亂寫。這份骨架我固定用四段：</p>
+  <ul class="pt">
+    <li><b>核心角色描述：</b>先用一段話把身份特徵定住，臉、妝容、服裝顏色、材質，寫成一段固定文字，之後每次生成都貼同一段開頭，不要每次重寫</li>
+    <li><b>分段生成策略：</b>不要一次要求生成太長，拆成四段，每段負責一個動作區間，先求穩再求完整</li>
+    <li><b>正向提示詞：</b>描述這一段要發生的動作和畫面，同時標明哪幾張參考圖對應臉、哪幾張對應服裝、哪幾張對應動作</li>
+    <li><b>負向提示詞：</b>明確列出絕對不要出現的東西，像是社群介面、浮水印、字幕、變臉、多手指、破損的袖子這些常見的生成瑕疵，一項一項寫清楚，不要只寫「畫質差不要」這種模糊的話</li>
+  </ul>
+  <p>負向提示詞這一段我一開始常常漏掉，後來才知道它跟正向提示詞一樣重要。你不寫清楚不要什麼，AI 就會把它覺得合理但你不要的東西加進去，像是手機錄屏介面、社群按鈕這種畫面。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">好的提示詞不是華麗的形容詞堆疊，是一份固定的骨架。</div><div class="a">角色描述、分段策略、正向、負向，四段缺一不可</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 下次寫提示詞前，先開一份文件，照這四段骨架把內容填進去，寫好存起來。之後同一個角色、同一個系列要再生成，直接複製這份文件微調，不用每次從頭想。</div>
+</section>
+
+<!-- 5 角色一致性 -->
+<section class="chapter" id="c5">
+  <span class="chip">STEP 05</span>
+  <h2 class="ct">角色一致性：固定設定檔的做法</h2>
+  <p class="cd">一致性不是靠 AI 記性好，是靠你自己建一份設定檔。</p>
+  <h3>發生什麼事</h3>
+  <p>同樣的邏輯，我也用在完全不相關的另一件事上，就是我自己品牌的公仔形象圖。我的封面系列（週報創刊號封面、第 2 期封面、第 3 期封面）看起來風格一致，不是因為 AI 每次都自動記得上一次畫的樣子，而是因為我固定了一份「角色設定檔」：同一張風格參考定版圖，加上固定的角色特徵描述，大黑框眼鏡、棕色及肩捲髮、2.5 頭身比例、固定的服裝款式，每次要產新一期封面，我都附上同一組參考圖和同一段設定文字。</p>
+  <p>戲曲動作影片和品牌封面圖，表面上是兩件完全不同的案子，但用的是同一招：先建設定檔，每次生成都附著設定檔走，而不是每次重新形容一遍、寄望 AI 剛好記得。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">系列感不是生出來的，是設計出來的。</div><div class="a">設定檔建一次，之後每次都能重複用</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 如果你要做一個系列，不管是角色、產品還是封面，先花一次時間定版一張「這就是標準答案」的參考圖，把角色特徵寫成一段固定文字存起來。之後每次生成都附上同一份設定檔，系列感才會出來，不用每次碰運氣。</div>
+</section>
+
+<!-- 6 驗收挑選 -->
+<section class="chapter" id="c6">
+  <span class="chip">STEP 06</span>
+  <h2 class="ct">產出驗收與挑選</h2>
+  <p class="cd">AI 生成是機率遊戲，你要做的是幫它多骰幾次，然後自己當裁判。</p>
+  <h3>發生什麼事</h3>
+  <p>就算參考圖和提示詞都準備得很齊全，也不代表 AI 一次就會生出你要的東西。我的做法是每一段動作都先生成幾個候選版本，從裡面挑「臉最穩、動作最順」的那一版，而不是把第一次生成的結果當成最終答案。四段動作各自挑完之後，再剪接成完整的短片，最後才做風格轉換，像是把寫實舞台版轉成水墨電影感這種二次加工。</p>
+  <p>我也提醒自己不要一開始就要求 AI 又要保臉、又要換風格、又要換場景，一次要求太多，每件事都會做不好。順序是先求穩（臉不跑、動作不歪），再求美（風格轉換、氛圍加工）。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">不要對第一次生成的結果太認真。</div><div class="a">先求穩，再求美，兩階段不要一次做完</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 每一段內容都生成兩到三個版本再挑，不要生一次就定案。挑選標準先看「有沒有跑掉」（臉、比例、關鍵細節），穩定之後才進入風格加工，順序反過來會很難修。</div>
+</section>
+
+<!-- 7 行動建議 -->
+<section class="chapter" id="c7">
+  <span class="chip">TAKE ACTION</span>
+  <h2 class="ct">給你的三步驟行動建議：明天就能開始</h2>
+  <p class="cd">你不用是設計師，也不用懂生成模型的原理。你需要的只是先把「樣子」收好，再把「規則」寫清楚，剩下的交給 AI 去試。</p>
+
+  <div class="action">
+    <div class="n">1</div>
+    <h4>把手上的素材分成臉／服裝、動作、環境三類</h4>
+    <p>不用多，每類先找兩到三張你最喜歡、最能代表你要的樣子的圖，分開存放，之後要跟 AI 溝通會清楚很多。</p>
+  </div>
+  <div class="action">
+    <div class="n">2</div>
+    <h4>寫一段固定的角色描述，存起來重複用</h4>
+    <p>把外觀特徵寫成一段文字，之後每次生成都貼同一段當開頭，不要每次重新描述一遍，系列感才會出來。</p>
+  </div>
+  <div class="action">
+    <div class="n">3</div>
+    <h4>先生一段五到八秒的短片或一張測試圖</h4>
+    <p>不要一開始就衝去做完整成品。先用小範圍測試臉會不會跑掉、風格對不對，穩了再往下做，省下重來的時間。</p>
+  </div>
+
+  <div class="golden"><div class="q">AI 不會幫你決定畫面該長什麼樣子，那是你的工作。</div><div class="a">慢慢來，比較快</div></div>
+</section>
+
+</article>
+</div>
+
+<footer>
+  用 AI 生成影片與視覺素材：從參考圖到提示詞的完整流程・Tarshar 教案集・2026<br>
+  🍀 Learn AI with Tarshar｜我不是工程師，我跟各位一樣是被工作追著跑的人，所以我只教明天就能用的東西
+</footer>
+
+</body>
+</html>

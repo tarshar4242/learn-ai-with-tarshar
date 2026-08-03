@@ -1,0 +1,162 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 時代的個人品牌經營</title><style>
+:root{
+  --bg:#f6f8f1;--card:#fff;--ink:#242a1f;--muted:#6c7364;--line:#e2e7d6;
+  --accent:#8fb15e;--accent-deep:#5f8038;--accent-soft:#eef3e2;
+  --good:#6f9350;--warn:#c9a24b;--bad:#c76b6b;--info:#6a97c2;
+  --shadow:0 1px 2px rgba(40,50,30,.05),0 6px 20px rgba(40,50,30,.06);--radius:14px;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#151812;--card:#1e221a;--ink:#e9ede0;--muted:#9aa38c;--line:#2f3527;
+  --accent:#a8c686;--accent-deep:#bcd79b;--accent-soft:#26301c;
+  --good:#8fb570;--warn:#d8bd6e;--bad:#e08d8d;--info:#8fb6dd;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.28);
+}}
+:root[data-theme="dark"]{
+  --bg:#151812;--card:#1e221a;--ink:#e9ede0;--muted:#9aa38c;--line:#2f3527;
+  --accent:#a8c686;--accent-deep:#bcd79b;--accent-soft:#26301c;
+  --good:#8fb570;--warn:#d8bd6e;--bad:#e08d8d;--info:#8fb6dd;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.28);
+}
+:root[data-theme="light"]{
+  --bg:#f6f8f1;--card:#fff;--ink:#242a1f;--muted:#6c7364;--line:#e2e7d6;
+  --accent:#8fb15e;--accent-deep:#5f8038;--accent-soft:#eef3e2;
+  --good:#6f9350;--warn:#c9a24b;--bad:#c76b6b;--info:#6a97c2;
+  --shadow:0 1px 2px rgba(40,50,30,.05),0 6px 20px rgba(40,50,30,.06);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;
+  line-height:1.7;-webkit-font-smoothing:antialiased}
+.wrap{max-width:860px;margin:0 auto;padding:clamp(22px,5vw,52px) clamp(16px,4vw,30px)}
+.kicker{font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent-deep);font-weight:700}
+h1.doc{font-size:clamp(1.7rem,4vw,2.5rem);margin:.28em 0 .12em;line-height:1.16;text-wrap:balance;font-weight:800}
+.docsub{color:var(--muted);font-size:1.02rem;margin:0 0 8px}
+section.blk{margin-top:34px}
+h2.blk{font-size:1.28rem;font-weight:800;margin:0 0 12px;display:flex;align-items:center;gap:.5em}
+h2.blk .ic{font-size:1.1em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+/* info table */
+table.info{width:100%;border-collapse:collapse;overflow:hidden;border-radius:var(--radius)}
+table.info td{border:1px solid var(--line);padding:9px 12px;font-size:.95rem}
+table.info td.k{background:var(--accent-soft);font-weight:700;width:22%;white-space:nowrap;color:var(--accent-deep)}
+/* dashboard */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center;box-shadow:var(--shadow)}
+.tile b{display:block;font-size:1.7rem;font-weight:800;color:var(--accent-deep);font-variant-numeric:tabular-nums;line-height:1.1}
+.tile span{font-size:.78rem;color:var(--muted)}
+.tile.warn b{color:var(--warn)}.tile.bad b{color:var(--bad)}.tile.good b{color:var(--good)}
+/* gantt */
+.gantt{display:flex;flex-direction:column;gap:9px}
+.grow{display:grid;grid-template-columns:130px 1fr;align-items:center;gap:10px;font-size:.86rem}
+.gtrack{position:relative;height:16px;background:var(--accent-soft);border-radius:8px}
+.gbar{position:absolute;height:16px;border-radius:8px;background:linear-gradient(90deg,var(--accent),var(--accent-deep));display:flex;align-items:center;padding:0 7px;font-size:.68rem;color:#fff;white-space:nowrap;overflow:hidden}
+/* timeline */
+.tl{position:relative;padding-left:22px;margin:0}
+.tl::before{content:"";position:absolute;left:6px;top:4px;bottom:4px;width:2px;background:var(--accent)}
+.tl li{position:relative;list-style:none;margin:0 0 12px;padding:0}
+.tl li::before{content:"";position:absolute;left:-22px;top:7px;width:10px;height:10px;border-radius:50%;background:var(--accent-deep);border:2px solid var(--card)}
+.tl .t{font-weight:700;color:var(--accent-deep);font-size:.82rem;margin-right:8px}
+/* mindmap (nested) */
+.mind{padding:16px}
+.mnode{font-weight:800;font-size:1.05rem;color:var(--accent-deep);margin-bottom:10px}
+.mbranch{border-left:2px solid var(--line);margin-left:8px;padding-left:14px}
+.mbranch>.mb{margin:8px 0}
+.mb-h{font-weight:700}
+.mb-h::before{content:"◆ ";color:var(--accent)}
+.mb ul{margin:4px 0 0;padding-left:18px}
+.mb li{font-size:.9rem;margin:2px 0}
+/* quotes */
+.quote{border-left:4px solid var(--accent-deep);background:var(--accent-soft);border-radius:0 10px 10px 0;padding:11px 15px;margin:0 0 10px;font-size:.98rem;font-style:italic}
+.quote .who{display:block;font-style:normal;font-size:.8rem;color:var(--muted);margin-top:4px}
+/* checklist */
+ul.check{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
+ul.check li{display:flex;gap:10px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 13px}
+.cbox{width:17px;height:17px;border-radius:5px;border:2px solid var(--accent-deep);flex:none;margin-top:2px;position:relative}
+.cbox.on{background:var(--accent-deep)}
+.cbox.on::after{content:"✓";color:var(--card);font-size:12px;position:absolute;top:-2px;left:2px}
+/* glossary */
+table.gl{width:100%;border-collapse:collapse}
+table.gl td{border-bottom:1px solid var(--line);padding:8px 10px;font-size:.92rem;vertical-align:top}
+table.gl td.term{font-weight:700;color:var(--accent-deep);width:30%;white-space:nowrap}
+/* actions / generic table */
+table.grid{width:100%;border-collapse:collapse;font-size:.9rem}
+table.grid th{background:var(--accent-soft);color:var(--accent-deep);font-weight:700;text-align:left;padding:9px 11px;border:1px solid var(--line)}
+table.grid td{padding:8px 11px;border:1px solid var(--line)}
+.prio{font-size:.72rem;padding:2px 8px;border-radius:12px;font-weight:700}
+.prio.高{background:var(--bad);color:#fff}.prio.中{background:var(--warn);color:#fff}.prio.低{background:var(--good);color:#fff}
+/* risk matrix */
+.risk{display:grid;grid-template-columns:auto 1fr 1fr 1fr;gap:5px;font-size:.8rem}
+.risk .hd{font-weight:700;color:var(--muted);display:flex;align-items:center;justify-content:center;text-align:center;padding:4px}
+.risk .cell{border-radius:8px;padding:8px;min-height:52px;color:#fff;font-size:.76rem}
+.risk .lo{background:var(--good)}.risk .mid{background:var(--warn)}.risk .hi{background:var(--bad)}
+/* bullets / tldr */
+ul.bul{margin:0;padding-left:20px}ul.bul li{margin:5px 0}
+.tldr{background:var(--accent-soft);border-radius:12px;padding:15px 18px;font-size:1.05rem;font-weight:600;line-height:1.6}
+.disc{border:1px dashed var(--bad);border-radius:12px;padding:12px 15px;color:var(--bad);font-size:.88rem;background:transparent}
+.overflow{overflow-x:auto}
+footer.doc{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:.82rem;text-align:center}
+/* 完整實錄 */
+.record{display:flex;flex-direction:column;gap:6px}
+.rec{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px 22px;box-shadow:var(--shadow);margin-bottom:10px}
+.rec-h{display:flex;align-items:center;gap:10px;margin:0 0 10px;font-size:1.08rem;font-weight:800;color:var(--accent-deep)}
+.rec-n{background:var(--accent-soft);color:var(--accent-deep);width:1.8em;height:1.8em;border-radius:8px;display:grid;place-items:center;font-size:.8rem;flex:none}
+.rec p{margin:0 0 10px;font-size:.96rem;text-align:justify}
+.rec p:last-child{margin-bottom:0}
+/* 工具列：版本切換 + 列印 */
+.toolbar{position:sticky;top:0;z-index:30;display:flex;flex-wrap:wrap;gap:10px;align-items:center;
+  background:var(--card);border:1px solid var(--line);border-radius:12px;padding:9px 12px;margin-bottom:8px;box-shadow:var(--shadow)}
+.seg{display:inline-flex;background:var(--accent-soft);border-radius:9px;padding:3px}
+.seg button{border:none;background:transparent;color:var(--muted);font-weight:700;font-size:.86rem;
+  padding:6px 14px;border-radius:7px;cursor:pointer;font-family:inherit}
+.seg button.on{background:var(--card);color:var(--accent-deep);box-shadow:var(--shadow)}
+.tbtn{border:1px solid var(--accent-deep);background:var(--accent-deep);color:#fff;
+  font-weight:700;font-size:.86rem;padding:8px 14px;border-radius:9px;cursor:pointer;font-family:inherit}
+.tbtn.first{margin-left:auto}
+.tbtn.ghost{background:transparent;color:var(--accent-deep)}
+.tbtn:hover{filter:brightness(1.06)}
+.hint{width:100%;font-size:.76rem;color:var(--muted);margin:2px 2px 0}
+/* 簡易模式：隱藏 detail 區塊 */
+body.simple section.detail{display:none}
+/* 簽核區（列印公文版時才出現） */
+.sign{display:none}
+/* ── 列印／存 PDF ── 兩種模式：pc=彩色網頁版（跟畫面一樣）、pf=正式公文版（黑字白底＋核章） */
+@media print{
+  @page{margin:14mm 13mm}
+  .toolbar,.home{display:none!important}
+  .wrap{max-width:none;padding:0}
+  section.blk{break-inside:avoid}
+  section.blk:has(.record){break-inside:auto}
+  .rec{break-inside:auto}
+  tr,li,.quote,.rec-h{break-inside:avoid}
+  /* ── 彩色網頁版（預設）：強制保留螢幕的顏色與底色，PDF 就跟畫面一模一樣 ── */
+  body.pc,body.pc *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  body.pc .sign{display:none}
+  /* ── 正式公文版：黑字白底、實線框、加核章欄 ── */
+  body.pf{background:#fff!important;color:#000!important;font-size:11.5pt}
+  body.pf .kicker,body.pf footer.doc{color:#000}
+  body.pf h1.doc{font-size:20pt}
+  body.pf h2.blk{font-size:13pt;border-bottom:1.5px solid #000;padding-bottom:3px}
+  body.pf .card,body.pf .tile,body.pf ul.check li,body.pf .rec{box-shadow:none!important;border:1px solid #666!important;background:#fff!important}
+  body.pf .tldr,body.pf .quote,body.pf .disc,body.pf table.info td.k,body.pf .tag,body.pf .prio,body.pf .rec-n{background:#fff!important;color:#000!important;border:1px solid #999}
+  body.pf .tile b,body.pf .mnode,body.pf .tl .t,body.pf table.gl td.term,body.pf .rec-h{color:#000!important}
+  body.pf table.grid th{background:#eee!important;color:#000!important}
+  body.pf .gbar{background:#555!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body.pf .gtrack{background:#eee!important}
+  body.pf .risk .cell{color:#000!important;border:1px solid #999;background:#fff!important}
+  body.pf .cbox{border-color:#000!important}
+  body.pf .cbox.on{background:#000!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body.pf .sign{display:block!important;margin-top:26px;border-top:1px solid #000;padding-top:12px;font-size:11pt}
+  body.pf .sign .r{display:flex;gap:40px;margin-top:22px}
+}
+</style></head><body class="pc">
+<div class="wrap">
+<div class="toolbar"><div class="seg"><button id="btnFull" class="on" onclick="setView(0)">詳細版</button><button id="btnLite" onclick="setView(1)">簡易重點版</button></div><button class="tbtn first" onclick="pdfWeb()">🖨️ 存成網頁版 PDF</button><button class="tbtn ghost" onclick="pdfDoc()">🏛️ 存成公文版 PDF</button><div class="hint">切「簡易重點版」只留精華、「詳細版」展開全部。「網頁版 PDF」＝跟畫面一樣的彩色版；「公文版 PDF」＝黑字白底、有核章的正式公文。按下去後在列印視窗選「儲存為 PDF」即可。</div></div>
+<div class="kicker">🍀 地端 AI · 演講／影片摘要</div>
+<h1 class="doc">AI 時代的個人品牌經營</h1>
+<p class="docsub">講者：某講師　·　線上講座　·　約 45 分鐘</p>
+<section class="blk"><table class="info"><tr><td class="k">講者</td><td>某講師</td></tr><tr><td class="k">場合</td><td>線上講座</td></tr><tr><td class="k">長度</td><td>約 45 分鐘</td></tr></table></section><section class="blk"><h2 class="blk"><span class="ic">⚡</span>三句話重點</h2><div class="tldr">個人品牌不是包裝自己，而是持續產出讓別人記得你的價值；AI 是放大器，先有內容才談效率。</div></section><section class="blk"><h2 class="blk"><span class="ic">•</span>核心論點</h2><ul class="bul"><li>個人品牌＝別人不在場時，如何描述你</li><li>先鎖定一個明確受眾，再談內容</li><li>AI 是放大器不是代筆，內容核心仍要自己長出來</li><li>持續比完美重要，累積才有複利</li></ul></section><section class="blk"><h2 class="blk"><span class="ic">•</span>我可以怎麼用（行動建議）</h2><ul class="bul"><li>這週寫下自己想被記得的「一句話定位」</li><li>挑一個平台，固定每週產出一則內容</li><li>用 AI 做初稿，但保留自己的觀點與口吻</li></ul></section><section class="blk detail"><h2 class="blk"><span class="ic">📚</span>完整演講實錄（整理版）</h2><div class="record"><div class="rec"><h3 class="rec-h"><span class="rec-n">1</span>開場：為什麼這個時代人人需要個人品牌</h3><p>講者從一個提問開場：「當你不在場的時候，別人會怎麼介紹你？」那段介紹，就是你的個人品牌。不是網紅才需要——求職、接案、升遷、跨界合作，別人都是先接觸到「關於你的描述」，才接觸到你本人。</p><p>AI 時代讓這件事更急迫：當技能的取得成本急速下降，「會做某件事」越來越難構成差異；別人記得你什麼、信任你什麼，反而成了稀缺資產。講者強調：個人品牌不是包裝，是「持續產出讓別人記得你的價值」。</p></div><div class="rec"><h3 class="rec-h"><span class="rec-n">2</span>個人品牌的三個誤解</h3><p>誤解一：要很厲害才能開始。講者反駁——記錄成長的過程本身就是內容，「從零到一的路上風景，對還在零的人最有價值」。</p><p>誤解二：要經營所有平台。事實是每個平台的語言不同，全都做等於全都做不好，先在一個平台建立存在感。</p><p>誤解三：個人品牌等於自我推銷。講者定義：推銷是把東西塞給別人，品牌是讓需要的人找得到你——方向完全相反。</p></div><div class="rec"><h3 class="rec-h"><span class="rec-n">3</span>第一步：鎖定受眾與一句話定位</h3><p>方法很具體：寫下你最想幫助的「一種人」，越具體越好——不是「對 AI 有興趣的人」，而是「想用 AI 提升工作效率、但不會寫程式的行政人員」。受眾清楚，內容的語言、深度、選題就都清楚了。</p><p>接著寫「一句話定位」：我幫助（誰）用（什麼方法）達成（什麼改變）。講者示範自己的版本，並提醒定位可以隨時修，先有再說；三個月回頭看一次，通常會越改越準。</p></div><div class="rec"><h3 class="rec-h"><span class="rec-n">4</span>內容產出策略：持續比完美重要</h3><p>頻率上，講者主張「固定節奏」勝過「靈感式爆發」：每週一則能撐一年的節奏，好過每天三則撐兩週。內容的複利來自持續，不來自單篇爆紅。</p><p>選題方面給了三個穩定來源：你剛學會的東西（教學相長）、你剛踩過的坑（避雷實錄）、你被問過兩次以上的問題（市場已驗證的需求）。</p><p>格式上鼓勵「一魚多吃」：一場演講可以拆成文章、圖卡、短影音；同一個核心觀點在不同平台用不同語言說。</p></div><div class="rec"><h3 class="rec-h"><span class="rec-n">5</span>AI 的角色：放大器，不是代筆</h3><p>講者展示自己的工作流：AI 負責初稿、整理逐字稿、拆平台版本，把一小時的活壓成十分鐘；但選題的判斷、觀點的立場、個人的口吻，永遠自己把關。</p><p>他提出一個判斷標準：「讀者留下來，是因為你的觀點，不是你的產能。」全交給 AI 的內容會越來越像大家的內容，個人品牌反而被稀釋。AI 要用，而且要用得兇，但用在把你的觀點放大，不是把你的觀點取代。</p></div><div class="rec"><h3 class="rec-h"><span class="rec-n">6</span>結尾與問答</h3><p>結尾回到心態：「你不用很厲害才開始，但要開始才會很厲害。」講者請每位聽眾散場前寫下自己的一句話定位，並公開承諾第一篇內容的發布日期。</p><p>問答摘要：被問到「內容沒人看怎麼辦」，回答是前一百篇都是練習，演算法獎勵存活者；被問到「怕被同行看到」，回答是同行的注視是品質的免費保證。</p></div></div></section><section class="blk detail"><h2 class="blk"><span class="ic">💬</span>金句摘錄</h2><div class="quote">「你不用很厲害才開始，但要開始才會很厲害。」<span class="who">— 講者</span></div><div class="quote">「AI 幫你把一小時的活壓成十分鐘，但那一小時的判斷還是你的。」<span class="who">— 講者</span></div></section><section class="blk detail"><h2 class="blk"><span class="ic">⏱️</span>章節時間軸</h2><ul class="tl"><li><span class="t">開場</span>為什麼這個時代人人都需要個人品牌</li><li><span class="t">中段</span>鎖定受眾與內容定位的方法</li><li><span class="t">後段</span>用 AI 工具加速產出的實際流程</li><li><span class="t">結尾</span>持續產出的心態與複利效應</li></ul></section>
+
+<footer class="doc">🍀 由地端 AI 語音轉紀錄平台自動產生　·　全程離線</footer>
+</div><script>function setView(lite){document.body.classList.toggle('simple',!!lite);document.getElementById('btnLite').classList.toggle('on',!!lite);document.getElementById('btnFull').classList.toggle('on',!lite);}function pdfWeb(){document.body.classList.remove('pf');document.body.classList.add('pc');window.print();}function pdfDoc(){document.body.classList.remove('pc');document.body.classList.add('pf');window.print();}</script></body></html>

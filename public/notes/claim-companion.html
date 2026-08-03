@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>理賠陪跑主題館｜🍀Learn AI with Tarshar</title>
+<meta name="description" content="一位陪你一步一步做的教練。從查醫療紀錄、找保單、遮個資，到用 AI 整理、正式申請理賠，手機拿在手上跟著做就好。本平台不儲存、不經手任何個人資料。">
+<style>
+  :root{
+    --cream:#FBF7EF;      /* 底色 奶油米白 */
+    --sage:#7A9B7E;       /* 主色 鼠尾草綠 */
+    --sage-deep:#5f7f64;  /* 主色加深（用於文字對比達 AA） */
+    --ink:#3E4640;        /* 深色文字 暖深灰 */
+    --peach:#E8A87C;      /* 點綴 柔杏桃橘 */
+    --peach-deep:#c9713f; /* 點綴加深（用於點綴色的文字對比） */
+    --card:#FFFFFF;       /* 卡片底 暖白 */
+    --line:#e6ddcd;       /* 淡邊線 */
+    --ink2:#5c635c;       /* 次要文字 */
+    --shadow:0 10px 30px -18px rgba(62,70,64,.35);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--cream);
+    color:var(--ink);
+    font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei","Heiti TC",sans-serif;
+    font-size:18px;
+    line-height:1.8;
+    -webkit-text-size-adjust:100%;
+    padding-bottom:40px;
+  }
+  .serif{font-family:"Noto Serif TC","Songti TC","PMingLiU",serif;}
+
+  /* ── 頂部固定列（站點時顯示進度與返回） ── */
+  #topbar{
+    position:sticky;top:0;z-index:50;
+    background:rgba(251,247,239,.96);
+    backdrop-filter:saturate(1.2) blur(6px);
+    border-bottom:1px solid var(--line);
+    padding:10px 16px;
+  }
+  #topbar .wrap{max-width:720px;margin:0 auto;}
+  #topbar.home{padding:14px 16px;}
+  .toprow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .brandline{display:flex;align-items:center;gap:8px;font-weight:800;color:var(--sage-deep);font-size:16px;}
+  .backlink{display:inline-flex;align-items:center;gap:6px;text-decoration:none;
+    background:var(--card);color:var(--sage-deep);border:1.5px solid var(--sage);
+    border-radius:999px;padding:8px 14px;font-size:15px;font-weight:800;white-space:nowrap;cursor:pointer;
+    font-family:inherit;}
+  .backlink:active{transform:translateY(1px);}
+  .progress-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .progress-label{font-weight:800;font-size:15px;color:var(--ink);white-space:nowrap;}
+  .bar{flex:1;min-width:120px;height:10px;background:#efe7d7;border-radius:999px;overflow:hidden;}
+  .bar > i{display:block;height:100%;background:var(--peach);border-radius:999px;transition:width .3s ease;}
+  .navbtns{display:flex;gap:8px;margin-top:8px;}
+  .navbtns button{
+    flex:1;min-height:48px;border:1px solid var(--line);background:var(--card);
+    color:var(--ink);border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;
+    font-family:inherit;padding:0 12px;
+  }
+  .navbtns button:active{transform:translateY(1px);}
+
+  /* ── 版心 ── */
+  main{max-width:720px;margin:0 auto;padding:0 18px;}
+  .screen{display:none;animation:fade .25s ease;}
+  .screen.active{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  /* ── 入口頁 ── */
+  .hero{text-align:center;padding:34px 6px 8px;}
+  .hero .kicker{color:var(--sage-deep);font-weight:800;letter-spacing:3px;font-size:14px;}
+  .hero h1{font-size:32px;line-height:1.4;margin:12px 0 10px;font-weight:900;}
+  .hero .lead{font-size:18px;color:var(--ink2);}
+  .promise{
+    background:var(--card);border:1px solid var(--line);border-radius:20px;
+    padding:22px 22px;margin:22px 0;box-shadow:var(--shadow);
+  }
+  .promise h2{font-size:20px;color:var(--sage-deep);margin-bottom:8px;}
+  .promise p{font-size:17px;color:var(--ink2);}
+
+  .ask{font-size:24px;font-weight:900;text-align:center;margin:30px 0 16px;}
+  .doors{display:flex;flex-direction:column;gap:14px;}
+  .door{
+    display:block;width:100%;text-align:left;
+    background:var(--card);border:2px solid var(--line);border-radius:20px;
+    padding:20px 22px;min-height:56px;cursor:pointer;font-family:inherit;
+    color:var(--ink);box-shadow:var(--shadow);
+  }
+  .door:active{transform:translateY(1px);}
+  .door .emoji{font-size:30px;line-height:1;}
+  .door .t{font-size:20px;font-weight:800;margin:8px 0 4px;}
+  .door .s{font-size:15.5px;color:var(--ink2);}
+
+  .section-title{font-size:24px;font-weight:900;margin:36px 0 14px;display:flex;align-items:center;gap:8px;}
+
+  /* 旅程地圖 */
+  .map{display:flex;flex-direction:column;gap:10px;}
+  .stop{
+    display:flex;align-items:center;gap:14px;width:100%;text-align:left;
+    background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:14px 16px;min-height:56px;cursor:pointer;font-family:inherit;color:var(--ink);
+  }
+  .stop:active{transform:translateY(1px);}
+  .stop .num{
+    flex:none;width:40px;height:40px;border-radius:50%;
+    background:var(--sage);color:#fff;font-weight:900;font-size:18px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .stop .st-name{font-size:18px;font-weight:800;}
+  .stop .st-do{font-size:14.5px;color:var(--ink2);}
+  .stop .chev{margin-left:auto;color:var(--sage-deep);font-weight:900;font-size:22px;}
+
+  .cta-faq{
+    display:block;width:100%;text-align:center;margin-top:18px;
+    background:transparent;border:2px dashed var(--sage);border-radius:16px;
+    padding:16px;min-height:56px;font-size:18px;font-weight:800;color:var(--sage-deep);
+    cursor:pointer;font-family:inherit;
+  }
+
+  /* ── 站點頁 五段式 ── */
+  .station-head{padding:26px 0 4px;}
+  .station-head .st-kicker{color:var(--peach-deep);font-weight:800;letter-spacing:2px;font-size:14px;}
+  .step1 h2{font-size:29px;line-height:1.45;font-weight:900;margin:8px 0 4px;}
+
+  .block{margin:24px 0;}
+  .block .tag{
+    display:inline-block;font-size:14px;font-weight:800;color:#fff;background:var(--sage);
+    border-radius:999px;padding:4px 14px;margin-bottom:10px;
+  }
+  .block.why .tag{background:var(--peach);color:#5a3b26;}
+  .why-box{
+    background:#fbf1e7;border:1px solid #f0dcc8;border-radius:18px;padding:18px 20px;
+  }
+  .why-box p{font-size:17.5px;color:#6a5342;}
+
+  /* 手機示意框 9:19.5 */
+  .steps{display:flex;flex-direction:column;gap:26px;margin-top:6px;}
+  .step{display:flex;flex-direction:column;align-items:center;gap:10px;}
+  .step .caption{font-size:17px;font-weight:700;text-align:center;}
+  .step .caption .n{color:var(--sage-deep);font-weight:900;margin-right:6px;}
+  .phone{
+    width:100%;max-width:250px;aspect-ratio:9 / 19.5;
+    background:repeating-linear-gradient(135deg,#efe9dd,#efe9dd 10px,#eae3d4 10px,#eae3d4 20px);
+    border:2px solid var(--line);border-radius:26px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;padding:20px 16px;color:#8a8272;
+  }
+  .phone .sid{font-size:12px;font-weight:800;letter-spacing:1px;color:#a99f88;margin-bottom:10px;}
+  .phone .ph-desc{font-size:14.5px;line-height:1.7;color:#7c7460;}
+  .phone .arrow{font-size:26px;margin-top:10px;color:var(--peach-deep);}
+
+  /* 台詞卡 / 知識卡 */
+  .script,.knownote{
+    background:var(--card);border:1px solid var(--line);border-radius:18px;
+    padding:18px 20px;box-shadow:var(--shadow);
+  }
+  .script p{font-size:17px;margin:6px 0;}
+  .script .say{color:var(--sage-deep);font-weight:800;}
+  .knownote + .knownote{margin-top:12px;}
+  .knownote h4{font-size:18px;font-weight:800;margin-bottom:4px;color:var(--ink);}
+  .knownote p{font-size:16px;color:var(--ink2);}
+
+  /* 打勾清單（純視覺、不記憶） */
+  .checklist{list-style:none;display:flex;flex-direction:column;gap:10px;}
+  .checklist li{
+    display:flex;align-items:flex-start;gap:12px;
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:14px 16px;min-height:56px;cursor:pointer;font-size:17px;
+  }
+  .checklist li:active{transform:translateY(1px);}
+  .checklist .box{
+    flex:none;width:28px;height:28px;border:2px solid var(--sage);border-radius:8px;
+    display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;
+    margin-top:1px;transition:.15s;
+  }
+  .checklist li.done .box{background:var(--sage);}
+  .checklist li.done .txt{color:var(--ink2);text-decoration:line-through;}
+
+  /* 卡住了怎麼辦 */
+  .stuck{
+    background:#f3f6f1;border:1px solid #dce7db;border-left:6px solid var(--sage);
+    border-radius:14px;padding:18px 20px;margin-top:8px;
+  }
+  .stuck .tag{background:transparent;color:var(--sage-deep);padding:0;font-size:16px;}
+  .stuck p{font-size:16.5px;color:#4f5b4f;margin-top:4px;}
+
+  .nextbtn{
+    display:block;width:100%;text-align:center;margin:28px 0 10px;
+    background:var(--sage);color:#fff;border:none;border-radius:16px;
+    padding:16px;min-height:56px;font-size:18px;font-weight:800;cursor:pointer;font-family:inherit;
+  }
+  .nextbtn:active{transform:translateY(1px);}
+  .nextbtn.ghost{background:transparent;color:var(--sage-deep);border:2px solid var(--sage);}
+
+  /* 一鍵複製 */
+  .copyblock{margin:16px 0;}
+  .copyblock .quote{
+    background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:16px 18px;font-size:16px;color:var(--ink2);line-height:1.9;white-space:pre-wrap;
+  }
+  .copybtn{
+    display:block;width:100%;margin-top:10px;
+    background:var(--peach);color:#4a2f1b;border:none;border-radius:14px;
+    padding:14px;min-height:56px;font-size:18px;font-weight:800;cursor:pointer;font-family:inherit;
+  }
+  .copybtn:active{transform:translateY(1px);}
+  .copybtn.copied{background:var(--sage);color:#fff;}
+
+  /* FAQ 翻卡 */
+  .faq-grid{display:flex;flex-direction:column;gap:12px;}
+  .flip{background:transparent;border:none;padding:0;width:100%;cursor:pointer;perspective:1000px;font-family:inherit;text-align:left;}
+  .flip .inner{position:relative;transition:transform .5s;transform-style:preserve-3d;min-height:110px;}
+  .flip.flipped .inner{transform:rotateY(180deg);}
+  .flip .face{
+    position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+    border-radius:18px;padding:18px 20px;display:flex;align-items:center;
+    border:1px solid var(--line);box-shadow:var(--shadow);
+  }
+  .flip .front{background:var(--card);color:var(--ink);}
+  .flip .front .q{font-size:18px;font-weight:800;}
+  .flip .front .hint{position:absolute;right:16px;bottom:12px;font-size:13px;color:var(--sage-deep);font-weight:700;}
+  .flip .back{background:#f3f6f1;color:#3f4b3f;transform:rotateY(180deg);}
+  .flip .back .a{font-size:16px;line-height:1.75;}
+  .flip .rel{position:static;min-height:110px;visibility:hidden;}
+
+  /* 頁尾合規（每頁固定） */
+  footer{
+    max-width:720px;margin:34px auto 0;padding:22px 18px;
+    border-top:1px solid var(--line);color:var(--ink2);font-size:14px;line-height:1.9;text-align:center;
+  }
+  footer strong{color:var(--sage-deep);}
+  footer .brand{margin-top:10px;font-size:13px;color:#9a9282;}
+
+  @media(max-width:400px){
+    body{font-size:17px;}
+    .hero h1{font-size:28px;}
+    .step1 h2{font-size:26px;}
+  }
+</style>
+</head>
+<body>
+
+<div id="topbar" class="home">
+  <div class="wrap" id="topbarInner">
+    <div class="toprow">
+      <a class="backlink" href="../plans/" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+      <span class="brandline">🍀 理賠陪跑主題館</span>
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <!-- ══════════ 入口分流頁 ══════════ -->
+  <section class="screen active" id="home">
+    <div class="hero">
+      <div class="kicker">LEARN AI WITH TARSHAR</div>
+      <h1 class="serif">理賠陪跑<br>一步一步，陪你做完</h1>
+      <p class="lead">你把手機拿在手上，跟著畫面做就好。慢慢來，沒關係。</p>
+    </div>
+
+    <div class="promise">
+      <h2>🌿 先給你一個安心承諾</h2>
+      <p>這裡不是查詢系統，我們<strong style="color:var(--sage-deep)">不儲存、也不經手你任何一筆個資</strong>。你的醫療紀錄和保單，從頭到尾只待在你自己的手機、你自己的 AI 帳號裡。這個網頁只是一位陪你一步一步做的教練，卡住了都有出口。</p>
+    </div>
+
+    <div class="ask">你現在遇到什麼狀況？</div>
+    <div class="doors">
+      <button class="door" onclick="go('s4', {urgent:true})">
+        <div class="emoji">🏥</div>
+        <div class="t">我剛出院或手術完，要申請理賠</div>
+        <div class="s">先帶你去把保單找齊（第 4 站）。前面的站，之後可以回頭慢慢補。</div>
+      </button>
+      <button class="door" onclick="go('s1')">
+        <div class="emoji">📱</div>
+        <div class="t">我想學會查自己的醫療紀錄</div>
+        <div class="s">從第 1 站開始，一關一關把工具裝好、學會查。</div>
+      </button>
+      <button class="door" onclick="go('s4')">
+        <div class="emoji">📋</div>
+        <div class="t">我想先搞懂自己保了什麼</div>
+        <div class="s">從第 4 站開始，先把保單找齊、用 AI 看懂。</div>
+      </button>
+    </div>
+
+    <div class="section-title">🗺️ 八站旅程地圖</div>
+    <div class="map" id="mapList"></div>
+
+    <button class="cta-faq" onclick="go('faq')">❓ 有問題想先問？看常見問題 10 題</button>
+  </section>
+
+  <!-- ══════════ 常見問題 ══════════ -->
+  <section class="screen" id="faq">
+    <div class="station-head">
+      <div class="st-kicker">常見問題</div>
+      <div class="step1"><h2 class="serif">你想問的，這裡先回答</h2></div>
+      <p class="lead" style="color:var(--ink2);margin-top:6px;">點一下卡片，翻到背面看答案。</p>
+    </div>
+    <div class="faq-grid" id="faqGrid"></div>
+    <button class="nextbtn ghost" onclick="go('home')">← 回首頁</button>
+  </section>
+
+  <!-- 八個站點由 JS 依資料生成，掛在這裡 -->
+  <div id="stationHost"></div>
+
+</main>
+
+<footer>
+  <div>本平台為操作教學，不提供醫療與保險建議。理賠認定以各保險公司條款為準，醫療問題請諮詢醫師、藥師等專業醫事人員。<strong>本平台不儲存、不經手任何個人資料。</strong></div>
+  <div class="brand">🍀 Learn AI with Tarshar · 理賠陪跑主題館</div>
+</footer>
+
+<script>
+/* ─────────── 站點資料（八站五段式） ─────────── */
+const STATIONS = [
+  {
+    n:1, name:"裝好健保快易通", emoji:"📲",
+    do:"下載 App、完成健保卡行動快速認證",
+    what:"在你的手機裡裝好「全民健保行動快易通（健康存摺）」App，並完成健保卡的行動快速認證。",
+    why:"這就像去辦一張「醫療資料的提款卡」。第一次辦比較麻煩，但認證一次，以後查自己的就醫紀錄、檢驗報告都不用再跑醫院。這一關是全程最大的魔王，慢慢來，過了就一勞永逸。",
+    steps:[
+      {id:"S1-01", cap:"打開手機的 App 商店", desc:"放：iPhone 的 App Store 或 Android 的 Play 商店首頁畫面，箭頭指向搜尋列", arrow:"↑ 點這裡搜尋"},
+      {id:"S1-02", cap:"搜尋「健保快易通」並下載", desc:"放：搜尋結果畫面，第一個是綠色健保署 App，箭頭指向「取得／安裝」", arrow:"↑ 點這裡安裝"},
+      {id:"S1-03", cap:"打開 App，點「健康存摺」", desc:"放：健保快易通首頁四大功能，箭頭指向「健康存摺」按鈕", arrow:"↑ 點這裡"},
+      {id:"S1-04", cap:"選「行動裝置認證」", desc:"放：登入方式選單，箭頭指向「行動裝置認證（行動快速認證）」", arrow:"↑ 選這個"},
+      {id:"S1-05", cap:"輸入資料、設定密碼", desc:"放：填寫身分證字號、健保卡號、手機門號的表單畫面，箭頭指向「送出」", arrow:"↓ 填完按送出"},
+      {id:"S1-06", cap:"看到認證成功", desc:"放：認證成功的綠色打勾畫面。恭喜，最難的一關過了", arrow:"🎉"}
+    ],
+    checks:["我已經下載好健保快易通 App","我完成了行動快速認證","我設好了一組自己記得住的密碼"],
+    stuck:"認證一直失敗？先深呼吸，這不是你的問題，這一關本來就最難。最常見的原因是「手機門號要跟健保卡登記的門號一致」。如果試三次還不行，帶著健保卡去附近的健保署服務據點，櫃檯人員可以當場幫你，大約五分鐘就好。"
+  },
+  {
+    n:2, name:"查我的就醫紀錄", emoji:"🔍",
+    do:"開健康存摺、看就醫紀錄、看懂檢驗紅字",
+    what:"打開健康存摺，看自己的就醫紀錄和檢驗結果，並且學會怎麼看「紅字」。",
+    why:"報告上的紅字，就像成績單上老師畫的重點，是在提醒你「這一項跟一般範圍不太一樣，值得看一下」。它不等於你生病了，更不等於不及格。真正的判斷，我們留到第 8 站交給醫師。",
+    steps:[
+      {id:"S2-01", cap:"打開健康存摺", desc:"放：健保快易通首頁，箭頭指向「健康存摺」", arrow:"↑ 點進去"},
+      {id:"S2-02", cap:"看「就醫紀錄」", desc:"放：就醫紀錄清單（哪天、哪家醫院、看什麼科），箭頭指向其中一筆", arrow:"← 這是一次看診"},
+      {id:"S2-03", cap:"點「檢驗檢查結果」", desc:"放：功能分頁，箭頭指向「檢驗檢查結果」", arrow:"↑ 點這裡"},
+      {id:"S2-04", cap:"看數值，紅字是提醒", desc:"放：檢驗數值表，有幾個紅字，箭頭指向紅字並註「這是提醒，不是判決」", arrow:"← 紅字＝值得看一下"}
+    ],
+    checks:["我找到了自己的就醫紀錄","我看到了檢驗檢查結果","我知道紅字只是提醒，判斷交給醫師"],
+    stuck:"看到一堆數字和紅字覺得慌？你不需要看懂每一個。你現在的任務只是「找到它、看到它」。看懂是第 6 站讓 AI 幫你、第 8 站問醫師的事，別急著自己扛。"
+  },
+  {
+    n:3, name:"下載我的報告", emoji:"💾",
+    do:"把檢驗報告、用藥紀錄存成檔案到手機",
+    what:"把檢驗報告、用藥紀錄存成檔案，放進自己的手機裡。",
+    why:"這就像把重要文件影印一份，收進自己的資料夾。之後要給 AI 看、要申請理賠，都是拿這份存好的檔案，不用每次重新查。重點不只是存，還要記得「存到哪裡、之後怎麼找到它」。",
+    steps:[
+      {id:"S3-01", cap:"找到「下載／分享」按鈕", desc:"放：健康存摺某份報告頁面，箭頭指向右上角的下載或分享圖示", arrow:"↑ 點這裡"},
+      {id:"S3-02", cap:"選存成 PDF 或圖片", desc:"放：儲存格式選單，箭頭指向「PDF」", arrow:"← 選 PDF"},
+      {id:"S3-03", cap:"存到「檔案」App 或相簿", desc:"放：儲存位置選單，箭頭指向「儲存到檔案」", arrow:"↑ 存這裡"},
+      {id:"S3-04", cap:"記住存到哪個資料夾", desc:"放：檔案 App 的下載資料夾，可以看到剛存好的檔案", arrow:"✔ 存好了"}
+    ],
+    checks:["我把檢驗報告存起來了","我把用藥紀錄存起來了","我知道這些檔案存在手機的哪裡"],
+    stuck:"存完找不到檔案？iPhone 打開「檔案」App、Android 打開「我的檔案」或「檔案管理」，通常在「下載」資料夾裡。真的找不到，就用手機內建的搜尋，打關鍵字「健康存摺」找找看。"
+  },
+  {
+    n:4, name:"把保單找齊", emoji:"📋",
+    do:"打電話給投保公司客服，要電子保單",
+    what:"打電話給你投保的保險公司客服，請他們把電子保單給你。",
+    why:"保單就是你和保險公司的「約定書」，寫著你保了什麼、賠多少。很多人的保單早就不知道收到哪去了，這很正常，沒關係。一通電話就能重新拿到電子檔。下面這張台詞卡，你可以直接照著念。",
+    script:[
+      {say:"你：", txt:"「您好，我是保戶，我想申請我的電子保單，麻煩您。」"},
+      {say:"對方會問：", txt:"你的身分證字號和姓名，照實回答就好。"},
+      {say:"你：", txt:"「請問可以寄到我的電子信箱嗎？我的信箱是⋯⋯」"},
+      {say:"或者：", txt:"「請問可以用手機簡訊給我下載連結嗎？」"}
+    ],
+    steps:[
+      {id:"S4-01", cap:"找到保險公司客服電話", desc:"放：保費收據 / 信用卡帳單 / 保險公司官網，箭頭指向「客服專線」號碼", arrow:"← 找這支電話"},
+      {id:"S4-02", cap:"撥打電話，照台詞講", desc:"放：手機撥號畫面，提醒把上面的台詞卡放旁邊照念", arrow:"📞 慢慢講"},
+      {id:"S4-03", cap:"收到電子保單檔案", desc:"放：信箱或簡訊收到保單下載連結的畫面", arrow:"✔ 收到了"}
+    ],
+    checks:["我找到了保險公司的客服電話","我打了電話、報了身分","我拿到了電子保單檔案"],
+    stuck:"想不起來自己保了哪幾家？翻信用卡帳單或銀行扣款紀錄，看「保費」是扣給哪幾家公司。真的想不起來，可以上「保險存摺」網站（由產險壽險公會提供）查自己名下有哪些保單。"
+  },
+  {
+    n:5, name:"遮好個資", emoji:"🖍️",
+    do:"手機上把保單與報告的個資塗掉",
+    what:"在手機上，把保單和報告上的重要個資塗掉，再拿去給 AI 看。",
+    why:"這就像寄明信片前先把家裡地址遮起來。AI 幫你看內容，並不需要知道你是誰。遮掉個資，安全又安心。要遮的有這幾樣：身分證字號、保單號碼、地址、電話、出生年月日、金融帳號。",
+    steps:[
+      {id:"S5-01", cap:"iPhone：照片或檔案裡點「編輯」", desc:"放：iPhone 打開一張保單照片，箭頭指向右上角「編輯」，再指向筆型「標示」圖示", arrow:"↑ 編輯 → 標示"},
+      {id:"S5-02", cap:"iPhone：用黑色麥克筆塗掉", desc:"放：標示工具列，選黑色麥克筆，把身分證字號那一行塗黑的畫面", arrow:"← 塗黑它"},
+      {id:"S5-03", cap:"Android：相簿裡點「編輯」", desc:"放：Android 打開保單照片，箭頭指向「編輯」再指向「塗鴉／馬克筆」", arrow:"↑ 編輯 → 塗鴉"},
+      {id:"S5-04", cap:"Android：用黑色塗掉個資", desc:"放：塗鴉工具選黑色，把保單號碼塗掉的畫面", arrow:"← 塗黑它"}
+    ],
+    checks:["身分證字號遮好了","保單號碼遮好了","地址、電話、生日遮好了"],
+    stuck:"塗完發現黑色底下還隱約看得到字（有些塗抹是半透明的）？塗個兩三層讓它全黑，或乾脆用「裁切」把那一區直接切掉。存檔後自己再檢查一次，完全看不到才算數。"
+  },
+  {
+    n:6, name:"建立我的 AI 理賠筆記", emoji:"🤖",
+    do:"把遮好個資的檔案上傳 AI，用範本提問",
+    what:"把遮好個資的檔案上傳給 AI，用下面現成的範本問它，讓它幫你把厚厚的保單整理成看得懂的表格。",
+    why:"AI 就像一個很有耐心的保險小幫手。你手機上有的 AI 都可以用（優先挑免費就能用的）。但要記得：它給的是「粗略概念」，正式申請前，一定要再跟保險公司確認一次。",
+    copy:[
+      {label:"📋 複製「提問範本」", title:"提問範本（先貼這個）",
+       text:"請擔任我的保險小幫手，全程用白話文，不要用保險術語。幫我整理：一、我的保障內容與理賠額度，列成表格。二、如果發生住院、手術、意外、癌症，我可以向哪些公司申請哪些理賠。三、理賠要注意的事：給付次數、天數、總額上限，收據要正本還是副本，不住院的門診手術賠不賠，哪些給付只能選一個領。"},
+      {label:"🛡️ 複製「防呆規則」", title:"防呆規則（再貼這個）",
+       text:"理賠額度必須用我檔案裡的實際計畫別計算，不能用最常見型別。找不到計畫別就列出來讓我補資料。重要結論要註明出處（哪份文件第幾條），條款沒寫的就說未載明，不要推測。"}
+    ],
+    steps:[
+      {id:"S6-01", cap:"打開你手機上的 AI，上傳檔案", desc:"放：任一 AI 對話畫面，箭頭指向「＋／迴紋針」上傳鈕，上傳遮好個資的保單檔", arrow:"↑ 上傳檔案"},
+      {id:"S6-02", cap:"貼上「提問範本」送出", desc:"放：把上面按鈕 A 的文字貼進輸入框、按送出的畫面", arrow:"↓ 貼上按鈕 A"},
+      {id:"S6-03", cap:"再貼「防呆規則」送出", desc:"放：接著把按鈕 B 的防呆規則貼進去、按送出的畫面", arrow:"↓ 貼上按鈕 B"},
+      {id:"S6-04", cap:"看它整理好的表格", desc:"放：AI 回覆的保障內容表格畫面", arrow:"✔ 看懂了"}
+    ],
+    checks:["我把遮好個資的檔案上傳給 AI 了","我貼了提問範本","我貼了防呆規則","我知道 AI 說的要再跟保險公司確認"],
+    stuck:"AI 說得含糊、好像在猜？把「防呆規則」再貼一次給它，它就會乖乖標出處、找不到資料時請你補。記住，AI 是助手不是裁判，最後一律以保險公司條款為準。"
+  },
+  {
+    n:7, name:"正式申請理賠", emoji:"📮",
+    do:"開診斷證明書、備收據、填申請書、送件",
+    what:"開診斷證明書、準備收據、填好理賠申請書，然後送件。",
+    why:"這是最後的「交作業」。前面幾站已經把資料都備齊了，這一步就是把它們交到對的地方。備齊了就不慌。下面三張小卡，是最多人卡住的地方，先看一下。",
+    knownotes:[
+      {h:"收據正本只有一張，怎麼辦？", p:"先跟其中一家用正本申請，請它退還並在副本上蓋「與正本相符」的章，其他家就用副本申請。或者在醫院申請時，就多請他們開幾張收據正本。"},
+      {h:"我保了好幾家？", p:"每一家都可以各自申請。要注意的是實支實付對「副本理賠」有各自的規定，細節以各家條款為準。"},
+      {h:"申請有沒有期限？", p:"有。保險金請求權的時效是「兩年」，從你知道可以申請的那天起算。別放太久，資料備齊就送。"}
+    ],
+    steps:[
+      {id:"S7-01", cap:"到醫院申請診斷證明書", desc:"放：醫院診斷證明書申請櫃檯或機台畫面", arrow:"🏥 先拿這個"},
+      {id:"S7-02", cap:"備齊收據（正本／副本）", desc:"放：醫療費用收據，標示正本與副本", arrow:"← 收好別弄丟"},
+      {id:"S7-03", cap:"拿理賠申請書並填好", desc:"放：保險公司理賠申請書（臨櫃拿或官網下載）填寫畫面", arrow:"✍️ 一欄一欄填"},
+      {id:"S7-04", cap:"連同資料一起送件", desc:"放：把文件送出的三種方式：臨櫃、郵寄、或保險 App 上傳", arrow:"📤 送出去"}
+    ],
+    checks:["我拿到了診斷證明書","我備齊了收據","我填好了理賠申請書","我把資料送出去了"],
+    stuck:"不確定要準備哪些文件？直接打保險公司客服，問「我這個狀況申請理賠，要準備哪些文件」，請他一項一項念給你、你抄下來。照著這份清單準備，最不會漏東西。"
+  },
+  {
+    n:8, name:"去哪裡問", emoji:"🙋",
+    do:"帶著資料，去問對的人",
+    what:"帶著你整理好的資料，去問對的人。",
+    why:"走到這裡，你已經把功課做好了。剩下的專業判斷，交給專業的人。問對人，比自己瞎猜安心一百倍。下面幫你把三種人的問句都準備好了，照著問就行。",
+    knownotes:[
+      {h:"問醫師", p:"「醫師，我這個診斷，證明書上可以幫我把病名和治療方式寫清楚嗎？」「這次的治療，屬於手術還是處置？」"},
+      {h:"問藥師", p:"「藥師，這幾種藥是治療什麼的？跟我這次的狀況有關嗎？」"},
+      {h:"問保險業務員或客服", p:"「我這個狀況，依我的保單可以申請哪些理賠？要準備什麼文件？」"}
+    ],
+    steps:[],
+    checks:["我知道要問醫師什麼","我知道要問藥師什麼","我知道要問業務員或客服什麼"],
+    stuck:"沒有熟識的業務員？直接打保單上的保險公司客服專線，他們有義務協助保戶。問之前，把你的問題先寫在紙上，一項一項問，才不會講完才想到漏了什麼。"
+  }
+];
+
+/* ─────────── 常見問題 10 題 ─────────── */
+const FAQ = [
+  {q:"健保卡認證一直失敗怎麼辦？", a:"最常見的原因是「手機門號和健保卡登記的不一致」。試三次還不行，就帶健保卡去健保署服務據點，櫃檯會當場幫你。這一關本來就最難，卡住很正常，不是你的問題。"},
+  {q:"我沒有讀卡機可以認證嗎？", a:"可以。用「行動快速認證」只要健保卡號、身分證字號和你的手機就能辦，完全不需要讀卡機。"},
+  {q:"檢驗報告上的紅字代表我很嚴重嗎？", a:"不一定。紅字只是提醒「這一項跟一般範圍不同，值得看一下」，像老師畫的重點。到底要不要緊，要問醫師，別自己嚇自己。"},
+  {q:"診斷證明書要花錢嗎？多少錢？", a:"通常要付費，各家醫院自訂，一份大約一兩百到數百元不等，正本會比影本貴一些。實際金額以醫院公告為準。"},
+  {q:"收據只有一張正本，我保了兩三家怎麼辦？", a:"先跟一家用正本申請，請它退還並在副本蓋「與正本相符」章，其他家用副本。或申請時就請醫院多開幾張正本。細節依各保險公司規定。"},
+  {q:"出院多久之內要申請理賠？", a:"保險金請求權的時效是兩年，從你知道可以申請那天起算。別拖太久，資料備齊就送。"},
+  {q:"沒住院的門診手術也能賠嗎？", a:"要看你的保單條款怎麼寫。有些手術險或實支實付含門診手術，有些不含。把保單給 AI 整理、再跟保險公司確認，最準。"},
+  {q:"保單不見了怎麼辦？", a:"打保險公司客服要電子保單就好（第 4 站有教）。想知道自己名下有哪些保單，可以上「保險存摺」網站查。"},
+  {q:"把資料傳給 AI 安全嗎？", a:"先把個資遮好再傳（第 5 站有教）。遮掉身分證字號、保單號碼、地址電話，AI 不需要知道你是誰，也能幫你看內容。"},
+  {q:"AI 說的理賠金額可以相信嗎？", a:"當參考就好。AI 給的是粗略概念，可能會算錯。正式申請前，一定要以保險公司條款和客服確認為準。"}
+];
+
+/* ─────────── 生成站點 HTML ─────────── */
+function buildStations(){
+  const host=document.getElementById('stationHost');
+  let html='';
+  STATIONS.forEach(s=>{
+    html+=`<section class="screen" id="s${s.n}">`;
+    html+=`<div class="station-head"><div class="st-kicker">第 ${s.n} 站 · 共 8 站</div>`;
+    html+=`<div class="step1"><h2 class="serif">${s.emoji} ${s.name}</h2></div></div>`;
+
+    // 1 這一步要做什麼
+    html+=`<div class="block"><span class="tag">① 這一步要做什麼</span><p style="font-size:20px;font-weight:700;">${s.what}</p></div>`;
+
+    // 2 為什麼
+    html+=`<div class="block why"><span class="tag">② 為什麼要做這一步</span><div class="why-box"><p>${s.why}</p></div></div>`;
+
+    // 台詞卡（第 4 站）
+    if(s.script){
+      html+=`<div class="block"><span class="tag">📞 電話怎麼講（可以照念）</span><div class="script">`;
+      s.script.forEach(l=>{ html+=`<p><span class="say">${l.say}</span>${l.txt}</p>`; });
+      html+=`</div></div>`;
+    }
+
+    // 一鍵複製（第 6 站）
+    if(s.copy){
+      html+=`<div class="block"><span class="tag">📋 一鍵複製，貼給 AI</span>`;
+      s.copy.forEach((c,i)=>{
+        html+=`<div class="copyblock"><div class="quote">${c.text}</div>`;
+        html+=`<button class="copybtn" data-text="${encodeURIComponent(c.text)}" onclick="copyText(this)">${c.label}</button></div>`;
+      });
+      html+=`</div>`;
+    }
+
+    // 3 拿手機跟著做
+    if(s.steps && s.steps.length){
+      html+=`<div class="block"><span class="tag">③ 拿起你的手機，跟著做</span><div class="steps">`;
+      s.steps.forEach(st=>{
+        html+=`<div class="step"><div class="caption"><span class="n">${st.id}</span>${st.cap}</div>`;
+        html+=`<div class="phone"><div class="sid">此處放截圖 · ${st.id}</div><div class="ph-desc">${st.desc}</div><div class="arrow">${st.arrow||''}</div></div></div>`;
+      });
+      html+=`</div></div>`;
+    }
+
+    // 知識小卡（第 7、8 站）
+    if(s.knownotes){
+      const label = s.n===8 ? "③ 照著問，準沒錯" : "📌 先搞懂這幾件事";
+      html+=`<div class="block"><span class="tag">${label}</span>`;
+      s.knownotes.forEach(k=>{ html+=`<div class="knownote"><h4>${k.h}</h4><p>${k.p}</p></div>`; });
+      html+=`</div>`;
+    }
+
+    // 4 打勾清單
+    html+=`<div class="block"><span class="tag">④ 打勾清單（做完就打勾）</span><ul class="checklist">`;
+    s.checks.forEach(c=>{
+      html+=`<li onclick="this.classList.toggle('done')"><span class="box">✔</span><span class="txt">${c}</span></li>`;
+    });
+    html+=`</ul></div>`;
+
+    // 5 卡住了怎麼辦
+    html+=`<div class="block"><div class="stuck"><span class="tag">⑤ 卡住了怎麼辦</span><p>${s.stuck}</p></div></div>`;
+
+    // 下一站
+    if(s.n<8){
+      html+=`<button class="nextbtn" onclick="go('s${s.n+1}')">完成這站，前往第 ${s.n+1} 站 →</button>`;
+      html+=`<button class="nextbtn ghost" onclick="go('home')">回旅程地圖</button>`;
+    }else{
+      html+=`<div class="block why"><div class="why-box"><p style="font-weight:800;color:var(--sage-deep);">🎉 你走完全程了！你已經把該做的功課都做好，剩下的交給專業的人。你很棒，慢慢來到這裡，一點都不簡單。</p></div></div>`;
+      html+=`<button class="nextbtn" onclick="go('home')">回旅程地圖</button>`;
+    }
+
+    html+=`</section>`;
+  });
+  host.innerHTML=html;
+}
+
+/* ─────────── 旅程地圖 ─────────── */
+function buildMap(){
+  const m=document.getElementById('mapList');
+  m.innerHTML=STATIONS.map(s=>`
+    <button class="stop" onclick="go('s${s.n}')">
+      <span class="num">${s.n}</span>
+      <span><span class="st-name">${s.name}</span><br><span class="st-do">${s.do}</span></span>
+      <span class="chev">›</span>
+    </button>`).join('');
+}
+
+/* ─────────── FAQ ─────────── */
+function buildFaq(){
+  const g=document.getElementById('faqGrid');
+  g.innerHTML=FAQ.map((f,i)=>`
+    <button class="flip" onclick="this.classList.toggle('flipped')" aria-label="常見問題：${f.q}">
+      <span class="rel"></span>
+      <span class="inner">
+        <span class="face front"><span class="q">Q${i+1}. ${f.q}</span><span class="hint">點一下看答案 ↻</span></span>
+        <span class="face back"><span class="a">${f.a}</span></span>
+      </span>
+    </button>`).join('');
+}
+
+/* ─────────── 一鍵複製 ─────────── */
+function copyText(btn){
+  const text=decodeURIComponent(btn.dataset.text);
+  const done=()=>{
+    const old=btn.textContent;
+    btn.classList.add('copied');btn.textContent='✔ 已複製，去貼給 AI 吧';
+    setTimeout(()=>{btn.classList.remove('copied');btn.textContent=old;},2200);
+  };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done).catch(()=>fallbackCopy(text,done));
+  }else{ fallbackCopy(text,done); }
+}
+function fallbackCopy(text,done){
+  const ta=document.createElement('textarea');
+  ta.value=text;ta.style.position='fixed';ta.style.opacity='0';
+  document.body.appendChild(ta);ta.focus();ta.select();
+  try{document.execCommand('copy');done();}catch(e){alert('複製沒成功，請手動長按選取文字複製。');}
+  document.body.removeChild(ta);
+}
+
+/* ─────────── 畫面切換與進度列 ─────────── */
+function setTopbar(id){
+  const bar=document.getElementById('topbar');
+  const inner=document.getElementById('topbarInner');
+  const m=id.match(/^s(\d)$/);
+  if(m){
+    const n=+m[1];
+    bar.className='';
+    inner.innerHTML=`
+      <div class="progress-row">
+        <span class="progress-label">第 ${n} 站 / 共 8 站</span>
+        <span class="bar"><i style="width:${Math.round(n/8*100)}%"></i></span>
+      </div>
+      <div class="navbtns">
+        <button onclick="go('${n>1?('s'+(n-1)):'home'}')">← ${n>1?'回上一站':'回首頁'}</button>
+        <button onclick="go('home')">🗺️ 回旅程地圖</button>
+        <a class="backlink" href="../plans/" style="flex:none" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+      </div>`;
+  }else if(id==='faq'){
+    bar.className='home';
+    inner.innerHTML=`<div class="toprow"><a class="backlink" href="../plans/" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a><button class="backlink" style="cursor:pointer" onclick="go('home')">← 回首頁</button></div>`;
+  }else{
+    bar.className='home';
+    inner.innerHTML=`<div class="toprow"><a class="backlink" href="../plans/" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a><span class="brandline">🍀 理賠陪跑主題館</span></div>`;
+  }
+}
+function go(id, opt){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const el=document.getElementById(id);
+  if(!el){return;}
+  el.classList.add('active');
+  setTopbar(id);
+  if(history.replaceState){history.replaceState(null,'','#'+id);}else{location.hash=id;}
+  window.scrollTo({top:0,behavior:'instant' in window?'instant':'auto'});
+  // 急件捷徑提示
+  const old=document.getElementById('urgentTip'); if(old) old.remove();
+  if(opt && opt.urgent && id==='s4'){
+    const tip=document.createElement('div');
+    tip.id='urgentTip';tip.className='block';
+    tip.innerHTML=`<div class="stuck" style="border-left-color:var(--peach);background:#fbf1e7;border-color:#f0dcc8;"><span class="tag" style="color:var(--peach-deep)">⏱️ 急件捷徑</span><p style="color:#6a5342">你剛出院，我們先直接帶你把保單找齊、備好資料申請。前面第 1 到第 3 站（查醫療紀錄），之後有空再回頭補就好，不影響你現在申請。</p></div>`;
+    el.querySelector('.station-head').after(tip);
+  }
+}
+
+/* ─────────── 啟動 ─────────── */
+buildStations();
+buildMap();
+buildFaq();
+// 瀏覽器上一頁/下一頁、或直接更改網址列的 #錨點 時，同步切換畫面
+window.addEventListener('hashchange', function(){
+  const h=location.hash.replace('#','');
+  const cur=(document.querySelector('.screen.active')||{}).id;
+  if(h && document.getElementById(h) && h!==cur){ go(h); }
+});
+(function(){
+  const h=location.hash.replace('#','');
+  if(h && document.getElementById(h)){ go(h); } else { go('home'); }
+})();
+</script>
+</body>
+</html>

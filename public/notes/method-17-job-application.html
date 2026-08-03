@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 陪跑求職：把真的你，講給公部門聽｜Tarshar 教案集</title>
+<meta name="description" content="Tarshar 教案集：用 AI 陪跑準備一次公部門職缺應徵資料的完整做法，從急件清單、自傳草稿、履歷補強、官方表格對照到送件前核對，六段真實走過的路，特別適合中高齡、二度就業、要投公部門或培訓案的人">
+<style>
+:root{
+  --paper:#f4f0e8; --card:#fffdf7; --card2:#fbf8ef; --ink:#3a3528; --ink2:#766f61; --ink3:#8a8674;
+  --line:#d8d0bf; --accent:#5d8d56; --accent2:#8cbd7d;
+  --code:#fffdf7;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.9}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(244,240,232,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:10px 20px;display:flex;align-items:center;gap:14px}
+.topbar b{font-size:15px}
+.topbar .right{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.topbar a.btn{font-size:12.5px;text-decoration:none;border:1px solid var(--line);border-radius:9px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap}
+.topbar a.btn:hover{border-color:var(--accent);color:var(--accent)}
+.hero{max-width:900px;margin:0 auto;padding:52px 22px 10px;text-align:center}
+.hero .ep{display:inline-block;font-size:12.5px;letter-spacing:3px;color:var(--accent);border:1px solid var(--accent2);border-radius:999px;padding:5px 16px;background:#eef5e9;margin-bottom:18px}
+.hero h1{font-size:clamp(24px,4.4vw,40px);font-weight:900;line-height:1.4;color:var(--ink)}
+.hero .lead{margin-top:14px;font-size:14.5px;color:var(--ink2)}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:18px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+
+.showcase{max-width:900px;margin:26px auto 0;padding:0 22px}
+.showcase-box{background:linear-gradient(120deg,#eef5e9,#fbf8ef);border:1px solid var(--accent2);border-radius:18px;padding:24px 26px;text-align:center}
+.showcase-box .kicker{font-size:12.5px;color:var(--accent);font-weight:800;letter-spacing:1px;margin-bottom:8px}
+.showcase-box p{font-size:14px;color:var(--ink2);margin:6px 0 16px}
+.showcase-box .note-inline{font-size:12.5px;color:var(--ink3)}
+
+.layout{max-width:1120px;margin:30px auto 0;padding:0 22px;display:grid;grid-template-columns:236px 1fr;gap:34px;align-items:start}
+nav.toc{position:sticky;top:66px;border:1px solid var(--line);border-radius:14px;background:var(--card);padding:16px 14px;font-size:13.5px}
+nav.toc .t{font-size:12px;letter-spacing:2px;color:var(--ink3);margin-bottom:10px}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:8px;border-left:3px solid transparent}
+nav.toc a:hover{background:#eef5e9;color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:30px 32px;margin-bottom:26px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:2px;font-weight:700;color:#fff;border-radius:999px;padding:5px 14px;margin-bottom:12px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+h2.ct{font-size:22px;font-weight:900;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:16.5px;font-weight:800;margin:24px 0 10px;padding-left:12px;border-left:4px solid var(--accent2);color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink)}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 24px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"◆";position:absolute;left:4px;font-size:9px;top:12px;color:var(--accent2)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:8px;width:23px;height:23px;border-radius:7px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:800;display:grid;place-items:center}
+.codebox{background:var(--code);border:1px solid var(--line);border-left:4px solid var(--accent2);border-radius:10px;padding:14px 16px;font-family:"Cascadia Code",Consolas,monospace;font-size:12.6px;color:#3a3528;white-space:pre-wrap;line-height:1.8;margin:12px 0;overflow-x:auto}
+.note{display:flex;gap:10px;border-radius:12px;padding:14px 16px;font-size:14px;margin:14px 0;line-height:1.85}
+.note.green{background:#eef5e9;border:1px solid var(--accent2);color:var(--accent)}
+.note.gold{background:#fdf6e7;border:1px solid #eeddb4;color:#7a5b12}
+.golden{background:linear-gradient(120deg,#eef5e9,#fbf8ef);border:1px solid var(--accent2);border-radius:14px;padding:16px 20px;margin:16px 0;text-align:center}
+.golden .q{font-size:17px;font-weight:900;color:var(--accent)}
+.golden .a{font-size:12.5px;color:var(--ink3);margin-top:6px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+@media (max-width:560px){ .grid2{grid-template-columns:1fr} }
+.mini{border:1px solid var(--line);border-radius:14px;padding:14px 16px;background:#fff}
+.mini .n{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:8px;background:var(--accent2);color:#fff;font-weight:800;font-size:12.5px;margin-bottom:6px}
+.mini h5{font-size:14px;font-weight:800;margin-bottom:4px;color:var(--ink)}
+.mini p{font-size:12.8px;color:var(--ink2)}
+.stage{display:inline-block;font-weight:800;font-size:11.5px;color:#fff;background:var(--accent);border-radius:6px;padding:2px 9px;margin-right:7px;letter-spacing:1px;vertical-align:middle}
+.action{border:1px solid var(--accent2);border-radius:16px;padding:18px 20px;background:#fff;margin:14px 0}
+.action .n{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:10px;background:var(--accent);color:#fff;font-weight:900;font-size:15px;margin-bottom:8px}
+.action h4{font-size:15.5px;font-weight:800;color:var(--ink);margin-bottom:4px}
+.action p{font-size:13.5px}
+.example{border:1px dashed var(--accent2);border-radius:12px;padding:12px 16px;margin:12px 0;background:#fbf8ef;font-size:13.5px;color:var(--ink2)}
+.example b{color:var(--accent)}
+.backhome{position:fixed;left:14px;bottom:14px;z-index:9999;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;text-decoration:none;color:#fff;background:var(--accent);border:1px solid #4c7745;border-radius:999px;padding:9px 16px;box-shadow:0 4px 18px rgba(0,0,0,.18)}
+.backhome:hover{background:#4c7745}
+footer{max-width:1120px;margin:20px auto 0;padding:30px 22px 70px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:2}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} }
+@media print{ .topbar,nav.toc,.backhome{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../plans/" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📚 Tarshar 教案集</b>
+  <div class="right">
+    <a class="btn" href="../plans/">📚 教案集系列</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">Tarshar 教案集 · 方法教學 17</span>
+  <h1>AI 陪跑求職：<br>把真的你，講給公部門聽</h1>
+  <p class="lead">這篇記錄的是我（小D）用 AI 陪跑準備一次<b>公部門職缺應徵資料</b>的完整做法。公告一貼出來就有期限，紙本要寄、格式要對、資料不能漏，稍有閃失就整份作廢。從急件清單、自傳草稿、履歷補強、官方表格對照，到送件前核對，六段真實走過的路，特別適合中高齡、二度就業、要投公部門或培訓案的你。</p>
+  <div class="meta">
+    <span>👵 中高齡 / 二度就業適用</span>
+    <span>📋 公部門紙本應徵</span>
+    <span>⏱️ 期限內完成</span>
+    <span>🗓️ 2026</span>
+  </div>
+</header>
+
+<div class="showcase">
+  <div class="showcase-box">
+    <div class="kicker">先說在前面</div>
+    <p>這篇教案為了保護個資，把單位名稱、職缺名稱、學經歷細節全部去掉，改用<b>虛構範例人物「陳小美」</b>應徵一個「行政支援類職缺」來示範每一步怎麼做。方法是真的，範例是假的，你可以直接照著方法套用在你自己要投的職缺上。</p>
+    <div class="note-inline">真實案例 → 去識別化 → 變成你能複製的方法</div>
+  </div>
+</div>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#c1">1. 投遞公部門最怕漏東西</a>
+  <a href="#c2">2. 先列急件清單</a>
+  <a href="#c3">3. 自傳不是自誇文</a>
+  <a href="#c4">4. 履歷補強</a>
+  <a href="#c5">5. 官方表格對照</a>
+  <a href="#c6">6. 送件前核對清單</a>
+  <a href="#c7">7. 你的三步驟行動建議</a>
+</nav>
+
+<article>
+
+<!-- 1 痛點 -->
+<section class="chapter" id="c1">
+  <span class="chip">STEP 01</span>
+  <h2 class="ct">投遞公部門最怕漏東西</h2>
+  <p class="cd">文件多、格式硬、期限緊，一步漏就整份作廢。</p>
+  <h3>發生什麼事</h3>
+  <p>公部門的職缺公告，跟一般公司投履歷完全是兩回事。網路上按個送出鍵不算數，要印出官方指定的表格、要親筆簽名、要準備好幾份影本、還要用掛號寄到指定地址，而且以郵戳為憑，超過那一天，前面準備得再齊全都沒用。我看著公告，第一個念頭不是「我夠不夠格」，是「我會不會漏掉什麼」。</p>
+  <div class="example">📌 範例情境：陳小美看到一個「行政支援類職缺」的公告，有效期間只有一週，公告上密密麻麻寫了資格條件、應備文件、寄送方式，她越看越慌，不知道從哪一項先開始。</div>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">AI 不是幫你寫一份假的你，是幫你把真的你講清楚。</div><div class="a">但前提是，你要先讓它幫你把「要交什麼」看清楚</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 拿到公告先不要急著寫自傳，把整份公告截圖或貼給 AI，請它先幫你抓出「應備文件」「資格條件」「期限」三件事，你才知道自己現在缺什麼、急什麼。</div>
+</section>
+
+<!-- 2 急件清單 -->
+<section class="chapter" id="c2">
+  <span class="chip">STEP 02</span>
+  <h2 class="ct">先列急件清單：AI 幫你從公告揪出要交什麼、缺什麼</h2>
+  <p class="cd">把一整份公告，拆成一張看得懂的待辦表。</p>
+  <h3>發生什麼事</h3>
+  <p>我把公告丟給 AI，請它照「今天必做」「明天必做」「寄件當天必做」分三段列出來，而不是一次列一長串嚇自己。AI 也順手比對了我手邊有什麼、還缺什麼，例如某張證照公告寫「有者尤佳」，但資料夾裡沒有那張證照本尊，就老實列成「目前缺，不能寫成已具備」，不是隨便幫我掰一個。</p>
+  <div class="example">📌 範例待辦（陳小美版）：<br>今天必做：下載官方指定表格、填入基本資料、寫自傳草稿。<br>明天必做：檢查影本是否清楚、依公告順序排好文件。<br>寄件當天必做：一早到郵局掛號寄出、保留收據照片。</div>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">清單不是用來焦慮的，是用來卸下焦慮的。</div><div class="a">把模糊的擔心，拆成看得見、打得了勾的一條一條</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 請 AI 幫你把清單按「今天／明天／截止當天」分段，每條前面加打勾框。做完就打勾，你會清楚看到自己已經往前走了多少，而不是一直盯著還沒做完的部分。</div>
+</section>
+
+<!-- 3 自傳 -->
+<section class="chapter" id="c3">
+  <span class="chip">STEP 03</span>
+  <h2 class="ct">自傳不是自誇文：讓 AI 訪談你，把經歷變成故事</h2>
+  <p class="cd">自傳最怕的不是寫不出來，是寫成一份自誇文。</p>
+  <h3>發生什麼事</h3>
+  <p>我一開始不知道怎麼下筆，AI 沒有叫我「先寫」，而是先問我問題：你為什麼想投這個職缺、你過去做過哪些跟這個職缺有關的事、你希望對方看到你的哪一面。像被訪談一樣，我一句一句回答，AI 再把這些零散的回答整理成一段完整的自傳，包含工作理念、投遞動機，和跟職缺對得上的實務經驗。</p>
+  <div class="example">📌 範例訪談（陳小美版）：<br>AI 問：「你過去的工作經驗裡，哪一段最接近這次要應徵的行政支援工作？」<br>陳小美答：「我做過協調外部單位、處理文書表報、支援活動現場。」<br>AI 把這段回答，寫成自傳裡一段有畫面、有具體任務的段落，不是空泛的「我很認真負責」。</div>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">自傳不是把自己吹得多厲害，是把自己講得多清楚。</div><div class="a">AI 訪談你，是為了把你自己都沒意識到的經歷挖出來</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 不要一開始就要求 AI「幫我寫自傳」，先讓它訪談你：問你的動機、問你的相關經驗、問你想被看見的特質。你負責誠實回答，AI 負責把答案接成一篇讀得下去的故事。</div>
+</section>
+
+<!-- 4 履歷補強 -->
+<section class="chapter" id="c4">
+  <span class="chip">STEP 04</span>
+  <h2 class="ct">履歷補強：把新技能寫進去的方法</h2>
+  <p class="cd">你這幾年學的新東西，要有地方被看見。</p>
+  <h3>發生什麼事</h3>
+  <p>公部門的履歷表欄位是固定的，能寫的空間有限，但我這幾年學的新技能，例如 AI 工具應用、教學陪跑經驗，公告上不一定有對應的欄位。我請 AI 幫我想，這些新技能可以怎麼放進「專長」「自傳」這些既有欄位裡，用職缺看得懂的語言講，而不是硬塞術語。</p>
+  <div class="example">📌 範例補強（陳小美版）：陳小美這幾年自學了試算表與簡報工具的進階用法，AI 幫她把這段經驗寫成「能獨立完成資料彙整、報表產出、跨部門聯繫」，對應到職缺公告寫的「文書處理、電子試算表操作能力」，而不是寫成一堆別人看不懂的軟體名稱。</div>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">新技能不是多寫一行，是換一個對方看得懂的講法。</div><div class="a">履歷是翻譯，不是清單</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 把你這幾年學的新東西列給 AI，再把職缺公告的資格條件也給它，請它幫你把兩邊對起來，用職缺的語言重寫你的經歷，而不是自己埋頭猜對方想看什麼。</div>
+</section>
+
+<!-- 5 官方表格對照 -->
+<section class="chapter" id="c5">
+  <span class="chip">STEP 05</span>
+  <h2 class="ct">官方表格對照：AI 幫你逐欄核對格式</h2>
+  <p class="cd">官方表格有它自己的規矩，AI 陪你一欄一欄過。</p>
+  <h3>發生什麼事</h3>
+  <p>官方指定表格常常有它自己的填寫規則，例如學歷欄位原則上只填已經畢業、有證明文件的學歷，在學或進修中的學程要另外寫在自傳裡而不是塞進學歷欄。我請 AI 陪我一欄一欄核對：這欄該不該填、這欄能不能由 AI 代填、這欄一定要我自己確認。</p>
+  <div class="example">📌 範例對照（陳小美版）：AI 幫陳小美填好姓名、聯絡方式、學歷、專長、自傳這些能由資料判斷的欄位；但身分證字號、戶籍地址、緊急聯絡人這些個資欄位，AI 明確標成「不能代填，你自己確認後補上」，不會自己亂猜。</div>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">能代填的欄位由 AI 幫你，不能代填的欄位它會老實告訴你。</div><div class="a">分清楚「AI 能做」跟「只有你能做」，比全部自己填快，也比全部丟給 AI 安全</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 把官方表格的每個欄位念給 AI 聽，請它明確分成三類：「可以直接幫你填」「需要你確認方向後它幫你潤稿」「只有你自己知道，AI 絕對不能代填」，個資類欄位永遠留給你自己。</div>
+</section>
+
+<!-- 6 送件前核對 -->
+<section class="chapter" id="c6">
+  <span class="chip">STEP 06</span>
+  <h2 class="ct">送件前核對清單：防漏的三次檢查</h2>
+  <p class="cd">寄出去就沒有回頭路，核對這件事不能只做一次。</p>
+  <h3>發生什麼事</h3>
+  <p>紙本寄出之後就改不了了，所以送件前我請 AI 陪我把公告重新核對一次，不是核對「我寫得好不好」，是核對「我有沒有漏東西」：資格條件逐條對、應備文件逐項對、表格欄位逐欄對。核對完，再照公告要求把文件依序排好，連信封怎麼寫收件地址、怎麼寫應徵的職缺名稱都列清楚。</p>
+  <div class="example">📌 範例核對表（陳小美版）：<br>① 資格條件：學歷、工作年資逐條核對公告要求<br>② 應備文件：表格、身分證影本、學歷證件影本、工作證明、回郵信封，逐項確認是否備齊<br>③ 表格本身：簽名、日期、必填欄位是否有留白</div>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">核對不是不信任自己，是給自己一個不用靠運氣的保險。</div><div class="a">寄出前的三次檢查，比寄出後的後悔便宜太多</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 送件前，把公告內容跟你準備好的資料一起丟給 AI，請它扮演「幫你抓漏的人」，逐條核對資格、逐項核對附件、逐欄核對表格，抓到漏洞比事後補救輕鬆太多。</div>
+</section>
+
+<!-- 7 行動建議 -->
+<section class="chapter" id="c7">
+  <span class="chip">TAKE ACTION</span>
+  <h2 class="ct">給你的三步驟行動建議：明天就能開始</h2>
+  <p class="cd">投公部門職缺，最怕的從來不是你不夠格，是漏東西、漏期限、漏格式。這六步不是要你變成很會寫公文的人，是讓 AI 陪你把該注意的事一項一項看清楚，剩下的，交給真正的你去完成。</p>
+
+  <div class="action">
+    <div class="n">1</div>
+    <h4>拿到公告，先請 AI 幫你拆成待辦清單</h4>
+    <p>不要自己一個人盯著整份公告發慌，把公告內容丟給 AI，請它按「今天／明天／截止當天」分段列出待辦，你只要照著打勾。</p>
+  </div>
+  <div class="action">
+    <div class="n">2</div>
+    <h4>讓 AI 訪談你，別自己憋著寫自傳</h4>
+    <p>把「幫我寫自傳」換成「請你訪談我」，一句一句誠實回答動機和經驗，AI 負責把答案接成一篇讀得下去、對得上職缺的故事。</p>
+  </div>
+  <div class="action">
+    <div class="n">3</div>
+    <h4>送件前，請 AI 陪你逐條、逐項、逐欄核對一次</h4>
+    <p>資格條件、應備文件、表格欄位，三個層次都核對過一遍再寄出。紙本寄出沒有回頭路，核對這一步，永遠不嫌多。</p>
+  </div>
+
+  <div class="golden"><div class="q">AI 不是幫你寫一份假的你，是幫你把真的你講清楚。</div><div class="a">慢慢來，比較快</div></div>
+</section>
+
+</article>
+</div>
+
+<footer>
+  AI 陪跑求職：把真的你，講給公部門聽・Tarshar 教案集・2026<br>
+  🍀 Learn AI with Tarshar｜我不是工程師，我跟各位一樣是被工作追著跑的人，所以我只教明天就能用的東西
+</footer>
+
+</body>
+</html>

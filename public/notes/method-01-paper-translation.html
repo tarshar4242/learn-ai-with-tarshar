@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>用 AI 把一篇英文論文變成你的研讀包｜Tarshar 教案集</title>
+<meta name="description" content="Tarshar 教案集方法教案第一號：不是英文很好才能讀懂原文論文，是拆對三件事。記錄小D 用 AI 把一篇英文學術論文轉譯成研讀簡報、逐句中英對照、口語小抄三件套的完整做法，給零基礎研究生的方法教學">
+<style>
+:root{
+  --paper:#f4f0e8; --card:#fffdf7; --card2:#fbf8ef; --ink:#3a3528; --ink2:#766f61; --ink3:#8a8674;
+  --line:#d8d0bf; --accent:#5d8d56; --accent2:#8cbd7d;
+  --code:#fffdf7;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.9}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(244,240,232,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:10px 20px;display:flex;align-items:center;gap:14px}
+.topbar b{font-size:15px}
+.topbar .right{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.topbar a.btn{font-size:12.5px;text-decoration:none;border:1px solid var(--line);border-radius:9px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap}
+.topbar a.btn:hover{border-color:var(--accent);color:var(--accent)}
+.hero{max-width:900px;margin:0 auto;padding:52px 22px 10px;text-align:center}
+.hero .ep{display:inline-block;font-size:12.5px;letter-spacing:3px;color:var(--accent);border:1px solid var(--accent2);border-radius:999px;padding:5px 16px;background:#eef5e9;margin-bottom:18px}
+.hero h1{font-size:clamp(24px,4.4vw,40px);font-weight:900;line-height:1.4;color:var(--ink)}
+.hero .lead{margin-top:14px;font-size:14.5px;color:var(--ink2)}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:18px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+
+.showcase{max-width:900px;margin:26px auto 0;padding:0 22px}
+.showcase-box{background:linear-gradient(120deg,#eef5e9,#fbf8ef);border:1px solid var(--accent2);border-radius:18px;padding:24px 26px;text-align:center}
+.showcase-box .kicker{font-size:12.5px;color:var(--accent);font-weight:800;letter-spacing:1px;margin-bottom:8px}
+.showcase-box p{font-size:14px;color:var(--ink2);margin:6px 0 16px}
+.showcase-box a.cta{display:inline-flex;align-items:center;gap:8px;text-decoration:none;background:var(--accent);color:#fff;font-weight:800;font-size:14.5px;padding:12px 22px;border-radius:999px;box-shadow:0 6px 18px rgba(93,141,86,.28)}
+.showcase-box a.cta:hover{background:#4c7745}
+.showcase-box .url{margin-top:10px;font-size:12.5px;color:var(--ink3)}
+
+.layout{max-width:1120px;margin:30px auto 0;padding:0 22px;display:grid;grid-template-columns:236px 1fr;gap:34px;align-items:start}
+nav.toc{position:sticky;top:66px;border:1px solid var(--line);border-radius:14px;background:var(--card);padding:16px 14px;font-size:13.5px}
+nav.toc .t{font-size:12px;letter-spacing:2px;color:var(--ink3);margin-bottom:10px}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:8px;border-left:3px solid transparent}
+nav.toc a:hover{background:#eef5e9;color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:30px 32px;margin-bottom:26px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:2px;font-weight:700;color:#fff;border-radius:999px;padding:5px 14px;margin-bottom:12px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+h2.ct{font-size:22px;font-weight:900;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:16.5px;font-weight:800;margin:24px 0 10px;padding-left:12px;border-left:4px solid var(--accent2);color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink)}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 24px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"◆";position:absolute;left:4px;font-size:9px;top:12px;color:var(--accent2)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:8px;width:23px;height:23px;border-radius:7px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:800;display:grid;place-items:center}
+.codebox{background:var(--code);border:1px solid var(--line);border-left:4px solid var(--accent2);border-radius:10px;padding:14px 16px;font-family:"Cascadia Code",Consolas,monospace;font-size:12.6px;color:#3a3528;white-space:pre-wrap;line-height:1.8;margin:12px 0;overflow-x:auto}
+.note{display:flex;gap:10px;border-radius:12px;padding:14px 16px;font-size:14px;margin:14px 0;line-height:1.85}
+.note.green{background:#eef5e9;border:1px solid var(--accent2);color:var(--accent)}
+.note.gold{background:#fdf6e7;border:1px solid #eeddb4;color:#7a5b12}
+.golden{background:linear-gradient(120deg,#eef5e9,#fbf8ef);border:1px solid var(--accent2);border-radius:14px;padding:16px 20px;margin:16px 0;text-align:center}
+.golden .q{font-size:17px;font-weight:900;color:var(--accent)}
+.golden .a{font-size:12.5px;color:var(--ink3);margin-top:6px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+@media (max-width:560px){ .grid2{grid-template-columns:1fr} }
+.mini{border:1px solid var(--line);border-radius:14px;padding:14px 16px;background:#fff}
+.mini .n{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:8px;background:var(--accent2);color:#fff;font-weight:800;font-size:12.5px;margin-bottom:6px}
+.mini h5{font-size:14px;font-weight:800;margin-bottom:4px;color:var(--ink)}
+.mini p{font-size:12.8px;color:var(--ink2)}
+table.term{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px}
+table.term th{background:var(--accent);color:#fff;padding:8px 10px;text-align:left;font-size:12.5px}
+table.term td{padding:8px 10px;border-bottom:1px solid var(--line);color:var(--ink2)}
+table.term tr:nth-child(even) td{background:#fbf8ef}
+.stage{display:inline-block;font-weight:800;font-size:11.5px;color:#fff;background:var(--accent);border-radius:6px;padding:2px 9px;margin-right:7px;letter-spacing:1px;vertical-align:middle}
+.action{border:1px solid var(--accent2);border-radius:16px;padding:18px 20px;background:#fff;margin:14px 0}
+.action .n{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:10px;background:var(--accent);color:#fff;font-weight:900;font-size:15px;margin-bottom:8px}
+.action h4{font-size:15.5px;font-weight:800;color:var(--ink);margin-bottom:4px}
+.action p{font-size:13.5px}
+.backhome{position:fixed;left:14px;bottom:14px;z-index:9999;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;text-decoration:none;color:#fff;background:var(--accent);border:1px solid #4c7745;border-radius:999px;padding:9px 16px;box-shadow:0 4px 18px rgba(0,0,0,.18)}
+.backhome:hover{background:#4c7745}
+footer{max-width:1120px;margin:20px auto 0;padding:30px 22px 70px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:2}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} }
+@media print{ .topbar,nav.toc,.backhome{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../plans/" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📚 Tarshar 教案集</b>
+  <div class="right">
+    <a class="btn" href="../plans/">📚 教案集系列</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">Tarshar 教案集 · 方法教學 01</span>
+  <h1>用 AI 把一篇英文論文<br>變成你的研讀包</h1>
+  <p class="lead">這篇記錄的是我（小D）身為非工程師研究生，怎麼用 AI 把一篇英文學術論文，轉譯成<b>研讀簡報、逐句中英對照、口語小抄</b>三件套的完整做法。不是英文很好才能做這件事，是拆對步驟就能做這件事。</p>
+  <div class="meta">
+    <span>🎓 零程式基礎</span>
+    <span>📄 已跑過多篇文獻</span>
+    <span>🌐 GitHub Pages 公開展示</span>
+    <span>🗓️ 2026</span>
+  </div>
+</header>
+
+<div class="showcase">
+  <div class="showcase-box">
+    <div class="kicker">先看我做出來的東西</div>
+    <p>每一篇論文，我都用這套方法跑出一個資料夾：原文、研讀簡報、逐段中英對照，缺一不可。指導教授要看我讀了什麼，我不用再一篇一篇傳檔案，一個連結就夠。</p>
+    <a class="cta" href="https://tarshar4242.github.io/thesis-library/" target="_blank" rel="noopener">📖 打開我的論文研讀庫 →</a>
+    <div class="url">tarshar4242.github.io/thesis-library</div>
+  </div>
+</div>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#c1">1. 為什麼要做研讀包</a>
+  <a href="#c2">2. 三件套是什麼</a>
+  <a href="#c3">3. 怎麼派 AI 逐段翻譯</a>
+  <a href="#c4">4. 中英對照的排版邏輯</a>
+  <a href="#c5">5. 口語小抄：跟教授報告用</a>
+  <a href="#c6">6. 驗收：抽段比對、術語一致</a>
+  <a href="#c7">7. 你的三步驟行動建議</a>
+</nav>
+
+<article>
+
+<!-- 1 為什麼要做研讀包 -->
+<section class="chapter" id="c1">
+  <span class="chip">STEP 01</span>
+  <h2 class="ct">為什麼要做研讀包</h2>
+  <p class="cd">先有困擾，才有這套做法。</p>
+  <h3>發生什麼事</h3>
+  <p>我讀的每一篇英文論文，看完常常就只留在我腦子裡的一團印象。指導教授問我這篇在講什麼，我要嘛講不清楚，要嘛得整篇重翻一次才敢報告。更麻煩的是，論文一篇一篇讀，讀完的東西沒有留下能被檢查的痕跡，等於每次都在從零開始說服教授「我真的有讀」。</p>
+  <p>我把這個困擾攤開來看，發現我要的其實是三件事：讀得懂、記得住、講得出來。這三件事剛好對不上同一份文件，所以我沒有硬做一份「萬用摘要」，而是讓 AI 幫我一次做出三種不同用途的版本。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">論文讀完不是結束，是留下能被檢查的東西才算數。</div><div class="a">讀懂是給自己的，講得出來是給教授的</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 開始翻論文之前，先問自己一句：讀完這篇，我要拿它做什麼？是要交報告、要跟教授討論、還是要引用進論文。答案不一樣，AI 要幫你做的東西就不一樣，先想清楚用途，再開始動工。</div>
+</section>
+
+<!-- 2 三件套是什麼 -->
+<section class="chapter" id="c2">
+  <span class="chip">STEP 02</span>
+  <h2 class="ct">三件套是什麼：一篇論文，三種用法</h2>
+  <p class="cd">同一篇原文，拆成三份各司其職的文件。</p>
+  <h3>發生什麼事</h3>
+  <p>我請 AI 把一篇論文原文，一次跑出三份東西，各自對應不同場合：</p>
+  <div class="grid2">
+    <div class="mini"><span class="n">1</span><h5>研讀簡報</h5><p>給我自己複習用，也能直接拿去報告。核心主張、關鍵概念一頁一個，配原文金句</p></div>
+    <div class="mini"><span class="n">2</span><h5>逐段中英對照</h5><p>原文段落完整保留，緊跟一段中文翻譯。最扎實，出處查得到，引用不心虛</p></div>
+    <div class="mini"><span class="n">3</span><h5>口語小抄</h5><p>在對照版之上再萃取一層人話，標好「這段在說什麼」「跟教授怎麼講」，報告前十分鐘看一眼就上場</p></div>
+  </div>
+  <p>三份放進同一個資料夾，資料夾就是這篇論文的完整履歷：原文在，翻譯在，我讀懂了什麼也在。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">不是一份文件打天下，是一篇論文分三種身分用。</div><div class="a">複習、引用、報告，各自需要不一樣的長相</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 你不用一次全做齊。先從「逐段中英對照」開始，這是最基本也最扎實的一份，其他兩份是進階版，等你熟悉流程了再加上去。</div>
+</section>
+
+<!-- 3 怎麼派AI逐段翻譯 -->
+<section class="chapter" id="c3">
+  <span class="chip">STEP 03</span>
+  <h2 class="ct">怎麼派 AI 逐段翻譯：不是整篇丟過去</h2>
+  <p class="cd">翻譯的顆粒度，決定翻出來的東西能不能用。</p>
+  <h3>發生什麼事</h3>
+  <p>我一開始也想過，把整篇 PDF 丟給 AI，叫它「幫我翻譯」，最快。但這樣做出來的東西，常常是被壓縮過的摘要，作者原本的論證順序、鋪陳的方式全都不見了，我讀了等於沒讀到原文真正的樣子。</p>
+  <p>後來我改了一個規則，只跟 AI 說一句話：<b>原文每一個自然段，對應一段完整的中文翻譯，整段翻到位，不拆成一句一句翻，也不做摘要式翻譯。</b></p>
+  <div class="note gold">逐句翻：句子被拆散，讀起來零碎，看不出作者怎麼把論點鋪陳出來。<br>摘要式翻：省略掉的地方，很可能正是教授會問的細節。<br>逐段翻：段落是作者思考的完整單位，翻譯照這個單位走，論證的來龍去脈才留得住。</div>
+  <p>圖表也一樣講究位置。我請 AI 照原文 PDF 裡圖表實際印刷的位置放，不是文字第一次提到那張圖的地方就擺，因為學術論文的圖表常常是浮動排版，跟文字提及的段落可能隔了好幾段甚至跨頁。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">顆粒度不是翻譯的細節，是翻譯的成敗。</div><div class="a">段落是作者的思考單位，翻譯要跟著這個單位走</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 派 AI 翻論文時，把這句話原封不動貼給它：「原文每一個自然段，翻成一段完整的中文，不要拆成逐句，也不要幫我摘要濃縮」。這一句話，決定了你拿到的是能查證的翻譯，還是被壓縮過的二手資訊。</div>
+</section>
+
+<!-- 4 中英對照的排版邏輯 -->
+<section class="chapter" id="c4">
+  <span class="chip">STEP 04</span>
+  <h2 class="ct">中英對照的排版邏輯：眼睛要能一秒對上</h2>
+  <p class="cd">排版不是好看，是讓你查證原文的速度變快。</p>
+  <h3>發生什麼事</h3>
+  <p>對照版的排版邏輯很單純：英文原文段落完整保留，格式不動，緊接著一個帶顏色邊框的中文注釋框跟在後面，眼睛掃下去，英文原文跟我的翻譯永遠是同一組，不用翻頁去找對應的段落在哪裡。</p>
+  <p>另一件我學到的事，是<b>術語要前後一致</b>，同一個英文詞，全篇只能用同一種中文譯法，不能這頁音譯、下一頁又意譯，不然教授看到會覺得我自己都沒讀懂。像知識管理領域常見的幾個詞，我固定成這樣：</p>
+  <table class="term">
+    <tr><th>英文</th><th>固定中文譯法</th><th>不要混用成</th></tr>
+    <tr><td>Explicit Knowledge</td><td>顯性知識</td><td>外顯知識、明示知識</td></tr>
+    <tr><td>Tacit Knowledge</td><td>隱性知識</td><td>內隱知識、緘默知識</td></tr>
+    <tr><td>knowledge fragments</td><td>知識片段</td><td>知識碎片</td></tr>
+  </table>
+  <p>還有一個我一開始沒注意、後來被自己抓到的坑：原文如果用的是保守語氣（may、could、suggests 這類詞），中文絕對不能翻成肯定語氣，不然就是我把作者沒說死的話，講成他說死了。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">翻譯不是把英文變中文，是把作者的語氣一起搬過來。</div><div class="a">他說「或許」，我不能幫他翻成「一定」</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 拿到翻譯稿的第一件事，先做一個小表格，把這篇論文裡反覆出現的專有名詞列出來，固定一種中文譯法，貼給 AI 說「全篇統一用這個譯法」。這個表格會越用越熟，讀得越多篇，你的個人術語庫就越紮實。</div>
+</section>
+
+<!-- 5 口語小抄 -->
+<section class="chapter" id="c5">
+  <span class="chip">STEP 05</span>
+  <h2 class="ct">口語小抄：跟教授報告用</h2>
+  <p class="cd">看得懂和講得出來，是兩件不同的事。</p>
+  <h3>發生什麼事</h3>
+  <p>逐段中英對照做完，我以為就結束了，結果發現一個問題：我把翻譯讀了三遍，坐在教授面前要口頭報告，還是會卡住，因為書面翻譯是「寫給眼睛看」的，不是「講給耳朵聽」的。</p>
+  <p>所以我又多做了一層，在對照版的基礎上，請 AI 針對每個段落再萃取一次，標上兩個提示：<b>【這段在說什麼】</b>用一句大白話講重點，<b>【跟教授說的】</b>是我可以直接開口講的口語版本，不是書面語直接照念。</p>
+  <div class="note gold">書面翻譯：「本研究提出一個概念性架構，用以促進機構間的知識流通。」<br>口語小抄：「這篇的重點是，作者提出一套讓不同單位之間互相交流知識的方法。」</div>
+  <p>做完這一層，我上場報告前，不用再重讀整篇對照版，看一眼小抄上的提示，就能順著自己的話講下去，不是照稿念，是真的懂了才講得出來。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">看懂是我知道，講得出來才是教授知道。</div><div class="a">口語小抄是把「我懂了」翻譯給教授聽</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 對照版做完後，挑幾個你最沒把握口頭講清楚的段落，請 AI 幫你多做一層「這段在說什麼」加「用口語怎麼講」。不用整篇都做，先從報告時最容易被問倒的那幾段開始。</div>
+</section>
+
+<!-- 6 驗收 -->
+<section class="chapter" id="c6">
+  <span class="chip">STEP 06</span>
+  <h2 class="ct">驗收：抽段比對、術語一致</h2>
+  <p class="cd">AI 做的東西，不能自己做自己驗。</p>
+  <h3>發生什麼事</h3>
+  <p>翻譯拿到手，我不會整篇通讀一次去挑錯，太花時間，我用的是抽查法：隨機挑三段，回頭對照原文，一句一句核對有沒有漏翻、有沒有翻錯方向。這三段抽得到問題，代表整篇可能都有同樣的問題，抽不到，我對這份翻譯的信任度就夠了。</p>
+  <p>抽查的時候，我固定看三件事：</p>
+  <ul class="pt">
+    <li>有沒有漏段：原文一段，翻譯是不是也對應一段，沒有被跳過</li>
+    <li>術語前後是否一致：像 SECI 這種縮寫或專有名詞，不能一下音譯一下意譯</li>
+    <li>語氣有沒有被翻重了：作者的「或許」、「可能」，中文裡是不是還留著保守的味道</li>
+  </ul>
+  <p>格式也要核對得起：全形標點統一、不要簡體字混進來、中文翻譯裡不用破折號。這些是小細節，但教授一眼就看得出你的稿子有沒有仔細校過。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">抽查不是不信任 AI，是我要為交出去的東西負責。</div><div class="a">三段抽查，比整篇通讀更抓得到問題</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 每次拿到 AI 翻的稿子，固定做這件事：隨機翻開三段，對照原文逐句核對，把你發現的問題直接標出來丟回去給 AI 改，改完再抽查一次。這個習慣，比校對整篇更省時間，也更抓得到真正的問題。</div>
+</section>
+
+<!-- 7 行動建議 -->
+<section class="chapter" id="c7">
+  <span class="chip">TAKE ACTION</span>
+  <h2 class="ct">給你的三步驟行動建議：下一篇論文就能開始</h2>
+  <p class="cd">這套做法不是只能用在我自己的論文上。你手上正在讀的那篇英文文獻，明天就能照這套流程跑一次。</p>
+
+  <div class="action">
+    <div class="n">1</div>
+    <h4>先做一份逐段中英對照，不要一開始就求三件套齊全</h4>
+    <p>把你要讀的英文論文交給 AI，貼上第三章那句話：「原文每一個自然段，翻成一段完整的中文，不要拆成逐句，也不要幫我摘要濃縮」。先把這一份做扎實。</p>
+  </div>
+  <div class="action">
+    <div class="n">2</div>
+    <h4>整理一份你自己的術語對照表</h4>
+    <p>把這篇論文裡反覆出現的專有名詞列出來，固定一種中文譯法，貼給 AI 說「全篇統一用這個譯法」。這份表格會跟著你讀的論文越滾越大。</p>
+  </div>
+  <div class="action">
+    <div class="n">3</div>
+    <h4>抽三段回頭比對原文，抓到問題就丟回去改</h4>
+    <p>翻譯拿到手先別急著用，隨機挑三段核對，確認沒有漏段、術語一致、語氣沒被翻重了，抽查通過了再放心拿去報告或引用。</p>
+  </div>
+
+  <div class="golden"><div class="q">你不需要英文很好，你需要的是拆對步驟。</div><div class="a">慢慢來，比較快</div></div>
+</section>
+
+</article>
+</div>
+
+<footer>
+  用 AI 把一篇英文論文變成你的研讀包・Tarshar 教案集・2026<br>
+  🍀 Learn AI with Tarshar｜我不是工程師，我跟各位一樣是被工作追著跑的人，所以我只教明天就能用的東西
+</footer>
+
+</body>
+</html>

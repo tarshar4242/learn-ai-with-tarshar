@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>幫自己請一個 AI 數位員工，甚至一整支團隊｜Tarshar 教案集</title>
+<meta name="description" content="Tarshar 教案集：不是多請一個人，是把你的做法寫成一個人。記錄小D 打造 AI 數位員工的完整做法，從定義角色、交辦任務、自動循環到驗證交付，附兩個真實案例：一位自動整理直播資料的數位員工，和一支一位總管帶四位專員的 AI 行銷團隊。">
+<style>
+:root{
+  --paper:#f4f0e8; --card:#fffdf7; --card2:#fbf8ef; --ink:#3a3528; --ink2:#766f61; --ink3:#8a8674;
+  --line:#d8d0bf; --accent:#5d8d56; --accent2:#8cbd7d;
+  --code:#fffdf7;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.9}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(244,240,232,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:10px 20px;display:flex;align-items:center;gap:14px}
+.topbar b{font-size:15px}
+.topbar .right{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.topbar a.btn{font-size:12.5px;text-decoration:none;border:1px solid var(--line);border-radius:9px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap}
+.topbar a.btn:hover{border-color:var(--accent);color:var(--accent)}
+.hero{max-width:900px;margin:0 auto;padding:52px 22px 10px;text-align:center}
+.hero .ep{display:inline-block;font-size:12.5px;letter-spacing:3px;color:var(--accent);border:1px solid var(--accent2);border-radius:999px;padding:5px 16px;background:#eef5e9;margin-bottom:18px}
+.hero h1{font-size:clamp(24px,4.4vw,40px);font-weight:900;line-height:1.4;color:var(--ink)}
+.hero .lead{margin-top:14px;font-size:14.5px;color:var(--ink2)}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:18px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+
+.showcase{max-width:900px;margin:26px auto 0;padding:0 22px}
+.showcase-box{background:linear-gradient(120deg,#eef5e9,#fbf8ef);border:1px solid var(--accent2);border-radius:18px;padding:24px 26px;text-align:center}
+.showcase-box .kicker{font-size:12.5px;color:var(--accent);font-weight:800;letter-spacing:1px;margin-bottom:8px}
+.showcase-box p{font-size:14px;color:var(--ink2);margin:6px 0 16px}
+
+.layout{max-width:1120px;margin:30px auto 0;padding:0 22px;display:grid;grid-template-columns:236px 1fr;gap:34px;align-items:start}
+nav.toc{position:sticky;top:66px;border:1px solid var(--line);border-radius:14px;background:var(--card);padding:16px 14px;font-size:13.5px}
+nav.toc .t{font-size:12px;letter-spacing:2px;color:var(--ink3);margin-bottom:10px}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:8px;border-left:3px solid transparent}
+nav.toc a:hover{background:#eef5e9;color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:30px 32px;margin-bottom:26px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:2px;font-weight:700;color:#fff;border-radius:999px;padding:5px 14px;margin-bottom:12px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+h2.ct{font-size:22px;font-weight:900;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:16.5px;font-weight:800;margin:24px 0 10px;padding-left:12px;border-left:4px solid var(--accent2);color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink)}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 24px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"◆";position:absolute;left:4px;font-size:9px;top:12px;color:var(--accent2)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:8px;width:23px;height:23px;border-radius:7px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:800;display:grid;place-items:center}
+.codebox{background:var(--code);border:1px solid var(--line);border-left:4px solid var(--accent2);border-radius:10px;padding:14px 16px;font-family:"Cascadia Code",Consolas,monospace;font-size:12.6px;color:#3a3528;white-space:pre-wrap;line-height:1.8;margin:12px 0;overflow-x:auto}
+.note{display:flex;gap:10px;border-radius:12px;padding:14px 16px;font-size:14px;margin:14px 0;line-height:1.85}
+.note.green{background:#eef5e9;border:1px solid var(--accent2);color:var(--accent)}
+.note.gold{background:#fdf6e7;border:1px solid #eeddb4;color:#7a5b12}
+.golden{background:linear-gradient(120deg,#eef5e9,#fbf8ef);border:1px solid var(--accent2);border-radius:14px;padding:16px 20px;margin:16px 0;text-align:center}
+.golden .q{font-size:17px;font-weight:900;color:var(--accent)}
+.golden .a{font-size:12.5px;color:var(--ink3);margin-top:6px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:14px 0}
+@media (max-width:560px){ .grid2{grid-template-columns:1fr} .grid3{grid-template-columns:1fr} }
+.mini{border:1px solid var(--line);border-radius:14px;padding:14px 16px;background:#fff}
+.mini .n{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:8px;background:var(--accent2);color:#fff;font-weight:800;font-size:12.5px;margin-bottom:6px}
+.mini h5{font-size:14px;font-weight:800;margin-bottom:4px;color:var(--ink)}
+.mini p{font-size:12.8px;color:var(--ink2)}
+.stage{display:inline-block;font-weight:800;font-size:11.5px;color:#fff;background:var(--accent);border-radius:6px;padding:2px 9px;margin-right:7px;letter-spacing:1px;vertical-align:middle}
+.action{border:1px solid var(--accent2);border-radius:16px;padding:18px 20px;background:#fff;margin:14px 0}
+.action .n{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:10px;background:var(--accent);color:#fff;font-weight:900;font-size:15px;margin-bottom:8px}
+.action h4{font-size:15.5px;font-weight:800;color:var(--ink);margin-bottom:4px}
+.action p{font-size:13.5px}
+.caselabel{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:800;color:var(--accent);background:#eef5e9;border:1px solid var(--accent2);border-radius:999px;padding:4px 12px;margin:8px 0 4px}
+.backhome{position:fixed;left:14px;bottom:14px;z-index:9999;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;text-decoration:none;color:#fff;background:var(--accent);border:1px solid #4c7745;border-radius:999px;padding:9px 16px;box-shadow:0 4px 18px rgba(0,0,0,.18)}
+.backhome:hover{background:#4c7745}
+footer{max-width:1120px;margin:20px auto 0;padding:30px 22px 70px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:2}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} }
+@media print{ .topbar,nav.toc,.backhome{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../plans/" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📚 Tarshar 教案集</b>
+  <div class="right">
+    <a class="btn" href="../plans/">📚 教案集系列</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">Tarshar 教案集 · 方法教學 12</span>
+  <h1>幫自己請一個 AI 數位員工，<br>甚至一整支團隊</h1>
+  <p class="lead">不是多請一個人，是把你的做法寫成一個人。這篇記錄我（小D）怎麼把「反覆在做的事」變成一個有職務、有規則、會自動回報的 AI 數位員工，從定義角色、交辦任務、讓它自動循環，到驗證交付，最後怎麼從一位員工擴編成一支團隊。</p>
+  <div class="meta">
+    <span>🙋‍♀️ 非工程師也能做</span>
+    <span>🧾 職務說明書思維</span>
+    <span>🔁 自動循環 + 驗證交付</span>
+    <span>🗓️ 2026</span>
+  </div>
+</header>
+
+<div class="showcase">
+  <div class="showcase-box">
+    <div class="kicker">兩個真實案例，貫穿這篇</div>
+    <p>案例一：一位自動幫我整理直播資料的數位員工，從「我每次都要自己搬檔案」修到「它自己完成整個循環」。<br>案例二：一支 AI 行銷團隊，一位總管接單、判斷、交辦，四位專員各自帶著自己的職務說明書上工。</p>
+  </div>
+</div>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#c1">1. 什麼是數位員工</a>
+  <a href="#c2">2. 先寫職務說明書</a>
+  <a href="#c3">3. 怎麼交辦任務</a>
+  <a href="#c4">4. 讓它自動循環</a>
+  <a href="#c5">5. 驗證交付</a>
+  <a href="#c6">6. 從一個人到一支團隊</a>
+  <a href="#c7">7. 你的三步驟行動建議</a>
+</nav>
+
+<article>
+
+<!-- 1 什麼是數位員工 -->
+<section class="chapter" id="c1">
+  <span class="chip">STEP 01</span>
+  <h2 class="ct">什麼是數位員工：不是聊天機器人，是有職務說明書的 AI</h2>
+  <p class="cd">先分清楚，你要的不是「一個很會回答的工具」，是「一個知道自己該做什麼的人」。</p>
+  <h3>發生什麼事</h3>
+  <p>我一開始也是把 AI 當工具用：丟一句話，它回一段文字，用完就關掉，下次再重新交代一次。後來我發現真正省力的不是「問得更聰明」，而是幫它寫一份職務說明書，讓它自己知道：它是誰、歸誰管、看到什麼就該開工、做到什麼程度算完成。寫完這份說明書之後，它就不再是每次從零開始的聊天視窗，而是一位有記憶、有邊界、會自動接手的數位員工。</p>
+  <p>我後來真的這樣做出了兩個東西：一位專門幫我整理直播資料的數位員工，還有一支由一位總管帶著四位專員的 AI 行銷團隊。這篇教案就是把這兩個真實案例拆開，變成你也能照著做的方法。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">工具是你每次拿起來用的東西，員工是你交辦一次、它自己會做完的人。</div><div class="a">差別不在 AI 多聰明，在你有沒有幫它寫清楚職務</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 下次想「叫 AI 做一件反覆在做的事」之前，先別急著下指令，改成問自己一句話：「如果這是我要請的一個人，他的職稱是什麼？」想得出職稱，這件事就適合變成數位員工。</div>
+</section>
+
+<!-- 2 先寫職務說明書 -->
+<section class="chapter" id="c2">
+  <span class="chip">STEP 02</span>
+  <h2 class="ct">先定義員工，不是先丟工具：寫一份職務說明書</h2>
+  <p class="cd">四件事寫清楚，AI 才知道自己是誰：職務、老闆、啟動方式、工作目標。</p>
+  <h3>發生什麼事</h3>
+  <p>我第一次養成的數位員工，職務是幫我整理每一集直播節目的資料：公告一貼出來，它要辨識集數、日期、來源連結，把簡報、錄影、補充資料分類歸檔，再更新一份總表。我沒有直接丟給它「幫我整理資料」這句話，而是先寫清楚四件事：</p>
+  <div class="grid2">
+    <div class="mini"><span class="n">1</span><h5>職務是什麼</h5><p>資料管理員，不是萬能助理。範圍越窄，它越不會做錯事。</p></div>
+    <div class="mini"><span class="n">2</span><h5>老闆是誰</h5><p>誰的話它要聽、誰拍板的決定它不能自己改。</p></div>
+    <div class="mini"><span class="n">3</span><h5>怎麼啟動</h5><p>看到什麼訊號就該開工，例如「我貼上一則公告或雲端連結」。</p></div>
+    <div class="mini"><span class="n">4</span><h5>工作目標</h5><p>用一句話講完成的樣子：整理正確、保留完整、總表最新。</p></div>
+  </div>
+  <p>光有職務還不夠，還要有邊界，不然它會「太積極」地幫倒忙。我給它三條它自己要遵守的規矩：不亂建（先查有沒有同名資料夾）、不亂搬（先比對再補檔，不重複複製）、不亂刪（目的端的舊檔任何情況都不刪）。</p>
+  <h3>這份說明書不是一次寫完的</h3>
+  <p>我原本以為職務寫好、邊界寫好就結束了，結果實際用起來才發現，它是一輪一輪修出來的，不是一次教會的：</p>
+  <ol class="st">
+    <li>第一次：收到連結就直接複製 → 修正成「先查同名資料夾」</li>
+    <li>第二次：看到來源就全部搬 → 修正成「逐層比對，只補新增」</li>
+    <li>第三次：來源少了就跟著刪 → 修正成「目的端舊檔永遠保留」</li>
+    <li>第四次：整理完就說完成 → 修正成「更新總表，再回讀驗證」</li>
+  </ol>
+  <p>四輪修正之後，我歸納出六個字：先查、再比、只補、不刪、更新、驗證。這六個字後來變成我寫給任何一位數位員工的通用邊界。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">培養一位數位員工，就像帶一個新人：要示範怎麼做、糾正錯在哪、設清楚邊界、訂驗收標準。</div><div class="a">它不是一次到位，是被你一次次修正養出來的</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 寫職務說明書時，先寫「它擁有的工作權責」（可以做的三件事），再寫「它遵守的邊界」（不能做的三件事）。權責和邊界一樣重要，少了邊界，越聰明的 AI 越容易幫你捅婁子。</div>
+</section>
+
+<!-- 3 怎麼交辦任務 -->
+<section class="chapter" id="c3">
+  <span class="chip">STEP 03</span>
+  <h2 class="ct">一則公告，就是它的工作單：怎麼交辦任務</h2>
+  <p class="cd">輸入清楚，數位員工才能自動開工。好的交辦，是把模糊訊息變成結構化工作單。</p>
+  <h3>發生什麼事</h3>
+  <p>職務說明書寫好之後，日常怎麼交辦才是關鍵。我不會每次都重講一次規則，我只丟給它「這次要處理的東西」，讓它自己套用職務說明書去解析：</p>
+  <ul class="pt">
+    <li>集數與課程名稱是什麼</li>
+    <li>日期、時間、課程類型</li>
+    <li>雲端來源連結</li>
+    <li>直播或錄影狀態</li>
+    <li>特殊備註（例如只有影片、還沒有簡報）</li>
+  </ul>
+  <p>它收到這些之後會自己走一遍解析流程：讀公告 → 抓欄位 → 統一名稱 → 確認來源 → 建立任務清單。開工前還有一份檢查清單自己過一遍：來源能不能打開、目的資料夾對不對、同名資料夾有沒有先搜尋過、重複公告有沒有去重。</p>
+  <h3>交辦一支團隊，格式也一樣</h3>
+  <p>我後來把同一套邏輯用在管理整支 AI 行銷團隊上。當我把任務交給某位專員之前，我不會只說一句「這個你處理一下」，而是講清楚四件事，像在一場真的團隊會議上分工：</p>
+  <div class="codebox">交給你這個任務：
+- 整體目標：這次要達成什麼
+- 背景重點：關鍵資訊、限制、已經知道的事
+- 你要產出：具體的交付物
+- 團隊配合：其他人等等會做什麼（如果有）</div>
+  <p>把這四件事講清楚，接手的一方（不管是一位數位員工還是一位專員）才不用回頭問我「你到底要什麼」，可以直接開工。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">先把模糊訊息變成結構化工作單，是自動化的第一步。</div><div class="a">你花時間講清楚一次，它之後每次都不用你再教</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 下次交辦任務前，先把「目標、背景、要產出什麼、有沒有其他人配合」四件事寫成一小段，貼給 AI，再讓它開工。多花一分鐘寫清楚，比事後改十次划算。</div>
+</section>
+
+<!-- 4 讓它自動循環 -->
+<section class="chapter" id="c4">
+  <span class="chip">STEP 04</span>
+  <h2 class="ct">只補新增，舊檔永遠保留：讓它自動完成整個循環</h2>
+  <p class="cd">自動化最怕的不是它不做事，是它做過頭。核心規則只有一句：新增就補、減少不刪、完成必回讀。</p>
+  <h3>發生什麼事</h3>
+  <p>現在我只要貼上一則公告，數位員工會自己走完整個循環，不用我每一步盯著：</p>
+  <div class="grid3">
+    <div class="mini"><span class="n">1</span><h5>收到公告</h5><p>辨識課程，搜尋資料夾</p></div>
+    <div class="mini"><span class="n">2</span><h5>逐層比對</h5><p>比對檔名、類型、大小、子資料夾</p></div>
+    <div class="mini"><span class="n">3</span><h5>增量補檔</h5><p>只補來源有、目的端沒有的內容</p></div>
+  </div>
+  <div class="grid3">
+    <div class="mini"><span class="n">4</span><h5>保留舊檔</h5><p>目的端獨有的內容完整保留，不刪除</p></div>
+    <div class="mini"><span class="n">5</span><h5>更新總表</h5><p>把最新狀態寫回總表，不留舊資訊</p></div>
+    <div class="mini"><span class="n">6</span><h5>回讀回報</h5><p>做完再看一次，主動告訴我結果</p></div>
+  </div>
+  <p>比對後的行動規則我寫得很白話：來源新增的，複製進目的端；兩邊都有的，不重複複製；目的端獨有的，完整保留不刪；來源減少的，目的端不動；暫存檔或系統產生的雜檔，一律排除不同步。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">它不只是自動，更是可靠：有判斷、有邊界、有驗收。</div><div class="a">自動化省的不是「做的力氣」，是「每次重新交代」的力氣</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 想讓任何重複性工作自動循環，先問自己：如果它做錯了，最壞的情況是什麼？把「絕對不能做的事」（通常是刪除、覆蓋、清空）寫成鐵律，比教它「怎麼把事情做對」更重要。</div>
+</section>
+
+<!-- 5 驗證交付 -->
+<section class="chapter" id="c5">
+  <span class="chip">STEP 05</span>
+  <h2 class="ct">做完不算完成，驗證才算交付</h2>
+  <p class="cd">數位員工必須更新總表、回讀資料、主動回報。做的人不驗自己做的東西，這條規則對 AI 一樣成立。</p>
+  <h3>發生什麼事</h3>
+  <p>我一開始踩過的坑，是它「整理完就說完成」，但我沒有再檢查，結果總表其實沒更新、漏掉的檔案也沒被發現。後來我把驗證循環直接寫進它的職務裡，變成五個步驟：列出目的資料夾 → 核對檔案數量 → 確認錄影與簡報 → 更新總表 → 再次回讀。這五步跑完才算一輪，不是搬完檔案就結束。</p>
+  <p>回報格式我也固定下來，讓它每次做完都用同一套語言告訴我結果：已新增的清單、原本已有的清單、仍缺少的清單、重複資料夾的清單、還在等待來源的項目。我不用再一格一格自己對，它把結果攤開給我看。</p>
+  <h3>成果怎麼算數</h3>
+  <p>我用四個指標判斷這位數位員工是不是真的在幫我：節省人工整理時間、降低漏檔與錯放、總表隨時保持最新、案例可以被追蹤也可以被拿去教下一個人。前面三個是效率，最後一個是它變成資產，不只是幫我做完一次事，是幫我留下一套可以複製的方法。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">今天完成的不是一次搬檔，而是一位可以持續交付、被信任的數位員工。</div><div class="a">判斷標準 + 工作邊界 + 驗收方式，三個合起來才叫可信任</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 不管是叫 AI 做事還是叫真人做事，都不要自己驗自己做的東西。幫每一項交辦任務加一句「做完之後，你要怎麼證明自己做對了」，讓它自己講出驗收方式，而不是你事後才發現漏東西。</div>
+</section>
+
+<!-- 6 從一個人到一支團隊 -->
+<section class="chapter" id="c6">
+  <span class="chip">STEP 06</span>
+  <h2 class="ct">從一個人到一支團隊：一位總管，分工協作</h2>
+  <p class="cd">養成一位數位員工的方法會重複用。真正放大效益的時候，是你把同一套方法用出第二位、第三位。</p>
+  <h3>發生什麼事</h3>
+  <p>整理直播資料的數位員工上手之後，我把同一套「職務說明書＋交辦＋自動循環＋驗證」的方法，用在經營我的品牌行銷上，變成一支小團隊：一位營運長負責接單，底下有社群小編、設計總監、SEO 策略師、廣告投放手四位專員，各自有自己的職務範圍。</p>
+  <p>這支團隊怎麼運作，其實跟前面五章講的方法完全一樣，只是多了一層「先判斷該誰做」：</p>
+  <ol class="st">
+    <li>我把任務丟給營運長，不管是寫貼文、做廣告、找關鍵字，全部先進她這一關</li>
+    <li>營運長判斷這件事屬於誰的職務範圍，決定該叫誰</li>
+    <li>當著我的面把任務交辦清楚（目標、背景、要產出什麼、其他人怎麼配合），不是默默把工作丟出去</li>
+    <li>對應的專員接手，用自己的職務說明書、自己的語氣執行，做出東西</li>
+    <li>任務做完，營運長回到台前收尾：整理各專員完成了什麼、跨角色該注意的事、建議下一步是什麼</li>
+  </ol>
+  <p>每位專員也各自有自己的邊界：社群小編不做廣告投放的判斷，廣告投放手不擅自改文案語氣，設計總監的視覺方向要對齊品牌調性。邊界分清楚，任務才不會互相打架，我也才知道出錯的時候該找誰。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">你不是在管一群工具，是在管一支有分工、有邊界、會互相配合的團隊。</div><div class="a">一位總管接單分派，比你自己一個人記得所有事更輕鬆</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 想擴編數位員工，不用一次做齊全部，先把你原本最常做、最花時間的那件事養成第一位員工，方法跑順了，再照同一套流程養第二位、第三位，慢慢就會長成一支團隊。</div>
+</section>
+
+<!-- 7 行動建議 -->
+<section class="chapter" id="c7">
+  <span class="chip">TAKE ACTION</span>
+  <h2 class="ct">給你的三步驟行動建議：明天就能開始</h2>
+  <p class="cd">這篇記錄的不是一個炫技的自動化系統，是我把「反覆在做、最花時間」的事，一件一件寫成職務說明書的過程。你也可以，從明天開始。</p>
+
+  <div class="action">
+    <div class="n">1</div>
+    <h4>挑一件你最常重複做的事，幫它寫職務說明書</h4>
+    <p>寫清楚四件事：它是誰、歸誰管、看到什麼就該開工、做到什麼程度算完成。再補上三條它絕對不能做的事（通常跟刪除、覆蓋有關）。</p>
+  </div>
+  <div class="action">
+    <div class="n">2</div>
+    <h4>交辦時把工作單寫清楚，不要只丟一句話</h4>
+    <p>目標、背景、要產出什麼、有沒有其他人配合，四件事講清楚，它才能自己開工，不用回頭問你。</p>
+  </div>
+  <div class="action">
+    <div class="n">3</div>
+    <h4>做完之後，一定要驗證再收工</h4>
+    <p>讓它自己講出「怎麼證明做對了」，回讀一次、回報一次，你才確認可以放心把下一次也交給它。</p>
+  </div>
+
+  <div class="golden"><div class="q">不是多請一個人，是把你的做法寫成一個人。</div><div class="a">慢慢來，比較快</div></div>
+</section>
+
+</article>
+</div>
+
+<footer>
+  幫自己請一個 AI 數位員工，甚至一整支團隊・Tarshar 教案集・2026<br>
+  🍀 Learn AI with Tarshar｜我不是工程師，我跟各位一樣是被工作追著跑的人，所以我只教明天就能用的東西
+</footer>
+
+</body>
+</html>

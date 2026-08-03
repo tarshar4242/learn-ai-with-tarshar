@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>我用 AI 幫實體工作坊蓋了一個線上導覽台，還做了一個總站串起所有專案｜Tarshar 教案集</title>
+<meta name="description" content="Tarshar 教案集：不會寫程式，也能用 AI 幫實體課蓋一個線上導覽台，再用總站把所有專案串起來。記錄小D 幫機關工作坊做導覽站、以及總站加子站架構的完整做法，給零基礎學員的方法教學">
+<style>
+:root{
+  --paper:#f4f0e8; --card:#fffdf7; --card2:#fbf8ef; --ink:#3a3528; --ink2:#766f61; --ink3:#8a8674;
+  --line:#d8d0bf; --accent:#5d8d56; --accent2:#8cbd7d;
+  --code:#fffdf7;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.9}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(244,240,232,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:10px 20px;display:flex;align-items:center;gap:14px}
+.topbar b{font-size:15px}
+.topbar .right{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.topbar a.btn{font-size:12.5px;text-decoration:none;border:1px solid var(--line);border-radius:9px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap}
+.topbar a.btn:hover{border-color:var(--accent);color:var(--accent)}
+.hero{max-width:900px;margin:0 auto;padding:52px 22px 10px;text-align:center}
+.hero .ep{display:inline-block;font-size:12.5px;letter-spacing:3px;color:var(--accent);border:1px solid var(--accent2);border-radius:999px;padding:5px 16px;background:#eef5e9;margin-bottom:18px}
+.hero h1{font-size:clamp(24px,4.4vw,40px);font-weight:900;line-height:1.4;color:var(--ink)}
+.hero .lead{margin-top:14px;font-size:14.5px;color:var(--ink2)}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:18px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+
+.showcase{max-width:900px;margin:26px auto 0;padding:0 22px}
+.showcase-box{background:linear-gradient(120deg,#eef5e9,#fbf8ef);border:1px solid var(--accent2);border-radius:18px;padding:24px 26px;text-align:center}
+.showcase-box .kicker{font-size:12.5px;color:var(--accent);font-weight:800;letter-spacing:1px;margin-bottom:8px}
+.showcase-box p{font-size:14px;color:var(--ink2);margin:6px 0 16px}
+.showcase-box .ctarow{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.showcase-box a.cta{display:inline-flex;align-items:center;gap:8px;text-decoration:none;background:var(--accent);color:#fff;font-weight:800;font-size:14.5px;padding:12px 22px;border-radius:999px;box-shadow:0 6px 18px rgba(93,141,86,.28)}
+.showcase-box a.cta:hover{background:#4c7745}
+.showcase-box a.cta.alt{background:#fff;color:var(--accent);border:1px solid var(--accent2);box-shadow:none}
+.showcase-box a.cta.alt:hover{background:#eef5e9}
+.showcase-box .url{margin-top:10px;font-size:12.5px;color:var(--ink3)}
+
+.layout{max-width:1120px;margin:30px auto 0;padding:0 22px;display:grid;grid-template-columns:236px 1fr;gap:34px;align-items:start}
+nav.toc{position:sticky;top:66px;border:1px solid var(--line);border-radius:14px;background:var(--card);padding:16px 14px;font-size:13.5px}
+nav.toc .t{font-size:12px;letter-spacing:2px;color:var(--ink3);margin-bottom:10px}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:8px;border-left:3px solid transparent}
+nav.toc a:hover{background:#eef5e9;color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:30px 32px;margin-bottom:26px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:2px;font-weight:700;color:#fff;border-radius:999px;padding:5px 14px;margin-bottom:12px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+h2.ct{font-size:22px;font-weight:900;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:16.5px;font-weight:800;margin:24px 0 10px;padding-left:12px;border-left:4px solid var(--accent2);color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink)}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 24px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"◆";position:absolute;left:4px;font-size:9px;top:12px;color:var(--accent2)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:8px;width:23px;height:23px;border-radius:7px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:800;display:grid;place-items:center}
+.codebox{background:var(--code);border:1px solid var(--line);border-left:4px solid var(--accent2);border-radius:10px;padding:14px 16px;font-family:"Cascadia Code",Consolas,monospace;font-size:12.6px;color:#3a3528;white-space:pre-wrap;line-height:1.8;margin:12px 0;overflow-x:auto}
+.note{display:flex;gap:10px;border-radius:12px;padding:14px 16px;font-size:14px;margin:14px 0;line-height:1.85}
+.note.green{background:#eef5e9;border:1px solid var(--accent2);color:var(--accent)}
+.note.gold{background:#fdf6e7;border:1px solid #eeddb4;color:#7a5b12}
+.golden{background:linear-gradient(120deg,#eef5e9,#fbf8ef);border:1px solid var(--accent2);border-radius:14px;padding:16px 20px;margin:16px 0;text-align:center}
+.golden .q{font-size:17px;font-weight:900;color:var(--accent)}
+.golden .a{font-size:12.5px;color:var(--ink3);margin-top:6px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+@media (max-width:560px){ .grid2{grid-template-columns:1fr} }
+.mini{border:1px solid var(--line);border-radius:14px;padding:14px 16px;background:#fff}
+.mini .n{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:8px;background:var(--accent2);color:#fff;font-weight:800;font-size:12.5px;margin-bottom:6px}
+.mini h5{font-size:14px;font-weight:800;margin-bottom:4px;color:var(--ink)}
+.mini p{font-size:12.8px;color:var(--ink2)}
+.stage{display:inline-block;font-weight:800;font-size:11.5px;color:#fff;background:var(--accent);border-radius:6px;padding:2px 9px;margin-right:7px;letter-spacing:1px;vertical-align:middle}
+.action{border:1px solid var(--accent2);border-radius:16px;padding:18px 20px;background:#fff;margin:14px 0}
+.action .n{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:10px;background:var(--accent);color:#fff;font-weight:900;font-size:15px;margin-bottom:8px}
+.action h4{font-size:15.5px;font-weight:800;color:var(--ink);margin-bottom:4px}
+.action p{font-size:13.5px}
+.backhome{position:fixed;left:14px;bottom:14px;z-index:9999;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;text-decoration:none;color:#fff;background:var(--accent);border:1px solid #4c7745;border-radius:999px;padding:9px 16px;box-shadow:0 4px 18px rgba(0,0,0,.18)}
+.backhome:hover{background:#4c7745}
+footer{max-width:1120px;margin:20px auto 0;padding:30px 22px 70px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:2}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} }
+@media print{ .topbar,nav.toc,.backhome{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<a href="../plans/" class="backhome" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+
+<div class="topbar">
+  <b>📚 Tarshar 教案集</b>
+  <div class="right">
+    <a class="btn" href="../plans/">📚 教案集系列</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">Tarshar 教案集 · 方法教學 #7</span>
+  <h1>幫一場實體工作坊<br>蓋一個線上導覽台</h1>
+  <p class="lead">這篇記錄的是兩層做法。第一層：幫一場<b>實體課程</b>蓋一個<b>線上導覽台</b>，學員掃 QR code 就能跟著走，回家還找得到。第二層：<b>總站＋平行子站</b>的架構，每個專案自己一個網站，總站只負責收人進來，之後做新東西掛上去就好。我一樣不會寫程式，一樣是跟 AI 一句話一句話講出來的。</p>
+  <div class="meta">
+    <span>🎓 零程式基礎</span>
+    <span>🏛️ 機關工作坊實例</span>
+    <span>🌐 總站＋子站架構</span>
+    <span>🗓️ 2026</span>
+  </div>
+</header>
+
+<div class="showcase">
+  <div class="showcase-box">
+    <div class="kicker">先看我蓋出來的東西</div>
+    <p>下面兩個都是真的在線上跑的網站。一個是我幫一場機關工作坊做的導覽台，一個是把我所有專案收在一起的總站。</p>
+    <div class="ctarow">
+      <a class="cta" href="https://tarshar4242.github.io/ai-kaiji-luzhou/" target="_blank" rel="noopener">🖥 打開機關工作坊導覽台 →</a>
+      <a class="cta alt" href="https://tarshar4242.github.io/tarshar-2026/" target="_blank" rel="noopener">📚 打開我的總站 →</a>
+    </div>
+    <div class="url">tarshar4242.github.io/ai-kaiji-luzhou｜tarshar4242.github.io/tarshar-2026</div>
+  </div>
+</div>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#c1">1. 為什麼實體課需要導覽台</a>
+  <a href="#c2">2. 導覽台裡放什麼</a>
+  <a href="#c3">3. 怎麼請 AI 蓋出來</a>
+  <a href="#c4">4. 總站與子站的分工</a>
+  <a href="#c5">5. 新專案怎麼掛上去</a>
+  <a href="#c6">6. 維護與更新</a>
+  <a href="#c7">7. 你的三步驟行動建議</a>
+</nav>
+
+<article>
+
+<!-- 1 為什麼需要導覽台 -->
+<section class="chapter" id="c1">
+  <span class="chip">STEP 01</span>
+  <h2 class="ct">為什麼實體課需要一個線上導覽台</h2>
+  <p class="cd">學員回家就忘，講義會丟，但網址不會。</p>
+  <h3>發生什麼事</h3>
+  <p>我幫一場機關的工作坊上課，兩小時，現場氣氛很好，大家都點頭說懂了。可是我很清楚，兩小時能留下來的東西很少。紙本講義下班前就會被壓到公文底下，隔天大概找不到了。學員唯一能帶走、還一定會用到的東西，其實只有手機。</p>
+  <p>所以我不是想「做一個網站」，我是想解決一個很具體的問題：<b>學員離開教室以後，要怎麼樣還找得到今天學的東西</b>。答案是一個網址，掃一次 QR code，存進手機瀏覽器，之後隨時打得開。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">實體課教的是兩小時，導覽台要接住的是那兩小時以後。</div><div class="a">上課是點火，導覽台是讓火不要熄</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 備課的時候多問自己一句：這場課結束後，學員回家會忘記什麼、會找不到什麼。想出答案的那個東西，就是導覽台一定要放的內容。</div>
+</section>
+
+<!-- 2 導覽台放什麼 -->
+<section class="chapter" id="c2">
+  <span class="chip">STEP 02</span>
+  <h2 class="ct">導覽台裡放什麼</h2>
+  <p class="cd">流程、教材、QR code 帶走的工具，三塊就夠。</p>
+  <h3>發生什麼事</h3>
+  <p>我沒有把導覽台做成一個複雜的網站，就是把備課時原本就有的三種東西，分區放進同一個網址：</p>
+  <ul class="pt">
+    <li><b>這堂課的教學流程</b>：起承轉合走了哪幾段，一張圖看完，學員也能拿去跟主管交代這堂課上了什麼</li>
+    <li><b>完整簡報與講義</b>：現場走的那份、帶回家自己看的那份，分開放，不要混在一起</li>
+    <li><b>當場能用的心法與招式</b>：我在課堂上講的心法、示範過的招式，整理成可以拍照帶走的卡片</li>
+  </ul>
+  <p>每一塊都對應學員一個真實的需要：想知道今天上了什麼、想再看一次簡報、想回去真的動手試。三塊放齊，導覽台就完整了，不用再加。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">導覽台不是把所有東西塞進去，是把學員真的會用到的三種東西擺出來。</div><div class="a">多不是更好，找得到才是好</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 開始蓋之前，先把你手上這堂課的教材分成三類：流程一張圖、完整教材、帶回家能用的招式卡。分好類，AI 就知道要幫你做出幾個區塊。</div>
+</section>
+
+<!-- 3 怎麼請 AI 蓋出來 -->
+<section class="chapter" id="c3">
+  <span class="chip">STEP 03</span>
+  <h2 class="ct">怎麼請 AI 蓋出來</h2>
+  <p class="cd">一句話起手，再把結構講清楚，AI 就接得住。</p>
+  <h3>發生什麼事</h3>
+  <p>我對 AI 說的第一句話很簡單：</p>
+  <div class="note gold">「我剛上完一場工作坊，幫我做一個線上導覽台，學員掃 QR code 就能看到今天上課的流程、教材、還有可以帶回家用的招式。」</div>
+  <p>光這一句 AI 就能動工，但真正讓成品準的，是我接著把結構講得更具體：</p>
+  <div class="codebox">這場課的骨架是「起承轉合」
+起：兩個破冰小魔法
+承：觀念說明＋心法
+轉：現場動手做
+合：帶回家的任務
+
+導覽台幫我分區放：
+1. 一頁看懂這堂課的流程圖
+2. 完整簡報（嵌入預覽）
+3. 帶回家的招式清單（表格）
+4. 給學員的講義下載連結</div>
+  <p>結構講出來以後，AI 生出來的頁面，區塊順序就跟我上課的邏輯一樣，學員照著往下滑，等於把課又走一次。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">一句話能起手，但結構才決定成品準不準。</div><div class="a">你負責講清楚課怎麼上的，AI 負責把它排成看得懂的頁面</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 先用一句話告訴 AI 你要做什麼、給誰看。它做出第一版以後，再把你備課的骨架（像起承轉合、或你自己的教學流程）講給它聽，請它照這個順序重排。兩步就會準很多。</div>
+</section>
+
+<!-- 4 總站與子站的分工 -->
+<section class="chapter" id="c4">
+  <span class="chip">STEP 04</span>
+  <h2 class="ct">總站與子站的分工：一個專案一個站</h2>
+  <p class="cd">總站只負責收人進來，不放內容。</p>
+  <h3>發生什麼事</h3>
+  <p>做完機關工作坊的導覽台，我發現一件事：我手上不會只有這一個專案。教案集、工作紀錄、以後還會有更多。如果每個專案都塞在同一個網站裡，改一個東西可能會動到另一個，我會怕改壞。</p>
+  <p>所以我請 AI 幫我拆成兩層：</p>
+  <ul class="pt">
+    <li><b>總站</b>：一個很簡單的入口頁，上面是一張一張卡片，每張卡片是一個專案，點下去才進去</li>
+    <li><b>子站</b>：每個專案自己獨立一個網站，有自己的網址，內容、風格、要改什麼，完全不影響別人</li>
+  </ul>
+  <p>總站的角色像是我工作室的櫃檯，不放產品，只指路。真正的內容都住在各自的子站裡。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">總站只做一件事：讓人找得到路。內容永遠住在子站裡。</div><div class="a">分工分清楚，改東西才敢動手</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 手上專案超過一個，就先問自己「這是入口，還是內容」。是入口，放進總站當一張卡片；是內容，獨立開一個自己的網站。兩件事不要混在同一頁。</div>
+</section>
+
+<!-- 5 新專案怎麼掛上去 -->
+<section class="chapter" id="c5">
+  <span class="chip">STEP 05</span>
+  <h2 class="ct">新專案怎麼掛上去：持續累積的做法</h2>
+  <p class="cd">做完新東西，回總站加一張卡片就好。</p>
+  <h3>發生什麼事</h3>
+  <p>這個架構最讓我安心的地方，是「以後」這件事變得很輕。我不用每次都想「這次要不要重做整個網站」，我只要問自己兩件事：這是不是一個新專案？如果是，就獨立蓋一個子站，蓋完以後，回到總站，跟 AI 說：</p>
+  <div class="note gold">「我新做了一個專案，網址是這個，幫我在總站加一張卡片連過去，跟現有的卡片風格一樣。」</div>
+  <p>AI 照著既有卡片的樣子，多加一張，其他卡片一個字都不會動。從那場機關工作坊之後，我陸續又做了工作紀錄、教案集，每一個都是這樣掛上去的，不是重做，是累加。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">累積不是每次重做，是每次都加一張卡片。</div><div class="a">系統會越用越大，不是越用越亂</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 做完一個新東西，先問「這算不算一個新專案」。算的話就獨立開一個網站，開完以後只跟 AI 說「幫我在總站加一張卡片」，其他都不用動。</div>
+</section>
+
+<!-- 6 維護與更新 -->
+<section class="chapter" id="c6">
+  <span class="chip">STEP 06</span>
+  <h2 class="ct">維護與更新：改一個站，不影響其他站</h2>
+  <p class="cd">分開了，才敢放心改。</p>
+  <h3>發生什麼事</h3>
+  <p>用同一個網站塞所有專案的時候，我最怕的就是「改一個地方，結果別的地方壞掉」。分成總站加子站以後，這個怕消失了。想更新機關工作坊那份導覽台，我只改那一個子站；想幫教案集加一篇新文章，我只動教案集自己的檔案。改哪一個，只有那一個會變。</p>
+  <p>唯一會回到總站的時候，是我開了全新的專案，或是某個子站的網址整個換掉了。平常的內容更新，總站完全不用碰。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">維護簡單不是因為東西少，是因為每一塊各自獨立。</div><div class="a">敢改，才會一直更新下去</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 想更新內容前先問一句：這個改動只影響一個專案，還是會動到入口？只影響一個專案，直接進那個子站改；動到入口（新增／移除專案），才回總站處理。</div>
+</section>
+
+<!-- 7 行動建議 -->
+<section class="chapter" id="c7">
+  <span class="chip">TAKE ACTION</span>
+  <h2 class="ct">給你的三步驟行動建議：明天就能開始</h2>
+  <p class="cd">這篇記錄的不只是一場工作坊的導覽台。它記錄的是一套會一直長大的做法，讓你之後每做一個新專案，都不用從頭重來一次，只要掛上去就好。</p>
+
+  <div class="action">
+    <div class="n">1</div>
+    <h4>幫你下一場實體課，先分好三塊內容</h4>
+    <p>流程一張圖、完整教材、帶回家能用的招式卡，先分好類，再打開 AI，照第三章的方式一句話起手、把骨架講給它聽。</p>
+  </div>
+  <div class="action">
+    <div class="n">2</div>
+    <h4>盤點你手上有幾個專案，該不該分站</h4>
+    <p>超過一個專案，就用「入口還是內容」這把尺分一次。是內容的，各自獨立開站；是入口的，都收進同一個總站當卡片。</p>
+  </div>
+  <div class="action">
+    <div class="n">3</div>
+    <h4>做完新東西的那一刻，順手回總站掛一張卡片</h4>
+    <p>不用等「以後要不要整理」，做完就掛，養成這個習慣，你的總站會自己長大，而且永遠不會亂。</p>
+  </div>
+
+  <div class="golden"><div class="q">你不需要一次蓋好一個大網站。你需要的是一個掛得上去的地方。</div><div class="a">慢慢來，比較快</div></div>
+</section>
+
+</article>
+</div>
+
+<footer>
+  幫一場實體工作坊蓋一個線上導覽台，再用總站把所有專案串起來・Tarshar 教案集・2026<br>
+  🍀 Learn AI with Tarshar｜我不是工程師，我跟各位一樣是被工作追著跑的人，所以我只教明天就能用的東西
+</footer>
+
+</body>
+</html>

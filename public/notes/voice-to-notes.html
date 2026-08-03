@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>地端 AI 語音轉紀錄 · 教案</title>
+<meta name="description" content="一份音檔，自動變成你要的紀錄。全程在自己電腦上離線運算、免費、資料不外流——會議記錄、課堂筆記、論文Meeting、演講摘要一鍵完成。教學用教案。">
+<style>
+  :root{
+    --bg:#f6f8f1;--card:#fff;--ink:#242a1f;--muted:#6c7364;--line:#e2e7d6;
+    --accent:#8fb15e;--accent-deep:#5f8038;--accent-soft:#eef3e2;
+    --a:#8fb15e;--b:#c9a24b;--c:#c76b6b;--d:#6a97c2;--e:#9d84c4;
+    --shadow:0 1px 2px rgba(40,50,30,.05),0 8px 24px rgba(40,50,30,.07);--radius:16px;
+  }
+  @media (prefers-color-scheme:dark){:root{
+    --bg:#151812;--card:#1e221a;--ink:#e9ede0;--muted:#9aa38c;--line:#2f3527;
+    --accent:#a8c686;--accent-deep:#bcd79b;--accent-soft:#26301c;
+    --a:#a8c686;--b:#d8bd6e;--c:#e08d8d;--d:#8fb6dd;--e:#bda6e0;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.3);
+  }}
+  :root[data-theme="dark"]{
+    --bg:#151812;--card:#1e221a;--ink:#e9ede0;--muted:#9aa38c;--line:#2f3527;
+    --accent:#a8c686;--accent-deep:#bcd79b;--accent-soft:#26301c;
+    --a:#a8c686;--b:#d8bd6e;--c:#e08d8d;--d:#8fb6dd;--e:#bda6e0;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.3);
+  }
+  :root[data-theme="light"]{
+    --bg:#f6f8f1;--card:#fff;--ink:#242a1f;--muted:#6c7364;--line:#e2e7d6;
+    --accent:#8fb15e;--accent-deep:#5f8038;--accent-soft:#eef3e2;
+    --a:#8fb15e;--b:#c9a24b;--c:#c76b6b;--d:#6a97c2;--e:#9d84c4;
+    --shadow:0 1px 2px rgba(40,50,30,.05),0 8px 24px rgba(40,50,30,.07);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;
+    line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:940px;margin:0 auto;padding:clamp(24px,5vw,60px) clamp(16px,4vw,32px) 100px}
+  .kicker{font-size:.8rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent-deep);font-weight:700}
+  h1{font-size:clamp(2rem,5.2vw,3.2rem);margin:.28em 0 .18em;line-height:1.12;text-wrap:balance;font-weight:800}
+  .lede{color:var(--muted);font-size:1.12rem;max-width:60ch}
+  .hero-badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+  .hbadge{font-size:.82rem;font-weight:700;background:var(--accent-soft);color:var(--accent-deep);padding:6px 13px;border-radius:20px}
+  h2{font-size:1.55rem;margin:56px 0 6px;font-weight:800;display:flex;align-items:center;gap:.5em;text-wrap:balance}
+  h2 .n{font-size:.82rem;color:var(--card);background:var(--accent-deep);width:1.75em;height:1.75em;display:grid;place-items:center;border-radius:9px;font-weight:800;flex:none}
+  .sub{color:var(--muted);margin:0 0 22px;max-width:64ch}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+
+  /* 為什麼地端 */
+  .why{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+  .why .card{padding:20px}
+  .why .ic{font-size:1.8rem}
+  .why h3{margin:8px 0 5px;font-size:1.1rem}
+  .why p{margin:0;color:var(--muted);font-size:.92rem}
+
+  /* 流程 */
+  .flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;align-items:stretch;gap:8px}
+  .step{padding:18px 14px;text-align:center}
+  .step .si{font-size:1.7rem}
+  .step h4{margin:8px 0 4px;font-size:1rem}
+  .step p{margin:0;font-size:.82rem;color:var(--muted)}
+  .arrow{display:grid;place-items:center;color:var(--accent-deep);font-size:1.5rem;font-weight:800}
+  @media(max-width:720px){.flow{grid-template-columns:1fr}.arrow{transform:rotate(90deg);padding:2px}}
+
+  /* 分群 */
+  .groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:12px}
+  .grp{padding:15px;border-left:4px solid var(--g)}
+  .grp .gt{font-weight:800;margin-bottom:6px}
+  .grp ul{margin:0;padding-left:16px;font-size:.85rem;color:var(--muted)}
+  .grp li{margin:2px 0}
+
+  /* 範例 */
+  .samples{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:14px}
+  .sample{padding:18px;border-top:4px solid var(--g);display:flex;flex-direction:column}
+  .sample .tag{font-size:.72rem;font-weight:700;color:var(--g);text-transform:uppercase;letter-spacing:.05em}
+  .sample h3{margin:5px 0 6px;font-size:1.12rem}
+  .sample p{margin:0 0 14px;font-size:.86rem;color:var(--muted);flex:1}
+  .sample a{display:inline-block;text-align:center;background:var(--accent-deep);color:#fff;text-decoration:none;font-weight:700;padding:9px;border-radius:10px;font-size:.9rem;transition:transform .15s}
+  .sample a:hover{transform:translateY(-2px)}
+
+  /* 動手做 */
+  .steps{counter-reset:s;display:flex;flex-direction:column;gap:12px}
+  .do{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;padding:16px 18px}
+  .do::before{counter-increment:s;content:counter(s);background:var(--accent-deep);color:#fff;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-weight:800}
+  .do h4{margin:0 0 3px;font-size:1.02rem}
+  .do p{margin:0;color:var(--muted);font-size:.9rem}
+  .do code{background:var(--accent-soft);color:var(--accent-deep);padding:1px 6px;border-radius:5px;font-size:.86em}
+
+  /* 教學重點 */
+  .teach{padding:24px}
+  .teach .row{display:grid;grid-template-columns:110px 1fr;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);font-size:.95rem}
+  .teach .row:last-child{border-bottom:none}
+  .teach .lab{font-weight:700;color:var(--accent-deep)}
+  .golden{margin-top:16px;background:var(--accent-soft);border-radius:12px;padding:16px 18px;font-size:1.08rem;font-weight:700;text-align:center;text-wrap:balance}
+
+  footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:.84rem;text-align:center}
+  .home{position:fixed;bottom:22px;left:22px;background:var(--card);border:2px solid var(--accent);color:var(--accent-deep);
+    padding:10px 16px;border-radius:30px;box-shadow:var(--shadow);font-weight:800;font-size:.86rem;text-decoration:none;z-index:40;transition:transform .15s}
+  .home:hover{transform:translateY(-2px)}
+</style>
+</head>
+<body>
+<a href="../plans/" class="clv-home" style="position:fixed;top:14px;left:14px;z-index:99999;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.96);color:#3f6b2e;border:1.5px solid #a8c686;border-radius:999px;padding:8px 15px;font-size:13.5px;font-weight:700;text-decoration:none;box-shadow:0 4px 16px rgba(0,0,0,.22);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);font-family:'Noto Sans TC','PingFang TC',system-ui,sans-serif" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+<div class="wrap">
+  <header>
+    <div class="kicker">🍀 生活應用 · 地端 AI 工具教案</div>
+    <h1>一份音檔，自動變成你要的紀錄</h1>
+    <p class="lede">把會議、上課、諮詢的錄音丟進一個資料夾，電腦就自動幫你轉成指定格式的紀錄。全程在<b>自己的電腦上離線運算</b>、完全免費、錄音與內容<b>不會外流</b>——特別適合資安敏感的機關單位。</p>
+    <div class="hero-badges">
+      <span class="hbadge">💰 完全免費</span>
+      <span class="hbadge">🔌 全程離線</span>
+      <span class="hbadge">🔒 資料不外流</span>
+      <span class="hbadge">🤖 一鍵自動化</span>
+    </div>
+  </header>
+
+  <h2><span class="n">1</span>它解決什麼問題？</h2>
+  <p class="sub">開完會、上完課，最花時間的不是討論本身，是「事後把錄音整理成紀錄」。這套把整段整理自動化：你只負責丟音檔，其他交給電腦。而且因為跑在自己的機器上，機關單位最在意的資安顧慮直接解決。</p>
+  <div class="why">
+    <div class="card"><div class="ic">💰</div><h3>完全免費</h3><p>用開源工具（Whisper、Ollama），不必付任何雲端 AI 訂閱費。</p></div>
+    <div class="card"><div class="ic">🔒</div><h3>資料不外流</h3><p>錄音和內容全程留在自己電腦，不上傳任何雲端，符合公部門資安。</p></div>
+    <div class="card"><div class="ic">🔌</div><h3>離線可用</h3><p>裝好之後不需網路，斷網也能跑，走到哪都能用。</p></div>
+  </div>
+
+  <h2><span class="n">2</span>它怎麼運作？三步驟</h2>
+  <p class="sub">AI 只負責「聽懂內容」，版面永遠由程式鎖定，所以格式每次都一致、不跑位。</p>
+  <div class="flow card" style="padding:6px">
+    <div class="step"><div class="si">🎙️</div><h4>① 音檔</h4><p>會議／上課／諮詢錄音丟進資料夾</p></div>
+    <div class="arrow">→</div>
+    <div class="step"><div class="si">📝</div><h4>② 逐字稿</h4><p>Whisper 把語音轉成文字</p></div>
+    <div class="arrow">→</div>
+    <div class="step"><div class="si">🧠</div><h4>③ AI 整理</h4><p>本地 AI 依類型抓出重點欄位</p></div>
+    <div class="arrow">→</div>
+    <div class="step"><div class="si">📄</div><h4>④ 成品</h4><p>套進固定版面，直接可用</p></div>
+  </div>
+
+  <h2><span class="n">3</span>不只會議記錄——五大分群、16 種紀錄</h2>
+  <p class="sub">同一套引擎，依紀錄類型分流到不同「技能」。每種紀錄配最適合它的呈現方式：該有表格的表格、該有甘特圖的甘特圖。</p>
+  <div class="groups">
+    <div class="card grp" style="--g:var(--a)"><div class="gt">A · 職場會議</div><ul><li>一般會議記錄</li><li>專案會議記錄</li><li>董事會・理監事</li></ul></div>
+    <div class="card grp" style="--g:var(--b)"><div class="gt">B · 業務・人資</div><ul><li>客戶洽談</li><li>面試記錄</li><li>一對一面談</li></ul></div>
+    <div class="card grp" style="--g:var(--c)"><div class="gt">C · 專業諮詢</div><ul><li>醫療諮詢</li><li>法律諮詢</li><li>心理諮商</li></ul></div>
+    <div class="card grp" style="--g:var(--d)"><div class="gt">D · 學習・研究</div><ul><li>課堂筆記</li><li>論文 Meeting</li><li>讀書會討論</li></ul></div>
+    <div class="card grp" style="--g:var(--e)"><div class="gt">E · 個人・生活</div><ul><li>語音備忘→待辦</li><li>訪談整理</li><li>演講摘要</li></ul></div>
+  </div>
+
+  <h2><span class="n">4</span>看實際成品</h2>
+  <p class="sub">以下四份是平台實際跑出來的成品，點開看效果。每種紀錄的版面與呈現元件都不一樣。</p>
+  <div class="samples">
+    <div class="card sample" style="--g:var(--d)"><span class="tag">D1 課堂筆記</span><h3>金融科技課</h3><p>知識地圖、章節時間軸、老師金句、名詞白話對照、待複習清單。</p><a href="sample-lecture.html" target="_blank">開啟範例 ›</a></div>
+    <div class="card sample" style="--g:var(--a)"><span class="tag">A2 專案會議</span><h3>官網改版週會</h3><p>專案儀表板、里程碑甘特圖、風險矩陣、責任到人的行動項。</p><a href="sample-project.html" target="_blank">開啟範例 ›</a></div>
+    <div class="card sample" style="--g:var(--d)"><span class="tag">D2 論文 Meeting</span><h3>研究方法討論</h3><p>教授回饋、可打勾的待修改清單、下次進度、要拍板的問題。</p><a href="sample-thesis.html" target="_blank">開啟範例 ›</a></div>
+    <div class="card sample" style="--g:var(--e)"><span class="tag">E3 演講摘要</span><h3>個人品牌經營</h3><p>三句話重點、核心論點、金句摘錄、章節時間軸、行動建議。</p><a href="sample-talk.html" target="_blank">開啟範例 ›</a></div>
+  </div>
+
+  <h2><span class="n">5</span>怎麼開始用？</h2>
+  <p class="sub">安裝只做一次（約 20–40 分鐘，多半在等下載）。之後日常使用就只有「丟音檔」一個動作。</p>
+  <div class="steps">
+    <div class="card do"><div><h4>一次性安裝</h4><p>在終端機貼一行指令，自動裝好所有工具與 AI 模型，並建好資料夾。</p></div></div>
+    <div class="card do"><div><h4>丟音檔到收件匣</h4><p>把錄音（<code>mp3</code>／<code>m4a</code>／<code>wav</code>）丟進「丟音檔到這裡」資料夾。</p></div></div>
+    <div class="card do"><div><h4>等通知，拿成品</h4><p>電腦自動跑完，右上角跳通知，到「完成」資料夾拿紀錄檔（附逐字稿）。</p></div></div>
+  </div>
+
+  <h2><span class="n">6</span>給講師的教學重點</h2>
+  <div class="card teach">
+    <div class="row"><span class="lab">適用對象</span><span>公部門行政人員、社大學員、研究生、AI 小白</span></div>
+    <div class="row"><span class="lab">建議時長</span><span>90–120 分鐘工作坊（含實作）</span></div>
+    <div class="row"><span class="lab">教學目標</span><span>理解「AI 懂內容、程式鎖版面」的分工；能自己把一段錄音變成一份紀錄</span></div>
+    <div class="row"><span class="lab">核心觀念</span><span>地端＝免費＋離線＋資安；自動化＝把重複的整理工作交給電腦</span></div>
+    <div class="row"><span class="lab">學員產出</span><span>帶一段自己的錄音，現場跑出一份專屬紀錄帶回家</span></div>
+    <div class="golden">💡「AI 幫你把一小時的整理壓成幾分鐘，但那份判斷與版面，永遠握在你自己手上。」</div>
+  </div>
+
+  <footer>
+    🍀 Learn AI with Tarshar　·　地端 AI 語音轉紀錄平台　·　全程離線、資料不外流<br>
+    本頁為教學用教案，工具與範例皆為實作成品
+  </footer>
+</div>
+</body>
+</html>

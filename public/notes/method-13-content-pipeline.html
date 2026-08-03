@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>從 0 到 1 架一條自動化內容生產線：以我的電子報為例｜Tarshar 教案集</title>
+<meta name="description" content="Tarshar 教案集：從 0 到 1 架一條自動化內容生產線，以我的電子報為例。記錄小D 零程式基礎，怎麼選工具、開刊、發創刊號、設定每週自動產草稿，自己只做最後過目與發布。教的不是寫一篇內容，是搭一條會自己跑的生產線。">
+<style>
+:root{
+  --paper:#f4f0e8; --card:#fffdf7; --card2:#fbf8ef; --ink:#3a3528; --ink2:#766f61; --ink3:#8a8674;
+  --line:#d8d0bf; --accent:#5d8d56; --accent2:#8cbd7d;
+  --code:#fffdf7;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.9}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(244,240,232,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:10px 20px;display:flex;align-items:center;gap:14px}
+.topbar b{font-size:15px}
+.topbar .right{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.topbar a.btn{font-size:12.5px;text-decoration:none;border:1px solid var(--line);border-radius:9px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap}
+.topbar a.btn:hover{border-color:var(--accent);color:var(--accent)}
+.hero{max-width:900px;margin:0 auto;padding:52px 22px 10px;text-align:center}
+.hero .ep{display:inline-block;font-size:12.5px;letter-spacing:3px;color:var(--accent);border:1px solid var(--accent2);border-radius:999px;padding:5px 16px;background:#eef5e9;margin-bottom:18px}
+.hero h1{font-size:clamp(24px,4.4vw,40px);font-weight:900;line-height:1.4;color:var(--ink)}
+.hero .lead{margin-top:14px;font-size:14.5px;color:var(--ink2)}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:18px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+
+.showcase{max-width:900px;margin:26px auto 0;padding:0 22px}
+.showcase-box{background:linear-gradient(120deg,#eef5e9,#fbf8ef);border:1px solid var(--accent2);border-radius:18px;padding:24px 26px;text-align:center}
+.showcase-box .kicker{font-size:12.5px;color:var(--accent);font-weight:800;letter-spacing:1px;margin-bottom:8px}
+.showcase-box p{font-size:14px;color:var(--ink2);margin:6px 0 16px}
+.showcase-box a.cta{display:inline-flex;align-items:center;gap:8px;text-decoration:none;background:var(--accent);color:#fff;font-weight:800;font-size:14.5px;padding:12px 22px;border-radius:999px;box-shadow:0 6px 18px rgba(93,141,86,.28)}
+.showcase-box a.cta:hover{background:#4c7745}
+.showcase-box .url{margin-top:10px;font-size:12.5px;color:var(--ink3)}
+
+.layout{max-width:1120px;margin:30px auto 0;padding:0 22px;display:grid;grid-template-columns:236px 1fr;gap:34px;align-items:start}
+nav.toc{position:sticky;top:66px;border:1px solid var(--line);border-radius:14px;background:var(--card);padding:16px 14px;font-size:13.5px}
+nav.toc .t{font-size:12px;letter-spacing:2px;color:var(--ink3);margin-bottom:10px}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:8px;border-left:3px solid transparent}
+nav.toc a:hover{background:#eef5e9;color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:30px 32px;margin-bottom:26px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:2px;font-weight:700;color:#fff;border-radius:999px;padding:5px 14px;margin-bottom:12px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+h2.ct{font-size:22px;font-weight:900;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:16.5px;font-weight:800;margin:24px 0 10px;padding-left:12px;border-left:4px solid var(--accent2);color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink)}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 24px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"◆";position:absolute;left:4px;font-size:9px;top:12px;color:var(--accent2)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:8px;width:23px;height:23px;border-radius:7px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:800;display:grid;place-items:center}
+.codebox{background:var(--code);border:1px solid var(--line);border-left:4px solid var(--accent2);border-radius:10px;padding:14px 16px;font-family:"Cascadia Code",Consolas,monospace;font-size:12.6px;color:#3a3528;white-space:pre-wrap;line-height:1.8;margin:12px 0;overflow-x:auto}
+.note{display:flex;gap:10px;border-radius:12px;padding:14px 16px;font-size:14px;margin:14px 0;line-height:1.85}
+.note.green{background:#eef5e9;border:1px solid var(--accent2);color:var(--accent)}
+.note.gold{background:#fdf6e7;border:1px solid #eeddb4;color:#7a5b12}
+.golden{background:linear-gradient(120deg,#eef5e9,#fbf8ef);border:1px solid var(--accent2);border-radius:14px;padding:16px 20px;margin:16px 0;text-align:center}
+.golden .q{font-size:17px;font-weight:900;color:var(--accent)}
+.golden .a{font-size:12.5px;color:var(--ink3);margin-top:6px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+@media (max-width:560px){ .grid2{grid-template-columns:1fr} }
+.mini{border:1px solid var(--line);border-radius:14px;padding:14px 16px;background:#fff}
+.mini .n{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:8px;background:var(--accent2);color:#fff;font-weight:800;font-size:12.5px;margin-bottom:6px}
+.mini h5{font-size:14px;font-weight:800;margin-bottom:4px;color:var(--ink)}
+.mini p{font-size:12.8px;color:var(--ink2)}
+.stage{display:inline-block;font-weight:800;font-size:11.5px;color:#fff;background:var(--accent);border-radius:6px;padding:2px 9px;margin-right:7px;letter-spacing:1px;vertical-align:middle}
+.action{border:1px solid var(--accent2);border-radius:16px;padding:18px 20px;background:#fff;margin:14px 0}
+.action .n{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:10px;background:var(--accent);color:#fff;font-weight:900;font-size:15px;margin-bottom:8px}
+.action h4{font-size:15.5px;font-weight:800;color:var(--ink);margin-bottom:4px}
+.action p{font-size:13.5px}
+.backhome{position:fixed;left:14px;bottom:14px;z-index:9999;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;text-decoration:none;color:#fff;background:var(--accent);border:1px solid #4c7745;border-radius:999px;padding:9px 16px;box-shadow:0 4px 18px rgba(0,0,0,.18)}
+.backhome:hover{background:#4c7745}
+footer{max-width:1120px;margin:20px auto 0;padding:30px 22px 70px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:2}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} }
+@media print{ .topbar,nav.toc,.backhome{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../plans/" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📚 Tarshar 教案集</b>
+  <div class="right">
+    <a class="btn" href="../plans/">📚 教案集系列</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">Tarshar 教案集 · 方法教學</span>
+  <h1>從 0 到 1 架一條自動化內容生產線<br>以我的電子報為例</h1>
+  <p class="lead">這篇記錄的不是「怎麼寫一篇好內容」，是我（小D）怎麼把電子報從零開始，架成一條會自己跑的生產線：選工具、開刊、發創刊號、設定每週自動產草稿，我只做最後過目與發布。這條線一旦架好，我不用再每週對著空白頁掙扎。</p>
+  <div class="meta">
+    <span>🎓 零程式基礎</span>
+    <span>📬 電子報生產線</span>
+    <span>🔁 每週自動排程</span>
+    <span>🗓️ 2026</span>
+  </div>
+</header>
+
+<div class="showcase">
+  <div class="showcase-box">
+    <div class="kicker">先看我架出來的東西</div>
+    <p>這是我實際在跑的電子報，🍀Learn AI with Tarshar 週報。創刊號叫「開機日」，現在每週自動產草稿，我過目定稿後才發布。</p>
+    <a class="cta" href="https://tarshar42.substack.com" target="_blank" rel="noopener">📬 打開我的電子報 →</a>
+    <div class="url">tarshar42.substack.com</div>
+  </div>
+</div>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#c1">1. 為什麼內容經營總是斷更</a>
+  <a href="#c2">2. 選工具的判準</a>
+  <a href="#c3">3. 創刊號怎麼生</a>
+  <a href="#c4">4. 封面圖的品牌一致性</a>
+  <a href="#c5">5. 排程自動化</a>
+  <a href="#c6">6. 人的位置</a>
+  <a href="#c7">7. 你的三步驟行動建議</a>
+</nav>
+
+<article>
+
+<!-- 1 為什麼斷更 -->
+<section class="chapter" id="c1">
+  <span class="chip">STEP 01</span>
+  <h2 class="ct">為什麼內容經營總是斷更：靠意志力必輸</h2>
+  <p class="cd">先承認問題不在你不夠努力，是在你靠的東西本來就不穩。</p>
+  <h3>發生什麼事</h3>
+  <p>在架這條線之前，我也試過「這週開始要固定發內容」，然後撐兩三次就斷了。不是我不想寫，是每次要動筆都得先想「這週要寫什麼」，光是這個起頭的力氣，就先把我耗掉一半。靠的是當下的意志力，意志力這東西本來就不穩，忙起來、累了、心情不好，一次就斷。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">靠意志力的產出必輸，靠系統的產出才撐得久。</div><div class="a">問題不是「我夠不夠自律」，是「我有沒有一套不靠自律也能跑的流程」</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 如果你也常常斷更，先別急著怪自己意志力不夠。回頭看看你每次卡關，卡在的是「沒靈感」還是「沒有固定的流程逼自己開始」。這兩個問題的解法完全不一樣，後面幾章講的就是第二種解法。</div>
+</section>
+
+<!-- 2 選工具 -->
+<section class="chapter" id="c2">
+  <span class="chip">STEP 02</span>
+  <h2 class="ct">選工具的判準：免費、簡單、名單握在自己手上</h2>
+  <p class="cd">工具選錯，後面全部要重來一次。</p>
+  <h3>發生什麼事</h3>
+  <p>決定要做電子報之後，我沒有去比較哪個平台功能最多。我只設了三個判準：要免費、要簡單到我不用學新技術、訂閱名單要是我自己的，不是被某個社群平台的演算法握在手裡。用這三個判準去篩，我選了 Substack 當第一個發布平台，開刊的過程很快，沒有卡關。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">第一個工具不用選到最強，要選到你今天就能用。</div><div class="a">功能可以之後再升級，但拖著不開始，什麼都不會發生</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 選工具前先問自己三題：這個要花錢嗎、我今天學得會嗎、我的名單以後搬得走嗎。三題都過得去的，就是你現在能用的工具，不用再繼續比較下去。</div>
+</section>
+
+<!-- 3 創刊號怎麼生 -->
+<section class="chapter" id="c3">
+  <span class="chip">STEP 03</span>
+  <h2 class="ct">創刊號怎麼生：標題給選項，草稿 AI 先寫，我做最後定稿</h2>
+  <p class="cd">第一期最容易卡關，所以流程要設計成「我只需要做選擇題」。</p>
+  <h3>發生什麼事</h3>
+  <p>開刊之後最卡的是「第一篇要寫什麼」。我把這個關卡拆成三步：先請 AI 給我幾個標題方向，我從裡面挑一個順眼的；挑定之後，草稿由 AI 先寫一版；草稿出來後，我自己再讀過、改語氣、定稿。創刊號最後定案的是「開機日」這個概念，存進我的品牌資料夾之後才正式發布上線。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">從零開始寫最難，從一個草稿去改最容易。</div><div class="a">我不用負責「生出來」，我只負責「挑」跟「改」</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 卡在「不知道要寫什麼」的時候，別逼自己空手生內容。先請 AI 給你三到五個標題選項，選一個你有感覺的，再請它照這個方向先寫一版草稿。你的工作永遠是從草稿改到滿意，不是從一片空白開始。</div>
+</section>
+
+<!-- 4 封面圖品牌一致性 -->
+<section class="chapter" id="c4">
+  <span class="chip">STEP 04</span>
+  <h2 class="ct">封面圖的品牌一致性：固定風格範本，不用每次重新想</h2>
+  <p class="cd">風格要決定一次，之後就不用每次重新決定。</p>
+  <h3>發生什麼事</h3>
+  <p>如果每期封面圖都重新想風格，我等於每週多一個要做判斷的關卡。所以我把封面圖的風格範本固定下來：配色、構圖、氛圍先講清楚一次，之後每一期只要照這個範本產生，讀者滑過去就知道「這是 Learn AI with Tarshar 的東西」，我也不用每次重新想這期要用什麼視覺。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">風格只需要決定一次，重複執行不用再決定。</div><div class="a">固定範本省下來的不是時間，是每週要重新判斷的腦力</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 幫你的內容定一個固定的視覺範本（配色、字型、構圖都先講清楚），存下來當作標準規格。之後每次要出圖，直接套這個範本讓 AI 生成，不用每次重新描述一次「我想要什麼風格」。</div>
+</section>
+
+<!-- 5 排程自動化 -->
+<section class="chapter" id="c5">
+  <span class="chip">STEP 05</span>
+  <h2 class="ct">排程自動化：每週自動產草稿，我只做過目</h2>
+  <p class="cd">把「記得要寫」這件事，從我的腦子裡拿掉。</p>
+  <h3>發生什麼事</h3>
+  <p>創刊號跑順之後，我把整個流程設定成每週固定時間自動重複：時間到了，AI 會自己先產出一版草稿和封面圖，等在那裡。我不用再靠自己記得「這週該寫電子報了」，也不用臨時擠時間從零開始。我只要找個空檔打開來看，草稿已經在那裡等我。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">系統的價值不是幫我寫得更快，是讓我不用再靠自己記得。</div><div class="a">排程把「開始」這個最耗力氣的動作，從我身上轉移到系統上</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 找出你最常「忘記要做」或「拖到最後一刻」的那件事，設定一個固定的時間點，讓 AI 在那個時間先動手產出草稿。你的角色從「要記得開始」，變成「東西已經在那裡，我來決定要不要用」。</div>
+</section>
+
+<!-- 6 人的位置 -->
+<section class="chapter" id="c6">
+  <span class="chip">STEP 06</span>
+  <h2 class="ct">人的位置：AI 產，人審，絕不全自動發布</h2>
+  <p class="cd">自動化的是「產出」，不是「決定」。</p>
+  <h3>發生什麼事</h3>
+  <p>整條生產線裡，我唯一沒有交出去的動作，是按下「發布」那一刻。AI 幫我把草稿和封面圖先準備好，但每一期最後都要經過我讀一遍、改語氣、確認內容是我想說的話，才會發出去。我沒有設定成草稿寫完就自動上線，因為對外發布的東西，我永遠要是最後看過、拍板的人。</p>
+  <h3>我學到什麼</h3>
+  <div class="golden"><div class="q">自動化省的是「開始」的力氣，不是「把關」的責任。</div><div class="a">越是要對外發布的東西，最後一關越不能自動化</div></div>
+  <h3>可複製的做法</h3>
+  <div class="note green">🍀 設計你自己的自動化流程時，先劃一條線：哪些步驟可以讓 AI 自動先做（草稿、配圖、排版），哪一步一定要留給自己（最後的審核與按下發布）。這條線劃清楚，你才能放心把前面的力氣交出去。</div>
+</section>
+
+<!-- 7 行動建議 -->
+<section class="chapter" id="c7">
+  <span class="chip">TAKE ACTION</span>
+  <h2 class="ct">給你的三步驟行動建議：明天就能開始</h2>
+  <p class="cd">這篇記錄的不是我寫了多少期電子報，是我怎麼把「每週擠一篇」這件事，換成「搭一條會自己跑的線」。你也可以，從明天開始。</p>
+
+  <div class="action">
+    <div class="n">1</div>
+    <h4>選一個免費、簡單、名單握在自己手上的工具，今天就開刊</h4>
+    <p>不用比較到最完美，選一個你今天就能上手的，先開起來，比研究哪個平台最強更重要。</p>
+  </div>
+  <div class="action">
+    <div class="n">2</div>
+    <h4>發第一期的時候，把「生出來」交給 AI，「挑跟改」留給自己</h4>
+    <p>請 AI 給你幾個方向選、先寫一版草稿，你負責挑一個順眼的方向，再改到自己滿意，不用從空白開始。</p>
+  </div>
+  <div class="action">
+    <div class="n">3</div>
+    <h4>設定一個固定時間，讓 AI 每週自動先產草稿，但發布永遠自己按</h4>
+    <p>把「記得要寫」交給排程，把「值不值得發出去」留給自己。這條線架好之後，你不用再每週跟自己的意志力搏鬥。</p>
+  </div>
+
+  <div class="golden"><div class="q">不是每週擠一篇，是搭一條會自己跑的線。</div><div class="a">慢慢來，比較快</div></div>
+</section>
+
+</article>
+</div>
+
+<footer>
+  從 0 到 1 架一條自動化內容生產線：以我的電子報為例・Tarshar 教案集・2026<br>
+  🍀 Learn AI with Tarshar｜我不是工程師，我跟各位一樣是被工作追著跑的人，所以我只教明天就能用的東西
+</footer>
+
+</body>
+</html>
