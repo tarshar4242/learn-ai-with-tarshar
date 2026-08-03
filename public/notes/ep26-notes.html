@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP26 課堂筆記｜知行合一 Manus AI：Skill 與 Manus Agents</title>
+<meta name="description" content="晨學講堂 EP26 課堂筆記：Manus AI 基礎操作與應用。Skill 技能包的元素與製作流程、Manus vs Claude Code 比較、用 skill-creator 實作「資訊圖表 Prompt 產生器」、官方技能庫與應用篇（Remotion／Manim）、Manus Agents 個人代理、傳統 Chatbot vs Agents、Telegram 用法與九大功能。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#0d8f80; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2);border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3);color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase;background:var(--accent)}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.svgwrap{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg{display:block;width:100%;height:auto}
+.svgwrap .cap{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.prompt{background:#1d1d1f;border:1px solid #2c2c31;border-radius:10px;padding:14px 16px;margin:12px 0;font-size:13px;line-height:1.9;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt b{color:#fff}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP26 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="ep26-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 晨學講堂 · EP26</span>
+  <h1>知行合一 <span>Manus AI</span>：Skill 與 Manus Agents</h1>
+  <p class="lead">EP26 談 <b>Manus AI</b> 的兩個進階主題：一是「<b>Skill 技能包</b>」——把最佳實踐、工作流程與工具打包成可重複呼叫的技能；二是「<b>Manus Agents</b>」——擁有獨特身份、持久記憶、可在 Telegram 等聊天應用裡替你連續完成多步驟任務的個人 AI 代理。課堂實作了用 <b>skill-creator</b> 從零打造一個「資訊圖表 Prompt 產生器」技能。</p>
+  <div class="meta">
+    <span>📅 2026/03 直播 · 20:30–21:30</span>
+    <span>🗂️ 教材：官方簡報＋筆記</span>
+    <span>🧰 主題：Skill × Agents</span>
+    <span>🤖 Manus 1.6</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-skill">1. Skill 是什麼與元素</a>
+  <a href="#sec-flow">2. 剖析 Skill 製作流程</a>
+  <a href="#sec-vs">3. Manus vs Claude Code</a>
+  <a href="#sec-demo">4. 實作：資訊圖表 Prompt 產生器</a>
+  <a href="#sec-lib">5. 官方技能庫與應用篇</a>
+  <a href="#sec-agents">6. Manus Agents 個人代理</a>
+  <a href="#sec-chatbot">7. Chatbot vs Manus Agents</a>
+  <a href="#sec-tg">8. Telegram 用法與九大功能</a>
+  <a href="#sec-recap">9. 重點整理</a>
+  <a href="#sec-src">10. 資料來源與製作說明</a>
+</nav>
+
+<article>
+
+<section class="chapter" id="sec-info">
+  <span class="chip">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>EP26_「<b>知行合一 Manus AI 基礎操作及應用——Skill ／ Manus Agents</b>」（直播時段 20:30–21:30）</td></tr>
+    <tr><th>頻道</th><td>生成式 AI 應用電台・晨學講堂</td></tr>
+    <tr><th>教材</th><td>官方課程簡報＋課堂筆記＋錄影回放</td></tr>
+    <tr><th>一句話先懂</th><td><b>Skill ＝ 把「怎麼做」打包成可重複呼叫的技能；Manus Agents ＝ 把 AI 變成有記憶、能在聊天軟體裡替你辦事的個人代理。</b></td></tr>
+    <tr><th>官網</th><td>manus.im</td></tr>
+  </table></div>
+  <div class="note blue">💡 本頁內容整理自 EP26 官方課程簡報與課堂筆記（真實課程教材，非推測）。示範操作的螢幕畫面若日後逐幀對照錄影可再補入。</div>
+</section>
+
+<section class="chapter" id="sec-skill">
+  <span class="chip">CHAPTER 01</span>
+  <h2 class="ct">1. Skill 是什麼與元素</h2>
+  <p class="cd">Skill ＝ 為你的智能體（Agent）提供「預封裝、可重複」的最佳實踐與工具。</p>
+  <p>簡單說，Skill 就是一個<b>技能包</b>：把某件事「該怎麼做」——包含知識、工作流程、工具整合——事先包好，之後只要<b>用關鍵字觸發</b>，Manus 就能照著標準流程把事情做出來。</p>
+  <h3>一個 Skill 由這些元素組成</h3>
+  <ul class="pt">
+    <li><b>MD 文件（SKILL.md）</b>：技能的說明書——定義這個技能是什麼、運作流程與規範。</li>
+    <li><b>scripts 腳本</b>：實際執行工作的程式碼／腳本。</li>
+    <li><b>資源（references／templates）</b>：技能會用到的參考資料與模板。</li>
+    <li><b>觸發邏輯與關鍵字</b>：用什麼關鍵字可以喚起這個技能。</li>
+  </ul>
+  <div class="svgwrap">
+  <svg viewBox="0 0 900 180" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,sans-serif">
+    <rect x="30" y="20" width="840" height="140" rx="12" fill="#EAF6F4" stroke="#0d8f80" stroke-dasharray="5 4"/>
+    <text x="50" y="44" font-size="13" font-weight="700" fill="#0a6b5f">一個 Skill 技能包</text>
+    <g>
+      <rect x="60" y="60" width="180" height="80" rx="10" fill="#fff" stroke="#0d8f80" stroke-width="1.6"/><text x="150" y="95" text-anchor="middle" font-size="13" font-weight="700" fill="#0a6b5f">SKILL.md</text><text x="150" y="116" text-anchor="middle" font-size="11" fill="#5f5f5f">說明書／規範</text>
+      <rect x="270" y="60" width="180" height="80" rx="10" fill="#fff" stroke="#3b6bb0" stroke-width="1.6"/><text x="360" y="95" text-anchor="middle" font-size="13" font-weight="700" fill="#2a5390">scripts 腳本</text><text x="360" y="116" text-anchor="middle" font-size="11" fill="#5f5f5f">實際執行的程式</text>
+      <rect x="480" y="60" width="180" height="80" rx="10" fill="#fff" stroke="#bf6a1e" stroke-width="1.6"/><text x="570" y="95" text-anchor="middle" font-size="13" font-weight="700" fill="#8a4d13">資源</text><text x="570" y="116" text-anchor="middle" font-size="11" fill="#5f5f5f">references／templates</text>
+      <rect x="690" y="60" width="150" height="80" rx="10" fill="#fff" stroke="#5645D4" stroke-width="1.6"/><text x="765" y="95" text-anchor="middle" font-size="13" font-weight="700" fill="#3f31a8">觸發</text><text x="765" y="116" text-anchor="middle" font-size="11" fill="#5f5f5f">關鍵字喚起</text>
+    </g>
+  </svg>
+  <div class="cap">圖解｜Skill＝說明書（SKILL.md）＋腳本（scripts）＋資源（references／templates）＋觸發關鍵字，四者打包成一個可重複呼叫的技能包。</div>
+  </div>
+</section>
+
+<section class="chapter" id="sec-flow">
+  <span class="chip">CHAPTER 02</span>
+  <h2 class="ct">2. 剖析 Skill 製作流程</h2>
+  <p class="cd">課堂用「五步」帶大家看懂一個 Skill 從無到有、再到能被閱讀呼應的完整過程。</p>
+  <ol class="st">
+    <li><b>了解 Skill 元素</b>：先認識一個技能包由 MD 文件、scripts 腳本與資源組成。</li>
+    <li><b>創作 Skill</b>：用 skill-creator 這個「核心技能創建工具」開始打造新技能。</li>
+    <li><b>剖析 Skill 製作過程</b>：觀察 AI 如何規劃、開發、撰寫文件、交付。</li>
+    <li><b>下載 Skill 檔案</b>：把完成的技能包（ZIP）下載下來檢視。</li>
+    <li><b>仔細閱讀並呼應</b>：打開 SKILL.md 與 scripts，理解技能內容並與需求對照。</li>
+  </ol>
+  <div class="note gold">⚠️ 重點：不要把 Skill 當黑盒子。下載後<b>親自打開 SKILL.md 讀一遍</b>，才知道它到底怎麼運作、觸發後會做什麼，之後才好維護與修改。</div>
+</section>
+
+<section class="chapter" id="sec-vs">
+  <span class="chip">CHAPTER 03</span>
+  <h2 class="ct">3. Manus vs Claude Code</h2>
+  <p class="cd">兩者都能執行技能與程式，最大的差異在於「執行」發生在哪裡、由誰承擔風險。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">比較面向</th><th>Manus</th><th>Claude Code</th></tr>
+    <tr><td>核心定位</td><td>在安全沙盒環境中端到端執行技能</td><td>在本地端執行程式與指令</td></tr>
+    <tr><td>執行方式</td><td>安全的雲端虛擬機</td><td>本地機器（具潛在風險）</td></tr>
+    <tr><td>使用環境</td><td>基於網頁操作，無需額外設置</td><td>需安裝本地 IDE／CLI 環境</td></tr>
+    <tr><td>技能導入</td><td>一鍵即時導入</td><td>需手動設置與配置</td></tr>
+    <tr><td>安全性</td><td>隔離式沙盒執行</td><td>在使用者機器上運行</td></tr>
+    <tr><td>適用對象</td><td>一般使用者、非技術背景者</td><td>專業開發者</td></tr>
+  </table></div>
+  <div class="golden"><div class="q">「最大的差異在於『執行』。」</div><div class="a">—— Manus 在雲端沙盒替你跑（安全、免設定、非技術者友善）；Claude Code 在你自己的電腦上跑（更彈性、但風險與設定都在本地）。</div></div>
+</section>
+
+<section class="chapter" id="sec-demo">
+  <span class="chip">CHAPTER 04 · LIVE DEMO</span>
+  <h2 class="ct">4. 實作：用 skill-creator 做「資訊圖表 Prompt 產生器」</h2>
+  <p class="cd">課堂現場示範：從對話開始，用官方的 <b>skill-creator</b> 技能，打造一個能產出資訊圖表 YAML Prompt 的儀表板網頁技能。</p>
+  <h3>實作流程（四步）</h3>
+  <ol class="st">
+    <li><b>從對話開始</b>：輸入「幫我使用 /skill-creator 一起創建一個技能。首先問我這個技能應該做什麼。」</li>
+    <li><b>AI 確認目標並反問細節</b>：Manus 先讀 /skill-creator 規範，確認要做「資訊圖表 Prompt 產生器」，並反問是否需多語系、有無 YAML 驗證規則。</li>
+    <li><b>AI 規劃並開發</b>：讀規範 → 開發網頁（HTML/CSS/JS）→ 撰寫 SKILL.md → 交付成果。</li>
+    <li><b>驗證並交付</b>：產出 dashboard.html＋SKILL.md，打包成 ZIP，按「新增到我的技能」入庫。</li>
+  </ol>
+  <div class="note green">🧾 這次實作<b>耗費 96 點</b>。交付內容：<b>SKILL.md</b>（定義流程、YAML 結構、使用說明）＋ <b>dashboard.html</b>（單頁儀表板，含即時預覽）。</div>
+  <h3>做出來的儀表板長怎樣</h3>
+  <ul class="pt">
+    <li><b>Dashboard 風格介面</b>：左側功能選單、右側設定區、下方輸出預覽。</li>
+    <li><b>多樣化控制項</b>：下拉選單、色碼選擇器、字級滑桿等。</li>
+    <li><b>即時預覽</b>：調整參數即時更新 YAML。</li>
+    <li><b>快速預設</b>：極簡黑白、科技藍、學術灰三種模板。</li>
+    <li><b>多格式輸出</b>：YAML、Markdown、JSON、純文字。</li>
+  </ul>
+  <h3>SKILL.md 的 YAML 前置設定（frontmatter）長怎樣</h3>
+  <div class="prompt">---
+<b>name</b>: infographic-prompt-generator
+<b>description</b>: 產生資訊圖表設計的 YAML Prompt。此技能提供一個互動式
+　　　　　儀表板，讓使用者透過視覺化介面選擇參數，即時生成
+　　　　　符合特定結構的資訊圖表 Prompt。
+<b>license</b>: Complete terms in LICENSE.txt
+---</div>
+  <div class="note gold">⚠️ 每個 Skill 的 SKILL.md 開頭都有這段 <b>YAML frontmatter</b>：<b>name</b>（技能代號）＋<b>description</b>（描述，也是觸發判斷的依據）。描述寫得越清楚，Manus 越知道什麼時候該喚起這個技能。</div>
+</section>
+
+<section class="chapter" id="sec-lib">
+  <span class="chip">CHAPTER 05</span>
+  <h2 class="ct">5. 官方技能庫與應用篇</h2>
+  <p class="cd">Manus 內建一個「技能」頁面，可搜尋、新增自訂技能，也有多個官方技能可直接用。</p>
+  <h3>幾個官方技能</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:180px">技能</th><th>用途</th></tr>
+    <tr><td><b>skill-creator</b>（技能創造者）</td><td>核心技能創建工具：用於建立或更新技能的指南，透過專業知識、工作流程或工具整合擴充 Manus。</td></tr>
+    <tr><td><b>stock-analysis</b></td><td>用金融市場數據分析股票與公司：公司概況、技術見解、價格圖表、內部人持股、SEC 資料。</td></tr>
+    <tr><td><b>video-generator</b></td><td>專業 AI 影片製作工作流程：影片、短片、廣告等內容。</td></tr>
+    <tr><td><b>similarweb-analytics</b></td><td>用 SimilarWeb 流量數據分析網站與網域：流量指標、參與度、全球排名、流量來源。</td></tr>
+  </table></div>
+  <h3>應用篇：把 Skill 用在動畫製作</h3>
+  <ul class="pt">
+    <li><b>應用篇 1：Remotion Skill</b>——製作轉場動畫。</li>
+    <li><b>應用篇 2：Manim Skill</b>——製作科學原理演示動畫。</li>
+  </ul>
+  <div class="note blue">💡 Remotion＝用程式碼（React）做影片動畫；Manim＝數學家 3Blue1Brown 那種「公式一步步演示」的動畫引擎。把它們包成 Skill，就能用一句話喚起整套製作流程。</div>
+</section>
+
+<section class="chapter" id="sec-agents">
+  <span class="chip">CHAPTER 06</span>
+  <h2 class="ct">6. Manus Agents 個人代理</h2>
+  <p class="cd">從「工具」升級成「有身份的助理」：認領一個屬於你、會跟你一起成長的個人 Agent。</p>
+  <h3>四大特點</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">特點</th><th>說明</th></tr>
+    <tr><td><b>獨特的 AI 身份</b></td><td>為它命名並賦予個性，它會記住所有內容。</td></tr>
+    <tr><td><b>持久的記憶與電腦</b></td><td>24/7 雲端助理，保留全部上下文與記憶。</td></tr>
+    <tr><td><b>自訂技能</b></td><td>為助理配備特定領域的專業知識（就是前面的 Skill）。</td></tr>
+    <tr><td><b>在聊天應用中使用</b></td><td>可在 Telegram 中使用，更多通訊應用即將上線。</td></tr>
+  </table></div>
+  <h3>可在哪裡使用</h3>
+  <ul class="pt">
+    <li><b>已上線</b>：Telegram、電腦使用。</li>
+    <li><b>即將上線</b>：WhatsApp、Messenger、Line。</li>
+    <li><b>帳號</b>：連結你的 Manus 帳號即可（免費／付費帳號都能用）。</li>
+  </ul>
+  <div class="note green">🖥️ 在聊天介面就能直接指派多階段工作流程，無需跳轉頁面；支援語音輸入與檔案上傳，並可即時取得成果；提供 <b>Manus 1.6 Max</b>（深度推理）與 <b>Manus 1.6 Lite</b>（快速回應）兩種模型，可依需求切換。</div>
+</section>
+
+<section class="chapter" id="sec-chatbot">
+  <span class="chip">CHAPTER 07</span>
+  <h2 class="ct">7. 傳統 Chatbot vs Manus Agents</h2>
+  <p class="cd">同樣在聊天視窗打字，差別在於：一個只會「回答」，一個會「把任務做完」。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:120px">比較面向</th><th>傳統 Chatbot</th><th>Manus Agents</th></tr>
+    <tr><td>核心定位</td><td>問答型互動工具</td><td>任務導向型 AI 代理</td></tr>
+    <tr><td>互動方式</td><td>一問一答</td><td>可下達多步驟任務</td></tr>
+    <tr><td>任務處理</td><td>單一回合回覆為主</td><td>可連續執行、拆解並完成複雜任務</td></tr>
+    <tr><td>資料整理</td><td>提供文字說明</td><td>主動整理資料、研究主題、彙整重點</td></tr>
+    <tr><td>專案規劃</td><td>協助提供建議</td><td>生成專案規劃、步驟流程與執行方案</td></tr>
+    <tr><td>內容生成</td><td>依提示產出內容</td><td>整合資料後產出完整成果</td></tr>
+    <tr><td>檔案處理</td><td>文字為主</td><td>可處理文件、圖片、語音等多媒體</td></tr>
+    <tr><td>輸入形式</td><td>文字輸入</td><td>文字、語音訊息、檔案上傳</td></tr>
+    <tr><td>輸出結果</td><td>單次回應內容</td><td>任務成果、整理文件、研究報告等完整輸出</td></tr>
+    <tr><td>使用價值</td><td>提升回應效率</td><td>建立可執行、可交付成果的 AI 工作流</td></tr>
+  </table></div>
+  <div class="golden"><div class="q">「Chatbot 給你答案，Agent 給你成果。」</div><div class="a">—— Chatbot 是一問一答的回應；Agent 會拆解任務、連續執行、最後交付一份可用的成品。</div></div>
+</section>
+
+<section class="chapter" id="sec-tg">
+  <span class="chip">CHAPTER 08</span>
+  <h2 class="ct">8. Manus Agents 的 Telegram 用法與九大功能</h2>
+  <h3>Telegram 上的四大特性</h3>
+  <ul class="pt">
+    <li><b>多步驟任務執行</b>：下一個任務，Agent 連續執行並把結果回傳。</li>
+    <li><b>多媒體互動處理</b>：語音、照片、文件都能互動。</li>
+    <li><b>個性化回應風格</b>：結構化或對話性，依你設定的個性回覆。</li>
+    <li><b>彈性模型切換</b>：Max（深度推理）／Lite（快速回應）自由切換。</li>
+  </ul>
+  <h3>可完成的九大功能</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">功能</th><th>說明</th></tr>
+    <tr><td>1. 查找資料</td><td>上網搜尋、蒐集新聞與資訊。</td></tr>
+    <tr><td>2. 撰寫文書</td><td>產出文件、DOC 等文書內容。</td></tr>
+    <tr><td>3. 整理分析</td><td>數據整理、表格彙整。</td></tr>
+    <tr><td>4. 建置網站</td><td>建站並部署上線。</td></tr>
+    <tr><td>5. 製作簡報</td><td>產出 PDF／PPTX 簡報。</td></tr>
+    <tr><td>6. 編寫程式</td><td>寫程式、執行腳本。</td></tr>
+    <tr><td>7. 處理檔案</td><td>處理 PDF、JPG 等各類檔案。</td></tr>
+    <tr><td>8. 排程提醒</td><td>定時辦事、按時執行提醒。</td></tr>
+    <tr><td>9. 影像製作</td><td>生成圖片與影像。</td></tr>
+  </table></div>
+  <div class="note green">🍌 課堂實例：在 Telegram 對 Agent 說「用 Nano Banana Pro 做一張 Podcast 封面（EP2｜AI 素養＝未來競爭力？）」，約 3～5 分鐘後 Agent 回傳 2048×2048 正方形封面（深藍科技風＋AI 晶片大腦主視覺），還能繼續調顏色、字型、版面或加 Logo。</div>
+  <div class="note blue">🗺️ 平台擴展路線圖：目前已開放訂閱使用，未來將擴展至 WhatsApp、LINE、Slack、Discord 等更多通訊平台。</div>
+</section>
+
+<section class="chapter" id="sec-recap">
+  <span class="chip">RECAP</span>
+  <h2 class="ct">9. 重點整理（帶走這幾句）</h2>
+  <ul class="pt">
+    <li><b>Skill ＝ 可重複呼叫的技能包</b>：由 SKILL.md（說明書）＋scripts（腳本）＋資源＋觸發關鍵字組成。</li>
+    <li><b>skill-creator</b> 是「做技能的技能」：用一句話就能請 Manus 幫你從零打造新 Skill（本集實作耗 96 點）。</li>
+    <li><b>Manus vs Claude Code</b>：差在「執行」——Manus 在雲端沙盒（安全、免設定），Claude Code 在本地（彈性、風險自負）。</li>
+    <li><b>Manus Agents ＝ 有身份、有記憶的個人代理</b>：命名、賦予個性、配自訂技能，24/7 雲端待命。</li>
+    <li><b>Chatbot 給答案，Agent 給成果</b>：Agent 能拆解並連續完成多步驟任務。</li>
+    <li><b>Telegram 就能用</b>：多步驟任務、多媒體、個性化、模型切換，涵蓋查資料到影像製作九大功能。</li>
+  </ul>
+</section>
+
+<section class="chapter" id="sec-src">
+  <span class="chip">SOURCE</span>
+  <h2 class="ct">10. 資料來源與製作說明</h2>
+  <ul class="pt">
+    <li><b>主要教材</b>：EP26 官方課程簡報《知行合一 Manus AI 基礎操作及應用——Skill／Manus Agents》＋課堂筆記。</li>
+    <li><b>製作方式</b>：本頁內容<b>逐頁整理自簡報全文</b>（真實課程教材）；比較表、技能清單、SKILL.md 片段、九大功能與 Telegram 實例均取自簡報原文，SVG 圖解為依內容繪製，未經改寫杜撰。</li>
+    <li><b>誠實標註</b>：本集以簡報與課堂筆記為主要依據；示範操作的螢幕畫面／逐字稿時間碼未逐幀對照錄影，若日後取得可再補入實錄截圖。Manus 功能與點數以官方為準。</li>
+    <li><b>延伸</b>：搭配 <a href="ep26-ai-skills.html">EP26 互動技能地圖</a>；相關 <a href="ep28-notes.html">EP28 AnswerThis</a>、<a href="ep39-notes.html">EP39 NotebookLM</a>。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  生成式 AI 應用電台・晨學講堂 ｜ EP26 課堂筆記 ｜ 知行合一 Manus AI：Skill 與 Manus Agents<br>
+  本頁為學習筆記整理，教材版權屬原課程與講者所有。<a href="../radio/" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a><br>
+  🍀 <b>Learn AI with Tarshar</b> ♥ 2026
+</footer>
+
+</body>
+</html>

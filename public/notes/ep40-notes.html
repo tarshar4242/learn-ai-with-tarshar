@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP40 課堂筆記｜ChatGPT for Excel & PowerPoint 六種實際應用（含 Codex 入門）</title>
+<meta name="description" content="晨學講堂 EP40 課堂筆記：把 ChatGPT 放進 Excel 與 PowerPoint 的工作流程——三種產品釐清、安裝與側邊欄、背景+任務+輸出下指令公式、Excel 四應用、PowerPoint 四應用、整合一條龍與五個安全提醒。依官方課程簡報與課堂筆記整理。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#217a52; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px;border-left:none}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+.note.violet{background:#F3EFFB;border-color:#DFD2F0;color:#5a34a8}
+.note.rose{background:#FBEEF1;border-color:#F0D2DB;color:#9c2f52}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.prompt{position:relative;background:#1d1d1f;border-radius:10px;padding:15px 16px;margin:12px 0;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt .tag{display:inline-block;font-size:11px;letter-spacing:.06em;color:#c9c4ff;border:1px solid #3a3a40;border-radius:6px;padding:2px 9px;margin-bottom:8px}
+.prompt b{color:#fff}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.embed{margin:14px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000}
+.embed iframe{display:block;width:100%;aspect-ratio:16/9;border:0}
+.embed .cap{font-size:12.5px;color:var(--ink3);padding:10px 16px;background:var(--paper);border-top:1px solid var(--line)}
+.ts{display:inline-block;font-family:"Cascadia Code",Consolas,monospace;font-weight:700;font-size:12px;color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,#fff);border-radius:5px;padding:2px 8px;margin-right:7px;letter-spacing:.4px;vertical-align:middle}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+.layers{display:grid;gap:10px;margin:14px 0}
+.lyr{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:13px 15px;background:#fff}
+.lyr .n{flex:none;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--accent)}
+.lyr h4{margin:0 0 3px;font-size:14.5px}
+.lyr p{font-size:13px;margin:0}
+.sub{color:var(--ink2)}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#a8c686" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP40 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="ep40-ai-skills.html">🗺️ 互動技能地圖</a>
+    </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 晨學講堂 · EP40</span>
+  <h1>ChatGPT for <span>Excel &amp; PowerPoint</span><br>六種實際應用（含 Codex 入門）</h1>
+  <p class="lead">這堂課不是把工作全丟給 AI，而是把 ChatGPT <b>放進 Excel 與 PowerPoint 的工作流程</b>，讓它幫你完成約 <b>60–70%</b> 的重複整理、初稿與檢查，再由人判斷、修正與定稿。本頁依<b>官方課程簡報（20 頁）與課堂筆記</b>整理，逐章對照每一張投影片的重點。</p>
+  <div class="meta">
+    <span>📅 2026/06/07 直播</span>
+    <span>🗂️ 教材：20 頁課堂簡報</span>
+    <span>🧮 Excel 四應用</span>
+    <span>📊 PowerPoint 四應用</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-map">1. 一頁看懂全課程</a>
+  <a href="#sec-products">2. 先分清三種產品</a>
+  <a href="#sec-install">3. 安裝與側邊欄</a>
+  <a href="#sec-formula">4. 下指令黃金公式</a>
+  <a href="#sec-excel">5. Excel 四應用</a>
+  <a href="#sec-ppt">6. PowerPoint 四應用</a>
+  <a href="#sec-flow">7. 整合一條龍與安全</a>
+  <a href="#sec-practice">8. 立即練習與名詞表</a>
+  <a href="#sec-src">9. 資料來源與製作說明</a>
+</nav>
+
+<article>
+
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--orange))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>EP40_「ChatGPT for PowerPoint 六種實際應用（淺談 Codex 入門）」，實際涵蓋 <b>Excel＋PowerPoint</b> 兩大工具</td></tr>
+    <tr><th>頻道</th><td>生成式 AI 應用電台・晨學講堂</td></tr>
+    <tr><th>直播日期</th><td>2026/06/07（六）晚間直播</td></tr>
+    <tr><th>教材</th><td>官方課程簡報 <b>20 頁</b>＋課堂筆記</td></tr>
+    <tr><th>一句話先懂</th><td>ChatGPT for Office 最適合當「<b>第一版助手、重複工作助手、檢查助手</b>」。它把 AI 直接開在 Excel／PowerPoint 側邊欄，讀你正在編輯的檔案，幫你寫公式、整理格式、生簡報初稿——但數字、公式、內容與資料安全的最後把關仍在你。</td></tr>
+  </table></div>
+
+  <h3>🎬 錄影回放</h3>
+  <div class="embed">
+    <iframe src="https://drive.google.com/file/d/1snzWofuiD3NJdPr2GHWBjh5q0TV7rAV-/preview" allow="autoplay" loading="lazy" title="EP40 錄影回放"></iframe>
+    <div class="cap">EP40 課堂錄影 — 需登入有觀看權限的 Google 帳號。</div>
+  </div>
+  <div class="note blue">💡 本頁內容以<b>官方課程簡報原文與課堂筆記</b>為依據逐章整理（真實課程內容，非推測）；投影片編號對應簡報第 N 頁。示範操作的螢幕截圖與逐字稿時間碼待錄影開通授權後補入。</div>
+</section>
+
+<section class="chapter" id="sec-map">
+  <span class="chip" style="background:linear-gradient(90deg,var(--cyan),var(--accent))">OVERVIEW</span>
+  <h2 class="ct">1. 一頁看懂全課程</h2>
+  <p class="cd">課程動線是一條「四段學習路線」：先<b>認識與安裝</b>，再學<b>下指令的心法</b>，接著分別在 <b>Excel</b> 與 <b>PowerPoint</b> 實戰，最後把兩邊串成一條龍。</p>
+  <figure class="diagram">
+    <svg viewBox="0 0 920 430" xmlns="http://www.w3.org/2000/svg" font-family="'Noto Sans TC',sans-serif">
+      <defs>
+        <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#217346"/><stop offset="1" stop-color="#0aa6c9"/></linearGradient>
+        <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2f6df0"/><stop offset="1" stop-color="#217346"/></linearGradient>
+        <linearGradient id="g3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1d9e6f"/><stop offset="1" stop-color="#3fa06a"/></linearGradient>
+        <linearGradient id="g4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d35400"/><stop offset="1" stop-color="#c98a0a"/></linearGradient>
+        <marker id="arw" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#b9c4b9"/></marker>
+      </defs>
+      <rect width="920" height="430" fill="#fbfcff"/>
+      <text x="460" y="42" text-anchor="middle" font-size="21" font-weight="900" fill="#2b2a33">EP40 · ChatGPT for Excel &amp; PowerPoint — 全景地圖</text>
+      <ellipse cx="460" cy="103" rx="270" ry="34" fill="#e8f4ec" stroke="#c3e4d1"/>
+      <text x="460" y="110" text-anchor="middle" font-size="13.5" font-weight="700" fill="#217346">核心：AI 完成 60–70% 重複工作，人做最後判斷與定稿</text>
+      <line x1="250" y1="143" x2="140" y2="190" stroke="#b9c4b9" stroke-width="2" marker-end="url(#arw)"/>
+      <line x1="390" y1="148" x2="360" y2="190" stroke="#b9c4b9" stroke-width="2" marker-end="url(#arw)"/>
+      <line x1="530" y1="148" x2="560" y2="190" stroke="#b9c4b9" stroke-width="2" marker-end="url(#arw)"/>
+      <line x1="670" y1="143" x2="780" y2="190" stroke="#b9c4b9" stroke-width="2" marker-end="url(#arw)"/>
+      <g>
+        <rect x="30" y="196" width="205" height="176" rx="16" fill="url(#g1)"/>
+        <text x="132" y="230" text-anchor="middle" font-size="16" font-weight="900" fill="#fff">① 安裝與認識</text>
+        <text x="132" y="258" text-anchor="middle" font-size="11.5" fill="#eafaf1">三種產品要分清</text>
+        <text x="132" y="280" text-anchor="middle" font-size="11.5" fill="#eafaf1">增益集安裝五步</text>
+        <text x="132" y="302" text-anchor="middle" font-size="11.5" fill="#eafaf1">側邊欄三位置</text>
+        <text x="132" y="324" text-anchor="middle" font-size="11.5" fill="#eafaf1">先用非機密小檔測試</text>
+      </g>
+      <g>
+        <rect x="252" y="196" width="205" height="176" rx="16" fill="url(#g2)"/>
+        <text x="354" y="230" text-anchor="middle" font-size="16" font-weight="900" fill="#fff">② 下指令心法</text>
+        <text x="354" y="258" text-anchor="middle" font-size="11.5" fill="#eaf1ff">背景＋任務＋輸出</text>
+        <text x="354" y="280" text-anchor="middle" font-size="11.5" fill="#eaf1ff">先要大綱再生內容</text>
+        <text x="354" y="302" text-anchor="middle" font-size="11.5" fill="#eaf1ff">指定可驗收輸出</text>
+        <text x="354" y="324" text-anchor="middle" font-size="11.5" fill="#eaf1ff">送出前人工檢查</text>
+      </g>
+      <g>
+        <rect x="474" y="196" width="205" height="176" rx="16" fill="url(#g3)"/>
+        <text x="576" y="230" text-anchor="middle" font-size="16" font-weight="900" fill="#fff">③ Excel 實戰</text>
+        <text x="576" y="258" text-anchor="middle" font-size="11.5" fill="#eafff6">一句話建報表</text>
+        <text x="576" y="280" text-anchor="middle" font-size="11.5" fill="#eafff6">不會函數請 AI 寫</text>
+        <text x="576" y="302" text-anchor="middle" font-size="11.5" fill="#eafff6">一鍵清理格式</text>
+        <text x="576" y="324" text-anchor="middle" font-size="11.5" fill="#eafff6">趨勢與情境分析</text>
+      </g>
+      <g>
+        <rect x="696" y="196" width="195" height="176" rx="16" fill="url(#g4)"/>
+        <text x="793" y="230" text-anchor="middle" font-size="16" font-weight="900" fill="#fff">④ PowerPoint 實戰</text>
+        <text x="793" y="258" text-anchor="middle" font-size="11.5" fill="#fff3e6">一句話生初稿</text>
+        <text x="793" y="280" text-anchor="middle" font-size="11.5" fill="#fff3e6">統一格式與標題</text>
+        <text x="793" y="302" text-anchor="middle" font-size="11.5" fill="#fff3e6">數據變洞察頁</text>
+        <text x="793" y="324" text-anchor="middle" font-size="11.5" fill="#fff3e6">多角度檢查</text>
+      </g>
+      <line x1="235" y1="284" x2="252" y2="284" stroke="#b9c4b9" stroke-width="2.5" marker-end="url(#arw)"/>
+      <line x1="457" y1="284" x2="474" y2="284" stroke="#b9c4b9" stroke-width="2.5" marker-end="url(#arw)"/>
+      <line x1="679" y1="284" x2="696" y2="284" stroke="#b9c4b9" stroke-width="2.5" marker-end="url(#arw)"/>
+      <text x="460" y="404" text-anchor="middle" font-size="12.5" fill="#8a879a">動線：先「裝好會用」→ 學「怎麼交代」→ 在「Excel」與「PowerPoint」實戰 → 串成一條龍</text>
+    </svg>
+    <figcaption>圖 1｜EP40 全景：四段學習路線（依課程簡報整理）</figcaption>
+  </figure>
+  <div class="golden"><div class="q">「ChatGPT for Office 最適合扮演三種角色：第一版助手、重複工作助手、檢查助手。」</div><div class="a">—— 本集最終重點（簡報 p20）</div></div>
+</section>
+
+<section class="chapter" id="sec-products">
+  <span class="chip" style="background:linear-gradient(90deg,#2f6df0,#0aa6c9)">CHAPTER 01</span>
+  <h2 class="ct">2. 先分清三種產品（別被名字搞混）</h2>
+  <p class="cd">很多人把「ChatGPT」「Copilot」混為一談。上手前先確認：你用的是哪一種？它能讀哪些資料？（簡報 p3–p4）</p>
+  <div class="twrap"><table>
+    <tr><th style="width:180px">產品</th><th>位置</th><th>作用／適合</th></tr>
+    <tr><td>網頁版 ChatGPT</td><td>瀏覽器或 ChatGPT App</td><td>OpenAI 模型；通用問答、文字工作、資料討論</td></tr>
+    <tr><td><b>ChatGPT for Excel／PowerPoint</b></td><td>直接在 Excel／PowerPoint 裡（增益集）</td><td>讀取目前的工作簿或簡報，協助產生公式、整理資料、建立內容；<b>上下文就在 Office 檔案裡，不用一直複製貼上</b></td></tr>
+    <tr><td>Microsoft Copilot</td><td>Microsoft 365 生態</td><td>模型與授權由 Microsoft 方案／帳號決定；入口、權限、付費與資料範圍都不同</td></tr>
+  </table></div>
+  <div class="note gold">⚠️ 停一下整理重點：<b>先確認自己用的是哪一種產品，再看它能讀取哪些資料</b>；不要只因為都叫 ChatGPT 或 Copilot 就把功能混在一起。</div>
+</section>
+
+<section class="chapter" id="sec-install">
+  <span class="chip" style="background:linear-gradient(90deg,#217346,#0aa6c9)">CHAPTER 02</span>
+  <h2 class="ct">3. 安裝增益集與側邊欄導覽</h2>
+  <p class="cd">Excel 與 PowerPoint 的安裝邏輯一模一樣，都是「增益集 → 搜尋 ChatGPT → 新增 → 登入授權」。（簡報 p5–p8）</p>
+  <h3>安裝五步驟</h3>
+  <ol class="st">
+    <li>開啟 Excel／PowerPoint，切到「<b>常用</b>」。</li>
+    <li>選擇「<b>增益集</b>」。</li>
+    <li>搜尋 <b>ChatGPT</b>（for Excel／for PowerPoint）。</li>
+    <li>按「<b>新增／Add</b>」。</li>
+    <li><b>登入 OpenAI 帳號</b>並完成授權。</li>
+  </ol>
+  <h4>安裝後先做的檢查</h4>
+  <ul class="pt">
+    <li>右側是否看得到<b>側邊欄</b>；是否登入<b>正確帳號</b>；是否授權讀取<b>目前活頁簿／簡報</b>。</li>
+    <li>先用一份<b>不含機密資料的小檔案</b>測試。</li>
+    <li>PowerPoint 版可能仍是 <b>beta</b>：介面、費用與可用性會更新，以實際帳號畫面為準。</li>
+  </ul>
+  <h3>側邊欄的三個重要位置（簡報 p8）</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">位置</th><th>作用</th></tr>
+    <tr><td>對話輸入框</td><td>描述要 AI 完成的工作</td></tr>
+    <tr><td>「＋」按鈕</td><td>加入 Skills、Apps 或其他可用工具</td></tr>
+    <tr><td>模型選擇</td><td>不同模型影響速度、成本與結果</td></tr>
+  </table></div>
+  <div class="note blue">💡 動手前先問自己三個問題：<b>AI 要讀什麼資料？要改哪一張表或哪幾張投影片？最後要交付什麼？</b></div>
+</section>
+
+<section class="chapter" id="sec-formula">
+  <span class="chip" style="background:linear-gradient(90deg,#2f6df0,#217346)">CHAPTER 03</span>
+  <h2 class="ct">4. 下指令黃金公式：背景＋任務＋輸出</h2>
+  <p class="cd">把需求說清楚，比用什麼模型更重要。（簡報 p9）</p>
+  <figure class="diagram">
+    <svg viewBox="0 0 900 210" xmlns="http://www.w3.org/2000/svg" font-family="'Noto Sans TC',sans-serif">
+      <rect width="900" height="210" fill="#fbfcff"/>
+      <g>
+        <rect x="30" y="40" width="250" height="130" rx="14" fill="#eef3fd" stroke="#c9ddf7"/>
+        <text x="155" y="78" text-anchor="middle" font-size="17" font-weight="900" fill="#2f6df0">背景</text>
+        <text x="155" y="108" text-anchor="middle" font-size="12" fill="#5a5866">這份檔案是什麼</text>
+        <text x="155" y="130" text-anchor="middle" font-size="12" fill="#5a5866">給誰看、有哪些限制</text>
+      </g>
+      <text x="300" y="112" text-anchor="middle" font-size="26" fill="#b9b3d9">＋</text>
+      <g>
+        <rect x="325" y="40" width="250" height="130" rx="14" fill="#e8f4ec" stroke="#c3e4d1"/>
+        <text x="450" y="78" text-anchor="middle" font-size="17" font-weight="900" fill="#217346">任務</text>
+        <text x="450" y="108" text-anchor="middle" font-size="12" fill="#5a5866">要分析、重寫、分類</text>
+        <text x="450" y="130" text-anchor="middle" font-size="12" fill="#5a5866">計算或建立什麼</text>
+      </g>
+      <text x="595" y="112" text-anchor="middle" font-size="26" fill="#b9b3d9">＝</text>
+      <g>
+        <rect x="620" y="40" width="250" height="130" rx="14" fill="#fdf1e7" stroke="#f2d6bd"/>
+        <text x="745" y="78" text-anchor="middle" font-size="17" font-weight="900" fill="#d35400">輸出</text>
+        <text x="745" y="108" text-anchor="middle" font-size="12" fill="#5a5866">要表格、公式、圖表</text>
+        <text x="745" y="130" text-anchor="middle" font-size="12" fill="#5a5866">簡報頁面或檢查清單</text>
+      </g>
+    </svg>
+    <figcaption>圖 2｜下指令黃金公式：背景＋任務＋輸出（簡報 p9）</figcaption>
+  </figure>
+  <div class="prompt">範例：
+背景：這是 2025 年每月營收資料，主管要在例會閱讀。
+任務：整理成月報，找出最高、最低與異常月份。
+輸出：建立一張摘要表、一張趨勢圖，並用三點文字說明主要洞察。</div>
+</section>
+
+<section class="chapter" id="sec-excel">
+  <span class="chip" style="background:linear-gradient(90deg,#1d9e6f,#0aa6c9)">CHAPTER 04</span>
+  <h2 class="ct">5. Excel 四應用</h2>
+
+  <h3>應用一：一句話建立報表（簡報 p10）</h3>
+  <ul class="pt">
+    <li>建立預算表、追蹤表、計畫表與範本；把原始欄位整理成易讀表格；建議圖表與摘要欄位；補充計算欄或 KPI。</li>
+    <li>人仍需檢查<b>欄位名稱、單位、日期格式與公式範圍</b>。</li>
+  </ul>
+
+  <h3>應用二：不會寫函數，讓 AI 協助（簡報 p11）</h3>
+  <p>用自然語言說明「<b>資料在哪裡</b>」與「<b>想算什麼</b>」，請 AI 提出公式並解釋。示例含 IF、IFERROR、VLOOKUP、SUMIF 等常用函數。</p>
+  <h4>正確驗收方式</h4>
+  <ol class="st">
+    <li>先要求<b>解釋公式每一段</b>。</li>
+    <li>用一筆<b>已知答案</b>的資料測試。</li>
+    <li>檢查<b>絕對／相對參照</b>。</li>
+    <li>檢查空白、文字、錯誤值等<b>邊界情況</b>。</li>
+  </ol>
+
+  <h3>應用三：一鍵清理與統一格式（簡報 p12）</h3>
+  <ul class="pt">
+    <li>找出：日期／貨幣／百分比格式不一致、欄位命名不一致、多餘空白／大小寫／標點問題、需要醒目顯示的異常值。</li>
+  </ul>
+  <div class="note gold">⚠️ 不要讓 AI <b>未經備份就直接覆寫整份原始資料</b>；先複製工作表或保留版本。</div>
+
+  <h3>應用四：趨勢與情境分析（簡報 p13）</h3>
+  <p>把數字轉成可討論的問題：哪個月成長最快？哪條產品線在下滑？實際和目標差多少？樂觀／基準／保守情境各會如何？</p>
+  <div class="note blue">💡 正式一點說，「<b>情境分析</b>」是對不同假設設定不同參數、觀察結果如何變化；它不是預言，而是<b>決策演練</b>。</div>
+</section>
+
+<section class="chapter" id="sec-ppt">
+  <span class="chip" style="background:linear-gradient(90deg,#d35400,#c98a0a)">CHAPTER 05</span>
+  <h2 class="ct">6. PowerPoint 四應用</h2>
+
+  <h3>應用一：從一句話生成簡報初稿（簡報 p14）</h3>
+  <p>AI 可從文字、Excel 資料或圖片建立簡報結構（封面、重點頁、圖表、摘要）。</p>
+  <div class="note green">✅ 重點不是「一次完成」，而是<b>先建立可修改的骨架</b>：要求 AI <b>先給頁面大綱、再生成內容</b>，通常更好控制。</div>
+
+  <h3>應用二：改投影片、統一格式與標題（簡報 p15）</h3>
+  <ul class="pt">
+    <li>把過長段落改成重點條列；統一標題句型與層級；重新安排資訊順序；建議圖表、圖片或版面形式。</li>
+    <li>統一格式前，<b>先指定要保留的品牌色、字型、Logo、頁碼與母片規則</b>。</li>
+  </ul>
+
+  <h3>應用三：把 Excel 數據變成洞察頁（簡報 p16）</h3>
+  <p>不是把圖表直接貼進簡報，而是讓<b>每張圖回答一個問題</b>：變化是什麼？原因可能是什麼？對決策有什麼意義？下一步要做什麼？</p>
+
+  <h3>應用四：多角度檢查（簡報 p17）</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">扮演角色</th><th>檢查什麼</th></tr>
+    <tr><td>主管</td><td>結論是否清楚、是否能決策</td></tr>
+    <tr><td>分析師</td><td>數據與論證是否一致</td></tr>
+    <tr><td>設計師</td><td>視覺層級與版面是否易讀</td></tr>
+    <tr><td>聽眾</td><td>是否有陌生名詞與理解斷點</td></tr>
+  </table></div>
+</section>
+
+<section class="chapter" id="sec-flow">
+  <span class="chip" style="background:linear-gradient(90deg,#217346,#d35400)">CHAPTER 06</span>
+  <h2 class="ct">7. 整合一條龍與五個安全提醒</h2>
+  <h3>資料到簡報一條龍（簡報 p18）</h3>
+  <ol class="st">
+    <li>Excel 整理分析。</li>
+    <li>建立 PowerPoint 初稿。</li>
+    <li>用 AI 調整版面、標題與資料洞察。</li>
+    <li>最後由<b>人</b>檢查事實、數字、語氣與敏感資訊。</li>
+  </ol>
+  <h3>五個安全提醒（簡報 p19）</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:120px">提醒</th><th>說明</th></tr>
+    <tr><td>務必檢查</td><td>AI 會出錯，尤其是公式、數字與引用</td></tr>
+    <tr><td>先備份</td><td>保留原始版本再讓工具修改</td></tr>
+    <tr><td>beta 不穩</td><td>PowerPoint 版若為 beta，功能與格式可能不穩定</td></tr>
+    <tr><td>相容性</td><td>VBA、外掛或公司政策可能造成相容性問題</td></tr>
+    <tr><td>隱私機密</td><td>不要上傳未獲授權的人事、財務或客戶資料</td></tr>
+  </table></div>
+  <div class="golden"><div class="q">「真正的責任仍在使用者：提供清楚背景、指定可驗收的輸出，並對數字、公式、內容與資料安全做最後確認。」</div><div class="a">最終重點（簡報 p20）</div></div>
+</section>
+
+<section class="chapter" id="sec-practice">
+  <span class="chip" style="background:linear-gradient(90deg,#c98a0a,#d4508e)">PRACTICE</span>
+  <h2 class="ct">8. 立即練習與名詞表</h2>
+  <h3>三項練習（簡報 p20）</h3>
+  <ul class="pt">
+    <li><b>Excel 銷售報表：</b>拿一份非機密月銷售表，要求 AI 清理格式、補總計與成長率、建趨勢圖，再自己驗算三筆。</li>
+    <li><b>PowerPoint 五頁簡報：</b>選一份 Word／Excel 資料，要求 AI 先給五頁大綱，再生成封面、現況、洞察、建議、下一步。</li>
+    <li><b>練習公式：</b>挑一個不會寫的函數，請 AI 產生公式、逐段解釋並列出三個容易出錯的情況。</li>
+  </ul>
+  <h3>名詞表</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:130px">名詞</th><th>白話</th><th>正式定義</th></tr>
+    <tr><td>增益集 Add-in</td><td>裝進 Office 的小工具</td><td>擴充 Office 應用功能的軟體元件</td></tr>
+    <tr><td>Prompt</td><td>給 AI 的工作說明</td><td>引導模型產生結果的文字或多模態輸入</td></tr>
+    <tr><td>情境分析</td><td>換不同假設看看結果</td><td>以多組參數假設比較可能結果的分析方法</td></tr>
+    <tr><td>Beta</td><td>還在測試中的版本</td><td>正式發布前供使用者驗證的軟體階段</td></tr>
+    <tr><td>VBA</td><td>Office 自動化程式語言</td><td>Microsoft Visual Basic for Applications</td></tr>
+    <tr><td>Codex</td><td>會寫程式的 AI 代理</td><td>本集片尾淺談：把重複的資料處理寫成可重跑的程式</td></tr>
+  </table></div>
+</section>
+
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5a5866)">SOURCES</span>
+  <h2 class="ct">9. 資料來源與製作說明</h2>
+  <ul class="pt">
+    <li><b>原始教材：</b>EP40「ChatGPT for PowerPoint 六種實際應用（淺談 Codex 入門）」官方課程簡報 20 頁＋課堂筆記。</li>
+    <li><b>製作方式：</b>逐頁對照官方簡報文字與課堂筆記整理成本頁，內容為<b>真實課程內容</b>，圖解為依課程結構自製的 SVG。</li>
+    <li><b>誠實聲明：</b>本頁以簡報實錄與課堂筆記為準；<b>示範操作的螢幕截圖與逐字稿時間碼</b>需錄影檔開通授權後才能補入（目前錄影為私人 Drive 檔）。ChatGPT for Office 為持續更新的功能，介面、方案與費用以你當下的帳號畫面為準。</li>
+    <li><b>介面參考：</b>互動技能地圖頁沿用本站 EP44–46 的卡片式多層導覽與遊戲化進度設計。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  EP40「ChatGPT for Excel &amp; PowerPoint 六種實際應用」課堂筆記・2026/07 整理<br>
+  🍀 Learn AI with Tarshar｜搭配 <a href="ep40-ai-skills.html">互動技能地圖</a> 使用效果最佳
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP16 課堂筆記｜用 Claude Skills 來學統計分析吧！（敘述統計、統計圖表及 t 檢定）</title>
+<meta name="description" content="晨學講堂 EP16 課堂筆記：Claude Skills 是什麼與為什麼需要、三大組成元素與三大特性、前置準備與介面導覽、問卷資料統計分析器實戰案例（五階段工作流、三層檢驗、t檢定類型、APA報告）、skill-creator手把手教學、Skills跨工具應用實例。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#3f8560; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#7c3aed; --pink:#b25269; --green:#3f8560; --orange:#c2620c; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px;border-left:none}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+.note.violet{background:#F3EFFB;border-color:#DFD2F0;color:#5a34a8}
+.note.rose{background:#FBEEF1;border-color:#F0D2DB;color:#9c2f52}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.prompt{position:relative;background:#1d1d1f;border-radius:10px;padding:15px 16px;margin:12px 0;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt .tag{display:inline-block;font-size:11px;letter-spacing:.06em;color:#c9c4ff;border:1px solid #3a3a40;border-radius:6px;padding:2px 9px;margin-bottom:8px}
+.prompt b{color:#fff}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.embed{margin:14px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000}
+.embed iframe{display:block;width:100%;aspect-ratio:16/9;border:0}
+.embed .cap{font-size:12.5px;color:var(--ink3);padding:10px 16px;background:var(--paper);border-top:1px solid var(--line)}
+.ts{display:inline-block;font-family:"Cascadia Code",Consolas,monospace;font-weight:700;font-size:12px;color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,#fff);border-radius:5px;padding:2px 8px;margin-right:7px;letter-spacing:.4px;vertical-align:middle}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+.layers{display:grid;gap:10px;margin:14px 0}
+.lyr{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:13px 15px;background:#fff}
+.lyr .n{flex:none;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--accent)}
+.lyr h4{margin:0 0 3px;font-size:14.5px}
+.lyr p{font-size:13px;margin:0}
+.sub{color:var(--ink2)}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#bfe0cb" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP16 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="ep16-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 晨學講堂 · EP16</span>
+  <h1>用 <span>Claude Skills</span> 來學統計分析吧！</h1>
+  <p class="lead">（敘述統計、統計圖表及 t 檢定）Skills 就像是為 AI 準備的「專業證照」——把特定任務的知識打包成獨立資料夾，讓通用的 Claude 瞬間轉化為特定領域的專家。本集用一個真實的<b>問卷資料統計分析器</b>技能，示範從資料清理、EDA、t 檢定到 APA 7 格式學術報告的完整五階段工作流，再教你動手用 skill-creator 做出自己的 Skill。</p>
+  <div class="meta">
+    <span>⏱️ 課程長度：約 1 小時</span>
+    <span>🗂️ 教材：46 頁簡報 + 問卷統計分析器 Skill 原始檔</span>
+    <span>📊 主題：Claude Skills × 統計分析</span>
+    <span>🖼️ 22 張課程簡報原圖</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-agenda">1. 三段式議程</a>
+  <a href="#sec-what">2. Claude Skills 是什麼／為什麼需要</a>
+  <a href="#sec-parts">3. 三大組成元素與三大特性</a>
+  <a href="#sec-setup">4. 前置準備與介面導覽</a>
+  <a href="#sec-case">5. 案例：問卷資料統計分析器</a>
+  <a href="#sec-create">6. 手把手教學：skill-creator</a>
+  <a href="#sec-extend">7. 產出延伸與跨工具應用</a>
+  <a href="#sec-src">8. 資料來源與製作說明</a>
+</nav>
+
+<article>
+
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--teal))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>EP16「用 Claude Skills 來學統計分析吧！（敘述統計、統計圖表及 t 檢定）」</td></tr>
+    <tr><th>頻道</th><td>生成式 AI 應用電台・晨學講堂</td></tr>
+    <tr><th>課程長度</th><td>約 1 小時</td></tr>
+    <tr><th>教材</th><td>官方課程簡報 <b>46 頁</b>＋「問卷資料統計分析器」（questionnaire-stats-analyzer）Claude Skill 原始檔（含 SKILL.md、README、Python 分析腳本）＋「團購小幫手」Skill 範例（含 SKILL.md／EXAMPLES／QUICK_START）＋探索式資料分析（EDA）補充教材（SPSS 操作簡報、APA 格式指南、模擬資料）</td></tr>
+    <tr><th>一句話先懂</th><td>Skills 就像是<b>為 AI 準備的「專業證照」</b>：讓通用的 Claude 模型瞬間轉化為特定領域的專家。</td></tr>
+  </table></div>
+  <figure class="shot">
+    <img src="ep16-img/slide01.jpg" alt="EP16 課程封面：用 Claude Skills 來學統計分析吧" loading="lazy">
+    <figcaption>簡報封面｜晨學講堂 EP16：用 Claude Skills 來學統計分析吧！（敘述統計、統計圖表及 t 檢定）。</figcaption>
+  </figure>
+  <div class="note blue">💡 本頁逐節整理簡報 46 頁內容，並對照課程附帶的真實 Claude Skill 原始檔（questionnaire-stats-analyzer、團購小幫手）核實技術細節；簡報原圖直接嵌入本頁重點段落。內容為<b>真實課程內容</b>，未經改寫杜撰。</div>
+</section>
+
+<section class="chapter" id="sec-agenda">
+  <span class="chip" style="background:linear-gradient(90deg,#3f8560,#0d8f80)">AGENDA</span>
+  <h2 class="ct">1. 三段式議程（1 小時）</h2>
+  <figure class="shot">
+    <img src="ep16-img/slide04.jpg" alt="用 Claude Skills 來學統計分析吧：三段式議程" loading="lazy">
+    <figcaption>簡報｜(1) 簡介及應用 Claude Skills 工具（提示與 Skills 差異、結構化分析助手）(2) 案例：問卷調查資料分析（t 檢定、APA 格式）（資料清理與探索分析、t 檢定與 APA 報告）(3) Skills 產出延伸與跨工具應用（程式小白模板、精通編碼模組）。</figcaption>
+  </figure>
+</section>
+
+<section class="chapter" id="sec-what">
+  <span class="chip" style="background:linear-gradient(90deg,#3f8560,#c2620c)">CHAPTER 01</span>
+  <h2 class="ct">2. Claude Skills 是什麼？為什麼需要？</h2>
+  <figure class="shot">
+    <img src="ep16-img/slide08.jpg" alt="Claude Skills 是什麼" loading="lazy">
+    <figcaption>簡報｜Claude Skills 是一種模組化系統，將特定任務的知識打包成獨立的「Skill」資料夾，讓 Claude 能夠在需要時動態載入這些專業能力。</figcaption>
+  </figure>
+  <ul class="pt">
+    <li>可重複使用的客製化指令。</li>
+    <li>Claude 可在任何對話中遵循。</li>
+    <li>將一次性 Prompt 轉化為可工程化的數位資產。</li>
+    <li>不僅告訴 AI「做什麼」，更定義「如何判斷」和「如何執行」。</li>
+  </ul>
+  <div class="golden"><div class="q">類比說明：Skills 就像是為 AI 準備的「專業證照」</div><div class="a">讓通用的 Claude 模型瞬間轉化為特定領域的專家。</div></div>
+
+  <h3>為什麼需要 Claude Skills？</h3>
+  <figure class="shot">
+    <img src="ep16-img/slide10.jpg" alt="為什麼需要 Claude Skills：傳統做法 vs Claude Skills" loading="lazy">
+    <figcaption>簡報｜傳統做法（每次對話都要重新說明需求／上下文視窗有限記憶有限／把所有需求資料文本都塞進 Prompts／容易被海量知識淹沒記憶體）vs Claude Skills（模組化設計靈活導入指令與資料／按需載入大幅節省 Token 消耗／把對的知識擺在對的時機／客製化功能需要時才主動導入）。</figcaption>
+  </figure>
+</section>
+
+<section class="chapter" id="sec-parts">
+  <span class="chip" style="background:linear-gradient(90deg,#c2620c,#0d8f80)">CHAPTER 02</span>
+  <h2 class="ct">3. Skills 的三大組成元素與三大特性</h2>
+  <h3>三大組成元素</h3>
+  <figure class="shot">
+    <img src="ep16-img/slide13.jpg" alt="Skills 的三大組成元素：指令、腳本、資源" loading="lazy">
+    <figcaption>簡報｜① <b>指令【規則】</b>：該領域之必備、先備、專業知識、實務經驗與完整作業流程——這是 Skill 的「大腦」，定義了 Claude 應該如何思考和判斷。② <b>腳本【流程】</b>：實際執行時會用到的固定工具，例如寫一個 Python、GAS 腳本來自動整理資料——這是 Skill 的「行動」能力。③ <b>資源【範例】</b>：一起附上的補充資料，例如 API 說明文件、操作手冊等參考資源——這是 Skill 的「知識庫」。</figcaption>
+  </figure>
+  <h3>三大特性</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:190px">特性</th><th>說明</th></tr>
+    <tr><td><b>01 可描述性</b>（Describability）</td><td>能夠清楚說明技能的經驗法則，讓 Claude 理解何時該使用這個技能，而非僅僅是執行指令。</td></tr>
+    <tr><td><b>02 可重現性</b>（Reproducibility）</td><td>在不同場景下都能維持穩定表現，確保輸出品質的一致性，將 AI 行為標準化。</td></tr>
+    <tr><td><b>03 可移轉性</b>（Transferability）</td><td>能夠透過分享讓他人也能使用，支援團隊協作與知識傳承，將個人經驗轉化為組織資產。</td></tr>
+  </table></div>
+</section>
+
+<section class="chapter" id="sec-setup">
+  <span class="chip" style="background:linear-gradient(90deg,#0d8f80,#3b6bb0)">CHAPTER 03</span>
+  <h2 class="ct">4. 開始使用 Claude Skills：前置準備與介面導覽</h2>
+  <figure class="shot">
+    <img src="ep16-img/slide09.jpg" alt="開始使用 Claude Skills：前置準備" loading="lazy">
+    <figcaption>簡報｜必要條件：訂閱 Claude Pro 或 Team 方案、使用網頁版介面（Web Interface）。啟用步驟：① 點擊左下角的個人頭像（Profile）② 選擇 Feature Preview 選單 ③ 找到 Skills 並切換為 On。</figcaption>
+  </figure>
+  <figure class="shot">
+    <img src="ep16-img/slide25.jpg" alt="Skills 介面導覽" loading="lazy">
+    <figcaption>簡報｜① 搜尋欄（Search）：快速查找已安裝或官方提供的 Skills，支援關鍵字模糊搜尋。② 新增按鈕（+ Add）：點擊開始創建新的 Skill，提供對話式創建、手動撰寫或上傳檔案三種模式。③ 分頁切換（Tabs）：Your skills 管理您創建的 Skills；Example skills 瀏覽官方範例。④ 列表區域（List Area）：顯示所有可用的 Skills 卡片，包含名稱、簡述與啟用狀態。</figcaption>
+  </figure>
+</section>
+
+<section class="chapter" id="sec-case">
+  <span class="chip" style="background:linear-gradient(90deg,#3f8560,#b5476a)">CHAPTER 04</span>
+  <h2 class="ct">5. 案例：問卷資料統計分析器（questionnaire-stats-analyzer）</h2>
+  <p class="cd">本集使用的示範案例：<b>壓力管理 APP 介入研究</b>——n=50，分成介入組與對照組各約 25 人，各自前測→後測，最後輸出符合 APA 7 格式的統計報告。</p>
+  <figure class="shot">
+    <img src="ep16-img/slide26.jpg" alt="壓力管理 APP 介入研究流程" loading="lazy">
+    <figcaption>簡報｜研究設計（n=50，APP 介入組 vs 對照組，各自前測→後測）→ 資料處理流程（資料清理去除 NA／空白／異常值 → 敘述統計 → t 檢定：成對／獨立／單一樣本）→ 輸出結果（APA 格式輸出，含 t(48) = 2.XX, p &lt; .05, d = 0.XX 等統計量）。</figcaption>
+  </figure>
+
+  <h3>五階段完整工作流</h3>
+  <p>依 Skill 原始 README 說明，這個真實部署的 Claude Skill 採<b>五階段工作流</b>，每階段皆含自我檢查：</p>
+  <ol class="st">
+    <li><b>資料清理</b>（9 項檢查）：結構檢查、缺失值識別、數值格式清理、類別變數標準化、範圍檢查、離群值識別、衍生變數建立。</li>
+    <li><b>探索性資料分析 EDA</b>（10 項分析）：單變數分布檢查、常態性判斷（Q-Q plot + Shapiro-Wilk）、群組分布比較、相關性分析、生成 EDA 總結報告。</li>
+    <li><b>資料編碼</b>（10 項檢查）：變數型態辨識、類別編碼、連續格式化、編碼驗證。</li>
+    <li><b>統計分析</b>（10 項判斷）：自動判定檢定類型、執行 t 檢定（成對／獨立／單一樣本）、計算效果量（Cohen's d）、三層檢驗確保正確性。</li>
+    <li><b>APA 報告生成</b>（10 項檢查）：標題頁、摘要、研究方法、研究結果（表格+文字）、討論與建議，完全符合 APA 7th 格式。</li>
+  </ol>
+
+  <h3>三層檢驗機制（Triple Verification）</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:130px">檢驗層級</th><th>說明</th></tr>
+    <tr><td><b>層級 1：即時檢查</b></td><td>每完成一個步驟立即驗證，自動檢測數值合理性，確認圖形正確生成。</td></tr>
+    <tr><td><b>層級 2：階段檢查</b></td><td>每完成一個階段全面檢視，交叉驗證不同分析結果，確認可銜接下一階段。</td></tr>
+    <tr><td><b>層級 3：最終檢查</b></td><td>完成所有分析後從頭檢查，確認數值前後一致，驗證報告完整性。</td></tr>
+  </table></div>
+  <div class="note gold">⚠️ 缺失值處理策略：缺失率 &lt; 5% 自動報告並建議，5-20% 必須詢問使用者決策，&gt; 20% 警告風險並建議刪除變數。處理選項包含刪除該配對個案、保留並標示缺失、平均數／中位數／分組平均插補。</div>
+
+  <h3>資料清理過程示意</h3>
+  <figure class="shot">
+    <img src="ep16-img/slide15.jpg" alt="資料清理：去除異常值" loading="lazy">
+    <figcaption>簡報｜資料清理階段示意：清掃 NA、空白、6.5h、3杯、90分鐘、7,2 等異常或格式不一致的原始輸入值。</figcaption>
+  </figure>
+
+  <h3>常見問題（FAQ，摘自 Skill 原始說明）</h3>
+  <ul class="pt">
+    <li><b>樣本數太小（n&lt;30）怎麼辦？</b>技能會自動標註樣本數限制，並在報告中說明；建議使用非參數方法。</li>
+    <li><b>資料嚴重不符常態怎麼辦？</b>技能會嘗試資料轉換（log、sqrt），若仍不符合會建議非參數方法。</li>
+    <li><b>需要多個 t 檢定會有多重比較問題嗎？</b>會！技能會自動提醒，並建議 Bonferroni 校正或改用 ANOVA。</li>
+  </ul>
+  <div class="note steel">💡 技能架構：questionnaire-stats-analyzer/ 底下為 SKILL.md（5000+ 字完整指引）＋ scripts/（data_cleaner.py、eda_analyzer.py、ttest_analyzer.py、apa_report_generator.py 四個 Python 分析模組）。需安裝套件：pandas、numpy、scipy、matplotlib、seaborn、python-docx、openpyxl。</div>
+</section>
+
+<section class="chapter" id="sec-create">
+  <span class="chip" style="background:linear-gradient(90deg,#c2620c,#9c7b23)">CHAPTER 05</span>
+  <h2 class="ct">6. 手把手教學：使用 skill-creator 創建 Skill</h2>
+  <figure class="shot">
+    <img src="ep16-img/slide27.jpg" alt="手把手教學：使用 skill-creator 創建 Skill" loading="lazy">
+    <figcaption>簡報｜① 啟動對話模式：在新增選單中點擊 Create with Claude，開啟專門用於創建 Skill 的對話視窗。② 描述你的需求：用自然語言告訴 Claude 你想做什麼，例如「幫我做一個能自動分析 CSV 財報並畫出趨勢圖的工具」。③ 測試與迭代：Claude 會生成初始版本，在右側的 Preview 視窗中實際測試，並透過對話要求它修正錯誤或調整細節。④ 發布 Skill：確認功能運作正常後，點擊右上角的 Publish 按鈕，新的 Skill 就會出現在個人列表中供隨時調用。</figcaption>
+  </figure>
+  <h3>創建 Skill 的三種方式</h3>
+  <figure class="shot">
+    <img src="ep16-img/slide30.jpg" alt="創建 Skill 的三種方式" loading="lazy">
+    <figcaption>簡報｜① Create with Claude 對話式創建：透過與 Claude 的自然語言對話逐步描述需求，Claude 會自動幫你生成結構化的 Skill 設定與指令。適合初學者、邏輯複雜需要 AI 協助梳理時。② Write Instructions 直接撰寫：直接在編輯器中編寫 Skill 的指令（Instructions），適合已經清楚知道 Prompt 寫法的使用者。適合簡單任務、快速調整現有 Prompt。③ Upload a Skill 匯入檔案：上傳現有的 .zip 或 .SKILL 檔案，通常用於安裝他人分享的 Skill 或還原備份。適合團隊共享、使用社群資源。</figcaption>
+  </figure>
+</section>
+
+<section class="chapter" id="sec-extend">
+  <span class="chip" style="background:linear-gradient(90deg,#3f8560,#5645D4)">CHAPTER 06</span>
+  <h2 class="ct">7. Skills 產出延伸與跨工具應用</h2>
+  <h3>把 Claude Skills 產出裝進 ChatGPT 專案功能</h3>
+  <figure class="shot">
+    <img src="ep16-img/slide32.jpg" alt="Claude Skills 裝入 ChatGPT 專案功能" loading="lazy">
+    <figcaption>簡報｜Claude 產出的 .MD 檔（Workflow + Prompt 範例）裝入 ChatGPT 專案 → 產生可重複執行的工作流（工廠生產線功能）。應用場景：教學培訓、行政自動化、研究寫作、AI Agent 雛形。</figcaption>
+  </figure>
+
+  <h3>實例：「團購小幫手」Skill 從原始文字到自動報表</h3>
+  <p class="cd">課程附帶另一個真實可用的 Skill 範例——把雜亂的團購訂單文字（姓名、電話、地址、品項夾雜在一起）自動整理成結構化報表。</p>
+  <figure class="shot">
+    <img src="ep16-img/slide35.jpg" alt="團購小幫手工作流示意" loading="lazy">
+    <figcaption>簡報｜雜亂團購文字 → AI 工具及 Google Sheet 分析 → 統計總數相關數據 → 寄送信箱通知。</figcaption>
+  </figure>
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="ep16-img/slide41.jpg" alt="Google Sheet 整理結果" loading="lazy">
+      <figcaption>整理後的 Google Sheet：姓名／電話／地址／品項／數量／單價／小計／原始文字，逐筆對照。</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="ep16-img/slide38.jpg" alt="團購資料整理器 Demo 網頁" loading="lazy">
+      <figcaption>「團購資料整理器」Demo 網頁：貼上團購文字即自動統計訂單總數、參與人數、總金額與各品項數量金額。</figcaption>
+    </figure>
+  </div>
+  <figure class="shot">
+    <img src="ep16-img/slide39.jpg" alt="Google Apps Script 程式碼" loading="lazy">
+    <figcaption>簡報｜Google Apps Script 程式碼：團購亂資料整理工具（從 A 欄貼上文字 → 明細表 → 彙總表 → 寄信），輸出 Raw_Cleaned_Data、By_Person_Summary、Item_Stats 三張表；選單提供整理資料、產出報表、整理+報表一次完成、寄送統計 Email 四種操作。</figcaption>
+  </figure>
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="ep16-img/slide43.jpg" alt="團購統計完成 Email 通知" loading="lazy">
+      <figcaption>自動寄出的統計 Email：參與人數、總金額、品項統計，並附上試算表連結與原始附件。</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="ep16-img/slide46.jpg" alt="NotebookLM 處理團購訂單並生成報表" loading="lazy">
+      <figcaption>NotebookLM 端也能處理同一份團購訂單，生成含統計摘要的完整 Excel 報表（Original_Data／Raw_Cleaned_Data／By_Person_Summary／Item_Stats 四分頁）。</figcaption>
+    </figure>
+  </div>
+  <div class="note green">✅ 這個案例示範了同一份「亂資料」，可以分別用 Claude Skill＋Google Apps Script、或 NotebookLM，走出不同但同樣可靠的自動化路徑——這正是 Skills「可移轉性」的具體展現。</div>
+</section>
+
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5a5866)">SOURCES</span>
+  <h2 class="ct">8. 資料來源與製作說明</h2>
+  <ul class="pt">
+    <li><b>原始教材：</b>EP16「用 Claude Skills 來學統計分析吧！」官方課程簡報 46 頁；「問卷資料統計分析器」（questionnaire-stats-analyzer）Claude Skill 原始檔（SKILL.md、README、四個 Python 分析腳本）；「團購小幫手」Skill 範例（SKILL.md／README／EXAMPLES／QUICK_START）；EDA 補充教材（SPSS 操作簡報兩份、APA 7 格式指南 PDF、模擬資料 xlsx）。</li>
+    <li><b>製作方式：</b>下載原始簡報 pptx，取出每頁內建設計背景圖（46 頁中 29 頁為圖文設計頁，已保留原圖），逐頁親眼判讀並對照 Skill 原始檔的 README 文字內容，整理成本頁章節。內容為<b>真實課程內容與真實 Skill 技術文件</b>，未經改寫杜撰。</li>
+    <li><b>誠實聲明：</b>本集資料夾錄影檔案較大，暫未逐句轉寫，<b>逐字稿時間碼</b>暫缺，如日後開放取得可再補入；簡報中純過場／QR Code 頁未收錄為獨立截圖。</li>
+    <li><b>介面參考：</b>頁面採全站現行「乾淨白底編輯風」版型（沿用 EP38 課堂筆記頁架構）。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  EP16「用 Claude Skills 來學統計分析吧！」課堂筆記・2026/07 整理<br>
+  🍀 Learn AI with Tarshar｜搭配 <a href="ep16-ai-skills.html">互動技能地圖</a> 使用效果最佳
+</footer>
+
+</body>
+</html>

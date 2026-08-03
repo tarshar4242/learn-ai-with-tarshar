@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP28 課堂筆記｜文獻耙梳工具 AnswerThis</title>
+<meta name="description" content="晨學講堂 EP28 課堂筆記：AnswerThis——以學術研究流程為核心的 AI 研究助理平台。核心特色、Tools（文獻回顧／學術搜尋／Chat with PDF／引用地圖）與 Agents（論文寫手／研究缺口發現器／改寫／同理心審稿）、Library 與 Citation Map，以及用 YAML 讓 AI 搜尋更精準。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#5645D4; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2);border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3);color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase;background:var(--accent)}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.prompt{position:relative;background:#1d1d1f;border-radius:10px;padding:15px 16px;margin:12px 0;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt .tag{display:inline-block;font-size:11px;letter-spacing:.06em;color:#c9c4ff;border:1px solid #3a3a40;border-radius:6px;padding:2px 9px;margin-bottom:8px}
+.prompt b{color:#fff}
+.svgwrap{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg{display:block;width:100%;height:auto}
+.svgwrap .cap{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP28 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="ep28-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 晨學講堂 · EP28</span>
+  <h1>文獻耙梳工具 <span>AnswerThis</span></h1>
+  <p class="lead">EP28 介紹 <b>AnswerThis</b>——一個<b>以學術研究流程為核心</b>的 AI 研究助理平台，把<b>文獻搜尋、理解、寫作與語言優化</b>整合在一起。掃描 2.5 億筆學術來源、每個回答附<b>逐行引用</b>直連原始論文，並用 <b>Tools（工具）</b>與 <b>Agents（智能代理）</b>兩大類功能，陪你從找題目一路走到寫論文。</p>
+  <div class="meta">
+    <span>📅 2026/03 直播</span>
+    <span>🗂️ 教材：官方簡報＋課堂筆記</span>
+    <span>🎓 主題：學術研究助理</span>
+    <span>📚 文獻回顧／引用地圖</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-what">1. AnswerThis 是什麼</a>
+  <a href="#sec-feat">2. 核心特色四項</a>
+  <a href="#sec-arch">3. 功能架構：Tools／Agents</a>
+  <a href="#sec-tools">4. Tools 工具詳解</a>
+  <a href="#sec-agents">5. Agents 智能代理</a>
+  <a href="#sec-lib">6. Library 與 Citation Map</a>
+  <a href="#sec-yaml">7. 延伸：YAML 精準搜尋</a>
+  <a href="#sec-recap">8. 重點整理</a>
+  <a href="#sec-src">9. 資料來源與製作說明</a>
+</nav>
+
+<article>
+
+<section class="chapter" id="sec-info">
+  <span class="chip">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>EP28_「<b>文獻耙梳工具・AnswerThis</b>」</td></tr>
+    <tr><th>頻道</th><td>生成式 AI 應用電台・晨學講堂</td></tr>
+    <tr><th>教材</th><td>官方課程簡報《文獻耙梳工具 AnswerThis》＋課堂筆記＋錄影回放</td></tr>
+    <tr><th>一句話先懂</th><td><b>AnswerThis ＝ 給研究者的 AI 研究助理平台</b>：一個地方把「找文獻、讀文獻、找研究缺口、寫初稿、潤稿、管理文獻」全部串起來，而且每個回答都附<b>逐行引用</b>，不怕它亂編。</td></tr>
+    <tr><th>適合誰</th><td>寫論文的碩博士生、做政策／主題研究的工作者——尤其在「文獻回顧」與「找研究缺口」這兩個最花時間的環節。</td></tr>
+  </table></div>
+  <div class="note blue">💡 本頁內容整理自 EP28 官方課程簡報全文與課堂筆記（真實課程教材，非推測）。功能架構圖為依簡報內容繪製的 SVG 圖解；示範操作的螢幕畫面若日後逐幀對照錄影可再補入。</div>
+</section>
+
+<section class="chapter" id="sec-what">
+  <span class="chip">CHAPTER 01</span>
+  <h2 class="ct">1. AnswerThis 是什麼</h2>
+  <p class="cd">一句話：以學術研究流程為核心的 AI 研究助理平台。</p>
+  <p>AnswerThis 不是單一功能的小工具，而是<b>把整條研究流程串起來的平台</b>——從<b>文獻搜尋 → 理解 → 寫作 → 語言優化</b>，每一段都有對應的 AI 功能接手。它的定位很清楚：<b>讓研究者少花時間在「整理」，多花時間在「思考」</b>。</p>
+  <div class="svgwrap">
+  <svg viewBox="0 0 900 120" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,sans-serif">
+    <defs><marker id="a1" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5645D4"/></marker></defs>
+    <g>
+      <rect x="16" y="40" width="180" height="46" rx="10" fill="#EEEBFB" stroke="#5645D4"/>
+      <text x="106" y="60" text-anchor="middle" font-size="13.5" font-weight="700" fill="#3f34a0">① 文獻搜尋</text>
+      <text x="106" y="77" text-anchor="middle" font-size="11" fill="#5f5f5f">找到對的論文</text>
+      <line x1="196" y1="63" x2="222" y2="63" stroke="#5645D4" stroke-width="2" marker-end="url(#a1)"/>
+      <rect x="228" y="40" width="180" height="46" rx="10" fill="#EEF4FB" stroke="#3b6bb0"/>
+      <text x="318" y="60" text-anchor="middle" font-size="13.5" font-weight="700" fill="#1d5e8f">② 理解</text>
+      <text x="318" y="77" text-anchor="middle" font-size="11" fill="#5f5f5f">Chat with PDF 讀懂</text>
+      <line x1="408" y1="63" x2="434" y2="63" stroke="#5645D4" stroke-width="2" marker-end="url(#a1)"/>
+      <rect x="440" y="40" width="180" height="46" rx="10" fill="#EDF7F1" stroke="#3f8560"/>
+      <text x="530" y="60" text-anchor="middle" font-size="13.5" font-weight="700" fill="#166a4c">③ 寫作</text>
+      <text x="530" y="77" text-anchor="middle" font-size="11" fill="#5f5f5f">Essay Writer 產初稿</text>
+      <line x1="620" y1="63" x2="646" y2="63" stroke="#5645D4" stroke-width="2" marker-end="url(#a1)"/>
+      <rect x="652" y="40" width="182" height="46" rx="10" fill="#FBF3E9" stroke="#bf6a1e"/>
+      <text x="743" y="60" text-anchor="middle" font-size="13.5" font-weight="700" fill="#8a4d13">④ 語言優化</text>
+      <text x="743" y="77" text-anchor="middle" font-size="11" fill="#5f5f5f">改寫／潤飾／去 AI 味</text>
+    </g>
+  </svg>
+  <div class="cap">圖解｜AnswerThis 貫穿學術研究四大段：搜尋 → 理解 → 寫作 → 語言優化，每一段都有對應功能。</div>
+  </div>
+</section>
+
+<section class="chapter" id="sec-feat">
+  <span class="chip">CHAPTER 02</span>
+  <h2 class="ct">2. 核心特色四項</h2>
+  <p class="cd">為什麼研究者會選它——資料來源：AnswerThis 官方數據（2024）。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">特色</th><th>說明</th></tr>
+    <tr><td><b>2.5 億+ 學術來源</b></td><td>掃描 PubMed、Scopus 等多個權威資料庫，涵蓋面廣。</td></tr>
+    <tr><td><b>精確引用追蹤</b></td><td>每個回答附<b>逐行引用</b>，直接連回原始論文——降低 AI 幻覺、可查證。</td></tr>
+    <tr><td><b>多元輸出格式</b></td><td>支援 APA、MLA 等格式，可匯出 BibTeX，銜接你的文獻管理軟體。</td></tr>
+    <tr><td><b>中文友善介面</b></td><td>完整支援<b>繁體中文查詢與回覆</b>，可以直接用中文問。</td></tr>
+  </table></div>
+  <div class="golden"><div class="q">「每個回答都附逐行引用，直連原始論文。」</div><div class="a">—— 這是學術工具與一般 AI 最關鍵的差別：不只給答案，還給得出處。</div></div>
+</section>
+
+<section class="chapter" id="sec-arch">
+  <span class="chip">CHAPTER 03</span>
+  <h2 class="ct">3. 功能架構：Tools ／ Agents</h2>
+  <p class="cd">全平台功能分成兩大核心類別，全方位支援研究流程。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">類別</th><th>包含功能</th><th>角色</th></tr>
+    <tr><td><b>Tools（工具類）</b></td><td>Literature Review、Search Papers、Chat with PDF、Citation Map、Diagram Generator</td><td>你主動操作的「工具」——搜、讀、畫。</td></tr>
+    <tr><td><b>Agents（智能代理）</b></td><td>AI Essay Writer、Research Gap Finder、Paraphraser Tool、Empathy Tool</td><td>替你「代勞一段任務」的助手——寫、找缺口、改、審。</td></tr>
+  </table></div>
+  <div class="note gold">⚠️ 心法：<b>Tools 是你拿在手上用的；Agents 是你交派任務給它做的。</b>搞懂這個分類，就知道每個功能該在研究的哪一步用。</div>
+</section>
+
+<section class="chapter" id="sec-tools">
+  <span class="chip">CHAPTER 04</span>
+  <h2 class="ct">4. Tools 工具詳解</h2>
+  <p class="cd">你主動操作的五個核心工具。</p>
+
+  <h3>① Literature Review 文獻回顧</h3>
+  <p>只需輸入研究主題，就自動生成<b>結構完整、附逐行引用</b>的文獻回顧，大幅縮短整理時間。</p>
+  <h4>操作五步</h4>
+  <ol class="st">
+    <li>登入 AnswerThis，進入 Literature Review 頁面。</li>
+    <li>在搜尋欄輸入研究問題（支援中文）。</li>
+    <li>設定篩選條件：來源類型、最低引用數、日期範圍。</li>
+    <li>選擇輸出類型：Literature Review 或 Full Paper。</li>
+    <li>AI 自動生成帶引用的文獻回顧。</li>
+  </ol>
+  <div class="note green">📄 兩種輸出：<b>Literature Review</b>＝綜合摘要＋逐行引用；<b>Full Paper</b>＝完整研究論文，可自訂章節名稱。</div>
+
+  <h3>② Search Papers 學術搜尋引擎</h3>
+  <p>掃描超過 <b>2.5 億</b>學術來源，用多維度篩選在海量文獻中精準鎖定目標。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">進階篩選</th><th>智慧結果呈現</th></tr>
+    <tr><td>來源篩選（學術論文／網路／個人圖書館）</td><td>表格視圖：結構化呈現所有文獻</td></tr>
+    <tr><td>引用數：設最低引用次數（確保影響力）</td><td>自訂欄位：自動提取研究方法、限制、未來工作</td></tr>
+    <tr><td>日期範圍：指定發表年份</td><td>快速預覽：直接看摘要與關鍵發現</td></tr>
+    <tr><td>期刊等級：限定 Q1、Q2 高品質期刊</td><td>匯出：一鍵到 Zotero／Mendeley／CSV／BibTeX</td></tr>
+  </table></div>
+
+  <h3>③ Chat with PDF 與 PDF 對話</h3>
+  <p>上傳論文後直接向 AI 提問，得到<b>基於論文全文</b>的精準回答，還能多篇同時比較。</p>
+  <ol class="st">
+    <li><b>建立專案與上傳</b>：在 Library 建專案，上傳 PDF 建專屬知識庫。</li>
+    <li><b>選取文獻對話</b>：勾選單篇或多篇，點「Chat with Selected」開始互動。</li>
+    <li><b>智能提問</b>：輸入「總結研究方法」「列出研究限制」即得精準回答。</li>
+    <li><b>段落即時解釋</b>：反白特定段落點「Explain」，得到詳細解釋與摘要。</li>
+  </ol>
+
+  <h3>④ Citation Map 引用地圖 ＆ ⑤ Diagram Generator 圖表生成器</h3>
+  <ul class="pt">
+    <li><b>Citation Map</b>：生成互動式<b>引用網絡圖</b>，視覺化論文之間的引用關係，快速找出核心文獻與研究脈絡。</li>
+    <li><b>Diagram Generator</b>：把複雜的研究概念或摘要，自動轉成清晰的<b>流程圖與心智圖</b>。</li>
+  </ul>
+</section>
+
+<section class="chapter" id="sec-agents">
+  <span class="chip">CHAPTER 05</span>
+  <h2 class="ct">5. Agents 智能代理</h2>
+  <p class="cd">替你代勞一段任務的四個助手。</p>
+
+  <h3>① AI Essay Writer 論文寫手</h3>
+  <p>依需求快速生成<b>結構化的學術初稿</b>，把草稿撰寫與格式調整的時間大幅縮短。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">可設定參數</th><th>輸出內容</th></tr>
+    <tr><td>論文題目與研究領域</td><td>摘要（Abstract）與關鍵詞</td></tr>
+    <tr><td>目標字數（如 1000–5000 字）</td><td>引言（Introduction）</td></tr>
+    <tr><td>引用文獻年限（如近 5 年）</td><td>自動生成的參考文獻列表</td></tr>
+  </table></div>
+  <p>匯出：支援 Word（.docx）與 PDF，方便後續編輯。</p>
+
+  <h3>② Research Gap Finder 研究缺口發現器</h3>
+  <p>AI 自動分析<b>文獻飽和度與創新潛力</b>，精準定位高價值研究缺口——研究初期確定題目的強大工具。</p>
+  <ul class="pt">
+    <li><b>輸出</b>：具體研究缺口清單（Research Gaps）＋優先級評級（Priority Rating）＋研究方向建議（Suggestions）。</li>
+    <li><b>應用場景</b>：碩士生確定論文題目、博士生尋找創新方向、研究人員規劃新專案。</li>
+  </ul>
+  <div class="golden"><div class="q">「找不到題目？先問它：這個主題還有哪裡沒被做透？」</div><div class="a">—— Research Gap Finder 把「找研究缺口」這件最難的事變成可操作的清單。</div></div>
+
+  <h3>③ Paraphraser 改寫 ＆ ④ Empathy 同理心審稿</h3>
+  <ul class="pt">
+    <li><b>Paraphraser Tool</b>：智慧改寫句子、降低重複率，並提供學術／正式等多種語氣；也能<b>去 AI 風格化</b>（Naturalizer）。</li>
+    <li><b>Empathy Tool</b>：模擬<b>審稿人視角</b>，依 <b>E.M.P.A.T.H.Y. 框架</b>提供建設性修改建議，等於投稿前先做一次同儕審查。</li>
+  </ul>
+</section>
+
+<section class="chapter" id="sec-lib">
+  <span class="chip">CHAPTER 06</span>
+  <h2 class="ct">6. Library 與 Citation Map</h2>
+  <p class="cd">你的個人研究中心：文獻管理＋脈絡追蹤一目瞭然。</p>
+  <ul class="pt">
+    <li><b>Library 個人圖書館</b>：支援 PDF 直接上傳與批量匯入（RIS、BIB、CSV），可建多個專案分類管理不同主題的文獻。</li>
+    <li><b>文獻計量分析</b>：自動生成統計圖表——年度出版量、引用數趨勢、作者分析、關鍵字文字雲。</li>
+    <li><b>Citation Map 引用地圖</b>：互動式引用網絡圖，視覺化論文引用關係，快速識別核心文獻。</li>
+    <li><b>研究脈絡追蹤</b>：透過引用地圖發現相關研究，理解該領域的基礎研究與未來趨勢。</li>
+  </ul>
+  <div class="note blue">🗂️ 一句話：<b>Library 是你自己的資料庫，Citation Map 是把這些論文的「關係」畫出來</b>——誰引用誰、哪篇是源頭，一眼看懂。</div>
+</section>
+
+<section class="chapter" id="sec-yaml">
+  <span class="chip">CHAPTER 07</span>
+  <h2 class="ct">7. 延伸：用 YAML 讓 AI 搜尋更精準</h2>
+  <p class="cd">課堂補充：把模糊問題變成可執行的研究指令。</p>
+  <p>在 NotebookLM 或各類 AI 工具搜尋時，只丟一句自然語言問題，常常<b>範圍過大、來源不明、時間界線不清</b>。用 <b>YAML 結構化</b>把搜尋任務拆成欄位，AI 就能精準理解、鎖定對的資料。</p>
+  <div class="prompt"><span class="tag">YAML 結構化搜尋範例</span>主題: （你的研究主題）
+關鍵字: [關鍵字1, 關鍵字2, 關鍵字3]
+網站/來源: （指定資料庫或網域，如 scholar / PubMed）
+資料類型: （學術論文 / 政策報告 / 新聞）
+時間範圍: （如 2020-2026）
+語言: 繁體中文</div>
+  <p>這種方法特別適合<b>學術文獻蒐集、政策研究、趨勢分析、主題型研究</b>——效率更高、取得的資料更貼近研究目的。</p>
+  <div class="note green">🧩 同場加映（課堂另兩個重點）：<b>「同一主題、不同受眾」</b>——調整 Prompt 的受眾／語氣／用途，同一份資料一鍵生出學生版、教師版、主管版；<b>NotebookLM 資訊圖表 YAML 模板</b>——固定主題、替換受眾，快速產出結構一致的圖文內容。</p>
+</section>
+
+<section class="chapter" id="sec-recap">
+  <span class="chip">RECAP</span>
+  <h2 class="ct">8. 重點整理（帶走這幾句）</h2>
+  <ul class="pt">
+    <li><b>AnswerThis ＝ 學術研究助理平台</b>：搜尋 → 理解 → 寫作 → 語言優化，一條龍。</li>
+    <li><b>最大賣點是逐行引用</b>：每個回答直連原始論文，可查證、少幻覺。</li>
+    <li><b>功能分兩類</b>：Tools（你操作的：文獻回顧／搜尋／Chat with PDF／引用地圖／圖表）；Agents（替你做的：論文寫手／研究缺口／改寫／同理心審稿）。</li>
+    <li><b>找題目用 Research Gap Finder</b>：把「還有哪裡沒被做」變成優先級清單。</li>
+    <li><b>寫文獻回顧用 Literature Review</b>：輸入主題 → 篩選 → 一鍵生成帶引用的回顧。</li>
+    <li><b>Library＋Citation Map</b>：管理自己的文獻，並把引用關係畫成地圖找核心文獻。</li>
+    <li><b>搜尋要精準，用 YAML 結構化</b>：把模糊問題拆成主題／關鍵字／來源／類型／時間欄位。</li>
+  </ul>
+  <div class="golden"><div class="q">「讓研究者少花時間在整理，多花時間在思考。」</div><div class="a">—— EP28 主題精神。</div></div>
+</section>
+
+<section class="chapter" id="sec-src">
+  <span class="chip">SOURCE</span>
+  <h2 class="ct">9. 資料來源與製作說明</h2>
+  <ul class="pt">
+    <li><b>主要教材</b>：EP28 官方課程簡報《文獻耙梳工具 AnswerThis》＋課堂筆記 Doc。</li>
+    <li><b>製作方式</b>：本頁內容<b>逐頁整理自簡報全文與課堂筆記</b>（真實課程教材）；流程圖為依簡報內容繪製的 SVG 圖解，功能名稱與數據（2.5 億來源等）均為簡報原文，未經改寫杜撰。</li>
+    <li><b>誠實標註</b>：本集以簡報與課堂筆記為主要依據；示範操作的螢幕畫面／逐字稿時間碼未逐幀對照錄影，若日後取得可再補入實錄截圖。AnswerThis 功能與介面以官方為準，本頁為學習整理。</li>
+    <li><b>延伸</b>：搭配 <a href="ep28-ai-skills.html">EP28 互動技能地圖</a> 逐項打勾；相關 <a href="ep29-notes.html">EP29 會議紀錄字幕工作流</a>、<a href="ep39-notes.html">EP39 NotebookLM×Markdown</a>。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  生成式 AI 應用電台・晨學講堂 ｜ EP28 課堂筆記 ｜ 文獻耙梳工具 AnswerThis<br>
+  本頁為學習筆記整理，教材版權屬原課程與講者所有。<a href="../radio/" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a><br>
+  🍀 <b>Learn AI with Tarshar</b> ♥ 2026
+</footer>
+
+</body>
+</html>

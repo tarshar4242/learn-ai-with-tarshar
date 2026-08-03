@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP3 課堂筆記｜打通生成式AI任督二脈：Grok 篇</title>
+<meta name="description" content="晨學講堂 EP3 課堂筆記：Grok 快速思考／深度思考模式實測、Deep Search 網路搜尋模式、報導員新聞 Agent、歌詞與圖片生成示範、語音人格化與外觀設定。根據真實錄影逐字稿與畫面截圖整理。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#0d8f80; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px;border-left:none}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#9fd8cf" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP3 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="ep3-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 晨學講堂 · EP3</span>
+  <h1>打通生成式AI任督二脈<br><span>Grok 篇</span></h1>
+  <p class="lead">EP3 實測 xAI 的 <b>Grok</b>：兩種回覆模式（快速思考／深度思考）的真實速度差異、比 ChatGPT／Gemini 更快的 <b>Deep Search</b> 網路搜尋、內建的「報導員」新聞 Agent，以及寫歌詞、生圖／改圖、語音人格化等創意示範。本頁根據<b>真實錄影逐字稿與畫面截圖</b>整理。</p>
+  <div class="meta">
+    <span>📅 2025/12/20 晨間直播（第三週）</span>
+    <span>🤖 主題：xAI Grok</span>
+    <span>🎥 教材：43 頁簡報＋錄影（61.5 分鐘）</span>
+    <span>👨‍🏫 講師：黃老師</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-intro">1. 開場：為什麼改到早上直播</a>
+  <a href="#sec-modes">2. 快速思考 vs 深度思考實測</a>
+  <a href="#sec-deepsearch">3. Deep Search 網路搜尋模式</a>
+  <a href="#sec-agent">4. 報導員：內建新聞 Agent</a>
+  <a href="#sec-creative">5. 創意生成：寫歌詞＋生圖改圖</a>
+  <a href="#sec-voice">6. 語音人格化與外觀設定</a>
+  <a href="#sec-recap">7. 重點整理</a>
+  <a href="#sec-src">8. 資料來源與製作說明</a>
+</nav>
+
+<article>
+
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--cyan))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>EP3「打通生成式AI任督二脈：Grok 篇」</td></tr>
+    <tr><th>頻道</th><td>生成式 AI 應用電台・晨學講堂（第三週，改為早上場次）</td></tr>
+    <tr><th>直播日期</th><td>2025/12/20（畫面時鐘顯示 07:04–08:11）</td></tr>
+    <tr><th>教材</th><td>本機簡報「打通生成式AI任督二脈_Grok篇.pptx」共 <b>43 頁</b>＋錄影回放（61.5 分鐘）</td></tr>
+    <tr><th>一句話先懂</th><td>Grok 的兩大王牌是<b>「快與便宜」</b>：回覆速度快、免付費也能用（一天二三十次搜尋都不會被擋），另外還有內建新聞 Agent、圖文並茂的來源引用，以及好玩的語音人格化功能。</td></tr>
+  </table></div>
+  <figure class="shot">
+    <img src="ep3-img/s1-bio.jpg" alt="EP3 講者黃老師自我介紹投影片" loading="lazy">
+    <figcaption>錄影 56:53｜簡報第 3 頁（自我介紹）：黃老師，政治大學公共行政學系博士候選人／中國文化大學行政管理學系講師等；左側縮圖可見簡報第 1 頁封面「打通生成式AI任督二脈_Grok篇」。</figcaption>
+  </figure>
+</section>
+
+<section class="chapter" id="sec-intro">
+  <span class="chip" style="background:linear-gradient(90deg,#0d8f80,#2f7d92)">CHAPTER 01</span>
+  <h2 class="ct">1. 開場：為什麼改到早上直播</h2>
+  <p class="cd">逐字稿原音（01:52–02:39）。</p>
+  <p>「謝謝大家一樣很早，現在早上 7 點 06 分，大家應該可能在家、或者是在外面運動、或者是剛好在吃早餐……我們進入第三週，這個早上起來學 AI 的過程。中間我剛好有課，12 月年底時間卡比較滿，晚上還蠻多人在開課，我就想說換個時間，早上比較有空，抱歉讓大家比較麻煩一點，早上起來上課。」</p>
+  <div class="note blue">💡 這集是系列第三週，因講師 12 月行程排滿，臨時把直播場次從晚上調到清晨——晨學講堂「早起學 AI」的慣例由此延續。</div>
+</section>
+
+<section class="chapter" id="sec-modes">
+  <span class="chip" style="background:linear-gradient(90deg,#0d8f80,#3b6bb0)">CHAPTER 02</span>
+  <h2 class="ct">2. 快速思考 vs 深度思考：實測速度差異</h2>
+  <p class="cd">逐字稿原音（39:16–40:39），現場實際操作對比兩種回覆模式。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:140px">模式</th><th>耗時（畫面顯示）</th><th>特色</th></tr>
+    <tr><td><b>快速思考</b></td><td>約 1.4 秒</td><td>回覆快，但整理程度較簡略，搜尋來源會直接顯示在對話中（圖文並茂，類似社群貼文樣式，可點來源查看原始網頁，例如引用「食尚玩家」的介紹）</td></tr>
+    <tr><td><b>深度思考</b></td><td>約 9.6 秒</td><td>先進入推理模式，再彙整結果；<b>會主動整理成表格</b>，內容更完整，但搜尋的來源數量反而比快速模式少；表格支援一鍵複製</td></tr>
+  </table></div>
+  <p>逐字稿：「這個是模式，看一下模式上的差異，第一個是一般快速的版本，第二個他告訴你花了 1.4 秒，第二個他花了 9.6 秒，然後相關的搜尋在這邊，他搜尋的就比較少，但是他幫你整理整理好了，一樣表格可以一鍵複製。」</p>
+  <div class="note gold">⚠️ 誠實聲明：本集錄影約 08:31–38:20 這段語音因背景雜訊、faster-whisper 辨識異常，逐字稿大量出現重複亂碼（無法還原原話），但期間畫面仍持續示範操作（見第 5、6 章截圖）；本頁對這段時間的操作描述以<b>畫面截圖內容</b>為準，不補述未能辨識的口語細節。</div>
+</section>
+
+<section class="chapter" id="sec-deepsearch">
+  <span class="chip" style="background:linear-gradient(90deg,#2f7d92,#3b6bb0)">CHAPTER 03</span>
+  <h2 class="ct">3. Deep Search：比 ChatGPT／Gemini 更快的網路搜尋</h2>
+  <p class="cd">逐字稿原音（40:55–42:29），現場示範查詢「2025 年台灣最推薦的聖誕節交換禮物」。</p>
+  <ul class="pt">
+    <li><b>搜尋範圍更廣</b>：比一般聊天模式搜尋的資料量更多。</li>
+    <li><b>速度優先</b>：「雖然說沒辦法做到像 ChatGPT 或 Gemini 查資料那麼廣、那麼深，但是在查資料的速度上還有回應上會比較快。」</li>
+    <li><b>一定附來源</b>：「他會告訴你關鍵的 Citation 從哪邊來。」</li>
+    <li><b>免費額度夠用</b>：「目前我免費、沒有付費的版本，Deep Search 我一天用個二三十次都沒有擋過。」</li>
+  </ul>
+  <div class="golden"><div class="q">「他沒辦法做出像 GPT 或 Gemini 整篇的報告，不過內容上基本上都準，而且速度快很多。」</div><div class="a">—— 講者對 Deep Search 的定位（41:47）</div></div>
+</section>
+
+<section class="chapter" id="sec-agent">
+  <span class="chip" style="background:linear-gradient(90deg,#3b6bb0,#5645D4)">CHAPTER 04</span>
+  <h2 class="ct">4. 報導員：內建新聞 Agent</h2>
+  <p class="cd">逐字稿原音（42:38–42:53）。</p>
+  <p>「報導員這個算是他自己寫好的一個 Agent，你一點，他每天就會告訴你說今天有什麼新聞——特斯拉的新聞、柬埔寨的新聞、娛樂的新聞等等，這個大家知道就可以了。」</p>
+  <div class="note blue">💡 定位：不用自己設定，Grok 內建現成的「報導員」Agent，點開即可看當日新聞摘要，橫跨科技、國際、娛樂等類別。</div>
+</section>
+
+<section class="chapter" id="sec-creative">
+  <span class="chip" style="background:linear-gradient(90deg,#5645D4,#b25269)">CHAPTER 05</span>
+  <h2 class="ct">5. 創意生成示範：寫歌詞＋生圖改圖</h2>
+  <p class="cd">畫面實錄（此段語音多為辨識異常區間，以截圖為準）。</p>
+  <figure class="shot">
+    <img src="ep3-img/s4-lyrics.jpg" alt="Grok 生成搖滾歌詞示範" loading="lazy">
+    <figcaption>錄影 27:20｜請 Grok 寫一首搖滾歌詞「破碎的霓虹 (Broken Neon)」，並在旁邊對話框追問「要不要修改風格（更重金屬、更抒情、更聳動）、換主題、或是加個英文歌名之類的」——示範可持續追問調整創作方向。</figcaption>
+  </figure>
+  <figure class="shot">
+    <img src="ep3-img/s5-image-edit.jpg" alt="Grok 生成與編輯圖片示範" loading="lazy">
+    <figcaption>錄影 29:15｜Grok 生成的城市天際線圖片（784×1168），示範圖片生成／編輯功能，畫面上方有編輯、分享等工具列。</figcaption>
+  </figure>
+  <ul class="pt">
+    <li>Grok 除了文字問答，也能<b>直接生成內容檔案</b>（如 document.md 歌詞檔）並放在檔案側欄管理。</li>
+    <li>生成圖片後可在同一個介面繼續<b>編輯、分享、下載</b>。</li>
+  </ul>
+</section>
+
+<section class="chapter" id="sec-voice">
+  <span class="chip" style="background:linear-gradient(90deg,#b25269,#bf6a1e)">CHAPTER 06</span>
+  <h2 class="ct">6. 語音人格化與外觀設定</h2>
+  <p class="cd">逐字稿原音（43:13–47:59，語音辨識品質較差，僅摘要可辨識片段）＋畫面截圖。</p>
+  <ul class="pt">
+    <li><b>語音功能示範</b>：類似 ChatGPT 的語音模式，可以指定<b>不同口音／人設</b>跟 Grok 對話（逐字稿可辨識片段：「你要很像 ChatGPT 一樣……你叫他……比如說你要帶有英式口音……」），示範中提到 Grok 的語音角色「有每一個人設」。</li>
+    <li><b>帳號登入</b>：用 Google 帳號登入 xAI／Grok（畫面顯示「選擇帳戶」畫面）。</li>
+    <li><b>外觀個人化設定</b>：淡色模式／深色模式／系統模式三種主題，另有「在程式碼區塊中預設自動換行」「在聊天記錄中顯示對話預覽」「啟用星空背景」等細節開關。</li>
+  </ul>
+  <figure class="shot">
+    <img src="ep3-img/s2-login.jpg" alt="使用 Google 帳號登入 xAI" loading="lazy">
+    <figcaption>錄影 15:58｜用 Google 帳戶登入 xAI／Grok 的畫面。</figcaption>
+  </figure>
+  <figure class="shot">
+    <img src="ep3-img/s3-appearance.jpg" alt="Grok 外觀與個人化設定畫面" loading="lazy">
+    <figcaption>錄影 17:11｜Grok 設定 →外觀：淡色／深色／系統模式，以及程式碼自動換行、對話預覽、星空背景等開關。</figcaption>
+  </figure>
+</section>
+
+<section class="chapter" id="sec-recap">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#0d8f80)">RECAP</span>
+  <h2 class="ct">7. 重點整理</h2>
+  <ul class="pt">
+    <li><b>快速思考 vs 深度思考</b>：1.4 秒 vs 9.6 秒，深度模式來源較少但整理成表格更完整。</li>
+    <li><b>Deep Search</b>：搜尋範圍比一般模式廣，比 GPT／Gemini 深度研究快，免費額度一天二三十次不會被擋。</li>
+    <li><b>報導員 Agent</b>：內建、免設定的每日新聞摘要功能。</li>
+    <li><b>創意生成</b>：能寫歌詞（存成 md 檔）、生圖／改圖，並在對話中持續追問調整。</li>
+    <li><b>語音人格化</b>：可指定口音／人設進行語音對話；外觀設定支援深色模式等個人化選項。</li>
+  </ul>
+</section>
+
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5a5866)">SOURCES</span>
+  <h2 class="ct">8. 資料來源與製作說明</h2>
+  <ul class="pt">
+    <li><b>原始教材：</b>EP3「打通生成式AI任督二脈：Grok 篇」錄影回放（61.5 分鐘，anyone-reader 權限，公開可下載）；本集 Drive 資料夾未附獨立簡報檔，簡報為講者當下開啟的本機 PowerPoint（43 頁，畫面可見縮圖）。</li>
+    <li><b>製作方式：</b>下載完整錄影 → faster-whisper（small 模型）產出逐字稿 → 場景變化偵測抽取畫面關鍵幀 → <b>親眼逐張判讀</b>畫面內容 → 對照逐字稿與畫面截圖整理成本頁章節。</li>
+    <li><b>誠實聲明：</b>錄影約 08:31–38:20 語音因背景雜訊或收音問題，faster-whisper 大量輸出重複亂碼（無法還原原話）；43:13–47:59 語音辨識品質亦較差。這些區間的操作描述<b>以畫面截圖可直接判讀的內容為準</b>，未能辨識的口語細節不補述、不杜撰。</li>
+    <li><b>介面參考：</b>版型沿用本站 EP29–EP46 課堂筆記的乾淨白底編輯風格。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  EP3「打通生成式AI任督二脈：Grok 篇」課堂筆記・2026/07 整理<br>
+  🍀 Learn AI with Tarshar｜搭配 <a href="ep3-ai-skills.html">互動技能地圖</a> 使用效果最佳
+</footer>
+
+</body>
+</html>

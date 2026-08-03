@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP31 課堂筆記｜Gemini X Google Workspace應用</title>
+<meta name="description" content="晨學講堂 EP31 課堂筆記：Gemini 如何整合進 Google Maps、Docs、Sheet、Slide。Maps 五大能力與比較表、Docs／Sheet 各 8 類應用與完整 prompt 範本、Slide 簡報應用，依官方課程簡報原文逐節整理，內含大量可直接套用的 prompt。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#3b6bb0; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px;border-left:none}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+.note.violet{background:#F3EFFB;border-color:#DFD2F0;color:#5a34a8}
+.note.rose{background:#FBEEF1;border-color:#F0D2DB;color:#9c2f52}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.prompt{position:relative;background:#1d1d1f;border-radius:10px;padding:15px 16px;margin:12px 0;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt .tag{display:inline-block;font-size:11px;letter-spacing:.06em;color:#c9c4ff;border:1px solid #3a3a40;border-radius:6px;padding:2px 9px;margin-bottom:8px}
+.prompt b{color:#fff}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.embed{margin:14px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000}
+.embed iframe{display:block;width:100%;aspect-ratio:16/9;border:0}
+.embed .cap{font-size:12.5px;color:var(--ink3);padding:10px 16px;background:var(--paper);border-top:1px solid var(--line)}
+.ts{display:inline-block;font-family:"Cascadia Code",Consolas,monospace;font-weight:700;font-size:12px;color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,#fff);border-radius:5px;padding:2px 8px;margin-right:7px;letter-spacing:.4px;vertical-align:middle}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+.layers{display:grid;gap:10px;margin:14px 0}
+.lyr{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:13px 15px;background:#fff}
+.lyr .n{flex:none;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--accent)}
+.lyr h4{margin:0 0 3px;font-size:14.5px}
+.lyr p{font-size:13px;margin:0}
+.sub{color:var(--ink2)}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#a8c686" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP31 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="ep31-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 晨學講堂 · EP31</span>
+  <h1>Gemini X Google Workspace應用<br><span>把 Gemini 用進 Maps／Docs／Sheet／Slide</span></h1>
+  <p class="lead">這集把 Gemini 放進四個你天天在用的 Google 工具裡：<b>Maps</b>（用語意提問取代關鍵字搜尋）、<b>Docs</b>（8 類文件應用）、<b>Sheet</b>（8 類試算表應用）、<b>Slide</b>（8 類簡報應用）。本頁依<b>官方課程簡報原文</b>逐節整理，最大重點是每一類應用都附<b>可直接套用的完整 prompt 範本</b>。</p>
+  <div class="meta">
+    <span>📅 2026/04/10 19:00–20:00 直播</span>
+    <span>🧩 4 大 Workspace 產品</span>
+    <span>📋 Maps 5能力＋Docs/Sheet/Slide 各8類</span>
+    <span>✍️ 72 組現成 prompt</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-map">1. 一頁看懂全課程</a>
+  <a href="#sec-maps">2. Google Maps x Gemini</a>
+  <a href="#sec-docs">3. Google Docs x Gemini</a>
+  <a href="#sec-sheet">4. Google Sheet x Gemini</a>
+  <a href="#sec-slide">5. Google Slide x Gemini</a>
+  <a href="#sec-cmp">6. 跨工具比較與選擇心法</a>
+  <a href="#sec-tips">7. 實戰心法與常見誤區</a>
+  <a href="#sec-check">8. 課後自我檢核表</a>
+  <a href="#sec-src">9. 資料來源與製作說明</a>
+</nav>
+
+<article>
+
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--purple))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>EP31_「Gemini X Google Workspace應用」</td></tr>
+    <tr><th>頻道</th><td>生成式 AI 應用電台・晨學講堂</td></tr>
+    <tr><th>直播時間</th><td>2026/04/10（五）19:00–20:00</td></tr>
+    <tr><th>教材</th><td>官方課程簡報《Gemini X Google workspace應用》</td></tr>
+    <tr><th>一句話先懂</th><td>Gemini 不是另一個要另外打開的 App，而是<b>已經內建在 Maps、Docs、Sheet、Slide 裡</b>的助理。這集把每個工具裡 Gemini 能做的「應用類型」與「照抄就能用的 prompt」整理成一份速查表。</td></tr>
+  </table></div>
+
+  <h3>🎬 錄影回放</h3>
+  <div class="embed">
+    <iframe src="https://drive.google.com/file/d/11mlyoyQso7fG-hzJrOn8y84SG7-SMDOt/preview" allow="autoplay" loading="lazy" title="EP31 錄影回放"></iframe>
+    <div class="cap">EP31_1900-2000_Gemini X Google workspace應用 — 2026/04/10 直播錄影，需登入有觀看權限的 Google 帳號。</div>
+  </div>
+  <div class="note blue">💡 本頁以<b>官方課程簡報原文</b>逐節整理（真實課程教材，非推測），每一類應用的 prompt 範本皆為<b>逐字抄錄</b>。錄影僅供內嵌回放，未逐幀抽取畫面截圖。</div>
+</section>
+
+<section class="chapter" id="sec-map">
+  <span class="chip" style="background:linear-gradient(90deg,var(--cyan),var(--accent))">OVERVIEW</span>
+  <h2 class="ct">1. 一頁看懂全課程</h2>
+  <p class="cd">Gemini 同一套語意理解能力，分別長進四個 Workspace 產品裡，各自解決不同的日常任務。</p>
+  <figure class="diagram">
+    <svg viewBox="0 0 900 420" xmlns="http://www.w3.org/2000/svg" font-family="'Noto Sans TC',sans-serif">
+      <rect width="900" height="420" fill="#fbfcff"/>
+      <text x="450" y="34" text-anchor="middle" font-size="20" font-weight="900" fill="#2b2a33">Gemini x Google Workspace 應用地圖</text>
+      <line x1="450" y1="170" x2="230" y2="120" stroke="#c9d9f7" stroke-width="2"/>
+      <line x1="450" y1="170" x2="670" y2="120" stroke="#c9d9f7" stroke-width="2"/>
+      <line x1="450" y1="250" x2="230" y2="300" stroke="#c9d9f7" stroke-width="2"/>
+      <line x1="450" y1="250" x2="670" y2="300" stroke="#c9d9f7" stroke-width="2"/>
+      <circle cx="450" cy="210" r="56" fill="#2f6df0" opacity="0.12"/>
+      <circle cx="450" cy="210" r="42" fill="#2f6df0"/>
+      <text x="450" y="205" text-anchor="middle" font-size="15" font-weight="900" fill="#fff">✦ Gemini</text>
+      <text x="450" y="223" text-anchor="middle" font-size="10" fill="#eaf2fe">多模態助理</text>
+      <g><rect x="60" y="56" width="260" height="112" rx="16" fill="#eaf2fe" stroke="#c9d9f7"/>
+        <text x="190" y="90" text-anchor="middle" font-size="16" font-weight="900" fill="#2f6df0">🗺️ Google Maps</text>
+        <text x="190" y="114" text-anchor="middle" font-size="11.5" fill="#5a5866">Ask Maps／智慧搜尋</text>
+        <text x="190" y="134" text-anchor="middle" font-size="11.5" fill="#5a5866">行程規劃／在地推薦</text>
+        <text x="190" y="154" text-anchor="middle" font-size="11.5" fill="#5a5866">情境式導航　共 5 能力</text></g>
+      <g><rect x="580" y="56" width="260" height="112" rx="16" fill="#fdeee7" stroke="#f5d3c2"/>
+        <text x="710" y="90" text-anchor="middle" font-size="16" font-weight="900" fill="#e2542a">📄 Google Docs</text>
+        <text x="710" y="114" text-anchor="middle" font-size="11.5" fill="#5a5866">生成／潤稿／摘要／重組</text>
+        <text x="710" y="134" text-anchor="middle" font-size="11.5" fill="#5a5866">多版本／翻譯／建議／協作</text>
+        <text x="710" y="154" text-anchor="middle" font-size="11.5" fill="#5a5866">共 8 類應用</text></g>
+      <g><rect x="60" y="276" width="260" height="112" rx="16" fill="#eafaf2" stroke="#bfe8d4"/>
+        <text x="190" y="310" text-anchor="middle" font-size="16" font-weight="900" fill="#1d9e6f">📊 Google Sheet</text>
+        <text x="190" y="334" text-anchor="middle" font-size="11.5" fill="#5a5866">清理／分析／視覺化／報告</text>
+        <text x="190" y="354" text-anchor="middle" font-size="11.5" fill="#5a5866">公式／預測／解釋／自動化</text>
+        <text x="190" y="374" text-anchor="middle" font-size="11.5" fill="#5a5866">共 8 類應用</text></g>
+      <g><rect x="580" y="276" width="260" height="112" rx="16" fill="#f5eefc" stroke="#e0cef2"/>
+        <text x="710" y="310" text-anchor="middle" font-size="16" font-weight="900" fill="#7a4fd6">🖥️ Google Slide</text>
+        <text x="710" y="334" text-anchor="middle" font-size="11.5" fill="#5a5866">簡報生成／內容精簡／結構</text>
+        <text x="710" y="354" text-anchor="middle" font-size="11.5" fill="#5a5866">視覺／圖表／版本／講稿／動畫</text>
+        <text x="710" y="374" text-anchor="middle" font-size="11.5" fill="#5a5866">共 8 類應用</text></g>
+    </svg>
+    <figcaption>圖 1｜EP31 全景：Gemini 在 Maps／Docs／Sheet／Slide 四大產品的應用地圖</figcaption>
+  </figure>
+  <div class="golden"><div class="q">「讓地圖不再只是『看路』的工具，而是一個能理解你意圖、幫你做決定的智慧管家。」</div><div class="a">—— 簡報對 Google Maps x Gemini 的定位，同一句話也適用於 Docs／Sheet／Slide：Gemini 讓工具從「你操作它」變成「它幫你決定」。</div></div>
+</section>
+
+<section class="chapter" id="sec-maps">
+  <span class="chip" style="background:linear-gradient(90deg,#2f6df0,#0aa6c9)">CHAPTER 01</span>
+  <h2 class="ct">2. Google Maps x Gemini</h2>
+  <p class="cd">簡報開場定調：讓地圖不再只是「看路」的工具，而是一個能透過理解你的意圖（Context），幫你「做決定」的智慧管家。以下 5 種能力皆為官方簡報逐頁整理。</p>
+
+  <div class="cat">
+    <div class="catname"><span class="n">1</span>Ask Maps</div>
+    <p>可以用自然語言提問，直接獲得地點、路線與情境式建議。</p>
+    <h4>應用情境</h4>
+    <ul class="pt"><li>「適合約會的安靜咖啡廳」</li><li>「附近可以久坐、有插座的地方」</li><li>「適合帶小孩的餐廳」</li></ul>
+    <h4>價值</h4>
+    <ul class="pt"><li>從「關鍵字搜尋」升級為「語意理解」</li><li>結果更貼近使用者需求</li><li>不需精確關鍵字，直接用描述查詢</li></ul>
+    <div class="twrap"><table><tr><th style="width:120px">原始做法</th><td>Step1 查詢評論、查詢食記後 → Step2 選定地點進行導航</td></tr>
+    <tr><th>新做法</th><td>Step1 告訴需求後，請 AI 推薦規劃 → Step2 選定地點進行導航</td></tr></table></div>
+  </div>
+
+  <div class="cat">
+    <div class="catname"><span class="n">2</span>智慧搜尋（Semantic Search）</div>
+    <h4>應用情境</h4>
+    <ul class="pt"><li>「幫我安排台北一日遊（含交通）」</li><li>「晚上 6 點後適合去的夜景景點」</li></ul>
+    <h4>價值</h4>
+    <ul class="pt"><li>自動排序景點</li><li>搭配交通路線（步行／開車／大眾運輸）</li><li>整合地點＋時間＋偏好，自動生成路線</li></ul>
+  </div>
+
+  <div class="cat">
+    <div class="catname"><span class="n">3</span>行程規劃（Trip Planning）</div>
+    <h4>應用情境</h4>
+    <ul class="pt"><li>「附近評價高但不擁擠的餐廳」</li><li>「現在人比較少的景點」</li></ul>
+    <h4>參考依據</h4>
+    <ul class="pt"><li>使用者評論（Review）</li><li>評分（Rating）</li><li>即時人潮（Popular times）</li><li>根據評論、照片與熱門時段生成建議</li></ul>
+  </div>
+
+  <div class="cat">
+    <div class="catname"><span class="n">4</span>在地推薦（Local Discovery）</div>
+    <h4>應用情境</h4>
+    <ul class="pt"><li>「現在去這裡會塞車嗎？」</li><li>「有沒有更快或更舒服的路線？」</li></ul>
+    <h4>進階能力</h4>
+    <ul class="pt"><li>即時交通分析</li><li>替代路線</li><li>推薦時間預測</li><li>不只是「怎麼走」，還會給決策建議</li></ul>
+  </div>
+
+  <div class="cat">
+    <div class="catname"><span class="n">5</span>情境式導航（Context-aware Navigation）</div>
+    <p>整合前四種能力的實際落地：導航不再只是路線，而是隨情境調整的決策建議。</p>
+  </div>
+
+  <h3>延伸比較：三種進階應用類型</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">應用類型</th><th>功能說明</th><th>典型應用情境</th><th>輸出形式</th></tr>
+    <tr><td>多條件篩選<br>（Complex Filtering）</td><td>同時整合多個條件進行精準搜尋</td><td>價格中等、有停車位、適合聚餐的餐廳；有 Wi-Fi、安靜、可工作 3 小時以上的咖啡廳</td><td>條件整合後的地點清單</td></tr>
+    <tr><td>評論摘要與判讀<br>（Review Summarization）</td><td>自動整理評論內容，提取關鍵資訊</td><td>快速了解店家品質；比較不同地點優缺點</td><td>優點摘要／缺點整理／常見回饋</td></tr>
+    <tr><td>探索式提問<br>（Exploratory Queries）</td><td>支援模糊、靈感導向的自然語言提問</td><td>「今天心情不好，有什麼地方可以去？」「台北有什麼特別體驗？」</td><td>情境化推薦（地點＋理由）</td></tr>
+  </table></div>
+  <div class="note blue">💡 簡報原文以「原始做法 vs 新做法」的兩步驟對照呈現轉變：舊流程是先查評論查食記，再選定地點導航；新流程是先讓 AI 依需求推薦規劃，再選定地點導航——省掉的是「自己爬文比較」那一步。</div>
+</section>
+
+<section class="chapter" id="sec-docs">
+  <span class="chip" style="background:linear-gradient(90deg,#e2542a,#2f6df0)">CHAPTER 02</span>
+  <h2 class="ct">3. Google Docs x Gemini</h2>
+  <p class="cd">官方簡報列出 8 種應用類型，每種都附完整功能說明、典型情境、輸出形式，以及 3 組可直接套用的 prompt 範本（原文照抄，把「＿＿＿＿」換成你的內容即可用）。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">應用類型</th><th>功能說明</th><th>典型應用情境</th><th>輸出形式</th></tr>
+    <tr><td>內容生成<br>（Content Generation）</td><td>根據提示自動撰寫文件內容</td><td>撰寫報告初稿／會議紀錄草稿／公文初稿</td><td>段落式文本</td></tr>
+    <tr><td>文本潤稿<br>（Editing &amp; Refinement）</td><td>調整語氣、精簡內容、提升可讀性</td><td>公文語氣修正／學術文章精簡／正式文件潤稿</td><td>修訂後文本</td></tr>
+    <tr><td>摘要整理<br>（Summarization）</td><td>將長文本濃縮為重點摘要</td><td>會議紀錄摘要／報告重點整理</td><td>條列式摘要</td></tr>
+    <tr><td>結構重組<br>（Structuring）</td><td>重整文章架構與邏輯順序</td><td>論文架構優化／報告章節重排</td><td>大綱／分段內容</td></tr>
+    <tr><td>多版本生成<br>（Variant Generation）</td><td>同一內容生成不同版本</td><td>正式版／簡報版／社群版</td><td>多版本文本</td></tr>
+    <tr><td>語言翻譯<br>（Translation）</td><td>多語言轉換並保留語意</td><td>中英翻譯／跨語言文件整理</td><td>對照文本</td></tr>
+    <tr><td>智慧建議<br>（Smart Suggestions）</td><td>提供寫作建議與補充內容</td><td>補強論述／加入例證或說明</td><td>建議段落</td></tr>
+    <tr><td>協作輔助<br>（Collaboration Support）</td><td>支援多人協作中的 AI 輔助</td><td>回覆評論建議／整合多方意見</td><td>修訂與回覆內容</td></tr>
+  </table></div>
+
+  <h3>各應用類型 Prompt 範本（每類 3 組，官方簡報原文）</h3>
+
+  <div class="cat"><div class="catname"><span class="n">1</span>內容生成（Content Generation）</div>
+  <div class="prompt">Prompt 1：
+請根據以下主題撰寫一篇約800字的報告初稿，包含背景、問題分析與結論：＿＿＿＿
+
+Prompt 2：
+請將以下重點整理為正式會議紀錄，包含時間、出席者、討論事項與決議：＿＿＿＿
+
+Prompt 3：
+請依中華民國公文格式，撰寫一份函稿（含主旨與說明）：＿＿＿＿</div></div>
+
+  <div class="cat"><div class="catname"><span class="n">2</span>文本潤稿（Editing &amp; Refinement）</div>
+  <div class="prompt">Prompt 1：
+請將以下內容改寫為正式公文語氣，並去除冗言贅字：＿＿＿＿
+
+Prompt 2：
+請將以下段落精簡為300字以內，保留核心論點與關鍵數據：＿＿＿＿
+
+Prompt 3：
+請潤飾以下學術段落，使語句更流暢且用詞一致：＿＿＿＿</div></div>
+
+  <div class="cat"><div class="catname"><span class="n">3</span>摘要整理（Summarization）</div>
+  <div class="prompt">Prompt 1：
+請將以下內容整理為5點重點摘要：＿＿＿＿
+
+Prompt 2：
+請將以下會議紀錄濃縮為「決策重點＋後續行動」：＿＿＿＿
+
+Prompt 3：
+請將以下報告整理為一段150字摘要：＿＿＿＿</div></div>
+
+  <div class="cat"><div class="catname"><span class="n">4</span>結構重組（Structuring）</div>
+  <div class="prompt">Prompt 1：
+請將以下內容重整為「前言－分析－結論」三段式結構：＿＿＿＿
+
+Prompt 2：
+請依學術論文格式，將以下內容轉為章節大綱（含標題階層）：＿＿＿＿
+
+Prompt 3：
+請重新編排以下內容，使邏輯順序更清晰並加上小標題：＿＿＿＿</div></div>
+
+  <div class="cat"><div class="catname"><span class="n">5</span>多版本生成（Variant Generation）</div>
+  <div class="prompt">Prompt 1：
+請將以下內容改寫為三種版本：正式報告版、簡報重點版、社群貼文版：＿＿＿＿
+
+Prompt 2：
+請針對以下內容，分別產出「專業版」與「白話版」：＿＿＿＿
+
+Prompt 3：
+請將以下文章改寫為「長版（800字）」與「短版（200字）」兩種版本：＿＿＿＿</div></div>
+
+  <div class="cat"><div class="catname"><span class="n">6</span>語言翻譯（Translation）</div>
+  <div class="prompt">Prompt 1：
+請將以下內容翻譯為英文，並符合母語使用者閱讀習慣：＿＿＿＿
+
+Prompt 2：
+請將以下中英文內容整理為對照表格式：＿＿＿＿
+
+Prompt 3：
+請將以下內容翻譯為日文，並保留正式書面語氣：＿＿＿＿</div></div>
+
+  <div class="cat"><div class="catname"><span class="n">7</span>智慧建議（Smart Suggestions）</div>
+  <div class="prompt">Prompt 1：
+請檢視以下內容，提出3點可強化論述的建議：＿＿＿＿
+
+Prompt 2：
+請針對以下段落，補充具體案例或數據支持：＿＿＿＿
+
+Prompt 3：
+請指出以下內容中可能的邏輯漏洞或論證不足之處：＿＿＿＿</div></div>
+
+  <div class="cat"><div class="catname"><span class="n">8</span>協作輔助（Collaboration Support）</div>
+  <div class="prompt">Prompt 1：
+請協助回覆以下評論，語氣需專業且具建設性：＿＿＿＿
+
+Prompt 2：
+請整合以下多位作者的意見，形成一致版本：＿＿＿＿
+
+Prompt 3：
+請整理以下討論內容，列出共識與分歧點：＿＿＿＿</div></div>
+</section>
+
+<section class="chapter" id="sec-sheet">
+  <span class="chip" style="background:linear-gradient(90deg,#1d9e6f,#2f6df0)">CHAPTER 03</span>
+  <h2 class="ct">4. Google Sheet x Gemini</h2>
+  <p class="cd">同樣 8 種應用類型，涵蓋從資料清理到自動化流程的完整分析鏈，每類 3 組 prompt 範本（官方簡報原文）。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">應用類型</th><th>功能說明</th><th>典型應用情境</th><th>輸出形式</th></tr>
+    <tr><td>資料清理<br>（Data Cleaning）</td><td>自動整理與標準化資料格式</td><td>去除重複值／統一日期格式／缺值處理</td><td>清理後資料表</td></tr>
+    <tr><td>資料分析<br>（Data Analysis）</td><td>根據資料進行統計分析與解釋</td><td>平均數、成長率計算／趨勢判讀</td><td>分析結果＋文字說明</td></tr>
+    <tr><td>視覺化建議<br>（Visualization）</td><td>建議適合的圖表並解讀</td><td>折線圖（趨勢）／長條圖（比較）</td><td>圖表＋解讀</td></tr>
+    <tr><td>自動報告生成<br>（Report Generation）</td><td>將數據轉為完整報告</td><td>統計通報／政策分析報告</td><td>段落式報告</td></tr>
+    <tr><td>公式生成<br>（Formula Generation）</td><td>根據需求自動產生公式</td><td>SUM、IF、VLOOKUP／複雜條件計算</td><td>可直接使用公式</td></tr>
+    <tr><td>預測分析<br>（Forecasting）</td><td>根據歷史資料進行預測</td><td>人口趨勢／遊客數預測</td><td>預測數據＋說明</td></tr>
+    <tr><td>資料解釋<br>（Data Interpretation）</td><td>將數據轉為易懂文字</td><td>數據背後意義說明</td><td>白話或專業解釋</td></tr>
+    <tr><td>自動化流程<br>（Automation Support）</td><td>結合 GAS 建立自動化流程</td><td>一鍵分析／定期更新報表</td><td>流程建議／程式碼</td></tr>
+  </table></div>
+
+  <h3>各應用類型 Prompt 範本（每類 3 組，官方簡報原文）</h3>
+
+  <div class="cat"><div class="catname"><span class="n">1</span>資料清理（Data Cleaning）</div>
+  <div class="prompt">Prompt 1：
+請檢查此資料表，找出缺值、重複值並提出清理建議：＿＿＿＿
+
+Prompt 2：
+請將以下資料統一格式（日期、數字、分類）：＿＿＿＿
+
+Prompt 3：
+請整理此資料，使其符合可進行統計分析的結構：＿＿＿＿</div></div>
+
+  <div class="cat"><div class="catname"><span class="n">2</span>資料分析（Data Analysis）</div>
+  <div class="prompt">Prompt 1：
+請計算以下資料的平均數、最大值、最小值與標準差，並說明意義：＿＿＿＿
+
+Prompt 2：
+請分析此資料的變化趨勢，指出關鍵轉折點：＿＿＿＿
+
+Prompt 3：
+請比較不同群組之間的差異並提供解釋：＿＿＿＿</div></div>
+
+  <div class="cat"><div class="catname"><span class="n">3</span>視覺化建議（Visualization）</div>
+  <div class="prompt">Prompt 1：
+請建議此資料適合使用的圖表類型並說明原因：＿＿＿＿
+
+Prompt 2：
+請根據資料生成圖表並撰寫圖表解讀：＿＿＿＿
+
+Prompt 3：
+請將此資料轉為適合簡報使用的圖表與重點：＿＿＿＿</div></div>
+
+  <div class="cat"><div class="catname"><span class="n">4</span>自動報告生成（Report Generation）</div>
+  <div class="prompt">Prompt 1：
+請根據此資料撰寫一段統計分析報告（約300字）：＿＿＿＿
+
+Prompt 2：
+請將數據整理為「標題＋論述＋表格」格式：＿＿＿＿
+
+Prompt 3：
+請撰寫政策導向的數據分析說明（含建議）：＿＿＿＿</div></div>
+
+  <div class="cat"><div class="catname"><span class="n">5</span>公式生成（Formula Generation）</div>
+  <div class="prompt">Prompt 1：
+請為此需求撰寫Google Sheets公式：＿＿＿＿
+
+Prompt 2：
+請用IF函數設計條件判斷（條件如下）：＿＿＿＿
+
+Prompt 3：
+請提供可計算成長率的公式並說明：＿＿＿＿</div></div>
+
+  <div class="cat"><div class="catname"><span class="n">6</span>預測分析（Forecasting）</div>
+  <div class="prompt">Prompt 1：
+請根據以下歷史資料預測未來三年趨勢：＿＿＿＿
+
+Prompt 2：
+請分析資料變動並推估未來可能變化：＿＿＿＿
+
+Prompt 3：
+請建立簡單預測模型並說明假設：＿＿＿＿</div></div>
+
+  <div class="cat"><div class="catname"><span class="n">7</span>資料解釋（Data Interpretation）</div>
+  <div class="prompt">Prompt 1：
+請用白話方式說明這組數據代表的意義：＿＿＿＿
+
+Prompt 2：
+請將以下數據轉為一段專業分析文字：＿＿＿＿
+
+Prompt 3：
+請指出資料中可能的異常現象與原因：＿＿＿＿</div></div>
+
+  <div class="cat"><div class="catname"><span class="n">8</span>自動化流程（Automation Support）</div>
+  <div class="prompt">Prompt 1：
+請設計一個Google Sheets＋GAS自動分析流程：＿＿＿＿
+
+Prompt 2：
+請提供可自動產生統計報告的腳本架構：＿＿＿＿
+
+Prompt 3：
+請規劃資料更新→分析→報告輸出的自動化流程：＿＿＿＿</div></div>
+</section>
+
+<section class="chapter" id="sec-slide">
+  <span class="chip" style="background:linear-gradient(90deg,#7a4fd6,#2f6df0)">CHAPTER 04</span>
+  <h2 class="ct">5. Google Slide x Gemini</h2>
+  <p class="cd">簡報製作的 8 種應用類型，從大綱生成到動畫建議，每類 3 組 prompt 範本（官方簡報原文）。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">應用類型</th><th>功能說明</th><th>典型應用情境</th><th>輸出形式</th></tr>
+    <tr><td>簡報生成<br>（Slide Generation）</td><td>根據主題自動產出簡報內容與頁面結構</td><td>課程簡報／政策報告／專案提案</td><td>投影片大綱＋頁面內容</td></tr>
+    <tr><td>內容精簡<br>（Content Condensing）</td><td>將長文本轉為簡報重點</td><td>報告轉簡報／論文轉重點頁</td><td>條列式重點</td></tr>
+    <tr><td>結構設計<br>（Slide Structuring）</td><td>規劃簡報邏輯與頁面順序</td><td>起承轉合設計／故事線建構</td><td>頁面架構</td></tr>
+    <tr><td>視覺建議<br>（Visual Design Suggestion）</td><td>提供版面與視覺呈現建議</td><td>圖表配置／配色建議</td><td>視覺說明</td></tr>
+    <tr><td>圖表轉換<br>（Data to Slides）</td><td>將數據轉為圖表並嵌入簡報</td><td>統計圖表／數據展示</td><td>圖表頁</td></tr>
+    <tr><td>多版本生成<br>（Variant Slides）</td><td>同一內容產出不同版本簡報</td><td>正式版／簡報版／教學版</td><td>多版本投影片</td></tr>
+    <tr><td>講稿生成<br>（Speaker Notes）</td><td>自動生成講者備註</td><td>演講稿／教學講解</td><td>講稿文字</td></tr>
+    <tr><td>動畫建議<br>（Animation Suggestion）</td><td>提供動畫與轉場設計</td><td>重點強調／流程展示</td><td>動畫規劃</td></tr>
+  </table></div>
+
+  <h3>各應用類型 Prompt 範本（每類 3 組，官方簡報原文）</h3>
+
+  <div class="cat"><div class="catname"><span class="n">1</span>簡報生成（Slide Generation）</div>
+  <div class="prompt">Prompt 1：
+請根據以下主題產出10頁簡報大綱（每頁含標題與3點重點）：＿＿＿＿
+
+Prompt 2：
+請設計一份教學簡報，包含導入、內容、結論三部分：＿＿＿＿
+
+Prompt 3：
+請產出適合政策報告的簡報架構（含章節與頁面安排）：＿＿＿＿</div></div>
+
+  <div class="cat"><div class="catname"><span class="n">2</span>內容精簡（Content Condensing）</div>
+  <div class="prompt">Prompt 1：
+請將以下文章轉為每頁3點的簡報內容：＿＿＿＿
+
+Prompt 2：
+請將此段文字精簡為簡報用重點（不超過50字）：＿＿＿＿
+
+Prompt 3：
+請將報告內容轉為條列式簡報語句：＿＿＿＿</div></div>
+
+  <div class="cat"><div class="catname"><span class="n">3</span>結構設計（Slide Structuring）</div>
+  <div class="prompt">Prompt 1：
+請將以下內容設計為簡報流程（起承轉合）：＿＿＿＿
+
+Prompt 2：
+請規劃簡報頁面順序與邏輯架構：＿＿＿＿
+
+Prompt 3：
+請重組內容，使簡報更具故事性與說服力：＿＿＿＿</div></div>
+
+  <div class="cat"><div class="catname"><span class="n">4</span>視覺建議（Visual Design Suggestion）</div>
+  <div class="prompt">Prompt 1：
+請建議此簡報適合的版面配置與圖像元素：＿＿＿＿
+
+Prompt 2：
+請提供配色與字體建議（正式風格）：＿＿＿＿
+
+Prompt 3：
+請建議如何將文字轉為視覺化呈現：＿＿＿＿</div></div>
+
+  <div class="cat"><div class="catname"><span class="n">5</span>圖表轉換（Data to Slides）</div>
+  <div class="prompt">Prompt 1：
+請將以下數據轉為適合簡報的圖表類型：＿＿＿＿
+
+Prompt 2：
+請設計一頁圖表簡報並附上解讀重點：＿＿＿＿
+
+Prompt 3：
+請將資料轉為比較型圖表並整理重點：＿＿＿＿</div></div>
+
+  <div class="cat"><div class="catname"><span class="n">6</span>多版本生成（Variant Slides）</div>
+  <div class="prompt">Prompt 1：
+請將內容轉為三種簡報版本（正式／教學／簡化）：＿＿＿＿
+
+Prompt 2：
+請產出長版與短版簡報：＿＿＿＿
+
+Prompt 3：
+請將簡報改寫為適合不同受眾版本：＿＿＿＿</div></div>
+
+  <div class="cat"><div class="catname"><span class="n">7</span>講稿生成（Speaker Notes）</div>
+  <div class="prompt">Prompt 1：
+請為每頁簡報撰寫講者講稿（每頁約100字）：＿＿＿＿
+
+Prompt 2：
+請根據簡報內容生成口語化講解稿：＿＿＿＿
+
+Prompt 3：
+請將重點轉為演講用講稿：＿＿＿＿</div></div>
+
+  <div class="cat"><div class="catname"><span class="n">8</span>動畫建議（Animation Suggestion）</div>
+  <div class="prompt">Prompt 1：
+請為簡報設計適合的動畫效果（逐步呈現）：＿＿＿＿
+
+Prompt 2：
+請建議每頁簡報的轉場方式：＿＿＿＿
+
+Prompt 3：
+請規劃動畫以強調重點內容：＿＿＿＿</div></div>
+</section>
+
+<section class="chapter" id="sec-cmp">
+  <span class="chip" style="background:linear-gradient(90deg,#c98a0a,#2f6df0)">CHAPTER 05</span>
+  <h2 class="ct">6. 跨工具比較與選擇心法</h2>
+  <p class="cd">四大產品的 Gemini 應用彼此獨立，但共同回答同一個問題：「這個任務最省力的入口在哪？」下表為整理自本集四節內容的總表（系列課程脈絡補充，非簡報逐字內容）。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:130px">工具</th><th>先問自己</th><th>核心價值</th></tr>
+    <tr><td><b>Google Maps</b></td><td>要找地方、排行程，還是判斷路況？</td><td>語意搜尋取代關鍵字，把「決策」交給 AI</td></tr>
+    <tr><td><b>Google Docs</b></td><td>要生內容、改語氣，還是重整結構？</td><td>一份文件的生成、修訂、翻譯全在同一個編輯視窗完成</td></tr>
+    <tr><td><b>Google Sheet</b></td><td>要清資料、算數字，還是要預測趨勢？</td><td>不用背公式，用白話描述需求就能拿到公式或分析</td></tr>
+    <tr><td><b>Google Slide</b></td><td>要生大綱、精簡內容，還是要講稿？</td><td>從一段文字到一份可上台的簡報，中間步驟大幅縮短</td></tr>
+  </table></div>
+  <div class="note gold">⚠️ 系列課程脈絡補充：以上「先問自己」欄位為本頁整理者依四節內容歸納的判斷提示，非簡報逐字語句，方便你在動手前先定位要用哪個工具。</div>
+</section>
+
+<section class="chapter" id="sec-tips">
+  <span class="chip" style="background:linear-gradient(90deg,#d4508e,#2f6df0)">CHAPTER 06</span>
+  <h2 class="ct">7. 實戰心法與常見誤區</h2>
+  <p class="cd">系列課程脈絡補充：以下心法整理自本集大量 prompt 範本呈現的共同結構，幫助你把「範本」變成「自己會用的工具」。</p>
+  <h3>三個共通心法</h3>
+  <ol class="st">
+    <li>每一類應用都附 3 組 prompt，不是要你三選一，而是<b>依情境挑選最接近的骨架</b>，再把「＿＿＿＿」換成你真正的內容。</li>
+    <li>四個工具的 prompt 都遵守同一種寫法：<b>先講清楚要 Gemini「做什麼動作」，再附上要處理的原始內容</b>（例如「請將以下內容整理為5點重點摘要：＿＿＿＿」）。</li>
+    <li>先用一組範本試跑一次，看輸出格式是否符合需求，再決定要不要換另一組 prompt 或加條件（例如指定字數、語氣、格式）。</li>
+  </ol>
+  <h3>常見誤區</h3>
+  <ul class="pt">
+    <li>把 8 類應用當成 8 個「必學功能」硬背，而不是先找出「我現在的任務屬於哪一類」。</li>
+    <li>直接貼上長篇原始資料却不先說明「要輸出什麼形式」，導致 Gemini 給出的格式跟需求不符。</li>
+    <li>在 Sheet／Docs 裡問太籠統的問題（如「幫我看一下」），沒有明確指定要清理、分析、還是預測。</li>
+    <li>忽略每個應用類型欄位裡的「輸出形式」——這其實就是在提示你最後會拿到什麼，先確認是否符合預期再送出。</li>
+  </ul>
+  <div class="note green">✅ 建議做法：把本頁 28 類應用＋prompt 範本存成自己的「常用指令庫」，遇到任務先對照「應用類型」欄位找入口，再套用對應 prompt。</div>
+</section>
+
+<section class="chapter" id="sec-check">
+  <span class="chip" style="background:linear-gradient(90deg,#1d9e6f,#c98a0a)">SELF CHECK</span>
+  <h2 class="ct">8. 課後自我檢核表</h2>
+  <p class="cd">學完這集，逐項確認自己是否能獨立完成：</p>
+  <ul class="checklist">
+    <li><input type="checkbox">能說出 Google Maps x Gemini 的 5 種能力名稱（Ask Maps／智慧搜尋／行程規劃／在地推薦／情境式導航）。</li>
+    <li><input type="checkbox">能在 Google Docs 裡至少用過一組「內容生成」或「摘要整理」的 prompt 範本。</li>
+    <li><input type="checkbox">能在 Google Sheet 裡用白話描述需求，請 Gemini 產生一個公式或一段資料分析。</li>
+    <li><input type="checkbox">能用「請根據以下主題產出 10 頁簡報大綱」這類 prompt，在 Google Slide 生成一份大綱。</li>
+    <li><input type="checkbox">能分辨四個工具各自的核心價值（決策管家／文件助理／試算表助理／簡報助理），知道任務該從哪個工具入手。</li>
+    <li><input type="checkbox">能把範本中的「＿＿＿＿」換成自己真實的工作內容，而不是照抄空白範本。</li>
+  </ul>
+</section>
+
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5a5866)">SOURCES</span>
+  <h2 class="ct">9. 資料來源與製作說明</h2>
+  <ul class="pt">
+    <li><b>原始教材：</b>EP31「Gemini X Google workspace應用」官方課程簡報（Copy of 簡報_EP31_Gemini X Google workspace應用.pptx）。</li>
+    <li><b>製作方式：</b>本頁第 2～5 章（Maps／Docs／Sheet／Slide 的功能表與全部 prompt 範本）為<b>逐字抄錄自官方簡報文字內容</b>，未經改寫或簡化；第 6～7 章（跨工具比較、實戰心法）為整理者依上述內容歸納的<b>系列課程脈絡補充</b>，已於段落中標註。</li>
+    <li><b>誠實聲明：</b>簡報以自動化工具轉為線性文字時，段落在頁面上的視覺排版無法百分之百還原，本頁依抽取出的文字順序忠實呈現對應的「應用情境／價值／進階能力」等區塊內容，未自行重新配對或臆測歸屬；如需逐字對照原始版面，請以簡報原檔為準。</li>
+    <li><b>錄影：</b>本頁內嵌 EP31 直播錄影（2026/04/10 19:00–20:00）供回放，未逐幀抽取示範畫面截圖；如需畫面示範細節，建議直接觀看內嵌影片對應段落。</li>
+    <li><b>介面參考：</b>本頁與互動技能地圖頁沿用本站 EP43／EP44–46 的紙感筆記與卡片式多層導覽設計。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  EP31「Gemini X Google Workspace應用」課堂筆記・2026/07 整理<br>
+  🍀 Learn AI with Tarshar｜搭配 <a href="ep31-ai-skills.html">互動技能地圖</a> 使用效果最佳
+</footer>
+
+</body>
+</html>

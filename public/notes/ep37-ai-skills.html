@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>與 AI 共行：RAG 訓練不用從頭開始｜互動式學習地圖</title>
+<meta name="description" content="EP37 晨學講堂：與 AI 共行・RAG——概念紮根、ChatGPT 客製化、RAG 檢索增強生成、專案功能免費 RAG、兩個實作、Gemini Gem、NotebookLM 個人知識庫，互動式多層次學習地圖">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269;
+  --green:#3f8560; --orange:#bf6a1e; --red:#c0453f; --teal:#0d8f80;
+  --feat:#b23a5b; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(28px,4.6vw,46px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--txt);background:none;-webkit-text-fill-color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:660px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:9px}
+.steps li{list-style:none;counter-increment:st;display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--txt2);line-height:1.7}
+.steps li::before{content:counter(st);flex:none;width:25px;height:25px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:var(--c,var(--feat));margin-top:1px}
+.steps li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+.prompt,.promptbox{background:#1d1d1f;border:1px solid #2c2c31;border-radius:10px;padding:13px 15px;margin-top:6px;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt b,.promptbox b{color:#fff}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <a class="navlink" href="../radio/" style="border-color:#a8c686" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <div class="logo">
+    <div class="dot">🧠</div>
+    <div>RAG 共行地圖<small>MORNING LEARNING · EP37</small></div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋關鍵字：RAG、專案功能、Gem、NotebookLM、客製化、實作…" autocomplete="off">
+  </div>
+  <a class="navlink" href="ep37-notes.html">📝 課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">EP37 · 晨學講堂 · 2026</span>
+  <h1>與 AI 共行<br>RAG 訓練不用從頭開始</h1>
+  <p class="sub">RAG＝先檢索你的資料、再生成回答。你不必訓練模型，只要上傳檔案就能建自己的知識庫。<br>點進每一章，逐層展開<b>本集實際教到</b>的概念、實作步驟與可複製 Prompt，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🎙️ 生成式AI應用電台・晨學講堂</span>
+    <span>🧠 RAG 檢索增強生成</span>
+    <span>🤝 ChatGPT×Gemini×NotebookLM</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>4</b><span>大主題</span></div>
+  <div class="stat"><b>8</b><span>實戰技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 8 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--feat)" onclick="showChapter('base')">
+        <div class="glowline"></div><span class="emoji">🌱</span>
+        <h3><em>CHAPTER 01</em>概念紮根＋客製化</h3>
+        <p>生成式 AI 分類與原理、常見工具，再把 ChatGPT 調到懂你：5 大個性、System/User Prompt、繁中回覆與降低生成感。</p>
+        <div class="foot"><div class="mini"><i data-mini="base"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--blue)" onclick="showChapter('rag')">
+        <div class="glowline"></div><span class="emoji">🧠</span>
+        <h3><em>CHAPTER 02</em>RAG＋專案免費 RAG</h3>
+        <p>RAG 檢索增強生成三步、為何訓練不用從頭開始；ChatGPT 專案功能＝RAG＋角色＋任務三合一。</p>
+        <div class="foot"><div class="mini"><i data-mini="rag"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--orange)" onclick="showChapter('lab')">
+        <div class="glowline"></div><span class="emoji">🛠️</span>
+        <h3><em>CHAPTER 03</em>兩個實作</h3>
+        <p>實作一：建專案＋上傳檔案建 RAG；實作二：設定專案指令（角色＋語氣＋格式＋約束），杜絕編造。</p>
+        <div class="foot"><div class="mini"><i data-mini="lab"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--green)" onclick="showChapter('tools')">
+        <div class="glowline"></div><span class="emoji">🔗</span>
+        <h3><em>CHAPTER 04</em>Gem／NotebookLM／生圖</h3>
+        <p>Gemini Gem＝免費 RAG 並打通 Google 生態；NotebookLM 個人知識庫；AI 生圖與印製注意事項。</p>
+        <div class="foot"><div class="mini"><i data-mini="tools"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+
+    <div class="resources">
+      <h3>📦 <span>課程原始資料</span></h3>
+      <div class="res-grid">
+        <a href="ep37-notes.html"><span class="ic">📝</span><span><b>課堂筆記</b>RAG 全流程＋實作＋Prompt</span></a>
+        <a href="../radio/"><span class="ic">📻</span><span><b>直播電台系列</b>回系列總覽，一集一卡</span></a>
+        <a href="ep36-notes.html"><span class="ic">📓</span><span><b>相關 EP36</b>Gemini Notebooks 5 用法</span></a>
+        <a href="ep39-notes.html"><span class="ic">📔</span><span><b>相關 EP39</b>NotebookLM×Markdown</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-base" class="view" style="--c:var(--feat)"></section>
+  <section id="view-rag" class="view" style="--c:var(--blue)"></section>
+  <section id="view-lab" class="view" style="--c:var(--orange)"></section>
+  <section id="view-tools" class="view" style="--c:var(--green)"></section>
+</main>
+
+<footer>
+  本頁為 EP37「與 AI 共行：RAG 訓練不用從頭開始」課後整理・介面沿用本站 EP36–46 互動式學習地圖<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2026｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+const DATA = {
+  base: {
+    key:'base', color:'var(--feat)', emoji:'🌱', code:'CHAPTER 01', title:'概念紮根＋客製化',
+    intro:'先站穩地基：搞懂生成式 AI 分類與原理，再把 ChatGPT 的個性、語氣與規則調到懂你。',
+    topics:[
+      {t:'概念紮根', s:'GenAI 分類、原理、工具、趨勢',
+       blocks:[
+        {h:'用程式概念看 AI',table:{head:['程式概念','對應 AI'],rows:[['函數 Function','把輸入轉輸出'],['條件分歧 Conditional','依情況給不同回應'],['布林 Boolean','判斷真假、要不要做'],['迴圈 Loop','反覆修正、持續優化']]}},
+        {h:'常見 GenAI 工具',ul:['對話型：ChatGPT、Claude、Copilot、Perplexity、Felo AI。','簡報型：Gamma。']},
+        {h:'趨勢',p:'多數人仍停在<b>「拼貼式」使用</b>（摘要、校正、格式各做各的）。課程主張把 AI 升級成<b>整合與重塑</b>工作流程的系統——RAG 就是關鍵一步。'},
+        {h:'心態',warn:'別把 AI 當一次性問答，要當「會累積脈絡的長期夥伴」——這就是「與 AI 共行」。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep37-notes.html#sec-base" style="color:var(--feat)">筆記 1：概念紮根</a>'}]},
+      {t:'ChatGPT 客製化與個人化', s:'5 大個性、System/User Prompt、常設指令',
+       blocks:[
+        {h:'自訂 GPT 5 大個性',table:{head:['個性','風格','適合'],rows:[['預設','平衡不偏','日常問答'],['憤世嫉俗','直白帶刺','腦力激盪'],['機器人','精準無感情','技術文件、除錯'],['傾聽者','溫暖反饋','決策、生活規劃'],['學霸','熱情知識宅','學新知、科普']]}},
+        {h:'System vs User Prompt',p:'<b>System Prompt</b>＝背景設定角色語氣任務範圍（自訂 GPT／專案指令／Gemini 已儲存資訊／Claude Preferences）；<b>User Prompt</b>＝當下的具體請求。'},
+        {h:'常設指令①繁中回覆',prompt:'1.沒特別指示統一用台灣繁體中文(zh_TW)。 2.回覆前再檢查第1點。 3.避免 source code 模式。 4.需整理時直接用表格。 5.沒說完直接繼續。 6.盡量附參考來源，不要杜撰。'},
+        {h:'常設指令②降低 AI 生成感',prompt:'語氣像資深同事、句子長短交錯、加生活化比喻與台灣語境、刪冗詞、避免「首先其次最後」機械結構、用同理心讓文字有溫度。三階段潤色：語言自然化→加情感情境→檢查專業親切感。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep37-notes.html#sec-custom" style="color:var(--feat)">筆記 2：客製化與個人化</a>'}]}
+    ]
+  },
+  rag: {
+    key:'rag', color:'var(--blue)', emoji:'🧠', code:'CHAPTER 02', title:'RAG＋專案免費 RAG',
+    intro:'本集核心：看懂 RAG 三步、為何不用從頭訓練，以及 ChatGPT 專案功能怎麼變成免費 RAG。',
+    topics:[
+      {t:'RAG 是什麼', s:'檢索增強生成・訓練不用從頭開始',
+       blocks:[
+        {h:'一句話',p:'<b>RAG＝Retrieval-Augmented Generation（檢索增強生成）</b>：先「檢索」你上傳的資料，再「生成」回答。'},
+        {h:'RAG 三步',steps:['檢索 Retrieval：去你的檔案庫找相關段落。','增強 Augment：把找到的資料塞進 AI 上下文。','生成 Generation：以你的資料為依據，產出有憑有據的答案。']},
+        {h:'為何不用從頭訓練',table:{head:['','傳統訓練','RAG'],rows:[['成本','大錢大量資料','零訓練'],['更新','要重訓','換檔案即可'],['門檻','技術很高','上傳檔案就好']]}},
+        {h:'金句',tip:'上傳檔案 = 建立「檢索資料庫」，不用重新訓練模型。ChatGPT 專案／Gemini Gem／NotebookLM 都內建這能力＝免費 RAG。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep37-notes.html#sec-rag" style="color:var(--blue)">筆記 3：RAG 是什麼</a>'}]},
+      {t:'專案功能＝免費 RAG', s:'RAG＋角色＋任務三合一',
+       blocks:[
+        {h:'核心概念',table:{head:['要素','內容'],rows:[['RAG 檔案庫','上傳 PDF/Word/簡報/表，回答優先引用'],['固定角色','研究助理、報告撰寫手、課程設計師'],['任務語氣','語氣、格式、條列、繁中'],['多文件整合','同專案多檔一起分析']]}},
+        {h:'使用情境',ul:['長期報告／專題研究（政策、學術、公務）。','跨部門資料整理（會議、專案管理）。','課程規劃與教案撰寫。','活動企劃、補助計畫、年度績效。']},
+        {h:'進階能力',ul:['多角色互動（審稿人＋研究助理）。','回覆必須引述來源，避免編造。','固定格式產出（APA／簡報框架／SOP）。','任務自動化：延續前次脈絡。']},
+        {h:'記住',warn:'專案 = RAG 檔案庫 + 固定角色 + 任務規則，三合一。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep37-notes.html#sec-proj" style="color:var(--blue)">筆記 4：專案功能＝免費 RAG</a>'}]}
+    ]
+  },
+  lab: {
+    key:'lab', color:'var(--orange)', emoji:'🛠️', code:'CHAPTER 03', title:'兩個實作',
+    intro:'動手做：先建專案上傳檔案把 RAG 建起來，再設定專案指令讓 AI 永遠以同一角色格式回答。',
+    topics:[
+      {t:'實作一：建立專案＋上傳檔案', s:'RAG 建置 A→B→C',
+       blocks:[
+        {h:'A. 建立新專案',steps:['左側側邊欄 →「＋ 新專案」。','輸入名稱（如「2025 政策研究資料庫」）。','點「建立專案」。']},
+        {h:'B. 上傳參考資料',steps:['點右上角「📄 檔案」。','上傳 PDF／PPTX／DOCX／XLSX。','ChatGPT 自動讀取建索引，回答優先引用。']},
+        {h:'C. 驗證連動',prompt:'請用我上傳的檔案資料，整理成 5 點摘要。'},
+        {h:'檢查點',tip:'回答裡有引用到你檔案的具體內容 → RAG 成功；沒有 → 確認檔案是否上傳完成。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep37-notes.html#sec-lab1" style="color:var(--orange)">筆記 5：實作一</a>'}]},
+      {t:'實作二：設定專案自訂指令', s:'角色＋語氣＋格式＋約束',
+       blocks:[
+        {h:'操作位置',p:'專案右上角「⋯」→「專案指令」→ 填入下面四段。'},
+        {h:'四段指令',prompt:'1.角色：你是一位公共政策研究助理，熟悉臺灣法規、政府制度、TSSCI 論文格式。\n2.語氣：台灣繁中、條列清楚、引用需標來源(PDF、頁碼)。\n3.任務格式：先摘要再詳述；需整理給表格；決策流程用 Mermaid 心智圖。\n4.約束：若無資料來源不可編造；政策內容須標引用文件名稱。'},
+        {h:'實際測試',prompt:'請用此專案的設定，寫出新北市農業局某某政策的三項政策挑戰。'},
+        {h:'最關鍵一句',warn:'「若無資料來源，不可編造」——這句大幅降低 AI 幻覺，讓 RAG 回答有憑有據。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep37-notes.html#sec-lab2" style="color:var(--orange)">筆記 6：實作二</a>'}]}
+    ]
+  },
+  tools: {
+    key:'tools', color:'var(--green)', emoji:'🔗', code:'CHAPTER 04', title:'Gem／NotebookLM／生圖',
+    intro:'另外兩個免費 RAG 工具，加上把成品做成圖、拿去印刷的注意事項。',
+    topics:[
+      {t:'Gemini Gem＝免費 RAG', s:'打通 Google 生態五步',
+       blocks:[
+        {h:'打通任督二脈五步',steps:['「已儲存的資訊」客製化：角色、回覆原則、降低生成感。','「應用程式」串 Google 生態(類似 MCP)：Gmail、Calendar、文件、雲端硬碟、YouTube…','「排程工作」：變行程秘書，提醒行程、整理信件、彙整會議。','「Gem」打造專案機器人(免費 RAG)：上傳檔案、設回應模式，也能 Deep Research／產圖／產影片(veo3)。','「Canvas」成果展示：改寫、產網頁／資訊圖表／測驗／小遊戲。']},
+        {h:'探索 Gem 三玩法',ul:['角色扮演：固定扮演某專家。','檔案上傳：資料變 Gem 的檢索庫。','自動潤稿：固定用你的語氣改寫。']},
+        {h:'降低幻覺',tip:'每筆回應可用「查證回覆內容」驗證，搭配 RAG 來源引用，雙重降低幻覺。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep37-notes.html#sec-gemini" style="color:var(--green)">筆記 7：Gemini Gem</a>'}]},
+      {t:'NotebookLM＋生圖印製', s:'個人知識庫與印刷注意事項',
+       blocks:[
+        {h:'NotebookLM 個人知識庫',ul:['基礎操作：來源輸入、角色與環境設定。','延伸一：善用對話記憶。','延伸二：建立個人知識庫。','延伸三：產高度個性化圖文。','延伸四：建客製化 AI 聊天機器人。']},
+        {h:'三工具怎麼選',p:'<b>ChatGPT 專案</b>重「長期任務＋角色」；<b>Gemini Gem</b>重「串 Google 生態＋自動化」；<b>NotebookLM</b>重「多來源知識庫＋對照問答」。核心都是 RAG。'},
+        {h:'AI 生圖',ul:['Youmid：ChatGPT Image 2.0 提示詞集散地。','用途：App/網站、海報、頭像、社群貼文、資訊圖表、縮圖、漫畫。','內建生圖有浮水印；成品可輸出印製。']},
+        {h:'印刷注意',table:{head:['問題','建議'],rows:[['圖糊','生高解析或放大工具'],['文字變形','改用 PPT/Canva 重排'],['顏色變暗','印前轉 CMYK、看樣張'],['邊被裁','加 3mm 出血'],['字體跑掉','PDF 嵌字型或轉外框']]}},
+        {h:'提醒',warn:'可要求「300dpi」「A4 直式」「背景延伸到出血區」，但真正 CMYK 檔與裁切線仍需設計軟體後製。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep37-notes.html#sec-nlm" style="color:var(--green)">筆記 8：NotebookLM／生圖印製</a>'}]}
+    ]
+  }
+};
+const ORDER = ['base','rag','lab','tools'];
+const $ = s=>document.querySelector(s);
+function renderChapter(ch){
+  const d=DATA[ch];const next=ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];const prev=ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html=`<div class="chapter-head"><span class="emoji">${d.emoji}</span><div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div></div>`;
+  d.topics.forEach((tp,i)=>{const id=`${ch}-${i}`;
+    html+=`<div class="topic" id="topic-${id}"><div class="topic-head" onclick="toggleTopic('${id}')"><span class="num">${i+1}</span><h4>${tp.t}<small>${tp.s}</small></h4><input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)"><span class="chev">▶</span></div><div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{html+=`<div class="block"><h5>${b.h}</h5>`;
+      if(b.p)html+=`<p>${b.p}</p>`;
+      if(b.ul)html+=`<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps)html+=`<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.table)html+=`<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.prompt)html+=`<div class="prompt">${b.prompt}</div>`;
+      if(b.tip)html+=`<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn)html+=`<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html+=`</div>`;});
+    html+=`</div></div></div>`;});
+  html+=`<div class="chapnav"><a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a><a onclick="showHome()" style="text-align:center">回總覽<b>🏠 四大主題</b></a><a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a></div>`;
+  $('#view-'+ch).innerHTML=html;
+}
+ORDER.forEach(renderChapter);
+function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('#view-'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function showHome(){switchView('home');$('#crumbs').style.display='none';clearSearch();}
+function showChapter(ch){switchView(ch);$('#crumbs').style.display='flex';$('#crumbHere').textContent=`${DATA[ch].emoji} ${DATA[ch].title}`;clearSearch();syncChecks();}
+function toggleTopic(id){$('#topic-'+id).classList.toggle('open');}
+function openTopic(ch,i){showChapter(ch);const el=$('#topic-'+ch+'-'+i);el.classList.add('open');setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+const KEY='ep37-skills-v1';
+const store=()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){const s=store();if(val)s[id]=1;else delete s[id];localStorage.setItem(KEY,JSON.stringify(s));updateProgress();}
+const TOTAL=ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){const done=Object.keys(store()).length;const pct=Math.round(done/TOTAL*100);$('#progFill').style.width=pct+'%';$('#progText').textContent=`${done} / ${TOTAL} 項技能已掌握`;$('#statDone').textContent=done;$('#statPct').textContent=pct+'%';ORDER.forEach(ch=>{const sub=DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;const el=document.querySelector(`[data-mini="${ch}"]`);if(el)el.style.width=Math.round(sub/DATA[ch].topics.length*100)+'%';});}
+function syncChecks(){const s=store();document.querySelectorAll('input[data-skill]').forEach(cb=>{cb.checked=!!s[cb.dataset.skill];});}
+function resetProgress(){if(confirm('確定要清空所有打勾進度嗎？')){localStorage.removeItem(KEY);syncChecks();updateProgress();}}
+function stripTags(s){return s.replace(/<[^>]+>/g,'');}
+const INDEX=[];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{let body=tp.s+' ';tp.blocks.forEach(b=>{if(b.p)body+=stripTags(b.p)+' ';if(b.ul)body+=b.ul.map(stripTags).join(' ')+' ';if(b.steps)body+=b.steps.map(stripTags).join(' ')+' ';if(b.tip)body+=stripTags(b.tip)+' ';if(b.warn)body+=stripTags(b.warn)+' ';if(b.prompt)body+=stripTags(b.prompt)+' ';if(b.table)body+=b.table.rows.flat().map(stripTags).join(' ')+' ';});INDEX.push({ch,i,title:tp.t,body});}));
+$('#searchInput').addEventListener('input',e=>{const q=e.target.value.trim();const box=$('#searchResults');if(!q){box.classList.remove('show');box.innerHTML='';return;}const hits=INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));box.classList.add('show');if(!hits.length){box.innerHTML=`<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：RAG、專案、Gem、實作、約束）</div>`;return;}const hl=s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);box.innerHTML=hits.map(x=>{const pos=x.body.toLowerCase().indexOf(q.toLowerCase());const snip=x.body.substr(Math.max(0,pos-20),90);return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})"><div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div><h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;}).join('');});
+function clearSearch(){$('#searchInput').value='';$('#searchResults').classList.remove('show');$('#searchResults').innerHTML='';}
+(function(){const box=$('#stars');for(let i=0;i<70;i++){const s=document.createElement('i');s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';s.style.animationDelay=(Math.random()*3)+'s';s.style.transform=`scale(${.5+Math.random()*1.5})`;box.appendChild(s);}})();
+syncChecks();updateProgress();
+</script>
+</body>
+</html>

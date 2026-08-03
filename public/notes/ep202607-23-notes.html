@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP202607.23 課堂筆記｜Microsoft Copilot × Power Automate：讓 AI 進入辦公流程</title>
+<meta name="description" content="晨學講堂 EP202607.23 課堂筆記：Copilot、Microsoft 365 Copilot 與 Power Automate 各自解決什麼問題、如何依授權資料風險選對工具、Copilot 消費者版與 M365 Copilot 完整功能地圖、哪些工作能被 AI 取代、哪些必須保留 Power Automate。根據真實課程簡報全文整理。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#3b6bb0; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(24px,4.2vw,40px);font-weight:800;line-height:1.18;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px;border-left:none}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#a9c0e8" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP202607.23 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="ep202607-23-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 年中共學 · EP202607.23</span>
+  <h1>Microsoft Copilot<br><span>× Power Automate</span><br>讓 AI 進入辦公流程</h1>
+  <p class="lead">EP202607.23 回答三件事：Copilot、Microsoft 365 Copilot 與 Power Automate 各自解決什麼問題？哪些「人工處理」可由 AI 協作縮短，哪些流程必須保留自動化引擎？如何用授權、資料、風險與可驗證性選對工具？本頁根據<b>官方課程簡報全文（29 頁）與真實畫面截圖</b>整理。</p>
+  <div class="meta">
+    <span>📅 2026/07/23 直播</span>
+    <span>🗂️ 教材：29 頁完整簡報</span>
+    <span>🤖 主題：Copilot 生態系＋Power Automate</span>
+    <span>⚖️ 選工具原則</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-three">1. 三件事＋三個產品定位</a>
+  <a href="#sec-auth">2. 帳號授權＋選工具第一原則</a>
+  <a href="#sec-copilot-consumer">3. Copilot（消費者版）完整功能</a>
+  <a href="#sec-copilot-limits">4. 消費者 Copilot 能取代與不能取代的</a>
+  <a href="#sec-m365-context">5. M365 Copilot：進入工作脈絡</a>
+  <a href="#sec-m365-apps">6. M365 Copilot 深入各應用程式</a>
+  <a href="#sec-agents">7. Create／Brand kit／Agents／Researcher</a>
+  <a href="#sec-pa">8. Power Automate 不可取代的核心</a>
+  <a href="#sec-route">9. 導入路線與工作取捨</a>
+  <a href="#sec-recap">10. 重點整理</a>
+  <a href="#sec-src">11. 資料來源與製作說明</a>
+</nav>
+
+<article>
+
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--purple))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>EP202607.23「Microsoft Copilot × Power Automate：讓 AI 進入辦公流程」（年中共學 5 天系列之一）</td></tr>
+    <tr><th>頻道</th><td>生成式 AI 應用電台・年中共學</td></tr>
+    <tr><th>直播日期</th><td>2026/07/23（畫面時鐘顯示 19:32–19:58）</td></tr>
+    <tr><th>教材</th><td>官方課程簡報共 29 個編號重點（完整文字版），錄影回放 56 分鐘</td></tr>
+    <tr><th>一句話先懂</th><td>Copilot 負責<b>理解與生成</b>（摘要、草擬、分類、比較、建議），Power Automate 負責<b>受控執行</b>（固定觸發、固定動作、可追蹤失敗）；正確架構是兩者分工，不是二選一。</td></tr>
+  </table></div>
+  <figure class="shot">
+    <img src="ep202607-23-img/s1-session.jpg" alt="EP202607.23 直播畫面" loading="lazy">
+    <figcaption>錄影 00:00｜直播開場畫面，年中共學(5天)直播播程系列第 4 場。</figcaption>
+  </figure>
+</section>
+
+<section class="chapter" id="sec-three">
+  <span class="chip" style="background:linear-gradient(90deg,#3b6bb0,#5645D4)">CHAPTER 01</span>
+  <h2 class="ct">1. 這堂課要回答的三件事＋三個產品定位</h2>
+  <p class="cd">簡報開場（原文照錄）。</p>
+  <ol class="st">
+    <li>Copilot、Microsoft 365 Copilot 與 Power Automate 各自解決什麼問題？</li>
+    <li>哪些「人工處理」可由 AI 協作縮短，哪些流程必須保留自動化引擎？</li>
+    <li>如何用授權、資料、風險與可驗證性，選對工具？</li>
+  </ol>
+  <div class="twrap"><table>
+    <tr><th style="width:180px">產品</th><th>定位</th></tr>
+    <tr><td><b>Microsoft Copilot</b></td><td>面向個人的網路型 AI；回答、寫作、創作與探索為主</td></tr>
+    <tr><td><b>Microsoft 365 Copilot</b></td><td>在工作帳號與 Microsoft 365 內容脈絡中協作</td></tr>
+    <tr><td><b>Power Automate</b></td><td>以觸發條件、連接器與規則，穩定地執行跨系統流程</td></tr>
+  </table></div>
+  <h3>先看帳號與授權，功能才不會說錯</h3>
+  <ul class="pt">
+    <li><b>免費 Copilot</b>：核心聊天、網路搜尋、寫作與部分影像能力；登入可保留歷程與延長對話。</li>
+    <li><b>Microsoft 365 個人／家用／Premium</b>：可在 Office 應用程式使用更多 Copilot 功能，但有 AI 點數與使用量差異。</li>
+    <li><b>商務 Copilot 授權</b>：可使用工作資料脈絡、組織代理程式與企業資料保護；功能仍受租戶設定控制。</li>
+  </ul>
+</section>
+
+<section class="chapter" id="sec-auth">
+  <span class="chip" style="background:linear-gradient(90deg,#5645D4,#2f7d92)">CHAPTER 02</span>
+  <h2 class="ct">2. 選工具的第一原則：結果可變，還是步驟必須固定？</h2>
+  <ul class="pt">
+    <li><b>需要摘要、草擬、分類、比較、建議</b>：優先讓 Copilot 先處理「理解與生成」。</li>
+    <li><b>需要固定觸發、固定欄位、固定動作與可追蹤失敗</b>：優先保留 Power Automate。</li>
+    <li><b>需要兩者</b>：以 Copilot 產生內容或判讀，再由流程執行通知、核准、寫回與留痕。</li>
+  </ul>
+  <div class="golden"><div class="q">「正確架構是：Copilot 負責理解與產生；Power Automate 負責受控執行、紀錄與回復。」</div><div class="a">—— 簡報核心原則（第 27 點）</div></div>
+</section>
+
+<section class="chapter" id="sec-copilot-consumer">
+  <span class="chip" style="background:linear-gradient(90deg,#2f7d92,#0d8f80)">CHAPTER 03</span>
+  <h2 class="ct">3. Copilot（消費者版）完整功能</h2>
+  <h3>聊天與網路即時回答</h3>
+  <p>以自然語言完成問答、摘要、改寫與規劃；可查證來源；登入後可用歷程與語音。</p>
+  <h3>檔案、寫作與 Pages</h3>
+  <p>可上傳檔案或影像，指定它做摘要、比較、擷取重點或根據內容寫作。可把聊天結果轉為 <b>Copilot Pages</b>，繼續編寫、改寫、列點、插表與保存構想。Pages 是共同撰寫的工作畫布，<b>不等於</b>事件驅動的自動化流程。</p>
+  <h3>影像生成與編輯</h3>
+  <p>以文字描述生成圖像；可用於構思、社群素材、海報與視覺草稿。可針對生成或上傳圖片提出編修需求，再反覆調整結果。輸出應視為草稿：人物、文字、品牌與版權敏感內容都需要人工審核。</p>
+  <figure class="shot">
+    <img src="ep202607-23-img/s3-copilot-vision-create.jpg" alt="Windows Copilot Vision 與影像生成編輯示範" loading="lazy">
+    <figcaption>錄影 17:12｜畫面實錄：Windows 桌面右側 Copilot 面板生成台灣 101 煙火照片，並提供橡皮擦、裁切、標記等編輯工具——對應「影像生成與編輯」與「Copilot on Windows」兩個功能點。</figcaption>
+  </figure>
+  <h3>Voice 與 Vision</h3>
+  <p>Voice 讓使用者以口語對話；Vision 可理解使用者主動分享的螢幕、App 視窗或手機鏡頭畫面。Vision 可解釋畫面、標示位置與逐步引導；Windows 一次最多分享兩個 App。<b>Vision 不會替你點擊、輸入或捲動：它是看懂與建議，不是 RPA。</b></p>
+  <h3>研究與連接資料</h3>
+  <p>Deep Research 可產生多來源研究報告；<b>官方已公告 2026/08/18 起將自消費者 Copilot 退役</b>。Microsoft 365 Premium 可改用 Researcher；它適合較慢但有結構、來源與可分享報告的研究任務。個人連接器可在同意後找 Outlook 或 Gmail 的郵件、聯絡人與行事曆；先確認資料範圍。</p>
+  <h3>Copilot on Windows：桌面工作入口</h3>
+  <p>Windows 版支援快捷鍵、喚醒詞、Vision、螢幕擷取與網頁內容檢視。可搜尋、開啟並詢問本機或同步到 OneDrive 的檔案內容。可協助 Windows 設定與操作指引；真正修改設定或完成動作仍由使用者確認。</p>
+  <figure class="shot">
+    <img src="ep202607-23-img/s2-copilot-settings.jpg" alt="Microsoft Copilot 個人化設定畫面" loading="lazy">
+    <figcaption>錄影 11:33｜畫面實錄：copilot.microsoft.com 喜好設定——語音語言（自動偵測）、語音（角色選擇）、語言（ZH）、佈景主題（晚上／深色模式）。</figcaption>
+  </figure>
+</section>
+
+<section class="chapter" id="sec-copilot-limits">
+  <span class="chip" style="background:linear-gradient(90deg,#0d8f80,#9c7b23)">CHAPTER 04</span>
+  <h2 class="ct">4. 消費者 Copilot 能取代與不能取代的</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:260px">能減少手工的部分</th><th>還做不到的部分</th></tr>
+    <tr><td>把「找資料、讀內容、寫初稿、整理待辦」從數十分鐘縮短為對話式工作</td><td>沒有通用的事件觸發、重試、分支、執行紀錄與跨系統服務帳號模型</td></tr>
+  </table></div>
+  <div class="note blue">💡 把它當成個人 AI 助理；需要可重複執行的流程時，仍要設計 Flow 或 Agent flow。</div>
+</section>
+
+<section class="chapter" id="sec-m365-context">
+  <span class="chip" style="background:linear-gradient(90deg,#9c7b23,#bf6a1e)">CHAPTER 05</span>
+  <h2 class="ct">5. M365 Copilot：從「個人回答」進入「工作脈絡」</h2>
+  <p><b>工作入口</b>：Chat、Search、Library、Agents、Create——依既有權限使用工作內容。</p>
+  <h3>工作資料基礎：Microsoft Graph、權限與企業資料保護</h3>
+  <ul class="pt">
+    <li>Copilot 只能在既有權限內存取檔案、郵件、聊天、會議與網站；它不會自動越權。</li>
+    <li>企業資料保護涵蓋傳輸與靜態加密、租戶隔離、敏感度標籤、保留政策與稽核。</li>
+    <li>Copilot 不會用企業資料訓練公開模型；但過度共用的資料權限仍是治理風險。</li>
+  </ul>
+  <h3>M365 Copilot Chat：Web、Work、Search 與引用</h3>
+  <p>Chat 可用工作內容或網路內容回答；是否可用 Work 與 Web 取決於授權與管理員設定。Search 用來找檔案、電子郵件與資訊；回答可帶引用，讓使用者回到原始資料驗證。把檔案、連結與明確限制放進提示詞，可提升回答的相關性與可追溯性。</p>
+  <h3>Copilot Pages：把對話變成可共同維護的成果</h3>
+  <p>將 Chat 回覆移到可持續編輯的頁面；可要求 Copilot 續寫、改寫或回答頁面內容。同事可協作同一 Page，不必取得原始聊天紀錄；可再轉成 Word 或 PowerPoint。適合把會議構想、研究摘要、決策草案變成共用工作物，而非建立流程。</p>
+  <h3>Copilot Notebooks：用有限來源，得到聚焦回答</h3>
+  <p>Notebook 可放 Word、PowerPoint、Excel、Copilot Pages 等參考資料；Copilot 只以此範圍回答。可建立專案指示，讓輸出長期維持既定語氣、格式或任務角色。商務帳號可生成 Audio Overview；適合快速吸收專案、研究或會議資料。</p>
+</section>
+
+<section class="chapter" id="sec-m365-apps">
+  <span class="chip" style="background:linear-gradient(90deg,#bf6a1e,#b25269)">CHAPTER 06</span>
+  <h2 class="ct">6. M365 Copilot 深入各應用程式</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:130px">應用</th><th>Copilot 能做的事</th></tr>
+    <tr><td><b>Word</b></td><td>由提示、筆記、大綱或參考檔案起草；可重組段落、縮寫、調整語氣、補結論；摘要長文件、回答文件問題、找待辦或壓力測試論點。共用文件中先提出變更預覽，核准後才寫入原檔。</td></tr>
+    <tr><td><b>Outlook</b></td><td>摘要長郵件串、根據脈絡草擬回覆、用 Coaching 改善語氣清晰度；理解收件匣與行事曆並協助建立會議或專注時間。「讀與寫」加速，通知歸檔轉寄分流仍屬 Flow 強項。</td></tr>
+    <tr><td><b>Teams</b></td><td>會議中或會後摘要誰說了什麼、建議行動項目並回答會議內容問題；開啟逐字稿後會後可在 Recap 持續提問；頻道聊天可快速整理主題、決策與待辦。</td></tr>
+    <tr><td><b>Excel</b></td><td>建立修改工作表、儲存格、公式、格式、圖表、樞紐分析與儀表板。Edit、Plan、Chat 三模式分別支援直接變更、先審計畫、僅分析不改檔。COPILOT 函數適合語意生成探索，不應取代需精確計算的規則。</td></tr>
+    <tr><td><b>PowerPoint</b></td><td>由主題或 Word/PDF 內容建立簡報，新增重組投影片並依品牌方向編修。可摘要整份簡報、回答投影片問題、找關鍵投影片與行動項目（約 40,000 字摘要）。Rewrite 可潤飾、濃縮或改專業語氣，仍要檢查內容版權品牌。</td></tr>
+    <tr><td><b>OneNote／Loop／SharePoint／Planner</b></td><td>OneNote 可把頁面筆記摘要成待辦、專案計畫或依期限排序的清單；Pages 可用 OneDrive、SharePoint、Teams、Loop、會議、Planner、To Do 與行事曆等可存取脈絡。這些工具讓人更快讀懂與編寫工作內容，本身不等於事件式跨服務自動化。</td></tr>
+  </table></div>
+</section>
+
+<section class="chapter" id="sec-agents">
+  <span class="chip" style="background:linear-gradient(90deg,#b25269,#5645D4)">CHAPTER 07</span>
+  <h2 class="ct">7. Create、Brand kits、Agents 與 Researcher</h2>
+  <ul class="pt">
+    <li><b>Create、Brand kits 與影片</b>：Create 可產生影像、資訊圖、海報、橫幅與短影片；部分功能須組織啟用 Clipchamp。Brand kit 可集中標誌、色票、字體、模板、圖像規則、語氣與資料視覺化樣式；品牌管理者維護官方套件，Copilot 可套用已核准的品牌元素。</li>
+    <li><b>Agents 與 Researcher</b>：Agents 可加入組織知識、指示與工具，協助重複任務、洞察與業務流程執行。Researcher 針對複雜、多步研究，整合網路與可存取工作資料，輸出結構化且有來源的報告。<b>Agent 不是免治理的自動化</b>：要明確定義資料來源、可做動作、身分驗證、測試與監控。</li>
+    <li><b>Workflows Agent</b>：最接近「以對話取代建 Flow」的功能——只要描述需求，即可為 Outlook、SharePoint、Teams、Planner 等建立支援服務的工作流程；支援排程、事件觸發、Teams Adaptive Card 收集輸入，並可在視覺化設計器測試與管理。<b>截至 2026/07 屬 Frontier 早期體驗，從美國英文市場開始；不可假設每個租戶都已可用。</b></li>
+  </ul>
+</section>
+
+<section class="chapter" id="sec-pa">
+  <span class="chip" style="background:linear-gradient(90deg,#5645D4,#3b6bb0)">CHAPTER 08</span>
+  <h2 class="ct">8. Power Automate 仍不可取代的核心能力</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:180px">能力</th><th>說明</th></tr>
+    <tr><td><b>雲端流程</b></td><td>事件觸發，跨服務執行動作</td></tr>
+    <tr><td><b>桌面 RPA 與維運</b></td><td>桌面自動化，保留紀錄與錯誤處理</td></tr>
+  </table></div>
+</section>
+
+<section class="chapter" id="sec-route">
+  <span class="chip" style="background:linear-gradient(90deg,#3b6bb0,#0d8f80)">CHAPTER 09</span>
+  <h2 class="ct">9. 哪些工作可取代、哪些要保留 Power Automate＋導入路線</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:260px">可由 Copilot 取代或大幅減少</th><th>必須保留 Power Automate</th></tr>
+    <tr><td>每日郵件整理、會議紀要、初稿與摘要：由 Copilot 即時完成，通常不必先建 Flow</td><td>涉及付款、核准、合規留存、客戶通知、主資料寫回或 SLA 的流程，必須有可預測的規則與稽核</td></tr>
+    <tr><td>臨時研究、文件比較、表格洞察、簡報草稿：由 Chat、Notebooks、Office Copilot 完成</td><td>需要第三方系統、服務帳號、複雜重試、例外處理、桌面 RPA 或高頻大量執行時</td></tr>
+    <tr><td>個人例行通知與簡單 M365 動作：可評估 Workflows Agent，先確認可用性與審核機制</td><td>—</td></tr>
+  </table></div>
+  <h3>導入路線：先 AI 輔助，再決定是否自動化</h3>
+  <ol class="st">
+    <li>挑選高頻、低風險、文字與知識密集的工作，用 Copilot 先做人工在迴路試行。</li>
+    <li>量化節省時間、錯誤類型與人工覆核點；把可重複的決策條件寫清楚。</li>
+    <li>只有流程穩定後才用 Power Automate 或 Agent flow 固化，並持續驗證來源、權限與輸出。</li>
+  </ol>
+</section>
+
+<section class="chapter" id="sec-recap">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#3b6bb0)">RECAP</span>
+  <h2 class="ct">10. 重點整理</h2>
+  <ul class="pt">
+    <li><b>三個產品各司其職</b>：Copilot（個人回答）、M365 Copilot（工作脈絡）、Power Automate（受控執行）。</li>
+    <li><b>選工具看「結果是否可變」</b>：可變、需理解生成用 Copilot；固定步驟、需稽核用 Power Automate。</li>
+    <li><b>Vision 不是 RPA</b>：Copilot Vision 看懂畫面、給建議，不會替你點擊操作。</li>
+    <li><b>Deep Research 即將退役</b>：2026/08/18 起自消費者 Copilot 移除，改用 Researcher（M365 Premium）。</li>
+    <li><b>Agent 不是免治理的自動化</b>：仍要定義資料來源、身分驗證、測試與監控。</li>
+    <li><b>導入路線三步驟</b>：先 Copilot 試行 → 量化效益 → 流程穩定後才用 Power Automate 固化。</li>
+  </ul>
+</section>
+
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5a5866)">SOURCES</span>
+  <h2 class="ct">11. 資料來源與製作說明</h2>
+  <ul class="pt">
+    <li><b>原始教材：</b>EP202607.23「Microsoft Copilot × Power Automate：讓 AI 進入辦公流程」官方課程簡報（29 個編號重點，完整文字版）＋錄影回放（56 分鐘）；均為 anyone-reader 權限、公開可下載。</li>
+    <li><b>製作方式：</b>本集簡報為文字／向量型投影片，read_file_content 直接取得完整逐字內容 → 對照下載錄影抽取的畫面關鍵幀（場景變化偵測）核對實際示範畫面 → 整理成本頁章節。內容為<b>真實課程內容</b>，非推測改寫。</li>
+    <li><b>誠實聲明：</b>本頁以簡報全文為主要依據，畫面截圖作為輔助佐證；因簡報文字內容已相當完整，未逐字轉寫全部錄影逐字稿，示範操作的口語細節若與截圖不符，以截圖畫面為準。</li>
+    <li><b>介面參考：</b>版型沿用本站 EP29–EP47 課堂筆記的乾淨白底編輯風格。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  EP202607.23「Microsoft Copilot × Power Automate」課堂筆記・2026/07 整理<br>
+  🍀 Learn AI with Tarshar｜搭配 <a href="ep202607-23-ai-skills.html">互動技能地圖</a> 使用效果最佳
+</footer>
+
+</body>
+</html>

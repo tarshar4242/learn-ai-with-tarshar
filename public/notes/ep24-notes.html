@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP24 課堂筆記｜從亂試到有策略：Meta AI 圖像生成這樣學最快</title>
+<meta name="description" content="晨學講堂 EP24 課堂筆記：Meta AI 圖像生成——跨平台進入途徑、文字回應特色、與 Midjourney/Flux 的技術結合、結構化提示詞五法則、常見失敗診斷、六個生圖實戰案例。取材自課程筆記 Google Doc 與簡報 PDF，文字版完整整理。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#3f8560; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px;border-left:none}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+.note.violet{background:#F3EFFB;border-color:#DFD2F0;color:#5a34a8}
+.note.rose{background:#FBEEF1;border-color:#F0D2DB;color:#9c2f52}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.prompt{position:relative;background:#1d1d1f;border-radius:10px;padding:15px 16px;margin:12px 0;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt .tag{display:inline-block;font-size:11px;letter-spacing:.06em;color:#c9c4ff;border:1px solid #3a3a40;border-radius:6px;padding:2px 9px;margin-bottom:8px}
+.prompt b{color:#fff}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.embed{margin:14px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000}
+.embed iframe{display:block;width:100%;aspect-ratio:16/9;border:0}
+.embed .cap{font-size:12.5px;color:var(--ink3);padding:10px 16px;background:var(--paper);border-top:1px solid var(--line)}
+.ts{display:inline-block;font-family:"Cascadia Code",Consolas,monospace;font-weight:700;font-size:12px;color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,#fff);border-radius:5px;padding:2px 8px;margin-right:7px;letter-spacing:.4px;vertical-align:middle}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+.layers{display:grid;gap:10px;margin:14px 0}
+.lyr{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:13px 15px;background:#fff}
+.lyr .n{flex:none;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--accent)}
+.lyr h4{margin:0 0 3px;font-size:14.5px}
+.lyr p{font-size:13px;margin:0}
+.sub{color:var(--ink2)}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#a8cdb4" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP24 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="ep24-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 晨學講堂 · EP24</span>
+  <h1><span>從亂試到有策略</span><br>Meta AI 圖像生成這樣學最快</h1>
+  <p class="lead">EP24 帶你認識 <b>Meta AI</b> 的圖像生成能力——從「到處都能用」的跨平台策略，到與 <b>Midjourney、Flux</b> 技術結合帶來的免費專業級生圖，再到一套可複用、可教、可驗證的<b>結構化提示詞方法</b>。本頁完整整理課程筆記與簡報內容，含六個真實生圖案例的失敗提示詞與改寫對照。</p>
+  <div class="meta">
+    <span>📅 2026/03 直播</span>
+    <span>🗂️ 教材：課程筆記＋簡報 PDF</span>
+    <span>🎨 主題：Meta AI 圖像生成</span>
+    <span>🧩 提示詞策略</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-what">1. Meta AI 是什麼</a>
+  <a href="#sec-howto">2. 怎麼開始使用</a>
+  <a href="#sec-text">3. 文字回應特色</a>
+  <a href="#sec-engine">4. 生圖引擎解密</a>
+  <a href="#sec-fit">5. 定位與適用情境</a>
+  <a href="#sec-rule12">6. 提示詞法則：結構與順序</a>
+  <a href="#sec-rule34">7. 提示詞法則：失敗診斷</a>
+  <a href="#sec-rule5">8. 可複用的方法</a>
+  <a href="#sec-modes">9. 兩種 Prompt 模式</a>
+  <a href="#sec-video">10. 影音能力延伸</a>
+  <a href="#sec-cases">11. 六個生圖案例實戰</a>
+  <a href="#sec-recap">12. 重點整理</a>
+  <a href="#sec-src">13. 資料來源與製作說明</a>
+</nav>
+
+<article>
+
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--teal))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>「從亂試到有策略：Meta AI 圖像生成這樣學最快」——Meta AI 完整使用教學，從零開始學會免費生圖、寫程式、辨識照片</td></tr>
+    <tr><th>頻道</th><td>生成式AI應用電台・晨學講堂</td></tr>
+    <tr><th>直播日期</th><td>2026/03 直播</td></tr>
+    <tr><th>教材</th><td>「課程筆記」Google Doc ＋ 簡報 PDF（本集<b>無錄影抽幀、無簡報原圖</b>，僅有文字教材）</td></tr>
+    <tr><th>一句話先懂</th><td>Meta AI 生圖不是亂試——它整合了 <b>Midjourney 美學技術</b>與 <b>Flux 模型</b>，只要用對<b>結構化提示詞</b>方法，免費也能做出接近專業水準的圖像。</td></tr>
+  </table></div>
+  <div class="note blue">💡 本頁內容取材自真實的「課程筆記」文件與簡報 PDF 文字，逐段整理成課堂筆記，<b>非推測、非重新編造</b>。本集資料夾沒有附上可下載的錄影檔，因此沒有做逐幀截圖／簡報原圖擷取，本頁為<b>純文字版筆記</b>。</div>
+</section>
+
+<section class="chapter" id="sec-what">
+  <span class="chip" style="background:linear-gradient(90deg,#3f8560,#0d8f80)">CHAPTER 01</span>
+  <h2 class="ct">1. Meta AI 是什麼：跨平台入口與三大核心功能</h2>
+  <p class="cd">重點：Meta AI 是 Meta 推出的跨平台 AI 助理，最大特色是「無縫整合」——不需要安裝新 App，打開手機裡的社群軟體就能直接使用。</p>
+  <h3>多元進入途徑：從「到處可用」理解其平台策略</h3>
+  <p>Meta AI 的一大特色在於<b>進入門檻極低、使用場景高度分散</b>。使用者不需要額外學習新系統，只要在既有的社群或通訊軟體中，即可直接呼叫 AI。這種設計邏輯，反映的是 Meta 長期以「社群即入口」的產品策略，而非將 AI 視為獨立工具。</p>
+  <p>實務上，Meta AI 可從 <b>Facebook、Instagram、WhatsApp、iMessage、網頁版與手機 App</b> 等多種管道進入，但以功能完整度與穩定度而言，<b>手機 App（特別是 IG 與 Messenger）</b>仍是目前最成熟的使用場景，也最適合初學者與教學示範。例如在教學現場，若希望學員快速體驗「文字生成 → 生圖 → 圖像分析」的完整流程，使用 Instagram App 內建的 Meta AI，可在同一介面中完成操作。</p>
+  <h3>核心優勢與月活躍規模</h3>
+  <ul class="pt">
+    <li><b>免費使用，無配額限制</b>。</li>
+    <li><b>支援中文對話</b>。</li>
+    <li><b>整合 Midjourney 美學 ＋ Flux 模型</b>。</li>
+    <li><b>月活躍用戶已超過 10 億人</b>。</li>
+  </ul>
+  <h3>3 大核心功能</h3>
+  <ol class="st">
+    <li><b>生圖與影片生成</b>：輸入文字描述，AI 自動生成高品質圖片或動態影片，特色是無限量、免費生成。</li>
+    <li><b>文字生成與資訊查詢</b>：像 ChatGPT 一樣聊天、搜尋資訊、規劃行程、協助寫程式、課業輔導。</li>
+    <li><b>影像分析與辨識</b>：上傳照片，AI 回答問題或提供建議，例如拍貓問品種、拍帽子問哪裡買。</li>
+  </ol>
+  <div class="golden"><div class="q">「Meta AI 靠社群當入口，而不是把 AI 當成獨立工具。」</div><div class="a">—— 課程筆記重點論述</div></div>
+</section>
+
+<section class="chapter" id="sec-howto">
+  <span class="chip" style="background:linear-gradient(90deg,#0d8f80,#2f7d92)">CHAPTER 02</span>
+  <h2 class="ct">2. 怎麼開始使用：手機版與電腦版</h2>
+  <h3>手機版（推薦初學者）</h3>
+  <ol class="st">
+    <li><b>打開 App</b>：開啟 Instagram 或 Messenger 應用程式。</li>
+    <li><b>進入聊天室</b>：進入任何現有的聊天室，或建立新訊息。</li>
+    <li><b>呼叫 AI</b>：點擊上方的「Meta AI」圓形圖示，或在對話框輸入 <b>@Meta AI</b>。</li>
+  </ol>
+  <h3>電腦版</h3>
+  <ol class="st">
+    <li><b>訪問 Meta.AI 官網</b>：開啟瀏覽器輸入網址直接訪問。</li>
+    <li><b>登入 Meta 帳號</b>：使用 Facebook 或 Instagram 帳號登入。</li>
+    <li><b>開始使用</b>：介面與手機版類似，功能完全相同。</li>
+  </ol>
+  <div class="twrap"><table>
+    <tr><th style="width:130px">目前限制</th><td>台灣有些用戶在網頁版可能看到「所在國家/地區尚未開放」，建議優先使用手機版 Instagram 或 Messenger。</td></tr>
+    <tr><th>電腦版優勢</th><td>適合長時間工作與創作、可同時開啟多視窗對比、大螢幕操作更舒適。</td></tr>
+  </table></div>
+  <div class="note gold">⚠️ 以功能完整度與穩定度而言，手機 App（特別是 IG 與 Messenger）仍是目前最成熟的使用場景，也最適合教學示範；電腦版網頁在台灣可能遇到地區限制提示。</div>
+</section>
+
+<section class="chapter" id="sec-text">
+  <span class="chip" style="background:linear-gradient(90deg,#3f8560,#3b6bb0)">CHAPTER 03</span>
+  <h2 class="ct">3. 文字回應特色：來自社群大數據的「生活化視角」</h2>
+  <p>與多數以搜尋或知識庫為核心的 AI 不同，Meta AI 的文字回應風格，深受其長期累積的<b>社群資料</b>影響。其回答往往較貼近日常語境，並能自然呈現多元觀點，特別適合用於<b>社群議題、生活情境、趨勢討論與意見彙整</b>。</p>
+  <p>這種特性並非單純「語氣比較輕鬆」，而是源自 Meta 同時整合 <b>Facebook、Instagram、Threads</b> 等平台的使用情境，使 AI 在回答問題時，更容易模擬不同社群角色與討論脈絡。</p>
+  <div class="note blue">💡 舉例說明：詢問「最近 Threads 上大家怎麼看 AI 生圖？」這類問題時，Meta AI 通常能整理出偏向社群討論脈絡的回應，而非單一結論式答案，對於課堂上示範「觀點蒐集」或「議題盤點」特別實用。</div>
+</section>
+
+<section class="chapter" id="sec-engine">
+  <span class="chip" style="background:linear-gradient(90deg,#3b6bb0,#5645D4)">CHAPTER 04</span>
+  <h2 class="ct">4. 生圖引擎解密：與 Midjourney、Flux 的技術結合</h2>
+  <p>在圖像生成方面，Meta AI 的核心優勢來自與 <b>Midjourney 美學技術</b>的整合，並結合 <b>Flux 模型</b>在視覺一致性上的表現，使其在光線、角度、藝術風格與畫面穩定度上，具備「接近專業、但門檻極低」的特性。</p>
+  <h3>Meta AI 與 Midjourney 的關係（2025.08）</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">技術授權與合作協議</th><td>Meta 將 Midjourney 美學技術整合到 Flux 模型中。</td></tr>
+    <tr><th>品質解鎖</th><td>免費使用 Midjourney 美學引擎，降低門檻。</td></tr>
+    <tr><th>技術加持</th><td>結合 Flux（視覺一致性），生圖速度與細節提升。</td></tr>
+    <tr><th>無痛轉移</th><td>Midjourney 創作者可直接上手。</td></tr>
+    <tr><th>結果</th><td><b>完全免費 × 無限量 × 專業級生圖</b>。</td></tr>
+  </table></div>
+  <div class="golden"><div class="q">「完全免費 × 無限量 × 專業級生圖。」</div><div class="a">—— 簡報｜Meta AI 與 Midjourney 的關係（2025.08）</div></div>
+</section>
+
+<section class="chapter" id="sec-fit">
+  <span class="chip" style="background:linear-gradient(90deg,#5645D4,#b25269)">CHAPTER 05</span>
+  <h2 class="ct">5. 定位與適用情境：能做什麼、不能做什麼</h2>
+  <p class="cd">核心定位：<b>快速、免費、高品質的創意工具</b>，而不是完美的商業級解決方案。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">適合用在什麼情境</th><td>快速生成商品圖、行銷素材／創意發想、概念視覺化／社群媒體內容製作／個人創意專案／學習和實驗 AI 生圖技術。</td></tr>
+    <tr><th>不適合拿來做什麼</th><td>對光影、構圖有極高要求的專業案件／商業授權使用（涉及版權問題）／複雜的細節要求（有時會失控）／特定人物的精確複製／需要完全一致的重複生成。</td></tr>
+  </table></div>
+</section>
+
+<section class="chapter" id="sec-rule12">
+  <span class="chip" style="background:linear-gradient(90deg,#bf6a1e,#9c7b23)">CHAPTER 06</span>
+  <h2 class="ct">6. 提示詞法則：結構與順序</h2>
+  <h3>法則 1：提示詞結構</h3>
+  <div class="note gold">❌ 失控的提示詞（The Problem）：「一個穿著漢服的女子，頭上有髮髻，衣服上寫著紅色的骨字，飄逸感，古典風格，清晰，高細節，電影級光線，專業攝影，4K 解析度，完美構圖…」——問題：太多修飾詞堆砌，AI 不知道優先順序。</div>
+  <ol class="st">
+    <li><b>主體</b>（最重要，放在最前面）</li>
+    <li><b>關鍵特徵</b>（具體的視覺細節）</li>
+    <li><b>風格定位</b>（藝術風格或氛圍）</li>
+    <li><b>品質要求</b>（光線、解析度、構圖）</li>
+  </ol>
+  <div class="prompt"><span class="tag">改寫範例</span>古典漢服女子，髮髻高挽，唸珠項鍊，衣著飄逸，古典中國風，高細節攝影</div>
+  <div class="golden"><div class="q">「從重要到次要排列，每個詞都要有用，不要盲目堆砌形容詞。」</div><div class="a">—— 法則 1 核心原則</div></div>
+
+  <h3>法則 2：描述順序——同一句話，不同順序，結果差很大</h3>
+  <p><b>核心原則：</b>越前面的描述，AI 給的權重越高；想要什麼成為主角，就把它放在最前面。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:90px">案例</th><th>主角在前</th><th>順序調換後</th></tr>
+    <tr><td>咖啡杯</td><td>「白色咖啡杯，木製桌子，窗邊自然光」→杯子是絕對主角</td><td>「窗邊自然光，木製桌子，白色咖啡杯」→光線和環境變成主角</td></tr>
+    <tr><td>手工皂</td><td>「手工皂，白色背景，柔和光線」→皂是焦點，背景純淨</td><td>「柔和光線，白色背景，手工皂」→光線主導，皂可能變配角</td></tr>
+    <tr><td>人物</td><td>「年輕女性，穿著牛仔褲，咖啡廳背景」→人物清晰，背景模糊</td><td>「咖啡廳，年輕女性坐著，穿著牛仔褲」→場景和人物同等重要</td></tr>
+  </table></div>
+</section>
+
+<section class="chapter" id="sec-rule34">
+  <span class="chip" style="background:linear-gradient(90deg,#9c7b23,#c0453f)">CHAPTER 07</span>
+  <h2 class="ct">7. 提示詞法則：失敗診斷</h2>
+  <h3>法則 3：結果差異原因——4 種常見盲點</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">問題類型</th><th>模糊 / 有問題的說法</th><th>精確 / 建議說法</th></tr>
+    <tr><td>用詞不夠精確</td><td>「漂亮」「好看的光」</td><td>「高級感、精緻」「柔和側光、夕陽」</td></tr>
+    <tr><td>混淆了相反的風格</td><td>「極簡風格，但細節豐富」（矛盾）</td><td>「極簡風格，精選細節」（協調）</td></tr>
+    <tr><td>用了 AI 不理解的詞</td><td>「小清新」「高級感」（主觀）</td><td>「日本動漫風格」「北歐極簡風格」（具體參照）</td></tr>
+    <tr><td>沒有給參考點</td><td>「一個漂亮的女人」「一個房間」（空泛）</td><td>「清爽色調、自然光」「黑色背景、戲劇光」（客觀）</td></tr>
+  </table></div>
+  <div class="note blue">💡 改進方法：用具體詞彙替代抽象詞彙、加入風格參考、避免相互矛盾。</div>
+
+  <h3>法則 4：常見失敗與修正對照表</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:130px">失敗現象</th><th>原因</th><th>修正做法</th></tr>
+    <tr><td>人物手部變形</td><td>AI 對手部結構理解有限</td><td>「清晰的手部，五根手指清楚可見」或「手部放在身體旁邊」</td></tr>
+    <tr><td>顏色完全不對</td><td>沒有明確指定顏色名稱</td><td>「紅色」改為「深紅色咖啡杯，質感光滑」</td></tr>
+    <tr><td>文字亂碼或變形</td><td>AI 生成文字能力有限</td><td>「不要在圖片中加入文字」，改用 Canva 後期添加</td></tr>
+    <tr><td>構圖很奇怪</td><td>沒有指定視角或鏡頭</td><td>「俯視拍攝」、「側面 45 度角」、「特寫」</td></tr>
+    <tr><td>人物臉部模糊</td><td>描述不夠具體或距離太遠</td><td>「清晰的臉部，五官精緻」或「背景虛化」</td></tr>
+    <tr><td>風格混亂</td><td>同時要求相反的風格</td><td>「選擇一個主要風格，其他作為補充」</td></tr>
+  </table></div>
+</section>
+
+<section class="chapter" id="sec-rule5">
+  <span class="chip" style="background:linear-gradient(90deg,#c0453f,#b25269)">CHAPTER 08</span>
+  <h2 class="ct">8. 可複用的方法：把生圖變成一套系統</h2>
+  <p class="cd">法則 5：讓生圖經驗可以累積、可以複製，而不是每次都從零亂試。</p>
+  <ol class="st">
+    <li><b>建立提示詞模板</b>：[主體][關鍵特徵][風格][光線][品質]。</li>
+    <li><b>建立「風格庫」</b>：為常用風格（如電商、居家）建立標準描述，每次只需替換主體。</li>
+    <li><b>測試並記錄結果</b>：每次生圖都記錄提示詞和結果，標記「成功」或「失敗」，找出有效的詞彙。</li>
+    <li><b>系統化調整</b>：不要一次改多個地方，每次只改一個變數，觀察什麼改變導致了結果變化。</li>
+    <li><b>建立失敗排查清單</b>：人物變形→加清晰描述；顏色不對→加明確色名；風格混亂→刪除衝突詞。</li>
+  </ol>
+</section>
+
+<section class="chapter" id="sec-modes">
+  <span class="chip" style="background:linear-gradient(90deg,#5645D4,#3f8560)">CHAPTER 09</span>
+  <h2 class="ct">9. 兩種 Prompt 模式：教學結構法 × 借力 Midjourney 生態</h2>
+  <p>在 Meta AI 的生圖教學中，實務上可清楚區分為兩種 prompt 撰寫模式，兩者並非衝突，而是適用於不同學習階段與使用情境。</p>
+  <div class="layers">
+    <div class="lyr"><div class="n">1</div><div><h4>教學結構法（初學者建立邏輯）</h4><p>依照簡報整理的結構化提示詞法，強調主體、關鍵特徵、風格與品質的清楚排序，適合初學者建立穩定的生圖邏輯，避免亂堆形容詞而導致結果失控。</p></div></div>
+    <div class="lyr"><div class="n">2</div><div><h4>Midjourney 慣用法（借力既有生態）</h4><p>借助 ChatGPT 等其他工具，先產出 Midjourney 慣用格式的 prompt，再直接套用至 Meta AI。由於 Meta AI 生圖背後的模型本質上整合了 Midjourney 的美學引擎，因此使用 Midjourney 長期累積的指令風格，反而能更精準地發揮其圖像生成潛力。</p></div></div>
+  </div>
+  <h3>學習來源：善用 Midjourney 公開範例</h3>
+  <p>對於初學者而言，最大的困難往往不是「不會下 prompt」，而是不知道「好的 prompt 長什麼樣子」。直接參考 <b>Midjourney 官網首頁</b>公開的圖像與描述方式，是一條低成本、有效率的學習路徑。重點不在於照抄，而是觀察其描述結構：主體、關鍵特徵、風格、光線與品質要求的排列順序。</p>
+  <div class="note green">💡 教學做法：教師可引導學員打開 Midjourney 官網首頁，選一張喜歡的作品，拆解其文字描述，再將相同結構改寫為 Meta AI 的提示詞，實際比較生成結果。這種做法不需付費，也能快速建立「可複用的生圖思維」。</div>
+  <div class="note blue">💡 進階應用：可先請 ChatGPT 產出一段符合 Midjourney 習慣的英文 prompt（包含風格、鏡頭、光線、藝術參考），再將該 prompt 原封或微調後丟入 Meta AI 生圖。學員通常會發現，畫面風格與細節掌控度明顯提升。</div>
+  <div class="golden"><div class="q">「Meta AI 生圖不是亂試，而是可以借力既有生態來學得更快。」</div><div class="a">—— 課程筆記重點論述</div></div>
+</section>
+
+<section class="chapter" id="sec-video">
+  <span class="chip" style="background:linear-gradient(90deg,#2f7d92,#3b6bb0)">CHAPTER 10</span>
+  <h2 class="ct">10. 影音能力延伸：向 Sora、即夢等生成式影片工具靠攏</h2>
+  <p>Meta AI 不僅止於靜態生圖，亦逐步加入「靜態圖片轉動態影像」的能力，並可搭配音樂、語音甚至對嘴效果，讓內容從單張圖延伸為短影音，貼近社群實際使用需求。</p>
+  <p>其能力路徑與 <b>Sora、即夢（Dream Machine）</b>等工具高度相似，核心不在於「一次生成完整長片」，而是強調圖片、動作、聲音之間的<b>混搭與轉換</b>。目前可觀察到的關鍵特性包含：</p>
+  <ul class="pt">
+    <li>靜態圖片轉為動態畫面</li>
+    <li>角色對嘴</li>
+    <li>音樂與語音同步</li>
+    <li>簡易情境動畫</li>
+  </ul>
+  <p>這些功能高度貼近社群短影音的實際需求，也符合 Meta 長期深耕 Reels、Stories 的產品方向。</p>
+  <div class="note steel">💡 教學示範建議：在課堂實作時，可先讓學員用 Meta AI 生成人物角色圖像，再請 AI 產生簡短動態片段，並加入語音或背景音樂，示範「同一角色、多模態輸出」的流程。這有助學員理解：Meta AI 並非只是在做生圖，而是在打造可延伸的內容素材庫。</div>
+</section>
+
+<section class="chapter" id="sec-cases">
+  <span class="chip" style="background:linear-gradient(90deg,#3f8560,#bf6a1e)">CHAPTER 11</span>
+  <h2 class="ct">11. 六個生圖案例實戰拆解</h2>
+  <p class="cd">每個案例都是「情境 → 失敗提示詞 → 為什麼失敗 → 改寫提示詞 → 效果 → 關鍵詞彙」的完整拆解，可直接套用。</p>
+
+  <h3>案例 1：簡約棚拍電商風格</h3>
+  <p><b>情境：</b>你要拍攝自己做的手工皂，放在購物網站上。</p>
+  <div class="note gold">❌「一個漂亮的手工皂，白色背景，好看的光線，高級感，清晰」——詞彙太模糊，AI 不知道什麼叫「好看」和「高級感」，缺乏具體細節。</div>
+  <div class="prompt"><span class="tag">改寫</span>手工皂產品，圓形，白色，質感光滑，純白無縫背景，柔和漫射光，高細節，清晰銳利，專業電商攝影風格</div>
+  <p><b>效果：</b>背景乾淨、光線柔和、產品清晰，符合專業電商標準。</p>
+  <p><b>調整技巧：</b>想看細節→加「特寫(Close-up)」；想看環境→加「俯視視角(Top-down view)」；想更高級→加「黑色背景(Black background)」。</p>
+
+  <h3>案例 2：生活手持情境風格</h3>
+  <p><b>情境：</b>你要展示一杯咖啡在日常生活中的樣子，看起來自然真實。</p>
+  <div class="note gold">❌「咖啡杯，手拿著，咖啡廳背景，真實」——缺乏視角描述，AI 容易生成奇怪的手部姿勢，背景也可能太過搶眼。</div>
+  <div class="prompt"><span class="tag">改寫</span>第一人稱視角(POV shot)，手持白色陶瓷咖啡杯，拿鐵拉花，背景是模糊的(blurred)咖啡廳和人群，窗外射入自然光(natural light)，高解析度，生活風格攝影</div>
+  <p><b>效果：</b>代入感強，背景虛化突出了主體，光線自然，像 IG 上的生活照。</p>
+  <p><b>關鍵詞彙：</b>POV shot（第一人稱視角）、Depth of field（景深/背景虛化）、Natural sunlight（自然陽光）。</p>
+
+  <h3>案例 3：高級暗調質感風格</h3>
+  <p><b>情境：</b>你要為一款高級香水製作廣告圖，強調神秘與質感。</p>
+  <div class="note gold">❌「香水瓶，黑色背景，看起來很貴，有質感」——「看起來很貴」太抽象，黑色背景如果沒有光線配合，會變成死黑一片，看不出產品輪廓。</div>
+  <div class="prompt"><span class="tag">改寫</span>透明玻璃香水瓶，金色液體，黑色大理石背景(black marble)，戲劇性輪廓光(dramatic rim light)，倒影，電影級光效，8k 高畫質，高級廣告攝影</div>
+  <p><b>效果：</b>輪廓光勾勒出瓶身形狀，大理石紋路增加層次，金色與黑色形成高級對比。</p>
+  <p><b>質感關鍵詞：</b>Rim light（輪廓光/邊緣光）、Material（指定材質：玻璃/金屬/大理石）、Reflection（倒影）。</p>
+
+  <h3>案例 4：藝術家風格</h3>
+  <p><b>情境：</b>你要為機車品牌設計一張「超現實主義」的創意海報。</p>
+  <div class="note gold">❌「一台很酷的機車，藝術風格，怪怪的，夢幻的感覺，油畫」——「藝術風格」太籠統，AI 可能只是加了一層濾鏡，無法產生真正的創意變形。</div>
+  <div class="prompt"><span class="tag">改寫</span>一台機車像時鐘一樣融化(melting like a clock)，荒漠背景，達利風格(style of Salvador Dali)，超現實主義，油畫質感，夢境氛圍</div>
+  <p><b>效果：</b>直接引用大師風格，AI 立即理解「融化」、「荒漠」等視覺元素，精準達成目標。</p>
+  <p><b>風格參考：</b>梵谷(Van Gogh)→漩渦筆觸；畢卡索(Picasso)→幾何解構；賽博龐克(Cyberpunk)→霓虹科技。</p>
+
+  <h3>案例 5：日本漫畫家風格</h3>
+  <p><b>情境：</b>你要把普通的火車進站場景，變成熱血漫畫的一格。</p>
+  <div class="note gold">❌「火車進站，漫畫風格，很帥」——「漫畫風格」太廣泛，AI 通常會生成普通的日系動漫風，缺乏張力和特色。</div>
+  <div class="prompt"><span class="tag">改寫</span>火車進站，荒木飛呂彥風格(Hirohiko Araki style)，JoJo的奇妙冒險，誇張的透視(exaggerated perspective)，粗獷的線條，戲劇性的陰影，狀聲詞文字(Sound effects text)，高對比度</div>
+  <p><b>效果：</b>指定特定漫畫家，加上該風格的關鍵元素（透視、線條、狀聲詞），瞬間產生強烈風格。</p>
+  <p><b>風格元素：</b>Artist Name（漫畫家名字）、Bold Lines（粗線條）、Dramatic Shading（戲劇性陰影）。</p>
+
+  <h3>案例 6：節慶氛圍風格</h3>
+  <p><b>情境：</b>你要製作一張聖誕節禮物盒的行銷圖片，需要溫馨、夢幻的感覺。</p>
+  <div class="note gold">❌「聖誕禮物，快樂，紅色盒子，雪」——太過普通，像廉價的圖庫照片，缺乏「氛圍感」和「光影層次」。</div>
+  <div class="prompt"><span class="tag">改寫</span>紅色絲絨禮物盒，金色緞帶，放置在雪地上，背景是模糊的聖誕燈光(bokeh Christmas lights)，魔法氛圍(magical atmosphere)，電影級光線(cinematic lighting)，溫暖色調，8k</div>
+  <p><b>效果：</b>光斑背景創造了夢幻感，材質描寫增加了高級感，整體氛圍溫馨。</p>
+  <p><b>氛圍關鍵詞：</b>Magical atmosphere（魔法氛圍）、Bokeh lights（散景燈光）、Warm lighting（暖色光）。</p>
+
+  <div class="note rose">⚠️ 簡報原文在 FAQ 段落「Q1 生成的圖片可以商用嗎？」之後被截斷，該題的完整解答未能擷取到，本頁誠實保留此缺口，不自行編造答案內容。</div>
+</section>
+
+<section class="chapter" id="sec-recap">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#3f8560)">RECAP</span>
+  <h2 class="ct">12. 重點整理：快速回顧 Meta AI 圖像生成</h2>
+  <ul class="pt">
+    <li>Meta AI 靠<b>社群平台當入口</b>，免安裝新 App，手機 IG／Messenger 最成熟。</li>
+    <li>三大核心功能：<b>生圖與影片生成、文字生成與查詢、影像分析與辨識</b>，皆免費無配額。</li>
+    <li>文字回應帶有<b>社群化生活視角</b>，適合議題盤點與觀點蒐集。</li>
+    <li>生圖引擎整合 <b>Midjourney 美學 ＋ Flux 模型</b>，等於免費解鎖專業級生圖。</li>
+    <li>定位是<b>快速創意工具</b>，不適合高精度商業案或版權敏感用途。</li>
+    <li>提示詞五法則：<b>結構排序、順序決定主角、精確用詞、失敗診斷、可複用系統</b>。</li>
+    <li>兩種 Prompt 模式可<b>並用</b>：教學結構法打底，Midjourney 慣用法借力生態。</li>
+    <li>影音能力正朝 <b>Sora、即夢</b>等生成式影片工具靠攏，圖 → 影音是可延伸的內容邏輯。</li>
+    <li>六個實戰案例證明：<b>模糊詞彙是失敗主因</b>，具體化描述就是解方。</li>
+  </ul>
+  <div class="golden"><div class="q">「不是亂試，而是有策略地學。」</div><div class="a">—— 課程主題核心精神</div></div>
+</section>
+
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5a5866)">SOURCES</span>
+  <h2 class="ct">13. 資料來源與製作說明</h2>
+  <ul class="pt">
+    <li><b>原始教材（真實文件，非杜撰）：</b>本集資料來源為兩份真實文件——課程 Google Drive 資料夾中的「課程筆記」Google Doc，以及一份簡報 PDF。本頁全部內容皆<b>逐段取材自這兩份文件的文字</b>整理而成。</li>
+    <li><b>誠實聲明：</b>本集資料夾未附可下載的錄影檔，因此<b>沒有進行影片抽幀或逐幀畫面判讀</b>，也沒有取得簡報原始 pptx／原圖，故本頁<b>不含任何截圖或投影片圖片</b>，為純文字版課堂筆記。這與本站其他集數「逐頁嵌入簡報原圖」的做法不同，特此註記，避免誤會本頁曾經「看過影片」。</li>
+    <li><b>缺口誠實標註：</b>簡報 FAQ 段落「Q1 生成的圖片可以商用嗎？」之後的內容在擷取時被截斷，未取得完整答案，本頁未自行補寫，保留缺口。</li>
+    <li><b>介面參考：</b>本頁版面與互動技能地圖頁沿用本站晨學講堂系列的統一課堂筆記樣式。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  EP24「從亂試到有策略：Meta AI 圖像生成這樣學最快」課堂筆記・2026/07 整理<br>
+  🍀 Learn AI with Tarshar｜搭配 <a href="ep24-ai-skills.html">互動技能地圖</a> 使用效果最佳
+</footer>
+
+</body>
+</html>

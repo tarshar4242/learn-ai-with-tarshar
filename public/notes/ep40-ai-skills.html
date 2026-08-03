@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ChatGPT for Excel &amp; PowerPoint｜互動式學習地圖</title>
+<meta name="description" content="EP40 晨學講堂：ChatGPT for Excel & PowerPoint 六種實際應用——三種產品釐清、安裝與側邊欄、背景+任務+輸出、Excel 四應用、PowerPoint 四應用，互動式多層次學習地圖">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269;
+  --green:#3f8560; --orange:#bf6a1e; --red:#c0453f; --teal:#0d8f80;
+  --feat:#217a52; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(28px,4.6vw,46px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--txt);background:none;-webkit-text-fill-color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:660px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:9px}
+.steps li{list-style:none;counter-increment:st;display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--txt2);line-height:1.7}
+.steps li::before{content:counter(st);flex:none;width:25px;height:25px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:var(--c,var(--feat));margin-top:1px}
+.steps li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+.prompt,.promptbox{background:#1d1d1f;border:1px solid #2c2c31;border-radius:10px;padding:13px 15px;margin-top:6px;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt b,.promptbox b{color:#fff}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <a class="navlink" href="../radio/" style="border-color:#a8c686" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <div class="logo">
+    <div class="dot">🧮</div>
+    <div>Excel & PPT AI 地圖<small>MORNING LEARNING · EP40</small></div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋技能關鍵字：增益集、函數、情境分析、洞察頁、多角度檢查…" autocomplete="off">
+  </div>
+  <a class="navlink" href="ep40-notes.html">📝 課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">EP40 · 晨學講堂 · 2026/06/07</span>
+  <h1>ChatGPT for<br>Excel &amp; PowerPoint</h1>
+  <p class="sub">把 ChatGPT 放進 Office 的側邊欄，讓它幫你完成 60–70% 的重複整理、初稿與檢查。<br>點進每一章，逐層展開<b>本集實際教到</b>的技能、步驟與指令，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🎙️ 生成式AI應用電台・晨學講堂</span>
+    <span>🧮 Excel 四應用</span>
+    <span>📊 PowerPoint 四應用</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>4</b><span>大主題</span></div>
+  <div class="stat"><b>11</b><span>實戰技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 11 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--green)" onclick="showChapter('setup')">
+        <div class="glowline"></div><span class="emoji">🧭</span>
+        <h3><em>CHAPTER 01</em>認識與安裝</h3>
+        <p>三種產品要先分清（網頁 ChatGPT／for Office／Copilot），增益集安裝五步驟，側邊欄三個重要位置。</p>
+        <div class="foot"><div class="mini"><i data-mini="setup"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--blue)" onclick="showChapter('prompt')">
+        <div class="glowline"></div><span class="emoji">🎯</span>
+        <h3><em>CHAPTER 02</em>下指令心法</h3>
+        <p>背景＋任務＋輸出的黃金公式，先要大綱再生內容，指定可驗收的輸出，送出前人工檢查。</p>
+        <div class="foot"><div class="mini"><i data-mini="prompt"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--teal)" onclick="showChapter('excel')">
+        <div class="glowline"></div><span class="emoji">🧮</span>
+        <h3><em>CHAPTER 03</em>Excel 四應用</h3>
+        <p>一句話建報表、不會函數請 AI 寫並驗收、一鍵清理統一格式、把數字變成趨勢與情境分析。</p>
+        <div class="foot"><div class="mini"><i data-mini="excel"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--orange)" onclick="showChapter('ppt')">
+        <div class="glowline"></div><span class="emoji">📊</span>
+        <h3><em>CHAPTER 04</em>PowerPoint 四應用</h3>
+        <p>一句話生初稿、統一格式與標題、把 Excel 數據變洞察頁、用四種角色多角度檢查。</p>
+        <div class="foot"><div class="mini"><i data-mini="ppt"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+
+    <div class="resources">
+      <h3>📦 <span>課程原始資料</span></h3>
+      <div class="res-grid">
+        <a href="https://drive.google.com/file/d/1snzWofuiD3NJdPr2GHWBjh5q0TV7rAV-/view" target="_blank" rel="noopener"><span class="ic">🎬</span><span><b>錄影回放</b>完整課程影片（需授權帳號）</span></a>
+        <a href="ep40-notes.html"><span class="ic">📝</span><span><b>課堂筆記</b>逐頁對照官方簡報重點</span></a>
+        <a href="../radio/"><span class="ic">📻</span><span><b>直播電台系列</b>回系列總覽，一集一卡</span></a>
+        <a href="ep42-notes.html"><span class="ic">🔌</span><span><b>相關 EP42</b>各大模型 API 申請應用</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-setup" class="view" style="--c:var(--green)"></section>
+  <section id="view-prompt" class="view" style="--c:var(--blue)"></section>
+  <section id="view-excel" class="view" style="--c:var(--teal)"></section>
+  <section id="view-ppt" class="view" style="--c:var(--orange)"></section>
+</main>
+
+<footer>
+  本頁為 EP40「ChatGPT for Excel & PowerPoint」課後整理・介面沿用本站 EP44–46 互動式學習地圖<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2026｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+const DATA = {
+  setup: {
+    key:'setup', color:'var(--green)', emoji:'🧭', code:'CHAPTER 01', title:'認識與安裝',
+    intro:'上手前先確認：你用的是哪一種產品？它能讀哪些資料？再把增益集裝好、認得側邊欄。',
+    topics:[
+      {t:'先分清三種產品', s:'別被名字搞混｜簡報 p3–p4',
+       blocks:[
+        {h:'三種產品',table:{head:['產品','位置','適合'],rows:[
+          ['網頁版 ChatGPT','瀏覽器／App','通用問答、文字工作、資料討論'],
+          ['ChatGPT for Excel／PPT','直接在 Office 裡（增益集）','讀取當前檔案，產公式、整理資料、建內容'],
+          ['Microsoft Copilot','Microsoft 365 生態','模型與授權由 MS 方案決定，入口與資料範圍不同']]}},
+        {h:'重點',tip:'先確認自己用的是哪一種產品，再看它能讀取哪些資料；不要因為都叫 ChatGPT／Copilot 就把功能混在一起。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep40-notes.html#sec-products" style="color:var(--green)">筆記 2：先分清三種產品</a>'}]},
+      {t:'安裝增益集與側邊欄', s:'Excel／PPT 邏輯相同｜簡報 p5–p8',
+       blocks:[
+        {h:'安裝五步驟',steps:['開 Excel／PPT，切到「常用」。','選「增益集」。','搜尋 ChatGPT。','按「新增／Add」。','登入 OpenAI 帳號並完成授權。']},
+        {h:'安裝後檢查',ul:['右側是否有側邊欄、是否登入正確帳號、是否授權讀取當前檔案。','先用不含機密資料的小檔測試。','PowerPoint 版可能是 beta，介面費用以帳號畫面為準。']},
+        {h:'側邊欄三位置',table:{head:['位置','作用'],rows:[['對話輸入框','描述要 AI 完成的工作'],['「＋」按鈕','加入 Skills／Apps／工具'],['模型選擇','影響速度、成本與結果']]}},
+        {h:'看課堂筆記',p:'👉 <a href="ep40-notes.html#sec-install" style="color:var(--green)">筆記 3：安裝與側邊欄</a>'}]}
+    ]
+  },
+  prompt: {
+    key:'prompt', color:'var(--blue)', emoji:'🎯', code:'CHAPTER 02', title:'下指令心法',
+    intro:'把需求說清楚，比用什麼模型更重要。一條公式解決：背景＋任務＋輸出。',
+    topics:[
+      {t:'背景＋任務＋輸出', s:'下指令黃金公式｜簡報 p9',
+       blocks:[
+        {h:'三段公式',ul:['<b>背景</b>：這份檔案是什麼、給誰看、有哪些限制。','<b>任務</b>：要分析、重寫、分類、計算或建立什麼。','<b>輸出</b>：要表格、公式、圖表、簡報頁面或檢查清單。']},
+        {h:'範例',prompt:'背景：這是 2025 年每月營收資料，主管要在例會閱讀。\n任務：整理成月報，找出最高、最低與異常月份。\n輸出：一張摘要表、一張趨勢圖、三點文字洞察。'},
+        {h:'心法',tip:'先要求 AI 給「頁面大綱／步驟」，確認方向後再生成內容，比一次到底更好控制。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep40-notes.html#sec-formula" style="color:var(--blue)">筆記 4：下指令黃金公式</a>'}]}
+    ]
+  },
+  excel: {
+    key:'excel', color:'var(--teal)', emoji:'🧮', code:'CHAPTER 03', title:'Excel 四應用',
+    intro:'讓 ChatGPT 在 Excel 側邊欄幫你建表、寫函數、清格式、做分析——但每一步都要人驗收。',
+    topics:[
+      {t:'一句話建立報表', s:'預算表／追蹤表／範本｜簡報 p10',
+       blocks:[
+        {h:'能做什麼',ul:['建立預算表、追蹤表、計畫表與範本。','把原始欄位整理成易讀表格。','建議圖表與摘要欄位、補計算欄或 KPI。']},
+        {h:'人要檢查',warn:'欄位名稱、單位、日期格式與公式範圍，AI 都可能弄錯，務必核對。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep40-notes.html#sec-excel" style="color:var(--teal)">筆記 5：Excel 四應用</a>'}]},
+      {t:'不會寫函數，讓 AI 協助', s:'IF／VLOOKUP／SUMIF｜簡報 p11',
+       blocks:[
+        {h:'用法',p:'用自然語言說明「資料在哪裡」與「想算什麼」，請 AI 提出公式並解釋。'},
+        {h:'正確驗收',steps:['先要求解釋公式每一段。','用一筆已知答案的資料測試。','檢查絕對／相對參照。','檢查空白、文字、錯誤值等邊界情況。']},
+        {h:'看課堂筆記',p:'👉 <a href="ep40-notes.html#sec-excel" style="color:var(--teal)">筆記 5：Excel 四應用</a>'}]},
+      {t:'一鍵清理與統一格式', s:'找出不一致與異常｜簡報 p12',
+       blocks:[
+        {h:'能找出',ul:['日期／貨幣／百分比格式不一致。','欄位命名不一致。','多餘空白、大小寫與標點問題。','需要醒目顯示的異常值。']},
+        {h:'安全',warn:'不要讓 AI 未經備份就直接覆寫整份原始資料；先複製工作表或保留版本。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep40-notes.html#sec-excel" style="color:var(--teal)">筆記 5：Excel 四應用</a>'}]},
+      {t:'趨勢與情境分析', s:'把數字變成可討論的問題｜簡報 p13',
+       blocks:[
+        {h:'可問的問題',ul:['哪個月成長最快？哪條產品線在下滑？','實際值和目標值差多少？','樂觀、基準、保守情境分別會如何？']},
+        {h:'觀念',tip:'情境分析是對不同假設設定不同參數、觀察結果變化；它不是預言，而是決策演練。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep40-notes.html#sec-excel" style="color:var(--teal)">筆記 5：Excel 四應用</a>'}]}
+    ]
+  },
+  ppt: {
+    key:'ppt', color:'var(--orange)', emoji:'📊', code:'CHAPTER 04', title:'PowerPoint 四應用',
+    intro:'從一句話生初稿，到統一格式、把數據變洞察頁、再用多種角色檢查——重點是「先骨架、再細節」。',
+    topics:[
+      {t:'從一句話生成簡報初稿', s:'先大綱再內容｜簡報 p14',
+       blocks:[
+        {h:'能做什麼',p:'AI 可從文字、Excel 資料或圖片建立簡報結構（封面、重點頁、圖表、摘要）。'},
+        {h:'關鍵',tip:'重點不是「一次完成」，而是先建立可修改的骨架：要 AI 先給頁面大綱、再生成內容。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep40-notes.html#sec-ppt" style="color:var(--orange)">筆記 6：PowerPoint 四應用</a>'}]},
+      {t:'改投影片、統一格式與標題', s:'保留品牌規則｜簡報 p15',
+       blocks:[
+        {h:'可交付的工作',ul:['把過長段落改成重點條列。','統一標題句型與層級。','重新安排資訊順序。','建議圖表、圖片或版面形式。']},
+        {h:'提醒',warn:'統一格式前，先指定要保留的品牌色、字型、Logo、頁碼與母片規則。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep40-notes.html#sec-ppt" style="color:var(--orange)">筆記 6：PowerPoint 四應用</a>'}]},
+      {t:'把 Excel 數據變成洞察頁', s:'每張圖回答一個問題｜簡報 p16',
+       blocks:[
+        {h:'四個問題',ul:['變化是什麼？','原因可能是什麼？','對決策有什麼意義？','下一步要做什麼？']},
+        {h:'看課堂筆記',p:'👉 <a href="ep40-notes.html#sec-ppt" style="color:var(--orange)">筆記 6：PowerPoint 四應用</a>'}]},
+      {t:'多角度檢查', s:'讓 AI 扮演四種角色｜簡報 p17',
+       blocks:[
+        {h:'四種角色',table:{head:['角色','檢查什麼'],rows:[['主管','結論是否清楚、能否決策'],['分析師','數據與論證是否一致'],['設計師','視覺層級與版面是否易讀'],['聽眾','是否有陌生名詞與理解斷點']]}},
+        {h:'一句話記憶',p:'「AI 是第一版助手、重複工作助手、檢查助手；責任與定稿仍在你。」'},
+        {h:'看課堂筆記',p:'👉 <a href="ep40-notes.html#sec-flow" style="color:var(--orange)">筆記 7：整合一條龍與安全</a>'}]}
+    ]
+  }
+};
+const ORDER = ['setup','prompt','excel','ppt'];
+const $ = s=>document.querySelector(s);
+function renderChapter(ch){
+  const d=DATA[ch];const next=ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];const prev=ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html=`<div class="chapter-head"><span class="emoji">${d.emoji}</span><div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div></div>`;
+  d.topics.forEach((tp,i)=>{const id=`${ch}-${i}`;
+    html+=`<div class="topic" id="topic-${id}"><div class="topic-head" onclick="toggleTopic('${id}')"><span class="num">${i+1}</span><h4>${tp.t}<small>${tp.s}</small></h4><input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)"><span class="chev">▶</span></div><div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{html+=`<div class="block"><h5>${b.h}</h5>`;
+      if(b.p)html+=`<p>${b.p}</p>`;
+      if(b.ul)html+=`<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps)html+=`<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.prompt)html+=`<div class="promptbox">${b.prompt}</div>`;
+      if(b.table)html+=`<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.tip)html+=`<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn)html+=`<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html+=`</div>`;});
+    html+=`</div></div></div>`;});
+  html+=`<div class="chapnav"><a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a><a onclick="showHome()" style="text-align:center">回總覽<b>🏠 四大主題</b></a><a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a></div>`;
+  $('#view-'+ch).innerHTML=html;
+}
+ORDER.forEach(renderChapter);
+function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('#view-'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function showHome(){switchView('home');$('#crumbs').style.display='none';clearSearch();}
+function showChapter(ch){switchView(ch);$('#crumbs').style.display='flex';$('#crumbHere').textContent=`${DATA[ch].emoji} ${DATA[ch].title}`;clearSearch();syncChecks();}
+function toggleTopic(id){$('#topic-'+id).classList.toggle('open');}
+function openTopic(ch,i){showChapter(ch);const el=$('#topic-'+ch+'-'+i);el.classList.add('open');setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+const KEY='ep40-skills-v1';
+const store=()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){const s=store();if(val)s[id]=1;else delete s[id];localStorage.setItem(KEY,JSON.stringify(s));updateProgress();}
+const TOTAL=ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){const done=Object.keys(store()).length;const pct=Math.round(done/TOTAL*100);$('#progFill').style.width=pct+'%';$('#progText').textContent=`${done} / ${TOTAL} 項技能已掌握`;$('#statDone').textContent=done;$('#statPct').textContent=pct+'%';ORDER.forEach(ch=>{const sub=DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;const el=document.querySelector(`[data-mini="${ch}"]`);if(el)el.style.width=Math.round(sub/DATA[ch].topics.length*100)+'%';});}
+function syncChecks(){const s=store();document.querySelectorAll('input[data-skill]').forEach(cb=>{cb.checked=!!s[cb.dataset.skill];});}
+function resetProgress(){if(confirm('確定要清空所有打勾進度嗎？')){localStorage.removeItem(KEY);syncChecks();updateProgress();}}
+function stripTags(s){return s.replace(/<[^>]+>/g,'');}
+const INDEX=[];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{let body=tp.s+' ';tp.blocks.forEach(b=>{if(b.p)body+=stripTags(b.p)+' ';if(b.ul)body+=b.ul.map(stripTags).join(' ')+' ';if(b.steps)body+=b.steps.map(stripTags).join(' ')+' ';if(b.prompt)body+=b.prompt+' ';if(b.tip)body+=stripTags(b.tip)+' ';if(b.warn)body+=stripTags(b.warn)+' ';if(b.table)body+=b.table.rows.flat().map(stripTags).join(' ')+' ';});INDEX.push({ch,i,title:tp.t,body});}));
+$('#searchInput').addEventListener('input',e=>{const q=e.target.value.trim();const box=$('#searchResults');if(!q){box.classList.remove('show');box.innerHTML='';return;}const hits=INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));box.classList.add('show');if(!hits.length){box.innerHTML=`<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：函數、格式、洞察、檢查）</div>`;return;}const hl=s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);box.innerHTML=hits.map(x=>{const pos=x.body.toLowerCase().indexOf(q.toLowerCase());const snip=x.body.substr(Math.max(0,pos-20),90);return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})"><div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div><h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;}).join('');});
+function clearSearch(){$('#searchInput').value='';$('#searchResults').classList.remove('show');$('#searchResults').innerHTML='';}
+(function(){const box=$('#stars');for(let i=0;i<70;i++){const s=document.createElement('i');s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';s.style.animationDelay=(Math.random()*3)+'s';s.style.transform=`scale(${.5+Math.random()*1.5})`;box.appendChild(s);}})();
+syncChecks();updateProgress();
+</script>
+</body>
+</html>

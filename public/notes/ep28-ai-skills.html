@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>文獻耙梳工具 AnswerThis｜互動式學習地圖</title>
+<meta name="description" content="EP28 晨學講堂：AnswerThis——AI 學術研究助理平台。核心特色、Tools（文獻回顧／學術搜尋／Chat with PDF／引用地圖）與 Agents（論文寫手／研究缺口發現器／改寫／同理心審稿）、Library 與 YAML 精準搜尋，互動式多層次學習地圖。">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269;
+  --green:#3f8560; --orange:#bf6a1e; --red:#c0453f; --teal:#0d8f80;
+  --feat:#5645D4; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(28px,4.6vw,46px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:660px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:9px}
+.steps li{list-style:none;counter-increment:st;display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--txt2);line-height:1.7}
+.steps li::before{content:counter(st);flex:none;width:25px;height:25px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:var(--c,var(--feat));margin-top:1px}
+.steps li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+.prompt,.promptbox{background:#1d1d1f;border:1px solid #2c2c31;border-radius:10px;padding:13px 15px;margin-top:6px;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt b,.promptbox b{color:#fff}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <a class="navlink" href="../radio/" style="border-color:#c9c2f0" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <div class="logo">
+    <div class="dot">📚</div>
+    <div>AnswerThis 地圖<small>MORNING LEARNING · EP28</small></div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋關鍵字：文獻回顧、逐行引用、研究缺口、Chat with PDF、引用地圖…" autocomplete="off">
+  </div>
+  <a class="navlink" href="ep28-notes.html">📝 課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">EP28 · 晨學講堂 · 2026/03</span>
+  <h1>文獻耙梳工具 AnswerThis</h1>
+  <p class="sub">以學術研究流程為核心的 AI 研究助理平台——把找文獻、讀文獻、找缺口、寫初稿、潤稿全部串起來，而且每個回答都附<b>逐行引用</b>。<br>點進每一章，逐層展開<b>本集實際教到</b>的功能與操作，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🎙️ 生成式AI應用電台・晨學講堂</span>
+    <span>🎓 學術研究助理</span>
+    <span>📚 2.5 億筆學術來源</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>4</b><span>大主題</span></div>
+  <div class="stat"><b>10</b><span>實戰技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 10 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--feat)" onclick="showChapter('intro')">
+        <div class="glowline"></div><span class="emoji">🎓</span>
+        <h3><em>CHAPTER 01</em>是什麼＋核心特色</h3>
+        <p>AnswerThis 是什麼、貫穿研究四大段，以及四項核心特色（2.5 億來源、逐行引用、多格式、中文友善）。</p>
+        <div class="foot"><div class="mini"><i data-mini="intro"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--blue)" onclick="showChapter('tools')">
+        <div class="glowline"></div><span class="emoji">🧰</span>
+        <h3><em>CHAPTER 02</em>Tools 工具</h3>
+        <p>你主動操作的工具：文獻回顧、學術搜尋引擎、Chat with PDF，以及引用地圖與圖表生成器。</p>
+        <div class="foot"><div class="mini"><i data-mini="tools"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--green)" onclick="showChapter('agents')">
+        <div class="glowline"></div><span class="emoji">🤖</span>
+        <h3><em>CHAPTER 03</em>Agents 智能代理</h3>
+        <p>替你代勞的助手：AI 論文寫手、研究缺口發現器、改寫工具與同理心審稿。</p>
+        <div class="foot"><div class="mini"><i data-mini="agents"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--orange)" onclick="showChapter('flow')">
+        <div class="glowline"></div><span class="emoji">🗂️</span>
+        <h3><em>CHAPTER 04</em>Library＋精準搜尋</h3>
+        <p>個人圖書館與 Citation Map 引用地圖，加上用 YAML 讓 AI 搜尋更精準的課堂補充。</p>
+        <div class="foot"><div class="mini"><i data-mini="flow"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+
+    <div class="resources">
+      <h3>📦 <span>課程原始資料</span></h3>
+      <div class="res-grid">
+        <a href="ep28-notes.html"><span class="ic">📝</span><span><b>課堂筆記</b>AnswerThis 完整功能整理</span></a>
+        <a href="../radio/"><span class="ic">📻</span><span><b>直播電台系列</b>回系列總覽，一集一卡</span></a>
+        <a href="ep29-notes.html"><span class="ic">🎙️</span><span><b>相關 EP29</b>會議紀錄字幕工作流</span></a>
+        <a href="ep39-notes.html"><span class="ic">📔</span><span><b>相關 EP39</b>NotebookLM×Markdown</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-intro" class="view" style="--c:var(--feat)"></section>
+  <section id="view-tools" class="view" style="--c:var(--blue)"></section>
+  <section id="view-agents" class="view" style="--c:var(--green)"></section>
+  <section id="view-flow" class="view" style="--c:var(--orange)"></section>
+</main>
+
+<footer>
+  本頁為 EP28「文獻耙梳工具 AnswerThis」課後整理・介面沿用本站互動式學習地圖<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2026｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+const DATA = {
+  intro: {
+    key:'intro', color:'var(--feat)', emoji:'🎓', code:'CHAPTER 01', title:'是什麼＋核心特色',
+    intro:'先搞懂 AnswerThis 是什麼、它怎麼貫穿整條研究流程，以及四項最關鍵的核心特色。',
+    topics:[
+      {t:'AnswerThis 是什麼', s:'學術研究助理平台',
+       blocks:[
+        {h:'一句話',p:'<b>AnswerThis ＝ 以學術研究流程為核心的 AI 研究助理平台</b>：把文獻搜尋、理解、寫作與語言優化整合在一起，讓研究者少花時間整理、多花時間思考。'},
+        {h:'貫穿研究四大段',steps:['文獻搜尋：找到對的論文。','理解：Chat with PDF 讀懂內容。','寫作：AI Essay Writer 產出初稿。','語言優化：改寫、潤飾、去 AI 味。']},
+        {h:'看課堂筆記',p:'👉 <a href="ep28-notes.html#sec-what" style="color:var(--feat)">筆記 1：AnswerThis 是什麼</a>'}]},
+      {t:'核心特色四項', s:'2.5 億來源／逐行引用／多格式／中文',
+       blocks:[
+        {h:'四項特色',table:{head:['特色','說明'],rows:[['2.5 億+ 學術來源','掃 PubMed、Scopus 等權威資料庫'],['精確引用追蹤','每個回答附逐行引用，直連原始論文'],['多元輸出格式','APA／MLA，可匯出 BibTeX'],['中文友善','完整支援繁中查詢與回覆']]}},
+        {h:'金句',tip:'每個回答都附逐行引用、直連原始論文——這是學術工具與一般 AI 最關鍵的差別：不只給答案，還給得出處。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep28-notes.html#sec-feat" style="color:var(--feat)">筆記 2：核心特色</a>'}]}
+    ]
+  },
+  tools: {
+    key:'tools', color:'var(--blue)', emoji:'🧰', code:'CHAPTER 02', title:'Tools 工具',
+    intro:'你主動拿在手上操作的核心工具：搜、讀、畫。',
+    topics:[
+      {t:'Literature Review 文獻回顧', s:'輸入主題→自動生成帶引用的回顧',
+       blocks:[
+        {h:'操作五步',steps:['登入進入 Literature Review 頁面。','搜尋欄輸入研究問題（支援中文）。','設篩選：來源類型、最低引用數、日期範圍。','選輸出：Literature Review 或 Full Paper。','AI 自動生成帶逐行引用的文獻回顧。']},
+        {h:'兩種輸出',table:{head:['類型','內容'],rows:[['Literature Review','綜合摘要＋逐行引用'],['Full Paper','完整研究論文，可自訂章節名稱']]}},
+        {h:'看課堂筆記',p:'👉 <a href="ep28-notes.html#sec-tools" style="color:var(--blue)">筆記 4：Tools 工具詳解</a>'}]},
+      {t:'Search Papers 學術搜尋引擎', s:'2.5 億來源＋多維度篩選',
+       blocks:[
+        {h:'進階篩選',ul:['來源篩選：學術論文／網路／個人圖書館。','引用數：設最低引用次數（確保影響力）。','日期範圍：指定發表年份。','期刊等級：限定 Q1、Q2 高品質期刊。']},
+        {h:'智慧結果',ul:['表格視圖：結構化呈現所有文獻。','自訂欄位：自動提取研究方法、限制、未來工作。','快速預覽：直接看摘要與關鍵發現。','匯出：一鍵到 Zotero／Mendeley／CSV／BibTeX。']},
+        {h:'看課堂筆記',p:'👉 <a href="ep28-notes.html#sec-tools" style="color:var(--blue)">筆記 4：Search Papers</a>'}]},
+      {t:'Chat with PDF ＋ 引用地圖', s:'跟論文對話、把引用畫成圖',
+       blocks:[
+        {h:'Chat with PDF 四步',steps:['建專案上傳 PDF 建專屬知識庫。','勾選單／多篇，點 Chat with Selected 對話。','提問「總結研究方法」「列出研究限制」。','反白段落點 Explain 得詳細解釋。']},
+        {h:'另兩個視覺化工具',ul:['<b>Citation Map</b>：互動式引用網絡圖，找出核心文獻與研究脈絡。','<b>Diagram Generator</b>：把研究概念或摘要自動轉成流程圖／心智圖。']},
+        {h:'看課堂筆記',p:'👉 <a href="ep28-notes.html#sec-tools" style="color:var(--blue)">筆記 4：Chat with PDF／引用地圖</a>'}]}
+    ]
+  },
+  agents: {
+    key:'agents', color:'var(--green)', emoji:'🤖', code:'CHAPTER 03', title:'Agents 智能代理',
+    intro:'替你代勞一段任務的助手：寫、找缺口、改、審。',
+    topics:[
+      {t:'AI Essay Writer 論文寫手', s:'快速產結構化學術初稿',
+       blocks:[
+        {h:'可設參數',ul:['論文題目與研究領域。','目標字數（如 1000–5000 字）。','引用文獻年限（如近 5 年）。']},
+        {h:'輸出內容',ul:['摘要（Abstract）與關鍵詞。','引言（Introduction）。','自動生成的參考文獻列表。','匯出 Word（.docx）與 PDF。']},
+        {h:'提醒',warn:'AI 產的是「初稿」，用來加速草稿與格式；學術判斷與內容正確性仍要自己把關。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep28-notes.html#sec-agents" style="color:var(--green)">筆記 5：AI Essay Writer</a>'}]},
+      {t:'Research Gap Finder 研究缺口發現器', s:'找題目最強的工具',
+       blocks:[
+        {h:'做什麼',p:'AI 自動分析<b>文獻飽和度與創新潛力</b>，精準定位高價值研究缺口——研究初期確定題目的強大工具。'},
+        {h:'輸出',ul:['具體研究缺口清單（Research Gaps）。','缺口優先級評級（Priority Rating）。','具體研究方向建議（Suggestions）。']},
+        {h:'應用場景',ul:['碩士生確定論文題目。','博士生尋找創新研究方向。','研究人員規劃新專案。']},
+        {h:'金句',tip:'找不到題目？先問它：這個主題還有哪裡沒被做透？把最難的事變成優先級清單。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep28-notes.html#sec-agents" style="color:var(--green)">筆記 5：Research Gap Finder</a>'}]},
+      {t:'改寫 ＋ 同理心審稿', s:'Paraphraser／Empathy Tool',
+       blocks:[
+        {h:'Paraphraser 改寫',p:'智慧改寫句子、降低重複率，提供學術／正式等語氣；也能<b>去 AI 風格化（Naturalizer）</b>。'},
+        {h:'Empathy 同理心審稿',p:'模擬<b>審稿人視角</b>，依 <b>E.M.P.A.T.H.Y. 框架</b>給建設性修改建議——等於投稿前先做一次同儕審查。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep28-notes.html#sec-agents" style="color:var(--green)">筆記 5：改寫／審稿</a>'}]}
+    ]
+  },
+  flow: {
+    key:'flow', color:'var(--orange)', emoji:'🗂️', code:'CHAPTER 04', title:'Library＋精準搜尋',
+    intro:'把文獻管理好、把引用關係畫出來，再學會用 YAML 讓搜尋更精準。',
+    topics:[
+      {t:'Library 與 Citation Map', s:'個人研究中心＋引用網絡',
+       blocks:[
+        {h:'四件事',ul:['<b>Library</b>：PDF 上傳＋批量匯入(RIS/BIB/CSV)，多專案分類管理。','<b>文獻計量分析</b>：年度出版量、引用趨勢、作者分析、關鍵字文字雲。','<b>Citation Map</b>：互動式引用網絡圖，快速識別核心文獻。','<b>研究脈絡追蹤</b>：發現相關研究、理解領域基礎與趨勢。']},
+        {h:'一句話',tip:'Library 是你自己的資料庫，Citation Map 把這些論文的「關係」畫出來——誰引用誰、哪篇是源頭一眼看懂。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep28-notes.html#sec-lib" style="color:var(--orange)">筆記 6：Library 與 Citation Map</a>'}]},
+      {t:'用 YAML 讓搜尋更精準', s:'把模糊問題變可執行指令',
+       blocks:[
+        {h:'為什麼',p:'只丟一句自然語言問題常常範圍過大、來源不明、時間不清。用 <b>YAML 結構化</b>把搜尋拆成欄位，AI 就能精準鎖定。'},
+        {h:'範例',prompt:'主題: （研究主題）\n關鍵字: [關鍵字1, 關鍵字2]\n網站/來源: scholar / PubMed\n資料類型: 學術論文 / 政策報告\n時間範圍: 2020-2026\n語言: 繁體中文'},
+        {h:'同場加映',ul:['同一主題不同受眾：調 Prompt 的受眾／語氣／用途，一鍵生出學生版、教師版、主管版。','NotebookLM 資訊圖表 YAML 模板：固定主題、替換受眾，快速產結構一致的圖文。']},
+        {h:'看課堂筆記',p:'👉 <a href="ep28-notes.html#sec-yaml" style="color:var(--orange)">筆記 7：YAML 精準搜尋</a>'}]}
+    ]
+  }
+};
+const ORDER = ['intro','tools','agents','flow'];
+const $ = s=>document.querySelector(s);
+function renderChapter(ch){
+  const d=DATA[ch];const next=ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];const prev=ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html=`<div class="chapter-head"><span class="emoji">${d.emoji}</span><div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div></div>`;
+  d.topics.forEach((tp,i)=>{const id=`${ch}-${i}`;
+    html+=`<div class="topic" id="topic-${id}"><div class="topic-head" onclick="toggleTopic('${id}')"><span class="num">${i+1}</span><h4>${tp.t}<small>${tp.s}</small></h4><input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)"><span class="chev">▶</span></div><div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{html+=`<div class="block"><h5>${b.h}</h5>`;
+      if(b.p)html+=`<p>${b.p}</p>`;
+      if(b.ul)html+=`<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps)html+=`<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.table)html+=`<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.prompt)html+=`<div class="prompt">${b.prompt}</div>`;
+      if(b.tip)html+=`<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn)html+=`<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html+=`</div>`;});
+    html+=`</div></div></div>`;});
+  html+=`<div class="chapnav"><a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a><a onclick="showHome()" style="text-align:center">回總覽<b>🏠 四大主題</b></a><a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a></div>`;
+  $('#view-'+ch).innerHTML=html;
+}
+ORDER.forEach(renderChapter);
+function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('#view-'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function showHome(){switchView('home');$('#crumbs').style.display='none';clearSearch();}
+function showChapter(ch){switchView(ch);$('#crumbs').style.display='flex';$('#crumbHere').textContent=`${DATA[ch].emoji} ${DATA[ch].title}`;clearSearch();syncChecks();}
+function toggleTopic(id){$('#topic-'+id).classList.toggle('open');}
+function openTopic(ch,i){showChapter(ch);const el=$('#topic-'+ch+'-'+i);el.classList.add('open');setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+const KEY='ep28-skills-v1';
+const store=()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){const s=store();if(val)s[id]=1;else delete s[id];localStorage.setItem(KEY,JSON.stringify(s));updateProgress();}
+const TOTAL=ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){const done=Object.keys(store()).length;const pct=Math.round(done/TOTAL*100);$('#progFill').style.width=pct+'%';$('#progText').textContent=`${done} / ${TOTAL} 項技能已掌握`;$('#statDone').textContent=done;$('#statPct').textContent=pct+'%';ORDER.forEach(ch=>{const sub=DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;const el=document.querySelector(`[data-mini="${ch}"]`);if(el)el.style.width=Math.round(sub/DATA[ch].topics.length*100)+'%';});}
+function syncChecks(){const s=store();document.querySelectorAll('input[data-skill]').forEach(cb=>{cb.checked=!!s[cb.dataset.skill];});}
+function resetProgress(){if(confirm('確定要清空所有打勾進度嗎？')){localStorage.removeItem(KEY);syncChecks();updateProgress();}}
+function stripTags(s){return s.replace(/<[^>]+>/g,'');}
+const INDEX=[];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{let body=tp.s+' ';tp.blocks.forEach(b=>{if(b.p)body+=stripTags(b.p)+' ';if(b.ul)body+=b.ul.map(stripTags).join(' ')+' ';if(b.steps)body+=b.steps.map(stripTags).join(' ')+' ';if(b.tip)body+=stripTags(b.tip)+' ';if(b.warn)body+=stripTags(b.warn)+' ';if(b.prompt)body+=stripTags(b.prompt)+' ';if(b.table)body+=b.table.rows.flat().map(stripTags).join(' ')+' ';});INDEX.push({ch,i,title:tp.t,body});}));
+$('#searchInput').addEventListener('input',e=>{const q=e.target.value.trim();const box=$('#searchResults');if(!q){box.classList.remove('show');box.innerHTML='';return;}const hits=INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));box.classList.add('show');if(!hits.length){box.innerHTML=`<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：文獻回顧、研究缺口、引用地圖）</div>`;return;}const hl=s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);box.innerHTML=hits.map(x=>{const pos=x.body.toLowerCase().indexOf(q.toLowerCase());const snip=x.body.substr(Math.max(0,pos-20),90);return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})"><div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div><h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;}).join('');});
+function clearSearch(){$('#searchInput').value='';$('#searchResults').classList.remove('show');$('#searchResults').innerHTML='';}
+syncChecks();updateProgress();
+</script>
+</body>
+</html>

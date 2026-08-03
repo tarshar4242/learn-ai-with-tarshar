@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skill 可以在哪裡用？Chat、Work、Agent｜互動式學習地圖</title>
+<meta name="description" content="EP47 晨學講堂：以 iOfficeAI/OfficeCLI 為例，Skill 在 Chat／Work／Codex 三種模式下的能力與限制、核心運作三層架構、Word/Excel/PowerPoint 能力、批次自動化，互動式多層次學習地圖">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269;
+  --green:#3f8560; --orange:#bf6a1e; --red:#c0453f; --teal:#0d8f80; --amber:#9c7b23;
+  --feat:#5645D4; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(28px,4.6vw,46px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--txt);background:none;-webkit-text-fill-color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:660px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:9px}
+.steps li{list-style:none;counter-increment:st;display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--txt2);line-height:1.7}
+.steps li::before{content:counter(st);flex:none;width:25px;height:25px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:var(--c,var(--feat));margin-top:1px}
+.steps li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+.prompt,.promptbox{background:#1d1d1f;border:1px solid #2c2c31;border-radius:10px;padding:13px 15px;margin-top:6px;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt b,.promptbox b{color:#fff}
+figure.shot{margin:10px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--txt3);padding:9px 14px;border-top:1px solid var(--line);background:var(--bg2);line-height:1.7}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <a class="navlink" href="../radio/" style="border-color:#c9c1f2" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <div class="logo">
+    <div class="dot">🧰</div>
+    <div>Skill 使用情境地圖<small>MORNING LEARNING · EP47</small></div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋技能關鍵字：Chat、Work、Codex、OfficeCLI…" autocomplete="off">
+  </div>
+  <a class="navlink" href="ep47-notes.html">📝 課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">EP47 · 晨學講堂 · 2026/07</span>
+  <h1>Skill 可以在哪裡用？<br>Chat、Work、Agent</h1>
+  <p class="sub">以 iOfficeAI／OfficeCLI 為例：同一個 Skill，在 Chat／Work／Codex 三種模式下能力天差地遠，選對模式才能真正發揮效果。<br>點進每一章，逐層展開<b>本集實際教到</b>的概念與示範，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🎙️ 生成式AI應用電台・晨學講堂</span>
+    <span>🧰 OfficeCLI Skill</span>
+    <span>🔀 Chat／Work／Codex</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>4</b><span>大主題</span></div>
+  <div class="stat"><b>10</b><span>實戰技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 10 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--purple)" onclick="showChapter('what')">
+        <div class="glowline"></div><span class="emoji">🧩</span>
+        <h3><em>CHAPTER 01</em>OfficeCLI 是什麼＋核心架構</h3>
+        <p>給 AI Agent 用的 Office 文件操作引擎，三層文件操作架構與 Help-first 原則。</p>
+        <div class="foot"><div class="mini"><i data-mini="what"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--teal)" onclick="showChapter('power')">
+        <div class="glowline"></div><span class="emoji">📄</span>
+        <h3><em>CHAPTER 02</em>Word／Excel／PPT 能力</h3>
+        <p>三大 Office 格式的完整操作能力，加上視覺預覽、檢查與自我修復。</p>
+        <div class="foot"><div class="mini"><i data-mini="power"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--amber)" onclick="showChapter('scale')">
+        <div class="glowline"></div><span class="emoji">⚙️</span>
+        <h3><em>CHAPTER 03</em>批次自動化＋適用情境</h3>
+        <p>Batch、Resident Mode、模板合併，以及典型工作流程與目前的限制。</p>
+        <div class="foot"><div class="mini"><i data-mini="scale"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--blue)" onclick="showChapter('modes')">
+        <div class="glowline"></div><span class="emoji">🔀</span>
+        <h3><em>CHAPTER 04</em>Chat／Work／Codex 該選誰</h3>
+        <p>三種模式各自能不能用 Skill、適合什麼情境、限制是什麼。</p>
+        <div class="foot"><div class="mini"><i data-mini="modes"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+
+    <div class="resources">
+      <h3>📦 <span>課程原始資料</span></h3>
+      <div class="res-grid">
+        <a href="ep47-notes.html"><span class="ic">📝</span><span><b>課堂筆記</b>逐頁嵌入 21 張簡報原圖</span></a>
+        <a href="../radio/"><span class="ic">📻</span><span><b>直播電台系列</b>回系列總覽，一集一卡</span></a>
+        <a href="https://github.com/iOfficeAI/OfficeCLI" target="_blank" rel="noopener"><span class="ic">🔗</span><span><b>OfficeCLI GitHub</b>官方倉庫頁面</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-what" class="view" style="--c:var(--purple)"></section>
+  <section id="view-power" class="view" style="--c:var(--teal)"></section>
+  <section id="view-scale" class="view" style="--c:var(--amber)"></section>
+  <section id="view-modes" class="view" style="--c:var(--blue)"></section>
+</main>
+
+<footer>
+  本頁為 EP47「Skill 可以在哪裡用？Chat、Work、Agent」課後整理・介面沿用本站 EP38–EP46 互動式學習地圖<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2026｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+const DATA = {
+  what: {
+    key:'what', color:'var(--purple)', emoji:'🧩', code:'CHAPTER 01', title:'OfficeCLI 是什麼＋核心架構',
+    intro:'先搞懂這個 Skill 到底是什麼，以及它怎麼分層操作 Office 文件。',
+    topics:[
+      {t:'四種使用模式', s:'Chat／Work／Agent／ChatGPT in PPT｜簡報 2',
+       blocks:[
+        {h:'四種模式',table:{head:['模式','適合情境'],rows:[['💬 Chat','快速對話與即時解答，適合單次查詢、靈感發想'],['📊 Work','處理文件、表格與資料，適合系統性任務與資料處理'],['🤖 Agent','自動執行多步驟任務，適合自動化、任務型工作'],['📑 ChatGPT in PPT','在 PPT 中直接用 AI，適合簡報製作與視覺化呈現']]}},
+        {h:'金句',tip:'不論在哪種模式，選對 Skill 就能事半功倍！'},
+        {h:'看課堂筆記',shot:{img:'ep47-img/slide02.jpg',cap:'簡報 2｜Skill 四種使用模式'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep47-notes.html#sec-modes" style="color:var(--purple)">筆記 1：四種使用模式</a>'}]},
+      {t:'OfficeCLI Skill 是什麼', s:'給 AI Agent 的 Office 操作引擎｜簡報 4',
+       blocks:[
+        {h:'定義',ul:['是提供給 AI Agent 使用的 <b>Office 文件操作引擎＋工作流程規範</b>。','不是 Office 編輯器，也不是單純提示詞。','是讓 AI 正確操控 OfficeCLI 的「操作手冊與品質規範」。','自包含單一執行檔，不需安裝 Microsoft Office，支援 macOS／Linux／Windows／x64／ARM64。']},
+        {h:'兩個層次',p:'<b>SKILL.md</b>：說明何時啟用、如何安裝、使用哪些命令、如何做品質檢查、遇錯時如何自我修正。<b>officecli 執行檔</b>：真正負責讀取、建立、修改 .docx／.xlsx／.pptx。'},
+        {h:'看課堂筆記',shot:{img:'ep47-img/slide04.jpg',cap:'簡報 4｜OfficeCLI Skill 是什麼'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep47-notes.html#sec-what" style="color:var(--purple)">筆記 2：OfficeCLI Skill 是什麼</a>'}]},
+      {t:'核心運作方式：三層架構', s:'L1/L2/L3＋Help-first｜簡報 5',
+       blocks:[
+        {h:'三層架構',steps:['L1 讀取與檢查：view、get、query、validate。','L2 DOM 結構化編輯：set、add、remove、move、swap。','L3 Raw XML：raw、raw-set、add-part，當 L2 無法表達時使用。']},
+        {h:'Help-first 原則',warn:'不確定屬性名稱、列舉值或語法時，必須先執行 officecli help，不能自行猜測；Skill 文件與目前安裝版本的 Help 不一致時，以 Help 為準。'},
+        {h:'看課堂筆記',shot:{img:'ep47-img/slide05.jpg',cap:'簡報 5｜三層文件操作架構＋Help-first原則'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep47-notes.html#sec-core" style="color:var(--purple)">筆記 4：核心運作方式</a>'}]}
+    ]
+  },
+  power: {
+    key:'power', color:'var(--teal)', emoji:'📄', code:'CHAPTER 02', title:'Word／Excel／PPT 能力',
+    intro:'三大 Office 格式的完整操作能力，以及讓 AI 能自己檢查與修正的預覽機制。',
+    topics:[
+      {t:'Word／Excel／PowerPoint 能力', s:'三大格式操作能力總覽｜簡報 8–10',
+       blocks:[
+        {h:'Word',ul:['段落、樣式、多層標題、表格、頁首頁尾、目錄、圖片圖表方程式、追蹤修訂。','版面規範：清楚的 Title／Heading 階層，避免全部都是 Normal 段落。','Word Form：真正可填寫表單需用 SDT／FormField／MERGEFIELD，不能用底線假裝欄位。']},
+        {h:'Excel',ul:['儲存格、公式重算、工作表管理、樞紐分析表、圖表 Sparklines。','內建公式引擎支援 350+ 函數（SUM、XLOOKUP、LAMBDA、LINEST 等）。','交付規範：不得有 #REF! 等錯誤，可計算數字要用公式不硬編碼。']},
+        {h:'PowerPoint',ul:['投影片管理、Shape／圖表／動畫轉場／Morph／Zoom、Mermaid 圖表自動轉換。','設計規則：一頁一觀念，標題≥36pt、正文≥18pt，標題約為正文兩倍字級。']},
+        {h:'看課堂筆記',shot:{img:'ep47-img/slide08.jpg',cap:'簡報 8｜Word 能力'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep47-notes.html#sec-wep" style="color:var(--teal)">筆記 6：Word／Excel／PowerPoint 三大能力</a>'}]},
+      {t:'視覺預覽、檢查與自我修復', s:'建立→渲染→看結果→修正｜簡報 11',
+       blocks:[
+        {h:'四個能力',ul:['<b>內建渲染</b>：Word/Excel/PPT 可渲染成 HTML、PNG、PowerPoint Slide SVG、即時預覽頁面。','<b>Watch 預覽</b>：啟動本機網頁伺服器，每次修改後自動重新整理。','<b>品質檢查</b>：validate 檢查 Schema，view issues 檢查文件品質。','<b>自我修復</b>：錯誤輸出為結構化 JSON，含錯誤代碼、建議修正方式。']},
+        {h:'看課堂筆記',shot:{img:'ep47-img/slide11.jpg',cap:'簡報 11｜視覺預覽、檢查與自我修復'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep47-notes.html#sec-preview" style="color:var(--teal)">筆記 7：視覺預覽、檢查與自我修復</a>'}]}
+    ]
+  },
+  scale: {
+    key:'scale', color:'var(--amber)', emoji:'⚙️', code:'CHAPTER 03', title:'批次自動化＋適用情境',
+    intro:'從單一文件到大量產出，以及目前實際能用在哪些場景。',
+    topics:[
+      {t:'批次、自動化與擴充整合', s:'Batch／Resident Mode／模板合併｜簡報 12',
+       blocks:[
+        {h:'五個能力',table:{head:['項目','說明'],rows:[['Batch','單次開啟儲存週期執行多操作，原子性提交'],['Resident Mode','open→set/add→save→close，降低大型文件重複解析成本'],['模板合併','{{client}}等 placeholder 替換 JSON 資料，大量產生文件'],['Dump→Batch','既有文件轉 blueprint JSON，再重建或批量產生變體'],['Skill整合','可整合 Claude Code、Copilot、Codex CLI、Cursor 等與 MCP Server']]}},
+        {h:'看課堂筆記',shot:{img:'ep47-img/slide12.jpg',cap:'簡報 12｜批次、自動化與擴充整合'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep47-notes.html#sec-batch" style="color:var(--amber)">筆記 8：批次、自動化與擴充整合</a>'}]},
+      {t:'典型流程、情境與限制', s:'load_skill→…→save/close｜簡報 13',
+       blocks:[
+        {h:'典型流程',steps:['load_skill','create／open','add／set','view html','validate','view issues','save／close']},
+        {h:'適合情境',p:'自動產生 Word 報告、CSV 轉 Excel 成績表、含圖表的教學簡報、大量合約證書、CI/CD 自動驗證 Office 文件、沒有 Microsoft Office 的環境中修改 Office 檔案。'},
+        {h:'目前限制',warn:'Skill 本身不會直接修改文件，仍需執行 OfficeCLI 或透過 MCP 呼叫；部分屬性版本相依，以 officecli help 為準；動態欄位可能需重新整理才完全更新。'},
+        {h:'看課堂筆記',shot:{img:'ep47-img/slide13.jpg',cap:'簡報 13｜典型流程、適用情境與限制'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep47-notes.html#sec-flow" style="color:var(--amber)">筆記 9：典型流程、情境與限制</a>'}]}
+    ]
+  },
+  modes: {
+    key:'modes', color:'var(--blue)', emoji:'🔀', code:'CHAPTER 04', title:'Chat／Work／Codex 該選誰',
+    intro:'同一個 Skill，三種模式的能力與限制天差地遠。',
+    topics:[
+      {t:'Chat 模式：能討論，不能執行', s:'僅限討論｜簡報 14–15',
+       blocks:[
+        {h:'可以做',ul:['安裝前先問：請 AI 說明安裝步驟、環境需求、常見錯誤。','指令先規劃：先產生 officecli 指令草稿與參數範例。','文件需求整理、排錯與教學。']},
+        {h:'不能做',warn:'不能直接執行指令、不能直接操作檔案、不能呼叫外部工具鏈、不能批次自動處理、不能取代實作環境。'},
+        {h:'一句話總結',tip:'Chat 可以教你怎麼做、幫你寫指令、幫你排錯；但不能在這裡直接完成 OfficeCLI 任務。'},
+        {h:'看課堂筆記',shot:{img:'ep47-img/slide14.jpg',cap:'簡報 14｜Chat 情境下可以怎麼幫'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep47-notes.html#sec-choose" style="color:var(--blue)">筆記 10：三模式情境對照</a>'}]},
+      {t:'Work 模式：適合一般工作流程', s:'建議使用｜簡報 17–18',
+       blocks:[
+        {h:'四個情境',ul:['處理 Office 檔案：可直接處理 Word、Excel、PowerPoint 任務。','資料整理與分析：整理表格、彙整欄位、產出重點摘要。','簡報與文件草稿：協助生成簡報內容、報表草稿。','格式化與範本套用：統一版型、欄位與基本格式。']},
+        {h:'流程建議',tip:'Chat 釐清需求 → Work 處理文件 → 回到 Chat 解釋與優化。'},
+        {h:'看課堂筆記',shot:{img:'ep47-img/slide17.jpg',cap:'簡報 17｜Work 情境下可以怎麼幫'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep47-notes.html#sec-choose" style="color:var(--blue)">筆記 10：三模式情境對照</a>'}]},
+      {t:'Codex 模式：正式執行最適合', s:'完整發揮功能｜簡報 19–21',
+       blocks:[
+        {h:'四個情境',ul:['直接跑指令：終端機直接執行 officecli 指令。','批次處理檔案：一次處理多份 Word、Excel、PowerPoint。','腳本整合流程：搭配 shell、Python 自動串接 Office 任務。','除錯與修正：邊查看輸出邊調整指令與流程。']},
+        {h:'使用限制',warn:'需要終端與權限；指令要先確認參數路徑輸出位置；受環境版本影響；複雜格式仍要人工複核；批次任務先小量測試。'},
+        {h:'一句話總結',tip:'Codex 很強，但因為會真的執行 OfficeCLI，所以更需要確認環境、權限與指令正確性。'},
+        {h:'看課堂筆記',shot:{img:'ep47-img/slide19.jpg',cap:'簡報 19｜Codex 情境下可以怎麼幫'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep47-notes.html#sec-choose" style="color:var(--blue)">筆記 10：三模式情境對照</a>'}]}
+    ]
+  }
+};
+const ORDER = ['what','power','scale','modes'];
+const $ = s=>document.querySelector(s);
+function renderChapter(ch){
+  const d=DATA[ch];const next=ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];const prev=ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html=`<div class="chapter-head"><span class="emoji">${d.emoji}</span><div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div></div>`;
+  d.topics.forEach((tp,i)=>{const id=`${ch}-${i}`;
+    html+=`<div class="topic" id="topic-${id}"><div class="topic-head" onclick="toggleTopic('${id}')"><span class="num">${i+1}</span><h4>${tp.t}<small>${tp.s}</small></h4><input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)"><span class="chev">▶</span></div><div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{html+=`<div class="block"><h5>${b.h}</h5>`;
+      if(b.p)html+=`<p>${b.p}</p>`;
+      if(b.ul)html+=`<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps)html+=`<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.table)html+=`<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.shot)html+=`<figure class="shot"><img src="${b.shot.img}" alt="" loading="lazy"><figcaption>${b.shot.cap}</figcaption></figure>`;
+      if(b.tip)html+=`<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn)html+=`<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html+=`</div>`;});
+    html+=`</div></div></div>`;});
+  html+=`<div class="chapnav"><a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a><a onclick="showHome()" style="text-align:center">回總覽<b>🏠 四大主題</b></a><a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a></div>`;
+  $('#view-'+ch).innerHTML=html;
+}
+ORDER.forEach(renderChapter);
+function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('#view-'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function showHome(){switchView('home');$('#crumbs').style.display='none';clearSearch();}
+function showChapter(ch){switchView(ch);$('#crumbs').style.display='flex';$('#crumbHere').textContent=`${DATA[ch].emoji} ${DATA[ch].title}`;clearSearch();syncChecks();}
+function toggleTopic(id){$('#topic-'+id).classList.toggle('open');}
+function openTopic(ch,i){showChapter(ch);const el=$('#topic-'+ch+'-'+i);el.classList.add('open');setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+const KEY='ep47-skills-v1';
+const store=()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){const s=store();if(val)s[id]=1;else delete s[id];localStorage.setItem(KEY,JSON.stringify(s));updateProgress();}
+const TOTAL=ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){const done=Object.keys(store()).length;const pct=Math.round(done/TOTAL*100);$('#progFill').style.width=pct+'%';$('#progText').textContent=`${done} / ${TOTAL} 項技能已掌握`;$('#statDone').textContent=done;$('#statPct').textContent=pct+'%';ORDER.forEach(ch=>{const sub=DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;const el=document.querySelector(`[data-mini="${ch}"]`);if(el)el.style.width=Math.round(sub/DATA[ch].topics.length*100)+'%';});}
+function syncChecks(){const s=store();document.querySelectorAll('input[data-skill]').forEach(cb=>{cb.checked=!!s[cb.dataset.skill];});}
+function resetProgress(){if(confirm('確定要清空所有打勾進度嗎？')){localStorage.removeItem(KEY);syncChecks();updateProgress();}}
+function stripTags(s){return s.replace(/<[^>]+>/g,'');}
+const INDEX=[];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{let body=tp.s+' ';tp.blocks.forEach(b=>{if(b.p)body+=stripTags(b.p)+' ';if(b.ul)body+=b.ul.map(stripTags).join(' ')+' ';if(b.steps)body+=b.steps.map(stripTags).join(' ')+' ';if(b.tip)body+=stripTags(b.tip)+' ';if(b.warn)body+=stripTags(b.warn)+' ';if(b.table)body+=b.table.rows.flat().map(stripTags).join(' ')+' ';});INDEX.push({ch,i,title:tp.t,body});}));
+$('#searchInput').addEventListener('input',e=>{const q=e.target.value.trim();const box=$('#searchResults');if(!q){box.classList.remove('show');box.innerHTML='';return;}const hits=INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));box.classList.add('show');if(!hits.length){box.innerHTML=`<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：Chat、Work、Codex、批次）</div>`;return;}const hl=s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);box.innerHTML=hits.map(x=>{const pos=x.body.toLowerCase().indexOf(q.toLowerCase());const snip=x.body.substr(Math.max(0,pos-20),90);return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})"><div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div><h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;}).join('');});
+function clearSearch(){$('#searchInput').value='';$('#searchResults').classList.remove('show');$('#searchResults').innerHTML='';}
+(function(){const box=$('#stars');for(let i=0;i<70;i++){const s=document.createElement('i');s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';s.style.animationDelay=(Math.random()*3)+'s';s.style.transform=`scale(${.5+Math.random()*1.5})`;box.appendChild(s);}})();
+syncChecks();updateProgress();
+</script>
+</body>
+</html>

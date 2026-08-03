@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>知行合一 Manus AI：Skill 與 Agents｜互動式學習地圖</title>
+<meta name="description" content="EP26 晨學講堂：Manus AI 的 Skill 技能包與 Manus Agents 個人代理。Skill 元素與製作流程、Manus vs Claude Code、skill-creator 實作資訊圖表 Prompt 產生器、官方技能庫與應用篇、Manus Agents 與 Telegram 九大功能，互動式多層次學習地圖。">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269;
+  --green:#3f8560; --orange:#bf6a1e; --red:#c0453f; --teal:#0d8f80;
+  --feat:#0d8f80; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(28px,4.6vw,46px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:660px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:9px}
+.steps li{list-style:none;counter-increment:st;display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--txt2);line-height:1.7}
+.steps li::before{content:counter(st);flex:none;width:25px;height:25px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:var(--c,var(--feat));margin-top:1px}
+.steps li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+.prompt,.promptbox{background:#1d1d1f;border:1px solid #2c2c31;border-radius:10px;padding:13px 15px;margin-top:6px;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt b,.promptbox b{color:#fff}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <a class="navlink" href="../radio/" style="border-color:#a9ddd5" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <div class="logo">
+    <div class="dot">🧰</div>
+    <div>Manus 地圖<small>MORNING LEARNING · EP26</small></div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋關鍵字：Skill、skill-creator、沙盒、Agents、Telegram、九大功能…" autocomplete="off">
+  </div>
+  <a class="navlink" href="ep26-notes.html">📝 課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">EP26 · 晨學講堂 · 2026/03</span>
+  <h1>知行合一 Manus AI：Skill 與 Agents</h1>
+  <p class="sub">兩條主線：<b>Skill</b>——把「怎麼做」打包成可重複呼叫的技能包；<b>Manus Agents</b>——有身份、有記憶、能在 Telegram 替你連續辦事的個人代理。<br>點進每一章，逐層展開<b>本集實際教到</b>的觀念與操作，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🎙️ 生成式AI應用電台・晨學講堂</span>
+    <span>🧰 Skill 技能包</span>
+    <span>🤖 Manus Agents</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>5</b><span>大主題</span></div>
+  <div class="stat"><b>10</b><span>實戰技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 10 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--feat)" onclick="showChapter('skill')">
+        <div class="glowline"></div><span class="emoji">🧰</span>
+        <h3><em>CHAPTER 01</em>Skill 是什麼與元素</h3>
+        <p>Skill＝可重複呼叫的技能包；認識它的四個元素：SKILL.md、scripts 腳本、資源與觸發關鍵字。</p>
+        <div class="foot"><div class="mini"><i data-mini="skill"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--blue)" onclick="showChapter('make')">
+        <div class="glowline"></div><span class="emoji">🛠️</span>
+        <h3><em>CHAPTER 02</em>製作流程＋Manus vs Claude Code</h3>
+        <p>做一個 Skill 的五步流程，以及 Manus 與 Claude Code 在「執行」上的關鍵差異。</p>
+        <div class="foot"><div class="mini"><i data-mini="make"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--orange)" onclick="showChapter('demo')">
+        <div class="glowline"></div><span class="emoji">📊</span>
+        <h3><em>CHAPTER 03</em>實作：資訊圖表 Prompt 產生器</h3>
+        <p>用 skill-creator 從對話開始，打造一個能即時產出 YAML Prompt 的儀表板技能（耗 96 點）。</p>
+        <div class="foot"><div class="mini"><i data-mini="demo"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--purple)" onclick="showChapter('lib')">
+        <div class="glowline"></div><span class="emoji">📚</span>
+        <h3><em>CHAPTER 04</em>官方技能庫與應用篇</h3>
+        <p>skill-creator、stock-analysis 等官方技能，以及把 Skill 用在 Remotion／Manim 動畫製作。</p>
+        <div class="foot"><div class="mini"><i data-mini="lib"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--green)" onclick="showChapter('agents')">
+        <div class="glowline"></div><span class="emoji">🤖</span>
+        <h3><em>CHAPTER 05</em>Manus Agents 與 Telegram</h3>
+        <p>個人 Agent 四大特點、Chatbot vs Agents，以及 Telegram 用法與可完成的九大功能。</p>
+        <div class="foot"><div class="mini"><i data-mini="agents"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+
+    <div class="resources">
+      <h3>📦 <span>課程原始資料</span></h3>
+      <div class="res-grid">
+        <a href="ep26-notes.html"><span class="ic">📝</span><span><b>課堂筆記</b>Manus Skill／Agents 完整整理</span></a>
+        <a href="../radio/"><span class="ic">📻</span><span><b>直播電台系列</b>回系列總覽，一集一卡</span></a>
+        <a href="ep28-notes.html"><span class="ic">🎓</span><span><b>相關 EP28</b>AnswerThis 研究助理</span></a>
+        <a href="ep39-notes.html"><span class="ic">📔</span><span><b>相關 EP39</b>NotebookLM×Markdown</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-skill" class="view" style="--c:var(--feat)"></section>
+  <section id="view-make" class="view" style="--c:var(--blue)"></section>
+  <section id="view-demo" class="view" style="--c:var(--orange)"></section>
+  <section id="view-lib" class="view" style="--c:var(--purple)"></section>
+  <section id="view-agents" class="view" style="--c:var(--green)"></section>
+</main>
+
+<footer>
+  本頁為 EP26「知行合一 Manus AI：Skill 與 Agents」課後整理・介面沿用本站互動式學習地圖<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2026｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+const DATA = {
+  skill: {
+    key:'skill', color:'var(--feat)', emoji:'🧰', code:'CHAPTER 01', title:'Skill 是什麼與元素',
+    intro:'先搞懂 Skill 是什麼、為什麼要打包成技能，以及一個技能包由哪些元素組成。',
+    topics:[
+      {t:'Skill 是什麼', s:'可重複呼叫的技能包',
+       blocks:[
+        {h:'一句話',p:'<b>Skill ＝ 為你的智能體提供「預封裝、可重複」的最佳實踐與工具</b>：把某件事「該怎麼做」事先包好，之後用關鍵字觸發，Manus 就照標準流程做出來。'},
+        {h:'為什麼要打包',ul:['把最佳實踐固定下來，每次結果穩定。','用一句關鍵字喚起整套工作流程。','可分享、可入庫、可重複用。']},
+        {h:'看課堂筆記',p:'👉 <a href="ep26-notes.html#sec-skill" style="color:var(--feat)">筆記 1：Skill 是什麼與元素</a>'}]},
+      {t:'Skill 的四個元素', s:'SKILL.md／scripts／資源／觸發',
+       blocks:[
+        {h:'四個元素',table:{head:['元素','角色'],rows:[['SKILL.md','技能的說明書：定義是什麼、流程與規範'],['scripts 腳本','實際執行工作的程式碼'],['資源 references／templates','技能用到的參考資料與模板'],['觸發邏輯與關鍵字','用什麼關鍵字喚起這個技能']]}},
+        {h:'記憶點',tip:'一個 Skill＝說明書＋腳本＋資源＋觸發關鍵字。四者打包成一個可重複呼叫的技能包。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep26-notes.html#sec-skill" style="color:var(--feat)">筆記 1：Skill 元素</a>'}]}
+    ]
+  },
+  make: {
+    key:'make', color:'var(--blue)', emoji:'🛠️', code:'CHAPTER 02', title:'製作流程＋Manus vs Claude Code',
+    intro:'看懂一個 Skill 從無到有的五步流程，再比較 Manus 與 Claude Code 的定位差異。',
+    topics:[
+      {t:'剖析 Skill 製作流程', s:'從了解元素到閱讀呼應的五步',
+       blocks:[
+        {h:'五步流程',steps:['<b>了解 Skill 元素</b>：先認識 MD 文件、scripts 與資源。','<b>創作 Skill</b>：用 skill-creator 開始打造新技能。','<b>剖析製作過程</b>：觀察 AI 如何規劃、開發、寫文件、交付。','<b>下載 Skill 檔案</b>：把完成的技能包 ZIP 下載檢視。','<b>仔細閱讀並呼應</b>：打開 SKILL.md 與 scripts，對照需求。']},
+        {h:'提醒',warn:'不要把 Skill 當黑盒子。下載後親自打開 SKILL.md 讀一遍，才知道它怎麼運作、觸發後會做什麼，之後才好維護修改。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep26-notes.html#sec-flow" style="color:var(--blue)">筆記 2：Skill 製作流程</a>'}]},
+      {t:'Manus vs Claude Code', s:'差別在「執行」發生在哪裡',
+       blocks:[
+        {h:'六個面向',table:{head:['面向','Manus','Claude Code'],rows:[['核心定位','雲端沙盒端到端執行','本地執行程式與指令'],['執行方式','安全雲端虛擬機','本地機器（有風險）'],['使用環境','網頁操作免設置','需裝 IDE／CLI'],['技能導入','一鍵即時導入','需手動設定'],['安全性','隔離式沙盒','在你機器上運行'],['適用對象','一般／非技術者','專業開發者']]}},
+        {h:'金句',tip:'最大的差異在於「執行」：Manus 在雲端沙盒替你跑（安全、免設定）；Claude Code 在你自己的電腦上跑（彈性、風險自負）。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep26-notes.html#sec-vs" style="color:var(--blue)">筆記 3：Manus vs Claude Code</a>'}]}
+    ]
+  },
+  demo: {
+    key:'demo', color:'var(--orange)', emoji:'📊', code:'CHAPTER 03', title:'實作：資訊圖表 Prompt 產生器',
+    intro:'課堂現場用 skill-creator，從一句話打造一個能即時產出 YAML Prompt 的儀表板技能。',
+    topics:[
+      {t:'實作四步', s:'從對話到入庫',
+       blocks:[
+        {h:'操作流程',steps:['<b>從對話開始</b>：輸入「幫我使用 /skill-creator 一起創建一個技能，先問我這個技能該做什麼」。','<b>AI 確認並反問</b>：Manus 讀 skill-creator 規範，確認做「資訊圖表 Prompt 產生器」，反問語系與驗證規則。','<b>規劃並開發</b>：讀規範 → 開發網頁 → 撰寫 SKILL.md → 交付。','<b>驗證並交付</b>：產出 dashboard.html＋SKILL.md，打包 ZIP，按「新增到我的技能」入庫。']},
+        {h:'成本',p:'這次實作<b>耗費 96 點</b>；交付內容為 <b>SKILL.md</b>（定義流程、YAML 結構、使用說明）＋ <b>dashboard.html</b>（單頁儀表板）。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep26-notes.html#sec-demo" style="color:var(--orange)">筆記 4：實作流程</a>'}]},
+      {t:'做出來的儀表板＋SKILL.md', s:'即時預覽的單頁工具',
+       blocks:[
+        {h:'儀表板五大功能',ul:['<b>Dashboard 介面</b>：左側選單、右側設定、下方預覽。','<b>多樣控制項</b>：下拉、色碼選擇器、字級滑桿。','<b>即時預覽</b>：調參數即時更新 YAML。','<b>快速預設</b>：極簡黑白／科技藍／學術灰。','<b>多格式輸出</b>：YAML／Markdown／JSON／純文字。']},
+        {h:'SKILL.md 前置設定',prompt:'---\nname: infographic-prompt-generator\ndescription: 產生資訊圖表設計的 YAML Prompt。提供互動式\n　　　　儀表板，讓使用者透過視覺化介面選擇參數，\n　　　　即時生成符合特定結構的 Prompt。\nlicense: Complete terms in LICENSE.txt\n---'},
+        {h:'重點',warn:'每個 SKILL.md 開頭都有這段 YAML frontmatter：name（代號）＋description（描述，也是觸發判斷依據）。描述越清楚，Manus 越知道何時喚起技能。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep26-notes.html#sec-demo" style="color:var(--orange)">筆記 4：儀表板與 SKILL.md</a>'}]}
+    ]
+  },
+  lib: {
+    key:'lib', color:'var(--purple)', emoji:'📚', code:'CHAPTER 04', title:'官方技能庫與應用篇',
+    intro:'Manus 內建的技能頁面有多個官方技能可直接用；也能把 Skill 用在進階的動畫製作。',
+    topics:[
+      {t:'幾個官方技能', s:'skill-creator／stock-analysis 等',
+       blocks:[
+        {h:'官方技能',table:{head:['技能','用途'],rows:[['skill-creator','核心技能創建工具：建立／更新技能的指南'],['stock-analysis','金融數據分析股票與公司'],['video-generator','專業 AI 影片製作工作流程'],['similarweb-analytics','SimilarWeb 流量數據分析網站']]}},
+        {h:'怎麼用',ul:['在「技能」頁面可搜尋技能、新增自訂技能。','官方技能一鍵試用或加入你的技能庫。']},
+        {h:'看課堂筆記',p:'👉 <a href="ep26-notes.html#sec-lib" style="color:var(--purple)">筆記 5：官方技能庫</a>'}]},
+      {t:'應用篇：Skill 做動畫', s:'Remotion／Manim',
+       blocks:[
+        {h:'兩個進階應用',ul:['<b>應用篇 1：Remotion Skill</b>——製作轉場動畫（用程式碼／React 做影片）。','<b>應用篇 2：Manim Skill</b>——製作科學原理演示動畫（公式一步步演示）。']},
+        {h:'一句話',tip:'把 Remotion、Manim 這類專業工具包成 Skill，就能用一句話喚起整套製作流程——這就是 Skill 的威力。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep26-notes.html#sec-lib" style="color:var(--purple)">筆記 5：應用篇</a>'}]}
+    ]
+  },
+  agents: {
+    key:'agents', color:'var(--green)', emoji:'🤖', code:'CHAPTER 05', title:'Manus Agents 與 Telegram',
+    intro:'從「工具」升級成「有身份的個人代理」：認識 Agent 四大特點、與 Chatbot 的差別，以及 Telegram 九大功能。',
+    topics:[
+      {t:'個人 Agent 四大特點', s:'身份／記憶／技能／聊天應用',
+       blocks:[
+        {h:'四大特點',table:{head:['特點','說明'],rows:[['獨特的 AI 身份','命名並賦予個性，它會記住所有內容'],['持久記憶與電腦','24/7 雲端助理，保留全部上下文'],['自訂技能','為助理配特定領域專業知識（Skill）'],['在聊天應用中使用','Telegram 已上線，更多應用即將上線']]}},
+        {h:'在哪裡用',ul:['已上線：Telegram、電腦使用。','即將上線：WhatsApp、Messenger、Line。','連結 Manus 帳號即可（免費／付費都能用）。']},
+        {h:'看課堂筆記',p:'👉 <a href="ep26-notes.html#sec-agents" style="color:var(--green)">筆記 6：Manus Agents</a>'}]},
+      {t:'Chatbot vs Manus Agents', s:'給答案 vs 給成果',
+       blocks:[
+        {h:'關鍵差異',table:{head:['面向','傳統 Chatbot','Manus Agents'],rows:[['核心定位','問答型互動工具','任務導向型 AI 代理'],['互動方式','一問一答','可下達多步驟任務'],['任務處理','單一回合為主','連續執行、拆解完成複雜任務'],['檔案處理','文字為主','文件、圖片、語音多媒體'],['輸出結果','單次回應','完整成果、整理文件、研究報告']]}},
+        {h:'金句',tip:'「Chatbot 給你答案，Agent 給你成果。」Agent 會拆解任務、連續執行、最後交付一份可用的成品。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep26-notes.html#sec-chatbot" style="color:var(--green)">筆記 7：Chatbot vs Agents</a>'}]},
+      {t:'Telegram 用法與九大功能', s:'四大特性＋九件能辦的事',
+       blocks:[
+        {h:'Telegram 四大特性',ul:['多步驟任務執行 & 結果回傳。','多媒體互動：語音、照片、文件。','個性化回應風格（結構化／對話性）。','彈性模型切換：Max（深度推理）／Lite（快速回應）。']},
+        {h:'可完成的九大功能',ul:['查找資料、撰寫文書、整理分析。','建置網站、製作簡報、編寫程式。','處理檔案、排程提醒、影像製作。']},
+        {h:'課堂實例',tip:'在 Telegram 說「用 Nano Banana Pro 做一張 Podcast 封面」，約 3～5 分鐘 Agent 回傳 2048×2048 封面（深藍科技風＋AI 晶片大腦），還能繼續調色、字型、加 Logo。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep26-notes.html#sec-tg" style="color:var(--green)">筆記 8：Telegram 與九大功能</a>'}]}
+    ]
+  }
+};
+const ORDER = ['skill','make','demo','lib','agents'];
+const $ = s=>document.querySelector(s);
+function renderChapter(ch){
+  const d=DATA[ch];const next=ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];const prev=ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html=`<div class="chapter-head"><span class="emoji">${d.emoji}</span><div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div></div>`;
+  d.topics.forEach((tp,i)=>{const id=`${ch}-${i}`;
+    html+=`<div class="topic" id="topic-${id}"><div class="topic-head" onclick="toggleTopic('${id}')"><span class="num">${i+1}</span><h4>${tp.t}<small>${tp.s}</small></h4><input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)"><span class="chev">▶</span></div><div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{html+=`<div class="block"><h5>${b.h}</h5>`;
+      if(b.p)html+=`<p>${b.p}</p>`;
+      if(b.ul)html+=`<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps)html+=`<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.table)html+=`<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.prompt)html+=`<div class="prompt">${b.prompt}</div>`;
+      if(b.tip)html+=`<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn)html+=`<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html+=`</div>`;});
+    html+=`</div></div></div>`;});
+  html+=`<div class="chapnav"><a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a><a onclick="showHome()" style="text-align:center">回總覽<b>🏠 五大主題</b></a><a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a></div>`;
+  $('#view-'+ch).innerHTML=html;
+}
+ORDER.forEach(renderChapter);
+function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('#view-'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function showHome(){switchView('home');$('#crumbs').style.display='none';clearSearch();}
+function showChapter(ch){switchView(ch);$('#crumbs').style.display='flex';$('#crumbHere').textContent=`${DATA[ch].emoji} ${DATA[ch].title}`;clearSearch();syncChecks();}
+function toggleTopic(id){$('#topic-'+id).classList.toggle('open');}
+function openTopic(ch,i){showChapter(ch);const el=$('#topic-'+ch+'-'+i);el.classList.add('open');setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+const KEY='ep26-skills-v1';
+const store=()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){const s=store();if(val)s[id]=1;else delete s[id];localStorage.setItem(KEY,JSON.stringify(s));updateProgress();}
+const TOTAL=ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){const done=Object.keys(store()).length;const pct=Math.round(done/TOTAL*100);$('#progFill').style.width=pct+'%';$('#progText').textContent=`${done} / ${TOTAL} 項技能已掌握`;$('#statDone').textContent=done;$('#statPct').textContent=pct+'%';ORDER.forEach(ch=>{const sub=DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;const el=document.querySelector(`[data-mini="${ch}"]`);if(el)el.style.width=Math.round(sub/DATA[ch].topics.length*100)+'%';});}
+function syncChecks(){const s=store();document.querySelectorAll('input[data-skill]').forEach(cb=>{cb.checked=!!s[cb.dataset.skill];});}
+function resetProgress(){if(confirm('確定要清空所有打勾進度嗎？')){localStorage.removeItem(KEY);syncChecks();updateProgress();}}
+function stripTags(s){return s.replace(/<[^>]+>/g,'');}
+const INDEX=[];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{let body=tp.s+' ';tp.blocks.forEach(b=>{if(b.p)body+=stripTags(b.p)+' ';if(b.ul)body+=b.ul.map(stripTags).join(' ')+' ';if(b.steps)body+=b.steps.map(stripTags).join(' ')+' ';if(b.tip)body+=stripTags(b.tip)+' ';if(b.warn)body+=stripTags(b.warn)+' ';if(b.prompt)body+=stripTags(b.prompt)+' ';if(b.table)body+=b.table.rows.flat().map(stripTags).join(' ')+' ';});INDEX.push({ch,i,title:tp.t,body});}));
+$('#searchInput').addEventListener('input',e=>{const q=e.target.value.trim();const box=$('#searchResults');if(!q){box.classList.remove('show');box.innerHTML='';return;}const hits=INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));box.classList.add('show');if(!hits.length){box.innerHTML=`<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：Skill、沙盒、Agents、Telegram）</div>`;return;}const hl=s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);box.innerHTML=hits.map(x=>{const pos=x.body.toLowerCase().indexOf(q.toLowerCase());const snip=x.body.substr(Math.max(0,pos-20),90);return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})"><div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div><h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;}).join('');});
+function clearSearch(){$('#searchInput').value='';$('#searchResults').classList.remove('show');$('#searchResults').innerHTML='';}
+syncChecks();updateProgress();
+</script>
+</body>
+</html>

@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP30 課堂筆記｜AnythingLLM（NotebookLM 平替版）逐節實錄</title>
+<meta name="description" content="晨學講堂 EP30 課堂筆記：AnythingLLM（NotebookLM 平替版）——NotebookLM 簡報上傳新功能、AnythingLLM 是什麼與核心功能、安裝七步驟、與 NotebookLM 比較、應用情境、直播聊天室真實問答精華">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#6f52c9; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px;border-left:none}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+.note.violet{background:#F3EFFB;border-color:#DFD2F0;color:#5a34a8}
+.note.rose{background:#FBEEF1;border-color:#F0D2DB;color:#9c2f52}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.prompt{position:relative;background:#1d1d1f;border-radius:10px;padding:15px 16px;margin:12px 0;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt .tag{display:inline-block;font-size:11px;letter-spacing:.06em;color:#c9c4ff;border:1px solid #3a3a40;border-radius:6px;padding:2px 9px;margin-bottom:8px}
+.prompt b{color:#fff}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.embed{margin:14px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000}
+.embed iframe{display:block;width:100%;aspect-ratio:16/9;border:0}
+.embed .cap{font-size:12.5px;color:var(--ink3);padding:10px 16px;background:var(--paper);border-top:1px solid var(--line)}
+.ts{display:inline-block;font-family:"Cascadia Code",Consolas,monospace;font-weight:700;font-size:12px;color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,#fff);border-radius:5px;padding:2px 8px;margin-right:7px;letter-spacing:.4px;vertical-align:middle}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+.layers{display:grid;gap:10px;margin:14px 0}
+.lyr{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:13px 15px;background:#fff}
+.lyr .n{flex:none;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--accent)}
+.lyr h4{margin:0 0 3px;font-size:14.5px}
+.lyr p{font-size:13px;margin:0}
+.sub{color:var(--ink2)}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#a8c686" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP30 課堂筆記（逐節實錄）</b>
+  <div class="right">
+    <a class="btn" href="ep30-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 晨學講堂 · EP30</span>
+  <h1>AnythingLLM<br><span>NotebookLM 平替版</span></h1>
+  <p class="lead">本頁以<b>官方簡報全文</b>與<b>直播聊天室即時留言的真實紀錄</b>為主要依據整理而成（本集<b>未</b>下載錄影逐幀抽格，原因與取捨見文末「9. 資料來源與製作說明」）。主軸是把 NotebookLM 新版「pptx 直接上傳」功能，接到<b>本地化知識庫平台 AnythingLLM</b>——它強調私有部署、資料不外流、模型可自選，是老師口中的「NotebookLM 平替版」。</p>
+  <div class="meta">
+    <span>📅 2026/03/26（四）20:30–21:30 直播</span>
+    <span>🧑‍🏫 主講 黃老師</span>
+    <span>📑 官方簡報全文 14 頁</span>
+    <span>🛠️ 主題：AnythingLLM 本地知識庫</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-map">1. 一頁看懂全課程</a>
+  <a href="#sec-nlm">2. NotebookLM 簡報上傳新功能</a>
+  <a href="#sec-what">3. AnythingLLM 是什麼＋核心功能</a>
+  <a href="#sec-install">4. 安裝七步驟</a>
+  <a href="#sec-compare">5. AnythingLLM vs NotebookLM 比較</a>
+  <a href="#sec-scenario">6. 應用情境</a>
+  <a class="sub" href="#sc-meeting">6.1 會議錄音</a>
+  <a class="sub" href="#sc-qq">6.2 騰訊文檔</a>
+  <a class="sub" href="#sc-uni">6.3 UniNotebook</a>
+  <a href="#sec-qa">7. 課堂問答精華</a>
+  <a href="#sec-check">8. 課後自我檢核</a>
+  <a href="#sec-src">9. 資料來源與製作說明</a>
+</nav>
+
+<article>
+
+<!-- 0 課程資訊 -->
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--pink))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>EP30「AnythingLLM (NotebookLM平替版)」</td></tr>
+    <tr><th>頻道</th><td>生成式 AI 應用電台・晨學講堂</td></tr>
+    <tr><th>直播日期</th><td>2026/03/26（四）晚間 20:30–21:30（依錄影檔名時段）</td></tr>
+    <tr><th>主講／即時問答</th><td>主講 <b>黃老師</b>；聊天室學員提問由「<b>賴炳樹（AI）</b>」即時協助回覆</td></tr>
+    <tr><th>一句話先懂</th><td>NotebookLM 新版可以<b>直接上傳 pptx</b>當來源了；但如果想要<b>資料不外流、本地跑、模型自己挑</b>，官方簡報把 <b>AnythingLLM</b> 介紹成「本地化 / 私有化 LLM 知識庫平台（RAG 架構）」——這集就是把兩者放在一起看：什麼時候用 NotebookLM，什麼時候該換成 AnythingLLM。</td></tr>
+    <tr><th>教材</th><td>官方簡報《AnythingLLM (NotebookLM平替版)》全文 14 頁（含比較表）＋ 直播聊天室文字紀錄</td></tr>
+  </table></div>
+
+  <h3>🎬 錄影回放（可直接播放對照）</h3>
+  <div class="embed">
+    <iframe src="https://drive.google.com/file/d/1WOh8Q2fw3zsSTMBUoIMIfupmR0UIb5DX/preview" allow="autoplay" loading="lazy" title="EP30 錄影回放"></iframe>
+    <div class="cap">EP30_AnythingLLM (NotebookLM平替版) 課堂錄影（2026/03/26 19:34 CST 起）— 需登入可觀看的 Google 帳號。</div>
+  </div>
+  <div class="note blue">💡 本頁<b>未</b>下載這支錄影逐幀抽格。官方簡報全文＋聊天室真實留言紀錄兩份素材已足以支撐本集重點（工具介紹、安裝流程標題、比較表、真實課堂問答），因此依 CLAUDE.md 專案規則的「先窮盡不需要大檔下載的解套辦法」原則採用文字素材為主；錄影連結保留在此，供想核對畫面細節（例如安裝步驟每一步實際畫面）的讀者直接播放對照。</div>
+</section>
+
+<!-- 1 全景 -->
+<section class="chapter" id="sec-map">
+  <span class="chip" style="background:linear-gradient(90deg,var(--cyan),var(--accent))">OVERVIEW</span>
+  <h2 class="ct">1. 一頁看懂全課程</h2>
+  <p class="cd">這堂課的動線：先講 NotebookLM 本身多了「pptx 直接上傳」這個新功能；接著把鏡頭轉到 AnythingLLM——一套本地化知識庫平台，介紹它是什麼、核心功能、七步驟安裝流程，再跟 NotebookLM 做面對面比較；最後帶到會議錄音、騰訊文檔、UniNotebook 等延伸應用情境。</p>
+  <figure class="diagram">
+    <svg viewBox="0 0 920 480" xmlns="http://www.w3.org/2000/svg" font-family="'Noto Sans TC',sans-serif">
+      <defs>
+        <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0aa6c9"/><stop offset="1" stop-color="#7a4fd6"/></linearGradient>
+        <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7a4fd6"/><stop offset="1" stop-color="#d4508e"/></linearGradient>
+        <marker id="arw" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#c3b3e8"/></marker>
+      </defs>
+      <rect width="920" height="480" fill="#fbfaff"/>
+      <text x="460" y="38" text-anchor="middle" font-size="20" font-weight="900" fill="#2b2a33">EP30 · AnythingLLM（NotebookLM 平替版）— 全景地圖</text>
+
+      <!-- two clouds -->
+      <rect x="40" y="66" width="380" height="150" rx="18" fill="url(#g1)"/>
+      <text x="230" y="98" text-anchor="middle" font-size="15.5" font-weight="900" fill="#fff">☁️ NotebookLM（雲端）</text>
+      <text x="230" y="124" text-anchor="middle" font-size="11.5" fill="#eafaff">Google 代管・固定模型</text>
+      <text x="230" y="146" text-anchor="middle" font-size="11.5" fill="#eafaff">新功能：pptx 可直接上傳（＜200MB）</text>
+      <text x="230" y="168" text-anchor="middle" font-size="11.5" fill="#eafaff">舊法：簡報→雲端→匯入（圖多文字仍需PDF）</text>
+      <text x="230" y="190" text-anchor="middle" font-size="11.5" fill="#eafaff">技術門檻低，但讀取速度較慢</text>
+
+      <rect x="500" y="66" width="380" height="150" rx="18" fill="url(#g2)"/>
+      <text x="690" y="98" text-anchor="middle" font-size="15.5" font-weight="900" fill="#fff">💻 AnythingLLM（本地／私有）</text>
+      <text x="690" y="124" text-anchor="middle" font-size="11.5" fill="#fdeaf4">Mintplex Labs・本地化 RAG 平台</text>
+      <text x="690" y="146" text-anchor="middle" font-size="11.5" fill="#fdeaf4">資料不外流，可搭配 Ollama 本地模型</text>
+      <text x="690" y="168" text-anchor="middle" font-size="11.5" fill="#fdeaf4">可接 OpenAI／Claude／Llama 等多模型</text>
+      <text x="690" y="190" text-anchor="middle" font-size="11.5" fill="#fdeaf4">技術門檻中，安裝需七步驟</text>
+
+      <line x1="230" y1="216" x2="340" y2="270" stroke="#c3b3e8" stroke-width="2" marker-end="url(#arw)"/>
+      <line x1="690" y1="216" x2="580" y2="270" stroke="#c3b3e8" stroke-width="2" marker-end="url(#arw)"/>
+
+      <!-- shared RAG concept -->
+      <rect x="270" y="278" width="380" height="96" rx="16" fill="#f2ecfd" stroke="#d9c9f7"/>
+      <text x="460" y="308" text-anchor="middle" font-size="14" font-weight="800" fill="#5a3a9e">🧠 共同底層概念：RAG（檢索增強生成）</text>
+      <text x="460" y="332" text-anchor="middle" font-size="11.5" fill="#5a3a9e">文件（PDF／PPTX／DOCX／網頁）→ 語意檢索（向量化）→ 對話式問答</text>
+      <text x="460" y="353" text-anchor="middle" font-size="11.5" fill="#5a3a9e">差別只在「檢索與模型跑在誰的地盤」——雲端 vs 本地／私有</text>
+
+      <line x1="460" y1="374" x2="460" y2="404" stroke="#c3b3e8" stroke-width="2" marker-end="url(#arw)"/>
+      <rect x="180" y="410" width="560" height="52" rx="14" fill="#fff" stroke="#e7e2d8"/>
+      <text x="460" y="442" text-anchor="middle" font-size="12.5" fill="#5a5866">安裝七步驟 → 比較表 → 應用情境（會議錄音／騰訊文檔／UniNotebook）</text>
+    </svg>
+    <figcaption>圖 1｜EP30 全景：NotebookLM 與 AnythingLLM 共用「文件→檢索→問答」的 RAG 概念，差別在雲端與本地／私有的取捨（依官方簡報整理）</figcaption>
+  </figure>
+  <div class="golden"><div class="q">「NotebookLM 不再只是『看投影片』，而是『問知識』。」</div><div class="a">—— 官方簡報對 pptx 上傳新功能的定位</div></div>
+</section>
+
+<!-- 2 NotebookLM pptx -->
+<section class="chapter" id="sec-nlm">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--cyan))">CHAPTER 01 · 官方簡報</span>
+  <h2 class="ct">2. NotebookLM 簡報上傳新功能</h2>
+  <p class="cd">開場先講 NotebookLM 本身的更新：上傳來源格式新增 pptx——把簡報直接變成「可檢索的知識資料庫」。</p>
+
+  <h3>早期作法 vs 現在作法</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">作法</th><th>怎麼做</th></tr>
+    <tr><td>早期作法</td><td>簡報先<b>上傳 Google 雲端</b>，再從雲端匯入 NotebookLM 當來源。</td></tr>
+    <tr><td>現在作法</td><td><b>簡報直接上傳 NotebookLM</b>，每份檔案上限 <b>200MB</b>，省去先轉存雲端的步驟。</td></tr>
+  </table></div>
+  <div class="note gold">⚠️ 特殊情況：若簡報<b>圖檔比較多</b>、且必須擷取<b>圖檔中的文字</b>，官方簡報建議仍改用「早期作法 + PDF」（先轉 PDF 再上傳，OCR／文字擷取效果較穩定）。另外現在直傳 pptx 的<b>讀取速度比較慢</b>，是實際使用時要有的心理準備。</div>
+
+  <h3>應用情境（官方簡報列出三種）</h3>
+  <ul class="pt">
+    <li><b>相同簡報內容，但風格轉換</b>——同一份知識，讓 NotebookLM 用不同呈現方式重新產出。</li>
+    <li><b>不再只是「看投影片」，而是「問知識」</b>——上傳後可直接對簡報內容提問，而不是被動翻頁閱讀。</li>
+    <li><b>AI 助教、內容交叉分析</b>——把多份簡報一起丟進去，讓 NotebookLM 幫忙比對、彙整跨檔案的知識點。</li>
+  </ul>
+  <div class="note blue">💡 這一段是本集的「暖身」：先讓學員看到 NotebookLM 自己也在進化，再帶出「如果連 pptx 都能直接上傳雲端，那麼想要資料不外流的人該怎麼辦」——順勢接到下一章的 AnythingLLM。</div>
+</section>
+
+<!-- 3 AnythingLLM 是什麼 -->
+<section class="chapter" id="sec-what">
+  <span class="chip" style="background:linear-gradient(90deg,var(--pink),var(--accent))">CHAPTER 02 · 官方簡報</span>
+  <h2 class="ct">3. AnythingLLM 是什麼＋核心功能</h2>
+
+  <h3 id="w-def">🧠 什麼是 AnythingLLM</h3>
+  <p>AnythingLLM（by <b>Mintplex Labs</b>）是一套<b>本地化 / 私有化 LLM 知識庫平台（RAG 架構）</b>：</p>
+  <ul class="pt">
+    <li>把文件（<b>PDF、簡報、網頁</b>）轉為「可對話資料庫」。</li>
+    <li>概念上<b>類似 NotebookLM</b>，但更強調<b>私有部署與資料安全</b>——這也是官方簡報把它稱為「NotebookLM 平替版」的原因。</li>
+  </ul>
+
+  <h3 id="w-core">⚙️ 核心功能（官方簡報五項）</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:180px">功能</th><th>說明</th></tr>
+    <tr><td>📥 文件導入 → 建立知識庫</td><td>支援 <b>PDF / DOCX / TXT / 網頁</b>等來源格式。</td></tr>
+    <tr><td>🔍 語意檢索（RAG）</td><td>問問題 → <b>精準從文件中找答案</b>，而不是憑空生成。</td></tr>
+    <tr><td>💬 對話式查詢</td><td>像 <b>ChatGPT 一樣與「你的資料」聊天</b>。</td></tr>
+    <tr><td>🖥️ 本地運行（Local-first）</td><td>可搭配 <b>Ollama</b> 使用本地模型，資料不必送到外部伺服器。</td></tr>
+    <tr><td>🔌 多模型整合</td><td>支援 <b>OpenAI、Claude、Llama</b> 等多種模型，可自行切換。</td></tr>
+  </table></div>
+  <div class="golden"><div class="q">「類似 NotebookLM，但更強調私有部署與資料安全。」</div><div class="a">—— 官方簡報對 AnythingLLM 的定位</div></div>
+</section>
+
+<!-- 4 安裝七步驟 -->
+<section class="chapter" id="sec-install">
+  <span class="chip" style="background:linear-gradient(90deg,var(--amber),var(--accent))">CHAPTER 03 · 官方簡報</span>
+  <h2 class="ct">4. 安裝七步驟</h2>
+  <p class="cd">官方簡報用 7 張畫面截圖依序示範安裝流程，每張都標「安裝步驟 N」並附官網連結 <a href="https://anythingllm.com/" target="_blank" rel="noopener">anythingllm.com</a>。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">投影片</th><th>標題</th><th>連結</th></tr>
+    <tr><td>第 4 頁</td><td>安裝步驟 1</td><td><a href="https://anythingllm.com/" target="_blank" rel="noopener">anythingllm.com</a></td></tr>
+    <tr><td>第 5 頁</td><td>安裝步驟 2</td><td><a href="https://anythingllm.com/" target="_blank" rel="noopener">anythingllm.com</a></td></tr>
+    <tr><td>第 6 頁</td><td>安裝步驟 3</td><td><a href="https://anythingllm.com/" target="_blank" rel="noopener">anythingllm.com</a></td></tr>
+    <tr><td>第 7 頁</td><td>安裝步驟 4</td><td><a href="https://anythingllm.com/" target="_blank" rel="noopener">anythingllm.com</a></td></tr>
+    <tr><td>第 8 頁</td><td>安裝步驟 5</td><td><a href="https://anythingllm.com/" target="_blank" rel="noopener">anythingllm.com</a></td></tr>
+    <tr><td>第 9 頁</td><td>安裝步驟 6</td><td><a href="https://anythingllm.com/" target="_blank" rel="noopener">anythingllm.com</a></td></tr>
+    <tr><td>第 10 頁</td><td>安裝步驟 7</td><td><a href="https://anythingllm.com/" target="_blank" rel="noopener">anythingllm.com</a></td></tr>
+  </table></div>
+  <div class="note gold">⚠️ 誠實說明：這 7 頁在原始簡報中是<b>畫面截圖（圖片）</b>，本頁的文字擷取工具只能取得投影片上的「標題文字」與連結，<b>無法讀出截圖畫面裡的操作說明文字</b>。因此本頁如實呈現簡報標題順序與官網連結，<b>不推測、不杜撰</b>每一步的實際畫面內容。若要看逐步安裝畫面，請直接開啟原始簡報，或到 <a href="https://anythingllm.com/" target="_blank" rel="noopener">anythingllm.com</a> 下載頁對照官方最新安裝流程；也可播放本頁「0. 課程資訊」的錄影回放核對現場實機操作畫面。</div>
+  <div class="note blue">💬 安裝過程中的真實課堂狀況（來自聊天室紀錄）：有學員在安裝時被詢問是否要下載約 <b>2GB 的 Meeting Assistant 模型</b>；也有多位學員在啟動後回報<b>記憶體不足</b>的錯誤訊息。這些真實案例整理在「7. 課堂問答精華」，安裝前建議先評估自己電腦的硬體與磁碟空間。</div>
+</section>
+
+<!-- 5 比較表 -->
+<section class="chapter" id="sec-compare">
+  <span class="chip" style="background:linear-gradient(90deg,var(--green),var(--accent))">CHAPTER 04 · 官方簡報</span>
+  <h2 class="ct">5. AnythingLLM vs NotebookLM 比較</h2>
+  <p class="cd">官方簡報用一張四維度比較表，把「該選哪一個」的判斷依據攤開來看。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">項目</th><th>AnythingLLM</th><th>NotebookLM</th></tr>
+    <tr><td>部署方式</td><td>本地 / 私有</td><td>雲端（Google）</td></tr>
+    <tr><td>資料控制</td><td><b>高</b>（不外流）</td><td>中</td></tr>
+    <tr><td>模型彈性</td><td><b>高</b>（可自選）</td><td>低（固定）</td></tr>
+    <tr><td>技術門檻</td><td>中</td><td><b>低</b></td></tr>
+  </table></div>
+  <ul class="pt">
+    <li>想<b>快速上手、不想管安裝與環境</b>：NotebookLM 技術門檻低，是首選。</li>
+    <li>在意<b>資料是否外流、想自選模型或需要本地跑</b>：AnythingLLM 資料控制與模型彈性都更高，但要花時間走完七步驟安裝與環境設定。</li>
+  </ul>
+  <div class="note purple">💬 學員 Jun 在聊天室問「資安問題比較小嗎？」，正好對應這張表的「資料控制」一列——這也是本集反覆強調的核心取捨，詳見「7. 課堂問答精華」。</div>
+</section>
+
+<!-- 6 應用情境 -->
+<section class="chapter" id="sec-scenario">
+  <span class="chip" style="background:linear-gradient(90deg,var(--cyan),var(--pink))">CHAPTER 05 · 官方簡報</span>
+  <h2 class="ct">6. 應用情境</h2>
+  <p class="cd">官方簡報在介紹完 AnythingLLM 後，接著示範一個實際應用（會議錄音），並延伸帶到兩個對照工具：騰訊文檔、UniNotebook。</p>
+
+  <h3 id="sc-meeting">6.1 應用：會議錄音</h3>
+  <p>簡報第 12 頁以「應用－會議錄音」為題，示範把會議錄音交給 AnythingLLM 處理（連結同樣指向 <a href="https://anythingllm.com/" target="_blank" rel="noopener">anythingllm.com</a>）。搭配聊天室紀錄，這正是安裝完成後第一批學員最想知道的實戰場景：<b>把公司會議錄音丟進本地知識庫，事後用問答方式檢索重點</b>，資料全程留在自己的環境裡不外流。</p>
+
+  <h3 id="sc-qq">6.2 騰訊文檔（對照工具）</h3>
+  <ul class="pt">
+    <li><b>可上傳整個資料夾／檔案</b>。</li>
+    <li>雲端文件協作平台，支援<b>即時多人協作</b>。</li>
+    <li>具備<b>模板與資料收集功能</b>。</li>
+    <li>官方簡報連結：<a href="https://docs.qq.com/desktop/" target="_blank" rel="noopener">docs.qq.com/desktop</a>。</li>
+  </ul>
+
+  <h3 id="sc-uni">6.3 UniNotebook（對照工具）</h3>
+  <ul class="pt">
+    <li>定位是「<b>AI 筆記 → 知識庫化</b>」的雲端工具。</li>
+    <li>支援<b>對話式筆記</b>與<b>多來源資料整合</b>。</li>
+    <li>底層同樣用<b>語意檢索（RAG）</b>。</li>
+    <li>官方簡報連結：<a href="https://www.uninotebook.com/" target="_blank" rel="noopener">uninotebook.com</a>。</li>
+  </ul>
+  <div class="note blue">💡 這三個應用情境放在一起看的意義：<b>會議錄音</b>示範 AnythingLLM 的本地化優勢；<b>騰訊文檔</b>示範雲端協作型知識工具；<b>UniNotebook</b>示範另一款輕量對話式筆記知識庫。三者剛好對應本集主軸「同樣是知識庫，你要選雲端協作、本地私有、還是輕量筆記」。</div>
+</section>
+
+<!-- 7 課堂問答精華 -->
+<section class="chapter" id="sec-qa">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--amber))">CHAPTER 06 · 聊天室實錄</span>
+  <h2 class="ct">7. 課堂問答精華（直播聊天室真實留言整理）</h2>
+  <p class="cd">以下內容整理自 EP30 直播<b>聊天室文字紀錄</b>，是學員即時發問、以及「<b>賴炳樹（AI）</b>」在聊天室即時回覆的真實對話，<b>非事後改寫</b>，發言者與內容均如實摘錄。</p>
+
+  <div class="qa">
+    <div class="q"><span class="who">charlie Wells</span>OCR 是什麼？</div>
+    <div class="a"><span class="who ai">賴炳樹（AI）</span>光學字元辨識（OCR）。</div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="who">charlie Wells</span>老師，在使用簡報的時候已經很清楚告知要 20 頁（提示詞也是下 20 頁），但是總是失敗，老師有這樣的經驗嗎？（另一位學員也回報：「因為有生成 20 張簡報的經驗，但真的會嘗試好幾次才成功」）</div>
+    <div class="a"><span class="who ai">賴炳樹（AI）</span>NotebookLM 一次產生的簡報通常最多相當於 15 頁，即使你寫「請產生 20 頁簡報」，系統仍然會自動「斷掉」或「少於 20 頁」，甚至在某些情況下直接失敗。試試分段結構提示：</div>
+    <div class="prompt">「請先幫我產生簡報前半段：1. 背景介紹、2. 問題分析、3. 理論基礎，請用10張簡報提供。」
+「再幫我產生後半段：4. 實務案例、5. 結論與建議，請用10張簡報提出。」</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">多位學員實測回報（Walker Dreaming、李芷儀等）：安裝完成、輸入「你好」後出現錯誤訊息。</div>
+    <div class="a">畫面顯示：<code>Could not respond to message. model requires more system memory (9.8 GiB) than is available (7.2 GiB)</code>（另有學員顯示 6.5 GiB 可用）；謝秋燕的畫面則顯示 <code>model 'qwen3-v1:4b-instruct' not found</code>。Shuan Wu 在聊天室補充判斷：「電腦容量不夠，沒有完整裝好模型」；Genna Lee 也回報「他回答的字一個一個吐字……我的跑好慢，顯卡太弱」；charlie Wells 感嘆「現在記憶體好貴」。</div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="who">Macro Chen</span>老師，安裝到出現了「Do you want to download the Meeting Assistant model? This will take approximately 2GB of disk space and will allow you to start using the Meeting Assistant immediately.」請問要安裝嗎？（Venus C 也追問：「meeting assistant model 是什麼，好像要另外的 2GB」）</div>
+    <div class="a">這是安裝過程中真實會跳出的選項：AnythingLLM 會另外詢問是否下載約 <b>2GB</b> 的「Meeting Assistant」模型。這一步<b>非必要</b>，磁碟空間或網路較吃緊的學員可以先略過（Shuan Wu 之後也在聊天室問「剛剛略過了，要怎麼把助理裝回來」，顯示這是可以事後再補裝的選配功能）。</div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="who">Shuan Wu</span>想請問老師 open notebook 跟 Anything LLM 比較推薦哪一個？<br><span class="who">ANNA</span>老師：請問 NOTEBOOK & ANYTHING，您會交叉使用嗎？還是偏向哪一個？可以建議我們做什麼樣的工作流，可以直接使用 ANYTHING？<br><span class="who">Jun</span>資安問題比較小嗎？</div>
+    <div class="a">這幾則提問聚焦在同一個核心取捨（對應第 5 章比較表的「資料控制」一列），但聊天室文字紀錄中<b>只留下學員的提問文字，未查到對應的書面回覆紀錄</b>（現場很可能是老師口頭直接回答，未打字留存）。<b>本頁誠實標示這個資訊缺口，不代替老師杜撰答案</b>；讀者若需要正式回覆，建議對照本頁錄影回放中對應時段的口說內容。</div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="who">范詩靈</span>請問老師 anything 如在 Linux 上的話也是要有圖形介面嗎？</div>
+    <div class="a">聊天室紀錄同樣<b>未留下對應的書面回覆</b>，如實標註此提問尚待補充正式回答。</div>
+  </div>
+
+  <div class="golden"><div class="q">「電腦容量不夠，沒有完整裝好模型。」</div><div class="a">—— 學員 Shuan Wu 對記憶體不足錯誤的現場判讀，也是本地化 AI 工具最真實的門檻</div></div>
+</section>
+
+<!-- 8 檢核 -->
+<section class="chapter" id="sec-check">
+  <span class="chip" style="background:linear-gradient(90deg,var(--amber),var(--pink))">SELF CHECK</span>
+  <h2 class="ct">8. 課後自我檢核</h2>
+  <p class="cd">都對應本集官方簡報與課堂問答真的涵蓋過的內容。可到<a href="ep30-ai-skills.html">互動技能地圖</a>逐項打勾。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:130px">主題</th><th>你應該做得到…</th></tr>
+    <tr><td>📄 NotebookLM</td><td>① 知道新版可直接上傳 pptx（限 200MB／份）　② 知道什麼情況仍要用「早期作法 + PDF」　③ 說出三種應用情境（風格轉換／問知識／AI 助教交叉分析）</td></tr>
+    <tr><td>🖥️ AnythingLLM</td><td>① 說出它是本地化 / 私有化 RAG 知識庫平台　② 列出五項核心功能　③ 找到官網 anythingllm.com 完成安裝　④ 安裝前先評估電腦記憶體是否足夠</td></tr>
+    <tr><td>⚖️ 比較與選擇</td><td>① 用「部署方式／資料控制／模型彈性／技術門檻」四維度比較兩者　② 能依情境判斷該選 NotebookLM 還是 AnythingLLM</td></tr>
+    <tr><td>🎯 應用情境</td><td>① 想出至少一個可用 AnythingLLM 處理的會議或文件場景　② 認識騰訊文檔、UniNotebook 作為對照工具　③ 知道「Meeting Assistant」是安裝時的選配模型（約 2GB）</td></tr>
+  </table></div>
+</section>
+
+<!-- 9 來源 -->
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,var(--ink3),var(--ink2))">SOURCES</span>
+  <h2 class="ct">9. 資料來源與製作說明</h2>
+  <ul class="pt">
+    <li><b>原始教材一：</b>官方簡報《AnythingLLM (NotebookLM平替版)》全文 14 頁（含表格），以 Google Drive 讀取工具逐句擷取，內容涵蓋 NotebookLM pptx 上傳新功能、AnythingLLM 介紹與核心功能、安裝步驟 1–7 標題、比較表、應用情境（會議錄音／騰訊文檔／UniNotebook）。</li>
+    <li><b>原始教材二：</b>EP30 直播<b>聊天室文字紀錄</b>（Google 文件），內容為學員即時發問與「賴炳樹（AI）」即時回覆的真實留言，本頁「7. 課堂問答精華」逐句摘錄、標明真實發言者，未加入未曾出現過的對話。</li>
+    <li><b>誠實聲明——安裝步驟畫面缺口：</b>官方簡報中「安裝步驟 1–7」在原始檔案裡是<b>畫面截圖（圖片）</b>，文字擷取工具只能取得投影片標題與連結，<b>無法讀出截圖裡的操作說明文字</b>，本頁不推測、不杜撰每一步實際內容；如需逐步安裝畫面，請直接開啟原始簡報或播放本頁錄影回放對照，或到官網 anythingllm.com 下載頁查看最新安裝流程。</li>
+    <li><b>誠實聲明——未逐幀抽格錄影：</b>本集<b>沒有</b>下載錄影並逐幀抽格。依 CLAUDE.md 專案規則，優先嘗試不需下載大檔的解套方式；本集官方簡報全文＋聊天室真實問答紀錄兩份素材已能涵蓋教學重點與真實課堂互動，故未執行「curl 下載 703MB～級大檔 → ffmpeg 抽格」流程。錄影連結仍完整保留在「0. 課程資訊」供讀者自行播放核對畫面細節。</li>
+    <li><b>誠實聲明——部分提問無書面回覆：</b>聊天室紀錄中「open notebook 與 AnythingLLM 怎麼選」「Linux 是否需要圖形介面」等提問，目前只查得到學員提問文字，<b>未查到對應的書面回覆紀錄</b>（可能為老師口頭回答、未留文字），本頁在「7. 課堂問答精華」如實標示此缺口，未代為杜撰答案。</li>
+    <li><b>介面參考：</b>本頁沿用本站既有課堂筆記頁的版面架構（米白紙感、sticky 目錄、章節卡片），與互動技能地圖頁的深色風格互為配套使用。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  EP30「AnythingLLM (NotebookLM平替版)」課堂筆記・2026/07 整理<br>
+  🍀 Learn AI with Tarshar｜搭配 <a href="ep30-ai-skills.html">互動技能地圖</a> 使用效果最佳
+</footer>
+
+</body>
+</html>

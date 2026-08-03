@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP6 課堂筆記｜一次掌握 n 種 Prompt 模式：ChatHub 整合生成一次上手</title>
+<meta name="description" content="晨學講堂 EP6 課堂筆記：Prompt三大核心要素、RTF／TAG／APE／ERA基礎框架、RACE／CO-STAR／RISEN／RODES／CREATE／CRISPE進階框架、行銷框架與高階推理技術、框架選擇指南、ChatHub整合實戰流程。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#6b4fd6; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px;border-left:none}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.prompt{position:relative;background:#1d1d1f;border-radius:10px;padding:15px 16px;margin:12px 0;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt .tag{display:inline-block;font-size:11px;letter-spacing:.06em;color:#c9c4ff;border:1px solid #3a3a40;border-radius:6px;padding:2px 9px;margin-bottom:8px}
+.svgwrap{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg{display:block;width:100%;height:auto}
+.svgwrap figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#c9bdf0" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP6 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="ep6-ai-skills.html">🗺️ 互動地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 晨學講堂 · EP6</span>
+  <h1>一次掌握 <span>n 種 Prompt 模式</span><br>ChatHub 整合生成一次上手</h1>
+  <p class="lead">學 Prompt 公式最常見的誤區，就是想找一套「萬能框架」——但實務上沒有任何一套能解決所有問題。EP6 帶你認識超過 <b>20 種主流 Prompt 框架</b>（RTF 到 CRISPE、DEPTH），再學會怎麼在 <b>ChatHub</b> 裡整合多模型、疊加框架，建立自己的「黃金 Prompt」詞庫。</p>
+  <div class="meta">
+    <span>📅 2025/12/26 直播</span>
+    <span>🗂️ 教材：官方課程簡報</span>
+    <span>🧩 主題：Prompt 公式</span>
+    <span>🔗 ChatHub 整合</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-core">1. Prompt 三大核心要素</a>
+  <a href="#sec-basic">2. 基礎框架：RTF／TAG／APE／ERA</a>
+  <a href="#sec-advanced">3. 進階情境框架六選</a>
+  <a href="#sec-marketing">4. 行銷框架＋高階推理技術</a>
+  <a href="#sec-guide">5. 框架選擇指南</a>
+  <a href="#sec-chathub">6. ChatHub 整合實戰流程</a>
+  <a href="#sec-shortcut">7. 快捷指令與最佳實踐</a>
+  <a href="#sec-src">8. 資料來源與製作說明</a>
+</nav>
+
+<article>
+
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--purple))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>EP6_一次掌握 n 種 Prompt 模式：ChatHub 整合生成一次上手</td></tr>
+    <tr><th>頻道</th><td>生成式 AI 應用電台・晨學講堂（黃老師）</td></tr>
+    <tr><th>直播日期</th><td>2025/12/26（五）晚間直播</td></tr>
+    <tr><th>教材</th><td>官方課程簡報＋補充《Prompt公式完整清單》</td></tr>
+    <tr><th>一句話先懂</th><td>Prompt Engineering 不是背誦公式，而是邏輯的藝術——從「指令給予」進化到「情境模擬」與「元認知迭代」。</td></tr>
+  </table></div>
+  <div class="note blue">💡 本頁依<b>官方課程簡報文字全文</b>整理（真實課程內容）；示範操作的螢幕畫面與逐字稿時間碼待日後取得錄影授權後再補入。</div>
+</section>
+
+<section class="chapter" id="sec-core">
+  <span class="chip" style="background:linear-gradient(90deg,#6b4fd6,#5645D4)">CHAPTER 01</span>
+  <h2 class="ct">1. Prompt 三大核心要素與結構化提示詞的價值</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">要素</th><th>核心功能</th></tr>
+    <tr><td>Role 角色</td><td>激活模型內部特定知識集群，設定視角與專業領域；定義 AI 的身份與立場。</td></tr>
+    <tr><td>Task 任務</td><td>指令的動詞核心，決定運算資源分配；明確告知 AI 需要執行的具體動作。</td></tr>
+    <tr><td>Format 呈現</td><td>控制輸出的序列化形式，影響結果品質；規範輸出的結構、風格與長度。</td></tr>
+  </table></div>
+  <p><b>The Reality：</b>大型語言模型本質上是基於概率的文字接龍，缺乏內在的邏輯意圖；隨意的非結構化提示往往導致模型輸出「平均化」的平庸回應。<b>The Solution：</b>結構化公式提供明確的語義錨點，鎖定模型注意力、減少隨機性，確保產出的可複製性與一致性。</p>
+  <div class="golden"><div class="q">「從『指令給予』進化到『情境模擬』與『元認知迭代』。」</div><div class="a">—— 課程金句</div></div>
+</section>
+
+<section class="chapter" id="sec-basic">
+  <span class="chip" style="background:linear-gradient(90deg,#5645D4,#3b6bb0)">CHAPTER 02</span>
+  <h2 class="ct">2. 基礎框架總覽：RTF／TAG／APE／ERA</h2>
+  <p class="cd">特點：結構精簡、適用日常辦公、強調速度與核心意圖。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:90px">框架</th><th style="width:200px">全稱</th><th>適用場景／範例</th></tr>
+    <tr><td>RTF</td><td>Role, Task, Format</td><td>最基礎的提示工程 MVP。例：「你是一位專業的翻譯員，將這段文字翻譯成法文，以表格形式呈現對照。」適合快速查詢、翻譯、簡單寫作。</td></tr>
+    <tr><td>TAG</td><td>Task, Action, Goal</td><td>目標導向框架。任務：評估行銷文案；行動：識別薄弱論點；目標：提高點擊率。核心價值：告知 AI「為什麼」，讓模型自行調整策略。</td></tr>
+    <tr><td>APE</td><td>Action, Purpose, Expectation</td><td>簡單任務的終極解法。Action：撰寫部落格介紹；Purpose：吸引讀者；Expectation：50-100 字簡潔介紹。適合內容創作、客戶服務。</td></tr>
+    <tr><td>ERA</td><td>Expectation, Role, Action</td><td>極簡任務、快速問答、直覺式指令。</td></tr>
+  </table></div>
+</section>
+
+<section class="chapter" id="sec-advanced">
+  <span class="chip" style="background:linear-gradient(90deg,#3b6bb0,#b25269)">CHAPTER 03</span>
+  <h2 class="ct">3. 進階情境框架：RACE／CO-STAR／RISEN／RODES／CREATE／CRISPE</h2>
+  <p class="cd">核心價值：引入「背景（Context）」與「限制（Constraints）」，確保模型理解任務深層邏輯。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:90px">框架</th><th style="width:220px">全稱</th><th>特點</th></tr>
+    <tr><td>RACE</td><td>Role, Action, Context, Expectation</td><td>RTF 的進化版本，加入 Context（品牌風格、目標受眾）與 Expectation（格式限制）。</td></tr>
+    <tr><td>CO-STAR</td><td>Context, Objective, Style, Tone, Audience, Response</td><td>最全面的設計框架，區分 Style（風格）與 Tone（語氣），實現精細控制。</td></tr>
+    <tr><td>RISEN</td><td>Role, Instructions, Steps, End goal, Narrowing</td><td>多步驟任務最佳選擇；Narrowing（限縮）是控制模型發散、聚焦核心任務的關鍵機制。</td></tr>
+    <tr><td>RODES</td><td>Role, Objective, Details, Examples, Sense Check</td><td>引入感知檢查的前瞻框架，將單向指令轉為雙向對話，降低誤解。</td></tr>
+    <tr><td>CREATE</td><td>Character, Request, Examples, Adjustments, Type, Extras</td><td>複雜任務的結構化解法，特別強調 Adjustments（調整）與 Extras（額外資訊）。</td></tr>
+    <tr><td>CRISPE</td><td>Capacity&Role, Request, Insight, Statement, Personality, Experiment</td><td>打造完整創意生成的六大支柱；Experiment（實驗）鼓勵生成多樣化選項，適合創意發想。</td></tr>
+  </table></div>
+  <div class="note blue">💡 還有更多框架：SCOPE（複雜專案規劃）、CRAFT（內容創作）、BROKE（商業分析）、BRIEF（快速簡報）、CHAT（研究假設驗證）、PAIN（故障排除）、ROSES（複雜情境解題）、TRACE（流程追蹤）。</div>
+</section>
+
+<section class="chapter" id="sec-marketing">
+  <span class="chip" style="background:linear-gradient(90deg,#b25269,#9c7b23)">CHAPTER 04</span>
+  <h2 class="ct">4. 行銷框架＋高階推理技術</h2>
+  <h3>行銷與社群媒體專用框架</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:90px">框架</th><th style="width:200px">全稱</th><th>適合</th></tr>
+    <tr><td>AIDA</td><td>Attention, Interest, Desire, Action</td><td>最經典銷售漏斗模型，適合著陸頁（Landing Page）。</td></tr>
+    <tr><td>PAS</td><td>Problem, Agitation, Solution</td><td>提出問題、激化痛點、給出解方，適合高轉化銷售文案。</td></tr>
+    <tr><td>BAB</td><td>Before, After, Bridge</td><td>描述現狀與理想落差並搭橋，適合客戶見證、案例故事。</td></tr>
+    <tr><td>FAB</td><td>Features, Advantages, Benefits</td><td>從功能延伸到優勢再到利益，適合電商產品描述。</td></tr>
+  </table></div>
+  <h3>高階推理技術</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">技術</th><th>說明</th></tr>
+    <tr><td>Zero-shot</td><td>不提供任何範例，直接要求模型回答，依賴預訓練的通用知識。</td></tr>
+    <tr><td>Few-shot</td><td>提供少量（1-3 個）範例作為上下文，引導模型學習特定輸入輸出模式。</td></tr>
+    <tr><td>CoT 思維鏈</td><td>要求模型「一步步思考」，將複雜問題拆解為中間推理步驟。適用數學計算、邏輯推理。</td></tr>
+    <tr><td>ToT 思維樹</td><td>引導模型探索多種推理路徑並評估決策，選擇最佳解。適用複雜規劃、創意發想。</td></tr>
+    <tr><td>ReAct</td><td>結合推理與行動，允許模型在思考中調用外部工具：Thought → Action → Observation。</td></tr>
+    <tr><td>Self-consistency</td><td>採樣多條不同推理路徑，選擇出現頻率最高的一致性答案（Majority Vote）。</td></tr>
+  </table></div>
+</section>
+
+<section class="chapter" id="sec-guide">
+  <span class="chip" style="background:linear-gradient(90deg,#9c7b23,#0d8f80)">CHAPTER 05</span>
+  <h2 class="ct">5. 框架選擇指南：依任務屬性與複雜度精準選用</h2>
+  <div class="svgwrap">
+    <svg viewBox="0 0 700 300" xmlns="http://www.w3.org/2000/svg">
+      <rect width="700" height="300" fill="#fff"/>
+      <g font-family="sans-serif" font-size="12" fill="#191919">
+        <line x1="350" y1="20" x2="350" y2="280" stroke="#E7E6E3"/>
+        <line x1="20" y1="150" x2="680" y2="150" stroke="#E7E6E3"/>
+        <text x="30" y="40" fill="#5f5f5f">高複雜度</text>
+        <text x="600" y="40" fill="#5f5f5f">低複雜度</text>
+        <text x="30" y="270" fill="#5f5f5f">創意發散</text>
+        <text x="600" y="270" text-anchor="end" fill="#5f5f5f">精確結構</text>
+        <text x="90" y="90" font-weight="700" fill="#6b4fd6">深度創作</text>
+        <text x="90" y="108" font-size="11" fill="#5f5f5f">CRISPE／CREATE／CO-STAR</text>
+        <text x="440" y="90" font-weight="700" fill="#6b4fd6">邏輯分析</text>
+        <text x="440" y="108" font-size="11" fill="#5f5f5f">RISEN／ROSES／SCOPE</text>
+        <text x="90" y="220" font-weight="700" fill="#6b4fd6">快速發想</text>
+        <text x="90" y="238" font-size="11" fill="#5f5f5f">APE／RTF</text>
+        <text x="440" y="220" font-weight="700" fill="#6b4fd6">精確執行</text>
+        <text x="440" y="238" font-size="11" fill="#5f5f5f">TAG／ERA／ICIO</text>
+      </g>
+    </svg>
+    <figcaption>框架選擇四象限：依「複雜度」與「創意 vs 結構」兩軸，快速找到適合的框架族群。</figcaption>
+  </div>
+  <ul class="pt">
+    <li><b>深度創作：</b>適合長篇寫作、行銷策劃、角色扮演等需要豐富細節與風格的任務。</li>
+    <li><b>邏輯分析：</b>適合程式開發、商業報告、複雜流程規劃等需要嚴謹邏輯與步驟的任務。</li>
+    <li><b>快速發想：</b>適合靈感激發、風格改寫、簡單草稿等需要快速產出多樣化結果的任務。</li>
+    <li><b>精確執行：</b>適合格式轉換、資料提取、明確問答等輸入輸出規則固定的任務。</li>
+  </ul>
+</section>
+
+<section class="chapter" id="sec-chathub">
+  <span class="chip" style="background:linear-gradient(90deg,#0d8f80,#3f8560)">CHAPTER 06</span>
+  <h2 class="ct">6. ChatHub 整合 Prompt 實戰流程</h2>
+  <p class="cd">ChatHub 是整合多個 AI 聊天機器人的一體化平台：同一視窗整合 GPT、Claude、Gemini 等多家模型，支援多模型切換與即時比較；可儲存與分類常用提示詞，支援一鍵套用、分享與管理。</p>
+  <ol class="st">
+    <li><b>建立個人化詞庫：</b>將 PTCF、CO-STAR 等常用框架存入 ChatHub「提示詞記憶倉庫」，設定快捷鍵一鍵調用。</li>
+    <li><b>多模型平行測試：</b>利用同步發送功能，將同一 Prompt 同時發給 GPT-4、Claude 3、Gemini 等模型，觀察理解差異。</li>
+    <li><b>迭代與混合使用：</b>根據測試結果修正 Prompt，嘗試「混合打法」（例如用 CO-STAR 設定語氣，再用 RISEN 規範步驟），將優化後的「黃金 Prompt」存回詞庫。</li>
+  </ol>
+  <h3>框架組合策略（1+1 > 2）</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:200px">組合</th><th>效果</th></tr>
+    <tr><td>CO-STAR ＋ CoT</td><td>深度商業分析：報告面向完整、論點推演嚴密，適合決策支援。</td></tr>
+    <tr><td>RISEN ＋ Few-shot</td><td>精準格式輸出：嚴格遵循步驟並以範例鎖定風格，適合程式碼或公文。</td></tr>
+    <tr><td>CRISPE ＋ Narrowing</td><td>高可用性創意：發散後收斂，避免幻覺，產出可落地方案。</td></tr>
+  </table></div>
+</section>
+
+<section class="chapter" id="sec-shortcut">
+  <span class="chip" style="background:linear-gradient(90deg,#3f8560,#6b4fd6)">RECAP</span>
+  <h2 class="ct">7. 快捷指令與最佳實踐</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:90px">指令</th><th>功能</th></tr>
+    <tr><td>/tw</td><td>將英文或其他語言內容專業翻譯成繁體中文。</td></tr>
+    <tr><td>/en</td><td>將繁體中文內容專業翻譯成英文，適合回覆外國客戶。</td></tr>
+    <tr><td>/grammar</td><td>修正行政文件或郵件語法錯誤，保持正式專業。</td></tr>
+    <tr><td>/simplify</td><td>將冗長複雜的內容簡化重寫，語意更清楚易懂。</td></tr>
+    <tr><td>/formal</td><td>將內容改寫成更正式、專業的語氣，適合公文。</td></tr>
+  </table></div>
+  <h3>四項核心原則</h3>
+  <ol class="st">
+    <li><b>建立框架庫：</b>不要死記硬背，將常用框架整理至筆記軟體或 ChatHub 詞庫，隨時調用。</li>
+    <li><b>持續迭代：</b>沒有完美的 Prompt，根據 AI 回應不斷微調，記錄效果最好的版本。</li>
+    <li><b>實證驗證：</b>理論不如實戰，在真實工作場景測試不同框架效果。</li>
+    <li><b>靈活組合：</b>不要被框架綁架，根據需求靈活拆解、重組不同框架的元素。</li>
+  </ol>
+  <div class="golden"><div class="q">「從模仿到超越，建立屬於你的 AI 溝通系統，讓每一次對話都成為生產力的基石。」</div><div class="a">—— 課程收尾金句</div></div>
+</section>
+
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5a5866)">SOURCES</span>
+  <h2 class="ct">8. 資料來源與製作說明</h2>
+  <ul class="pt">
+    <li><b>原始教材：</b>EP6「一次掌握 n 種 Prompt 模式：ChatHub 整合生成一次上手」官方課程簡報全文，補充《Prompt公式完整清單》。</li>
+    <li><b>製作方式：</b>逐節對照官方簡報可讀文字整理，框架定義與範例<b>取自簡報原文</b>，圖解為自製 SVG。內容為<b>真實課程內容</b>。</li>
+    <li><b>誠實聲明：</b>本頁以簡報實錄為準；本集資料夾錄影檔案暫僅供擁有者存取，<b>示範操作畫面與逐字稿時間碼</b>待開放授權或網路政策開通後補入。ChatHub 介面與模型清單會持續更新，以你使用當下的官方頁面為準。</li>
+    <li><b>介面參考：</b>互動地圖頁沿用本站 EP38–46 的卡片式多層導覽與遊戲化進度設計。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  EP6「一次掌握 n 種 Prompt 模式：ChatHub 整合生成一次上手」課堂筆記・2026/07 整理<br>
+  🍀 Learn AI with Tarshar｜搭配 <a href="ep6-ai-skills.html">互動地圖</a> 使用效果最佳
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP29 課堂筆記｜會議紀錄字幕工作流：從逐字稿到結構化 YAML 指令</title>
+<meta name="description" content="晨學講堂 EP29 逐節課堂筆記：語音轉文字工具比較（Gemini／NotebookLM／Google AI Studio／雅婷／Word／Otter.ai）、逐字稿加時間戳、整理成問題與決策、會議紀錄生成、VTT 字幕製作（每段不超過3秒）、YouTube 字幕流程、NotebookLM 會議分析，以及後半段從一句提示詞升級到結構化 YAML 指令的五大應用，含官方簡報原圖與課堂逐字稿逐句佐證">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#2f8ba0; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px;border-left:none}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+.note.violet{background:#F3EFFB;border-color:#DFD2F0;color:#5a34a8}
+.note.rose{background:#FBEEF1;border-color:#F0D2DB;color:#9c2f52}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.prompt{position:relative;background:#1d1d1f;border-radius:10px;padding:15px 16px;margin:12px 0;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt .tag{display:inline-block;font-size:11px;letter-spacing:.06em;color:#c9c4ff;border:1px solid #3a3a40;border-radius:6px;padding:2px 9px;margin-bottom:8px}
+.prompt b{color:#fff}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.embed{margin:14px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000}
+.embed iframe{display:block;width:100%;aspect-ratio:16/9;border:0}
+.embed .cap{font-size:12.5px;color:var(--ink3);padding:10px 16px;background:var(--paper);border-top:1px solid var(--line)}
+.ts{display:inline-block;font-family:"Cascadia Code",Consolas,monospace;font-weight:700;font-size:12px;color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,#fff);border-radius:5px;padding:2px 8px;margin-right:7px;letter-spacing:.4px;vertical-align:middle}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+.layers{display:grid;gap:10px;margin:14px 0}
+.lyr{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:13px 15px;background:#fff}
+.lyr .n{flex:none;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--accent)}
+.lyr h4{margin:0 0 3px;font-size:14.5px}
+.lyr p{font-size:13px;margin:0}
+.sub{color:var(--ink2)}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#0aa6c9" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP29 課堂筆記（逐節實錄）</b>
+  <div class="right">
+    <a class="btn" href="ep29-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 晨學講堂 · EP29</span>
+  <h1>會議紀錄字幕工作流<br><span>從逐字稿到結構化 YAML 指令</span></h1>
+  <p class="lead">本頁對照<b>官方課程簡報《EP29_會議紀錄字幕工作流.pptx》</b>、<b>課堂筆記 PDF（EP29語音轉會議記錄筆記）</b>與<b>課堂錄影完整逐字稿（Copy of WEBVTT.vtt，含時間戳）</b>三份真實素材整理而成。老師先用「苦哈哈的紀錄員 → 主動駕馭 AI 的高手」破題，帶大家把<b>錄音→逐字稿→整理→會議紀錄→字幕</b>全流程自動化；後半段再把提示詞升級成<b>結構化 YAML 指令</b>，示範文字、圖像、資訊圖表、報告、AI Agent 工作流五種應用。</p>
+  <div class="meta">
+    <span>📅 2026/03/13（五）20:00 CST 直播</span>
+    <span>🧩 主題：會議紀錄字幕工作流</span>
+    <span>🤖 工具：Gemini・NotebookLM・Google AI Studio</span>
+    <span>📄 逐字稿全長 07:34</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-map">1. 一頁看懂全課程</a>
+  <a href="#sec-tools">2. 語音轉文字工具比較</a>
+  <a href="#sec-transcript">3. 錄音轉逐字稿＋時間戳</a>
+  <a class="sub" href="#t-rule">3.1 逐字稿格式規則</a>
+  <a class="sub" href="#t-prompt">3.2 轉錄 Prompt 範本</a>
+  <a href="#sec-organize">4. 逐字稿整理與會議紀錄</a>
+  <a class="sub" href="#o-clean">4.1 整理成問題與決策</a>
+  <a class="sub" href="#o-minutes">4.2 會議紀錄生成</a>
+  <a href="#sec-subtitle">5. 字幕（VTT）生成與 YouTube 流程</a>
+  <a class="sub" href="#s-rule">5.1 斷句規則：每段不超過 3 秒</a>
+  <a class="sub" href="#s-demo">5.2 Google AI Studio 實機示範</a>
+  <a class="sub" href="#s-youtube">5.3 YouTube／雲端字幕軌流程</a>
+  <a href="#sec-auto">6. NotebookLM 分析與自動化系統</a>
+  <a class="sub" href="#a-nlm">6.1 NotebookLM 會議分析</a>
+  <a class="sub" href="#a-flow">6.2 完整 AI 會議自動化流程圖</a>
+  <a href="#sec-yaml">7. 進階：從一句提示詞到結構化 YAML</a>
+  <a class="sub" href="#y-why">7.1 為什麼要 YAML</a>
+  <a class="sub" href="#y-when">7.2 什麼時候用、什麼時候不用</a>
+  <a class="sub" href="#y-apps">7.3 五大應用實例</a>
+  <a href="#sec-check">8. 課後自我檢核</a>
+  <a href="#sec-src">9. 資料來源與製作說明</a>
+</nav>
+
+<article>
+
+<!-- 0 課程資訊 -->
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--purple))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>EP29「會議紀錄字幕工作流」（AI 語音轉文字與會議紀錄工作流：Gemini × NotebookLM × Google AI Studio）</td></tr>
+    <tr><th>頻道</th><td>生成式 AI 應用電台・晨學講堂</td></tr>
+    <tr><th>直播日期</th><td>2026/03/13（五）20:00–21:30 CST</td></tr>
+    <tr><th>一句話先懂</th><td>把<b>錄音檔 → 語音轉文字 → 逐字稿（含時間戳）→ 整理重點 → 會議紀錄 → 字幕（VTT）</b>這一長串苦工，交給 AI 一步步自動化；學會之後再把提示詞升級成<b>結構化 YAML 指令</b>，讓輸出格式每次都精準重現。</td></tr>
+    <tr><th>教學結構</th><td>開場破題（苦哈哈紀錄員 → 主動駕馭 AI 高手）→ 四大部分：①AI 自動化會議 ②結構化指令的威力 ③用 YAML 打造內容 ④設計更複雜的 AI 工作流程。</td></tr>
+    <tr><th>示範案例</th><td>用 <b>Google AI Studio</b> 上傳影片、下指令「產生逐字稿並翻譯為中文、輸出可下載 .vtt、每段不超過 3 秒」，現場產出時間碼對齊的 VTT 字幕檔；並示範 Google 雲端「管理字幕軌」自動生成英文字幕，與 NotebookLM 的字幕/摘要功能。</td></tr>
+  </table></div>
+
+  <h3>🎬 錄影回放（可直接播放）</h3>
+  <div class="embed">
+    <iframe src="https://drive.google.com/file/d/1oesyFmt3GKHDr4osP9ZErpUk3WGRvR_i/preview" allow="autoplay" loading="lazy" title="EP29 錄影回放"></iframe>
+    <div class="cap">EP29_會議紀錄 字幕工作流 課堂錄影（約 2030–2130）— 需登入可觀看的 Google 帳號。</div>
+  </div>
+  <div class="note blue">💡 本頁文字內容對照三份真實素材：<b>官方課程簡報</b>原文與內嵌截圖（直接取自簡報檔 <code>ppt/media/</code> 原圖，非影片抽幀）、<b>課堂筆記 PDF</b> 九大概念，以及<b>課堂逐字稿</b>（Copy of WEBVTT.vtt）逐句時間戳。引號內文字均取自逐字稿原句，未經改寫。</div>
+</section>
+
+<!-- 1 全景 -->
+<section class="chapter" id="sec-map">
+  <span class="chip" style="background:linear-gradient(90deg,var(--cyan),var(--blue))">OVERVIEW</span>
+  <h2 class="ct">1. 一頁看懂全課程</h2>
+  <p class="cd">老師開場用一句話定調：把每次開完會「一個字一個字 key 字幕」的苦工，換成一條可重複執行的 AI 工作流；後半段再教你怎麼用<b>結構化 YAML</b>把這條工作流「寫死」成隨時可重複使用的指令。</p>
+  <figure class="diagram">
+    <svg viewBox="0 0 920 460" xmlns="http://www.w3.org/2000/svg" font-family="'Noto Sans TC',sans-serif">
+      <defs>
+        <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0aa6c9"/><stop offset="1" stop-color="#2f6df0"/></linearGradient>
+        <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1d9e6f"/><stop offset="1" stop-color="#0aa6c9"/></linearGradient>
+        <linearGradient id="g3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d4508e"/><stop offset="1" stop-color="#7a4fd6"/></linearGradient>
+        <linearGradient id="g4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c98a0a"/><stop offset="1" stop-color="#d4508e"/></linearGradient>
+        <linearGradient id="g5" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7a4fd6"/><stop offset="1" stop-color="#0aa6c9"/></linearGradient>
+        <marker id="arw" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#b9b3d9"/></marker>
+      </defs>
+      <rect width="920" height="460" fill="#fbfcff"/>
+      <text x="460" y="38" text-anchor="middle" font-size="20" font-weight="900" fill="#2b2a33">EP29 · 會議紀錄字幕工作流 — 全景地圖</text>
+      <text x="460" y="60" text-anchor="middle" font-size="12" fill="#8a879a">五步驟自動化（上排）→ 升級為結構化 YAML 指令（下排）</text>
+      <g>
+        <rect x="20" y="86" width="168" height="120" rx="14" fill="url(#g1)"/>
+        <text x="104" y="118" text-anchor="middle" font-size="15" font-weight="900" fill="#fff">🎙️ 錄音</text>
+        <text x="104" y="142" text-anchor="middle" font-size="11" fill="#e6f8ff">會議錄音檔</text>
+        <text x="104" y="160" text-anchor="middle" font-size="11" fill="#e6f8ff">Gemini／AI Studio</text>
+        <text x="104" y="178" text-anchor="middle" font-size="11" fill="#e6f8ff">NotebookLM／Otter</text>
+      </g>
+      <g>
+        <rect x="204" y="86" width="168" height="120" rx="14" fill="url(#g2)"/>
+        <text x="288" y="118" text-anchor="middle" font-size="15" font-weight="900" fill="#fff">📝 逐字稿</text>
+        <text x="288" y="142" text-anchor="middle" font-size="11" fill="#eafaf2">加時間戳 00:00:00</text>
+        <text x="288" y="160" text-anchor="middle" font-size="11" fill="#eafaf2">逐句顯示</text>
+        <text x="288" y="178" text-anchor="middle" font-size="11" fill="#eafaf2">段首標時間</text>
+      </g>
+      <g>
+        <rect x="388" y="86" width="168" height="120" rx="14" fill="url(#g1)"/>
+        <text x="472" y="118" text-anchor="middle" font-size="15" font-weight="900" fill="#fff">🧹 整理</text>
+        <text x="472" y="142" text-anchor="middle" font-size="11" fill="#e6f8ff">刪語助詞／重複句</text>
+        <text x="472" y="160" text-anchor="middle" font-size="11" fill="#e6f8ff">問題／回覆／決策</text>
+        <text x="472" y="178" text-anchor="middle" font-size="11" fill="#e6f8ff">依議題分段</text>
+      </g>
+      <g>
+        <rect x="572" y="86" width="168" height="120" rx="14" fill="url(#g3)"/>
+        <text x="656" y="118" text-anchor="middle" font-size="15" font-weight="900" fill="#fff">🗒️ 會議紀錄</text>
+        <text x="656" y="142" text-anchor="middle" font-size="11" fill="#fdeaf4">名稱／時間／出席</text>
+        <text x="656" y="160" text-anchor="middle" font-size="11" fill="#fdeaf4">討論事項</text>
+        <text x="656" y="178" text-anchor="middle" font-size="11" fill="#fdeaf4">決議事項</text>
+      </g>
+      <g>
+        <rect x="756" y="86" width="145" height="120" rx="14" fill="url(#g4)"/>
+        <text x="828" y="118" text-anchor="middle" font-size="15" font-weight="900" fill="#fff">🎬 字幕</text>
+        <text x="828" y="142" text-anchor="middle" font-size="11" fill="#fff5e6">VTT／每段≤3秒</text>
+        <text x="828" y="160" text-anchor="middle" font-size="11" fill="#fff5e6">中英字幕</text>
+        <text x="828" y="178" text-anchor="middle" font-size="11" fill="#fff5e6">上傳影片平台</text>
+      </g>
+      <line x1="188" y1="146" x2="204" y2="146" stroke="#b9b3d9" stroke-width="2.5" marker-end="url(#arw)"/>
+      <line x1="372" y1="146" x2="388" y2="146" stroke="#b9b3d9" stroke-width="2.5" marker-end="url(#arw)"/>
+      <line x1="556" y1="146" x2="572" y2="146" stroke="#b9b3d9" stroke-width="2.5" marker-end="url(#arw)"/>
+      <line x1="740" y1="146" x2="756" y2="146" stroke="#b9b3d9" stroke-width="2.5" marker-end="url(#arw)"/>
+      <line x1="460" y1="206" x2="460" y2="248" stroke="#b9b3d9" stroke-width="2.5" marker-end="url(#arw)"/>
+      <text x="460" y="234" text-anchor="middle" font-size="11.5" fill="#8a879a">但如果要「精準控制、每次都一樣、還要處理一百部影片」呢？</text>
+      <rect x="120" y="260" width="680" height="150" rx="16" fill="url(#g5)"/>
+      <text x="460" y="292" text-anchor="middle" font-size="16" font-weight="900" fill="#fff">🧩 升級：用結構化 YAML 指令取代口語提示詞</text>
+      <text x="220" y="326" text-anchor="middle" font-size="12" fill="#f1ecff">📄 文字生成</text>
+      <text x="330" y="326" text-anchor="middle" font-size="12" fill="#f1ecff">🎨 圖像生成</text>
+      <text x="460" y="326" text-anchor="middle" font-size="12" fill="#f1ecff">📊 資訊圖表</text>
+      <text x="590" y="326" text-anchor="middle" font-size="12" fill="#f1ecff">📑 報告編排</text>
+      <text x="700" y="326" text-anchor="middle" font-size="12" fill="#f1ecff">🤖 AI Agent 工作流</text>
+      <text x="460" y="358" text-anchor="middle" font-size="12.5" fill="#fff" font-weight="700">task／input／output 明確定義 → 沒有模糊空間、每次都可重複重現</text>
+      <text x="460" y="388" text-anchor="middle" font-size="11.5" fill="#e8def9">「白話文說『幫我翻譯』AI 還要猜語言；YAML 直接定義 task/input/output，指令超清晰。」</text>
+      <text x="460" y="440" text-anchor="middle" font-size="12" fill="#8a879a">動線：先跑完一次「五步驟自動化」→ 再學會用「YAML」把它變成可重複使用的模板</text>
+    </svg>
+    <figcaption>圖 1｜EP29 全景：錄音→逐字稿→整理→會議紀錄→字幕的五步驟自動化，再升級為結構化 YAML 指令的五大應用（依課堂逐字稿實際講述順序整理）</figcaption>
+  </figure>
+  <figure class="shot">
+    <img src="ep29-img/s01_cover.png" alt="EP29 官方簡報封面：咖啡拉花上的會議紀錄字幕工作流圖示" loading="lazy">
+    <figcaption>官方簡報封面圖：咖啡拉花上疊了整個工作流圖示——<b>🎙️收錄 → 📄記錄 → 🖥️轉錄／時間編碼 → 🎞️字幕製作/翻譯 → ✅審核/匯出</b>，一眼看懂本集主軸。</figcaption>
+  </figure>
+  <div class="golden"><div class="q">「讓你從一個苦哈哈的紀錄員，變身成一個可以主動駕馭 AI 的高手。」</div><div class="a">—— 課堂逐字稿 00:11 開場破題句</div></div>
+</section>
+
+<!-- 2 工具比較 -->
+<section class="chapter" id="sec-tools">
+  <span class="chip" style="background:linear-gradient(90deg,#0aa6c9,#1d9e6f)">CHAPTER 01 · 實錄</span>
+  <h2 class="ct">2. 語音轉文字工具比較</h2>
+  <p class="cd">逐字稿 <span class="ts">01:52</span>：「說到語音轉文字，市面上的工具真的超多的，你可能會想說到底要選哪一個？」老師先給一張總覽表，再用一張細節圖把每個工具的<b>免費分鐘限制</b>攤開來講清楚——這是選型最實際的依據。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">工具</th><th>定位（PDF 筆記／簡報）</th></tr>
+    <tr><td><b>Gemini</b>（一般免費版）</td><td>適合<b>短音訊快速轉錄</b>；免費版上傳音訊總長度約 10 分鐘，單次音檔限制約 10 分鐘／次；付費版可達 3 小時以上。</td></tr>
+    <tr><td><b>NotebookLM</b></td><td>適合<b>長資料整理分析</b>；免費分鐘限制未公開，主要依「上傳檔案大小與 token 限制」，官方未公布固定分鐘數。</td></tr>
+    <tr><td><b>Google AI Studio</b>（Gemini API）</td><td>可處理<b>長音訊</b>；無免費分鐘概念（API 計費），單次 prompt 音訊上限約 1M tokens ≈ 8.4 小時音訊／次。</td></tr>
+    <tr><td><b>雅婷逐字稿</b>（Yating）</td><td>常見逐字稿工具；免費分鐘限制約 3 分鐘試用，非常短，多數功能需購買時數。</td></tr>
+    <tr><td><b>Microsoft Word 聽寫／轉錄</b></td><td>免費分鐘限制 300 分鐘／月；Microsoft 365 提供 300 分鐘轉錄配額。</td></tr>
+    <tr><td><b>Otter.ai</b>（Free Basic）</td><td>免費分鐘限制 300 分鐘／月，單次音檔限制 30 分鐘／次錄音，超過 30 分鐘需切段或升級方案。</td></tr>
+  </table></div>
+  <figure class="shot">
+    <img src="ep29-img/s02_tool_minutes.png" alt="語音轉文字工具分鐘限制確認版2026年比較圖" loading="lazy">
+    <figcaption>官方簡報原圖「語音轉文字工具『分鐘限制』確認版 (2026)」：六個工具的免費分鐘數／單次音檔限制／備註一次列清楚，是選工具時最實用的一張圖。</figcaption>
+  </figure>
+  <div class="note blue">💡 逐字稿 <span class="ts">02:16</span> 原話：「比方說你只是偶爾需要處理一下很短的錄音，那免費版的 Gemini 就綽綽有餘了；但如果你是要處理那種長達好幾個小時的演講或訪談，那 Google AI Studio 的 API 絕對是你的首選。」——選型關鍵只有兩個：<b>錄音長度</b>與<b>使用頻率</b>。</div>
+</section>
+
+<!-- 3 逐字稿 -->
+<section class="chapter" id="sec-transcript">
+  <span class="chip" style="background:linear-gradient(90deg,#1d9e6f,#0aa6c9)">CHAPTER 02 · 實錄</span>
+  <h2 class="ct">3. 錄音轉逐字稿＋時間戳</h2>
+  <p class="cd">逐字稿 <span class="ts">01:42</span>：「第一，先把聲音錄下來；第二，丟給 AI 做語音轉文字。」錄音檔上傳至 AI 工具後即可生成完整逐字稿並附上時間戳——這是整條工作流的第一個關卡。</p>
+
+  <h3 id="t-rule">3.1 逐字稿格式規則（官方簡報 p7）</h3>
+  <ul class="pt">
+    <li><b>逐句顯示</b>語音內容，不要整段黏在一起。</li>
+    <li><b>每句加上時間戳記</b>，方便之後回頭核對錄音原文。</li>
+    <li>時間格式固定為 <b>00:00:00</b>，時：分：秒補零。</li>
+    <li>時間標示<b>放在句首</b>，一眼就能定位到錄音的哪一秒。</li>
+  </ul>
+
+  <h3 id="t-prompt">3.2 轉錄 Prompt 範本（課堂筆記 PDF・概念二）</h3>
+  <div class="prompt">將錄音檔轉換為逐字稿，每句話需加入時間戳，格式為 00:00:00 開頭。</div>
+  <div class="note green">✅ 這條指令刻意寫得很短、很直接——只規定「格式」，不規定「內容怎麼整理」，因為整理是下一步的工作，兩件事分開做，AI 才不會把逐字稿寫得又整理又摘要、反而漏字漏句。</div>
+</section>
+
+<!-- 4 整理與會議紀錄 -->
+<section class="chapter" id="sec-organize">
+  <span class="chip" style="background:linear-gradient(90deg,#2f6df0,#1d9e6f)">CHAPTER 03 · 實錄</span>
+  <h2 class="ct">4. 逐字稿整理與會議紀錄生成</h2>
+  <p class="cd">拿到逐字稿只是半成品——逐字稿通常包含大量口語內容（語助詞、重複句、離題閒聊），要先整理成「問題與決策」，才能再轉成一份能拿去交差的正式會議紀錄。</p>
+
+  <h3 id="o-clean">4.1 整理成問題與決策事項</h3>
+  <ul class="pt">
+    <li><b>刪除語助詞與重複語句</b>（嗯、啊、就是說、然後然後）。</li>
+    <li><b>依照議題分段整理</b>，把跳來跳去的討論收攏到同一個主題底下。</li>
+    <li><b>整理問題與回答</b>的配對關係，誰問了什麼、誰回答了什麼。</li>
+    <li><b>產生重點摘要</b>，讓沒開會的人也能三分鐘看懂。</li>
+  </ul>
+  <div class="prompt">以下為逐字稿，請整理為：討論問題、主要回覆、重要決策。</div>
+
+  <h3 id="o-minutes">4.2 會議紀錄生成</h3>
+  <p>整理完成後，再用一條指令把它轉成正式格式的會議紀錄——匯入逐字稿內容、AI 整理討論重點、生成正式紀錄、可輸出為文件或報告。</p>
+  <div class="prompt">根據逐字稿生成會議紀錄，包含：會議名稱、時間、出席人員、討論事項、決議事項。</div>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">欄位</th><th>對應內容</th></tr>
+    <tr><td>會議名稱</td><td>從逐字稿主題或使用者補充資訊帶入</td></tr>
+    <tr><td>時間</td><td>錄音檔的日期／起訖時間</td></tr>
+    <tr><td>出席人員</td><td>逐字稿中被提及或辨識出的講者</td></tr>
+    <tr><td>討論事項</td><td>整理後的問題與主要回覆（4.1 的成果）</td></tr>
+    <tr><td>決議事項</td><td>整理後的重要決策（4.1 的成果）</td></tr>
+  </table></div>
+  <div class="note gold">⚠️ 兩步驟拆開下指令（先整理問題決策、再生成正式紀錄）比一次到位更穩：逐字稿越長，AI 一次處理「整理＋格式化」越容易漏掉細節或把口語誤植進正式文件。</div>
+</section>
+
+<!-- 5 字幕 -->
+<section class="chapter" id="sec-subtitle">
+  <span class="chip" style="background:linear-gradient(90deg,#c98a0a,#0aa6c9)">CHAPTER 04 · 實錄</span>
+  <h2 class="ct">5. 字幕（VTT）生成與 YouTube 流程</h2>
+  <p class="cd">逐字稿 <span class="ts">02:34</span>：「接下來，我們就來實際操作一次，看看字幕到底是怎麼變出來的。」同一份逐字稿只要換個輸出格式，就能變成影片字幕——這一節示範用 Google AI Studio 直接產出 VTT。</p>
+
+  <h3 id="s-rule">5.1 斷句規則：每段字幕不超過 3 秒</h3>
+  <div class="prompt">請將逐字稿轉為 VTT 字幕，每段字幕不超過3秒並依語句斷點分割。</div>
+  <p>官方簡報原文指令（可存成 System Instructions 直接套用）：</p>
+  <div class="prompt">請產生影片逐字稿並翻譯為中文，轉成可下載的 .vtt 格式檔案，每個字幕段不超過 3 秒，並依據語句斷點分割。</div>
+  <div class="note blue">💡 逐字稿 <span class="ts">02:44</span> 老師示範時說的口語版：「嘿，幫我把影片的逐字稿生出來，翻譯成中文，然後轉成可以下載的 VTT 格式檔案。」——正式 prompt 與現場口語版是同一件事，差別只在正式版多寫了「每段不超過 3 秒、依語句斷點分割」這條格式限制。</div>
+
+  <h3 id="s-demo">5.2 Google AI Studio 實機示範</h3>
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="ep29-img/s14_aistudio_prompt.png" alt="Google AI Studio 上傳影片並下指令產生逐字稿翻譯VTT" loading="lazy">
+      <figcaption>在 Google AI Studio 貼上指令「請產生影片逐字稿並翻譯為中文，轉成可下載的 .vtt 格式檔案，每個字幕段不超過 3 秒，並依據語句斷點分割」，附上影片後送出（畫面顯示 Extracting 擷取中）。</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="ep29-img/s15_aistudio_vtt.png" alt="Google AI Studio 產出的WEBVTT字幕檔結果，含時間碼00:00.279" loading="lazy">
+      <figcaption>AI 回覆：「好的，這就為您產生影片的逐字稿、中文翻譯，並格式化為可下載的 .vtt 檔案。」下方直接生成標準 <b>WEBVTT</b> 格式，時間碼精準到毫秒（如 <span class="ts">00:00.279</span> → <span class="ts">00:01.279</span>），可一鍵下載或複製。</figcaption>
+    </figure>
+  </div>
+  <p>逐字稿 <span class="ts">02:55</span>：「接下來，哇，神奇的事情就發生了，AI 馬上就會開始工作，把你剛剛下的指令變成一個時間點都對得好好的、格式也完全正確的 VTT 字幕檔，隨時等著你下載。」最後一步「把這個檔案上傳到你的影片平台，你看，完美同步的中文字幕就這樣出現了」。</p>
+
+  <h3 id="s-youtube">5.3 YouTube／雲端字幕軌流程</h3>
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="ep29-img/s12_en_caption_demo.png" alt="示範影片自動偵測英文字幕畫面" loading="lazy">
+      <figcaption>官方簡報「英文字幕」段落示範：<b>將影片上傳至 Google 雲端後，點選「管理字幕軌」，約 3–5 分鐘即可自動生成英文字幕。</b>（畫面為示範用測試影片播放中，可見「英文（系統偵測）」字幕軌）</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="ep29-img/s16_bilingual_caption.png" alt="NotebookLM影片同時顯示英文與中文字幕，字幕軌列表含手動與系統偵測" loading="lazy">
+      <figcaption>字幕軌管理列表可同時保留<b>系統偵測（自動）</b>與<b>手動上傳（中文繁體）</b>兩軌，畫面示範中英雙字幕同時顯示的效果。</figcaption>
+    </figure>
+  </div>
+  <figure class="shot">
+    <img src="ep29-img/s16_caption_dialog.png" alt="新增字幕軌對話框，語言選中文繁體，可填字幕軌標題並啟用" loading="lazy">
+    <figcaption>手動新增字幕軌的設定框：選擇<b>語言（中文繁體）</b>、填寫字幕軌標題（選填）、勾選<b>啟用</b>後按<b>儲存</b>，即可把 AI 產出的 .vtt 檔掛上影片。</figcaption>
+  </figure>
+  <ol class="st">
+    <li>影片上傳至 Google 雲端／YouTube。</li>
+    <li>點選「管理字幕軌」，等待約 3–5 分鐘系統自動偵測生成英文字幕。</li>
+    <li>需要中文字幕時，改用 Google AI Studio 上傳影片＋下達 5.1 的指令，取得翻譯後的 .vtt。</li>
+    <li>回到字幕軌管理，新增字幕軌、選語言、貼上或上傳 .vtt 檔、啟用、儲存。</li>
+    <li>AI 生成完成後也可先下載為 .txt 編輯校對，再存回 .vtt 格式上傳。</li>
+  </ol>
+  <div class="golden"><div class="q">「這就漂亮地展示了這整個流程有多簡單、多強大，不只省時間，還能確保資訊傳達得超準確。」</div><div class="a">—— 課堂逐字稿 03:16</div></div>
+</section>
+
+<!-- 6 NotebookLM 與自動化 -->
+<section class="chapter" id="sec-auto">
+  <span class="chip" style="background:linear-gradient(90deg,#7a4fd6,#0aa6c9)">CHAPTER 05 · 實錄</span>
+  <h2 class="ct">6. NotebookLM 會議分析與自動化系統</h2>
+  <p class="cd">單集操作示範講完後，官方簡報把整個工作流收斂成兩張總覽圖：一張是 NotebookLM 專責的「會議分析」，一張是把六個部件串起來的「AI 會議紀錄自動化」系統圖。</p>
+
+  <h3 id="a-nlm">6.1 NotebookLM 會議分析（課堂筆記 PDF・概念七）</h3>
+  <p>NotebookLM 適合針對已經很長的逐字稿做<b>摘要與決策抽取</b>，不需要再手動翻找整份逐字稿。</p>
+  <div class="prompt">分析會議逐字稿並輸出會議重點、關鍵問題與待辦事項。</div>
+  <div class="note blue">💡 對照本集開場素材：NotebookLM 官方示範影片《NotebookLM: Your Personal AI Brain》的台詞正是「if you are drowning in a sea of notes, articles, meeting transcripts, you are definitely not alone」——會議紀錄氾濫正是 NotebookLM 這類工具存在的理由。</div>
+
+  <h3 id="a-flow">6.2 完整 AI 會議自動化流程圖（課堂筆記 PDF・概念八、九）</h3>
+  <p>把前面每一段的指令串起來，就是一條可重複執行的自動化流程：</p>
+  <div class="prompt">請將錄音→語音轉文字→逐字稿→會議紀錄→字幕整理轉為流程圖。</div>
+  <p>最終目標則是把這整條路徑固定成系統：</p>
+  <div class="prompt">設計AI會議紀錄自動化系統，包含錄音、轉錄、摘要與字幕。</div>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">系統組件</th><th>對應本集內容</th></tr>
+    <tr><td>AI 語音轉文字</td><td>第 2、3 章：工具選擇＋逐字稿＋時間戳 prompt</td></tr>
+    <tr><td>AI 摘要與會議紀錄</td><td>第 4 章：整理問題決策＋生成正式會議紀錄</td></tr>
+    <tr><td>AI 字幕翻譯</td><td>第 5 章：VTT 生成＋YouTube／雲端字幕軌</td></tr>
+    <tr><td>建立會議知識資料庫</td><td>第 6.1 節：NotebookLM 彙整多份逐字稿供日後查詢</td></tr>
+  </table></div>
+</section>
+
+<!-- 7 YAML 進階 -->
+<section class="chapter" id="sec-yaml">
+  <span class="chip" style="background:linear-gradient(90deg,#7a4fd6,#d4508e)">CHAPTER 06 · 實錄（本集後半段）</span>
+  <h2 class="ct">7. 進階：從一句提示詞到結構化 YAML 指令</h2>
+  <p class="cd">逐字稿 <span class="ts">03:28</span>：「剛剛那套流程很棒對不對？超方便的，但，問題來了——如果你想要更精準的控制呢？如果你希望每一次每一次的結果都一模一樣、完美重現呢？又或者如果你不是處理一部影片，而是要處理一百部影片，那該怎麼辦？」這是本集逐字稿裡真實延伸出的第二條主線：把口語提示詞升級成<b>結構化 YAML 指令</b>。</p>
+
+  <h3 id="y-why">7.1 為什麼要 YAML</h3>
+  <p>逐字稿 <span class="ts">03:44</span>：「這時候我們就需要從聊天模式升級到寫程式的思維了，這個答案就是 YAML。」老師給的比喻——<span class="ts">03:48</span>：「你可以把它想像成⋯⋯像是給 AI 的一本說明書，或食譜。」</p>
+  <ul class="pt">
+    <li>YAML 是<b>人跟機器都能看懂的語言</b>，用結構化、像填表格一樣的方式下達指令。</li>
+    <li>可以下達<b>非常精準、而且可以重複使用</b>的指令，叫 AI 做比較複雜的事情。</li>
+    <li>核心價值：<b>沒有模糊的空間</b>，每一次執行結果都可預期、可重現。</li>
+  </ul>
+
+  <h3 id="y-when">7.2 什麼時候用、什麼時候不用</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:130px">情境</th><th>建議</th></tr>
+    <tr><td>任務有很多步驟</td><td>用 YAML——定義清楚每一步要做什麼</td></tr>
+    <tr><td>需要定義報告的架構</td><td>用 YAML——章節骨架寫死，每次產出結構一致</td></tr>
+    <tr><td>想建立可重複使用的模板</td><td>用 YAML——這是它的「超能力」所在</td></tr>
+    <tr><td>只是要問個問題、做個簡單翻譯</td><td><b>不用</b> YAML——「殺雞用牛刀」，口語提示詞就夠</td></tr>
+  </table></div>
+  <p>逐字稿 <span class="ts">04:39</span> 的對比示範最直白：</p>
+  <div class="prompt">白話文：「幫我翻譯」
+→ AI 還要猜你要翻成什麼語言
+
+YAML：
+task: translate
+input: 中文
+output: 英文
+→ 指令超清晰，完全沒有模糊的空間</div>
+
+  <h3 id="y-apps">7.3 五大應用實例（逐字稿 04:58–07:17 逐一示範）</h3>
+  <ol class="st">
+    <li><b>文字生成</b>：用 YAML 命令 AI 寫一篇關於數位治理的雙語文章，直接規定骨架要包含「背景、挑戰、解決方案」幾個章節，確保每次產出都符合專業格式。</li>
+    <li><b>圖像生成</b>：不是隨便丟關鍵字，而是用 YAML 精準指定主題（未來 AI 城市）、風格（賽博龐克）、燈光（霓虹燈感）、解析度（4K），讓畫面真正符合創意想像。</li>
+    <li><b>資訊圖表生成</b>：用 YAML 定義標題、要比較哪幾個工具、比較的指標有哪些——數據視覺化不再需要開 Illustrator 弄半天，把結構定義好 AI 就能搞定。</li>
+    <li><b>報告編排</b>：把 YAML 當成固定模板，先把所有章節都規劃好，確保每一份 AI 產出的報告都有一樣的專業結構，對需要大量產出標準化文件的團隊是救星。</li>
+    <li><b>AI Agent 工作流</b>：想像自己是專案經理，手下有三個 AI 員工——用 YAML 分配任務，叫<b>研究員 AI</b> 去找資料，交給<b>分析師 AI</b> 去挖出洞見，最後由<b>寫手 AI</b> 把報告寫出來，實現全自動化的團隊合作。</li>
+  </ol>
+  <div class="golden"><div class="q">「我們今天從一個解決會議紀錄的小技巧開始，一路聊到怎麼用結構化的方式去精準控制 AI。」</div><div class="a">—— 課堂逐字稿 07:17，本集自我總結</div></div>
+  <div class="note gold">⚠️ 本節五大應用（文字／圖像／資訊圖表／報告／AI Agent 工作流）為<b>逐字稿真實講述內容</b>，官方簡報 PDF／PPTX 文字檔中未收錄對應投影片頁面（可能是簡報後段口語延伸或另有投影片未包含在本次讀取的檔案中），故本節僅以逐字稿原文＋時間戳呈現，不附加簡報截圖，特此註明。</div>
+</section>
+
+<!-- 8 檢核 -->
+<section class="chapter" id="sec-check">
+  <span class="chip" style="background:linear-gradient(90deg,#c98a0a,#d4508e)">SELF CHECK</span>
+  <h2 class="ct">8. 課後自我檢核（照本集實際教學內容）</h2>
+  <p class="cd">都對應本集官方簡報＋逐字稿真的講過的內容。可到<a href="ep29-ai-skills.html">互動技能地圖</a>逐項打勾。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:120px">主題</th><th>你應該做得到…</th></tr>
+    <tr><td>🎙️ 工具選擇</td><td>① 依「錄音長度」與「使用頻率」選對 Gemini／NotebookLM／AI Studio／Otter 等工具　② 說出各工具免費分鐘限制的大致範圍</td></tr>
+    <tr><td>📝 逐字稿與整理</td><td>① 用時間戳 prompt 產生逐字稿　② 用兩段式指令把逐字稿整理成問題／回覆／決策　③ 再生成含五要素的正式會議紀錄</td></tr>
+    <tr><td>🎬 字幕製作</td><td>① 記得「每段字幕不超過 3 秒、依語句斷點分割」的規則　② 會用 Google AI Studio 產出 WEBVTT 格式字幕　③ 知道雲端「管理字幕軌」3–5 分鐘自動產生英文字幕的路徑</td></tr>
+    <tr><td>🤖 自動化與 YAML</td><td>① 說出 AI 會議自動化系統的四個組件　② 判斷什麼情境該用 YAML、什麼情境不必　③ 能寫出 task/input/output 的簡單 YAML 指令　④ 說出 YAML 五大應用（文字／圖像／資訊圖表／報告／AI Agent 工作流）</td></tr>
+  </table></div>
+</section>
+
+<!-- 9 來源 -->
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5a5866)">SOURCES</span>
+  <h2 class="ct">9. 資料來源與製作說明</h2>
+  <ul class="pt">
+    <li><b>原始教材（三份真實素材）：</b>①《EP29語音轉會議記錄筆記.pdf》課堂筆記（九大概念＋九條 Prompt 範本）；②《EP29_會議紀錄字幕工作流.pptx》官方課程簡報（16 頁，含真實內嵌截圖）；③《Copy of WEBVTT.vtt》課堂錄影完整逐字稿（帶時間戳，全長 07:34，老師開場破題到收尾提問全程口白）。</li>
+    <li><b>截圖來源：</b>本頁 7 張截圖<b>直接取自官方簡報檔內嵌的原圖</b>（下載 .pptx 後解壓 <code>ppt/media/</code> 取原始圖檔），包含簡報封面、工具分鐘限制比較圖、Google AI Studio 逐字稿/VTT 產出畫面、YouTube／雲端字幕軌管理畫面等；<b>非本頁製作團隊另行對影片抽幀</b>，而是官方簡報作者原本就內嵌的操作示範截圖。</li>
+    <li><b>逐字稿使用方式：</b>凡標註 <span class="ts" style="margin:0">mm:ss</span> 的引號句子，均為逐字稿原句直接引用，未經改寫或潤飾；第 7 章「進階：結構化 YAML」為逐字稿真實講述、但簡報文字檔中未收錄對應頁面的內容，已於該章節內特別註明。</li>
+    <li><b>誠實聲明：</b>本集官方簡報標題聚焦「會議紀錄字幕工作流」，但課堂逐字稿顯示老師實際授課內容分兩段——前半段（00:00–03:25）為會議紀錄字幕自動化五步驟，後半段（03:25–07:34）延伸講解結構化 YAML 指令與五大應用；本頁如實按逐字稿實際順序與比重整理，未省略後半段內容。<b>未下載完整課堂錄影（約 652MB）另行抽幀</b>——因 PDF 筆記＋官方簡報原圖＋完整逐字稿三者已足以逐句還原課程內容，故未執行影片抽幀這一步；若讀者需要對照畫面中未被簡報截圖涵蓋的操作細節，仍可使用第 0 章內嵌的錄影回放 iframe 直接播放原始影片核對。</li>
+    <li><b>介面參考：</b>互動技能地圖頁沿用本站 EP44～EP46 的卡片式多層導覽與遊戲化進度設計。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  EP29「會議紀錄字幕工作流」逐節課堂筆記・2026/07 整理<br>
+  🍀 Learn AI with Tarshar｜搭配 <a href="ep29-ai-skills.html">互動技能地圖</a> 使用效果最佳
+</footer>
+
+</body>
+</html>

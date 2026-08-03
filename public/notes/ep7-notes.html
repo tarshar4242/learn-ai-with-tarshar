@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP7 課堂筆記｜Claude 基礎操作及 Skills 的 3 種手把手操作情境應用</title>
+<meta name="description" content="晨學講堂 EP7 課堂筆記：AI Agent 概念與五級發展、Claude 桌面版與快捷鍵、Analysis tool 視覺化圖表、Writing Style／Customized、Artifacts 即時呈現作品、Project 專案協作、Computer use 解放雙手。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#b23a5b; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px;border-left:none}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.prompt{position:relative;background:#1d1d1f;border-radius:10px;padding:15px 16px;margin:12px 0;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt .tag{display:inline-block;font-size:11px;letter-spacing:.06em;color:#c9c4ff;border:1px solid #3a3a40;border-radius:6px;padding:2px 9px;margin-bottom:8px}
+.svgwrap{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg{display:block;width:100%;height:auto}
+.svgwrap figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#e3b9c6" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP7 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="ep7-ai-skills.html">🗺️ 互動地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 晨學講堂 · EP7</span>
+  <h1>Claude 基礎操作<span>及 Skills</span><br>3 種手把手操作情境應用</h1>
+  <p class="lead">EP7 先從 <b>AI Agent 概念</b>談起，再逐一手把手帶你操作 Claude 的七個實用功能：桌面版、<b>Analysis tool</b> 視覺化圖表、<b>Writing Style／Customized</b> 客製化、<b>Artifacts</b> 即時呈現作品、<b>Project</b> 專案協作、<b>Computer use</b> 解放雙手。</p>
+  <div class="meta">
+    <span>📅 2025/12/27 直播</span>
+    <span>🗂️ 教材：官方課程簡報</span>
+    <span>🤖 主題：Claude 操作＋Skills</span>
+    <span>🧠 AI Agent 概念</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-agent">1. AI Agent 概念</a>
+  <a href="#sec-desktop">2. Claude 桌面版與快捷鍵</a>
+  <a href="#sec-analysis">3. Analysis tool 視覺化圖表</a>
+  <a href="#sec-style">4. Writing Style ＋ Customized</a>
+  <a href="#sec-artifacts">5. Artifacts 即時呈現作品</a>
+  <a href="#sec-project">6. Project 專案協作</a>
+  <a href="#sec-computer">7. Computer use 解放雙手</a>
+  <a href="#sec-src">8. 資料來源與製作說明</a>
+</nav>
+
+<article>
+
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--rose))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>EP7_Claude 基礎操作及 Skills 的 3 種手把手操作情境應用</td></tr>
+    <tr><th>頻道</th><td>生成式 AI 應用電台・晨學講堂（黃老師）</td></tr>
+    <tr><th>直播日期</th><td>2025/12/27（六）晚間直播</td></tr>
+    <tr><th>教材</th><td>官方課程簡報＋補充文件《與AI共行_Claude相關功能應用》</td></tr>
+    <tr><th>一句話先懂</th><td>Claude 不只是聊天機器人：<b>Analysis tool、Artifacts、Project、Computer use</b> 四個功能組合起來，就是一套從分析、呈現到協作、行動的完整工作站。</td></tr>
+  </table></div>
+  <div class="note blue">💡 本頁依<b>官方課程簡報文字全文</b>整理（真實課程內容）；示範操作的螢幕畫面與逐字稿時間碼待日後取得錄影授權後再補入。</div>
+</section>
+
+<section class="chapter" id="sec-agent">
+  <span class="chip" style="background:linear-gradient(90deg,#b23a5b,#9c7b23)">CHAPTER 01</span>
+  <h2 class="ct">1. AI Agent 概念：自主決策與行動的人工智慧</h2>
+  <p class="cd">AI 革命普遍視作「第四次工業革命」；貫穿前三次人類工業革命的關鍵詞是「自動化」。</p>
+  <p>AI Agent（人工智慧代理／智能體）指一種能夠<b>自主完成決策與行動</b>的人工智慧系統，無需人類直接介入。它透過感知環境資訊，結合指令自行規劃任務並分解成多個步驟執行，並能根據回饋持續學習優化。核心融合大型語言模型（LLM），展現規劃、記憶與工具調用能力：透過「思維鏈」與「思維樹」將複雜任務分解為子目標，再用反思框架（ReAct、Reflexion）評估行動、改善表現。</p>
+  <h3>OpenAI 的 AI 五級發展</h3>
+  <ol class="st">
+    <li><b>聊天機器人（Chatbots）：</b>具有對話功能的 AI。</li>
+    <li><b>推理者（Reasoners）：</b>能像人類一樣解決問題。</li>
+    <li><b>代理（Agents）：</b>可以正確地採取行動（重點在使用工具）。</li>
+    <li><b>創新者（Innovators）：</b>可以幫助發明的 AI。</li>
+    <li><b>組織（Organizations）：</b>AI 可以執行人類組織的工作。</li>
+  </ol>
+  <h3>AI Agent vs RPA（自動化流程機器人）</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">比較項目</th><th>AI Agent</th><th>RPA</th></tr>
+    <tr><td>解決問題</td><td>擅長非結構化問題，如不確定性場景</td><td>處理結構化問題，依賴固定規則</td></tr>
+    <tr><td>運作模式</td><td>結合推理與生成式 AI 動態生成解決方案</td><td>遵循預設流程，適應性低</td></tr>
+    <tr><td>學習優化</td><td>具反思與學習能力</td><td>不具學習能力，需人工更新</td></tr>
+    <tr><td>應用場景</td><td>客服問題解決、資料搜集與報告撰寫</td><td>資料錄入、自動生成報表</td></tr>
+  </table></div>
+  <h3>AI Agents vs Chatbots</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">項目</th><th>AI Agents</th><th>Chatbots</th></tr>
+    <tr><td>核心能力</td><td>執行任務、決策與工具操作</td><td>提供文字或語音回覆</td></tr>
+    <tr><td>智能程度</td><td>可處理複雜多步驟任務</td><td>多依賴預設對話模型</td></tr>
+    <tr><td>舉例</td><td>自動駕駛車、智能家居管理系統</td><td>ChatGPT、Siri、Google Assistant</td></tr>
+  </table></div>
+</section>
+
+<section class="chapter" id="sec-desktop">
+  <span class="chip" style="background:linear-gradient(90deg,#9c7b23,#3b6bb0)">CHAPTER 02</span>
+  <h2 class="ct">2. Claude 桌面版與快捷鍵</h2>
+  <p>Anthropic 推出的 Claude AI 桌面版本支援 Windows 與 Mac。安裝步驟簡單：從官網下載相應版本（如 Apple Silicon），解壓縮後即可啟用，建議使用 Email 進行認證登入。桌面版介面與 Web 版相似，但無需透過瀏覽器操作，並提供快捷鍵能在處理其他工作時快速呼叫 Claude AI。</p>
+  <ul class="pt">
+    <li><b>Mac 快捷鍵：</b>Command + E</li>
+    <li><b>Windows 快捷鍵：</b>Control + Alt + Space</li>
+  </ul>
+</section>
+
+<section class="chapter" id="sec-analysis">
+  <span class="chip" style="background:linear-gradient(90deg,#3b6bb0,#5645D4)">CHAPTER 03</span>
+  <h2 class="ct">3. Analysis tool：視覺化圖表</h2>
+  <p>Claude AI 的視覺化圖表功能（特別是 Claude 3.5）顯著增強了圖像分析與解讀能力，能準確識別圖表中的文字和數據並提供詳細解釋。開啟方式：點選帳號 → Feature Preview → Analysis tool → Turn on。</p>
+  <ol class="st">
+    <li><b>匯入資料進行分析：</b>使用 CSV 檔（免費版有容量限制）。</li>
+    <li><b>搜尋即時資料分析：</b>例如分析 12 強世界棒球賽中華隊數據，形成合適統計圖表。</li>
+    <li><b>圖形轉換：</b>圖形產生後可轉換為 SVG 檔，下載到 PowerPoint 調整排版。</li>
+  </ol>
+  <div class="note blue">💡 SVG（Scalable Vector Graphics）是基於 XML 的矢量圖形格式，支持縮放不失真，廣泛用於網頁和圖形設計——課堂示範用它畫出「台灣國防預算趨勢圖」。</div>
+</section>
+
+<section class="chapter" id="sec-style">
+  <span class="chip" style="background:linear-gradient(90deg,#5645D4,#b25269)">CHAPTER 04</span>
+  <h2 class="ct">4. Writing Style（寫作風格）＋ Customized（客製化功能）</h2>
+  <h3>Writing Style 三種＋個人風格</h3>
+  <ul class="pt">
+    <li><b>Formal：</b>用於「清晰而精緻」的內容。</li>
+    <li><b>Concise：</b>專注簡短直接的回應。</li>
+    <li><b>Explanatory：</b>針對需要詳細解釋的場景。</li>
+    <li><b>個人風格：</b>可自訂屬於自己的寫作語氣。</li>
+  </ul>
+  <h3>Customized 個人化功能</h3>
+  <p>設定偏好設定可讓 Claude 在回應中考慮用戶的個人化偏好，這些設定為帳戶範圍內選項。</p>
+  <ol class="st">
+    <li>點擊左下角的個人圖示（姓名首字母）。</li>
+    <li>選擇「設定」。</li>
+    <li>在「Claude 應考慮哪些偏好設定？」欄位描述你的偏好：處理方法、常用術語、常見情境、溝通習慣。</li>
+  </ol>
+</section>
+
+<section class="chapter" id="sec-artifacts">
+  <span class="chip" style="background:linear-gradient(90deg,#b25269,#0d8f80)">CHAPTER 05</span>
+  <h2 class="ct">5. Artifacts：即時呈現作品</h2>
+  <p>開啟方式：點選帳號 → Setting → Profile → 往下拉 → Enable artifacts。Claude Artifacts 能根據對話內容動態生成多種形式的成果，包括程式碼片段、文件、圖表，甚至互動式 React 組件，且能在後續對話中持續更新與引用。使用者不僅能在獨立窗口中運行生成的代碼，還能預覽並通過連結分享。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:140px">應用範圍</th><th>範例</th></tr>
+    <tr><td>交互式簡報資料</td><td>生成 Markdown 文件、純文本文檔或結構化報告。</td></tr>
+    <tr><td>資料與流程視覺化</td><td>使用 Plotly.js 生成交互式圖表，如數據分析儀表板。</td></tr>
+    <tr><td>SVG 圖形</td><td>設計徽標，並可在 Artifact 窗口中修改樣式。</td></tr>
+    <tr><td>網站建置</td><td>創建單頁或多頁 HTML 網站。</td></tr>
+    <tr><td>序列圖與流程圖</td><td>支援流程圖、序列圖、甘特圖和 ERD。</td></tr>
+    <tr><td>複雜代碼結構</td><td>建立管理系統的 Python 類別。</td></tr>
+    <tr><td>交互式網頁組件</td><td>使用 React 創建動態搜索欄。</td></tr>
+    <tr><td>共享與協作</td><td>通過連結分享 Artifacts，允許他人混搭重新編輯。</td></tr>
+  </table></div>
+</section>
+
+<section class="chapter" id="sec-project">
+  <span class="chip" style="background:linear-gradient(90deg,#0d8f80,#3f8560)">CHAPTER 06</span>
+  <h2 class="ct">6. Project：專案協作</h2>
+  <p>Claude Projects 支援每個專案最高 <b>200K</b> 的脈絡長度，允許使用者添加多樣化的文件、程式碼和見解以強化 Claude 的效率。透過結合組織內部知識（風格指南、程式碼庫、採訪紀錄或先前成果），Claude 能針對不同任務提供專家級建議——例如撰寫符合企業行銷風格的電子郵件，或像資料分析師一樣撰寫精確的 SQL 查詢。使用者還能設定專案，客製化 Claude 的回應風格（正式語氣或特定角色）。</p>
+</section>
+
+<section class="chapter" id="sec-computer">
+  <span class="chip" style="background:linear-gradient(90deg,#3f8560,#b23a5b)">CHAPTER 07</span>
+  <h2 class="ct">7. Computer use：解放雙手</h2>
+  <p class="cd">透過 open-interpreter，讓 Claude 直接操作你的電腦完成任務。</p>
+  <ol class="st">
+    <li>打開電腦命令提示字元（Windows 搜尋 CMD／Mac 是終端機）。</li>
+    <li>打上 <code>pip install open-interpreter</code>，按下 Enter。</li>
+    <li>跑完打上 <code>interpreter --os</code>，按下 Enter。</li>
+    <li>到 console.anthropic.com 網站，點「Get API Keys」。</li>
+    <li>依照畫面創建 Key，複製 Key。</li>
+    <li>到命令提示字元貼上 Key，按下 Enter。</li>
+    <li>輸入你想要 Claude 幫你完成的事情。</li>
+  </ol>
+  <div class="note gold">⚠️ 需先安裝 Python（python.org/downloads），並到 console.anthropic.com 取得 API Key 才能使用。API Key 屬敏感資訊，切勿公開分享。</div>
+</section>
+
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5a5866)">SOURCES</span>
+  <h2 class="ct">8. 資料來源與製作說明</h2>
+  <ul class="pt">
+    <li><b>原始教材：</b>EP7「Claude基礎操作及Skills的3種手把手操作情境應用」官方課程簡報全文＋補充文件《與AI共行_Claude相關功能應用》。</li>
+    <li><b>製作方式：</b>逐節對照官方簡報可讀文字整理，比較表與操作步驟<b>取自簡報原文</b>。內容為<b>真實課程內容</b>。</li>
+    <li><b>誠實聲明：</b>本頁以簡報實錄為準；本集資料夾錄影檔案暫僅供擁有者存取，<b>示範操作畫面與逐字稿時間碼</b>待開放授權或網路政策開通後補入。Claude 各項功能介面會持續更新，以你使用當下的官方畫面為準。</li>
+    <li><b>介面參考：</b>互動地圖頁沿用本站 EP38–46 的卡片式多層導覽與遊戲化進度設計。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  EP7「Claude 基礎操作及 Skills 的 3 種手把手操作情境應用」課堂筆記・2026/07 整理<br>
+  🍀 Learn AI with Tarshar｜搭配 <a href="ep7-ai-skills.html">互動地圖</a> 使用效果最佳
+</footer>
+
+</body>
+</html>

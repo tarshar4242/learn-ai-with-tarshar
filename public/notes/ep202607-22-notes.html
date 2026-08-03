@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP202607.22 課堂筆記｜生成式AI簡報工具：一次掌握6種簡報工具</title>
+<meta name="description" content="晨學講堂 EP202607.22 課堂筆記：一次掌握 Gemini、ChatGPT、Claude、NotebookLM、Gamma、Manus 六種 AI 簡報工具，加上 PowerPoint AI Agent 與 HTML 風格簡報兩個 Bonus，以及 YAML 套版、Canva 魔法圖層解構等實戰技巧。根據真實錄影逐字稿與課程簡報整理。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#b23a5b; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b23a5b;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(24px,4.2vw,40px);font-weight:800;line-height:1.18;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px;border-left:none}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#e3b2c1" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP202607.22 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="ep202607-22-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 年中共學 · EP202607.22</span>
+  <h1>生成式AI簡報工具<br><span>一次掌握 6 種簡報工具</span></h1>
+  <p class="lead">EP202607.22 一口氣示範 Gemini、ChatGPT、Claude、NotebookLM、Gamma、Manus 六種 AI 簡報工具，外加 PowerPoint AI Agent 與 HTML 風格簡報兩個 Bonus。本頁根據<b>真實錄影逐字稿與課程簡報全頁原圖</b>整理，含講師現場示範口白、真實學員 Q&A，以及 YAML 套版、Canva 魔法圖層解構等實戰技巧。</p>
+  <div class="meta">
+    <span>📅 2026/07/22 直播</span>
+    <span>🗂️ 教材：13 頁簡報＋錄影（63.9 分鐘）</span>
+    <span>🎨 主題：6 種簡報工具＋2 個 Bonus</span>
+    <span>💬 含真實學員 Q&A</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-open">1. 開場：不只六種，工具全景</a>
+  <a href="#sec-gemini">2. Gemini 簡報系列</a>
+  <a href="#sec-chatgpt">3. ChatGPT 簡報系列</a>
+  <a href="#sec-claude">4. Claude 簡報系列＋PowerPoint Agent</a>
+  <a href="#sec-notebooklm">5. NotebookLM 簡報系列＋套版解構</a>
+  <a href="#sec-gamma">6. Gamma 簡報新功能</a>
+  <a href="#sec-manus">7. Manus 簡報功能＋花絮工具</a>
+  <a href="#sec-html">8. Bonus：HTML 風格簡報</a>
+  <a href="#sec-qa">9. 真實學員 Q&A</a>
+  <a href="#sec-recap">10. 重點整理</a>
+  <a href="#sec-src">11. 資料來源與製作說明</a>
+</nav>
+
+<article>
+
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--pink))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>EP202607.22「生成式AI簡報工具：一次掌握6種簡報工具」（年中共學 5 天系列之一）</td></tr>
+    <tr><th>頻道</th><td>生成式 AI 應用電台・年中共學</td></tr>
+    <tr><th>教材</th><td>官方課程簡報 13 頁（逐頁原圖全收錄）＋錄影回放 63.9 分鐘</td></tr>
+    <tr><th>一句話先懂</th><td>六種工具各有定位：<b>Gemini</b> 內建 Google 生態系、<b>ChatGPT</b> 靠 Image 2.0 畫圖再套版、<b>Claude</b> 走 PowerPoint 增益集但關卡較多、<b>NotebookLM</b> 最會套版、<b>Gamma</b> 是最老牌但也追上 Agent 浪潮、<b>Manus</b> 已轉為點數收費。</td></tr>
+  </table></div>
+  <figure class="shot">
+    <img src="ep202607-22-img/slide01.jpg" alt="生成式AI簡報工具封面" loading="lazy">
+    <figcaption>簡報封面｜生成式AI簡報工具：一次掌握6種簡報工具。</figcaption>
+  </figure>
+</section>
+
+<section class="chapter" id="sec-open">
+  <span class="chip" style="background:linear-gradient(90deg,#b23a5b,#9c7b23)">CHAPTER 01</span>
+  <h2 class="ct">1. 開場：不只六種，工具全景</h2>
+  <p class="cd">逐字稿原音（00:13–04:19）——開場先講這堂課的定位與 AI 簡報工具的現況。</p>
+  <ul class="pt">
+    <li><b>今天做什麼</b>：「今天要談的是這個，如何做簡報、如何用AI做簡報。」</li>
+    <li><b>現在的程度做到什麼程度</b>：「您是要手把手的像傳統的AI一問一答的做，或者是您要讓Agent一口氣做完的都有——基本上現在工具會慢慢走向有Agent，甚至連我們熟悉的PPT都已經有AI Agent。」</li>
+    <li><b>免費 vs 付費</b>：「這都是有一些是要付費，有一些是免費的……當然很多人會問我說免費的功能未來會不會收費？我猜會啦，一開始他們的策略都是這樣，免費的讓大家用，大家越來越多人用的時候，開始做收費的動作。」</li>
+    <li><b>不只六種</b>：「好，不只六種，今天看時間，我就盡量講，我們先從最簡單的開始。」</li>
+  </ul>
+  <div class="note gold">⚠️ 這句提醒值得記住：AI 工具的免費功能不是永久保證，Manus、Fillo（早期熱門工具，逐字稿發音近似「furo」）等工具後來都已轉為點數收費制，本集示範時也直接點出這個趨勢。</div>
+</section>
+
+<section class="chapter" id="sec-gemini">
+  <span class="chip" style="background:linear-gradient(90deg,#9c7b23,#3b6bb0)">CHAPTER 02</span>
+  <h2 class="ct">2. Gemini 簡報系列：一次認識 3 種應用</h2>
+  <figure class="shot">
+    <img src="ep202607-22-img/slide02.jpg" alt="Gemini簡報系列封面" loading="lazy">
+    <figcaption>簡報 2｜Gemini 簡報系列——一次認識 3 種簡報應用：Canvas、問問 Gemini、Nano banana。</figcaption>
+  </figure>
+  <h3>① Canvas：連結 Google 簡報</h3>
+  <p>逐字稿（04:26–05:20）：早期大家使用 Gemini，打開之後在對話框輸入、選擇 Canvas，直接用中文寫「幫我製作有關於無人機以及AI技術的相關簡報」——「當你開了這個畫布的功能，等於說讓你的AI去連接到所謂的Google簡報的功能，他做完就會放在Google簡報。」</p>
+  <div class="note blue">💡 講師老實評價：「就是非常非常陽春，就像這個一般的、比較像是商務型、再比商務型再稍微陽春感重一點點的簡報啦。如果以你一般的Canvas，堪用堪用，因為基本上免費都可以使用他。」</div>
+  <h3>② 問問 Gemini：對話發想</h3>
+  <figure class="shot">
+    <img src="ep202607-22-img/slide03.jpg" alt="問問Gemini" loading="lazy">
+    <figcaption>簡報 3｜問問 Gemini——用對話協助發想、整理與問答：靈感發想、重點整理、快速問答。</figcaption>
+  </figure>
+  <h3>③ Nano banana：輕量視覺延伸＋YAML 鎖定格式</h3>
+  <figure class="shot">
+    <img src="ep202607-22-img/slide04.jpg" alt="Nano banana" loading="lazy">
+    <figcaption>簡報 4｜Nano banana——輕量創意工具，快速延伸視覺靈感：創意延伸、視覺發想、快速生成。</figcaption>
+  </figure>
+  <p>逐字稿（09:13–10:32）：早期在 GPT 的 Image 2.0 還沒出來之前，大部分都用 Nano Banana 一頁一頁做簡報。最早會用 <b>YAML 格式</b>鎖定「我要幾頁簡報」，讓輸出比較聽話。示範指令：「幫我製作三頁圖文並茂的無人機跟AI技術，第一頁是封面，第二頁是兩個技術之間的結合，第三個是未來的展望，幫我製成三張簡報，然後寫成YAML格式，風格是玩具總動員的風格。」</p>
+  <div class="note gold">⚠️ 反向提示詞的差異：「繁體中文用反向提示詞，在GPT它不理你，不過在Nano Banana，它是非常非常吃反向提示詞的——繁體中文你說不要有多餘的筆劃、不要有模糊的字，它可以做到。」輸出後也可直接把 Google Canvas 內容輸出成 PPTX 編輯。</div>
+  <figure class="shot">
+    <img src="ep202607-22-img/s1-yaml-prompt-live.jpg" alt="現場示範NotebookLM與問問Gemini下YAML指令" loading="lazy">
+    <figcaption>錄影 12:37｜現場畫面：左側 NotebookLM 與 ChatGPT 分頁、右側「問問 Gemini」分頁，輸入框裡正是逐字稿中那句「幫我製作……無人機跟AI技術……寫成YAML格式，風格是玩具總動員的風格」的實際提示詞畫面。</figcaption>
+  </figure>
+</section>
+
+<section class="chapter" id="sec-chatgpt">
+  <span class="chip" style="background:linear-gradient(90deg,#3b6bb0,#5645D4)">CHAPTER 03</span>
+  <h2 class="ct">3. ChatGPT 簡報系列：一次掌握 4 大功能</h2>
+  <figure class="shot">
+    <img src="ep202607-22-img/slide05.jpg" alt="ChatGPT簡報系列四大功能" loading="lazy">
+    <figcaption>簡報 5｜ChatGPT 簡報系列——一次掌握 4 大功能：① Chat 聰明對話、即時解答 ② Work 整合工具、高效完成任務 ③ Agent 專屬助理、主動完成工作 ④ Image 2.0 創意生成、視覺再進化。</figcaption>
+  </figure>
+  <p>逐字稿（12:55–13:10）：「早期GPT做簡報非常非常難看，他的文字會非常陽春。不過他現在學聰明了，他會自己去導入用他擅長畫圖的 Image 2.0 先把圖畫出來，然後等一下他會自己把文字放進去。」</p>
+  <h3>套版技巧：先滿意一張，再要求依樣做完</h3>
+  <p>逐字稿（33:20–33:39）：「除了會套版的還有誰？GPT也非常非常會套——如果你第一張覺得這個風格還不錯，那我接下來的一二三頁要跳套，這樣子跟他說：請按照這個風格，依序的做完。」</p>
+  <div class="note blue">💡 解決「多頁被合成一張圖」的真實學員問題：講師現場示範，下指令時要明講「16比9，每一張都分開」——「您下指令的時候，告訴他每一頁都分開，像我這樣……三頁簡報擠在一起的情況下，您就下這個指令：16比9，讓他知道第一個我的尺寸是分開的，那三頁都要分開。」</div>
+  <h3>Image 2.0 解構的極限</h3>
+  <p>逐字稿（34:13–35:25）：「GPT本身畫圖的力量很強，所以他的解構頂多就是把這張圖……這個小男孩你可以自己改，這一個也可以自己改，不過這些文字都不能改，他就是幫你做好了。」若要更完整拆解可下指令「把這張簡報詳細的進行拆解，我每一個圖層、每一個字到每個圖我都要可以動，請你重新繪製，分別繪製出來之後重新組成PPTX檔給我」，但講師建議：「如果你想要改的話，還不如就是用Canva，我想這個魔法圖層的技術未來會越來越普遍。」</p>
+  <h3>ChatGPT 的 PowerPoint 增益集（PBT）</h3>
+  <p>逐字稿（43:42–44:35）：這其實是 Codex 的功能，在 PowerPoint 增益集裡下載安裝，讓 ChatGPT 免費版就能用——「但是你的要求，你的PowerPoint要求要2019之後的版本，而且要正版。」找不到增益集的位置：「按檔案，然後按其他，按選項，然後在自訂功能區這邊，有一個增益集，把它打開，打開之後他就會出現在這裡。」可在裡面設定固定指示，例如「我要求字體一律放大，至少要24」，也能導入自訂 Skill。</p>
+</section>
+
+<section class="chapter" id="sec-claude">
+  <span class="chip" style="background:linear-gradient(90deg,#5645D4,#b25269)">CHAPTER 04</span>
+  <h2 class="ct">4. Claude 簡報系列＋PowerPoint AI Agent</h2>
+  <figure class="shot">
+    <img src="ep202607-22-img/slide06.jpg" alt="Claude簡報系列" loading="lazy">
+    <figcaption>簡報 6｜Claude 簡報系列——AI 助你更快打造專業簡報：① Claude 對話生成、快速成稿 ② Claude design 設計美觀、風格一致 ③ Claude cowork 協作共享、團隊共創。</figcaption>
+  </figure>
+  <figure class="shot">
+    <img src="ep202607-22-img/slide12.jpg" alt="AI Agent in PowerPoint" loading="lazy">
+    <figcaption>簡報 12（Bonus）｜AI Agent in PowerPoint——讓 AI 成為簡報夥伴：內容生成、文字優化、設計建議、資料視覺化、一鍵美化；流程為設定目標→AI生成→人工調整→專業呈現。</figcaption>
+  </figure>
+  <h3>Claude 版 PowerPoint 增益集，關卡比 ChatGPT 多</h3>
+  <p>逐字稿（44:47–46:20）：講師實測比較 ChatGPT／Codex 與 Claude 兩種 PowerPoint 增益集的差異：「Claude比較複雜，他必須得要Claude的付費版，然後呢你要365，你要Microsoft 365，他才會讓你用——就是Claude要付費，然後也要365才能使用。我必須要跟大家講，他關卡比較多一點，他GPT的Codex比較簡單一點。」</p>
+  <div class="note gold">⚠️ 換句話說：ChatGPT／Codex 走增益集路線只要 PowerPoint 2019＋正版即可免費啟用；Claude 的同類功能則需要<b>付費版 Claude ＋ Microsoft 365 訂閱</b>雙重門檻，上手成本明顯較高。</div>
+</section>
+
+<section class="chapter" id="sec-notebooklm">
+  <span class="chip" style="background:linear-gradient(90deg,#b25269,#0d8f80)">CHAPTER 05</span>
+  <h2 class="ct">5. NotebookLM 簡報系列：YAML 格式＋套版</h2>
+  <figure class="shot">
+    <img src="ep202607-22-img/slide07.jpg" alt="NotebookLM簡報系列YAML與套版" loading="lazy">
+    <figcaption>簡報 7｜NotebookLM 簡報系列——① YAML 格式要求：用 title / description / theme / slides 結構鎖定內容 ② 套版：多種風格、一鍵套用、快速美化簡報。</figcaption>
+  </figure>
+  <p>逐字稿（31:23–31:40）：「除了會套版的還有誰？」——「這個NotebookLM非常會套版……你要讓NotebookLM的東西做好，壓模（YAML鎖定格式）是一個非常需要的東西，再來是套版，如果你給他一個風格，例如我喜歡這個藍色的風格……這個技術大概是去年6月多就有的技術。」</p>
+  <figure class="shot">
+    <img src="ep202607-22-img/s2-notebooklm-output.jpg" alt="NotebookLM生成的無人機課程簡報封面實拍" loading="lazy">
+    <figcaption>錄影 38:22｜現場實拍：ChatGPT 對話視窗中「已完成」一份以 NotebookLM／Gemini Notebook 風格製作的無人機主題簡報封面（檔名「積木航程：啟迪智慧的創客工坊」），可見套版後的目錄頁與插畫風格。</figcaption>
+  </figure>
+  <h3>字型／版型無法改？用 Canva 魔法圖層解構</h3>
+  <p>逐字稿（1704–1845s）：真實學員在直播聊天室反映「我在notebookLM做簡報，但是想改字型不出來，要用什麼替換」。講師現場示範解法：把圖片貼上 Canva，跟它說「請使用魔法圖層，把這張圖解構出來」——「他就會把這張圖，像是您在畫Illustrator裡面的每一個圖層，可能底圖一張，然後一張一張變成各自獨立的物件，然後他就可以做移動，文字也可以。」若要整份簡報一起拆，可以把 PDF 整份丟進 Canva AI：「把整個簡報檔給他，用PDF，動模把圖層、內頁都拆開……還是可以讀，然後他有些字讀錯了，你可以自己改一下就好。」</p>
+  <div class="note blue">💡 額度提醒：「Canva 免費版一個月五次，最近不知道有沒有調低；他如果教育版基本上可以好好的用，不太會有限制。」用 MCP 或直接開 Canva 解構，兩種方式都可以。</div>
+</section>
+
+<section class="chapter" id="sec-gamma">
+  <span class="chip" style="background:linear-gradient(90deg,#0d8f80,#2f7d92)">CHAPTER 06</span>
+  <h2 class="ct">6. Gamma 簡報新功能：老牌也追上 Agent 浪潮</h2>
+  <p>逐字稿（46:56–47:34）：「很多人說的是，要提到簡報你總不能忘記最早期的Gamma吧，我們做簡報的十組AI做簡報，Gamma算是最早期，大概2023年的時候正夯……他現在當然沒有被時代淘汰，不過他其實有新功能，除了我們早期的一頁一頁打這些功能之外，他也跟著更新了Agent的功能——他怕他被時代淘汰掉，所以他也會跟著這個時代一起進步。」</p>
+  <figure class="shot">
+    <img src="ep202607-22-img/slide08.jpg" alt="Gamma簡報新功能" loading="lazy">
+    <figcaption>簡報 8｜Gamma 簡報新功能——與 Agent 一起創作：① Agent 創作：輸入想法、筆記或檔案，快速生成簡報草稿 ② 研究與引用：協助研究主題、整理脈絡並標明出處 ③ 多格式轉換：可延伸為文件、簡報與社群貼文 ④ 工作情境：研究摘要、培訓簡報、會議紀錄一次整合。</figcaption>
+  </figure>
+  <figure class="shot">
+    <img src="ep202607-22-img/s3-gamma-create.jpg" alt="現場實拍gamma.app/create建立頁面" loading="lazy">
+    <figcaption>錄影 48:00｜現場實拍 gamma.app/create 建立頁面：生成／貼上文字／從範本建立／匯入檔案或網址四種入口，下方即為簡報 8 所介紹的「與 Agent 一起創作」新功能區塊，與簡報原圖完全對應。</figcaption>
+  </figure>
+  <figure class="shot">
+    <img src="ep202607-22-img/slide09.jpg" alt="Agent模式從輸入到成稿" loading="lazy">
+    <figcaption>簡報 9｜Agent 模式：從輸入到成稿——① 輸入素材（貼上想法、筆記、會議紀錄或上傳檔案）② AI 研究整理（自動歸納重點、補充脈絡並協助標明出處）③ 生成簡報（快速形成頁面架構、重點內容與可分享版本）；你可以怎麼用：研究論文轉重點簡報、培訓文件變新手上路教材、會議紀錄整理成簡報摘要。</figcaption>
+  </figure>
+  <figure class="shot">
+    <img src="ep202607-22-img/slide10.jpg" alt="Gamma新功能帶來的價值" loading="lazy">
+    <figcaption>簡報 10｜Gamma 新功能帶來的價值——不只做簡報，更能支援研究、整理與內容轉換：① 更省時間 ② 更有結構 ③ 更多延伸 ④ 更適合工作現場。適合需要快速產出內容、又希望保有條理與專業感的使用者。</figcaption>
+  </figure>
+  <div class="note gold">⚠️ 講師的市場觀察：「因為他現在其實ChatGPT做的、Google做的已經佔領滿多，那另外一群大家喜歡用NotebookLM做，Gamma還是有更新，但是不多。」</div>
+</section>
+
+<section class="chapter" id="sec-manus">
+  <span class="chip" style="background:linear-gradient(90deg,#2f7d92,#9c7b23)">CHAPTER 07</span>
+  <h2 class="ct">7. Manus 簡報功能＋其他花絮工具</h2>
+  <figure class="shot">
+    <img src="ep202607-22-img/slide11.jpg" alt="Manus簡報功能" loading="lazy">
+    <figcaption>簡報 11｜Manus 簡報功能——AI 助你從想法到簡報，一鍵完成專業呈現：自動生成、結構完整、版型美觀、輕鬆分享；支援匯出 PDF／PPTX／PNG 等格式。</figcaption>
+  </figure>
+  <p>逐字稿（11:07–12:09）：直播中有學員提問 Manus，講師直接評價：「Manus最近都是要收所謂的點數，以點數為主……老實說Manus現在做簡報的人應該比較少。」</p>
+  <p>逐字稿（48:18–49:00）：「Manus的進步是什麼？就是他為了避免被取代，所以他在做投影片的時候，他可以讓你選擇你的圖片是要哪幾種模式——是要屬於完全不能改的圖片版，還是可以改的PowerPoint版本，就看你的需求。」</p>
+  <h3>花絮：另一款早期熱門工具（已轉點數收費）</h3>
+  <p>逐字稿（49:12–50:18）：講師也提到「還有一個好朋友也不能忘記他」——這是早期大家非常喜歡用的 AI 簡報工具（逐字稿語音辨識為近似「furo」的發音，因收音品質限制，正確產品名稱本頁不強行猜測），「後來因為要收點數之後，就也比較少能用」。示範時可選擇繁體中文、頁數 30 到 50 頁，AI 會自動上網查資料並產出：「他就會做，他就會上網查資料，做完50頁給你確認，就是他的特色，不過我跟你講，真金白銀，每頁都是要扣點數的。」</p>
+  <div class="note gold">⚠️ 誠實揭露：這段花絮工具的產品名稱在逐字稿中辨識度不佳（收音／背景雜訊影響），為避免誤植真實產品名稱，本頁僅忠實轉述講師描述的功能特徵（點數制、支援繁中、30–50 頁自動生成、自動上網查資料），不做臆測性指名。</div>
+</section>
+
+<section class="chapter" id="sec-html">
+  <span class="chip" style="background:linear-gradient(90deg,#9c7b23,#bf6a1e)">CHAPTER 08</span>
+  <h2 class="ct">8. Bonus：HTML 風格簡報</h2>
+  <figure class="shot">
+    <img src="ep202607-22-img/slide13.jpg" alt="HTML風格簡報" loading="lazy">
+    <figcaption>簡報 13（Bonus）｜HTML 風格簡報——讓簡報像網頁一樣清晰、結構化、易維護：結構化、可讀性高、視覺一致；基本 HTML 結構包含 head（頁面資訊、標題與樣式連結）、main（核心內容與圖表）、footer（補充說明、來源或聯絡資訊）。</figcaption>
+  </figure>
+  <p>逐字稿（18:19–20:32）：講師現場用 Gamma 示範 HTML 版本輸出：「HTML它是一個雲端版的格式，它是一個線上格式，最近也非常非常紅……幫我做五張有關於無人機跟AI技術的HTML版本的簡報，那其中要有互動感，然後要有動畫感。」他說明特色：「我的簡報第一個，我不需要到我的PPT，我也不想要再多調，我想要一切所有的調整的方式全部都在線上，我demo的時候也在線上……你就可以直接輸出HTML版本的簡報。他的特色就是他會比較有互動感，然後他的渲染程度、他的簡報整個鋪陳會比較好看。」「那這個簡報的格式，他帶著就可以走，他其實就是一個網頁版本的概念而已。」</p>
+</section>
+
+<section class="chapter" id="sec-qa">
+  <span class="chip" style="background:linear-gradient(90deg,#bf6a1e,#5645D4)">Q&A</span>
+  <h2 class="ct">9. 真實學員 Q&A</h2>
+  <p class="cd">以下問題直接來自直播 Google Meet 聊天室的真實學員留言，講師現場逐一回應。</p>
+  <div class="golden">
+    <div class="q">Q1：我在 NotebookLM 做簡報，但是想改字型不出來，要用什麼替換？</div>
+    <div class="a">A：把輸出圖片貼到 Canva，使用「魔法圖層」把圖解構成各自獨立的圖層物件，文字與圖片都能個別移動、替換字型（詳見第 5 章）。</div>
+  </div>
+  <div class="golden">
+    <div class="q">Q2（Kenny Huang）：可否使用 ChatGPT Image 2.0 做出來的圖輸出成可編輯 PPTX？</div>
+    <div class="a">A：Image 2.0 的解構有極限——圖片與部分元素可自己改，但文字通常不能改；若要完整可動的版本，講師建議改用 Canva 魔法圖層，而非硬要 GPT 重新拆解組回 PPTX。</div>
+  </div>
+  <div class="golden">
+    <div class="q">Q3（Kenny Huang）：可否突破 ChatGPT 一次最多只能產出 10 頁、多頁會合併成一張圖的限制？</div>
+    <div class="a">A：下指令時要明確指定「16:9，每一張都分開」——講師現場示範：「您下指令的時候，告訴他每一頁都分開……16比9，讓他知道我的尺寸是分開的，那三頁都要分開。」</div>
+  </div>
+  <div class="golden">
+    <div class="q">Q4：下載下來的圖太糊，在 Canva 裡沒辦法重繪怎麼辦？</div>
+    <div class="a">A：按圖片、右上角選項，用 Canva 的「取消模糊／增強」功能重新處理一次；若整份簡報都要拆解，改用 PDF 整份匯入 Canva AI 一次拆開所有內頁圖層。</div>
+  </div>
+</section>
+
+<section class="chapter" id="sec-recap">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#b23a5b)">RECAP</span>
+  <h2 class="ct">10. 重點整理</h2>
+  <ul class="pt">
+    <li><b>六種工具各有定位</b>：Gemini（Google生態系內建）、ChatGPT（Image 2.0 畫圖＋套版最方便）、Claude（PowerPoint增益集但需付費＋365）、NotebookLM（最會套版）、Gamma（最老牌，追上Agent浪潮）、Manus（已轉點數收費，較少人用來做簡報）。</li>
+    <li><b>YAML／壓模格式</b>：先鎖定 title / description / theme / slides 結構，讓輸出更聽話、更好複製風格。</li>
+    <li><b>字型或版型改不動的救援法</b>：把圖片或整份 PDF 丟進 Canva，用「魔法圖層」解構成可個別編輯的物件。</li>
+    <li><b>多頁被合成一張圖</b>：下指令時明確要求「16:9，每一張都分開」。</li>
+    <li><b>版權提醒</b>：要求特定風格（如玩具總動員）時，改用「類似」「相似」的說法會更順利——「因為他現在版權抓得比較嚴，你跟他說類似、類似，他就會做。」</li>
+    <li><b>遇到專有名詞</b>：先請 AI 用形容的方式解釋這個名詞，再按照它的說明去畫，效果更穩定。</li>
+    <li><b>建議提供自己的資料</b>：「除非你很相信AI，或者你對這個領域非常熟悉，可以直接判斷資料是否正確；不然我還滿需要給他資料的。」</li>
+    <li><b>講師個人首選</b>：「我簡報都怎麼做？ChatGPT跟Codex算是我的首選……我大概就把我想做的內容告訴他，還有我的想法告訴他，他就做一做。」</li>
+  </ul>
+</section>
+
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5a5866)">SOURCES</span>
+  <h2 class="ct">11. 資料來源與製作說明</h2>
+  <ul class="pt">
+    <li><b>原始教材：</b>EP202607.22「生成式AI簡報工具：一次掌握6種簡報工具」官方課程簡報 13 頁（逐頁原圖全收錄）＋錄影回放（63.9 分鐘）；均為 anyone-reader 權限、公開可下載。</li>
+    <li><b>製作方式：</b>下載完整錄影 → faster-whisper（small 模型）產出全 63.9 分鐘完整逐字稿 → 下載原始 pptx 取出 13 頁投影片原圖 → 對照場景切換擷取的實況截圖 → <b>逐頁親眼判讀</b>並對照逐字稿整理成本頁章節。第 9 章「真實學員 Q&A」的問題文字直接來自錄影畫面中可讀到的 Google Meet 聊天室截圖，非杜撰。內容為<b>真實課程內容</b>，非推測改寫。</li>
+    <li><b>誠實揭露：</b>逐字稿由語音辨識產生，對「Gemini」「Gamma」「Canva」等產品名稱偶有同音誤植（如「Jumper Line」「伽罵／Juma」「Kemba／CANBA」），本頁一律以官方簡報與畫面判讀為準做校正；第 7 章提到的另一款花絮工具因收音品質無法確認正確產品名稱，故未指名，僅忠實轉述功能描述。</li>
+    <li><b>介面參考：</b>版型沿用本站 EP29–EP47 課堂筆記的乾淨白底編輯風格。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  EP202607.22「生成式AI簡報工具：一次掌握6種簡報工具」課堂筆記・2026/07 整理<br>
+  🍀 Learn AI with Tarshar｜搭配 <a href="ep202607-22-ai-skills.html">互動技能地圖</a> 使用效果最佳
+</footer>
+
+</body>
+</html>

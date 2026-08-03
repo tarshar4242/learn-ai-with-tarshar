@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP41 課堂筆記｜AI 生圖篇：不只給漁獲，也不只給釣竿，AI 直接給你智慧漁網</title>
+<meta name="description" content="晨學講堂 EP41 課堂筆記：AI 生圖進階——Guidance／CFG 服從程度旋鈕、Seed 種子碼與重現、可重現紀錄表、從生圖延伸到影片、推薦實驗流程與易錯點。依官方課程簡報與課堂筆記整理。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#c33d80; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px;border-left:none}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+.note.violet{background:#F3EFFB;border-color:#DFD2F0;color:#5a34a8}
+.note.rose{background:#FBEEF1;border-color:#F0D2DB;color:#9c2f52}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.prompt{position:relative;background:#1d1d1f;border-radius:10px;padding:15px 16px;margin:12px 0;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt .tag{display:inline-block;font-size:11px;letter-spacing:.06em;color:#c9c4ff;border:1px solid #3a3a40;border-radius:6px;padding:2px 9px;margin-bottom:8px}
+.prompt b{color:#fff}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.embed{margin:14px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000}
+.embed iframe{display:block;width:100%;aspect-ratio:16/9;border:0}
+.embed .cap{font-size:12.5px;color:var(--ink3);padding:10px 16px;background:var(--paper);border-top:1px solid var(--line)}
+.ts{display:inline-block;font-family:"Cascadia Code",Consolas,monospace;font-weight:700;font-size:12px;color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,#fff);border-radius:5px;padding:2px 8px;margin-right:7px;letter-spacing:.4px;vertical-align:middle}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+.layers{display:grid;gap:10px;margin:14px 0}
+.lyr{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:13px 15px;background:#fff}
+.lyr .n{flex:none;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--accent)}
+.lyr h4{margin:0 0 3px;font-size:14.5px}
+.lyr p{font-size:13px;margin:0}
+.sub{color:var(--ink2)}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#a8c686" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP41 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="ep41-ai-skills.html">🗺️ 互動技能地圖</a>
+    </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 晨學講堂 · EP41</span>
+  <h1>AI 生圖篇：<span>智慧漁網</span><br>不只給漁獲，也不只給釣竿</h1>
+  <p class="lead">「給漁獲」是拿一張生成圖；「給釣竿」是學會寫 Prompt；<b>「智慧漁網」</b>是把 Prompt、參數、<b>Seed</b>、比較方法與輸出流程組合起來，讓好結果可以<b>重現、調整與系列化</b>。本頁依<b>官方課程簡報（約 31 頁）與課堂筆記</b>整理，聚焦兩個關鍵旋鈕：<b>Guidance／CFG</b> 與 <b>Seed</b>。</p>
+  <div class="meta">
+    <span>📅 2026/06/12 直播</span>
+    <span>🎛️ CFG 服從程度</span>
+    <span>🌱 Seed 種子碼</span>
+    <span>📋 可重現紀錄表</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-map">1. 一頁看懂全課程</a>
+  <a href="#sec-cfg">2. Guidance／CFG 服從旋鈕</a>
+  <a href="#sec-cfgtest">3. CFG 實驗方式</a>
+  <a href="#sec-seed">4. Seed 種子碼與重現</a>
+  <a href="#sec-record">5. 可重現紀錄表</a>
+  <a href="#sec-video">6. 從生圖延伸到影片</a>
+  <a href="#sec-flow">7. 實驗流程與易錯點</a>
+  <a href="#sec-src">8. 資料來源與製作說明</a>
+</nav>
+
+<article>
+
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--purple))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>EP41_「AI 生圖篇：不只給漁獲，也不只給釣竿，AI 直接給你智慧漁網」</td></tr>
+    <tr><th>頻道</th><td>生成式 AI 應用電台・晨學講堂</td></tr>
+    <tr><th>直播日期</th><td>2026/06/12（五）晚間直播</td></tr>
+    <tr><th>教材</th><td>官方課程簡報 <b>約 31 頁</b>＋課堂筆記</td></tr>
+    <tr><th>一句話先懂</th><td>從「一次生圖」走向「<b>可控制、可重現的流程</b>」。關鍵是兩個旋鈕：<b>CFG</b>（AI 對 Prompt 的服從程度）與 <b>Seed</b>（亂數起點）；固定它們，才知道每次差異是哪個變數造成的。</td></tr>
+  </table></div>
+
+  <h3>🎬 錄影回放</h3>
+  <div class="embed">
+    <iframe src="https://drive.google.com/file/d/1HuUWxtGIMg_j22zCcd3bwrOVgzcUQlJ1/preview" allow="autoplay" loading="lazy" title="EP41 錄影回放"></iframe>
+    <div class="cap">EP41 AI 生圖篇 課堂錄影 — 需登入有觀看權限的 Google 帳號。</div>
+  </div>
+  <div class="note blue">💡 本頁以<b>官方課程簡報原文與課堂筆記</b>逐節整理（真實課程內容，非推測）。示範生圖的實際畫面與逐字稿時間碼待錄影開通授權後補入。</div>
+</section>
+
+<section class="chapter" id="sec-map">
+  <span class="chip" style="background:linear-gradient(90deg,var(--cyan),var(--accent))">OVERVIEW</span>
+  <h2 class="ct">1. 一頁看懂全課程</h2>
+  <p class="cd">整堂課的比喻主線：漁獲 → 釣竿 → <b>智慧漁網</b>。要織出「智慧漁網」，先學會兩個旋鈕，再建立紀錄表把好結果固定下來。</p>
+  <figure class="diagram">
+    <svg viewBox="0 0 900 300" xmlns="http://www.w3.org/2000/svg" font-family="'Noto Sans TC',sans-serif">
+      <rect width="900" height="300" fill="#fbfcff"/>
+      <text x="450" y="40" text-anchor="middle" font-size="20" font-weight="900" fill="#2b2a33">從「一次生圖」到「可重現流程」</text>
+      <g>
+        <rect x="40" y="70" width="230" height="90" rx="14" fill="#fdeef4" stroke="#f0cede"/>
+        <text x="155" y="104" text-anchor="middle" font-size="15" font-weight="800" fill="#c8377f">🐟 給漁獲</text>
+        <text x="155" y="132" text-anchor="middle" font-size="12" fill="#5a5866">直接拿一張生成圖</text>
+      </g>
+      <text x="290" y="120" text-anchor="middle" font-size="22" fill="#d9a5c4">→</text>
+      <g>
+        <rect x="315" y="70" width="230" height="90" rx="14" fill="#f0eefc" stroke="#d8cff2"/>
+        <text x="430" y="104" text-anchor="middle" font-size="15" font-weight="800" fill="#7a4fd6">🎣 給釣竿</text>
+        <text x="430" y="132" text-anchor="middle" font-size="12" fill="#5a5866">學會寫 Prompt</text>
+      </g>
+      <text x="565" y="120" text-anchor="middle" font-size="22" fill="#d9a5c4">→</text>
+      <g>
+        <rect x="590" y="70" width="270" height="90" rx="14" fill="#e8f4ec" stroke="#c3e4d1"/>
+        <text x="725" y="104" text-anchor="middle" font-size="15" font-weight="800" fill="#1d9e6f">🕸️ 智慧漁網</text>
+        <text x="725" y="132" text-anchor="middle" font-size="11.5" fill="#5a5866">Prompt＋參數＋Seed＋紀錄＋流程</text>
+      </g>
+      <g>
+        <rect x="120" y="196" width="300" height="74" rx="12" fill="#fbeef5" stroke="#f0cede"/>
+        <text x="270" y="226" text-anchor="middle" font-size="14" font-weight="800" fill="#c8377f">🎛️ 旋鈕一：CFG</text>
+        <text x="270" y="250" text-anchor="middle" font-size="11.5" fill="#5a5866">AI 對 Prompt 的服從程度</text>
+      </g>
+      <g>
+        <rect x="480" y="196" width="300" height="74" rx="12" fill="#eef7f1" stroke="#c3e4d1"/>
+        <text x="630" y="226" text-anchor="middle" font-size="14" font-weight="800" fill="#1d9e6f">🌱 旋鈕二：Seed</text>
+        <text x="630" y="250" text-anchor="middle" font-size="11.5" fill="#5a5866">亂數起點，固定就能重現</text>
+      </g>
+    </svg>
+    <figcaption>圖 1｜EP41 全景：漁獲→釣竿→智慧漁網，與兩個關鍵旋鈕</figcaption>
+  </figure>
+  <div class="golden"><div class="q">「CFG 不是越高越好，就像音量不是轉到最大最好聽。」</div><div class="a">—— 本集最核心的一句</div></div>
+</section>
+
+<section class="chapter" id="sec-cfg">
+  <span class="chip" style="background:linear-gradient(90deg,#d4508e,#7a4fd6)">CHAPTER 01</span>
+  <h2 class="ct">2. Guidance／CFG 是什麼</h2>
+  <p class="cd">白話：CFG 是 AI 對 Prompt 的「<b>服從程度旋鈕</b>」。正式：<b>Classifier-Free Guidance Scale</b>——擴散模型生成時調整條件提示影響強度的參數。不同工具可能叫 Guidance／Prompt Guidance，數值範圍也不一定相同。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">CFG 位置</th><th>會發生什麼</th><th>適合</th></tr>
+    <tr><td><b>太低</b></td><td>AI 比較自由，畫面自然、有意外創意，但主體／場景／風格可能偏離 Prompt</td><td>發想、探索、找新方向</td></tr>
+    <tr><td><b>中間（約 6–9）</b></td><td>比較願意遵守 Prompt，同時保留自然感</td><td>建立第一個<b>基準版本</b>（初學者先從中間值測試，實際數值依模型／工具）</td></tr>
+    <tr><td><b>太高</b></td><td>過度強化提示詞，可能僵硬、不自然、過度銳利或戲劇化；重複的形容詞會被放大</td><td>—（多半不理想）</td></tr>
+  </table></div>
+</section>
+
+<section class="chapter" id="sec-cfgtest">
+  <span class="chip" style="background:linear-gradient(90deg,#c8377f,#0aa6c9)">CHAPTER 02</span>
+  <h2 class="ct">3. CFG 實驗方式：一次只改一個變數</h2>
+  <p class="cd">固定 <b>Prompt、Seed、尺寸與模型</b>，只改 CFG。例如分別產生低、中、高三組，再比較。</p>
+  <ul class="pt">
+    <li>主體是否符合。</li>
+    <li>風格是否清楚。</li>
+    <li>構圖是否自然。</li>
+    <li>是否出現過度強化或破圖。</li>
+  </ul>
+  <div class="note gold">⚠️ <b>一次只改一個變數</b>，才能知道是哪個參數造成差異。這是整堂課的方法論核心。</div>
+</section>
+
+<section class="chapter" id="sec-seed">
+  <span class="chip" style="background:linear-gradient(90deg,#1d9e6f,#0aa6c9)">CHAPTER 03</span>
+  <h2 class="ct">4. Seed 種子碼與「重現」</h2>
+  <p class="cd">白話：Seed 是 AI 生圖的「<b>亂數起點</b>」。正式：初始化隨機數生成器的數值；在模型、Prompt 與參數相同時，固定 Seed 有助於重現相同或相近的結果。</p>
+  <h3>Seed 的最大用途：重現</h3>
+  <p>當一張圖的構圖與人物位置很好，只想調色溫、背景或風格時，<b>記下 Seed</b> 就能在相似基礎上微調。適合：比較不同 Prompt 版本、微調風格、固定角色或構圖、製作系列圖、做教學示範與 A/B 測試。</p>
+  <h3>Seed 操作邏輯</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:130px">階段</th><th>怎麼做</th></tr>
+    <tr><td>發想階段</td><td>讓 Seed <b>隨機</b>，多看不同可能性</td></tr>
+    <tr><td>選定方向後</td><td>① 記下 Seed　② 固定模型與構圖　③ 逐一修改 Prompt／CFG／Steps／比例／解析度　④ 記錄每次修改與輸出</td></tr>
+  </table></div>
+  <div class="note blue">💡 若不固定 Seed，每次畫面變動太多，就難以判斷是 <b>Prompt</b> 還是<b>參數</b>造成的。</div>
+</section>
+
+<section class="chapter" id="sec-record">
+  <span class="chip" style="background:linear-gradient(90deg,#7a4fd6,#2f6df0)">CHAPTER 04</span>
+  <h2 class="ct">5. 建立可重現紀錄表</h2>
+  <p class="cd">每次重要生成至少記錄這些欄位，好結果才留得住、系列圖才做得出來。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:170px">欄位</th><th>用途</th></tr>
+    <tr><td>模型與版本</td><td>確認生成引擎</td></tr>
+    <tr><td>Prompt</td><td>重現文字條件</td></tr>
+    <tr><td>Negative Prompt</td><td>記錄排除項目（若工具支援）</td></tr>
+    <tr><td>Seed</td><td>固定亂數起點</td></tr>
+    <tr><td>Guidance／CFG</td><td>記錄提示詞強度</td></tr>
+    <tr><td>尺寸／比例</td><td>保留版型條件</td></tr>
+    <tr><td>日期與工具</td><td>工具更新可能改變結果</td></tr>
+    <tr><td>輸出檔名</td><td>連接參數與成品</td></tr>
+  </table></div>
+</section>
+
+<section class="chapter" id="sec-video">
+  <span class="chip" style="background:linear-gradient(90deg,#2f6df0,#0aa6c9)">CHAPTER 05</span>
+  <h2 class="ct">6. 從生圖延伸到影片</h2>
+  <p class="cd">簡報提到可透過 <b>Gemini App 的 Google AI Pro 方案</b>生成影片，當時教材標示每日最多三部。此類方案、模型、地區與每日限制會更新，操作前<b>必須以當下官方帳號畫面為準</b>。</p>
+  <h4>生圖轉影片時，除了畫面 Prompt，還要補：</h4>
+  <ul class="pt">
+    <li>主體動作。</li>
+    <li>鏡頭運動。</li>
+    <li>時間長度與節奏。</li>
+    <li>要保留的角色、構圖與風格。</li>
+    <li>音訊或無聲要求。</li>
+  </ul>
+  <div class="note gold">⚠️ 別把「教材當時的方案限制」視為永久規則；也要確認圖像、人物、商標與訓練素材的使用權。</div>
+</section>
+
+<section class="chapter" id="sec-flow">
+  <span class="chip" style="background:linear-gradient(90deg,#1d9e6f,#d4508e)">CHAPTER 06</span>
+  <h2 class="ct">7. 推薦實驗流程與易錯點</h2>
+  <h3>推薦實驗流程</h3>
+  <ol class="st">
+    <li>寫一個清楚的<b>基準 Prompt</b>。</li>
+    <li>讓 Seed 隨機，生成多個方向。</li>
+    <li>選一張構圖最好者，<b>記下 Seed</b>。</li>
+    <li>固定 Seed，比較三個 CFG 值。</li>
+    <li>選定 CFG，再<b>一次只改一個 Prompt 元素</b>。</li>
+    <li>把最終參數<b>存成模板</b>。</li>
+    <li>需要系列內容時沿用相同紀錄表。</li>
+  </ol>
+  <h3>六個易錯點</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:40px">#</th><th>易錯點</th></tr>
+    <tr><td>1</td><td>把 CFG 當品質旋鈕，無限制拉高</td></tr>
+    <tr><td>2</td><td>沒記 Seed，想微調時整張圖全變</td></tr>
+    <tr><td>3</td><td>同時改 Prompt／Seed／比例／模型，無法知道原因</td></tr>
+    <tr><td>4</td><td>沒記錄工具與模型版本，幾週後無法重現</td></tr>
+    <tr><td>5</td><td>把教材當時的方案限制視為永久規則</td></tr>
+    <tr><td>6</td><td>未確認圖像、人物、商標與訓練素材的使用權</td></tr>
+  </table></div>
+  <h3>立即練習：咖啡九宮格</h3>
+  <div class="prompt">用同一個咖啡 Prompt 完成九宮格實驗：
+① 固定 Seed，CFG 分成低、中、高；
+② 再固定最佳 CFG，只改三種光線；
+③ 最後寫下哪一個變數造成最大的可見差異。</div>
+  <div class="golden"><div class="q">「智慧漁網＝把 Prompt、參數、Seed、比較方法與輸出流程組合起來，讓好結果可以重現、調整與系列化。」</div><div class="a">本集金句</div></div>
+</section>
+
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5a5866)">SOURCES</span>
+  <h2 class="ct">8. 資料來源與製作說明</h2>
+  <ul class="pt">
+    <li><b>原始教材：</b>EP41「AI 生圖篇：智慧漁網」官方課程簡報約 31 頁＋課堂筆記。</li>
+    <li><b>製作方式：</b>逐節對照官方簡報可讀文字與課堂筆記整理（含 Guidance／CFG、Seed、Gemini App 影片限制等），內容為<b>真實課程內容</b>，圖解為自製 SVG。</li>
+    <li><b>誠實聲明：</b>簡報部分投影片為圖像，其文字待錄影／私人 Drive 授權後補齊；本頁<b>不推測尚未讀取到的投影片內容</b>。示範生圖畫面與逐字稿時間碼需錄影開通授權後補入。生圖工具與方案（含每日影片數）會更新，以你當下官方帳號畫面為準。</li>
+    <li><b>介面參考：</b>互動技能地圖頁沿用本站 EP44–46 的卡片式多層導覽與遊戲化進度設計。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  EP41「AI 生圖篇：智慧漁網」課堂筆記・2026/07 整理<br>
+  🍀 Learn AI with Tarshar｜搭配 <a href="ep41-ai-skills.html">互動技能地圖</a> 使用效果最佳
+</footer>
+
+</body>
+</html>

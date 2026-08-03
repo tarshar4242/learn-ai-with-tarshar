@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP202607.21 課堂筆記｜用手機遙控 Codex：讓 AI Agent 幫你處理任務</title>
+<meta name="description" content="晨學講堂 EP202607.21 課堂筆記：用手機遙控 Codex——手機如何遙控 Codex 的三步驟流程、開始前準備、電腦端安裝設定、手機端配對 Remote、用手機交辦任務、Queue 與 Steer、連不上的排查、最適合示範的任務、更順暢的建議，以及 MCP-NotebookLM 與 Skill 簡報製作實作案例。根據真實錄影逐字稿與課程簡報整理。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#bf6a1e; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(24px,4.2vw,40px);font-weight:800;line-height:1.18;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px;border-left:none}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#eac79a" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP202607.21 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="ep202607-21-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 年中共學 · EP202607.21</span>
+  <h1>用手機遙控 Codex<br><span>讓 AI Agent 幫你處理任務</span></h1>
+  <p class="lead">EP202607.21 教你用手機遙控電腦端的 Codex（透過 ChatGPT 桌面 App）：手機是控制台，真正執行任務、讀取檔案與修改內容的是電腦端。本頁根據<b>真實錄影逐字稿與課程簡報全頁原圖</b>整理，含 ChatGPT 帳號額度管理技巧、Queue／Steer 兩種下指令方式，以及 MCP-NotebookLM、Skill 簡報製作兩個實作案例。</p>
+  <div class="meta">
+    <span>📅 2026/07/21 直播</span>
+    <span>🗂️ 教材：20 頁簡報＋錄影（40.7 分鐘）</span>
+    <span>📱 主題：Codex 手機遙控</span>
+    <span>💡 額度管理技巧</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-quota">1. 開場：ChatGPT 額度管理小技巧</a>
+  <a href="#sec-why">2. 手機如何遙控 Codex</a>
+  <a href="#sec-prep">3. 開始前要準備什麼</a>
+  <a href="#sec-computer">4. 電腦端如何安裝與設定</a>
+  <a href="#sec-mobile">5. 手機端如何配對 Remote</a>
+  <a href="#sec-task">6. 如何用手機交辦任務＋手機看得到什麼</a>
+  <a href="#sec-queue">7. Queue 與 Steer 怎麼用</a>
+  <a href="#sec-trouble">8. 連不上或看不到主機怎麼辦</a>
+  <a href="#sec-demo">9. 最適合示範的任務＋更順暢的建議</a>
+  <a href="#sec-cases">10. 實作案例：MCP-NotebookLM＋Skill 簡報製作</a>
+  <a href="#sec-recap">11. 重點整理</a>
+  <a href="#sec-src">12. 資料來源與製作說明</a>
+</nav>
+
+<article>
+
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--amber))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>EP202607.21「用手機遙控 Codex：讓 AI Agent 幫你處理任務」（年中共學 5 天系列之一）</td></tr>
+    <tr><th>頻道</th><td>生成式 AI 應用電台・年中共學</td></tr>
+    <tr><th>教材</th><td>官方課程簡報 20 頁（逐頁原圖全收錄）＋錄影回放 40.7 分鐘</td></tr>
+    <tr><th>一句話先懂</th><td>手機是控制台；真正執行任務、讀取檔案與修改內容的是電腦端。連線靠<b>手機下載 ChatGPT App</b>＋<b>電腦安裝 ChatGPT 桌面版</b>，在設定裡找到「Remote」開啟，掃 QR Code 配對即可。</td></tr>
+  </table></div>
+  <figure class="shot">
+    <img src="ep202607-21-img/slide01.jpg" alt="用手機遙控Codex封面" loading="lazy">
+    <figcaption>簡報封面｜用手機遙控 Codex：讓 AI Agent 幫你處理任務——手機下達任務，電腦端 Codex 執行並回傳文件、程式碼、分析結果。</figcaption>
+  </figure>
+</section>
+
+<section class="chapter" id="sec-quota">
+  <span class="chip" style="background:linear-gradient(90deg,#bf6a1e,#9c7b23)">CHAPTER 01</span>
+  <h2 class="ct">1. 開場：ChatGPT 額度管理小技巧</h2>
+  <p class="cd">逐字稿原音（00:41–01:41）——正式進入手機遙控主題前，先教怎麼省額度。</p>
+  <ul class="pt">
+    <li><b>用標準速度就好</b>：不趕時間就別選快速，「速度越快，扣的量會越多」。</li>
+    <li><b>推理強度選中間</b>：選越高會耗費更多額度。</li>
+    <li><b>模型選 5.4 mini</b>：「這些模型都是比較需要推理、比較需要寫程式的時候用，我們現在只是很簡單地安裝寫好的懶人包，所以用 5.4 mini 就好，可以大幅減少容量限制。」</li>
+    <li><b>個人化性格選「務實」</b>：不要選友善，「他會非常的囉唆」。</li>
+  </ul>
+  <div class="note gold">⚠️ 逐字稿（02:00–02:10）補充：想讓 Codex 自動上網找資料，「瀏覽器」開關要打開；想讓它連接你的電腦操縱東西，「Computer Use」開關也要打開。額度用完可以換一個 AI 帳號進去做，同樣工作場合換個帳號即可。</div>
+</section>
+
+<section class="chapter" id="sec-why">
+  <span class="chip" style="background:linear-gradient(90deg,#9c7b23,#3b6bb0)">CHAPTER 02</span>
+  <h2 class="ct">2. 手機如何遙控 Codex</h2>
+  <figure class="shot">
+    <img src="ep202607-21-img/slide02.jpg" alt="手機如何遙控Codex" loading="lazy">
+    <figcaption>簡報 2｜手機是控制台；真正執行任務、讀取檔案與修改內容的是電腦端。① 手機下達任務與查看進度：在 ChatGPT 手機 App 選擇 Codex，下達任務並即時查看執行進度 ② 電腦執行指令、讀檔、修改內容：電腦端的 ChatGPT 桌面 App / Codex 收到指令後，執行任務、讀取檔案並修改內容 ③ 結果回傳手機，必要時由你核准操作：任務完成或需要確認時，結果與變更摘要回傳到手機，由你核准後再執行後續操作（如提交、發布等）。</figcaption>
+  </figure>
+  <p>逐字稿（03:38–03:53）：「我們今天人在外面，我們想要操控我的電腦，讓我的電腦可以去做事情——讓他可以去幫你做簡報、讓他可以去使用 Skill、讓他可以去使用 MCP，幫你做任何的事情。」</p>
+  <div class="note blue">💡 常見誤解澄清（03:55–04:10）：手機跟電腦<b>不需要同一個網路</b>——「你這支手機在外面，怎麼可能會分享網路給他」；重點是<b>你的電腦要開機</b>，手機才讀得到，這不是網路共享問題。</div>
+</section>
+
+<section class="chapter" id="sec-prep">
+  <span class="chip" style="background:linear-gradient(90deg,#3b6bb0,#5645D4)">CHAPTER 03</span>
+  <h2 class="ct">3. 開始前要準備什麼</h2>
+  <figure class="shot">
+    <img src="ep202607-21-img/slide03.jpg" alt="開始前要準備什麼" loading="lazy">
+    <figcaption>簡報 3｜先確認電腦、手機、帳號與網路條件都已就緒。</figcaption>
+  </figure>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">端</th><th>準備項目</th></tr>
+    <tr><td><b>電腦端</b></td><td>Windows 或 macOS 電腦、最新版 ChatGPT 桌面 App、可使用 Codex 的帳號、要處理的專案資料夾、穩定網路與保持開機</td></tr>
+    <tr><td><b>手機端</b></td><td>iPhone 或 Android、最新版 ChatGPT App、與電腦登入相同帳號、開啟 Remote 功能、能接收通知與核准操作</td></tr>
+  </table></div>
+  <div class="note gold">⚠️ 逐字稿（06:57–07:08）：手機請下載「ChatGPT」App，<b>不是下載「Codex」App</b>——「一定一定是打 GPT，你也找不到 Codex。」</div>
+</section>
+
+<section class="chapter" id="sec-computer">
+  <span class="chip" style="background:linear-gradient(90deg,#5645D4,#b25269)">CHAPTER 04</span>
+  <h2 class="ct">4. 電腦端如何安裝與設定</h2>
+  <figure class="shot">
+    <img src="ep202607-21-img/slide04.jpg" alt="電腦端如何安裝與設定" loading="lazy">
+    <figcaption>簡報 4｜先在電腦完成桌面 App 安裝，再進入 Codex 專案環境。① 安裝 App：下載並安裝 ChatGPT 桌面 App ② 登入帳號：使用可用 Codex 的帳號登入 ③ 開啟專案：選擇要處理的資料夾或專案 ④ 先做測試：先請 Codex 讀取檔案並回報內容。建議先備份或建立 Git checkpoint，再進行大量修改。</figcaption>
+  </figure>
+  <p>逐字稿（04:54–05:05）：Mac 下載的是 dmg 檔，Windows 版綁在 Microsoft Store 裡，「按開啟就好」。第一次登入時 ChatGPT 與 Codex 兩個介面可以選，「不管你的界面在 GPT 或者是在 Codex，功能是一模一樣的」。</p>
+</section>
+
+<section class="chapter" id="sec-mobile">
+  <span class="chip" style="background:linear-gradient(90deg,#b25269,#0d8f80)">CHAPTER 05</span>
+  <h2 class="ct">5. 手機端如何配對 Remote</h2>
+  <figure class="shot">
+    <img src="ep202607-21-img/slide05.jpg" alt="手機端如何配對Remote" loading="lazy">
+    <figcaption>簡報 5｜手機連接 Codex 前，先把環境設好——電腦端（最新版 App、可用帳號、專案資料夾、保持開機不睡眠、Allow connections/Set up Remote 已開啟）、手機端（最新版 App、相同帳號/工作區、開啟通知、iPhone 或 Android 都可、掃描 QR Code 完成配對）、連線條件（穩定 Wi-Fi、優先有線網路、避免頻繁切換或睡眠、檢查 VPN/防火牆）。重點：Remote 不是雲端代跑；真正執行任務的是電腦端。</figcaption>
+  </figure>
+  <figure class="shot">
+    <img src="ep202607-21-img/slide08.jpg" alt="手機端如何配對Remote QR Code" loading="lazy">
+    <figcaption>簡報 8｜從電腦開啟 Remote 設定，再用手機掃描 QR Code 完成連線：① 電腦開啟 Remote（進入 Set up Remote）② 顯示 QR Code ③ 手機掃描（ChatGPT App 掃描配對）④ 完成驗證（帳號、工作區與驗證確認）。回到電腦確認：Allow connections 已開啟，裝置已出現在連線清單。</figcaption>
+  </figure>
+  <p>逐字稿（05:41–06:16）：遠端連接功能藏在兩個地方——① 問號說明選單裡有「設定遠端」② 帳號設定裡滑到「連線」，兩邊都能進去設定手機配對。</p>
+</section>
+
+<section class="chapter" id="sec-task">
+  <span class="chip" style="background:linear-gradient(90deg,#0d8f80,#2f7d92)">CHAPTER 06</span>
+  <h2 class="ct">6. 如何用手機交辦任務＋手機看得到什麼</h2>
+  <figure class="shot">
+    <img src="ep202607-21-img/slide06.jpg" alt="如何用手機交辦任務" loading="lazy">
+    <figcaption>簡報 6｜在手機選擇主機與專案後，用自然語言交代工作內容：① 選擇主機（在 Remote 中選擇已連線的電腦）② 選擇專案（進入資料夾、Git repository 或既有對話）③ 下達任務（先請 Codex 閱讀資料，再提出計畫、修改與測試）。推薦說法：「先讀取這個資料夾，說明有哪些檔案與用途；提出修正計畫，等我核准後再修改。」</figcaption>
+  </figure>
+  <figure class="shot">
+    <img src="ep202607-21-img/slide07.jpg" alt="手機可以看到哪些內容" loading="lazy">
+    <figcaption>簡報 7｜除了追蹤進度，也能在必要時核准敏感操作：目前任務進度、終端機輸出與錯誤訊息、修改了哪些檔案、測試結果與 Git diff、需要你核准的操作。常見核准項目：安裝套件、執行終端機指令、存取其他資料夾、大量修改或刪除檔案。</figcaption>
+  </figure>
+</section>
+
+<section class="chapter" id="sec-queue">
+  <span class="chip" style="background:linear-gradient(90deg,#2f7d92,#9c7b23)">CHAPTER 07</span>
+  <h2 class="ct">7. Queue 與 Steer 怎麼用</h2>
+  <figure class="shot">
+    <img src="ep202607-21-img/slide09.jpg" alt="Queue與Steer怎麼用" loading="lazy">
+    <figcaption>簡報 9｜Queue：把新的要求排入下一個任務，等目前工作完成後再處理——適合補做測試、完成後再整理報告、依序加入下一項工作。Steer：在任務進行中立刻導正方向，避免繼續做錯——適合停止修改某資料夾、縮小處理範圍、改成先分析再修改。一般預設用 Queue；只有方向明顯偏掉時，再用 Steer。</figcaption>
+  </figure>
+</section>
+
+<section class="chapter" id="sec-trouble">
+  <span class="chip" style="background:linear-gradient(90deg,#9c7b23,#bf6a1e)">CHAPTER 08</span>
+  <h2 class="ct">8. 連不上或看不到主機怎麼辦</h2>
+  <figure class="shot">
+    <img src="ep202607-21-img/slide10.jpg" alt="連不上或看不到主機怎麼辦" loading="lazy">
+    <figcaption>簡報 10｜先從帳號、權限、連線與裝置狀態逐一檢查：手機與電腦是否登入相同帳號、是否使用相同工作區、電腦 ChatGPT App 是否仍在執行、Allow connections 是否已開啟、電腦是否睡眠斷線或鎖定、手機與電腦 App 是否更新到最新版。Remote 不是雲端代跑；電腦必須保持開機、連網並開啟 App。</figcaption>
+  </figure>
+</section>
+
+<section class="chapter" id="sec-demo">
+  <span class="chip" style="background:linear-gradient(90deg,#bf6a1e,#5645D4)">CHAPTER 09</span>
+  <h2 class="ct">9. 最適合示範的任務＋更順暢的建議</h2>
+  <figure class="shot">
+    <img src="ep202607-21-img/slide11.jpg" alt="最適合示範的手機遙控任務" loading="lazy">
+    <figcaption>簡報 11｜用一段清楚指令，展示手機下令、電腦執行、人工核准與回報成果的完整流程。示範指令：「請先讀取目前資料夾。列出所有檔案與用途。提出整理與改善計畫，不要先修改。等我核准後，再建立 output 資料夾並輸出結果。完成後回報修改檔案、執行結果與需要人工檢查的項目。」</figcaption>
+  </figure>
+  <figure class="shot">
+    <img src="ep202607-21-img/slide13.jpg" alt="怎樣更順暢更方便" loading="lazy">
+    <figcaption>簡報 13｜把工作環境簡化、任務範圍縮小，操作會更省力：電腦更順暢（插電使用、關閉大型下載）、專案更好管（只開當前資料夾、先切分支或 Worktree）、手機更方便（通知開啟、常用主機與對話先固定好）、下指令更有效（先讀取→提計畫→等核准→再修改，一次只交辦一件主任務）。</figcaption>
+  </figure>
+  <figure class="shot">
+    <img src="ep202607-21-img/slide14.jpg" alt="讓運作更快的最佳化建議" loading="lazy">
+    <figcaption>簡報 14｜速度不只看網路，也和任務切法、檔案範圍與工作習慣有關：速度關鍵（5GHz Wi-Fi 或穩定有線、電腦不睡眠、暫停大量雲端同步）、推薦配置（電腦插電、桌面 App 開啟、新分支/Worktree、Git checkpoint）、加速做法（先指定子資料夾、先盤點再批次、測試報告可用 Queue 排隊）。最穩的做法：網路穩、範圍小、先計畫再執行。</figcaption>
+  </figure>
+</section>
+
+<section class="chapter" id="sec-cases">
+  <span class="chip" style="background:linear-gradient(90deg,#5645D4,#0d8f80)">CHAPTER 10</span>
+  <h2 class="ct">10. 實作案例：MCP-NotebookLM＋Skill 簡報製作</h2>
+  <h3>案例一：MCP–NotebookLM 實作</h3>
+  <figure class="shot">
+    <img src="ep202607-21-img/slide15.jpg" alt="MCP-NotebookLM實作案例" loading="lazy">
+    <figcaption>簡報 15｜根據現有資料，快速完成圖表、憑證整理、NotebookLM 上傳、資料表輸出與 Google Sheet 串接。資料來源：現有 Excel/CSV/表單資料、現場拍照的憑證或收據。核心流程：先依資料製作統計圖表 → 拍照憑證後整理成可讀內容 → 將資料與圖表上傳 NotebookLM → 請 AI 產生摘要與資料表。最終產出：形成可閱讀的表格內容、開啟 Google Sheet 整理資料、取得可分享的連結。</figcaption>
+  </figure>
+  <figure class="shot">
+    <img src="ep202607-21-img/slide16.jpg" alt="MCP-NotebookLM操作流程" loading="lazy">
+    <figcaption>簡報 16｜六步驟：① 整理現有資料 ② 製作資料圖表 ③ 拍照憑證 ④ 上傳 NotebookLM ⑤ 生成資料表 ⑥ 開啟 Google Sheet。可交辦內容：「幫我依資料做圖表、整理憑證、彙整成資料表，最後開啟 Google Sheet 並提供分享連結。」範疇重點：資料先乾淨、欄位先明確，後續 AI 整理與 Sheet 串接會更穩、更快。</figcaption>
+  </figure>
+  <h3>案例二：Skill 導入簡報製作</h3>
+  <figure class="shot">
+    <img src="ep202607-21-img/slide18.jpg" alt="Skill製作簡報的操作流程" loading="lazy">
+    <figcaption>簡報 18｜從需求輸入到上傳 Google 簡報與 Canva，形成完整交付流程：① 提供需求（主題／對象／頁數／風格／用途）② 啟動簡報 Skill（讀取需求、建立大綱與頁面架構）③ 生成簡報內容（標題／重點／圖像建議／講者用語）④ 版面與校正（調整字句、順序、設計風格、確認內容正確）⑤ 上傳 Google 簡報（形成可分享連結，方便協作編輯）⑥ 同步 Canva（便於視覺微調，輸出社群或簡報版本）。推薦指令：「請依本主題製作 10 頁簡報，先列大綱，再完成每頁重點，最後上傳 Google 簡報與 Canva。」</figcaption>
+  </figure>
+  <figure class="shot">
+    <img src="ep202607-21-img/slide20.jpg" alt="Skill簡報實作的成果與應用" loading="lazy">
+    <figcaption>簡報 20｜不只完成簡報，還能保留後續修改、共享與延伸設計的空間：Google 簡報適合協作編修（團隊協作、雲端分享、即時修改、會議展示），Canva 適合視覺深化（美化版型、調整字體配色、輸出社群圖卡、延伸視覺素材）。注意事項：檢查事實正確、統一風格、圖片授權留意、上傳權限與分享設定確認。</figcaption>
+  </figure>
+</section>
+
+<section class="chapter" id="sec-recap">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#bf6a1e)">RECAP</span>
+  <h2 class="ct">11. 重點整理</h2>
+  <ul class="pt">
+    <li><b>額度管理技巧</b>：標準速度、推理強度中等、模型選 5.4 mini、性格選務實。</li>
+    <li><b>手機下載 ChatGPT App，不是 Codex App</b>；電腦端要有 ChatGPT 桌面版。</li>
+    <li><b>不需要同一網路</b>：關鍵是電腦要保持開機、連網、App 保持執行。</li>
+    <li><b>Remote 設定藏在兩處</b>：說明選單「設定遠端」／帳號設定「連線」。</li>
+    <li><b>Queue vs Steer</b>：一般用 Queue 排隊；方向明顯偏掉才用 Steer 立即導正。</li>
+    <li><b>最穩做法</b>：網路穩、範圍小、先讀取再提計畫、等核准再修改。</li>
+    <li><b>兩個實作案例</b>：MCP–NotebookLM（資料圖表化＋憑證整理＋Google Sheet 串接）、Skill 簡報製作（需求→大綱→內容→上傳 Google 簡報與 Canva）。</li>
+  </ul>
+</section>
+
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5a5866)">SOURCES</span>
+  <h2 class="ct">12. 資料來源與製作說明</h2>
+  <ul class="pt">
+    <li><b>原始教材：</b>EP202607.21「用手機遙控 Codex：讓 AI Agent 幫你處理任務」官方課程簡報 20 頁（逐頁原圖全收錄）＋錄影回放（40.7 分鐘）；均為 anyone-reader 權限、公開可下載。</li>
+    <li><b>製作方式：</b>下載完整錄影 → faster-whisper（small 模型）產出逐字稿 → 下載原始 pptx 取出 20 頁投影片原圖 → <b>逐頁親眼判讀</b>並對照逐字稿整理成本頁章節。內容為<b>真實課程內容</b>，非推測改寫。</li>
+    <li><b>介面參考：</b>版型沿用本站 EP29–EP47 課堂筆記的乾淨白底編輯風格。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  EP202607.21「用手機遙控 Codex」課堂筆記・2026/07 整理<br>
+  🍀 Learn AI with Tarshar｜搭配 <a href="ep202607-21-ai-skills.html">互動技能地圖</a> 使用效果最佳
+</footer>
+
+</body>
+</html>

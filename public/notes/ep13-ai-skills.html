@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gemini Gem vs New Gem & Claude Code x NotebookLM｜互動式學習地圖</title>
+<meta name="description" content="EP13 晨學講堂：傳統 Gem 完整回顧、繪圖與算帳小書僮實戰、New Gem（Gemini+Opal）工作流引擎、Manga Maker 自製流程、GEM小書僮 Chrome 擴充功能、Claude Code x NotebookLM 技能，互動式多層次學習地圖">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269;
+  --green:#3f8560; --orange:#bf6a1e; --red:#c0453f; --teal:#0d8f80;
+  --feat:#9c7b23; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(28px,4.6vw,46px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--txt);background:none;-webkit-text-fill-color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:660px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:9px}
+.steps li{list-style:none;counter-increment:st;display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--txt2);line-height:1.7}
+.steps li::before{content:counter(st);flex:none;width:25px;height:25px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:var(--c,var(--feat));margin-top:1px}
+.steps li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+.prompt,.promptbox{background:#1d1d1f;border:1px solid #2c2c31;border-radius:10px;padding:13px 15px;margin-top:6px;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt b,.promptbox b{color:#fff}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <a class="navlink" href="../radio/" style="border-color:#e2cf94" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <div class="logo">
+    <div class="dot">💎</div>
+    <div>Gem 進化地圖<small>MORNING LEARNING · EP13</small></div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋技能關鍵字：Gem、Opal、NotebookLM、Claude Code、擴充功能…" autocomplete="off">
+  </div>
+  <a class="navlink" href="ep13-notes.html">📝 課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">EP13 · 晨學講堂 · 2026/01</span>
+  <h1>Gemini Gem vs New Gem<br>& Claude Code x NotebookLM</h1>
+  <p class="sub">從<b>傳統 Gem</b>（角色/任務/格式＋NotebookLM 掛載）一路升級到 <b>New Gem</b>（Gemini + Opal 多步驟工作流），再加碼老師自製的 <b>GEM小書僮</b> Chrome 擴充功能，以及 <b>Claude Code x NotebookLM</b> 技能實測。<br>點進每一章，逐層展開<b>本集實際教到</b>的概念與步驟，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🎙️ 生成式AI應用電台・晨學講堂</span>
+    <span>💎 Gem ＋ 🧩 Opal</span>
+    <span>🤖 Claude Code Skill</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>4</b><span>大主題</span></div>
+  <div class="stat"><b>11</b><span>實戰技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 11 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--blue)" onclick="showChapter('classic')">
+        <div class="glowline"></div><span class="emoji">💎</span>
+        <h3><em>CHAPTER 01</em>傳統 Gem 全解析</h3>
+        <p>角色/任務/格式的黃金公式、掛載 NotebookLM 當知識庫（最多10本）、分享排程與跨 Workspace 呼叫。</p>
+        <div class="foot"><div class="mini"><i data-mini="classic"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--orange)" onclick="showChapter('newgem')">
+        <div class="glowline"></div><span class="emoji">🧩</span>
+        <h3><em>CHAPTER 02</em>New Gem：Gemini + Opal</h3>
+        <p>15 個現成範本、Opal 視覺化工作流畫布、模型選擇陷阱、Manga Maker 從零打造實戰。</p>
+        <div class="foot"><div class="mini"><i data-mini="newgem"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--green)" onclick="showChapter('ext')">
+        <div class="glowline"></div><span class="emoji">🧰</span>
+        <h3><em>CHAPTER 03</em>GEM小書僮擴充功能</h3>
+        <p>老師自製 Chrome 擴充功能：一鍵灌入分類提示詞，三步驟安裝（解壓縮/載入未封裝/釘選圖示）。</p>
+        <div class="foot"><div class="mini"><i data-mini="ext"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--purple)" onclick="showChapter('claude')">
+        <div class="glowline"></div><span class="emoji">🤖</span>
+        <h3><em>CHAPTER 04</em>Claude Code x NotebookLM</h3>
+        <p>終端機安裝 NotebookLM 技能、指令列管理筆記本、自然語言提問，含真實踩坑與付費門檻提醒。</p>
+        <div class="foot"><div class="mini"><i data-mini="claude"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+
+    <div class="resources">
+      <h3>📦 <span>課程原始資料</span></h3>
+      <div class="res-grid">
+        <a href="ep13-notes.html"><span class="ic">📝</span><span><b>課堂筆記</b>逐字稿＋抽幀親眼判讀整理</span></a>
+        <a href="../radio/"><span class="ic">📻</span><span><b>直播電台系列</b>回系列總覽，一集一卡</span></a>
+        <a href="ep15-notes.html"><span class="ic">🎥</span><span><b>相關 EP15</b>後續集數筆記</span></a>
+        <a href="ep38-notes.html"><span class="ic">🧑‍🚀</span><span><b>相關 EP38</b>Gemini Avatar</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-classic" class="view" style="--c:var(--blue)"></section>
+  <section id="view-newgem" class="view" style="--c:var(--orange)"></section>
+  <section id="view-ext" class="view" style="--c:var(--green)"></section>
+  <section id="view-claude" class="view" style="--c:var(--purple)"></section>
+</main>
+
+<footer>
+  本頁為 EP13「Gemini Gem vs New Gem 功能比較 & Claude Code x NotebookLM（下）」課後整理・介面沿用本站 EP38、EP44–46 互動式學習地圖<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2026｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+const DATA = {
+  classic: {
+    key:'classic', color:'var(--blue)', emoji:'💎', code:'CHAPTER 01', title:'傳統 Gem 全解析',
+    intro:'先把傳統 Gem 的邏輯講透：怎麼寫提示詞、怎麼掛 NotebookLM、怎麼分享與排程。',
+    topics:[
+      {t:'建立 Gem 的黃金公式', s:'角色／任務／背景／格式｜提示詞寫法',
+       blocks:[
+        {h:'四步驟',steps:['名稱：自由命名你的專案機器人。','說明：只是給自己看的提醒，不影響功能。','使用說明（系統提示詞）：角色(Role)＋任務(Task)＋背景脈絡＋格式(Format)。','按魔法棒（✨）讓 AI 幫你潤飾提示詞，讓角色扮演更到位。']},
+        {h:'老師的實際做法',p:'不是憑空手寫，而是先把畫有「角色/任務/背景/格式」四要素的黃金公式圖片<b>上傳</b>給 Gemini，請它「根據上傳的圖片，寫出這個〇〇小幫手的指令」，產生完整系統提示詞後再貼進使用說明欄位、按魔法棒潤飾一次。'},
+        {h:'看課堂筆記',shot:{img:'ep13-img/frame01.jpg',cap:'開場標題畫面：Gemini Gem & My Gems from Labs'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep13-notes.html#sec-classic" style="color:var(--blue)">筆記 1：傳統 Gem 完整回顧</a>'}]},
+      {t:'掛載 NotebookLM 當知識庫', s:'最多10本筆記本｜付費300／免費50個來源',
+       blocks:[
+        {h:'重點',ul:['以前只能上傳最多 10 個檔案；現在可直接掛 <b>NotebookLM 筆記本</b>，同樣最多 10 本。','每本筆記本內部可放更多來源：<b>付費版 300 個、免費版 50 個</b>，資料量是以前數十倍。','Gem 讀取的是<b>整本筆記本</b>，無法只挑某份資料；資料太多會跑很慢，建議先精簡整理。','NotebookLM 資料庫持續更新，Gem 的背景知識也會同步滾動更新。']},
+        {h:'看課堂筆記',p:'👉 <a href="ep13-notes.html#sec-classic" style="color:var(--blue)">筆記 1：NotebookLM 掛載</a>'}]},
+      {t:'分享、排程、跨 Workspace 呼叫', s:'可分享／可排程／可寫入試算表文件日曆',
+       blocks:[
+        {h:'三種延伸能力',ul:['<b>可分享</b>：對方有 Google 帳號即可使用你設定好的 Gem。','<b>可排程</b>：偵測關鍵字觸發，或固定時間自動彙整並寄出／提醒。','<b>可產出到 Workspace</b>：直接寫入 Google 試算表、日曆、Gmail、文件。']},
+        {h:'實測',shot:{img:'ep13-img/frame03.jpg',cap:'算帳小書僮：自動記帳＋書僮點評＋匯出試算表'}},
+        {h:'比較',table:{head:['','Gemini Gem','ChatGPT 專案功能'],rows:[['開放度','較封閉但深度整合 Google 生態系','可直接串 Notion，較開放'],['產出','寫入 Workspace 工具','可直接寄出至外部服務']]}},
+        {h:'看課堂筆記',p:'👉 <a href="ep13-notes.html#sec-classic-demo" style="color:var(--blue)">筆記 2：繪圖與算帳小書僮實戰</a>'}]}
+    ]
+  },
+  newgem: {
+    key:'newgem', color:'var(--orange)', emoji:'🧩', code:'CHAPTER 02', title:'New Gem：Gemini + Opal',
+    intro:'把單一提示詞升級成階段式多步驟工作流，並實戰打造一個從零開始的 Manga Maker。',
+    topics:[
+      {t:'New Gem 是什麼', s:'My Gems from Labs = Gemini + Opal｜15個現成範本',
+       blocks:[
+        {h:'核心概念',ul:['公式：<b>原本的 Gemini Gem ＋ Opal</b>（Google 內部視覺化工作流工具，概念類似 n8n）。','傳統 Gem 是<b>單一段落</b>提示詞；New Gem 是<b>階段式多步驟</b>，一步接一步跑完整套流程。','內建共 <b>15 個現成範本</b>，首頁常駐 4 個：考試小幫手、拍照剩菜變食譜、會議紀錄整理、求職履歷審查。']},
+        {h:'看課堂筆記',shot:{img:'ep13-img/frame04.jpg',cap:'Opal 畫布：Collect URL → Extract Transcript → Analyze → Generate Quiz'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep13-notes.html#sec-newgem" style="color:var(--orange)">筆記 3：New Gem 概念與 Learning with YouTube</a>'}]},
+      {t:'Opal 畫布判讀與模型選擇', s:'黃色輸入／中間AI／輸出｜選錯模型會失敗',
+       blocks:[
+        {h:'看圖口訣',tip:'黃色＝資料輸入，中間＝AI 在運作（生成節點），最後＝輸出。用 input → process → output 的邏輯看工作流圖就懂了。'},
+        {h:'模型清單',ul:['文字理解：Gemini 2.5 Flash／2.5 Pro／3 Pro。','複雜任務：Plan and Execute with Gemini 2.5 Flash。','深度查證：Deep Research with Gemini 2.5 Flash。','<b>生成圖片一定要選圖像模型</b>：Imagen 4、Gemini 2.5／3 Pro Image（Nano Banana）。']},
+        {h:'看課堂筆記',shot:{img:'ep13-img/frame05.jpg',cap:'Opal 模型選單：Gemini 2.5/3、Deep Research、Imagen 4、Nano Banana'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep13-notes.html#sec-newgem" style="color:var(--orange)">筆記 3：模型選擇</a>'}]},
+      {t:'實戰：從零打造 Manga Maker', s:'中文需求→自動拆解步驟→踩坑→修正模型',
+       blocks:[
+        {h:'三步驟',steps:['用中文輸入需求：「根據我的需求，來畫出日本卡通的漫畫，搭配中文字」。','Gemini 自動拆三階段：拆解分鏡與字幕 → 生成每格漫畫圖 → 組成網頁。','輸入簡單故事測試並執行。']},
+        {h:'真實踩坑',warn:'第一次執行圖片沒生成、中文字跑不出來，原因是 Generate 節點選錯模型（用了不支援穩定生圖的 2.5 Flash）。解法：進 Advanced Editor 把模型換成 3.0 Imagen／Nano Banana，重新執行就正常了。'},
+        {h:'自然語言微調',p:'不用手動改節點，直接打字：「我的步驟裡面要有一個步驟是：產生的內容請都用中文」，Opal 會自動把這個步驟寫進工作流。<b>簡單調整</b>用講的就能改；<b>精確設定（如指定模型）</b>一定要進 Advanced Editor 手動點選。'},
+        {h:'發布與再利用',ul:['<b>Share App</b>：可切換 Public 公開分享你的完整流程。','<b>Remix</b>：複製別人公開的 App 據為己用，不會動到對方原版。','<b>Download</b>：成果可直接下載成 HTML 檔。','NotebookLM 節點<b>尚未上線</b>，目前變通做法是用 Google 雲端資料夾。']},
+        {h:'看課堂筆記',shot:{img:'ep13-img/frame06.jpg',cap:'Manga Maker 修正模型後產出的漫畫條，附下載按鈕'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep13-notes.html#sec-manga" style="color:var(--orange)">筆記 4：打造 Manga Maker</a>'}]}
+    ]
+  },
+  ext: {
+    key:'ext', color:'var(--green)', emoji:'🧰', code:'CHAPTER 03', title:'GEM小書僮 Chrome 擴充功能',
+    intro:'老師自己開發的擴充功能，一鍵把分類好的提示詞灌進 Gem。',
+    topics:[
+      {t:'功能定位與三種版本', s:'一般版／學術版／專案功能版',
+       blocks:[
+        {h:'做什麼用',p:'「一鍵擷取分類、主題不同的 prompts，來訓練 Gemini Gem（傳統）或 Gems Builder（進階）」——把整理好的系統提示詞一鍵貼進新增 Gem 欄位，不用自己手打。'},
+        {h:'三種版本',ul:['<b>一般版本</b>：基礎提示詞分類。','<b>學術版</b>：文獻收集／篩選／批判／整理／數據更新完整流程提示詞。','<b>專案功能版</b>：針對 Gem／New Gem 設計。']},
+        {h:'看課堂筆記',p:'👉 <a href="ep13-notes.html#sec-ext" style="color:var(--green)">筆記 5：GEM小書僮安裝實戰</a>'}]},
+      {t:'三步驟安裝流程', s:'解壓縮→載入未封裝項目→釘選圖示',
+       blocks:[
+        {h:'安裝步驟',steps:['解壓縮：把 GEM小書僮_v1.x.x.zip 解壓縮到你想要的位置，變成資料夾。','開啟 chrome://extensions/，打開右上角「開發人員模式」，點「載入未封裝項目」，選擇解壓縮後的 extension 資料夾。','點擊工具列的 💎 圖示（找不到就點拼圖圖示釘選它）即可開始使用。']},
+        {h:'快速使用',ul:['<b>選擇平台</b>：Gemini Gem（傳統）或 Gems Builder（進階）。','<b>瀏覽分類</b>：點分類按鈕篩選主題，如「概念解釋器」（示範解釋量子糾纏）。','<b>搜尋</b>：輸入關鍵字快速找到需要的提示詞。']},
+        {h:'提醒',tip:'這個擴充功能沒有上架 Chrome 線上應用程式商店，所以才需要用開發人員模式手動「載入未封裝項目」——這是安裝任何自製擴充功能的通用做法。'},
+        {h:'看課堂筆記',shot:{img:'ep13-img/frame07.jpg',cap:'GEM小書僮快速安裝指南.md 原文內容'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep13-notes.html#sec-ext" style="color:var(--green)">筆記 5：安裝步驟詳解</a>'}]}
+    ]
+  },
+  claude: {
+    key:'claude', color:'var(--purple)', emoji:'🤖', code:'CHAPTER 04', title:'Claude Code x NotebookLM（下）',
+    intro:'接續上週作業，用 Claude Code 終端機指令管理與詢問 NotebookLM 筆記本。',
+    topics:[
+      {t:'付費門檻與正確心態', s:'需要 Claude 付費方案｜老師建議先不用急著付費',
+       blocks:[
+        {h:'重要提醒',warn:'安裝 NotebookLM 技能並實際呼叫 API，目前需要 Claude 付費方案（Pro／Plus）。老師明講「不建議大家為了這個馬上去付費」，可以先認識邏輯，等免費功能釋出，或改用隔天教的 Open NotebookLM（開源替代方案，不需要 Claude 付費）。'},
+        {h:'只有落地版能用',p:'必須是 <b>Claude Code 落地版（CLI）</b>，網頁版 Claude 目前不支援安裝 NotebookLM 技能。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep13-notes.html#sec-claude" style="color:var(--purple)">筆記 6：Claude Code x NotebookLM</a>'}]},
+      {t:'安裝與兩步驟設定', s:'skill放進技能資料夾→登入授權→提供筆記本網址',
+       blocks:[
+        {h:'流程',steps:['安裝 Claude Code 落地版（CLI）。','把社群寫好的 NotebookLM skill 放進 .claude/skills/notebooklm 資料夾。','登入／授權你的 NotebookLM 帳號。','提供要分析的筆記本網址給這個技能。']},
+        {h:'真實除錯過程',p:'老師實測第一次呼叫 auth_manager.py status 遇到<b>路徑錯誤與 Windows 中文編碼錯誤（UnicodeEncodeError）</b>，換了下指令方式後才確認「您已經完成認證設定了」——如實記錄，不是一路順暢。'},
+        {h:'看課堂筆記',shot:{img:'ep13-img/frame08.jpg',cap:'Claude Code 終端機顯示 NotebookLM 技能使用方式'}}]},
+      {t:'指令列操作實測', s:'list／add／search／ask_question',
+       blocks:[
+        {h:'常用指令',table:{head:['功能','指令'],rows:[['查看所有筆記本','python scripts/run.py notebook_manager.py list'],['新增筆記本','python scripts/run.py notebook_manager.py add --url "網址"'],['搜尋筆記本','python scripts/run.py notebook_manager.py search --query "關鍵字"'],['向筆記本提問','python scripts/run.py ask_question.py --question "問題"'],['指定特定筆記本提問','... --question "問題" --notebook ...']]}},
+        {h:'實測示範',p:'認證成功後執行 list 直接列出既有筆記本《AI 雙劍合璧：Gemini 與 Claude 玩轉 NotebookLM》，狀態顯示「已設為活躍筆記本」；接著直接用中文自然語言提問「幫我查詢 Claude 和 Gemini 如何整合？」，Claude Code 呼叫技能讀取筆記本內容回答。'},
+        {h:'定位提醒',tip:'這一段跟隔天教的 Open NotebookLM 邏輯相通：都是「用另一個 AI 去讀你 NotebookLM 或自建知識庫裡的資料」，差別只在 Open NotebookLM 不需要 Claude 付費方案。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep13-notes.html#sec-claude" style="color:var(--purple)">筆記 6：指令示範與加碼 Zotero 展示</a>'}]}
+    ]
+  }
+};
+const ORDER = ['classic','newgem','ext','claude'];
+const $ = s=>document.querySelector(s);
+function renderChapter(ch){
+  const d=DATA[ch];const next=ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];const prev=ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html=`<div class="chapter-head"><span class="emoji">${d.emoji}</span><div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div></div>`;
+  d.topics.forEach((tp,i)=>{const id=`${ch}-${i}`;
+    html+=`<div class="topic" id="topic-${id}"><div class="topic-head" onclick="toggleTopic('${id}')"><span class="num">${i+1}</span><h4>${tp.t}<small>${tp.s}</small></h4><input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)"><span class="chev">▶</span></div><div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{html+=`<div class="block"><h5>${b.h}</h5>`;
+      if(b.p)html+=`<p>${b.p}</p>`;
+      if(b.ul)html+=`<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps)html+=`<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.table)html+=`<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.shot)html+=`<figure class="shot"><img src="${b.shot.img}" alt="" loading="lazy"><figcaption>${b.shot.cap}</figcaption></figure>`;
+      if(b.tip)html+=`<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn)html+=`<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html+=`</div>`;});
+    html+=`</div></div></div>`;});
+  html+=`<div class="chapnav"><a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a><a onclick="showHome()" style="text-align:center">回總覽<b>🏠 四大主題</b></a><a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a></div>`;
+  $('#view-'+ch).innerHTML=html;
+}
+ORDER.forEach(renderChapter);
+function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('#view-'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function showHome(){switchView('home');$('#crumbs').style.display='none';clearSearch();}
+function showChapter(ch){switchView(ch);$('#crumbs').style.display='flex';$('#crumbHere').textContent=`${DATA[ch].emoji} ${DATA[ch].title}`;clearSearch();syncChecks();}
+function toggleTopic(id){$('#topic-'+id).classList.toggle('open');}
+function openTopic(ch,i){showChapter(ch);const el=$('#topic-'+ch+'-'+i);el.classList.add('open');setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+const KEY='ep13-skills-v1';
+const store=()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){const s=store();if(val)s[id]=1;else delete s[id];localStorage.setItem(KEY,JSON.stringify(s));updateProgress();}
+const TOTAL=ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){const done=Object.keys(store()).length;const pct=Math.round(done/TOTAL*100);$('#progFill').style.width=pct+'%';$('#progText').textContent=`${done} / ${TOTAL} 項技能已掌握`;$('#statDone').textContent=done;$('#statPct').textContent=pct+'%';ORDER.forEach(ch=>{const sub=DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;const el=document.querySelector(`[data-mini="${ch}"]`);if(el)el.style.width=Math.round(sub/DATA[ch].topics.length*100)+'%';});}
+function syncChecks(){const s=store();document.querySelectorAll('input[data-skill]').forEach(cb=>{cb.checked=!!s[cb.dataset.skill];});}
+function resetProgress(){if(confirm('確定要清空所有打勾進度嗎？')){localStorage.removeItem(KEY);syncChecks();updateProgress();}}
+function stripTags(s){return s.replace(/<[^>]+>/g,'');}
+const INDEX=[];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{let body=tp.s+' ';tp.blocks.forEach(b=>{if(b.p)body+=stripTags(b.p)+' ';if(b.ul)body+=b.ul.map(stripTags).join(' ')+' ';if(b.steps)body+=b.steps.map(stripTags).join(' ')+' ';if(b.tip)body+=stripTags(b.tip)+' ';if(b.warn)body+=stripTags(b.warn)+' ';if(b.table)body+=b.table.rows.flat().map(stripTags).join(' ')+' ';});INDEX.push({ch,i,title:tp.t,body});}));
+$('#searchInput').addEventListener('input',e=>{const q=e.target.value.trim();const box=$('#searchResults');if(!q){box.classList.remove('show');box.innerHTML='';return;}const hits=INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));box.classList.add('show');if(!hits.length){box.innerHTML=`<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：Opal、NotebookLM、Nano Banana、擴充功能）</div>`;return;}const hl=s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);box.innerHTML=hits.map(x=>{const pos=x.body.toLowerCase().indexOf(q.toLowerCase());const snip=x.body.substr(Math.max(0,pos-20),90);return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})"><div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div><h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;}).join('');});
+function clearSearch(){$('#searchInput').value='';$('#searchResults').classList.remove('show');$('#searchResults').innerHTML='';}
+(function(){const box=$('#stars');for(let i=0;i<70;i++){const s=document.createElement('i');s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';s.style.animationDelay=(Math.random()*3)+'s';s.style.transform=`scale(${.5+Math.random()*1.5})`;box.appendChild(s);}})();
+syncChecks();updateProgress();
+</script>
+</body>
+</html>

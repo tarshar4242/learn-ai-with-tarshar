@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>結構先於工具：用 YAML 打造可查證工作流｜互動式學習地圖</title>
+<meta name="description" content="EP19 晨學講堂：為什麼要用 YAML、基礎語法與分層思維、何時該用／不必用 YAML、逆向工程與順向工程兩大實戰技巧、六大應用場景與專家心法，互動式多層次學習地圖">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269;
+  --green:#3f8560; --orange:#bf6a1e; --red:#c0453f; --teal:#0d8f80;
+  --feat:#3b6bb0; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(28px,4.6vw,46px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--txt);background:none;-webkit-text-fill-color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:660px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:9px}
+.steps li{list-style:none;counter-increment:st;display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--txt2);line-height:1.7}
+.steps li::before{content:counter(st);flex:none;width:25px;height:25px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:var(--c,var(--feat));margin-top:1px}
+.steps li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+.prompt,.promptbox{background:#1d1d1f;border:1px solid #2c2c31;border-radius:10px;padding:13px 15px;margin-top:6px;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt b,.promptbox b{color:#fff}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <a class="navlink" href="../radio/" style="border-color:#b7c8ea" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <div class="logo">
+    <div class="dot">🧩</div>
+    <div>YAML 結構地圖<small>MORNING LEARNING · EP19</small></div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋技能關鍵字：YAML、逆向工程、順向工程、資訊圖表、簡報生成…" autocomplete="off">
+  </div>
+  <a class="navlink" href="ep19-notes.html">📝 課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">EP19 · 晨學講堂 · 01/21</span>
+  <h1>結構先於工具<br>用 YAML 打造可查證工作流</h1>
+  <p class="sub">不在於換哪一個 AI 工具，而是<b>先建立結構，再讓工具服從結構</b>。YAML 是連接人腦與 AI 的結構橋樑——縮排即邏輯，可驗證、可重現、可交接。<br>點進每一章，逐層展開<b>本集實際教到</b>的概念與步驟，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🎙️ 生成式AI應用電台・晨學講堂</span>
+    <span>🧩 結構化提示工程</span>
+    <span>📐 YAML 控制層</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>4</b><span>大主題</span></div>
+  <div class="stat"><b>8</b><span>實戰技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 8 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--blue)" onclick="showChapter('concept')">
+        <div class="glowline"></div><span class="emoji">🧩</span>
+        <h3><em>CHAPTER 01</em>核心概念＋基礎語法</h3>
+        <p>為什麼要用 YAML（四優勢）、YAML vs JSON vs Markdown 的定位差異、三層分層思維（Meta／Input／Output）。</p>
+        <div class="foot"><div class="mini"><i data-mini="concept"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--cyan)" onclick="showChapter('timing')">
+        <div class="glowline"></div><span class="emoji">🚦</span>
+        <h3><em>CHAPTER 02</em>判斷時機＋控制層框架</h3>
+        <p>何時該用／不必強用 YAML（Green Light／Red Light），以及 YAML「萬能控制層」通用框架四大區塊。</p>
+        <div class="foot"><div class="mini"><i data-mini="timing"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--green)" onclick="showChapter('skills')">
+        <div class="glowline"></div><span class="emoji">🔄</span>
+        <h3><em>CHAPTER 03</em>兩大實戰技巧</h3>
+        <p>逆向工程（解構風格→YAML）與順向工程（套用 YAML→生成新內容），含 NotebookLM 進階用法。</p>
+        <div class="foot"><div class="mini"><i data-mini="skills"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--orange)" onclick="showChapter('cases')">
+        <div class="glowline"></div><span class="emoji">🗂️</span>
+        <h3><em>CHAPTER 04</em>六大應用場景＋心法</h3>
+        <p>資訊圖表／簡報／NotebookLM圖像法／論文摘取／文獻格式／歌曲生成，加上專家建議與總結三大支柱。</p>
+        <div class="foot"><div class="mini"><i data-mini="cases"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+
+    <div class="resources">
+      <h3>📦 <span>課程原始資料</span></h3>
+      <div class="res-grid">
+        <a href="ep19-notes.html"><span class="ic">📝</span><span><b>課堂筆記</b>逐節嵌入 13 張簡報原圖</span></a>
+        <a href="../radio/"><span class="ic">📻</span><span><b>直播電台系列</b>回系列總覽，一集一卡</span></a>
+        <a href="ep23-notes.html"><span class="ic">📊</span><span><b>相關 EP23</b>YAML 讓資訊圖表乖乖聽話</span></a>
+        <a href="ep25-notes.html"><span class="ic">🧾</span><span><b>相關 EP25</b>用 YAML 讓簡報乖乖聽話</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-concept" class="view" style="--c:var(--blue)"></section>
+  <section id="view-timing" class="view" style="--c:var(--cyan)"></section>
+  <section id="view-skills" class="view" style="--c:var(--green)"></section>
+  <section id="view-cases" class="view" style="--c:var(--orange)"></section>
+</main>
+
+<footer>
+  本頁為 EP19「結構先於工具：用 YAML 打造可查證的文獻引用與資訊圖表工作流」課後整理・介面沿用本站互動式學習地圖架構<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2026｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+const DATA = {
+  concept: {
+    key:'concept', color:'var(--blue)', emoji:'🧩', code:'CHAPTER 01', title:'核心概念＋基礎語法',
+    intro:'先搞懂為什麼要用 YAML，再學它的分層思維——這是後面所有實戰的地基。',
+    topics:[
+      {t:'為什麼要用 YAML', s:'結構化控制／高可讀性／風格一致／跨工具通用',
+       blocks:[
+        {h:'四項優勢',ul:['<b>結構化控制</b>：更精準地限制 AI 的輸出範圍與格式。','<b>高可讀性</b>：對人類和機器都友善，比 JSON 更好讀。','<b>風格一致性</b>：適用於需要維持特定風格（簡報、資訊圖表）的場景。','<b>跨工具通用</b>：一套邏輯框架，適用於 ChatGPT、NotebookLM、Claude 等不同模型。']},
+        {h:'三種格式比較',table:{head:['格式','定位','特性'],rows:[['JSON','機器導向','語法嚴謹，適合數據傳輸，人類閱讀吃力'],['YAML','人機共讀','縮排即邏輯，直觀映射 AI 思考結構'],['Markdown','人類閱讀導向','標記輕量，專注文檔撰寫，非結構化數據']]}},
+        {h:'金句',tip:'JSON 是數據，Markdown 是文本，YAML 是連接人腦與 AI 的結構橋樑。'},
+        {h:'看課堂筆記',shot:{img:'ep19-img/slide08.jpg',cap:'簡報｜JSON、YAML、Markdown 三者比較'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep19-notes.html#sec-why" style="color:var(--blue)">筆記 1：為什麼要用 YAML</a>'}]},
+      {t:'基礎語法與三層分層思維', s:'冒號／短橫線／縮排｜Meta／Input／Output',
+       blocks:[
+        {h:'兩個關鍵符號',ul:['<b>冒號（:）</b>：定義屬性（例如 Color: Red）。','<b>短橫線（-）</b>：定義清單或步驟（條列式內容）。','<b>縮排</b>：利用縮排建立層級關係。']},
+        {h:'三層結構思維',steps:['<b>設定 Meta</b>：控制 AI 的行為參數（角色、溫度、模型）。','<b>內容來源 Input</b>：提供 AI 處理的資料或語料。','<b>產出規則 Output</b>：定義 AI 必須遵守的格式與限制。']},
+        {h:'金句',tip:'學 YAML 不是背語法，而是學「分層」——學會這三層，你已駕馭 80% 的 AI 工作流。'},
+        {h:'看課堂筆記',shot:{img:'ep19-img/slide09.jpg',cap:'簡報｜YAML 的基本結構思維：分層而非語法'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep19-notes.html#sec-syntax" style="color:var(--blue)">筆記 2：基礎語法與分層思維</a>'}]}
+    ]
+  },
+  timing: {
+    key:'timing', color:'var(--cyan)', emoji:'🚦', code:'CHAPTER 02', title:'判斷時機＋控制層框架',
+    intro:'不是什麼場合都要上 YAML，先學會判斷，再學萬能控制層長什麼樣。',
+    topics:[
+      {t:'何時該用／不必強用 YAML', s:'Green Light／Red Light',
+       blocks:[
+        {h:'該用（Green Light）',ul:['<b>需要反覆生成</b>：穩定、可預測的產出。','<b>需要跨工具</b>：不同系統間的通用語言。','<b>需要一致風格</b>：維持統一的品牌或格式。','<b>需要被他人接手</b>：清晰的交接與協作。']},
+        {h:'不必強用（Red Light）',ul:['<b>一次性聊天</b>：隨性對話，無需記錄。','<b>即興創作</b>：自由發揮，不設限。','<b>無結構需求</b>：散亂想法，無需整理。']},
+        {h:'心法',tip:'關鍵不是會不會用，而是什麼時候用。'},
+        {h:'看課堂筆記',shot:{img:'ep19-img/slide07.jpg',cap:'簡報｜Green Light / Red Light 判斷表'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep19-notes.html#sec-when" style="color:var(--cyan)">筆記 3：何時該用／不必用</a>'}]},
+      {t:'YAML 萬能控制層框架', s:'meta／input／structure／output',
+       blocks:[
+        {h:'四大區塊',ul:['<b>meta</b>：元數據，明確此工作流要解決的問題。','<b>input</b>：資料來源，來源文件或需遵循的範例。','<b>structure</b>：主要框架定義，各段落功能與限制。','<b>output</b>：產出結果，指定格式與不可違反的規則。']},
+        {h:'完整範例',prompt:'meta:\n  purpose: 明確此工作流要解決的問題\n  reproducible: true\n  verification_level: high\n\ninput:\n  sources:\n    - type: document\n      description: 來源文件或資料\n\nstructure:\n  sections:\n    - name: section_name\n      role: 此段落的功能定位\n\noutput:\n  format: 指定輸出格式\n  rules:\n    - 不可違反的硬性規則'},
+        {h:'看課堂筆記',shot:{img:'ep19-img/slide04.jpg',cap:'簡報｜YAML 萬能控制層通用框架 Universal Scaffold'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep19-notes.html#sec-syntax" style="color:var(--cyan)">筆記 2：控制層框架</a>'}]}
+    ]
+  },
+  skills: {
+    key:'skills', color:'var(--green)', emoji:'🔄', code:'CHAPTER 03', title:'兩大實戰技巧',
+    intro:'逆向工程負責「還原風格」，順向工程負責「套用風格生成新內容」，兩招合體就是完整工作流。',
+    topics:[
+      {t:'實戰一：逆向工程（解構）', s:'上傳素材→分析視覺結構→轉成 YAML',
+       blocks:[
+        {h:'操作三步驟',steps:['<b>上傳素材</b>：將參考圖檔或 PDF 上傳給 AI（推薦用具備視覺辨識的模型）。','<b>下達指令</b>：要求 AI 分析檔案的視覺結構、配色、排版邏輯。','<b>指定輸出格式</b>：明確要求 AI「將分析結果轉換為 YAML 格式」。']},
+        {h:'Prompt 範例',prompt:'請擔任一位專業的視覺設計師。請分析這張圖片的版面配置、配色方案（色號）、字體風格以及內容架構。請將分析結果以 YAML 格式輸出，以便我後續使用。'},
+        {h:'應用場景',p:'不想手動調整簡報母片；想複製某個資訊圖表的風格，但內容要換成新的。'},
+        {h:'實例：NotebookLM 圖像法',shot:{img:'ep19-img/slide12.jpg',cap:'簡報｜不用 YAML 的簡報生成：先鎖定視覺不可變，再讓 AI 填文字'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep19-notes.html#sec-reverse" style="color:var(--green)">筆記 4：逆向工程解構</a>'}]},
+      {t:'實戰二：順向工程（重塑生成）', s:'套用 YAML 規則→生成新內容，NotebookLM 進階用法',
+       blocks:[
+        {h:'操作四步驟',steps:['<b>提供 YAML 規則</b>：將逆向工程得到的 YAML 碼貼給 AI。','<b>輸入新內容</b>：給定想要製作的新主題。','<b>下達指令</b>：要求 AI「依照上述 YAML 的風格規範，生成新的內容結構」。','<b>生成成品</b>：將產出放入簡報工具（Gamma、Canva 或手動製作）。']},
+        {h:'NotebookLM 進階用法',p:'將 YAML 規則存成 .txt 或 Markdown 檔（例如 style_guide.yaml），上傳至 NotebookLM 作為「來源」。之後可隨時要求它：「請依照來源中的 YAML 風格，幫我撰寫這一頁的簡報大綱。」它就變成「熟知該風格的專家」。'},
+        {h:'心法',tip:'YAML 是雙向轉譯的橋樑：人類想法（自然語言）→ YAML（結構化指令）；現有成品（圖片／PDF）→ YAML（風格參數）。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep19-notes.html#sec-forward" style="color:var(--green)">筆記 5：順向工程重塑</a>'}]}
+    ]
+  },
+  cases: {
+    key:'cases', color:'var(--orange)', emoji:'🗂️', code:'CHAPTER 04', title:'六大應用場景＋心法',
+    intro:'六個真實可套用的場景範例，加上專家建議與最終結論。',
+    topics:[
+      {t:'六大應用場景範例', s:'資訊圖表／簡報／圖像法／論文摘取／文獻格式／歌曲生成',
+       blocks:[
+        {h:'場景清單',table:{head:['場景','YAML 定義什麼'],rows:[['① 資訊圖表','layout／color_theme／typography'],['② 簡報生成','slides 類型與 max_bullets'],['③ NotebookLM 圖像法','鎖定視覺、AI 只填文字'],['④ 論文方法摘取','只 extract research_design／sample／analysis_method'],['⑤ 文獻格式再製','citation style／language'],['⑥ 歌曲內容生成','song title／genre／tempo／lyrics_structure']]}},
+        {h:'共同套路',p:'每個場景都是「YAML 定結構、Prompt 執行、AI 只做填充，不重組結構」的固定模式。'},
+        {h:'看課堂筆記',shot:{img:'ep19-img/slide10.jpg',cap:'簡報｜應用場景一：資訊圖表還原／模仿／再製'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep19-notes.html#sec-cases" style="color:var(--orange)">筆記 6：六大應用場景範例</a>'}]},
+      {t:'專家建議與總結三大支柱', s:'不要手寫／雙向轉譯／檢核點／工具極限／被驗證重做交接',
+       blocks:[
+        {h:'五個心法',ul:['<b>不要從頭手寫 YAML</b>：善用 AI 幫你寫（自然語言轉譯，或從圖片逆向生成）。','<b>雙向轉譯</b>：YAML 是人類想法與現有成品之間的橋樑。','<b>檢核點</b>：長篇內容分段檢查，問 AI 是否符合 YAML 規範再繼續。','<b>工具的極限</b>：AI 簡報工具通常只能做到 80-90%，最後精修仍需人工。','<b>長期記憶</b>：把風格存成 YAML，就是建立你的「風格資料庫」。']},
+        {h:'結語三大支柱',ul:['<b>被驗證</b>（Verifiable）：格式正確、無幻覺。','<b>被重做</b>（Reproducible）：穩定產出、可迭代。','<b>被交接</b>（Handover-able）：團隊協作、可維護。']},
+        {h:'金句',tip:'結構一旦站穩，工具只是替換品。'},
+        {h:'看課堂筆記',shot:{img:'ep19-img/slide16.jpg',cap:'簡報｜結語：YAML 不是語法，是駕馭 AI 的方式'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep19-notes.html#sec-recap" style="color:var(--orange)">筆記 8：總結流程圖與結語</a>'}]}
+    ]
+  }
+};
+const ORDER = ['concept','timing','skills','cases'];
+const $ = s=>document.querySelector(s);
+function renderChapter(ch){
+  const d=DATA[ch];const next=ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];const prev=ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html=`<div class="chapter-head"><span class="emoji">${d.emoji}</span><div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div></div>`;
+  d.topics.forEach((tp,i)=>{const id=`${ch}-${i}`;
+    html+=`<div class="topic" id="topic-${id}"><div class="topic-head" onclick="toggleTopic('${id}')"><span class="num">${i+1}</span><h4>${tp.t}<small>${tp.s}</small></h4><input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)"><span class="chev">▶</span></div><div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{html+=`<div class="block"><h5>${b.h}</h5>`;
+      if(b.p)html+=`<p>${b.p}</p>`;
+      if(b.ul)html+=`<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps)html+=`<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.table)html+=`<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.shot)html+=`<figure class="shot"><img src="${b.shot.img}" alt="" loading="lazy"><figcaption>${b.shot.cap}</figcaption></figure>`;
+      if(b.prompt)html+=`<div class="prompt">${b.prompt.replace(/&/g,'&amp;').replace(/</g,'&lt;')}</div>`;
+      if(b.tip)html+=`<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn)html+=`<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html+=`</div>`;});
+    html+=`</div></div></div>`;});
+  html+=`<div class="chapnav"><a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a><a onclick="showHome()" style="text-align:center">回總覽<b>🏠 四大主題</b></a><a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a></div>`;
+  $('#view-'+ch).innerHTML=html;
+}
+ORDER.forEach(renderChapter);
+function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('#view-'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function showHome(){switchView('home');$('#crumbs').style.display='none';clearSearch();}
+function showChapter(ch){switchView(ch);$('#crumbs').style.display='flex';$('#crumbHere').textContent=`${DATA[ch].emoji} ${DATA[ch].title}`;clearSearch();syncChecks();}
+function toggleTopic(id){$('#topic-'+id).classList.toggle('open');}
+function openTopic(ch,i){showChapter(ch);const el=$('#topic-'+ch+'-'+i);el.classList.add('open');setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+const KEY='ep19-skills-v1';
+const store=()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){const s=store();if(val)s[id]=1;else delete s[id];localStorage.setItem(KEY,JSON.stringify(s));updateProgress();}
+const TOTAL=ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){const done=Object.keys(store()).length;const pct=Math.round(done/TOTAL*100);$('#progFill').style.width=pct+'%';$('#progText').textContent=`${done} / ${TOTAL} 項技能已掌握`;$('#statDone').textContent=done;$('#statPct').textContent=pct+'%';ORDER.forEach(ch=>{const sub=DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;const el=document.querySelector(`[data-mini="${ch}"]`);if(el)el.style.width=Math.round(sub/DATA[ch].topics.length*100)+'%';});}
+function syncChecks(){const s=store();document.querySelectorAll('input[data-skill]').forEach(cb=>{cb.checked=!!s[cb.dataset.skill];});}
+function resetProgress(){if(confirm('確定要清空所有打勾進度嗎？')){localStorage.removeItem(KEY);syncChecks();updateProgress();}}
+function stripTags(s){return s.replace(/<[^>]+>/g,'');}
+const INDEX=[];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{let body=tp.s+' ';tp.blocks.forEach(b=>{if(b.p)body+=stripTags(b.p)+' ';if(b.ul)body+=b.ul.map(stripTags).join(' ')+' ';if(b.steps)body+=b.steps.map(stripTags).join(' ')+' ';if(b.tip)body+=stripTags(b.tip)+' ';if(b.warn)body+=stripTags(b.warn)+' ';if(b.table)body+=b.table.rows.flat().map(stripTags).join(' ')+' ';});INDEX.push({ch,i,title:tp.t,body});}));
+$('#searchInput').addEventListener('input',e=>{const q=e.target.value.trim();const box=$('#searchResults');if(!q){box.classList.remove('show');box.innerHTML='';return;}const hits=INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));box.classList.add('show');if(!hits.length){box.innerHTML=`<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：逆向工程、資訊圖表、Green Light）</div>`;return;}const hl=s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);box.innerHTML=hits.map(x=>{const pos=x.body.toLowerCase().indexOf(q.toLowerCase());const snip=x.body.substr(Math.max(0,pos-20),90);return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})"><div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div><h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;}).join('');});
+function clearSearch(){$('#searchInput').value='';$('#searchResults').classList.remove('show');$('#searchResults').innerHTML='';}
+syncChecks();updateProgress();
+</script>
+</body>
+</html>

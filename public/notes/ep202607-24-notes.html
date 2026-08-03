@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP202607.24 課堂筆記｜用手機遙控 Claude Code：讓 AI Agent 成為你的行動助理</title>
+<meta name="description" content="晨學講堂 EP202607.24 課堂筆記：用手機遙控 Claude Code——Dispatch App 整體架構、電腦端開啟 Claude Code、開啟 Remote Control、手機端配對連線、手機端可做的操作、應用情境與使用提醒。含真實錄影畫面截圖與課程簡報全頁原圖。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#0d8f80; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(24px,4.2vw,40px);font-weight:800;line-height:1.18;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px;border-left:none}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#9fd8cf" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP202607.24 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="ep202607-24-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 年中共學 · EP202607.24</span>
+  <h1>用手機遙控 Claude Code<br><span>讓 AI Agent 成為你的行動助理</span></h1>
+  <p class="lead">EP202607.24 教你用手機透過 <b>Dispatch</b> 遠端遙控電腦端的 Claude Code：手機負責下指令與查看進度，真正執行任務、讀取檔案與修改內容的是電腦端。本頁根據<b>真實課程簡報全頁原圖與錄影畫面截圖</b>整理，含實際的中文化安裝示範與 Claude Code 觀察多個 AI coding agent 設定的真實畫面。</p>
+  <div class="meta">
+    <span>📅 2026/07/24 直播</span>
+    <span>🗂️ 教材：10 頁簡報＋錄影（44.8 分鐘）</span>
+    <span>📱 主題：Dispatch 手機遙控</span>
+    <span>🤖 Claude Code Remote Control</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-why">1. 為什麼要用手機遙控 Claude Code</a>
+  <a href="#sec-arch">2. 整體架構怎麼運作</a>
+  <a href="#sec-prep">3. 使用前要先準備什麼</a>
+  <a href="#sec-step1">4. 步驟一：電腦端開啟 Claude Code</a>
+  <a href="#sec-step2">5. 步驟二：開啟 Remote Control</a>
+  <a href="#sec-step3">6. 步驟三：手機端用 Dispatch 完成連線</a>
+  <a href="#sec-mobile">7. 手機端可以做哪些操作</a>
+  <a href="#sec-cases">8. 應用情境與適合族群</a>
+  <a href="#sec-tips">9. 使用提醒與最佳實務</a>
+  <a href="#sec-recap">10. 重點整理</a>
+  <a href="#sec-src">11. 資料來源與製作說明</a>
+</nav>
+
+<article>
+
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--orange))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>EP202607.24「用手機遙控 Claude Code：讓 AI Agent 成為你的行動助理」（年中共學 5 天系列之一）</td></tr>
+    <tr><th>頻道</th><td>生成式 AI 應用電台・年中共學</td></tr>
+    <tr><th>直播日期</th><td>2026/07/24（畫面時鐘顯示 19:41–19:58）</td></tr>
+    <tr><th>教材</th><td>官方課程簡報 10 頁（逐頁原圖全收錄）＋錄影回放 44.8 分鐘＋補充文件「Prompts_Claude code 介面繁體中文化.docx」</td></tr>
+    <tr><th>一句話先懂</th><td>手機是<b>控制台</b>；真正執行任務、讀取檔案與修改內容的是<b>電腦端</b>。用 <b>Dispatch</b> App 把手機跟電腦端的 Claude Code 工作階段串起來，外出時也能追蹤進度、補指令、核准操作。</td></tr>
+  </table></div>
+  <figure class="shot">
+    <img src="ep202607-24-img/slide01.jpg" alt="用手機遙控 Claude Code 封面" loading="lazy">
+    <figcaption>簡報封面｜手機遙控、AI Agent、Claude Code、高效自動化——手機透過 Dispatch 連上正在執行的 Claude Code，任務清單顯示執行中／已完成項目。</figcaption>
+  </figure>
+</section>
+
+<section class="chapter" id="sec-why">
+  <span class="chip" style="background:linear-gradient(90deg,#0d8f80,#bf6a1e)">CHAPTER 01</span>
+  <h2 class="ct">1. 為什麼要用手機遙控 Claude Code</h2>
+  <figure class="shot">
+    <img src="ep202607-24-img/slide02.jpg" alt="為什麼要用手機遙控Claude Code" loading="lazy">
+    <figcaption>簡報 2｜讓 AI Agent 從桌面工作站，延伸成你的行動助理。</figcaption>
+  </figure>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">情境</th><th>說明</th></tr>
+    <tr><td><b>外出不中斷</b></td><td>離開電腦也能追蹤任務</td></tr>
+    <tr><td><b>即時補指令</b></td><td>臨時修正需求與追加條件</td></tr>
+    <tr><td><b>快速看進度</b></td><td>掌握 Agent 回報、錯誤與結果</td></tr>
+    <tr><td><b>行動協作</b></td><td>必要時上網查資料，再補充給 Claude</td></tr>
+  </table></div>
+  <p class="cd">你會得到什麼：節省等待時間、減少來回切換、提升工作連續性、讓 Agent 更像助理。</p>
+</section>
+
+<section class="chapter" id="sec-arch">
+  <span class="chip" style="background:linear-gradient(90deg,#bf6a1e,#9c7b23)">CHAPTER 02</span>
+  <h2 class="ct">2. 整體架構怎麼運作</h2>
+  <p class="cd">手機、Dispatch、Remote Control 與 Claude Code 的關係。</p>
+  <figure class="shot">
+    <img src="ep202607-24-img/slide03.jpg" alt="整體架構怎麼運作" loading="lazy">
+    <figcaption>簡報 3｜五個角色：① 手機端：在手機上透過 Dispatch 撰寫或語音輸入指令，並送出任務 ② Dispatch：接收指令，管理連線與驗證，並轉送至 Remote Control ③ Claude Code Remote Control：建立安全連線橋樑，將指令轉送到正在執行的 Claude Code 工作階段 ④ 電腦端 Claude Code：收到指令後，依工作樹環境執行任務（如編寫程式碼、分析、修正等）⑤ 任務結果與回報：執行結果與進度透過 Remote Control 傳回 Dispatch，再即時推送到手機端顯示。</figcaption>
+  </figure>
+  <ol class="st">
+    <li>發出指令：在手機端 Dispatch 輸入或語音發出指令。</li>
+    <li>傳送到連線中的工作階段：Dispatch 經由 Remote Control 將指令送達。</li>
+    <li>Claude Code 執行任務：Claude Code 在電腦端執行並處理任務。</li>
+    <li>回傳進度與結果：結果與進度回傳至手機，即時查看與追蹤。</li>
+  </ol>
+  <div class="note gold">⚠️ 重點提醒：先在電腦端開啟 Claude Code，並啟用 Remote Control，手機才能順利接手。</div>
+</section>
+
+<section class="chapter" id="sec-prep">
+  <span class="chip" style="background:linear-gradient(90deg,#9c7b23,#3b6bb0)">CHAPTER 03</span>
+  <h2 class="ct">3. 使用前要先準備什麼</h2>
+  <figure class="shot">
+    <img src="ep202607-24-img/slide04.jpg" alt="使用前要先準備什麼" loading="lazy">
+    <figcaption>簡報 4｜開始手機遙控前的前置條件檢查。</figcaption>
+  </figure>
+  <div class="twrap"><table>
+    <tr><th style="width:40px">#</th><th>檢查項目</th></tr>
+    <tr><td>1</td><td>電腦已安裝並啟動 Claude Code</td></tr>
+    <tr><td>2</td><td>使用 Claude 中文版或可操作的 Claude Code 環境</td></tr>
+    <tr><td>3</td><td>手機端可使用 Dispatch</td></tr>
+    <tr><td>4</td><td>網路連線穩定</td></tr>
+    <tr><td>5</td><td>已開啟要操作的專案或工作資料夾</td></tr>
+    <tr><td>6</td><td>清楚知道要交給 Agent 的任務</td></tr>
+  </table></div>
+  <p>建議先確認：登入狀態（已登入正確帳號並可正常使用）、權限設定（具備專案存取與執行必要權限）、工作目錄（確認目前工作目錄是正確的專案路徑）、任務目標（任務目標明確，輸出期望清楚）、回報方式（確認回報管道與通知方式）。</p>
+  <figure class="shot">
+    <img src="ep202607-24-img/s1-github-patch.jpg" alt="Claude Desktop 繁體中文化實際安裝畫面" loading="lazy">
+    <figcaption>錄影 11:18｜畫面實錄：實際示範環境準備——用 Claude Code 搜尋並安裝 GitHub 上的「javaht/claude-desktop-zh-cn」繁體中文化補丁，畫面顯示 5.3k stars、267 forks；左側對話框顯示安裝進度「安裝程式已啟動，正在等待 Windows UAC 授權」，對應課程資料夾內「Prompts_Claude code 介面繁體中文化.docx」提供的完整指令範本。</figcaption>
+  </figure>
+</section>
+
+<section class="chapter" id="sec-step1">
+  <span class="chip" style="background:linear-gradient(90deg,#3b6bb0,#5645D4)">CHAPTER 04</span>
+  <h2 class="ct">4. 步驟一：電腦端開啟 Claude Code</h2>
+  <figure class="shot">
+    <img src="ep202607-24-img/slide05.jpg" alt="步驟一：先在電腦端開啟Claude Code" loading="lazy">
+    <figcaption>簡報 5｜先建立可被遠端接手的工作環境：A 啟動 Claude Code 工作階段（在終端機輸入 claude）B 開啟你的專案或資料夾（切換到專案資料夾或用 claude /path/to/project 開啟工作區）C 確認 Agent 正在待命或可執行任務（看到 Ready 或提示符號代表已就緒）。這一步的目的：讓 Dispatch 找得到目前正在執行的 Claude Code 工作階段。</figcaption>
+  </figure>
+</section>
+
+<section class="chapter" id="sec-step2">
+  <span class="chip" style="background:linear-gradient(90deg,#5645D4,#b25269)">CHAPTER 05</span>
+  <h2 class="ct">5. 步驟二：開啟 Claude Code Remote Control</h2>
+  <figure class="shot">
+    <img src="ep202607-24-img/slide06.jpg" alt="步驟二：開啟Claude Code Remote Control" loading="lazy">
+    <figcaption>簡報 6｜這是 Dispatch 能夠連線的關鍵設定：① 進入設定（點選左下角齒輪圖示）② 點選 Claude Code（在左側選單選擇）③ 找到 Remote Control（在設定清單中找到「遠端控制 / Remote Control」）④ 將開關打開（點擊開關，啟用 Remote Control 功能）。沒有先開啟 Remote Control，Dispatch 就無法正常連線。</figcaption>
+  </figure>
+</section>
+
+<section class="chapter" id="sec-step3">
+  <span class="chip" style="background:linear-gradient(90deg,#b25269,#0d8f80)">CHAPTER 06</span>
+  <h2 class="ct">6. 步驟三：手機端用 Dispatch 完成連線</h2>
+  <figure class="shot">
+    <img src="ep202607-24-img/slide07.jpg" alt="步驟三：使用Dispatch完成連線" loading="lazy">
+    <figcaption>簡報 7｜把手機端與 Claude Code 工作階段串起來：① 開啟 Dispatch（在手機上開啟 Dispatch 應用程式）② 找到可連線的 Claude Code 工作階段（系統會自動掃描可連線的工作階段）③ 完成配對或選擇連線（選擇要連線的 Claude Code 工作階段或確認配對）④ 確認狀態顯示已連線（連線成功後會顯示已連線狀態）。連線成功後你會看到：任務清單、回報訊息、進度狀態、可傳送新指令。</figcaption>
+  </figure>
+  <figure class="shot">
+    <img src="ep202607-24-img/s2-dispatch-mobile.jpg" alt="Dispatch App 手機端真實畫面" loading="lazy">
+    <figcaption>錄影 14:02｜畫面實錄：Dispatch App 真實手機畫面，Sessions 清單顯示「概要說明資料夾內容」（Connected）、「讀取資料內容簡單摘要」「介紹 dispatch 的使用」「介紹 Code Dispatch 功能」等歷史工作階段（Disconnected）。</figcaption>
+  </figure>
+</section>
+
+<section class="chapter" id="sec-mobile">
+  <span class="chip" style="background:linear-gradient(90deg,#0d8f80,#2f7d92)">CHAPTER 07</span>
+  <h2 class="ct">7. 手機端可以做哪些操作</h2>
+  <figure class="shot">
+    <img src="ep202607-24-img/slide08.jpg" alt="手機端可以做哪些操作" loading="lazy">
+    <figcaption>簡報 8｜Dispatch 連上後，Agent 就能成為行動助理。</figcaption>
+  </figure>
+  <ol class="st">
+    <li><b>發送新指令</b>：隨時輸入需求或問題，快速下達新任務，Agent 立即開始處理。</li>
+    <li><b>追加補充條件</b>：在原有任務中補充背景、限制或偏好，讓 Agent 更精準執行。</li>
+    <li><b>查看任務進度</b>：即時掌握任務狀態，了解目前階段與完成百分比。</li>
+    <li><b>閱讀 Agent 回報</b>：查看 Agent 的執行結果、分析與建議，快速理解重點與結論。</li>
+    <li><b>調整任務方向</b>：調整目標、重點或格式，引導 Agent 重新聚焦，產出更符合需求的結果。</li>
+    <li><b>追蹤結果輸出</b>：下載或複製最終成果，保存紀錄，方便後續使用與分享。</li>
+  </ol>
+  <p class="cd">適合的指令類型：整理資料（如整理表格、統整會議紀錄）、修正文案（如潤稿、改寫、調整語氣）、檢查程式（如除錯、優化、檢查邏輯）、彙整回報（如摘要成果、建立簡報）、排定下一步（如規劃行動、建立待辦清單）。</p>
+  <figure class="shot">
+    <img src="ep202607-24-img/s3-claude-code-observe.jpg" alt="Claude Code 觀察多個 AI coding agent 設定的真實畫面" loading="lazy">
+    <figcaption>錄影 17:13｜畫面實錄：真實 Claude Code 網頁工作階段（claude.ai/code），指令「概要說明資料夾內容」，回報中列出使用者根目錄下 .claude、.codex、.gemini、.hermes、.hyperframes、.antigravity、.notebooklm、.papersgpt、.gmail-mcp、.google-mcp-accounts、.aws、.azure、.docker、.ssh、.cargo、.rustup、.conda/anaconda、.vscode 等資料夾，並觀察到「多套 AI coding agent 並行」（Claude Code、Codex、Gemini CLI、Hermes、HyperFrames、Antigravity 等設定目錄同時存在）與「學術研究工作痕跡明顯」（Zotero、scholarapi、notebooklm 等目錄指向文獻管理與 AI 輔助研究）——示範用手機下指令請 Claude Code 分析自己電腦的使用習慣。</figcaption>
+  </figure>
+</section>
+
+<section class="chapter" id="sec-cases">
+  <span class="chip" style="background:linear-gradient(90deg,#2f7d92,#9c7b23)">CHAPTER 08</span>
+  <h2 class="ct">8. 應用情境與適合族群</h2>
+  <figure class="shot">
+    <img src="ep202607-24-img/slide09.jpg" alt="Dispatch連接後的應用情境" loading="lazy">
+    <figcaption>簡報 9｜把 Claude Code 變成真正可移動的 AI Agent：外出時追蹤任務執行、臨時補充指令與修正需求、查看 Agent 回報與結果、必要時上網查資料再補充給 Claude。</figcaption>
+  </figure>
+  <p class="cd">適合族群：講師、研究者、行政人員、內容工作者、開發者。</p>
+  <div class="golden"><div class="q">「手機不是取代電腦，而是讓工作不中斷。」</div><div class="a">—— 簡報 9 提醒</div></div>
+</section>
+
+<section class="chapter" id="sec-tips">
+  <span class="chip" style="background:linear-gradient(90deg,#9c7b23,#0d8f80)">CHAPTER 09</span>
+  <h2 class="ct">9. 使用提醒與最佳實務</h2>
+  <figure class="shot">
+    <img src="ep202607-24-img/slide10.jpg" alt="使用提醒與最佳實務" loading="lazy">
+    <figcaption>簡報 10｜讓手機遙控 Claude Code 更穩定、更安全、更有效率。</figcaption>
+  </figure>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">面向</th><th>內容</th></tr>
+    <tr><td>操作提醒</td><td>先開 Remote Control（啟用後才能遠端操作）；保持連線穩定（確保網路順暢，避免中斷影響任務）；任務交代要清楚（提供明確指令與背景，提升執行品質）</td></tr>
+    <tr><td>適合的工作</td><td>追蹤進度、補充需求、查看回報、短任務協作</td></tr>
+    <tr><td>注意事項</td><td>避免高風險操作（如重大變更、刪除資料等操作）；重要結果仍需人工確認（AI 可能出錯，請務必檢查確認）；敏感資料要注意權限（注意資料存取與分享的安全性）</td></tr>
+  </table></div>
+  <p class="cd">一頁總結：① 開啟 Claude Code（先在電腦端啟動工作環境）② 啟用 Remote Control（到設定頁中開啟控制功能）③ Dispatch 連線（透過 Dispatch 完成連線）④ 手機遠端操作（在手機上接收指令與執行任務）。讓 AI Agent 不只在桌面上工作，也能跟著你一起行動。</p>
+</section>
+
+<section class="chapter" id="sec-recap">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#0d8f80)">RECAP</span>
+  <h2 class="ct">10. 重點整理</h2>
+  <ul class="pt">
+    <li><b>手機是控制台，電腦端才真正執行</b>：Dispatch 不是雲端代跑，真正執行任務的是保持開機的電腦端。</li>
+    <li><b>三步驟建立連線</b>：電腦端開啟 Claude Code → 開啟 Remote Control → 手機端用 Dispatch 配對連線。</li>
+    <li><b>手機端六種操作</b>：發送指令、追加條件、查看進度、閱讀回報、調整方向、追蹤輸出。</li>
+    <li><b>真實示範</b>：用 Claude Code 安裝 GitHub 上的繁體中文化補丁，以及讓 Claude Code 分析自己電腦內多套 AI coding agent 的使用痕跡。</li>
+    <li><b>安全提醒</b>：避免高風險操作，重要結果仍需人工確認，敏感資料要注意權限。</li>
+  </ul>
+</section>
+
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5a5866)">SOURCES</span>
+  <h2 class="ct">11. 資料來源與製作說明</h2>
+  <ul class="pt">
+    <li><b>原始教材：</b>EP202607.24「用手機遙控 Claude Code：讓 AI Agent 成為你的行動助理」官方課程簡報 10 頁＋錄影回放（44.8 分鐘）＋補充文件「Prompts_Claude code 介面繁體中文化.docx」；均為 anyone-reader 權限、公開可下載。</li>
+    <li><b>製作方式：</b>下載完整錄影 → 場景變化偵測抽取畫面關鍵幀 → <b>親眼逐張判讀</b>畫面內容 → 對照下載原始 pptx 取出 10 頁投影片原圖 → 整理成本頁章節。內容為<b>真實課程內容</b>，非推測改寫。</li>
+    <li><b>介面參考：</b>版型沿用本站 EP29–EP47 課堂筆記的乾淨白底編輯風格。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  EP202607.24「用手機遙控 Claude Code」課堂筆記・2026/07 整理<br>
+  🍀 Learn AI with Tarshar｜搭配 <a href="ep202607-24-ai-skills.html">互動技能地圖</a> 使用效果最佳
+</footer>
+
+</body>
+</html>

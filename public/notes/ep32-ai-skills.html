@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>打通生成式 AI 任督二脈：Claude Code 篇｜互動式學習地圖</title>
+<meta name="description" content="EP32 晨學講堂：Claude Code 從零安裝到上手——桌面版三分頁、Windows 終端機安裝實戰（CMD／PowerShell 踩雷）、邊查邊做設定專案、用自然語言改 settings.json、/model 與 Plan Mode，互動式多層次學習地圖">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269;
+  --green:#3f8560; --orange:#bf6a1e; --red:#c0453f; --teal:#0d8f80;
+  --feat:#3f8560; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(28px,4.6vw,46px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--txt);background:none;-webkit-text-fill-color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:660px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:9px}
+.steps li{list-style:none;counter-increment:st;display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--txt2);line-height:1.7}
+.steps li::before{content:counter(st);flex:none;width:25px;height:25px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:var(--c,var(--feat));margin-top:1px}
+.steps li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+.prompt,.promptbox{background:#1d1d1f;border:1px solid #2c2c31;border-radius:10px;padding:13px 15px;margin-top:6px;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt b,.promptbox b{color:#fff}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <a class="navlink" href="../radio/" style="border-color:#8fd6b4" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <div class="logo">
+    <div class="dot">🧩</div>
+    <div>Claude Code 技能地圖<small>MORNING LEARNING · EP32</small></div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋技能關鍵字：安裝、PATH、settings.json、CCC、Plan Mode…" autocomplete="off">
+  </div>
+  <a class="navlink" href="ep32-notes.html">📝 逐幀課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">EP32 · 晨學講堂 · 2026/04/10</span>
+  <h1>打通生成式 AI 任督二脈<br>Claude Code 篇</h1>
+  <p class="sub">本集<b>沒有簡報</b>，只有一支 68 分鐘的真實安裝實戰錄影——從下載桌面版、終端機安裝踩雷、邊查邊做設定專案，到用自然語言改設定、切模型、進 Plan Mode。<br>點進每一章，逐層展開<b>本集實際發生</b>的操作、指令與錯誤訊息，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🎙️ 生成式AI應用電台・晨學講堂</span>
+    <span>🎞️ 逐幀判讀 205 張截圖</span>
+    <span>🗂️ 五大主題 · 14 項實錄技能</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>5</b><span>大主題</span></div>
+  <div class="stat"><b>14</b><span>實錄技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 14 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--teal)" onclick="showChapter('app')">
+        <div class="glowline"></div>
+        <span class="emoji">💻</span>
+        <h3><em>CHAPTER 01</em>桌面版三分頁</h3>
+        <p>claude.ai 網頁起手、下載三步驟、Chat／Cowork／Code 三分頁，直接問 Claude「你能做什麼」取得完整能力清單。</p>
+        <div class="foot"><div class="mini"><i data-mini="app"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--blue)" onclick="showChapter('install')">
+        <div class="glowline"></div>
+        <span class="emoji">⌨️</span>
+        <h3><em>CHAPTER 02</em>終端機安裝實戰</h3>
+        <p>CMD 安裝指令、CMD 與 PowerShell 誤用踩雷、Git for Windows 需求、安裝成功後的 PATH 環境變數提醒。</p>
+        <div class="foot"><div class="mini"><i data-mini="install"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--purple)" onclick="showChapter('project')">
+        <div class="glowline"></div>
+        <span class="emoji">🛠️</span>
+        <h3><em>CHAPTER 03</em>邊查邊做設定專案</h3>
+        <p>請 ChatGPT 生成步驟指南、真實新手錯誤示範（照抄佔位字）、補裝 Node.js 才能跑 npm 指令。</p>
+        <div class="foot"><div class="mini"><i data-mini="project"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--orange)" onclick="showChapter('config')">
+        <div class="glowline"></div>
+        <span class="emoji">⚙️</span>
+        <h3><em>CHAPTER 04</em>自然語言改設定</h3>
+        <p>用中文直接跟 Claude Code 說需求，它呼叫內建 Skill(update-config) 改 settings.json，還做了 CCC 快速啟動別名。</p>
+        <div class="foot"><div class="mini"><i data-mini="config"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--pink)" onclick="showChapter('usage')">
+        <div class="glowline"></div>
+        <span class="emoji">🚀</span>
+        <h3><em>CHAPTER 05</em>上手操作</h3>
+        <p>/model 切換 Opus／Sonnet／Haiku、Plan Mode 計劃模式先想後做、Claude Code 即時網路搜尋示範。</p>
+        <div class="foot"><div class="mini"><i data-mini="usage"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+
+    <div class="resources">
+      <h3>📦 <span>課程原始資料</span></h3>
+      <div class="res-grid">
+        <a href="https://drive.google.com/file/d/1D5_5J7Xtjbs4CbUwydNC6UOZHhaDtwH3/view" target="_blank" rel="noopener"><span class="ic">🎬</span><span><b>錄影回放</b>完整課程影片（約 68:24），無簡報檔</span></a>
+        <a href="ep32-notes.html"><span class="ic">📝</span><span><b>逐幀課堂筆記</b>205 張抽格真實截圖＋時間戳</span></a>
+        <a href="../radio/"><span class="ic">📻</span><span><b>直播電台系列</b>回系列總覽，一集一卡</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-app" class="view" style="--c:var(--teal)"></section>
+  <section id="view-install" class="view" style="--c:var(--blue)"></section>
+  <section id="view-project" class="view" style="--c:var(--purple)"></section>
+  <section id="view-config" class="view" style="--c:var(--orange)"></section>
+  <section id="view-usage" class="view" style="--c:var(--pink)"></section>
+</main>
+
+<footer>
+  本頁為 EP32「打通生成式 AI 任督二脈：Claude Code 篇」課後整理・介面沿用本站 EP44–EP46 互動式學習地圖<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2026｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+/* ═══════════ 課程資料（章 → 技能 → 內容區塊） ═══════════ */
+const DATA = {
+  app: {
+    key:'app', color:'var(--teal)', emoji:'💻', code:'CHAPTER 01', title:'桌面版三分頁',
+    intro:'課程一開始，老師先從瀏覽器 claude.ai 帶大家「認人」，再引導下載桌面版、登入、切到 Code 分頁，直接問 Claude「你能做什麼」，把回答整段記錄下來當能力地圖。',
+    topics:[
+      {t:'claude.ai 網頁版起手與下載', s:'三步驟安裝桌面版｜錄影 01:00–01:40',
+       blocks:[
+        {h:'畫面實錄',ul:[
+          '網頁首頁「<b>Good evening, Huang</b>」，模型顯示 <b>Sonnet 4.6</b>，下方 Write／Learn／Code／Life stuff／From Drive 五個快捷入口。',
+          '切到 claude.ai/downloads：<b>Open</b>（執行 Claude Setup.exe）→ <b>Launch</b>（自動安裝）→ <b>Chat</b>（工作列開啟）。',
+          '下方另有 Mobile（iOS／Android）與 Chrome 擴充功能（可在瀏覽器中操作點擊、填表單）。']},
+        {h:'登入方式',p:'桌面版啟動後彈出 Sign in 視窗，用 <b>Continue with Google</b> 登入，接著看到「Let\'s knock something off your list」歡迎畫面。'},
+        {h:'看實錄截圖',p:'👉 <a href="ep32-notes.html#a-web" style="color:var(--teal)">逐幀筆記 3.1：claude.ai 網頁版起手</a>'}]},
+      {t:'Chat／Cowork／Code 三分頁與能力清單', s:'直接問 Claude「你能做什麼」｜錄影 07:40',
+       blocks:[
+        {h:'畫面實錄',p:'桌面版視窗頂部三個分頁：<b>Chat｜Cowork｜Code</b>。切到 Code 分頁開新 session「Clarify AI capabilities and features」，輸入「請問您能做什麼？」，Claude 條列自身能力。'},
+        {h:'能力清單（畫面原文照抄）',table:{head:['分類','項目'],rows:[
+          ['軟體工程','閱讀/編寫/修改程式碼；除錯/重構/解釋；搜尋程式庫/分析結構；執行終端指令/管理檔案'],
+          ['研究與分析','搜尋網路資料（WebSearch）；擷取網頁內容（WebFetch）；回答技術問題/解釋概念'],
+          ['文件處理','建立/編輯 Word（.docx）；處理 PDF/Excel/PowerPoint；撰寫技術文件'],
+          ['自動化','設定排程任務（Cron Jobs）']]}},
+        {h:'提醒',warn:'三分頁本身的功能差異，本集沒有明確講解或比較表，老師直接切到 Code 分頁操作示範。'},
+        {h:'看實錄截圖',p:'👉 <a href="ep32-notes.html#a-modes" style="color:var(--teal)">逐幀筆記 3.2：三分頁與能力清單（含截圖）</a>'}]}
+    ]
+  },
+  install: {
+    key:'install', color:'var(--blue)', emoji:'⌨️', code:'CHAPTER 02', title:'終端機安裝實戰',
+    intro:'這是全集份量最重的一段：從 Google 搜尋「claude code」找到官方文件，到終端機一路貼指令、真的卡關、真的排錯，最後成功安裝並登入——過程完整保留。',
+    topics:[
+      {t:'CMD 安裝指令', s:'從官方文件複製貼上｜錄影 09:20–10:40',
+       blocks:[
+        {h:'畫面實錄指令',prompt:'curl -fsSL https://claude.ai/install.cmd -o install.cmd && install.cmd && del install.cmd'},
+        {h:'操作路徑',p:'Google 搜尋「claude code」→ 進入 <b>code.claude.com/docs/zh-TW/overview</b> 官方文件 → 用 Windows 搜尋「cmd」開啟命令提示字元 → 貼上並執行。'},
+        {h:'看實錄截圖',p:'👉 <a href="ep32-notes.html#i-cmd" style="color:var(--blue)">逐幀筆記 4.1：CMD 安裝指令</a>'}]},
+      {t:'CMD vs PowerShell：真的踩到的雷', s:'&& 錯誤、需要 Git for Windows｜錄影 14:20',
+       blocks:[
+        {h:'官方文件原文（畫面判讀）',p:'「If you see <b>The token \'&&\' is not a valid statement separator</b>, you\'re in PowerShell, not CMD. Use the PowerShell command above instead. Your prompt shows <b>PS C:\\</b> when you\'re in PowerShell.」「<b>Windows requires Git for Windows.</b> Install it first if you don\'t have it.」'},
+        {h:'兩種安裝指令對照',prompt:'CMD：\ncurl -fsSL https://claude.ai/install.cmd -o install.cmd && install.cmd && del install.cmd\n\nPowerShell：\nirm https://claude.ai/install.ps1 | iex'},
+        {h:'真實踩雷過程',ul:[
+          '老師先在 PowerShell 視窗貼了 CMD 版指令，跳出 <code>&&</code> 錯誤——正是文件提醒的典型誤用。',
+          '約 21:20–26:00 螢幕分享一度暫停（只剩參與者頭像），是離線排錯的真實空檔。',
+          '改用 PowerShell 版指令後，跳出橘字警告：Windows 上使用 Claude Code 需要 <b>git-bash</b>，若已安裝但不在 PATH 需設定 <code>CLAUDE_CODE_GIT_BASH_PATH</code>。',
+          '接著另開瀏覽器下載 <b>Git for Windows</b> 安裝檔並跑完安裝精靈。']},
+        {h:'看實錄截圖',p:'👉 <a href="ep32-notes.html#i-trouble" style="color:var(--blue)">逐幀筆記 4.2：CMD vs PowerShell 踩雷</a>'}]},
+      {t:'安裝成功與 PATH 環境變數', s:'安裝成功≠指令能直接用｜錄影 44:20',
+       blocks:[
+        {h:'畫面實錄（PowerShell 輸出原文）',p:'「<b>Claude Code successfully installed!</b> Version: 2.1.100　Location: C:\\Users\\huang\\.local\\bin\\claude.exe」下方橘色 Setup notes：「Native installation exists but C:\\Users\\huang\\.local\\bin is not in your PATH. Add it by opening: System Properties → Environment Variables → Edit User PATH → New → Add the path above. Then restart your terminal.」'},
+        {h:'修 PATH 三步驟',steps:[
+          '用 Windows 搜尋「環境變數」，開啟「編輯系統環境變數」控制台項目。',
+          '在使用者 PATH 中新增一條，指向 C:\\Users\\huang\\.local\\bin。',
+          '關閉並重新開啟終端機，讓新的 PATH 生效。']},
+        {h:'提醒',warn:'這是本集第二個真實新手雷點：安裝成功不代表指令能直接用，Windows 上常需手動把安裝路徑加進 PATH 並重開終端機。'},
+        {h:'看實錄截圖',p:'👉 <a href="ep32-notes.html#i-done" style="color:var(--blue)">逐幀筆記 4.3：安裝成功與 PATH 提醒</a>'}]},
+      {t:'登入與歡迎畫面', s:'Google 帳號登入 + Welcome back｜錄影 45:00–57:00',
+       blocks:[
+        {h:'畫面實錄',ul:[
+          '瀏覽器彈出 claude.ai/login「Think fast, build faster」頁面，選擇 Enter email／Continue with email。',
+          '終端機出現 ASCII 貓咪圖示，「<b>Welcome to Claude Code v2.1.100</b>」，顯示 Logged in as 107256503@g.nccu.edu.tw、Login successful。',
+          '瀏覽器顯示 platform.claude.com「<b>Build something great</b> — You\'re all set up for Claude Code. You can now close this window.」',
+          '重開 session 後看到「Welcome back Huang!」：Sonnet 4.6・Claude Pro・107256503@g.nccu.edu.tw\'s Organization・C:\\Users\\huang；提示可用 <b>/init</b> 建立 CLAUDE.md。']},
+        {h:'看實錄截圖',p:'👉 <a href="ep32-notes.html#i-login" style="color:var(--blue)">逐幀筆記 4.4：登入與歡迎畫面</a>'}]}
+    ]
+  },
+  project: {
+    key:'project', color:'var(--purple)', emoji:'🛠️', code:'CHAPTER 03', title:'邊查邊做設定專案',
+    intro:'安裝過程中，老師另開 ChatGPT（搭配 NotebookLM 分頁）即時生成「怎麼建立 Node.js 專案資料夾」的步驟指南，一邊照著唸、一邊在 PowerShell 貼指令——過程中真的出現了新手會犯的錯誤，而且沒有被剪掉。',
+    topics:[
+      {t:'請 ChatGPT 生成步驟指南', s:'四段式操作指南｜錄影 33:00',
+       blocks:[
+        {h:'畫面實錄',ul:[
+          '開啟 chatgpt.com，請它針對「還沒有專案資料夾」的情況給步驟。',
+          '產出指南結構：<b>一、建立 Node.js 專案（必要）／二、進入專案資料夾／三、初始化 Claude Code／四、安裝完成後（驗證）</b>，每段附可複製貼上的 PowerShell 指令方塊。',
+          '視窗右側同時開著 NotebookLM 分頁。']},
+        {h:'看實錄截圖',p:'👉 <a href="ep32-notes.html#p-guide" style="color:var(--purple)">逐幀筆記 5.1：請 ChatGPT 生成步驟指南</a>'}]},
+      {t:'新手常見錯誤示範（真實發生，未剪掉）', s:'照抄佔位字「your-project」｜錄影 35:20',
+       blocks:[
+        {h:'畫面實錄',p:'左側 PowerShell、右側 ChatGPT 指南並排。連續兩次執行 <code>cd your-project</code> 都出現「<b>cd：找不到 \'C:\\Users\\huang\\my-project\\your-project\'，路徑：因為它不存在。</b>」——原因是把指南裡的<b>佔位字「your-project」</b>直接複製貼上，而非替換成自己建立的資料夾名稱 my-project。'},
+        {h:'學到什麼',tip:'照抄範例文字時要注意「佔位字」跟「實際名稱」的差別——這正是很多初學者第一次用命令列會卡住的地方，本集把它完整保留而不是剪掉。'},
+        {h:'看實錄截圖',p:'👉 <a href="ep32-notes.html#p-mistake" style="color:var(--purple)">逐幀筆記 5.2：新手常見錯誤示範</a>'}]},
+      {t:'補裝 Node.js', s:'npm 找不到指令才發現沒裝 Node｜錄影 36:20',
+       blocks:[
+        {h:'畫面實錄',p:'執行 <code>npm init -y</code> 時 PowerShell 回覆「npm：無法辨識 \'npm\' 詞彙是否為 Cmdlet、函數...」——因為當下電腦還沒安裝 Node.js。ChatGPT 建議指令：<code>npm init -y</code>／<code>npm install @anthropic-ai/sdk</code>／<code>dir</code>。'},
+        {h:'解法',p:'下載並執行 <b>Node.js 安裝精靈</b>，裝完後才能繼續後續的 npm 指令。'},
+        {h:'看實錄截圖',p:'👉 <a href="ep32-notes.html#p-node" style="color:var(--purple)">逐幀筆記 5.3：補裝 Node.js</a>'}]}
+    ]
+  },
+  config: {
+    key:'config', color:'var(--orange)', emoji:'⚙️', code:'CHAPTER 04', title:'自然語言改設定',
+    intro:'裝好、登入後，老師沒有直接手改設定檔，而是直接跟 Claude Code 用中文說需求，讓它自己找到對應設定、跑內建 Skill、改 settings.json，全程可見核准流程。',
+    topics:[
+      {t:'換工作資料夾（additionalDirectories）', s:'內建 Skill(update-config) 實際運作｜錄影 57:40–60:00',
+       blocks:[
+        {h:'操作流程（畫面判讀）',steps:[
+          '使用者輸入「請一律用中文回答」→ Claude 確認改用中文回覆。',
+          '使用者說「我想要把我的資料另外新增在外頭新的資料夾，不要放在系統檔的路徑」。',
+          'Claude 反問要建在哪個位置（Documents 下、D:\\ 等選項）。',
+          '使用者指定 D:\\ 下建立「claude code」資料夾。',
+          'Claude 呼叫內建 <b>Skill(update-config)</b>，跳出核准選單：1. Yes　2. Yes, and don\'t ask again　3. No。']},
+        {h:'settings.json diff（畫面原文）',prompt:'2 -  "autoUpdatesChannel": "latest"\n2 +  "autoUpdatesChannel": "latest",\n3 +  "permissions": {\n4 +    "additionalDirectories": ["D:\\\\claude code"]\n5 +  }'},
+        {h:'Skill(update-config) 是什麼',p:'畫面顯示完整說明：「Use this skill to configure the Claude Code harness via settings.json...」代表它是<b>官方預先寫好、專門用來安全地改設定檔</b>的技能，不是 Claude 隨意亂改檔案。'},
+        {h:'一次失敗紀錄',warn:'Claude 曾嘗試 Bash(mkdir -p "/d/claude code") 建資料夾，回傳 Error: Exit code 127　mkdir: command not found——這是 Windows 上 bash／git-bash 路徑對應的另一個真實踩雷。'},
+        {h:'看實錄截圖',p:'👉 <a href="ep32-notes.html#c-dir" style="color:var(--orange)">逐幀筆記 6.1：換工作資料夾</a>'}]},
+      {t:'CCC 快速啟動別名', s:'PowerShell／cmd／bash 三種寫法｜錄影 61:20',
+       blocks:[
+        {h:'PowerShell 版',prompt:'New-Item -ItemType Directory -Force -Path "$HOME\\Documents\\PowerShell" | Out-Null\nAdd-Content -Path "$HOME\\Documents\\PowerShell\\Microsoft.PowerShell_profile.ps1" -Value \'function CCC { cd "D:\\claude code"; claude }\''},
+        {h:'cmd 版',prompt:'echo @echo off > C:\\Windows\\CCC.bat\necho cd /d "D:\\claude code" >> C:\\Windows\\CCC.bat\necho claude >> C:\\Windows\\CCC.bat'},
+        {h:'bash 版（Git Bash 等）',p:'寫入 ~/.bashrc：<code>alias ccc=\'claude\'</code>，執行 <code>source ~/.bashrc</code> 生效；若使用 Git Bash 可能需另外確認 ~/.bashrc 會自動載入，否則加進 ~/.bash_profile。'},
+        {h:'驗證',ul:[
+          '開新終端機視窗，實際輸入 <b>ccc</b> 測試別名是否生效。',
+          '開檔案總管確認 C:\\Users\\huang 底下真的有 .claude、.config、.local、my-project 等資料夾，證明設定確實落地。']},
+        {h:'看實錄截圖',p:'👉 <a href="ep32-notes.html#c-shortcut" style="color:var(--orange)">逐幀筆記 6.2：CCC 快速啟動別名</a>'}]}
+    ]
+  },
+  usage: {
+    key:'usage', color:'var(--pink)', emoji:'🚀', code:'CHAPTER 05', title:'上手操作',
+    intro:'環境都設定好之後，最後一段示範三個實際會用到的操作：切換模型、進入計劃模式、還有一次即時網路搜尋的示範。',
+    topics:[
+      {t:'/model 切換模型', s:'Opus／Sonnet／Haiku 三選一｜錄影 61:40',
+       blocks:[
+        {h:'兩種切換方式',steps:[
+          '方法一：指令列輸入——在對話框中輸入 <b>/model</b>。',
+          '方法二：啟動時指定——<b>claude --model claude-opus-4-6</b>。']},
+        {h:'可用模型列表（畫面原文）',table:{head:['模型','模型 ID','特性'],rows:[
+          ['Opus 4.6','claude-opus-4-6','最強能力，適合複雜任務'],
+          ['Sonnet 4.6','claude-sonnet-4-6','均衡效能（目前使用中）'],
+          ['Haiku 4.5','claude-haiku-4-5-20251001','最快速，適合簡單任務']]}},
+        {h:'看實錄截圖',p:'👉 <a href="ep32-notes.html#u-model" style="color:var(--pink)">逐幀筆記 7.1：/model 切換模型</a>'}]},
+      {t:'Plan Mode 計劃模式', s:'先探索設計，確認後才執行｜錄影 61:40',
+       blocks:[
+        {h:'目前狀態（畫面原文）',table:{head:['項目','狀態'],rows:[
+          ['模式','Plan Mode 啟動中'],
+          ['權限','唯讀，不執行任何修改'],
+          ['用途','規劃、探索、設計方案']]}},
+        {h:'運作方式四步驟',steps:[
+          '<b>探索</b>：讀取程式碼、分析結構，但不做任何修改。',
+          '<b>設計</b>：提出實作方案供使用者審查。',
+          '<b>確認</b>：使用者批准後才會實際執行。',
+          '<b>退出</b>：完成規劃後輸入 /exit-plan 或呼叫 ExitPlanMode。']},
+        {h:'延伸提醒',warn:'使用者接著被問「您想調整哪種權限設定？」，回答「自動核准模式」——代表 Plan Mode 之外還有獨立的權限核准機制，但本集未再展開細講。'},
+        {h:'看實錄截圖',p:'👉 <a href="ep32-notes.html#u-plan" style="color:var(--pink)">逐幀筆記 7.2：Plan Mode 計劃模式</a>'}]},
+      {t:'即時網路搜尋示範', s:'WebSearch 工具實際被用到｜錄影 65:40',
+       blocks:[
+        {h:'畫面實錄',ul:[
+          'Claude Code 自動執行 <b>Web Search("Gemini Notebooks 最新消息 2026")</b> 與 <b>Web Search("Google Gemini Notebooks new features 2026")</b> 兩次搜尋。',
+          '搜尋完成後整理成表格回覆：重點摘要＋核心功能表（聊天整理、自訂指令、檔案附加、雙向同步、跨功能使用）。']},
+        {h:'意義',p:'呼應第 1 章能力清單裡「搜尋網路資料（WebSearch）」那一項——這是<b>真的被示範出來的能力</b>，不只是條列文字。'},
+        {h:'看實錄截圖',p:'👉 <a href="ep32-notes.html#u-search" style="color:var(--pink)">逐幀筆記 7.3：即時網路搜尋示範</a>'}]}
+    ]
+  }
+};
+
+/* ═══════════ 渲染 ═══════════ */
+const ORDER = ['app','install','project','config','usage'];
+const $ = s=>document.querySelector(s);
+
+function renderChapter(ch){
+  const d = DATA[ch];
+  const next = ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];
+  const prev = ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html = `
+  <div class="chapter-head">
+    <span class="emoji">${d.emoji}</span>
+    <div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div>
+  </div>`;
+  d.topics.forEach((tp,i)=>{
+    const id = `${ch}-${i}`;
+    html += `
+    <div class="topic" id="topic-${id}">
+      <div class="topic-head" onclick="toggleTopic('${id}')">
+        <span class="num">${i+1}</span>
+        <h4>${tp.t}<small>${tp.s}</small></h4>
+        <input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)">
+        <span class="chev">▶</span>
+      </div>
+      <div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{
+      html += `<div class="block"><h5>${b.h}</h5>`;
+      if(b.p) html += `<p>${b.p}</p>`;
+      if(b.ul) html += `<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps) html += `<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.prompt) html += `<div class="promptbox">${b.prompt}</div>`;
+      if(b.table) html += `<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.tip) html += `<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn) html += `<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html += `</div>`;
+    });
+    html += `</div></div></div>`;
+  });
+  html += `
+  <div class="chapnav">
+    <a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a>
+    <a onclick="showHome()" style="text-align:center">回總覽<b>🏠 五大主題</b></a>
+    <a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a>
+  </div>`;
+  $('#view-'+ch).innerHTML = html;
+}
+ORDER.forEach(renderChapter);
+
+function switchView(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  $('#view-'+id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function showHome(){ switchView('home'); $('#crumbs').style.display='none'; clearSearch(); }
+function showChapter(ch){
+  switchView(ch);
+  $('#crumbs').style.display='flex';
+  $('#crumbHere').textContent = `${DATA[ch].emoji} ${DATA[ch].title}`;
+  clearSearch(); syncChecks();
+}
+function toggleTopic(id){ $('#topic-'+id).classList.toggle('open'); }
+function openTopic(ch,i){
+  showChapter(ch);
+  const el = $('#topic-'+ch+'-'+i);
+  el.classList.add('open');
+  setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);
+}
+
+const KEY='ep32-skills-v1';
+const store = ()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){
+  const s = store(); if(val) s[id]=1; else delete s[id];
+  localStorage.setItem(KEY,JSON.stringify(s));
+  updateProgress();
+}
+const TOTAL = ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){
+  const done = Object.keys(store()).length;
+  const pct = Math.round(done/TOTAL*100);
+  $('#progFill').style.width = pct+'%';
+  $('#progText').textContent = `${done} / ${TOTAL} 項技能已掌握`;
+  $('#statDone').textContent = done;
+  $('#statPct').textContent = pct+'%';
+  ORDER.forEach(ch=>{
+    const sub = DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;
+    const el = document.querySelector(`[data-mini="${ch}"]`);
+    if(el) el.style.width = Math.round(sub/DATA[ch].topics.length*100)+'%';
+  });
+}
+function syncChecks(){
+  const s = store();
+  document.querySelectorAll('input[data-skill]').forEach(cb=>{ cb.checked = !!s[cb.dataset.skill]; });
+}
+function resetProgress(){
+  if(confirm('確定要清空所有打勾進度嗎？')){ localStorage.removeItem(KEY); syncChecks(); updateProgress(); }
+}
+
+function stripTags(s){ return s.replace(/<[^>]+>/g,''); }
+const INDEX = [];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{
+  let body = tp.s+' ';
+  tp.blocks.forEach(b=>{
+    if(b.p) body+=stripTags(b.p)+' ';
+    if(b.ul) body+=b.ul.map(stripTags).join(' ')+' ';
+    if(b.steps) body+=b.steps.map(stripTags).join(' ')+' ';
+    if(b.prompt) body+=b.prompt+' ';
+    if(b.tip) body+=stripTags(b.tip)+' ';
+    if(b.warn) body+=stripTags(b.warn)+' ';
+    if(b.table) body+=b.table.rows.flat().map(stripTags).join(' ')+' ';
+  });
+  INDEX.push({ch,i,title:tp.t,body});
+}));
+$('#searchInput').addEventListener('input',e=>{
+  const q = e.target.value.trim();
+  const box = $('#searchResults');
+  if(!q){ box.classList.remove('show'); box.innerHTML=''; return; }
+  const hits = INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));
+  box.classList.add('show');
+  if(!hits.length){ box.innerHTML = `<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：安裝、PATH、settings.json、CCC、Plan Mode）</div>`; return; }
+  const hl = s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);
+  box.innerHTML = hits.map(x=>{
+    const pos = x.body.toLowerCase().indexOf(q.toLowerCase());
+    const snip = x.body.substr(Math.max(0,pos-20),90);
+    return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})">
+      <div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div>
+      <h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;
+  }).join('');
+});
+function clearSearch(){ $('#searchInput').value=''; $('#searchResults').classList.remove('show'); $('#searchResults').innerHTML=''; }
+
+(function(){
+  const box = $('#stars');
+  for(let i=0;i<70;i++){
+    const s = document.createElement('i');
+    s.style.left = Math.random()*100+'%';
+    s.style.top = Math.random()*100+'%';
+    s.style.animationDelay = (Math.random()*3)+'s';
+    s.style.transform = `scale(${.5+Math.random()*1.5})`;
+    box.appendChild(s);
+  }
+})();
+
+syncChecks(); updateProgress();
+</script>
+</body>
+</html>

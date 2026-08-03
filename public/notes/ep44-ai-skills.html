@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026 上半年一定會的 AI 技能｜互動式學習地圖</title>
+<meta name="description" content="EP44 晨學講堂：2026 上半年一定會的 AI 技能 — 文字篇、生圖篇、AI Agent 篇、自動化篇，互動式多層次學習地圖">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269;
+  --green:#3f8560; --orange:#bf6a1e; --red:#c0453f; --teal:#0d8f80;
+  --feat:#4f56d6; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(28px,4.6vw,46px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--txt);background:none;-webkit-text-fill-color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:660px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:9px}
+.steps li{list-style:none;counter-increment:st;display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--txt2);line-height:1.7}
+.steps li::before{content:counter(st);flex:none;width:25px;height:25px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:var(--c,var(--feat));margin-top:1px}
+.steps li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+.prompt,.promptbox{background:#1d1d1f;border:1px solid #2c2c31;border-radius:10px;padding:13px 15px;margin-top:6px;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt b,.promptbox b{color:#fff}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <a class="navlink" href="../radio/" style="border-color:#a8c686" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <div class="logo">
+    <div class="dot">🧠</div>
+    <div>AI 技能地圖<small>MORNING LEARNING · EP44</small></div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋技能關鍵字：YAML、MCP、n8n、生圖…" autocomplete="off">
+  </div>
+  <a class="navlink" href="ep44-notes.html">📝 逐幀課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">EP44 · 晨學講堂 · 2026/07/03</span>
+  <h1>2026 上半年<br>一定會的 AI 技能</h1>
+  <p class="sub">半年一次的總體檢：講師用同一個「颱風」案例，把上半年最重要的 AI 能力串成「文字、生圖、Agent、自動化」四大主線。<br>點進每一章，逐層展開<b>本集實際示範</b>的技能、步驟與指令，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🎙️ 生成式AI應用電台・晨學講堂</span>
+    <span>🧵 貫穿案例：颱風</span>
+    <span>🗂️ 四大篇章 · 17 項實錄技能</span>
+    <span>✅ 進度自動記憶（存在本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>4</b><span>大篇章</span></div>
+  <div class="stat"><b>17</b><span>實錄技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 17 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <!-- ═══ Level 1：四大篇章 ═══ -->
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--cyan)" onclick="showChapter('text')">
+        <div class="glowline"></div>
+        <span class="emoji">✍️</span>
+        <h3><em>CHAPTER 01</em>文字篇</h3>
+        <p>現場做一個「颱風預測專家」：專案／Gem／Notebooks 知識庫、專家角色指令、資料來源、AI 查證思維、NotebookLM。</p>
+        <div class="foot"><div class="mini"><i data-mini="text"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--pink)" onclick="showChapter('image')">
+        <div class="glowline"></div>
+        <span class="emoji">🎨</span>
+        <h3><em>CHAPTER 02</em>生圖篇</h3>
+        <p>把颱風擬人化成 Q 版角色：生圖雙雄對決、修圖兩派、YAML 風格卡（颱風寶寶）、圖上畫紅線讓 AI 改、Canva 魔法圖層。</p>
+        <div class="foot"><div class="mini"><i data-mini="image"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--purple)" onclick="showChapter('agent')">
+        <div class="glowline"></div>
+        <span class="emoji">🤖</span>
+        <h3><em>CHAPTER 03</em>AI Agent 篇</h3>
+        <p>從聊天到代理：Opencode／Codex／Claude code／Antigravity 四工具，用 Codex 連上 NotebookLM 的 MCP、加 Skill、手機掃碼連線。</p>
+        <div class="foot"><div class="mini"><i data-mini="agent"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--green)" onclick="showChapter('auto')">
+        <div class="glowline"></div>
+        <span class="emoji">⚙️</span>
+        <h3><em>CHAPTER 04</em>自動化篇</h3>
+        <p>一句話交辦 Agent：颱風假 SWOT 報告自動查證存檔、文字轉影片生成成片，把技能「自動跑」起來。</p>
+        <div class="foot"><div class="mini"><i data-mini="auto"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+
+    <div class="resources">
+      <h3>📦 <span>課程原始資料</span></h3>
+      <div class="res-grid">
+        <a href="https://drive.google.com/drive/folders/1nOGbITVV41m0mNoHz14Vdn4Q9_RUe1cb" target="_blank" rel="noopener"><span class="ic">🗂️</span><span><b>講義及錄影回放資料夾</b>Google Drive（EP44 原始分享）</span></a>
+        <a href="https://drive.google.com/file/d/10MbFHlGMs_1ISJXDcX9vFdMFlI6JgyWj/view" target="_blank" rel="noopener"><span class="ic">📊</span><span><b>課程簡報</b>簡報_EP44（PPTX）</span></a>
+        <a href="https://drive.google.com/file/d/1qpIe2YcVoOew7REmSrv8qHhrekWD-ZVz/view" target="_blank" rel="noopener"><span class="ic">🎬</span><span><b>錄影回放</b>完整課程影片（59 分鐘）</span></a>
+        <a href="ep44-notes.html"><span class="ic">📝</span><span><b>逐幀課堂筆記</b>真實截圖 + 時間戳 + 逐字稿佐證</span></a>
+        <a href="../radio/"><span class="ic">📻</span><span><b>直播電台系列</b>回系列總覽，一集一卡</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ Level 2：各章節（由 JS 從資料生成） ═══ -->
+  <section id="view-text" class="view" style="--c:var(--cyan)"></section>
+  <section id="view-image" class="view" style="--c:var(--pink)"></section>
+  <section id="view-agent" class="view" style="--c:var(--purple)"></section>
+  <section id="view-auto" class="view" style="--c:var(--green)"></section>
+</main>
+
+<footer>
+  本頁為 EP44「2026 年上半年一定會的 AI 技能」課後整理・介面靈感來自 akira.ipas-ai.com 互動式學習地圖<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2026｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+/* ═══════════ 課程資料（多層結構：章 → 技能 → 內容區塊） ═══════════ */
+const DATA = {
+  text: {
+    key:'text', color:'var(--cyan)', emoji:'✍️', code:'CHAPTER 01', title:'文字篇',
+    intro:'文字是所有應用的地基。這一章講師沒停在理論，而是當場做一個「颱風預測專家」：先把資料變成知識庫，再用一句話生出專家角色卡，接著上傳資料來源，最後用「會不會放颱風假」這種有標準答案的問題，逼出 AI 的極限與正確用法——一定要給來源、要它自己查證。',
+    topics:[
+      {t:'專案／Gem／Notebooks：把資料變知識庫', s:'簡報 slide 3｜錄影 03:15',
+       blocks:[
+        {h:'核心觀念',ul:[
+          '三個容器：<b>專案</b>（集中管理資料）、<b>Gem</b>（與 AI 助理對話生成）、<b>Notebooks</b>（筆記本管理與知識整理）。',
+          '共同重點：把「自訂資料＋來源資料」統一<b>轉成 .md 檔</b>——輕量、跨平台、好餵給任何 AI。',
+          '先做個人化：ChatGPT 現場填暱稱（「假日認真上的小黃」）、調語氣，讓之後每次回答對齊你的偏好。']},
+        {h:'一句話記憶',p:'「先把散落的資料收成 .md 知識庫，AI 才有穩定的地基可站。」'}]},
+      {t:'颱風預測專家「角色指令」', s:'一句話生出可下載的專家卡｜錄影 06:45',
+       blocks:[
+        {h:'現場做法',ul:[
+          '只打一句<b>「寫出"專家角色指令" 颱風預測專家 "台灣脈絡"」</b>，AI 就展開成完整角色卡。',
+          '角色卡含四種定位：<b>氣象分析師／防災顧問／台灣在地解讀者／不確定性說明者</b>。',
+          '生成後一鍵下載成 <b>PDF／Word .docx／.md</b>——呼應上一節「轉成檔案、進知識庫」。']},
+        {h:'現場指令（原字）',prompt:'寫出"專家角色指令"\n颱風預測專家\n"台灣脈絡"'},
+        {h:'看實錄截圖',p:'👉 <a href="ep44-notes.html#t-expert" style="color:var(--cyan)">逐幀筆記 3.2：颱風預測專家角色指令（含 ChatGPT 生成畫面）</a>'},
+        {h:'一句話記憶',p:'「角色 = 主題 + 脈絡 + 一句『寫出專家角色指令』，AI 自己展開成卡片。」'}]},
+      {t:'專案 + 資料來源 + 圖文佐證', s:'把角色升級成長期可用的專案｜錄影 10:15',
+       blocks:[
+        {h:'現場做法',steps:[
+          '建立<b>「颱風專家」專案</b>並命名。',
+          '在「資料來源」上傳 Doc1.docx，讓角色有依據可查。',
+          '在專案指令加一條：<b>「回應時先用文字論述，並用 image2.0 生成一張圖佐證」</b>——每次回答都自帶圖文。']},
+        {h:'重點',ul:[
+          '專案（Project）＝角色 + 專屬資料 + 專屬指令，開新對話就自動載入。',
+          '資料來源可接附加檔案、Google 雲端硬碟、Slack 等。']}]},
+      {t:'AI 查證思維：巴威颱風這堂課', s:'有標準答案的問題最能逼出正確用法｜錄影 17:15',
+       blocks:[
+        {h:'發生了什麼',ul:[
+          '問「寫出 7/7–7/11 最新的預測」，AI 回：第 9 號颱風「巴威」已於 7/2 形成，<b>7 天以上路徑誤差可超過 1000 公里，只能做風險判讀</b>。',
+          'AI 主動提醒：使用者上傳的颱風圖是 <b>2024／2025 舊資料，不能作為最新依據</b>。',
+          '講師反覆強調：就算給了角色、給了資料，<b>「他還是照樣給你幻覺」「他都會亂講話」</b>。']},
+        {h:'正確用法',steps:[
+          '<b>給來源</b>：把官方資料（中央氣象署、停班停課辦法）當來源，而不是讓它憑空講。',
+          '<b>要它查證</b>：下「複查上述資訊，給我一個 check list 表」，逐項標「符合／需修正／不可沿用」。',
+          '<b>保留不確定性</b>：好角色會說「現在不能判斷停班停課」，而不是硬給假確定。']},
+        {h:'看實錄截圖',p:'👉 <a href="ep44-notes.html#t-verify" style="color:var(--cyan)">逐幀筆記 3.3：巴威颱風預測＝AI 查證課</a>'},
+        {h:'一句話記憶',p:'「AI 一定會有幻覺——所以一定要有來源、要它複查、要它保留不確定。」'}]},
+      {t:'NotebookLM 個人知識庫', s:'Gemini 的「筆記本」就是 NotebookLM｜錄影 21:00',
+       blocks:[
+        {h:'核心能力',ul:[
+          '用「菜單設計師」筆記本示範：上傳來源、<b>回答附引用</b>、可在「筆記本設定」填自訂指令（現場填「扮演港式料理專家」）。',
+          '把講義、網頁、文件、對話紀錄丟進同一個 Notebook 當<b>來源</b>，較不會亂編。']},
+        {h:'連結 NotebookLM 的 2 大途徑（slide 16）',table:{head:['途徑','做法','適合'],rows:[
+          ['① 直連使用','在 Gemini 生態系直接搭 NotebookLM','操作直覺、日常知識整理'],
+          ['② Agent 串接','透過 AI Agent 串 notebooklm-mcp-cli','可串工具、流程自動化、進階應用']]}},
+        {h:'小提醒',warn:'來源品質決定答案品質——上傳前先清掉過時與重複的檔案（就像那批舊颱風圖）。'}]}
+    ]
+  },
+  image: {
+    key:'image', color:'var(--pink)', emoji:'🎨', code:'CHAPTER 02', title:'生圖篇',
+    intro:'生圖篇的主題是「把可怕的颱風變成 Q 版擬人化角色」。重點不是抽到一張漂亮圖，而是一條可控的工作流：用 YAML 固定風格、在圖上畫記號讓 AI 改、再用 Canva 圖層拆解量產。',
+    topics:[
+      {t:'生圖雙雄對決', s:'Nano Banana × ChatGPT Image 2.0｜簡報 slide 7｜錄影 27:15',
+       blocks:[
+        {h:'兩強定位',table:{head:['模型','主打','底層'],rows:[
+          ['Nano Banana','高保真細節、多模態理解','Google Gemini 3.1 Flash Image / Pro'],
+          ['ChatGPT Image 2.0','文字渲染精準、構圖靈活','OpenAI gpt-image-2（GPT-5.4 backbone）']]}},
+        {h:'看實錄截圖',p:'👉 <a href="ep44-notes.html#i-duel" style="color:var(--pink)">逐幀筆記 4.1：生圖雙雄與修圖兩派（含簡報原圖）</a>'}]},
+      {t:'生圖修正分成 2 派', s:'簡報 slide 8/9｜請 AI 修 vs 轉圖層自己修',
+       blocks:[
+        {h:'兩種修圖路線',table:{head:['派別','做法','適合'],rows:[
+          ['① 請 AI 修','用 ChatGPT image 2.0 轉成去背細節圖（可匯出 PNG）','先求效率、局部重繪'],
+          ['② 轉圖層自己修','用 Canva 魔法圖層直接把圖拆開','細節可控、精修與完稿']]}},
+        {h:'一句話記憶',p:'「AI 出粗胚，圖層做完稿——兩派各司其職。」'}]},
+      {t:'YAML 把「颱風擬人化」變規格', s:'玩具總動員風格・颱風寶寶｜錄影 31:15',
+       blocks:[
+        {h:'現場做法',ul:[
+          '起手式一句白話：「把可怕的颱風變成 Q 版的動畫（擬人化）模樣在台灣的四周圍」。',
+          '關鍵動作：再叫 AI <b>「轉成 YAML 格式」</b>，把形容詞固定成可反覆套用、逐欄修改的規格卡。',
+          '生成的 YAML 定義：視覺美學＝玩具總動員風格、質感＝塑料光澤／4K、角色＝<b>颱風寶寶（Typhoon Kids）</b>。']},
+        {h:'現場指令（原字）',prompt:'把可怕的颱風變成 Q 版的動畫(擬人化)模樣在台灣的四周圍。\n轉成 YAML 格式（整體風格要像玩具總動員的風格）\n繁體中文，請不要有多餘的筆劃、模糊的邊緣，至少 4K'},
+        {h:'看實錄截圖',p:'👉 <a href="ep44-notes.html#i-yaml" style="color:var(--pink)">逐幀筆記 4.2：YAML 颱風擬人化（含 YAML 與生成成果）</a>'},
+        {h:'一句話記憶',p:'「先出 YAML 規格卡，再用同一張卡生圖，就有系列感。」'}]},
+      {t:'圖上畫紅線讓 AI 改', s:'比文字更精準的修圖法｜錄影 36:15',
+       blocks:[
+        {h:'最實用的一招',ul:[
+          '直接在生成圖上<b>用紅筆圈範圍、寫紅字「加入鯊魚」</b>，再把標註過的圖丟回去。',
+          '指令：<b>「請按照圖片中的指示來完成我的需求，完成之後把紅線跟紅字拿掉。」</b>',
+          '比用文字描述「在左下角加一隻鯊魚」更精準、更省溝通（很多人會拿手機截圖後再標）。']},
+        {h:'延伸量產',steps:[
+          '請 AI「依序生成十張不同風格圖」（第一張＝童趣積木世界…）。',
+          '再下「把整張圖拆解、每個颱風跟台灣區隔、共八張、每張 16:9、幫我去背」。',
+          '一次量產一整套可各自使用的素材。']},
+        {h:'看實錄截圖',p:'👉 <a href="ep44-notes.html#i-annotate" style="color:var(--pink)">逐幀筆記 4.3：圖上畫紅線讓 AI 改</a>'}]},
+      {t:'Canva 魔法圖層', s:'把一張圖拆成可編輯圖層｜錄影 43:15',
+       blocks:[
+        {h:'核心能力',ul:[
+          'Canva「編輯圖片 → 魔法圖層／魔法編輯工具／背景移除／風格萃取」面板。',
+          '一鍵把整張圖<b>拆解成可編輯的圖層</b>，個別調整、局部重繪，再匯出成 pptx。',
+          '這就是「修圖第 2 派」的實作：AI 負責發想，圖層負責精修。']},
+        {h:'看實錄截圖',p:'👉 <a href="ep44-notes.html#i-canva" style="color:var(--pink)">逐幀筆記 4.4：Canva 魔法圖層（含編輯面板）</a>'},
+        {h:'一句話記憶',p:'「抽卡靠運氣，YAML 風格卡靠系統；文字說不清的，就在圖上畫給它看。」'}]}
+    ]
+  },
+  agent: {
+    key:'agent', color:'var(--purple)', emoji:'🤖', code:'CHAPTER 03', title:'AI Agent 篇',
+    intro:'開場講師就說「今天不會講太多 Agent，因為第一個 Agent 要花一點時間讓它跑」。實際上他用 Codex 現場示範了 Agent 最關鍵的一步——連上工具（MCP），讓 AI 從「回答你」變成「幫你做完」。',
+    topics:[
+      {t:'四大 Agent 工具 + 能力分層', s:'Opencode／Codex／Claude code／Antigravity｜錄影 47:30',
+       blocks:[
+        {h:'能力分層',ul:[
+          '<b>Chatbot</b>：你問它答。<b>Copilot</b>：你做它幫。<b>Agent</b>：你交辦，它規劃 → 執行 → 驗證 → 回報。',
+          '判斷任務適不適合 Agent：步驟多、可驗證、容錯高的雜事最適合。']},
+        {h:'本集出現的四工具',table:{head:['工具','定位'],rows:[
+          ['Opencode','開源終端 Agent，模型可自選，低成本入口'],
+          ['Codex','OpenAI 桌面／行動 Agent（本集主要示範對象）'],
+          ['Claude code','Anthropic 工程代理，讀寫專案檔案、跑指令'],
+          ['Antigravity','「反重力智慧程式設計」，本集用 Gemini 3.1 Pro']]}},
+        {h:'一句話記憶',p:'「Chatbot 給答案，Agent 給結果。」'}]},
+      {t:'Codex 連上 NotebookLM 的 MCP', s:'Agent 最關鍵的一步：連上工具｜錄影 48:30',
+       blocks:[
+        {h:'現場流程',steps:[
+          '打開 Codex 桌面版，交辦一句：<b>「請幫我連上 NotebookLM 的 MCP。」</b>',
+          'Codex 開啟 Google 登入授權流程（Sign in - Google Accounts）。',
+          '第一次授權沒完成，Codex <b>誠實回報</b>「登入流程被關閉或未在時限內完成」，重試後顯示綠色勾選「MCP 已載入」。']},
+        {h:'講師原話',p:'「直接讓 Agent 去串你的 Nano Banana／NotebookLM」「幫我把它用 MCP 的方式接起來」「這個叫做 MCP」。'},
+        {h:'看實錄截圖',p:'👉 <a href="ep44-notes.html#a-mcp" style="color:var(--purple)">逐幀筆記 5.2：Codex 連 NotebookLM MCP</a>'}]},
+      {t:'MCP 是什麼', s:'AI 連外部工具的通用插座',
+       blocks:[
+        {h:'核心觀念',ul:[
+          '<b>MCP（Model Context Protocol）</b>：AI 連外部工具的通用插座——接上 NotebookLM、Drive、Gmail、資料庫，Agent 才有手有腳。',
+          '呼應文字篇 slide 16：日常用可在 Gemini 裡<b>直連</b> NotebookLM；要進自動化就走 <b>notebooklm-mcp-cli ＋ Agent</b>。',
+          '權限由小到大：先接讀取類（查資料）再接寫入類（改東西）。']},
+        {h:'小提醒',warn:'寫入權限（寄信、刪檔、付款）務必保留人工確認那一步。'}]},
+      {t:'Skill 外掛與手機掃碼連線', s:'加能力、跨裝置｜錄影 51:00 / 54:15',
+       blocks:[
+        {h:'Skill（外掛技能）',ul:[
+          'Codex「外掛程式 → skill」頁面已安裝 <b>PDF</b>（建立/編輯/審閱 PDF）與 <b>Playwright</b>（自動操作真實瀏覽器）。',
+          '需要什麼能力就加什麼 skill——尾聲聊天室許願最多的就是「開一堂教安裝 skill 的課」。']},
+        {h:'行動版連線',ul:[
+          '用手機掃「Codex 行動版」QR code 就能連上、管理現有連線。',
+          '搭配 Windows「允許連線／遠端控制此電腦」；聊天室熱議「學校的 IP 會不會擋」。']},
+        {h:'看實錄截圖',p:'👉 <a href="ep44-notes.html#a-skill" style="color:var(--purple)">逐幀筆記 5.3：Skill 與手機連線</a>'}]}
+    ]
+  },
+  auto: {
+    key:'auto', color:'var(--green)', emoji:'⚙️', code:'CHAPTER 04', title:'自動化篇',
+    intro:'最後一哩，把前面所有能力交給 Agent「一句話跑完」。講師用兩個颱風相關的成品收尾：一份會自動查證的颱風假 SWOT 報告，一支颱風擬人化影片——都是「你出一句需求，機器自己查、自己做、自己存檔」。',
+    topics:[
+      {t:'交辦式自動化：觸發 → 處理 → 輸出', s:'先畫流程，再挑工具',
+       blocks:[
+        {h:'核心觀念',ul:[
+          '所有自動化都是同一句話：「<b>當…發生，就用 AI 做…，然後把結果放到…</b>」。',
+          '本集的示範把它濃縮成「一句自然語言需求 → Agent 自己完成整條流水線」。',
+          '衡量標準：每週重複、規則講得清楚、結果可驗證的事，優先交給 Agent。']},
+        {h:'一句話記憶',p:'「先想清楚觸發、處理、輸出，剩下的交給 Agent。」'}]},
+      {t:'一句話生成颱風假 SWOT 報告', s:'自動查官方標準 + 存檔 + 畫圖｜錄影 52:00',
+       blocks:[
+        {h:'現場交辦',p:'對 Codex 下一句：<b>「請告訴我颱風下禮拜有沒有機會放颱風假，給我 SWOT 分析做一份報告存檔下來，並畫一些圖來輔助。」</b>'},
+        {h:'Agent 自己做的事',steps:[
+          '回覆「我先查台灣下週的官方天氣與颱風資訊，並把『放颱風假』判斷標準一起納進來」。',
+          '<b>自動連網搜尋 cwa.gov.tw、dgpa.gov.tw</b>（天然災害停止上班上課作業辦法）。',
+          '整理成 SWOT、生成輔助圖，存成可直接打開的檔案。']},
+        {h:'能力總集合',ul:[
+          '這一段把整堂課收在一起：<b>角色與查證（文字篇）＋圖表佐證（生圖篇）＋工具串接（Agent 篇）</b>，全部濃縮成一句交辦。']},
+        {h:'看實錄截圖',p:'👉 <a href="ep44-notes.html#u-swot" style="color:var(--green)">逐幀筆記 6.1：颱風假 SWOT 報告（含 Codex 自動查證畫面）</a>'}]},
+      {t:'文字轉影片：把設計案變成成片', s:'felo.ai Text to Video｜錄影 56:23',
+       blocks:[
+        {h:'現場做法',ul:[
+          '用 <b>felo.ai 的 Text to Video</b>（口號「文件負責沉澱，影片負責傳播」）把「颱風擬人化設計案」直接生成影片。',
+          '成片規格：塑料光澤掃光、多角色漂浮，<b>全片繁體中文旁白（zh-TW 女聲）＋皮克斯風配樂＋字幕</b>。',
+          '不必逐格剪片——把文件／設計案丟進去，旁白、字幕、配樂、動效一次生成。']},
+        {h:'看實錄截圖',p:'👉 <a href="ep44-notes.html#u-video" style="color:var(--green)">逐幀筆記 6.2：文字轉影片成片（含播放畫面）</a>'},
+        {h:'一句話記憶',p:'「你出一句需求，機器自己查、自己做、自己存檔——這就是把技能自動跑起來。」'}]}
+    ]
+  }
+};
+
+/* ═══════════ 渲染 ═══════════ */
+const ORDER = ['text','image','agent','auto'];
+const $ = s=>document.querySelector(s);
+
+function renderChapter(ch){
+  const d = DATA[ch];
+  const next = ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];
+  const prev = ORDER[(ORDER.indexOf(ch)+3)%ORDER.length];
+  let html = `
+  <div class="chapter-head">
+    <span class="emoji">${d.emoji}</span>
+    <div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div>
+  </div>`;
+  d.topics.forEach((tp,i)=>{
+    const id = `${ch}-${i}`;
+    html += `
+    <div class="topic" id="topic-${id}">
+      <div class="topic-head" onclick="toggleTopic('${id}')">
+        <span class="num">${i+1}</span>
+        <h4>${tp.t}<small>${tp.s}</small></h4>
+        <input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)">
+        <span class="chev">▶</span>
+      </div>
+      <div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{
+      html += `<div class="block"><h5>${b.h}</h5>`;
+      if(b.p) html += `<p>${b.p}</p>`;
+      if(b.ul) html += `<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps) html += `<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.prompt) html += `<div class="promptbox">${b.prompt}</div>`;
+      if(b.table) html += `<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.tip) html += `<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn) html += `<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html += `</div>`;
+    });
+    html += `</div></div></div>`;
+  });
+  html += `
+  <div class="chapnav">
+    <a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a>
+    <a onclick="showHome()" style="text-align:center">回總覽<b>🏠 四大篇章</b></a>
+    <a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a>
+  </div>`;
+  $('#view-'+ch).innerHTML = html;
+}
+ORDER.forEach(renderChapter);
+
+/* ═══════════ 導航 ═══════════ */
+function switchView(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  $('#view-'+id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function showHome(){
+  switchView('home');
+  $('#crumbs').style.display='none';
+  clearSearch();
+}
+function showChapter(ch){
+  switchView(ch);
+  $('#crumbs').style.display='flex';
+  $('#crumbHere').textContent = `${DATA[ch].emoji} ${DATA[ch].title}`;
+  clearSearch();
+  syncChecks();
+}
+function toggleTopic(id){ $('#topic-'+id).classList.toggle('open'); }
+function openTopic(ch,i){
+  showChapter(ch);
+  const el = $('#topic-'+ch+'-'+i);
+  el.classList.add('open');
+  setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);
+}
+
+/* ═══════════ 進度（localStorage） ═══════════ */
+const KEY='ep44-skills-v2';
+const store = ()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){
+  const s = store(); if(val) s[id]=1; else delete s[id];
+  localStorage.setItem(KEY,JSON.stringify(s));
+  updateProgress();
+}
+const TOTAL = ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){
+  const done = Object.keys(store()).length;
+  const pct = Math.round(done/TOTAL*100);
+  $('#progFill').style.width = pct+'%';
+  $('#progText').textContent = `${done} / ${TOTAL} 項技能已掌握`;
+  $('#statDone').textContent = done;
+  $('#statPct').textContent = pct+'%';
+  ORDER.forEach(ch=>{
+    const sub = DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;
+    const el = document.querySelector(`[data-mini="${ch}"]`);
+    if(el) el.style.width = Math.round(sub/DATA[ch].topics.length*100)+'%';
+  });
+}
+function syncChecks(){
+  const s = store();
+  document.querySelectorAll('input[data-skill]').forEach(cb=>{ cb.checked = !!s[cb.dataset.skill]; });
+}
+function resetProgress(){
+  if(confirm('確定要清空所有打勾進度嗎？')){ localStorage.removeItem(KEY); syncChecks(); updateProgress(); }
+}
+
+/* ═══════════ 搜尋 ═══════════ */
+function stripTags(s){ return s.replace(/<[^>]+>/g,''); }
+const INDEX = [];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{
+  let body = tp.s+' ';
+  tp.blocks.forEach(b=>{
+    if(b.p) body+=stripTags(b.p)+' ';
+    if(b.ul) body+=b.ul.map(stripTags).join(' ')+' ';
+    if(b.steps) body+=b.steps.map(stripTags).join(' ')+' ';
+    if(b.prompt) body+=b.prompt+' ';
+    if(b.tip) body+=stripTags(b.tip)+' ';
+    if(b.warn) body+=stripTags(b.warn)+' ';
+    if(b.table) body+=b.table.rows.flat().map(stripTags).join(' ')+' ';
+  });
+  INDEX.push({ch,i,title:tp.t,body});
+}));
+$('#searchInput').addEventListener('input',e=>{
+  const q = e.target.value.trim();
+  const box = $('#searchResults');
+  if(!q){ box.classList.remove('show'); box.innerHTML=''; return; }
+  const hits = INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));
+  box.classList.add('show');
+  if(!hits.length){ box.innerHTML = `<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：YAML、Agent、n8n）</div>`; return; }
+  const hl = s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);
+  box.innerHTML = hits.map(x=>{
+    const pos = x.body.toLowerCase().indexOf(q.toLowerCase());
+    const snip = x.body.substr(Math.max(0,pos-20),90);
+    return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})">
+      <div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div>
+      <h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;
+  }).join('');
+});
+function clearSearch(){ $('#searchInput').value=''; $('#searchResults').classList.remove('show'); $('#searchResults').innerHTML=''; }
+
+/* ═══════════ 星點 ═══════════ */
+(function(){
+  const box = $('#stars');
+  for(let i=0;i<70;i++){
+    const s = document.createElement('i');
+    s.style.left = Math.random()*100+'%';
+    s.style.top = Math.random()*100+'%';
+    s.style.animationDelay = (Math.random()*3)+'s';
+    s.style.transform = `scale(${.5+Math.random()*1.5})`;
+    box.appendChild(s);
+  }
+})();
+
+syncChecks(); updateProgress();
+</script>
+</body>
+</html>

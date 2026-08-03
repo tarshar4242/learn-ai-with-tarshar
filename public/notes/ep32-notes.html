@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP32 課堂筆記｜打通生成式 AI 任督二脈：Claude Code 篇（逐幀實錄）</title>
+<meta name="description" content="晨學講堂 EP32 逐幀課堂筆記：Claude Code 從零安裝到上手——Chat／Cowork／Code 三分頁、Windows 安裝實戰（CMD vs PowerShell、Git for Windows）、settings.json 與 additionalDirectories、CCC 快速啟動別名、/model 切換模型、Plan Mode 計劃模式。本集資料夾無簡報檔，全部內容依錄影逐幀抽格親眼判讀而來。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#3f8560; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px;border-left:none}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+.note.violet{background:#F3EFFB;border-color:#DFD2F0;color:#5a34a8}
+.note.rose{background:#FBEEF1;border-color:#F0D2DB;color:#9c2f52}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.prompt{position:relative;background:#1d1d1f;border-radius:10px;padding:15px 16px;margin:12px 0;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt .tag{display:inline-block;font-size:11px;letter-spacing:.06em;color:#c9c4ff;border:1px solid #3a3a40;border-radius:6px;padding:2px 9px;margin-bottom:8px}
+.prompt b{color:#fff}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.embed{margin:14px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000}
+.embed iframe{display:block;width:100%;aspect-ratio:16/9;border:0}
+.embed .cap{font-size:12.5px;color:var(--ink3);padding:10px 16px;background:var(--paper);border-top:1px solid var(--line)}
+.ts{display:inline-block;font-family:"Cascadia Code",Consolas,monospace;font-weight:700;font-size:12px;color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,#fff);border-radius:5px;padding:2px 8px;margin-right:7px;letter-spacing:.4px;vertical-align:middle}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+.layers{display:grid;gap:10px;margin:14px 0}
+.lyr{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:13px 15px;background:#fff}
+.lyr .n{flex:none;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--accent)}
+.lyr h4{margin:0 0 3px;font-size:14.5px}
+.lyr p{font-size:13px;margin:0}
+.sub{color:var(--ink2)}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#8fd6b4" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP32 課堂筆記（逐幀實錄）</b>
+  <div class="right">
+    <a class="btn" href="ep32-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 晨學講堂 · EP32</span>
+  <h1>打通生成式 AI 任督二脈<br><span>Claude Code 篇</span></h1>
+  <p class="lead">本集<b>資料夾裡沒有簡報檔</b>，只有一支 68 分鐘的錄影。本頁完全依錄影<b>每 20 秒抽 1 幀、逐幀親眼判讀</b>寫成——內容是老師帶著約 150–170 位學員<b>從零開始安裝 Claude Code</b>：下載桌面版、Windows 終端機安裝（CMD／PowerShell 踩雷實錄）、用 ChatGPT／NotebookLM 邊查邊做、設定專案資料夾、做快速啟動捷徑，一路示範到 <b>/model</b> 切模型與 <b>Plan Mode</b> 計劃模式。</p>
+  <div class="meta">
+    <span>📅 2026/04/10（五）20:30 直播</span>
+    <span>⏱️ 錄影全長約 68:24</span>
+    <span>🧩 主題：Claude Code 安裝與快速上手</span>
+    <span>🎞️ 逐幀判讀 205 張（每 20 秒 1 張）</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-map">1. 一頁看懂全課程</a>
+  <a href="#sec-timeline">2. 逐幀時間軸（68 分鐘）</a>
+  <a href="#sec-app">3. Claude 桌面版：三分頁與能力清單</a>
+  <a class="sub" href="#a-web">3.1 claude.ai 網頁版起手</a>
+  <a class="sub" href="#a-modes">3.2 Chat／Cowork／Code 三分頁</a>
+  <a href="#sec-install">4. Windows 安裝實戰（含踩雷）</a>
+  <a class="sub" href="#i-cmd">4.1 CMD 安裝指令</a>
+  <a class="sub" href="#i-trouble">4.2 CMD vs PowerShell 踩雷</a>
+  <a class="sub" href="#i-done">4.3 安裝成功與 PATH 提醒</a>
+  <a class="sub" href="#i-login">4.4 登入與歡迎畫面</a>
+  <a href="#sec-project">5. 邊查邊做：ChatGPT／NotebookLM 陪你設定專案</a>
+  <a class="sub" href="#p-guide">5.1 請 ChatGPT 生成步驟指南</a>
+  <a class="sub" href="#p-mistake">5.2 新手常見錯誤示範</a>
+  <a class="sub" href="#p-node">5.3 補裝 Node.js</a>
+  <a href="#sec-config">6. 用自然語言改設定：settings.json 與 Skill</a>
+  <a class="sub" href="#c-dir">6.1 換工作資料夾（additionalDirectories）</a>
+  <a class="sub" href="#c-shortcut">6.2 CCC 快速啟動別名</a>
+  <a href="#sec-usage">7. 上手操作：模型、計劃模式與網路搜尋</a>
+  <a class="sub" href="#u-model">7.1 /model 切換模型</a>
+  <a class="sub" href="#u-plan">7.2 Plan Mode 計劃模式</a>
+  <a class="sub" href="#u-search">7.3 即時網路搜尋示範</a>
+  <a href="#sec-terms">8. 專有名詞卡</a>
+  <a href="#sec-check">9. 課後自我檢核</a>
+  <a href="#sec-src">10. 資料來源與製作說明</a>
+</nav>
+
+<article>
+
+<!-- 0 課程資訊 -->
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--purple))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>EP32_「打通生成式 AI 任督二脈｜Claude Code 篇」</td></tr>
+    <tr><th>頻道</th><td>生成式 AI 應用電台・晨學講堂</td></tr>
+    <tr><th>直播日期</th><td>2026/04/10（五）20:30–21:30 CST；錄影全長約 <b>68:24</b></td></tr>
+    <tr><th>教材</th><td><b>本集資料夾無簡報檔案、無課堂筆記檔</b>，只有錄影本體一支。</td></tr>
+    <tr><th>一句話先懂</th><td>整堂課就是一場<b>真實的「從零安裝到能用」實作直播</b>：從 claude.ai 下載桌面版，到 Windows 終端機安裝 Claude Code（中間真的卡關、真的排錯），再到設定專屬工作資料夾、做快速啟動捷徑，最後示範切模型與 Plan Mode。</td></tr>
+    <tr><th>現場人數</th><td>Google Meet 開場約 <b>151 人</b>在線，全程緩降到收尾約 <b>134 人</b>。</td></tr>
+  </table></div>
+
+  <h3>🎬 錄影回放（可直接播放）</h3>
+  <div class="embed">
+    <iframe src="https://drive.google.com/file/d/1D5_5J7Xtjbs4CbUwydNC6UOZHhaDtwH3/preview" allow="autoplay" loading="lazy" title="EP32 錄影回放"></iframe>
+    <div class="cap">EP32_打通生成式 AI 任督二脈｜Claude Code 篇 課堂錄影（約 68:24）— 需登入可觀看的 Google 帳號。</div>
+  </div>
+  <div class="note gold">⚠️ <b>誠實聲明（請務必先讀）：</b>本集 Drive 資料夾<b>沒有簡報檔、沒有現成課堂筆記</b>。本頁全部內容依錄影<b>每 20 秒抽 1 幀、共 205 張畫面</b>逐幀親眼判讀而來，畫面中出現的指令、錯誤訊息、選單文字均<b>直接照畫面抄錄</b>；沒有畫面可對照的地方，本頁不會用「對 Claude Code 的一般知識」去湊內容。</div>
+</section>
+
+<!-- 1 全景 -->
+<section class="chapter" id="sec-map">
+  <span class="chip" style="background:linear-gradient(90deg,var(--cyan),var(--accent))">OVERVIEW</span>
+  <h2 class="ct">1. 一頁看懂全課程</h2>
+  <p class="cd">這堂課沒有投影片脈絡可循，動線完全由「老師實際操作螢幕的順序」決定。逐幀判讀後可歸納成四段：<b>①認識桌面版三分頁 ②Windows 終端機安裝實戰（含真實踩雷）③邊查邊做設定專案資料夾 ④上手操作（模型／計劃模式／網路搜尋）</b>。</p>
+  <figure class="diagram">
+    <svg viewBox="0 0 920 430" xmlns="http://www.w3.org/2000/svg" font-family="'Noto Sans TC',sans-serif">
+      <defs>
+        <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1d9e6f"/><stop offset="1" stop-color="#0aa6c9"/></linearGradient>
+        <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2f6df0"/><stop offset="1" stop-color="#1d9e6f"/></linearGradient>
+        <linearGradient id="g3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d4508e"/><stop offset="1" stop-color="#7a4fd6"/></linearGradient>
+        <linearGradient id="g4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c98a0a"/><stop offset="1" stop-color="#d4508e"/></linearGradient>
+        <marker id="arw" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#b9b3d9"/></marker>
+      </defs>
+      <rect width="920" height="430" fill="#fbfcff"/>
+      <text x="460" y="42" text-anchor="middle" font-size="21" font-weight="900" fill="#2b2a33">EP32 · 打通生成式 AI 任督二脈：Claude Code 篇 — 全景地圖</text>
+      <ellipse cx="460" cy="103" rx="280" ry="34" fill="#e9f7f0" stroke="#bfe8d4"/>
+      <text x="460" y="110" text-anchor="middle" font-size="13.5" font-weight="700" fill="#1d9e6f">核心：一支錄影，實錄「從零安裝到能用」的真實踩雷過程</text>
+      <line x1="250" y1="143" x2="140" y2="190" stroke="#b9b3d9" stroke-width="2" marker-end="url(#arw)"/>
+      <line x1="390" y1="148" x2="360" y2="190" stroke="#b9b3d9" stroke-width="2" marker-end="url(#arw)"/>
+      <line x1="530" y1="148" x2="560" y2="190" stroke="#b9b3d9" stroke-width="2" marker-end="url(#arw)"/>
+      <line x1="670" y1="143" x2="780" y2="190" stroke="#b9b3d9" stroke-width="2" marker-end="url(#arw)"/>
+      <g>
+        <rect x="30" y="196" width="205" height="176" rx="16" fill="url(#g1)"/>
+        <text x="132" y="230" text-anchor="middle" font-size="16" font-weight="900" fill="#fff">💻 桌面版三分頁</text>
+        <text x="132" y="258" text-anchor="middle" font-size="11.5" fill="#eafaf5">claude.ai 網頁起手</text>
+        <text x="132" y="280" text-anchor="middle" font-size="11.5" fill="#eafaf5">下載三步驟</text>
+        <text x="132" y="302" text-anchor="middle" font-size="11.5" fill="#eafaf5">Chat／Cowork／Code</text>
+        <text x="132" y="324" text-anchor="middle" font-size="11.5" fill="#eafaf5">問它能做什麼</text>
+        <text x="132" y="350" text-anchor="middle" font-size="11.5" fill="#eafaf5">能力清單全記錄</text>
+      </g>
+      <g>
+        <rect x="252" y="196" width="205" height="176" rx="16" fill="url(#g2)"/>
+        <text x="354" y="230" text-anchor="middle" font-size="16" font-weight="900" fill="#fff">⌨️ 終端機安裝實戰</text>
+        <text x="354" y="258" text-anchor="middle" font-size="11.5" fill="#eaf3ff">CMD 安裝指令</text>
+        <text x="354" y="280" text-anchor="middle" font-size="11.5" fill="#eaf3ff">CMD／PowerShell 誤用</text>
+        <text x="354" y="302" text-anchor="middle" font-size="11.5" fill="#eaf3ff">Git for Windows 提醒</text>
+        <text x="354" y="324" text-anchor="middle" font-size="11.5" fill="#eaf3ff">真的斷線排錯 4 分鐘</text>
+        <text x="354" y="350" text-anchor="middle" font-size="11.5" fill="#eaf3ff">PATH 環境變數</text>
+      </g>
+      <g>
+        <rect x="474" y="196" width="205" height="176" rx="16" fill="url(#g3)"/>
+        <text x="576" y="230" text-anchor="middle" font-size="16" font-weight="900" fill="#fff">🛠️ 邊查邊做設定</text>
+        <text x="576" y="258" text-anchor="middle" font-size="11.5" fill="#fdeaf4">ChatGPT 生成步驟</text>
+        <text x="576" y="280" text-anchor="middle" font-size="11.5" fill="#fdeaf4">新手常見錯誤</text>
+        <text x="576" y="302" text-anchor="middle" font-size="11.5" fill="#fdeaf4">補裝 Node.js</text>
+        <text x="576" y="324" text-anchor="middle" font-size="11.5" fill="#fdeaf4">自然語言改 settings.json</text>
+        <text x="576" y="350" text-anchor="middle" font-size="11.5" fill="#fdeaf4">CCC 快速啟動別名</text>
+      </g>
+      <g>
+        <rect x="696" y="196" width="195" height="176" rx="16" fill="url(#g4)"/>
+        <text x="793" y="230" text-anchor="middle" font-size="16" font-weight="900" fill="#fff">🚀 上手操作</text>
+        <text x="793" y="258" text-anchor="middle" font-size="11.5" fill="#fff5e6">/model 切模型</text>
+        <text x="793" y="280" text-anchor="middle" font-size="11.5" fill="#fff5e6">Opus／Sonnet／Haiku</text>
+        <text x="793" y="302" text-anchor="middle" font-size="11.5" fill="#fff5e6">Plan Mode 計劃模式</text>
+        <text x="793" y="324" text-anchor="middle" font-size="11.5" fill="#fff5e6">即時網路搜尋</text>
+        <text x="793" y="350" text-anchor="middle" font-size="11.5" fill="#fff5e6">現場 Q&amp;A 收尾</text>
+      </g>
+      <line x1="235" y1="284" x2="252" y2="284" stroke="#b9b3d9" stroke-width="2.5" marker-end="url(#arw)"/>
+      <line x1="457" y1="284" x2="474" y2="284" stroke="#b9b3d9" stroke-width="2.5" marker-end="url(#arw)"/>
+      <line x1="679" y1="284" x2="696" y2="284" stroke="#b9b3d9" stroke-width="2.5" marker-end="url(#arw)"/>
+      <text x="460" y="404" text-anchor="middle" font-size="12.5" fill="#8a879a">動線：認識三分頁 → 終端機安裝（真的卡關再排除）→ 邊查邊做設定專案 → 上手操作（模型／計劃模式／搜尋）</text>
+    </svg>
+    <figcaption>圖 1｜EP32 全景：桌面版三分頁 → 終端機安裝實戰 → 邊查邊做設定 → 上手操作（依錄影實際操作順序整理，非官方簡報）</figcaption>
+  </figure>
+  <figure class="shot">
+    <img src="ep32-img/frame01.jpg" alt="EP32 直播開場 Google Meet 畫面" loading="lazy">
+    <figcaption><span class="ts">00:40</span>直播開場：Google Meet 視窗標題列可見完整場次名稱「<b>EP32_2030-2130_打通生成式AI任督二篇 Cl...（Claude Code篇）</b>」，畫面因螢幕分享自身而出現「畫中畫」層層縮小的視覺效果，右側面板顯示講師 Beethoven Dr. 與參與人數（開場約 151 人）。</figcaption>
+  </figure>
+  <div class="golden"><div class="q">本集沒有一句「金句投影片」——它的價值在於「真的卡住、真的修好」的完整過程。</div><div class="a">—— 逐幀判讀整體觀察，非引用簡報</div></div>
+</section>
+
+<!-- 2 逐幀時間軸 -->
+<section class="chapter" id="sec-timeline">
+  <span class="chip" style="background:linear-gradient(90deg,#c98a0a,#0aa6c9)">TIMELINE</span>
+  <h2 class="ct">2. 逐幀時間軸（68 分鐘全程）</h2>
+  <p class="cd">每一列都是<b>親眼逐幀判讀</b>的實錄（每 20 秒 1 張，共 205 張）；點各章節看該段詳細筆記與截圖。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:92px">時間</th><th style="width:160px">畫面／工具</th><th>發生了什麼</th></tr>
+    <tr><td><span class="ts">00:00</span></td><td>Google Meet</td><td>直播開場，畫面出現螢幕分享自身造成的「畫中畫」多層縮小效果；標題列可見完整場次名稱。</td></tr>
+    <tr><td><span class="ts">01:00</span></td><td>claude.ai/new</td><td>網頁版 Claude 首頁「<b>Good evening, Huang</b>」，模型顯示 <b>Sonnet 4.6</b>，下方 Write／Learn／Code／Life stuff／From Drive 五個快捷入口。</td></tr>
+    <tr><td><span class="ts">01:40</span></td><td>claude.ai/downloads</td><td>下載頁三步驟：<b>Open</b>（執行 Claude Setup.exe）→ <b>Launch</b>（自動安裝）→ <b>Chat</b>（工作列開啟）；下方還有 Mobile（iOS／Android）與 Chrome 擴充功能。</td></tr>
+    <tr><td><span class="ts">04:00</span></td><td>Google 登入</td><td>桌面版彈出「Sign in」視窗，用 <b>Continue with Google</b> 登入；隨後「Let's knock something off your list」歡迎畫面。</td></tr>
+    <tr><td><span class="ts">07:40</span></td><td>桌面版 Code 分頁</td><td>切到 <b>Code</b> 分頁，開新 session「Clarify AI capabilities and features」，輸入「請問您能做什麼？」，Claude 條列自身能力（軟體工程／研究與分析／文件處理／自動化）。</td></tr>
+    <tr><td><span class="ts">09:20</span></td><td>Google 搜尋</td><td>搜尋「claude code」，點進 <b>Claude Code Docs</b> 官方文件頁（code.claude.com/docs/zh-TW/overview）。</td></tr>
+    <tr><td><span class="ts">10:00</span></td><td>Windows 搜尋</td><td>用 Windows 搜尋「cmd」開啟命令提示字元，準備貼上官方安裝指令。</td></tr>
+    <tr><td><span class="ts">10:40</span></td><td>CMD</td><td>貼上並執行：<b>curl -fsSL https://claude.ai/install.cmd -o install.cmd &amp;&amp; install.cmd &amp;&amp; del install.cmd</b>。</td></tr>
+    <tr><td><span class="ts">14:20</span></td><td>Claude Code Docs</td><td>文件頁提示：若看到「<b>The token '&amp;&amp;' is not a valid statement separator</b>」代表你在 PowerShell 不是 CMD，要改用 PowerShell 版指令；並提醒 <b>Windows requires Git for Windows</b>。</td></tr>
+    <tr><td><span class="ts">21:20–26:00</span></td><td>（螢幕分享暫停）</td><td>畫面僅剩參與者頭像，老師暫停分享螢幕排除安裝問題（約 4–5 分鐘離線排錯）。</td></tr>
+    <tr><td><span class="ts">26:20</span></td><td>PowerShell</td><td>改用 <b>irm https://claude.ai/install.ps1 | iex</b>；出現 git-bash 需求提示（橘字警告），但最終顯示「<b>✅ Installation complete!</b>」。</td></tr>
+    <tr><td><span class="ts">31:20</span></td><td>Git for Windows</td><td>另開瀏覽器下載 Git for Windows 安裝檔並跑安裝精靈（Install 進度條）。</td></tr>
+    <tr><td><span class="ts">33:00</span></td><td>ChatGPT</td><td>另開 <b>chatgpt.com</b>，請它生成「Node.js 專案設定」步驟指南（一、二、三、四步）搭配 PowerShell 視窗同步操作。</td></tr>
+    <tr><td><span class="ts">33:20–36:00</span></td><td>PowerShell + ChatGPT</td><td>依指南 <b>mkdir my-project</b> → <b>cd my-project</b>；照抄指南文字時誤把佔位字「your-project」原樣貼上，出現「路徑不存在」的真實新手錯誤示範。</td></tr>
+    <tr><td><span class="ts">36:20</span></td><td>npm 指令</td><td><b>npm init -y</b> 出現「npm 無法辨識」——因為 Node.js 還沒裝；ChatGPT 建議先確認 Node 環境。</td></tr>
+    <tr><td><span class="ts">37:40</span></td><td>Node.js 安裝</td><td>下載並執行 Node.js 安裝精靈（Installing Node.js 進度條）。</td></tr>
+    <tr><td><span class="ts">39:00</span></td><td>Claude Code on the Web</td><td>瀏覽器同時開著「Claude Code on the Web」頁籤，作為對照參考。</td></tr>
+    <tr><td><span class="ts">44:20</span></td><td>PowerShell</td><td>再次執行 <b>irm https://claude.ai/install.ps1 | iex</b>，這次顯示「<b>Claude Code successfully installed! Version 2.1.100</b>」，並提示 <b>.local\bin 不在 PATH</b>，需手動加入環境變數。</td></tr>
+    <tr><td><span class="ts">45:00</span></td><td>登入流程</td><td>瀏覽器彈出 claude.ai/login「Think fast, build faster」頁面，Enter email／Continue with email。</td></tr>
+    <tr><td><span class="ts">46:20</span></td><td>Claude Code 終端機</td><td>ASCII 貓咪圖示，「<b>Welcome to Claude Code v2.1.100</b>」，Logged in as 107256503@g.nccu.edu.tw，Login successful。</td></tr>
+    <tr><td><span class="ts">49:00</span></td><td>環境變數設定</td><td>Windows 搜尋「環境變數」→ 開啟「編輯系統環境變數」視窗，把 Claude 安裝路徑加入 PATH。</td></tr>
+    <tr><td><span class="ts">51:20</span></td><td>Google 重新登入</td><td>瀏覽器彈出「您即將重新登入『Claude』」授權確認畫面（沿用 nccu.edu.tw 帳號）。</td></tr>
+    <tr><td><span class="ts">57:00</span></td><td>Claude Code 終端機</td><td>Welcome back 畫面：Sonnet 4.6・Claude Pro・107256503@g.nccu.edu.tw's Organization・C:\Users\huang；提示「Run /init to create a CLAUDE.md file」。</td></tr>
+    <tr><td><span class="ts">57:40</span></td><td>Claude Code 對話</td><td>使用者輸入「請一律用中文回答」→ Claude 確認改用中文；接著提出「我想要把我的資料另外新增在外頭新的資料夾，不要放在系統檔的路徑」。</td></tr>
+    <tr><td><span class="ts">59:00</span></td><td>Skill 執行</td><td>Claude 呼叫內建 <b>Skill(update-config)</b>，說明它會透過 settings.json 設定 harness 行為，經使用者核准後執行。</td></tr>
+    <tr><td><span class="ts">60:00</span></td><td>settings.json diff</td><td>顯示綠色新增內容：<b>"permissions": { "additionalDirectories": ["D:\\claude code"] }</b>，並附上如何從新路徑啟動 Claude Code 的操作說明。</td></tr>
+    <tr><td><span class="ts">61:20</span></td><td>建立捷徑別名</td><td>先示範 PowerShell profile 函式 <b>CCC</b>、cmd.exe 批次檔 <b>CCC.bat</b>，之後又針對 bash 環境示範 <b>alias ccc='claude'</b> 寫入 ~/.bashrc。</td></tr>
+    <tr><td><span class="ts">63:20</span></td><td>測試別名</td><td>新開 PowerShell 視窗輸入 <b>ccc</b> 測試捷徑是否生效。</td></tr>
+    <tr><td><span class="ts">64:00</span></td><td>檔案總管</td><td>開啟 C:\Users\huang 資料夾，展示 .claude、.config、.local、my-project 等實際存在的資料夾結構。</td></tr>
+    <tr><td><span class="ts">65:40</span></td><td>WebSearch 示範</td><td>對 Claude Code 提問，它自動執行 <b>Web Search("Gemini Notebooks 最新消息 2026")</b> 等兩次搜尋，整理出功能表格。</td></tr>
+    <tr><td><span class="ts">69:20（累計）</span></td><td>/model 指令</td><td>示範切換模型：對話框輸入 <b>/model</b> 或啟動時加 <b>--model claude-opus-4-6</b>；列出 Opus 4.6／Sonnet 4.6／Haiku 4.5 三種模型的 ID 與特性。</td></tr>
+    <tr><td><span class="ts">61:40</span></td><td>Plan Mode</td><td>進入 <b>Plan Mode（計劃模式）</b>：唯讀、不執行修改，只探索、設計方案、待確認後才實際執行，退出用 /exit-plan。</td></tr>
+    <tr><td><span class="ts">63:20</span></td><td>Google Meet 聊天</td><td>螢幕縮回會議畫面，聊天室出現學員提問「請問老師的課程會有小幫手嗎？」，老師互動收尾，直播於約 68:24 結束。</td></tr>
+  </table></div>
+  <div class="note blue">💡 時間戳為抽格畫面對應的錄影時間（每 20 秒一格），部分文字說明畫面因視窗切換頻繁，實際對話發生時間可能與抽格時間相差數秒至一分鐘內，僅供對照參考。</div>
+</section>
+
+<!-- 3 桌面版三分頁 -->
+<section class="chapter" id="sec-app">
+  <span class="chip" style="background:linear-gradient(90deg,#1d9e6f,#0aa6c9)">CHAPTER 01 · 實錄</span>
+  <h2 class="ct">3. Claude 桌面版：三分頁與能力清單</h2>
+  <p class="cd">課程一開始，老師先從瀏覽器 claude.ai 帶大家「認人」，再引導下載桌面版、登入、切換到 <b>Code</b> 分頁，直接問 Claude「你能做什麼」，把回答整段記錄下來當作能力地圖。</p>
+
+  <h3 id="a-web">3.1 claude.ai 網頁版起手</h3>
+  <ul class="pt">
+    <li>網頁版首頁「<b>Good evening, Huang</b>」，輸入框下方模型顯示 <b>Sonnet 4.6</b>。</li>
+    <li>五個快捷入口：<b>Write／Learn／Code／Life stuff／From Drive</b>。</li>
+    <li>接著切到 <b>claude.ai/downloads</b> 頁面，三步驟安裝桌面版：<b>Open</b>（執行 Claude Setup.exe，6.6 MB）→ <b>Launch</b>（安裝進度條）→ <b>Chat</b>（安裝完成後從工作列開啟）。下方另有 Mobile（iOS／Android 下載）與 Chrome 擴充功能（可在瀏覽器中操作點擊、填表單）。</li>
+  </ul>
+
+  <h3 id="a-modes">3.2 Chat／Cowork／Code 三分頁，親自問它「你能做什麼」</h3>
+  <figure class="shot">
+    <img src="ep32-img/frame02.jpg" alt="Claude 桌面版 Chat Cowork Code 三分頁與能力清單" loading="lazy">
+    <figcaption><span class="ts">07:40</span>桌面版視窗頂部三個分頁：<b>Chat｜Cowork｜Code</b>（目前停在 Code）。左側側欄：New session／Search／Scheduled／Dispatch／Customize／All projects，「Today」下方是本次 session「Clarify AI capabilities and features」，「Older」下方還有先前的「Add skills section to profile」「Add NotebookLM skill installation instr...」。使用者輸入「請問您能做什麼？」，Claude 回覆自身能力清單。左下角帳號「Huang · Pro plan」，工作路徑 C:\Users\User，模型 Sonnet 4.6，並開啟「Auto accept edits」。</figcaption>
+  </figure>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">能力分類</th><th>畫面上實際列出的項目</th></tr>
+    <tr><td><b>軟體工程</b></td><td>閱讀、編寫、修改程式碼（支援多種語言）；除錯、重構、解釋程式碼；搜尋程式庫、分析專案結構；執行終端指令、管理檔案</td></tr>
+    <tr><td><b>研究與分析</b></td><td>搜尋網路資料（WebSearch）；擷取網頁內容（WebFetch）；回答技術問題、解釋概念</td></tr>
+    <tr><td><b>文件處理</b></td><td>建立／編輯 Word 文件（.docx）；處理 PDF、Excel（.xlsx）、PowerPoint（.pptx）；撰寫技術文件</td></tr>
+    <tr><td><b>自動化</b></td><td>設定排程任務（Cron Jobs）</td></tr>
+  </table></div>
+  <div class="note blue">💡 這段「問 Claude 你能做什麼」不是官方簡報內容，而是老師<b>現場直接對 Code 分頁提問</b>、把 Claude 自己回覆的能力清單當教材——逐字照畫面抄錄，四大分類、共 10 項小項全部真實存在於畫面中。</div>
+  <div class="note gold">⚠️ Chat／Cowork／Code 三分頁本身的功能差異，本集<b>沒有明確講解或比較表</b>，老師直接切到 Code 分頁操作；若日後官方文件有更清楚說明，可再補充對照。</div>
+</section>
+
+<!-- 4 安裝實戰 -->
+<section class="chapter" id="sec-install">
+  <span class="chip" style="background:linear-gradient(90deg,#2f6df0,#1d9e6f)">CHAPTER 02 · 實錄</span>
+  <h2 class="ct">4. Windows 安裝實戰（含真實踩雷）</h2>
+  <p class="cd">這是全集份量最重的一段：從 Google 搜尋「claude code」找到官方文件，到終端機一路貼指令、真的卡關、真的排錯，最後成功安裝並登入——過程完整保留，包含好幾個新手會遇到的真實錯誤。</p>
+
+  <h3 id="i-cmd">4.1 CMD 安裝指令</h3>
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="ep32-img/frame03.jpg" alt="Windows CMD 執行 curl 安裝指令" loading="lazy">
+      <figcaption><span class="ts">10:40</span>從 <b>code.claude.com/docs/zh-TW/overview</b> 官方文件複製 Windows CMD 安裝指令，貼到命令提示字元執行：</figcaption>
+    </figure>
+    <figure class="shot" style="display:flex;flex-direction:column;justify-content:center;background:#fbfcff;padding:6px 16px">
+      <figcaption style="border:0;background:none;color:var(--ink2);font-size:13px;line-height:1.9">
+      <b>畫面上的完整指令</b><br>
+      <span style="font-family:Consolas,monospace;font-size:12px">curl -fsSL https://claude.ai/install.cmd -o install.cmd && install.cmd && del install.cmd</span><br><br>
+      官方文件同時列出 <b>Windows PowerShell</b> 版指令在同一頁，老師先示範 CMD 版本。
+      </figcaption>
+    </figure>
+  </div>
+
+  <h3 id="i-trouble">4.2 CMD vs PowerShell：真的踩到的雷</h3>
+  <figure class="shot">
+    <img src="ep32-img/frame04.jpg" alt="官方文件提示 CMD 與 PowerShell 差異" loading="lazy">
+    <figcaption><span class="ts">14:20</span>Claude Code Docs 頁面上的關鍵提醒（老師照這段排錯）：「<b>If you see The token '&amp;&amp;' is not a valid statement separator, you're in PowerShell, not CMD. Use the PowerShell command above instead. Your prompt shows PS C:\ when you're in PowerShell.</b>」「<b>Windows requires Git for Windows.</b> Install it first if you don't have it.」</figcaption>
+  </figure>
+  <ul class="pt">
+    <li>老師一開始在 <b>PowerShell 視窗</b>裡貼了 CMD 版指令（含 <code>&amp;&amp;</code>），跳出「<code>The token '&amp;&amp;' is not a valid statement separator</code>」錯誤——這正是文件提醒的典型誤用。</li>
+    <li>畫面中約 <b>21:20–26:00</b> 這段螢幕分享一度暫停（只剩參與者頭像），是老師離開畫面排除問題的真實空檔，之後回來已改用 PowerShell 版指令。</li>
+    <li>PowerShell 版指令：<code>irm https://claude.ai/install.ps1 | iex</code>；執行後除了安裝訊息，還跳出橘字警告，提示 <b>Windows 上使用 Claude Code 需要 git-bash</b>（若已安裝但不在 PATH，需另外設定環境變數 <code>CLAUDE_CODE_GIT_BASH_PATH</code>）。</li>
+    <li>老師接著另開瀏覽器下載 <b>Git for Windows</b> 安裝檔並跑完安裝精靈。</li>
+  </ul>
+  <div class="prompt">畫面實際出現的兩種安裝指令：
+CMD：
+curl -fsSL https://claude.ai/install.cmd -o install.cmd && install.cmd && del install.cmd
+
+PowerShell：
+irm https://claude.ai/install.ps1 | iex</div>
+
+  <h3 id="i-done">4.3 安裝成功與 PATH 環境變數提醒</h3>
+  <figure class="shot">
+    <img src="ep32-img/frame07.jpg" alt="Claude Code 安裝成功訊息與 PATH 提醒" loading="lazy">
+    <figcaption><span class="ts">44:20</span>PowerShell 顯示：「<b>Claude Code successfully installed!</b> Version: 2.1.100　Location: C:\Users\huang\.local\bin\claude.exe　Next: Run claude --help to get started」，下方橘色 <b>Setup notes</b>：「Native installation exists but C:\Users\huang\.local\bin is not in your PATH. Add it by opening: System Properties → Environment Variables → Edit User PATH → New → Add the path above. Then restart your terminal.」最後「✅ Installation complete!」。背景瀏覽器分頁同時開著 claude.ai 登入頁（Think fast, build faster）。</figcaption>
+  </figure>
+  <ol class="st">
+    <li>用 Windows 搜尋「環境變數」，開啟「編輯系統環境變數」控制台項目。</li>
+    <li>在使用者 PATH 中新增一條，指向 <code>C:\Users\huang\.local\bin</code>。</li>
+    <li>關閉並重新開啟終端機，讓新的 PATH 生效。</li>
+  </ol>
+  <div class="note gold">⚠️ 這一步是本集第二個真實新手雷點：<b>安裝成功≠指令能直接用</b>，Windows 上常需要手動把安裝路徑加進 PATH 環境變數，重開終端機才會生效。</div>
+
+  <h3 id="i-login">4.4 登入與歡迎畫面</h3>
+  <ul class="pt">
+    <li>瀏覽器彈出 <b>claude.ai/login</b>「Think fast, build faster / Brainstorm in Claude, build in Cowork」頁面，選擇 <b>Enter your email</b> 或 <b>Continue with email</b>。</li>
+    <li>終端機出現 ASCII 貓咪圖示，橘字「<b>Welcome to Claude Code v2.1.100</b>」，接著顯示「Logged in as 107256503@g.nccu.edu.tw」「Login successful. Press Enter t...」。</li>
+    <li>瀏覽器同時顯示 <b>platform.claude.com</b>「<b>Build something great</b> — You're all set up for Claude Code. You can now close this window.」</li>
+    <li>重新開一個 session 後看到「<b>Welcome back Huang!</b>」歡迎卡：Sonnet 4.6・Claude Pro・107256503@g.nccu.edu.tw's Organization・C:\Users\huang；右側 Tips 提示「Run <b>/init</b> to create a CLAUDE.md file with instructions for Claude the next time you use it in your home directory.」</li>
+  </ul>
+  <div class="golden"><div class="q">「Note: You have launched claude in your home directory.」</div><div class="a">—— 終端機提示文字，畫面判讀原文，提醒使用者目前是在整台電腦的家目錄下啟動，不是專案資料夾</div></div>
+</section>
+
+<!-- 5 邊查邊做 -->
+<section class="chapter" id="sec-project">
+  <span class="chip" style="background:linear-gradient(90deg,#d4508e,#7a4fd6)">CHAPTER 03 · 實錄</span>
+  <h2 class="ct">5. 邊查邊做：ChatGPT／NotebookLM 陪你設定專案</h2>
+  <p class="cd">安裝過程中，老師另開 ChatGPT（搭配 NotebookLM 分頁）即時生成「怎麼建立 Node.js 專案資料夾」的步驟指南，一邊照著唸、一邊在 PowerShell 貼指令——過程中真的出現了新手會犯的錯誤，而且沒有被剪掉。</p>
+
+  <h3 id="p-guide">5.1 請 ChatGPT 生成步驟指南</h3>
+  <ul class="pt">
+    <li>開啟 <b>chatgpt.com</b>，畫面顯示「你正在做什麼？」提問框，老師請它針對「還沒有專案資料夾」的情況給步驟。</li>
+    <li>ChatGPT 產出的指南結構分四段：<b>一、建立 Node.js 專案（必要）／二、進入專案資料夾／三、初始化 Claude Code／四、安裝完成後（驗證）</b>，每段都附可直接複製貼上的 PowerShell 指令方塊。</li>
+    <li>視窗右側同時開著 <b>NotebookLM</b> 分頁，可能用來交叉核對或補充資料（畫面上可見分頁但操作內容未展開）。</li>
+  </ul>
+
+  <h3 id="p-mistake">5.2 新手常見錯誤示範（真實發生，未剪掉）</h3>
+  <figure class="shot">
+    <img src="ep32-img/frame06.jpg" alt="PowerShell 與 ChatGPT 並排，示範照抄佔位字造成的錯誤" loading="lazy">
+    <figcaption><span class="ts">35:20</span>左側 PowerShell、右側 ChatGPT 指南並排。畫面可見連續兩次執行 <code>cd your-project</code> 都出現「<b>cd：找不到 'C:\Users\huang\my-project\your-project'，路徑：因為它不存在。</b>」——原因是把指南裡的<b>佔位字「your-project」</b>直接當成真實指令複製貼上，而非替換成自己剛建立的資料夾名稱 <code>my-project</code>。</figcaption>
+  </figure>
+  <div class="note green">✅ 這段沒有被剪掉，反而是很好的教材：<b>照抄範例文字時要注意「佔位字」跟「實際名稱」的差別</b>——這正是很多初學者第一次用命令列會卡住的地方。</div>
+
+  <h3 id="p-node">5.3 補裝 Node.js</h3>
+  <ul class="pt">
+    <li>接續嘗試 <code>npm init -y</code>，PowerShell 回覆「<b>npm：無法辨識 'npm' 詞彙是否為 Cmdlet、函數...</b>」——因為當下電腦還沒有安裝 Node.js。</li>
+    <li>ChatGPT 指南同步建議「我可協助你確認：Node 環境是否正常」，並列出建議指令 <code>npm init -y</code>／<code>npm install @anthropic-ai/sdk</code>／<code>dir</code>。</li>
+    <li>老師接著下載並執行 <b>Node.js 安裝精靈</b>（Installing Node.js 進度條畫面），裝完後才能繼續後續的 npm 指令。</li>
+  </ul>
+  <div class="golden"><div class="q">「請執行並回傳結果：npm init -y / npm install @anthropic-ai/sdk / dir」</div><div class="a">畫面判讀 · ChatGPT 生成指南「六、建議下一步（請直接做）」段落原文</div></div>
+</section>
+
+<!-- 6 自然語言改設定 -->
+<section class="chapter" id="sec-config">
+  <span class="chip" style="background:linear-gradient(90deg,#c98a0a,#1d9e6f)">CHAPTER 04 · 實錄</span>
+  <h2 class="ct">6. 用自然語言改設定：settings.json 與內建 Skill</h2>
+  <p class="cd">裝好、登入後，老師沒有直接手改設定檔，而是<b>直接跟 Claude Code 用中文說需求</b>，讓它自己找到對應設定、跑內建 Skill、改 settings.json，全程可見核准流程。</p>
+
+  <h3 id="c-dir">6.1 換工作資料夾（additionalDirectories）</h3>
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="ep32-img/frame08.jpg" alt="settings.json diff 顯示 additionalDirectories 新增內容" loading="lazy">
+      <figcaption><span class="ts">60:00</span>終端機顯示 settings.json 的變更 diff（紅刪綠增）：<br><span style="font-family:Consolas,monospace;font-size:12px">2 - "autoUpdatesChannel": "latest"<br>2 + "autoUpdatesChannel": "latest",<br>3 + "permissions": {<br>4 +&nbsp;&nbsp;"additionalDirectories": ["D:\\\\claude code"]<br>5 + }</span><br>下方接著顯示「設定已更新完成！」與「如何從 D:\claude code 啟動 Claude Code」操作說明。</figcaption>
+    </figure>
+    <figure class="shot" style="display:flex;flex-direction:column;justify-content:center;background:#fbfcff;padding:6px 16px">
+      <figcaption style="border:0;background:none;color:var(--ink2);font-size:13px;line-height:1.9">
+      <b>操作流程（畫面判讀）</b><br>
+      1️⃣ 使用者輸入「請一律用中文回答」→ Claude 確認改用中文回覆<br>
+      2️⃣ 使用者說「我想要把我的資料另外新增在外頭新的資料夾，不要放在系統檔的路徑」<br>
+      3️⃣ Claude 反問要建在哪個位置（給了 Documents 下、D:\ 等選項）<br>
+      4️⃣ 使用者指定 D:\ 下建立「claude code」資料夾<br>
+      5️⃣ Claude 呼叫內建 <b>Skill(update-config)</b>，跳出核准選單：<br>
+      　「1. Yes　2. Yes, and don't ask again for update-config in C:\Users\huang　3. No」
+      </figcaption>
+    </figure>
+  </div>
+  <div class="note blue">💡 <b>Skill(update-config)</b> 是 Claude Code 內建技能，畫面上顯示它的完整說明：「Use this skill to configure the Claude Code harness via settings.json. Automated behaviors (\"from now on when X\"...) require hooks configured in settings.json — the harness executes these, not Claude...」代表它是<b>官方預先寫好、專門用來安全地改設定檔</b>的技能，而不是 Claude 隨意亂改檔案。</div>
+  <div class="note gold">⚠️ 過程中曾出現一次失敗：Claude 嘗試 <code>Bash(mkdir -p "/d/claude code")</code> 建資料夾，但回傳「<b>Error: Exit code 127　/usr/bin/bash: line 1: mkdir: command not found</b>」——這是 Windows 上 bash／git-bash 環境路徑對應的另一個真實踩雷，最後改用其他方式（PowerShell／Claude 內部工具）完成建立。</div>
+
+  <h3 id="c-shortcut">6.2 CCC 快速啟動別名</h3>
+  <figure class="shot">
+    <img src="ep32-img/frame10.jpg" alt="設定 CCC 快速啟動別名" loading="lazy">
+    <figcaption>老師接著請 Claude 幫忙「設定一個指令，以後只要打幾個字就能開啟並直接進入 D:\claude code」，Claude 依偵測到的環境分別給出三種寫法：</figcaption>
+  </figure>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">環境</th><th>作法（畫面原文照抄）</th></tr>
+    <tr><td>PowerShell</td><td><code>New-Item -ItemType Directory -Force -Path "$HOME\Documents\PowerShell" | Out-Null</code><br><code>Add-Content -Path "$HOME\Documents\PowerShell\Microsoft.PowerShell_profile.ps1" -Value 'function CCC { cd "D:\claude code"; claude }'</code><br>執行後關閉並重新開啟 PowerShell，之後輸入 <b>CCC</b> 即可啟動。</td></tr>
+    <tr><td>cmd</td><td><code>echo @echo off &gt; C:\Windows\CCC.bat</code><br><code>echo cd /d "D:\claude code" &gt;&gt; C:\Windows\CCC.bat</code><br><code>echo claude &gt;&gt; C:\Windows\CCC.bat</code></td></tr>
+    <tr><td>bash（Git Bash 等）</td><td>寫入 <code>~/.bashrc</code>：<code>alias ccc='claude'</code>，執行 <code>source ~/.bashrc</code> 生效；若使用 Git Bash 可能需另外確認 ~/.bashrc 會自動載入，否則加進 ~/.bash_profile。</td></tr>
+  </table></div>
+  <ul class="pt">
+    <li>老師接著開新終端機視窗，實際輸入 <b>ccc</b> 測試別名是否生效。</li>
+    <li>另外開啟檔案總管確認 <code>C:\Users\huang</code> 底下真的有 <code>.claude</code>、<code>.config</code>、<code>.local</code>、<code>my-project</code> 等資料夾，證明設定確實落地。</li>
+  </ul>
+  <div class="golden"><div class="q">用自然語言告訴 Claude Code「我想要 XX」，它會自己找到對應設定機制去改，而不是要你自己去翻文件改 JSON。</div><div class="a">—— 本段實錄整體示範的核心觀念</div></div>
+</section>
+
+<!-- 7 上手操作 -->
+<section class="chapter" id="sec-usage">
+  <span class="chip" style="background:linear-gradient(90deg,#5563d6,#1d9e6f)">CHAPTER 05 · 實錄</span>
+  <h2 class="ct">7. 上手操作：模型、計劃模式與網路搜尋</h2>
+  <p class="cd">環境都設定好之後，最後一段示範三個實際會用到的操作：切換模型、進入計劃模式、還有一次即時網路搜尋的示範。</p>
+
+  <h3 id="u-model">7.1 /model 切換模型</h3>
+  <figure class="shot">
+    <img src="ep32-img/frame09.jpg" alt="/model 指令與可用模型列表" loading="lazy">
+    <figcaption>畫面顯示兩種切換方式與可用模型列表：</figcaption>
+  </figure>
+  <div class="twrap"><table>
+    <tr><th style="width:90px">模型</th><th>模型 ID</th><th>特性（畫面原文）</th></tr>
+    <tr><td><b>Opus 4.6</b></td><td><code>claude-opus-4-6</code></td><td>最強能力，適合複雜任務</td></tr>
+    <tr><td><b>Sonnet 4.6</b></td><td><code>claude-sonnet-4-6</code></td><td>均衡效能（目前使用中）</td></tr>
+    <tr><td><b>Haiku 4.5</b></td><td><code>claude-haiku-4-5-20251001</code></td><td>最快速，適合簡單任務</td></tr>
+  </table></div>
+  <ol class="st">
+    <li><b>方法一：指令列輸入</b>——在對話框中輸入 <code>/model</code></li>
+    <li><b>方法二：啟動時指定</b>——<code>claude --model claude-opus-4-6</code></li>
+  </ol>
+  <div class="note blue">💡 畫面上 Claude 主動追問：「請問您想切換到哪個模型？或者『模式選擇』是指其他功能（例如 Plan Mode／權限模式）？」——順勢帶出下一段的 Plan Mode 示範。</div>
+
+  <h3 id="u-plan">7.2 Plan Mode 計劃模式</h3>
+  <figure class="shot">
+    <img src="ep32-img/frame10.jpg" alt="Plan Mode 計劃模式說明畫面" loading="lazy">
+    <figcaption>終端機顯示「Entered plan mode / Claude is now exploring and designing an implementation approach.」與中文說明「已成功進入 Plan Mode（計劃模式）」：</figcaption>
+  </figure>
+  <div class="twrap"><table>
+    <tr><th style="width:70px">項目</th><th>狀態（畫面原文）</th></tr>
+    <tr><td>模式</td><td>Plan Mode 啟動中</td></tr>
+    <tr><td>權限</td><td>唯讀，不執行任何修改</td></tr>
+    <tr><td>用途</td><td>規劃、探索、設計方案</td></tr>
+  </table></div>
+  <ol class="st">
+    <li><b>探索</b>：我會讀取程式碼、分析結構，但不做任何修改</li>
+    <li><b>設計</b>：提出實作方案供您審查</li>
+    <li><b>確認</b>：您批准後才會實際執行</li>
+    <li><b>退出</b>：完成規劃後輸入 <code>/exit-plan</code> 或我呼叫 <code>ExitPlanMode</code></li>
+  </ol>
+  <div class="note gold">⚠️ 畫面上使用者接著被問「您想調整哪種權限設定？」，回答「自動核准模式」，代表 Plan Mode 之外還有獨立的<b>權限核准機制</b>可以調整（例如每一步都要問 vs 自動核准）；但本集對此機制沒有再展開細講。</div>
+
+  <h3 id="u-search">7.3 即時網路搜尋示範</h3>
+  <ul class="pt">
+    <li>畫面顯示 Claude Code 自動執行 <b>Web Search("Gemini Notebooks 最新消息 2026")</b> 與 <b>Web Search("Google Gemini Notebooks new features 2026")</b> 兩次搜尋。</li>
+    <li>搜尋完成後整理成表格回覆，包含「Gemini Notebooks 最新消息彙整（2026 年 4 月）」的重點摘要與核心功能表（聊天整理、自訂指令、檔案附加、雙向同步、跨功能使用）。</li>
+    <li>這段示範了 Claude Code 除了寫程式、改設定，也能直接當<b>研究助理即時查資料</b>——呼應第 3 章能力清單裡「搜尋網路資料（WebSearch）」那一項，是真的被示範出來的能力，不是條列文字而已。</li>
+  </ul>
+  <div class="golden"><div class="q">直播尾聲聊天室出現提問：「請問老師的課程會有小幫手嗎？」</div><div class="a">畫面判讀 · Google Meet 聊天室原文，直播於約 68:24 結束</div></div>
+</section>
+
+<!-- 8 名詞卡 -->
+<section class="chapter" id="sec-terms">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5a5866)">GLOSSARY</span>
+  <h2 class="ct">8. 專有名詞卡</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">名詞</th><th>白話</th><th>正式定義／畫面依據</th></tr>
+    <tr><td>Chat／Cowork／Code</td><td>桌面版三分頁</td><td>Claude 桌面應用程式頂部三個分頁，本集主要操作 Code 分頁</td></tr>
+    <tr><td>CMD／PowerShell</td><td>兩種 Windows 終端機</td><td>語法不同（<code>&amp;&amp;</code> 只在 CMD 有效），官方文件分別提供對應安裝指令</td></tr>
+    <tr><td>Git for Windows／git-bash</td><td>Windows 上跑 bash 的工具</td><td>Claude Code 在 Windows 上需要它才能完整運作，若不在 PATH 需設定 <code>CLAUDE_CODE_GIT_BASH_PATH</code></td></tr>
+    <tr><td>PATH 環境變數</td><td>電腦去哪裡找指令的路徑清單</td><td>安裝完成不代表指令能直接執行，常需手動把安裝路徑加入 PATH 並重開終端機</td></tr>
+    <tr><td>settings.json</td><td>Claude Code 的設定檔</td><td>存放權限、允許存取目錄（additionalDirectories）等設定，可由 Claude 透過 Skill 自動編輯</td></tr>
+    <tr><td>Skill（技能）</td><td>Claude Code 內建的專門工具</td><td>本集示範 <code>update-config</code>，專門用來安全地改動 settings.json／settings.local.json</td></tr>
+    <tr><td>additionalDirectories</td><td>額外允許存取的資料夾</td><td>settings.json 中 permissions 底下的欄位，讓 Claude Code 能在指定目錄外的資料夾工作</td></tr>
+    <tr><td>CCC 別名</td><td>快速啟動捷徑</td><td>本集自訂的別名／函式名稱，讓使用者打幾個字就能 cd 到專案資料夾並啟動 claude</td></tr>
+    <tr><td>/model</td><td>切換模型指令</td><td>對話框輸入 /model 或啟動時加 --model 參數，可在 Opus 4.6／Sonnet 4.6／Haiku 4.5 間切換</td></tr>
+    <tr><td>Plan Mode（計劃模式）</td><td>先想清楚再動手</td><td>唯讀狀態，只探索與設計方案，需使用者確認才會真正執行修改</td></tr>
+    <tr><td>/init</td><td>建立 CLAUDE.md</td><td>終端機提示可用此指令在家目錄建立含操作指示的 CLAUDE.md 檔案（本集僅畫面提示，未展開示範）</td></tr>
+    <tr><td>WebSearch</td><td>即時上網查資料</td><td>Claude Code 的內建工具之一，本集實際示範對 Gemini Notebooks 主題做兩次搜尋並整理結果</td></tr>
+  </table></div>
+</section>
+
+<!-- 9 自我檢核 -->
+<section class="chapter" id="sec-check">
+  <span class="chip" style="background:linear-gradient(90deg,#c98a0a,#d4508e)">SELF CHECK</span>
+  <h2 class="ct">9. 課後自我檢核（照本集實作）</h2>
+  <p class="cd">都對應本集畫面真的出現過的操作與訊息。可到<a href="ep32-ai-skills.html">互動技能地圖</a>逐項打勾。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:120px">主題</th><th>你應該做得到…</th></tr>
+    <tr><td>💻 桌面版</td><td>① 從 claude.ai/downloads 完成三步驟安裝　② 知道 Chat／Cowork／Code 三分頁位置　③ 能直接問 Claude「你能做什麼」取得能力清單</td></tr>
+    <tr><td>⌨️ 終端機安裝</td><td>① 分清 CMD 與 PowerShell 安裝指令不能混用　② 看到 <code>&amp;&amp;</code> 錯誤知道自己在哪個終端機　③ 知道 Windows 需要 Git for Windows／git-bash　④ 安裝完成後會檢查並手動修 PATH</td></tr>
+    <tr><td>🛠️ 專案設定</td><td>① 會用 mkdir／cd 建立並進入專案資料夾（不會誤用佔位字）　② 知道 npm 指令要先裝好 Node.js　③ 能用中文直接跟 Claude Code 說「我要把資料夾換到哪裡」讓它自己改設定</td></tr>
+    <tr><td>🚀 上手操作</td><td>① 會用 /model 切換 Opus／Sonnet／Haiku　② 知道 Plan Mode 是唯讀規劃、確認後才執行　③ 知道 Claude Code 能做即時網路搜尋（WebSearch）</td></tr>
+  </table></div>
+</section>
+
+<!-- 10 來源 -->
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5a5866)">SOURCES</span>
+  <h2 class="ct">10. 資料來源與製作說明</h2>
+  <ul class="pt">
+    <li><b>原始教材：</b>本集 Drive 資料夾內<b>只有一支課堂錄影</b>（fileId 1D5_5J7Xtjbs4CbUwydNC6UOZHhaDtwH3，約 755MB，長度約 68:24），<b>沒有簡報檔，也沒有既有的課堂筆記檔</b>。</li>
+    <li><b>逐幀製作方式：</b>下載完整錄影 → 用 ffmpeg 以每 20 秒 1 張的頻率抽出畫面，共 <b>205 張</b> → 先合併成 11 張縮圖總覽表快速掃過全片，再對關鍵時間點的原始畫面逐張放大<b>親眼判讀</b>（終端機文字、瀏覽器網址列、錯誤訊息、選單文字等）→ 挑選 10 張最具代表性的畫面裁切、縮圖後嵌入本頁。文字說明中所有指令、錯誤訊息、設定內容均<b>依畫面實際顯示逐字照抄</b>，非憑通用知識重述。</li>
+    <li><b>誠實聲明：</b>本頁完全依錄影實際發生的順序與畫面內容為準，包含中間確實發生的安裝錯誤、路徑打錯、npm 指令找不到等真實踩雷過程——這些<b>沒有被隱藏或美化</b>，因為它們正是這堂「從零安裝到能用」直播課最真實的教學價值所在。部分畫面因視窗切換快、字體小或被其他視窗遮擋，少數細節（例如逐字對話全文、部分選單被截斷的文字）可能因抽格解析度限制無法 100% 還原，已在對應段落標註「畫面判讀」以示區別於逐字稿引用。</li>
+    <li><b>版本號提醒：</b>畫面中出現的 Claude Code 版本（v2.1.100）與模型代號（claude-opus-4-6、claude-sonnet-4-6、claude-haiku-4-5-20251001）為<b>該場直播當下畫面顯示的實際版本</b>，Anthropic 後續更新版本或模型代號可能已不同，實作請以你當下畫面顯示為準。</li>
+    <li><b>介面參考：</b>互動技能地圖頁沿用本站 EP44–EP46 的卡片式多層導覽與遊戲化進度設計。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  EP32「打通生成式 AI 任督二脈：Claude Code 篇」逐幀課堂筆記・2026/07 整理<br>
+  🍀 Learn AI with Tarshar｜搭配 <a href="ep32-ai-skills.html">互動技能地圖</a> 使用效果最佳
+</footer>
+
+</body>
+</html>

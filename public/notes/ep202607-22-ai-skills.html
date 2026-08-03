@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>生成式AI簡報工具｜互動式學習地圖</title>
+<meta name="description" content="EP202607.22：Gemini/ChatGPT/Claude/NotebookLM/Gamma/Manus六種AI簡報工具、YAML套版技巧、Canva魔法圖層解構、HTML風格簡報Bonus，互動式多層次學習地圖">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269;
+  --green:#3f8560; --orange:#bf6a1e; --red:#c0453f; --teal:#0d8f80; --amber:#9c7b23; --rose:#b23a5b;
+  --feat:#b23a5b; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(26px,4.4vw,44px);font-weight:800;line-height:1.16;letter-spacing:-.025em;color:var(--txt);background:none;-webkit-text-fill-color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:660px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:9px}
+.steps li{list-style:none;counter-increment:st;display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--txt2);line-height:1.7}
+.steps li::before{content:counter(st);flex:none;width:25px;height:25px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:var(--c,var(--feat));margin-top:1px}
+.steps li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+figure.shot{margin:10px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--txt3);padding:9px 14px;border-top:1px solid var(--line);background:var(--bg2);line-height:1.7}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <a class="navlink" href="../radio/" style="border-color:#e3b2c1" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <div class="logo">
+    <div class="dot">🎨</div>
+    <div>簡報工具地圖<small>YEAR-MID LEARNING · EP202607.22</small></div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋技能關鍵字：YAML、套版、魔法圖層、Agent…" autocomplete="off">
+  </div>
+  <a class="navlink" href="ep202607-22-notes.html">📝 課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">EP202607.22 · 年中共學 · 2026/07/22</span>
+  <h1>生成式AI簡報工具<br>一次掌握 6 種簡報工具</h1>
+  <p class="sub">Gemini、ChatGPT、Claude、NotebookLM、Gamma、Manus，各有各的定位與眉角——外加 PowerPoint AI Agent 與 HTML 風格簡報兩個 Bonus。<br>點進每一章，逐層展開<b>本集實際教到</b>的工具特性與實戰技巧，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🎙️ 生成式AI應用電台・年中共學</span>
+    <span>🎨 6 種工具＋2 個 Bonus</span>
+    <span>📐 YAML 套版技巧</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>4</b><span>大主題</span></div>
+  <div class="stat"><b>8</b><span>實戰技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 8 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--blue)" onclick="showChapter('gengpt')">
+        <div class="glowline"></div><span class="emoji">💬</span>
+        <h3><em>CHAPTER 01</em>Gemini＋ChatGPT 系列</h3>
+        <p>Canvas／問問Gemini／Nano banana，以及 ChatGPT 四大功能與套版、16:9分頁技巧。</p>
+        <div class="foot"><div class="mini"><i data-mini="gengpt"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--purple)" onclick="showChapter('claudenb')">
+        <div class="glowline"></div><span class="emoji">🧩</span>
+        <h3><em>CHAPTER 02</em>Claude系列＋NotebookLM</h3>
+        <p>Claude 的 PowerPoint Agent 雙重門檻、NotebookLM 的 YAML 套版與 Canva 魔法圖層解構。</p>
+        <div class="foot"><div class="mini"><i data-mini="claudenb"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--teal)" onclick="showChapter('gammanus')">
+        <div class="glowline"></div><span class="emoji">🚀</span>
+        <h3><em>CHAPTER 03</em>Gamma＋Manus＋Bonus</h3>
+        <p>老牌 Gamma 追上 Agent 浪潮、Manus 轉點數收費、HTML 風格簡報示範。</p>
+        <div class="foot"><div class="mini"><i data-mini="gammanus"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--rose)" onclick="showChapter('qatips')">
+        <div class="glowline"></div><span class="emoji">💡</span>
+        <h3><em>CHAPTER 04</em>真實 Q&A＋實戰心法</h3>
+        <p>學員直播現場提問與解法，加上版權措辭、給資料等實戰建議。</p>
+        <div class="foot"><div class="mini"><i data-mini="qatips"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+
+    <div class="resources">
+      <h3>📦 <span>課程原始資料</span></h3>
+      <div class="res-grid">
+        <a href="ep202607-22-notes.html"><span class="ic">📝</span><span><b>課堂筆記</b>逐頁嵌入簡報原圖＋真實逐字稿與截圖</span></a>
+        <a href="../radio/"><span class="ic">📻</span><span><b>直播電台系列</b>回系列總覽，一集一卡</span></a>
+        <a href="ep202607-20-notes.html"><span class="ic">📓</span><span><b>相關集數</b>NotebookLM Agentic 功能</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-gengpt" class="view" style="--c:var(--blue)"></section>
+  <section id="view-claudenb" class="view" style="--c:var(--purple)"></section>
+  <section id="view-gammanus" class="view" style="--c:var(--teal)"></section>
+  <section id="view-qatips" class="view" style="--c:var(--rose)"></section>
+</main>
+
+<footer>
+  本頁為 EP202607.22「生成式AI簡報工具」課後整理・介面沿用本站互動式學習地圖<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2026｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+const DATA = {
+  gengpt: {
+    key:'gengpt', color:'var(--blue)', emoji:'💬', code:'CHAPTER 01', title:'Gemini＋ChatGPT 系列',
+    intro:'從最簡單的 Gemini 三種應用開始，再到 ChatGPT 的四大功能與套版技巧。',
+    topics:[
+      {t:'Gemini 簡報系列：Canvas／問問Gemini／Nano banana', s:'三種應用一次認識｜簡報 2-4',
+       blocks:[
+        {h:'三種應用',ul:['<b>Canvas</b>：對話框輸入需求，開啟畫布連接 Google 簡報，做完直接放在 Google 簡報裡，可輸出 PPTX 編輯。','<b>問問 Gemini</b>：用對話協助發想、整理與問答——靈感發想、重點整理、快速問答。','<b>Nano banana</b>：輕量創意工具，快速延伸視覺靈感——創意延伸、視覺發想、快速生成，也是 GPT Image 2.0 出現前大家做逐頁簡報的主力工具。']},
+        {h:'講師老實評價',p:'Canvas 做出來「非常非常陽春，就像比較商務型再陽春一點的簡報」，但免費堪用；Nano Banana 對繁體中文的反向提示詞（不要模糊、不要多餘筆劃）吃得很準，GPT 反而不太理會。'},
+        {h:'看課堂筆記',shot:{img:'ep202607-22-img/s1-yaml-prompt-live.jpg',cap:'錄影 12:37｜現場實拍：問問 Gemini 分頁中輸入 YAML 格式的無人機簡報提示詞'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep202607-22-notes.html#sec-gemini" style="color:var(--blue)">筆記 2：Gemini 簡報系列</a>'}]},
+      {t:'ChatGPT 簡報系列：四大功能＋套版＋16:9分頁', s:'Chat/Work/Agent/Image2.0｜簡報 5',
+       blocks:[
+        {h:'四大功能',table:{head:['功能','定位'],rows:[
+          ['① Chat','聰明對話，即時解答'],
+          ['② Work','整合工具，高效完成任務'],
+          ['③ Agent','專屬助理，主動完成工作'],
+          ['④ Image 2.0','創意生成，視覺再進化']
+        ]}},
+        {h:'套版技巧',p:'先做出滿意的第一張，再跟它說：「請按照這個風格，依序的做完」，後面幾頁就會跟著套用同一種風格。'},
+        {h:'解決多頁被合成一張圖',tip:'下指令時要明講「16比9，每一張都分開」——這是真實學員問題的現場解法，也適用其他工具遇到多頁擠成一張圖的狀況。'},
+        {h:'ChatGPT 的 PowerPoint 增益集',steps:['在 PowerPoint 選單「檔案→其他→選項→自訂功能區」勾選增益集，即可在功能區看到入口。','要求 PowerPoint 2019 之後版本，且必須是正版才能安裝。','免費版 ChatGPT 就能使用，這其實是 Codex 的功能。','可設定固定指示（例如字體一律放大至少24），也能導入自訂 Skill。']},
+        {h:'看課堂筆記',p:'👉 <a href="ep202607-22-notes.html#sec-chatgpt" style="color:var(--blue)">筆記 3：ChatGPT 簡報系列</a>'}]}
+    ]
+  },
+  claudenb: {
+    key:'claudenb', color:'var(--purple)', emoji:'🧩', code:'CHAPTER 02', title:'Claude系列＋NotebookLM',
+    intro:'Claude 走 PowerPoint Agent 路線但門檻較高；NotebookLM 是套版高手，改不動就找 Canva 救援。',
+    topics:[
+      {t:'Claude 簡報系列＋PowerPoint AI Agent', s:'需付費版＋Microsoft 365｜簡報 6、12',
+       blocks:[
+        {h:'Claude 三項功能',table:{head:['功能','定位'],rows:[
+          ['① Claude','對話生成，快速成稿'],
+          ['② Claude design','設計美觀，風格一致'],
+          ['③ Claude cowork','協作共享，團隊共創']
+        ]}},
+        {h:'PowerPoint Agent 雙重門檻',warn:'Claude 版的 PowerPoint 增益集需要「付費版 Claude ＋ Microsoft 365 訂閱」才能使用，門檻比 ChatGPT／Codex（免費版＋正版 PowerPoint 2019＋即可）明顯高，講師直言：「他關卡比較多一點，他GPT的Codex比較簡單一點。」'},
+        {h:'AI Agent in PowerPoint 五大任務',ul:['內容生成：依主題快速產生簡報大綱與內容。','文字優化：潤飾文字、調整語氣讓表達更專業。','設計建議：提供版面、配色與圖示搭配建議。','資料視覺化：將數據轉換成圖表提升說服力。','一鍵美化：自動調整對齊、字體與整體版面風格。']},
+        {h:'看課堂筆記',p:'👉 <a href="ep202607-22-notes.html#sec-claude" style="color:var(--purple)">筆記 4：Claude 系列＋PowerPoint Agent</a>'}]},
+      {t:'NotebookLM：YAML套版＋Canva魔法圖層解構', s:'最會套版的工具｜簡報 7',
+       blocks:[
+        {h:'YAML 格式要求',p:'用 title / description / theme / slides 結構鎖定每一頁標題與內容，讓輸出格式固定、風格一致；套版時只要給一個喜歡的風格（例如藍色風格），NotebookLM 就能一鍵套用到全部頁面。'},
+        {h:'字型／版型改不動的救援法',steps:['把輸出的圖片貼到 Canva。','跟 Canva 說「請使用魔法圖層，把這張圖解構出來」。','圖會像 Illustrator 圖層一樣拆成各自獨立的物件（底圖、文字、插圖各自分開）。','文字、圖片都可以個別移動與替換字型。','整份簡報要一次拆解，可改用 PDF 整份匯入 Canva AI。']},
+        {h:'額度提醒',warn:'Canva 免費版每月僅 5 次額度（可能調整），教育版基本上不太受限。'},
+        {h:'看課堂筆記',shot:{img:'ep202607-22-img/s2-notebooklm-output.jpg',cap:'錄影 38:22｜現場實拍：NotebookLM／Gemini Notebook 風格套版後的無人機主題簡報封面'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep202607-22-notes.html#sec-notebooklm" style="color:var(--purple)">筆記 5：NotebookLM 簡報系列</a>'}]}
+    ]
+  },
+  gammanus: {
+    key:'gammanus', color:'var(--teal)', emoji:'🚀', code:'CHAPTER 03', title:'Gamma＋Manus＋Bonus',
+    intro:'2023年就出道的老牌 Gamma 也追上 Agent 浪潮；Manus 已轉點數制；最後看兩個 Bonus 花絮。',
+    topics:[
+      {t:'Gamma：老牌追上 Agent 浪潮', s:'Agent創作／研究引用／多格式轉換｜簡報 8-10',
+       blocks:[
+        {h:'四大新功能',ul:['Agent 創作：輸入想法、筆記或檔案，快速生成簡報草稿。','研究與引用：協助研究主題、整理脈絡並標明出處。','多格式轉換：可延伸為文件、簡報與社群貼文。','工作情境：研究摘要、培訓簡報、會議紀錄一次整合。']},
+        {h:'Agent 模式三步驟',steps:['輸入素材：貼上想法、筆記、會議紀錄或上傳檔案。','AI 研究整理：自動歸納重點、補充脈絡並協助標明出處。','生成簡報：快速形成頁面架構、重點內容與可分享版本。']},
+        {h:'講師觀察',p:'Gamma 大概 2023 年就出現，是最早期的 AI 簡報工具之一，「他怕他被時代淘汰掉，所以他也會跟著這個時代一起進步」，加入 Agent 功能維持競爭力。'},
+        {h:'看課堂筆記',shot:{img:'ep202607-22-img/s3-gamma-create.jpg',cap:'錄影 48:00｜現場實拍 gamma.app/create 建立頁面與「與 Agent 一起創作」新功能'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep202607-22-notes.html#sec-gamma" style="color:var(--teal)">筆記 6：Gamma 簡報新功能</a>'}]},
+      {t:'Manus＋Bonus：點數制、PowerPoint Agent、HTML簡報', s:'簡報功能／花絮工具／HTML風格｜簡報 11、13',
+       blocks:[
+        {h:'Manus 現況',warn:'Manus 已轉為點數收費制，講師直言「老實說Manus現在做簡報的人應該比較少」；可選擇圖片完全不能改的鎖定版，或可編輯的 PowerPoint 版本。'},
+        {h:'花絮工具（產品名稱因收音品質無法確認）',p:'另一款早期熱門 AI 簡報工具也是點數制：可選繁體中文、頁數 30-50 頁自動生成，AI 會自動上網查資料，但「真金白銀，每頁都是要扣點數的」。'},
+        {h:'Bonus：HTML 風格簡報',p:'雲端線上格式，不需要離開瀏覽器調整、demo 也在線上；特色是互動感強、渲染鋪陳好看，「他其實就是一個網頁版本的概念而已」——結構化、可讀性高、視覺一致。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep202607-22-notes.html#sec-manus" style="color:var(--teal)">筆記 7-8：Manus＋Bonus 兩章</a>'}]}
+    ]
+  },
+  qatips: {
+    key:'qatips', color:'var(--rose)', emoji:'💡', code:'CHAPTER 04', title:'真實 Q&A＋實戰心法',
+    intro:'直播現場真實學員提問與解法，加上幾個放諸各工具皆準的實戰建議。',
+    topics:[
+      {t:'四則真實學員 Q&A', s:'字型／PPTX輸出／10頁限制／圖太糊｜Google Meet 聊天室截圖',
+       blocks:[
+        {h:'Q1：NotebookLM 字型改不出來',p:'A：貼到 Canva 用「魔法圖層」解構成可個別編輯的物件，文字與字型都能替換。'},
+        {h:'Q2：ChatGPT Image 2.0 能否輸出可編輯 PPTX？',p:'A：解構有極限，圖片與部分元素可改但文字通常不能改；想要完全可動，建議改用 Canva 魔法圖層。'},
+        {h:'Q3：ChatGPT 多頁被合併成一張圖怎麼辦？',p:'A：下指令時明確要求「16:9，每一張都分開」。'},
+        {h:'Q4：下載的圖太糊，Canva 沒辦法重繪？',p:'A：按圖片右上角選項用「取消模糊／增強」功能；整份簡報則改用 PDF 整份匯入 Canva AI 一次拆解。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep202607-22-notes.html#sec-qa" style="color:var(--rose)">筆記 9：真實學員 Q&A</a>'}]},
+      {t:'放諸各工具皆準的實戰心法', s:'版權措辭／專有名詞／給資料／個人首選｜逐字稿重點整理',
+       blocks:[
+        {h:'四個心法',ul:['<b>版權措辭</b>：要求特定風格（如玩具總動員）時，改用「類似」「相似」的說法，因為版權偵測抓得比較嚴。','<b>專有名詞處理</b>：先請 AI 用形容的方式解釋這個名詞，再按照它的說明去畫，效果更穩定。','<b>建議提供自己的資料</b>：除非你對該領域非常熟悉、能自行判斷正確性，否則建議把真實資料餵給 AI，而非完全仰賴它的既有知識。','<b>講師個人首選</b>：「ChatGPT跟Codex算是我的首選」——把想做的內容和想法直接告訴它，讓它做一做。']},
+        {h:'免費不是永久保證',tip:'開場就提醒：免費功能未來很可能收費，Manus、另一款花絮工具都已從免費轉為點數制，這是 AI 工具產業的常見策略。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep202607-22-notes.html#sec-recap" style="color:var(--rose)">筆記 10：重點整理</a>'}]}
+    ]
+  }
+};
+const ORDER = ['gengpt','claudenb','gammanus','qatips'];
+const $ = s=>document.querySelector(s);
+function renderChapter(ch){
+  const d=DATA[ch];const next=ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];const prev=ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html=`<div class="chapter-head"><span class="emoji">${d.emoji}</span><div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div></div>`;
+  d.topics.forEach((tp,i)=>{const id=`${ch}-${i}`;
+    html+=`<div class="topic" id="topic-${id}"><div class="topic-head" onclick="toggleTopic('${id}')"><span class="num">${i+1}</span><h4>${tp.t}<small>${tp.s}</small></h4><input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)"><span class="chev">▶</span></div><div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{html+=`<div class="block"><h5>${b.h}</h5>`;
+      if(b.p)html+=`<p>${b.p}</p>`;
+      if(b.ul)html+=`<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps)html+=`<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.table)html+=`<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.shot)html+=`<figure class="shot"><img src="${b.shot.img}" alt="" loading="lazy"><figcaption>${b.shot.cap}</figcaption></figure>`;
+      if(b.tip)html+=`<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn)html+=`<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html+=`</div>`;});
+    html+=`</div></div></div>`;});
+  html+=`<div class="chapnav"><a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a><a onclick="showHome()" style="text-align:center">回總覽<b>🏠 四大主題</b></a><a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a></div>`;
+  $('#view-'+ch).innerHTML=html;
+}
+ORDER.forEach(renderChapter);
+function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('#view-'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function showHome(){switchView('home');$('#crumbs').style.display='none';clearSearch();}
+function showChapter(ch){switchView(ch);$('#crumbs').style.display='flex';$('#crumbHere').textContent=`${DATA[ch].emoji} ${DATA[ch].title}`;clearSearch();syncChecks();}
+function toggleTopic(id){$('#topic-'+id).classList.toggle('open');}
+function openTopic(ch,i){showChapter(ch);const el=$('#topic-'+ch+'-'+i);el.classList.add('open');setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+const KEY='ep202607-22-skills-v1';
+const store=()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){const s=store();if(val)s[id]=1;else delete s[id];localStorage.setItem(KEY,JSON.stringify(s));updateProgress();}
+const TOTAL=ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){const done=Object.keys(store()).length;const pct=Math.round(done/TOTAL*100);$('#progFill').style.width=pct+'%';$('#progText').textContent=`${done} / ${TOTAL} 項技能已掌握`;$('#statDone').textContent=done;$('#statPct').textContent=pct+'%';ORDER.forEach(ch=>{const sub=DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;const el=document.querySelector(`[data-mini="${ch}"]`);if(el)el.style.width=Math.round(sub/DATA[ch].topics.length*100)+'%';});}
+function syncChecks(){const s=store();document.querySelectorAll('input[data-skill]').forEach(cb=>{cb.checked=!!s[cb.dataset.skill];});}
+function resetProgress(){if(confirm('確定要清空所有打勾進度嗎？')){localStorage.removeItem(KEY);syncChecks();updateProgress();}}
+function stripTags(s){return s.replace(/<[^>]+>/g,'');}
+const INDEX=[];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{let body=tp.s+' ';tp.blocks.forEach(b=>{if(b.p)body+=stripTags(b.p)+' ';if(b.ul)body+=b.ul.map(stripTags).join(' ')+' ';if(b.steps)body+=b.steps.map(stripTags).join(' ')+' ';if(b.tip)body+=stripTags(b.tip)+' ';if(b.warn)body+=stripTags(b.warn)+' ';if(b.table)body+=b.table.rows.flat().map(stripTags).join(' ')+' ';});INDEX.push({ch,i,title:tp.t,body});}));
+$('#searchInput').addEventListener('input',e=>{const q=e.target.value.trim();const box=$('#searchResults');if(!q){box.classList.remove('show');box.innerHTML='';return;}const hits=INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));box.classList.add('show');if(!hits.length){box.innerHTML=`<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：YAML、套版、魔法圖層）</div>`;return;}const hl=s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);box.innerHTML=hits.map(x=>{const pos=x.body.toLowerCase().indexOf(q.toLowerCase());const snip=x.body.substr(Math.max(0,pos-20),90);return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})"><div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div><h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;}).join('');});
+function clearSearch(){$('#searchInput').value='';$('#searchResults').classList.remove('show');$('#searchResults').innerHTML='';}
+(function(){const box=$('#stars');for(let i=0;i<70;i++){const s=document.createElement('i');s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';s.style.animationDelay=(Math.random()*3)+'s';s.style.transform=`scale(${.5+Math.random()*1.5})`;box.appendChild(s);}})();
+syncChecks();updateProgress();
+</script>
+</body>
+</html>

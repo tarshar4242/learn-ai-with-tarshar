@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP35 課堂筆記｜從 Prompt 到 Harness：打造可控 AI 系統</title>
+<meta name="description" content="晨學講堂 EP35 課堂筆記：Harness Engineering（駕馭工程）——大模型的先天缺陷、AI 工程三次遷徙、Agent−Model=Harness、成熟 Harness 六層架構、OpenAI/Anthropic 真實做法，以及用 Gemini Gem＋NotebookLM 實作「每日 AI 新鮮事產生器」的完整六層落地手冊與 Prompt。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#2f6d8f; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px;border-left:none}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+.note.violet{background:#F3EFFB;border-color:#DFD2F0;color:#5a34a8}
+.note.rose{background:#FBEEF1;border-color:#F0D2DB;color:#9c2f52}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.prompt{position:relative;background:#1d1d1f;border-radius:10px;padding:15px 16px;margin:12px 0;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt .tag{display:inline-block;font-size:11px;letter-spacing:.06em;color:#c9c4ff;border:1px solid #3a3a40;border-radius:6px;padding:2px 9px;margin-bottom:8px}
+.prompt b{color:#fff}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.embed{margin:14px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000}
+.embed iframe{display:block;width:100%;aspect-ratio:16/9;border:0}
+.embed .cap{font-size:12.5px;color:var(--ink3);padding:10px 16px;background:var(--paper);border-top:1px solid var(--line)}
+.ts{display:inline-block;font-family:"Cascadia Code",Consolas,monospace;font-weight:700;font-size:12px;color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,#fff);border-radius:5px;padding:2px 8px;margin-right:7px;letter-spacing:.4px;vertical-align:middle}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+.layers{display:grid;gap:10px;margin:14px 0}
+.lyr{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:13px 15px;background:#fff}
+.lyr .n{flex:none;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--accent)}
+.lyr h4{margin:0 0 3px;font-size:14.5px}
+.lyr p{font-size:13px;margin:0}
+.sub{color:var(--ink2)}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#a9cad9" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP35 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="ep35-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 晨學講堂 · EP35</span>
+  <h1><span>從 Prompt 到 Harness</span><br>打造可控 AI 系統</h1>
+  <p class="lead">為什麼模型越來越強，真正能穩定落地的應用卻寥寥可數？答案藏在大模型的<b>先天缺陷</b>裡。本集帶你認識 <b>Harness Engineering（駕馭工程）</b>——包在模型外層、讓它穩定做事的「軟體馬具」：先看 AI 工程的三次遷徙，再拆解成熟 Harness 的<b>六層架構</b>，最後用 Gemini Gem＋NotebookLM 親手做出一個具備六層結構的<b>「每日 AI 新鮮事產生器」</b>。</p>
+  <div class="meta">
+    <span>📅 2026 直播</span>
+    <span>🧰 主題：Harness Engineering</span>
+    <span>🏗️ 六層架構</span>
+    <span>🛠️ 附完整實作手冊</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-why">1. 為什麼需要 Harness</a>
+  <a href="#sec-shift">2. AI 工程三次遷徙</a>
+  <a href="#sec-def">3. Harness 的定義</a>
+  <a href="#sec-six">4. 成熟 Harness 六層架構</a>
+  <a href="#sec-real">5. OpenAI／Anthropic 真實做法</a>
+  <a href="#sec-lab">6. 實作：每日 AI 新鮮事產生器</a>
+  <a href="#sec-sop">7. 每日操作 SOP</a>
+  <a href="#sec-recap">8. 重點整理</a>
+  <a href="#sec-src">9. 資料來源與製作說明</a>
+</nav>
+
+<article>
+
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--teal))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>EP35_「<b>從 Prompt 到 Harness：打造可控 AI 系統</b>」【Harness Engineering 應用】</td></tr>
+    <tr><th>頻道</th><td>生成式 AI 應用電台・晨學講堂</td></tr>
+    <tr><th>教材</th><td>官方課程簡報（20 頁）＋《每日 AI 新鮮事產生器》Step-by-Step 實作手冊＋錄影回放</td></tr>
+    <tr><th>一句話先懂</th><td><b>Harness（馬具）</b>＝包在大模型外層、用來駕馭它的整套軟體系統。公式：<b>完整 Agent − 核心大模型 ＝ Harness</b>。它不是讓模型更聰明，而是讓模型在你的系統裡<b>穩定做事</b>。</td></tr>
+    <tr><th>從玩具到資產</th><td>Harness 的價值，是把 AI 從「測試很強、上線就掉鏈」的玩具，升級成可控、可觀測、可維護的<b>工業資產</b>。</td></tr>
+  </table></div>
+  <div class="note blue">💡 本頁內容整理自<b>EP35 官方簡報全文、講師逐字稿與《每日 AI 新鮮事產生器》實作手冊</b>（真實課程教材，非推測）。六層架構圖為依簡報內容繪製的 SVG，所有 Prompt 均為手冊原文。</div>
+</section>
+
+<section class="chapter" id="sec-why">
+  <span class="chip" style="background:linear-gradient(90deg,#2f6d8f,#e2542a)">CHAPTER 01</span>
+  <h2 class="ct">1. 為什麼需要 Harness：大模型的先天缺陷</h2>
+  <p class="cd">為何更換更強的模型，也救不了失敗的工作流？</p>
+
+  <p>大模型本質上是<b>無狀態的（Stateless）</b>——就像一個擁有博士學位、卻每隔幾分鐘就會失憶的學者。當你把它放進需要連續執行三十分鐘、一小時的工作流程，會發生「三件慘事」：</p>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">失敗模式</th><th>發生什麼</th></tr>
+    <tr><td>上下文腐爛</td><td>模型忘記最初的指令，越做越偏。</td></tr>
+    <tr><td>工具調用幻覺</td><td>參數傳錯，陷入死循環。</td></tr>
+    <tr><td>狀態丟失</td><td>任務做到一半就斷線、過早停止。</td></tr>
+  </table></div>
+  <div class="note steel">🐴 這就是為什麼很多人在小範圍測試覺得 AI 超強，一推到真實生產線，成功率<b>連 70% 都不到</b>。換更強的模型、調更精的提示詞，都救不了這個<b>結構性問題</b>——所以我們需要全新的工程思維。</div>
+</section>
+
+<section class="chapter" id="sec-shift">
+  <span class="chip" style="background:linear-gradient(90deg,#e2542a,#7a4fd6)">CHAPTER 02</span>
+  <h2 class="ct">2. AI 工程的三次遷徙</h2>
+  <p class="cd">從『聽懂』→『拿到資訊』→『持續做對』。</p>
+
+  <div class="svgwrap">
+  <svg viewBox="0 0 900 150" xmlns="http://www.w3.org/2000/svg" font-family="Noto Sans TC,sans-serif">
+    <defs><marker id="a2" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#2f6d8f"/></marker></defs>
+    <g>
+      <rect x="16" y="46" width="250" height="66" rx="12" fill="#eef6fd" stroke="#2f6df0"/>
+      <text x="141" y="72" text-anchor="middle" font-size="14" font-weight="800" fill="#1d5e8f">① 聽懂</text>
+      <text x="141" y="93" text-anchor="middle" font-size="11.5" fill="#516069">提示詞工程 Prompt Eng.</text>
+      <line x1="270" y1="79" x2="300" y2="79" stroke="#2f6d8f" stroke-width="2" marker-end="url(#a2)"/>
+      <rect x="326" y="46" width="250" height="66" rx="12" fill="#f6e9ee" stroke="#b23a5b"/>
+      <text x="451" y="72" text-anchor="middle" font-size="14" font-weight="800" fill="#8c2c47">② 拿到資訊</text>
+      <text x="451" y="93" text-anchor="middle" font-size="11.5" fill="#516069">上下文工程 ＋ RAG</text>
+      <line x1="580" y1="79" x2="610" y2="79" stroke="#2f6d8f" stroke-width="2" marker-end="url(#a2)"/>
+      <rect x="636" y="46" width="250" height="66" rx="12" fill="#e8f0f4" stroke="#2f6d8f"/>
+      <text x="761" y="72" text-anchor="middle" font-size="14" font-weight="800" fill="#255066">③ 持續做對</text>
+      <text x="761" y="93" text-anchor="middle" font-size="11.5" fill="#516069">Harness Engineering</text>
+      <text x="141" y="30" text-anchor="middle" font-size="11" fill="#84939c">溝通</text>
+      <text x="451" y="30" text-anchor="middle" font-size="11" fill="#84939c">知識</text>
+      <text x="761" y="30" text-anchor="middle" font-size="11" fill="#84939c">執行</text>
+    </g>
+  </svg>
+  <div class="cap">圖解｜AI 工程三次重心遷移。前兩階段仍然有用，但無法保證第三件事——在長鏈路任務中穩定、可靠地把活做完。</div>
+  </div>
+
+  <div class="twrap"><table>
+    <tr><th style="width:150px">階段</th><th>解決什麼</th><th>侷限</th></tr>
+    <tr><td><b>① 提示詞工程</b></td><td>意圖表達——把話說清楚（角色、約束、範例）。</td><td>再精緻也無法彌補模型缺失的知識，更無法管理長鏈路狀態。</td></tr>
+    <tr><td><b>② 上下文工程／RAG</b></td><td>在對的時機把正確資訊、工具、歷史放進上下文窗口。</td><td>窗口容量有限，壓縮就丟資訊，模型反覆犯同樣的錯。</td></tr>
+    <tr><td><b>③ Harness Engineering</b></td><td>在真實世界長時間、低容錯地持續做對。</td><td>需要「監督與糾偏」機制——這正是前兩者缺的。</td></tr>
+  </table></div>
+</section>
+
+<section class="chapter" id="sec-def">
+  <span class="chip" style="background:linear-gradient(90deg,#7a4fd6,#2f6d8f)">CHAPTER 03</span>
+  <h2 class="ct">3. Harness 的定義：Agent − Model = Harness</h2>
+  <p class="cd">Harness 原意是馬具，象徵對力量的約束與控制。</p>
+
+  <p>大模型就像算力強大卻容易跑偏的<b>野馬</b>；Harness 就是<b>包覆模型外層、用來控制與駕馭它的軟體作業系統</b>。業界有一個乾淨的定義公式：</p>
+  <div class="golden"><div class="q">完整 Agent － 核心大模型 ＝ Harness</div><div class="a">記憶管理、工具代碼、權限控管、流程編排、錯誤處理、評估機制……扣掉中間那顆模型，剩下全部都是 Harness。</div></div>
+  <div class="note steel">🎯 視角轉換：Harness Engineering 不研究「怎麼讓模型更聰明」，而是研究「怎麼讓模型在我們的系統裡<b>安穩工作</b>」。</div>
+</section>
+
+<section class="chapter" id="sec-six">
+  <span class="chip" style="background:linear-gradient(90deg,#2f6d8f,#1d9e6f)">CHAPTER 04</span>
+  <h2 class="ct">4. 成熟 Harness 的六層架構（本集核心）</h2>
+  <p class="cd">一個成熟的 Harness 可以拆成六層，由內而外把野馬套牢。</p>
+
+  <div class="layers">
+    <div class="lyr"><div class="n">1</div><div><h4>上下文管理與角色邊界</h4><p>模型不該一開始就被塞入所有規範。用<b>漸進式載入（Progressive Loading）</b>：核心配置只保留最關鍵的規則與索引，執行到特定步驟才動態讀取外部細則——保持上下文乾淨。</p></div></div>
+    <div class="lyr"><div class="n">2</div><div><h4>外部工具與動態技能系統</h4><p>沒有工具，模型只是文字預測器。關鍵不只是把 API 丟給它，而是解決<b>給什麼、何時用、結果如何反饋</b>；用 MCP 等協定接資料庫，把操作邏輯封裝成 Skills，並清洗工具回傳的雜訊。</p></div></div>
+    <div class="lyr"><div class="n">3</div><div><h4>任務編排與執行邏輯</h4><p>建立標準執行軌道，而非讓模型想到哪做到哪。拆成理解目標→判斷資訊→調用工具→分析結果→驗證輸出，採 <b>ReAct</b> 或 <b>Plan-and-Execute</b>；進階可用多個 <b>Sub-agents</b> 協作（子 Agent 上下文互不干擾）。</p></div></div>
+    <div class="lyr"><div class="n">4</div><div><h4>記憶系統與狀態持久化</h4><p>把失憶的大腦變成會累積經驗的打工仔。管理當前任務狀態、會話中間結果、長期記憶與偏好；<b>狀態存到外部儲存</b>，任務中斷還能從斷點精準恢復。</p></div></div>
+    <div class="lyr"><div class="n">5</div><div><h4>質量評估與觀測機制</h4><p>模型自評一定「王婆賣瓜」。要把<b>生成（Generator）與評估（Evaluator）拆成兩個獨立實體</b>，用日誌、指標、模擬操作檢驗，把 AI 推理轉成成功率、耗時、魯棒性等可量化指標。</p></div></div>
+    <div class="lyr"><div class="n">6</div><div><h4>約束、錯誤攔截與自動恢復</h4><p>「該錯的事一定會錯。」設<b>輸入過濾</b>（擋 Prompt 注入）與<b>輸出校驗</b>；出錯時把錯誤打包回傳給模型引導它<b>反思重生成</b>；反覆犯的同類錯，直接在代碼層寫死規則堵住。</p></div></div>
+  </div>
+
+  <div class="svgwrap">
+  <svg viewBox="0 0 900 210" xmlns="http://www.w3.org/2000/svg" font-family="Noto Sans TC,sans-serif">
+    <g>
+      <rect x="330" y="82" width="240" height="46" rx="10" fill="#0f2029"/>
+      <text x="450" y="103" text-anchor="middle" font-size="13" font-weight="800" fill="#8fd4ec">核心大模型（野馬）</text>
+      <text x="450" y="119" text-anchor="middle" font-size="10.5" fill="#7fa9bb">Stateless LLM</text>
+      <rect x="250" y="58" width="400" height="94" rx="14" fill="none" stroke="#6aa3bd" stroke-width="1.5"/>
+      <rect x="180" y="36" width="540" height="138" rx="18" fill="none" stroke="#2f6d8f" stroke-width="1.5"/>
+      <text x="450" y="24" text-anchor="middle" font-size="12" font-weight="700" fill="#255066">Harness＝把野馬套牢的六層馬具</text>
+      <g font-size="11.5" fill="#255066" font-weight="700">
+        <rect x="12" y="20" width="150" height="26" rx="7" fill="#e8f0f4" stroke="#c7dbe6"/><text x="87" y="37" text-anchor="middle">①上下文與角色邊界</text>
+        <rect x="12" y="52" width="150" height="26" rx="7" fill="#e8f0f4" stroke="#c7dbe6"/><text x="87" y="69" text-anchor="middle">②工具與技能</text>
+        <rect x="12" y="84" width="150" height="26" rx="7" fill="#e8f0f4" stroke="#c7dbe6"/><text x="87" y="101" text-anchor="middle">③任務編排</text>
+        <rect x="738" y="20" width="150" height="26" rx="7" fill="#e8f0f4" stroke="#c7dbe6"/><text x="813" y="37" text-anchor="middle">④記憶與狀態</text>
+        <rect x="738" y="52" width="150" height="26" rx="7" fill="#e8f0f4" stroke="#c7dbe6"/><text x="813" y="69" text-anchor="middle">⑤評估與觀測</text>
+        <rect x="738" y="84" width="150" height="26" rx="7" fill="#e8f0f4" stroke="#c7dbe6"/><text x="813" y="101" text-anchor="middle">⑥約束與錯誤攔截</text>
+      </g>
+      <text x="450" y="196" text-anchor="middle" font-size="11.5" fill="#516069">六層齊備 → 可控、可觀測、可維護的 AI 系統（工業資產）</text>
+    </g>
+  </svg>
+  <div class="cap">圖解｜六層 Harness 把「無狀態的野馬」層層包覆，從上下文邊界一路到錯誤防護網。</div>
+  </div>
+</section>
+
+<section class="chapter" id="sec-real">
+  <span class="chip" style="background:linear-gradient(90deg,#1d9e6f,#2f6d8f)">CHAPTER 05</span>
+  <h2 class="ct">5. OpenAI／Anthropic 的真實做法</h2>
+  <p class="cd">六層架構不是理論——大廠早已這樣落地。</p>
+  <ul class="pt">
+    <li><b>Human Steer, Agents Execute</b>（OpenAI）：人類掌舵、代理執行——刻意保留人類的中繼觀察點，而不是全自動放生。</li>
+    <li><b>生成與評估分離</b>（Anthropic）：Planner／Generator／Evaluator「三權分立」，避免模型自評的盲點；評估不過就「打回重構」。</li>
+    <li><b>代碼層硬規則</b>：對於模型反覆犯的同類錯誤，工程師直接在代碼寫死規則（例：強制置換錯誤背景色）從根本堵死。</li>
+  </ul>
+  <div class="note gold">⚠️ 關鍵心法：<b>「代碼主導流程，模型負責單點突破」</b>——把不可控的大腦，放進一個有結構、有防線的工作環境裡。</div>
+</section>
+
+<section class="chapter" id="sec-lab">
+  <span class="chip" style="background:linear-gradient(90deg,#2f6d8f,#c98a0a)">實 作</span>
+  <h2 class="ct">6. 實作：每日 AI 新鮮事產生器</h2>
+  <p class="cd">不寫程式、不用 API，只用 Gemini Gem＋NotebookLM＋複製貼上，做出一個具備六層 Harness 結構的小工具。</p>
+
+  <h3>平台分工（為什麼分兩個平台？）</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">平台</th><th>角色</th></tr>
+    <tr><td><b>NotebookLM</b></td><td>長期記憶＋來源權威：訂閱 15+ 個 AI 新聞來源、儲存歷史稿件避免重複。</td></tr>
+    <tr><td><b>Gemini Gem</b></td><td>執行引擎＋任務編排：每天拉資料、寫稿、配圖、輸出。</td></tr>
+    <tr><td><b>Nano Banana</b></td><td>Gemini 2.5 Flash Image，負責每日封面圖。</td></tr>
+    <tr><td><b>Google Docs</b></td><td>最終輸出與歷史歸檔（可下載 docx）。</td></tr>
+  </table></div>
+  <div class="note steel">🔑 「生成」與「記憶」、「資料」與「執行」<b>刻意分離</b>，中間靠你的「複製貼上」接力——這正是 <b>Human Steer, Agents Execute</b> 的體現。</div>
+
+  <h3>六層怎麼落地（對照上面的架構）</h3>
+  <ol class="st">
+    <li><b>第一層｜角色邊界</b>：Gem 系統指示只放「角色定位＋核心邊界＋模組索引」，用<b>指令關鍵字</b>（【啟動】【素材】【寫稿】【配圖】【評估】【輸出】【歸檔】）漸進式載入。</li>
+    <li><b>第二層｜工具與技能</b>：NotebookLM 當「人類仲介的工具」，寫稿／配圖／輸出各封裝成獨立模組 Prompt。</li>
+    <li><b>第三層｜任務編排</b>：把每天拆成 7 個關卡、一次一關，每關用 ReAct 風格輸出〔思考〕〔行動〕〔預期〕〔觀察〕。</li>
+    <li><b>第四層｜記憶</b>：當日狀態放 Gem、近期主題放 Google Docs 工作日誌、長期素材放 NotebookLM；開工前先「載入過去 7 天主題」避免重複。</li>
+    <li><b>第五層｜評估</b>：另開一個「主編評估官」Gem，用<b>七大維度</b>逐項打分（滿分 35、門檻 30），不過就退稿重寫。</li>
+    <li><b>第六層｜防護網</b>：輸入過濾（擋注入與越界）＋輸出校驗（6 項硬規格），不過自動 Retry 最多 2 次。</li>
+  </ol>
+
+  <h3>三個關鍵 Prompt（手冊原文）</h3>
+  <div class="prompt"><span class="tag">第一層 · Gem 系統指示（漸進式載入骨架）</span># 角色定位：你是「每日 AI 新鮮事產生器」，為台灣中文讀者整理 AI 業界動態的編輯助理…
+# 漸進式載入（關鍵）：依使用者輸入的「指令關鍵字」逐步進入對應模組——
+・收到「【啟動】」→ 回「已就緒，請貼入今日素材」並等待
+・收到「【素材】」+內容 → 進入分類模組
+・收到「【寫稿】」→ 進入寫稿模組 …
+未收到關鍵字時，不主動執行下一步。
+# 不變約束：不得編造新聞/人名/數據；任何事實必附來源；單一來源引用不超過 25 中文字。</div>
+
+  <div class="prompt"><span class="tag">第三層 · 主編排指令（流程鎖＋ReAct）</span>【編排規則】每天任務分 7 關，依序通過不得跳關：①啟動→②接收素材→③分類→④寫稿→⑤自我評估→⑥配圖→⑦輸出。
+每關開始前先輸出三行：〔思考〕我要做什麼、為什麼；〔行動〕即將執行的步驟；〔預期〕應產出什麼。
+每關結束輸出一行〔觀察〕產出與預期是否一致。完成後只回「✅ 第 N 關完成，等待下一步」，然後停。</div>
+
+  <div class="prompt"><span class="tag">第五層 · 主編評估官（生成/評估分離）</span># 角色：嚴格的中文編輯主編，職責是挑毛病，不替作者著想。
+# 七大維度逐項打分(1–5)：①事實準確度 ②重複度 ③結構完整 ④字數合規 ⑤風格一致 ⑥引用合規 ⑦台灣相關性。
+# 輸出：逐項評分+總分(滿分35)+通過門檻30；未過門檻給「修訂建議清單」；發現編造事實直接判「整篇退稿」。</div>
+
+  <div class="note green">✅ 手冊完整收錄六層全部 Prompt（1A／2A–2D／3A／4A–4B／5A–5B／6A–6B）、每日 SOP 與故障排除 FAQ，可直接複製貼上使用。</div>
+</section>
+
+<section class="chapter" id="sec-sop">
+  <span class="chip" style="background:linear-gradient(90deg,#c98a0a,#2f6d8f)">SOP</span>
+  <h2 class="ct">7. 每日操作 SOP（約 15 分鐘）</h2>
+  <p class="cd">熟練後一輪約 12–18 分鐘，這是每日標準流程。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:70px">步驟</th><th>在哪做</th><th>做什麼</th></tr>
+    <tr><td>① 蒐集</td><td>NotebookLM</td><td>查「過去 24 小時最重要的 5–8 則 AI 動態」</td></tr>
+    <tr><td>② 過濾</td><td>NotebookLM</td><td>人眼確認來源權威、日期、無重複</td></tr>
+    <tr><td>③ 狀態載入</td><td>Gem</td><td>貼上過去 7 天主題（Prompt 4A）避免重複</td></tr>
+    <tr><td>④ 啟動＋分類</td><td>Gem</td><td>【啟動】→【素材】+內容</td></tr>
+    <tr><td>⑤ 寫稿</td><td>Gem</td><td>【寫稿】（Prompt 2B）產出 800–1200 字稿件</td></tr>
+    <tr><td>⑥ 評估</td><td>主編評估官 Gem</td><td>貼稿件評分，未過門檻回原 Gem 修訂</td></tr>
+    <tr><td>⑦ 配圖＋輸出</td><td>Gem</td><td>【配圖】選 A/B → 【輸出】Markdown → 貼 Docs 下載 docx</td></tr>
+    <tr><td>⑧ 歸檔</td><td>Gem＋Docs</td><td>【歸檔】更新工作日誌主題追蹤表</td></tr>
+  </table></div>
+  <div class="golden"><div class="q">「換主題不換架構——這就是 Harness 思維的可重用性。」</div><div class="a">同一套六層架構，換掉 NotebookLM 來源就能做每日國防新聞、每週政策摘要、文獻週報。</div></div>
+</section>
+
+<section class="chapter" id="sec-recap">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--teal))">RECAP</span>
+  <h2 class="ct">8. 重點整理（帶走這幾句）</h2>
+  <ul class="pt">
+    <li><b>大模型是無狀態的野馬</b>：上下文腐爛、工具幻覺、狀態丟失——換更強的模型也救不了。</li>
+    <li><b>三次遷徙</b>：聽懂（Prompt）→ 拿到資訊（Context/RAG）→ 持續做對（Harness）。</li>
+    <li><b>Harness ＝ Agent − Model</b>：記憶、工具、編排、評估、防護，全部都是 Harness。</li>
+    <li><b>六層架構</b>：①角色邊界 ②工具技能 ③任務編排 ④記憶狀態 ⑤評估觀測 ⑥錯誤防護。</li>
+    <li><b>漸進式載入</b>：核心只放索引，細節按需載入，保持上下文乾淨。</li>
+    <li><b>生成／評估分離</b>：不要讓模型自評（王婆賣瓜），另設獨立評估角色。</li>
+    <li><b>狀態存外部</b>：不靠模型記憶，存到 Google Docs／NotebookLM，可從斷點恢復。</li>
+    <li><b>不寫程式也能做 Harness</b>：Gem＋NotebookLM＋複製貼上，就是一個六層小工具。</li>
+  </ul>
+  <div class="golden"><div class="q">「從 Prompt 到 Harness，從個人玩家到系統設計者。」</div><div class="a">Harness 不是新技術，而是把既有工具「組裝得更可控」的工程思維。</div></div>
+</section>
+
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,#84939c,#516069)">SOURCE</span>
+  <h2 class="ct">9. 資料來源與製作說明</h2>
+  <ul class="pt">
+    <li><b>主要教材</b>：EP35 官方課程簡報《Harness Engineering》（20 頁）＋講師逐字稿＋《每日 AI 新鮮事產生器 Step-by-Step Prompts 操作手冊》。</li>
+    <li><b>製作方式</b>：本頁<b>整理自簡報、逐字稿與手冊全文</b>（真實課程教材）；六層架構圖與三次遷徙圖為依內容繪製的 SVG 圖解，所有 Prompt 均為手冊原文，未經改寫杜撰。</li>
+    <li><b>誠實標註</b>：本集示範操作的螢幕畫面／逐字稿時間碼未逐幀對照錄影；若日後逐幀對照可再補入實錄截圖。</li>
+    <li><b>延伸</b>：搭配 <a href="ep35-ai-skills.html">EP35 互動技能地圖</a> 逐項打勾；相關 <a href="ep36-notes.html">EP36 Gemini Notebooks</a>、<a href="ep37-notes.html">EP37 RAG 與 AI 共行</a>、<a href="ep39-notes.html">EP39 NotebookLM×Markdown</a>。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  生成式 AI 應用電台・晨學講堂 ｜ EP35 課堂筆記 ｜ 從 Prompt 到 Harness：打造可控 AI 系統<br>
+  本頁為學習筆記整理，教材版權屬原課程與講者所有。<a href="../radio/" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a><br>
+  🍀 <b>Learn AI with Tarshar</b> ♥ 2026
+</footer>
+
+</body>
+</html>

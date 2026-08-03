@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP14 課堂筆記｜NotebookLM 最強開源替代品？Open Notebook 實測：資料完全私有</title>
+<meta name="description" content="晨學講堂 EP14 課堂筆記：Open Notebook——開源、AI 驅動的 NotebookLM 替代方案，七大痛點、四大核心功能、16+ AI 模型供應商、Docker Compose 手把手安裝教學、AI Podcast 製作、隱私控制三層級。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#2f7d92; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px;border-left:none}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+.note.violet{background:#F3EFFB;border-color:#DFD2F0;color:#5a34a8}
+.note.rose{background:#FBEEF1;border-color:#F0D2DB;color:#9c2f52}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.prompt{position:relative;background:#1d1d1f;border-radius:10px;padding:15px 16px;margin:12px 0;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt .tag{display:inline-block;font-size:11px;letter-spacing:.06em;color:#c9c4ff;border:1px solid #3a3a40;border-radius:6px;padding:2px 9px;margin-bottom:8px}
+.prompt b{color:#fff}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.embed{margin:14px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000}
+.embed iframe{display:block;width:100%;aspect-ratio:16/9;border:0}
+.embed .cap{font-size:12.5px;color:var(--ink3);padding:10px 16px;background:var(--paper);border-top:1px solid var(--line)}
+.ts{display:inline-block;font-family:"Cascadia Code",Consolas,monospace;font-weight:700;font-size:12px;color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,#fff);border-radius:5px;padding:2px 8px;margin-right:7px;letter-spacing:.4px;vertical-align:middle}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+.layers{display:grid;gap:10px;margin:14px 0}
+.lyr{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:13px 15px;background:#fff}
+.lyr .n{flex:none;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--accent)}
+.lyr h4{margin:0 0 3px;font-size:14.5px}
+.lyr p{font-size:13px;margin:0}
+.sub{color:var(--ink2)}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#a7cdd6" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP14 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="ep14-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 晨學講堂 · EP14</span>
+  <h1><span>Open Notebook</span><br>NotebookLM 最強開源替代品實測</h1>
+  <p class="lead">EP14 帶你實測 <b>Open Notebook</b>——一個<b>開源、AI 驅動</b>的筆記與研究平台，定位是 Google NotebookLM 的開源替代：資料完全私有、模型自由選擇、支援 16+ 種 AI 供應商。本頁整理課程簡報全部重點，並附上<b>手把手 Docker Compose 安裝操作教學</b>（來自課程附帶的安裝操作手冊）。</p>
+  <div class="meta">
+    <span>📅 2026/01/09 直播</span>
+    <span>🗂️ 教材：簡報＋安裝操作手冊（pdf/docx）＋完整錄影</span>
+    <span>🔓 開源 · 自主 · 隱私</span>
+    <span>🐳 Docker Compose 安裝</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-what">1. 什麼是 Open Notebook</a>
+  <a href="#sec-why">2. 為什麼選擇它</a>
+  <a href="#sec-pain">3. 解決的七大痛點</a>
+  <a href="#sec-core">4. 四大核心功能</a>
+  <a href="#sec-source">5. 整合你的所有學習資源</a>
+  <a href="#sec-model">6. 16+ 種 AI 模型供應商</a>
+  <a href="#sec-req">7. 系統需求與三種安裝方式</a>
+  <a href="#sec-install">8. 實戰安裝：Docker Compose 手把手</a>
+  <a href="#sec-notebook">9. 建立筆記本＋自動化轉化</a>
+  <a href="#sec-chat">10. 對話範圍＋AI Podcast</a>
+  <a href="#sec-privacy">11. 隱私控制＋誰最需要</a>
+  <a href="#sec-recap">12. 重點整理</a>
+  <a href="#sec-src">13. 資料來源與製作說明</a>
+</nav>
+
+<article>
+
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--blue))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>EP14「NotebookLM 最強開源替代品？Open Notebook 實測：資料完全私有」</td></tr>
+    <tr><th>頻道</th><td>生成式 AI 應用電台・晨學講堂</td></tr>
+    <tr><th>直播日期</th><td>2026/01/09 20:13 CST</td></tr>
+    <tr><th>教材</th><td>課程簡報（pptx／pdf，文字版）＋《Open Notebook 安裝操作手冊》（pdf／docx，共 7 頁）＋完整錄影</td></tr>
+    <tr><th>一句話先懂</th><td>Open Notebook 是<b>開源、AI 驅動</b>的筆記與研究平台，結合 AI 力量與隱私控制，是 Google NotebookLM 的開源替代，讓使用者在增強能力的同時，掌握自己的工作流程與資料使用方式。</td></tr>
+  </table></div>
+  <div class="note blue">💡 本集簡報為<b>文字型投影片</b>（PptxGenJS 產生，非圖片型），本頁內容直接取自簡報全文與安裝手冊逐頁內容，<b>真實課程內容，非推測</b>；因無需圖像判讀，本頁以文字整理呈現而非逐頁截圖。</div>
+</section>
+
+<section class="chapter" id="sec-what">
+  <span class="chip" style="background:linear-gradient(90deg,#2f7d92,#3b6bb0)">CHAPTER 01</span>
+  <h2 class="ct">1. 什麼是 Open Notebook</h2>
+  <h3>核心定位</h3>
+  <p>Open Notebook 是一個<b>開源、AI 驅動</b>的筆記與研究平台，結合 AI 力量與隱私控制。它是 Google NotebookLM 的開源替代，為研究者、學生與專業人士設計，讓使用者在增強能力的同時，掌握自己的工作流程與資料使用方式。</p>
+  <h3>核心理念</h3>
+  <p>在 AI 主導的時代，<b>獲取知識與思考能力不應是少數人的特權</b>，也不應被鎖在單一供應商的服務中。</p>
+  <div class="golden"><div class="q">「你一直想要的認知夥伴。」</div><div class="a">—— 簡報開場定位句</div></div>
+</section>
+
+<section class="chapter" id="sec-why">
+  <span class="chip" style="background:linear-gradient(90deg,#3b6bb0,#5645D4)">CHAPTER 02</span>
+  <h2 class="ct">2. 為什麼選擇 Open Notebook：三大核心優勢</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:160px">比較項目</th><th>Open Notebook</th><th>對照對象</th></tr>
+    <tr><td>授權模式</td><td>MIT 授權，代碼透明，可自由修改</td><td>閉源 SaaS</td></tr>
+    <tr><td>資料存放</td><td>隱私掌握在自己手裡，無第三方存取</td><td>Google 伺服器</td></tr>
+    <tr><td>模型選擇</td><td>支援 OpenAI、Claude、Ollama 等 16+ 種</td><td>僅限 Gemini</td></tr>
+  </table></div>
+</section>
+
+<section class="chapter" id="sec-pain">
+  <span class="chip" style="background:linear-gradient(90deg,#5645D4,#2f7d92)">CHAPTER 03</span>
+  <h2 class="ct">3. Open Notebook 解決的七大痛點</h2>
+  <ul class="pt">
+    <li><b>資料隱私疑慮</b>：敏感資料不外流，完全掌握安全。</li>
+    <li><b>內容轉換受限</b>：支援多元知識萃取與轉換。</li>
+    <li><b>AI 供應商綁定</b>：自由切換模型，不受單一限制。</li>
+    <li><b>缺乏 API</b>：完整 API 整合自動化流程。</li>
+    <li><b>功能限制</b>：開源架構支援無限擴充。</li>
+    <li><b>Podcast 限制</b>：支援 4 人對話與個性自訂。</li>
+    <li><b>成本不透明</b>：自主選擇模型，成本完全可控。</li>
+  </ul>
+</section>
+
+<section class="chapter" id="sec-core">
+  <span class="chip" style="background:linear-gradient(90deg,#2f7d92,#0d8f80)">CHAPTER 04</span>
+  <h2 class="ct">4. 四大核心功能總覽</h2>
+  <div class="layers">
+    <div class="lyr"><div class="n">1</div><div><h4>Podcast Generator 播客生成</h4><p>將筆記轉成多聲道播客，支援自訂語音。</p></div></div>
+    <div class="lyr"><div class="n">2</div><div><h4>AI-Powered Notes 智慧筆記</h4><p>自動總結與生成洞察，轉為結構化筆記。</p></div></div>
+    <div class="lyr"><div class="n">3</div><div><h4>Privacy Control 隱私控制</h4><p>三級可見度設定，掌握 AI 存取權限。</p></div></div>
+    <div class="lyr"><div class="n">4</div><div><h4>Content Integration 內容整合</h4><p>支援多格式匯入（PDF、YouTube、DOCX 等）。</p></div></div>
+  </div>
+</section>
+
+<section class="chapter" id="sec-source">
+  <span class="chip" style="background:linear-gradient(90deg,#0d8f80,#3f8560)">CHAPTER 05</span>
+  <h2 class="ct">5. 整合你所有的學習資源</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:120px">類型</th><th>支援格式</th></tr>
+    <tr><td>文件 (Documents)</td><td>PDF, DOCX, TXT, EPUB, PPT</td></tr>
+    <tr><td>網頁 (Web)</td><td>直接輸入 URL，自動擷取內容</td></tr>
+    <tr><td>影片 (Video)</td><td>YouTube 影片，自動提取字幕與內容</td></tr>
+    <tr><td>音訊 (Audio)</td><td>音訊檔案，自動轉錄文字</td></tr>
+    <tr><td>文字 (Text)</td><td>直接貼上任何文字內容</td></tr>
+  </table></div>
+  <p class="cd">三種添加方式：<b>提供網頁 URL</b>／<b>上傳本地檔案</b>／<b>直接貼上文字</b>。</p>
+</section>
+
+<section class="chapter" id="sec-model">
+  <span class="chip" style="background:linear-gradient(90deg,#3f8560,#9c7b23)">CHAPTER 06</span>
+  <h2 class="ct">6. 支援 16+ 種 AI 模型供應商</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">類別</th><th>供應商</th></tr>
+    <tr><td>主流雲端供應商</td><td>OpenAI (GPT)、Anthropic (Claude)、Google (Gemini)、Groq (高速推理)、Mistral AI、DeepSeek</td></tr>
+    <tr><td>本地模型支援</td><td>Ollama (完全本地)、LM Studio、其他開源模型</td></tr>
+  </table></div>
+  <div class="note gold">💡 核心優勢：可根據任務需求、成本考量、隱私要求選擇不同模型，甚至<b>混合使用</b>。</div>
+</section>
+
+<section class="chapter" id="sec-req">
+  <span class="chip" style="background:linear-gradient(90deg,#9c7b23,#bf6a1e)">CHAPTER 07</span>
+  <h2 class="ct">7. 系統需求與三種安裝方式</h2>
+  <h3>最低系統需求 vs 推薦配置</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:130px"></th><th>最低需求</th><th>推薦配置</th></tr>
+    <tr><td>硬體</td><td>Docker Engine（必須）／4GB RAM／2GB 可用磁碟空間</td><td>8GB+ RAM／10GB+ 可用空間／穩定網路連線</td></tr>
+    <tr><td>其他</td><td>至少一個 AI 模型的 API 金鑰</td><td>—</td></tr>
+  </table></div>
+  <p class="cd">支援作業系統：Linux（官方推薦，效能最佳）／macOS（Intel 或 Apple Silicon）／Windows（需搭配 WSL2 或 Docker Desktop）。</p>
+  <h3>三種安裝方式</h3>
+  <ol class="st">
+    <li><b>Docker Compose（推薦）</b>：最簡單快速的部署方式，自動處理所有依賴，適合大多數使用者。</li>
+    <li><b>Docker 指令安裝</b>：提供更靈活的配置選項，適合熟悉 Docker 操作的進階使用者。</li>
+    <li><b>源碼安裝 (Source)</b>：完全控制安裝過程，適合開發者或需要深度客製化的使用者。</li>
+  </ol>
+</section>
+
+<section class="chapter" id="sec-install">
+  <span class="chip" style="background:linear-gradient(90deg,#bf6a1e,#2f7d92)">CHAPTER 08</span>
+  <h2 class="ct">8. 實戰安裝：Docker Compose 手把手教學</h2>
+  <p class="cd">整理自課程附帶的《Open Notebook 安裝操作手冊》（共 7 頁），以 Windows + Docker Desktop 為例。</p>
+  <h3>一、前置條件檢查</h3>
+  <ul class="pt">
+    <li>安裝 <b>Docker</b>（<a href="https://www.docker.com/" target="_blank">docker.com</a>），確認：<code>docker --version</code> 與 <code>docker compose version</code>（或 <code>docker-compose --version</code>）。</li>
+    <li>開啟 Docker Desktop → Settings → General：勾選 <b>Use WSL 2 based engine</b>；Resources → WSL Integration：勾選 <b>Enable integration with default WSL distro</b>（例如 Ubuntu-24.04）。</li>
+    <li>回到主畫面確認右下角顯示 <b>Engine running</b>——這步沒完成，後續指令會全部失敗。</li>
+  </ul>
+  <h3>二、建立專案資料夾與設定檔</h3>
+  <ol class="st">
+    <li>開啟 PowerShell，建立並進入資料夾：<code>mkdir D:\work\open-notebook</code>、<code>cd D:\work\open-notebook</code>（路徑可自訂，但後續指令要在同一資料夾內執行）。</li>
+    <li>建立 <code>docker-compose.yml</code>：<code>notepad docker-compose.yml</code>，把官方提供的內容完整貼上並覆蓋，<b>只修改 <code>OPENAI_API_KEY</code>，其餘不要改</b>。</li>
+    <li>各大 LLM API 申請位置：OpenAI（platform.openai.com/api-keys）／Anthropic（console.anthropic.com）／Google（aistudio.google.com）／Groq（console.groq.com）。</li>
+  </ol>
+  <h3>三、啟動與驗證</h3>
+  <ol class="st">
+    <li>（保險）先關閉舊服務：<code>docker compose down</code>（若沒裝過可跳過）。</li>
+    <li>啟動服務：<code>docker compose up -d</code>。</li>
+    <li>確認狀態（非常重要）：<code>docker compose ps</code>，正常應顯示 <code>open-notebook-surrealdb-1 → Up</code>、<code>open-notebook-open_notebook-1 → Up</code>，開放埠 8000／8502／5055。若顯示 Restarting 或 Exited，<b>先別繼續下一步</b>。</li>
+    <li>開啟瀏覽器輸入 <code>http://localhost:8502</code>：正常應可看到 UI、可建立 Notebook、可正常對話，且沒有 <code>ERR_EMPTY_RESPONSE</code> 或 Failed to send message。</li>
+  </ol>
+  <div class="prompt"><span class="tag">常用管理指令</span>停止服務　docker compose down
+啟動服務　docker compose up -d
+查看狀態　docker compose ps
+查看 Open Notebook log　docker compose logs --tail=100 open_notebook
+查看 SurrealDB log　docker compose logs --tail=100 surrealdb</div>
+  <div class="note violet">💡 若想「資料不出電腦、也不用申請其他 LLM API」，可改用 <b>Ollama</b> 跑本地模型（課程提及後續直播會另外分享）。安裝輔助小幫手：官方提供的 ChatGPT 安裝助理連結（見簡報／手冊原文）。</div>
+</section>
+
+<section class="chapter" id="sec-notebook">
+  <span class="chip" style="background:linear-gradient(90deg,#2f7d92,#5645D4)">CHAPTER 09</span>
+  <h2 class="ct">9. 建立筆記本＋自動化知識轉化</h2>
+  <h3>創建第一個筆記本</h3>
+  <ol class="st">
+    <li>點擊主畫面右上角「Create New Notebook」。</li>
+    <li>填寫名稱與<b>詳細描述</b>——描述越詳細，AI 越能理解上下文（例：「這個筆記本專門用於收集和整理深度學習相關的論文、教學影片和實作範例…」）。</li>
+    <li>點擊「Add Source」加入資料：連結（Link，貼 URL）／檔案（File，PDF/DOCX/PPT）／文字（Text，直接貼上）。處理流程：系統解析 → 提取純文字 → 建立向量索引。</li>
+  </ol>
+  <h3>自動化知識轉化 (Transformations)</h3>
+  <p>Transformations 是預設的 AI 指令集，能自動處理匯入的資料來源，節省大量閱讀與整理時間。</p>
+  <ul class="pt">
+    <li><b>自動摘要</b>：快速生成長篇文章或論文的重點摘要。</li>
+    <li><b>實體提取</b>：自動抓取人名、地點、日期與專有名詞。</li>
+    <li><b>語言翻譯</b>：外文資料直接轉化為母語。</li>
+    <li><b>格式轉換</b>：非結構化文字轉為表格、Markdown 或心智圖代碼。</li>
+  </ul>
+  <div class="note steel">💡 進階技巧：可自行編寫 Prompt 創建客製化 Transformation，例如「提取所有提到的書籍並附上作者」。</div>
+</section>
+
+<section class="chapter" id="sec-chat">
+  <span class="chip" style="background:linear-gradient(90deg,#5645D4,#b25269)">CHAPTER 10</span>
+  <h2 class="ct">10. 與 AI 助手對話的三種範圍＋打造 AI Podcast</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">對話範圍</th><th>適用情境</th></tr>
+    <tr><td>單一文件 (Single Source)</td><td>深入研讀論文、合約或長篇文章</td></tr>
+    <tr><td>筆記本 (Notebook)｜預設</td><td>整合當前筆記本內所有資料，適合特定主題綜合研究</td></tr>
+    <tr><td>全域 (Global)</td><td>搜尋所有筆記本與資料庫，適合跨領域整合或廣泛檢索</td></tr>
+  </table></div>
+  <p class="cd">Pro Tip：回答不夠精準就縮小到「單一文件」；需要創意發想就切到「全域」。</p>
+  <h3>打造專屬 AI Podcast（多角色對話）</h3>
+  <ol class="st">
+    <li><b>選擇來源</b>：勾選要轉換的筆記本或特定文件。</li>
+    <li><b>設定參數</b>：語言（中文／英文）、對話風格（輕鬆／專業）、主持人數量（最多 4 位）。</li>
+    <li><b>生成播放</b>：AI 自動撰寫腳本並合成語音，完成後可線上收聽或下載。</li>
+  </ol>
+</section>
+
+<section class="chapter" id="sec-privacy">
+  <span class="chip" style="background:linear-gradient(90deg,#b25269,#3f8560)">CHAPTER 11</span>
+  <h2 class="ct">11. 隱私控制三層級＋誰最需要 Open Notebook</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">層級</th><th>內容</th></tr>
+    <tr><td>資料儲存自主權</td><td>所有筆記與文件存在本地伺服器或私有雲端，不依賴第三方資料庫</td></tr>
+    <tr><td>AI 訪問控制</td><td>精細設定 AI 可讀取範圍（單一文件／特定筆記本／全域）</td></tr>
+    <tr><td>模型隱私選擇</td><td>可用 Ollama 等本地 LLM，實現完全離線運算</td></tr>
+  </table></div>
+  <h3>六大核心族群</h3>
+  <ul class="pt">
+    <li><b>學術研究員</b>：整理大量文獻、精準引用、深度分析與知識連結。</li>
+    <li><b>內容創作者</b>：靈感快速轉化為 Podcast 腳本或文章。</li>
+    <li><b>技術開發者</b>：喜愛開源專案、想完全掌控架構與 API 整合。</li>
+    <li><b>隱私倡議者</b>：拒絕資料上雲，堅持數據主權與本地部署。</li>
+    <li><b>學生與考生</b>：快速摘要教材重點，製作複習筆記與心智圖。</li>
+    <li><b>知識工作者</b>：整合跨專案資訊，建立個人第二大腦。</li>
+  </ul>
+  <div class="note green">💡 實際案例：<b>學術研究</b>整理數百篇 PDF 文獻自動生成綜述；<b>企業知識庫</b>匯入內部規章打造員工 AI 問答助手；<b>個人學習</b>快速摘要課程內容；<b>Podcast 製作</b>把零散筆記轉成廣播腳本並自動生成語音。</div>
+</section>
+
+<section class="chapter" id="sec-recap">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#2f7d92)">RECAP</span>
+  <h2 class="ct">12. 重點整理：快速回顧 Open Notebook</h2>
+  <ul class="pt">
+    <li>它是 <b>開源、AI 驅動</b>的 NotebookLM 替代方案，MIT 授權。</li>
+    <li>核心優勢：<b>資料自主、模型自由、完全開源</b>。</li>
+    <li>四大功能：<b>播客生成、智慧筆記、隱私控制、內容整合</b>。</li>
+    <li>安裝首選 <b>Docker Compose</b>，最低 4GB RAM 即可跑起來。</li>
+    <li>支援 <b>16+ 種 AI 模型</b>，含完全本地的 Ollama。</li>
+  </ul>
+  <div class="golden"><div class="q">「隱私與掌控權，完全由你決定。」</div><div class="a">—— 簡報封面金句</div></div>
+</section>
+
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5a5866)">SOURCES</span>
+  <h2 class="ct">13. 資料來源與製作說明</h2>
+  <ul class="pt">
+    <li><b>原始教材：</b>EP14「NotebookLM 最強開源替代品？Open Notebook 實測：資料完全私有」課程簡報（pptx／pdf，文字型投影片）＋《Open Notebook 安裝操作手冊》（pdf／docx，共 7 頁）＋完整錄影（2026/01/09 20:13 CST，約 832MB）。</li>
+    <li><b>製作方式：</b>簡報為 PptxGenJS 產生的<b>文字型投影片</b>（非圖片型），已透過 Drive 工具直接讀出全文內容；安裝操作手冊逐頁讀取整理為第 8 節的手把手教學。內容為<b>真實課程內容</b>，非推測。</li>
+    <li><b>誠實聲明：</b>本頁以簡報全文＋安裝手冊為主要依據；因簡報本身即為文字內容（非需要逐頁截圖判讀的圖片型簡報），本頁未附簡報截圖，改以結構化文字整理呈現。完整錄影已取得但本次未逐幀轉寫，如需要示範操作的畫面截圖與逐字稿時間碼，可後續補充。</li>
+    <li><b>介面參考：</b>互動技能地圖頁沿用本站 EP38、EP44–46 的卡片式多層導覽與遊戲化進度設計。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  EP14「Open Notebook 實測：資料完全私有」課堂筆記・2026/07 整理<br>
+  🍀 Learn AI with Tarshar｜搭配 <a href="ep14-ai-skills.html">互動技能地圖</a> 使用效果最佳
+</footer>
+
+</body>
+</html>

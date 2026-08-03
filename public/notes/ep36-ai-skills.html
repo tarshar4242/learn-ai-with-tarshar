@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gemini Notebooks 5 種用法｜互動式學習地圖</title>
+<meta name="description" content="EP36 晨學講堂：Gemini Notebooks——認識筆記本、六大環境設定、五種實用用法（簡報模板資料庫、學習教練、專案管理、跨筆記本對話、共享來源），互動式多層次學習地圖">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269;
+  --green:#3f8560; --orange:#bf6a1e; --red:#c0453f; --teal:#0d8f80;
+  --feat:#0d9488; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(28px,4.6vw,46px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--txt);background:none;-webkit-text-fill-color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:660px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:9px}
+.steps li{list-style:none;counter-increment:st;display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--txt2);line-height:1.7}
+.steps li::before{content:counter(st);flex:none;width:25px;height:25px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:var(--c,var(--feat));margin-top:1px}
+.steps li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+.prompt,.promptbox{background:#1d1d1f;border:1px solid #2c2c31;border-radius:10px;padding:13px 15px;margin-top:6px;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt b,.promptbox b{color:#fff}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <a class="navlink" href="../radio/" style="border-color:#a8c686" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <div class="logo">
+    <div class="dot">📓</div>
+    <div>Gemini Notebooks 地圖<small>MORNING LEARNING · EP36</small></div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋關鍵字：六大設定、簡報模板、學習教練、專案管理、共享來源、Prompt…" autocomplete="off">
+  </div>
+  <a class="navlink" href="ep36-notes.html">📝 課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">EP36 · 晨學講堂 · 2026</span>
+  <h1>Gemini Notebooks<br>5 種稀鬆平常的用法</h1>
+  <p class="sub">先學會<b>六大環境設定</b>把 AI 調教到懂你，再用五個真實情境把 Gemini 變成生活中的超級助理。<br>點進每一章，逐層展開<b>本集實際教到</b>的觀念、步驟與可複製 Prompt，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🎙️ 生成式AI應用電台・晨學講堂</span>
+    <span>📓 Gemini 筆記本</span>
+    <span>🧩 六大環境設定</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>4</b><span>大主題</span></div>
+  <div class="stat"><b>8</b><span>實戰技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 8 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--teal)" onclick="showChapter('base')">
+        <div class="glowline"></div><span class="emoji">📓</span>
+        <h3><em>CHAPTER 01</em>認識筆記本＋六大設定</h3>
+        <p>Gemini Notebooks 是什麼、和傳統筆記本差在哪，以及開口前先設好的六大環境設定。</p>
+        <div class="foot"><div class="mini"><i data-mini="base"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--purple)" onclick="showChapter('create')">
+        <div class="glowline"></div><span class="emoji">🎨</span>
+        <h3><em>CHAPTER 02</em>用法①②：簡報＋學習</h3>
+        <p>用法①打造簡報模板資料庫（設計總監上身）；用法②學習教練機器人（看懂你卡在哪）。</p>
+        <div class="foot"><div class="mini"><i data-mini="create"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--blue)" onclick="showChapter('manage')">
+        <div class="glowline"></div><span class="emoji">📋</span>
+        <h3><em>CHAPTER 03</em>用法③④：專案＋跨本</h3>
+        <p>用法③專案管理機器人（需求三分類＋本週待辦）；用法④跨筆記本對話（多本互相對照）。</p>
+        <div class="foot"><div class="mini"><i data-mini="manage"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--green)" onclick="showChapter('share')">
+        <div class="glowline"></div><span class="emoji">🔗</span>
+        <h3><em>CHAPTER 04</em>用法⑤＋Prompt 全集</h3>
+        <p>用法⑤共享來源（Gemini×ChatGPT 同一批資料交叉分析）；再附可直接複製的範例 Prompt。</p>
+        <div class="foot"><div class="mini"><i data-mini="share"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+
+    <div class="resources">
+      <h3>📦 <span>課程原始資料</span></h3>
+      <div class="res-grid">
+        <a href="ep36-notes.html"><span class="ic">📝</span><span><b>課堂筆記</b>五大用法＋完整 Prompt</span></a>
+        <a href="../radio/"><span class="ic">📻</span><span><b>直播電台系列</b>回系列總覽，一集一卡</span></a>
+        <a href="ep37-notes.html"><span class="ic">🧠</span><span><b>相關 EP37</b>與 AI 共行・RAG</span></a>
+        <a href="ep39-notes.html"><span class="ic">📔</span><span><b>相關 EP39</b>NotebookLM×Markdown</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-base" class="view" style="--c:var(--teal)"></section>
+  <section id="view-create" class="view" style="--c:var(--purple)"></section>
+  <section id="view-manage" class="view" style="--c:var(--blue)"></section>
+  <section id="view-share" class="view" style="--c:var(--green)"></section>
+</main>
+
+<footer>
+  本頁為 EP36「Gemini Notebooks 5 種稀鬆平常的用法」課後整理・介面沿用本站 EP38–46 互動式學習地圖<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2026｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+const DATA = {
+  base: {
+    key:'base', color:'var(--teal)', emoji:'📓', code:'CHAPTER 01', title:'認識筆記本＋六大設定',
+    intro:'先搞懂 Gemini Notebooks 是什麼、和傳統筆記本差在哪，再學會開口前先設好的六大環境設定。',
+    topics:[
+      {t:'認識 Gemini Notebooks', s:'內建 AI 的筆記型環境',
+       blocks:[
+        {h:'一句話',p:'<b>Gemini Notebooks ＝ Google 提供的 AI 筆記型環境</b>：在單一筆記本中與 Gemini 協作，撰寫、執行程式碼、分析資料並視覺化，重點是「AI 直接內建進筆記本，隨時協作」。'},
+        {h:'五個馬上上手場景',ul:['<b>整理筆記</b>：零散內容變有結構重點。','<b>研究分析</b>：丟資料請 AI 歸納趨勢。','<b>待辦清單</b>：討論轉成可追蹤任務。','<b>內容創作</b>：快速產草稿、文案、大綱。','<b>發想與規劃</b>：腦力激盪、規劃流程。']},
+        {h:'和傳統筆記本差在哪',table:{head:['面向','傳統筆記本','Gemini Notebooks'],rows:[['AI 協作','需切換工具','內建 Gemini，隨時協作'],['資料處理','自行寫程式','AI 協助生成與優化'],['視覺化','需自行處理','簡單指令即可產圖'],['易用性','設定較繁','開箱即用、直覺']]}},
+        {h:'核心心法',tip:'提問 ＋ 檔案來源 ＝ 更準確、完整、有依據的回覆。這是後面五種用法共同的底層邏輯。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep36-notes.html#sec-what" style="color:var(--teal)">筆記 1：認識 Gemini Notebooks</a>'}]},
+      {t:'六大環境設定', s:'角色／任務／資料／工作／輸出／限制',
+       blocks:[
+        {h:'先設定，再對話',p:'在開始對話前先設好環境，Gemini 才會更懂你、回得更精準。六格填好，等於先把 AI 的「工作合約」講清楚。'},
+        {h:'六大設定',table:{head:['設定','在做什麼','範例'],rows:[['①角色扮演','設定身分與專業背景','「你是一位資深行銷顧問」'],['②任務要求','描述目標、情境與重點','「幫我分析這份報告重點」'],['③資料來源','提供參考資料當依據','上傳 PDF／Excel／簡報'],['④工作事項','拆解成具體步驟','①整理②分析③建議'],['⑤輸出格式','指定呈現方式','條列／表格／簡報大綱'],['⑥回應限制','設邊界與注意事項','「僅事實不推測」「500 字內」']]}},
+        {h:'金句',tip:'六大設定齊全 → 輸出才會穩定、一致、可直接拿來用。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep36-notes.html#sec-env" style="color:var(--teal)">筆記 2：六大環境設定</a>'}]}
+    ]
+  },
+  create: {
+    key:'create', color:'var(--purple)', emoji:'🎨', code:'CHAPTER 02', title:'用法①②：簡報＋學習',
+    intro:'兩個最常用的情境：讓 Gemini 當簡報設計總監，以及當看得懂你學習狀況的學習教練。',
+    topics:[
+      {t:'用法①：簡報模板資料庫', s:'輸入主題→自動推薦風格、規劃版面',
+       blocks:[
+        {h:'六步流程',steps:['設定身份：簡報設計總監＋資訊圖表設計師＋模板管理專家。','建立風格資料庫：把風格整理成可搜尋、可比對、可推薦。','主題生成：輸入主題，自動推薦風格、規劃每頁、安排故事線。','資訊圖表轉換：長文字優先轉圖表，原則「圖>表>文字」。','自動推薦風格：依主題給前 3 名＋理由。','輸出規格與限制：先講規則，讓每次產出一致。']},
+        {h:'關鍵 Prompt',prompt:'請你扮演一位「國際級簡報設計總監＋資訊圖表設計師＋簡報模板資料庫管理專家」，依 主題、情境、對象、內容量、資料型態 自動判斷風格與版型。請維持：高級感、易閱讀、視覺層次、演講友善、白底黑字優先、重點放大、資訊圖表化。'},
+        {h:'記憶點',warn:'把風格變成「可管理、可推薦、可重複使用」的資料庫——一次建好，之後每個主題都能快速套用。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep36-notes.html#sec-u1" style="color:var(--purple)">筆記 3：簡報模板資料庫</a>'}]},
+      {t:'用法②：學習教練機器人', s:'不只摘要，而是幫你看懂卡在哪',
+       blocks:[
+        {h:'固定四塊輸出',table:{head:['區塊','做什麼'],rows:[['今天學到什麼','白話整理真正的重點'],['現在卡在哪','指出最可能混淆處'],['下一步 3 件事','只留最優先的動作'],['最容易再犯的錯','依錯誤紀錄提醒']]}},
+        {h:'第五塊',p:'再加「<b>回到 NotebookLM 可以補哪裡</b>」：摘要／提問／FAQ／學習指南／來源查找／時間軸。'},
+        {h:'核心 Prompt',prompt:'請根據這本 notebook 的內容整理今天的學習狀況：【今天學到什麼】【現在卡在哪】【下一步先做什麼(只列3件)】【最容易再犯的錯】【回到 NotebookLM 可以補哪裡】。限制：繁中、專有名詞翻白話、不照抄教材、資料不足請直說。'},
+        {h:'金句',tip:'不是抄內容，而是指出你真正學會了什麼、卡在哪、先做什麼。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep36-notes.html#sec-u2" style="color:var(--purple)">筆記 4：學習教練機器人</a>'}]}
+    ]
+  },
+  manage: {
+    key:'manage', color:'var(--blue)', emoji:'📋', code:'CHAPTER 03', title:'用法③④：專案＋跨本',
+    intro:'把一堆會議、需求、報價整理成能開會能執行的專案，還能讓多本筆記本互相對照。',
+    topics:[
+      {t:'用法③：專案管理機器人', s:'需求三分類＋本週待辦表',
+       blocks:[
+        {h:'六步流程',steps:['角色設定：專案整理助理，先整理狀況不急著給解法。','資料讀取：只用筆記本內資料，不腦補；不足要明說。','專案目標：5 句內講清楚問題、成果、範圍、限制、下一步。','需求分類：已確認／待確認／已超出範圍。','本週待辦：表格列任務＋窗口＋需要資料＋預期產出。','回應規範：繁中、白話、不照抄、不腦補、先整理再判斷。']},
+        {h:'需求三分類',table:{head:['分類','定義'],rows:[['已確認需求','客戶明確提出、有依據，可執行'],['待確認需求','有提到但細節時程預算不清'],['已超出範圍','超出原提案／報價／時程']]}},
+        {h:'本週待辦 Prompt',prompt:'請用表格列出本週最重要待辦：| 優先順序 | 待辦事項 | 對應窗口 | 需要資料 | 預期產出 | 備註 |。只列最重要的，窗口不明標「待確認」。'},
+        {h:'三不原則',warn:'不照抄原文、不腦補需求、不先給解法——先把狀況整理清楚，才是這隻機器人的價值。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep36-notes.html#sec-u3" style="color:var(--blue)">筆記 5：專案管理機器人</a>'}]},
+      {t:'用法④：跨筆記本對話', s:'把多本筆記本當來源互相對照',
+       blocks:[
+        {h:'早期 vs 現在',table:{head:['','早期限制','現在可以'],rows:[['運作','每本各自獨立','把多本當參考來源'],['能做','需人工切換','比較差異、整合、交叉參照']]}},
+        {h:'基本流程',p:'開啟 Gemini／Gem → 指定筆記本 A、B 為來源 → 提出比較問題 → 取得整合回覆。'},
+        {h:'應用情境',ul:['研究資料對照、課程內容整合。','專案版本比較、跨主題知識整理。']},
+        {h:'範例 Prompt',prompt:'請把筆記本 A 與筆記本 B 當作來源，整理兩者的重點差異、共同點，以及可以互相搭配應用的地方。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep36-notes.html#sec-u4" style="color:var(--blue)">筆記 6：跨筆記本對話</a>'}]}
+    ]
+  },
+  share: {
+    key:'share', color:'var(--green)', emoji:'🔗', code:'CHAPTER 04', title:'用法⑤＋Prompt 全集',
+    intro:'讓 Gemini 與 ChatGPT 共用同一批資料交叉分析，再帶走可直接複製的範例 Prompt。',
+    topics:[
+      {t:'用法⑤：共享來源', s:'Gemini×ChatGPT 同一批資料',
+       blocks:[
+        {h:'概念',p:'把文件集中放在<b>雲端空間</b>，Gemini 與 ChatGPT 都可讀取相同來源——分析角度不同，但依據可以一致。'},
+        {h:'傳統 vs 共享',table:{head:['面向','傳統做法','共享來源'],rows:[['資料準備','每工具各自上傳','集中放雲端一次備妥'],['脈絡背景','要重複建立','不必每次重建'],['切換工具','容易不同步','可交叉參考、比對回答']]}},
+        {h:'可共享來源',ul:['文件／PDF、簡報／試算表。','筆記／逐字稿、網站連結或整理後資料。']},
+        {h:'範例 Prompt',prompt:'請根據雲端空間中的共同來源，分別用 Gemini 與 ChatGPT 協助分析重點、比較差異，並整理可互相搭配應用的地方。'},
+        {h:'金句',tip:'用同一批來源驅動不同 LLM，不必重複準備，也更容易交叉分析。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep36-notes.html#sec-u5" style="color:var(--green)">筆記 7：共享來源</a>'}]},
+      {t:'範例 Prompt 全集', s:'照情境挑一段貼進 Notebook',
+       blocks:[
+        {h:'六大設定一次到位',prompt:'1.角色：資深市場研究與策略分析顧問。 2.任務：分析「台灣生成式 AI 工具應用趨勢」，聚焦公務機關、教育研究、自動化辦公、AI Agent。 3.資料來源：優先參考上傳檔案，外部補充需標示。 4.工作：①整理②分析③歸納場景④未來方向⑤可執行建議。 5.輸出：標題＋摘要3~5點＋表格＋條列＋一句總結(Markdown)。 6.限制：繁中、避術語、不虛構、2000字內、重點加粗。'},
+        {h:'學習教練｜先讀懂再整理',prompt:'請優先參考這本 notebook 的資料，不要憑空推測。整理：教材核心觀念、我筆記重點、錯誤反覆出現的問題、操作截圖的卡關、我可能尚未理解的地方。資料不足請直說「目前資料不足」。'},
+        {h:'專案｜需求三分類',prompt:'請將需求分成三類：【已確認】明確且有依據；【待確認】範圍細節時程預算不清；【已超出範圍】超出原提案報價時程。每項用白話改寫，不要複製原文。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep36-notes.html#sec-prompts" style="color:var(--green)">筆記 8：範例 Prompt 全集</a>'}]}
+    ]
+  }
+};
+const ORDER = ['base','create','manage','share'];
+const $ = s=>document.querySelector(s);
+function renderChapter(ch){
+  const d=DATA[ch];const next=ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];const prev=ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html=`<div class="chapter-head"><span class="emoji">${d.emoji}</span><div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div></div>`;
+  d.topics.forEach((tp,i)=>{const id=`${ch}-${i}`;
+    html+=`<div class="topic" id="topic-${id}"><div class="topic-head" onclick="toggleTopic('${id}')"><span class="num">${i+1}</span><h4>${tp.t}<small>${tp.s}</small></h4><input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)"><span class="chev">▶</span></div><div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{html+=`<div class="block"><h5>${b.h}</h5>`;
+      if(b.p)html+=`<p>${b.p}</p>`;
+      if(b.ul)html+=`<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps)html+=`<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.table)html+=`<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.prompt)html+=`<div class="prompt">${b.prompt}</div>`;
+      if(b.tip)html+=`<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn)html+=`<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html+=`</div>`;});
+    html+=`</div></div></div>`;});
+  html+=`<div class="chapnav"><a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a><a onclick="showHome()" style="text-align:center">回總覽<b>🏠 四大主題</b></a><a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a></div>`;
+  $('#view-'+ch).innerHTML=html;
+}
+ORDER.forEach(renderChapter);
+function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('#view-'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function showHome(){switchView('home');$('#crumbs').style.display='none';clearSearch();}
+function showChapter(ch){switchView(ch);$('#crumbs').style.display='flex';$('#crumbHere').textContent=`${DATA[ch].emoji} ${DATA[ch].title}`;clearSearch();syncChecks();}
+function toggleTopic(id){$('#topic-'+id).classList.toggle('open');}
+function openTopic(ch,i){showChapter(ch);const el=$('#topic-'+ch+'-'+i);el.classList.add('open');setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+const KEY='ep36-skills-v1';
+const store=()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){const s=store();if(val)s[id]=1;else delete s[id];localStorage.setItem(KEY,JSON.stringify(s));updateProgress();}
+const TOTAL=ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){const done=Object.keys(store()).length;const pct=Math.round(done/TOTAL*100);$('#progFill').style.width=pct+'%';$('#progText').textContent=`${done} / ${TOTAL} 項技能已掌握`;$('#statDone').textContent=done;$('#statPct').textContent=pct+'%';ORDER.forEach(ch=>{const sub=DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;const el=document.querySelector(`[data-mini="${ch}"]`);if(el)el.style.width=Math.round(sub/DATA[ch].topics.length*100)+'%';});}
+function syncChecks(){const s=store();document.querySelectorAll('input[data-skill]').forEach(cb=>{cb.checked=!!s[cb.dataset.skill];});}
+function resetProgress(){if(confirm('確定要清空所有打勾進度嗎？')){localStorage.removeItem(KEY);syncChecks();updateProgress();}}
+function stripTags(s){return s.replace(/<[^>]+>/g,'');}
+const INDEX=[];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{let body=tp.s+' ';tp.blocks.forEach(b=>{if(b.p)body+=stripTags(b.p)+' ';if(b.ul)body+=b.ul.map(stripTags).join(' ')+' ';if(b.steps)body+=b.steps.map(stripTags).join(' ')+' ';if(b.tip)body+=stripTags(b.tip)+' ';if(b.warn)body+=stripTags(b.warn)+' ';if(b.prompt)body+=stripTags(b.prompt)+' ';if(b.table)body+=b.table.rows.flat().map(stripTags).join(' ')+' ';});INDEX.push({ch,i,title:tp.t,body});}));
+$('#searchInput').addEventListener('input',e=>{const q=e.target.value.trim();const box=$('#searchResults');if(!q){box.classList.remove('show');box.innerHTML='';return;}const hits=INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));box.classList.add('show');if(!hits.length){box.innerHTML=`<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：六大設定、學習教練、專案、共享來源）</div>`;return;}const hl=s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);box.innerHTML=hits.map(x=>{const pos=x.body.toLowerCase().indexOf(q.toLowerCase());const snip=x.body.substr(Math.max(0,pos-20),90);return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})"><div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div><h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;}).join('');});
+function clearSearch(){$('#searchInput').value='';$('#searchResults').classList.remove('show');$('#searchResults').innerHTML='';}
+(function(){const box=$('#stars');for(let i=0;i<70;i++){const s=document.createElement('i');s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';s.style.animationDelay=(Math.random()*3)+'s';s.style.transform=`scale(${.5+Math.random()*1.5})`;box.appendChild(s);}})();
+syncChecks();updateProgress();
+</script>
+</body>
+</html>

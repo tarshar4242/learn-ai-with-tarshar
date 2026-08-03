@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP17 課堂筆記｜從零到上線：打造你的第一個 Google 擴充功能</title>
+<meta name="description" content="晨學講堂 EP17 課堂筆記：什麼是擴充功能、手刻理解派 vs AI 委外派、VS Code 課前準備、manifest/popup/scripts/styles 身體結構、未封裝載入與反查原始碼、把擴充功能變成 AI 工作流（自動填入 Prompt、多平台策略、Prompts 小書僮）。含 22 張課程簡報原圖。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#c2620c; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#7c3aed; --pink:#b25269; --green:#3f8560; --orange:#c2620c; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px;border-left:none}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+.note.violet{background:#F3EFFB;border-color:#DFD2F0;color:#5a34a8}
+.note.rose{background:#FBEEF1;border-color:#F0D2DB;color:#9c2f52}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.prompt{position:relative;background:#1d1d1f;border-radius:10px;padding:15px 16px;margin:12px 0;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt .tag{display:inline-block;font-size:11px;letter-spacing:.06em;color:#c9c4ff;border:1px solid #3a3a40;border-radius:6px;padding:2px 9px;margin-bottom:8px}
+.prompt b{color:#fff}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.embed{margin:14px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000}
+.embed iframe{display:block;width:100%;aspect-ratio:16/9;border:0}
+.embed .cap{font-size:12.5px;color:var(--ink3);padding:10px 16px;background:var(--paper);border-top:1px solid var(--line)}
+.ts{display:inline-block;font-family:"Cascadia Code",Consolas,monospace;font-weight:700;font-size:12px;color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,#fff);border-radius:5px;padding:2px 8px;margin-right:7px;letter-spacing:.4px;vertical-align:middle}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+.layers{display:grid;gap:10px;margin:14px 0}
+.lyr{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:13px 15px;background:#fff}
+.lyr .n{flex:none;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--accent)}
+.lyr h4{margin:0 0 3px;font-size:14.5px}
+.lyr p{font-size:13px;margin:0}
+.sub{color:var(--ink2)}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#eecba0" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP17 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="ep17-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 晨學講堂 · EP17</span>
+  <h1>從零到上線：打造你的第一個 <span>Google 擴充功能</span></h1>
+  <p class="lead">核心心法：<b>先存在，再談功能</b>。從 Chrome 右上角那個小小的擴充功能圖示出發，拆解它的「身體結構」——manifest.json（身分證）、popup.html（介面）、scripts（邏輯）、styles（易讀性），再學會把提示詞庫變成「一個畫面控制多個 AI」的效率面板，讓擴充功能從「別人做的工具」變成「你能隨需求調整的工作流載體」。</p>
+  <div class="meta">
+    <span>📅 01月20日（二）06:30-07:30 直播</span>
+    <span>🗂️ 教材：課程筆記 + 33 頁簡報 + Prompts 小書僮範例</span>
+    <span>🧩 主題：Chrome 擴充功能開發</span>
+    <span>🖼️ 22 張課程簡報原圖</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-what">1. 什麼是擴充功能</a>
+  <a href="#sec-path">2. 手刻理解派 vs AI 委外派</a>
+  <a href="#sec-setup">3. 課前準備：安裝 VS Code</a>
+  <a href="#sec-body">4. 身體結構：manifest／popup／scripts／styles</a>
+  <a href="#sec-load">5. 從下載到可改：未封裝載入</a>
+  <a href="#sec-flow">6. 變成 AI 工作流：自動填入與多平台策略</a>
+  <a href="#sec-src">7. 資料來源與製作說明</a>
+</nav>
+
+<article>
+
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--amber))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>EP17「從零到上線：打造你的第一個 Google 擴充功能」</td></tr>
+    <tr><th>頻道</th><td>生成式 AI 應用電台・晨學講堂</td></tr>
+    <tr><th>直播時間</th><td>01月20日（二）06:30-07:30</td></tr>
+    <tr><th>教材</th><td>講師撰寫的課程筆記文件（5 節）＋官方課程簡報 <b>33 頁</b>＋「Prompts 小書僮」擴充功能範例 zip</td></tr>
+    <tr><th>課程用到連結</th><td>Visual Studio Code（code.visualstudio.com）／Chrome 擴充功能（開發人員模式 chrome://extensions/）／AI ZOO／BananaNL</td></tr>
+    <tr><th>一句話先懂</th><td><b>先存在，再談功能</b>：manifest.json 是入場券，沒有它，後面寫再多都沒用。</td></tr>
+  </table></div>
+  <figure class="shot">
+    <img src="ep17-img/slide01.jpg" alt="EP17 課程封面：從零到上線，打造你的第一個 Google 擴充功能" loading="lazy">
+    <figcaption>簡報封面｜Chrome Extension 最小結構一覽：manifest.json／popup.html／popup.js／content.js／icon.png。</figcaption>
+  </figure>
+  <div class="note blue">💡 本頁逐節整理課程筆記文件，並對照簡報 33 頁逐頁核對；簡報原圖直接嵌入本頁重點段落。內容為<b>真實課程內容</b>，未經改寫杜撰。</div>
+</section>
+
+<section class="chapter" id="sec-what">
+  <span class="chip" style="background:linear-gradient(90deg,#c2620c,#9c7b23)">CHAPTER 01</span>
+  <h2 class="ct">1. 打造第一個 Google 擴充功能：從「會用」到「會改」</h2>
+  <p class="cd">本課程聚焦在 Chrome 右上角的擴充功能（Extension），把它視為日常工作中最常用的「小工具入口」。透過擴充功能，你可以把常用提示詞、固定流程、快速操作做成按鈕化的工具，讓重複性工作更快完成。課程的核心不是炫技，而是建立一套<b>可理解、可複用、可延伸</b>的擴充功能思維，讓學員從使用者進階到能客製化的人。</p>
+  <figure class="shot">
+    <img src="ep17-img/slide07.jpg" alt="不用重裝瀏覽器，只要安裝擴充功能就能做到" loading="lazy">
+    <figcaption>簡報｜不用重裝瀏覽器，只要安裝擴充功能，就能做到：自動化重複操作、改變網頁行為、在特定網站上加功能、協助資料整理分析提醒。</figcaption>
+  </figure>
+  <figure class="shot">
+    <img src="ep17-img/slide08.jpg" alt="常見的擴充功能能做什麼：四宮格" loading="lazy">
+    <figcaption>簡報｜常見的擴充功能能做什麼？① 操作網頁內容（content script）② 在瀏覽器上新增功能按鈕（popup.html/js）③ 背景自動運作（background/service worker）④ 與瀏覽器深度整合（browser API）。</figcaption>
+  </figure>
+  <div class="twrap"><table>
+    <tr><th>比較項目</th><th>一般網站</th><th>瀏覽器擴充功能</th></tr>
+    <tr><td>是否依附瀏覽器</td><td>否</td><td>是</td></tr>
+    <tr><td>是否能操作其他網站</td><td>❌</td><td>✅（有權限時）</td></tr>
+    <tr><td>是否能監聽分頁事件</td><td>❌</td><td>✅</td></tr>
+    <tr><td>是否可背景執行</td><td>❌</td><td>✅</td></tr>
+    <tr><td>使用對象</td><td>所有人</td><td>安裝者（本機使用）</td></tr>
+  </table></div>
+</section>
+
+<section class="chapter" id="sec-path">
+  <span class="chip" style="background:linear-gradient(90deg,#9c7b23,#c2620c)">CHAPTER 02</span>
+  <h2 class="ct">2. 兩條路都能到終點：手刻理解派 vs AI 委外派</h2>
+  <p class="cd">課程先讓學員掌握兩種典型作法：</p>
+  <ul class="pt">
+    <li><b>塗法煉鋼（手刻路線）：</b>逐步理解每個檔案與設定的作用，適合想扎實掌握結構的人。</li>
+    <li><b>AI 委外路線：</b>把需求與框架交給 AI 生成初版，再由人負責檢查與微調。</li>
+  </ul>
+  <div class="note gold">⚠️ 兩條路並行的目的，是讓學員能依自己時間、能力與目標選擇策略，但<b>不論走哪一條，都必須先看懂架構，才能真正掌控工具</b>。</div>
+</section>
+
+<section class="chapter" id="sec-setup">
+  <span class="chip" style="background:linear-gradient(90deg,#3b6bb0,#c2620c)">CHAPTER 03</span>
+  <h2 class="ct">3. 課前準備：安裝 VS Code</h2>
+  <figure class="shot">
+    <img src="ep17-img/slide03.jpg" alt="Download Visual Studio Code 官網下載頁" loading="lazy">
+    <figcaption>簡報｜到 code.visualstudio.com/download 依作業系統（Windows／Linux .deb .rpm／macOS）下載安裝。</figcaption>
+  </figure>
+  <figure class="shot">
+    <img src="ep17-img/slide04.jpg" alt="在 VS Code 中安裝繁體中文語言套件五步驟" loading="lazy">
+    <figcaption>簡報｜VS Code 中文化 5 步驟：① 點選「延伸模組」圖示 ② 搜尋「Chinese」③ 選擇「Chinese (Traditional) Language Pack」④ 點選「安裝」⑤ 重啟並切換語言。安裝後會自動切換為繁體中文介面，若未自動切換可用 Ctrl+Shift+P 搜尋「Configure Display Language」手動變更。</figcaption>
+  </figure>
+</section>
+
+<section class="chapter" id="sec-body">
+  <span class="chip" style="background:linear-gradient(90deg,#c2620c,#b5476a)">CHAPTER 04</span>
+  <h2 class="ct">4. 擴充功能的「身體結構」：入場券、介面與動作腳本</h2>
+  <p class="cd">擴充功能可以用「人體」來理解：<b>Manifest.json 是入場券</b>，也是瀏覽器辨識與允許執行的核心設定；<b>popup.html 是使用者點開看到的介面</b>，像一個小網頁；<b>JavaScript（如 popup.js / content script）</b>則負責讓按鈕「真的做事」，例如複製、貼上、填入內容，甚至與特定網站互動。當你能分清楚這三層，你就知道哪裡不能亂動、哪裡可以安全改，也能更快定位錯誤與調整方向。</p>
+
+  <h3>4.1 資料夾結構與必備檔案</h3>
+  <figure class="shot">
+    <img src="ep17-img/slide11.jpg" alt="my-first-extension 資料夾結構" loading="lazy">
+    <figcaption>簡報｜my-first-extension/ 底下：manifest.json（一定要有）、popup.html（有介面才需要）、popup.js、content.js（要操作網頁才需要）、icon.png。</figcaption>
+  </figure>
+  <figure class="shot">
+    <img src="ep17-img/slide12.jpg" alt="必備 manifest.json，其餘檔案依需求" loading="lazy">
+    <figcaption>簡報｜Chrome 擴充功能本質是資料夾，但不是每個檔案都必須，只有 manifest.json 一定要有，否則 Chrome 根本不認得你。</figcaption>
+  </figure>
+  <figure class="shot">
+    <img src="ep17-img/slide14.jpg" alt="為什麼一定要先寫 manifest.json：門票比喻" loading="lazy">
+    <figcaption>簡報｜Manifest 是門票：沒有它，後面寫再多都沒用。它告訴 Chrome「我是誰／我要做什麼／我要用哪些權限」——這是 Chrome 跟你溝通的唯一方式。（非程式背景的人，用「身分證」比喻最容易理解。）</figcaption>
+  </figure>
+  <div class="prompt"><span class="tag">最小 manifest.json 範例</span>{
+  "manifest_version": 3,
+  "name": "我的第一個擴充功能",
+  "version": "1.0",
+  "action": {
+    "default_title": "點我",
+    "default_popup": "popup.html"
+  }
+}</div>
+
+  <h3>4.2 Popup.html vs Popup.js：畫面與行為</h3>
+  <figure class="shot">
+    <img src="ep17-img/slide18.jpg" alt="Popup.html vs Popup.js 角色對照表" loading="lazy">
+    <figcaption>簡報｜一句話記憶：popup.html 負責「畫面」（長什麼樣），popup.js 負責「行為」（點了會怎樣）。刪掉 popup.html 介面會消失／空白；刪掉 popup.js 介面還在但按鈕沒反應。</figcaption>
+  </figure>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">項目</th><th>popup.html（UI 介面骨架）</th><th>popup.js（功能邏輯與互動）</th></tr>
+    <tr><td>定位</td><td>負責內容：按鈕、文字、輸入框、排版</td><td>負責內容：事件監聽、資料處理、呼叫 API、訊息傳遞</td></tr>
+    <tr><td>典型語法</td><td>HTML 標籤（&lt;button&gt;）</td><td>JavaScript（addEventListener）</td></tr>
+    <tr><td>常見錯誤</td><td>忘記 &lt;meta charset="UTF-8"&gt;、檔名路徑錯</td><td>檔案未引入、事件綁不到 id、編碼造成中文亂碼</td></tr>
+    <tr><td>教學口訣</td><td>「畫出來」</td><td>「動起來」</td></tr>
+  </table></div>
+  <div class="note gold">⚠️ 重要提醒（新手最常誤會的一句）：popup 是「臨時視窗」，關掉就結束，不適合存重要資料——重要資料要用 chrome.storage 或交給 background/service worker。</div>
+
+  <h3>4.3 Scripts：程式邏輯的真正所在地</h3>
+  <figure class="shot">
+    <img src="ep17-img/slide20.jpg" alt="從會跑到能長大：Scripts 登場" loading="lazy">
+    <figcaption>簡報｜前面的 popup 比較像「門口」，可以接收點擊，但不適合承載所有功能。當功能一多，popup.js 越寫越長、找不到邏輯在哪、改一行整個壞掉——Scripts 就是為了處理這個問題而出現的。</figcaption>
+  </figure>
+  <figure class="shot">
+    <img src="ep17-img/slide21.jpg" alt="Scripts 程式邏輯的真正所在地" loading="lazy">
+    <figcaption>簡報｜一句話記憶：popup（入口）→ scripts（工廠）。popup.js 不應該「自己做完所有事情」，它比較像是接到使用者指令，然後交辦給對的人處理；Scripts 資料夾就是把這些「對的人」集中管理。</figcaption>
+  </figure>
+  <figure class="shot">
+    <img src="ep17-img/slide22.jpg" alt="Scripts 資料夾的角色分工" loading="lazy">
+    <figcaption>簡報｜Scripts 分工：popup.js（介面互動、事件入口，「使用者點了什麼」）／content.js（與網頁互動 DOM，「網頁發生了什麼」）／formulas.js（計算、邏輯、共用功能，「資料怎麼算、怎麼處理」）。原則：一個檔案只負責一種類型的事情，會決定你未來專案會不會亂。</figcaption>
+  </figure>
+  <figure class="shot">
+    <img src="ep17-img/slide23.jpg" alt="popup.js 的定位其實非常有限" loading="lazy">
+    <figcaption>簡報｜popup.js 適合做：接收點擊、顯示 UI、呼叫其他程式；不適合做：複雜邏輯、重複使用的功能、與網頁深度互動。如果把所有功能都塞在 popup.js：會很快寫不下去，也很難教、很難改、很難擴充。</figcaption>
+  </figure>
+
+  <h3>4.4 Styles：讓功能「看得懂、用得久」</h3>
+  <figure class="shot">
+    <img src="ep17-img/slide31.jpg" alt="Styles popup.css 讓功能看得懂用得久" loading="lazy">
+    <figcaption>簡報｜Before popup.css：按鈕文字雜亂重疊，看不懂、不想用；After popup.css：分頁、卡片、Modal 層次清楚，看得懂、用得久。popup.css 控制重點：固定 popup 尺寸（寬高、捲軸）、Header/Tabs/Card/Modal 的層次、Hover/Active/Focus 的操作回饋。</figcaption>
+  </figure>
+  <div class="golden"><div class="q">「UI 出問題時，九成不是 JS，而是 CSS。」</div><div class="a">—— 講者說明：Debug 順序建議先用 DevTools 看元素有沒有出現，再看是不是被 overflow: hidden 蓋掉，最後才懷疑 JS 沒跑。</div></div>
+  <figure class="shot">
+    <img src="ep17-img/slide32.jpg" alt="Styles 常見問題與修正方式" loading="lazy">
+    <figcaption>簡報｜三個常見問題：① popup 被截斷／內容看不到（原因：popup 高度寫死、overflow 設錯 → 修正：max-height、overflow-y: auto）② 字太擠、閱讀困難（原因：font-size/line-height 沒設好 → 修正：調整 line-height 與卡片間距）③ 點了沒感覺（原因：hover/active 狀態不明顯 → 修正：.hover、.active、.focus 樣式一定要有）。</figcaption>
+  </figure>
+  <figure class="shot">
+    <img src="ep17-img/slide33.jpg" alt="Icons：使用者對擴充功能的第一印象" loading="lazy">
+    <figcaption>簡報｜Icons 角色：16×16（工具列）／32×32／48×48／128×128（商店、管理頁）。修改流程：準備新 PNG（背景透明、正方形）→ 覆蓋 icon16/32/48/128.png → 確認 manifest.json 有正確指到 icons → 重新 Reload。講者收尾說明：Icon 與 Styles 不會讓功能「更強」，但會決定使用者覺得這個工具「值不值得信任、會不會持續用」。</figcaption>
+  </figure>
+</section>
+
+<section class="chapter" id="sec-load">
+  <span class="chip" style="background:linear-gradient(90deg,#3f8560,#c2620c)">CHAPTER 05</span>
+  <h2 class="ct">5. 從「下載」到「可改」：未封裝載入與反查原始碼觀念</h2>
+  <p class="cd">很多好用的擴充功能不一定在商店上架，常見來源是作者提供的檔案或 GitHub 專案。課程會示範如何在開發人員模式下「載入未封裝項目」，用整個資料夾安裝到瀏覽器中，讓你可以直接看到並修改原始碼。即使沒有公開 GitHub，也能透過已安裝的檔案結構回推其設計邏輯，理解它如何運作，進而替換成你要的 AI 平台或工作流程。</p>
+  <figure class="shot">
+    <img src="ep17-img/slide13.jpg" alt="按載入未封裝項目選資料夾" loading="lazy">
+    <figcaption>簡報｜chrome://extensions/ → 開啟「開發人員模式」→ 按「載入未封裝項目」選資料夾（提醒：選的是「資料夾」，不是選 manifest.json）。</figcaption>
+  </figure>
+  <figure class="shot">
+    <img src="ep17-img/slide17.jpg" alt="避坑指南：Reload 與編碼" loading="lazy">
+    <figcaption>簡報｜最常卡的兩個地方：① 改完檔案一定要 Reload（chrome://extensions → 重新載入圖示）② 中文亂碼 99% 是檔案不是 UTF-8（manifest/html/js 都要是 UTF-8）。仍怪怪的終極解法：移除擴充功能 → 關 Chrome → 重新載入未封裝項目。</figcaption>
+  </figure>
+</section>
+
+<section class="chapter" id="sec-flow">
+  <span class="chip" style="background:linear-gradient(90deg,#c2620c,#5645D4)">CHAPTER 06</span>
+  <h2 class="ct">6. 把擴充功能變成你的 AI 工作流</h2>
+  <p class="cd">課程的落點會回到實務應用：最基本的是把提示詞做成可複製／可填入的按鈕，形成個人化提示詞庫；進階則可做成「一個畫面控制多個 AI」的操作面板，同時對 ChatGPT、Claude、Gemini 等模型發問，加速比較與決策。當你掌握結構後，擴充功能不再只是別人做的工具，而是你可以隨需求調整的工作流載體，真正做到<b>「先懂架構，再談交給 AI 加速」</b>。</p>
+
+  <h3>6.1 第一個真正有感的功能：自動填入 Prompt</h3>
+  <figure class="shot">
+    <img src="ep17-img/slide24.jpg" alt="第一個真正有感的功能：自動填入 Prompt" loading="lazy">
+    <figcaption>簡報｜使用者在 popup 點「填入」→ Prompt 直接出現在 AI 網頁輸入框。講者說明：到這一刻使用者會第一次明確感覺到差別——不是「我有一個好看的 popup」，而是「它幫我省了一個動作」；而這個能力，完全來自 Scripts 的分工設計。</figcaption>
+  </figure>
+  <h4>content.js 逐段拆解：怎麼「真的把 Prompt 塞進網頁」</h4>
+  <figure class="shot">
+    <img src="ep17-img/slide25.jpg" alt="content.js 四層拆解：Listener、Finder、Inserter、Trigger" loading="lazy">
+    <figcaption>簡報｜核心邏輯：popup 送來一段文字 → content.js 找到網頁的輸入框 → 把文字寫進去 → 觸發網站的 input 事件，讓前端框架認得「文字真的變了」。四層：① 接收指令 Listener（chrome.runtime.onMessage）② 抓輸入框 Finder（document.querySelector）③ 值替換 Inserter（inputBox.value = ...）④ 觸發前端框架 Trigger（dispatchEvent(new Event('input'))）。</figcaption>
+  </figure>
+
+  <h3>6.2 每個平台怎麼塞：代表平台策略 + 最後保底</h3>
+  <figure class="shot">
+    <img src="ep17-img/slide27.jpg" alt="核心：策略式嘗試 Strategy Pattern" loading="lazy">
+    <figcaption>簡報｜策略陣列（準備好的工具箱）：先試 ChatGPT → 再試 Claude → 再試 Gemini → … → 最後才走 insertGeneric() 當保底。執行流程：for loop 逐個試策略，成功就 return true，全部失敗才 return false。白話說明：不是寫死「只支援 ChatGPT」，而是「我看你現在在哪個站，就用那個站最穩的塞文字方式」。</figcaption>
+  </figure>
+  <figure class="shot">
+    <img src="ep17-img/slide28.jpg" alt="每個平台怎麼塞：ChatGPT/Claude/Gemini/Copilot 策略實例與 insertGeneric 保底" loading="lazy">
+    <figcaption>簡報｜代表平台策略實例：(A) ChatGPT 優先找 #prompt-textarea，依 contenteditable 或 textarea 分流處理，並用 React Native Value Setter 這一招觸發 dispatchEvent。(B) Claude / Gemini 為富文本編輯器（ProseMirror 或 rich-textarea），走 Focus → 改內容 → dispatch input event。(C) Copilot 特例：Shadow DOM，像俄羅斯娃娃一層一層挖進去（cib-serp → cib-action-bar → cib-text-input → textarea）。最後保底 insertGeneric()：先掃所有可用 textarea，再掃所有 contenteditable，加上 isVisible() 避免抓到隱藏元素，維持基本可用性。</figcaption>
+  </figure>
+
+  <h3>6.3 如果想要「改自己 prompts」要怎麼改</h3>
+  <figure class="shot">
+    <img src="ep17-img/slide29.jpg" alt="如果想要改自己 prompts 要怎麼改：formulas.js 結構" loading="lazy">
+    <figcaption>簡報｜formulas.js 的 PROMPT_FORMULAS 物件是核心入口：① 改某一個 Prompt 的內容（template）：找到該 id，修改該筆的 template ② 新增一個 Prompt（新增一張卡片）：在某分類的 formulas: [] 陣列裡加一筆物件，Popup.js 會逐項渲染成卡片 ③ 新增一個分類（一個新分頁 tab）：在 PROMPT_FORMULAS 最外層新增一個 key，Popup.js 的 renderTabs() 會自動產生新 tab。</figcaption>
+  </figure>
+  <div class="note steel">💡 本集提供「Prompts 小書僮」擴充功能範例（zip），架構即依此 formulas.js 模式設計，可直接載入未封裝項目安裝來對照課堂內容操作。</div>
+</section>
+
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5a5866)">SOURCES</span>
+  <h2 class="ct">7. 資料來源與製作說明</h2>
+  <ul class="pt">
+    <li><b>原始教材：</b>EP17「從零到上線：打造你的第一個 Google 擴充功能」講師撰寫的完整課程筆記文件（5 節）＋官方課程簡報 33 頁＋「Prompts 小書僮」擴充功能範例 zip。</li>
+    <li><b>製作方式：</b>下載原始 pptx，取出每頁內建的設計背景圖（33 頁中 26 頁為圖文設計頁，已完整保留原圖），逐頁親眼判讀並比對課程筆記文件文字內容，整理成本頁章節。內容為<b>真實課程內容</b>，未經改寫杜撰。</li>
+    <li><b>誠實聲明：</b>簡報中部分純標題／過場頁（無內嵌點陣背景圖）之文字內容已整合進對應章節說明中；本集資料夾錄影暫未逐句轉寫，<b>逐字稿時間碼</b>暫缺，如日後開放取得可再補入。</li>
+    <li><b>介面參考：</b>頁面採全站現行「乾淨白底編輯風」版型（沿用 EP38 課堂筆記頁架構）。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  EP17「從零到上線：打造你的第一個 Google 擴充功能」課堂筆記・2026/07 整理<br>
+  🍀 Learn AI with Tarshar｜搭配 <a href="ep17-ai-skills.html">互動技能地圖</a> 使用效果最佳
+</footer>
+
+</body>
+</html>

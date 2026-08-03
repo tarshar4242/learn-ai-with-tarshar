@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP42 課堂筆記｜各大主流大型語言模型（ChatGPT、Gemini、Claude）API 申請與應用</title>
+<meta name="description" content="晨學講堂 EP42 課堂筆記：API 是什麼、如何取得 Key、用 Google Colab 最小測試、三類常見錯誤、Token 與費用、三項安全設定，以及 OpenRouter、OpenAI、Gemini、Claude 的申請與比較。依官方課程簡報與課堂筆記整理。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#3b6bb0; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px;border-left:none}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+.note.violet{background:#F3EFFB;border-color:#DFD2F0;color:#5a34a8}
+.note.rose{background:#FBEEF1;border-color:#F0D2DB;color:#9c2f52}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.prompt{position:relative;background:#1d1d1f;border-radius:10px;padding:15px 16px;margin:12px 0;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt .tag{display:inline-block;font-size:11px;letter-spacing:.06em;color:#c9c4ff;border:1px solid #3a3a40;border-radius:6px;padding:2px 9px;margin-bottom:8px}
+.prompt b{color:#fff}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.embed{margin:14px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000}
+.embed iframe{display:block;width:100%;aspect-ratio:16/9;border:0}
+.embed .cap{font-size:12.5px;color:var(--ink3);padding:10px 16px;background:var(--paper);border-top:1px solid var(--line)}
+.ts{display:inline-block;font-family:"Cascadia Code",Consolas,monospace;font-weight:700;font-size:12px;color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,#fff);border-radius:5px;padding:2px 8px;margin-right:7px;letter-spacing:.4px;vertical-align:middle}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+.layers{display:grid;gap:10px;margin:14px 0}
+.lyr{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:13px 15px;background:#fff}
+.lyr .n{flex:none;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--accent)}
+.lyr h4{margin:0 0 3px;font-size:14.5px}
+.lyr p{font-size:13px;margin:0}
+.sub{color:var(--ink2)}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#a8c686" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP42 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="ep42-ai-skills.html">🗺️ 互動技能地圖</a>
+    </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 晨學講堂 · EP42</span>
+  <h1>各大主流大型語言模型<br><span>API 申請與應用</span></h1>
+  <p class="lead">把 <b>ChatGPT、Gemini、Claude 與 OpenRouter</b> 的 API 申請流程放在同一張地圖上：理解 API 是什麼、如何取得 Key、如何用 <b>Google Colab</b> 做最小測試，以及如何避免金鑰外洩與費用失控。本頁依<b>官方課程簡報（30 頁）與課堂筆記</b>整理。</p>
+  <div class="meta">
+    <span>📅 2026/06/19 直播</span>
+    <span>🗂️ 教材：30 頁課堂簡報</span>
+    <span>🔑 四家 API</span>
+    <span>🧪 Colab 最小測試</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-map">1. 一頁看懂全課程</a>
+  <a href="#sec-what">2. API 到底在做什麼</a>
+  <a href="#sec-router">3. OpenRouter：一把金鑰連多模型</a>
+  <a href="#sec-openai">4. OpenAI API 與 Colab 測試</a>
+  <a href="#sec-error">5. 成功畫面與三類錯誤</a>
+  <a href="#sec-token">6. Token 與三項安全設定</a>
+  <a href="#sec-choose">7. Gemini／Claude 與怎麼選</a>
+  <a href="#sec-action">8. 立即行動清單</a>
+  <a href="#sec-src">9. 資料來源與製作說明</a>
+</nav>
+
+<article>
+
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--purple))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>EP42_「各大主流大型語言模型（ChatGPT、Gemini、Claude）API 申請與應用」</td></tr>
+    <tr><th>頻道</th><td>生成式 AI 應用電台・晨學講堂</td></tr>
+    <tr><th>直播日期</th><td>2026/06/19（五）晚間直播</td></tr>
+    <tr><th>教材</th><td>官方課程簡報 <b>30 頁</b>＋課堂筆記</td></tr>
+    <tr><th>一句話先懂</th><td>API 讓你的<b>程式</b>直接呼叫模型（而不是開網頁聊天）。這堂課教你在 <b>Google Colab</b> 用最小程式跑一次成功請求，並把金鑰、Token 與費用管好。</td></tr>
+  </table></div>
+
+  <h3>🎬 錄影回放</h3>
+  <div class="embed">
+    <iframe src="https://drive.google.com/file/d/1yUtZ8e-XDKd5PhH1XCW4OWAtrjv5Ucgg/preview" allow="autoplay" loading="lazy" title="EP42 錄影回放"></iframe>
+    <div class="cap">EP42 各大模型 API 申請應用 課堂錄影 — 需登入有觀看權限的 Google 帳號。</div>
+  </div>
+  <div class="note blue">💡 本頁以<b>官方課程簡報原文與課堂筆記</b>逐節整理（真實課程內容，非推測）；投影片編號對應簡報第 N 頁。示範操作的螢幕截圖與逐字稿時間碼待錄影開通授權後補入。</div>
+</section>
+
+<section class="chapter" id="sec-map">
+  <span class="chip" style="background:linear-gradient(90deg,var(--cyan),var(--accent))">OVERVIEW</span>
+  <h2 class="ct">1. 一頁看懂全課程</h2>
+  <p class="cd">四大學習路線：<b>API 是什麼 → 申請與帳務 → 建立 API Key → 測試與除錯</b>。（簡報 p2）</p>
+  <figure class="diagram">
+    <svg viewBox="0 0 900 250" xmlns="http://www.w3.org/2000/svg" font-family="'Noto Sans TC',sans-serif">
+      <rect width="900" height="250" fill="#fbfcff"/>
+      <text x="450" y="38" text-anchor="middle" font-size="20" font-weight="900" fill="#2b2a33">四大 API 學習路線</text>
+      <g><rect x="30" y="70" width="195" height="120" rx="14" fill="#eef3fd" stroke="#cfe0fb"/>
+        <text x="127" y="106" text-anchor="middle" font-size="15" font-weight="800" fill="#2f6df0">① API 是什麼</text>
+        <text x="127" y="134" text-anchor="middle" font-size="11.5" fill="#5a5866">程式與模型的連接</text>
+        <text x="127" y="156" text-anchor="middle" font-size="11.5" fill="#5a5866">餐廳服務生比喻</text></g>
+      <text x="240" y="134" text-anchor="middle" font-size="20" fill="#b9c9ef">→</text>
+      <g><rect x="255" y="70" width="195" height="120" rx="14" fill="#eef7f1" stroke="#c3e4d1"/>
+        <text x="352" y="106" text-anchor="middle" font-size="15" font-weight="800" fill="#1d9e6f">② 申請與帳務</text>
+        <text x="352" y="134" text-anchor="middle" font-size="11.5" fill="#5a5866">建帳號、設付款</text>
+        <text x="352" y="156" text-anchor="middle" font-size="11.5" fill="#5a5866">訂閱≠API 計費</text></g>
+      <text x="465" y="134" text-anchor="middle" font-size="20" fill="#b9c9ef">→</text>
+      <g><rect x="480" y="70" width="195" height="120" rx="14" fill="#f5eefc" stroke="#e0cef2"/>
+        <text x="577" y="106" text-anchor="middle" font-size="15" font-weight="800" fill="#7a4fd6">③ 建立 API Key</text>
+        <text x="577" y="134" text-anchor="middle" font-size="11.5" fill="#5a5866">取得程式用憑證</text>
+        <text x="577" y="156" text-anchor="middle" font-size="11.5" fill="#5a5866">只顯示一次，收好</text></g>
+      <text x="690" y="134" text-anchor="middle" font-size="20" fill="#b9c9ef">→</text>
+      <g><rect x="705" y="70" width="165" height="120" rx="14" fill="#fdf1e7" stroke="#f2d6bd"/>
+        <text x="787" y="106" text-anchor="middle" font-size="15" font-weight="800" fill="#d35400">④ 測試除錯</text>
+        <text x="787" y="134" text-anchor="middle" font-size="11.5" fill="#5a5866">Colab 最小請求</text>
+        <text x="787" y="156" text-anchor="middle" font-size="11.5" fill="#5a5866">看 Token 與錯誤</text></g>
+    </svg>
+    <figcaption>圖 1｜EP42 全景：四大 API 學習路線（簡報 p2）</figcaption>
+  </figure>
+  <div class="golden"><div class="q">「不要問『哪個模型最好』，而要問『哪個最適合這個任務』。」</div><div class="a">—— 本集選型心法</div></div>
+</section>
+
+<section class="chapter" id="sec-what">
+  <span class="chip" style="background:linear-gradient(90deg,#2f6df0,#0aa6c9)">CHAPTER 01</span>
+  <h2 class="ct">2. API 到底在做什麼</h2>
+  <p class="cd">白話：<b>API 像餐廳服務生</b>。你的程式把需求交給 API，API 送到模型，再把答案帶回來。（簡報 p3）</p>
+  <p>正式：<b>Application Programming Interface</b> 是一套讓不同軟體依約定格式交換請求與回應的介面。常見用途：聊天機器人、文字摘要、資料分類、客服、內容生成與自動化工作流。</p>
+  <h3>開始前準備（簡報 p4）</h3>
+  <ol class="st">
+    <li>安裝 Python，確認能執行 <b>python --version</b>。</li>
+    <li>建立專案資料夾，例如 <b>AI_API</b>。</li>
+    <li>準備套件：OpenAI、Google Gen AI、Anthropic、requests 等。</li>
+  </ol>
+</section>
+
+<section class="chapter" id="sec-router">
+  <span class="chip" style="background:linear-gradient(90deg,#7a4fd6,#2f6df0)">CHAPTER 02</span>
+  <h2 class="ct">3. OpenRouter：一把金鑰連多模型</h2>
+  <p class="cd">OpenRouter 是統一模型入口，可從同一 API 選 OpenAI／Gemini／Claude 或其他模型，適合比較成本、速度、品質與用途。（簡報 p5–p9）</p>
+  <h3>申請流程</h3>
+  <ol class="st">
+    <li>註冊 OpenRouter。</li>
+    <li>加入 Credits。</li>
+    <li>建立 API Key。</li>
+    <li>用 chat/completions 或相容端點測試。</li>
+  </ol>
+  <ul class="pt">
+    <li><b>比較四個模型：</b>同一個問題送給不同模型，記錄品質、速度、價格與適用工作。</li>
+    <li><b>Fusion 多模型協作：</b>讓多模型協作或比較答案，提升研究、推理或生成品質；但多次呼叫會增加成本與延遲。</li>
+    <li><b>使用方式：</b>查看模型列表與價格 → 選擇或自動路由 → 取得 API 格式 → 用 API Playground 或 Hoppscotch 測試。</li>
+  </ul>
+</section>
+
+<section class="chapter" id="sec-openai">
+  <span class="chip" style="background:linear-gradient(90deg,#1d9e6f,#0aa6c9)">CHAPTER 03</span>
+  <h2 class="ct">4. OpenAI API 申請與 Colab 最小測試</h2>
+  <p class="cd">流程：登入 API Platform → 設定帳務 → 建立 API Key → 在 Google Colab 測試。（簡報 p11–p20）</p>
+  <div class="note gold">⚠️ <b>帳號與帳務：</b>ChatGPT 訂閱和 API 計費是<b>不同系統</b>。即使有 ChatGPT Plus，API 仍可能需要另外設定付款或額度。</div>
+  <div class="note blue">🔑 <b>建立 API Key：</b>建立後<b>立即安全保存</b>。金鑰通常只完整顯示一次，不能放在公開簡報、聊天、程式碼截圖或 GitHub。</div>
+  <h3>Google Colab 最小測試四步</h3>
+  <ol class="st">
+    <li>開啟 Google Colab 並建立新筆記本。</li>
+    <li>安裝官方套件，例如 <b>pip install -q -U openai</b>。</li>
+    <li>透過環境變數或 <b>Colab Secrets</b> 載入 Key。</li>
+    <li>發送一個<b>最小請求</b>，確認能收到回應。</li>
+  </ol>
+  <div class="note green">✅ 成功條件（簡報 p20）：套件安裝完成、Key 可使用、模型名稱正確、請求收到回應。</div>
+</section>
+
+<section class="chapter" id="sec-error">
+  <span class="chip" style="background:linear-gradient(90deg,#d35400,#c98a0a)">CHAPTER 04</span>
+  <h2 class="ct">5. 三類常見錯誤與除錯順序</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:210px">錯誤</th><th>可能原因</th></tr>
+    <tr><td><b>Incorrect API key provided</b></td><td>Key 錯誤、複製不完整，或讀到錯的環境變數</td></tr>
+    <tr><td><b>insufficient_quota</b></td><td>沒有額度、帳務未設定，或超過上限</td></tr>
+    <tr><td><b>ModuleNotFoundError</b></td><td>套件未安裝，或執行環境重啟後遺失</td></tr>
+  </table></div>
+  <div class="note gold">⚠️ 除錯順序：先看<b>錯誤類型</b>，再依序檢查 Key、模型名稱、套件、帳務與網路；<b>不要一看到錯誤就重新建立所有東西</b>。</div>
+  <h3>做自己的自由提問版本（簡報 p22）</h3>
+  <p>把固定問題改成<b>輸入變數</b>，讓使用者在 Colab 輸入問題，再把內容送往模型——這是從一次測試走向小工具的第一步。</p>
+</section>
+
+<section class="chapter" id="sec-token">
+  <span class="chip" style="background:linear-gradient(90deg,#2f6df0,#7a4fd6)">CHAPTER 05</span>
+  <h2 class="ct">6. Token 使用量與三項安全設定</h2>
+  <h3>Token 使用量（簡報 p23）</h3>
+  <p>Token 是模型處理文字的<b>計量單位</b>。費用通常與輸入 Token、輸出 Token、模型價格及其他工具呼叫有關。應記錄：input tokens、output tokens、total tokens、模型名稱與請求用途。</p>
+  <h3>三項安全設定（簡報 p25）</h3>
+  <ol class="st">
+    <li>重新命名筆記本，保留可理解的<b>版本紀錄</b>。</li>
+    <li>使用 <b>getpass()</b>、環境變數或 Secret，<b>不把 Key 寫死</b>在程式碼。</li>
+    <li>設定使用量或<b>預算通知</b>，避免意外成本。</li>
+  </ol>
+</section>
+
+<section class="chapter" id="sec-choose">
+  <span class="chip" style="background:linear-gradient(90deg,#7a4fd6,#0aa6c9)">CHAPTER 06</span>
+  <h2 class="ct">7. Gemini／Claude 與怎麼選</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:120px">API</th><th>入口／重點</th><th>常見特色</th></tr>
+    <tr><td>OpenAI</td><td>API Platform → 帳務 → Key → Colab</td><td>生態成熟、工具多</td></tr>
+    <tr><td>Gemini</td><td>Google AI Studio 建金鑰，設 <b>GEMINI_API_KEY</b>，用 Google 官方 SDK</td><td>Google 生態與多模態整合</td></tr>
+    <tr><td>Claude</td><td><b>Claude Console／Platform</b> 才是 API 入口（Claude.ai 是聊天產品）；設 <b>ANTHROPIC_API_KEY</b>，呼叫 Messages API</td><td>長文、推理與文字工作常見</td></tr>
+    <tr><td>OpenRouter</td><td>一把金鑰連多模型</td><td>多模型比較與統一入口</td></tr>
+  </table></div>
+  <h4>常見 HTTP 問題</h4>
+  <ul class="pt">
+    <li><b>401</b> 金鑰錯誤；<b>402／quota</b> 帳務或額度；<b>429</b> 速率限制；模型名稱錯誤。</li>
+  </ul>
+</section>
+
+<section class="chapter" id="sec-action">
+  <span class="chip" style="background:linear-gradient(90deg,#c98a0a,#d4508e)">ACTION</span>
+  <h2 class="ct">8. 立即行動清單</h2>
+  <ol class="st">
+    <li>先選<b>一家</b> API，不要同時申請四家。</li>
+    <li>用最小 Colab 程式完成一次成功請求。</li>
+    <li>把 Key 移到 <b>Secrets／環境變數</b>。</li>
+    <li>查看 <b>Token 使用量</b>。</li>
+    <li>設定<b>預算與上限</b>。</li>
+    <li>再比較第二個模型的品質與成本。</li>
+  </ol>
+  <div class="golden"><div class="q">「先讓一家 API 成功跑一次，再談比較；金鑰與預算，是每一步都要顧的兩件事。」</div><div class="a">本集收束</div></div>
+</section>
+
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5a5866)">SOURCES</span>
+  <h2 class="ct">9. 資料來源與製作說明</h2>
+  <ul class="pt">
+    <li><b>原始教材：</b>EP42「各大主流大型語言模型 API 申請與應用」官方課程簡報 30 頁＋課堂筆記。</li>
+    <li><b>製作方式：</b>逐頁對照官方簡報文字與課堂筆記整理，內容為<b>真實課程內容</b>，圖解為自製 SVG。</li>
+    <li><b>誠實聲明：</b>本頁以簡報實錄與課堂筆記為準；<b>Colab 操作畫面與逐字稿時間碼</b>需錄影開通授權後補入。各家 API 的方案、費用、模型名稱與端點會更新，以官方文件與你當下帳號畫面為準；金鑰請勿外洩。</li>
+    <li><b>介面參考：</b>互動技能地圖頁沿用本站 EP44–46 的卡片式多層導覽與遊戲化進度設計。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  EP42「各大主流大型語言模型 API 申請與應用」課堂筆記・2026/07 整理<br>
+  🍀 Learn AI with Tarshar｜搭配 <a href="ep42-ai-skills.html">互動技能地圖</a> 使用效果最佳
+</footer>
+
+</body>
+</html>

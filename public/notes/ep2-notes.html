@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP2 課堂筆記｜Felo AI×Suno篇 ＆ 那些教授沒告訴您的話（SEM+Elicit）</title>
+<meta name="description" content="晨學講堂 EP2 課堂筆記：上半場 Felo AI（自訂指令、搜尋代理、LiveDoc 報告生成）與 Suno（AI 譜曲歌詞示範），下半場用曼陀羅九宮格學統計（SEM 核心概念）與 Elicit 文獻研究助手示範。根據真實錄影逐字稿與畫面截圖整理。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#b23a5b; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(24px,4vw,38px);font-weight:800;line-height:1.2;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc .grp{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin:14px 0 4px;padding-left:10px;font-weight:700}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px;border-left:none}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+.partbanner{border-radius:12px;padding:16px 20px;margin:0 0 20px;font-weight:700;font-size:15px;color:#fff}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#e6b9c6" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP2 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="ep2-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 晨學講堂 · EP2</span>
+  <h1>Felo AI×Suno篇<br><span>＆</span> 那些教授沒告訴您的話（SEM＋Elicit）</h1>
+  <p class="lead">EP2 這天連開<b>兩場</b>：上半場是 <b>Felo AI</b>（自訂指令、搜尋代理、LiveDoc 報告生成）與 <b>Suno</b>（AI 譜曲歌詞示範）；下半場是「用曼陀羅九宮格學統計」（<b>SEM 結構方程模型</b>核心概念）與 <b>Elicit</b> 文獻研究助手示範。本頁根據<b>真實錄影逐字稿與畫面截圖</b>整理，兩場依實際播出順序收錄。</p>
+  <div class="meta">
+    <span>📅 2025/12/13 晨間連續兩場</span>
+    <span>🎨 Felo AI・Suno</span>
+    <span>📊 SEM・Elicit</span>
+    <span>👨‍🏫 講師：黃老師</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <div class="grp">場次一 07:00–08:00</div>
+  <a href="#sec-felo-intro">1. Felo AI：自訂指令與角色模板</a>
+  <a href="#sec-felo-agent">2. Felo 搜尋代理：智慧型 vs 多步驟</a>
+  <a href="#sec-felo-livedoc">3. LiveDoc：搜尋結果變完整報告</a>
+  <a href="#sec-suno">4. Suno：AI 譜曲歌詞示範</a>
+  <div class="grp">場次二 08:30–09:30</div>
+  <a href="#sec-sem">5. 用九宮格學統計：SEM 核心概念</a>
+  <a href="#sec-elicit">6. Elicit：五大功能與研究報告示範</a>
+  <a href="#sec-qa">7. 現場問答</a>
+  <a href="#sec-recap">8. 重點整理</a>
+  <a href="#sec-src">9. 資料來源與製作說明</a>
+</nav>
+
+<article>
+
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--rose))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>場次一「打通生成式AI任督二脈：Felo AI 篇＋Suno 篇」；場次二「生成式AI時代下，那些教授沒告訴您的話（SEM＋Elicit 工具介紹）」</td></tr>
+    <tr><th>頻道</th><td>生成式 AI 應用電台・晨學講堂</td></tr>
+    <tr><th>直播日期</th><td>2025/12/13（六）場次一 07:00–08:00；場次二 08:30–09:30</td></tr>
+    <tr><th>教材</th><td>場次二有本機簡報「用曼陀羅九宮格學統計(SPSS基礎操作).pptx」（29 頁）＋「Elicit_學術研究的AI助手.pptx」；場次一無獨立簡報，以錄影為主</td></tr>
+  </table></div>
+  <figure class="shot">
+    <img src="ep2-img/b0-schedule.jpg" alt="EP2 兩場直播場次時間表" loading="lazy">
+    <figcaption>畫面實錄｜講者自己的排播筆記：直播場次1「Felo AI篇+Suno篇」07:00–08:00；直播場次2「SEM+Elicit工具介紹」08:30–09:30。下方反白的例句「Analyzing the motivation for waking up early to take AI courses using the Theory of Planned Behavior.」正是場次二示範用的研究問題。</figcaption>
+  </figure>
+  <div class="note blue">💡 站上集數用「EP2」統一收錄這天的兩場直播；本頁依照<b>實際播出順序</b>先講 Felo AI×Suno（場次一），再講 SEM＋Elicit（場次二）。</div>
+</section>
+
+<div class="partbanner" style="background:linear-gradient(90deg,#b25269,#5645D4)">🎨 場次一・07:00–08:00　Felo AI × Suno</div>
+
+<section class="chapter" id="sec-felo-intro">
+  <span class="chip" style="background:linear-gradient(90deg,#b25269,#5645D4)">CHAPTER 01</span>
+  <h2 class="ct">1. Felo AI：自訂指令與角色模板</h2>
+  <p class="cd">畫面實錄（10:30）＋逐字稿片段（10:48）：「如果你不想要讓 Felo 的模型去借用……」（後段語音辨識不清）。</p>
+  <figure class="shot">
+    <img src="ep2-img/b1-felo-custom.jpg" alt="Felo AI 自訂指令設定畫面" loading="lazy">
+    <figcaption>畫面實錄｜Felo「自訂指令」設定：Felo 會根據你的搜尋偏好和語言偏好提供個人化回應；範例已存好一個角色模板「專家角色指令：跨領域AI教授」，內含完整的角色定位描述文字，可直接套用或編輯。</figcaption>
+  </figure>
+  <ul class="pt">
+    <li>Felo 支援把常用的<b>角色設定／回答風格</b>存成自訂指令，之後每次搜尋都會套用。</li>
+    <li>側欄可見「偏好與設定」「點數用量」等帳號管理項目。</li>
+  </ul>
+</section>
+
+<section class="chapter" id="sec-felo-agent">
+  <span class="chip" style="background:linear-gradient(90deg,#5645D4,#3b6bb0)">CHAPTER 02</span>
+  <h2 class="ct">2. Felo 搜尋代理：智慧型 vs 多步驟</h2>
+  <p class="cd">畫面實錄（23:57）：「打造個人專屬搜尋代理」建立畫面。</p>
+  <figure class="shot">
+    <img src="ep2-img/b2-felo-agent.jpg" alt="Felo 打造個人專屬搜尋代理畫面" loading="lazy">
+    <figcaption>畫面實錄｜兩種代理類型：<b>智慧搜尋代理</b>（Beta，結合自訂指令和特定知識來源來搜尋結果）與<b>多步驟搜尋代理</b>（基於問題自動規劃多個搜尋步驟獲得結果）；背景可見 Felo 的代理市集，含「AI翻譯神器」「網頁摘要智慧助理」「發票擷取小幫手」等現成範本。</figcaption>
+  </figure>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">代理類型</th><th>用途</th></tr>
+    <tr><td><b>智慧搜尋代理</b>（Beta）</td><td>結合自訂指令和特定知識來源來搜尋結果，適合固定領域、固定角色的重複查詢</td></tr>
+    <tr><td><b>多步驟搜尋代理</b></td><td>基於問題自動規劃多個搜尋步驟獲得結果，適合需要拆解成好幾步才能回答的複雜問題</td></tr>
+  </table></div>
+</section>
+
+<section class="chapter" id="sec-felo-livedoc">
+  <span class="chip" style="background:linear-gradient(90deg,#3b6bb0,#0d8f80)">CHAPTER 03</span>
+  <h2 class="ct">3. LiveDoc：把搜尋結果變成完整報告／圖文頁面</h2>
+  <p class="cd">畫面實錄兩則示範。</p>
+  <figure class="shot">
+    <img src="ep2-img/b3-felo-livedoc-research.jpg" alt="Felo LiveDoc 研究報告示範：偏鄉數位學習落差" loading="lazy">
+    <figcaption>畫面實錄（36:48）｜LiveDoc 生成的研究文件「偏鄉數位學習落差議題」，左側大綱含「數位落差的定義與演變」「偏鄉數位落差的成因分析」「COVID-19疫情的衝擊」「應對策略與未來展望」等章節，右側正文附<b>70 條編號來源</b>逐一列出（可展開查看每條的原始連結）。</figcaption>
+  </figure>
+  <figure class="shot">
+    <img src="ep2-img/b4-felo-livedoc-breakfast.jpg" alt="Felo LiveDoc 圖文頁面示範：台北好吃的早餐" loading="lazy">
+    <figcaption>畫面實錄（47:48）｜LiveDoc 也能做成<b>圖文並茂的介紹頁面</b>，示範主題「台北好吃的早餐總覽」，收錄「阜杭豆漿」的招牌必點、排隊攻略（地點、營業時間、排隊策略）與實拍照片；右側「AI 修改」面板可直接輸入指示微調內容，並可切換 Gemini 等底層模型。</figcaption>
+  </figure>
+  <div class="note green">✅ 逐字稿（36:50）：「他幾乎都是從網路上的資料」——LiveDoc 的內容基礎是即時網路搜尋，並非憑空生成。</div>
+</section>
+
+<section class="chapter" id="sec-suno">
+  <span class="chip" style="background:linear-gradient(90deg,#0d8f80,#9c7b23)">CHAPTER 04</span>
+  <h2 class="ct">4. Suno：AI 譜曲歌詞示範</h2>
+  <p class="cd">逐字稿原音（52:57–60:37）＋畫面實錄（60:23）。</p>
+  <p>「有一些好用的功能，你在寫歌曲的時候，我們就直接進入他進階版的做法，想做的歌詞……沒有付費也可以……一首歌的組招，包括前奏、主歌、導歌、副歌、橋段……鼓點的……他會進入到一個空間……他有分享的功能，Share，可以 Copy 連結。」</p>
+  <figure class="shot">
+    <img src="ep2-img/b5-suno-lyrics.jpg" alt="Suno 生成歌詞與歌曲示範" loading="lazy">
+    <figcaption>畫面實錄（60:23）｜Suno 生成的示範歌曲「Check Me」，Lyrics 分頁可見完整歌詞：[Intro, Chill R&B beat]「走進教室我遲到了五分鐘，老師眼神像要射我一槍」／[Verse 1, Rapped Verse]「書包沒拉好 書散滿地……」；左側導覽列 Home／Create／Studio／Library／Search／Hooks／Explore／Radio，底部播放器可直接播放、切換歌曲版本。</figcaption>
+  </figure>
+  <ul class="pt">
+    <li><b>免費版可用</b>：不用付費就能生成完整歌曲。</li>
+    <li><b>歌曲結構化</b>：Intro／Verse／Chorus／Bridge 等段落標記清楚，AI 依段落套用不同曲風（如示範中的 Chill R&B beat）。</li>
+    <li><b>可分享</b>：生成後有 Share／Copy link 功能，方便直接傳給別人聽。</li>
+  </ul>
+</section>
+
+<div class="partbanner" style="background:linear-gradient(90deg,#9c7b23,#b23a5b)">📊 場次二・08:30–09:30　那些教授沒告訴您的話：SEM＋Elicit</div>
+
+<section class="chapter" id="sec-sem">
+  <span class="chip" style="background:linear-gradient(90deg,#b23a5b,#9c7b23)">CHAPTER 05</span>
+  <h2 class="ct">5. 用九宮格學統計：SEM 核心概念</h2>
+  <p class="cd">畫面實錄：簡報「用曼陀羅九宮格學統計(SPSS基礎操作)」封面與內頁。</p>
+  <figure class="shot">
+    <img src="ep2-img/a1-title.jpg" alt="用曼陀羅九宮格學統計 SPSS基礎操作 封面" loading="lazy">
+    <figcaption>畫面實錄（00:04）｜簡報封面「用曼陀羅九宮格學統計 (SPSS基礎操作)」——延續 EP1 同一套九宮格教學法，這次套用在統計／SEM 主題上。</figcaption>
+  </figure>
+  <figure class="shot">
+    <img src="ep2-img/a3-sem-theory.jpg" alt="理論、構面、變數之間關係" loading="lazy">
+    <figcaption>畫面實錄（13:06）｜「理論、構面、變數之間關係」：理論為構面提供框架與指導、解釋構面在特定背景下的意義和相互關係；構面是對變數的抽象表示，捕捉變數所代表的特定屬性或特徵。</figcaption>
+  </figure>
+  <figure class="shot">
+    <img src="ep2-img/a2-sem-concepts.jpg" alt="測量模型主要概念" loading="lazy">
+    <figcaption>畫面實錄（06:23）｜測量模型主要概念（原文照錄）：<b>因素(Factor)</b>——表示潛在變數；<b>測量指標(Indicator)</b>——用於觀察和衡量潛在變數；<b>因素負荷量(Factor Loading)</b>——衡量測量指標與潛在變數之間的相關性；<b>信度(Reliability)</b>——測量工具的內部一致性和穩定性；<b>收斂效度(Convergent Validity)</b>——同一構面的測量指標之間相關性；<b>區別效度(Discriminant Validity)</b>——確認測量模型中各個構面之間的區別性。</figcaption>
+  </figure>
+  <div class="note gold">⚠️ 誠實聲明：本集 Drive 資料夾內另附一份不同日期（2026/02）建立的補充 PDF／簡報「AI 素養＝未來競爭力？美國最新政策釋出」（美國勞工部 AI Literacy Framework），與這場錄影日期（2025/12）不同，判斷為<b>另外補充的閱讀資料，非本集錄影當場教授的內容</b>，故不列入本節課堂實錄，僅在第 9 節資料來源中註記其存在。</div>
+</section>
+
+<section class="chapter" id="sec-elicit">
+  <span class="chip" style="background:linear-gradient(90deg,#9c7b23,#3f8560)">CHAPTER 06</span>
+  <h2 class="ct">6. Elicit：五大核心功能與研究報告示範</h2>
+  <figure class="shot">
+    <img src="ep2-img/a4-elicit-intro.jpg" alt="Elicit AI 科學研究的AI助手" loading="lazy">
+    <figcaption>畫面實錄（13:31）｜簡報「Elicit AI｜引出」：科學研究的 AI 助手——加速文獻審查、數據提取與論文分析。</figcaption>
+  </figure>
+  <figure class="shot">
+    <img src="ep2-img/a5-elicit-features.jpg" alt="Elicit 的核心功能概覽：五大功能" loading="lazy">
+    <figcaption>畫面實錄（40:16）｜Elicit 核心功能概覽（原文照錄）：<b>查找論文</b>（Find Papers，自然語言提問，從 1.38 億篇論文中找最相關結果）、<b>與論文對話</b>（Paper Chat，上傳 PDF 或選擇論文進行對話交互）、<b>提取數據</b>（Extract Data，從多篇 PDF 自動提取結構化數據）、<b>生成研究報告</b>（Research Report，輸入問題自動生成研究報告）、<b>系統審查</b>（Systematic Review，完整的系統性文獻工作流程）。</figcaption>
+  </figure>
+  <h3>現場示範：用 TPB 理論分析「為什麼要早起上 AI 課」</h3>
+  <p class="cd">示範研究問題來自課程排播筆記：「Analyzing the motivation for waking up early to take AI courses using the Theory of Planned Behavior.」講者先 Google 搜尋 TPB（計畫行為理論）模型圖確認理論架構，再用 Elicit 實際查找相關文獻。</p>
+  <figure class="shot">
+    <img src="ep2-img/a6-elicit-report.jpg" alt="Elicit 生成研究報告：學習AI課程動機" loading="lazy">
+    <figcaption>畫面實錄（26:01）｜Elicit Research Report 功能，主題「學習AI課程動機」，畫面顯示生成進度：Gather sources（蒐集相關研究來源）→ Screen sources（依收錄條件篩選研究），並提示完成後會寄信通知。</figcaption>
+  </figure>
+  <figure class="shot">
+    <img src="ep2-img/a7-elicit-paper.jpg" alt="Elicit 找到的相關論文：早起上課與睡眠" loading="lazy">
+    <figcaption>畫面實錄（33:49）｜Elicit 找到高度相關的真實論文：S. Yeo,〈Early morning university classes are associated with impaired sleep and academic performance〉(2024)，直接切中「早起上課」的研究問題。</figcaption>
+  </figure>
+</section>
+
+<section class="chapter" id="sec-qa">
+  <span class="chip" style="background:linear-gradient(90deg,#3f8560,#2f7d92)">CHAPTER 07</span>
+  <h2 class="ct">7. 現場問答</h2>
+  <p class="cd">畫面實錄（42:28）：Elicit 對話視窗顯示觀眾提問。</p>
+  <ul class="pt">
+    <li>觀眾提問：「試用 14 天後，就要付費嗎？那還能繼續用嗎？就 PRO 降級成免費版？」</li>
+    <li>觀眾提問：「請問老師能夠中文提問嗎？」</li>
+  </ul>
+  <div class="note blue">💡 這兩個問題點出 Elicit 新手最常見的疑慮：<b>試用期後的收費方式</b>與<b>是否支援中文提問</b>——這些屬於工具當下的方案細節，實際情況請以 Elicit 官方頁面當時公告為準。</div>
+</section>
+
+<section class="chapter" id="sec-recap">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#b23a5b)">RECAP</span>
+  <h2 class="ct">8. 重點整理</h2>
+  <h4>場次一：Felo AI × Suno</h4>
+  <ul class="pt">
+    <li><b>Felo 自訂指令</b>：把常用角色設定存成模板，之後搜尋自動套用。</li>
+    <li><b>兩種搜尋代理</b>：智慧搜尋代理（固定領域＋知識來源）vs 多步驟搜尋代理（自動拆解複雜問題）。</li>
+    <li><b>LiveDoc</b>：把搜尋結果整理成附完整來源的研究報告，或圖文並茂的介紹頁面，且可用 AI 修改面板持續調整。</li>
+    <li><b>Suno</b>：免費就能生成結構化歌曲（Intro／Verse／Chorus），並附分享連結功能。</li>
+  </ul>
+  <h4>場次二：SEM × Elicit</h4>
+  <ul class="pt">
+    <li><b>九宮格教學法延伸</b>：EP1 用在 NotebookLM，這集用在統計／SEM，同一套思考工具可套用到不同專業主題。</li>
+    <li><b>SEM 六個核心概念</b>：因素、測量指標、因素負荷量、信度、收斂效度、區別效度。</li>
+    <li><b>Elicit 五大功能</b>：查找論文、與論文對話、提取數據、生成研究報告、系統審查。</li>
+    <li><b>從理論到文獻的完整示範</b>：TPB 理論 → Google 圖片確認模型 → Elicit 查找真實相關論文。</li>
+  </ul>
+</section>
+
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5a5866)">SOURCES</span>
+  <h2 class="ct">9. 資料來源與製作說明</h2>
+  <ul class="pt">
+    <li><b>原始教材：</b>場次一「Felo AI篇+Suno篇」錄影回放（Drive 檔案時長顯示 8 小時，經比對逐字稿與畫面確認<b>實際課程內容集中在前 65 分鐘</b>，其後為直播結束未關閉錄影所致的長時間空白畫面，未作為教材內容處理）；場次二「SEM+Elicit工具介紹」錄影回放（42.6 分鐘），另有本機簡報「用曼陀羅九宮格學統計(SPSS基礎操作).pptx」與「Elicit_學術研究的AI助手.pptx」。以上檔案均為 anyone-reader 權限、公開可下載。</li>
+    <li><b>製作方式：</b>下載完整錄影 → faster-whisper（small 模型）產出逐字稿 → 場景變化偵測抽取畫面關鍵幀 → <b>親眼逐張判讀</b>畫面內容（含九宮格與 Elicit 功能表原文照錄）→ 對照逐字稿整理成本頁章節。</li>
+    <li><b>另有一份不列入本集實錄的補充文件：</b>EP2.1 資料夾內有一份 2026/02 建立的 PDF／簡報「AI 素養＝未來競爭力？美國最新政策釋出」，建立時間與本集錄影（2025/12）不同，判斷為之後另外加入的補充閱讀，<b>非本集直播當場教授內容</b>，故不納入課堂實錄章節，特此註明避免誤植。</li>
+    <li><b>誠實聲明：</b>場次一 24:31–32:26 語音因收音問題出現重複亂碼，無法還原原話，該段以畫面截圖為準；未能辨識的口語細節不補述、不杜撰。</li>
+    <li><b>介面參考：</b>版型沿用本站 EP29–EP46 課堂筆記的乾淨白底編輯風格。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  EP2「Felo AI×Suno篇＆那些教授沒告訴您的話（SEM+Elicit）」課堂筆記・2026/07 整理<br>
+  🍀 Learn AI with Tarshar｜搭配 <a href="ep2-ai-skills.html">互動技能地圖</a> 使用效果最佳
+</footer>
+
+</body>
+</html>

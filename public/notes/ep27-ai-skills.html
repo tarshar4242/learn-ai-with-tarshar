@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>用 Prezi AI 做出動態簡報｜互動式學習地圖</title>
+<meta name="description" content="EP27 晨學講堂：Prezi——縮放式非線性簡報工具。是什麼＋核心特色、三大產品（Present／Video／Design）、Prezi vs PowerPoint＋AI 信用點數、中文字體與關鍵功能（主題路徑／內建主題／縮放技巧），互動式多層次學習地圖。">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269;
+  --green:#3f8560; --orange:#bf6a1e; --red:#c0453f; --teal:#0d8f80;
+  --feat:#c2620c; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(28px,4.6vw,46px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:660px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:9px}
+.steps li{list-style:none;counter-increment:st;display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--txt2);line-height:1.7}
+.steps li::before{content:counter(st);flex:none;width:25px;height:25px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:var(--c,var(--feat));margin-top:1px}
+.steps li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+.prompt,.promptbox{background:#1d1d1f;border:1px solid #2c2c31;border-radius:10px;padding:13px 15px;margin-top:6px;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt b,.promptbox b{color:#fff}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <a class="navlink" href="../radio/" style="border-color:#e4c39a" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <div class="logo">
+    <div class="dot">🎬</div>
+    <div>Prezi 地圖<small>MORNING LEARNING · EP27</small></div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋關鍵字：縮放式、非線性、Present、Video、主題路徑、AI 點數…" autocomplete="off">
+  </div>
+  <a class="navlink" href="ep27-notes.html">📝 課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">EP27 · 晨學講堂 · 2026/03</span>
+  <h1>用 Prezi AI 做出動態簡報</h1>
+  <p class="sub">Prezi 是以「<b>縮放式視覺地圖</b>」為核心的<b>非線性</b>簡報工具——整份簡報畫在同一張畫布上，用鏡頭的放大縮小移動來講故事。<br>點進每一章，逐層展開<b>本集實際教到</b>的觀念與操作，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🎙️ 生成式AI應用電台・晨學講堂</span>
+    <span>🎬 動態簡報工具</span>
+    <span>🔍 縮放式非線性</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>4</b><span>大主題</span></div>
+  <div class="stat"><b>9</b><span>實戰技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 9 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--feat)" onclick="showChapter('intro')">
+        <div class="glowline"></div><span class="emoji">🎬</span>
+        <h3><em>CHAPTER 01</em>是什麼＋核心特色</h3>
+        <p>Prezi 是什麼、縮放式非線性與「畫布」概念，以及四項核心特色與各自最適合的簡報情境。</p>
+        <div class="foot"><div class="mini"><i data-mini="intro"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--blue)" onclick="showChapter('products')">
+        <div class="glowline"></div><span class="emoji">🧰</span>
+        <h3><em>CHAPTER 02</em>三大產品</h3>
+        <p>Prezi Present（動態簡報）、Prezi Video（人＋簡報同框）、Prezi Design（資訊圖表）分別怎麼用。</p>
+        <div class="foot"><div class="mini"><i data-mini="products"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--green)" onclick="showChapter('vs')">
+        <div class="glowline"></div><span class="emoji">⚖️</span>
+        <h3><em>CHAPTER 03</em>vs PowerPoint＋AI 點數</h3>
+        <p>Prezi 與 PowerPoint 的差別與取捨，以及 Prezi AI 各項功能各要多少信用點數。</p>
+        <div class="foot"><div class="mini"><i data-mini="vs"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--purple)" onclick="showChapter('key')">
+        <div class="glowline"></div><span class="emoji">🛠️</span>
+        <h3><em>CHAPTER 04</em>中文字體與關鍵功能</h3>
+        <p>中文呈現字體選擇，以及主題路徑設置、內建視覺主題、縮放技巧三個 Prezi 的靈魂功能。</p>
+        <div class="foot"><div class="mini"><i data-mini="key"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+
+    <div class="resources">
+      <h3>📦 <span>課程原始資料</span></h3>
+      <div class="res-grid">
+        <a href="ep27-notes.html"><span class="ic">📝</span><span><b>課堂筆記</b>Prezi 完整整理</span></a>
+        <a href="../radio/"><span class="ic">📻</span><span><b>直播電台系列</b>回系列總覽，一集一卡</span></a>
+        <a href="ep34-notes.html"><span class="ic">🎨</span><span><b>相關 EP34</b>Canva 動畫篇</span></a>
+        <a href="ep43-notes.html"><span class="ic">🎞️</span><span><b>相關 EP43</b>影片製作</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-intro" class="view" style="--c:var(--feat)"></section>
+  <section id="view-products" class="view" style="--c:var(--blue)"></section>
+  <section id="view-vs" class="view" style="--c:var(--green)"></section>
+  <section id="view-key" class="view" style="--c:var(--purple)"></section>
+</main>
+
+<footer>
+  本頁為 EP27「用 Prezi AI 做出動態簡報」課後整理・介面沿用本站互動式學習地圖<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2026｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+const DATA = {
+  intro: {
+    key:'intro', color:'var(--feat)', emoji:'🎬', code:'CHAPTER 01', title:'是什麼＋核心特色',
+    intro:'先搞懂 Prezi 是什麼、它跟一般簡報最不一樣的「畫布＋鏡頭」思維，以及四項核心特色各自適合的情境。',
+    topics:[
+      {t:'Prezi 是什麼', s:'縮放式、非線性、以畫布為核心',
+       blocks:[
+        {h:'一句話',p:'<b>Prezi ＝ 用「鏡頭移動」講故事的簡報</b>：不是一頁一頁翻，而是在一張大畫布上放大縮小、平移，像看地圖一樣把觀眾的視線帶去該看的地方。'},
+        {h:'三個關鍵詞',ul:['<b>縮放式簡報（Zooming Presentation）</b>：內容像地圖一樣可放大、縮小、移動。','<b>非線性簡報</b>：跟 PowerPoint／Google Slides「一頁一頁」不同，可自由跳、自由縮放。','<b>畫布（Canvas）</b>：整份簡報都設計在同一張畫布上，靠鏡頭移動來呈現。']},
+        {h:'看課堂筆記',p:'👉 <a href="ep27-notes.html#sec-what" style="color:var(--feat)">筆記 1：Prezi 是什麼</a>'}]},
+      {t:'核心特色與適合情境', s:'四項特色對應四種場合',
+       blocks:[
+        {h:'特色 × 情境',table:{head:['核心特色','適合情境'],rows:[['縮放式簡報（Zooming UI）','教學簡報'],['視覺化故事流程','概念解釋'],['非線性導航','故事型簡報'],['動畫移動感強','創意提案']]}},
+        {h:'什麼時候用 Prezi',warn:'當你要講「概念之間的關係」或「說一個故事」時最合適（放大看細節、縮小看全貌）；如果只是規規矩矩的條列報告，PowerPoint 反而更快。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep27-notes.html#sec-feat" style="color:var(--feat)">筆記 2：核心特色與情境</a>'}]}
+    ]
+  },
+  products: {
+    key:'products', color:'var(--blue)', emoji:'🧰', code:'CHAPTER 02', title:'三大產品',
+    intro:'Prezi 不只是一個簡報軟體，而是三條產品線：做動態簡報、做人＋簡報同框的視訊、做資訊圖表。',
+    topics:[
+      {t:'Prezi Present 動態簡報', s:'地圖式、放大縮小、視覺路徑',
+       blocks:[
+        {h:'做什麼',p:'Prezi 的招牌產品：把內容排在一張畫布上，用<b>放大縮小＋視覺路徑</b>依序帶觀眾看重點，做出地圖式的動態簡報。'},
+        {h:'使用情境',ul:['教學：把知識點畫成地圖，縮放帶學生走。','簡報／提案：用鏡頭氣勢強化故事感。']},
+        {h:'看課堂筆記',p:'👉 <a href="ep27-notes.html#sec-prod" style="color:var(--blue)">筆記 3：三大產品</a>'}]},
+      {t:'Prezi Video 視訊簡報', s:'簡報與人物同時出現在畫面',
+       blocks:[
+        {h:'做什麼',p:'讓你的<b>人臉和簡報內容同框</b>出現在畫面上，不用一直切「分享畫面／露臉」。'},
+        {h:'使用情境',ul:['線上教學、Zoom 簡報。','YouTube 教學影片。']},
+        {h:'一句話',tip:'Prezi Video 很適合線上課／直播：人和簡報同框，觀眾同時看到你和內容，臨場感更強。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep27-notes.html#sec-prod" style="color:var(--blue)">筆記 3：Prezi Video</a>'}]},
+      {t:'Prezi Design 視覺圖表', s:'資訊圖表、報告圖表、視覺化資料',
+       blocks:[
+        {h:'做什麼',p:'專門做<b>視覺圖表設計</b>：資訊圖表（infographic）、報告圖表、視覺化資料。'},
+        {h:'使用情境',ul:['需要一張漂亮的資訊圖表時。','把數據／流程做成好看的視覺化報告。']},
+        {h:'看課堂筆記',p:'👉 <a href="ep27-notes.html#sec-prod" style="color:var(--blue)">筆記 3：Prezi Design</a>'}]}
+    ]
+  },
+  vs: {
+    key:'vs', color:'var(--green)', emoji:'⚖️', code:'CHAPTER 03', title:'vs PowerPoint＋AI 點數',
+    intro:'什麼時候該選 Prezi、什麼時候該選 PowerPoint；以及用 Prezi AI 時，各項操作分別要花多少信用點數。',
+    topics:[
+      {t:'Prezi vs PowerPoint', s:'像心智圖 vs 像清單',
+       blocks:[
+        {h:'五個維度比一比',table:{head:['項目','Prezi','PowerPoint'],rows:[['簡報結構','地圖式','投影片'],['簡報方式','縮放移動','一頁一頁'],['故事呈現','視覺化強','結構清楚'],['創意程度','高','中'],['學習難度','中','低']]}},
+        {h:'金句',tip:'「Prezi 像心智圖，PowerPoint 像清單。」要氣勢與故事感選 Prezi；要快速、穩定、好上手選 PowerPoint。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep27-notes.html#sec-vs" style="color:var(--green)">筆記 4：Prezi vs PowerPoint</a>'}]},
+      {t:'Prezi AI 信用點數', s:'哪些操作貴、哪些便宜',
+       blocks:[
+        {h:'各功能點數',table:{head:['功能','所需 AI 點數'],rows:[['建立 AI 簡報','150 點'],['從檔案建立內容','100 點'],['生成一張圖片','60 點'],['使用高級視覺效果','60 點'],['移除圖片背景','25 點'],['轉換內容','10 點']]}},
+        {h:'點數觀念',warn:'「從頭建立 AI 簡報」最貴（150 點），小操作（轉換、去背）便宜。先想清楚要 AI 幫你做哪一步，別把點數花在反覆重生成整份簡報。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep27-notes.html#sec-credit" style="color:var(--green)">筆記 5：Prezi AI 信用點數</a>'}]}
+    ]
+  },
+  key: {
+    key:'key', color:'var(--purple)', emoji:'🛠️', code:'CHAPTER 04', title:'中文字體與關鍵功能',
+    intro:'把中文字體選對，再抓住 Prezi 真正的靈魂：路徑怎麼帶、主題怎麼挑、鏡頭怎麼縮放。',
+    topics:[
+      {t:'中文呈現字體', s:'思源黑體／XANO 明朝',
+       blocks:[
+        {h:'兩款推薦字體',ul:['<b>思源黑體 Noto Sans TC</b>——乾淨的無襯線，最通用。','<b>XANO 明朝</b>——明朝體，適合有質感／文學感的版面。']},
+        {h:'看課堂筆記',p:'👉 <a href="ep27-notes.html#sec-key" style="color:var(--purple)">筆記 6：中文字體與關鍵功能</a>'}]},
+      {t:'三個關鍵功能', s:'主題路徑／內建主題／縮放技巧',
+       blocks:[
+        {h:'Prezi 的靈魂三件事',steps:['<b>主題路徑設置</b>：決定鏡頭依什麼順序移動、放大到哪、縮小回哪——這是 Prezi 的靈魂。','<b>故事、動畫、星球主題</b>：內建視覺主題（例如「星球」把重點排成行星般環繞），快速做出有氣勢的版面。','<b>縮放技巧</b>：善用放大看細節、縮小看全貌的節奏，讓觀眾跟著你的視線走。']},
+        {h:'金句',tip:'「Prezi 的重點不是頁面，而是『路徑』——你怎麼帶鏡頭。」先想好故事線與鏡頭移動，再放內容。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep27-notes.html#sec-key" style="color:var(--purple)">筆記 6：關鍵功能</a>'}]}
+    ]
+  }
+};
+const ORDER = ['intro','products','vs','key'];
+const $ = s=>document.querySelector(s);
+function renderChapter(ch){
+  const d=DATA[ch];const next=ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];const prev=ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html=`<div class="chapter-head"><span class="emoji">${d.emoji}</span><div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div></div>`;
+  d.topics.forEach((tp,i)=>{const id=`${ch}-${i}`;
+    html+=`<div class="topic" id="topic-${id}"><div class="topic-head" onclick="toggleTopic('${id}')"><span class="num">${i+1}</span><h4>${tp.t}<small>${tp.s}</small></h4><input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)"><span class="chev">▶</span></div><div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{html+=`<div class="block"><h5>${b.h}</h5>`;
+      if(b.p)html+=`<p>${b.p}</p>`;
+      if(b.ul)html+=`<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps)html+=`<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.table)html+=`<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.prompt)html+=`<div class="prompt">${b.prompt}</div>`;
+      if(b.tip)html+=`<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn)html+=`<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html+=`</div>`;});
+    html+=`</div></div></div>`;});
+  html+=`<div class="chapnav"><a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a><a onclick="showHome()" style="text-align:center">回總覽<b>🏠 四大主題</b></a><a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a></div>`;
+  $('#view-'+ch).innerHTML=html;
+}
+ORDER.forEach(renderChapter);
+function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('#view-'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function showHome(){switchView('home');$('#crumbs').style.display='none';clearSearch();}
+function showChapter(ch){switchView(ch);$('#crumbs').style.display='flex';$('#crumbHere').textContent=`${DATA[ch].emoji} ${DATA[ch].title}`;clearSearch();syncChecks();}
+function toggleTopic(id){$('#topic-'+id).classList.toggle('open');}
+function openTopic(ch,i){showChapter(ch);const el=$('#topic-'+ch+'-'+i);el.classList.add('open');setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+const KEY='ep27-skills-v1';
+const store=()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){const s=store();if(val)s[id]=1;else delete s[id];localStorage.setItem(KEY,JSON.stringify(s));updateProgress();}
+const TOTAL=ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){const done=Object.keys(store()).length;const pct=Math.round(done/TOTAL*100);$('#progFill').style.width=pct+'%';$('#progText').textContent=`${done} / ${TOTAL} 項技能已掌握`;$('#statDone').textContent=done;$('#statPct').textContent=pct+'%';ORDER.forEach(ch=>{const sub=DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;const el=document.querySelector(`[data-mini="${ch}"]`);if(el)el.style.width=Math.round(sub/DATA[ch].topics.length*100)+'%';});}
+function syncChecks(){const s=store();document.querySelectorAll('input[data-skill]').forEach(cb=>{cb.checked=!!s[cb.dataset.skill];});}
+function resetProgress(){if(confirm('確定要清空所有打勾進度嗎？')){localStorage.removeItem(KEY);syncChecks();updateProgress();}}
+function stripTags(s){return s.replace(/<[^>]+>/g,'');}
+const INDEX=[];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{let body=tp.s+' ';tp.blocks.forEach(b=>{if(b.p)body+=stripTags(b.p)+' ';if(b.ul)body+=b.ul.map(stripTags).join(' ')+' ';if(b.steps)body+=b.steps.map(stripTags).join(' ')+' ';if(b.tip)body+=stripTags(b.tip)+' ';if(b.warn)body+=stripTags(b.warn)+' ';if(b.prompt)body+=stripTags(b.prompt)+' ';if(b.table)body+=b.table.rows.flat().map(stripTags).join(' ')+' ';});INDEX.push({ch,i,title:tp.t,body});}));
+$('#searchInput').addEventListener('input',e=>{const q=e.target.value.trim();const box=$('#searchResults');if(!q){box.classList.remove('show');box.innerHTML='';return;}const hits=INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));box.classList.add('show');if(!hits.length){box.innerHTML=`<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：縮放、非線性、Video、AI 點數）</div>`;return;}const hl=s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);box.innerHTML=hits.map(x=>{const pos=x.body.toLowerCase().indexOf(q.toLowerCase());const snip=x.body.substr(Math.max(0,pos-20),90);return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})"><div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div><h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;}).join('');});
+function clearSearch(){$('#searchInput').value='';$('#searchResults').classList.remove('show');$('#searchResults').innerHTML='';}
+syncChecks();updateProgress();
+</script>
+</body>
+</html>

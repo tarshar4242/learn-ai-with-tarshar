@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP5 課堂筆記｜NotebookLM × Google Apps Script：從筆記本到記帳本的半自動化流程</title>
+<meta name="description" content="晨學講堂 EP5 課堂筆記：半自動化記帳的價值、NotebookLM 資料表五種情境、無資料表功能替代方案與三層提示詞框架、Google Apps Script 自動分類與報表圖表程式碼、自訂選單與觸發器。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#217a52; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px;border-left:none}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.prompt{position:relative;background:#1d1d1f;border-radius:10px;padding:15px 16px;margin:12px 0;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt .tag{display:inline-block;font-size:11px;letter-spacing:.06em;color:#c9c4ff;border:1px solid #3a3a40;border-radius:6px;padding:2px 9px;margin-bottom:8px}
+.svgwrap{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg{display:block;width:100%;height:auto}
+.svgwrap figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#a8d2bb" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP5 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="ep5-ai-skills.html">🗺️ 互動地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 晨學講堂 · EP5</span>
+  <h1>NotebookLM × Google Apps Script<br><span>從筆記本到記帳本</span>的半自動化流程</h1>
+  <p class="lead">EP5 帶你走完「消費筆記 → 智慧記帳」的完整半自動化流程：先用 <b>NotebookLM 資料表</b>把收據照片、語音備忘錄與雜亂筆記變成結構化表格，再用 <b>Google Apps Script</b> 自動分類、彙總報表、繪製圖表，最後設定觸發器與寄信通知，達成「設定後即忘記」的自動化體驗。</p>
+  <div class="meta">
+    <span>📅 2025/12/24 直播</span>
+    <span>🗂️ 教材：官方課程簡報</span>
+    <span>🧾 主題：半自動化記帳</span>
+    <span>⚙️ Google Apps Script</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-why">1. 為何需要半自動化記帳</a>
+  <a href="#sec-cases">2. NotebookLM 資料表五種情境</a>
+  <a href="#sec-alt">3. 無資料表功能替代方案</a>
+  <a href="#sec-gas">4. Google Apps Script 基礎與自動分類</a>
+  <a href="#sec-report">5. 生成報表與繪製圖表</a>
+  <a href="#sec-ext">6. 自訂選單、觸發器與寄信通知</a>
+  <a href="#sec-flow">7. 流程總覽與延伸應用</a>
+  <a href="#sec-src">8. 資料來源與製作說明</a>
+</nav>
+
+<article>
+
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--teal))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>EP5_NotebookLM × Google Apps Script：從筆記本到記帳本的半自動化流程</td></tr>
+    <tr><th>頻道</th><td>生成式 AI 應用電台・晨學講堂（黃老師）</td></tr>
+    <tr><th>直播日期</th><td>2025/12/24（三）晚間直播</td></tr>
+    <tr><th>教材</th><td>官方課程簡報＋範例資料表.docx＋範例收據.png</td></tr>
+    <tr><th>一句話先懂</th><td>NotebookLM 負責「智慧解析非結構化資料」，Google Apps Script 負責「自動分類、計算與寄信」——兩者接起來就是一套免費、客製化、全自動化的記帳工作流。</td></tr>
+  </table></div>
+  <div class="note blue">💡 本頁依<b>官方課程簡報文字全文</b>整理（真實課程內容），含完整 Google Apps Script 程式碼；示範操作的螢幕畫面與逐字稿時間碼待日後取得錄影授權後再補入。</div>
+</section>
+
+<section class="chapter" id="sec-why">
+  <span class="chip" style="background:linear-gradient(90deg,#217a52,#0d8f80)">CHAPTER 01</span>
+  <h2 class="ct">1. 為何需要半自動化記帳？</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">比較項目</th><th>傳統手動方式</th><th>半自動化方案</th></tr>
+    <tr><td>時間成本</td><td>每日 15-30 分鐘</td><td>每週 5-10 分鐘</td></tr>
+    <tr><td>錯誤率</td><td>人工輸入易出錯</td><td>AI 輔助校驗</td></tr>
+    <tr><td>分類一致性</td><td>標準不統一</td><td>自動化分類</td></tr>
+    <tr><td>洞察能力</td><td>難以分析趨勢</td><td>自動報表生成</td></tr>
+  </table></div>
+  <h3>誰適合這套工作流？</h3>
+  <ul class="pt">
+    <li><b>個人開支管理者：</b>想擺脫繁瑣記帳的上班族，透過隨手筆記輕鬆完成每日記帳。</li>
+    <li><b>研究人員：</b>需要追蹤研究經費與報銷的學者，自動彙整各類實驗室支出。</li>
+    <li><b>專案經理：</b>管理專案預算與支出的 PM，即時掌握專案成本與剩餘預算。</li>
+    <li><b>小型企業主：</b>需要簡易財務報表的創業者，無需專業會計軟體也能掌握金流。</li>
+  </ul>
+</section>
+
+<section class="chapter" id="sec-cases">
+  <span class="chip" style="background:linear-gradient(90deg,#0d8f80,#3b6bb0)">CHAPTER 02</span>
+  <h2 class="ct">2. NotebookLM 資料表：5+ 種實用情境</h2>
+  <p class="cd">NotebookLM 專注於分析你上傳的文件，提供基於事實的回答，嚴格遵循來源資料、不瞎編亂造。資料表功能於 2024/12/18 推出，Pro／Ultra 用戶優先使用。</p>
+  <ol class="st">
+    <li><b>財務管理：</b>將收據照片、銀行通知、訊息上傳，一鍵轉換為記帳表格（日期／項目／金額／分類）。</li>
+    <li><b>研究分析：</b>彙整多篇論文，建立比較表（作者年份／研究方法／樣本數／主要發現／研究限制）。</li>
+    <li><b>競品分析：</b>上傳競爭對手產品資訊，生成比較表（定價／目標客群／核心功能／優劣勢）。</li>
+    <li><b>會議管理：</b>上傳會議逐字稿，萃取待辦事項表（任務／負責人／截止日／優先級）。</li>
+    <li><b>專案規劃：</b>從討論紀錄自動生成任務分配表或簡易甘特圖資料（任務／負責人／開始日／完成日／相依任務）。</li>
+  </ol>
+  <div class="golden"><div class="q">Prompt 範例（財務情境）</div><div class="a">「請將這些消費紀錄整理成表格，欄位包含：日期、項目名稱、金額、消費分類（餐飲/交通/娛樂/日用品/其他）」</div></div>
+</section>
+
+<section class="chapter" id="sec-alt">
+  <span class="chip" style="background:linear-gradient(90deg,#3b6bb0,#5645D4)">CHAPTER 03</span>
+  <h2 class="ct">3. 無「資料表」功能的替代方案</h2>
+  <ol class="st">
+    <li><b>輸入提示詞：</b>要求 NotebookLM 生成 Markdown 格式表格。</li>
+    <li><b>複製內容：</b>複製生成的 Markdown 表格代碼。</li>
+    <li><b>貼上至 Sheets：</b>直接貼上到 Google 試算表。</li>
+    <li><b>調整格式：</b>簡單調整欄寬與框線即可使用。</li>
+  </ol>
+  <h3>NotebookLM 三層提示詞框架</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:130px">層次</th><th>用途</th><th>範例提問</th></tr>
+    <tr><td>感知與理解</td><td>快速掌握單一資料源的核心問題與方法</td><td>「這份資料嘗試解決什麼問題？提出了哪些方法？達成哪些結果？」</td></tr>
+    <tr><td>衝突與整合</td><td>分析多個資料源的異同並建立連結</td><td>「找出這些來源中相互矛盾的觀點」「它們與主題 XXX 有什麼關聯？」</td></tr>
+    <tr><td>敘事與表現</td><td>組織輸出結構，生成大綱或特定格式</td><td>「將核心觀點串連起來，創建一份大綱」「重新組織以突顯核心論點」</td></tr>
+  </table></div>
+</section>
+
+<section class="chapter" id="sec-gas">
+  <span class="chip" style="background:linear-gradient(90deg,#5645D4,#bf6a1e)">CHAPTER 04</span>
+  <h2 class="ct">4. Google Apps Script 基礎與自動分類</h2>
+  <p>Google Apps Script 是基於 JavaScript 的雲端腳本平台：深度整合 Sheets／Gmail／Calendar／Drive，完全免費、雲端執行、使用廣泛流行的 JavaScript 語法。開啟方式：Google Sheets → 擴充功能 → Apps Script。</p>
+  <div class="prompt"><span class="tag">Code.gs 讀取／寫入</span>function readData() {
+  const sheet = SpreadsheetApp.getActive().getActiveSheet();
+  const data = sheet.getDataRange().getValues();
+  Logger.log(data);
+}
+function writeData() {
+  const sheet = SpreadsheetApp.getActive().getActiveSheet();
+  sheet.getRange("A1").setValue("Hello");
+  sheet.appendRow(["2023/12/25", "午餐", 120]);
+}</div>
+  <h3>範例一：自動分類帳目＋金額過高判斷</h3>
+  <div class="prompt"><span class="tag">Code.gs</span>function autoCategorizeAndCheckAmount() {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  const data = sheet.getDataRange().getValues();
+  const HIGH_AMOUNT_THRESHOLD = 500;
+  const categoryRules = [
+    { keywords: ["Uber","捷運","公車","計程車"], category: "交通" },
+    { keywords: ["午餐","晚餐","早餐","便當"], category: "餐飲" },
+    { keywords: ["電影","KTV","遊戲"], category: "娛樂" },
+    { keywords: ["超市","家樂福","全聯"], category: "日用品" }
+  ];
+  // D欄：依關鍵字自動分類；F欄：金額 > 500 標記「過高」，否則「正常」
+}</div>
+</section>
+
+<section class="chapter" id="sec-report">
+  <span class="chip" style="background:linear-gradient(90deg,#bf6a1e,#b5476a)">CHAPTER 05</span>
+  <h2 class="ct">5. 範例二＋三：生成月度財務報表與自動繪製圖表</h2>
+  <h3>範例二：生成月度財務報表</h3>
+  <p class="cd">運作邏輯：利用 JavaScript 物件作為雜湊表，將相同分類的金額累加，最後輸出至獨立報表頁面。</p>
+  <div class="prompt"><span class="tag">Code.gs</span>function generateReport() {
+  const sheet = SpreadsheetApp.getActive().getSheetByName("記帳");
+  const data = sheet.getDataRange().getValues();
+  const totals = {};
+  for (let i = 1; i < data.length; i++) {
+    const category = data[i][3], amount = data[i][2];
+    if (category) totals[category] = (totals[category]||0) + amount;
+  }
+  const reportSheet = SpreadsheetApp.getActive().getSheetByName("報表");
+  reportSheet.clear();
+  reportSheet.appendRow(["分類","總金額"]);
+  for (const cat in totals) reportSheet.appendRow([cat, totals[cat]]);
+}</div>
+  <h3>範例三：自動繪製圓餅圖</h3>
+  <p class="cd">繪圖流程：定義資料範圍 → 建立圖表物件 → 設定類型與位置 → 插入工作表。</p>
+  <div class="prompt"><span class="tag">Code.gs</span>function createMonthlyExpensePieChart() {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("報表");
+  const lastRow = sheet.getLastRow();
+  const range = sheet.getRange(1, 1, lastRow, 2);
+  const chart = sheet.newChart().asPieChart().addRange(range)
+    .setOption("title", "本月支出分佈")
+    .setOption("legend", { position: "right" })
+    .setPosition(2, 8, 0, 0).build();
+  sheet.insertChart(chart);
+}</div>
+</section>
+
+<section class="chapter" id="sec-ext">
+  <span class="chip" style="background:linear-gradient(90deg,#b5476a,#217a52)">CHAPTER 06</span>
+  <h2 class="ct">6. 擴充功能：自訂選單、觸發器與寄送報表郵件</h2>
+  <h3>自訂選單（一鍵執行）</h3>
+  <p class="cd">關鍵觸發器：<code>onOpen()</code>——開啟試算表時自動執行，用來建立 UI 選單。</p>
+  <div class="prompt"><span class="tag">Code.gs</span>function onOpen() {
+  const ui = SpreadsheetApp.getUi();
+  ui.createMenu('記帳小幫手')
+    .addItem('自動分類帳目', 'autoCategorize')
+    .addItem('生成月報表', 'generateReport')
+    .addSeparator()
+    .addItem('寄送報表郵件', 'sendEmail')
+    .addToUi();
+}</div>
+  <h3>設定觸發器</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">類型</th><th>說明</th><th>應用範例</th></tr>
+    <tr><td>時間驅動</td><td>設定固定時間間隔自動執行</td><td>每月 1 號自動寄送財務報表</td></tr>
+    <tr><td>事件驅動</td><td>特定事件發生時自動觸發</td><td>輸入金額後自動判斷分類</td></tr>
+  </table></div>
+  <div class="note gold">⚠️ 首次設定觸發器時，Google 會要求授權腳本存取你的資料，依指示完成驗證即可。</div>
+  <h3>寄送報表郵件（MailApp）</h3>
+  <div class="prompt"><span class="tag">Code.gs</span>function sendEmail() {
+  const sheet = SpreadsheetApp.getActive().getSheetByName("報表");
+  const data = sheet.getDataRange().getValues();
+  let body = "本月財務報表摘要：\n\n";
+  for (let i = 1; i < data.length; i++) body += data[i][0] + ": " + data[i][1] + "\n";
+  MailApp.sendEmail({ to: "user@example.com", subject: "12月財務報表", body: body });
+}</div>
+</section>
+
+<section class="chapter" id="sec-flow">
+  <span class="chip" style="background:linear-gradient(90deg,#3f8560,#0d8f80)">RECAP</span>
+  <h2 class="ct">7. 半自動化流程總覽與延伸應用</h2>
+  <h3>Phase 1：從零散筆記到結構化資料</h3>
+  <ol class="st">
+    <li>資料搜集：消費收據照片、語音備忘錄、雜亂文字筆記。</li>
+    <li>NotebookLM：上傳多種來源 → Data Table 處理 → Prompt 欄位定義。</li>
+    <li>結構化輸出：標準化表格 → 匯出 CSV → 匯入 Google Sheets。</li>
+  </ol>
+  <h3>Phase 2：從試算表到自動化報表</h3>
+  <ol class="st" start="4">
+    <li>Google Sheets：原始數據儲存 → 貼上 Markdown/CSV → 基礎格式調整。</li>
+    <li>Apps Script：自動分類腳本 → 數據彙總邏輯 → 定時觸發執行。</li>
+    <li>自動化產出：視覺化圖表 → 月度財務報表 → Email 自動通知。</li>
+  </ol>
+  <h3>延伸應用</h3>
+  <ul class="pt">
+    <li><b>專案管理：</b>將會議錄音轉為待辦事項，自動同步至 Google Tasks 或 Trello。</li>
+    <li><b>學術研究：</b>整理大量文獻摘要，自動生成引用格式並匯入 Zotero 或 EndNote。</li>
+    <li><b>Line Notify 串接：</b>將財務報表推送到 Line 群組，即時掌握資訊。</li>
+    <li><b>行事曆整合：</b>從筆記中識別日期與活動，自動建立 Google Calendar 行程。</li>
+    <li><b>AI 深度整合：</b>分析長期消費數據，提供個人化省錢建議；打造個人知識庫第二大腦。</li>
+  </ul>
+  <div class="golden"><div class="q">「NotebookLM × Google Apps Script，從筆記本到記帳本，只需一步之遙。」</div><div class="a">—— 課程收尾金句</div></div>
+</section>
+
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5a5866)">SOURCES</span>
+  <h2 class="ct">8. 資料來源與製作說明</h2>
+  <ul class="pt">
+    <li><b>原始教材：</b>EP5「NotebookLM × Google Apps Script：從筆記本到記帳本的半自動化流程」官方課程簡報全文，含範例資料表.docx、範例收據.png。</li>
+    <li><b>製作方式：</b>逐節對照官方簡報可讀文字整理，比較表、Prompt 範例與 GAS 程式碼<b>取自簡報原文</b>。內容為<b>真實課程內容</b>。</li>
+    <li><b>誠實聲明：</b>本頁以簡報實錄為準；本集資料夾錄影檔案暫僅供擁有者存取，<b>示範操作畫面與逐字稿時間碼</b>待開放授權或網路政策開通後補入。NotebookLM 與 Apps Script 介面會持續更新，以你使用當下的畫面為準。</li>
+    <li><b>介面參考：</b>互動地圖頁沿用本站 EP38–46 的卡片式多層導覽與遊戲化進度設計。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  EP5「NotebookLM × Google Apps Script：從筆記本到記帳本的半自動化流程」課堂筆記・2026/07 整理<br>
+  🍀 Learn AI with Tarshar｜搭配 <a href="ep5-ai-skills.html">互動地圖</a> 使用效果最佳
+</footer>
+
+</body>
+</html>

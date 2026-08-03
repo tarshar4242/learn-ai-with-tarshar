@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP37 課堂筆記｜與 AI 共行：RAG 訓練不用從頭開始</title>
+<meta name="description" content="晨學講堂 EP37 課堂筆記：與 AI 共行・RAG——生成式 AI 概念紮根、ChatGPT 客製化與個人化、RAG 檢索增強生成是什麼、ChatGPT 專案功能＝免費 RAG、兩個實作（建立專案上傳檔案／設定專案指令）、Gemini Gem 免費 RAG、NotebookLM 個人知識庫、AI 生圖與印製注意事項。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#b23a5b; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px;border-left:none}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+.note.violet{background:#F3EFFB;border-color:#DFD2F0;color:#5a34a8}
+.note.rose{background:#FBEEF1;border-color:#F0D2DB;color:#9c2f52}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.prompt{position:relative;background:#1d1d1f;border-radius:10px;padding:15px 16px;margin:12px 0;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt .tag{display:inline-block;font-size:11px;letter-spacing:.06em;color:#c9c4ff;border:1px solid #3a3a40;border-radius:6px;padding:2px 9px;margin-bottom:8px}
+.prompt b{color:#fff}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.embed{margin:14px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000}
+.embed iframe{display:block;width:100%;aspect-ratio:16/9;border:0}
+.embed .cap{font-size:12.5px;color:var(--ink3);padding:10px 16px;background:var(--paper);border-top:1px solid var(--line)}
+.ts{display:inline-block;font-family:"Cascadia Code",Consolas,monospace;font-weight:700;font-size:12px;color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,#fff);border-radius:5px;padding:2px 8px;margin-right:7px;letter-spacing:.4px;vertical-align:middle}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+.layers{display:grid;gap:10px;margin:14px 0}
+.lyr{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:13px 15px;background:#fff}
+.lyr .n{flex:none;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--accent)}
+.lyr h4{margin:0 0 3px;font-size:14.5px}
+.lyr p{font-size:13px;margin:0}
+.sub{color:var(--ink2)}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#e6b9c6" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP37 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="ep37-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 晨學講堂 · EP37</span>
+  <h1><span>與 AI 共行</span><br>RAG：訓練不用從頭開始</h1>
+  <p class="lead">EP37 的核心是 <b>RAG（檢索增強生成）</b>：你不需要「從頭訓練」一個模型，只要把自己的檔案交給 AI 當<b>檢索資料庫</b>，它就能以你的資料為依據回答。這堂課用三個「免費 RAG」工具貫穿——<b>ChatGPT 專案功能、Gemini Gem、NotebookLM</b>，再加上把 AI 調教到懂你的<b>客製化指令</b>與兩個實作。</p>
+  <div class="meta">
+    <span>📅 2026 直播</span>
+    <span>🗂️ 教材：官方課程簡報</span>
+    <span>🧠 主題：RAG／專案功能</span>
+    <span>🤝 ChatGPT × Gemini × NotebookLM</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-base">1. 概念紮根</a>
+  <a href="#sec-custom">2. ChatGPT 客製化與個人化</a>
+  <a href="#sec-rag">3. RAG 是什麼</a>
+  <a href="#sec-proj">4. 專案功能＝免費 RAG</a>
+  <a href="#sec-lab1">5. 實作一：建立專案＋上傳檔案</a>
+  <a href="#sec-lab2">6. 實作二：設定專案指令</a>
+  <a href="#sec-gemini">7. Gemini 篇：Gem 免費 RAG</a>
+  <a href="#sec-nlm">8. NotebookLM 個人知識庫</a>
+  <a href="#sec-ext">9. 延伸：AI 生圖與印製</a>
+  <a href="#sec-recap">10. 重點整理</a>
+  <a href="#sec-src">11. 資料來源與製作說明</a>
+</nav>
+
+<article>
+
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--purple))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>EP37_「<b>與 AI 共行：RAG 訓練不用從頭開始</b>」</td></tr>
+    <tr><th>頻道</th><td>生成式 AI 應用電台・晨學講堂</td></tr>
+    <tr><th>教材</th><td>官方課程簡報（大型完整簡報）＋錄影回放</td></tr>
+    <tr><th>一句話先懂</th><td><b>RAG（Retrieval-Augmented Generation，檢索增強生成）</b>＝先「檢索」你上傳的資料，再「生成」回答。你不必訓練模型，只要把檔案丟進去，AI 就以你的資料為依據作答——這就是「訓練不用從頭開始」。</td></tr>
+    <tr><th>三個免費 RAG</th><td>① ChatGPT 專案功能　② Gemini Gem　③ NotebookLM——都能上傳檔案、建立自己的檢索知識庫。</td></tr>
+  </table></div>
+  <div class="note blue">💡 本頁內容<b>逐頁整理自 EP37 官方課程簡報全文</b>（真實課程教材，非推測）；概念圖為依簡報內容繪製的 SVG 圖解。本集示範操作的螢幕畫面／逐字稿時間碼未逐幀對照錄影，若日後取得可再補入實錄截圖。</div>
+</section>
+
+<section class="chapter" id="sec-base">
+  <span class="chip" style="background:linear-gradient(90deg,#b23a5b,#7a4fd6)">CHAPTER 01</span>
+  <h2 class="ct">1. 概念紮根：先站穩地基</h2>
+  <p class="cd">在動手之前，先把生成式 AI 的分類、原理與常見工具搞清楚。</p>
+
+  <h3>生成式 AI 分類與運作原理</h3>
+  <p>課程用「程式概念」來類比 AI 的運作：AI 就像在<b>取代傳統程式的四個元件</b>——</p>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">程式概念</th><th>對應 AI 的角色</th></tr>
+    <tr><td>函數 Function</td><td>把輸入轉成輸出的處理單元</td></tr>
+    <tr><td>條件分歧 Conditional</td><td>依情況給不同回應</td></tr>
+    <tr><td>布林表達式 Boolean</td><td>判斷真／假、要不要做</td></tr>
+    <tr><td>迴圈 Loop</td><td>反覆修正、持續優化</td></tr>
+  </table></div>
+
+  <h3>常見 GenAI 工具</h3>
+  <ul class="pt">
+    <li><b>對話型</b>：ChatGPT、Claude、Copilot、Perplexity AI、Felo AI</li>
+    <li><b>簡報型</b>：Gamma（自動生成簡報）</li>
+  </ul>
+
+  <h3>趨勢：零散應用，還是系統再造？</h3>
+  <p>目前多數人對 GenAI 仍停留在<b>「拼貼式」使用</b>——摘要生成、語法校正、格式整理各做各的。課程主張把 AI 從零散工具升級成<b>整合與重塑</b>工作流程的系統，而 RAG 正是關鍵一步：把你的資料變成 AI 的長期記憶。</p>
+  <div class="note gold">⚠️ 心態調整：別再把 AI 當「一次性問答」，要把它當<b>會累積脈絡的長期夥伴</b>——這也是本集標題「與 AI 共行」的意思。</div>
+</section>
+
+<section class="chapter" id="sec-custom">
+  <span class="chip" style="background:linear-gradient(90deg,#7a4fd6,#2f6df0)">CHAPTER 02</span>
+  <h2 class="ct">2. ChatGPT 客製化與個人化</h2>
+  <p class="cd">在建 RAG 之前，先把 AI 的「個性、語氣、規則」調到懂你。</p>
+
+  <h3>自訂 GPT 的 5 大個性</h3>
+  <p>ChatGPT 個人帳戶 →「自訂 ChatGPT」→ 可選 AI 的性格：</p>
+  <div class="twrap"><table>
+    <tr><th style="width:130px">個性</th><th>風格</th><th>適合時機</th></tr>
+    <tr><td>預設 Default</td><td>穩定、平衡、不偏不倚</td><td>日常問答、寫作、資料整理</td></tr>
+    <tr><td>憤世嫉俗 Cynic</td><td>嘲諷、直白、帶刺幽默</td><td>腦力激盪、想聽不拐彎的意見</td></tr>
+    <tr><td>機器人 Robot</td><td>精準、簡潔、無感情</td><td>技術文件、流程指引、除錯</td></tr>
+    <tr><td>傾聽者 Listener</td><td>溫暖、放鬆、反饋思考</td><td>做決策、生活規劃、自我反思</td></tr>
+    <tr><td>學霸 Nerd</td><td>好奇、熱情、知識宅</td><td>學新知、科普解說、長篇探討</td></tr>
+  </table></div>
+
+  <h3>System Prompt vs User Prompt</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">類型</th><th>作用</th><th>設在哪</th></tr>
+    <tr><td><b>System Prompt</b></td><td>定義 AI 的整體角色、語氣、任務範圍、行為規範（背景設定）</td><td>ChatGPT「自訂 GPT」／專案「新增指令」；Gemini「已儲存的資訊」；Claude「Personal Preferences」</td></tr>
+    <tr><td><b>User Prompt</b></td><td>當下輸入的具體請求、問題、任務</td><td>每次對話輸入框</td></tr>
+  </table></div>
+
+  <h3>兩個超實用的常設指令</h3>
+  <h4>① 繁中回覆原則（貼進「自訂 ChatGPT」）</h4>
+  <div class="prompt"><span class="tag">回覆原則</span>1. 在沒有特別指示下，統一用符合台灣（中華民國）常用的繁體中文回覆（zh_TW）。
+2. 回覆前請再次檢查第 1 點是否符合（zh_TW）。
+3. 沒有特別指示下，避免用 source code 模式。
+4. 需要整理時請直接用表格形式回覆。
+5. 對話還沒說完，請直接繼續。
+6. 回覆盡可能附上參考來源與連結，不要杜撰、天花亂墜。</div>
+
+  <h4>② 降低 AI 生成感（讓文字像真人）</h4>
+  <div class="prompt"><span class="tag">降低 AI 生成感</span>請記住以下偏好，改寫或創作時遵守，讓內容自然、有溫度、貼近真人說話：
+・語氣親切專業，像資深同事分享經驗，不要太書面化。
+・句子長短交錯，用分號逗號串連想法，避免全是短句。
+・加入生活化比喻、具體例子、台灣文化語境。
+・刪除冗長重複空泛詞句，簡潔精準。
+・避免機械化結構（首先／其次／最後）與僵硬條列。
+・用同理心表達，讓人讀起來有溫度。
+三階段潤色：先語言自然化 → 再加情感情境 → 最後檢查專業親切感。</div>
+
+  <div class="note green">🎯 這一章的重點：先用「System Prompt」把 AI 的角色與規則固定下來，後面 RAG 專案的回答才會穩定一致。</div>
+</section>
+
+<section class="chapter" id="sec-rag">
+  <span class="chip" style="background:linear-gradient(90deg,#2f6df0,#0d9488)">CHAPTER 03</span>
+  <h2 class="ct">3. RAG 是什麼（本集核心）</h2>
+  <p class="cd">Retrieval-Augmented Generation＝檢索增強生成。一句話：先查你的資料，再生成回答。</p>
+
+  <div class="svgwrap">
+  <svg viewBox="0 0 900 200" xmlns="http://www.w3.org/2000/svg" font-family="Noto Sans TC,sans-serif">
+    <defs><marker id="ar" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#b23a5b"/></marker></defs>
+    <g>
+      <rect x="14" y="76" width="150" height="52" rx="12" fill="#f6e9ee" stroke="#b23a5b"/>
+      <text x="89" y="99" text-anchor="middle" font-size="13.5" font-weight="800" fill="#8c2c47">你的問題</text>
+      <text x="89" y="117" text-anchor="middle" font-size="11" fill="#61545a">User Prompt</text>
+      <line x1="168" y1="102" x2="200" y2="102" stroke="#b23a5b" stroke-width="2" marker-end="url(#ar)"/>
+      <rect x="206" y="60" width="180" height="84" rx="12" fill="#eef6fd" stroke="#2f6df0"/>
+      <text x="296" y="88" text-anchor="middle" font-size="13.5" font-weight="800" fill="#1d5e8f">① 檢索 Retrieval</text>
+      <text x="296" y="108" text-anchor="middle" font-size="11" fill="#61545a">先去你的檔案庫</text>
+      <text x="296" y="124" text-anchor="middle" font-size="11" fill="#61545a">找出相關段落</text>
+      <line x1="390" y1="102" x2="422" y2="102" stroke="#b23a5b" stroke-width="2" marker-end="url(#ar)"/>
+      <rect x="428" y="60" width="180" height="84" rx="12" fill="#f3eeff" stroke="#7a4fd6"/>
+      <text x="518" y="88" text-anchor="middle" font-size="13.5" font-weight="800" fill="#5a34a8">② 增強 Augment</text>
+      <text x="518" y="108" text-anchor="middle" font-size="11" fill="#61545a">把找到的資料</text>
+      <text x="518" y="124" text-anchor="middle" font-size="11" fill="#61545a">塞進 AI 的上下文</text>
+      <line x1="612" y1="102" x2="644" y2="102" stroke="#b23a5b" stroke-width="2" marker-end="url(#ar)"/>
+      <rect x="650" y="60" width="180" height="84" rx="12" fill="#eafaf2" stroke="#1d9e6f"/>
+      <text x="740" y="88" text-anchor="middle" font-size="13.5" font-weight="800" fill="#166a4c">③ 生成 Generation</text>
+      <text x="740" y="108" text-anchor="middle" font-size="11" fill="#61545a">以你的資料為依據</text>
+      <text x="740" y="124" text-anchor="middle" font-size="11" fill="#61545a">產出有憑有據的答案</text>
+      <rect x="206" y="12" width="624" height="30" rx="8" fill="#241019"/>
+      <text x="518" y="32" text-anchor="middle" font-size="12.5" font-weight="700" fill="#f0a8c0">上傳檔案 = 建立「檢索資料庫」，不用重新訓練模型</text>
+      <line x1="296" y1="42" x2="296" y2="58" stroke="#94858c" stroke-width="1.4" stroke-dasharray="3 3"/>
+    </g>
+  </svg>
+  <div class="cap">圖解｜RAG 三步：檢索 → 增強 → 生成。你上傳的 PDF／Word／簡報就是「檢索資料庫」，AI 回答會優先引用它。</div>
+  </div>
+
+  <h3>為什麼「訓練不用從頭開始」</h3>
+  <ul class="pt">
+    <li><b>傳統做法</b>：要 AI 懂你的領域，得花大錢、大量資料去「訓練／微調」一個模型。</li>
+    <li><b>RAG 做法</b>：不動模型，只把資料放進「可檢索的資料庫」，AI 現查現用——<b>零訓練、即時更新、隨時換資料</b>。</li>
+    <li><b>對一般人的意義</b>：ChatGPT 專案、Gemini Gem、NotebookLM 都內建這個能力，等於<b>免費、免技術門檻的 RAG</b>。</li>
+  </ul>
+  <div class="golden"><div class="q">「把 RAG 概念應用在專案管理裡——上傳檔案，就等於幫 AI 建了一個檢索資料庫。」</div><div class="a">—— EP37 簡報原文</div></div>
+</section>
+
+<section class="chapter" id="sec-proj">
+  <span class="chip" style="background:linear-gradient(90deg,#0d9488,#b23a5b)">CHAPTER 04</span>
+  <h2 class="ct">4. ChatGPT 專案功能 ＝ 免費 RAG</h2>
+  <p class="cd">專案功能把「對話、檔案、自訂指令」集中在同一個資料夾，讓 AI 用固定角色、固定資料長期幫你辦事。（類似 Gemini 的 Gem）</p>
+
+  <h3>專案核心概念：RAG ＋ 角色 ＋ 任務</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">要素</th><th>內容</th></tr>
+    <tr><td><b>RAG 檔案庫</b></td><td>專案可上傳 PDF、Word、簡報、資料表，AI 回答會<b>優先引用這些資料</b>。</td></tr>
+    <tr><td><b>固定角色設定</b></td><td>定義 AI 的身分（研究助理、報告撰寫手、課程設計師）。</td></tr>
+    <tr><td><b>任務與語氣</b></td><td>指定回應語氣、格式、是否條列、是否繁中等細節。</td></tr>
+    <tr><td><b>多文件整合</b></td><td>同一專案可含多個檔案，AI 能整併分析所有資料。</td></tr>
+  </table></div>
+
+  <h3>專案使用情境</h3>
+  <ul class="pt">
+    <li>長期報告／專題研究（政策、學術、公務）</li>
+    <li>跨部門資料整理（會議、專案管理）</li>
+    <li>課程規劃與教案撰寫</li>
+    <li>活動企劃、補助計畫、年度績效</li>
+  </ul>
+
+  <h3>專案的進階能力</h3>
+  <ul class="pt">
+    <li><b>多角色互動</b>：同時扮演「審稿人」＋「研究助理」。</li>
+    <li><b>回覆必須引述來源</b>：避免 AI 編造資料。</li>
+    <li><b>固定格式產出</b>：APA、簡報框架、SOP。</li>
+    <li><b>任務自動化</b>：每次進專案都能延續前次脈絡。</li>
+  </ul>
+  <div class="note rose">🌹 一句話記住：<b>專案 ＝ RAG 檔案庫 ＋ 固定角色 ＋ 任務規則</b>，三合一。</div>
+</section>
+
+<section class="chapter" id="sec-lab1">
+  <span class="chip" style="background:linear-gradient(90deg,#b23a5b,#c98a0a)">實作 一</span>
+  <h2 class="ct">5. 實作一：建立專案 ＋ 上傳檔案（RAG 建置）</h2>
+  <p class="cd">目標：讓 ChatGPT 記住一個主題，並能引用你提供的檔案進行分析、摘要、撰寫。</p>
+
+  <h3>A. 建立新專案</h3>
+  <ol class="st">
+    <li>左側側邊欄 → 點「＋ 新專案」。</li>
+    <li>輸入專案名稱（例：「AI 解答機器」「2025 政策研究資料庫」「會議整理與紀錄專案」）。</li>
+    <li>點「建立專案」。</li>
+  </ol>
+
+  <h3>B. 上傳參考資料（建立 RAG 資料庫）</h3>
+  <ol class="st">
+    <li>點右上角「📄 檔案」。</li>
+    <li>上傳要給 AI 用的檔案（PDF、PPTX、DOCX、XLSX）。</li>
+    <li>ChatGPT 自動讀取檔案並建立資料索引；之後回答會<b>優先引用上傳資料</b>。</li>
+  </ol>
+
+  <h3>C. 驗證是否成功連動</h3>
+  <div class="prompt"><span class="tag">驗證指令</span>請用我上傳的檔案資料，整理成 5 點摘要。</div>
+  <p>→ 若 AI 能引用檔案內容作答，代表 RAG 設定成功。</p>
+  <div class="note green">✅ 檢查點：回答裡有沒有「引用到你檔案裡的具體內容」？有 → 成功；沒有 → 重新確認檔案是否上傳完成。</div>
+</section>
+
+<section class="chapter" id="sec-lab2">
+  <span class="chip" style="background:linear-gradient(90deg,#c98a0a,#b23a5b)">實作 二</span>
+  <h2 class="ct">6. 實作二：設定專案自訂指令（角色＋語氣＋格式＋任務）</h2>
+  <p class="cd">目標：讓 AI 在專案中「永遠以同一角色與格式」回應你。</p>
+
+  <h3>操作位置</h3>
+  <p>點專案右上角「⋯」→ 選「專案指令」→ 填入下面四段（可直接貼上你的簡報）。</p>
+
+  <h3>可直接套用的四段指令</h3>
+  <div class="prompt"><span class="tag">1. 指定角色</span>你是一位公共政策研究助理，熟悉臺灣法規、政府制度、TSSCI 論文格式。</div>
+  <div class="prompt"><span class="tag">2. 指定語氣與風格</span>全程使用臺灣常用繁體中文；條列式、重點清楚；引用資料需標示來源（如 PDF、頁碼）。</div>
+  <div class="prompt"><span class="tag">3. 指定任務與格式</span>回答時請先產出摘要，再產出詳述；若內容需整理，請提供表格；若需呈現決策流程，請用 Mermaid 心智圖。</div>
+  <div class="prompt"><span class="tag">4. 約束條件</span>若無資料來源，不可編造；所有政策相關內容須標示引用文件名稱。</div>
+
+  <h3>實際測試</h3>
+  <div class="prompt"><span class="tag">測試指令</span>請用此專案的設定，寫出新北市農業局某某政策的三項政策挑戰。</div>
+  <p>AI 會自動：用你設定的語氣 ＋ 引用你上傳的資料 ＋ 用指定格式回答 → 代表專案設定成功。</p>
+  <div class="note gold">⚠️ 「約束條件」最關鍵：<b>「若無資料來源，不可編造」</b>——這一句能大幅降低 AI 幻覺，讓 RAG 回答有憑有據。</div>
+</section>
+
+<section class="chapter" id="sec-gemini">
+  <span class="chip" style="background:linear-gradient(90deg,#2f6df0,#7a4fd6)">CHAPTER 05</span>
+  <h2 class="ct">7. Gemini 篇：Gem ＝免費 RAG，打通 Google 生態</h2>
+  <p class="cd">Gemini 的 Gem 就像 ChatGPT 的 GPTs／專案功能，一樣能上傳檔案做免費 RAG，還能串整個 Google 生態鏈。</p>
+
+  <h3>打通 Google AI 任督二脈（五步）</h3>
+  <ol class="st">
+    <li><b>「已儲存的資訊」客製化</b>：專家角色指令、回覆原則、降低 AI 生成感、快捷鍵指令。</li>
+    <li><b>「應用程式」鏈結 Google 生態鏈（類似 MCP）</b>：GitHub、Gmail、Calendar、Keep、Tasks、文件、雲端硬碟、地圖、航班、飯店、YouTube。</li>
+    <li><b>「排程工作」</b>：讓 Gemini 變行程秘書，每天提醒行程、天氣、整理信件、彙整會議紀錄。</li>
+    <li><b>「Gem」打造專案機器人（免費 RAG）</b>：一鍵設置、上傳相關檔案、設定回應模式，也能做 Deep Research、產圖、產影片（veo3）。</li>
+    <li><b>「Canvas」成果展示平台</b>：字體調整、語氣改寫、長度調整、產網頁／資訊圖表／測驗／小遊戲。</li>
+  </ol>
+
+  <h3>探索 Gem 的三個玩法</h3>
+  <ul class="pt">
+    <li><b>角色扮演</b>：讓 Gem 固定扮演某個專家。</li>
+    <li><b>檔案上傳</b>：把資料變成 Gem 的檢索庫（RAG）。</li>
+    <li><b>自動潤稿</b>：固定用你的語氣改寫。</li>
+  </ul>
+  <div class="note blue">💡 每一筆 Gemini 回應都能用「<b>查證回覆內容</b>」驗證資訊是否有誤——搭配 RAG 的來源引用，雙重降低幻覺。</div>
+  <div class="golden"><div class="q">「Gem＝免費 RAG。」</div><div class="a">—— 上傳檔案 + 設定角色，你就有了一個懂你資料的專屬機器人。</div></div>
+</section>
+
+<section class="chapter" id="sec-nlm">
+  <span class="chip" style="background:linear-gradient(90deg,#0d9488,#2f6df0)">CHAPTER 06</span>
+  <h2 class="ct">8. NotebookLM ＝個人知識庫</h2>
+  <p class="cd">第三個免費 RAG 工具，專門把「一堆來源」變成可問答、可對照的個人知識庫。</p>
+
+  <h3>功能定位與使用時機</h3>
+  <ul class="pt">
+    <li><b>基礎操作</b>：來源輸入、角色設定與環境設定。</li>
+    <li><b>延伸應用一</b>：善用對話記憶功能，讓它記住你的偏好與脈絡。</li>
+    <li><b>延伸應用二</b>：建立個人知識庫，把資料集中成一本可檢索的筆記。</li>
+    <li><b>延伸應用三</b>：產出高度個性化的圖文作品。</li>
+    <li><b>延伸應用四</b>：建立客製化 AI 聊天機器人。</li>
+  </ul>
+  <div class="note green">🔗 三個工具怎麼選：<b>ChatGPT 專案</b>重「長期任務＋角色」；<b>Gemini Gem</b>重「串 Google 生態＋自動化」；<b>NotebookLM</b>重「多來源知識庫＋對照問答」。核心都是 RAG。</div>
+</section>
+
+<section class="chapter" id="sec-ext">
+  <span class="chip" style="background:linear-gradient(90deg,#c98a0a,#d4508e)">延 伸</span>
+  <h2 class="ct">9. 延伸：AI 生圖與印製注意事項</h2>
+  <p class="cd">課程尾段補充：用 AI 生圖做成品、以及要拿去印刷時該注意什麼。</p>
+
+  <h3>生圖資源與應用</h3>
+  <ul class="pt">
+    <li><b>Youmid</b>：專為 ChatGPT Image 2.0 打造的「提示詞」集散地，提示詞範本可直接取用。</li>
+    <li>常見用途：App／網站設計、海報傳單、個人頭像、社群貼文、資訊圖表、YouTube 縮圖、漫畫分鏡。</li>
+    <li>內建生圖有浮水印；成品可輸出、印製。</li>
+  </ul>
+
+  <h3>要拿去印刷？先看這張表</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:120px">問題</th><th>原因</th><th>建議處理</th></tr>
+    <tr><td>圖片糊掉</td><td>解析度不足、放太大</td><td>生成高解析圖或用放大工具</td></tr>
+    <tr><td>文字變形</td><td>AI 直接生成文字不穩</td><td>文字改用 PPT／Canva／AI 重排</td></tr>
+    <tr><td>顏色變暗</td><td>RGB 轉 CMYK 色域落差</td><td>印前轉 CMYK、先看樣張</td></tr>
+    <tr><td>邊緣被裁</td><td>沒有出血</td><td>加 3mm 出血</td></tr>
+    <tr><td>字體跑掉</td><td>沒嵌入字型</td><td>輸出 PDF 時嵌入字型或轉外框</td></tr>
+  </table></div>
+  <div class="note gold">⚠️ 可以在 prompt 裡要求「適合 300dpi 印刷」「16:9／A4 直式」「背景延伸到出血區」，但<b>真正的 CMYK 檔與裁切線仍需設計軟體後製輸出</b>，光靠生圖不夠。</div>
+</section>
+
+<section class="chapter" id="sec-recap">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--purple))">RECAP</span>
+  <h2 class="ct">10. 重點整理（帶走這幾句）</h2>
+  <ul class="pt">
+    <li><b>RAG ＝ 檢索增強生成</b>：先查你的資料，再生成回答；上傳檔案就是建「檢索資料庫」。</li>
+    <li><b>訓練不用從頭開始</b>：不動模型、只換資料，零訓練、即時更新——這就是免費 RAG。</li>
+    <li><b>三個免費 RAG 工具</b>：ChatGPT 專案、Gemini Gem、NotebookLM，都能上傳檔案建知識庫。</li>
+    <li><b>先客製化再建 RAG</b>：用 System Prompt 固定角色、語氣、繁中回覆與「降低 AI 生成感」。</li>
+    <li><b>實作一</b>：建專案 → 上傳檔案 → 用「整理成 5 點摘要」驗證連動成功。</li>
+    <li><b>實作二</b>：專案指令四段——角色、語氣、任務格式、約束條件（「無來源不可編造」最關鍵）。</li>
+    <li><b>降低幻覺</b>：要求 AI 引用來源、加約束條件、用「查證回覆內容」驗證。</li>
+    <li><b>生圖印製</b>：可要求高解析與比例，但 CMYK／出血／裁切線仍需設計軟體後製。</li>
+  </ul>
+  <div class="golden"><div class="q">「與 AI 共行——把你的資料交給它，它就成為最懂你的助理。」</div><div class="a">—— EP37 主題金句</div></div>
+</section>
+
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,#94858c,#61545a)">SOURCE</span>
+  <h2 class="ct">11. 資料來源與製作說明</h2>
+  <ul class="pt">
+    <li><b>主要教材</b>：EP37 官方課程簡報《與 AI 共行：RAG 訓練不用從頭開始》（大型完整簡報）。</li>
+    <li><b>製作方式</b>：本頁內容<b>逐頁整理自簡報全文</b>（真實課程教材）——所有指令與 Prompt 均為簡報原文；RAG 三步圖為依簡報內容繪製的 SVG 圖解，用於幫助理解，非另加內容。</li>
+    <li><b>誠實標註</b>：本集簡報為 66MB 大型檔（105 頁），以檔案結構萃取全文文字建置本頁；示範操作的螢幕畫面／逐字稿時間碼未逐幀對照錄影，若日後取得可再補入實錄截圖。未經改寫杜撰。</li>
+    <li><b>延伸</b>：搭配 <a href="ep37-ai-skills.html">EP37 互動技能地圖</a> 逐項打勾練習；相關集數 <a href="ep36-notes.html">EP36 Gemini Notebooks</a>、<a href="ep39-notes.html">EP39 NotebookLM×Markdown</a>。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  生成式 AI 應用電台・晨學講堂 ｜ EP37 課堂筆記 ｜ 與 AI 共行：RAG 訓練不用從頭開始<br>
+  本頁為學習筆記整理，教材版權屬原課程與講者所有。<a href="../radio/" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a><br>
+  🍀 <b>Learn AI with Tarshar</b> ♥ 2026
+</footer>
+
+</body>
+</html>

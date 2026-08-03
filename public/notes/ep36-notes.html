@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP36 課堂筆記｜Gemini Notebooks 5 種稀鬆平常的用法</title>
+<meta name="description" content="晨學講堂 EP36 課堂筆記：Gemini Notebooks（Gemini 筆記本）——認識 Notebooks、六大環境設定（角色/任務/資料/工作/輸出/限制）、五種實用用法：簡報模板資料庫、學習教練機器人、專案管理機器人、跨筆記本對話、Gemini×ChatGPT 共享來源。含完整範例 Prompt。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#0d9488; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px;border-left:none}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+.note.violet{background:#F3EFFB;border-color:#DFD2F0;color:#5a34a8}
+.note.rose{background:#FBEEF1;border-color:#F0D2DB;color:#9c2f52}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.prompt{position:relative;background:#1d1d1f;border-radius:10px;padding:15px 16px;margin:12px 0;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt .tag{display:inline-block;font-size:11px;letter-spacing:.06em;color:#c9c4ff;border:1px solid #3a3a40;border-radius:6px;padding:2px 9px;margin-bottom:8px}
+.prompt b{color:#fff}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.embed{margin:14px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000}
+.embed iframe{display:block;width:100%;aspect-ratio:16/9;border:0}
+.embed .cap{font-size:12.5px;color:var(--ink3);padding:10px 16px;background:var(--paper);border-top:1px solid var(--line)}
+.ts{display:inline-block;font-family:"Cascadia Code",Consolas,monospace;font-weight:700;font-size:12px;color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,#fff);border-radius:5px;padding:2px 8px;margin-right:7px;letter-spacing:.4px;vertical-align:middle}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+.layers{display:grid;gap:10px;margin:14px 0}
+.lyr{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:13px 15px;background:#fff}
+.lyr .n{flex:none;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--accent)}
+.lyr h4{margin:0 0 3px;font-size:14.5px}
+.lyr p{font-size:13px;margin:0}
+.sub{color:var(--ink2)}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#9fded3" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP36 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="ep36-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 晨學講堂 · EP36</span>
+  <h1><span>Gemini Notebooks</span><br>5 種稀鬆平常、馬上上手的用法</h1>
+  <p class="lead">EP36 帶你把 <b>Gemini Notebooks（Gemini 筆記本）</b>從「聽過」變成「天天在用」：先學會<b>六大環境設定</b>把 AI 調教到懂你，再用五個真實情境——<b>簡報模板資料庫、學習教練、專案管理、跨筆記本對話、Gemini×ChatGPT 共享來源</b>——讓 AI 成為生活中的超級助理。本頁整理每一頁簡報重點並附上<b>可直接複製的範例 Prompt</b>。</p>
+  <div class="meta">
+    <span>📅 2026 直播</span>
+    <span>🗂️ 教材：官方簡報（含 Prompt 集）</span>
+    <span>🤖 主題：Gemini Notebooks</span>
+    <span>🧰 整理筆記／研究／待辦／創作</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-what">1. 認識 Gemini Notebooks</a>
+  <a href="#sec-env">2. 六大環境設定</a>
+  <a href="#sec-u1">3. 用法①簡報模板資料庫</a>
+  <a href="#sec-u2">4. 用法②學習教練機器人</a>
+  <a href="#sec-u3">5. 用法③專案管理機器人</a>
+  <a href="#sec-u4">6. 用法④跨筆記本對話</a>
+  <a href="#sec-u5">7. 用法⑤共享來源</a>
+  <a href="#sec-prompts">8. 範例 Prompt 全集</a>
+  <a href="#sec-recap">9. 重點整理</a>
+  <a href="#sec-src">10. 資料來源與製作說明</a>
+</nav>
+
+<article>
+
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--blue))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>EP36_「<b>Gemini notebooks 5 種稀鬆平常得用法</b>」（LIVE 實用 AI 工具系列）</td></tr>
+    <tr><th>頻道</th><td>生成式 AI 應用電台・晨學講堂</td></tr>
+    <tr><th>教材</th><td>官方課程簡報（含五大用法 + 完整範例 Prompt 集）＋錄影回放</td></tr>
+    <tr><th>核心一句</th><td>Gemini Notebooks 是一個「<b>先設定環境、再開始對話</b>」的 AI 筆記本：把資料、角色、規則都固定在一本筆記裡，讓 Gemini 每次都以同一套脈絡幫你辦事。</td></tr>
+    <tr><th>五種用法</th><td>① 簡報模板資料庫　② 學習教練機器人　③ 專案管理機器人　④ 跨筆記本對話　⑤ Gemini×ChatGPT 共享來源</td></tr>
+  </table></div>
+  <div class="note blue">💡 本頁內容整理自<b>官方課程簡報全文與其中的範例 Prompt</b>（真實課程教材，非推測）。示範操作的螢幕畫面時間碼，若日後逐幀對照錄影可再補入。</div>
+</section>
+
+<section class="chapter" id="sec-what">
+  <span class="chip" style="background:linear-gradient(90deg,#0d9488,#0aa6c9)">CHAPTER 01</span>
+  <h2 class="ct">1. 認識 Gemini Notebooks</h2>
+  <p class="cd">先搞懂它是什麼、跟一般筆記本差在哪、典型怎麼用。</p>
+
+  <h3>它是什麼</h3>
+  <p><b>Gemini Notebooks 是 Google 提供的「AI 筆記型環境」</b>——讓你在單一筆記本中與 Gemini 協作：撰寫、執行程式碼、分析資料並把結果視覺化。重點不是「多一個記事本」，而是<b>把 AI 直接內建進筆記本</b>，隨時協作。</p>
+
+  <h3>五個馬上能上手的場景</h3>
+  <ul class="pt">
+    <li><b>整理筆記</b>——把零散內容整理成有結構的重點。</li>
+    <li><b>研究分析</b>——丟資料進去，請 AI 幫你歸納趨勢與洞察。</li>
+    <li><b>待辦清單</b>——把討論轉成可追蹤、可執行的任務。</li>
+    <li><b>內容創作</b>——快速產出草稿、文案、簡報大綱。</li>
+    <li><b>發想與規劃</b>——腦力激盪、規劃流程與故事線。</li>
+  </ul>
+
+  <h3>和傳統筆記本（Jupyter 等）差在哪</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:120px">面向</th><th>傳統筆記本</th><th>Gemini Notebooks</th></tr>
+    <tr><td>AI 協作</td><td>需切換到別的工具</td><td><b>內建 Gemini，隨時協作</b></td></tr>
+    <tr><td>資料處理</td><td>需自行撰寫程式碼</td><td>Gemini 協助生成與優化</td></tr>
+    <tr><td>視覺化</td><td>需自行處理</td><td>簡單指令即可產生圖表</td></tr>
+    <tr><td>易用性</td><td>需較多設定與工具整合</td><td>開箱即用、直覺操作</td></tr>
+    <tr><td>協作分享</td><td>功能有限</td><td>即時協作、留言、分享</td></tr>
+  </table></div>
+
+  <h3>典型使用流程</h3>
+  <div class="svgwrap">
+  <svg viewBox="0 0 900 130" xmlns="http://www.w3.org/2000/svg" font-family="Noto Sans TC,sans-serif">
+    <defs><marker id="ah1" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#0d9488"/></marker></defs>
+    <g>
+      <rect x="8" y="42" width="150" height="46" rx="10" fill="#e6f4f2" stroke="#0d9488"/>
+      <text x="83" y="62" text-anchor="middle" font-size="13" font-weight="700" fill="#0d5951">① 建立筆記本</text>
+      <text x="83" y="79" text-anchor="middle" font-size="11" fill="#54615e">新的 Notebook</text>
+      <line x1="162" y1="65" x2="188" y2="65" stroke="#0d9488" stroke-width="2" marker-end="url(#ah1)"/>
+      <rect x="192" y="42" width="150" height="46" rx="10" fill="#eef6fd" stroke="#2f6df0"/>
+      <text x="267" y="62" text-anchor="middle" font-size="13" font-weight="700" fill="#1d5e8f">② 與 Gemini 對話</text>
+      <text x="267" y="79" text-anchor="middle" font-size="11" fill="#54615e">提問／取得建議</text>
+      <line x1="346" y1="65" x2="372" y2="65" stroke="#0d9488" stroke-width="2" marker-end="url(#ah1)"/>
+      <rect x="376" y="42" width="150" height="46" rx="10" fill="#f3eeff" stroke="#7a4fd6"/>
+      <text x="451" y="62" text-anchor="middle" font-size="13" font-weight="700" fill="#5a34a8">③ 執行程式碼</text>
+      <text x="451" y="79" text-anchor="middle" font-size="11" fill="#54615e">在筆記本中即時跑</text>
+      <line x1="530" y1="65" x2="556" y2="65" stroke="#0d9488" stroke-width="2" marker-end="url(#ah1)"/>
+      <rect x="560" y="42" width="150" height="46" rx="10" fill="#eafaf2" stroke="#1d9e6f"/>
+      <text x="635" y="62" text-anchor="middle" font-size="13" font-weight="700" fill="#166a4c">④ 分析與視覺化</text>
+      <text x="635" y="79" text-anchor="middle" font-size="11" fill="#54615e">建圖表、找洞察</text>
+      <line x1="714" y1="65" x2="740" y2="65" stroke="#0d9488" stroke-width="2" marker-end="url(#ah1)"/>
+      <rect x="744" y="42" width="148" height="46" rx="10" fill="#fdf6e7" stroke="#c98a0a"/>
+      <text x="818" y="62" text-anchor="middle" font-size="13" font-weight="700" fill="#7a5b12">⑤ 分享與協作</text>
+      <text x="818" y="79" text-anchor="middle" font-size="11" fill="#54615e">共同編輯／分享</text>
+    </g>
+  </svg>
+  <div class="cap">圖解｜典型流程：建立筆記本 → 與 Gemini 對話 → 編寫並執行程式碼 → 分析視覺化 → 分享協作。適合資料分析、教學、研究與各種需要 AI 協作的工作流程。</div>
+  </div>
+
+  <h3>個人化：讓筆記本記住你</h3>
+  <ul class="pt">
+    <li><b>個人化記憶</b>——Gemini 會記住並參考這本筆記本的所有對話脈絡、偏好與背景，讓回覆更貼近你。</li>
+    <li><b>筆記本設定</b>——你可以告訴 Gemini 回覆的語氣（專業／簡潔／親切）、格式、重點關注事項。</li>
+    <li><b>新增來源檔案</b>——上傳文件、PDF、簡報、試算表、文字檔，Gemini 會閱讀理解，作為回答的重要依據。</li>
+  </ul>
+  <div class="note green">🎯 核心心法：<b>「結合你的提問 ＋ 檔案內容」</b>＝更準確、完整且有依據的回覆。這正是後面五種用法共同的底層邏輯。</div>
+</section>
+
+<section class="chapter" id="sec-env">
+  <span class="chip" style="background:linear-gradient(90deg,#0aa6c9,#2f6df0)">CHAPTER 02</span>
+  <h2 class="ct">2. 六大環境設定（開口前先調教）</h2>
+  <p class="cd">在開始對話前先設好環境，Gemini 才會更懂你、回得更精準。</p>
+
+  <div class="svgwrap">
+  <svg viewBox="0 0 900 250" xmlns="http://www.w3.org/2000/svg" font-family="Noto Sans TC,sans-serif">
+    <g>
+      <rect x="12" y="16" width="284" height="66" rx="12" fill="#e6f4f2" stroke="#0d9488"/>
+      <text x="30" y="42" font-size="14" font-weight="800" fill="#0d5951">① 角色扮演 Role</text>
+      <text x="30" y="63" font-size="11.5" fill="#54615e">設定 Gemini 的身分與專業背景</text>
+      <rect x="308" y="16" width="284" height="66" rx="12" fill="#eef6fd" stroke="#2f6df0"/>
+      <text x="326" y="42" font-size="14" font-weight="800" fill="#1d5e8f">② 任務要求 Task</text>
+      <text x="326" y="63" font-size="11.5" fill="#54615e">清楚描述目標、情境與重點</text>
+      <rect x="604" y="16" width="284" height="66" rx="12" fill="#f3eeff" stroke="#7a4fd6"/>
+      <text x="622" y="42" font-size="14" font-weight="800" fill="#5a34a8">③ 資料來源 Source</text>
+      <text x="622" y="63" font-size="11.5" fill="#54615e">提供參考資料，以真實內容為依據</text>
+      <rect x="12" y="94" width="284" height="66" rx="12" fill="#eafaf2" stroke="#1d9e6f"/>
+      <text x="30" y="120" font-size="14" font-weight="800" fill="#166a4c">④ 工作事項 Workflow</text>
+      <text x="30" y="141" font-size="11.5" fill="#54615e">拆解任務、列出具體步驟</text>
+      <rect x="308" y="94" width="284" height="66" rx="12" fill="#fdf6e7" stroke="#c98a0a"/>
+      <text x="326" y="120" font-size="14" font-weight="800" fill="#7a5b12">⑤ 輸出格式 Output</text>
+      <text x="326" y="141" font-size="11.5" fill="#54615e">指定呈現方式（條列／表格／大綱）</text>
+      <rect x="604" y="94" width="284" height="66" rx="12" fill="#fdeef4" stroke="#d4508e"/>
+      <text x="622" y="120" font-size="14" font-weight="800" fill="#9c2f66">⑥ 回應限制 Constraints</text>
+      <text x="622" y="141" font-size="11.5" fill="#54615e">邊界：字數、僅事實不推測、避術語</text>
+      <rect x="180" y="188" width="540" height="46" rx="12" fill="#0f1e1c"/>
+      <text x="450" y="216" text-anchor="middle" font-size="13.5" font-weight="700" fill="#8fe6d6">六大設定齊全 → 打造專屬 Gemini 筆記本環境</text>
+    </g>
+  </svg>
+  <div class="cap">圖解｜六大環境設定：角色、任務、資料、工作、輸出、限制。這六格填好，等於先把 AI 的「工作合約」講清楚。</div>
+  </div>
+
+  <div class="twrap"><table>
+    <tr><th style="width:120px">設定</th><th>在做什麼</th><th>範例</th></tr>
+    <tr><td><b>① 角色扮演</b></td><td>設定 AI 的身分與專業背景，從該角色角度給建議</td><td>「你是一位資深行銷顧問」「你是一名資料科學家」</td></tr>
+    <tr><td><b>② 任務要求</b></td><td>清楚描述目標、情境與重點</td><td>「幫我分析這份市場報告的重點」「協助我擬定行銷策略」</td></tr>
+    <tr><td><b>③ 資料來源</b></td><td>提供參考資料，讓 AI 以真實內容為依據</td><td>上傳 PDF、Excel、簡報；或提供網站連結／文字</td></tr>
+    <tr><td><b>④ 工作事項</b></td><td>把任務拆成具體步驟，讓 AI 有條理執行</td><td>「①整理資料重點 ②分析趨勢 ③提出建議」</td></tr>
+    <tr><td><b>⑤ 輸出格式</b></td><td>指定結果的呈現方式</td><td>條列式重點／表格比較／簡報大綱（含標題與重點）</td></tr>
+    <tr><td><b>⑥ 回應限制</b></td><td>設主題範圍、字數、避免內容，確保聚焦安全</td><td>「字數不超過 500 字」「僅提供事實，不要推測」「避免技術術語」</td></tr>
+  </table></div>
+
+  <div class="golden"><div class="q">「先設定，再對話。」</div><div class="a">—— 六大設定齊全，輸出才會穩定、一致、可直接拿來用。這是 Notebooks 最重要的操作心法。</div></div>
+</section>
+
+<section class="chapter" id="sec-u1">
+  <span class="chip" style="background:linear-gradient(90deg,#7a4fd6,#0d9488)">用法 ①</span>
+  <h2 class="ct">3. 打造「簡報模板資料庫」</h2>
+  <p class="cd">讓 Gemini 變成你的簡報設計總監：輸入主題，自動推薦風格、規劃版面、產出每頁內容。</p>
+
+  <h3>六個步驟</h3>
+  <ol class="st">
+    <li><b>設定 Notebook 身份</b>——先定義 Gemini 要扮演誰（簡報設計總監＋資訊圖表設計師＋模板資料庫管理專家），後續輸出才穩定。</li>
+    <li><b>建立風格資料庫</b>——把風格圖片整理成「可搜尋、可比對、可推薦」的資料庫（例：3D 新創風、大地永續風、大字報編輯風、極簡留白風、數據資訊圖表風、模組卡片風、霧玻璃漸層風）。</li>
+    <li><b>主題生成與簡報規劃</b>——每次輸入主題，Gemini 自動推薦風格、規劃每頁重點、安排故事線。</li>
+    <li><b>資訊圖表轉換</b>——把長文字優先轉成流程圖／時間軸／比較表／九宮格等，原則是「圖 &gt; 表 &gt; 文字」。</li>
+    <li><b>自動推薦風格</b>——依主題比對資料庫，給出前 3 名風格＋推薦理由。</li>
+    <li><b>輸出規格與限制</b>——先講清楚輸出規則，讓每次產出一致。</li>
+  </ol>
+
+  <h3>關鍵範例 Prompt</h3>
+  <div class="prompt"><span class="tag">Step 1｜設定身份</span>請你扮演一位「國際級簡報設計總監＋資訊圖表設計師＋簡報模板資料庫管理專家」。你擅長：根據主題自動推薦簡報風格、將文字轉為高質感版面、建立可重複使用的模板、設計資訊圖表、規劃投影片視覺階層。你會依據 <b>主題、使用情境、對象、內容量、資料型態</b> 自動判斷適合的風格與版型。請維持：高級感、易閱讀、視覺層次、演講友善、<b>白底黑字優先、重點放大、資訊圖表化</b>。</div>
+
+  <div class="prompt"><span class="tag">Step 3｜主題生成</span>主題：（輸入主題）　用途：（演講／課程／報告／提案）　對象：（學生／主管／公務員／研究人員／企業）　內容：（貼上文章或逐字稿）　希望風格：（可指定或請你推薦）　頁數：（例如 10 頁）
+請協助：1.推薦風格　2.建議版面配置　3.規劃簡報故事線　4.建議資訊圖表形式　5.產出每頁內容　6.每頁視覺設計建議　7.標示哪幾頁適合做動畫。</div>
+
+  <div class="prompt"><span class="tag">Step 6｜輸出規則</span>請所有輸出遵守：使用繁體中文、白底黑字優先、主標題大字、重點關鍵字加粗、每頁不超過 5 個重點、適合演講觀看、保持高留白、避免過度裝飾、優先資訊圖表化、內容過長自動拆頁、每頁需有「標題＋視覺建議＋內容」。</div>
+
+  <div class="note gold">⚠️ 記憶點：<b>「把風格變成可管理、可推薦、可重複使用的資料庫」</b>——一次建好，之後每個主題都能快速套用。</div>
+</section>
+
+<section class="chapter" id="sec-u2">
+  <span class="chip" style="background:linear-gradient(90deg,#2f6df0,#0d9488)">用法 ②</span>
+  <h2 class="ct">4. 打造「學習教練機器人」</h2>
+  <p class="cd">不只幫你摘要，而是幫你看懂：今天真正學會什麼、卡在哪、下一步先做什麼。</p>
+
+  <h3>五個步驟</h3>
+  <ol class="st">
+    <li><b>角色設定</b>——把 Gemini 定義成「學習教練＋進度整理助手＋錯誤提醒夥伴」，讀懂你的教材、筆記、錯誤紀錄與操作截圖。</li>
+    <li><b>資料讀取規則</b>——優先參考筆記本內資料，不要憑空推測；資料不足要直說。</li>
+    <li><b>每日學習整理</b>——固定四塊輸出：今天學到什麼／現在卡在哪／下一步先做的 3 件事／最容易再犯的錯。</li>
+    <li><b>白話改寫規則</b>——不照抄教材，用「是什麼、為什麼重要、怎麼做、常見錯誤」四問說明。</li>
+    <li><b>回應限制與規範</b>——繁中、下一步只留 3 件事、優先表格與條列、不確定就說資料不足。</li>
+  </ol>
+
+  <div class="svgwrap">
+  <svg viewBox="0 0 900 120" xmlns="http://www.w3.org/2000/svg" font-family="Noto Sans TC,sans-serif">
+    <g>
+      <rect x="10" y="30" width="205" height="60" rx="12" fill="#eef6fd" stroke="#2f6df0"/>
+      <text x="112" y="55" text-anchor="middle" font-size="13.5" font-weight="800" fill="#1d5e8f">今天學到什麼</text>
+      <text x="112" y="75" text-anchor="middle" font-size="11" fill="#54615e">白話整理真正的重點</text>
+      <rect x="235" y="30" width="205" height="60" rx="12" fill="#fdeef4" stroke="#d4508e"/>
+      <text x="337" y="55" text-anchor="middle" font-size="13.5" font-weight="800" fill="#9c2f66">現在卡在哪</text>
+      <text x="337" y="75" text-anchor="middle" font-size="11" fill="#54615e">指出最可能混淆處</text>
+      <rect x="460" y="30" width="205" height="60" rx="12" fill="#eafaf2" stroke="#1d9e6f"/>
+      <text x="562" y="55" text-anchor="middle" font-size="13.5" font-weight="800" fill="#166a4c">下一步 3 件事</text>
+      <text x="562" y="75" text-anchor="middle" font-size="11" fill="#54615e">只留最優先的動作</text>
+      <rect x="685" y="30" width="205" height="60" rx="12" fill="#fdf6e7" stroke="#c98a0a"/>
+      <text x="787" y="55" text-anchor="middle" font-size="13.5" font-weight="800" fill="#7a5b12">最容易再犯的錯</text>
+      <text x="787" y="75" text-anchor="middle" font-size="11" fill="#54615e">依錯誤紀錄提醒</text>
+    </g>
+  </svg>
+  <div class="cap">圖解｜學習教練的固定四塊輸出。最後再加一塊「回到 NotebookLM 可以補哪裡」（摘要／提問／FAQ／學習指南／來源查找／時間軸）。</div>
+  </div>
+
+  <div class="prompt"><span class="tag">核心 Prompt｜每日整理</span>請根據這本 notebook 的內容，幫我整理今天的學習狀況，依以下格式輸出：
+<b>【今天學到什麼】</b>用白話整理今天真正學會的重點。
+<b>【現在卡在哪】</b>指出我最可能不懂、混淆或操作失誤的地方。
+<b>【下一步先做什麼】</b>只列最優先的 3 件事。
+<b>【最容易再犯的錯】</b>根據錯誤紀錄或操作內容提醒我。
+<b>【回到 NotebookLM 可以補哪裡】</b>建議可用的功能（摘要、提問、FAQ、時間軸、學習指南、來源查找）。
+限制：繁體中文、專有名詞翻白話、不照抄教材、不要給太多步驟、資料不足請直說、回答要短且可執行。</div>
+
+  <div class="golden"><div class="q">「不是抄內容，而是指出你真正學會了什麼、卡在哪、先做什麼。」</div><div class="a">—— 學習教練與一般摘要的最大差別。</div></div>
+</section>
+
+<section class="chapter" id="sec-u3">
+  <span class="chip" style="background:linear-gradient(90deg,#c98a0a,#0d9488)">用法 ③</span>
+  <h2 class="ct">5. 打造「專案管理機器人」</h2>
+  <p class="cd">把逐字稿、需求文件、舊提案、報價，整理成能開會、能追蹤、能執行的專案內容。</p>
+
+  <h3>六個步驟</h3>
+  <ol class="st">
+    <li><b>角色設定</b>——定義成「專案整理助理＋會議重點整理員＋需求追蹤助手」，先整理狀況、不急著給解法。</li>
+    <li><b>資料讀取規則</b>——只用筆記本內已有資料，不腦補客戶沒說過的需求；資料不足要明說。</li>
+    <li><b>專案目標整理</b>——用 5 句以內講清楚：客戶想解決什麼、要完成什麼、目前範圍、可能限制、下一步最重要的判斷。</li>
+    <li><b>需求分類</b>——分成「已確認／待確認／已超出範圍」三類，全用白話改寫。</li>
+    <li><b>本週待辦與窗口</b>——用表格列出最重要任務，標對應窗口、需要資料、預期產出。</li>
+    <li><b>回應限制與規範</b>——繁中、白話、不照抄、不腦補、先整理狀況再判斷。</li>
+  </ol>
+
+  <h3>需求三分類（最實用的一招）</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:130px">分類</th><th>定義</th></tr>
+    <tr><td><b>已確認需求</b></td><td>客戶明確提出、資料中有依據，可直接納入執行。</td></tr>
+    <tr><td><b>待確認需求</b></td><td>有提到但細節、時程或預算未明，仍需再確認。</td></tr>
+    <tr><td><b>已超出範圍需求</b></td><td>超出原提案／原報價／原時程或目前專案範圍。</td></tr>
+  </table></div>
+
+  <div class="prompt"><span class="tag">核心 Prompt｜本週待辦</span>請用表格列出本週最重要的待辦事項，標示對應窗口、需要資料、預期產出與備註：
+| 優先順序 | 待辦事項 | 對應窗口 | 需要資料 | 預期產出 | 備註 |
+限制：只列最重要的、不要一次太多、每項都能實際執行、窗口不明標「待確認」。</div>
+
+  <div class="note gold">⚠️ 三不原則：<b>不照抄原文、不腦補需求、不先給解法</b>——先把狀況整理清楚，才是專案管理機器人的價值。</div>
+</section>
+
+<section class="chapter" id="sec-u4">
+  <span class="chip" style="background:linear-gradient(90deg,#0d9488,#7a4fd6)">用法 ④</span>
+  <h2 class="ct">6. 跨筆記本對話功能</h2>
+  <p class="cd">把不同筆記本當作來源，一起對照、比較與搭配應用。</p>
+
+  <div class="twrap"><table>
+    <tr><th style="width:90px"></th><th>早期限制</th><th>現在可以</th></tr>
+    <tr><td><b>運作</b></td><td>每本筆記本各自獨立，不能直接交叉比較</td><td>透過 Gemini／Gem 把多個筆記本內容當作參考來源</td></tr>
+    <tr><td><b>能做</b></td><td>需人工來回切換整理</td><td>比較兩本重點差異、整合多本資訊、交叉參照不同主題</td></tr>
+  </table></div>
+
+  <h4>基本流程</h4>
+  <p>開啟 Gemini／Gem → 指定筆記本 A、B 為來源 → 提出比較問題 → 取得整合回覆。</p>
+  <h4>應用情境</h4>
+  <ul class="pt">
+    <li>研究資料對照、課程內容整合</li>
+    <li>專案版本比較、跨主題知識整理</li>
+  </ul>
+
+  <div class="prompt"><span class="tag">範例 Prompt</span>請把筆記本 A 與筆記本 B 當作來源，整理兩者的重點差異、共同點，以及可以互相搭配應用的地方。</div>
+</section>
+
+<section class="chapter" id="sec-u5">
+  <span class="chip" style="background:linear-gradient(90deg,#1d9e6f,#2f6df0)">用法 ⑤</span>
+  <h2 class="ct">7. 共享來源：讓 Gemini 與 ChatGPT 不用從頭打造</h2>
+  <p class="cd">透過雲端空間共享同一批資料，兩個 LLM 都能以相同來源分析、整理與應用。</p>
+
+  <h3>概念</h3>
+  <p><b>把文件集中放在雲端空間</b>，Gemini 與 ChatGPT 都可讀取相同來源——分析角度不同，但依據可以一致。</p>
+
+  <h4>傳統做法 vs 共享來源</h4>
+  <div class="twrap"><table>
+    <tr><th style="width:120px">面向</th><th>傳統做法</th><th>共享來源</th></tr>
+    <tr><td>資料準備</td><td>每個工具各自重新上傳</td><td>集中放雲端，一次備妥</td></tr>
+    <tr><td>脈絡背景</td><td>要重複建立</td><td>不必每次重建</td></tr>
+    <tr><td>切換工具</td><td>容易資料不同步</td><td>兩工具可交叉參考、比對回答角度</td></tr>
+  </table></div>
+
+  <h4>可共享的來源</h4>
+  <p>文件／PDF、簡報／試算表、筆記／逐字稿、網站連結或整理後資料。</p>
+  <h4>適合情境</h4>
+  <p>課程備課、研究整理、專案分析、簡報與內容企劃。</p>
+
+  <div class="prompt"><span class="tag">範例 Prompt</span>請根據雲端空間中的共同來源，分別用 Gemini 與 ChatGPT 協助分析重點、比較差異，並整理可互相搭配應用的地方。</div>
+
+  <div class="golden"><div class="q">「用同一批來源驅動不同 LLM，不必重複準備，也更容易交叉分析。」</div><div class="a">—— 共享來源的核心價值。</div></div>
+</section>
+
+<section class="chapter" id="sec-prompts">
+  <span class="chip" style="background:linear-gradient(90deg,#0d9488,#c98a0a)">PROMPT PACK</span>
+  <h2 class="ct">8. 範例 Prompt 全集（可直接複製）</h2>
+  <p class="cd">課程簡報附的完整 Prompt，照情境挑一段貼進 Notebook 即可。</p>
+
+  <h3>環境設定範例（六大設定一次到位）</h3>
+  <div class="prompt"><span class="tag">角色＋任務＋來源＋工作＋輸出＋限制</span>1.角色：請你扮演一位「資深市場研究與策略分析顧問」，具備資料分析、趨勢觀察與商業策略規劃能力，以清楚、條列式方式說明。
+2.任務：請協助我分析「台灣生成式 AI 工具應用趨勢」，聚焦公務機關應用、教育與研究應用、自動化辦公流程、AI Agent 發展方向。
+3.資料來源：請優先參考我上傳的資料（AI工具整理.pdf、生成式AI課程講義.pptx、公務機關AI應用案例.docx）；若資料不足可補充，但需標示哪些來自外部推論。
+4.工作事項：①整理資料重點 ②分析重要趨勢 ③歸納核心應用場景 ④提出未來發展方向 ⑤產出可執行建議。
+5.輸出格式：標題＋重點摘要（3～5 點）＋表格整理＋條列分析＋一句總結，使用 Markdown。
+6.回應限制：繁體中文、簡單易懂、避免術語、資料不足主動說明、不虛構、字數 2000 字內、重點加粗。</div>
+
+  <h3>學習教練｜資料讀取</h3>
+  <div class="prompt"><span class="tag">先讀懂再整理</span>請優先參考這本 notebook 中的資料，不要憑空推測。閱讀後幫我整理：1.教材核心觀念 2.我筆記中的重點 3.錯誤紀錄反覆出現的問題 4.操作截圖透露的卡關 5.我可能尚未理解的地方。若資料不足，請直接說明「目前資料不足」並告訴我還缺什麼。</div>
+
+  <h3>專案管理｜需求分類</h3>
+  <div class="prompt"><span class="tag">三分類</span>請將專案需求分成三類：【已確認需求】客戶明確提出且資料有依據；【待確認需求】有提到但範圍細節時程預算不清；【已超出範圍需求】超出原提案／報價／時程。每一項用白話改寫，不要直接複製原文。</div>
+</section>
+
+<section class="chapter" id="sec-recap">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--blue))">RECAP</span>
+  <h2 class="ct">9. 重點整理（帶走這幾句）</h2>
+  <ul class="pt">
+    <li><b>Gemini Notebooks ＝ 內建 AI 的筆記本</b>：把資料、角色、規則固定在一本裡，AI 每次都用同一套脈絡幫你辦事。</li>
+    <li><b>先設定，再對話</b>：角色、任務、資料、工作、輸出、限制——六格填好，輸出才穩定。</li>
+    <li><b>用法① 簡報模板資料庫</b>：把風格變成可搜尋、可推薦、可重複用的資料庫。</li>
+    <li><b>用法② 學習教練</b>：固定四塊——學到什麼／卡在哪／下一步 3 件事／最容易再犯的錯。</li>
+    <li><b>用法③ 專案管理</b>：需求三分類（已確認／待確認／超出範圍）＋本週待辦表。</li>
+    <li><b>用法④ 跨筆記本對話</b>：多本筆記本互相對照、比較、整合。</li>
+    <li><b>用法⑤ 共享來源</b>：同一批雲端資料同時餵 Gemini 與 ChatGPT，交叉分析。</li>
+    <li><b>共同心法</b>：提問 ＋ 檔案來源 ＝ 更準確、有依據的回答；不確定就請 AI 說「資料不足」，別讓它腦補。</li>
+  </ul>
+  <div class="golden"><div class="q">「簡單、實用、馬上上手——讓 AI 成為你生活中的超級助理。」</div><div class="a">—— EP36 主題金句</div></div>
+</section>
+
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,#87938f,#54615e)">SOURCE</span>
+  <h2 class="ct">10. 資料來源與製作說明</h2>
+  <ul class="pt">
+    <li><b>主要教材</b>：EP36 官方課程簡報《Gemini notebooks 5 種稀鬆平常得用法》——含五大用法各分頁與完整範例 Prompt 集。</li>
+    <li><b>製作方式</b>：本頁內容<b>逐頁整理自簡報全文與其中的 Prompt</b>（真實課程教材），流程圖與四要素圖為依簡報內容繪製的 SVG 圖解，用來幫助理解，非另加內容。</li>
+    <li><b>誠實標註</b>：本集示範操作的螢幕畫面／逐字稿時間碼未逐幀對照錄影；若日後取得可再補入實錄截圖。所有 Prompt 均為簡報原文，未經改寫杜撰。</li>
+    <li><b>延伸</b>：搭配 <a href="ep36-ai-skills.html">EP36 互動技能地圖</a> 逐項打勾練習，效果更好。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  生成式 AI 應用電台・晨學講堂 ｜ EP36 課堂筆記 ｜ Gemini Notebooks 5 種稀鬆平常的用法<br>
+  本頁為學習筆記整理，教材版權屬原課程與講者所有。<a href="../radio/" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a><br>
+  🍀 <b>Learn AI with Tarshar</b> ♥ 2026
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP19 課堂筆記｜結構先於工具：用 YAML 打造可查證的文獻引用與資訊圖表工作流</title>
+<meta name="description" content="晨學講堂 EP19 課堂筆記：為什麼要用 YAML、基礎語法與分層思維、何時該用／不必用 YAML、逆向工程與順向工程兩大實戰技巧、六大應用場景範例（資訊圖表／簡報／NotebookLM圖像法／論文摘取／文獻格式／歌曲生成）、專家心法與總結流程圖。含課程簡報原圖。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#3b6bb0; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px;border-left:none}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+.note.violet{background:#F3EFFB;border-color:#DFD2F0;color:#5a34a8}
+.note.rose{background:#FBEEF1;border-color:#F0D2DB;color:#9c2f52}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.prompt{position:relative;background:#1d1d1f;border-radius:10px;padding:15px 16px;margin:12px 0;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt .tag{display:inline-block;font-size:11px;letter-spacing:.06em;color:#c9c4ff;border:1px solid #3a3a40;border-radius:6px;padding:2px 9px;margin-bottom:8px}
+.prompt b{color:#fff}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.embed{margin:14px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000}
+.embed iframe{display:block;width:100%;aspect-ratio:16/9;border:0}
+.embed .cap{font-size:12.5px;color:var(--ink3);padding:10px 16px;background:var(--paper);border-top:1px solid var(--line)}
+.ts{display:inline-block;font-family:"Cascadia Code",Consolas,monospace;font-weight:700;font-size:12px;color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,#fff);border-radius:5px;padding:2px 8px;margin-right:7px;letter-spacing:.4px;vertical-align:middle}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+.layers{display:grid;gap:10px;margin:14px 0}
+.lyr{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:13px 15px;background:#fff}
+.lyr .n{flex:none;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--accent)}
+.lyr h4{margin:0 0 3px;font-size:14.5px}
+.lyr p{font-size:13px;margin:0}
+.sub{color:var(--ink2)}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#b7c8ea" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP19 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="ep19-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 晨學講堂 · EP19</span>
+  <h1>結構先於工具：用 <span>YAML</span> 打造可查證的文獻引用與資訊圖表工作流</h1>
+  <p class="lead">EP19 的核心心法：<b>不在於換哪一個 AI 工具，而是先建立結構，再讓工具服從結構</b>。用 YAML 這個「人機共讀」的萬能控制層，把自然語言的不穩定，轉成可驗證、可重現、可交接的 AI 工作流——從逆向工程「還原風格」到順向工程「套用風格生成」，一路涵蓋資訊圖表、簡報、論文摘取、文獻格式、歌曲生成六大應用場景。</p>
+  <div class="meta">
+    <span>📅 01/21（三）06:30-07:30 直播</span>
+    <span>🗂️ 教材：課程筆記 + 16 頁簡報 + YAML 框架文字檔</span>
+    <span>🧩 主題：YAML 結構化提示工程</span>
+    <span>🖼️ 13 張課程簡報原圖</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-why">1. 為什麼要用 YAML</a>
+  <a href="#sec-syntax">2. 基礎語法與分層思維</a>
+  <a href="#sec-when">3. 何時該用／不必用 YAML</a>
+  <a href="#sec-reverse">4. 實戰一：逆向工程解構</a>
+  <a href="#sec-forward">5. 實戰二：順向工程重塑</a>
+  <a href="#sec-cases">6. 六大應用場景範例</a>
+  <a href="#sec-tips">7. 專家建議與心法</a>
+  <a href="#sec-recap">8. 總結流程圖與結語</a>
+  <a href="#sec-src">9. 資料來源與製作說明</a>
+</nav>
+
+<article>
+
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--purple))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>EP19「結構先於工具：用 YAML 打造可查證的文獻引用與資訊圖表工作流」</td></tr>
+    <tr><th>頻道</th><td>生成式 AI 應用電台・晨學講堂</td></tr>
+    <tr><th>直播時間</th><td>01月21日（三）06:30-07:30</td></tr>
+    <tr><th>教材</th><td>課程筆記 Google 文件（6 節完整講義）＋官方課程簡報 <b>16 頁</b>＋「YAML 萬能控制層」框架文字檔</td></tr>
+    <tr><th>一句話先懂</th><td>YAML 不是語法，是<b>「駕馭 AI 的方式」</b>：先鎖定結構，再讓 AI 在結構裡填內容，讓輸出可驗證、可重現、可交接。</td></tr>
+  </table></div>
+  <figure class="shot">
+    <img src="ep19-img/slide01.jpg" alt="EP19 課程封面：結構先於工具，用 YAML 打造可查證的文獻引用與資訊圖表工作流" loading="lazy">
+    <figcaption>簡報封面｜核心概念：不在於換哪一個 AI 工具，先建立結構，再讓工具服從結構——YAML 是跨工具的控制層。</figcaption>
+  </figure>
+  <div class="note blue">💡 本頁內容整理自講師撰寫的完整課程筆記文件，並對照官方簡報逐頁核對；簡報原圖直接嵌入本頁（16 頁中 13 頁為圖文設計頁，其餘 3 頁為純文字／圖形物件頁，內容已完整收錄於對應章節文字中）。</div>
+</section>
+
+<section class="chapter" id="sec-why">
+  <span class="chip" style="background:linear-gradient(90deg,#3b6bb0,#2f7d92)">CHAPTER 01</span>
+  <h2 class="ct">1. 核心概念：為什麼要用 YAML？</h2>
+  <p class="cd">在與 AI（如 ChatGPT、NotebookLM）溝通時，自然語言雖然方便，但也容易發散。YAML（Yet Another Markup Language）是一種標記語言，具備四項優勢：</p>
+  <ul class="pt">
+    <li><b>結構化控制</b>：能更精準地限制 AI 的輸出範圍與格式。</li>
+    <li><b>高可讀性</b>：對人類和機器都友善，比 JSON 更好讀。</li>
+    <li><b>風格一致性</b>：特別適用於需要維持特定風格（如簡報、資訊圖表）的場景。</li>
+    <li><b>跨工具通用</b>：這是一套邏輯框架，適用於 ChatGPT、NotebookLM、Claude 等不同模型。</li>
+  </ul>
+  <h3>YAML vs JSON vs Markdown：三種格式的定位差異</h3>
+  <figure class="shot">
+    <img src="ep19-img/slide08.jpg" alt="JSON、YAML、Markdown 三者比較" loading="lazy">
+    <figcaption>簡報｜JSON 是機器導向、Markdown 是人類閱讀導向，YAML 是「人機共讀」的橋樑——縮排即邏輯，直觀映射 AI 思考結構。</figcaption>
+  </figure>
+  <div class="twrap"><table>
+    <tr><th style="width:120px">格式</th><th>定位</th><th>特性</th></tr>
+    <tr><td><b>JSON</b></td><td>機器導向 Machine Oriented</td><td>語法嚴謹（括號、引號），適合數據傳輸，人類閱讀吃力。</td></tr>
+    <tr><td><b>YAML</b></td><td>人機共讀 Human-Machine Bridge</td><td>縮排即邏輯，直觀映射 AI 思考結構；結構先於工具，不必猜測。</td></tr>
+    <tr><td><b>Markdown</b></td><td>人類閱讀導向 Human Readable</td><td>標記輕量，專注文檔撰寫與排版，非結構化數據。</td></tr>
+  </table></div>
+  <div class="golden"><div class="q">「JSON 是數據，Markdown 是文本，YAML 是連接人腦與 AI 的結構橋樑。」</div><div class="a">—— 簡報關鍵差異總結</div></div>
+</section>
+
+<section class="chapter" id="sec-syntax">
+  <span class="chip" style="background:linear-gradient(90deg,#5645D4,#3b6bb0)">CHAPTER 02</span>
+  <h2 class="ct">2. YAML 的基礎語法與分層思維</h2>
+  <p class="cd">不需要會寫程式也能懂，只需記住兩個關鍵符號，加上一種分層思維。</p>
+  <ul class="pt">
+    <li><b>冒號（:）</b>：定義屬性（例如 Color: Red）。</li>
+    <li><b>短橫線（-）</b>：定義清單或步驟（條列式內容）。</li>
+    <li><b>縮排</b>：利用縮排來建立層級關係。</li>
+  </ul>
+  <figure class="shot">
+    <img src="ep19-img/slide04.jpg" alt="YAML 萬能控制層通用框架 Universal Scaffold" loading="lazy">
+    <figcaption>簡報｜YAML「萬能控制層」通用框架（Universal Scaffold）：meta（元數據）／input（資料來源）／structure（主要框架）／output（產出結果）四大區塊。</figcaption>
+  </figure>
+  <div class="prompt"><span class="tag">YAML 萬能控制層框架</span>meta:
+  purpose: 明確此工作流要解決的問題
+  reproducible: true
+  verification_level: high
+
+input:
+  sources:
+    - type: document
+      description: 來源文件或資料
+    - type: reference
+      description: 需遵循的範例或樣式
+
+structure:
+  sections:
+    - name: section_name
+      role: 此段落的功能定位
+      constraints:
+        length: 文字或內容限制
+        style: 語氣 / 視覺 / 格式規則
+
+output:
+  format: 指定輸出格式（markdown / slide / json / lyrics）
+  rules:
+    - 不可違反的硬性規則
+    - 一致性要求</div>
+  <h3>學 YAML 不是背語法，而是學「分層」</h3>
+  <figure class="shot">
+    <img src="ep19-img/slide09.jpg" alt="YAML 的基本結構思維：設定、內容來源、產出規則" loading="lazy">
+    <figcaption>簡報｜三層結構思維：① 設定 Meta（控制 AI 行為參數）② 內容來源 Input（提供處理資料）③ 不可違反的產出規則 Output（格式與限制）。</figcaption>
+  </figure>
+  <div class="layers">
+    <div class="lyr"><div class="n">1</div><div><h4>設定（Meta）</h4><p>控制 AI 的行為參數（例如：角色、溫度、模型）。</p></div></div>
+    <div class="lyr"><div class="n">2</div><div><h4>內容來源（Input）</h4><p>提供 AI 處理的資料或語料（例如：用戶提問、知識庫）。</p></div></div>
+    <div class="lyr"><div class="n">3</div><div><h4>不可違反的產出規則（Output）</h4><p>定義 AI 必須遵守的格式與限制（例如：JSON 格式、字數限制）。</p></div></div>
+  </div>
+  <div class="golden"><div class="q">「你已駕馭 80% 的 AI 工作流。」</div><div class="a">—— 簡報：掌握這三層分層思維，就等於掌握了大部分結構化提示工程</div></div>
+  <figure class="shot">
+    <img src="ep19-img/slide06.jpg" alt="自然語言到 YAML 控制層再到 AI 產出的過濾流程" loading="lazy">
+    <figcaption>簡報｜自然語言（不穩定）→ 過濾與結構化 → YAML 控制層（人類可讀與結構化）→ AI 產出（可驗證、可重現、可延用）。</figcaption>
+  </figure>
+</section>
+
+<section class="chapter" id="sec-when">
+  <span class="chip" style="background:linear-gradient(90deg,#2f7d92,#3f8560)">CHAPTER 03</span>
+  <h2 class="ct">3. 何時該用／不必強用 YAML？</h2>
+  <p class="cd">關鍵心法：<b>關鍵不是會不會用，而是什麼時候用</b>（It's not about ability, but timing.）。</p>
+  <figure class="shot">
+    <img src="ep19-img/slide07.jpg" alt="何時該用 YAML 綠燈與何時不必強用 YAML 紅燈" loading="lazy">
+    <figcaption>簡報｜Green Light / Red Light：四種該用情境 vs 四種不必強用情境。</figcaption>
+  </figure>
+  <div class="twrap"><table>
+    <tr><th>✅ 該用 YAML（Green Light）</th><th>❌ 不必強用 YAML（Red Light）</th></tr>
+    <tr><td><b>需要反覆生成</b>（Iterative Generation）：穩定、可預測的產出。</td><td><b>一次性聊天</b>（One-Off Chat）：隨性對話，無需記錄。</td></tr>
+    <tr><td><b>需要跨工具</b>（Cross-Tool Compatible）：不同系統間的通用語言。</td><td><b>即興創作</b>（Improvised Creation）：自由發揮，不設限。</td></tr>
+    <tr><td><b>需要一致風格</b>（Consistent Style）：維持統一的品牌或格式。</td><td rowspan="2"><b>無結構需求</b>（No Structure Needed）：散亂想法，無需整理。</td></tr>
+    <tr><td><b>需要被他人接手</b>（Handover-Ready）：清晰的交接與協作。</td></tr>
+  </table></div>
+</section>
+
+<section class="chapter" id="sec-reverse">
+  <span class="chip" style="background:linear-gradient(90deg,#bf6a1e,#9c7b23)">CHAPTER 04</span>
+  <h2 class="ct">4. 實戰技巧一：逆向工程（解構）</h2>
+  <p class="cd"><b>目的</b>：當你看到喜歡的簡報、圖表或文件風格，想讓 AI 學習並模仿時。</p>
+  <ol class="st">
+    <li><b>上傳素材</b>：將參考圖檔（Image）或 PDF 上傳給 AI（推薦用具備視覺辨識的模型）。</li>
+    <li><b>下達指令（Prompt）</b>：要求 AI 分析該檔案的「視覺結構」、「配色」、「排版邏輯」。</li>
+    <li><b>指定輸出格式</b>：明確要求 AI「將分析結果轉換為 YAML 格式」。</li>
+  </ol>
+  <div class="prompt"><span class="tag">Prompt 範例</span>請擔任一位專業的視覺設計師。請分析這張圖片的版面配置、配色方案（色號）、字體風格以及內容架構。請將分析結果以 YAML 格式輸出，以便我後續使用。</div>
+  <p><b>應用場景</b>：不想手動調整簡報母片；想複製某個資訊圖表的風格，但內容要換成新的。</p>
+  <div class="note gold">💡 實例演練——應用場景三：不用 YAML 的簡報生成（NotebookLM 圖像法）。當設計優先於內容時，可反向操作：先鎖定「視覺不可變」，再讓 AI 填文字。此法適合政府簡報、高橋流、品牌簡報。</div>
+  <figure class="shot">
+    <img src="ep19-img/slide12.jpg" alt="不用 YAML 的簡報生成：NotebookLM 圖像法反向操作流程" loading="lazy">
+    <figcaption>簡報｜反向操作流程：來源圖片 + 投影片大綱 → NotebookLM → ① 鎖定視覺（確認背景與風格不可變）→ ② AI 填寫文字（依大綱與規則生成內容）→ 內文頁背景不重複、配色字體一致。</figcaption>
+  </figure>
+  <div class="prompt"><span class="tag">核心指令</span>使用來源中的圖片作為投影片背景，將《投影片大綱》轉化為視覺化簡報。
+1. 內文頁避免重複背景
+2. 字體使用思源黑體
+3. 配色需與背景一致
+禁止：自行設計新背景／忽略圖片來源改用純文字／加入大綱外內容／使用思源黑體以外的字型</div>
+</section>
+
+<section class="chapter" id="sec-forward">
+  <span class="chip" style="background:linear-gradient(90deg,#9c7b23,#bf6a1e)">CHAPTER 05</span>
+  <h2 class="ct">5. 實戰技巧二：順向工程（重塑／生成）</h2>
+  <p class="cd"><b>目的</b>：利用逆向工程得到的 YAML 程式碼，作為「風格守門員」，讓 AI 生成新內容時不跑版。</p>
+  <ol class="st">
+    <li><b>提供 YAML 規則</b>：將剛剛逆向工程得到的 YAML 碼貼給 AI。</li>
+    <li><b>輸入新內容</b>：給定你想要製作的新主題（例如：將「年獸的故事」改成「元宵節由來」）。</li>
+    <li><b>下達指令</b>：要求 AI「依照上述 YAML 的風格規範，生成新的內容結構」。</li>
+    <li><b>生成成品</b>：將 AI 產出的結果放入簡報工具（如 Gamma、Canva 或手動製作）。</li>
+  </ol>
+  <div class="note blue">💡 <b>NotebookLM 的進階用法</b>：可以將 YAML 規則存成一份 .txt 或 Markdown 檔案（例如 style_guide.yaml），上傳至 NotebookLM 作為「來源」。在對話時，NotebookLM 就會變成一個「熟知該風格的專家」，可隨時要求它：「請依照來源中的 YAML 風格，幫我撰寫這一頁的簡報大綱。」</div>
+</section>
+
+<section class="chapter" id="sec-cases">
+  <span class="chip" style="background:linear-gradient(90deg,#3b6bb0,#5645D4)">CHAPTER 06</span>
+  <h2 class="ct">6. 六大應用場景範例：YAML 範例 + Prompt</h2>
+  <p class="cd">簡報逐一示範六種場景，每個場景都是「YAML 定結構、Prompt 執行、AI 只做填充」的固定套路。</p>
+
+  <h3>場景一：資訊圖表還原／模仿／再製</h3>
+  <figure class="shot">
+    <img src="ep19-img/slide10.jpg" alt="應用場景一：資訊圖表" loading="lazy">
+    <figcaption>簡報｜YAML 定義佈局與骨架（結構）→ 填充指定資料（內容）→ 一致性視覺結果（產出）。</figcaption>
+  </figure>
+  <div class="prompt"><span class="tag">YAML 範例</span>structure:
+  infographic:
+    layout: vertical
+    color_theme: blue_gray
+    typography: noto_sans_tc</div>
+  <div class="prompt"><span class="tag">Prompt</span>請依照以下 YAML 結構，將資料轉為資訊圖表內容，不得新增 YAML 未定義的視覺元素，並確保可再次生成結果一致。</div>
+
+  <h3>場景二：簡報生成還原／模仿／再製</h3>
+  <figure class="shot">
+    <img src="ep19-img/slide11.jpg" alt="應用場景二：簡報生成" loading="lazy">
+    <figcaption>簡報｜Slide 1 封面 → Slide 2 議程 → Slide 3 內容，每一頁嚴格對應 YAML 定義生成。</figcaption>
+  </figure>
+  <div class="prompt"><span class="tag">YAML 範例</span>slides:
+  - type: cover
+  - type: agenda
+  - type: content
+    max_bullets: 3</div>
+  <div class="prompt"><span class="tag">Prompt</span>你是一個簡報生成器，請嚴格依 YAML 結構產生投影片內容，每一頁只做「填充」，不重組結構。</div>
+
+  <h3>場景三：不用 YAML 的簡報生成（NotebookLM 圖像法）</h3>
+  <p>詳見第 4 節「實戰技巧一：逆向工程」的完整流程說明與簡報原圖。</p>
+
+  <h3>場景四：多篇論文方法論摘取</h3>
+  <figure class="shot">
+    <img src="ep19-img/slide13.jpg" alt="應用場景四：多篇論文方法論摘取" loading="lazy">
+    <figcaption>簡報｜精確摘取流程：多篇學術論文 → AI 過濾器（只留「方法」，排除結果／討論）→ 精確的研究方法摘要。</figcaption>
+  </figure>
+  <div class="prompt"><span class="tag">YAML 範例</span>structure:
+  methods:
+    extract:
+      - research_design
+      - sample
+      - analysis_method</div>
+  <div class="prompt"><span class="tag">Prompt</span>請根據 YAML 結構，從多篇論文中只摘取「研究方法」，禁止加入討論與結果。</div>
+
+  <h3>場景五：參考文獻格式再製</h3>
+  <figure class="shot">
+    <img src="ep19-img/slide14.jpg" alt="應用場景五：參考文獻格式再製" loading="lazy">
+    <figcaption>簡報｜原始參考文獻（混亂、多格式、多語言）→ AI 格式化引擎 → 統一後參考文獻（APA 7、繁體中文，格式統一、可查證、可重現）。</figcaption>
+  </figure>
+  <div class="prompt"><span class="tag">YAML 範例</span>citation:
+  style: APA_7
+  language: zh_TW</div>
+  <div class="prompt"><span class="tag">Prompt</span>請依 YAML 指定的引用格式，統一轉換所有參考文獻，並保留原始資料可查證性。</div>
+
+  <h3>場景六：歌曲內容生成</h3>
+  <figure class="shot">
+    <img src="ep19-img/slide15.jpg" alt="應用場景六：歌曲內容生成" loading="lazy">
+    <figcaption>簡報｜結構化生成流程：AI 音樂生成引擎 → 樂譜與歌詞草稿 → 完整歌曲內容（結構化生成、順序鎖定、內容合規）。</figcaption>
+  </figure>
+  <div class="prompt"><span class="tag">YAML 範例</span>song:
+  title: ""
+  genre: lofi
+  tempo: 85
+  lyrics_structure:
+    - verse
+    - chorus</div>
+  <div class="prompt"><span class="tag">Prompt</span>請依 YAML 結構生成歌曲內容，歌詞段落順序不可變更，不可新增未定義段落。</div>
+</section>
+
+<section class="chapter" id="sec-tips">
+  <span class="chip" style="background:linear-gradient(90deg,#5a34a8,#3b6bb0)">CHAPTER 07</span>
+  <h2 class="ct">7. 專家建議與心法</h2>
+  <ul class="pt">
+    <li><b>不要從頭手寫 YAML</b>：效率太低。請善用 AI 幫你寫（從自然語言轉譯，或從圖片逆向生成）。</li>
+    <li><b>雙向轉譯，YAML 是一個橋樑</b>：人類想法（自然語言）→ YAML（結構化指令）；現有成品（圖片／PDF）→ YAML（風格參數）。</li>
+    <li><b>檢核點（Checkpoints）</b>：在生成長篇內容（如 20 頁簡報）時，不要一次做完。先做「檢核」，問 AI：「請檢查你生成的內容是否符合上述 YAML 的規範？」確認無誤後再繼續執行。</li>
+    <li><b>工具的極限</b>：目前的 AI 簡報工具（如 Gamma、Beautiful.ai 等）雖然方便，但通常只能做到 80-90%。「手刻（手動微調）」是必要的，AI 負責產出結構與初稿，最後的精修還是要靠人工。</li>
+    <li><b>長期記憶</b>：將風格轉成 YAML 存起來，等於建立了你的「風格資料庫」，下次要用時直接把檔案丟給 AI，就能瞬間喚醒它的記憶。</li>
+  </ul>
+</section>
+
+<section class="chapter" id="sec-recap">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#3b6bb0)">RECAP</span>
+  <h2 class="ct">8. 總結流程圖與結語</h2>
+  <ol class="st">
+    <li>素材／想法</li>
+    <li>AI 解析（Prompt：轉成 YAML 格式）</li>
+    <li>取得 YAML 代碼（含配色、排版、結構）</li>
+    <li>輸入新需求（Prompt：依照此 YAML 規範）</li>
+    <li>AI 生成新結構</li>
+    <li>匯入工具／手動排版 → 最終成品</li>
+  </ol>
+  <figure class="shot">
+    <img src="ep19-img/slide16.jpg" alt="結語：YAML 不是語法，是駕馭 AI 的方式" loading="lazy">
+    <figcaption>簡報｜結構的三大支柱——① 被驗證（Verifiable）② 被重做（Reproducible）③ 被交接（Handover-able）。舊思維問「哪個工具比較強」，YAML 思維問「這個結構能不能被驗證、被重做、被交接」。</figcaption>
+  </figure>
+  <div class="golden"><div class="q">「結構一旦站穩，工具只是替換品。」</div><div class="a">—— EP19 最終結論</div></div>
+</section>
+
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5a5866)">SOURCES</span>
+  <h2 class="ct">9. 資料來源與製作說明</h2>
+  <ul class="pt">
+    <li><b>原始教材：</b>EP19「結構先於工具：用 YAML 打造可查證的文獻引用與資訊圖表工作流」講師撰寫的完整課程筆記文件（6 節）＋官方課程簡報 16 頁＋「YAML 萬能控制層」框架文字檔。</li>
+    <li><b>製作方式：</b>下載原始 pptx，取出內建的每頁設計背景圖（13 頁為圖文設計頁，已完整保留原圖），並逐節比對課程筆記文件與簡報文字內容，<b>逐頁親眼判讀</b>後整理成本頁章節。內容為<b>真實課程內容</b>，未經改寫杜撰。</li>
+    <li><b>誠實聲明：</b>簡報第 2、3、5 頁為純文字／向量圖形排版（無內嵌點陣背景圖），其文字內容已完整收錄於對應章節（第 1、2 章）；本集資料夾未附可直接存取的逐字稿，<b>示範操作畫面與逐字稿時間碼</b>暫缺，如日後開放取得可再補入。</li>
+    <li><b>介面參考：</b>頁面採全站現行「乾淨白底編輯風」版型（沿用 EP38 課堂筆記頁架構）。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  EP19「結構先於工具：用 YAML 打造可查證的文獻引用與資訊圖表工作流」課堂筆記・2026/07 整理<br>
+  🍀 Learn AI with Tarshar｜搭配 <a href="ep19-ai-skills.html">互動技能地圖</a> 使用效果最佳
+</footer>
+
+</body>
+</html>

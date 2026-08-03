@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP21 課堂筆記｜讓數據會說話：AI 賦能的 Power BI × Looker Studio 視覺化實戰</title>
+<meta name="description" content="晨學講堂 EP21 課堂筆記：從懶人一鍵生成到可互動儀表板；Power BI 與 Looker Studio 比較；模擬彩券資料的資料型態判讀；手把手拖曳做圖基本功；用 AI 技能自動化 Looker Studio 操作；Power BI 可寫程式的 AI 整合優勢。含真實課程截圖三張。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#0d8f80; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px;border-left:none}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+.note.violet{background:#F3EFFB;border-color:#DFD2F0;color:#5a34a8}
+.note.rose{background:#FBEEF1;border-color:#F0D2DB;color:#9c2f52}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.prompt{position:relative;background:#1d1d1f;border-radius:10px;padding:15px 16px;margin:12px 0;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt .tag{display:inline-block;font-size:11px;letter-spacing:.06em;color:#c9c4ff;border:1px solid #3a3a40;border-radius:6px;padding:2px 9px;margin-bottom:8px}
+.prompt b{color:#fff}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.embed{margin:14px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000}
+.embed iframe{display:block;width:100%;aspect-ratio:16/9;border:0}
+.embed .cap{font-size:12.5px;color:var(--ink3);padding:10px 16px;background:var(--paper);border-top:1px solid var(--line)}
+.ts{display:inline-block;font-family:"Cascadia Code",Consolas,monospace;font-weight:700;font-size:12px;color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,#fff);border-radius:5px;padding:2px 8px;margin-right:7px;letter-spacing:.4px;vertical-align:middle}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+.layers{display:grid;gap:10px;margin:14px 0}
+.lyr{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:13px 15px;background:#fff}
+.lyr .n{flex:none;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--accent)}
+.lyr h4{margin:0 0 3px;font-size:14.5px}
+.lyr p{font-size:13px;margin:0}
+.sub{color:var(--ink2)}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#9ed6cb" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP21 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="ep21-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 晨學講堂 · EP21</span>
+  <h1><span>讓數據會說話</span><br>AI 賦能的 Power BI × Looker Studio 視覺化實戰</h1>
+  <p class="lead">EP21 從一個常見的「懶人一鍵生成圖表」痛點出發，比較 <b>Power BI</b> 與 <b>Looker Studio</b> 兩大視覺化工具的定位差異，用一份模擬版「全台頭獎投注彩券資料」practice 資料集，帶大家練習資料型態判讀、手動拖曳做圖的基本功，最後示範如何把「操作 Looker Studio」寫成一個 <b>AI 技能（Skill）</b>，讓瀏覽器自動幫你把整份互動儀表板建置起來。</p>
+  <div class="meta">
+    <span>📅 2026/02/12 直播</span>
+    <span>🗂️ 教材：僅有錄影（無簡報檔）</span>
+    <span>📊 主題：資料視覺化</span>
+    <span>🧰 Power BI × Looker Studio</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-open">1. 開場：為什麼要做視覺化</a>
+  <a href="#sec-tools">2. 工具比較：Power BI vs Looker Studio</a>
+  <a href="#sec-data">3. 練習資料：模擬版全台頭獎彩券</a>
+  <a href="#sec-basic">4. 手把手基本功：拖曳與成果儀表板</a>
+  <a href="#sec-skill">5. 進階自動化：AI Skill 操作 Looker Studio</a>
+  <a href="#sec-powerbi">6. Power BI × AI：可寫程式的優勢</a>
+  <a href="#sec-recap">7. 結語與社群資訊</a>
+  <a href="#sec-src">8. 資料來源與製作說明</a>
+</nav>
+
+<article>
+
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--cyan))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>EP21_「讓數據會說話：AI 賦能的 Power BI × Looker Studio 視覺化實戰」</td></tr>
+    <tr><th>頻道</th><td>生成式AI應用電台・晨學講堂</td></tr>
+    <tr><th>直播日期</th><td>2026/02/12</td></tr>
+    <tr><th>教材</th><td>僅有錄影（無獨立課堂筆記或簡報檔），本頁內容全部整理自錄影逐字稿與畫面截圖</td></tr>
+    <tr><th>一句話先懂</th><td>把資料從「懶人一鍵生成的圖表」升級成「真正可互動、可重複使用的儀表板」——工具用 Looker Studio 入門、Power BI 補進階，最後再交給 AI 技能把重複性的操作自動化。</td></tr>
+  </table></div>
+  <div class="note blue">💡 誠實聲明：EP21 的 Drive 資料夾裡<b>只有一支約 86 分鐘的錄影</b>，沒有另外的講義或簡報檔。依照本站規則，這種情況不能跳過或用推測內容交差，因此本頁是把<b>完整錄影</b>下載、用 Whisper 逐字稿轉寫、並實際擷取畫面截圖親眼檢視後整理而成，細節見文末「資料來源與製作說明」。</div>
+</section>
+
+<section class="chapter" id="sec-open">
+  <span class="chip" style="background:linear-gradient(90deg,#0d8f80,#2f7d92)">CHAPTER 01</span>
+  <h2 class="ct">1. 開場：為什麼要做視覺化，不只是做表格</h2>
+  <p class="cd">從「懶人一鍵生成」出發，講清楚為什麼還要花時間學真正的視覺化工具。</p>
+  <h3>懶人做法的問題</h3>
+  <ul class="pt">
+    <li>常見做法是直接把一份統計圖表資料丟給<b>某個線上快速生成工具</b>（一種可以把資料快速轉成簡報／圖表的線上功能），系統就會跑出一個簡單版本的圖表。</li>
+    <li>但這種做法通常沒辦法真正滿足老闆或自己的需求，因為它的<b>「可動性」（互動性、可調整性）比較低</b>。</li>
+    <li>資料的<b>連動性也不好</b>——每次資料更新，都要重新手動上傳一次，沒辦法自動同步。</li>
+  </ul>
+  <div class="note gold">⚠️ 逐字稿說明：老師口中這個「懶人做法」用的工具，音檔裡的說法比較模糊（近似「canva 式快速拉圖」功能），無法百分之百確定是哪一款產品，本頁選擇保留籠統描述，不做無根據的指名猜測。</div>
+  <h3>表格滿足不了人的直覺需求</h3>
+  <ul class="pt">
+    <li>資料整理完之後，我們常會先把它做成<b>表格</b>，例如常見的財產資產負債表、損益表、收支表等等。</li>
+    <li>但表格通常沒辦法滿足我們對「資訊」的直覺需求——<b>人類是非常直觀的動物</b>，比起一排排數字，更想要「看得到」的視覺化呈現。</li>
+    <li>例如：圓餅圖裡特別把某一塊獨立標示出來、用顏色凸顯重點、或是讓趨勢線一路往上的走勢圖。</li>
+    <li>更進一步，還可以做到更細緻的<b>分眾分析</b>（老師舉例像醫療領域可以做到更細部的族群分析）。</li>
+  </ul>
+  <div class="golden"><div class="q">「今天的實作，就是要帶大家從『懶人一鍵生成』的階段，往上一層走到『真正可互動、可重複使用的儀表板』。」</div><div class="a">—— 開場定調</div></div>
+</section>
+
+<section class="chapter" id="sec-tools">
+  <span class="chip" style="background:linear-gradient(90deg,#3b6bb0,#0d8f80)">CHAPTER 02</span>
+  <h2 class="ct">2. 兩大主流視覺化工具比較：Power BI vs Looker Studio</h2>
+  <p class="cd">操作大同小異，只是版面有點不一樣——核心概念幾乎一致，學會一套另一套很快上手。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:130px">項目</th><th>Power BI</th><th>Looker Studio</th></tr>
+    <tr><td>出品</td><td>微軟</td><td>Google（前身叫做 Data Studio）</td></tr>
+    <tr><td>生態整合</td><td>跟微軟自家生態鏈（例如 OneDrive 上傳資料）整合度高</td><td>相對單純</td></tr>
+    <tr><td>可用載體</td><td>桌面版、網頁版、手機版，較多元</td><td>主要就是網頁版操作</td></tr>
+    <tr><td>定位</td><td>進階、可搭配程式化操作</td><td>比較常被用在輕量的視覺化需求</td></tr>
+  </table></div>
+  <div class="note blue">💡 老師選擇「先教 Looker Studio」：正是因為兩者概念非常相近，且介面相對單純，適合當作入門起點，之後再帶到 Power BI 補充比較進階、可寫程式的部分。</div>
+</section>
+
+<section class="chapter" id="sec-data">
+  <span class="chip" style="background:linear-gradient(90deg,#2f7d92,#0d8f80)">CHAPTER 03</span>
+  <h2 class="ct">3. 練習資料：模擬版全台頭獎投注彩券資料</h2>
+  <p class="cd">今天實作使用的資料集，是老師自己模擬產生的「2026 春節頭獎模擬數據」，共 100 筆。</p>
+  <div class="note gold">⚠️ 老師特別強調：<b>「這不是今年真實開出的資料，是我模擬出來的」</b>——這是為了教學示範而生成的練習資料，不是官方彩券開獎紀錄。</div>
+  <figure class="shot">
+    <img src="ep21-img/shot01-data-structure.jpg" alt="資料介紹：全台頭獎投注彩券資料結構 簡報截圖" loading="lazy">
+    <figcaption>課程畫面 1｜資料介紹：全台頭獎投注彩券資料結構——資料來源情境（全台各期頭獎開出紀錄／可作為區域與趨勢分析基礎／支援視覺化與儀表板建構／作為 AI 分析示範資料集）與資料結構欄位表。</figcaption>
+  </figure>
+  <h3>資料結構欄位</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:120px">欄位</th><th style="width:160px">資料型態</th><th>說明</th></tr>
+    <tr><td>彩券期別</td><td>類別型</td><td>每期開獎的識別編號</td></tr>
+    <tr><td>開獎日期</td><td>日期型</td><td>該期開獎的日期</td></tr>
+    <tr><td>縣市地區</td><td>類別型／地理維度</td><td>頭獎開出所在地行政區</td></tr>
+    <tr><td>頭獎金額</td><td>數值型（連續變數）</td><td>該期頭獎金額</td></tr>
+    <tr><td>銷售額</td><td>數值型（連續變數）</td><td>該期彩券銷售總額</td></tr>
+  </table></div>
+  <div class="note green">✅ 關鍵訊息（簡報原文）：類別型變數用於分群與比較／數值型變數用於統計與預測／日期型變數用於趨勢分析——<b>正確理解資料型態是後續建模關鍵</b>。</div>
+  <figure class="shot">
+    <img src="ep21-img/shot02-mock-spreadsheet.jpg" alt="練習資料_2026春節頭獎模擬數據100筆 Google Sheets 截圖" loading="lazy">
+    <figcaption>課程畫面 2｜實際打開的練習資料試算表「練習資料_2026春節頭獎模擬數據100筆」，欄位為彩券期別／開獎日期／縣市地區／頭獎金額／銷售額。<b>這是老師為練習產生的模擬資料</b>，非真實官方開獎資料。</figcaption>
+  </figure>
+  <h3>今天想達成的目標</h3>
+  <p>做出一個「<b>互動式資訊儀表板</b>」：可以看到目前累積的頭獎總金額、銷售額、中獎注數，以及哪個縣市頭獎金額最多等資訊，並且具備互動功能（例如可以點選、篩選特定縣市查看細節）。</p>
+</section>
+
+<section class="chapter" id="sec-basic">
+  <span class="chip" style="background:linear-gradient(90deg,#0d8f80,#3f8560)">CHAPTER 04</span>
+  <h2 class="ct">4. 手把手基本功：先自己拖一次，再交給 AI</h2>
+  <p class="cd">「這是基本功，我們不能只學這個，但也不能不學。」</p>
+  <ul class="pt">
+    <li>像 Looker Studio 或 Power BI 這種工具，傳統上都可以透過<b>手動把欄位、圖表元件一個個拖曳、搬移、調整位置</b>來完成（老師形容是「慢慢刻」）。</li>
+    <li>這個手動操作的過程雖然基本，但建議大家還是要先自己動手做出一兩個圖表、一兩張表格，練習基本操作邏輯。</li>
+    <li>接下來比較複雜、重複性高的部分，才交給 AI 代勞。</li>
+  </ul>
+  <h3>實際操作示範</h3>
+  <ol class="st">
+    <li>打開 Looker Studio，把練習資料的試算表接進去當資料來源。</li>
+    <li>透過「將欄位從資料面板拖曳到面板上」的方式新增圖表。</li>
+    <li>做出<b>依縣市地區分布的橫向長條圖</b>與<b>依開獎日期分布的圓餅圖</b>。</li>
+    <li>透過畫面上方的篩選器（例如依「彩券期別」篩選）跟不同圖表互動連動。</li>
+  </ol>
+  <figure class="shot">
+    <img src="ep21-img/shot03-looker-dashboard.jpg" alt="Looker Studio Reporting 完成的互動儀表板截圖" loading="lazy">
+    <figcaption>課程畫面 3｜完成的 Looker Studio 互動報表：左側橫向長條圖（依縣市地區）、圓餅圖（依開獎日期百分比分布），右側「資料」面板列出可拖曳欄位（彩券期別／開獎日期／銷售額／縣市地區／頭獎金額／Record Count），並附提示「立即開始：將欄位從『資料面板』拖曳到面板上即可新增圖表」。</figcaption>
+  </figure>
+  <div class="note blue">💡 這張圖就是今天手動拖曳基本功的最終成果——先靠自己的手把兩張圖做出來，才有辦法在下一節看懂 AI 幫你自動化的是「哪一段流程」。</div>
+</section>
+
+<section class="chapter" id="sec-skill">
+  <span class="chip" style="background:linear-gradient(90deg,#5645D4,#0d8f80)">CHAPTER 05</span>
+  <h2 class="ct">5. 進階自動化：把「操作 Looker Studio」寫成一個 AI 技能（Skill）</h2>
+  <p class="cd">這是本集後半段的重點示範。</p>
+  <p>目前 Looker Studio、Power BI 這類視覺化工具，還沒有辦法被 AI 直接原生串接、自動操作，所以能做到「自動化操作」的方式，目前主要是透過<b>可被 AI 控制的瀏覽器代理</b>，老師點名了三個目前用起來比較順的工具：</p>
+  <ol class="st">
+    <li><b>Comet</b>（Perplexity 推出的 AI 瀏覽器）</li>
+    <li><b>Claude in Chrome</b>（Anthropic 推出的瀏覽器擴充功能，若已安裝可直接使用）</li>
+    <li>Google 這邊也有對應的<b>瀏覽器代理功能</b>可以做到類似效果（老師提醒美國地區帳號可能可以更早直接使用）</li>
+  </ol>
+  <div class="note gold">⚠️ 逐字稿說明：第三項 Google 瀏覽器代理功能，老師在音檔中的說法較為模糊，無法確定是哪一款正式產品名稱，本頁沿用課堂上的籠統描述，不做無根據的指名猜測。</div>
+  <h3>做法的邏輯</h3>
+  <ol class="st">
+    <li>先請 AI（例如 Claude 或 Manus）「寫好一個技能（Skill）」。</li>
+    <li>這個技能專門負責把使用者的需求「翻譯」成 Comet、Claude in Chrome 等工具看得懂、可以執行的指令（老師稱為 prompt／腳本）。</li>
+    <li>技能做好之後，只要把資料丟給它，它就能根據資料量身打造一份對應的操作指令。</li>
+    <li>把指令直接貼進 Comet 瀏覽器或類似工具去執行——瀏覽器就會自動動滑鼠、逐步把 Looker Studio 的一份標準版報表都建置好，大概只需要 <b>5 到 10 分鐘</b>。</li>
+    <li>使用者最後只要做檢查、確認結果即可。</li>
+  </ol>
+  <div class="golden"><div class="q">「這個 Skill 是有程序性的：只需要設計一次，之後只要把新的需求或資料丟給它，它就能持續把需求轉譯成可在 Comet 瀏覽器或 Claude 上執行的操作指令，不用每次重新設計流程。」</div><div class="a">—— 老師強調的核心概念</div></div>
+  <h3>Manus 平台的技能功能示範</h3>
+  <ul class="pt">
+    <li>在介面中點選「<b>使用技能</b>」→「<b>管理技能</b>」，可以看到官方預先寫好的技能，也可以自己建立客製化技能，操作起來很快速。</li>
+    <li>目前 <b>Manus 的免費版就能使用技能功能</b>。</li>
+    <li>Claude 官方也已宣布會將 Skill 功能全面開放給免費用戶使用，代表未來會有更多人使用、也會出現更多現成的技能可以參考套用。</li>
+    <li>老師提到<b>預計三月初會另外開一場「Skill」專題直播</b>完整教學。</li>
+  </ul>
+</section>
+
+<section class="chapter" id="sec-powerbi">
+  <span class="chip" style="background:linear-gradient(90deg,#bf6a1e,#0d8f80)">CHAPTER 06</span>
+  <h2 class="ct">6. Power BI 與 AI 整合的優勢：可以直接寫程式</h2>
+  <p class="cd">兩者在「能否被 AI 直接程式化操作」這件事情上，還是有實質差異。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:180px">能否被 AI 程式化操作</th><th>Looker Studio</th><th>Power BI</th></tr>
+    <tr><td>方式</td><td>目前還沒辦法直接被 AI 用程式碼串接執行動作，只能透過前述的瀏覽器代理方式間接控制</td><td><b>可以寫程式</b>——可透過類似 DAX／M 這類查詢語言，直接請 AI 幫忙寫成對應的腳本語法去執行操作</td></tr>
+  </table></div>
+  <p>因此如果之後想要跟 AI 做更深度的整合（例如自動化報表產製流程），無論是線上版還是桌面版的 Power BI，會比純網頁版的 Looker Studio 更方便一些。</p>
+</section>
+
+<section class="chapter" id="sec-recap">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#0d8f80)">RECAP</span>
+  <h2 class="ct">7. 結語與社群資訊</h2>
+  <ul class="pt">
+    <li>從「為什麼要做視覺化」出發，比較 <b>Power BI 與 Looker Studio</b> 兩大工具的定位差異。</li>
+    <li>練習了<b>資料型態判讀</b>與<b>手動拖曳做圖</b>的基本功。</li>
+    <li>示範如何用 <b>AI 技能</b>把整個 Looker Studio 儀表板建置流程自動化。</li>
+    <li>補充 <b>Power BI 可寫程式</b>的 AI 整合優勢。</li>
+  </ul>
+  <h3>社群活動公告</h3>
+  <ul class="pt">
+    <li>隔天早上還有一場關於「<b>人工智慧基本法</b>」的直播（探討台灣人工智慧基本法未來兩年的修法與日落條款動向，以及公部門的人工智慧使用手冊上市，並提及三月的 iPAS 相關考試可留意），歡迎有興趣的夥伴以「旁聽」身份加入。</li>
+    <li>提醒大家可以透過課程平台頁面查詢自己的購課紀錄與加入對應的課程空間。</li>
+  </ul>
+  <div class="golden"><div class="q">「感謝大家參與。」</div><div class="a">—— 直播結尾</div></div>
+</section>
+
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5a5866)">SOURCES</span>
+  <h2 class="ct">8. 資料來源與製作說明</h2>
+  <ul class="pt">
+    <li><b>原始教材：</b>本集 Google Drive 資料夾裡<b>只有一支約 86 分鐘的錄影</b>（實際直播的螢幕分享錄影），<b>沒有另外附上課堂筆記或簡報檔</b>。</li>
+    <li><b>製作方式：</b>依照本站「不可以自行跳過或降級使用者指定的資料來源」的規則，這集<b>把完整錄影下載</b>，<b>用 Whisper（small 模型，中文）把音軌完整轉寫成逐字稿</b>，並<b>擷取螢幕分享的畫面截圖逐張親眼檢視</b>後，才整理成本頁內容。</li>
+    <li><b>內容真實性：</b>本頁所有內容都取自<b>真實的逐字稿轉寫與真實截圖</b>，不是推測或重新編造；但中文語音辨識（ASR）在專有名詞上並不完美，逐字稿原文出現不少音譯誤植（例如「power di」「look studio」「comment瀏覽器」「minus」等），本頁已對照上下文，把明顯可判讀的誤植字修正為正確術語（如 Power BI、Looker Studio、Comet、Manus）。</li>
+    <li><b>刻意保留模糊之處：</b>逐字稿中有兩處產品名稱在音檔裡本身就含糊不清、無法百分之百判定——一是討論「Google 瀏覽器代理功能」時的確切產品名稱，二是開場提到的「把圖表丟進某個線上工具快速生成」所指的確切產品。這兩處<b>刻意用籠統描述帶過，沒有用猜測去指名</b>，避免誤植成不存在或不正確的產品名稱。</li>
+    <li><b>真實截圖：</b>本頁嵌入<b>三張真實課程截圖</b>——資料結構簡報畫面、練習資料試算表畫面、完成後的 Looker Studio 互動儀表板畫面。</li>
+    <li><b>介面參考：</b>互動技能地圖頁沿用本站既有的卡片式多層導覽與遊戲化進度設計。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  EP21「讓數據會說話：AI 賦能的 Power BI × Looker Studio 視覺化實戰」課堂筆記・2026/07 整理<br>
+  🍀 Learn AI with Tarshar｜搭配 <a href="ep21-ai-skills.html">互動技能地圖</a> 使用效果最佳
+</footer>
+
+</body>
+</html>

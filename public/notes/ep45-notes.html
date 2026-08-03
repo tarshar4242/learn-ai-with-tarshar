@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP45 課堂筆記｜Google AI Studio 偷藏了這些 Agent！（逐幀實錄）</title>
+<meta name="description" content="晨學講堂 EP45 逐幀課堂筆記：Google AI Studio 的隱藏 Agent——Codex 語音聽寫、模型 vs Agent、TTS 情境、Build with Agents、Antigravity、AI Talk Radio、多 Agent 團隊，含真實操作截圖、影片時間戳與逐字稿佐證">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#3b6bb0; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px;border-left:none}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+.note.violet{background:#F3EFFB;border-color:#DFD2F0;color:#5a34a8}
+.note.rose{background:#FBEEF1;border-color:#F0D2DB;color:#9c2f52}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.prompt{position:relative;background:#1d1d1f;border-radius:10px;padding:15px 16px;margin:12px 0;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt .tag{display:inline-block;font-size:11px;letter-spacing:.06em;color:#c9c4ff;border:1px solid #3a3a40;border-radius:6px;padding:2px 9px;margin-bottom:8px}
+.prompt b{color:#fff}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.embed{margin:14px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000}
+.embed iframe{display:block;width:100%;aspect-ratio:16/9;border:0}
+.embed .cap{font-size:12.5px;color:var(--ink3);padding:10px 16px;background:var(--paper);border-top:1px solid var(--line)}
+.ts{display:inline-block;font-family:"Cascadia Code",Consolas,monospace;font-weight:700;font-size:12px;color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,#fff);border-radius:5px;padding:2px 8px;margin-right:7px;letter-spacing:.4px;vertical-align:middle}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+.layers{display:grid;gap:10px;margin:14px 0}
+.lyr{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:13px 15px;background:#fff}
+.lyr .n{flex:none;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--accent)}
+.lyr h4{margin:0 0 3px;font-size:14.5px}
+.lyr p{font-size:13px;margin:0}
+.sub{color:var(--ink2)}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#a8c686" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP45 課堂筆記（逐幀實錄）</b>
+  <div class="right">
+    <a class="btn" href="ep45-ai-skills.html">🗺️ 互動技能地圖</a>
+    </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 晨學講堂 · EP45</span>
+  <h1>Google AI Studio<br><span>偷藏了這些 Agent！</span></h1>
+  <p class="lead">本頁為<b>照錄影逐段實錄</b>的筆記：每一節都標上錄影 <span class="ts" style="margin:0">mm:ss</span> 時間戳、附上該操作畫面的<b>真實截圖</b>，並引用講師逐字稿。主軸是把 Google AI Studio 從「挑一個 Gemini 來聊天的 Playground」，帶到<b>它偷藏的一整排官方 Agent</b>——並示範「不想一直付 token，就讓自己的 Codex／Antigravity 學官方設計、自己重做」。</p>
+  <div class="meta">
+    <span>📅 2026/07/10（五）晚間直播</span>
+    <span>⏱️ 錄影全長 37:08</span>
+    <span>🧵 示範案例：颱風</span>
+    <span>🤖 主題：AI Agent</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-map">1. 一頁看懂全課程</a>
+  <a href="#sec-timeline">2. 逐幀時間軸（37 分鐘）</a>
+  <a href="#sec-input">3. 輸入加速：Codex 語音聽寫</a>
+  <a href="#sec-studio">4. AI Studio：模型 vs Agent</a>
+  <a class="sub" href="#s-model">4.1 模型總覽</a>
+  <a class="sub" href="#s-tts">4.2 TTS 情境範本</a>
+  <a href="#sec-agents">5. 官方 Agent 展示間</a>
+  <a class="sub" href="#a-gallery">5.1 Build with Agents</a>
+  <a class="sub" href="#a-antigravity">5.2 Antigravity Preview</a>
+  <a class="sub" href="#a-tools">5.3 工具開關與成本</a>
+  <a class="sub" href="#a-radio">5.4 AI Talk Radio</a>
+  <a class="sub" href="#a-learn">5.5 學官方、自己重做</a>
+  <a href="#sec-adv">6. 進階：多 Agent 與實作</a>
+  <a class="sub" href="#v-team">6.1 多 Agent 團隊</a>
+  <a class="sub" href="#v-game">6.2 颱風寓教娛樂遊戲</a>
+  <a class="sub" href="#v-choose">6.3 選擇與限制</a>
+  <a href="#sec-terms">7. 專有名詞卡</a>
+  <a href="#sec-check">8. 課後自我檢核</a>
+  <a href="#sec-src">9. 資料來源與製作說明</a>
+</nav>
+
+<article>
+
+<!-- 0 課程資訊 -->
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--purple))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>EP45_「Google AI Studio 偷藏了這些 Agent！」</td></tr>
+    <tr><th>頻道</th><td>生成式 AI 應用電台・晨學講堂</td></tr>
+    <tr><th>直播日期</th><td>2026/07/10（五）晚間；錄影全長 <b>37:08</b></td></tr>
+    <tr><th>教學結構</th><td>主要教學 <b>00:44–27:15</b>；問答與後續課程預告 <b>27:15–37:08</b></td></tr>
+    <tr><th>一句話先懂</th><td>Google AI Studio 不只是「挑一個 Gemini 模型來聊天」的 Playground——它把可直接試跑的 <b>Agent 範本、工具開關、資料來源、網路規則與雲端執行環境</b>放進同一個介面。老師進一步示範：不想一直付 API token，就把官方 Agent 的 sources、rules 交給 Codex 或 Antigravity 學，再打造自己的版本。</td></tr>
+    <tr><th>示範案例</th><td>全程以<b>「颱風」</b>當範例：颱風 NPC 語音 → 颱風氣象 Podcast → 颱風寓教娛樂防災遊戲</td></tr>
+  </table></div>
+
+  <h3>🎬 錄影回放（可直接播放）</h3>
+  <div class="embed">
+    <iframe src="https://drive.google.com/file/d/1fknRZpQIrP-k8W_4JK8zz-_LnMCeHkju/preview" allow="autoplay" loading="lazy" title="EP45 錄影回放"></iframe>
+    <div class="cap">EP45_Google AI Studio 偷藏了這些 Agent！課堂錄影（37:08）— 需登入可觀看的 Google 帳號。</div>
+  </div>
+  <div class="note blue">💡 本頁 14 張截圖皆<b>直接擷取自這支錄影</b>，逐幀親眼判讀操作畫面，並對照課堂逐字稿。播放到對應 <span class="ts" style="margin:0">mm:ss</span> 就能核對畫面。</div>
+</section>
+
+<!-- 1 全景 -->
+<section class="chapter" id="sec-map">
+  <span class="chip" style="background:linear-gradient(90deg,var(--cyan),var(--accent))">OVERVIEW</span>
+  <h2 class="ct">1. 一頁看懂全課程</h2>
+  <p class="cd">這堂課的動線很清楚：先教一個<b>貫穿所有工具的小技巧</b>（語音聽寫），再帶你認識 Google AI Studio 的兩個世界——<b>Models（模型）</b>與<b>Agents（代理）</b>；然後打開 Agents 展示間逐一示範，最後用「多 Agent 團隊做一個颱風遊戲」收尾，並給出「付費試跑 vs 學官方自己重做」的取捨。</p>
+  <figure class="diagram">
+    <svg viewBox="0 0 920 430" xmlns="http://www.w3.org/2000/svg" font-family="'Noto Sans TC',sans-serif">
+      <defs>
+        <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2f6df0"/><stop offset="1" stop-color="#0aa6c9"/></linearGradient>
+        <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7a4fd6"/><stop offset="1" stop-color="#2f6df0"/></linearGradient>
+        <linearGradient id="g3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d4508e"/><stop offset="1" stop-color="#7a4fd6"/></linearGradient>
+        <linearGradient id="g4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1d9e6f"/><stop offset="1" stop-color="#0aa6c9"/></linearGradient>
+        <marker id="arw" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#b9b3d9"/></marker>
+      </defs>
+      <rect width="920" height="430" fill="#fbfcff"/>
+      <text x="460" y="42" text-anchor="middle" font-size="21" font-weight="900" fill="#2b2a33">EP45 · Google AI Studio 偷藏的 Agent — 全景地圖</text>
+      <ellipse cx="460" cy="103" rx="245" ry="34" fill="#eaf1fe" stroke="#c3d6fb"/>
+      <text x="460" y="110" text-anchor="middle" font-size="13.5" font-weight="700" fill="#2f6df0">核心：AI Studio 不只有 Models，還偷藏了一整排官方 Agent</text>
+      <line x1="250" y1="143" x2="140" y2="190" stroke="#b9b3d9" stroke-width="2" marker-end="url(#arw)"/>
+      <line x1="390" y1="148" x2="360" y2="190" stroke="#b9b3d9" stroke-width="2" marker-end="url(#arw)"/>
+      <line x1="530" y1="148" x2="560" y2="190" stroke="#b9b3d9" stroke-width="2" marker-end="url(#arw)"/>
+      <line x1="670" y1="143" x2="780" y2="190" stroke="#b9b3d9" stroke-width="2" marker-end="url(#arw)"/>
+      <g>
+        <rect x="30" y="196" width="205" height="176" rx="16" fill="url(#g1)"/>
+        <text x="132" y="230" text-anchor="middle" font-size="16" font-weight="900" fill="#fff">⌨️ 輸入加速</text>
+        <text x="132" y="258" text-anchor="middle" font-size="11.5" fill="#eaf3ff">Codex 按住說話</text>
+        <text x="132" y="280" text-anchor="middle" font-size="11.5" fill="#eaf3ff">聽寫工具＋快捷鍵</text>
+        <text x="132" y="302" text-anchor="middle" font-size="11.5" fill="#eaf3ff">游標在哪就寫哪</text>
+        <text x="132" y="324" text-anchor="middle" font-size="11.5" fill="#eaf3ff">貫穿所有工具</text>
+        <text x="132" y="350" text-anchor="middle" font-size="11.5" fill="#eaf3ff">連 Word 也能用</text>
+      </g>
+      <g>
+        <rect x="252" y="196" width="205" height="176" rx="16" fill="url(#g2)"/>
+        <text x="354" y="230" text-anchor="middle" font-size="16" font-weight="900" fill="#fff">🧪 AI Studio 基礎</text>
+        <text x="354" y="258" text-anchor="middle" font-size="11.5" fill="#efeaff">Models vs Agents</text>
+        <text x="354" y="280" text-anchor="middle" font-size="11.5" fill="#efeaff">Live Translate / TTS</text>
+        <text x="354" y="302" text-anchor="middle" font-size="11.5" fill="#efeaff">Lyria 3 音樂模型</text>
+        <text x="354" y="324" text-anchor="middle" font-size="11.5" fill="#efeaff">TTS 情境範本</text>
+        <text x="354" y="350" text-anchor="middle" font-size="11.5" fill="#efeaff">遊戲 NPC 聲音</text>
+      </g>
+      <g>
+        <rect x="474" y="196" width="205" height="176" rx="16" fill="url(#g3)"/>
+        <text x="576" y="230" text-anchor="middle" font-size="16" font-weight="900" fill="#fff">🤖 官方 Agent</text>
+        <text x="576" y="258" text-anchor="middle" font-size="11.5" fill="#fdeaf4">Build with Agents</text>
+        <text x="576" y="280" text-anchor="middle" font-size="11.5" fill="#fdeaf4">Antigravity Preview</text>
+        <text x="576" y="302" text-anchor="middle" font-size="11.5" fill="#fdeaf4">工具開關＋API key</text>
+        <text x="576" y="324" text-anchor="middle" font-size="11.5" fill="#fdeaf4">AI Talk Radio</text>
+        <text x="576" y="350" text-anchor="middle" font-size="11.5" fill="#fdeaf4">學官方省 token</text>
+      </g>
+      <g>
+        <rect x="696" y="196" width="195" height="176" rx="16" fill="url(#g4)"/>
+        <text x="793" y="230" text-anchor="middle" font-size="16" font-weight="900" fill="#fff">🧩 進階實作</text>
+        <text x="793" y="258" text-anchor="middle" font-size="11.5" fill="#e8fff5">多 Agent 團隊分工</text>
+        <text x="793" y="280" text-anchor="middle" font-size="11.5" fill="#e8fff5">音效／動畫／闖關</text>
+        <text x="793" y="302" text-anchor="middle" font-size="11.5" fill="#e8fff5">颱風防災遊戲</text>
+        <text x="793" y="324" text-anchor="middle" font-size="11.5" fill="#e8fff5">付費 vs 自建取捨</text>
+        <text x="793" y="350" text-anchor="middle" font-size="11.5" fill="#e8fff5">動態網站的限制</text>
+      </g>
+      <line x1="235" y1="284" x2="252" y2="284" stroke="#b9b3d9" stroke-width="2.5" marker-end="url(#arw)"/>
+      <line x1="457" y1="284" x2="474" y2="284" stroke="#b9b3d9" stroke-width="2.5" marker-end="url(#arw)"/>
+      <line x1="679" y1="284" x2="696" y2="284" stroke="#b9b3d9" stroke-width="2.5" marker-end="url(#arw)"/>
+      <text x="460" y="404" text-anchor="middle" font-size="12.5" fill="#8a879a">動線：先會「快速輸入」→ 認識「模型與代理」→ 打開「官方 Agent」→ 用「多 Agent」做出成品</text>
+    </svg>
+    <figcaption>圖 1｜EP45 全景：從輸入技巧到多 Agent 實作（依錄影實際示範順序整理）</figcaption>
+  </figure>
+  <div class="golden"><div class="q">「這些功能看似很炫沒錯——但每一個 Agent 都要 API key，執行會花 token。想省錢，就讓你自己的 Agent 去學官方的設計。」</div><div class="a">—— 本集貫穿的核心取捨</div></div>
+</section>
+
+<!-- 2 逐幀時間軸 -->
+<section class="chapter" id="sec-timeline">
+  <span class="chip" style="background:linear-gradient(90deg,#c98a0a,#0aa6c9)">TIMELINE</span>
+  <h2 class="ct">2. 逐幀時間軸（37 分鐘全程）</h2>
+  <p class="cd">每一列都是<b>親眼逐幀判讀</b>的實錄；點各章節看該段詳細筆記與截圖。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:92px">時間</th><th style="width:150px">畫面／工具</th><th>發生了什麼</th></tr>
+    <tr><td><span class="ts">00:44</span></td><td>Codex 桌面版</td><td>先教一個貫穿全課的小技巧——<b>Codex 按住說話（語音聽寫）</b>：設定聽寫工具、選麥克風與快捷鍵（示範 Ctrl+A）。</td></tr>
+    <tr><td><span class="ts">03:30</span></td><td>Word / 系統</td><td>強調「<b>游標在哪，聽寫就寫到哪</b>」——連 Word 打字也能用；簡繁可在 Word 校閱「繁簡轉換」修正。</td></tr>
+    <tr><td><span class="ts">06:36</span></td><td>Google AI Studio</td><td>進入今天主軸；IO 大會後改版、Logo 換新。回顧 Playground 的 Models：對話、生圖、影像、TTS、即時互動。</td></tr>
+    <tr><td><span class="ts">07:35</span></td><td>AI Studio · TTS</td><td><b>TTS 情境範本</b>：除了單人／多人，多了「助理、遊戲 NPC、主持人、廣告」等情境；以「颱風要登陸」示範 NPC 聲音、換聲線與語速，可下載音訊。</td></tr>
+    <tr><td><span class="ts">10:43</span></td><td>AI Studio · Agents</td><td>切到 <b>Build with Agents</b>：官方做好的 Agent 展示間。</td></tr>
+    <tr><td><span class="ts">11:08</span></td><td>Antigravity</td><td>談 Agent 四大工具（Claude Code／Codex／OpenCode／Google Antigravity），示範 <b>Antigravity Preview</b> 在雲端直接使用、可多角色子代理協作、需裝 skill 中文化。</td></tr>
+    <tr><td><span class="ts">12:34</span></td><td>Run settings</td><td><b>工具開關＋成本</b>：Code execution／Google Search Grounding／URL context／Filesystem／Sources／Network rules；提醒所有 Agent 都要 API key、會花 token。</td></tr>
+    <tr><td><span class="ts">14:00</span></td><td>AI Talk Radio</td><td>下 prompt：一分鐘、中文、颱風最新動態、<b>兩位主持人＋配樂</b>的 Podcast。</td></tr>
+    <tr><td><span class="ts">15:16</span></td><td>sources / rules</td><td>示範<b>省 token 的路</b>：把官方 Agent 的 <b>18 sources／9 network rules</b> 連結交給自己的 Antigravity 學，先學一次再自建。</td></tr>
+    <tr><td><span class="ts">17:41</span></td><td>Podcast 產出</td><td>Radio Agent 完成：含開場、主持人口播、音效、<b>Lyria 3 配樂</b>、<b>Nano Banana 封面</b>、可下載 MP3。</td></tr>
+    <tr><td><span class="ts">20:23</span></td><td>Agent 清單</td><td>快速帶過其他 Agent（Customer Support／Data Analyst／Document Processor／Repo Maintainer）與適用情境。</td></tr>
+    <tr><td><span class="ts">21:05</span></td><td>多 Agent 團隊</td><td>用 Antigravity 的「團隊合作」斜線指令，把「做颱風互動遊戲」<b>分派給音效／動畫／闖關子 Agent</b>。</td></tr>
+    <tr><td><span class="ts">23:19</span></td><td>颱風遊戲成果</td><td>展示上一堂做好的<b>「颱風指揮官」防災遊戲</b>：背景音效、突發事件、選擇影響健康值。</td></tr>
+    <tr><td><span class="ts">25:04</span></td><td>選擇路徑</td><td>付費試跑 vs 學官方自建的取捨；Customer Support 對<b>動態網站</b>（如 Facebook）爬取有限制。</td></tr>
+    <tr><td><span class="ts">27:15</span></td><td>問答／預告</td><td>年中共學課程預告、Codex 手機版、寵物、抽獎；<b>下週因出國停播一次</b>會補課。</td></tr>
+    <tr><td><span class="ts">36:01</span></td><td>CLI Teamwork</td><td>補充：<b>CLI 介面的 teamwork 要主動用指令叫出</b>，不像網頁版直接有按鈕。</td></tr>
+  </table></div>
+</section>
+
+<!-- 3 輸入加速 -->
+<section class="chapter" id="sec-input">
+  <span class="chip" style="background:linear-gradient(90deg,#2f6df0,#0aa6c9)">CHAPTER 01 · 實錄</span>
+  <h2 class="ct">3. 輸入加速：Codex 語音聽寫</h2>
+  <p class="cd">開場老師先講一個「會貫穿今天所有工具」的小功能——不管是聊天機器人還是 AI Agent，都一定要<b>下 Prompt</b>；那就把「打字」換成「說話」。</p>
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="ep45-img/02-codex-settings.jpg" alt="Codex 設定一般頁面" loading="lazy">
+      <figcaption><span class="ts">04:30</span>Codex 桌面版「設定 → 一般」：往下可找到<b>聽寫工具</b>，選麥克風並設定<b>按住快捷鍵</b>（老師以 Ctrl+A 為例）。左欄還可見寵物、MCP 伺服器、Computer use 等項目。</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="ep45-img/01-codex-dictation.jpg" alt="在 Word 使用 Codex 語音聽寫" loading="lazy">
+      <figcaption><span class="ts">03:38</span>關鍵：<b>游標在哪，聽寫就寫到哪</b>——連 Microsoft Word 都能用。畫面下方的「●●●●」就是 Codex 正在聽你說話、即時轉寫。</figcaption>
+    </figure>
+  </div>
+  <ul class="pt">
+    <li>設定路徑：<b>Codex → 左下角你的頭像 → Setting → 一般往下滑 → 聽寫功能</b>，選麥克風＋快捷鍵。</li>
+    <li>用法：在任何有文字游標的地方<b>按住快捷鍵說話</b>，放開後它「一字不漏」把語音轉成文字落在該欄位。老師原話：<i>「你只要以後按 Ctrl A，他就可以直接幫我做聽寫的動作……而且他是在游標的位置。」</i></li>
+    <li>簡繁：辨識偶爾出簡體，可在 Codex 設定語言為繁中；在 Word 內用<b>校閱 → 繁簡轉換</b>修正，不用重打。</li>
+    <li>定位：這是<b>輸入輔助</b>（加快下 Prompt），不等於 Agent 自動完成任務；送出前仍要檢查專有名詞、數字與否定詞。</li>
+  </ul>
+  <div class="golden"><div class="q">「語音聽寫解決的是『輸入速度』，不是『思考與驗證』。」</div><div class="a">輸入篇重點</div></div>
+</section>
+
+<!-- 4 AI Studio 基礎 -->
+<section class="chapter" id="sec-studio">
+  <span class="chip" style="background:linear-gradient(90deg,#7a4fd6,#2f6df0)">CHAPTER 02 · 實錄</span>
+  <h2 class="ct">4. Google AI Studio：模型 vs Agent</h2>
+  <p class="cd">老師把 AI Studio 比喻成一座 AI 實驗室：<b>Models</b> 是一台台不同用途的機器；<b>Agents</b> 則是已經把機器、工具與操作流程組裝好的工作站。</p>
+
+  <h3 id="s-model">4.1 模型總覽</h3>
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="ep45-img/03-ai-studio-entry.jpg" alt="進入 Google AI Studio" loading="lazy">
+      <figcaption><span class="ts">06:45</span>進入主軸：Chrome 新分頁搜「google ai studio」（捷徑列可見 NotebookLM／Gemini／Google AI Studio）。老師提到 IO 大會後 Logo 換成繽紛色彩。</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="ep45-img/04-model-explorer.jpg" alt="AI Studio 模型清單" loading="lazy">
+      <figcaption><span class="ts">07:45</span>Models 清單：<b>Gemini 3.5 Live Translate Preview</b>（即時語音翻譯 70+ 語言）、<b>Gemini 3.1 Flash TTS Preview</b>、<b>Lyria 3 Pro Preview（Paid）</b> 全曲生成音樂模型。</figcaption>
+    </figure>
+  </div>
+  <div class="twrap"><table>
+    <tr><th style="width:120px">概念</th><th>定義</th></tr>
+    <tr><td>Model（模型）</td><td>接受輸入、產生輸出的基礎 AI 能力——回答一次。</td></tr>
+    <tr><td>Agent（代理人）</td><td>以模型為核心，另配指令、工具、來源、權限、執行環境與步驟——會規劃、選工具、執行並組合結果。</td></tr>
+  </table></div>
+
+  <h3 id="s-tts">4.2 TTS 情境範本：不只是「把文字唸出來」</h3>
+  <figure class="shot">
+    <img src="ep45-img/05-tts-scenarios.jpg" alt="Google AI Studio TTS 情境範本" loading="lazy">
+    <figcaption><span class="ts">08:20</span>TTS Playground（Gemini 3.1 Flash TTS）的 <b>Quickstart Templates</b>：The Everyday Assistant／The Guarded NPC／The Energetic Co-Host／The Master Storyteller／The Ad Voiceover／The Training Guide／The Game Show Host／The Patient Teacher。</figcaption>
+  </figure>
+  <ul class="pt">
+    <li>以前只分 single／多人；現在多了按用途整理的<b>情境</b>：助理、遊戲 NPC、主持人、說故事／廣告。老師以「遊戲 NPC」示範，輸入<i>「今天颱風準備要登陸」</i>再換聲線與語速。</li>
+    <li>可調：說話內容、角色情境、聲音（speaker）、英文口音／腔調、語速、單人或多人；生成後可播放並<b>下載音訊</b>。</li>
+    <li>這仍是<b>單項模型能力</b>；下一章的 AI Talk Radio 才會把 TTS＋主持人＋配樂＋封面串成完整節目。</li>
+  </ul>
+  <div class="note gold">⚠️ 中文腔調選項當時還沒有（英文才有多種口音）；操作以當下畫面與版本為準。</div>
+</section>
+
+<!-- 5 官方 Agent -->
+<section class="chapter" id="sec-agents">
+  <span class="chip" style="background:linear-gradient(90deg,#d4508e,#7a4fd6)">CHAPTER 03 · 實錄</span>
+  <h2 class="ct">5. 官方 Agent 展示間</h2>
+  <p class="cd">切到 Agents 分頁，AI Studio 偷藏的一整排官方 Agent 就露出來了。老師先總覽，再挑 Antigravity 與 AI Talk Radio 深入示範，並教一招「省 token 的自建路」。</p>
+
+  <h3 id="a-gallery">5.1 Build with Agents：官方做好的 Agent</h3>
+  <figure class="shot">
+    <img src="ep45-img/06-agent-gallery.jpg" alt="Build with Agents 範本清單" loading="lazy">
+    <figcaption><span class="ts">10:45</span>「Build with Agents」展示間（右上 Models／Agents 切換）。六張官方範本卡：<b>Antigravity Preview、AI Talk Radio、Customer Support、Data Analyst、Document Processor、Repo Maintainer</b>。</figcaption>
+  </figure>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">Agent</th><th>用途（畫面說明）</th></tr>
+    <tr><td>Antigravity Preview</td><td>在 Google 託管的遠端 Linux 環境執行的一般用途自主 Agent</td></tr>
+    <tr><td>AI Talk Radio</td><td>把文字來源轉成含主持人、來賓／來電者與背景音樂的模擬廣播</td></tr>
+    <tr><td>Customer Support</td><td>掃描網站建立客服知識庫並回答問題</td></tr>
+    <tr><td>Data Analyst</td><td>資料分析與互動式商業洞察</td></tr>
+    <tr><td>Document Processor</td><td>文件、費用／發票等處理工作</td></tr>
+    <tr><td>Repo Maintainer</td><td>分析程式碼庫、找問題、回答與協助維護</td></tr>
+  </table></div>
+  <p>選 Agent 別先看哪張卡最炫，先問：①輸入是文字／網站／文件／資料／程式碼？ ②產物是答案／報告／知識庫／音訊／可執行成品？ ③需要哪些工具與外部資料？ ④來源是靜態頁還是動態網站？</p>
+
+  <h3 id="a-antigravity">5.2 Antigravity Preview：雲端直接用的自主 Agent</h3>
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="ep45-img/07-antigravity-desktop.jpg" alt="Antigravity 中文化桌面介面" loading="lazy">
+      <figcaption><span class="ts">12:00</span>「反重力智慧程式設計」（Antigravity）介面——<b>中文化需自行安裝 skill</b>。可選模型（畫面為 Claude Sonnet 4.6 Thinking）、有排程工作與專案清單。</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="ep45-img/08-antigravity-preview.jpg" alt="AI Studio 內的 Antigravity Preview" loading="lazy">
+      <figcaption><span class="ts">21:30</span>AI Studio 內的 <b>Antigravity Preview</b>：「A general-purpose autonomous agent running in a remote, Google-hosted Linux environment」，可 Explore Environment／Weather Dashboard／Build Antigravity Game。</figcaption>
+    </figure>
+  </div>
+  <ul class="pt">
+    <li>Agent 四大工具，老師點名：<b>Claude Code、GPT 的 Codex、開源 OpenCode、Google 的 Antigravity</b>。</li>
+    <li>Antigravity 最大特色：<b>可在雲端直接用</b>（不必只靠本機）、模型可選、支援<b>多角色子代理協作</b>。</li>
+    <li>Preview＝功能仍會變動；雲端 Agent 有自己的環境、來源與網路權限，不等於能自由讀取你整台電腦。</li>
+  </ul>
+
+  <h3 id="a-tools">5.3 工具開關與成本：Agent 的「手、眼睛與通行證」</h3>
+  <figure class="shot">
+    <img src="ep45-img/09-agent-tools.jpg" alt="Run settings 工具開關" loading="lazy">
+    <figcaption><span class="ts">13:15</span>右側 <b>Run settings</b> 的工具開關：Code execution、Grounding with Google Search、URL context、Filesystem tools；下方還有 Sources 與 Network rules。左側 Models 展示間含 Image Generation（Nano Banana／Imagen）、Video（Veo）、Speech and Music、Real-time（Live API）。</figcaption>
+  </figure>
+  <div class="twrap"><table>
+    <tr><th style="width:170px">工具</th><th>作用</th></tr>
+    <tr><td>Code execution</td><td>讓 Agent 在隔離環境執行程式</td></tr>
+    <tr><td>Grounding with Google Search</td><td>透過 Google Search 查資料、作為回答依據</td></tr>
+    <tr><td>URL context</td><td>讀取指定網址內容作為上下文</td></tr>
+    <tr><td>Filesystem tools</td><td>管理隔離環境中的檔案（依執行模式而定）</td></tr>
+    <tr><td>Sources</td><td>Agent 已連結的資料來源／規格</td></tr>
+    <tr><td>Network rules</td><td>哪些網域／網路請求可被允許</td></tr>
+  </table></div>
+  <div class="note gold">💰 成本提醒（老師原話）：<i>「所有的 agent 都必須要用 API key，就是你要給他付費的 API key，他才能做使用。」</i>介面能打開，不代表每一步都免費。</div>
+
+  <h3 id="a-radio">5.4 AI Talk Radio：把文字變成完整 Podcast</h3>
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="ep45-img/10-radio-config.jpg" alt="AI Talk Radio 設定與 prompt" loading="lazy">
+      <figcaption><span class="ts">14:22</span>AI Talk Radio 設定：prompt「寫一個 1 分鐘的 podcast，有開場、兩個主持人、介紹颱風最新動態、用中文」。右側可見 <b>Sources 18／Network rules</b>、Tools 開關、Environment。</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="ep45-img/11-radio-output.jpg" alt="AI Talk Radio 執行與產出" loading="lazy">
+      <figcaption><span class="ts">17:45</span>成品「颱風巴威一分鐘氣象快報」執行過程（Run Command／Thoughts／Google Search／Read File），標題旁顯示 <b>442,416 tokens</b>，右下有 <b>Download</b>。</figcaption>
+    </figure>
+  </div>
+  <ul class="pt">
+    <li>老師的任務：一段約一分鐘、中文、颱風動態的廣播，含<b>開場、兩位主持人、背景配樂</b>、可下載完整音訊。</li>
+    <li>產出不只語音：節目結構、口播、音效／配樂、封面、MP3。相關模型——<b>TTS</b> 負責人聲、<b>Lyria 3</b> 負責配樂、<b>Nano Banana</b> 負責封面，Agent 負責安排順序與整合。</li>
+    <li>老師比較：<i>「他會比 NotebookLM 做出來的再更完整——他有背景音樂，用 Lyria 3 做的配樂。」</i></li>
+    <li>那個 <b>442,416 tokens</b> 正是「成本」的具體證據——完整 Podcast 很炫，但也很吃 token。</li>
+  </ul>
+
+  <h3 id="a-learn">5.5 省 token 的路：讓自己的 Agent 學官方設計</h3>
+  <figure class="shot">
+    <img src="ep45-img/12-learn-official.jpg" alt="教 Antigravity 學官方 Agent 的 prompt" loading="lazy">
+    <figcaption><span class="ts">25:45</span>在 Antigravity 下的教學 prompt：把官方 Agent 頁面連結當「目標」，要它<b>先下載 18 sources 與 9 rules</b>、回報頁面所有可見內容（標題、按鈕、模型選項、系統指令…）後，再開始 demo。</figcaption>
+  </figure>
+  <ol class="st">
+    <li><b>先給目標</b>：例如「學習並打造 AI Talk Radio Agent」。</li>
+    <li><b>給來源</b>：貼上官方 Agent 連結。</li>
+    <li><b>指定學習範圍</b>：讀取 18 個 sources 與 9 個 network rules。</li>
+    <li><b>先回報理解</b>：要它整理架構、工具、限制與流程。老師原話：<i>「你學完你要先學一次，然後我看你好不好，好了，你再變成你的固定的專欄。」</i></li>
+    <li><b>再動手實作</b>：確認理解正確後才建立自己的版本。</li>
+  </ol>
+  <div class="note blue">💡 界線：能學的是官方<b>公開規格、流程與可觀察行為</b>；不代表能複製 Google 的私有模型或後端。自建版本仍要確認 API、授權、費用與網路白名單。</div>
+  <div class="golden"><div class="q">「Sources 告訴 Agent 要學哪些材料，rules 告訴它可以連到哪裡——兩者共同構成可控邊界。」</div><div class="a">Agent 篇金句</div></div>
+</section>
+
+<!-- 6 進階 -->
+<section class="chapter" id="sec-adv">
+  <span class="chip" style="background:linear-gradient(90deg,#1d9e6f,#0aa6c9)">CHAPTER 04 · 實錄</span>
+  <h2 class="ct">6. 進階：多 Agent 與實作</h2>
+  <p class="cd">把 Antigravity 放到雲端後，它「有手有腳」——這一章用「多 Agent 團隊做一個颱風遊戲」示範，並收在「怎麼選、有什麼限制」。</p>
+
+  <h3 id="v-team">6.1 多 Agent 團隊：把大任務拆給專門角色</h3>
+  <p>老師用 Antigravity 的斜線指令「<b>團隊合作</b>」，把一個任務切得更細、分派給不同子 Agent。原話任務：</p>
+  <div class="prompt">請幫我針對颱風為主題做一個寓教娛樂的遊戲，
+包含音效、包含動畫、還有包含闖關性的劇情設計，
+是一個可以直接打包、直接使用 HTML 呈現的網頁遊戲。
+—— 過程中請分配給不同子 Agent：A1 音效、A2 動畫、A3 遊戲設計</div>
+  <ul class="pt">
+    <li><b>Multi-agent collaboration</b>：主 Agent 接收總目標 → 拆分子任務 → 分派給多個子 Agent → 最後整合與驗證。</li>
+    <li>不是越多越好：子 Agent 過多會增加溝通、重工與成本。適合拆分的條件是<b>工作能明確分界、可獨立驗收，且最後有整合角色</b>。</li>
+  </ul>
+
+  <h3 id="v-game">6.2 颱風寓教娛樂遊戲：把知識藏進選擇與後果</h3>
+  <figure class="shot">
+    <img src="ep45-img/13-typhoon-game.jpg" alt="颱風指揮官 防災遊戲成果" loading="lazy">
+    <figcaption><span class="ts">23:35</span>成果「<b>颱風指揮官</b>」防災遊戲（本機 index.html）：距登陸 6 小時、防災預算 $300；選擇防颱行動（黏窗戶膠帶／清排水孔／堆沙包／採購儲備），畫面即時顯示「結構防禦力 25%／防水補漏力 10%」，並有音效開啟鈕。</figcaption>
+  </figure>
+  <ul class="pt">
+    <li>玩法：以突發事件推進（海水倒灌、玻璃破裂），玩家<b>選擇應對方式</b>，選擇會影響健康／精神等狀態，系統說明錯誤選擇的風險與較好做法。</li>
+    <li>老師比較：<i>「他會比你原本用 Gemini 的 Canvas 功能做出來的，品質再更好一點——畢竟他長出手跟腳了，能拿語音、音樂、動畫這些模型。」</i></li>
+    <li>驗收清單：每個事件有正確防災依據？錯誤選項有說明原因？音效／動畫不干擾閱讀？手機可操作？HTML 能離線開或直接部署？</li>
+  </ul>
+
+  <h3 id="v-choose">6.3 選擇路徑與限制</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">路徑</th><th>適合</th></tr>
+    <tr><td>A｜直接用官方 Agent</td><td>要快速驗證、願提供 API key、可接受 token 成本</td></tr>
+    <tr><td>B｜讓自己的 Agent 學官方設計</td><td>想控制流程、重用既有 Codex／Antigravity 配額、願花時間理解 sources／rules／工具限制</td></tr>
+  </table></div>
+  <ul class="pt">
+    <li>對應建議：報告與資料整理→文件／資料 Agent；程式碼維護→Repo Maintainer；寓教娛樂遊戲→具程式／音效／動畫／多 Agent 能力的流程；<b>對 Agent 還不熟→先從 Antigravity Preview 試作</b>。</li>
+    <li><b>Customer Support 的限制（<span class="ts" style="margin:0">26:20</span>）</b>：偏靜態網頁才適合爬取；<b>Facebook 等動態、需登入的內容爬不到</b>，Google 評論還可以，但動態網站很難。建知識庫前先驗證「來源能否存取、是否穩定、是否允許使用」。</li>
+    <li><b>CLI Teamwork（<span class="ts" style="margin:0">36:01</span>）</b>：若用 CLI 介面，teamwork／團隊功能<b>要主動用指令叫出</b>，不像網頁版直接有按鈕。</li>
+  </ul>
+  <figure class="shot">
+    <img src="ep45-img/14-cli-teamwork.jpg" alt="課末問答與 CLI teamwork 提問" loading="lazy">
+    <figcaption><span class="ts">36:05</span>課末問答（Meet 聊天室）：學員問「antigravity 2.0 有 team work，但 antigravity CLI 好像沒有耶」，老師補充 CLI 需主動叫出 teamwork；並回應中文化＋1、桌面小寵物、年中共學回放等。</figcaption>
+  </figure>
+  <div class="golden"><div class="q">「付費買的是速度與已整合流程；自建換來控制力，但要承擔設計、測試與維護。」</div><div class="a">自動化篇金句</div></div>
+</section>
+
+<!-- 7 名詞 -->
+<section class="chapter" id="sec-terms">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5a5866)">GLOSSARY</span>
+  <h2 class="ct">7. 專有名詞卡</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:120px">名詞</th><th>白話</th><th>正式定義</th></tr>
+    <tr><td>Prompt</td><td>交代 AI 要做什麼</td><td>提供給模型或 Agent 的文字／多模態輸入與約束</td></tr>
+    <tr><td>TTS</td><td>把文字唸成聲音</td><td>Text-to-Speech，文字轉語音技術</td></tr>
+    <tr><td>Agent</td><td>能自己分步完成任務的 AI</td><td>結合模型、指令、工具、來源與執行迴圈的系統</td></tr>
+    <tr><td>子 Agent</td><td>專門負責一小塊的助手</td><td>由主 Agent 分派獨立子任務的代理執行單元</td></tr>
+    <tr><td>Grounding</td><td>查資料後再回答</td><td>將輸出連結到外部可檢索來源／證據的機制</td></tr>
+    <tr><td>URL context</td><td>把指定網頁交給 AI 讀</td><td>將 URL 可取得內容注入模型上下文的工具</td></tr>
+    <tr><td>Code execution</td><td>讓 AI 實際跑程式</td><td>在受控／隔離環境執行程式碼的能力</td></tr>
+    <tr><td>Sources</td><td>Agent 的參考材料</td><td>Agent 執行時可讀取的來源／規格／知識資源</td></tr>
+    <tr><td>Network rules</td><td>Agent 的網路白名單</td><td>限制執行環境可存取網域與請求的規則</td></tr>
+    <tr><td>API key／Token</td><td>服務鑰匙／計費單位</td><td>驗證呼叫者與計量用量的憑證；模型切分文字後的計算單位</td></tr>
+    <tr><td>Lyria 3 / Nano Banana</td><td>配樂模型／封面生圖模型</td><td>本集 Radio Agent 分別用於背景音樂與節目封面</td></tr>
+  </table></div>
+</section>
+
+<!-- 8 檢核 -->
+<section class="chapter" id="sec-check">
+  <span class="chip" style="background:linear-gradient(90deg,#c98a0a,#d4508e)">SELF CHECK</span>
+  <h2 class="ct">8. 課後自我檢核（照本集實作）</h2>
+  <p class="cd">都對應本集真的示範過的動作。可到<a href="ep45-ai-skills.html">互動技能地圖</a>逐項打勾。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">主題</th><th>你應該做得到…</th></tr>
+    <tr><td>⌨️ 輸入</td><td>① 設定 Codex 聽寫工具與快捷鍵　② 在 Word 等任何有游標處用語音輸入　③ 知道要人工檢查專有名詞</td></tr>
+    <tr><td>🧪 AI Studio</td><td>① 說出 Models 與 Agents 的差異　② 認得 Live Translate／TTS／Lyria 3　③ 用 TTS 情境範本（NPC）設定聲音與語速並下載音訊</td></tr>
+    <tr><td>🤖 官方 Agent</td><td>① 說出 Build with Agents 的六種範本與用途　② 解釋 Code execution／Grounding／URL context／Filesystem 的作用　③ 知道每個 Agent 都要 API key、會花 token　④ 用 AI Talk Radio 生成含配樂、封面的 Podcast</td></tr>
+    <tr><td>🧩 進階</td><td>① 把官方 Agent 的 18 sources／9 rules 交給自己的 Agent「先學再自建」　② 用多 Agent 團隊把遊戲拆給音效／動畫／闖關子 Agent　③ 判斷 Customer Support 對動態網站的限制　④ 選對付費 vs 自建路徑</td></tr>
+  </table></div>
+</section>
+
+<!-- 9 來源 -->
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5a5866)">SOURCES</span>
+  <h2 class="ct">9. 資料來源與製作說明</h2>
+  <ul class="pt">
+    <li><b>原始教材：</b>EP45「Google AI Studio 偷藏了這些 Agent！」課堂錄影（37:08，未附獨立簡報檔，圖片來源為錄影操作畫面）。</li>
+    <li><b>逐幀製作方式：</b>下載完整錄影 → ffmpeg 依節點時間碼抽出畫面 → <b>親眼逐幀判讀</b>每個操作畫面（Codex／AI Studio／Antigravity／AI Talk Radio／颱風遊戲）→ 裁切成 14 張真實截圖嵌入本頁；並對照課堂逐字稿，引號內文字取自逐字稿或畫面可辨識內容。</li>
+    <li><b>誠實聲明：</b>本頁內容以錄影實際發生的順序與畫面為準。語音辨識偶有錯字（如工具名稱、颱風名「巴威」等），已依畫面校正後採用；畫面上 AI Talk Radio 顯示的 network rules 於不同時點分別出現 9／10，本頁以老師強調的 <b>18 sources／9 rules</b> 為準並在截圖如實標註當下數字。</li>
+    <li><b>介面參考：</b>互動技能地圖頁沿用本站 EP44 的卡片式多層導覽與遊戲化進度設計。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  EP45「Google AI Studio 偷藏了這些 Agent！」逐幀課堂筆記・2026/07 整理<br>
+  🍀 Learn AI with Tarshar｜搭配 <a href="ep45-ai-skills.html">互動技能地圖</a> 使用效果最佳
+</footer>
+
+</body>
+</html>

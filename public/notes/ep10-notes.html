@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP10 課堂筆記｜自動化概念＋Notion x LINE 實作（免n8n、免付費工具版）</title>
+<meta name="description" content="晨學講堂 EP10 課堂筆記：不用 n8n、不用付費工具，只靠 Notion 整合 API＋LINE Messaging API＋Google Apps Script，就能把傳給 LINE 官方帳號的訊息自動存進 Notion 資料庫。逐字稿全程聽打＋畫面逐幀判讀，四大步驟手把手記錄。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#bf6a1e; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px;border-left:none}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+.note.violet{background:#F3EFFB;border-color:#DFD2F0;color:#5a34a8}
+.note.rose{background:#FBEEF1;border-color:#F0D2DB;color:#9c2f52}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.prompt{position:relative;background:#1d1d1f;border-radius:10px;padding:15px 16px;margin:12px 0;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt .tag{display:inline-block;font-size:11px;letter-spacing:.06em;color:#c9c4ff;border:1px solid #3a3a40;border-radius:6px;padding:2px 9px;margin-bottom:8px}
+.prompt b{color:#fff}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.embed{margin:14px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000}
+.embed iframe{display:block;width:100%;aspect-ratio:16/9;border:0}
+.embed .cap{font-size:12.5px;color:var(--ink3);padding:10px 16px;background:var(--paper);border-top:1px solid var(--line)}
+.ts{display:inline-block;font-family:"Cascadia Code",Consolas,monospace;font-weight:700;font-size:12px;color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,#fff);border-radius:5px;padding:2px 8px;margin-right:7px;letter-spacing:.4px;vertical-align:middle}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+.layers{display:grid;gap:10px;margin:14px 0}
+.lyr{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:13px 15px;background:#fff}
+.lyr .n{flex:none;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--accent)}
+.lyr h4{margin:0 0 3px;font-size:14.5px}
+.lyr p{font-size:13px;margin:0}
+.sub{color:var(--ink2)}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#e0bd97" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP10 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="ep10-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 晨學講堂 · EP10</span>
+  <h1>自動化概念＋<span>Notion x LINE</span> 實作</h1>
+  <p class="lead">EP10 用一集的時間，教會你<b>不用 n8n、不用任何付費工具</b>，只靠 <b>Notion 整合 API＋LINE Messaging API＋Google Apps Script</b> 三個免費服務接起來，就能把你傳給 LINE 官方帳號的任何一句話，自動存進 Notion 資料庫——這就是最基礎、最省成本的個人自動化雛型。本頁逐字稿全程聽打、畫面逐幀親眼判讀後整理。</p>
+  <div class="meta">
+    <span>🎙️ 晨學講堂直播 · 約 67 分鐘</span>
+    <span>🗂️ 教材：僅錄影，無簡報 pptx</span>
+    <span>🔗 主題：Notion × LINE 自動化串接</span>
+    <span>🛠️ 工具：Notion／LINE Developers／Google Apps Script</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-why">1. 為什麼要學自動化</a>
+  <a href="#sec-notion">2. 第一步：建立 Notion 資料庫</a>
+  <a href="#sec-antenna">3. 第二步：打開 Notion 對外天線</a>
+  <a href="#sec-line">4. 第三步：建立 LINE 官方帳號</a>
+  <a href="#sec-bridge">5. 第四步：用 Google Apps Script 接橋</a>
+  <a href="#sec-test">6. 實測成功＋常見雷點</a>
+  <a href="#sec-recap">7. 重點整理與 n8n 的關係</a>
+  <a href="#sec-src">8. 資料來源與製作說明</a>
+</nav>
+
+<article>
+
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--amber))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>EP10「自動化概念＋Notion x LINE 實作」</td></tr>
+    <tr><th>頻道</th><td>生成式 AI 應用電台・晨學講堂</td></tr>
+    <tr><th>形式</th><td>真人直播實作課，講師全程共享螢幕操作、學員邊聽邊跟做，直播結尾開放 Q&amp;A</td></tr>
+    <tr><th>教材</th><td>本集資料夾<b>只有一支約 67 分鐘的錄影</b>，沒有簡報 pptx，也沒有現成課堂筆記</td></tr>
+    <tr><th>一句話先懂</th><td>把 LINE 官方帳號當「輸入口」、Notion 資料庫當「儲存庫」，中間用 Google Apps Script 寫一小段免費的橋接程式，訊息傳進 LINE 就會自動出現在 Notion 裡——完全不用 n8n，也不用任何付費自動化平台。</td></tr>
+  </table></div>
+  <figure class="shot">
+    <img src="ep10-img/slide01.jpg" alt="EP10 課程投影片：設定Notion與設定LINE官方兩大步驟總覽" loading="lazy">
+    <figcaption>課堂投影片｜整堂課的骨架其實只有兩大步驟：① 設定 Notion（建立資料庫與連接器，約 10 分鐘）② 設定 LINE 官方帳號（啟用 Messaging API，約 15 分鐘），完成後的效果是「傳訊息給 LINE 官方帳號 → 訊息自動出現在 Notion 資料庫」。</figcaption>
+  </figure>
+  <div class="note gold">⚠️ <b>誠實聲明：</b>本集資料夾僅有錄影、沒有簡報。本頁內容整理自<b>完整逐字稿聽打（1947 句、涵蓋全程 00:00–66:57）</b>與<b>畫面逐幀親眼判讀</b>（每 20 秒一張，共 201 張，含 Notion、LINE Developers、Google Apps Script 等實際操作畫面），不是推測或改寫的內容。文中時間戳為逐字稿實際對應秒數。</div>
+</section>
+
+<section class="chapter" id="sec-why">
+  <span class="chip" style="background:linear-gradient(90deg,#c98a0a,#bf6a1e)">CHAPTER 01</span>
+  <h2 class="ct">1. 為什麼要學自動化：今天要做什麼</h2>
+  <p class="cd">開場破題（<span class="ts">00:44</span>–<span class="ts">03:00</span>）</p>
+  <ul class="pt">
+    <li><b>今天的目標：</b>「你不用透過 n8n，你也不用透過任何付費的工具，就可以讓 LINE 直接去連接你的 Notion」——這是老師開場第一句話定的調。</li>
+    <li><b>基本模式：</b>先在 Notion 建帳號、設定好表格，接著把訊息傳給一個 LINE 官方帳號，官方帳號就會自動把資料彙整到 Notion 的那張表格。</li>
+    <li><b>應用想像：</b>代辦事項、研究訪談記錄、生活靈感，甚至傳照片轉文字稿之後彙整摘要，都是同一套模式的延伸——今天教的只是一個 sample，後續怎麼玩看每個人自己的需求去調整。</li>
+    <li><b>跟 n8n 的關係先說清楚：</b>今天<b>不會安裝 n8n</b>（留到下次課），但過程中會順便用今天做的東西講解 n8n 的核心概念——「節點」與「串聯」。n8n 之所以能幫你做自動分析，就是因為把各種 AI 工具的節點串起來；理解每個節點怎麼接起來，是學 n8n 最重要的基礎。</li>
+    <li><b>老師特別交代來源：</b>今天示範的這個自動化流程<b>不是老師自己寫的</b>，是「脆」（Threads）上一位網友寫的範例，老師認為很適合當作 n8n／自動化入門的教材，所以拿來做延伸示範，並在課堂上明確告知出處。</li>
+  </ul>
+  <div class="golden"><div class="q">「你不用透過 n8n，你也不用透過任何付費的工具，就可以讓 LINE 直接去連接你的 Notion。」</div><div class="a">—— <span class="ts">01:20</span> 開場定調</div></div>
+  <div class="note blue">💡 老師在直播一開始還用「LINE 記事」表格帶大家實際傳訊息測試效果——傳一句話給官方帳號，畫面上的 Notion 表格就即時多一筆記錄，讓大家對「等一下要做出來的東西長什麼樣」先有畫面。</div>
+</section>
+
+<section class="chapter" id="sec-notion">
+  <span class="chip" style="background:linear-gradient(90deg,#bf6a1e,#9c7b23)">CHAPTER 02</span>
+  <h2 class="ct">2. 第一步：建立 Notion 資料庫（四個必要欄位）</h2>
+  <p class="cd"><span class="ts">07:05</span>–<span class="ts">14:52</span> 實際操作</p>
+  <ol class="st">
+    <li>打開 notion.so，用 Google 帳號登入，進入工作區首頁，右上角按「新增頁面」。</li>
+    <li>選右下角的「資料庫」→「空白資料庫」（不要用現成範本，因為等一下的程式碼是照固定欄位名稱寫死的，要自己手動建）。</li>
+    <li>依序把預設的第一欄改名為 <b>訊息內容</b>（型態維持文字／標題）。</li>
+    <li>新增第二個欄位 <b>建立時間</b>，型態選「日期」，這樣才能知道每則訊息是什麼時候傳進來的。</li>
+    <li>新增第三個欄位 <b>分類</b>，型態選「選取」（Select），之後可以自訂選項如「生活」「記帳」「教學」，讓 Notion 自動幫你把訊息分類、做成不同視圖或公式。</li>
+    <li>新增第四個欄位 <b>狀態</b>，型態選「狀態」（Status），一定要建立 <b>待處理</b> 與 <b>已完成</b> 兩個選項（老師特別強調「這兩個一定要填」），因為程式碼會照這個狀態名稱去抓取資料型態；其餘像「進行中」等預設選項若用不到可以刪掉，顏色可以自己配（老師示範已完成配橙色、待處理配紅色，純美觀不影響設定）。</li>
+    <li>把資料庫命名（老師示範取名「小助手」），完成後 Notion 會立即自動存檔。</li>
+  </ol>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">欄位名稱</th><th style="width:110px">型態</th><th>用途說明</th></tr>
+    <tr><td><b>訊息內容</b></td><td>Title（標題）</td><td>儲存 LINE 傳進來的訊息文字</td></tr>
+    <tr><td><b>建立時間</b></td><td>Date（日期）</td><td>自動記錄訊息傳送時間</td></tr>
+    <tr><td><b>分類</b></td><td>Select（選取）</td><td>依內容分類，如生活／記帳／教學</td></tr>
+    <tr><td><b>狀態</b></td><td>Status（狀態）</td><td>必須包含「待處理」「已完成」兩個選項，供後續流程判斷</td></tr>
+  </table></div>
+  <figure class="shot">
+    <img src="ep10-img/slide03.jpg" alt="投影片：建立Notion資料庫，設定四個必要欄位對照表" loading="lazy">
+    <figcaption>課堂投影片｜四個必要欄位的名稱、型態、用途一次列清楚——這張表基本上就是後面 Apps Script 程式碼會讀取的欄位名稱，一個字都不能打錯。</figcaption>
+  </figure>
+  <figure class="shot">
+    <img src="ep10-img/slide02.jpg" alt="Notion 空白資料庫初始畫面，尚未命名欄位" loading="lazy">
+    <figcaption>實際操作畫面｜按「空白資料庫」之後的初始狀態，接下來就是照上表把四個欄位一一改名、設定型態。</figcaption>
+  </figure>
+  <div class="note gold">⚠️ 建好資料庫之後，接下來要拿到它的「網址」：右上角「分享」→「複製連結」，貼到記事本存起來。網址裡 <code>notion.so/</code> 後面一長串英數字、到 <code>?</code> 問號之前的那一段，就是這個資料庫的 <b>ID</b>，之後串接 Google Apps Script 一定會用到，老師特別提醒要先框起來記下來，「不然你等一下會忘記」。</div>
+</section>
+
+<section class="chapter" id="sec-antenna">
+  <span class="chip" style="background:linear-gradient(90deg,#9c7b23,#c98a0a)">CHAPTER 03</span>
+  <h2 class="ct">3. 第二步：打開 Notion 對外天線（Integration／API Key）</h2>
+  <p class="cd"><span class="ts">17:45</span>–<span class="ts">26:16</span> 實際操作 · 老師的比喻：「天線」</p>
+  <p>資料庫只是把資料放在自己家裡，外面的程式要進得來，需要 Notion 提供的一支「對外天線」——也就是 <b>Integration（整合）</b>。老師整段用「架天線、接 WiFi 密碼」的比喻帶大家理解 API Key 的概念，非常好懂。</p>
+  <ol class="st">
+    <li>到 <b>notion.so/my-integrations</b>（老師直接貼網址給大家），按「新整合」。</li>
+    <li>幫這支「天線」取名（建議跟資料庫同名，例如「小助手」），選擇要插到哪個工作區（房子），需要的話上傳一個 icon。</li>
+    <li>按「儲存」，如果跳出帳號選擇提示，選自己的工作區即可，完成後就會進入「整合設定」畫面。</li>
+    <li><b>最關鍵的一步：</b>在「功能」區塊裡，一定要把 <b>讀取內容</b>、<b>更新內容</b>、<b>插入內容</b> 三個權限都打開——因為等一下 LINE 傳進來的資訊要能「新增」進 Notion，缺了插入或更新權限就串不起來。</li>
+    <li>在「內部整合密鑰」欄位按「顯示」再按「複製」，把這串 API Key 存到剛剛的記事本，命名清楚（例如「notion API」），等一下要靠它來當「天線的密碼」。</li>
+    <li>回到剛剛建好的資料庫頁面，右上角三個點「⋯」→「連結」→「編輯連結」，在「私人」分類裡找到剛剛建立的整合（天線），選取後按「確認」——這一步等於「把天線架到資料庫這個房子裡」。</li>
+    <li>驗證方式：回到資料庫頁面右上角三個點，看到「連結」欄位已經列出剛剛的整合名稱，就代表天線接好了。</li>
+  </ol>
+  <figure class="shot">
+    <img src="ep10-img/slide04.jpg" alt="Notion 整合功能勾選畫面，讀取內容、更新內容、插入內容三個核取方塊全部勾選" loading="lazy">
+    <figcaption>實際操作畫面｜整合的「功能」設定，讀取內容／更新內容／插入內容三個權限都要打勾，這是老師特別停下來強調的一步——「我其實最需要這根天線是幫我做這樣的事情，一定要開這兩個：更新內容跟插入內容」。</figcaption>
+  </figure>
+  <div class="note blue">💡 老師的口語比喻整理：<b>資料庫＝家</b>，<b>Integration＝天線</b>，<b>API Key／Integration Secret＝天線的 WiFi 密碼</b>，<b>把整合連結到資料庫＝把天線插到房子裡</b>。有了天線＋密碼，外部程式（Google Apps Script）才能對這個房子做讀寫。</div>
+</section>
+
+<section class="chapter" id="sec-line">
+  <span class="chip" style="background:linear-gradient(90deg,#c98a0a,#bf6a1e)">CHAPTER 04</span>
+  <h2 class="ct">4. 第三步：建立 LINE 官方帳號（Messaging API）</h2>
+  <p class="cd"><span class="ts">27:00</span>–<span class="ts">39:19</span> 實際操作</p>
+  <p>Notion 那一頭設定好之後，換到「輸入口」這一頭：建立一個 LINE 官方帳號，並開通它的 Messaging API 功能，才能讓外部程式接收使用者傳進來的訊息。老師提醒這一段「很多人會卡在這裡，它要調來調去」，是整堂課最容易出錯的地方之一。</p>
+  <ol class="st">
+    <li>到 <b>LINE Developers</b>（developers.line.biz）主控台，如果還沒有「提供者」（Provider），先建立一個提供者。</li>
+    <li>提供者底下按「Create」新增一個「Channel」，型態選 <b>Messaging API</b>。</li>
+    <li>依畫面指示填入官方帳號名稱、你的 Email，第一次使用需要用 LINE 帳號登入完成基本驗證。</li>
+    <li>接著會被導到 <b>LINE 官方帳號後台（Official Account Manager）</b>的建立表單：填帳號名稱、Email、公司／服務所在地區、業種（大分類／小分類）。認證流程先選「稍後進行認證」（正式認證要付費，課堂上不需要），同意條款後帳號就建立完成。</li>
+    <li>回到帳號右側的「設定」，做三件事：
+      <ul class="pt">
+        <li>「回應設定」裡把 <b>加入歡迎訊息</b> 關掉（避免干擾自動化流程）。</li>
+        <li>把 <b>聊天</b> 打開。</li>
+        <li>找到 <b>Messaging API</b> 分頁並啟用它——同意條款、確認後，LINE 就會把這個帳號初步設定為可以走 API 的頻道。</li>
+      </ul>
+    </li>
+    <li>啟用 Messaging API 後，切到 <b>Basic settings</b> 分頁，複製 <b>Channel secret</b>（頻道密鑰）存到記事本；再切到 <b>Messaging API</b> 分頁，找到 <b>Channel access token</b>，按「issue」產生一長串通行碼後複製存起來——這兩把金鑰是等一下橋接程式一定要用到的。</li>
+  </ol>
+  <figure class="shot">
+    <img src="ep10-img/slide05.jpg" alt="LINE Developers 主控台，建立訊息傳遞 API 通道頁面" loading="lazy">
+    <figcaption>實際操作畫面｜LINE Developers 主控台「建立訊息傳遞 API 通道」頁——第一次使用必須先透過「建立 LINE 官方帳號」按鈕，去官方帳號管理後台建立帳號，才能回頭建立 Messaging API 頻道。</figcaption>
+  </figure>
+  <figure class="shot">
+    <img src="ep10-img/slide06.jpg" alt="LINE Developers Messaging API 設定頁，顯示 Bot basic ID 與加好友 QR code" loading="lazy">
+    <figcaption>實際操作畫面｜官方帳號建好之後的 Messaging API 設定頁，可以看到 <b>Bot basic ID</b> 與加好友用的 <b>QR code</b>——這個 QR code 就是等一下讓大家實際測試用的入口。</figcaption>
+  </figure>
+  <div class="note gold">⚠️ 老師提醒：如果你原本就已經有其他官方 LINE 帳號（例如之前課程用過的「智能助教」），一樣可以用同一套方式接，不用重新建立——只要到那個既有帳號的 Basic Setting 頁面，一樣能拿到 Channel secret 跟 Channel access token。</div>
+</section>
+
+<section class="chapter" id="sec-bridge">
+  <span class="chip" style="background:linear-gradient(90deg,#bf6a1e,#c98a0a)">CHAPTER 05</span>
+  <h2 class="ct">5. 第四步：用 Google Apps Script 接橋（webhook 串接）</h2>
+  <p class="cd"><span class="ts">41:00</span>–<span class="ts">51:09</span> 實際操作 · 最複雜的一段</p>
+  <p>Notion 天線、LINE 金鑰都拿到手之後，還缺一段「翻譯機」：LINE 傳來的訊息格式，跟 Notion API 吃的格式不一樣，中間要用程式把兩邊接起來，並且要有一個外部網址讓 LINE 能夠打進來——這正是老師之前教過的 <b>Google Apps Script</b>（Google 試算表「擴充功能」裡的 App Script）派上用場的地方。這一段程式碼是網路上現成的範本，課堂上不需要自己從零寫。</p>
+  <ol class="st">
+    <li>開一個新的 Google 試算表，「擴充功能」→「Apps Script」，把老師提供的完整程式碼整段貼上（程式碼是別人寫好的公開範本，不需要自己改邏輯）。</li>
+    <li>按「部署」→「新增部署作業」，類型選 <b>網頁應用程式</b>，「具有存取權的使用者」選 <b>所有人</b>（這裡的「所有人」是指任何知道網址的人都能打這支 API，不是公開讓所有人看得到你的資料），按「部署」。</li>
+    <li>第一次部署會要求「授權」：選自己的 Google 帳號 → 進階 → 前往（不安全）→ 允許，這是 Google 對「未驗證應用程式」的正常警告，不是程式有問題。</li>
+    <li>部署完成後，程式會在試算表裡自動生成一份「Setup」設定頁，並附上使用說明（程式碼裡直接寫了操作步驟文字）：
+      <div class="prompt"><span class="tag">Apps Script 內建說明文字（實際畫面內容）</span>📌 使用說明
+1. 在 B1~B4 填入對應的 Token 和 ID
+2. 在 B5 填入允許的 LINE User ID（多個以逗號分隔，留空則允許所有人）
+3. 部署此專案為網頁應用程式
+4. 將部署網址設定到 LINE Developers 的 Webhook URL
+📌 Notion Database 必要欄位</div>
+    </li>
+    <li>照設定頁指示，把四個值分別貼進 B1~B4：<b>LINE Channel access token</b>、<b>LINE Channel secret</b>、<b>Notion API Key（Integration Secret）</b>、<b>Notion 資料庫 ID</b>；B5 是選填的「白名單」——只填自己的 LINE User ID，就能限制只有你自己傳的訊息會被讀取，避免別人也傳訊息進來污染資料庫。</li>
+    <li>四個值填完後，<b>再部署一次</b>（新增部署作業，一樣選網頁應用程式、所有人），這次部署完成會產生一個正式的 <b>Web App 網址</b>，把它複製起來。</li>
+    <li>回到 LINE Developers 該頻道的 <b>Messaging API</b> 分頁，找到 <b>Webhook settings</b>，按「編輯」把剛剛複製的網址貼上，按「更新」，再按「Verify（驗證）」——出現 <b>success</b> 就代表兩邊真的接通了；如果失敗，要回頭檢查 Apps Script 那邊四個設定值有沒有貼對。</li>
+  </ol>
+  <figure class="shot">
+    <img src="ep10-img/slide07.jpg" alt="LINE to Notion 範本試算表內建教學文字，說明複製 Channel secret 與 access token 的步驟" loading="lazy">
+    <figcaption>實際操作畫面｜老師提供的「LINE to Notion (template)」範本試算表，內建操作教學分頁，清楚寫著「回到 LINE Developers → 點擊 Channels 的 Messaging API → 複製兩個密鑰：Basic settings 分頁的 Channel secret、Messaging API 分頁的 Channel access token」。</figcaption>
+  </figure>
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="ep10-img/slide08.jpg" alt="Google Apps Script 新增部署作業對話框，選取部署作業類型" loading="lazy">
+      <figcaption>Apps Script「新增部署作業」對話框——選「網頁應用程式」，這是整段串接的核心動作，跑錯型態就串不起來。</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="ep10-img/slide09.jpg" alt="Notion 資料庫實際同步 LINE 傳入訊息的成功畫面" loading="lazy">
+      <figcaption>串接成功後的真實結果——之後在下一節詳細說明。</figcaption>
+    </figure>
+  </div>
+  <div class="note violet">💡 老師特別建議：不要直接用他分享的試算表副本操作（因為綁定校務帳號，部署權限可能受限），最保險的方式是「擴充功能 → AppsScript → 把整段程式碼複製走 → 自己開一個全新的 Google 試算表貼上」，全部自己開、自己部署最不會踩雷。他也提醒 Google 有時候第一次部署會判定失敗，遇到的話<b>等大約 15 分鐘後再重新部署一次</b>通常就會成功。</div>
+</section>
+
+<section class="chapter" id="sec-test">
+  <span class="chip" style="background:linear-gradient(90deg,#c98a0a,#9c7b23)">CHAPTER 06</span>
+  <h2 class="ct">6. 實測成功＋常見雷點</h2>
+  <p class="cd"><span class="ts">52:00</span>–<span class="ts">62:14</span> 課堂實測與 Q&amp;A</p>
+  <ol class="st">
+    <li>大家用手機掃剛剛畫面上的 <b>QR code</b>，加官方帳號為好友。</li>
+    <li>直接傳一句話（老師實測傳「寫一本書的大綱」），LINE 那頭傳出去的瞬間，Notion 資料庫這邊就自動多出一筆新記錄，<b>訊息內容、建立時間、分類（預設）、狀態（待處理）</b>全部自動填好。</li>
+    <li>多位學員同時測試都成功同步，證明整條「LINE → Google Apps Script → Notion」的串接是通的。</li>
+  </ol>
+  <figure class="shot">
+    <img src="ep10-img/slide09.jpg" alt="Notion 資料庫『Line x Notion 記事小書僮』實際同步多筆 LINE 傳入訊息" loading="lazy">
+    <figcaption>課堂實測真實截圖｜資料庫「Line x Notion 記事小書僮」裡「今日的天氣」「早安~」「寫一半書大綱」等多筆訊息，都是學員與老師當場用 LINE 傳送、自動同步進來的記錄，建立時間精準對應傳送時刻，分類預設「生活」、狀態預設「待處理」。</figcaption>
+  </figure>
+  <h3>常見雷點與限制（課堂上實際被問到、實際示範到的）</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:170px">狀況</th><th>老師的說明</th></tr>
+    <tr><td>傳圖片／檔案沒有被記錄</td><td>目前程式碼<b>預設只抓文字訊息</b>；要支援圖片或檔案，需要在 Notion 資料庫加一個對應欄位（例如「檔案和媒體」），並回到 Apps Script 程式碼裡加入「多媒體類型」的判斷邏輯——老師當場示範資料庫加欄位、並提到程式碼要跟著改，但完整改法留給大家自己延伸練習。</td></tr>
+    <tr><td>怕陌生人也傳訊息污染資料庫</td><td>可以在 Apps Script 設定頁的 <b>B5</b>（允許的 LINE User ID）只填自己的 ID，官方帳號就只會讀取白名單內的人傳的訊息，「他不會讀其他的帳號」。</td></tr>
+    <tr><td>Webhook 驗證失敗</td><td>回頭檢查 Apps Script 裡四個設定值（token、secret、資料庫 ID、API Key）有沒有貼對／貼全，通常問題都出在這裡；也可能是部署還沒用最新版網址。</td></tr>
+    <tr><td>部署／授權跑不動、卡住</td><td>Google 對新專案的自動化授權偶爾會失敗，等待約 <b>15 分鐘</b>後重新部署即可，不用重建整個專案。</td></tr>
+    <tr><td>想用自己既有的官方 LINE 帳號</td><td>完全可以，不必重新建立新帳號，一樣到 Basic Setting 頁面拿 Channel secret／token 即可接上同一套流程。</td></tr>
+  </table></div>
+</section>
+
+<section class="chapter" id="sec-recap">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#bf6a1e)">RECAP</span>
+  <h2 class="ct">7. 重點整理：自動化的心法＋跟 n8n 的關係</h2>
+  <p class="cd"><span class="ts">56:00</span>–<span class="ts">66:57</span> 收尾與延伸</p>
+  <ul class="pt">
+    <li><b>四步驟串起來，就是今天做的事：</b>① Notion 建資料庫（四個必要欄位）② 開 Notion 對外天線（Integration，開三個讀寫權限）③ 建 LINE 官方帳號並啟用 Messaging API（拿到兩把金鑰）④ 用 Google Apps Script 當橋樑（填四個值＋部署成 Web App＋設定 LINE Webhook）。</li>
+    <li><b>跟 n8n 的差別：</b>n8n 可以用付費方案把這些節點直接「拖拉串接」，速度快很多，不用像今天這樣手動一段一段接、慢慢除錯；但今天這一套<b>完全免費</b>，而且逼著你搞懂每一段串接背後在做什麼（Channel secret 是什麼、Integration 權限是什麼、Webhook 是什麼），這正是老師刻意選擇先講這個範例的原因——「理解每一個節點怎麼去把它接起來」是學 n8n 前最重要的地基。</li>
+    <li><b>可延伸的方向：</b>把「代辦事項」「記帳」等不同用途的分類串接起來、支援圖片與檔案上傳、把 Notion 裡的資料再丟給 AI 做摘要分析——這些都可以在今天這套雛型上繼續疊加。</li>
+    <li><b>老師自己的真實用法（也是這堂課最想傳達的心法）：</b>把工作用的 LINE 訊息，習慣性轉貼給自己的這個「小幫手」官方帳號，它就自動幫忙整理進 Notion；之後只要打開 Notion 看整理過的清單就好，不用一直在 LINE 裡面翻找。「所以我只要看代表的資訊就好。」</li>
+    <li>影片後續會由團隊剪成分段教學上傳 YouTube 頻道，方便大家照著一步一步重做。</li>
+  </ul>
+  <div class="golden"><div class="q">「你的 LINE 多多少少都會有工作訊息，我都會習慣把工作的訊息貼到我的那個小幫手，他就幫我整理，然後我只要看代表的資訊就好。」</div><div class="a">—— <span class="ts">65:57</span> 課程收尾金句</div></div>
+</section>
+
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5a5866)">SOURCES</span>
+  <h2 class="ct">8. 資料來源與製作說明</h2>
+  <ul class="pt">
+    <li><b>原始教材：</b>EP10「自動化概念＋Notion x LINE 實作」晨學講堂直播錄影，全長約 66 分 57 秒，資料夾內<b>僅有此錄影，沒有簡報 pptx，也沒有現成課堂筆記</b>。</li>
+    <li><b>製作方式：</b>下載完整錄影 → 抽取音軌並以 <b>faster-whisper（small 模型，繁中）</b>跑出完整逐字稿，共 1947 句、涵蓋 00:00 至 66:57 全程 → 逐字稿全文通讀一遍，整理實際教學步驟與重點 → 以每 20 秒一張的頻率抽出畫面幀，<b>逐幀親眼判讀</b>（Notion 資料庫設定、LINE Developers 主控台、Google Apps Script 編輯器與部署流程、實測成功的 Notion 同步結果等關鍵畫面）→ 依真實操作順序整理成本頁筆記，並挑選 9 張代表性畫面截圖直接嵌入。</li>
+    <li><b>誠實聲明：</b>本頁所有步驟、金句、時間戳，均可對應逐字稿與畫面截圖，<b>沒有推測或臆造內容</b>。少數逐字稿因直播現場背景音／口音辨識誤差而語意不完整之處（例如工具名稱「App Script」被誤轉寫為「以色列」「以色有黨」等同音誤植），已依畫面與上下文判讀校正為正確用詞。老師示範用的自動化範本程式碼，其原作者為「Threads 上一位網友」，非本集講師原創，講師於課堂上有明確告知來源。</li>
+    <li><b>介面參考：</b>互動技能地圖頁沿用本站既有的卡片式多層導覽與遊戲化進度設計。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  EP10「自動化概念＋Notion x LINE 實作」課堂筆記・2026/07 整理<br>
+  🍀 Learn AI with Tarshar｜搭配 <a href="ep10-ai-skills.html">互動技能地圖</a> 使用效果最佳
+</footer>
+
+</body>
+</html>

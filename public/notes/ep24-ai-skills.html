@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>從亂試到有策略：Meta AI 圖像生成｜互動式學習地圖</title>
+<meta name="description" content="EP24 晨學講堂：Meta AI 圖像生成——跨平台進入途徑、文字回應特色、與 Midjourney/Flux 技術結合、提示詞結構與順序法則、失敗診斷、可複用方法、兩種 Prompt 模式、影音延伸與六大案例，互動式多層次學習地圖">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269;
+  --green:#3f8560; --orange:#bf6a1e; --red:#c0453f; --teal:#0d8f80;
+  --feat:#3f8560; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(28px,4.6vw,46px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--txt);background:none;-webkit-text-fill-color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:660px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:9px}
+.steps li{list-style:none;counter-increment:st;display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--txt2);line-height:1.7}
+.steps li::before{content:counter(st);flex:none;width:25px;height:25px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:var(--c,var(--feat));margin-top:1px}
+.steps li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+.prompt,.promptbox{background:#1d1d1f;border:1px solid #2c2c31;border-radius:10px;padding:13px 15px;margin-top:6px;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt b,.promptbox b{color:#fff}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <a class="navlink" href="../radio/" style="border-color:#a8cdb4" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <div class="logo">
+    <div class="dot">🎨</div>
+    <div>Meta AI 生圖地圖<small>MORNING LEARNING · EP24</small></div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋技能關鍵字：Midjourney、Flux、提示詞、順序、失敗診斷…" autocomplete="off">
+  </div>
+  <a class="navlink" href="ep24-notes.html">📝 課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">EP24 · 晨學講堂 · 2026/03</span>
+  <h1>從亂試到有策略<br>Meta AI 圖像生成這樣學最快</h1>
+  <p class="sub">Meta AI 生圖引擎整合了 Midjourney 美學與 Flux 模型，免費就能做出接近專業水準的圖像——關鍵在於用<b>結構化提示詞</b>取代亂試。<br>點進每一章，逐層展開<b>本集實際教到</b>的方法與案例，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🎙️ 生成式AI應用電台・晨學講堂</span>
+    <span>🎨 Meta AI 圖像生成</span>
+    <span>🧩 結構化提示詞</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>4</b><span>大主題</span></div>
+  <div class="stat"><b>12</b><span>實戰技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 12 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--blue)" onclick="showChapter('entry')">
+        <div class="glowline"></div><span class="emoji">🚪</span>
+        <h3><em>CHAPTER 01</em>認識與進入</h3>
+        <p>Meta AI 是什麼、跨平台進入途徑與三大核心功能，以及手機版／電腦版怎麼開始使用。</p>
+        <div class="foot"><div class="mini"><i data-mini="entry"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--purple)" onclick="showChapter('engine')">
+        <div class="glowline"></div><span class="emoji">🧠</span>
+        <h3><em>CHAPTER 02</em>文字與生圖引擎</h3>
+        <p>社群化的文字回應特色、與 Midjourney／Flux 的技術結合、以及生圖工具的定位與適用情境。</p>
+        <div class="foot"><div class="mini"><i data-mini="engine"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--green)" onclick="showChapter('prompt')">
+        <div class="glowline"></div><span class="emoji">🎯</span>
+        <h3><em>CHAPTER 03</em>提示詞心法</h3>
+        <p>結構化五要素、描述順序決定主角、常見失敗診斷、可複用方法、兩種 Prompt 模式並用。</p>
+        <div class="foot"><div class="mini"><i data-mini="prompt"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--orange)" onclick="showChapter('cases')">
+        <div class="glowline"></div><span class="emoji">🎬</span>
+        <h3><em>CHAPTER 04</em>影音延伸＋實戰案例</h3>
+        <p>靜態圖轉動態、對嘴與配樂的影音能力，加上六個真實生圖案例的失敗與改寫對照。</p>
+        <div class="foot"><div class="mini"><i data-mini="cases"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+
+    <div class="resources">
+      <h3>📦 <span>課程原始資料</span></h3>
+      <div class="res-grid">
+        <a href="ep24-notes.html"><span class="ic">📝</span><span><b>課堂筆記</b>課程筆記＋簡報 PDF 全文整理</span></a>
+        <a href="../radio/"><span class="ic">📻</span><span><b>直播電台系列</b>回系列總覽，一集一卡</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-entry" class="view" style="--c:var(--blue)"></section>
+  <section id="view-engine" class="view" style="--c:var(--purple)"></section>
+  <section id="view-prompt" class="view" style="--c:var(--green)"></section>
+  <section id="view-cases" class="view" style="--c:var(--orange)"></section>
+</main>
+
+<footer>
+  本頁為 EP24「從亂試到有策略：Meta AI 圖像生成這樣學最快」課後整理・介面沿用本站晨學講堂互動式學習地圖樣式<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2026｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+const DATA = {
+  entry: {
+    key:'entry', color:'var(--blue)', emoji:'🚪', code:'CHAPTER 01', title:'認識與進入',
+    intro:'先搞懂 Meta AI 是什麼、為什麼到處都能用，再學會怎麼從手機或電腦開始使用。',
+    topics:[
+      {t:'Meta AI 是什麼：跨平台策略與三大核心功能', s:'社群即入口｜課程筆記一＋簡報',
+       blocks:[
+        {h:'跨平台進入途徑',ul:['進入門檻極低、使用場景高度分散，不需額外學新系統。','可從 <b>Facebook、Instagram、WhatsApp、iMessage、網頁版、手機 App</b> 進入。','手機 App（特別是 <b>IG 與 Messenger</b>）最成熟，最適合教學示範。']},
+        {h:'核心優勢',ul:['免費使用，無配額限制。','支援中文對話。','整合 Midjourney 美學 ＋ Flux 模型。','月活躍用戶已超過 10 億人。']},
+        {h:'三大核心功能',steps:['生圖與影片生成：無限量、免費生成高品質圖片或動態影片。','文字生成與資訊查詢：聊天、搜尋、規劃行程、寫程式、課業輔導。','影像分析與辨識：上傳照片問品種、問哪裡買等。']},
+        {h:'看課堂筆記',p:'👉 <a href="ep24-notes.html#sec-what" style="color:var(--blue)">筆記 1：Meta AI 是什麼</a>'}]},
+      {t:'怎麼開始使用：手機版與電腦版', s:'實際操作三步｜簡報',
+       blocks:[
+        {h:'手機版（推薦）',steps:['打開 App：開啟 Instagram 或 Messenger。','進入聊天室：任何現有聊天室或建立新訊息。','呼叫 AI：點「Meta AI」圓形圖示，或輸入 @Meta AI。']},
+        {h:'電腦版',steps:['訪問 Meta.AI 官網。','用 Facebook 或 Instagram 帳號登入。','介面與手機版類似，功能相同。']},
+        {h:'注意',warn:'台灣有些用戶在網頁版可能看到「所在國家/地區尚未開放」，建議優先使用手機版 IG 或 Messenger。電腦版優勢是適合長時間創作、可多視窗比對。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep24-notes.html#sec-howto" style="color:var(--blue)">筆記 2：怎麼開始使用</a>'}]}
+    ]
+  },
+  engine: {
+    key:'engine', color:'var(--purple)', emoji:'🧠', code:'CHAPTER 02', title:'文字與生圖引擎',
+    intro:'了解 Meta AI 的文字回應為什麼特別「生活化」，以及生圖背後整合了哪些技術、適合用在哪裡。',
+    topics:[
+      {t:'文字回應特色：社群大數據的生活化視角', s:'課程筆記二',
+       blocks:[
+        {h:'重點',p:'Meta AI 的文字回應風格深受長期累積的<b>社群資料</b>影響，較貼近日常語境，能自然呈現多元觀點，特別適合<b>社群議題、生活情境、趨勢討論與意見彙整</b>。這源自 Meta 同時整合 Facebook、Instagram、Threads 的使用情境。'},
+        {h:'舉例',p:'詢問「最近 Threads 上大家怎麼看 AI 生圖？」，Meta AI 通常能整理出偏向社群討論脈絡的回應，而非單一結論式答案，適合課堂示範「觀點蒐集」。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep24-notes.html#sec-text" style="color:var(--purple)">筆記 3：文字回應特色</a>'}]},
+      {t:'生圖引擎解密：與 Midjourney、Flux 的技術結合', s:'2025.08 合作協議｜簡報',
+       blocks:[
+        {h:'關係拆解',table:{head:['項目','說明'],rows:[['技術授權與合作協議','Meta 將 Midjourney 美學技術整合到 Flux 模型中'],['品質解鎖','免費使用 Midjourney 美學引擎，降低門檻'],['技術加持','結合 Flux（視覺一致性），生圖速度與細節提升'],['無痛轉移','Midjourney 創作者可直接上手'],['結果','完全免費 × 無限量 × 專業級生圖']]}},
+        {h:'金句',tip:'完全免費 × 無限量 × 專業級生圖。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep24-notes.html#sec-engine" style="color:var(--purple)">筆記 4：生圖引擎解密</a>'}]},
+      {t:'定位與適用情境：能做什麼、不能做什麼', s:'簡報',
+       blocks:[
+        {h:'核心定位',p:'快速、免費、高品質的<b>創意工具</b>，而不是完美的商業級解決方案。'},
+        {h:'適合／不適合',table:{head:['適合','不適合'],rows:[['快速生成商品圖、行銷素材','對光影構圖有極高要求的專業案件'],['創意發想、概念視覺化','商業授權使用（涉及版權問題）'],['社群媒體內容製作','複雜細節要求（有時會失控）'],['個人創意專案、學習實驗','特定人物精確複製、完全一致的重複生成']]}},
+        {h:'看課堂筆記',p:'👉 <a href="ep24-notes.html#sec-fit" style="color:var(--purple)">筆記 5：定位與適用情境</a>'}]}
+    ]
+  },
+  prompt: {
+    key:'prompt', color:'var(--green)', emoji:'🎯', code:'CHAPTER 03', title:'提示詞心法',
+    intro:'從結構、順序、失敗診斷到系統化方法，把生圖從亂試變成一套可複用的策略。',
+    topics:[
+      {t:'結構化提示詞 5 要素', s:'主體→特徵→風格→品質｜法則 1',
+       blocks:[
+        {h:'失控範例',warn:'「一個穿著漢服的女子…飄逸感，古典風格，清晰，高細節，電影級光線，專業攝影，4K 解析度，完美構圖…」——太多修飾詞堆砌，AI 不知道優先順序。'},
+        {h:'正確結構',steps:['主體（最重要，放在最前面）。','關鍵特徵（具體的視覺細節）。','風格定位（藝術風格或氛圍）。','品質要求（光線、解析度、構圖）。']},
+        {h:'改寫範例',p:'「古典漢服女子，髮髻高挽，唸珠項鍊，衣著飄逸，古典中國風，高細節攝影」'},
+        {h:'看課堂筆記',p:'👉 <a href="ep24-notes.html#sec-rule12" style="color:var(--green)">筆記 6：提示詞結構與順序</a>'}]},
+      {t:'描述順序決定主角', s:'越前面權重越高｜法則 2',
+       blocks:[
+        {h:'核心原則',p:'越前面的描述，AI 給的權重越高；想要什麼成為主角，就把它放在最前面。'},
+        {h:'三個對照案例',table:{head:['案例','主角在前','順序調換後'],rows:[['咖啡杯','白色咖啡杯，木製桌子，窗邊自然光→杯子是主角','窗邊自然光，木製桌子，白色咖啡杯→光線變主角'],['手工皂','手工皂，白色背景，柔和光線→皂是焦點','柔和光線，白色背景，手工皂→光線主導'],['人物','年輕女性，穿著牛仔褲，咖啡廳背景→人物清晰','咖啡廳，年輕女性坐著，穿著牛仔褲→場景人物同等重要']]}},
+        {h:'看課堂筆記',p:'👉 <a href="ep24-notes.html#sec-rule12" style="color:var(--green)">筆記 6：提示詞結構與順序</a>'}]},
+      {t:'常見失敗診斷與修正', s:'4種盲點＋6種失敗現象｜法則 3、4',
+       blocks:[
+        {h:'4種用詞盲點',table:{head:['問題類型','模糊說法','精確說法'],rows:[['用詞不夠精確','漂亮、好看的光','高級感、精緻／柔和側光、夕陽'],['混淆相反風格','極簡但細節豐富（矛盾）','極簡風格，精選細節（協調）'],['AI不理解的詞','小清新、高級感（主觀）','日本動漫風格、北歐極簡風格（具體）'],['沒有給參考點','漂亮的女人、一個房間（空泛）','清爽色調自然光、黑色背景戲劇光（客觀）']]}},
+        {h:'6種失敗現象與修正',table:{head:['失敗現象','原因','修正做法'],rows:[['人物手部變形','AI對手部結構理解有限','清晰的手部，五根手指清楚可見'],['顏色完全不對','沒有明確指定顏色名稱','深紅色咖啡杯，質感光滑'],['文字亂碼變形','AI生成文字能力有限','不要加文字，改用 Canva 後期添加'],['構圖很奇怪','沒有指定視角或鏡頭','俯視拍攝／側面45度角／特寫'],['人物臉部模糊','描述不夠具體或距離太遠','清晰的臉部，五官精緻／背景虛化'],['風格混亂','同時要求相反的風格','選擇一個主要風格，其他作為補充']]}},
+        {h:'看課堂筆記',p:'👉 <a href="ep24-notes.html#sec-rule34" style="color:var(--green)">筆記 7：失敗診斷</a>'}]},
+      {t:'可複用的方法：把生圖變成一套系統', s:'模板化＋風格庫＋記錄｜法則 5',
+       blocks:[
+        {h:'五個做法',steps:['建立提示詞模板：[主體][關鍵特徵][風格][光線][品質]。','建立「風格庫」：常用風格建立標準描述，每次只換主體。','測試並記錄結果：標記成功或失敗，找出有效詞彙。','系統化調整：每次只改一個變數，觀察結果變化。','建立失敗排查清單：人物變形→加清晰描述；顏色不對→加明確色名；風格混亂→刪除衝突詞。']},
+        {h:'看課堂筆記',p:'👉 <a href="ep24-notes.html#sec-rule5" style="color:var(--green)">筆記 8：可複用的方法</a>'}]},
+      {t:'兩種 Prompt 模式：教學結構法 × 借力 Midjourney', s:'不衝突、適用不同階段｜課程筆記四、六',
+       blocks:[
+        {h:'兩種模式',ul:['<b>教學結構法</b>：依簡報結構化提示詞法，強調主體、特徵、風格、品質排序，適合初學者建立穩定邏輯。','<b>Midjourney 慣用法</b>：借 ChatGPT 先產出 Midjourney 慣用格式 prompt，再套用至 Meta AI，因其生圖引擎整合了 Midjourney 美學。']},
+        {h:'學習來源',p:'直接參考 <b>Midjourney 官網首頁</b>公開圖像與描述方式，拆解其主體、特徵、風格、光線、品質的排列順序，改寫成 Meta AI 提示詞——不需付費，能快速建立可複用的生圖思維。'},
+        {h:'金句',tip:'Meta AI 生圖不是亂試，而是可以借力既有生態來學得更快。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep24-notes.html#sec-modes" style="color:var(--green)">筆記 9：兩種 Prompt 模式</a>'}]}
+    ]
+  },
+  cases: {
+    key:'cases', color:'var(--orange)', emoji:'🎬', code:'CHAPTER 04', title:'影音延伸＋實戰案例',
+    intro:'從靜態圖延伸到動態影音，再看六個真實案例怎麼把模糊提示詞改寫成有效提示詞。',
+    topics:[
+      {t:'影音能力：靜態轉動態、對嘴與配樂', s:'向 Sora、即夢靠攏｜課程筆記三、五',
+       blocks:[
+        {h:'關鍵特性',ul:['靜態圖片轉為動態畫面。','角色對嘴。','音樂與語音同步。','簡易情境動畫。']},
+        {h:'定位',p:'能力路徑與 <b>Sora、即夢（Dream Machine）</b>高度相似，核心不在一次生成完整長片，而是<b>圖片、動作、聲音之間的混搭與轉換</b>，貼近社群短影音需求，符合 Meta 深耕 Reels、Stories 的方向。'},
+        {h:'教學示範建議',tip:'先讓學員用 Meta AI 生成人物角色圖像，再產生簡短動態片段並加入語音或背景音樂，示範「同一角色、多模態輸出」。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep24-notes.html#sec-video" style="color:var(--orange)">筆記 10：影音能力延伸</a>'}]},
+      {t:'六個生圖案例拆解', s:'電商／生活／暗調／藝術家／漫畫／節慶｜簡報',
+       blocks:[
+        {h:'案例總覽',table:{head:['案例','情境','關鍵詞彙'],rows:[
+          ['① 電商棚拍','手工皂產品照','純白無縫背景、柔和漫射光'],
+          ['② 生活手持','手持咖啡拍照','POV shot、Depth of field、Natural sunlight'],
+          ['③ 高級暗調','香水廣告圖','Rim light、Material、Reflection'],
+          ['④ 藝術家風格','機車超現實海報','style of Salvador Dali、melting'],
+          ['⑤ 日本漫畫家','火車進站漫畫格','Hirohiko Araki style、Sound effects text'],
+          ['⑥ 節慶氛圍','聖誕禮物行銷圖','Magical atmosphere、Bokeh lights']]}},
+        {h:'共通失敗原因',p:'六個案例的失敗提示詞幾乎都犯同一種錯：用了<b>「漂亮」「好看」「有質感」「很帥」</b>這類太抽象的形容詞，AI 無法判斷具體要呈現什麼。改寫版共通做法是<b>換成具體材質、光線類型、鏡頭視角或藝術家／風格參照</b>。'},
+        {h:'注意',warn:'簡報 FAQ「生成的圖片可以商用嗎？」之後的內容在擷取時被截斷，完整答案未取得，本頁誠實保留此缺口，不自行編造。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep24-notes.html#sec-cases" style="color:var(--orange)">筆記 11：六個生圖案例實戰</a>'}]}
+    ]
+  }
+};
+const ORDER = ['entry','engine','prompt','cases'];
+const $ = s=>document.querySelector(s);
+function renderChapter(ch){
+  const d=DATA[ch];const next=ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];const prev=ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html=`<div class="chapter-head"><span class="emoji">${d.emoji}</span><div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div></div>`;
+  d.topics.forEach((tp,i)=>{const id=`${ch}-${i}`;
+    html+=`<div class="topic" id="topic-${id}"><div class="topic-head" onclick="toggleTopic('${id}')"><span class="num">${i+1}</span><h4>${tp.t}<small>${tp.s}</small></h4><input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)"><span class="chev">▶</span></div><div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{html+=`<div class="block"><h5>${b.h}</h5>`;
+      if(b.p)html+=`<p>${b.p}</p>`;
+      if(b.ul)html+=`<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps)html+=`<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.table)html+=`<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.tip)html+=`<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn)html+=`<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html+=`</div>`;});
+    html+=`</div></div></div>`;});
+  html+=`<div class="chapnav"><a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a><a onclick="showHome()" style="text-align:center">回總覽<b>🏠 四大主題</b></a><a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a></div>`;
+  $('#view-'+ch).innerHTML=html;
+}
+ORDER.forEach(renderChapter);
+function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('#view-'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function showHome(){switchView('home');$('#crumbs').style.display='none';clearSearch();}
+function showChapter(ch){switchView(ch);$('#crumbs').style.display='flex';$('#crumbHere').textContent=`${DATA[ch].emoji} ${DATA[ch].title}`;clearSearch();syncChecks();}
+function toggleTopic(id){$('#topic-'+id).classList.toggle('open');}
+function openTopic(ch,i){showChapter(ch);const el=$('#topic-'+ch+'-'+i);el.classList.add('open');setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+const KEY='ep24-skills-v1';
+const store=()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){const s=store();if(val)s[id]=1;else delete s[id];localStorage.setItem(KEY,JSON.stringify(s));updateProgress();}
+const TOTAL=ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){const done=Object.keys(store()).length;const pct=Math.round(done/TOTAL*100);$('#progFill').style.width=pct+'%';$('#progText').textContent=`${done} / ${TOTAL} 項技能已掌握`;$('#statDone').textContent=done;$('#statPct').textContent=pct+'%';ORDER.forEach(ch=>{const sub=DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;const el=document.querySelector(`[data-mini="${ch}"]`);if(el)el.style.width=Math.round(sub/DATA[ch].topics.length*100)+'%';});}
+function syncChecks(){const s=store();document.querySelectorAll('input[data-skill]').forEach(cb=>{cb.checked=!!s[cb.dataset.skill];});}
+function resetProgress(){if(confirm('確定要清空所有打勾進度嗎？')){localStorage.removeItem(KEY);syncChecks();updateProgress();}}
+function stripTags(s){return s.replace(/<[^>]+>/g,'');}
+const INDEX=[];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{let body=tp.s+' ';tp.blocks.forEach(b=>{if(b.p)body+=stripTags(b.p)+' ';if(b.ul)body+=b.ul.map(stripTags).join(' ')+' ';if(b.steps)body+=b.steps.map(stripTags).join(' ')+' ';if(b.tip)body+=stripTags(b.tip)+' ';if(b.warn)body+=stripTags(b.warn)+' ';if(b.table)body+=b.table.rows.flat().map(stripTags).join(' ')+' ';});INDEX.push({ch,i,title:tp.t,body});}));
+$('#searchInput').addEventListener('input',e=>{const q=e.target.value.trim();const box=$('#searchResults');if(!q){box.classList.remove('show');box.innerHTML='';return;}const hits=INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));box.classList.add('show');if(!hits.length){box.innerHTML=`<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：Midjourney、順序、失敗診斷）</div>`;return;}const hl=s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);box.innerHTML=hits.map(x=>{const pos=x.body.toLowerCase().indexOf(q.toLowerCase());const snip=x.body.substr(Math.max(0,pos-20),90);return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})"><div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div><h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;}).join('');});
+function clearSearch(){$('#searchInput').value='';$('#searchResults').classList.remove('show');$('#searchResults').innerHTML='';}
+syncChecks();updateProgress();
+</script>
+</body>
+</html>

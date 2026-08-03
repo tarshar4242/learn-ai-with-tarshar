@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP9 課堂筆記｜生成式AI文獻耙梳工具全景：AnswerThis、GenSpark 到十大工具矩陣</title>
+<meta name="description" content="晨學講堂 EP9 課堂筆記：文獻探討三大挑戰與 Deep Research 典範轉移、七大平台比較、Research Rabbit／Connected Papers 視覺化地圖、Elicit／Consensus／Scopus AI、AnswerThis 中文友善平台、Stanford STORM／SCISPACE、十大工具功能矩陣與四階段研究流程。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#0f9d78; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px;border-left:none}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.svgwrap{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg{display:block;width:100%;height:auto}
+.svgwrap figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#a6e0cc" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP9 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="ep9-ai-skills.html">🗺️ 互動地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 晨學講堂 · EP9</span>
+  <h1>生成式AI<span>文獻耙梳工具</span>全景</h1>
+  <p class="lead">從「大海撈針」到「精準導航」：EP9 帶你走過 <b>Deep Research</b> 典範轉移、<b>AnswerThis／GenSpark</b> 中文友善研究平台、<b>Research Rabbit／Connected Papers</b> 文獻視覺化地圖、<b>Elicit／Consensus／Scopus AI</b>，最後用<b>十大工具矩陣</b>與<b>四階段研究流程</b>收尾，幫你依研究階段挑對工具。</p>
+  <div class="meta">
+    <span>📅 2025/12 直播</span>
+    <span>🗂️ 教材：官方課程簡報</span>
+    <span>📚 主題：文獻耙梳／Deep Research</span>
+    <span>🔟 十大工具功能矩陣</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-challenge">1. 文獻探討三大挑戰</a>
+  <a href="#sec-deep">2. Deep Research 七大平台比較</a>
+  <a href="#sec-map">3. 視覺化文獻地圖工具</a>
+  <a href="#sec-qa">4. 摘要與問答工具</a>
+  <a href="#sec-answerthis">5. AnswerThis 中文友善平台</a>
+  <a href="#sec-storm">6. Stanford STORM 與 SCISPACE</a>
+  <a href="#sec-matrix">7. 十大工具矩陣＋四階段流程</a>
+  <a href="#sec-src">8. 資料來源與製作說明</a>
+</nav>
+
+<article>
+
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--teal))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>EP9_生成式AI文獻耙梳工具_AnswerThis(Agent)、GenSpark</td></tr>
+    <tr><th>頻道</th><td>生成式 AI 應用電台・晨學講堂（黃老師）</td></tr>
+    <tr><th>直播日期</th><td>2025/12 晚間直播</td></tr>
+    <tr><th>教材</th><td>官方課程簡報（PptxGenJS 產出，約 99 頁）</td></tr>
+    <tr><th>一句話先懂</th><td>文獻探討正從「人工主導、AI輔助」走向「<b>AI主導、人工監督</b>」——但驗證仍是王道：AI 給的引用與數據都要自己查證。</td></tr>
+  </table></div>
+  <div class="note blue">💡 本頁依<b>官方課程簡報文字全文</b>整理（真實課程內容），簡報為文字型投影片，逐節對照原文重點、表格與案例；示範操作的螢幕畫面與逐字稿時間碼待日後取得錄影授權後再補入。</div>
+</section>
+
+<section class="chapter" id="sec-challenge">
+  <span class="chip" style="background:linear-gradient(90deg,#0f9d78,#2f7d92)">CHAPTER 01</span>
+  <h2 class="ct">1. 文獻探討三大挑戰，AI 工具如何破解？</h2>
+  <p class="cd">從「大海撈針」轉變為「精準導航」。</p>
+  <ul class="pt">
+    <li><b>傳統困境：</b>研究者面臨資訊爆炸、時間壓力與視角侷限，每日數萬篇新論文，缺乏有效篩選機制。</li>
+    <li><b>從關鍵字搜尋 到 語意理解</b>——不用再猜對的關鍵字，AI 直接理解你的研究問題。</li>
+    <li><b>從線性閱讀 到 網絡探索</b>——文獻不再一篇篇讀，而是看整張引用關係網。</li>
+    <li><b>從人工整理 到 AI輔助寫作</b>——摘要、比較、初稿都能讓 AI 先做一輪。</li>
+  </ul>
+  <div class="svgwrap">
+    <svg viewBox="0 0 760 200" xmlns="http://www.w3.org/2000/svg">
+      <rect width="760" height="200" fill="#fff"/>
+      <g font-family="sans-serif" font-size="13" fill="#191919">
+        <rect x="20" y="70" width="200" height="60" rx="10" fill="#F7F6F3" stroke="#E7E6E3"/>
+        <text x="120" y="95" text-anchor="middle" font-weight="700">關鍵字搜尋</text>
+        <text x="120" y="115" text-anchor="middle" font-size="11" fill="#5f5f5f">線性閱讀・人工整理</text>
+        <path d="M230 100 H320" stroke="#0f9d78" stroke-width="3" marker-end="url(#a9)"/>
+        <rect x="330" y="70" width="200" height="60" rx="10" fill="#F7F6F3" stroke="#E7E6E3"/>
+        <text x="430" y="95" text-anchor="middle" font-weight="700">語意理解</text>
+        <text x="430" y="115" text-anchor="middle" font-size="11" fill="#5f5f5f">網絡探索・AI輔助寫作</text>
+        <path d="M540 100 H630" stroke="#0f9d78" stroke-width="3" marker-end="url(#a9)"/>
+        <rect x="540" y="70" width="200" height="60" rx="10" fill="color-mix(in srgb,#0f9d78 12%,#fff)" stroke="#0f9d78" x="540"/>
+        <text x="640" y="95" text-anchor="middle" font-weight="700" fill="#0f9d78">Deep Research</text>
+        <text x="640" y="115" text-anchor="middle" font-size="11" fill="#166a4c">AI主導・人工監督</text>
+      </g>
+      <defs><marker id="a9" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#0f9d78"/></marker></defs>
+    </svg>
+    <figcaption>文獻探討典範轉移全景：從關鍵字搜尋走到 Deep Research 的 AI 主導、人工監督。</figcaption>
+  </div>
+  <div class="golden"><div class="q">「AI 不會取代研究者，但善用 AI 的研究者將取代不使用者。」</div><div class="a">—— 課程結論金句</div></div>
+</section>
+
+<section class="chapter" id="sec-deep">
+  <span class="chip" style="background:linear-gradient(90deg,#2f7d92,#3b6bb0)">CHAPTER 02</span>
+  <h2 class="ct">2. Deep Research：革命性影響</h2>
+  <p class="cd">備註：在 Grok 稱為 Deeper Search、Felo 稱研究分析。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">工具名稱</th><th>Deep Research 特色（一句話）</th></tr>
+    <tr><td>ChatGPT</td><td>會自己查資料、歸納重點、寫出有邏輯又有出處的報告，像個技術型博士級助理。</td></tr>
+    <tr><td>Claude</td><td>回答冷靜有條理、邏輯清楚又會標來源，像可靠但保守型的研究型同事。</td></tr>
+    <tr><td>DeepSeek</td><td>搜、比、推一步步來，連推理過程都寫給你看，像縝密的碩士級研究助教。</td></tr>
+    <tr><td>Perplexity AI</td><td>簡潔有力、查資料速度快、答案精準，還會附比對來源，像高效率資料調查分析員。</td></tr>
+    <tr><td>Gemini</td><td>先列研究計畫，再分段搜資料，最後拆解重點、畫表格，像博學多問的研究代理人。</td></tr>
+    <tr><td>Felo AI</td><td>一鍵輸入主題就能自動整理、加圖表、做頁面，像全天候待命的多功能研究助理。</td></tr>
+    <tr><td>Grok3</td><td>快又清楚，還能拆矛盾、舉實例，像懂推理又愛驗證的資訊偵查機器人。</td></tr>
+  </table></div>
+  <h3>Deep Research 三大突破</h3>
+  <ol class="st">
+    <li><b>多來源資料整合（Data Search）：</b>自動上網搜尋，整合 Google Scholar、Scopus、Semantic Scholar 等多個資料庫，打破資訊孤島。</li>
+    <li><b>自動化多工整合（Content Analysis）：</b>篩選交叉資料，標註引用來源，自動比對不同文獻的觀點與證據。</li>
+    <li><b>帶有框架產出內容（Article Generation）：</b>強化 End-to-End Reinforcement Learning，產出結構完整的報告。</li>
+  </ol>
+  <div class="note gold">⚠️ Deep Research 小叮嚀：產出內容有風險，分析需謹慎！該功能原本專為 ChatGPT Pro 訂閱用戶（每月 200 美元）打造，每月使用約 120 次。</div>
+</section>
+
+<section class="chapter" id="sec-map">
+  <span class="chip" style="background:linear-gradient(90deg,#3b6bb0,#5645D4)">CHAPTER 03</span>
+  <h2 class="ct">3. 視覺化文獻地圖：Research Rabbit 與 Connected Papers</h2>
+  <h3>Research Rabbit：發現知識脈絡的智能兔</h3>
+  <p>來自美國西雅圖的免費學術研究平台，被稱為「Spotify for Research」。核心能力：互動式視覺化（引用關係網絡、可切換時間軸）、個性化摘要、新文獻提醒、多元檢索（關鍵字／作者／識別碼／RIS/BibTex）。</p>
+  <ol class="st">
+    <li>建立專案：登入後新建專案並命名，設置標籤。</li>
+    <li>搜尋文獻：輸入關鍵字或直接定位已知文獻。</li>
+    <li>文獻篩選：收藏相關文獻，用視覺化介面檢視相似性與引用關係。</li>
+    <li>互動視覺化：探索引用關係與時間軸，發現研究發展歷程。</li>
+    <li>深度挖掘：追蹤主要研究者、對特定應用場景做專題分析。</li>
+    <li>持續優化：系統依收藏與瀏覽行為學習，優化推薦。</li>
+  </ol>
+  <h3>Connected Papers：一張圖看懂文獻關聯網絡</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:130px">特色</th><th>說明</th></tr>
+    <tr><td>網路圖視覺化</td><td>以圖形化展示文獻相似性，中心點為核心文獻，距離越近關聯越高。</td></tr>
+    <tr><td>相似性分析</td><td>利用引用和文本相似度計算，生成與目標文獻相似的研究網路。</td></tr>
+    <tr><td>深度探索</td><td>點擊圖中任何節點即可生成新網路圖，逐層擴展資料範圍。</td></tr>
+    <tr><td>篩選與導出</td><td>依年份、作者篩選文獻，支援匯出至 Zotero、EndNote。</td></tr>
+  </table></div>
+  <div class="note blue">💡 兩者都「適合發現相關文獻的關聯性，快速建立系統性文獻回顧的架構」，屬於研究初期最好用的視覺化探索工具。</div>
+</section>
+
+<section class="chapter" id="sec-qa">
+  <span class="chip" style="background:linear-gradient(90deg,#5645D4,#b25269)">CHAPTER 04</span>
+  <h2 class="ct">4. 摘要與問答工具：Consensus、Elicit AI、Scopus AI</h2>
+  <h3>Consensus：科學共識的快速解析器</h3>
+  <p>支援自然語言提問，AI 解析多篇研究結論給出「共識」；系統持續更新資料庫，適合快速理解特定議題的學術共識與爭議點。優點：中文化、產生研究概述、研究架構快速解析。</p>
+  <h3>Elicit AI：1.38 億篇論文的智能分析平台</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">功能</th><th>說明</th></tr>
+    <tr><td>Find Papers</td><td>自然語言語義搜索，快速發現最相關研究文獻。</td></tr>
+    <tr><td>Paper Chat</td><td>上傳 PDF 進行實時交互，最多支持 8 篇同時分析。</td></tr>
+    <tr><td>Extract Data</td><td>自動從多個 PDF 提取結構化數據，Pro 版支持 40 個數據源。</td></tr>
+    <tr><td>Research Report</td><td>輸入問題自動生成詳細報告，含摘要、關鍵發現與參考文獻。</td></tr>
+    <tr><td>Systematic Review</td><td>完整系統審查工作流程：篩選、提取、質量評估、報告生成。</td></tr>
+  </table></div>
+  <p class="cd">定價：Basic 免費／Plus $10 月／Pro $42 月／Team $65 月／Enterprise 客製。限制：論文推薦仰賴 Semantic Scholar。</p>
+  <h3>Scopus AI：從資料庫到智能分析的七大功能</h3>
+  <ul class="pt">
+    <li><b>Summary（研究速食包）：</b>三秒吃完核心重點。</li>
+    <li><b>Expanded Summary（研究廣角鏡）：</b>多視野補足主題全貌。</li>
+    <li><b>Concept map（學術地鐵圖）：</b>一眼看懂主題路線。</li>
+    <li><b>Topic experts（學界導航王）：</b>帶你找對人問對話。</li>
+    <li><b>Emerging themes（研究寶藏圖）：</b>挖出新興與冷門金礦。</li>
+    <li><b>Go deeper（學術潛水艇）：</b>帶你潛到更深知識層。</li>
+    <li><b>Reflection layer（信任顯微鏡）：</b>檢查回應內容可靠度，減少幻覺。</li>
+  </ul>
+  <div class="note gold">⚠️ Scopus AI 若在資料庫中找不到相關學術論文，會直接通知，而不是硬掰答案。</div>
+</section>
+
+<section class="chapter" id="sec-answerthis">
+  <span class="chip" style="background:linear-gradient(90deg,#b25269,#0d8f80)">CHAPTER 05</span>
+  <h2 class="ct">5. AnswerThis：支援中文查詢的一站式研究平台</h2>
+  <p class="cd">整合超過 2.5 億篇學術論文，完整支援繁體中文查詢與回覆，核心優勢是「避免 AI 幻覺」。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:140px">分類</th><th>功能</th></tr>
+    <tr><td rowspan="7">Tools 工具類</td><td>Literature Review 文獻回顧——只需輸入研究主題，自動生成結構完整的文獻回顧文章，附逐行引用。</td></tr>
+    <tr><td>Search Papers 論文搜尋——支援期刊等級（Q1/Q2）篩選，結果以表格呈現並可自訂欄位。</td></tr>
+    <tr><td>Citation Map 引用地圖——互動式引用網絡圖，快速識別核心文獻。</td></tr>
+    <tr><td>Naturalizer 去 AI 風格化。</td></tr>
+    <tr><td>Chat with PDF 與 PDF 對話——支援多篇文獻同時比較分析。</td></tr>
+    <tr><td>Extract Data 提取數據——自動擷取表格、數據，匯出 CSV/Excel。</td></tr>
+    <tr><td>Diagram Generator 圖表生成。</td></tr>
+    <tr><td rowspan="4">Agents 智能代理類</td><td>AI Essay Writer 論文寫手——可設定題目、字數、引用年限，輸出含摘要、引言、參考文獻。</td></tr>
+    <tr><td>Research Gap Finder 研究缺口發現——自動分析文獻飽和度，輸出研究缺口清單與優先級評級，適合碩博士生確定題目。</td></tr>
+    <tr><td>Paraphraser Tool 改寫潤飾。</td></tr>
+    <tr><td>Empathy Tool 同儕審查——模擬審稿人視角提供建設性修改建議。</td></tr>
+  </table></div>
+  <div class="golden"><div class="q">Library 個人圖書館 ＋ Citation Map</div><div class="a">支援 PDF 直接上傳與批量匯入（RIS/BIB/CSV），自動生成文獻計量統計圖表（年度出版量、引用趨勢），並用互動式引用網絡圖追蹤研究脈絡。</div></div>
+</section>
+
+<section class="chapter" id="sec-storm">
+  <span class="chip" style="background:linear-gradient(90deg,#0d8f80,#9c7b23)">CHAPTER 06</span>
+  <h2 class="ct">6. Stanford STORM 與 SCISPACE：自動化長文生成</h2>
+  <h3>Stanford STORM：模擬多角色對話的長篇文章生成器</h3>
+  <ol class="st">
+    <li><b>自動蒐集：</b>聚合文獻與網路資源（Google Search/Scholar）。</li>
+    <li><b>多角色對話：</b>模擬研究者、專家、主持人多角度辯論。</li>
+    <li><b>整合洞見：</b>從互動中萃取討論結果與關鍵觀點。</li>
+    <li><b>生成架構：</b>構建完整報告大綱、目錄與章節重點。</li>
+    <li><b>撰寫報告：</b>撰寫深入清晰的文章，標註完整參考來源。</li>
+  </ol>
+  <p class="cd">三大運作模式：<b>STORM</b>（標準文章）、<b>Co-STORM</b>（多角色對話生成多觀點文章）、<b>Data-STORM</b>（深度資料研究模式，結合多代理問答與資料科學工作流，適合量化分析、政策評估、市場調研）。</p>
+  <h3>SCISPACE：整合八大功能的研究自動化平台</h3>
+  <ul class="pt">
+    <li><b>Deep Search：</b>深度搜尋，挖掘隱藏在海量文獻中的關鍵資訊。</li>
+    <li><b>AI Writer：</b>輸入「/」叫出助手協助寫作。</li>
+    <li><b>Chat with PDF：</b>與 PDF 對話，快速理解文獻內容與關鍵數據。</li>
+    <li><b>Literature Review：</b>Standard／High Quality／Deep Review 三種模式。</li>
+    <li><b>Find Topics：</b>發現具潛力的研究主題與未來發展方向。</li>
+    <li><b>Paraphraser、Citation Generator、Extract Data、AI Detector：</b>潤稿、引用格式、資料擷取、AI 生成內容偵測。</li>
+  </ul>
+  <div class="note gold">⚠️ AI Detector 實測準確度不算高，就算顯示 100% 人寫，文中也可能有 AI 協作句子，只能當參考，建議搭配其他工具一起判斷。</div>
+  <h3>補充：Scite_ 與 Liner</h3>
+  <p><b>Scite_</b> 提供引用脈絡分析（支持與反對觀點）；<b>Liner</b> 是 AI 驅動的網頁標註工具，能在網頁上直接畫線整理重點並自動生成摘要。</p>
+</section>
+
+<section class="chapter" id="sec-matrix">
+  <span class="chip" style="background:linear-gradient(90deg,#9c7b23,#0f9d78)">RECAP</span>
+  <h2 class="ct">7. 十大工具功能矩陣＋四階段研究流程</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:140px">類別</th><th>工具</th></tr>
+    <tr><td>視覺化工具</td><td>Research Rabbit（知識脈絡網絡圖）、Connected Papers（文獻相似性網絡）、Scopus AI（概念地圖）</td></tr>
+    <tr><td>文獻搜尋工具</td><td>Elicit（1.38 億+ 論文）、Scopus AI（全領域權威）、AnswerThis（中文搜尋）、SCISPACE（整合式搜尋）</td></tr>
+    <tr><td>AI 對話與分析</td><td>Elicit Paper Chat（最多 8 篇）、SCISPACE／AnswerThis Chat with PDF、Consensus（自然語言提問）</td></tr>
+    <tr><td>寫作與報告生成</td><td>Stanford STORM（長篇自動生成）、Elicit Research Report、SCISPACE AI Writer、AnswerThis AI Essay Writer</td></tr>
+    <tr><td>引用與格式管理</td><td>Scite_（引用脈絡分析）、SCISPACE Citation Generator、AnswerThis Citation Map</td></tr>
+    <tr><td>數據提取</td><td>Elicit／SCISPACE／AnswerThis 皆有 Extract Data</td></tr>
+  </table></div>
+  <h3>四階段研究流程應用</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:140px">階段</th><th>目標</th><th>推薦工具</th></tr>
+    <tr><td>初期探索</td><td>建立研究主題的知識網絡，快速掌握領域概況</td><td>Research Rabbit、Connected Papers</td></tr>
+    <tr><td>深度閱讀</td><td>系統性文獻審查，掌握學術共識與爭議</td><td>Elicit、SCISPACE</td></tr>
+    <tr><td>寫作階段</td><td>自動生成文獻回顧架構，AI 輔助寫作與引用管理</td><td>Stanford STORM、AnswerThis</td></tr>
+    <tr><td>持續追蹤</td><td>設定新文獻提醒，追蹤引用脈絡與影響力</td><td>Research Rabbit、Liner</td></tr>
+  </table></div>
+  <div class="golden"><div class="q">關鍵建議</div><div class="a">不同階段搭配不同工具，建立個人化研究工作流，才能真正提升效率——沒有一套工具能通吃四個階段。</div></div>
+</section>
+
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5a5866)">SOURCES</span>
+  <h2 class="ct">8. 資料來源與製作說明</h2>
+  <ul class="pt">
+    <li><b>原始教材：</b>EP9「生成式AI文獻耙梳工具_AnswerThis(Agent)、GenSpark」官方課程簡報全文。</li>
+    <li><b>製作方式：</b>逐節對照官方簡報可讀文字整理，工具比較表、操作步驟與金句<b>取自簡報原文</b>，圖解為自製 SVG。內容為<b>真實課程內容</b>。</li>
+    <li><b>誠實聲明：</b>本頁以簡報實錄為準；本集資料夾錄影檔案暫僅供擁有者存取，<b>示範操作畫面與逐字稿時間碼</b>待開放授權或網路政策開通後補入。各工具介面、功能與定價會持續更新，請以你使用當下的官方頁面為準。</li>
+    <li><b>介面參考：</b>互動地圖頁沿用本站 EP38–46 的卡片式多層導覽與遊戲化進度設計。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  EP9「生成式AI文獻耙梳工具全景」課堂筆記・2026/07 整理<br>
+  🍀 Learn AI with Tarshar｜搭配 <a href="ep9-ai-skills.html">互動地圖</a> 使用效果最佳
+</footer>
+
+</body>
+</html>

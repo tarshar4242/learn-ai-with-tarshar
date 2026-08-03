@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP23 課堂筆記｜用YAML讓您的NotebookLM資訊圖表乖乖聽話（含十個資訊圖表工具介紹）</title>
+<meta name="description" content="晨學講堂 EP23 課堂筆記：用YAML讓NotebookLM等資訊圖表工具乖乖聽話——YAML核心概念、三大規則、標準製作流程與視覺規格、十個資訊圖表工具介紹（NotebookLM／AI Studio／Felo AI／Manus／Napkin AI／Dreamina AI等）、兩大生圖流派、常見痛點解法與老師的Pro Tips。內容取自課程筆記Google Doc與簡報PDF，文字整理，本集無簡報原圖與錄影截圖。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#b5476a; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px;border-left:none}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+.note.violet{background:#F3EFFB;border-color:#DFD2F0;color:#5a34a8}
+.note.rose{background:#FBEEF1;border-color:#F0D2DB;color:#9c2f52}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.prompt{position:relative;background:#1d1d1f;border-radius:10px;padding:15px 16px;margin:12px 0;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace;overflow-x:auto}
+.prompt .tag{display:inline-block;font-size:11px;letter-spacing:.06em;color:#c9c4ff;border:1px solid #3a3a40;border-radius:6px;padding:2px 9px;margin-bottom:8px}
+.prompt b{color:#fff}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.embed{margin:14px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000}
+.embed iframe{display:block;width:100%;aspect-ratio:16/9;border:0}
+.embed .cap{font-size:12.5px;color:var(--ink3);padding:10px 16px;background:var(--paper);border-top:1px solid var(--line)}
+.ts{display:inline-block;font-family:"Cascadia Code",Consolas,monospace;font-weight:700;font-size:12px;color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,#fff);border-radius:5px;padding:2px 8px;margin-right:7px;letter-spacing:.4px;vertical-align:middle}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+.layers{display:grid;gap:10px;margin:14px 0}
+.lyr{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:13px 15px;background:#fff}
+.lyr .n{flex:none;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--accent)}
+.lyr h4{margin:0 0 3px;font-size:14.5px}
+.lyr p{font-size:13px;margin:0}
+.sub{color:var(--ink2)}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#e3b9c8" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP23 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="ep23-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 晨學講堂 · EP23</span>
+  <h1>用<span>YAML</span>讓您的 NotebookLM 資訊圖表乖乖聽話<br>（含十個資訊圖表工具介紹）</h1>
+  <p class="lead">EP23 帶你搞懂一件事：<b>為什麼資訊圖表一定要先寫 YAML，AI 才會聽話</b>。從 YAML 的三個規則、資訊圖表的標準製作流程與視覺規格，到 NotebookLM、Google AI Studio、Felo AI、Manus、Napkin AI、Dreamina AI 等十個實務工具的定位與限制，一次整理清楚。本頁教材為<b>課程筆記 Google Doc ＋ 簡報 PDF</b> 的文字整理，本集<b>無簡報原圖與錄影截圖</b>，重點 YAML 範例皆逐字重現。</p>
+  <div class="meta">
+    <span>📅 2026/03 直播</span>
+    <span>🗂️ 教材：課程筆記 Doc ＋ 簡報 PDF（文字版）</span>
+    <span>🧩 主題：YAML × 資訊圖表</span>
+    <span>🛠️ 十個以上工具介紹</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-why">1. 為什麼資訊圖表要用 YAML</a>
+  <a href="#sec-rule">2. YAML 只需要懂的三個規則</a>
+  <a href="#sec-flow">3. 標準製作流程與視覺規格</a>
+  <a href="#sec-tools">4. 十個資訊圖表工具詳解</a>
+  <a href="#sec-school">5. 兩大生圖流派</a>
+  <a href="#sec-fix">6. 常見痛點：中文字與畫質</a>
+  <a href="#sec-tips">7. 老師的專家建議</a>
+  <a href="#sec-recap">8. 重點整理</a>
+  <a href="#sec-src">9. 資料來源與製作說明</a>
+</nav>
+
+<article>
+
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--purple))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>用YAML讓您的NotebookLM資訊圖表乖乖聽話（含十個資訊圖表工具介紹）</td></tr>
+    <tr><th>頻道</th><td>生成式AI應用電台・晨學講堂</td></tr>
+    <tr><th>直播日期</th><td>2026/03 直播</td></tr>
+    <tr><th>教材</th><td>「課程筆記」Google Doc＋簡報 PDF（無錄影抽幀／無簡報原圖，本集僅有文字教材）</td></tr>
+    <tr><th>一句話先懂</th><td>你要什麼 → 寫成 <b>YAML</b> → 變成你跟 AI 之間的<b>規則共識</b> → AI 才會照著做，而不是隨自己高興生圖。</td></tr>
+  </table></div>
+  <div class="note blue">💡 本集是<b>文字教材</b>，不是圖像型簡報。本頁把課程筆記 Google Doc 與簡報 PDF 兩份真實文件的內容，整理成可閱讀、可照抄的課堂筆記；簡報中出現的 YAML 範例會<b>逐字重現</b>成程式碼區塊，方便直接複製使用。</div>
+</section>
+
+<section class="chapter" id="sec-why">
+  <span class="chip" style="background:linear-gradient(90deg,#b5476a,#5645D4)">CHAPTER 01</span>
+  <h2 class="ct">1. 為什麼資訊圖表要用 YAML：AI 的「資訊規格書」</h2>
+  <p class="cd">YAML（YAML Ain't Markup Language）是一種以高可讀性為核心的資料描述格式。在 AI 工作流中，YAML 不只是語法工具，而是扮演「規則共識」的角色，用來明確告訴 AI：什麼能做、怎麼做、做到什麼程度。</p>
+  <h3>一句話理解 YAML</h3>
+  <div class="golden"><div class="q">你要什麼 → YAML → 規則共識 → AI 照著做</div><div class="a">—— 簡報「一句定位」，可直接放投影片</div></div>
+  <h3>沒有 YAML vs 用了 YAML</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:160px">沒有 YAML 時</th><th>用了 YAML 之後</th></tr>
+    <tr><td>圖表型式亂換</td><td>圖表種類先鎖定，AI 只負責照著做</td></tr>
+    <tr><td>字數失控</td><td>字數、語氣可控</td></tr>
+    <tr><td>AI 自行補資料、亂舉例</td><td>AI 不敢亂加東西</td></tr>
+  </table></div>
+  <div class="note gold">⚠️ YAML 不是寫給電腦看的，是寫給「你跟 AI 之間的共識」。YAML 是防止 AI 失控的第一道保險，而不是讓 AI 變聰明——它是讓 AI 變「聽話」。</div>
+  <h3>為什麼要用 YAML？（四個理由）</h3>
+  <ol class="st">
+    <li><b>建立共識</b>：YAML 是你與 AI 之間的溝通橋樑，讓 AI 從「看起來很聰明」進化為「真的很聽話」。</li>
+    <li><b>防止失控</b>：可有效限制輸出字數、語氣、圖表種類與結構，避免 AI 自行補資料、亂舉例或發揮過頭。</li>
+    <li><b>精確控制</b>：能針對顏色、字體、版面、比例（如 16:9）、解析度等視覺元素進行細粒度設定。</li>
+    <li><b>易讀易改</b>：語法接近自然語言，即使沒有程式背景，也能快速理解、修改與長期維護。</li>
+  </ol>
+  <h3>YAML 規格書的結構要素（簡報補充）</h3>
+  <p>作為「規格書」，YAML 用來定義圖表的結構、樣式和內容，讓 NotebookLM 精確執行。關鍵要素：</p>
+  <ul class="pt">
+    <li><b>規格書結構</b>：標題（定義圖表的主標題和副標題）。</li>
+    <li><b>數據</b>：指定數據來源、數列和類別。</li>
+    <li><b>樣式</b>：設定配色方案、字體大小、線條樣式等視覺效果。</li>
+    <li><b>佈局設定</b>：配置圖例位置、坐標軸範圍、網格線顯示。</li>
+  </ul>
+  <p>YAML 的優勢可歸納為三點：<b>結構化</b>（清晰的層級結構，邏輯分明，易於維護）、<b>易讀</b>（接近自然語言，無需複雜程式背景即可理解）、<b>精確控制</b>（對圖表元素如顏色、字體、佈局進行細粒度設定）。</p>
+  <div class="prompt"><span class="tag">簡報範例片段</span>chart_type: bar
+title: "季度銷售報告"
+data: {source: "sheet1", categories: "sheet1"}
+style: {color_palette: "blue_grey"}</div>
+  <p class="cd">整體流程：<b>原始數據 → YAML 規格書 → 生成圖表</b>——透過 YAML 規格書，把雜亂數據轉換為符合預期的專業圖表。</p>
+</section>
+
+<section class="chapter" id="sec-rule">
+  <span class="chip" style="background:linear-gradient(90deg,#3b6bb0,#0aa6c9)">CHAPTER 02</span>
+  <h2 class="ct">2. YAML 只需要懂的三個規則</h2>
+  <p class="cd">YAML 的三大基本規則，學會這三個就能看懂、也能改 YAML。</p>
+  <div class="layers">
+    <div class="lyr"><div class="n">1</div><div><h4>冒號（:）— 定義是什麼</h4><p>「這一行在定義什麼」：左邊是名稱／欄位，右邊是內容／設定值。</p></div></div>
+    <div class="lyr"><div class="n">2</div><div><h4>縮排 — 定義層級關係</h4><p>「誰是誰的底下」：縮排代表「屬於它的內容」，一旦縮排錯誤，AI 對結構的理解就會完全跑偏，縮排錯，意思就錯。</p></div></div>
+    <div class="lyr"><div class="n">3</div><div><h4>減號（-）— 定義清單</h4><p>「這是一個清單」：代表同一層級下有多個項目（不只一個），常用於條列重點或多項設定，就像填表單欄位。</p></div></div>
+  </div>
+  <h3>簡報範例：topic + charts</h3>
+  <div class="prompt"><span class="tag">YAML 範例</span>topic: 台灣水資源問題
+charts:
+  - 用水結構圓餅圖
+  - 降雨比例長條圖</div>
+  <p class="cd">說明：<b>charts</b> 是大類，<b>-</b> 開頭代表清單項目。</p>
+  <div class="golden"><div class="q">只要你「看得懂這份 YAML 在寫什麼」，AI 幾乎就做得對。</div><div class="a">—— 一定要記住的心法</div></div>
+</section>
+
+<section class="chapter" id="sec-flow">
+  <span class="chip" style="background:linear-gradient(90deg,#5645D4,#2f7d92)">CHAPTER 03</span>
+  <h2 class="ct">3. 標準製作流程與視覺規格</h2>
+  <h3>核心心法：先文字，後圖片</h3>
+  <p class="cd">為降低 AI 生圖錯誤率，建議遵循以下標準生成順序：</p>
+  <ol class="st">
+    <li><b>text_content</b>：先完成文字內容、重點與邏輯結構。</li>
+    <li><b>data_structure</b>：確認資料表、欄位名稱、順序與對應關係。</li>
+    <li><b>visual_rendering</b>：最後才進行圖像與視覺生成。</li>
+  </ol>
+  <div class="note gold">⚠️ 重點：不要一開始就生圖，否則錯字與結構錯誤機率會大幅上升。</div>
+  <h3>視覺規格設定建議</h3>
+  <ul class="pt">
+    <li><b>解析度</b>：建議直接設定為 4K，確保放大、裁切、投影時文字與線條依然清晰。</li>
+    <li><b>版面比例</b>：以 16:9 橫向（Landscape）為主，最適合簡報、教學與投影環境。</li>
+    <li><b>設計風格</b>：以「教學導向」為核心，視覺層級要明確：標題 ＞ 重點 ＞ 補充，避免過度裝飾影響理解。</li>
+  </ul>
+  <h3>真實完整 YAML 範例一：Infographic 視覺規格設定</h3>
+  <p class="cd">以下為簡報中的完整 YAML 規格範例，逐字重現，可直接參考其結構撰寫自己的規格書：</p>
+  <div class="prompt"><span class="tag">YAML · infographic 視覺規格</span># ================================ #
+# Infographic 視覺規格設定
+# ================================ #
+infographic:
+  type: "data_infographic"
+  description: >
+    資料型資訊圖表，以紅色手繪筆觸標示重點，
+    透過圈選、註記方式強化視覺焦點與理解效率。
+
+  layout:
+    aspect_ratio: "16:9"
+    orientation: "landscape"
+
+  resolution:
+    target: "4K"
+    minimum: "2K"
+    requirement: >
+      全圖以 4K 等級輸出，放大檢視（含局部裁切）
+      仍須保持文字與圖形邊緣清晰、不糊化。
+
+  language:
+    primary: "zh-TW"
+
+  typography:
+    preference: "sans-serif"
+    readability_note: "適合投影、簡報與教學場域"
+
+  visual_style:
+    emphasis_method:
+      - "red_handwritten_circle"
+      - "red_handwritten_underline"
+    tone: "教學導向、清楚、不追求過度裝飾"
+    background: "淺色或留白，避免干擾資料閱讀"
+
+  content_flow:
+    generation_order:
+      - "text_content"
+      - "data_structure"
+      - "visual_rendering"
+    note: >
+      必須先完成文字與資料邏輯，
+      再進行圖像生成，避免圖文錯置或語意錯誤。</div>
+  <h3>真實完整 YAML 範例二：Infographic 製作原則</h3>
+  <div class="prompt"><span class="tag">YAML · 製作原則</span># ================================ #
+# Infographic 製作原則
+# ================================ #
+production_guidelines:
+  clarity:
+    - "文字尺寸需確保投影與遠距可讀"
+    - "每一張圖僅傳達一個核心訊息"
+
+  accuracy:
+    - "標示越明確，生成錯誤率越低"
+    - "資料單位、時間、對象需明確標註"
+
+  teaching_orientation:
+    - "視覺層級清楚（標題 > 重點 > 補充）"
+    - "適合教師講解、學生快速掃描理解"
+
+  reusability:
+    - "結構可直接移轉至 Canva / Gemini / Felo / Manus"
+    - "不綁定特定工具，僅定義規格與邏輯"</div>
+  <div class="note blue">💡 這兩份 YAML 的重點在於「可重用」：規格與邏輯寫好之後，不綁定單一工具，可以直接拿去 Canva、Gemini、Felo、Manus 等不同平台使用。</div>
+  <h3>YAML 格式練習：固定框架</h3>
+  <p class="cd">簡報也提供一個簡化的練習框架，理解「隨心所欲」與「稍微聽話」的差別：</p>
+  <ul class="pt">
+    <li><b>主題</b>：YAML是什麼</li>
+    <li><b>格式</b>：固定框架</li>
+    <li><b>回答</b>：標題＋100字</li>
+    <li><b>檢查</b>：檢查錯字、語意、不要大陸用字</li>
+    <li><b>排版</b>：將產出文字進行排版（標題／文字論述）</li>
+  </ul>
+</section>
+
+<section class="chapter" id="sec-tools">
+  <span class="chip" style="background:linear-gradient(90deg,#bf6a1e,#9c7b23)">CHAPTER 04</span>
+  <h2 class="ct">4. 十個資訊圖表工具詳解</h2>
+  <h3>生成式資訊圖表工具的發展趨勢</h3>
+  <ul class="pt">
+    <li><b>發展派別</b>：主要分為圖文敘事型與統計儀表板型，前者重視視覺傳達，後者強調數據分析，兩者正逐步融合。</li>
+    <li><b>Input 元素</b>：輸入元素從單一文字，擴展為文字、圖片、檔案與結構化數據，多模態輸入已成影響生成品質的關鍵因素。</li>
+    <li><b>Output 成果</b>：輸出不再只求好看，而是強調可編輯與可延用，常見格式包含 PPT、PDF、SVG 與高解析圖檔。</li>
+  </ul>
+
+  <h3>工具 1｜Google NotebookLM：知識結構視覺化（免費版每日 3–5 次）</h3>
+  <p class="cd">一句話定位：NotebookLM 可直接根據你匯入的文件與資料，將內容整理為結構清楚、可解讀的資訊圖表，協助快速理解重點與脈絡，而非僅追求視覺美感。</p>
+  <ul class="pt">
+    <li><b>可選項目</b>：語言、方向（橫向／直向／正方形）、詳細程度、自訂內容（可調整風格、配色、重點內容）。</li>
+    <li><b>新功能</b>：NotebookLM × Nano Banana 資訊圖表工作室——多模態（Multimodal）文字轉圖表；NotebookLM × Gemini Canvas 簡報——從上傳資料自動生成資訊圖表或簡報，讓內容立即可視化、可分享、可教學（可選格式：詳細簡報／美觀簡報、語言、詳細程度、自訂大綱與聽眾樣式）。</li>
+    <li><b>功能重點</b>：來源導向生成（所有圖表皆依據上傳資料，避免憑空產生內容）、結構優先設計（擅長摘要圖、流程、重點條列與心智圖）、文字與圖像整合（先產出可檢核的文字結構，再轉為視覺呈現）、教學與報告友善（適合快速轉為簡報或說明素材）。</li>
+    <li><b>常見應用情境</b>：教學備課（課文內容→概念圖）、研究與報告（多份文件→重點比較圖、長文摘要→結論視覺化）、行政與專案（會議紀錄→流程圖、決策內容→重點彙整圖）。</li>
+  </ul>
+  <div class="note blue">💡 實務提醒：結構清楚永遠比「看起來漂亮」更重要；建議先用條列或 YAML 定義層級再轉成圖表；若需高完成度設計，可再交由其他視覺工具二次加工。</div>
+  <div class="golden"><div class="q">NotebookLM 的資訊圖表功能，本質是「知識結構視覺化」的加速器，而不是單純的畫圖工具。</div><div class="a">—— 課程筆記關鍵結論</div></div>
+  <p class="cd">流程示意：<b>來源文件（Source Documents）→ NotebookLM 智慧轉化（Smart Transformation）→ 結構化圖表（Structured Visuals）</b>。</p>
+
+  <h3>工具 2｜Google AI Studio：高品質模型調用</h3>
+  <ul class="pt">
+    <li><b>特色</b>：可直接呼叫先進模型（如 Nano Banana Pro），比例可設 16:9 或 9:16。</li>
+    <li><b>成本</b>：平均一張 4K 高品質圖約新台幣 7～8 元。</li>
+  </ul>
+
+  <h3>工具 3｜Felo AI（Nano Banana）：高解析實務型工具（需 Pro 版才能 4K）</h3>
+  <p class="cd">工具定位：Felo AI 提供以生成式模型為核心的圖片與資訊圖表生成能力，主打「快速生成、可編修、適合簡報與教學使用」，並整合 Nano Banana 系列影像模型作為主要圖像引擎。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:130px">解析度</th><th>說明</th></tr>
+    <tr><td>2K</td><td>一般生成模式，速度快、穩定度高</td></tr>
+    <tr><td>4K</td><td>高解析生成模式，屬進階／付費功能</td></tr>
+  </table></div>
+  <ul class="pt">
+    <li><b>模型定位</b>：Nano Banana 屬於偏向「清楚、可讀、穩定」的生成模型，特別適合文字密集型的資訊圖表，而非寫實或藝術風格圖片。</li>
+    <li><b>限制</b>：4K 生成需啟用特定模式或付費方案；文字多時仍需人工檢查。</li>
+    <li><b>修正方式</b>：可用內建圖片編輯功能微調錯字，不必重畫整張圖。</li>
+  </ul>
+  <div class="note gold">⚠️ 簡報原文在「生成限制與注意事項」段落於「圖像越...」處被截斷，本頁如實標記、不自行編造被截斷的內容；其餘工具介紹以下方課程筆記 Google Doc 的「三、AI 資訊圖表工具詳解」段落為準。</div>
+
+  <h3>工具 4｜Manus：數據可視化專家</h3>
+  <ul class="pt">
+    <li><b>生圖策略</b>：支援「文字先行」，先確認文案再轉圖。</li>
+    <li><b>統計圖表</b>：擅長長條圖、折線圖、箱型圖，並附趨勢解讀。</li>
+  </ul>
+  <div class="prompt"><span class="tag">常用指令</span>請先輸出資料表，再依資料產出長條圖</div>
+
+  <h3>工具 5｜Napkin AI：文字自動轉圖表</h3>
+  <ul class="pt">
+    <li><b>定位</b>：將文字快速轉為流程圖、心智圖、天秤圖。</li>
+    <li><b>優點</b>：門檻低、支援 60+ 語言、生成內容可商用。</li>
+    <li><b>補充技巧</b>：條列式、分段式文字效果最佳；支援 SVG 向量輸出，方便後續編修。</li>
+  </ul>
+
+  <h3>工具 6｜Dreamina AI：多模態素材製作</h3>
+  <ul class="pt">
+    <li><b>功能</b>：涵蓋影像、影片與虛擬替身。</li>
+    <li><b>影像</b>：支援中文文字，解析度可達 4K（Image 4.0）。</li>
+    <li><b>虛擬替身</b>：可用現成或自錄語音製作數位分身。</li>
+  </ul>
+  <div class="note steel">🧭 以上六項為課程筆記與簡報中明確點名的工具；課程筆記標題稱「10+N 工具脈絡」/簡報稱「含 10 個資訊圖表工具介紹」，代表課堂口語上會延伸提及更多同類工具（如 Canva、Gemini、Flow 等在規格重用段落被提及的平台），但兩份文字教材中有完整介紹段落的核心工具即為以上六個，本頁如實呈現，不另行杜撰其餘工具的細節。</div>
+</section>
+
+<section class="chapter" id="sec-school">
+  <span class="chip" style="background:linear-gradient(90deg,#3f8560,#0d8f80)">CHAPTER 05</span>
+  <h2 class="ct">5. AI 視覺化圖表的兩大流派</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:180px">流派</th><th>特點</th><th>代表工具</th><th>適用場景</th></tr>
+    <tr><td><b>Nano Banana 視覺流派</b>（藝術視覺型）</td><td>重視美感、畫質與藝術氛圍</td><td>Flow、Google AI Studio</td><td>海報、簡報視覺圖、高品質配圖</td></tr>
+    <tr><td><b>數據統計流派</b>（資訊邏輯型）</td><td>重視邏輯、流程、數據準確度</td><td>Nktip AI</td><td>流程圖、SOP、統計圖表、SmartArt 替代</td></tr>
+  </table></div>
+  <div class="note violet">🧩 兩派並非互斥：課程筆記也提到「生成式資訊圖表工具主要分為圖文敘事型與統計儀表板型……兩者正逐步融合」，實務上常常混用——先用數據統計流派確認邏輯與數字，再用視覺流派做最後的美化呈現。</div>
+</section>
+
+<section class="chapter" id="sec-fix">
+  <span class="chip" style="background:linear-gradient(90deg,#c0453f,#bf6a1e)">CHAPTER 06</span>
+  <h2 class="ct">6. 解決 AI 生圖常見痛點：中文字與畫質</h2>
+  <ol class="st">
+    <li><b>提高解析度</b>：要求 2K 或 4K，可顯著降低錯字、異體字出現機率。</li>
+    <li><b>先文字後圖像</b>：先用 YAML 整理內容，再交給生圖工具。</li>
+    <li><b>善用後端編輯功能</b>：使用支援 OCR 或文字編輯的工具（如 Flow），錯字可直接改，不必重畫。</li>
+  </ol>
+</section>
+
+<section class="chapter" id="sec-tips">
+  <span class="chip" style="background:linear-gradient(90deg,#5645D4,#b5476a)">CHAPTER 07</span>
+  <h2 class="ct">7. 老師的專家建議（Pro Tips）</h2>
+  <ul class="pt">
+    <li><b>減少文字量</b>：大標題交給 AI，小細節人工補，畫面最乾淨。</li>
+    <li><b>跨平台整合</b>：先在 ChatGPT 完成 YAML 結構，再複製到生圖平台。</li>
+    <li><b>解析度即畫質</b>：解析度越高，中文錯字風險越低。</li>
+    <li><b>自學策略</b>：多參考成熟提示詞（如日系生圖網站），學縮排與結構，比亂試有效。</li>
+  </ul>
+</section>
+
+<section class="chapter" id="sec-recap">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#b5476a)">RECAP</span>
+  <h2 class="ct">8. 重點整理：快速回顧 EP23</h2>
+  <ul class="pt">
+    <li>YAML 是你跟 AI 之間的<b>規則共識</b>，不是寫給電腦看的——它是防止 AI 失控的第一道保險。</li>
+    <li>只要三個規則：<b>冒號</b>定義是什麼、<b>縮排</b>定義層級、<b>減號</b>定義清單。</li>
+    <li>資訊圖表製作心法：<b>先文字（text_content）→ 再資料結構（data_structure）→ 最後才生圖（visual_rendering）</b>。</li>
+    <li>視覺規格三重點：<b>4K 解析度、16:9 橫向、教學導向設計</b>。</li>
+    <li>十個工具各有定位：NotebookLM 重結構、AI Studio 重高品質模型、Felo AI 重高解析文字密集圖、Manus 重數據可視化、Napkin AI 重文字轉流程圖、Dreamina AI 重多模態素材。</li>
+    <li>兩大流派：<b>視覺型</b>（Flow、Google AI Studio）vs <b>統計型</b>（Nktip AI），正逐步融合。</li>
+    <li>中文字與畫質痛點：<b>提高解析度、先文字後圖像、善用 OCR 編輯功能</b>三招解決。</li>
+  </ul>
+  <div class="golden"><div class="q">你要什麼 → YAML → 規則共識 → AI 照著做。</div><div class="a">—— 貫穿全集的一句話定位</div></div>
+</section>
+
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5a5866)">SOURCES</span>
+  <h2 class="ct">9. 資料來源與製作說明</h2>
+  <ul class="pt">
+    <li><b>原始教材（真實文件，共兩份）：</b>(1) 課程「課程筆記」Google Doc——真實課堂逐條整理的文字筆記；(2) 課程簡報 PDF——真實投影片內容的文字擷取，皆來自本課程 Google Drive 資料夾。</li>
+    <li><b>製作方式：</b>本頁內容全部逐段取自上述兩份真實文件，經彙整、去重與排版後成篇；YAML 範例（infographic 視覺規格、production_guidelines 製作原則等）皆<b>逐字重現</b>簡報原文，未做內容增刪。</li>
+    <li><b>誠實聲明：</b>本集<b>沒有</b>進行錄影抽幀，也<b>沒有</b>取得簡報原始 pptx／圖片檔，因此本頁<b>不含任何簡報截圖或影片畫面</b>，全部以文字與程式碼區塊呈現。簡報 PDF 在「工具3｜Felo AI」段落原文本身即在「圖像越...」處被截斷，本頁如實標記此限制，未自行編造被截斷的內容；該段落之外的工具介紹（Manus、Napkin AI、Dreamina AI）改以課程筆記 Doc 的對應段落為準，內容仍屬真實教材，並非推測。</li>
+    <li><b>介面參考：</b>互動技能地圖頁沿用本站既有的卡片式多層導覽與遊戲化進度設計。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  EP23「用YAML讓您的NotebookLM資訊圖表乖乖聽話」課堂筆記・2026/07 整理<br>
+  🍀 Learn AI with Tarshar｜搭配 <a href="ep23-ai-skills.html">互動技能地圖</a> 使用效果最佳
+</footer>
+
+</body>
+</html>

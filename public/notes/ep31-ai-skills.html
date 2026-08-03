@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gemini X Google Workspace應用｜互動式學習地圖</title>
+<meta name="description" content="EP31 晨學講堂：Gemini X Google Workspace應用——Maps 五大能力、Docs／Sheet／Slide 各 8 類應用與完整 prompt 範本，互動式多層次學習地圖，含全站搜尋與打勾進度。">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269;
+  --green:#3f8560; --orange:#bf6a1e; --red:#c0453f; --teal:#0d8f80;
+  --feat:#3b6bb0; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(28px,4.6vw,46px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--txt);background:none;-webkit-text-fill-color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:660px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:9px}
+.steps li{list-style:none;counter-increment:st;display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--txt2);line-height:1.7}
+.steps li::before{content:counter(st);flex:none;width:25px;height:25px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:var(--c,var(--feat));margin-top:1px}
+.steps li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+.prompt,.promptbox{background:#1d1d1f;border:1px solid #2c2c31;border-radius:10px;padding:13px 15px;margin-top:6px;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt b,.promptbox b{color:#fff}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <a class="navlink" href="../radio/" style="border-color:#a8c686" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <div class="logo">
+    <div class="dot">🧩</div>
+    <div>Workspace 技能地圖<small>MORNING LEARNING · EP31</small></div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋技能關鍵字：Maps、Docs、Sheet、Slide、prompt、公式、摘要…" autocomplete="off">
+  </div>
+  <a class="navlink" href="ep31-notes.html">📝 課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">EP31 · 晨學講堂 · 2026/04/10</span>
+  <h1>Gemini X<br>Google Workspace應用</h1>
+  <p class="sub">把 Gemini 用進 Maps、Docs、Sheet、Slide 四個天天在用的工具。<br>點進每一章，逐項展開<b>本集實際教到</b>的應用類型與現成 prompt 範本，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🎙️ 生成式AI應用電台・晨學講堂</span>
+    <span>🧩 4 大 Workspace 產品</span>
+    <span>✍️ 72 組現成 prompt</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>4</b><span>大主題</span></div>
+  <div class="stat"><b>30</b><span>實戰技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 30 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--cyan)" onclick="showChapter('maps')">
+        <div class="glowline"></div><span class="emoji">🗺️</span>
+        <h3><em>CHAPTER 01</em>Google Maps x Gemini</h3>
+        <p>Ask Maps、智慧搜尋、行程規劃、在地推薦、情境式導航——把地圖從「看路」升級成「幫你做決定」。</p>
+        <div class="foot"><div class="mini"><i data-mini="maps"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--orange)" onclick="showChapter('docs')">
+        <div class="glowline"></div><span class="emoji">📄</span>
+        <h3><em>CHAPTER 02</em>Google Docs x Gemini</h3>
+        <p>內容生成、潤稿、摘要、重組、多版本、翻譯、建議、協作——8 類文件應用，每類 3 組現成 prompt。</p>
+        <div class="foot"><div class="mini"><i data-mini="docs"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--green)" onclick="showChapter('sheet')">
+        <div class="glowline"></div><span class="emoji">📊</span>
+        <h3><em>CHAPTER 03</em>Google Sheet x Gemini</h3>
+        <p>資料清理、分析、視覺化、報告、公式、預測、解釋、自動化——8 類試算表應用，每類 3 組現成 prompt。</p>
+        <div class="foot"><div class="mini"><i data-mini="sheet"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--purple)" onclick="showChapter('slide')">
+        <div class="glowline"></div><span class="emoji">🖥️</span>
+        <h3><em>CHAPTER 04</em>Google Slide x Gemini</h3>
+        <p>簡報生成、內容精簡、結構、視覺、圖表、多版本、講稿、動畫——8 類簡報應用，每類 3 組現成 prompt。</p>
+        <div class="foot"><div class="mini"><i data-mini="slide"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+
+    <div class="resources">
+      <h3>📦 <span>課程原始資料</span></h3>
+      <div class="res-grid">
+        <a href="https://drive.google.com/file/d/11mlyoyQso7fG-hzJrOn8y84SG7-SMDOt/view" target="_blank" rel="noopener"><span class="ic">🎬</span><span><b>錄影回放</b>完整課程影片（需授權帳號）</span></a>
+        <a href="ep31-notes.html"><span class="ic">📝</span><span><b>課堂筆記</b>Maps／Docs／Sheet／Slide 逐節整理</span></a>
+        <a href="../radio/"><span class="ic">📻</span><span><b>直播電台系列</b>回系列總覽，一集一卡</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-maps" class="view" style="--c:var(--cyan)"></section>
+  <section id="view-docs" class="view" style="--c:var(--orange)"></section>
+  <section id="view-sheet" class="view" style="--c:var(--green)"></section>
+  <section id="view-slide" class="view" style="--c:var(--purple)"></section>
+</main>
+
+<footer>
+  本頁為 EP31「Gemini X Google Workspace應用」課後整理・介面沿用本站 EP43／EP44–46 互動式學習地圖<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2026｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+const DATA = {
+  maps: {
+    key:'maps', color:'var(--cyan)', emoji:'🗺️', code:'CHAPTER 01', title:'Google Maps x Gemini',
+    intro:'讓地圖不再只是「看路」的工具，而是一個能理解你的意圖（Context）、幫你「做決定」的智慧管家。',
+    topics:[
+      {t:'Ask Maps', s:'自然語言提問｜官方簡報',
+       blocks:[
+        {h:'能力',p:'可以用自然語言提問，直接獲得地點、路線與情境式建議。'},
+        {h:'應用情境',ul:['「適合約會的安靜咖啡廳」','「附近可以久坐、有插座的地方」','「適合帶小孩的餐廳」']},
+        {h:'價值',ul:['從「關鍵字搜尋」升級為「語意理解」','結果更貼近使用者需求','不需精確關鍵字，直接用描述查詢']},
+        {h:'Before / After',table:{head:['原始做法','新做法'],rows:[['Step1 查詢評論、查詢食記 → Step2 選定地點導航','Step1 告訴需求，請 AI 推薦規劃 → Step2 選定地點導航']]}},
+        {h:'看課堂筆記',p:'👉 <a href="ep31-notes.html#sec-maps" style="color:var(--cyan)">筆記 2：Google Maps x Gemini</a>'}]},
+      {t:'智慧搜尋（Semantic Search）', s:'自動整合行程與交通｜官方簡報',
+       blocks:[
+        {h:'應用情境',ul:['「幫我安排台北一日遊（含交通）」','「晚上 6 點後適合去的夜景景點」']},
+        {h:'價值',ul:['自動排序景點','搭配交通路線（步行／開車／大眾運輸）','整合地點＋時間＋偏好，自動生成路線']},
+        {h:'看課堂筆記',p:'👉 <a href="ep31-notes.html#sec-maps" style="color:var(--cyan)">筆記 2：智慧搜尋</a>'}]},
+      {t:'行程規劃（Trip Planning）', s:'依評論、評分、人潮生成建議｜官方簡報',
+       blocks:[
+        {h:'應用情境',ul:['「附近評價高但不擁擠的餐廳」','「現在人比較少的景點」']},
+        {h:'參考依據',ul:['使用者評論（Review）','評分（Rating）','即時人潮（Popular times）','根據評論、照片與熱門時段生成建議']},
+        {h:'看課堂筆記',p:'👉 <a href="ep31-notes.html#sec-maps" style="color:var(--cyan)">筆記 2：行程規劃</a>'}]},
+      {t:'在地推薦（Local Discovery）', s:'即時交通與決策建議｜官方簡報',
+       blocks:[
+        {h:'應用情境',ul:['「現在去這裡會塞車嗎？」','「有沒有更快或更舒服的路線？」']},
+        {h:'進階能力',ul:['即時交通分析','替代路線','推薦時間預測','不只是「怎麼走」，還會給決策建議']},
+        {h:'看課堂筆記',p:'👉 <a href="ep31-notes.html#sec-maps" style="color:var(--cyan)">筆記 2：在地推薦</a>'}]},
+      {t:'情境式導航（Context-aware Navigation）', s:'整合前四能力的落地情境｜官方簡報',
+       blocks:[
+        {h:'定位',p:'把 Ask Maps、智慧搜尋、行程規劃、在地推薦整合起來的實際落地：導航不再只是路線，而是隨情境調整的決策建議。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep31-notes.html#sec-maps" style="color:var(--cyan)">筆記 2：情境式導航</a>'}]},
+      {t:'延伸比較：3 種進階應用', s:'多條件篩選／評論摘要／探索式提問｜官方簡報',
+       blocks:[
+        {h:'比較表',table:{head:['應用類型','功能說明','典型應用情境'],rows:[
+          ['多條件篩選','同時整合多個條件進行精準搜尋','價格中等、有停車位、適合聚餐的餐廳；有 Wi-Fi、安靜、可工作 3 小時以上的咖啡廳'],
+          ['評論摘要與判讀','自動整理評論內容，提取關鍵資訊','快速了解店家品質；比較不同地點優缺點'],
+          ['探索式提問','支援模糊、靈感導向的自然語言提問','「今天心情不好，有什麼地方可以去？」「台北有什麼特別體驗？」']]}},
+        {h:'看課堂筆記',p:'👉 <a href="ep31-notes.html#sec-maps" style="color:var(--cyan)">筆記 2：延伸比較</a>'}]}
+    ]
+  },
+  docs: {
+    key:'docs', color:'var(--orange)', emoji:'📄', code:'CHAPTER 02', title:'Google Docs x Gemini',
+    intro:'8 種應用類型，涵蓋生成、潤稿到協作，每一類都附 3 組可直接套用的 prompt 範本。',
+    topics:[
+      {t:'內容生成（Content Generation）', s:'撰寫報告、會議紀錄、公文｜官方簡報',
+       blocks:[
+        {h:'功能說明',p:'根據提示自動撰寫文件內容。典型情境：撰寫報告初稿／會議紀錄草稿／公文初稿。輸出形式：段落式文本。'},
+        {h:'Prompt 範本（3組）',prompt:'Prompt 1：\n請根據以下主題撰寫一篇約800字的報告初稿，包含背景、問題分析與結論：＿＿＿＿\n\nPrompt 2：\n請將以下重點整理為正式會議紀錄，包含時間、出席者、討論事項與決議：＿＿＿＿\n\nPrompt 3：\n請依中華民國公文格式，撰寫一份函稿（含主旨與說明）：＿＿＿＿'},
+        {h:'看課堂筆記',p:'👉 <a href="ep31-notes.html#sec-docs" style="color:var(--orange)">筆記 3：內容生成</a>'}]},
+      {t:'文本潤稿（Editing & Refinement）', s:'語氣調整、精簡、學術潤飾｜官方簡報',
+       blocks:[
+        {h:'功能說明',p:'調整語氣、精簡內容、提升可讀性。典型情境：公文語氣修正／學術文章精簡／正式文件潤稿。輸出形式：修訂後文本。'},
+        {h:'Prompt 範本（3組）',prompt:'Prompt 1：\n請將以下內容改寫為正式公文語氣，並去除冗言贅字：＿＿＿＿\n\nPrompt 2：\n請將以下段落精簡為300字以內，保留核心論點與關鍵數據：＿＿＿＿\n\nPrompt 3：\n請潤飾以下學術段落，使語句更流暢且用詞一致：＿＿＿＿'},
+        {h:'看課堂筆記',p:'👉 <a href="ep31-notes.html#sec-docs" style="color:var(--orange)">筆記 3：文本潤稿</a>'}]},
+      {t:'摘要整理（Summarization）', s:'長文本濃縮重點｜官方簡報',
+       blocks:[
+        {h:'功能說明',p:'將長文本濃縮為重點摘要。典型情境：會議紀錄摘要／報告重點整理。輸出形式：條列式摘要。'},
+        {h:'Prompt 範本（3組）',prompt:'Prompt 1：\n請將以下內容整理為5點重點摘要：＿＿＿＿\n\nPrompt 2：\n請將以下會議紀錄濃縮為「決策重點＋後續行動」：＿＿＿＿\n\nPrompt 3：\n請將以下報告整理為一段150字摘要：＿＿＿＿'},
+        {h:'看課堂筆記',p:'👉 <a href="ep31-notes.html#sec-docs" style="color:var(--orange)">筆記 3：摘要整理</a>'}]},
+      {t:'結構重組（Structuring）', s:'重整文章架構與邏輯｜官方簡報',
+       blocks:[
+        {h:'功能說明',p:'重整文章架構與邏輯順序。典型情境：論文架構優化／報告章節重排。輸出形式：大綱／分段內容。'},
+        {h:'Prompt 範本（3組）',prompt:'Prompt 1：\n請將以下內容重整為「前言－分析－結論」三段式結構：＿＿＿＿\n\nPrompt 2：\n請依學術論文格式，將以下內容轉為章節大綱（含標題階層）：＿＿＿＿\n\nPrompt 3：\n請重新編排以下內容，使邏輯順序更清晰並加上小標題：＿＿＿＿'},
+        {h:'看課堂筆記',p:'👉 <a href="ep31-notes.html#sec-docs" style="color:var(--orange)">筆記 3：結構重組</a>'}]},
+      {t:'多版本生成（Variant Generation）', s:'同一內容產出多版本｜官方簡報',
+       blocks:[
+        {h:'功能說明',p:'同一內容生成不同版本。典型情境：正式版／簡報版／社群版。輸出形式：多版本文本。'},
+        {h:'Prompt 範本（3組）',prompt:'Prompt 1：\n請將以下內容改寫為三種版本：正式報告版、簡報重點版、社群貼文版：＿＿＿＿\n\nPrompt 2：\n請針對以下內容，分別產出「專業版」與「白話版」：＿＿＿＿\n\nPrompt 3：\n請將以下文章改寫為「長版（800字）」與「短版（200字）」兩種版本：＿＿＿＿'},
+        {h:'看課堂筆記',p:'👉 <a href="ep31-notes.html#sec-docs" style="color:var(--orange)">筆記 3：多版本生成</a>'}]},
+      {t:'語言翻譯（Translation）', s:'多語言轉換並保留語意｜官方簡報',
+       blocks:[
+        {h:'功能說明',p:'多語言轉換並保留語意。典型情境：中英翻譯／跨語言文件整理。輸出形式：對照文本。'},
+        {h:'Prompt 範本（3組）',prompt:'Prompt 1：\n請將以下內容翻譯為英文，並符合母語使用者閱讀習慣：＿＿＿＿\n\nPrompt 2：\n請將以下中英文內容整理為對照表格式：＿＿＿＿\n\nPrompt 3：\n請將以下內容翻譯為日文，並保留正式書面語氣：＿＿＿＿'},
+        {h:'看課堂筆記',p:'👉 <a href="ep31-notes.html#sec-docs" style="color:var(--orange)">筆記 3：語言翻譯</a>'}]},
+      {t:'智慧建議（Smart Suggestions）', s:'補強論述、加入例證｜官方簡報',
+       blocks:[
+        {h:'功能說明',p:'提供寫作建議與補充內容。典型情境：補強論述／加入例證或說明。輸出形式：建議段落。'},
+        {h:'Prompt 範本（3組）',prompt:'Prompt 1：\n請檢視以下內容，提出3點可強化論述的建議：＿＿＿＿\n\nPrompt 2：\n請針對以下段落，補充具體案例或數據支持：＿＿＿＿\n\nPrompt 3：\n請指出以下內容中可能的邏輯漏洞或論證不足之處：＿＿＿＿'},
+        {h:'看課堂筆記',p:'👉 <a href="ep31-notes.html#sec-docs" style="color:var(--orange)">筆記 3：智慧建議</a>'}]},
+      {t:'協作輔助（Collaboration Support）', s:'回覆評論、整合多方意見｜官方簡報',
+       blocks:[
+        {h:'功能說明',p:'支援多人協作中的 AI 輔助。典型情境：回覆評論建議／整合多方意見。輸出形式：修訂與回覆內容。'},
+        {h:'Prompt 範本（3組）',prompt:'Prompt 1：\n請協助回覆以下評論，語氣需專業且具建設性：＿＿＿＿\n\nPrompt 2：\n請整合以下多位作者的意見，形成一致版本：＿＿＿＿\n\nPrompt 3：\n請整理以下討論內容，列出共識與分歧點：＿＿＿＿'},
+        {h:'看課堂筆記',p:'👉 <a href="ep31-notes.html#sec-docs" style="color:var(--orange)">筆記 3：協作輔助</a>'}]}
+    ]
+  },
+  sheet: {
+    key:'sheet', color:'var(--green)', emoji:'📊', code:'CHAPTER 03', title:'Google Sheet x Gemini',
+    intro:'8 種應用類型，從資料清理到自動化流程，每一類都附 3 組可直接套用的 prompt 範本。',
+    topics:[
+      {t:'資料清理（Data Cleaning）', s:'去重複、統一格式、缺值處理｜官方簡報',
+       blocks:[
+        {h:'功能說明',p:'自動整理與標準化資料格式。典型情境：去除重複值／統一日期格式／缺值處理。輸出形式：清理後資料表。'},
+        {h:'Prompt 範本（3組）',prompt:'Prompt 1：\n請檢查此資料表，找出缺值、重複值並提出清理建議：＿＿＿＿\n\nPrompt 2：\n請將以下資料統一格式（日期、數字、分類）：＿＿＿＿\n\nPrompt 3：\n請整理此資料，使其符合可進行統計分析的結構：＿＿＿＿'},
+        {h:'看課堂筆記',p:'👉 <a href="ep31-notes.html#sec-sheet" style="color:var(--green)">筆記 4：資料清理</a>'}]},
+      {t:'資料分析（Data Analysis）', s:'統計分析與趨勢判讀｜官方簡報',
+       blocks:[
+        {h:'功能說明',p:'根據資料進行統計分析與解釋。典型情境：平均數、成長率計算／趨勢判讀。輸出形式：分析結果＋文字說明。'},
+        {h:'Prompt 範本（3組）',prompt:'Prompt 1：\n請計算以下資料的平均數、最大值、最小值與標準差，並說明意義：＿＿＿＿\n\nPrompt 2：\n請分析此資料的變化趨勢，指出關鍵轉折點：＿＿＿＿\n\nPrompt 3：\n請比較不同群組之間的差異並提供解釋：＿＿＿＿'},
+        {h:'看課堂筆記',p:'👉 <a href="ep31-notes.html#sec-sheet" style="color:var(--green)">筆記 4：資料分析</a>'}]},
+      {t:'視覺化建議（Visualization）', s:'建議圖表類型並解讀｜官方簡報',
+       blocks:[
+        {h:'功能說明',p:'建議適合的圖表並解讀。典型情境：折線圖（趨勢）／長條圖（比較）。輸出形式：圖表＋解讀。'},
+        {h:'Prompt 範本（3組）',prompt:'Prompt 1：\n請建議此資料適合使用的圖表類型並說明原因：＿＿＿＿\n\nPrompt 2：\n請根據資料生成圖表並撰寫圖表解讀：＿＿＿＿\n\nPrompt 3：\n請將此資料轉為適合簡報使用的圖表與重點：＿＿＿＿'},
+        {h:'看課堂筆記',p:'👉 <a href="ep31-notes.html#sec-sheet" style="color:var(--green)">筆記 4：視覺化建議</a>'}]},
+      {t:'自動報告生成（Report Generation）', s:'把數據轉為完整報告｜官方簡報',
+       blocks:[
+        {h:'功能說明',p:'將數據轉為完整報告。典型情境：統計通報／政策分析報告。輸出形式：段落式報告。'},
+        {h:'Prompt 範本（3組）',prompt:'Prompt 1：\n請根據此資料撰寫一段統計分析報告（約300字）：＿＿＿＿\n\nPrompt 2：\n請將數據整理為「標題＋論述＋表格」格式：＿＿＿＿\n\nPrompt 3：\n請撰寫政策導向的數據分析說明（含建議）：＿＿＿＿'},
+        {h:'看課堂筆記',p:'👉 <a href="ep31-notes.html#sec-sheet" style="color:var(--green)">筆記 4：自動報告生成</a>'}]},
+      {t:'公式生成（Formula Generation）', s:'不用背公式，用白話描述需求｜官方簡報',
+       blocks:[
+        {h:'功能說明',p:'根據需求自動產生公式。典型情境：SUM、IF、VLOOKUP／複雜條件計算。輸出形式：可直接使用公式。'},
+        {h:'Prompt 範本（3組）',prompt:'Prompt 1：\n請為此需求撰寫Google Sheets公式：＿＿＿＿\n\nPrompt 2：\n請用IF函數設計條件判斷（條件如下）：＿＿＿＿\n\nPrompt 3：\n請提供可計算成長率的公式並說明：＿＿＿＿'},
+        {h:'看課堂筆記',p:'👉 <a href="ep31-notes.html#sec-sheet" style="color:var(--green)">筆記 4：公式生成</a>'}]},
+      {t:'預測分析（Forecasting）', s:'根據歷史資料推估未來｜官方簡報',
+       blocks:[
+        {h:'功能說明',p:'根據歷史資料進行預測。典型情境：人口趨勢／遊客數預測。輸出形式：預測數據＋說明。'},
+        {h:'Prompt 範本（3組）',prompt:'Prompt 1：\n請根據以下歷史資料預測未來三年趨勢：＿＿＿＿\n\nPrompt 2：\n請分析資料變動並推估未來可能變化：＿＿＿＿\n\nPrompt 3：\n請建立簡單預測模型並說明假設：＿＿＿＿'},
+        {h:'看課堂筆記',p:'👉 <a href="ep31-notes.html#sec-sheet" style="color:var(--green)">筆記 4：預測分析</a>'}]},
+      {t:'資料解釋（Data Interpretation）', s:'把數據轉為易懂文字｜官方簡報',
+       blocks:[
+        {h:'功能說明',p:'將數據轉為易懂文字。典型情境：數據背後意義說明。輸出形式：白話或專業解釋。'},
+        {h:'Prompt 範本（3組）',prompt:'Prompt 1：\n請用白話方式說明這組數據代表的意義：＿＿＿＿\n\nPrompt 2：\n請將以下數據轉為一段專業分析文字：＿＿＿＿\n\nPrompt 3：\n請指出資料中可能的異常現象與原因：＿＿＿＿'},
+        {h:'看課堂筆記',p:'👉 <a href="ep31-notes.html#sec-sheet" style="color:var(--green)">筆記 4：資料解釋</a>'}]},
+      {t:'自動化流程（Automation Support）', s:'結合 GAS 建立自動化｜官方簡報',
+       blocks:[
+        {h:'功能說明',p:'結合 GAS 建立自動化流程。典型情境：一鍵分析／定期更新報表。輸出形式：流程建議／程式碼。'},
+        {h:'Prompt 範本（3組）',prompt:'Prompt 1：\n請設計一個Google Sheets＋GAS自動分析流程：＿＿＿＿\n\nPrompt 2：\n請提供可自動產生統計報告的腳本架構：＿＿＿＿\n\nPrompt 3：\n請規劃資料更新→分析→報告輸出的自動化流程：＿＿＿＿'},
+        {h:'看課堂筆記',p:'👉 <a href="ep31-notes.html#sec-sheet" style="color:var(--green)">筆記 4：自動化流程</a>'}]}
+    ]
+  },
+  slide: {
+    key:'slide', color:'var(--purple)', emoji:'🖥️', code:'CHAPTER 04', title:'Google Slide x Gemini',
+    intro:'8 種應用類型，從簡報生成到動畫建議，每一類都附 3 組可直接套用的 prompt 範本。',
+    topics:[
+      {t:'簡報生成（Slide Generation）', s:'依主題自動產出大綱與頁面｜官方簡報',
+       blocks:[
+        {h:'功能說明',p:'根據主題自動產出簡報內容與頁面結構。典型情境：課程簡報／政策報告／專案提案。輸出形式：投影片大綱＋頁面內容。'},
+        {h:'Prompt 範本（3組）',prompt:'Prompt 1：\n請根據以下主題產出10頁簡報大綱（每頁含標題與3點重點）：＿＿＿＿\n\nPrompt 2：\n請設計一份教學簡報，包含導入、內容、結論三部分：＿＿＿＿\n\nPrompt 3：\n請產出適合政策報告的簡報架構（含章節與頁面安排）：＿＿＿＿'},
+        {h:'看課堂筆記',p:'👉 <a href="ep31-notes.html#sec-slide" style="color:var(--purple)">筆記 5：簡報生成</a>'}]},
+      {t:'內容精簡（Content Condensing）', s:'長文本轉簡報重點｜官方簡報',
+       blocks:[
+        {h:'功能說明',p:'將長文本轉為簡報重點。典型情境：報告轉簡報／論文轉重點頁。輸出形式：條列式重點。'},
+        {h:'Prompt 範本（3組）',prompt:'Prompt 1：\n請將以下文章轉為每頁3點的簡報內容：＿＿＿＿\n\nPrompt 2：\n請將此段文字精簡為簡報用重點（不超過50字）：＿＿＿＿\n\nPrompt 3：\n請將報告內容轉為條列式簡報語句：＿＿＿＿'},
+        {h:'看課堂筆記',p:'👉 <a href="ep31-notes.html#sec-slide" style="color:var(--purple)">筆記 5：內容精簡</a>'}]},
+      {t:'結構設計（Slide Structuring）', s:'規劃邏輯與頁面順序｜官方簡報',
+       blocks:[
+        {h:'功能說明',p:'規劃簡報邏輯與頁面順序。典型情境：起承轉合設計／故事線建構。輸出形式：頁面架構。'},
+        {h:'Prompt 範本（3組）',prompt:'Prompt 1：\n請將以下內容設計為簡報流程（起承轉合）：＿＿＿＿\n\nPrompt 2：\n請規劃簡報頁面順序與邏輯架構：＿＿＿＿\n\nPrompt 3：\n請重組內容，使簡報更具故事性與說服力：＿＿＿＿'},
+        {h:'看課堂筆記',p:'👉 <a href="ep31-notes.html#sec-slide" style="color:var(--purple)">筆記 5：結構設計</a>'}]},
+      {t:'視覺建議（Visual Design Suggestion）', s:'版面與視覺呈現建議｜官方簡報',
+       blocks:[
+        {h:'功能說明',p:'提供版面與視覺呈現建議。典型情境：圖表配置／配色建議。輸出形式：視覺說明。'},
+        {h:'Prompt 範本（3組）',prompt:'Prompt 1：\n請建議此簡報適合的版面配置與圖像元素：＿＿＿＿\n\nPrompt 2：\n請提供配色與字體建議（正式風格）：＿＿＿＿\n\nPrompt 3：\n請建議如何將文字轉為視覺化呈現：＿＿＿＿'},
+        {h:'看課堂筆記',p:'👉 <a href="ep31-notes.html#sec-slide" style="color:var(--purple)">筆記 5：視覺建議</a>'}]},
+      {t:'圖表轉換（Data to Slides）', s:'數據轉圖表並嵌入簡報｜官方簡報',
+       blocks:[
+        {h:'功能說明',p:'將數據轉為圖表並嵌入簡報。典型情境：統計圖表／數據展示。輸出形式：圖表頁。'},
+        {h:'Prompt 範本（3組）',prompt:'Prompt 1：\n請將以下數據轉為適合簡報的圖表類型：＿＿＿＿\n\nPrompt 2：\n請設計一頁圖表簡報並附上解讀重點：＿＿＿＿\n\nPrompt 3：\n請將資料轉為比較型圖表並整理重點：＿＿＿＿'},
+        {h:'看課堂筆記',p:'👉 <a href="ep31-notes.html#sec-slide" style="color:var(--purple)">筆記 5：圖表轉換</a>'}]},
+      {t:'多版本生成（Variant Slides）', s:'同一內容產出不同版本簡報｜官方簡報',
+       blocks:[
+        {h:'功能說明',p:'同一內容產出不同版本簡報。典型情境：正式版／簡報版／教學版。輸出形式：多版本投影片。'},
+        {h:'Prompt 範本（3組）',prompt:'Prompt 1：\n請將內容轉為三種簡報版本（正式／教學／簡化）：＿＿＿＿\n\nPrompt 2：\n請產出長版與短版簡報：＿＿＿＿\n\nPrompt 3：\n請將簡報改寫為適合不同受眾版本：＿＿＿＿'},
+        {h:'看課堂筆記',p:'👉 <a href="ep31-notes.html#sec-slide" style="color:var(--purple)">筆記 5：多版本生成</a>'}]},
+      {t:'講稿生成（Speaker Notes）', s:'自動生成講者備註｜官方簡報',
+       blocks:[
+        {h:'功能說明',p:'自動生成講者備註。典型情境：演講稿／教學講解。輸出形式：講稿文字。'},
+        {h:'Prompt 範本（3組）',prompt:'Prompt 1：\n請為每頁簡報撰寫講者講稿（每頁約100字）：＿＿＿＿\n\nPrompt 2：\n請根據簡報內容生成口語化講解稿：＿＿＿＿\n\nPrompt 3：\n請將重點轉為演講用講稿：＿＿＿＿'},
+        {h:'看課堂筆記',p:'👉 <a href="ep31-notes.html#sec-slide" style="color:var(--purple)">筆記 5：講稿生成</a>'}]},
+      {t:'動畫建議（Animation Suggestion）', s:'動畫與轉場設計｜官方簡報',
+       blocks:[
+        {h:'功能說明',p:'提供動畫與轉場設計。典型情境：重點強調／流程展示。輸出形式：動畫規劃。'},
+        {h:'Prompt 範本（3組）',prompt:'Prompt 1：\n請為簡報設計適合的動畫效果（逐步呈現）：＿＿＿＿\n\nPrompt 2：\n請建議每頁簡報的轉場方式：＿＿＿＿\n\nPrompt 3：\n請規劃動畫以強調重點內容：＿＿＿＿'},
+        {h:'看課堂筆記',p:'👉 <a href="ep31-notes.html#sec-slide" style="color:var(--purple)">筆記 5：動畫建議</a>'}]}
+    ]
+  }
+};
+const ORDER = ['maps','docs','sheet','slide'];
+const $ = s=>document.querySelector(s);
+function renderChapter(ch){
+  const d=DATA[ch];const next=ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];const prev=ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html=`<div class="chapter-head"><span class="emoji">${d.emoji}</span><div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div></div>`;
+  d.topics.forEach((tp,i)=>{const id=`${ch}-${i}`;
+    html+=`<div class="topic" id="topic-${id}"><div class="topic-head" onclick="toggleTopic('${id}')"><span class="num">${i+1}</span><h4>${tp.t}<small>${tp.s}</small></h4><input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)"><span class="chev">▶</span></div><div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{html+=`<div class="block"><h5>${b.h}</h5>`;
+      if(b.p)html+=`<p>${b.p}</p>`;
+      if(b.ul)html+=`<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps)html+=`<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.prompt)html+=`<div class="promptbox">${b.prompt}</div>`;
+      if(b.table)html+=`<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.tip)html+=`<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn)html+=`<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html+=`</div>`;});
+    html+=`</div></div></div>`;});
+  html+=`<div class="chapnav"><a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a><a onclick="showHome()" style="text-align:center">回總覽<b>🏠 四大主題</b></a><a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a></div>`;
+  $('#view-'+ch).innerHTML=html;
+}
+ORDER.forEach(renderChapter);
+function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('#view-'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function showHome(){switchView('home');$('#crumbs').style.display='none';clearSearch();}
+function showChapter(ch){switchView(ch);$('#crumbs').style.display='flex';$('#crumbHere').textContent=`${DATA[ch].emoji} ${DATA[ch].title}`;clearSearch();syncChecks();}
+function toggleTopic(id){$('#topic-'+id).classList.toggle('open');}
+function openTopic(ch,i){showChapter(ch);const el=$('#topic-'+ch+'-'+i);el.classList.add('open');setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+const KEY='ep31-skills-v1';
+const store=()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){const s=store();if(val)s[id]=1;else delete s[id];localStorage.setItem(KEY,JSON.stringify(s));updateProgress();}
+const TOTAL=ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){const done=Object.keys(store()).length;const pct=Math.round(done/TOTAL*100);$('#progFill').style.width=pct+'%';$('#progText').textContent=`${done} / ${TOTAL} 項技能已掌握`;$('#statDone').textContent=done;$('#statPct').textContent=pct+'%';ORDER.forEach(ch=>{const sub=DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;const el=document.querySelector(`[data-mini="${ch}"]`);if(el)el.style.width=Math.round(sub/DATA[ch].topics.length*100)+'%';});}
+function syncChecks(){const s=store();document.querySelectorAll('input[data-skill]').forEach(cb=>{cb.checked=!!s[cb.dataset.skill];});}
+function resetProgress(){if(confirm('確定要清空所有打勾進度嗎？')){localStorage.removeItem(KEY);syncChecks();updateProgress();}}
+function stripTags(s){return s.replace(/<[^>]+>/g,'');}
+const INDEX=[];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{let body=tp.s+' ';tp.blocks.forEach(b=>{if(b.p)body+=stripTags(b.p)+' ';if(b.ul)body+=b.ul.map(stripTags).join(' ')+' ';if(b.steps)body+=b.steps.map(stripTags).join(' ')+' ';if(b.prompt)body+=b.prompt+' ';if(b.tip)body+=stripTags(b.tip)+' ';if(b.warn)body+=stripTags(b.warn)+' ';if(b.table)body+=b.table.rows.flat().map(stripTags).join(' ')+' ';});INDEX.push({ch,i,title:tp.t,body});}));
+$('#searchInput').addEventListener('input',e=>{const q=e.target.value.trim();const box=$('#searchResults');if(!q){box.classList.remove('show');box.innerHTML='';return;}const hits=INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));box.classList.add('show');if(!hits.length){box.innerHTML=`<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：Docs、Sheet、Slide、公式、摘要、講稿）</div>`;return;}const hl=s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);box.innerHTML=hits.map(x=>{const pos=x.body.toLowerCase().indexOf(q.toLowerCase());const snip=x.body.substr(Math.max(0,pos-20),90);return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})"><div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div><h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;}).join('');});
+function clearSearch(){$('#searchInput').value='';$('#searchResults').classList.remove('show');$('#searchResults').innerHTML='';}
+(function(){const box=$('#stars');for(let i=0;i<70;i++){const s=document.createElement('i');s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';s.style.animationDelay=(Math.random()*3)+'s';s.style.transform=`scale(${.5+Math.random()*1.5})`;box.appendChild(s);}})();
+syncChecks();updateProgress();
+</script>
+</body>
+</html>

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP38 課堂筆記｜Gemini Avatar：從概念到應用（虛擬人、虛擬分身與數字人）</title>
+<meta name="description" content="晨學講堂 EP38 課堂筆記：Gemini Avatar——什麼是 AI 驅動的虛擬互動角色、核心四要素（文字／語音／形象／知識）、運作流程五步、主要特色、應用情境、製作步驟、優勢與限制、使用注意事項。含每一頁課程簡報原圖。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#4f56d6; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px;border-left:none}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+.note.violet{background:#F3EFFB;border-color:#DFD2F0;color:#5a34a8}
+.note.rose{background:#FBEEF1;border-color:#F0D2DB;color:#9c2f52}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.prompt{position:relative;background:#1d1d1f;border-radius:10px;padding:15px 16px;margin:12px 0;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt .tag{display:inline-block;font-size:11px;letter-spacing:.06em;color:#c9c4ff;border:1px solid #3a3a40;border-radius:6px;padding:2px 9px;margin-bottom:8px}
+.prompt b{color:#fff}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.embed{margin:14px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000}
+.embed iframe{display:block;width:100%;aspect-ratio:16/9;border:0}
+.embed .cap{font-size:12.5px;color:var(--ink3);padding:10px 16px;background:var(--paper);border-top:1px solid var(--line)}
+.ts{display:inline-block;font-family:"Cascadia Code",Consolas,monospace;font-weight:700;font-size:12px;color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,#fff);border-radius:5px;padding:2px 8px;margin-right:7px;letter-spacing:.4px;vertical-align:middle}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+.layers{display:grid;gap:10px;margin:14px 0}
+.lyr{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:13px 15px;background:#fff}
+.lyr .n{flex:none;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--accent)}
+.lyr h4{margin:0 0 3px;font-size:14.5px}
+.lyr p{font-size:13px;margin:0}
+.sub{color:var(--ink2)}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#b7bef0" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP38 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="ep38-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 晨學講堂 · EP38</span>
+  <h1><span>Gemini Avatar</span><br>從概念到應用的快速認識</h1>
+  <p class="lead">EP38 帶你認識 <b>Gemini Avatar</b>——一種<b>以 AI 驅動的虛擬互動角色</b>：把文字、語音、影像與角色形象整合起來，能像真人一樣說明、互動、展示與陪伴。本頁<b>逐頁嵌入官方課程簡報原圖</b>並整理每一頁重點（本集為手繪風簡報，10 頁全收錄）。</p>
+  <div class="meta">
+    <span>📅 2026/05 直播</span>
+    <span>🗂️ 教材：10 頁手繪簡報</span>
+    <span>🤖 主題：Gemini Avatar</span>
+    <span>🎭 虛擬人／分身／數字人</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-what">1. 什麼是 Gemini Avatar</a>
+  <a href="#sec-core">2. 核心組成四要素</a>
+  <a href="#sec-flow">3. 運作流程五步</a>
+  <a href="#sec-feature">4. 主要特色</a>
+  <a href="#sec-use">5. 應用情境</a>
+  <a href="#sec-make">6. 製作步驟五步</a>
+  <a href="#sec-limit">7. 優勢與限制</a>
+  <a href="#sec-safe">8. 使用注意事項</a>
+  <a href="#sec-recap">9. 重點整理</a>
+  <a href="#sec-src">10. 資料來源與製作說明</a>
+</nav>
+
+<article>
+
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--purple))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>EP38_「Avatar 虛擬人模型實作（虛擬人、虛擬分身與數字人差異實作）」，內容以 <b>Gemini Avatar</b> 為主軸</td></tr>
+    <tr><th>頻道</th><td>生成式 AI 應用電台・晨學講堂</td></tr>
+    <tr><th>直播日期</th><td>2026/05 晚間直播</td></tr>
+    <tr><th>教材</th><td>官方課程簡報 <b>10 頁</b>（手繪白板風）</td></tr>
+    <tr><th>一句話先懂</th><td>Gemini Avatar 是<b>以 AI 驅動的虛擬互動角色</b>：把「文字理解／語音／角色形象／知識」四件事整合成一個會表達的分身，用在教學、客服、行銷與內容創作。</td></tr>
+  </table></div>
+  <figure class="shot">
+    <img src="ep38-img/slide01.jpg" alt="EP38 課程封面：Gemini Avatar" loading="lazy">
+    <figcaption>簡報封面｜<b>Gemini Avatar — 從概念到應用的快速認識</b>：多模態互動、虛擬角色呈現、教學／行銷／客服應用。</figcaption>
+  </figure>
+  <div class="note blue">💡 本集簡報為<b>手繪風、圖像型投影片</b>；本頁<b>逐頁嵌入官方簡報原圖</b>並把每頁重點整理成文字（真實課程內容，非推測）。示範操作的螢幕畫面與逐字稿時間碼，若日後取得錄影可再補入。</div>
+</section>
+
+<section class="chapter" id="sec-what">
+  <span class="chip" style="background:linear-gradient(90deg,#5563d6,#0aa6c9)">CHAPTER 01</span>
+  <h2 class="ct">1. 什麼是 Gemini Avatar</h2>
+  <p class="cd">一句話：<b>以 AI 驅動的虛擬互動角色</b>。（簡報 p2）</p>
+  <figure class="shot">
+    <img src="ep38-img/slide02.jpg" alt="什麼是 Gemini Avatar" loading="lazy">
+    <figcaption>簡報 1｜以 AI 驅動的虛擬互動角色，可結合文字、語音與影像。</figcaption>
+  </figure>
+  <ul class="pt">
+    <li><b>可結合文字、語音與影像</b>——多種模態一起輸入輸出。</li>
+    <li><b>能以虛擬角色形式回應使用者</b>——不只是文字回覆，而是一個有形象的分身在跟你互動。</li>
+    <li><b>適合說明、互動、展示與陪伴</b>四類情境。</li>
+  </ul>
+  <div class="note gold">⚠️ 名詞區分（本集副標）：<b>虛擬人 / 虛擬分身 / 數字人</b>常被混用——共同點是「以 AI 生成、可互動的虛擬角色」；差別多在<b>是否對應真實個人、擬真程度與應用場景</b>。本集以 Gemini Avatar 為例貫穿說明。</div>
+</section>
+
+<section class="chapter" id="sec-core">
+  <span class="chip" style="background:linear-gradient(90deg,#7a4fd6,#5563d6)">CHAPTER 02</span>
+  <h2 class="ct">2. 核心組成：四大要素</h2>
+  <p class="cd">讓 Avatar 能互動的四件事。（簡報 p3）</p>
+  <figure class="shot">
+    <img src="ep38-img/slide03.jpg" alt="核心組成四大要素" loading="lazy">
+    <figcaption>簡報 2｜核心組成——文字、語音、形象、知識，四者整合。</figcaption>
+  </figure>
+  <div class="twrap"><table>
+    <tr><th style="width:90px">要素</th><th>負責什麼</th></tr>
+    <tr><td>文字</td><td>理解與生成內容</td></tr>
+    <tr><td>語音</td><td>說話、聆聽與回應</td></tr>
+    <tr><td>形象</td><td>角色外觀與風格</td></tr>
+    <tr><td>知識</td><td>提供資訊與情境理解</td></tr>
+  </table></div>
+  <div class="golden"><div class="q">「多模態整合，是 Avatar 體驗的關鍵。」</div><div class="a">—— 簡報 p3 金句</div></div>
+</section>
+
+<section class="chapter" id="sec-flow">
+  <span class="chip" style="background:linear-gradient(90deg,#2f6df0,#0aa6c9)">CHAPTER 03</span>
+  <h2 class="ct">3. 運作流程：從輸入到輸出五步</h2>
+  <figure class="shot">
+    <img src="ep38-img/slide04.jpg" alt="運作流程五步" loading="lazy">
+    <figcaption>簡報 3｜運作流程：輸入需求 → 理解內容 → 生成回應 → 呈現 Avatar → 持續互動。</figcaption>
+  </figure>
+  <ol class="st">
+    <li><b>輸入需求</b>：使用文字、語音或圖片提出需求。</li>
+    <li><b>理解內容</b>：AI 分析語意與脈絡，掌握重點。</li>
+    <li><b>生成回應</b>：整合知識與模型，生成合適的回應內容。</li>
+    <li><b>呈現 Avatar</b>：以 Gemini Avatar 自然、親切地呈現。</li>
+    <li><b>持續互動</b>：根據回饋調整，持續提供更好體驗。</li>
+  </ol>
+  <div class="note blue">💡 三個心法（簡報底部）：<b>先理解、再生成</b>；<b>可依需求調整表達方式</b>；<b>互動越多、使用越順手</b>。</div>
+</section>
+
+<section class="chapter" id="sec-feature">
+  <span class="chip" style="background:linear-gradient(90deg,#5563d6,#d4508e)">CHAPTER 04</span>
+  <h2 class="ct">4. 主要特色：Gemini Avatar 的亮點</h2>
+  <figure class="shot">
+    <img src="ep38-img/slide05.jpg" alt="主要特色" loading="lazy">
+    <figcaption>簡報 4｜主要特色——自然對話、多模態理解、快速生成、角色化表現。</figcaption>
+  </figure>
+  <ul class="pt">
+    <li><b>自然對話</b>：互動更接近真人溝通。</li>
+    <li><b>多模態理解</b>：能處理文字、聲音與畫面。</li>
+    <li><b>快速生成</b>：提升內容產製效率。</li>
+    <li><b>角色化表現</b>：讓資訊傳達更有溫度。</li>
+  </ul>
+  <div class="golden"><div class="q">「不只是回答，更是會表達。」</div><div class="a">—— 簡報 p5 金句</div></div>
+</section>
+
+<section class="chapter" id="sec-use">
+  <span class="chip" style="background:linear-gradient(90deg,#1d9e6f,#0aa6c9)">CHAPTER 05</span>
+  <h2 class="ct">5. 應用情境：哪些場景最實用</h2>
+  <figure class="shot">
+    <img src="ep38-img/slide06.jpg" alt="應用情境四類" loading="lazy">
+    <figcaption>簡報 5｜應用情境——教學輔助、客服接待、行銷推廣、內容創作。</figcaption>
+  </figure>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">情境</th><th>用途</th></tr>
+    <tr><td>教學輔助</td><td>說明概念、陪伴學習</td></tr>
+    <tr><td>客服接待</td><td>回答問題、提升效率</td></tr>
+    <tr><td>行銷推廣</td><td>介紹產品、強化互動</td></tr>
+    <tr><td>內容創作</td><td>生成腳本、示範呈現</td></tr>
+  </table></div>
+</section>
+
+<section class="chapter" id="sec-make">
+  <span class="chip" style="background:linear-gradient(90deg,#c98a0a,#5563d6)">CHAPTER 06</span>
+  <h2 class="ct">6. 製作步驟：打造 Gemini Avatar 五步</h2>
+  <figure class="shot">
+    <img src="ep38-img/slide07.jpg" alt="製作步驟五步" loading="lazy">
+    <figcaption>簡報 6｜製作步驟：設定角色 → 準備腳本 → 設計畫面 → 測試互動 → 正式發布。</figcaption>
+  </figure>
+  <ol class="st">
+    <li><b>設定角色</b>：決定定位與語氣。</li>
+    <li><b>準備腳本</b>：安排內容與說法。</li>
+    <li><b>設計畫面</b>：規劃視覺與風格。</li>
+    <li><b>測試互動</b>：確認回應品質。</li>
+    <li><b>正式發布</b>：投入教學或應用。</li>
+  </ol>
+</section>
+
+<section class="chapter" id="sec-limit">
+  <span class="chip" style="background:linear-gradient(90deg,#d35400,#c98a0a)">CHAPTER 07</span>
+  <h2 class="ct">7. 優勢與限制：使用前要知道的兩面向</h2>
+  <figure class="shot">
+    <img src="ep38-img/slide08.jpg" alt="優勢與限制" loading="lazy">
+    <figcaption>簡報 7｜優勢 vs. 限制，兩面向一起看。</figcaption>
+  </figure>
+  <div class="twrap"><table>
+    <tr><th style="width:120px">優勢</th><th>限制</th></tr>
+    <tr><td>互動生動</td><td>需持續調整內容</td></tr>
+    <tr><td>溝通效率高</td><td>仰賴資料與設定品質</td></tr>
+    <tr><td>容易吸引注意</td><td>仍需人工檢查</td></tr>
+  </table></div>
+  <div class="golden"><div class="q">「善用優勢，同時保留人類判斷。」</div><div class="a">—— 簡報 p8 金句</div></div>
+</section>
+
+<section class="chapter" id="sec-safe">
+  <span class="chip" style="background:linear-gradient(90deg,#5563d6,#7a4fd6)">CHAPTER 08</span>
+  <h2 class="ct">8. 使用注意事項：安全、倫理與品質</h2>
+  <figure class="shot">
+    <img src="ep38-img/slide09.jpg" alt="使用注意事項" loading="lazy">
+    <figcaption>簡報 8｜使用注意事項——安全、倫理與品質都很重要。</figcaption>
+  </figure>
+  <ul class="pt">
+    <li><b>保護個人資料與隱私</b>。</li>
+    <li><b>注意著作權與素材來源</b>。</li>
+    <li><b>避免錯誤資訊直接輸出</b>。</li>
+    <li><b>保留人工審查與事實查核</b>。</li>
+  </ul>
+  <div class="golden"><div class="q">「好用，也要用得安心。」</div><div class="a">—— 簡報 p9 金句</div></div>
+</section>
+
+<section class="chapter" id="sec-recap">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5563d6)">RECAP</span>
+  <h2 class="ct">9. 重點整理：快速回顧 Gemini Avatar</h2>
+  <figure class="shot">
+    <img src="ep38-img/slide10.jpg" alt="重點整理" loading="lazy">
+    <figcaption>簡報 9｜重點整理與收尾——讓 AI 互動更生動、更有感。</figcaption>
+  </figure>
+  <ul class="pt">
+    <li>它是 <b>AI 虛擬互動角色</b>。</li>
+    <li>具備<b>多模態整合能力</b>。</li>
+    <li>可應用於<b>教學、客服與行銷</b>。</li>
+    <li>製作流程<b>重視角色、內容與測試</b>。</li>
+    <li>使用時要<b>兼顧倫理與品質</b>。</li>
+  </ul>
+  <div class="golden"><div class="q">「讓 AI 互動更生動、更有感！」</div><div class="a">—— 簡報收尾金句</div></div>
+</section>
+
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5a5866)">SOURCES</span>
+  <h2 class="ct">10. 資料來源與製作說明</h2>
+  <ul class="pt">
+    <li><b>原始教材：</b>EP38「Avatar 虛擬人模型實作（虛擬人、虛擬分身與數字人差異實作）」官方課程簡報 10 頁（手繪白板風）。</li>
+    <li><b>製作方式：</b>本集簡報為圖像型投影片；下載原始 pptx → 取出 10 頁投影片原圖 → <b>逐頁親眼判讀</b>並整理重點 → 原圖直接嵌入本頁。內容為<b>真實課程內容</b>。</li>
+    <li><b>誠實聲明：</b>本頁以簡報實錄為準；本集資料夾未附獨立錄影，<b>示範操作畫面與逐字稿時間碼</b>暫缺，如日後取得錄影可再補入。Gemini／Avatar 相關功能會更新，實作以你當下的官方帳號與工具畫面為準。</li>
+    <li><b>介面參考：</b>互動技能地圖頁沿用本站 EP44–46 的卡片式多層導覽與遊戲化進度設計。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  EP38「Gemini Avatar：從概念到應用」課堂筆記・2026/07 整理<br>
+  🍀 Learn AI with Tarshar｜搭配 <a href="ep38-ai-skills.html">互動技能地圖</a> 使用效果最佳
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NotebookLM 最新 Agentic 功能｜互動式學習地圖</title>
+<meta name="description" content="EP202607.20：NotebookLM 既有功能與 AI Agent 復刻六步驟、更名為 Gemini Notebook 的生態系整合、Gemini 兩大功能、NotebookLM Agentic Pack 懶人包安裝與 4 個研究 Skill，互動式多層次學習地圖">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269;
+  --green:#3f8560; --orange:#bf6a1e; --red:#c0453f; --teal:#0d8f80; --amber:#9c7b23;
+  --feat:#2f7d92; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(26px,4.4vw,44px);font-weight:800;line-height:1.16;letter-spacing:-.025em;color:var(--txt);background:none;-webkit-text-fill-color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:660px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:9px}
+.steps li{list-style:none;counter-increment:st;display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--txt2);line-height:1.7}
+.steps li::before{content:counter(st);flex:none;width:25px;height:25px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:var(--c,var(--feat));margin-top:1px}
+.steps li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+.prompt,.promptbox{background:#1d1d1f;border:1px solid #2c2c31;border-radius:10px;padding:13px 15px;margin-top:6px;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt b,.promptbox b{color:#fff}
+figure.shot{margin:10px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--txt3);padding:9px 14px;border-top:1px solid var(--line);background:var(--bg2);line-height:1.7}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <a class="navlink" href="../radio/" style="border-color:#a8cdd6" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <div class="logo">
+    <div class="dot">📓</div>
+    <div>NotebookLM Agentic 地圖<small>YEAR-MID LEARNING · EP202607.20</small></div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋技能關鍵字：Agentic、Gemini Notebook、懶人包…" autocomplete="off">
+  </div>
+  <a class="navlink" href="ep202607-20-notes.html">📝 課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">EP202607.20 · 年中共學 · 2026/07/20</span>
+  <h1>NotebookLM 最新 Agentic 功能<br>打造你的 AI 研究助理</h1>
+  <p class="sub">既有六大功能怎麼被 AI Agent 拆成六步驟復刻，加上 Google 把 NotebookLM 整合升級為 Gemini Notebook 的完整生態系變化。<br>點進每一章，逐層展開<b>本集實際教到</b>的概念與懶人包安裝說明，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🎙️ 生成式AI應用電台・年中共學</span>
+    <span>📓 Gemini Notebook</span>
+    <span>🤖 Agentic 六步驟</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>4</b><span>大主題</span></div>
+  <div class="stat"><b>8</b><span>實戰技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 8 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--cyan)" onclick="showChapter('agentic')">
+        <div class="glowline"></div><span class="emoji">🤖</span>
+        <h3><em>CHAPTER 01</em>既有功能＋Agent 六步驟</h3>
+        <p>NotebookLM 既有六大功能，怎麼被 AI Agent 拆成可操作的六個步驟。</p>
+        <div class="foot"><div class="mini"><i data-mini="agentic"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--blue)" onclick="showChapter('rename')">
+        <div class="glowline"></div><span class="emoji">📓</span>
+        <h3><em>CHAPTER 02</em>更名為 Gemini Notebook</h3>
+        <p>整合 Gemini、Google 搜尋、Google 生態系、安全雲端電腦與程式碼執行能力。</p>
+        <div class="foot"><div class="mini"><i data-mini="rename"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--amber)" onclick="showChapter('gemini2')">
+        <div class="glowline"></div><span class="emoji">💡</span>
+        <h3><em>CHAPTER 03</em>Gemini 兩大功能＋缺點</h3>
+        <p>整理思路 vs 讀書與學習，以及目前的兩個限制：幻覺與無法分享。</p>
+        <div class="foot"><div class="mini"><i data-mini="gemini2"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--green)" onclick="showChapter('pack')">
+        <div class="glowline"></div><span class="emoji">📦</span>
+        <h3><em>CHAPTER 04</em>懶人包安裝與 4 個 Skill</h3>
+        <p>NotebookLM MCP + 4 個研究 Skill，串成完整證據鏈研究工作流。</p>
+        <div class="foot"><div class="mini"><i data-mini="pack"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+
+    <div class="resources">
+      <h3>📦 <span>課程原始資料</span></h3>
+      <div class="res-grid">
+        <a href="ep202607-20-notes.html"><span class="ic">📝</span><span><b>課堂筆記</b>逐頁嵌入 10 張簡報原圖</span></a>
+        <a href="../radio/"><span class="ic">📻</span><span><b>直播電台系列</b>回系列總覽，一集一卡</span></a>
+        <a href="https://github.com/jacob-bd/notebooklm-mcp-cli" target="_blank" rel="noopener"><span class="ic">🔗</span><span><b>notebooklm-mcp-cli</b>上游 GitHub 專案</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-agentic" class="view" style="--c:var(--cyan)"></section>
+  <section id="view-rename" class="view" style="--c:var(--blue)"></section>
+  <section id="view-gemini2" class="view" style="--c:var(--amber)"></section>
+  <section id="view-pack" class="view" style="--c:var(--green)"></section>
+</main>
+
+<footer>
+  本頁為 EP202607.20「NotebookLM 最新 Agentic 功能」課後整理・介面沿用本站互動式學習地圖<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2026｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+const DATA = {
+  agentic: {
+    key:'agentic', color:'var(--cyan)', emoji:'🤖', code:'CHAPTER 01', title:'既有功能＋Agent 六步驟',
+    intro:'先搞懂 NotebookLM 既有六大功能，再看怎麼被 AI Agent 拆成可操作步驟。',
+    topics:[
+      {t:'既有六大功能', s:'上傳／摘要／問答／筆記／引用／音訊｜簡報封面',
+       blocks:[
+        {h:'六大功能',table:{head:['功能','說明'],rows:[['上傳與整合來源','文件、PDF、網頁、YouTube、文字等'],['資料理解與摘要','快速摘要重點、解釋概念、回答問題'],['互動問答','根據來源回答問題，深入追問更理解'],['筆記／筆記本','整理重點、建立筆記與想法，持續累積知識'],['引用來源','答案皆附上來源引用，降低幻覺風險'],['音訊概述','將重點轉換為對話式音訊摘要，方便聆聽']]}},
+        {h:'看課堂筆記',shot:{img:'ep202607-20-img/s1-overview.jpg',cap:'簡報封面｜既有功能與 Agent 操作對照'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep202607-20-notes.html#sec-existing" style="color:var(--cyan)">筆記 1：既有六大功能</a>'}]},
+      {t:'Agent 復刻六步驟', s:'匯入→解析→產生→追問→輸出→標註｜簡報封面',
+       blocks:[
+        {h:'六步驟',steps:['匯入來源：上傳或連結文件、PDF、網頁、YouTube、文字等。','AI Agent 解析內容：讀取來源、理解內容、擷取重點。','產生摘要與見解：生成摘要、關鍵重點、洞見與結論。','互動問答與追問：根據內容回答問題，支援多輪對話。','整理與輸出：建立筆記、心智圖、表格或清單等。','引用與來源標註：標註來源段落，提供可驗證依據。']},
+        {h:'幻覺風險提醒',warn:'NotebookLM 本身因答案皆附來源引用，幻覺風險低；但若用外部模型打造 Agent，仍需嚴格限制來源、要求逐段引用並人工驗證。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep202607-20-notes.html#sec-agentic" style="color:var(--cyan)">筆記 2：Agent 復刻六步驟</a>'}]}
+    ]
+  },
+  rename: {
+    key:'rename', color:'var(--blue)', emoji:'📓', code:'CHAPTER 02', title:'更名為 Gemini Notebook',
+    intro:'NotebookLM 整合升級進 Gemini 生態系的完整變化。',
+    topics:[
+      {t:'NotebookLM → Gemini Notebook', s:'整合五大要素｜簡報 3-4',
+       blocks:[
+        {h:'整合組成',ul:['Gemini＋Google 搜尋＋Google 生態系（Drive、Docs、Sheets、Gmail）＋安全雲端電腦＋原生程式碼執行能力。','已開放對象：AI Ultra 與指定 Workspace 用戶；未來數週推送至所有 Google AI Pro 網頁版用戶。','安全與信任：在安全的雲端環境中執行程式碼，保護資料與隱私。']},
+        {h:'看課堂筆記',shot:{img:'ep202607-20-img/s2-rename.jpg',cap:'簡報 3｜Google 已將 NotebookLM 更名為 Gemini Notebook'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep202607-20-notes.html#sec-rename" style="color:var(--blue)">筆記 3：更名為 Gemini Notebook</a>'}]},
+      {t:'成為共通研究載體＋無處不在', s:'串連 Gemini App／搜尋｜簡報 5-6',
+       blocks:[
+        {h:'研究載體',p:'Gemini App、Gemini Notebook（完整同步）、Google 搜尋（未來帶入 AI Mode）三者互通，做到研究、整理、同步、延伸搜尋、AI 延伸洞察、多端連結。'},
+        {h:'四個重點功能',ul:['Gemini 上傳選項：可上傳檔案與資料。','Gemini Gem 加入檔案：提供 Gem 參考。','Antigravity：可直接叫出使用。','AI Mode：未來功能。']},
+        {h:'看課堂筆記',shot:{img:'ep202607-20-img/s4-research-vehicle.jpg',cap:'簡報 5｜Gemini Notebook 成為研究載體'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep202607-20-notes.html#sec-vehicle" style="color:var(--blue)">筆記 4：成為研究載體</a>'}]}
+    ]
+  },
+  gemini2: {
+    key:'gemini2', color:'var(--amber)', emoji:'💡', code:'CHAPTER 03', title:'Gemini 兩大功能＋缺點',
+    intro:'整理思路與讀書學習兩大功能，以及目前該注意的限制。',
+    topics:[
+      {t:'兩大功能：整理思路 vs 讀書與學習', s:'工作向 vs 學習向｜簡報 8-10',
+       blocks:[
+        {h:'對照',table:{head:['功能','核心價值'],rows:[['整理思路','把零散資訊整理成可理解的脈絡：匯入→依主題分組→整理成重點'],['讀書與學習','建立課程、追蹤進度：設定主題→取得學習內容→追蹤進度與複習']]}},
+        {h:'看課堂筆記',shot:{img:'ep202607-20-img/s7-func1-organize.jpg',cap:'簡報 9｜功能一：整理思路'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep202607-20-notes.html#sec-gemini2" style="color:var(--amber)">筆記 7：Gemini 兩大功能</a>'}]},
+      {t:'目前的兩個缺點', s:'幻覺與無法分享｜簡報 7',
+       blocks:[
+        {h:'兩個缺點',warn:'① 幻覺跑出來了：有時會產生不正確或虛構內容。② 無法分享：內容不易直接共享給他人。使用前要查核內容，協作分享也有限制。'},
+        {h:'看課堂筆記',shot:{img:'ep202607-20-img/s6-drawbacks.jpg',cap:'簡報 7｜Gemini + NotebookLM 兩個缺點'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep202607-20-notes.html#sec-cons" style="color:var(--amber)">筆記 6：目前的兩個缺點</a>'}]}
+    ]
+  },
+  pack: {
+    key:'pack', color:'var(--green)', emoji:'📦', code:'CHAPTER 04', title:'懶人包安裝與 4 個 Skill',
+    intro:'NotebookLM MCP 懶人包安裝流程，以及 4 個研究 Skill 怎麼串接。',
+    topics:[
+      {t:'5 分鐘啟動安裝', s:'PowerShell 一鍵流程｜README',
+       blocks:[
+        {h:'安裝指令',p:'Set-ExecutionPolicy -Scope Process Bypass<br>cd &lt;本資料夾&gt;<br>.\\install_notebooklm_mcp.ps1<br>.\\login_notebooklm.ps1<br>.\\setup_codex.ps1<br>.\\install_skills.ps1 -Force<br>.\\verify_notebooklm.ps1'},
+        {h:'重要限制',warn:'notebooklm-mcp-cli 是社群維護的非官方橋接器；請勿把敏感資料放入未審核的第三方橋接器；NotebookLM 的 source、配額與功能會依帳號／方案／地區改變。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep202607-20-notes.html#sec-pack" style="color:var(--green)">筆記 8：懶人包安裝</a>'}]},
+      {t:'4 個研究 Skill 串接', s:'找缺口→批判回顧→跨筆記本比較→APA｜懶人包介紹簡報',
+       blocks:[
+        {h:'串接流程',p:'Evidence Gap → Literature Critic（含三角檢證）→ Cross-Notebook Compare → APA References → 研究稿件'},
+        {h:'四個 Skill',ul:['<b>Evidence Gap</b>：盤點現有證據，建立缺口矩陣，找不到 ≠ 不存在。','<b>Literature Critic</b>：Source Map、Claim Matrix、三角檢證，沒 citation 就標 uncited。','<b>Cross-Notebook Compare</b>：先隔離各筆記本再比較，不把 A 的證據當 B 的證據。','<b>APA References</b>：驗證 DOI/URL，缺資料標 NEEDS_VERIFICATION，不自行補造。']},
+        {h:'看課堂筆記',p:'👉 <a href="ep202607-20-notes.html#sec-pack" style="color:var(--green)">筆記 8：4 個研究 Skill</a>'}]}
+    ]
+  }
+};
+const ORDER = ['agentic','rename','gemini2','pack'];
+const $ = s=>document.querySelector(s);
+function renderChapter(ch){
+  const d=DATA[ch];const next=ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];const prev=ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html=`<div class="chapter-head"><span class="emoji">${d.emoji}</span><div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div></div>`;
+  d.topics.forEach((tp,i)=>{const id=`${ch}-${i}`;
+    html+=`<div class="topic" id="topic-${id}"><div class="topic-head" onclick="toggleTopic('${id}')"><span class="num">${i+1}</span><h4>${tp.t}<small>${tp.s}</small></h4><input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)"><span class="chev">▶</span></div><div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{html+=`<div class="block"><h5>${b.h}</h5>`;
+      if(b.p)html+=`<p>${b.p}</p>`;
+      if(b.ul)html+=`<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps)html+=`<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.table)html+=`<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.shot)html+=`<figure class="shot"><img src="${b.shot.img}" alt="" loading="lazy"><figcaption>${b.shot.cap}</figcaption></figure>`;
+      if(b.tip)html+=`<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn)html+=`<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html+=`</div>`;});
+    html+=`</div></div></div>`;});
+  html+=`<div class="chapnav"><a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a><a onclick="showHome()" style="text-align:center">回總覽<b>🏠 四大主題</b></a><a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a></div>`;
+  $('#view-'+ch).innerHTML=html;
+}
+ORDER.forEach(renderChapter);
+function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('#view-'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function showHome(){switchView('home');$('#crumbs').style.display='none';clearSearch();}
+function showChapter(ch){switchView(ch);$('#crumbs').style.display='flex';$('#crumbHere').textContent=`${DATA[ch].emoji} ${DATA[ch].title}`;clearSearch();syncChecks();}
+function toggleTopic(id){$('#topic-'+id).classList.toggle('open');}
+function openTopic(ch,i){showChapter(ch);const el=$('#topic-'+ch+'-'+i);el.classList.add('open');setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+const KEY='ep202607-20-skills-v1';
+const store=()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){const s=store();if(val)s[id]=1;else delete s[id];localStorage.setItem(KEY,JSON.stringify(s));updateProgress();}
+const TOTAL=ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){const done=Object.keys(store()).length;const pct=Math.round(done/TOTAL*100);$('#progFill').style.width=pct+'%';$('#progText').textContent=`${done} / ${TOTAL} 項技能已掌握`;$('#statDone').textContent=done;$('#statPct').textContent=pct+'%';ORDER.forEach(ch=>{const sub=DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;const el=document.querySelector(`[data-mini="${ch}"]`);if(el)el.style.width=Math.round(sub/DATA[ch].topics.length*100)+'%';});}
+function syncChecks(){const s=store();document.querySelectorAll('input[data-skill]').forEach(cb=>{cb.checked=!!s[cb.dataset.skill];});}
+function resetProgress(){if(confirm('確定要清空所有打勾進度嗎？')){localStorage.removeItem(KEY);syncChecks();updateProgress();}}
+function stripTags(s){return s.replace(/<[^>]+>/g,'');}
+const INDEX=[];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{let body=tp.s+' ';tp.blocks.forEach(b=>{if(b.p)body+=stripTags(b.p)+' ';if(b.ul)body+=b.ul.map(stripTags).join(' ')+' ';if(b.steps)body+=b.steps.map(stripTags).join(' ')+' ';if(b.tip)body+=stripTags(b.tip)+' ';if(b.warn)body+=stripTags(b.warn)+' ';if(b.table)body+=b.table.rows.flat().map(stripTags).join(' ')+' ';});INDEX.push({ch,i,title:tp.t,body});}));
+$('#searchInput').addEventListener('input',e=>{const q=e.target.value.trim();const box=$('#searchResults');if(!q){box.classList.remove('show');box.innerHTML='';return;}const hits=INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));box.classList.add('show');if(!hits.length){box.innerHTML=`<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：Agentic、Gemini Notebook、Skill）</div>`;return;}const hl=s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);box.innerHTML=hits.map(x=>{const pos=x.body.toLowerCase().indexOf(q.toLowerCase());const snip=x.body.substr(Math.max(0,pos-20),90);return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})"><div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div><h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;}).join('');});
+function clearSearch(){$('#searchInput').value='';$('#searchResults').classList.remove('show');$('#searchResults').innerHTML='';}
+(function(){const box=$('#stars');for(let i=0;i<70;i++){const s=document.createElement('i');s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';s.style.animationDelay=(Math.random()*3)+'s';s.style.transform=`scale(${.5+Math.random()*1.5})`;box.appendChild(s);}})();
+syncChecks();updateProgress();
+</script>
+</body>
+</html>

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>一次掌握 n 種 Prompt 模式｜互動式學習地圖</title>
+<meta name="description" content="EP6 晨學講堂：Prompt三大核心要素、基礎與進階框架、行銷框架與高階推理技術、框架選擇指南、ChatHub整合實戰流程與快捷指令，互動式多層次學習地圖">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269;
+  --green:#3f8560; --orange:#bf6a1e; --red:#c0453f; --teal:#0d8f80; --amber:#9c7b23;
+  --feat:#6b4fd6; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(28px,4.6vw,46px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--txt);background:none;-webkit-text-fill-color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:660px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:9px}
+.steps li{list-style:none;counter-increment:st;display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--txt2);line-height:1.7}
+.steps li::before{content:counter(st);flex:none;width:25px;height:25px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:var(--c,var(--feat));margin-top:1px}
+.steps li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <a class="navlink" href="../radio/" style="border-color:#c9bdf0" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <div class="logo">
+    <div class="dot">🧩</div>
+    <div>Prompt 模式地圖<small>MORNING LEARNING · EP6</small></div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋技能關鍵字：RTF、CO-STAR、CoT、ChatHub…" autocomplete="off">
+  </div>
+  <a class="navlink" href="ep6-notes.html">📝 課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">EP6 · 晨學講堂 · 2025/12/26</span>
+  <h1>一次掌握 n 種 Prompt 模式<br>ChatHub 整合生成一次上手</h1>
+  <p class="sub">從三大核心要素、基礎框架到進階情境框架，加上行銷框架與高階推理技術，最後在 ChatHub 裡整合多模型建立你的黃金 Prompt 詞庫。<br>點進每一章，逐層展開<b>本集實際教到</b>的框架與範例，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🎙️ 生成式AI應用電台・晨學講堂</span>
+    <span>🧩 20+ 種 Prompt 框架</span>
+    <span>🔗 ChatHub 整合</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>4</b><span>大主題</span></div>
+  <div class="stat"><b>8</b><span>實戰技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 8 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--purple)" onclick="showChapter('core')">
+        <div class="glowline"></div><span class="emoji">🧱</span>
+        <h3><em>CHAPTER 01</em>核心要素＋基礎框架</h3>
+        <p>Prompt 三大核心要素 Role/Task/Format，加上 RTF／TAG／APE／ERA 基礎框架。</p>
+        <div class="foot"><div class="mini"><i data-mini="core"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--blue)" onclick="showChapter('advanced')">
+        <div class="glowline"></div><span class="emoji">🏗️</span>
+        <h3><em>CHAPTER 02</em>進階框架＋行銷框架</h3>
+        <p>RACE／CO-STAR／RISEN／RODES／CREATE／CRISPE，加上 AIDA／PAS／BAB／FAB 行銷框架。</p>
+        <div class="foot"><div class="mini"><i data-mini="advanced"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--teal)" onclick="showChapter('reasoning')">
+        <div class="glowline"></div><span class="emoji">🧠</span>
+        <h3><em>CHAPTER 03</em>推理技術＋選擇指南</h3>
+        <p>Zero-shot／CoT／ToT／ReAct 等高階推理技術，加上框架選擇四象限指南。</p>
+        <div class="foot"><div class="mini"><i data-mini="reasoning"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--amber)" onclick="showChapter('chathub')">
+        <div class="glowline"></div><span class="emoji">🔗</span>
+        <h3><em>CHAPTER 04</em>ChatHub＋快捷指令</h3>
+        <p>ChatHub 整合實戰三步驟與框架組合策略，加上快捷指令與四項最佳實踐原則。</p>
+        <div class="foot"><div class="mini"><i data-mini="chathub"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+
+    <div class="resources">
+      <h3>📦 <span>課程原始資料</span></h3>
+      <div class="res-grid">
+        <a href="ep6-notes.html"><span class="ic">📝</span><span><b>課堂筆記</b>完整框架對照表</span></a>
+        <a href="../radio/"><span class="ic">📻</span><span><b>直播電台系列</b>回系列總覽，一集一卡</span></a>
+        <a href="ep7-notes.html"><span class="ic">🤖</span><span><b>相關 EP7</b>Claude 基礎操作與 Skills</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-core" class="view" style="--c:var(--purple)"></section>
+  <section id="view-advanced" class="view" style="--c:var(--blue)"></section>
+  <section id="view-reasoning" class="view" style="--c:var(--teal)"></section>
+  <section id="view-chathub" class="view" style="--c:var(--amber)"></section>
+</main>
+
+<footer>
+  本頁為 EP6「一次掌握 n 種 Prompt 模式：ChatHub 整合生成一次上手」課後整理・介面沿用本站 EP38–46 互動式學習地圖<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2026｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+const DATA = {
+  core: {
+    key:'core', color:'var(--purple)', emoji:'🧱', code:'CHAPTER 01', title:'核心要素＋基礎框架',
+    intro:'先懂 Prompt 三大要素，再學會四個最基礎、最好上手的框架。',
+    topics:[
+      {t:'Prompt 三大核心要素', s:'Role／Task／Format｜結構化提示詞的價值',
+       blocks:[
+        {h:'三要素',table:{head:['要素','核心功能'],rows:[['Role 角色','定義 AI 身份與立場'],['Task 任務','明確告知具體動作'],['Format 呈現','規範輸出結構與風格']]}},
+        {h:'為什麼要結構化',p:'LLM 本質是基於概率的文字接龍；結構化公式提供語義錨點，鎖定注意力、減少隨機性，確保可複製性與一致性。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep6-notes.html#sec-core" style="color:var(--purple)">筆記 1：Prompt 三大核心要素</a>'}]},
+      {t:'基礎框架：RTF／TAG／APE／ERA', s:'結構精簡、強調速度與核心意圖',
+       blocks:[
+        {h:'四個框架',table:{head:['框架','全稱','適用'],rows:[['RTF','Role, Task, Format','快速查詢、翻譯、簡單寫作'],['TAG','Task, Action, Goal','告知 AI 為什麼，自行調整策略'],['APE','Action, Purpose, Expectation','內容創作、客戶服務'],['ERA','Expectation, Role, Action','極簡任務、快速問答']]}},
+        {h:'範例',p:'RTF 範例：「扮演一名獸醫（R），研究不同犬種（T），並以簡報形式呈現（F）。」'},
+        {h:'看課堂筆記',p:'👉 <a href="ep6-notes.html#sec-basic" style="color:var(--purple)">筆記 2：基礎框架總覽</a>'}]}
+    ]
+  },
+  advanced: {
+    key:'advanced', color:'var(--blue)', emoji:'🏗️', code:'CHAPTER 02', title:'進階框架＋行銷框架',
+    intro:'進階框架加入背景與限制，行銷框架則是經典銷售漏斗的 AI 版本。',
+    topics:[
+      {t:'進階情境框架六選', s:'RACE／CO-STAR／RISEN／RODES／CREATE／CRISPE',
+       blocks:[
+        {h:'六大框架一覽',table:{head:['框架','特點'],rows:[['RACE','RTF 進化版，加入 Context 與 Expectation'],['CO-STAR','最全面，區分 Style 與 Tone'],['RISEN','多步驟任務最佳選擇，Narrowing 聚焦核心'],['RODES','雙向對話式，降低誤解'],['CREATE','強調 Adjustments 與 Extras'],['CRISPE','六大支柱，Experiment 鼓勵多樣化選項']]}},
+        {h:'看課堂筆記',p:'👉 <a href="ep6-notes.html#sec-advanced" style="color:var(--blue)">筆記 3：進階情境框架六選</a>'}]},
+      {t:'行銷框架', s:'AIDA／PAS／BAB／FAB',
+       blocks:[
+        {h:'四個框架',table:{head:['框架','全稱','適合'],rows:[['AIDA','Attention Interest Desire Action','著陸頁 Landing Page'],['PAS','Problem Agitation Solution','高轉化銷售文案'],['BAB','Before After Bridge','客戶見證、案例故事'],['FAB','Features Advantages Benefits','電商產品描述']]}},
+        {h:'看課堂筆記',p:'👉 <a href="ep6-notes.html#sec-marketing" style="color:var(--blue)">筆記 4：行銷框架</a>'}]}
+    ]
+  },
+  reasoning: {
+    key:'reasoning', color:'var(--teal)', emoji:'🧠', code:'CHAPTER 03', title:'推理技術＋選擇指南',
+    intro:'讓模型「想得更深」的推理技巧，加上怎麼挑框架的四象限指南。',
+    topics:[
+      {t:'高階推理技術', s:'Zero-shot／Few-shot／CoT／ToT／ReAct／Self-consistency',
+       blocks:[
+        {h:'六種技術',ul:['<b>Zero-shot：</b>不給範例，依賴預訓練知識。','<b>Few-shot：</b>給 1-3 個範例引導特定模式。','<b>CoT 思維鏈：</b>一步步思考，拆解推理步驟。','<b>ToT 思維樹：</b>探索多種推理路徑，選最佳解。','<b>ReAct：</b>Thought→Action→Observation，結合工具調用。','<b>Self-consistency：</b>多條路徑投票，選最一致答案。']},
+        {h:'看課堂筆記',p:'👉 <a href="ep6-notes.html#sec-marketing" style="color:var(--teal)">筆記 4：高階推理技術</a>'}]},
+      {t:'框架選擇指南', s:'複雜度 × 創意/結構 四象限',
+       blocks:[
+        {h:'四象限',table:{head:['象限','代表框架'],rows:[['深度創作','CRISPE／CREATE／CO-STAR'],['邏輯分析','RISEN／ROSES／SCOPE'],['快速發想','APE／RTF'],['精確執行','TAG／ERA／ICIO']]}},
+        {h:'看課堂筆記',p:'👉 <a href="ep6-notes.html#sec-guide" style="color:var(--teal)">筆記 5：框架選擇指南</a>'}]}
+    ]
+  },
+  chathub: {
+    key:'chathub', color:'var(--amber)', emoji:'🔗', code:'CHAPTER 04', title:'ChatHub＋快捷指令',
+    intro:'把框架真正用起來：在 ChatHub 整合多模型，再用快捷指令加速日常。',
+    topics:[
+      {t:'ChatHub 整合實戰流程', s:'建立詞庫→多模型測試→迭代混合',
+       blocks:[
+        {h:'三步驟',steps:['建立個人化詞庫：常用框架存入 ChatHub 提示詞記憶倉庫。','多模型平行測試：同一 Prompt 發給 GPT-4／Claude／Gemini 比較。','迭代與混合使用：修正 Prompt，混合打法，存回黃金 Prompt 詞庫。']},
+        {h:'框架組合策略',table:{head:['組合','效果'],rows:[['CO-STAR＋CoT','深度商業分析'],['RISEN＋Few-shot','精準格式輸出'],['CRISPE＋Narrowing','高可用性創意']]}},
+        {h:'看課堂筆記',p:'👉 <a href="ep6-notes.html#sec-chathub" style="color:var(--amber)">筆記 6：ChatHub 整合實戰流程</a>'}]},
+      {t:'快捷指令與最佳實踐', s:'/tw／/en／/grammar／/simplify／/formal',
+       blocks:[
+        {h:'常用快捷指令',ul:['<b>/tw：</b>翻譯成繁體中文。','<b>/en：</b>翻譯成英文。','<b>/grammar：</b>修正語法錯誤。','<b>/simplify：</b>簡化重寫。','<b>/formal：</b>改寫成正式語氣。']},
+        {h:'四項核心原則',steps:['建立框架庫，隨時調用。','持續迭代，記錄最佳版本。','實證驗證，真實場景測試。','靈活組合，不被框架綁架。']},
+        {h:'看課堂筆記',p:'👉 <a href="ep6-notes.html#sec-shortcut" style="color:var(--amber)">筆記 7：快捷指令與最佳實踐</a>'}]}
+    ]
+  }
+};
+const ORDER = ['core','advanced','reasoning','chathub'];
+const $ = s=>document.querySelector(s);
+function renderChapter(ch){
+  const d=DATA[ch];const next=ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];const prev=ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html=`<div class="chapter-head"><span class="emoji">${d.emoji}</span><div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div></div>`;
+  d.topics.forEach((tp,i)=>{const id=`${ch}-${i}`;
+    html+=`<div class="topic" id="topic-${id}"><div class="topic-head" onclick="toggleTopic('${id}')"><span class="num">${i+1}</span><h4>${tp.t}<small>${tp.s}</small></h4><input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)"><span class="chev">▶</span></div><div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{html+=`<div class="block"><h5>${b.h}</h5>`;
+      if(b.p)html+=`<p>${b.p}</p>`;
+      if(b.ul)html+=`<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps)html+=`<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.table)html+=`<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.tip)html+=`<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn)html+=`<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html+=`</div>`;});
+    html+=`</div></div></div>`;});
+  html+=`<div class="chapnav"><a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a><a onclick="showHome()" style="text-align:center">回總覽<b>🏠 四大主題</b></a><a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a></div>`;
+  $('#view-'+ch).innerHTML=html;
+}
+ORDER.forEach(renderChapter);
+function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('#view-'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function showHome(){switchView('home');$('#crumbs').style.display='none';clearSearch();}
+function showChapter(ch){switchView(ch);$('#crumbs').style.display='flex';$('#crumbHere').textContent=`${DATA[ch].emoji} ${DATA[ch].title}`;clearSearch();syncChecks();}
+function toggleTopic(id){$('#topic-'+id).classList.toggle('open');}
+function openTopic(ch,i){showChapter(ch);const el=$('#topic-'+ch+'-'+i);el.classList.add('open');setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+const KEY='ep6-skills-v1';
+const store=()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){const s=store();if(val)s[id]=1;else delete s[id];localStorage.setItem(KEY,JSON.stringify(s));updateProgress();}
+const TOTAL=ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){const done=Object.keys(store()).length;const pct=Math.round(done/TOTAL*100);$('#progFill').style.width=pct+'%';$('#progText').textContent=`${done} / ${TOTAL} 項技能已掌握`;$('#statDone').textContent=done;$('#statPct').textContent=pct+'%';ORDER.forEach(ch=>{const sub=DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;const el=document.querySelector(`[data-mini="${ch}"]`);if(el)el.style.width=Math.round(sub/DATA[ch].topics.length*100)+'%';});}
+function syncChecks(){const s=store();document.querySelectorAll('input[data-skill]').forEach(cb=>{cb.checked=!!s[cb.dataset.skill];});}
+function resetProgress(){if(confirm('確定要清空所有打勾進度嗎？')){localStorage.removeItem(KEY);syncChecks();updateProgress();}}
+function stripTags(s){return s.replace(/<[^>]+>/g,'');}
+const INDEX=[];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{let body=tp.s+' ';tp.blocks.forEach(b=>{if(b.p)body+=stripTags(b.p)+' ';if(b.ul)body+=b.ul.map(stripTags).join(' ')+' ';if(b.steps)body+=b.steps.map(stripTags).join(' ')+' ';if(b.tip)body+=stripTags(b.tip)+' ';if(b.warn)body+=stripTags(b.warn)+' ';if(b.table)body+=b.table.rows.flat().map(stripTags).join(' ')+' ';});INDEX.push({ch,i,title:tp.t,body});}));
+$('#searchInput').addEventListener('input',e=>{const q=e.target.value.trim();const box=$('#searchResults');if(!q){box.classList.remove('show');box.innerHTML='';return;}const hits=INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));box.classList.add('show');if(!hits.length){box.innerHTML=`<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：CO-STAR、CoT、ChatHub）</div>`;return;}const hl=s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);box.innerHTML=hits.map(x=>{const pos=x.body.toLowerCase().indexOf(q.toLowerCase());const snip=x.body.substr(Math.max(0,pos-20),90);return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})"><div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div><h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;}).join('');});
+function clearSearch(){$('#searchInput').value='';$('#searchResults').classList.remove('show');$('#searchResults').innerHTML='';}
+syncChecks();updateProgress();
+</script>
+</body>
+</html>

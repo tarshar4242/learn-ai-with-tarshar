@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>用手機遙控 Codex｜互動式學習地圖</title>
+<meta name="description" content="EP202607.21：ChatGPT額度管理技巧、手機遙控Codex架構、電腦端安裝與手機端配對Remote、交辦任務與Queue/Steer、疑難排解、示範建議與兩個實作案例，互動式多層次學習地圖">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269;
+  --green:#3f8560; --orange:#bf6a1e; --red:#c0453f; --teal:#0d8f80; --amber:#9c7b23; --rose:#b5476a;
+  --feat:#bf6a1e; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(26px,4.4vw,44px);font-weight:800;line-height:1.16;letter-spacing:-.025em;color:var(--txt);background:none;-webkit-text-fill-color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:660px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:9px}
+.steps li{list-style:none;counter-increment:st;display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--txt2);line-height:1.7}
+.steps li::before{content:counter(st);flex:none;width:25px;height:25px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:var(--c,var(--feat));margin-top:1px}
+.steps li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+figure.shot{margin:10px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--txt3);padding:9px 14px;border-top:1px solid var(--line);background:var(--bg2);line-height:1.7}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <a class="navlink" href="../radio/" style="border-color:#eac79a" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <div class="logo">
+    <div class="dot">📱</div>
+    <div>Codex 遙控地圖<small>YEAR-MID LEARNING · EP202607.21</small></div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋技能關鍵字：Remote、Queue、Steer、額度…" autocomplete="off">
+  </div>
+  <a class="navlink" href="ep202607-21-notes.html">📝 課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">EP202607.21 · 年中共學 · 2026/07/21</span>
+  <h1>用手機遙控 Codex<br>讓 AI Agent 幫你處理任務</h1>
+  <p class="sub">手機是控制台，真正執行任務、讀取檔案與修改內容的是電腦端——透過 ChatGPT 桌面 App 的 Remote 功能把兩端串起來。<br>點進每一章，逐層展開<b>本集實際教到</b>的設定步驟與操作技巧，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🎙️ 生成式AI應用電台・年中共學</span>
+    <span>📱 ChatGPT App Remote</span>
+    <span>💻 Codex 電腦端執行</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>4</b><span>大主題</span></div>
+  <div class="stat"><b>8</b><span>實戰技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 8 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--amber)" onclick="showChapter('basics')">
+        <div class="glowline"></div><span class="emoji">💡</span>
+        <h3><em>CHAPTER 01</em>額度技巧＋整體概念</h3>
+        <p>省額度的四個開場技巧，以及手機遙控 Codex 的三步驟運作原理與事前準備。</p>
+        <div class="foot"><div class="mini"><i data-mini="basics"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--purple)" onclick="showChapter('setup')">
+        <div class="glowline"></div><span class="emoji">🔧</span>
+        <h3><em>CHAPTER 02</em>電腦端安裝＋手機配對</h3>
+        <p>電腦端安裝 ChatGPT 桌面 App，手機端掃 QR Code 配對 Remote 連線。</p>
+        <div class="foot"><div class="mini"><i data-mini="setup"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--teal)" onclick="showChapter('ops')">
+        <div class="glowline"></div><span class="emoji">📲</span>
+        <h3><em>CHAPTER 03</em>交辦任務＋排解問題</h3>
+        <p>用手機下任務、手機看得到什麼、Queue 與 Steer 差異、連不上怎麼辦。</p>
+        <div class="foot"><div class="mini"><i data-mini="ops"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--rose)" onclick="showChapter('cases')">
+        <div class="glowline"></div><span class="emoji">🧩</span>
+        <h3><em>CHAPTER 04</em>示範建議＋兩個實作案例</h3>
+        <p>最適合示範的任務、更順暢的設定建議，以及 MCP-NotebookLM 與 Skill 簡報製作案例。</p>
+        <div class="foot"><div class="mini"><i data-mini="cases"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+
+    <div class="resources">
+      <h3>📦 <span>課程原始資料</span></h3>
+      <div class="res-grid">
+        <a href="ep202607-21-notes.html"><span class="ic">📝</span><span><b>課堂筆記</b>逐頁嵌入簡報原圖＋真實逐字稿</span></a>
+        <a href="../radio/"><span class="ic">📻</span><span><b>直播電台系列</b>回系列總覽，一集一卡</span></a>
+        <a href="ep202607-24-notes.html"><span class="ic">🤖</span><span><b>相關集數</b>用手機遙控 Claude Code</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-basics" class="view" style="--c:var(--amber)"></section>
+  <section id="view-setup" class="view" style="--c:var(--purple)"></section>
+  <section id="view-ops" class="view" style="--c:var(--teal)"></section>
+  <section id="view-cases" class="view" style="--c:var(--rose)"></section>
+</main>
+
+<footer>
+  本頁為 EP202607.21「用手機遙控 Codex」課後整理・介面沿用本站互動式學習地圖<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2026｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+const DATA = {
+  basics: {
+    key:'basics', color:'var(--amber)', emoji:'💡', code:'CHAPTER 01', title:'額度技巧＋整體概念',
+    intro:'進入手機遙控主題前，先學會省額度；再搞懂手機與電腦分工的三步驟原理。',
+    topics:[
+      {t:'ChatGPT 額度管理小技巧', s:'速度／推理強度／模型／性格｜逐字稿 00:41-01:41',
+       blocks:[
+        {h:'四個技巧',ul:['<b>用標準速度就好</b>：不趕時間就別選快速，「速度越快，扣的量會越多」。','<b>推理強度選中間</b>：選越高會耗費更多額度。','<b>模型選 5.4 mini</b>：安裝寫好的懶人包不需要高階推理模型，選 5.4 mini 可大幅減少容量限制。','<b>個人化性格選「務實」</b>：不要選友善，「他會非常的囉唆」。']},
+        {h:'補充設定',warn:'想讓 Codex 自動上網找資料，「瀏覽器」開關要打開；想讓它操縱電腦，「Computer Use」開關也要打開。額度用完可換一個 AI 帳號繼續做。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep202607-21-notes.html#sec-quota" style="color:var(--amber)">筆記 1：開場額度管理小技巧</a>'}]},
+      {t:'手機如何遙控 Codex＋開始前準備', s:'三步驟原理＋電腦手機雙端準備｜簡報 2-3',
+       blocks:[
+        {h:'三步驟運作',steps:['手機下達任務與查看進度：在 ChatGPT 手機 App 選擇 Codex，下達任務並即時查看執行進度。','電腦執行指令、讀檔、修改內容：電腦端 ChatGPT 桌面 App／Codex 收到指令後執行任務。','結果回傳手機，必要時由你核准操作：完成或需確認時，摘要回傳手機，核准後才繼續。']},
+        {h:'常見誤解澄清',tip:'手機跟電腦不需要同一個網路——重點是「你的電腦要開機」，手機才讀得到，這不是網路共享問題。'},
+        {h:'雙端準備清單',table:{head:['端','準備項目'],rows:[
+          ['電腦端','Windows/macOS、最新版 ChatGPT 桌面 App、可用 Codex 的帳號、專案資料夾、穩定網路與保持開機'],
+          ['手機端','iPhone/Android、最新版 ChatGPT App、與電腦相同帳號、開啟 Remote 功能、能接收通知並核准操作']
+        ]}},
+        {h:'常見誤裝提醒',warn:'手機請下載「ChatGPT」App，不是下載「Codex」App——「一定一定是打 GPT，你也找不到 Codex。」'},
+        {h:'看課堂筆記',p:'👉 <a href="ep202607-21-notes.html#sec-why" style="color:var(--amber)">筆記 2-3：運作原理與開始前準備</a>'}]}
+    ]
+  },
+  setup: {
+    key:'setup', color:'var(--purple)', emoji:'🔧', code:'CHAPTER 02', title:'電腦端安裝＋手機配對',
+    intro:'先在電腦裝好桌面 App 並測試，再用手機掃 QR Code 完成 Remote 配對。',
+    topics:[
+      {t:'電腦端如何安裝與設定', s:'安裝→登入→開專案→先測試｜簡報 4',
+       blocks:[
+        {h:'四步驟',steps:['安裝 App：下載並安裝 ChatGPT 桌面 App（Mac 為 dmg 檔，Windows 綁在 Microsoft Store）。','登入帳號：使用可用 Codex 的帳號登入。','開啟專案：選擇要處理的資料夾或專案。','先做測試：先請 Codex 讀取檔案並回報內容；建議先備份或建立 Git checkpoint。']},
+        {h:'介面提醒',p:'第一次登入時 ChatGPT 與 Codex 兩個介面可以選，「不管你的界面在 GPT 或者是在 Codex，功能是一模一樣的」。'},
+        {h:'看課堂筆記',shot:{img:'ep202607-21-img/slide04.jpg',cap:'簡報 4｜電腦端如何安裝與設定'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep202607-21-notes.html#sec-computer" style="color:var(--purple)">筆記 4：電腦端安裝與設定</a>'}]},
+      {t:'手機端如何配對 Remote', s:'環境設定＋QR Code 四步驟｜簡報 5、8',
+       blocks:[
+        {h:'三方環境條件',ul:['電腦端：最新版 App、可用帳號、專案資料夾、保持開機不睡眠、Allow connections/Set up Remote 已開啟。','手機端：最新版 App、相同帳號/工作區、開啟通知、掃描 QR Code 完成配對。','連線條件：穩定 Wi-Fi、優先有線網路、避免頻繁切換或睡眠、檢查 VPN/防火牆。']},
+        {h:'QR Code 配對四步驟',steps:['電腦開啟 Remote：進入 Set up Remote。','顯示 QR Code。','手機掃描：ChatGPT App 掃描配對。','完成驗證：帳號、工作區與驗證確認。']},
+        {h:'藏在兩處的入口',tip:'遠端連接功能藏在兩個地方——① 問號說明選單裡有「設定遠端」② 帳號設定裡滑到「連線」，兩邊都能進去設定手機配對。'},
+        {h:'重點提醒',warn:'Remote 不是雲端代跑；真正執行任務的是電腦端。回到電腦確認 Allow connections 已開啟、裝置已出現在連線清單。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep202607-21-notes.html#sec-mobile" style="color:var(--purple)">筆記 5：手機端如何配對 Remote</a>'}]}
+    ]
+  },
+  ops: {
+    key:'ops', color:'var(--teal)', emoji:'📲', code:'CHAPTER 03', title:'交辦任務＋排解問題',
+    intro:'連線後怎麼下任務、手機看得到什麼、Queue 與 Steer 怎麼選、連不上時怎麼查。',
+    topics:[
+      {t:'用手機交辦任務＋手機看得到什麼', s:'選主機→選專案→下任務｜簡報 6-7',
+       blocks:[
+        {h:'三步驟交辦',steps:['選擇主機：在 Remote 中選擇已連線的電腦。','選擇專案：進入資料夾、Git repository 或既有對話。','下達任務：先請 Codex 閱讀資料，再提出計畫、修改與測試。']},
+        {h:'推薦說法',p:'「先讀取這個資料夾，說明有哪些檔案與用途；提出修正計畫，等我核准後再修改。」'},
+        {h:'手機能看到的內容',ul:['目前任務進度。','終端機輸出與錯誤訊息。','修改了哪些檔案。','測試結果與 Git diff。','需要你核准的操作（安裝套件、執行終端機指令、存取其他資料夾、大量修改或刪除檔案）。']},
+        {h:'看課堂筆記',p:'👉 <a href="ep202607-21-notes.html#sec-task" style="color:var(--teal)">筆記 6：交辦任務＋手機看得到什麼</a>'}]},
+      {t:'Queue 與 Steer 怎麼用＋連不上怎麼辦', s:'排隊 vs 立即導正＋疑難排解｜簡報 9-10',
+       blocks:[
+        {h:'Queue vs Steer',table:{head:['方式','用途','適合情境'],rows:[
+          ['Queue','把新要求排入下一個任務，等目前工作完成後再處理','補做測試、完成後再整理報告、依序加入下一項工作'],
+          ['Steer','在任務進行中立刻導正方向，避免繼續做錯','停止修改某資料夾、縮小處理範圍、改成先分析再修改']
+        ]}},
+        {h:'一般原則',tip:'一般預設用 Queue；只有方向明顯偏掉時，再用 Steer。'},
+        {h:'連不上時的檢查清單',ul:['手機與電腦是否登入相同帳號、相同工作區。','電腦 ChatGPT App 是否仍在執行。','Allow connections 是否已開啟。','電腦是否睡眠斷線或鎖定。','手機與電腦 App 是否更新到最新版。']},
+        {h:'重點提醒',warn:'Remote 不是雲端代跑；電腦必須保持開機、連網並開啟 App。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep202607-21-notes.html#sec-queue" style="color:var(--teal)">筆記 7-8：Queue／Steer 與疑難排解</a>'}]}
+    ]
+  },
+  cases: {
+    key:'cases', color:'var(--rose)', emoji:'🧩', code:'CHAPTER 04', title:'示範建議＋兩個實作案例',
+    intro:'最適合示範的任務範例、讓操作更順暢的建議，以及兩個真實的實作案例。',
+    topics:[
+      {t:'最適合示範的任務＋更順暢的建議', s:'示範指令＋速度優化｜簡報 11、13-14',
+       blocks:[
+        {h:'示範指令範例',p:'「請先讀取目前資料夾。列出所有檔案與用途。提出整理與改善計畫，不要先修改。等我核准後，再建立 output 資料夾並輸出結果。完成後回報修改檔案、執行結果與需要人工檢查的項目。」'},
+        {h:'更順暢的四個建議',ul:['電腦更順暢：插電使用、關閉大型下載。','專案更好管：只開當前資料夾、先切分支或 Worktree。','手機更方便：通知開啟、常用主機與對話先固定好。','下指令更有效：先讀取→提計畫→等核准→再修改，一次只交辦一件主任務。']},
+        {h:'速度優化建議',steps:['速度關鍵：5GHz Wi-Fi 或穩定有線、電腦不睡眠、暫停大量雲端同步。','推薦配置：電腦插電、桌面 App 開啟、新分支/Worktree、Git checkpoint。','加速做法：先指定子資料夾、先盤點再批次、測試報告可用 Queue 排隊。']},
+        {h:'最穩做法',tip:'網路穩、範圍小、先計畫再執行。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep202607-21-notes.html#sec-demo" style="color:var(--rose)">筆記 9：示範任務與順暢建議</a>'}]},
+      {t:'實作案例：MCP-NotebookLM＋Skill 簡報製作', s:'資料圖表化＋簡報產出流程｜簡報 15-16、18、20',
+       blocks:[
+        {h:'案例一：MCP-NotebookLM',steps:['整理現有資料（Excel/CSV/表單、現場拍照的憑證或收據）。','製作資料圖表。','拍照憑證後整理成可讀內容。','上傳 NotebookLM。','生成資料表與摘要。','開啟 Google Sheet 整理資料，取得可分享連結。']},
+        {h:'案例二：Skill 導入簡報製作',steps:['提供需求：主題／對象／頁數／風格／用途。','啟動簡報 Skill：讀取需求、建立大綱與頁面架構。','生成簡報內容：標題／重點／圖像建議／講者用語。','版面與校正：調整字句、順序、設計風格、確認內容正確。','上傳 Google 簡報：形成可分享連結，方便協作編輯。','同步 Canva：便於視覺微調，輸出社群或簡報版本。']},
+        {h:'兩個推薦指令',ul:['NotebookLM：「幫我依資料做圖表、整理憑證、彙整成資料表，最後開啟 Google Sheet 並提供分享連結。」','簡報 Skill：「請依本主題製作 10 頁簡報，先列大綱，再完成每頁重點，最後上傳 Google 簡報與 Canva。」']},
+        {h:'成果與注意事項',warn:'Google 簡報適合協作編修，Canva 適合視覺深化；注意事項：檢查事實正確、統一風格、圖片授權留意、上傳權限與分享設定確認。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep202607-21-notes.html#sec-cases" style="color:var(--rose)">筆記 10：兩個實作案例</a>'}]}
+    ]
+  }
+};
+const ORDER = ['basics','setup','ops','cases'];
+const $ = s=>document.querySelector(s);
+function renderChapter(ch){
+  const d=DATA[ch];const next=ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];const prev=ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html=`<div class="chapter-head"><span class="emoji">${d.emoji}</span><div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div></div>`;
+  d.topics.forEach((tp,i)=>{const id=`${ch}-${i}`;
+    html+=`<div class="topic" id="topic-${id}"><div class="topic-head" onclick="toggleTopic('${id}')"><span class="num">${i+1}</span><h4>${tp.t}<small>${tp.s}</small></h4><input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)"><span class="chev">▶</span></div><div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{html+=`<div class="block"><h5>${b.h}</h5>`;
+      if(b.p)html+=`<p>${b.p}</p>`;
+      if(b.ul)html+=`<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps)html+=`<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.table)html+=`<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.shot)html+=`<figure class="shot"><img src="${b.shot.img}" alt="" loading="lazy"><figcaption>${b.shot.cap}</figcaption></figure>`;
+      if(b.tip)html+=`<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn)html+=`<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html+=`</div>`;});
+    html+=`</div></div></div>`;});
+  html+=`<div class="chapnav"><a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a><a onclick="showHome()" style="text-align:center">回總覽<b>🏠 四大主題</b></a><a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a></div>`;
+  $('#view-'+ch).innerHTML=html;
+}
+ORDER.forEach(renderChapter);
+function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('#view-'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function showHome(){switchView('home');$('#crumbs').style.display='none';clearSearch();}
+function showChapter(ch){switchView(ch);$('#crumbs').style.display='flex';$('#crumbHere').textContent=`${DATA[ch].emoji} ${DATA[ch].title}`;clearSearch();syncChecks();}
+function toggleTopic(id){$('#topic-'+id).classList.toggle('open');}
+function openTopic(ch,i){showChapter(ch);const el=$('#topic-'+ch+'-'+i);el.classList.add('open');setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+const KEY='ep202607-21-skills-v1';
+const store=()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){const s=store();if(val)s[id]=1;else delete s[id];localStorage.setItem(KEY,JSON.stringify(s));updateProgress();}
+const TOTAL=ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){const done=Object.keys(store()).length;const pct=Math.round(done/TOTAL*100);$('#progFill').style.width=pct+'%';$('#progText').textContent=`${done} / ${TOTAL} 項技能已掌握`;$('#statDone').textContent=done;$('#statPct').textContent=pct+'%';ORDER.forEach(ch=>{const sub=DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;const el=document.querySelector(`[data-mini="${ch}"]`);if(el)el.style.width=Math.round(sub/DATA[ch].topics.length*100)+'%';});}
+function syncChecks(){const s=store();document.querySelectorAll('input[data-skill]').forEach(cb=>{cb.checked=!!s[cb.dataset.skill];});}
+function resetProgress(){if(confirm('確定要清空所有打勾進度嗎？')){localStorage.removeItem(KEY);syncChecks();updateProgress();}}
+function stripTags(s){return s.replace(/<[^>]+>/g,'');}
+const INDEX=[];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{let body=tp.s+' ';tp.blocks.forEach(b=>{if(b.p)body+=stripTags(b.p)+' ';if(b.ul)body+=b.ul.map(stripTags).join(' ')+' ';if(b.steps)body+=b.steps.map(stripTags).join(' ')+' ';if(b.tip)body+=stripTags(b.tip)+' ';if(b.warn)body+=stripTags(b.warn)+' ';if(b.table)body+=b.table.rows.flat().map(stripTags).join(' ')+' ';});INDEX.push({ch,i,title:tp.t,body});}));
+$('#searchInput').addEventListener('input',e=>{const q=e.target.value.trim();const box=$('#searchResults');if(!q){box.classList.remove('show');box.innerHTML='';return;}const hits=INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));box.classList.add('show');if(!hits.length){box.innerHTML=`<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：Remote、Queue、Steer）</div>`;return;}const hl=s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);box.innerHTML=hits.map(x=>{const pos=x.body.toLowerCase().indexOf(q.toLowerCase());const snip=x.body.substr(Math.max(0,pos-20),90);return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})"><div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div><h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;}).join('');});
+function clearSearch(){$('#searchInput').value='';$('#searchResults').classList.remove('show');$('#searchResults').innerHTML='';}
+(function(){const box=$('#stars');for(let i=0;i<70;i++){const s=document.createElement('i');s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';s.style.animationDelay=(Math.random()*3)+'s';s.style.transform=`scale(${.5+Math.random()*1.5})`;box.appendChild(s);}})();
+syncChecks();updateProgress();
+</script>
+</body>
+</html>

@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP39 課堂筆記｜NotebookLM 與 Markdown 格式交互應用</title>
+<meta name="description" content="晨學講堂 EP39 課堂筆記：讓 NotebookLM 產出「排版不跑掉」的報告——自然語言的坑（退格、表格會不見）、改用 Markdown／YAML 指令、用工作室預覽複製保留格式、目錄與頁碼三做法、Google Docs＋Apps Script 收尾（頁碼／目錄／統一標楷體）。依官方課程簡報與 GAS 程式碼整理。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#7a4fd6; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px;border-left:none}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+.note.violet{background:#F3EFFB;border-color:#DFD2F0;color:#5a34a8}
+.note.rose{background:#FBEEF1;border-color:#F0D2DB;color:#9c2f52}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.prompt{position:relative;background:#1d1d1f;border-radius:10px;padding:15px 16px;margin:12px 0;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt .tag{display:inline-block;font-size:11px;letter-spacing:.06em;color:#c9c4ff;border:1px solid #3a3a40;border-radius:6px;padding:2px 9px;margin-bottom:8px}
+.prompt b{color:#fff}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.embed{margin:14px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000}
+.embed iframe{display:block;width:100%;aspect-ratio:16/9;border:0}
+.embed .cap{font-size:12.5px;color:var(--ink3);padding:10px 16px;background:var(--paper);border-top:1px solid var(--line)}
+.ts{display:inline-block;font-family:"Cascadia Code",Consolas,monospace;font-weight:700;font-size:12px;color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,#fff);border-radius:5px;padding:2px 8px;margin-right:7px;letter-spacing:.4px;vertical-align:middle}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+.layers{display:grid;gap:10px;margin:14px 0}
+.lyr{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:13px 15px;background:#fff}
+.lyr .n{flex:none;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--accent)}
+.lyr h4{margin:0 0 3px;font-size:14.5px}
+.lyr p{font-size:13px;margin:0}
+.sub{color:var(--ink2)}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#c3b0ea" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP39 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="ep39-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 晨學講堂 · EP39</span>
+  <h1>NotebookLM 與 <span>Markdown 格式</span><br>交互應用</h1>
+  <p class="lead">同樣一段內容，用<b>自然語言</b>叫 NotebookLM 產出報告——退格、表格常常<b>一匯出就跑掉</b>。這堂課教你改用 <b>Markdown／YAML 格式指令</b>把版面「講清楚」、用<b>工作室預覽複製</b>保住格式，再用 <b>Google Docs＋Apps Script</b> 補上目錄、頁碼與統一字體。本頁依<b>官方課程簡報與課堂 GAS 程式碼</b>整理。</p>
+  <div class="meta">
+    <span>📅 2026/05/29 直播</span>
+    <span>📓 NotebookLM</span>
+    <span>🔤 Markdown／YAML</span>
+    <span>📄 Google Docs＋GAS</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-map">1. 一頁看懂全課程</a>
+  <a href="#sec-plain">2. 自然語言的坑</a>
+  <a href="#sec-format">3. 用 Markdown／YAML 保住格式</a>
+  <a href="#sec-preview">4. 工作室預覽：複製最保真</a>
+  <a href="#sec-toc">5. 目錄與頁碼三做法</a>
+  <a href="#sec-gas">6. Google Docs＋Apps Script 收尾</a>
+  <a href="#sec-terms">7. 名詞卡與立即練習</a>
+  <a href="#sec-src">8. 資料來源與製作說明</a>
+</nav>
+
+<article>
+
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--blue))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>EP39_「NotebookLM 與 Markdown 格式交互應用」</td></tr>
+    <tr><th>頻道</th><td>生成式 AI 應用電台・晨學講堂</td></tr>
+    <tr><th>直播日期</th><td>2026/05/29（五）晚間直播</td></tr>
+    <tr><th>教材</th><td>官方課程簡報＋補充《Markdown & YAML 格式》＋《GAS code》程式碼文件</td></tr>
+    <tr><th>一句話先懂</th><td>NotebookLM 很會寫內容，但「<b>排版</b>」要你講清楚。與其用自然語言含糊帶過（結果<b>退格、表格匯出就消失</b>），不如用 <b>Markdown／YAML</b> 把格式規格化，並善用<b>工作室預覽的複製</b>與 <b>Google Docs／Apps Script</b> 完成正式排版。</td></tr>
+  </table></div>
+
+  <h3>🎬 錄影回放</h3>
+  <div class="embed">
+    <iframe src="https://drive.google.com/file/d/1VUNaioWTDpfcNURmVtKwcTdYSFC39ali/preview" allow="autoplay" loading="lazy" title="EP39 錄影回放"></iframe>
+    <div class="cap">EP39 NotebookLM 與 Markdown 格式交互應用 課堂錄影 — 需登入有觀看權限的 Google 帳號。</div>
+  </div>
+  <div class="note blue">💡 本頁以<b>官方課程簡報原文與課堂 GAS 程式碼</b>逐節整理（真實課程內容，非推測）。示範操作的螢幕截圖與逐字稿時間碼待錄影開通授權後補入；簡報中的戰鬥陀螺為講師示範主題。</div>
+</section>
+
+<section class="chapter" id="sec-map">
+  <span class="chip" style="background:linear-gradient(90deg,var(--cyan),var(--accent))">OVERVIEW</span>
+  <h2 class="ct">1. 一頁看懂全課程</h2>
+  <p class="cd">整堂課就是一條「把 NotebookLM 的內容變成一份排版正確的報告」的流水線。</p>
+  <figure class="diagram">
+    <svg viewBox="0 0 920 250" xmlns="http://www.w3.org/2000/svg" font-family="'Noto Sans TC',sans-serif">
+      <rect width="920" height="250" fill="#fbfcff"/>
+      <text x="460" y="38" text-anchor="middle" font-size="20" font-weight="900" fill="#2b2a33">從「內容」到「排版正確的報告」</text>
+      <g>
+        <rect x="26" y="74" width="190" height="118" rx="14" fill="#fdeef4" stroke="#f0cede"/>
+        <text x="121" y="108" text-anchor="middle" font-size="14.5" font-weight="800" fill="#c8377f">① 自然語言</text>
+        <text x="121" y="134" text-anchor="middle" font-size="11.5" fill="#5a5866">會寫內容</text>
+        <text x="121" y="154" text-anchor="middle" font-size="11.5" fill="#c0426f">但退格／表格</text>
+        <text x="121" y="172" text-anchor="middle" font-size="11.5" fill="#c0426f">匯出就跑掉</text>
+      </g>
+      <text x="230" y="138" text-anchor="middle" font-size="20" fill="#c9bce8">→</text>
+      <g>
+        <rect x="246" y="74" width="190" height="118" rx="14" fill="#f2eefb" stroke="#ddd0f4"/>
+        <text x="341" y="108" text-anchor="middle" font-size="14.5" font-weight="800" fill="#7a4fd6">② Markdown／YAML</text>
+        <text x="341" y="134" text-anchor="middle" font-size="11.5" fill="#5a5866">把格式規格化</text>
+        <text x="341" y="154" text-anchor="middle" font-size="11.5" fill="#5a5866">標題、縮排、表格</text>
+        <text x="341" y="172" text-anchor="middle" font-size="11.5" fill="#5a5866">講清楚可控</text>
+      </g>
+      <text x="450" y="138" text-anchor="middle" font-size="20" fill="#c9bce8">→</text>
+      <g>
+        <rect x="466" y="74" width="190" height="118" rx="14" fill="#eef6fd" stroke="#c9e3f7"/>
+        <text x="561" y="108" text-anchor="middle" font-size="14.5" font-weight="800" fill="#2f6df0">③ 工作室預覽</text>
+        <text x="561" y="134" text-anchor="middle" font-size="11.5" fill="#5a5866">從預覽複製</text>
+        <text x="561" y="154" text-anchor="middle" font-size="11.5" fill="#5a5866">最能保留退格</text>
+        <text x="561" y="172" text-anchor="middle" font-size="11.5" fill="#5a5866">與表格</text>
+      </g>
+      <text x="670" y="138" text-anchor="middle" font-size="20" fill="#c9bce8">→</text>
+      <g>
+        <rect x="686" y="74" width="208" height="118" rx="14" fill="#eef7f1" stroke="#c3e4d1"/>
+        <text x="790" y="108" text-anchor="middle" font-size="14.5" font-weight="800" fill="#1d9e6f">④ Google Docs＋GAS</text>
+        <text x="790" y="134" text-anchor="middle" font-size="11.5" fill="#5a5866">目錄、頁碼</text>
+        <text x="790" y="154" text-anchor="middle" font-size="11.5" fill="#5a5866">統一標楷體</text>
+        <text x="790" y="172" text-anchor="middle" font-size="11.5" fill="#5a5866">正式排版收尾</text>
+      </g>
+    </svg>
+    <figcaption>圖 1｜EP39 全景：NotebookLM 內容 → 格式化指令 → 預覽保真 → Docs／GAS 收尾</figcaption>
+  </figure>
+  <div class="golden"><div class="q">「NotebookLM 負責『內容與邏輯』；『封面、目錄、頁碼、版面』交給 Google Docs／Apps Script。分工清楚，排版才不會亂。」</div><div class="a">—— 本集核心分工</div></div>
+</section>
+
+<section class="chapter" id="sec-plain">
+  <span class="chip" style="background:linear-gradient(90deg,#d4508e,#7a4fd6)">CHAPTER 01</span>
+  <h2 class="ct">2. 自然語言的坑：退格與表格會不見</h2>
+  <p class="cd">先看講師的示範主題：請 NotebookLM「介紹戰鬥陀螺」，要求<b>標題、文字約 400 字、含標題的表格</b>。（簡報 p1–p5）</p>
+  <ul class="pt">
+    <li>對話視窗裡看起來都對：有標題、400 字、每段第一句退 2 格、表格也在。</li>
+    <li><b>陷阱一（退格）</b>：對話裡雖然「可退格」，但<b>貼到 Word 會恢復原樣</b>（縮排消失）。</li>
+    <li><b>陷阱二（報告功能）</b>：改用 NotebookLM 的「<b>報告功能</b>」匯出時——<b>表格不見了、退格也不見了</b>。</li>
+    <li>結論：自然語言能把「內容」講清楚，卻很難把「<b>格式</b>」穩定帶到最終檔案。</li>
+  </ul>
+  <div class="note gold">⚠️ 這就是為什麼要換一種「機器看得懂格式」的講法——<b>Markdown／YAML</b>。</div>
+</section>
+
+<section class="chapter" id="sec-format">
+  <span class="chip" style="background:linear-gradient(90deg,#7a4fd6,#2f6df0)">CHAPTER 02</span>
+  <h2 class="ct">3. 用 Markdown／YAML 把格式「規格化」</h2>
+  <p class="cd">同一個戰鬥陀螺需求，改用結構化格式來下，NotebookLM 就知道你要的每一項規格。（簡報 p6–p9）</p>
+  <h4>YAML 版：把需求當成一張「規格表」</h4>
+  <div class="prompt">task: "撰寫戰鬥陀螺介紹"
+output_format: "markdown"
+requirements:
+  title:
+    required: true
+    description: "文章標題"
+  content:
+    length: "約400字"
+    formatting:
+      indentation: "每段第一句退2格"
+      text_style: "不可使用加粗字體"
+    topics: "戰鬥陀螺的起源、玩法與媒體發展"
+  table:
+    required: true
+    includes_caption: true
+    description: "戰鬥陀螺的類型與特色比較表"</div>
+  <div class="note blue">💡 <b>YAML</b>＝用「鍵：值」層層縮排列出需求，像填一張表單；<b>Markdown</b>＝用 <code>#</code>／<code>##</code>、清單、表格等輕量符號直接寫出結構。兩者都比自然語言更能穩定控制版面。</div>
+  <h4>兩種進階指令版本（簡報 p10 · 自訂筆記本）</h4>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">版本</th><th>適合／重點</th></tr>
+    <tr><td>長文架構與草稿版</td><td>報告與企劃書：一律 Markdown 輸出、專注「章節架構＋圖表標題預留位置＋內容草稿」；圖表處用 <code>&gt; [圖表插入點：…]</code> 標示；只給乾淨結構化文本，封面／目錄／頁碼後續自己排。</td></tr>
+    <tr><td>模組化輸出版</td><td>極長篇正式文件：嚴格用 Markdown；把「章節架構草擬」與「正文草稿」<b>分開產出</b>，先給完整骨架（含各級標題與圖表標題預留），再寫正文。</td></tr>
+  </table></div>
+  <div class="note green">✅ 這樣下指令有兩個好處：產出好用的 Markdown，且<b>明確界定 NotebookLM 的工作範圍</b>，避免它用純文字硬畫出奇怪的封面或目錄，之後轉 Word／Google Docs／LaTeX 排版更順。</div>
+</section>
+
+<section class="chapter" id="sec-preview">
+  <span class="chip" style="background:linear-gradient(90deg,#2f6df0,#0aa6c9)">CHAPTER 03</span>
+  <h2 class="ct">4. 工作室預覽：複製最能保真</h2>
+  <p class="cd">格式指令下對了，還要用對「取出」的方式。（簡報 p8–p9）</p>
+  <ul class="pt">
+    <li>不要從「報告功能」硬匯出（會掉格式），而是<b>直接使用工作室（Studio）的預覽顯示功能</b>。</li>
+    <li>從<b>預覽畫面複製</b>，是<b>最能保留格式的方式</b>——退格與表格都比較能帶著走。</li>
+    <li>心法：<b>Markdown 指令（講清楚）＋ 預覽複製（取乾淨）</b>，格式才穩。</li>
+  </ul>
+  <div class="golden"><div class="q">「同樣的內容，指令用 Markdown、取用走預覽複製——退格和表格才留得下來。」</div><div class="a">保真的兩個關鍵動作</div></div>
+</section>
+
+<section class="chapter" id="sec-toc">
+  <span class="chip" style="background:linear-gradient(90deg,#c98a0a,#7a4fd6)">CHAPTER 04</span>
+  <h2 class="ct">5. 目錄與頁碼：三種做法</h2>
+  <p class="cd">課堂用「3 頁 A4：第 1 頁目錄、第 2–3 頁內文」測試三種下法。（簡報 p11–p13）</p>
+  <h4>做法一：YAML 描述文件結構</h4>
+  <div class="prompt">document_profile:
+  type: "Report"
+  total_pages: 3
+layout:
+  page_1: { content_type: "Table of Contents", title: "目錄" }
+  page_2: { content_type: "Body Content", elements: ["Main Heading","Subheading","Textual Discourse"] }
+  page_3: { content_type: "Body Content", elements: ["Main Heading","Subheading","Textual Discourse"] }
+formatting_rules:
+  paragraph: { first_line_indent: "2_characters", alignment: "justify" }
+  typography: { headings: { main: "H1", sub: "H2" } }
+  pagination: { show_page_number: true, start_from_page: 1, position: "footer" }</div>
+  <h4>做法二：Markdown 手動補「縮排與頁碼」</h4>
+  <ul class="pt">
+    <li>第 1 頁單獨產「目錄章節」；第 2–3 頁依目錄寫 <code># 大標題</code>、<code>## 小標題</code>與論述。</li>
+    <li>傳統 Markdown 不支援首行縮進 → 每段開頭<b>手動加兩個全形空格</b>（或 <code>&amp;emsp;&amp;emsp;</code>）。</li>
+    <li>每頁底部手動加 <code>[第 X 頁 / 共 3 頁]</code> 標記，方便後續匯出。</li>
+  </ul>
+  <h4>做法三：交給 Google Docs 內建功能</h4>
+  <ul class="pt">
+    <li><b>首行縮進</b>：全選內文 → 格式 → 對齊與縮進 → 縮進選項 → 特殊縮進選「首行」，設 <b>0.85 公分</b>（約 2 字元），<b>切勿手動連按空白鍵</b>。</li>
+    <li><b>頁碼</b>：插入 → 頁碼 → 選「頁尾」並勾「顯示總頁數」（如 1/3）。</li>
+    <li>第 1 頁放「自動目錄」，此頁不放內文論述。</li>
+  </ul>
+  <div class="note gold">⚠️ 三種做法各有場合：要快、要一次到位 → Google Docs 內建最穩；要純文字可攜 → Markdown；要把規格交給 AI 產生 → YAML。</div>
+</section>
+
+<section class="chapter" id="sec-gas">
+  <span class="chip" style="background:linear-gradient(90deg,#1d9e6f,#0aa6c9)">CHAPTER 05</span>
+  <h2 class="ct">6. Google Docs＋Apps Script 收尾</h2>
+  <p class="cd">最後把重複的排版動作自動化：課堂提供三段 <b>Google Apps Script（GAS）</b>——寫頁碼、自動生目錄、統一字體。（簡報 p14–p15；程式碼取自課堂《GAS code》文件）</p>
+  <h4>① 頁尾寫頁碼（標楷體 10pt 置中）</h4>
+  <div class="prompt">function writeFooter() {
+  const doc = DocumentApp.getActiveDocument();
+  const tab = doc.getActiveTab().asDocumentTab();
+  let footer = tab.getFooter();
+  if (!footer) { footer = tab.addFooter(); }
+  footer.clear();
+  const p = footer.appendParagraph("第 1 頁");
+  p.setAlignment(DocumentApp.HorizontalAlignment.CENTER);
+  p.editAsText().setFontFamily("標楷體").setFontSize(10).setBold(false);
+  doc.saveAndClose();
+}</div>
+  <h4>② 自動抓標題產生「手動目錄」</h4>
+  <p>掃描全文，把<b>第一個非空段落（主標題）</b>、<b>「一、二、三…」的章節標題</b>與<b>以「表」結尾的表格標題</b>收集起來，插到最前面成為目錄頁（標楷體、含頁碼點線），並自動清掉舊目錄。核心函式：</p>
+  <div class="prompt">function createManualTOCFromDocument() {
+  const doc  = DocumentApp.getActiveDocument();
+  const body = doc.getActiveTab().asDocumentTab().getBody();
+  removeOldManualTOC_(body);                 // 先刪舊目錄
+  const headings = collectHeadingsFromBody_(body);   // 收集標題＋頁碼
+  body.insertPageBreak(0);
+  const tocTitle = body.insertParagraph(0, "目錄");
+  tocTitle.setHeading(DocumentApp.ParagraphHeading.HEADING1);
+  tocTitle.setAlignment(DocumentApp.HorizontalAlignment.CENTER);
+  let i = 1;
+  headings.forEach(item => {                  // 標題 …… 頁碼
+    const p = body.insertParagraph(i++, makeTOCLine_(item.title, item.page));
+    p.editAsText().setFontFamily("標楷體").setFontSize(12);
+  });
+  body.insertPageBreak(i);
+  doc.saveAndClose();
+}
+// 抓標題規則：第一段=主標題；「一、二…」=章節；「…表」=表格標題
+// makeTOCLine_() 用「.」補點線對齊頁碼</div>
+  <div class="note blue">💡 這段等於幫你把 Word 的「自動目錄」在 Google Docs 裡用程式重現：改標題、加章節後<b>重跑一次</b>就更新，不用手動維護。</div>
+  <h4>③ 一鍵全文統一字體（標楷體 DFKai-SB）</h4>
+  <div class="prompt">function setAllToDFKaiSB() {
+  const doc  = DocumentApp.getActiveDocument();
+  doc.getBody().editAsText().setFontFamily("DFKai-SB"); // 全文改標楷體
+  Logger.log("已統一設定為標楷體");
+}</div>
+  <div class="note gold">⚠️ 使用方式：Google Docs → 擴充功能 → Apps Script → 貼上函式 → 執行（首次需授權）。這三段對應課堂示範的「頁碼、目錄、統一字體」三個常見排版收尾動作。</div>
+  <div class="golden"><div class="q">「會重複的排版動作，就寫一次 Apps Script，之後一鍵跑完。」</div><div class="a">自動化收尾金句</div></div>
+</section>
+
+<section class="chapter" id="sec-terms">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5a5866)">GLOSSARY & PRACTICE</span>
+  <h2 class="ct">7. 名詞卡與立即練習</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:130px">名詞</th><th>白話</th><th>正式定義</th></tr>
+    <tr><td>NotebookLM</td><td>以你的資料為本的 AI 筆記本</td><td>Google 的來源接地（grounded）AI，回答限定在你上傳的來源</td></tr>
+    <tr><td>Markdown</td><td>用符號寫排版的輕量語言</td><td>以 <code>#</code>、清單、表格等符號標記結構的純文字格式</td></tr>
+    <tr><td>YAML</td><td>用「鍵：值」列規格</td><td>以縮排鍵值對表達結構化資料的格式，常用來下「規格式」指令</td></tr>
+    <tr><td>首行縮進</td><td>每段第一行空兩格</td><td>段落層級的排版屬性；Google Docs 設 0.85 公分，勿手打空白</td></tr>
+    <tr><td>工作室預覽</td><td>NotebookLM 的成品預覽</td><td>Studio 的預覽顯示；從預覽複製較能保留退格與表格</td></tr>
+    <tr><td>Apps Script（GAS）</td><td>Google 文件的自動化程式</td><td>以 JavaScript 操作 Docs／Sheets 等的雲端腳本平台</td></tr>
+  </table></div>
+  <h3>立即練習</h3>
+  <ol class="st">
+    <li>用<b>自然語言</b>請 NotebookLM 寫一段含表格的短報告，貼到 Word，看退格／表格掉了沒。</li>
+    <li>改用<b>YAML 或 Markdown 指令</b>重下一次，並從<b>工作室預覽複製</b>，比較差異。</li>
+    <li>把成品貼進 Google Docs，用<b>內建首行縮進 0.85cm ＋ 頁碼（顯示總頁數）</b>排好。</li>
+    <li>進階：把三段 <b>GAS</b> 貼進 Apps Script，一鍵補頁碼、生目錄、統一標楷體。</li>
+  </ol>
+</section>
+
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5a5866)">SOURCES</span>
+  <h2 class="ct">8. 資料來源與製作說明</h2>
+  <ul class="pt">
+    <li><b>原始教材：</b>EP39「NotebookLM 與 Markdown 格式交互應用」官方課程簡報＋補充《Markdown & YAML 格式》＋課堂《GAS code》程式碼文件。</li>
+    <li><b>製作方式：</b>逐頁對照官方簡報可讀文字與課堂程式碼整理，內容為<b>真實課程內容</b>；YAML／Markdown 指令與 GAS 程式碼<b>取自課堂教材原文</b>，圖解為自製 SVG。</li>
+    <li><b>誠實聲明：</b>本頁以簡報實錄與程式碼為準；<b>示範操作的螢幕截圖與逐字稿時間碼</b>需錄影開通授權後補入。NotebookLM／Google Docs 介面與功能會更新，以你當下帳號畫面為準。</li>
+    <li><b>介面參考：</b>互動技能地圖頁沿用本站 EP44–46 的卡片式多層導覽與遊戲化進度設計。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  EP39「NotebookLM 與 Markdown 格式交互應用」課堂筆記・2026/07 整理<br>
+  🍀 Learn AI with Tarshar｜搭配 <a href="ep39-ai-skills.html">互動技能地圖</a> 使用效果最佳
+</footer>
+
+</body>
+</html>

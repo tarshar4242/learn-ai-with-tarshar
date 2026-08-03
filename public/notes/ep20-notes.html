@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP20 課堂筆記｜打通 Anthropic 任督二脈：Claude 篇（含 Cowork 介紹及應用）</title>
+<meta name="description" content="晨學講堂 EP20 課堂筆記：Claude 全功能整理——額度與隱私設定、深度思考與寫作風格、Artifacts／SVG、Connectors 連接器、Projects 與 Research、桌面版與 Chrome 擴充、Excel 與數據分析、官方 Skills 一覽。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#9c7b23; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px;border-left:none}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+.note.violet{background:#F3EFFB;border-color:#DFD2F0;color:#5a34a8}
+.note.rose{background:#FBEEF1;border-color:#F0D2DB;color:#9c2f52}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.prompt{position:relative;background:#1d1d1f;border-radius:10px;padding:15px 16px;margin:12px 0;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt .tag{display:inline-block;font-size:11px;letter-spacing:.06em;color:#c9c4ff;border:1px solid #3a3a40;border-radius:6px;padding:2px 9px;margin-bottom:8px}
+.prompt b{color:#fff}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.embed{margin:14px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000}
+.embed iframe{display:block;width:100%;aspect-ratio:16/9;border:0}
+.embed .cap{font-size:12.5px;color:var(--ink3);padding:10px 16px;background:var(--paper);border-top:1px solid var(--line)}
+.ts{display:inline-block;font-family:"Cascadia Code",Consolas,monospace;font-weight:700;font-size:12px;color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,#fff);border-radius:5px;padding:2px 8px;margin-right:7px;letter-spacing:.4px;vertical-align:middle}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+.layers{display:grid;gap:10px;margin:14px 0}
+.lyr{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:13px 15px;background:#fff}
+.lyr .n{flex:none;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--accent)}
+.lyr h4{margin:0 0 3px;font-size:14.5px}
+.lyr p{font-size:13px;margin:0}
+.sub{color:var(--ink2)}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#e0cf9c" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP20 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="ep20-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 晨學講堂 · EP20</span>
+  <h1><span>打通 Anthropic 任督二脈</span><br>Claude 篇（含 Cowork 介紹及應用）</h1>
+  <p class="lead">EP20 把 <b>Claude</b> 從「聊天工具」升級成「可控的整合型工作夥伴」：從額度與隱私設定開始，走過<b>深度思考、寫作風格、Artifacts／SVG 視覺化、Connectors 連接器、Projects 專案、Research 研究功能</b>，一路到<b>桌面版／Chrome 擴充／Excel 整合</b>與官方 Skills 一覽。本頁依<b>課程筆記 Google Doc</b>與<b>簡報 PDF</b> 兩份真實教材整理而成（本集無錄影抽幀、無簡報原圖）。</p>
+  <div class="meta">
+    <span>📅 2026/01/24 直播</span>
+    <span>🗂️ 教材：課程筆記 Doc + 簡報 PDF</span>
+    <span>🤖 主題：Claude 全功能地圖</span>
+    <span>🧩 Connectors／Artifacts／Projects</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-setup">1. 基礎設置與使用策略</a>
+  <a href="#sec-privacy">2. 隱私與個人化配置</a>
+  <a href="#sec-think">3. 深度思考與寫作風格</a>
+  <a href="#sec-artifacts">4. Artifacts：視覺化與 SVG</a>
+  <a href="#sec-connectors">5. Connectors 連接器</a>
+  <a href="#sec-projects">6. Projects 與 Research</a>
+  <a href="#sec-tools">7. 桌面版與 Chrome 擴充</a>
+  <a href="#sec-excel">8. Excel 與數據分析</a>
+  <a href="#sec-settings">9. 其他介面設定與 Skills 一覽</a>
+  <a href="#sec-recap">10. 重點整理</a>
+  <a href="#sec-src">11. 資料來源與製作說明</a>
+</nav>
+
+<article>
+
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--orange))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>打通 Anthropic 任督二脈：Claude 篇（含 Cowork 介紹及應用）</td></tr>
+    <tr><th>頻道</th><td>生成式AI應用電台・晨學講堂</td></tr>
+    <tr><th>直播日期</th><td>2026/01/24</td></tr>
+    <tr><th>教材</th><td>「課程筆記」Google Doc ＋ 簡報 PDF（無錄影抽幀／無簡報原圖，本集僅有文字教材）</td></tr>
+    <tr><th>一句話先懂</th><td>Claude 不只是聊天工具，透過<b>個人化設定、深度推理、SVG 視覺化與 Excel 整合</b>，能成為橫跨資料處理、分析思考與簡報製作的整合型工作夥伴。</td></tr>
+  </table></div>
+  <h3>參考連結（課程筆記原文附）</h3>
+  <ul class="pt">
+    <li><b>Claude in Chrome：</b><a href="https://chromewebstore.google.com/publisher/anthropic/u308d63ea0533efcf7ba778ad42da7390" target="_blank" rel="noopener">chromewebstore.google.com/publisher/anthropic</a></li>
+    <li><b>Claude in Excel：</b><a href="https://marketplace.microsoft.com/en-us/product/saas/wa200009404?tab=overview" target="_blank" rel="noopener">marketplace.microsoft.com（Microsoft AppSource）</a></li>
+    <li><b>Claude Code + NotebookLM 一鍵安裝技能：</b>見本頁第 9 節「官方 Skills 一覽」的安裝指令。</li>
+  </ul>
+  <div class="note blue">💡 本集資料夾沒有錄影檔，也沒有簡報投影片的截圖／原圖，因此本頁<b>純文字整理</b>，不含任何嵌入圖片。詳細誠實聲明見第 11 節「資料來源與製作說明」。</div>
+</section>
+
+<section class="chapter" id="sec-setup">
+  <span class="chip" style="background:linear-gradient(90deg,#9c7b23,#bf6a1e)">CHAPTER 01</span>
+  <h2 class="ct">1. 基礎設置與使用策略</h2>
+  <p class="cd">在正式使用 Claude 之前，先理解其運作機制與額度限制，是發揮效能與控管成本的第一步。</p>
+
+  <h3>額度與成本管理</h3>
+  <ul class="pt">
+    <li>Claude 提供<b>免費版</b>與<b>付費版（Pro）</b>兩種方案。</li>
+    <li><b>免費版：</b>約可進行 <b>50 次</b>對話。</li>
+    <li><b>Pro 版：</b>約可進行 <b>175–200 次</b>對話。</li>
+  </ul>
+  <div class="note gold">⚠️ 重要提醒：在「設定（Settings）」中，建議關閉「<b>額外增量付費</b>」相關選項。除非是企業或專案需求，否則應避免因高頻使用而產生非預期費用。</div>
+
+  <h3>介面語言與操作建議</h3>
+  <ul class="pt">
+    <li>目前 Claude 的操作介面<b>仍以英文為主</b>。</li>
+    <li>雖然可透過瀏覽器<b>即時翻譯</b>為中文，但在執行較複雜的指令時（例如<b>資料匯出、程式碼輸出、檔案處理</b>），建議<b>切換回原始英文介面</b>，以降低錯誤發生的機率。</li>
+  </ul>
+</section>
+
+<section class="chapter" id="sec-privacy">
+  <span class="chip" style="background:linear-gradient(90deg,#bf6a1e,#9c7b23)">CHAPTER 02</span>
+  <h2 class="ct">2. 隱私與個人化配置</h2>
+  <p class="cd">良好的隱私設定，能同時保護資料安全，也能讓 AI 更貼近你的工作習慣。</p>
+
+  <h3>隱私保護設定</h3>
+  <ul class="pt">
+    <li>建議關閉：<b>改善模型（Help improve Claude）</b>——用來訓練和改進 Anthropic AI 模型的選項。</li>
+    <li>建議關閉：<b>分享位置（Location metadata / Share location）</b>。</li>
+  </ul>
+  <p>如此可避免對話內容被用於模型訓練，並降低個人與地理資訊外洩的風險。</p>
+  <div class="note steel">🧠 簡報另提到 <b>Memory（記憶）</b>功能：允許 Claude 搜尋過去聊天中的相關詳情，從聊天歷史生成記憶，記住你聊天中的相關背景——是否開啟同樣屬於隱私取捨的一環，建議依個人需求評估後再決定。</div>
+
+  <h3>自定義指令（使用者偏好 / Personal preferences）</h3>
+  <p>你可以在此設定 Claude 的<b>長期行為規則</b>，例如：</p>
+  <ul class="pt">
+    <li><b>指定角色定位</b>（如：資料分析師、政策研究員、行銷顧問）。</li>
+    <li><b>規定回覆風格</b>（條列式、學術寫作、政策分析語氣）。</li>
+    <li><b>指定語言或呈現方式</b>（例如固定使用繁體中文、或特定格式）。</li>
+  </ul>
+  <p>這一區塊等同於為 Claude 建立「<b>長期工作人格設定</b>」。簡報中對應的欄位是「Personal preferences」，題目寫著 <b>"What personal preferences should Claude consider in responses?"</b>，範例填法如 <b>"Be concise, use bullet points, always provide examples."</b>——這段設定會變成<b>帳號級預設</b>，跨對話通用，可套用到<b>教學／顧問型、簡報型、SOP／流程型</b>等不同任務。</p>
+
+  <h3>MCP 擴充連結（外部工具）</h3>
+  <p>Claude 可連結 <b>Google Drive、日曆與 Gmail</b> 等服務，但目前功能<b>以「讀取」為主</b>，尚未支援直接寫入或自動修改內容。在實務上，較適合作為<b>輔助判讀與整理工具</b>，而非自動化執行工具。</p>
+</section>
+
+<section class="chapter" id="sec-think">
+  <span class="chip" style="background:linear-gradient(90deg,#9c7b23,#c98a0a)">CHAPTER 03</span>
+  <h2 class="ct">3. 深度思考與寫作風格</h2>
+  <p class="cd">Claude 的核心強項，在於結構清楚、推理完整、文字表現穩定。</p>
+
+  <h3>深度思考模式（Extended thinking）</h3>
+  <p>點擊介面中的<b>時鐘圖示</b>，即可啟用「深度思考」功能。此模式下，模型會花更多時間進行邏輯推演，適合用於：</p>
+  <ul class="pt">
+    <li>技術或政策方案比較。</li>
+    <li>多方案利弊分析。</li>
+    <li>高風險或高影響決策判斷。</li>
+  </ul>
+  <p>簡報進一步把「在難題上多想一步、降低失誤」的流程拆成四步：</p>
+  <ol class="st">
+    <li><b>定義問題（Define）</b>：出發解讀問題核心。</li>
+    <li><b>探索分支（Explore）</b>：探索不同解法分支。</li>
+    <li><b>深度分析（Analyze）</b>：針對各分支做深度分析。</li>
+    <li><b>綜合方案（Synthesize）</b>：綜合各分析結果成一個方案。</li>
+  </ol>
+
+  <h3>寫作風格客製化（Writing style）</h3>
+  <p>Claude 內建多種寫作風格，簡報列出四種：</p>
+  <div class="twrap"><table>
+    <tr><th style="width:100px">風格</th><th>特性與適用場景</th></tr>
+    <tr><td>Normal</td><td>一般溝通、日常任務的標準語氣。</td></tr>
+    <tr><td>Concise</td><td>重點直接、精簡有力，適合快速摘要、條列、標題。</td></tr>
+    <tr><td>Formal</td><td>正式、專業，用詞較進階，適合正式文件、商業書信、報告、郵件、學術寫作。</td></tr>
+    <tr><td>Explanatory</td><td>逐步拆解概念，包含範例，聚焦「如何運作」與「為什麼」，適合教學、指南、教育內容。</td></tr>
+  </table></div>
+  <div class="golden"><div class="q">用「風格」控制呈現方式，用「prompt」控制任務內容。</div><div class="a">—— 簡報 Writing style 一節</div></div>
+  <p>更進階的作法是<b>打造專屬寫作風格</b>：</p>
+  <ol class="st">
+    <li>提供一段你自己的既有文字。</li>
+    <li>請 Claude 分析你的語氣與結構特徵（例如：條列導向、台灣政策語境、行政體系寫作）。</li>
+    <li>將其作為「專屬寫作風格」長期套用。</li>
+  </ol>
+  <p>這一步驟，對於<b>研究者、公部門寫作與課程講師</b>特別關鍵。</p>
+</section>
+
+<section class="chapter" id="sec-artifacts">
+  <span class="chip" style="background:linear-gradient(90deg,#c98a0a,#9c7b23)">CHAPTER 04</span>
+  <h2 class="ct">4. Claude Artifacts：視覺化與 SVG 生成</h2>
+  <p class="cd">Artifacts 是 Claude 在實務應用上最具代表性的功能之一——把輸出變成「作品」與「可分享的成品」。</p>
+
+  <h3>SVG 圖形生成</h3>
+  <p>可直接要求 Claude 產出：</p>
+  <ul class="pt">
+    <li>文字雲。</li>
+    <li>圓餅圖。</li>
+    <li>架構流程圖。</li>
+    <li>簡報用示意圖。</li>
+  </ul>
+  <p>並以 <b>SVG 向量格式</b>輸出。</p>
+
+  <h3>簡報實戰應用</h3>
+  <p>將 SVG 檔案下載後拖入 PowerPoint，點選「<b>轉換為圖形</b>」，即可：</p>
+  <ul class="pt">
+    <li>拆解為可編輯物件。</li>
+    <li>自由更換顏色與字型。</li>
+    <li>作為正式簡報素材使用。</li>
+  </ul>
+  <p>這對於<b>政策簡報、教學投影片與報告視覺化</b>特別實用。</p>
+
+  <h3>遊戲與小工具示範</h3>
+  <p>Claude 亦可生成簡單的小型互動工具（如貪食蛇、俄羅斯方塊），適合用於：</p>
+  <ul class="pt">
+    <li>教學展示。</li>
+    <li>技術概念說明。</li>
+    <li>AI 能力示範。</li>
+  </ul>
+
+  <h3>Artifacts 五步驟（簡報補充）</h3>
+  <p>簡報把 Artifacts 的使用流程整理成五步，特別適合圖、表、流程圖、互動小工具、可重混的模板：</p>
+  <ol class="st">
+    <li><b>創建（Create）</b></li>
+    <li><b>編輯（Edit）</b></li>
+    <li><b>預覽（Preview）</b></li>
+    <li><b>分享（Share）</b></li>
+    <li><b>協作（Collaborate）</b></li>
+  </ol>
+</section>
+
+<section class="chapter" id="sec-connectors">
+  <span class="chip" style="background:linear-gradient(90deg,#9c7b23,#bf6a1e)">CHAPTER 05</span>
+  <h2 class="ct">5. Connectors：把 Claude 連到你的資料與工具</h2>
+  <p class="cd">簡報用一張「Claude 功能地圖」把整個網頁介面分成回應層、工作空間層、外部整合層來導覽，Connectors 就落在「外部整合層」。連接不等於永久儲存；權限與資料邊界要先講清楚。</p>
+
+  <h3>新增自訂連接器</h3>
+  <p>可以新增自訂連接器，讓 Claude 連到自己或公司內部的系統／服務，在設定中運作及回應記憶。伺服器需要 <b>OAuth 驗證</b>，重複利用專屬功能按鈕。簡報列出的常見 Connectors 包括：</p>
+  <ul class="pt">
+    <li>Google Drive</li>
+    <li>Gmail</li>
+    <li>GitHub</li>
+    <li>Google Calendar</li>
+  </ul>
+  <div class="golden"><div class="q">把 Claude 接上你的資料和工具（Connect Claude to your data and tools）。</div><div class="a">—— 簡報 Connectors 一節標題</div></div>
+
+  <h3>連接流程與權限</h3>
+  <ol class="st">
+    <li>選擇服務。</li>
+    <li>授權連接。</li>
+    <li>設置權限。</li>
+    <li>確認範圍。</li>
+  </ol>
+  <p>多數服務<b>預設為「只讀」權限</b>——這也呼應課程筆記中「MCP 擴充連結目前以讀取為主，尚未支援直接寫入」的說法。</p>
+
+  <h3>自訂 Connector 詳細設定（Custom Connector Setup）</h3>
+  <p>簡報中「Add custom connector」的設定畫面需要填：</p>
+  <ul class="pt">
+    <li><b>Name</b>：輸入 connector 名稱。</li>
+    <li><b>Remote MCP server URL</b>：例如 <code>https://api.mcp-server.com</code>。</li>
+    <li><b>Advanced settings</b>：OAuth／安全性配置。</li>
+  </ul>
+  <p>設定流程五步：</p>
+  <ol class="st">
+    <li>開始設定新 Connector。</li>
+    <li>輸入基本資訊。</li>
+    <li>配置伺服器 URL。</li>
+    <li>設定進階安全選項。</li>
+    <li>儲存並驗證連線。</li>
+  </ol>
+  <div class="note gold">⚠️ 風險提醒（簡報明確列出）：<b>未經驗證的伺服器</b>、<b>敏感資料傳輸風險</b>、<b>安全設定不足</b>——新增自訂連接器前務必留意。</div>
+</section>
+
+<section class="chapter" id="sec-projects">
+  <span class="chip" style="background:linear-gradient(90deg,#bf6a1e,#c98a0a)">CHAPTER 06</span>
+  <h2 class="ct">6. Projects 專案功能與 Research 研究功能</h2>
+
+  <h3>Projects：把聊天變成「可管理的工作空間」</h3>
+  <p>一個 <b>Project = 一套任務、資料、規則與產出格式</b>。設定步驟：</p>
+  <ol class="st">
+    <li>設定專案名稱與目標。</li>
+    <li>匯入或創建教材與規範資料。</li>
+    <li>定義固定輸出格式與任務清單。</li>
+    <li>配置專案規則與工作流。</li>
+  </ol>
+
+  <h3>Research：讓 Claude 做「可查證的網路研究」</h3>
+  <p>從「我覺得」變成「我查到，且可引用」：</p>
+  <ul class="pt">
+    <li><b>Research OFF</b>：只能憑內部知識回答。</li>
+    <li><b>Research ON</b>：會實際搜尋官方文件、大型媒體、部落格／論壇等來源，並附引用。</li>
+  </ul>
+</section>
+
+<section class="chapter" id="sec-tools">
+  <span class="chip" style="background:linear-gradient(90deg,#c98a0a,#bf6a1e)">CHAPTER 07</span>
+  <h2 class="ct">7. 多端工具與瀏覽器擴充</h2>
+
+  <h3>桌面版應用</h3>
+  <p>桌面版 Claude 適合：<b>文字工作者、工程與資料分析人員</b>。其優點在於<b>同步速度快</b>，且與<b>本機環境整合度高</b>。</p>
+  <p>簡報補充的安裝流程（Mac/Windows 類似）：</p>
+  <ol class="st">
+    <li>下載應用程式（Download App）。</li>
+    <li>執行安裝檔（Run Installer）。</li>
+    <li>登入帳戶（Log In）。</li>
+  </ol>
+  <div class="note blue">💡 桌面端＝更貼近本機工作流（尤其是 Claude Code／MCP）。</div>
+
+  <h3>Chrome 瀏覽器擴充功能</h3>
+  <p>Claude 的瀏覽器擴充功能可直接讀取當前網頁內容，操作方式接近即時助理。</p>
+  <p><b>實務應用範例：</b>在 Google 地圖搜尋餐廳時，開啟側邊欄，要求 Claude：</p>
+  <div class="prompt"><span class="tag">實例</span>「整理目前畫面中所有餐廳名稱、評價與距離，並製成表格。」</div>
+  <p>此類操作特別適合<b>資訊蒐集與快速整理</b>。安裝連結：<a href="https://chromewebstore.google.com/publisher/anthropic/u308d63ea0533efcf7ba778ad42da7390" target="_blank" rel="noopener">Claude in Chrome（Chrome 線上應用程式商店）</a>。</p>
+</section>
+
+<section class="chapter" id="sec-excel">
+  <span class="chip" style="background:linear-gradient(90deg,#9c7b23,#bf6a1e)">CHAPTER 08</span>
+  <h2 class="ct">8. Excel 與數據分析應用</h2>
+
+  <h3>Excel 整合</h3>
+  <p>可透過增益集或直接貼上資料，要求 Claude：</p>
+  <ul class="pt">
+    <li>生成 Excel 公式。</li>
+    <li>建立樞紐分析表。</li>
+    <li>視覺化趨勢圖。</li>
+  </ul>
+  <p>在某些邏輯判斷與資料理解上，Claude 的回應往往較<b>直覺、可解釋</b>。安裝連結：<a href="https://marketplace.microsoft.com/en-us/product/saas/wa200009404?tab=overview" target="_blank" rel="noopener">Claude in Excel（Microsoft AppSource）</a>。</p>
+
+  <h3>學術與統計分析</h3>
+  <p>Claude 可協助撰寫 R 或 Python 程式碼，用於：</p>
+  <ul class="pt">
+    <li>成對樣本或獨立樣本 t 檢定。</li>
+    <li>變異數分析（ANOVA）。</li>
+    <li>迴歸分析。</li>
+  </ul>
+  <div class="note green">✅ 實務小技巧：在學術投稿前，可請 Claude 協助檢查：<b>P 值是否達顯著水準</b>、<b>論述是否符合學術書寫慣例</b>、<b>統計結果敘述是否一致</b>。</div>
+</section>
+
+<section class="chapter" id="sec-settings">
+  <span class="chip" style="background:linear-gradient(90deg,#bf6a1e,#9c7b23)">CHAPTER 09</span>
+  <h2 class="ct">9. 其他介面設定與官方 Skills 一覽</h2>
+  <p class="cd">以下項目為簡報同時提到、但內容較片段的介面選項與官方 Skills 清單，如實列出，不過度延伸推測。</p>
+
+  <h3>介面選項（簡報列出）</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:170px">選項</th><th>說明</th></tr>
+    <tr><td>Appearance 外觀設定</td><td>Light 淺色／Dark 深色／System 系統跟隨／Auto 自動。</td></tr>
+    <tr><td>Chat font 聊天字體</td><td>Sans 無襯線／Dyslexic friendly 閱讀障礙友善。</td></tr>
+    <tr><td>Domain allowlist 網域允許清單</td><td>限定可存取的網域。</td></tr>
+    <tr><td>Extra usage 額外使用額度</td><td>對應第 1 節提醒「建議關閉」的加購額度選項。</td></tr>
+    <tr><td>Plan usage limits 計畫使用限制</td><td>顯示目前方案的用量上限。</td></tr>
+    <tr><td>Export data 匯出資料</td><td>匯出對話與帳號資料。</td></tr>
+    <tr><td>Shared chats 共享聊天</td><td>管理已分享出去的對話連結。</td></tr>
+    <tr><td>Notifications 通知</td><td>例如 Emails from Claude Code on the web。</td></tr>
+    <tr><td>Code execution and file creation</td><td>執行程式碼與建立檔案，可建立和編輯文件、試算表、簡報、PDF 和資料報告。</td></tr>
+    <tr><td>Allow network egress</td><td>放行 Claude 上網做進階工作。</td></tr>
+  </table></div>
+
+  <h3>官方預先打包的 Skills（需搭配文件使用）</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:190px">Skill</th><th>用途</th></tr>
+    <tr><td>web-artifacts-builder</td><td>協助做較複雜的互動式前端 Web 作品。</td></tr>
+    <tr><td>slack-gif-creator</td><td>幫你規劃與製作適合 Slack 的 GIF。</td></tr>
+    <tr><td>skill-creator</td><td>幫你把工作流程包裝成新的 Claude 技能。</td></tr>
+    <tr><td>theme-factory</td><td>幫各種 Artifact 套好一致的主題與視覺風格。</td></tr>
+    <tr><td>canvas-design</td><td>幫你設計海報、插畫等平面視覺稿。</td></tr>
+    <tr><td>algorithmic-art</td><td>用程式幫你畫「演算法藝術／生成圖」。</td></tr>
+    <tr><td>doc-coauthoring</td><td>用結構化流程跟你一起撰寫文件。</td></tr>
+    <tr><td>internal-comms</td><td>代寫公司內部公告、狀態更新等溝通文本。</td></tr>
+    <tr><td>brand-guidelines</td><td>讓作品自動套用 Anthropic 的品牌風格。</td></tr>
+    <tr><td>mcp-builder</td><td>教你怎麼撰寫 MCP 伺服器，讓模型能用外部工具。</td></tr>
+  </table></div>
+  <p>簡報以介面截圖呈現分類選單，這些 Skills 依用途大致可歸類在：<b>Life stuff（生活相關）、Marketing（行銷）、Design（設計）、Legal（法律）、Human Resources（人力資源）、Finance（財務）、Data Science（數據科學）、Engineering（工程）、Operations（營運）、Product Management（產品管理）、Sales（銷售）</b>等應用領域分類下（此處以文字列出對應項目，不強行還原截圖版面）。</p>
+
+  <h3>Claude Code + NotebookLM 一鍵安裝功能</h3>
+  <p>課程筆記附上的具體安裝步驟：</p>
+  <div class="prompt"><span class="tag">安裝指令</span>1. Create skills directory (if it doesn't exist): mkdir -p ~/.claude/skills
+2. Clone this repository: cd ~/.claude/skills; git clone https://github.com/PleasePrompto/notebooklm-skill notebooklm
+3. That's it! Open Claude Code and say: "What are my skills?"</div>
+</section>
+
+<section class="chapter" id="sec-recap">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#9c7b23)">RECAP</span>
+  <h2 class="ct">10. 重點整理：快速回顧 EP20</h2>
+  <ul class="pt">
+    <li>先搞懂<b>額度</b>（免費 50 次／Pro 175–200 次）並<b>關閉額外增量付費</b>，複雜指令切回<b>英文介面</b>。</li>
+    <li><b>隱私設定</b>建議關閉改善模型與分享位置；用 <b>Personal preferences</b> 建立帳號級長期人格設定。</li>
+    <li><b>深度思考</b>（時鐘圖示，定義→探索→分析→綜合）適合高風險決策；<b>寫作風格</b>四選一（Normal／Concise／Formal／Explanatory），也能訓練專屬風格。</li>
+    <li><b>Artifacts／SVG</b> 能產出文字雲、流程圖、簡報素材，甚至小遊戲，五步驟：創建→編輯→預覽→分享→協作。</li>
+    <li><b>Connectors</b> 把 Claude 接上 Google Drive／Gmail／GitHub／Calendar，多為<b>只讀</b>；自訂 Connector 需注意 OAuth 與伺服器安全風險。</li>
+    <li><b>Projects</b> 把聊天變工作空間；<b>Research</b> 把「我覺得」變「我查到，且可引用」。</li>
+    <li><b>桌面版</b>同步快、整合本機環境；<b>Chrome 擴充</b>能即時整理當前網頁內容為表格。</li>
+    <li><b>Excel 整合</b>可做公式／樞紐分析／趨勢圖；<b>統計分析</b>可協助 t 檢定、ANOVA、迴歸與投稿前檢查。</li>
+    <li>官方提供多款 <b>Skills</b>（web-artifacts-builder、skill-creator、theme-factory 等），依生活、行銷、設計、法律、人資、財務、數據科學、工程、營運、產品、銷售等場景分類。</li>
+  </ul>
+  <div class="golden"><div class="q">Claude 不只是聊天工具。</div><div class="a">透過個人化設定、深度推理、SVG 視覺化與 Excel 整合，它能成為一個橫跨資料處理、分析思考與簡報製作的整合型工作夥伴。—— 課程筆記結語</div></div>
+</section>
+
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5a5866)">SOURCES</span>
+  <h2 class="ct">11. 資料來源與製作說明</h2>
+  <ul class="pt">
+    <li><b>原始教材：</b>本頁內容取自 EP20「打通 Anthropic 任督二脈：Claude 篇」課程 Google Drive 資料夾中的<b>兩份真實文件</b>——① 一份「課程筆記」Google Doc（結構清楚、屬<b>逐段轉寫的乾淨文字稿</b>，本頁以此為主要依據）；② 一份簡報 PDF（以「Claude 功能地圖」為主題的投影片，圖像／示意圖比重高，主要在畫<b>整張 Claude 網頁介面的 UI 分區導覽圖</b>）。</li>
+    <li><b>誠實聲明（重要）：</b>本集<b>沒有錄影檔</b>，因此<b>未執行逐幀抽格</b>；也<b>沒有取得簡報投影片的原始圖片</b>，因此本頁<b>不含任何嵌入圖片或截圖</b>，純文字整理。凡是本頁描述「本集沒有」的東西，就是真的沒有，不做推測補齊。</li>
+    <li><b>關於簡報 PDF 文字擷取品質：</b>該簡報是一張以圖像／UI 地圖為主的投影片，文字抽取結果<b>相當破碎、帶有 OCR 式的錯位與斷句</b>（例如按鈕名稱、步驟編號常與說明文字黏在一起）。本頁在<b>文字脈絡清楚可判讀</b>的段落（如 Connectors、Privacy、Writing style、Projects、Research、Extended thinking、Artifacts、Custom Connector Setup、Claude Desktop 安裝、其餘介面選項與 Skills 清單）盡量<b>還原其真實語意</b>並整理成可讀的條列／表格；對於<b>片段、無法確定具體版面或細節</b>的部分（如「其他介面設定」表格中列出的項目），採<b>如實列出用詞、不過度延伸推測</b>的方式呈現，不虛構簡報中沒有明確提到的細節。</li>
+    <li><b>與課程筆記的關係：</b>簡報中可與課程筆記對應的內容（例如 Privacy 設定、Writing style、深度思考）已在正文中<b>互相補充標註</b>；簡報獨有、課程筆記未提到的內容（如 Connectors 詳細設定、Projects、Research、Claude Desktop 安裝步驟、官方 Skills 清單）則<b>單獨列出章節</b>，並註明資訊來自簡報。</li>
+    <li><b>製作方式：</b>本頁未使用影片抽幀或簡報截圖流程，僅依上述兩份文件的文字內容整理、分節、製表。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  EP20「打通 Anthropic 任督二脈：Claude 篇（含 Cowork 介紹及應用）」課堂筆記・2026/07 整理<br>
+  🍀 Learn AI with Tarshar｜搭配 <a href="ep20-ai-skills.html">互動技能地圖</a> 使用效果最佳
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>抽絲剝繭談 ChatGPT Work｜互動式學習地圖</title>
+<meta name="description" content="EP46 晨學講堂：抽絲剝繭談 ChatGPT Work——Chat／Work／Codex 三模式、Work+Codex=Agent、目標式交付（新青安 3.0 動畫簡報 16 分鐘實作）、Sol／Terra／Luna 三模型、權限核准、Sites 建站、手機 Remote，互動式多層次學習地圖">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269;
+  --green:#3f8560; --orange:#bf6a1e; --red:#c0453f; --teal:#0d8f80;
+  --feat:#0f9d78; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(28px,4.6vw,46px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--txt);background:none;-webkit-text-fill-color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:660px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:9px}
+.steps li{list-style:none;counter-increment:st;display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--txt2);line-height:1.7}
+.steps li::before{content:counter(st);flex:none;width:25px;height:25px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:var(--c,var(--feat));margin-top:1px}
+.steps li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+.prompt,.promptbox{background:#1d1d1f;border:1px solid #2c2c31;border-radius:10px;padding:13px 15px;margin-top:6px;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt b,.promptbox b{color:#fff}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <a class="navlink" href="../radio/" style="border-color:#a8c686" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <div class="logo">
+    <div class="dot">🧩</div>
+    <div>ChatGPT Work 技能地圖<small>MORNING LEARNING · EP46</small></div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋技能關鍵字：Work、目標、Sol、Sites、標楷體、核准…" autocomplete="off">
+  </div>
+  <a class="navlink" href="ep46-notes.html">📝 逐幀課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">EP46 · 晨學講堂 · 2026/07/19</span>
+  <h1>抽絲剝繭談<br>ChatGPT Work</h1>
+  <p class="sub">ChatGPT 桌面新版把 Chat／Work／Codex 放進同一個 App——重點是 <b>Work</b>：給它一句「目標」，它就自己收資料、產檔案、依回饋修正。<br>點進每一章，逐層展開<b>本集實際示範</b>的技能、步驟與指令，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🎙️ 生成式AI應用電台・晨學講堂</span>
+    <span>🧩 示範案例：新青安 3.0 懶人包</span>
+    <span>🗂️ 四大主題 · 12 項實錄技能</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>4</b><span>大主題</span></div>
+  <div class="stat"><b>12</b><span>實錄技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 12 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--teal)" onclick="showChapter('modes')">
+        <div class="glowline"></div>
+        <span class="emoji">🧭</span>
+        <h3><em>CHAPTER 01</em>三種模式</h3>
+        <p>一個桌面 App、三種模式：Chat 給答案、Work 交成果、Codex 改軟體。Work＋Codex＝Agent；手機／網頁／桌面能力還不一樣。</p>
+        <div class="foot"><div class="mini"><i data-mini="modes"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--blue)" onclick="showChapter('deliver')">
+        <div class="glowline"></div>
+        <span class="emoji">🎯</span>
+        <h3><em>CHAPTER 02</em>目標式交付</h3>
+        <p>給目標不給問題、五步驟自動規劃、先做無字背景再疊可編輯文字——現場 16 分鐘生出「新青安 3.0」動畫簡報。</p>
+        <div class="foot"><div class="mini"><i data-mini="deliver"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--purple)" onclick="showChapter('model')">
+        <div class="glowline"></div>
+        <span class="emoji">🧠</span>
+        <h3><em>CHAPTER 03</em>選對模型</h3>
+        <p>GPT-5.6 的 Sol／Terra／Luna 三種定位，加上推理強度 Light→Ultra，依任務難度與規模挑到最划算的組合。</p>
+        <div class="foot"><div class="mini"><i data-mini="model"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--orange)" onclick="showChapter('power')">
+        <div class="glowline"></div>
+        <span class="emoji">🔐</span>
+        <h3><em>CHAPTER 04</em>權限與延伸</h3>
+        <p>三種動作核准權限、用 Sites 一句話建站、用手機 Remote 掃 QR 遙控電腦，還有寵物幫你管理對話——人在迴路把關。</p>
+        <div class="foot"><div class="mini"><i data-mini="power"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+
+    <div class="resources">
+      <h3>📦 <span>課程原始資料</span></h3>
+      <div class="res-grid">
+        <a href="https://drive.google.com/file/d/1-OjGBJva648jZ2z108BuoPSshNG7hcwR/view" target="_blank" rel="noopener"><span class="ic">🎬</span><span><b>錄影回放</b>完整課程影片（37:09）</span></a>
+        <a href="ep46-notes.html"><span class="ic">📝</span><span><b>逐幀課堂筆記</b>真實截圖 + 時間戳 + 簡報原文佐證</span></a>
+        <a href="../radio/"><span class="ic">📻</span><span><b>直播電台系列</b>回系列總覽，一集一卡</span></a>
+        <a href="ep45-notes.html"><span class="ic">🧪</span><span><b>上一集 EP45</b>Google AI Studio 偷藏了這些 Agent！</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-modes" class="view" style="--c:var(--teal)"></section>
+  <section id="view-deliver" class="view" style="--c:var(--blue)"></section>
+  <section id="view-model" class="view" style="--c:var(--purple)"></section>
+  <section id="view-power" class="view" style="--c:var(--orange)"></section>
+</main>
+
+<footer>
+  本頁為 EP46「抽絲剝繭談 ChatGPT Work」課後整理・介面沿用本站 EP44／EP45 互動式學習地圖<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2026｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+/* ═══════════ 課程資料（章 → 技能 → 內容區塊） ═══════════ */
+const DATA = {
+  modes: {
+    key:'modes', color:'var(--teal)', emoji:'🧭', code:'CHAPTER 01', title:'三種模式',
+    intro:'很多人打開新版 ChatGPT 就問「Work 到底在哪？」它跟 Chat、Codex 一起被放進同一個桌面 App。先分清「這件事要一個答案、一份成果、還是改一段程式」，再決定進哪個模式。',
+    topics:[
+      {t:'一個 App，三種工作模式', s:'Chat／Work／Codex 各自的產出與時機｜錄影 00:45',
+       blocks:[
+        {h:'三模式定位',table:{head:['模式','適用','產出','什麼時候用'],rows:[
+          ['Chat','快速問答、搜尋、比較、草稿','回答、訊息、簡短內容','需求還在探索'],
+          ['Work','研究、跨工具流程、交付物','文件、簡報、試算表、Site','成果規格已能說清楚'],
+          ['Codex','程式碼、儲存庫、測試、PR','程式變更、差異、測試結果','核心工作是軟體工程']]}},
+        {h:'判斷口訣',p:'官方簡報第 4 頁：<b>要一個答案用 Chat；要一個成果用 Work；要修改軟體用 Codex。</b>'},
+        {h:'看實錄截圖',p:'👉 <a href="ep46-notes.html#m-three" style="color:var(--teal)">逐幀筆記 3.1：三模式（含簡報 p3/p4）</a>'},
+        {h:'一句話記憶',p:'「先選對模式，再寫提示詞——用錯模式，提示詞再好也事倍功半。」'}]},
+      {t:'Work＋Codex＝Agent', s:'哪兩個模式會「自己動手」｜錄影 01:00',
+       blocks:[
+        {h:'關鍵區分',ul:[
+          '老師用紅筆在 Work 與 Codex 之間畫括弧、手寫「<b>Agent</b>」——這兩個才是會規劃、動手的代理模式。',
+          '<b>Chat</b> 產生一個可讀的回答，通常以文字為終點、由你主導下一步。',
+          '<b>Work</b> 把目標跑成可審核的成果：先規劃、再找資料與操作工具，能建文件／簡報／表格／Sites。官方定義它是 <b>outcome-oriented agent（目標導向代理）</b>。',
+          '<b>Codex</b> 專攻軟體工程，顯示開發與審查細節。']},
+        {h:'邊界提醒',warn:'官方簡報 p5 附註：Codex 不能在網頁／手機當可選模式；手機 Remote 只能存取「部分」桌面 Codex 任務。'},
+        {h:'看實錄截圖',p:'👉 <a href="ep46-notes.html#m-agent" style="color:var(--teal)">逐幀筆記 3.2：Work 首頁與 Agent 概念</a>'}]},
+      {t:'手機、網頁、桌面能力不同', s:'本機資料只有桌面授權後能讀｜錄影 07:15',
+       blocks:[
+        {h:'三種裝置',table:{head:['裝置','能做什麼'],rows:[
+          ['手機','Chat／Work 在雲端執行；可上傳檔案，不能直接讀本機資料'],
+          ['網頁','Chat／Work、串 Plugin、建文件與 Sites；雲端對話可跨裝置延續'],
+          ['桌面','同時有 Chat／Work／Codex；授權後可讀本機資料與桌面 App']]}},
+        {h:'重點',tip:'雲端 Work 可同步；本機聊天與本機檔案仍留在該電腦。要它讀你電腦裡的檔，就得用桌面版並授權。'},
+        {h:'看實錄截圖',p:'👉 <a href="ep46-notes.html#m-surface" style="color:var(--teal)">逐幀筆記 3.3：手機／網頁／桌面</a>'}]}
+    ]
+  },
+  deliver: {
+    key:'deliver', color:'var(--blue)', emoji:'🎯', code:'CHAPTER 02', title:'目標式交付',
+    intro:'本集重頭戲：老師只講一句「目標」，讓 Work 把一份「新青安 3.0 政策懶人包」動畫簡報從無到有做出來——過程可見、可補料、可改方向，最後 16 分鐘交出 5 頁 PPTX。',
+    topics:[
+      {t:'給「目標」，不是給「問題」', s:'好提示詞的五欄公式｜錄影 09:15',
+       blocks:[
+        {h:'現場目標指令',prompt:'我目標是要做，用這個動畫的方式的簡報，\n然後來介紹新青安 3.0 政策，作為政策懶人包。\n簡報 5 頁（image2.0）。\n（追加）文字部分，請使用標楷體、字型大小最少 24 號字。'},
+        {h:'五欄公式（官方 p9）',table:{head:['欄位','意義','本次對應'],rows:[
+          ['結果','要交付什麼？給誰？','新青安 3.0 懶人包簡報'],
+          ['脈絡','背景、目的','動畫風格、給民眾看'],
+          ['來源','檔案、連結、範圍','行政院／財政部公告'],
+          ['限制','頁數、格式、語氣','5 頁、標楷體、字級≥24'],
+          ['驗收','數字、版面、缺口','共 5 頁、無文字超出版面']]}},
+        {h:'看實錄截圖',p:'👉 <a href="ep46-notes.html#d-goal" style="color:var(--blue)">逐幀筆記 4.1：給目標不給問題</a>'},
+        {h:'一句話記憶',p:'「提示詞不必長，五項不能含糊：結果＋脈絡＋來源＋限制＋驗收。」'}]},
+      {t:'五步驟自動規劃', s:'它先想好再動手｜錄影 10:15',
+       blocks:[
+        {h:'實際跑出的 5 步驟',steps:[
+          '盤點現有檔案素材（先看資料夾有無半成品）。',
+          '查核新青安 3.0 政策重點（自動網頁搜尋官方公告）。',
+          '規劃 5 頁動畫懶人包腳本。',
+          '產出 5 頁 Image 2.0 圖像（先背景、後疊字）。',
+          '整理交付檔並驗證（頁數、版面、來源）。']},
+        {h:'對照官方六步循環',p:'官方簡報 p7：<b>定義成果 → 收集脈絡 → 規劃步驟 → 執行工具 → 產出檔案 → 預覽驗收</b>。任何一步都能補資料或改方向。'},
+        {h:'看實錄截圖',p:'👉 <a href="ep46-notes.html#d-plan" style="color:var(--blue)">逐幀筆記 4.2：五步驟規劃</a>'},
+        {h:'一句話記憶',p:'「Work 跟聊天最大的差別，是它會先把任務拆成可驗收的步驟，再逐一執行。」'}]},
+      {t:'查公告、做背景、疊上可編輯文字', s:'避免 AI 把中文畫成亂碼的關鍵手法｜錄影 10:45',
+       blocks:[
+        {h:'核心手法',ul:[
+          '<b>先背景、後文字</b>：AI 生圖容易把中文寫成亂碼，所以讓它只畫「16:9 無文字插畫背景」，再用簡報工具把<b>可編輯中文</b>疊上去——版面乾淨、文字不會錯。',
+          '<b>資料有出處</b>：Work 自己查行政院／財政部 2026/07/16 公告，每頁附「資料來源」；只改版面、<b>不改政策內容</b>。',
+          '<b>途中可加條件</b>：學員在 Meet 補「標楷體、字級≥24」，Work 立刻納入後續步驟——這就是官方講的 <b>steer（中途導引）</b>。']},
+        {h:'新青安資格（簡報 p2 示範內容）',ul:[
+          '本人、配偶、未成年子女均無自有住宅；申貸時未滿 50 歲；申貸年齡＋核貸年限 ≤ 80；本人年所得 ≤ 200 萬。',
+          '房屋總價上限：台北 3,500 萬、新北新竹 2,500 萬、其他 2,000 萬。（實際申辦以主管機關公告為準）']},
+        {h:'看實錄截圖',p:'👉 <a href="ep46-notes.html#d-make" style="color:var(--blue)">逐幀筆記 4.3：查公告、做背景、疊文字</a>'}]},
+      {t:'16 分鐘交付，再一句話改稿', s:'交付後還能持續迭代｜錄影 26:45',
+       blocks:[
+        {h:'交付成果',ul:[
+          '完成畫面：「<b>已完成 5 頁動畫風格簡報，文字用標楷體、最小字級不低於 24pt，依官方公告整理。已驗證：共 5 頁、無文字超出版面。</b>」',
+          '提供 <b>下載 PPTX</b>，標註「完成目標用時約 <b>16 分鐘</b>」；檔名「新青安3.0政策懶人包_5頁動畫風格.pptx（7,311KB）」。',
+          '再示範改稿：「把全部的字改成微軟正黑體」→ 拆 3 任務（掃描字型／套用微軟正黑體字級≥24pt／檢查溢位）；追加「生一頁台北 101 風格資訊圖表」。']},
+        {h:'交付後的三個檢查（官方 p13）',table:{head:['檢查','問自己'],rows:[
+          ['正確','數字、姓名、日期、引文與來源是否一致？'],
+          ['完整','是否覆蓋原始需求、必要章節與例外？'],
+          ['可用','字級、版面、公式、連結、格式可交付嗎？']]}},
+        {h:'精準修正句型',prompt:'• 只修改第 6 頁圖表標題；其餘版面不變。\n• 把所有百分比重新對照原始試算表，列出更動清單。\n• 將摘要改為主管閱讀的一頁版，保留來源與限制。'},
+        {h:'看實錄截圖',p:'👉 <a href="ep46-notes.html#d-done" style="color:var(--blue)">逐幀筆記 4.4：16 分鐘交付與改稿</a>'}]}
+    ]
+  },
+  model: {
+    key:'model', color:'var(--purple)', emoji:'🧠', code:'CHAPTER 03', title:'選對模型',
+    intro:'GPT-5.6 之後模型命名變了——不再是一串代號，而是三個「性格」：Sol、Terra、Luna。加上推理強度，就能依任務難度與規模挑到最划算的組合。',
+    topics:[
+      {t:'Sol／Terra／Luna 三種定位', s:'太陽／地球／月亮｜錄影 08:00',
+       blocks:[
+        {h:'三模型比較（官方 p16/17）',table:{head:['模型','定位','適合','特性'],rows:[
+          ['Sol','模糊、困難、需判斷精修','深度研究、策略、複雜文件、電腦操作','深度最高；較慢、用量高'],
+          ['Terra','需求大致清楚的日常','報告、分析、簡報、流程文件','能力、速度、成本平衡'],
+          ['Luna','規則明確、可大量重複','擷取、分類、轉換、結構摘要','速度最快、成本最低']]}},
+        {h:'選模型三問',ul:[
+          '你還不知道最佳解長什麼樣 → <b>Sol</b>。',
+          '知道成果方向、但需要完整處理 → <b>Terra</b>。',
+          '已有規則、格式與範例 → <b>Luna</b>。']},
+        {h:'老師實務',p:'做簡報 Terra 或 Sol 就夠；要省容量選 5.5；寫複雜、要夾東夾西的 code 才上更重的模型。模型不是固定身份——同一任務可<b>先 Terra，遇到模糊關鍵點再升 Sol</b>。'},
+        {h:'看實錄截圖',p:'👉 <a href="ep46-notes.html#sec-model" style="color:var(--purple)">逐幀筆記 5：Sol／Terra／Luna（含模型選單）</a>'}]},
+      {t:'推理強度：Light 到 Ultra', s:'先低再往上加｜錄影 08:15',
+       blocks:[
+        {h:'五個強度（官方 p18）',table:{head:['設定','適合','代表任務'],rows:[
+          ['Light','快速、範圍明確','改格式、摘要、單一步驟'],
+          ['Medium','速度與深度平衡','多數日常 Work（Power 預設 Sol Medium）'],
+          ['High / Extra High','多步驟、來源多','研究、分析、重要文件'],
+          ['Max','讓單一模型想更久','最難問題；深度優先於速度'],
+          ['Ultra','子 Agent 平行處理','多工作流研究或大型交付（依方案）']]}},
+        {h:'原則',tip:'先用「最低可達品質」的強度，不夠再往上調——省 token、也省等待。'},
+        {h:'看實錄截圖',p:'👉 <a href="ep46-notes.html#sec-model" style="color:var(--purple)">逐幀筆記 5：模型與推理強度</a>'},
+        {h:'一句話記憶',p:'「選模型看『任務有多不確定、規模有多大』；選強度看『要它想多久』。」'}]}
+    ]
+  },
+  power: {
+    key:'power', color:'var(--orange)', emoji:'🔐', code:'CHAPTER 04', title:'權限與延伸',
+    intro:'Work 能「動手」，就一定會碰到權限與安全。這一章收在三個延伸主題：怎麼核准動作、用 Sites 一句話建站、用手機 Remote 遙控電腦。',
+    topics:[
+      {t:'三種動作核准權限', s:'把「動手的範圍」握在手上｜錄影 06:00',
+       blocks:[
+        {h:'三選項',table:{head:['核准層級','意義'],rows:[
+          ['要求核准','一律先問是否要編輯外部檔案及使用網際網路'],
+          ['代我核准','僅對偵測為可能不安全的操作要求核准'],
+          ['完整存取權','可無限制存取網際網路和你電腦上的任何檔案'],
+          ['自訂','用 config.toml 自己設規則']]}},
+        {h:'人在迴路四原則（官方 p20）',ul:[
+          '<b>最小授權</b>：只開任務需要的檔案／網站／App。',
+          '<b>憑證隔離</b>：密碼只在瀏覽器輸入，不貼進聊天。',
+          '<b>來源不盲信</b>：把網頁內容視為未受信任，核對帳號與頁面。',
+          '<b>敏感動作覆核</b>：送出、發布、變更權限、刪除前先確認。']},
+        {h:'提醒',warn:'熟悉前先用「要求核准」看它每一步想做什麼；「完整存取權」＝它能碰你整台電腦，要清楚自己在授權什麼。金句：AI 可以跑流程；責任與最終判斷仍由人承擔。'},
+        {h:'看實錄截圖',p:'👉 <a href="ep46-notes.html#p-approve" style="color:var(--orange)">逐幀筆記 6.1：三種核准權限</a>'}]},
+      {t:'Sites：一句話生成互動頁面', s:'現場建「AI Agent 課程網站」｜錄影 17:45',
+       blocks:[
+        {h:'Sites 三步驟（官方 p14）',steps:[
+          '描述網站的對象、用途、資料與互動。',
+          '檢查<b>私人預覽</b>，再用文字要求調整。',
+          '設定可見對象，確認後<b>發布網址</b>。']},
+        {h:'現場示範',ul:[
+          '任務：建「AI Agent 課程網站」，介紹 <b>Codex／Opencode／Claude Code／Antigravity</b> 四工具。',
+          '遇到環境限制（沒有 Linux 子系統）會自己用<b>等效的 Windows 流程</b>繞過，不影響最後內容。',
+          '發布前推送被 <b>Git 安全檢查擋下</b>（執行身分不同）→ 加安全例外後續傳 Sites。']},
+        {h:'發布邊界',warn:'每個部署網址都是正式環境；付費方案適用（Free／Go 不含）；首波不含 EEA／瑞士／英國。課程與行政資料——別把學員名冊、成績、身分放進公開 Site。'},
+        {h:'看實錄截圖',p:'👉 <a href="ep46-notes.html#p-sites" style="color:var(--orange)">逐幀筆記 6.2：Sites 建站</a>'}]},
+      {t:'手機 Remote 與寵物', s:'掃 QR 遙控電腦、寵物管理對話｜錄影 05:15',
+       blocks:[
+        {h:'手機 Remote',ul:[
+          '設定 → 連線 → 「控制其他裝置」：桌面顯示「<b>在你的裝置上核准，即可遠端控制這台電腦</b>」，切「電話／電腦」並掃 <b>QR 碼</b>配對。',
+          '讓你人不在電腦前，也能用手機核准／查看桌面 Codex 的部分任務。']},
+        {h:'寵物（粽寶／簡報鴞…）',ul:[
+          '不只是裝飾：會<b>幫你管理對話串、提示需要注意的事項</b>。',
+          'demo 用「幫我設定我的寵物」一句話就能挑角色（晨學狐／研研貓／簡報鴞…）。']},
+        {h:'安全前提',tip:'這些延伸功能都建立在同一件事上：先確認登入的帳號、只授權需要的範圍、敏感動作自己覆核。'},
+        {h:'看實錄截圖',p:'👉 <a href="ep46-notes.html#p-remote" style="color:var(--orange)">逐幀筆記 6.3：手機 Remote 遙控</a>'}]}
+    ]
+  }
+};
+
+/* ═══════════ 渲染 ═══════════ */
+const ORDER = ['modes','deliver','model','power'];
+const $ = s=>document.querySelector(s);
+
+function renderChapter(ch){
+  const d = DATA[ch];
+  const next = ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];
+  const prev = ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html = `
+  <div class="chapter-head">
+    <span class="emoji">${d.emoji}</span>
+    <div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div>
+  </div>`;
+  d.topics.forEach((tp,i)=>{
+    const id = `${ch}-${i}`;
+    html += `
+    <div class="topic" id="topic-${id}">
+      <div class="topic-head" onclick="toggleTopic('${id}')">
+        <span class="num">${i+1}</span>
+        <h4>${tp.t}<small>${tp.s}</small></h4>
+        <input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)">
+        <span class="chev">▶</span>
+      </div>
+      <div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{
+      html += `<div class="block"><h5>${b.h}</h5>`;
+      if(b.p) html += `<p>${b.p}</p>`;
+      if(b.ul) html += `<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps) html += `<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.prompt) html += `<div class="promptbox">${b.prompt}</div>`;
+      if(b.table) html += `<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.tip) html += `<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn) html += `<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html += `</div>`;
+    });
+    html += `</div></div></div>`;
+  });
+  html += `
+  <div class="chapnav">
+    <a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a>
+    <a onclick="showHome()" style="text-align:center">回總覽<b>🏠 四大主題</b></a>
+    <a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a>
+  </div>`;
+  $('#view-'+ch).innerHTML = html;
+}
+ORDER.forEach(renderChapter);
+
+function switchView(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  $('#view-'+id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function showHome(){ switchView('home'); $('#crumbs').style.display='none'; clearSearch(); }
+function showChapter(ch){
+  switchView(ch);
+  $('#crumbs').style.display='flex';
+  $('#crumbHere').textContent = `${DATA[ch].emoji} ${DATA[ch].title}`;
+  clearSearch(); syncChecks();
+}
+function toggleTopic(id){ $('#topic-'+id).classList.toggle('open'); }
+function openTopic(ch,i){
+  showChapter(ch);
+  const el = $('#topic-'+ch+'-'+i);
+  el.classList.add('open');
+  setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);
+}
+
+const KEY='ep46-skills-v1';
+const store = ()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){
+  const s = store(); if(val) s[id]=1; else delete s[id];
+  localStorage.setItem(KEY,JSON.stringify(s));
+  updateProgress();
+}
+const TOTAL = ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){
+  const done = Object.keys(store()).length;
+  const pct = Math.round(done/TOTAL*100);
+  $('#progFill').style.width = pct+'%';
+  $('#progText').textContent = `${done} / ${TOTAL} 項技能已掌握`;
+  $('#statDone').textContent = done;
+  $('#statPct').textContent = pct+'%';
+  ORDER.forEach(ch=>{
+    const sub = DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;
+    const el = document.querySelector(`[data-mini="${ch}"]`);
+    if(el) el.style.width = Math.round(sub/DATA[ch].topics.length*100)+'%';
+  });
+}
+function syncChecks(){
+  const s = store();
+  document.querySelectorAll('input[data-skill]').forEach(cb=>{ cb.checked = !!s[cb.dataset.skill]; });
+}
+function resetProgress(){
+  if(confirm('確定要清空所有打勾進度嗎？')){ localStorage.removeItem(KEY); syncChecks(); updateProgress(); }
+}
+
+function stripTags(s){ return s.replace(/<[^>]+>/g,''); }
+const INDEX = [];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{
+  let body = tp.s+' ';
+  tp.blocks.forEach(b=>{
+    if(b.p) body+=stripTags(b.p)+' ';
+    if(b.ul) body+=b.ul.map(stripTags).join(' ')+' ';
+    if(b.steps) body+=b.steps.map(stripTags).join(' ')+' ';
+    if(b.prompt) body+=b.prompt+' ';
+    if(b.tip) body+=stripTags(b.tip)+' ';
+    if(b.warn) body+=stripTags(b.warn)+' ';
+    if(b.table) body+=b.table.rows.flat().map(stripTags).join(' ')+' ';
+  });
+  INDEX.push({ch,i,title:tp.t,body});
+}));
+$('#searchInput').addEventListener('input',e=>{
+  const q = e.target.value.trim();
+  const box = $('#searchResults');
+  if(!q){ box.classList.remove('show'); box.innerHTML=''; return; }
+  const hits = INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));
+  box.classList.add('show');
+  if(!hits.length){ box.innerHTML = `<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：Work、目標、Sol、Sites、核准）</div>`; return; }
+  const hl = s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);
+  box.innerHTML = hits.map(x=>{
+    const pos = x.body.toLowerCase().indexOf(q.toLowerCase());
+    const snip = x.body.substr(Math.max(0,pos-20),90);
+    return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})">
+      <div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div>
+      <h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;
+  }).join('');
+});
+function clearSearch(){ $('#searchInput').value=''; $('#searchResults').classList.remove('show'); $('#searchResults').innerHTML=''; }
+
+(function(){
+  const box = $('#stars');
+  for(let i=0;i<70;i++){
+    const s = document.createElement('i');
+    s.style.left = Math.random()*100+'%';
+    s.style.top = Math.random()*100+'%';
+    s.style.animationDelay = (Math.random()*3)+'s';
+    s.style.transform = `scale(${.5+Math.random()*1.5})`;
+    box.appendChild(s);
+  }
+})();
+
+syncChecks(); updateProgress();
+</script>
+</body>
+</html>

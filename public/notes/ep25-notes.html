@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP25 課堂筆記｜用 YAML 讓簡報乖乖聽話：從規格到產出一次搞定</title>
+<meta name="description" content="晨學講堂 EP25 課堂筆記：從手工挑模板到規格化控制模板、黃金公式（架構模組＋風格模組）、在 NotebookLM 建立自己的 YAML 資料庫、跨工具實測比較、素材蒐集小撇步。含真實影片截圖與逐字稿重點整理。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#3b6bb0; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px;border-left:none}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+.note.violet{background:#F3EFFB;border-color:#DFD2F0;color:#5a34a8}
+.note.rose{background:#FBEEF1;border-color:#F0D2DB;color:#9c2f52}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.prompt{position:relative;background:#1d1d1f;border-radius:10px;padding:15px 16px;margin:12px 0;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt .tag{display:inline-block;font-size:11px;letter-spacing:.06em;color:#c9c4ff;border:1px solid #3a3a40;border-radius:6px;padding:2px 9px;margin-bottom:8px}
+.prompt b{color:#fff}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.embed{margin:14px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000}
+.embed iframe{display:block;width:100%;aspect-ratio:16/9;border:0}
+.embed .cap{font-size:12.5px;color:var(--ink3);padding:10px 16px;background:var(--paper);border-top:1px solid var(--line)}
+.ts{display:inline-block;font-family:"Cascadia Code",Consolas,monospace;font-weight:700;font-size:12px;color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,#fff);border-radius:5px;padding:2px 8px;margin-right:7px;letter-spacing:.4px;vertical-align:middle}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+.layers{display:grid;gap:10px;margin:14px 0}
+.lyr{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:13px 15px;background:#fff}
+.lyr .n{flex:none;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--accent)}
+.lyr h4{margin:0 0 3px;font-size:14.5px}
+.lyr p{font-size:13px;margin:0}
+.sub{color:var(--ink2)}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#b0c3e0" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP25 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="ep25-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 晨學講堂 · EP25</span>
+  <h1>用 <span>YAML</span> 讓簡報乖乖聽話<br>從規格到產出一次搞定</h1>
+  <p class="lead">EP25 教大家建立一套自己習慣的<b>簡報規格／模式</b>，讓不論用哪一種生成式 AI 工具做簡報，輸出結果都能「比較聽話」。核心方法是把簡報拆成<b>架構模組</b>與<b>風格模組</b>兩大支柱，再用 <b>YAML</b> 把設計美感轉成可執行的規則，並在 NotebookLM 裡建立屬於自己的規格資料庫。本頁整理自真實錄影逐字稿與畫面截圖。</p>
+  <div class="meta">
+    <span>📅 2026/02/11 直播</span>
+    <span>🗂️ 教材：僅有錄影（無獨立簡報檔）</span>
+    <span>🤖 主題：YAML 簡報規格設計</span>
+    <span>🛠️ NotebookLM／ChatGPT／Gemini／Gamma／Canva</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-open">1. 開場：這堂課要練什麼</a>
+  <a href="#sec-template">2. 從手工挑模板到規格化控制</a>
+  <a href="#sec-golden">3. 核心方法：黃金公式（架構模組＋風格模組）</a>
+  <a href="#sec-db">4. 打造你自己的 YAML 資料庫</a>
+  <a href="#sec-test">5. 跨工具實測比較</a>
+  <a href="#sec-tips">6. 素材蒐集小撇步＆邏輯總複習</a>
+  <a href="#sec-end">7. 結語與社群資訊</a>
+  <a href="#sec-recap">8. 重點整理</a>
+  <a href="#sec-src">9. 資料來源與製作說明</a>
+</nav>
+
+<article>
+
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--purple))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>EP25「用 YAML 讓簡報乖乖聽話：從規格到產出一次搞定」</td></tr>
+    <tr><th>頻道</th><td>生成式AI應用電台・晨學講堂</td></tr>
+    <tr><th>直播日期</th><td>2026/02/11 直播</td></tr>
+    <tr><th>教材</th><td><b>僅有錄影</b>（無獨立課堂筆記或簡報檔），本頁內容全部整理自錄影逐字稿與畫面截圖</td></tr>
+    <tr><th>一句話先懂</th><td>把簡報設計拆成<b>架構模組</b>（內容邏輯／頁數／受眾）與<b>風格模組</b>（視覺美學），用 <b>YAML</b> 寫成規格，AI 依規格穩定產出，抓到方法後大約能做到<b>六到八成</b>的格式穩定度。</td></tr>
+  </table></div>
+  <div class="note blue">💡 本集資料夾與其他集數不同，只有一支約 75 分鐘的直播錄影（Google Meet 螢幕分享），沒有另外的簡報檔或筆記文件。依本站資料處理原則，錄影已被完整下載、逐字轉寫並抽格檢視，詳見文末「資料來源與製作說明」。</div>
+</section>
+
+<section class="chapter" id="sec-open">
+  <span class="chip" style="background:linear-gradient(90deg,#5563d6,#0aa6c9)">CHAPTER 01</span>
+  <h2 class="ct">1. 開場：這堂課要練什麼</h2>
+  <p class="cd">延續前幾次直播的格式，目標是建立一套「比較聽話」的簡報規格。</p>
+  <ul class="pt">
+    <li>目的是讓大家建立一套<b>自己習慣的簡報規格／模式</b>，不論用哪一種生成式 AI 工具做簡報，輸出結果都能比較聽話。</li>
+    <li>老師誠實地說：<b>沒辦法做到百分之百完全照格式跑</b>，但抓到方法後大概可以做到<b>六到八成</b>的穩定度，已經算相當堪用。</li>
+    <li>建議大家準備一個自己想做的題目或主題，<b>邊聽邊實際跟著操作測試</b>。</li>
+  </ul>
+  <div class="note gold">⚠️ 誠實的期待管理：這套方法不是「完美複製格式」的魔法，而是把原本靠運氣的生成，變成靠規格提高命中率的做法。</div>
+</section>
+
+<section class="chapter" id="sec-template">
+  <span class="chip" style="background:linear-gradient(90deg,#7a4fd6,#5563d6)">CHAPTER 02</span>
+  <h2 class="ct">2. 從「手工挑模板」到「規格化控制模板」</h2>
+  <p class="cd">先理解傳統做法的侷限，再看 AI 時代如何反過來用。</p>
+  <figure class="shot">
+    <img src="ep25-img/shot01-template-vs-spec.jpg" alt="從手工挑模板到規格化控制模板：傳統流程 vs AI 時代結構化流程對照圖" loading="lazy">
+    <figcaption>畫面截圖｜老師展示的對照圖「從手工挑模板到規格化控制模板」——傳統 3 步驟（下載模板→挑外觀→套用內容，「只能選外觀，難以控制風格邏輯」）對比 AI 時代 3 步驟（結構化規格→穩定生成→個人偏好版型，「用規格控制，可重複使用」）。</figcaption>
+  </figure>
+  <h3>傳統流程的侷限</h3>
+  <ol class="st">
+    <li>上網找喜歡的模板。</li>
+    <li>下載後挑外觀（簡約風、工業風等）。</li>
+    <li>把文字內容一個個手動塞進模板裡。</li>
+  </ol>
+  <p>這個過程要花很多時間手動套內容，而且<b>只能選外觀，難以控制風格邏輯</b>。</p>
+  <h3>反過來用：把模板變成 AI 的參考依據</h3>
+  <p>有了 NotebookLM、Gamma、Canva、Beautiful AI 等生成式簡報工具之後，其實可以反過來操作：把你以前喜歡的模板<b>截圖直接給 AI</b>，請它「根據這個模板的外觀，把我的簡報內容放上去」。</p>
+  <div class="note steel">🖥️ 老師現場示範：隨意下載一個「藍天白雲、Windows 95 視窗、灰色搜尋框」風格的懷舊模板，把兩張截圖丟給 NotebookLM，請它依照這個模板風格做一份「台北淡水老街」主題的簡報——結果不只做出類似排版，還自動延伸出更完整的復古電腦風視覺效果。</div>
+  <p>老師的心得：<b>當你對簡報格式沒有明確想法時，直接去看別人的模板長怎樣，通常會比憑空亂想更快找到方向。</b></p>
+  <h3>傳統模板瀏覽的實例</h3>
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="ep25-img/shot03-slidescarnival.jpg" alt="SlidesCarnival.com 免費簡報模板網站畫面" loading="lazy">
+      <figcaption>畫面截圖｜SlidesCarnival.com——免費簡報模板圖庫網站，可下載 Canva／PowerPoint／Google Slides 格式，用來瀏覽風格參考。</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="ep25-img/shot04-canva-template.jpg" alt="Canva minimalist business slides 分享範本頁面" loading="lazy">
+      <figcaption>畫面截圖｜Canva「minimalist. business slides」分享範本頁（1920×1080px），另一個模板圖庫式風格參考的實例。</figcaption>
+    </figure>
+  </div>
+  <div class="golden"><div class="q">「用規格控制，可重複使用。」</div><div class="a">—— 這正是 AI 時代規格化控制的核心：把只能選外觀的手工流程，升級成結構化規格→穩定生成→個人偏好版型的可重複流程。</div></div>
+</section>
+
+<section class="chapter" id="sec-golden">
+  <span class="chip" style="background:linear-gradient(90deg,#2f6df0,#0aa6c9)">CHAPTER 03</span>
+  <h2 class="ct">3. 核心方法：黃金公式——架構模組與風格模組</h2>
+  <p class="cd">這是本集最核心的方法論。</p>
+  <p>老師的作法是先給 AI 一個「黃金公式」，非常詳細地告訴它：請把一份簡報拆成兩個模組來處理——</p>
+  <div class="twrap"><table>
+    <tr><th style="width:130px">模組</th><th>負責什麼</th></tr>
+    <tr><td><b>架構模組</b></td><td>整體的內容邏輯、格式、頁數、以及「我的受眾是誰」。</td></tr>
+    <tr><td><b>風格模組</b></td><td>整體呈現的視覺風格（這個階段完全不涉及內容本身，內容之後才會額外餵給它）。</td></tr>
+  </table></div>
+  <p>AI 只需要先把「格式跟風格」兩件事處理好，這是這個方法最主要的訴求。</p>
+  <h3>最偷懶（也最建議新手）的做法</h3>
+  <ol class="st">
+    <li>直接打開 <b>ChatGPT</b> 或 <b>Gemini</b>，把黃金公式的內容貼給它。</li>
+    <li>下指令：「幫我把以上的這些內容轉成 <b>YAML</b> 格式，要如何思考請呈現」。</li>
+    <li>AI 就會依序把你的簡報邏輯轉成 YAML 格式。</li>
+  </ol>
+  <p>YAML 格式本身不難，主要是把上面的內容轉換成結構化欄位；大家比較容易卡關的地方通常是<b>「色號／主色配色」和「字體」</b>這類視覺細節該怎麼寫，這部分同樣可以請 AI 協助整理，你只需要事後微調（例如關鍵字要加粗、要強調的地方要標出來）。</p>
+  <div class="note blue">💡 名詞提醒：這裡的 <b>YAML</b> 是一種結構化的資料格式（類似設定檔的寫法），不是簡報工具本身，而是拿來「寫規格」用的語言。</div>
+</section>
+
+<section class="chapter" id="sec-db">
+  <span class="chip" style="background:linear-gradient(90deg,#5563d6,#d4508e)">CHAPTER 04</span>
+  <h2 class="ct">4. 打造你自己的 YAML 資料庫（在 NotebookLM 建立筆記本）</h2>
+  <p class="cd">老師示範怎麼在 NotebookLM 建立一個「YAML 轉譯」專用筆記本。</p>
+  <figure class="shot">
+    <img src="ep25-img/shot02-notebooklm-list.jpg" alt="老師 NotebookLM 筆記本列表，多個資料夾以 YAML 為關鍵字命名" loading="lazy">
+    <figcaption>畫面截圖｜老師的 NotebookLM 筆記本列表，可見多個資料夾／筆記本以 YAML 為主題命名（例如「舉例_YAML簡報生成：結構化設計模組指南」「啟發靈感的AI趣味問答指南」），這是老師本人真實的個人資料庫組織方式。</figcaption>
+  </figure>
+  <ol class="st">
+    <li><b>先給格式，再談內容</b>：筆記本裡第一件事就是要有 YAML 格式規範，此外還要有一份「設定筆記」，明確告訴 AI 兩件事：(a) 它現在是一個「YAML 轉譯大師」；(b) 它不是聊天助手，只是一個編輯器——使用者告訴它需求，它就把需求轉成 YAML 格式。</li>
+    <li><b>強制它把來源讀完</b>：要在指示中明確要求它「好好地去讀完這些資料」。老師提醒：如果之後上傳了一兩百份、甚至三百多份 YAML 規格文件當作素材，AI 到後面容易偷懶、不會逐份細讀，所以一定要用明確指令強制要求它認真讀完全部來源，才會真正落實。</li>
+    <li><b>準備你的風格素材包</b>：在黃金公式之外，資料庫裡其餘的內容都是你的「素材包」。例如可以準備多種風格素材：<b>Apple 簡約風、工業風、Prezi 動態風、Icon／火柴人風</b>等等，每一種風格底下都會有各自的字體組成、圖像組成、相關色號組成。</li>
+    <li><b>由大而小、宏觀到微觀的思考邏輯</b>：想 YAML 規格時，要先從「一個整體風格成立的架構」出發，再往下想這個風格裡會有哪些文字、圖像、圖形，最後才是這些元素各自的顏色、字體、字型、排列方式。老師強調這是準備素材包、做轉譯時<b>「非常非常重要的核心邏輯」</b>——一定要由大而小做完整思考，做法就是逐步和 AI 對話、請它上網協助找相關素材，一步步把資料庫建立完整。</li>
+    <li><b>成果示範</b>：設定好之後，只要跟 NotebookLM 說「請給我的公版」，它就能直接把黃金公式格式的 YAML 公版格式吐出來、附上可回溯的來源引用。老師也現場示範「換個風格」：只要說「我要用～風格」（例如示範了一個以人物介紹口吻、正式演講風格、要介紹「台北 第一 機場」之類主題的版本），NotebookLM 就會依照設定好的人設與資料包，自動生成對應風格的 YAML 格式演講簡報內容——這個過程完全沒有額外餵給它內容資料，只餵了格式資料，示範的是<b>格式本身可以直接支撐簡報產出</b>。</li>
+    <li><b>轉譯要有始有終</b>：老師特別強調一個觀念——「請 NotebookLM 用 YAML 轉，出來的內容也要是 YAML」，這樣後續才能真正拿去做進一步的輸出（output）；如果轉譯完卻吐出一般格式文字，那就失去了轉譯 YAML 的意義，仍然沒辦法拿去穩定套用。</li>
+  </ol>
+  <figure class="shot">
+    <img src="ep25-img/shot05-notebooklm-summary.jpg" alt="NotebookLM 筆記本「舉例_YAML 簡報生成：結構化設計模組指南」的 AI 自動摘要畫面" loading="lazy">
+    <figcaption>畫面截圖｜NotebookLM 筆記本「舉例_YAML 簡報生成：結構化設計模組指南」，左側來源檔案可見「語氣模板」「多元風格素材包」「常用頁面類型模板」「結構化設計黃金公式」「風格模組（Style Module）」等真實檔名，右側是 AI 自動產生的摘要（原文照錄於下）。</figcaption>
+  </figure>
+  <div class="golden">
+    <div class="q">NotebookLM 真實自動摘要原文</div>
+    <div class="a">「這些來源文件介紹了一套將簡報設計結構化的專業方法論，核心概念是透過 YAML 程式碼將設計美感轉化為可執行的規則。系統將簡報拆分為架構模組與風格模組兩大支柱，前者負責掌控內容邏輯與頁數，後者則精確定義視覺美學。文中提供了多樣化的風格素材包，包含 Apple 極簡風、TED 啟發感及學術專業風等色彩與排版規範。透過預設的語氣模板與黃金公式，使用者能引導 AI 穩定產出高品質且風格統一的簡報內容。這種「設計即程式」的思維，讓抽象的視覺傳達轉變為精確的技術規格。」</div>
+  </div>
+</section>
+
+<section class="chapter" id="sec-test">
+  <span class="chip" style="background:linear-gradient(90deg,#1d9e6f,#0aa6c9)">CHAPTER 05</span>
+  <h2 class="ct">5. 把 YAML 規格拿到不同工具做測試比較</h2>
+  <p class="cd">建立好公版之後，老師示範把同一份 YAML 規格拿去不同工具實測、互相比較。</p>
+  <ul class="pt">
+    <li>可以先從做<b>一頁「資訊圖表式的簡報頁」</b>開始練習，而不是一次做整份詳細資訊圖表。</li>
+    <li>如果還沒想法要用什麼風格，可以直接請 AI 依題目「<b>推薦一個好的風格</b>」，它就會自動去你準備好的風格素材包裡挑選對應風格。</li>
+    <li>現場測試：把 NotebookLM 產出的公版 YAML 格式貼給其他工具（如 <b>Gemini／Nano Banana Pro</b>）畫成簡報頁面。</li>
+  </ul>
+  <div class="note steel">🔍 老師觀察：<b>Gemini</b> 用來畫圖速度快，但語音／配音功能目前品質還沒有那麼好；而透過 YAML 規格產出的版面，文字通常會<b>「壓得比較準」</b>（版面與字型呈現較不容易跑掉），做出來的簡報也會和別人常見的、一般 AI 隨手生成的成果<b>「不太一樣」</b>，比較有辨識度。</div>
+  <h3>今天練習的兩層次</h3>
+  <div class="layers">
+    <div class="lyr"><div class="n">1</div><div><h4>套用公版</h4><p>直接使用老師提供的公版 YAML 規格，快速上手體驗。</p></div></div>
+    <div class="lyr"><div class="n">2</div><div><h4>打造自己的規格資料庫</h4><p>照著同樣的方法論，自己收集素材、建立屬於自己的一套 YAML 規格系統。</p></div></div>
+  </div>
+  <p>兩種都可以拿來練習。</p>
+</section>
+
+<section class="chapter" id="sec-tips">
+  <span class="chip" style="background:linear-gradient(90deg,#c98a0a,#5563d6)">CHAPTER 06</span>
+  <h2 class="ct">6. 素材蒐集小撇步＆整體邏輯總複習</h2>
+  <ul class="pt">
+    <li>建立資料庫時<b>不需要收集很多素材</b>，重點是把在網路上找到、覺得不錯的內容整理起來即可。</li>
+    <li>做法可以是先用 ChatGPT／Gemini 對話研究、篩選出覺得好的段落，直接複製貼上文字，作為 NotebookLM 筆記本的新來源。</li>
+    <li><b>不需要 NotebookLM Pro 版</b>，一般版本就能使用。</li>
+  </ul>
+  <h3>資料庫組成順序（由大而小）</h3>
+  <ol class="st">
+    <li>公式（黃金公式本身）</li>
+    <li>風格模組／相關規格（你有哪些風格模組）</li>
+    <li>常用素材包（字型、圖片等元素）</li>
+    <li>語氣模板</li>
+  </ol>
+  <p>照著這個順序去剪輯、收斂你收集到的資料，就能建立起一套完整、可重複使用的 YAML 簡報規格系統。</p>
+</section>
+
+<section class="chapter" id="sec-end">
+  <span class="chip" style="background:linear-gradient(90deg,#5563d6,#7a4fd6)">CHAPTER 07</span>
+  <h2 class="ct">7. 結語與社群資訊</h2>
+  <p>最後老師簡短收尾，提醒大家回去可以自己動手試試看規格化的方法；如果簡報生成速度太慢，也可以先從做一個資訊圖表練習開始，這樣之後在找／套用自己的簡報規格時會更順手。</p>
+  <figure class="shot">
+    <img src="ep25-img/shot06-course-promo.jpg" alt="老師社群課程頁面 portaly.cc/GenAI.AIRRadio，列出多堂生成式AI工具班付費課程" loading="lazy">
+    <figcaption>畫面截圖｜老師經營的「生成式 AI 應用電台」社群課程頁面（portaly.cc/GenAI.AIRRadio），其中一堂正是「與AI共行｜生成式簡報好好用系列：從規格到規格：YAML簡報規格設計實戰（規格定義、條件式規則與內容結構）」，售價 NT.1600——也就是這場直播對應的課程主題。</figcaption>
+  </figure>
+  <p>老師最後表示要去準備週末的課程，向大家道謝道別，直播結束。</p>
+</section>
+
+<section class="chapter" id="sec-recap">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5563d6)">RECAP</span>
+  <h2 class="ct">8. 重點整理：快速回顧 EP25</h2>
+  <ul class="pt">
+    <li>目標是建立<b>自己習慣的簡報規格</b>，讓 AI 輸出「比較聽話」，可達六到八成穩定度。</li>
+    <li>把簡報拆成<b>架構模組</b>（內容邏輯／頁數／受眾）與<b>風格模組</b>（視覺美學），這是黃金公式的核心。</li>
+    <li>用 ChatGPT／Gemini 把黃金公式轉成 <b>YAML</b> 格式，是最偷懶也最建議新手的做法。</li>
+    <li>在 <b>NotebookLM</b> 建立「YAML 轉譯」專用筆記本：先給格式、強制讀完來源、準備風格素材包、由大而小思考、轉譯要有始有終。</li>
+    <li>把同一份 YAML 規格拿到不同工具（Gemini／Nano Banana Pro／Gamma／Canva）實測比較，版面文字通常「壓得比較準」。</li>
+    <li>資料庫組成順序：<b>公式 → 風格模組 → 常用素材包 → 語氣模板</b>。</li>
+  </ul>
+  <div class="golden"><div class="q">「用規格控制，可重複使用。」</div><div class="a">—— 從手工挑模板到規格化控制模板，是這集最核心的一句話。</div></div>
+</section>
+
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5a5866)">SOURCES</span>
+  <h2 class="ct">9. 資料來源與製作說明</h2>
+  <ul class="pt">
+    <li><b>原始教材：</b>EP25「用 YAML 讓簡報乖乖聽話：從規格到產出一次搞定」——本集 Google Drive 資料夾<b>只有一支直播錄影</b>（約 75 分鐘，Google Meet 螢幕分享），沒有另外附上課堂筆記文件或簡報檔。</li>
+    <li><b>製作方式：</b>依本站資料來源處理原則，不可跳過或降級使用者指定的資料來源。因此完整下載了這支真實錄影，用 <b>Whisper（small 模型）</b>對音訊做端到端逐字轉寫，並對錄影中的螢幕分享畫面<b>抽格、逐張親眼檢視</b>，挑出六張具代表性的真實截圖收錄於本頁。本頁所有內容整理自這份真實逐字稿與畫面截圖，並非憑空重構或推測。</li>
+    <li><b>逐字稿修正說明：</b>中文語音辨識在專有名詞上偶有誤判，例如逐字稿把「YAML」聽寫成類似「亞莫／壓模」的音、把「NotebookLM」聽寫成「no不可欠」等，本頁已依上下文將這類明顯的語音辨識誤植修正為正確術語（YAML、NotebookLM、Gamma、ChatGPT、Gemini、Nano Banana Pro 等），內容本身仍完全忠於老師實際講述的內容。</li>
+    <li><b>誠實聲明：</b>本集沒有官方簡報檔可供逐頁核對，所有畫面截圖皆取自錄影中老師實際操作／展示的螢幕畫面；示範過程中的工具介面（NotebookLM、Gemini、SlidesCarnival、Canva 等）會隨時間更新，實作請以你當下看到的畫面為準。</li>
+    <li><b>介面參考：</b>互動技能地圖頁沿用本站近期集數的卡片式多層導覽與遊戲化進度設計。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  EP25「用 YAML 讓簡報乖乖聽話：從規格到產出一次搞定」課堂筆記・2026/07 整理<br>
+  🍀 Learn AI with Tarshar｜搭配 <a href="ep25-ai-skills.html">互動技能地圖</a> 使用效果最佳
+</footer>
+
+</body>
+</html>

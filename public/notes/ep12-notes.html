@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP12 課堂筆記｜一場搞懂 Zotero 文獻管理的關鍵用法</title>
+<meta name="description" content="晨學講堂 EP12 課堂筆記：Zotero 文獻管理工具——安裝設定、三欄式介面、五種文獻匯入方式、標籤與去重整理技巧、Word 引用操作，含官方課程簡報整理。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#0d8f80; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px;border-left:none}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+.note.violet{background:#F3EFFB;border-color:#DFD2F0;color:#5a34a8}
+.note.rose{background:#FBEEF1;border-color:#F0D2DB;color:#9c2f52}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.prompt{position:relative;background:#1d1d1f;border-radius:10px;padding:15px 16px;margin:12px 0;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt .tag{display:inline-block;font-size:11px;letter-spacing:.06em;color:#c9c4ff;border:1px solid #3a3a40;border-radius:6px;padding:2px 9px;margin-bottom:8px}
+.prompt b{color:#fff}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.embed{margin:14px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000}
+.embed iframe{display:block;width:100%;aspect-ratio:16/9;border:0}
+.embed .cap{font-size:12.5px;color:var(--ink3);padding:10px 16px;background:var(--paper);border-top:1px solid var(--line)}
+.ts{display:inline-block;font-family:"Cascadia Code",Consolas,monospace;font-weight:700;font-size:12px;color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,#fff);border-radius:5px;padding:2px 8px;margin-right:7px;letter-spacing:.4px;vertical-align:middle}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+.layers{display:grid;gap:10px;margin:14px 0}
+.lyr{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:13px 15px;background:#fff}
+.lyr .n{flex:none;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--accent)}
+.lyr h4{margin:0 0 3px;font-size:14.5px}
+.lyr p{font-size:13px;margin:0}
+.sub{color:var(--ink2)}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#9fd6cd" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP12 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="ep12-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 晨學講堂 · EP12</span>
+  <h1><span>Zotero</span><br>一場搞懂文獻管理的關鍵用法</h1>
+  <p class="lead">EP12 帶你從零開始搞懂 <b>Zotero</b>——免費、開源的文獻管理與引文工具：從安裝設定、三欄式介面、五種文獻匯入方式，到標籤整理、去重合併，最後在 Word 一鍵插入引註與參考文獻。本頁整理官方課程簡報全部重點，並附三支操作實錄短片可另行參考。</p>
+  <div class="meta">
+    <span>📅 2026 直播</span>
+    <span>🗂️ 教材：完整課程簡報＋3 支操作精華短片</span>
+    <span>📚 適用對象：研究生／學術研究者／論文撰寫者</span>
+    <span>💰 免費開源，對比 EndNote</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-what">1. Zotero 是什麼＋發展歷程</a>
+  <a href="#sec-why">2. 四大核心優勢＋vs EndNote</a>
+  <a href="#sec-install">3. 安裝與設定</a>
+  <a href="#sec-ui">4. 認識三欄式介面</a>
+  <a href="#sec-import">5. 文獻匯入實戰五法</a>
+  <a href="#sec-organize">6. 文獻整理技巧：標籤與去重</a>
+  <a href="#sec-word">7. Word 引用操作</a>
+  <a href="#sec-recap">8. 重點整理</a>
+  <a href="#sec-src">9. 資料來源與製作說明</a>
+</nav>
+
+<article>
+
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--cyan))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>EP12「一場搞懂 Zotero 文獻管理的關鍵用法」</td></tr>
+    <tr><th>頻道</th><td>生成式 AI 應用電台・晨學講堂</td></tr>
+    <tr><th>適用對象</th><td>研究生、學術研究者、論文撰寫者、文案相關從業人員</td></tr>
+    <tr><th>教材</th><td>完整課程簡報（pptx，文字型）＋3 支操作精華錄影（安裝設定／文獻匯入輸出／外掛功能與 AI 導入）</td></tr>
+    <tr><th>一句話先懂</th><td>Zotero 是一款<b>免費、開源</b>的文獻管理與引文工具，幫你「收集、整理、管理與引用」研究資源，並能一鍵在 Word 插入引註與參考文獻。</td></tr>
+  </table></div>
+  <div class="note blue">💡 本集簡報為<b>文字型投影片</b>（PptxGenJS 產生），本頁內容直接取自簡報全文，<b>真實課程內容，非推測</b>；因無需圖像判讀，本頁以文字整理呈現而非逐頁截圖。</div>
+</section>
+
+<section class="chapter" id="sec-what">
+  <span class="chip" style="background:linear-gradient(90deg,#0d8f80,#2f7d92)">CHAPTER 01</span>
+  <h2 class="ct">1. Zotero 是什麼＋發展歷程</h2>
+  <p class="cd">一款免費、開源的文獻管理與引文工具。</p>
+  <ul class="pt">
+    <li><b>名稱由來：</b>源自阿爾巴尼亞語動詞，意為「掌握」或「精通」。</li>
+    <li><b>開發背景：</b>2006 年由美國喬治梅森大學開發，解決研究人員管理大量書目與資料的困境，強調易用性、開放性與跨平台相容性。</li>
+    <li><b>核心用途：</b>收集、整理、管理與引用研究資源（書籍、文章、網頁、PDF 等）。</li>
+  </ul>
+  <div class="twrap"><table>
+    <tr><th style="width:90px">年份</th><th>里程碑</th></tr>
+    <tr><td>2006</td><td>Firefox 插件——最初版本，作為瀏覽器插件運行</td></tr>
+    <tr><td>2011</td><td>Zotero Standalone——可脫離瀏覽器獨立執行</td></tr>
+    <tr><td>2017</td><td>Zotero 5.0——整合 Connectors（Chrome／Safari／Firefox）</td></tr>
+    <tr><td>2022</td><td>Zotero 6.0——內建 PDF 閱讀與註解功能</td></tr>
+    <tr><td>2024</td><td>Zotero 7.0（最新版）——現代化介面、強化跨平台與筆記功能</td></tr>
+  </table></div>
+</section>
+
+<section class="chapter" id="sec-why">
+  <span class="chip" style="background:linear-gradient(90deg,#2f7d92,#3b6bb0)">CHAPTER 02</span>
+  <h2 class="ct">2. 四大核心優勢＋vs EndNote 功能比較</h2>
+  <ol class="st">
+    <li><b>完全免費且開源</b>：無需付費即可使用所有核心功能。</li>
+    <li><b>自動擷取書目資料</b>：一鍵從網頁、資料庫擷取完整書目。</li>
+    <li><b>多平台無縫整合</b>：與 Word、Google Docs 深度整合。</li>
+    <li><b>雲端同步與團隊協作</b>：書目、PDF、註解自動同步。</li>
+  </ol>
+  <div class="twrap"><table>
+    <tr><th style="width:140px">功能項目</th><th>Zotero</th><th>EndNote</th></tr>
+    <tr><td>價格</td><td>免費</td><td>付費（約 $250 美元）</td></tr>
+    <tr><td>網頁資料存檔</td><td>支援</td><td>不支援</td></tr>
+    <tr><td>書目檔案匯入</td><td>支援</td><td>支援</td></tr>
+    <tr><td>PDF 自動辨識</td><td>支援</td><td>支援</td></tr>
+    <tr><td>內建 PDF 閱讀器</td><td>支援（7.0 起）</td><td>支援</td></tr>
+    <tr><td>多人共享</td><td>支援</td><td>支援</td></tr>
+    <tr><td>開源社群</td><td>活躍</td><td>無</td></tr>
+  </table></div>
+  <div class="golden"><div class="q">「Zotero 免費且功能完整，是學術研究的最佳選擇。」</div><div class="a">—— 簡報比較結論</div></div>
+</section>
+
+<section class="chapter" id="sec-install">
+  <span class="chip" style="background:linear-gradient(90deg,#3b6bb0,#5645D4)">CHAPTER 03</span>
+  <h2 class="ct">3. 安裝與設定：手把手教學</h2>
+  <h3>安裝前確認：系統相容性</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:140px">Zotero 7 桌面端</th><th>需求</th></tr>
+    <tr><td>Windows</td><td>Windows 7 以上（建議 Windows 10+）</td></tr>
+    <tr><td>macOS</td><td>macOS 10.12 以上（建議 10.15+）</td></tr>
+    <tr><td>Linux</td><td>完整支援各主流發行版</td></tr>
+    <tr><td>瀏覽器外掛 (Connector)</td><td>Chrome／Edge 穩定版或 Extended Stable；Firefox 115 以上；Safari macOS Big Sur 以上</td></tr>
+  </table></div>
+  <div class="note gold">⚠️ 重要提醒：Zotero <b>本體＋瀏覽器外掛需「同時安裝」</b>效果最佳。</div>
+  <h3>三步驟安裝教學</h3>
+  <ol class="st">
+    <li><b>下載 Zotero 桌面版</b>：前往 <code>zotero.org/download</code> 官網下載頁面，點選對應作業系統的下載按鈕，執行安裝檔完成安裝。</li>
+    <li><b>安裝 Zotero Connector</b>：前往 Chrome 線上應用程式商店，搜尋「Zotero Connector」，點選「加到 Chrome」。</li>
+    <li><b>註冊 Zotero 帳號（選用）</b>：前往 <code>zotero.org/user/register</code> 建立帳號，註冊後可啟用雲端同步功能，建議使用學校或常用信箱。</li>
+  </ol>
+  <h3>設定繁體中文介面</h3>
+  <p>開啟 Zotero → 「Edit」（編輯）→「Settings」（設定）→ 找到「Language」→ 從下拉選單選擇「繁體中文」→ 點選「OK」儲存設定 → 重新啟動 Zotero 使設定生效。</p>
+</section>
+
+<section class="chapter" id="sec-ui">
+  <span class="chip" style="background:linear-gradient(90deg,#5645D4,#0d8f80)">CHAPTER 04</span>
+  <h2 class="ct">4. 認識 Zotero 介面：三欄式設計</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">欄位</th><th>內容</th></tr>
+    <tr><td>左欄：文獻庫</td><td>我的文獻庫（所有資料的根目錄）／分類資料夾（建立主題分類）／群組文獻庫（團隊協作共享區）</td></tr>
+    <tr><td>中欄：書目清單</td><td>顯示當前分類下的所有文獻，可依標題／作者／年份排序，上方搜尋列可快速查找</td></tr>
+    <tr><td>右欄：詳細資訊</td><td>資訊頁籤（編輯書目欄位）／筆記頁籤（撰寫閱讀筆記）／標籤頁籤（管理關鍵字標籤）</td></tr>
+  </table></div>
+  <h3>實作：建立你的第一個文獻集</h3>
+  <ol class="st">
+    <li>點擊左上角的「新增文獻集」圖示（黃色資料夾）。</li>
+    <li>輸入文獻集名稱（例如：碩士論文、專題研究）。</li>
+    <li>按下「確定」即可在左側欄位看到新資料夾。</li>
+  </ol>
+  <div class="note steel">💡 小撇步：在文獻集上按右鍵，可選擇「新增子文獻集」建立層級分類。</div>
+</section>
+
+<section class="chapter" id="sec-import">
+  <span class="chip" style="background:linear-gradient(90deg,#0d8f80,#3f8560)">CHAPTER 05</span>
+  <h2 class="ct">5. 文獻匯入實戰：五種常見方式</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:130px">方式</th><th>做法</th><th>適用</th></tr>
+    <tr><td>① 瀏覽器擷取</td><td>使用 Connector 一鍵儲存網頁內容</td><td>一般網頁、新聞、單篇論文</td></tr>
+    <tr><td>② 資料庫匯入</td><td>從學術資料庫匯出書目檔 (RIS/BibTeX)</td><td>系統性文獻回顧、批次下載</td></tr>
+    <tr><td>③ 手動輸入</td><td>自行建立條目並填寫欄位資訊</td><td>實體書籍、非標準格式資料</td></tr>
+    <tr><td>④ PDF 檔案匯入</td><td>直接拖曳 PDF，系統自動抓取書目</td><td>整理電腦中既有的 PDF 檔案</td></tr>
+    <tr><td>⑤ 識別碼匯入</td><td>輸入 DOI、ISBN 或 PMID 快速查找</td><td>已知特定文獻 ID 時</td></tr>
+  </table></div>
+  <h3>方法一：瀏覽器擷取</h3>
+  <p>開啟目標網頁 → 點擊瀏覽器右上角的 Zotero Connector 按鈕 → 看到「Saving to My Library」視窗即完成。圖示會隨內容變更（論文／書籍／新聞不同圖示）。</p>
+  <h3>方法二：從資料庫匯入（適用 Google Scholar、PubMed 等）</h3>
+  <p>搜尋關鍵字檢視結果 → 點擊資料夾圖示（右上 Zotero 會變黃色資料夾）→ 在彈窗勾選欲下載之文獻並確認。<b>關鍵識別</b>：Connector 偵測到多筆文獻時會顯示資料夾圖示，方便批次下載。</p>
+  <h3>方法五：用 DOI/ISBN 快速匯入（魔術棒工具）</h3>
+  <p>這是最精準的匯入方式，無需開啟瀏覽器，直接透過識別碼從網路抓取完整書目資訊。支援 DOI（期刊）、ISBN（書籍）、PMID（PubMed）、arXiv ID。操作：點擊工具列魔術棒圖示 → 輸入識別碼 → 按下 Enter 鍵，系統自動下載書目與全文 PDF。</p>
+</section>
+
+<section class="chapter" id="sec-organize">
+  <span class="chip" style="background:linear-gradient(90deg,#3f8560,#9c7b23)">CHAPTER 06</span>
+  <h2 class="ct">6. 文獻整理技巧：標籤與去重全攻略</h2>
+  <h3>實作：為文獻加上標籤</h3>
+  <ol class="st">
+    <li>在中間欄位點選想要分類的書目。</li>
+    <li>點擊右側欄位的「Tags（標籤）」分頁。</li>
+    <li>點擊「Add」按鈕，輸入自訂標籤後按 Enter。</li>
+  </ol>
+  <p class="cd">為什麼要用標籤？資料夾是「單一歸類」，標籤則可做為「多維度篩選」（例：待閱讀、碩士論文、質性研究、重要參考）。</p>
+  <h3>實作：合併重複的文獻</h3>
+  <ol class="st">
+    <li>在左側欄位底部找到「重複的項目」(Duplicate Items) 資料夾。</li>
+    <li>在中間欄位點選一組重複的文獻，系統會自動標示它們。</li>
+    <li>在右側欄位確認資訊後，點擊「合併 X 個項目」(Merge items) 按鈕。</li>
+  </ol>
+  <div class="note steel">💡 小撇步：合併前可在右側欄位選擇哪一筆資料作為「主條目」(Master Item)，以保留最正確的欄位資訊。</div>
+  <h3>進階設定：連結圖書館全文資源（OpenURL）</h3>
+  <p>透過 OpenURL 設定，讓 Zotero 直接串接學校圖書館權限，自動尋找並下載付費資料庫的全文 PDF。操作：Edit &gt; Preferences &gt; Advanced 頁籤 → 找到 OpenURL 區塊 → 填入學校圖書館提供的專屬 Resolver URL（通常可在學校圖書館網站搜尋「Zotero OpenURL」找到）。</p>
+</section>
+
+<section class="chapter" id="sec-word">
+  <span class="chip" style="background:linear-gradient(90deg,#9c7b23,#0d8f80)">CHAPTER 07</span>
+  <h2 class="ct">7. Word 引用操作：一鍵生成引註與參考文獻</h2>
+  <h3>基本概念：引註 vs 參考文獻</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:110px"></th><th>引註 Citation</th><th>參考文獻 Bibliography</th></tr>
+    <tr><td>位置</td><td>出現在文章段落中，緊跟在引用句之後</td><td>位於整份文件最末端，獨立成頁</td></tr>
+    <tr><td>內容</td><td>簡短資訊，通常僅含作者姓氏與年份，或編號（如 (Smith, 2023) 或 [1]）</td><td>完整書目資訊，含標題、期刊名、卷期、頁碼等</td></tr>
+    <tr><td>功能</td><td>指引讀者對應到後方完整書目</td><td>提供讀者查找原始資料所需的詳細線索</td></tr>
+  </table></div>
+  <h3>實作：設定 Word 文件引用格式</h3>
+  <ol class="st">
+    <li>在 Word 的 Zotero 工具列點選最左側「Document Preferences」。</li>
+    <li>選擇需要的格式（如 APA 7th、IEEE、Chicago 等）。</li>
+    <li>設定語言：選擇「中文（台灣）」或「English」，會影響「等」與「et al.」的顯示。</li>
+  </ol>
+  <div class="note blue">💡 隨時可修改：寫作過程中隨時可以回來更改格式，整份文件的引註會自動更新，無需手動調整。</div>
+  <h3>實作：在 Word 中插入引註</h3>
+  <p>游標定位在想插入引用的位置 → 點選工具列上的「Add/Edit Citation」按鈕 → 搜尋並選擇文獻 → 確認插入。全部引用完成後，用「Add/Edit Bibliography」一鍵在文末生成完整參考文獻清單。</p>
+</section>
+
+<section class="chapter" id="sec-recap">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#0d8f80)">RECAP</span>
+  <h2 class="ct">8. 重點整理：快速回顧 Zotero</h2>
+  <ul class="pt">
+    <li>它是<b>免費、開源</b>的文獻管理與引文工具，功能完整可媲美付費的 EndNote。</li>
+    <li><b>本體＋瀏覽器外掛</b>要一起裝才順手。</li>
+    <li>五種匯入方式中，<b>DOI/ISBN 魔術棒</b>最精準快速。</li>
+    <li><b>標籤</b>做多維度篩選，<b>去重合併</b>保持文獻庫乾淨。</li>
+    <li>Word 引用<b>一鍵插入、整份自動更新</b>，格式隨時可換。</li>
+  </ul>
+</section>
+
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5a5866)">SOURCES</span>
+  <h2 class="ct">9. 資料來源與製作說明</h2>
+  <ul class="pt">
+    <li><b>原始教材：</b>EP12「一場搞懂 Zotero 文獻管理的關鍵用法」官方課程簡報（pptx，文字型投影片）＋3 支操作精華錄影（安裝及設定／文獻匯入及輸出／外掛功能及導入 AI 功能，共約 200MB）。</li>
+    <li><b>製作方式：</b>簡報為 PptxGenJS 產生的<b>文字型投影片</b>（非圖片型），已透過 Drive 工具直接讀出全文內容整理成本頁。內容為<b>真實課程內容</b>，非推測。</li>
+    <li><b>誠實聲明：</b>本頁以簡報全文為主要依據；因簡報本身即為文字內容，本頁未附簡報截圖，改以結構化文字整理呈現。3 支操作精華短片已確認存在但本次未逐幀轉寫，如需示範操作的畫面截圖與逐字稿時間碼，可後續補充。</li>
+    <li><b>介面參考：</b>互動技能地圖頁沿用本站 EP38、EP44–46 的卡片式多層導覽與遊戲化進度設計。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  EP12「一場搞懂 Zotero 文獻管理的關鍵用法」課堂筆記・2026/07 整理<br>
+  🍀 Learn AI with Tarshar｜搭配 <a href="ep12-ai-skills.html">互動技能地圖</a> 使用效果最佳
+</footer>
+
+</body>
+</html>

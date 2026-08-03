@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP4 課堂筆記｜生成式AI文獻耙梳工具：AnswerThis AI Research Assistant</title>
+<meta name="description" content="晨學講堂 EP4 課堂筆記：AnswerThis（Lit Seconds）AI 文獻研究助手——查找論文（Papers／Internet／Library 三種搜尋範圍）、IEEE 論文全文閱讀、專案圖書館管理、把文字描述轉成圖表（Diagram）。根據真實錄影畫面截圖整理。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#bf6a1e; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px;border-left:none}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#eac79a" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP4 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="ep4-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 晨學講堂 · EP4</span>
+  <h1>生成式AI文獻耙梳工具<br><span>AnswerThis AI Research Assistant</span></h1>
+  <p class="lead">EP4 實測 <b>AnswerThis</b>（介面標語「Lit Seconds」）：一個幫你在幾秒內完成文獻搜尋與分析的 AI 研究助手。示範查找論文、閱讀論文全文、管理研究專案圖書館，以及把一段文字描述<b>直接轉成圖表</b>。本頁根據<b>真實錄影畫面截圖</b>整理。</p>
+  <div class="meta">
+    <span>📅 2025/12/20 傍晚直播</span>
+    <span>🔧 主題：AnswerThis 文獻研究助手</span>
+    <span>🎥 教材：錄影回放（45.8 分鐘）</span>
+    <span>👨‍🏫 講師：黃老師</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-what">1. AnswerThis 是什麼</a>
+  <a href="#sec-search">2. 三種搜尋範圍：Papers／Internet／Library</a>
+  <a href="#sec-read">3. 直接閱讀論文全文</a>
+  <a href="#sec-library">4. 專案圖書館管理</a>
+  <a href="#sec-diagram">5. 文字轉圖表：Create Your Diagram</a>
+  <a href="#sec-recap">6. 重點整理</a>
+  <a href="#sec-src">7. 資料來源與製作說明</a>
+</nav>
+
+<article>
+
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--amber))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>EP4「生成式AI文獻耙梳工具：AnswerThis AI Research Assistant」</td></tr>
+    <tr><th>頻道</th><td>生成式 AI 應用電台・晨學講堂</td></tr>
+    <tr><th>直播日期</th><td>2025/12/20 傍晚（畫面時鐘顯示 17:45–18:31）</td></tr>
+    <tr><th>教材</th><td>本集 Drive 資料夾只保留<b>錄影回放</b>（45.8 分鐘），未附獨立簡報檔</td></tr>
+    <tr><th>一句話先懂</th><td>AnswerThis（介面自稱「Lit Seconds」）是一套<b>幫你在論文堆裡快速找答案</b>的 AI 工具：輸入研究問題，它會去搜尋論文、彙整回答，還能直接把整理好的內容轉成圖表。</td></tr>
+  </table></div>
+  <figure class="shot">
+    <img src="ep4-img/f0-landing.jpg" alt="AnswerThis 首頁 Lit Seconds" loading="lazy">
+    <figcaption>錄影 00:25｜AnswerThis 首頁標語「Lit Seconds」，搜尋框下方有 Papers／Internet／Library 三個範圍按鈕，並提供範例問題如「Why do some people not respond to antidepressants?」。</figcaption>
+  </figure>
+</section>
+
+<section class="chapter" id="sec-what">
+  <span class="chip" style="background:linear-gradient(90deg,#bf6a1e,#9c7b23)">CHAPTER 01</span>
+  <h2 class="ct">1. AnswerThis 是什麼</h2>
+  <p class="cd">畫面實錄：AnswerThis 工作區介面。</p>
+  <ul class="pt">
+    <li>頂部導覽列有「政勳 - Workspace」等<b>團隊工作區</b>切換，並提供 Invite members、Recent Searches 等協作功能。</li>
+    <li>左側工具列圖示依序對應：新增查詢、資料庫／圖書館、資料夾、搜尋、版本歷程、繪圖／圖表、其他工具。</li>
+    <li>核心互動方式：在搜尋框輸入研究問題（可用 <code>@</code> 標記已存入圖書館的論文、拖放檔案或貼上文字），直接開始分析。</li>
+  </ul>
+</section>
+
+<section class="chapter" id="sec-search">
+  <span class="chip" style="background:linear-gradient(90deg,#bf6a1e,#3b6bb0)">CHAPTER 02</span>
+  <h2 class="ct">2. 三種搜尋範圍：Papers／Internet／Library</h2>
+  <p class="cd">畫面實錄：搜尋框下方的範圍切換按鈕，示範問題「生成式AI在大專教育應用」的分析進度畫面。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">範圍</th><th>用途</th></tr>
+    <tr><td><b>Papers</b></td><td>只在學術論文資料庫中搜尋，回答會附上論文出處</td></tr>
+    <tr><td><b>Internet</b></td><td>擴大到一般網路資料，補足論文之外的最新資訊</td></tr>
+    <tr><td><b>Library</b></td><td>只在自己上傳／收藏的專案圖書館內搜尋，適合針對自己手上的文獻提問</td></tr>
+  </table></div>
+  <figure class="shot">
+    <img src="ep4-img/f6-analyzing.jpg" alt="AnswerThis 分析查詢進度畫面" loading="lazy">
+    <figcaption>錄影 25:05｜輸入研究問題「生成式AI在大專教育應用」後，畫面顯示分析進度圈與「Initializing…」，示範從送出問題到取得答案的完整流程。</figcaption>
+  </figure>
+</section>
+
+<section class="chapter" id="sec-read">
+  <span class="chip" style="background:linear-gradient(90deg,#3b6bb0,#5645D4)">CHAPTER 03</span>
+  <h2 class="ct">3. 直接閱讀論文全文</h2>
+  <p class="cd">畫面實錄：從搜尋結果點進 IEEE Xplore 的論文 PDF 全文頁面。</p>
+  <figure class="shot">
+    <img src="ep4-img/f2-ieee-paper.jpg" alt="AnswerThis 連結到 IEEE 論文全文" loading="lazy">
+    <figcaption>錄影 17:33｜點開搜尋結果後直接進入 IEEE Xplore 的論文 PDF（ielx7/6287639/6514899/10531194.pdf），可在原始出處確認內容，不只是看 AI 摘要。</figcaption>
+  </figure>
+  <div class="note blue">💡 這個「一路點進原始論文」的動線，呼應文獻研究工具的基本要求：AI 摘要之外，隨時能<b>回到第一手來源</b>核對。</div>
+</section>
+
+<section class="chapter" id="sec-library">
+  <span class="chip" style="background:linear-gradient(90deg,#5645D4,#b25269)">CHAPTER 04</span>
+  <h2 class="ct">4. 專案圖書館管理</h2>
+  <p class="cd">畫面實錄：Select Library 選單。</p>
+  <figure class="shot">
+    <img src="ep4-img/f3-select-library.jpg" alt="AnswerThis 選擇圖書館畫面" loading="lazy">
+    <figcaption>錄影 24:34｜「Select Library」彈窗顯示目前的「Default project」（1 specific project selected），可以切換要在哪一個研究專案的圖書館範圍內搜尋。</figcaption>
+  </figure>
+  <ul class="pt">
+    <li>每個研究主題可以建立獨立的 <b>Project</b>，底下管理自己的文獻圖書館。</li>
+    <li>搜尋時可以選擇「只在這個 Project 的圖書館裡找」，避免不同研究主題的文獻互相干擾。</li>
+  </ul>
+</section>
+
+<section class="chapter" id="sec-diagram">
+  <span class="chip" style="background:linear-gradient(90deg,#b25269,#bf6a1e)">CHAPTER 05</span>
+  <h2 class="ct">5. 文字轉圖表：Create Your Diagram</h2>
+  <p class="cd">畫面實錄：「Create Your Diagram」功能，把一句文字描述變成圖表。</p>
+  <figure class="shot">
+    <img src="ep4-img/f4-diagram.jpg" alt="AnswerThis 文字轉圖表功能示範" loading="lazy">
+    <figcaption>錄影 37:12｜輸入描述「使用AI用多(45%)、腦力退化越多(55%)正相關」，右側 Preview 立刻生成一張圓餅圖（45% vs 55%），並可切換 Flowchart／State Diagram／Git Graph 等不同圖表類型（Process & Flow／Structure／Planning／Analysis／Charts 分類）。</figcaption>
+  </figure>
+  <ul class="pt">
+    <li>左側輸入 <b>Description</b>（文字描述你想呈現的關係或數據）。</li>
+    <li>右側 <b>Preview</b> 即時生成對應圖表，並保留 <b>Revision</b> 版本紀錄（可切換 Revision 1 of 1 等）。</li>
+    <li>圖表類型不限圓餅圖，還有流程圖、狀態圖、Git 分支圖等多種「Predefined Types」可選。</li>
+  </ul>
+  <div class="golden"><div class="q">「不用自己畫，用一句話描述數據關係，AnswerThis 直接幫你生成圖表。」</div><div class="a">—— 本節示範重點</div></div>
+</section>
+
+<section class="chapter" id="sec-recap">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#bf6a1e)">RECAP</span>
+  <h2 class="ct">6. 重點整理</h2>
+  <ul class="pt">
+    <li><b>AnswerThis／Lit Seconds</b>：幾秒內完成文獻搜尋與彙整的 AI 研究助手。</li>
+    <li><b>三種搜尋範圍</b>：Papers（學術論文）、Internet（一般網路）、Library（自己的圖書館）可依需求切換。</li>
+    <li><b>可回到原始論文</b>：搜尋結果能直接連到 IEEE 等資料庫的 PDF 全文核對。</li>
+    <li><b>Project 圖書館管理</b>：不同研究主題可分開建立 Project，避免文獻互相干擾。</li>
+    <li><b>文字轉圖表</b>：一句話描述數據關係，就能生成圓餅圖、流程圖等多種圖表類型。</li>
+  </ul>
+</section>
+
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5a5866)">SOURCES</span>
+  <h2 class="ct">7. 資料來源與製作說明</h2>
+  <ul class="pt">
+    <li><b>原始教材：</b>EP4「生成式AI文獻耙梳工具：AnswerThis AI Research Assistant」錄影回放（45.8 分鐘，anyone-reader 權限，公開可下載）。本集 Drive 資料夾未附獨立簡報檔或課堂筆記 md。</li>
+    <li><b>製作方式：</b>下載完整錄影 → 場景變化偵測抽取畫面關鍵幀 → <b>親眼逐張判讀</b>畫面內容（工具介面、搜尋流程、圖表生成結果）→ 整理成本頁章節。</li>
+    <li><b>誠實聲明：</b>本集錄影音訊品質不佳，faster-whisper 轉出的逐字稿大部分為重複亂碼、無法還原成有效語句，因此<b>本頁內容以畫面截圖可直接判讀的介面文字與操作流程為準</b>，不包含逐字稿內容，也不對未能辨識的口語說明做任何補述或推測。</li>
+    <li><b>介面參考：</b>版型沿用本站 EP29–EP46 課堂筆記的乾淨白底編輯風格。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  EP4「生成式AI文獻耙梳工具：AnswerThis AI Research Assistant」課堂筆記・2026/07 整理<br>
+  🍀 Learn AI with Tarshar｜搭配 <a href="ep4-ai-skills.html">互動技能地圖</a> 使用效果最佳
+</footer>
+
+</body>
+</html>

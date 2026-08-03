@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP18 課堂筆記｜打通 Open AI 任督二脈：ChatGPT 篇</title>
+<meta name="description" content="晨學講堂 EP18 課堂筆記：模型選擇與隱私設定、客製化指令 Custom Instructions、GPTs 打造專屬機器人、Canvas 畫布協作、進階提示技巧（行話／Step-by-Step／System vs User Prompt／5 種個性風格）、Gemini 對照與連接器、講師心得總結。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#7c3aed; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#7c3aed; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px;border-left:none}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+.note.violet{background:#F3EFFB;border-color:#DFD2F0;color:#5a34a8}
+.note.rose{background:#FBEEF1;border-color:#F0D2DB;color:#9c2f52}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.prompt{position:relative;background:#1d1d1f;border-radius:10px;padding:15px 16px;margin:12px 0;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt .tag{display:inline-block;font-size:11px;letter-spacing:.06em;color:#c9c4ff;border:1px solid #3a3a40;border-radius:6px;padding:2px 9px;margin-bottom:8px}
+.prompt b{color:#fff}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.embed{margin:14px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000}
+.embed iframe{display:block;width:100%;aspect-ratio:16/9;border:0}
+.embed .cap{font-size:12.5px;color:var(--ink3);padding:10px 16px;background:var(--paper);border-top:1px solid var(--line)}
+.ts{display:inline-block;font-family:"Cascadia Code",Consolas,monospace;font-weight:700;font-size:12px;color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,#fff);border-radius:5px;padding:2px 8px;margin-right:7px;letter-spacing:.4px;vertical-align:middle}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+.layers{display:grid;gap:10px;margin:14px 0}
+.lyr{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:13px 15px;background:#fff}
+.lyr .n{flex:none;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--accent)}
+.lyr h4{margin:0 0 3px;font-size:14.5px}
+.lyr p{font-size:13px;margin:0}
+.sub{color:var(--ink2)}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#d4c2f7" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP18 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="ep18-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 晨學講堂 · EP18</span>
+  <h1>打通 Open AI 任督二脈：<span>ChatGPT</span> 篇</h1>
+  <p class="lead">讓你的 GPT 用起來跟別人不一樣：從課前的<b>模型選擇與隱私設定</b>開始，學會用<b>客製化指令</b>固定人設、用 <b>GPTs</b> 打造專屬知識庫機器人、用 <b>Canvas</b> 做局部精修寫作與寫程式，再加上「說行話」「Step-by-Step」等提問技巧，一路把 ChatGPT 從聊天工具升級成可控的專屬工作夥伴。</p>
+  <div class="meta">
+    <span>📅 01月20日（二）21:00-22:00 直播（VIP場）</span>
+    <span>🗂️ 教材：課程筆記 + 大型視覺化簡報</span>
+    <span>🤖 主題：ChatGPT 深度客製化</span>
+    <span>🖼️ 含官方課程封面圖</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-setup">1. 課前設定與基礎認知</a>
+  <a href="#sec-custom">2. 客製化指令 Custom Instructions</a>
+  <a href="#sec-gpts">3. GPTs：打造專屬機器人</a>
+  <a href="#sec-canvas">4. Canvas 畫布協作介面</a>
+  <a href="#sec-prompt">5. 進階提示技巧</a>
+  <a href="#sec-more">6. 補充：Gemini 對照與連接器</a>
+  <a href="#sec-tips">7. 講師心得與總結</a>
+  <a href="#sec-src">8. 資料來源與製作說明</a>
+</nav>
+
+<article>
+
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--blue))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>EP18「打通 Open AI 任督二脈：ChatGPT 篇」（讓您的 GPT 用起來跟別人不一樣，只限 VIP 參加）</td></tr>
+    <tr><th>頻道</th><td>生成式 AI 應用電台・晨學講堂</td></tr>
+    <tr><th>直播時間</th><td>01月20日（二）21:00-22:00</td></tr>
+    <tr><th>教材</th><td>講師撰寫的課程筆記文件（5 節完整講義）＋大型視覺化課程簡報（單張超大資訊圖表，逐步建構呈現）</td></tr>
+    <tr><th>一句話先懂</th><td>ChatGPT 高手三部曲：<b>用 Custom Instructions 固化身份 → 用 GPTs 建立專案知識庫 → 用 Canvas 精修長文與程式碼</b>。</td></tr>
+  </table></div>
+  <figure class="shot">
+    <img src="ep18-img/cover.jpg" alt="EP18 課程封面：打通 Open AI 任督二脈 ChatGPT 篇" loading="lazy">
+    <figcaption>簡報封面｜打通 Open AI 任督二脈：ChatGPT 篇。</figcaption>
+  </figure>
+  <div class="note blue">💡 本集官方簡報為單張超大型視覺化資訊圖表（以動畫逐步建構呈現各功能區塊，非傳統逐頁投影片格式），不適合逐頁擷取成獨立截圖；本頁改以講師撰寫的完整課程筆記文件與簡報文字內容為主要依據整理，內容為<b>真實課程內容</b>，未經改寫杜撰。</div>
+</section>
+
+<section class="chapter" id="sec-setup">
+  <span class="chip" style="background:linear-gradient(90deg,#7c3aed,#3b6bb0)">CHAPTER 01</span>
+  <h2 class="ct">1. 課前設定與基礎認知</h2>
+  <h3>1.1 模型選擇 Model Selection</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:130px">系列</th><th>定位</th></tr>
+    <tr><td><b>o 系列</b>（o1、o3、o4）</td><td>代表 Thinking（思考）模型。回答前會深思熟慮，適合處理複雜邏輯，速度較慢。</td></tr>
+    <tr><td><b>4o 系列</b>（GPT-4o）</td><td>代表 Omni（全能／快速）。速度快，適合一般對話和即時回應。</td></tr>
+    <tr><td><b>5 系列</b>（未來趨勢）</td><td>結合兩者，系統會依據使用者的需求（Task）自動判斷該用「思考模式」還是「快速模式」。</td></tr>
+    <tr><td><b>免費版</b></td><td>通常使用 4o-mini 或標準 4o，適合一般任務。</td></tr>
+  </table></div>
+  <h3>1.2 隱私設定 Data Controls〔重要〕</h3>
+  <ul class="pt">
+    <li><b>操作路徑：</b>左下角設定（Settings）→ 資料控管（Data Controls）→ 關閉「為所有人改善模型（Improve the model for everyone）」。</li>
+    <li><b>目的：</b>保護隱私，避免你的對話數據被拿去訓練模型。關閉後不會影響 ChatGPT 的效能或速度。</li>
+  </ul>
+  <h3>1.3 新功能：翻譯 Translation</h3>
+  <ul class="pt">
+    <li>GPT 推出了新的翻譯功能，能結合「語意」與「語境」進行翻譯，比傳統 Google 翻譯更自然。</li>
+    <li>未來可能會釋出 API，可掛載到其他軟體（如 The Open Notebook、Zotero）中。</li>
+  </ul>
+</section>
+
+<section class="chapter" id="sec-custom">
+  <span class="chip" style="background:linear-gradient(90deg,#5645D4,#7c3aed)">CHAPTER 02</span>
+  <h2 class="ct">2. 核心功能一：客製化指令 Custom Instructions</h2>
+  <p class="cd">解決「每次開新對話都要重新介紹自己或設定規則」的麻煩——就像給 GPT 一個「人設」和「標準作業程序（SOP）」。</p>
+  <h3>設定區塊（兩欄位）</h3>
+  <ol class="st">
+    <li><b>上欄（你希望 ChatGPT 知道關於你的什麼事？）：</b>設定身份與背景。案例：「我是一個在台灣夜市賣臭豆腐 30 年的專家，熟悉食材醃製與行銷。」效果：GPT 的回答會帶入這個視角，使用行話，減少幻覺，讓回答更精準。</li>
+    <li><b>下欄（你希望 ChatGPT 怎麼回應你？）：</b>設定輸出風格與格式。建議設定：條列式（Point form）、專業口吻、不要廢話、附上詳細數據、使用表格呈現。案例：「請給我詳細的食譜，單位要精確，語氣要像夜市老闆。」</li>
+  </ol>
+  <h3>實戰技巧</h3>
+  <ul class="pt">
+    <li><b>降低幻覺：</b>當你賦予它具體專家的身份（如臭豆腐專家），它會限縮在該領域的知識庫中搜尋，減少胡說八道的機率。</li>
+    <li><b>隨時切換：</b>如果覺得 GPT 被定型了（例如一直講臭豆腐），可以隨時去設定裡把這兩欄清空或關閉。</li>
+  </ul>
+  <h3>System Prompt vs User Prompt（簡報補充）</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">類型</th><th>定義</th><th>對應功能</th></tr>
+    <tr><td><b>System Prompt</b></td><td>定義 AI 的整體角色、語氣、任務範圍、行為規範，是在「背景」設定的指令。</td><td>ChatGPT「自訂 GPT」功能、專案中「新增指令」；Gemini「已儲存的資訊」；Claude「Personal Preferences」</td></tr>
+    <tr><td><b>User Prompt</b></td><td>向 AI 輸入的具體請求、問題、任務。</td><td>每一輪對話中實際打的那句話</td></tr>
+  </table></div>
+  <h3>5 種個性風格（簡報補充）</h3>
+  <div class="twrap"><table>
+    <tr><th>個性</th><th>語氣</th><th>適合情境</th></tr>
+    <tr><td>預設 Default</td><td>清楚、中性、靈活</td><td>一般日常問答、寫作、資料整理</td></tr>
+    <tr><td>憤世嫉俗 Cynic</td><td>嘲諷、直白、帶刺幽默</td><td>想聽有趣又不拐彎抹角的意見；腦力激盪</td></tr>
+    <tr><td>機器人 Robot</td><td>精準、簡潔、無感情</td><td>需要快速、直接、無贅字的指令；技術文件、除錯</td></tr>
+    <tr><td>傾聽者 Listener</td><td>溫暖、放鬆、反饋思考</td><td>尋求對話感和情緒支持；做決策、生活規劃</td></tr>
+    <tr><td>學霸 Nerd</td><td>好奇、熱情、知識宅</td><td>想深入了解原理、背景和延伸應用；學習新知</td></tr>
+  </table></div>
+  <div class="note violet">💡 小小許願：5 大個性的下一步，可以想像對應到 <b>MBTI（16 種人格類型）</b>的更細緻客製化方向。</div>
+</section>
+
+<section class="chapter" id="sec-gpts">
+  <span class="chip" style="background:linear-gradient(90deg,#3b6bb0,#5645D4)">CHAPTER 03</span>
+  <h2 class="ct">3. 核心功能二：GPTs（專案／My GPTs）</h2>
+  <p class="cd"><b>專案化管理：</b>每個 GPTs 就像一個獨立的 App 或資料夾，用來隔離環境——避免角色錯亂。例如：你需要一個「臭豆腐專家」GPT，也需要一個「Python 程式導師」GPT，兩者分開建立，互不干擾。</p>
+  <h3>建立步驟（Configure）</h3>
+  <ul class="pt">
+    <li><b>Name（名稱）：</b>例如「夜市臭豆腐行銷大師」。</li>
+    <li><b>Description（描述）：</b>簡短說明這個 GPT 的用途。</li>
+    <li><b>Instructions（指令）：</b>這裡是核心，填入類似客製化指令的內容。</li>
+    <li><b>Knowledge（知識庫）〔最強大功能〕：</b>可以上傳你的獨家資料（如祖傳秘方 PDF、過往銷售 Excel）。GPT 會優先從這些檔案中讀取資訊，而非網路上的一般資料。</li>
+    <li><b>Capabilities（能力）：</b>勾選是否要上網搜尋（Web Browsing）、畫圖（DALL·E）或寫程式（Code Interpreter）。</li>
+  </ul>
+  <h3>應用案例：Suno 歌詞生成器</h3>
+  <p><b>指令設定：</b>告訴 GPT 你是一個專業作詞家，熟悉 Suno AI 的指令格式（包含前奏 Intro、主歌 Verse、副歌 Chorus 的標記）。</p>
+  <p><b>運作：</b>使用者只要輸入主題（如：過年買臭豆腐），GPT 就會自動產出符合 Suno 格式的歌詞與結構，直接複製貼上即可做歌。</p>
+  <div class="note gold">⚠️ 免費版可使用別人創建好的 GPTs（但有使用上限）；付費版可串 API 自行連結。</div>
+</section>
+
+<section class="chapter" id="sec-canvas">
+  <span class="chip" style="background:linear-gradient(90deg,#2f7d92,#3b6bb0)">CHAPTER 04</span>
+  <h2 class="ct">4. 核心功能三：Canvas（畫布／協作介面）</h2>
+  <p class="cd">雙視窗工作模式：左邊是聊天對話，右邊是文件／程式碼編輯區。適合寫長文章、寫程式碼（Coding）、做簡報大綱。</p>
+  <h3>優勢</h3>
+  <ul class="pt">
+    <li><b>局部修改：</b>不需要為了改一個錯字或一句話而讓 AI 重寫整篇文章。</li>
+    <li><b>互動編輯：</b>可以反白右側視窗的某一段文字，要求 AI「潤飾這段」、「翻譯這段」或「把這段變更長」；也可以直接在右側手動打字修改，AI 會知道內容變了。</li>
+    <li><b>即時預覽（Coding）：</b>如果是用來寫 HTML/CSS（例如做一個臭豆腐宣傳網頁），Canvas 可以直接預覽網頁效果。</li>
+  </ul>
+  <h3>實用 Shortcut（快捷功能）</h3>
+  <p>Canvas 介面右下角通常有快捷鍵（如調整長度、潤飾、檢查錯字），可直接將生成的內容轉換為不同格式（PDF／docx／Markdown）。</p>
+</section>
+
+<section class="chapter" id="sec-prompt">
+  <span class="chip" style="background:linear-gradient(90deg,#7c3aed,#b25269)">CHAPTER 05</span>
+  <h2 class="ct">5. 進階提示技巧（簡報補充）</h2>
+  <h3>ChatGPT 常用基本功能</h3>
+  <ul class="pt">
+    <li><b>自訂指令（客製化）：</b>換位思考。</li>
+    <li><b>ChatGPT Search：</b>減少幻覺。</li>
+    <li><b>Step By Step / Deep Research：</b>將大型任務分解成小步驟（產生結果、結果反推）。</li>
+    <li><b>Re-reading（再讀效應）：</b>檢查指令接收是否清楚、結果與指令是否有落差。</li>
+  </ul>
+  <h3>延伸應用組合</h3>
+  <ul class="pt">
+    <li><b>自訂指令 × ChatGPT Search：</b>結果更聚焦、資料有一說一。</li>
+    <li><b>Re-reading × Step By Step：</b>剝絲抽繭、尋根究底。</li>
+  </ul>
+  <h3>站在 AI 角度提問</h3>
+  <ul class="pt">
+    <li><b>說行話（Jargon）：</b>對 AI 說該領域的專業術語，AI 會認為你是內行人，吐出的資料會更有深度。</li>
+    <li><b>寫 AI 看得懂的指令：</b>善用記憶功能，校正脈絡資訊落差。</li>
+  </ul>
+  <div class="golden"><div class="q">「不要自己寫 Prompt，讓 AI 幫你寫。」</div><div class="a">—— 講師心得：先給 AI 一個簡單指令，再請它「幫我優化這個指令，讓它變成專家級的 Prompt」，優化後再貼回去用。</div></div>
+</section>
+
+<section class="chapter" id="sec-more">
+  <span class="chip" style="background:linear-gradient(90deg,#3f8560,#7c3aed)">CHAPTER 06</span>
+  <h2 class="ct">6. 補充：Gemini 對照與連接器</h2>
+  <h3>關於 Gemini</h3>
+  <ul class="pt">
+    <li>Gemini（Google）的邏輯與 GPT 相似。</li>
+    <li><b>Gems：</b>對應 GPTs 的功能，可以建立專屬角色的 AI。</li>
+    <li><b>優勢：</b>與 Google 生態系（Drive、Docs、Mail）整合較好，可以直接調用雲端硬碟檔案。</li>
+  </ul>
+  <h3>ChatGPT 連接器（Connectors）</h3>
+  <p>可整合的常見服務：Gmail、Google 雲端硬碟、Google 行事曆、Canvas、Microsoft Teams、Box、Dropbox、GitHub、HubSpot、Linear、Outlook 行事曆、Outlook 電子郵件、SharePoint、Microsoft OneDrive。</p>
+</section>
+
+<section class="chapter" id="sec-tips">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#7c3aed)">RECAP</span>
+  <h2 class="ct">7. 講師心得與總結：如何成為 GPT 高手？</h2>
+  <ol class="st">
+    <li><b>定身份：</b>用 Custom Instructions 固化你的常用身份。</li>
+    <li><b>分任務：</b>用 GPTs 處理特定、需要專業資料庫的工作（如寫歌、寫程式、特定產品客服）。</li>
+    <li><b>精修飾：</b>用 Canvas 進行長文寫作與程式碼的細部潤修。</li>
+  </ol>
+  <div class="note steel">💡 <b>分流使用心法：</b>一般問題用免費版／4o，需要專業分析、讀大量文件或特定任務時，使用 GPTs 或 Canvas。</div>
+</section>
+
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5a5866)">SOURCES</span>
+  <h2 class="ct">8. 資料來源與製作說明</h2>
+  <ul class="pt">
+    <li><b>原始教材：</b>EP18「打通 Open AI 任督二脈：ChatGPT 篇」講師撰寫的完整課程筆記文件（5 節）＋官方大型視覺化課程簡報（單張超大資訊圖表，以動畫逐步建構呈現）。</li>
+    <li><b>製作方式：</b>逐節比對課程筆記文件與簡報逐字稿文字內容，整理成本頁章節；封面圖直接取自簡報內嵌原圖。內容為<b>真實課程內容</b>，未經改寫杜撰。</li>
+    <li><b>誠實聲明：</b>本集簡報格式為單張動畫式資訊圖表（216 個漸進建構畫面組成同一張視覺海報），不同於一般逐頁投影片，故本頁不逐頁附圖，改以完整文字內容呈現；本集資料夾錄影暫未逐句轉寫，<b>逐字稿時間碼</b>暫缺，如日後開放取得可再補入。</li>
+    <li><b>介面參考：</b>頁面採全站現行「乾淨白底編輯風」版型（沿用 EP38 課堂筆記頁架構）。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  EP18「打通 Open AI 任督二脈：ChatGPT 篇」課堂筆記・2026/07 整理<br>
+  🍀 Learn AI with Tarshar｜搭配 <a href="ep18-ai-skills.html">互動技能地圖</a> 使用效果最佳
+</footer>
+
+</body>
+</html>

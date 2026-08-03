@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Felo AI×Suno ＆ SEM+Elicit｜互動式學習地圖</title>
+<meta name="description" content="EP2 晨學講堂：Felo AI（自訂指令、搜尋代理、LiveDoc）、Suno 譜曲示範、SEM 核心概念、Elicit 文獻研究助手，互動式多層次學習地圖">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269;
+  --green:#3f8560; --orange:#bf6a1e; --red:#c0453f; --teal:#0d8f80; --amber:#9c7b23; --rose:#b5476a;
+  --feat:#b23a5b; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(24px,4.2vw,42px);font-weight:800;line-height:1.2;letter-spacing:-.025em;color:var(--txt);background:none;-webkit-text-fill-color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:660px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.sectag{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--txt3);margin:22px 0 10px;font-weight:700;padding-left:2px}
+.sectag:first-child{margin-top:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+figure.shot{margin:10px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--txt3);padding:9px 14px;border-top:1px solid var(--line);background:var(--bg2);line-height:1.7}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <a class="navlink" href="../radio/" style="border-color:#e6b9c6" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <div class="logo">
+    <div class="dot">🎨</div>
+    <div>EP2 兩場地圖<small>MORNING LEARNING · EP2</small></div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋技能關鍵字：Felo、Suno、SEM、Elicit…" autocomplete="off">
+  </div>
+  <a class="navlink" href="ep2-notes.html">📝 課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">EP2 · 晨學講堂 · 2025/12</span>
+  <h1>Felo AI×Suno篇<br>＆ SEM＋Elicit</h1>
+  <p class="sub">這天連開兩場：上半場玩 Felo AI 的搜尋代理與 LiveDoc、用 Suno 寫歌；下半場用九宮格學統計，再用 Elicit 找真實文獻。<br>點進每一章，逐層展開<b>本集實際教到</b>的功能與示範，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🎙️ 生成式AI應用電台・晨學講堂</span>
+    <span>🎨 Felo AI・Suno</span>
+    <span>📊 SEM・Elicit</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>6</b><span>大主題</span></div>
+  <div class="stat"><b>6</b><span>實戰技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 6 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="sectag">場次一 07:00–08:00・Felo AI × Suno</div>
+    <div class="grid">
+      <div class="card" style="--c:var(--rose)" onclick="showChapter('felo')">
+        <div class="glowline"></div><span class="emoji">🎨</span>
+        <h3><em>CHAPTER 01</em>Felo AI：代理＋LiveDoc</h3>
+        <p>自訂指令角色模板、智慧／多步驟搜尋代理，以及把搜尋結果變成完整報告的 LiveDoc。</p>
+        <div class="foot"><div class="mini"><i data-mini="felo"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--teal)" onclick="showChapter('suno')">
+        <div class="glowline"></div><span class="emoji">🎵</span>
+        <h3><em>CHAPTER 02</em>Suno：AI 譜曲示範</h3>
+        <p>免費生成結構化歌曲，Intro／Verse／Chorus 段落清楚，還能分享連結。</p>
+        <div class="foot"><div class="mini"><i data-mini="suno"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+    <div class="sectag">場次二 08:30–09:30・SEM ＋ Elicit</div>
+    <div class="grid">
+      <div class="card" style="--c:var(--amber)" onclick="showChapter('sem')">
+        <div class="glowline"></div><span class="emoji">📐</span>
+        <h3><em>CHAPTER 03</em>用九宮格學統計：SEM</h3>
+        <p>因素、測量指標、因素負荷量、信度、收斂效度、區別效度六個核心概念。</p>
+        <div class="foot"><div class="mini"><i data-mini="sem"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--green)" onclick="showChapter('elicit')">
+        <div class="glowline"></div><span class="emoji">📚</span>
+        <h3><em>CHAPTER 04</em>Elicit：五大功能＋實例</h3>
+        <p>查找論文、與論文對話、提取數據、生成研究報告、系統審查，加上 TPB 理論實例示範。</p>
+        <div class="foot"><div class="mini"><i data-mini="elicit"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+
+    <div class="resources">
+      <h3>📦 <span>課程原始資料</span></h3>
+      <div class="res-grid">
+        <a href="ep2-notes.html"><span class="ic">📝</span><span><b>課堂筆記</b>逐字稿＋畫面截圖完整版</span></a>
+        <a href="../radio/"><span class="ic">📻</span><span><b>直播電台系列</b>回系列總覽，一集一卡</span></a>
+        <a href="ep1-notes.html"><span class="ic">🧩</span><span><b>相關 EP1</b>同樣用曼陀羅九宮格拆解 NotebookLM</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-felo" class="view" style="--c:var(--rose)"></section>
+  <section id="view-suno" class="view" style="--c:var(--teal)"></section>
+  <section id="view-sem" class="view" style="--c:var(--amber)"></section>
+  <section id="view-elicit" class="view" style="--c:var(--green)"></section>
+</main>
+
+<footer>
+  本頁為 EP2「Felo AI×Suno篇＆SEM+Elicit」課後整理・介面沿用本站 EP38–EP46 互動式學習地圖<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2025｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+const DATA = {
+  felo: {
+    key:'felo', color:'var(--rose)', emoji:'🎨', code:'CHAPTER 01', title:'Felo AI：代理＋LiveDoc',
+    intro:'自訂指令、兩種搜尋代理，以及把搜尋結果變成完整報告的 LiveDoc。',
+    topics:[
+      {t:'自訂指令與角色模板', s:'個人化回應｜10:30',
+       blocks:[
+        {h:'重點',p:'Felo 會根據你的搜尋偏好和語言偏好提供個人化回應；可以把常用角色設定存成自訂指令（例如「專家角色指令：跨領域AI教授」），之後每次搜尋自動套用。'},
+        {h:'看課堂筆記',shot:{img:'ep2-img/b1-felo-custom.jpg',cap:'畫面實錄｜Felo 自訂指令設定'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep2-notes.html#sec-felo-intro" style="color:var(--rose)">筆記 1：Felo AI 自訂指令</a>'}]},
+      {t:'搜尋代理：智慧型 vs 多步驟', s:'兩種代理類型｜23:57',
+       blocks:[
+        {h:'差異對照',table:{head:['類型','用途'],rows:[['智慧搜尋代理（Beta）','結合自訂指令和特定知識來源來搜尋結果'],['多步驟搜尋代理','基於問題自動規劃多個搜尋步驟獲得結果']]}},
+        {h:'看課堂筆記',shot:{img:'ep2-img/b2-felo-agent.jpg',cap:'畫面實錄｜打造個人專屬搜尋代理'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep2-notes.html#sec-felo-agent" style="color:var(--rose)">筆記 2：Felo 搜尋代理</a>'}]},
+      {t:'LiveDoc：搜尋結果變報告', s:'附完整來源／圖文頁面｜36:48 / 47:48',
+       blocks:[
+        {h:'兩種範例',ul:['<b>研究報告型</b>：「偏鄉數位學習落差議題」，附 70 條編號來源逐一列出。','<b>圖文頁面型</b>：「台北好吃的早餐總覽」，含實拍照片與 AI 修改面板即時調整。']},
+        {h:'資料基礎',tip:'逐字稿：「他幾乎都是從網路上的資料」——LiveDoc 內容基於即時網路搜尋，非憑空生成。'},
+        {h:'看課堂筆記',shot:{img:'ep2-img/b3-felo-livedoc-research.jpg',cap:'畫面實錄｜LiveDoc 研究報告範例'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep2-notes.html#sec-felo-livedoc" style="color:var(--rose)">筆記 3：LiveDoc</a>'}]}
+    ]
+  },
+  suno: {
+    key:'suno', color:'var(--teal)', emoji:'🎵', code:'CHAPTER 02', title:'Suno：AI 譜曲示範',
+    intro:'免費生成結構化歌曲，段落清楚，還能分享連結。',
+    topics:[
+      {t:'寫歌詞＋AI 譜曲', s:'免費可用｜52:57–60:37',
+       blocks:[
+        {h:'逐字稿原話',p:'「有一些好用的功能，你在寫歌曲的時候……想做的歌詞，沒有付費也可以……一首歌的組招，包括前奏、主歌、導歌、副歌、橋段……他有分享的功能，Share，可以 Copy 連結。」'},
+        {h:'示範歌曲',p:'示範歌曲「Check Me」講遲到的小故事：「走進教室我遲到了五分鐘，老師眼神像要射我一槍」，[Intro, Chill R&B beat] 標記清楚的段落結構。'},
+        {h:'看課堂筆記',shot:{img:'ep2-img/b5-suno-lyrics.jpg',cap:'畫面實錄｜Suno 生成歌詞與歌曲'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep2-notes.html#sec-suno" style="color:var(--teal)">筆記 4：Suno 譜曲示範</a>'}]}
+    ]
+  },
+  sem: {
+    key:'sem', color:'var(--amber)', emoji:'📐', code:'CHAPTER 03', title:'用九宮格學統計：SEM',
+    intro:'延續 EP1 的九宮格教學法，這次套用在統計／SEM 主題。',
+    topics:[
+      {t:'SEM 六個核心概念', s:'測量模型｜06:23 / 13:06',
+       blocks:[
+        {h:'六個概念',ul:['<b>因素(Factor)</b>：表示潛在變數。','<b>測量指標(Indicator)</b>：用於觀察和衡量潛在變數。','<b>因素負荷量(Factor Loading)</b>：測量指標與潛在變數之間的相關性。','<b>信度(Reliability)</b>：測量工具的內部一致性和穩定性。','<b>收斂效度(Convergent Validity)</b>：同一構面的測量指標之間相關性。','<b>區別效度(Discriminant Validity)</b>：確認測量模型中各構面之間的區別性。']},
+        {h:'理論構面變數關係',p:'理論為構面提供框架與指導；構面是對變數的抽象表示，捕捉變數所代表的特定屬性或特徵。'},
+        {h:'看課堂筆記',shot:{img:'ep2-img/a3-sem-theory.jpg',cap:'畫面實錄｜理論、構面、變數之間關係'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep2-notes.html#sec-sem" style="color:var(--amber)">筆記 5：SEM 核心概念</a>'}]}
+    ]
+  },
+  elicit: {
+    key:'elicit', color:'var(--green)', emoji:'📚', code:'CHAPTER 04', title:'Elicit：五大功能＋實例',
+    intro:'五大核心功能，加上用 TPB 理論找真實文獻的完整示範。',
+    topics:[
+      {t:'Elicit 五大核心功能', s:'科學研究的AI助手｜40:16',
+       blocks:[
+        {h:'五大功能',table:{head:['功能','說明'],rows:[['查找論文 (Find Papers)','自然語言提問，從 1.38 億篇論文中找最相關結果'],['與論文對話 (Paper Chat)','上傳 PDF 或選擇論文進行對話交互'],['提取數據 (Extract Data)','從多篇 PDF 自動提取結構化數據'],['生成研究報告 (Research Report)','輸入問題自動生成研究報告'],['系統審查 (Systematic Review)','完整的系統性文獻工作流程']]}},
+        {h:'看課堂筆記',shot:{img:'ep2-img/a5-elicit-features.jpg',cap:'畫面實錄｜Elicit 核心功能概覽'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep2-notes.html#sec-elicit" style="color:var(--green)">筆記 6：Elicit 功能與示範</a>'}]},
+      {t:'實例：TPB 理論找文獻', s:'早起上課動機研究｜26:01 / 33:49',
+       blocks:[
+        {h:'示範流程',steps:['研究問題：分析用計畫行為理論(TPB)解釋「為什麼要早起上AI課」的動機。','Google 圖片搜尋 TPB 模型圖，確認理論架構。','Elicit Research Report：輸入問題，Gather sources → Screen sources。','找到真實相關論文：S. Yeo (2024)〈Early morning university classes are associated with impaired sleep and academic performance〉。']},
+        {h:'現場問答',warn:'觀眾提問：「試用14天後就要付費嗎？」「能夠中文提問嗎？」——實際方案請以 Elicit 官方頁面當時公告為準。'},
+        {h:'看課堂筆記',shot:{img:'ep2-img/a7-elicit-paper.jpg',cap:'畫面實錄｜Elicit 找到的相關論文'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep2-notes.html#sec-qa" style="color:var(--green)">筆記 7：現場問答</a>'}]}
+    ]
+  }
+};
+const ORDER = ['felo','suno','sem','elicit'];
+const $ = s=>document.querySelector(s);
+function renderChapter(ch){
+  const d=DATA[ch];const next=ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];const prev=ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html=`<div class="chapter-head"><span class="emoji">${d.emoji}</span><div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div></div>`;
+  d.topics.forEach((tp,i)=>{const id=`${ch}-${i}`;
+    html+=`<div class="topic" id="topic-${id}"><div class="topic-head" onclick="toggleTopic('${id}')"><span class="num">${i+1}</span><h4>${tp.t}<small>${tp.s}</small></h4><input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)"><span class="chev">▶</span></div><div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{html+=`<div class="block"><h5>${b.h}</h5>`;
+      if(b.p)html+=`<p>${b.p}</p>`;
+      if(b.ul)html+=`<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps)html+=`<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.table)html+=`<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.shot)html+=`<figure class="shot"><img src="${b.shot.img}" alt="" loading="lazy"><figcaption>${b.shot.cap}</figcaption></figure>`;
+      if(b.tip)html+=`<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn)html+=`<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html+=`</div>`;});
+    html+=`</div></div></div>`;});
+  html+=`<div class="chapnav"><a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a><a onclick="showHome()" style="text-align:center">回總覽<b>🏠 四大主題</b></a><a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a></div>`;
+  $('#view-'+ch).innerHTML=html;
+}
+ORDER.forEach(renderChapter);
+function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('#view-'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function showHome(){switchView('home');$('#crumbs').style.display='none';clearSearch();}
+function showChapter(ch){switchView(ch);$('#crumbs').style.display='flex';$('#crumbHere').textContent=`${DATA[ch].emoji} ${DATA[ch].title}`;clearSearch();syncChecks();}
+function toggleTopic(id){$('#topic-'+id).classList.toggle('open');}
+function openTopic(ch,i){showChapter(ch);const el=$('#topic-'+ch+'-'+i);el.classList.add('open');setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+const KEY='ep2-skills-v1';
+const store=()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){const s=store();if(val)s[id]=1;else delete s[id];localStorage.setItem(KEY,JSON.stringify(s));updateProgress();}
+const TOTAL=ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){const done=Object.keys(store()).length;const pct=Math.round(done/TOTAL*100);$('#progFill').style.width=pct+'%';$('#progText').textContent=`${done} / ${TOTAL} 項技能已掌握`;$('#statDone').textContent=done;$('#statPct').textContent=pct+'%';ORDER.forEach(ch=>{const sub=DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;const el=document.querySelector(`[data-mini="${ch}"]`);if(el)el.style.width=Math.round(sub/DATA[ch].topics.length*100)+'%';});}
+function syncChecks(){const s=store();document.querySelectorAll('input[data-skill]').forEach(cb=>{cb.checked=!!s[cb.dataset.skill];});}
+function resetProgress(){if(confirm('確定要清空所有打勾進度嗎？')){localStorage.removeItem(KEY);syncChecks();updateProgress();}}
+function stripTags(s){return s.replace(/<[^>]+>/g,'');}
+const INDEX=[];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{let body=tp.s+' ';tp.blocks.forEach(b=>{if(b.p)body+=stripTags(b.p)+' ';if(b.ul)body+=b.ul.map(stripTags).join(' ')+' ';if(b.steps)body+=b.steps.map(stripTags).join(' ')+' ';if(b.tip)body+=stripTags(b.tip)+' ';if(b.warn)body+=stripTags(b.warn)+' ';if(b.table)body+=b.table.rows.flat().map(stripTags).join(' ')+' ';});INDEX.push({ch,i,title:tp.t,body});}));
+$('#searchInput').addEventListener('input',e=>{const q=e.target.value.trim();const box=$('#searchResults');if(!q){box.classList.remove('show');box.innerHTML='';return;}const hits=INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));box.classList.add('show');if(!hits.length){box.innerHTML=`<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：Felo、Suno、SEM、Elicit）</div>`;return;}const hl=s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);box.innerHTML=hits.map(x=>{const pos=x.body.toLowerCase().indexOf(q.toLowerCase());const snip=x.body.substr(Math.max(0,pos-20),90);return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})"><div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div><h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;}).join('');});
+function clearSearch(){$('#searchInput').value='';$('#searchResults').classList.remove('show');$('#searchResults').innerHTML='';}
+(function(){const box=$('#stars');for(let i=0;i<70;i++){const s=document.createElement('i');s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';s.style.animationDelay=(Math.random()*3)+'s';s.style.transform=`scale(${.5+Math.random()*1.5})`;box.appendChild(s);}})();
+syncChecks();updateProgress();
+</script>
+</body>
+</html>

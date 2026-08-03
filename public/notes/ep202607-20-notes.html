@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP202607.20 課堂筆記｜NotebookLM 最新 Agentic 功能：打造你的 AI 研究助理</title>
+<meta name="description" content="晨學講堂 EP202607.20 課堂筆記：NotebookLM 最新 Agentic 功能——既有六大功能、用 AI Agent 操作復刻的六步驟、NotebookLM 更名為 Gemini Notebook 的完整生態系整合、兩個缺點、Gemini 兩大功能（整理思路／讀書與學習），並附 NotebookLM Agentic Pack 懶人包安裝說明。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#2f7d92; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(24px,4.2vw,40px);font-weight:800;line-height:1.18;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px;border-left:none}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.prompt{position:relative;background:#1d1d1f;border-radius:10px;padding:15px 16px;margin:12px 0;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt .tag{display:inline-block;font-size:11px;letter-spacing:.06em;color:#c9c4ff;border:1px solid #3a3a40;border-radius:6px;padding:2px 9px;margin-bottom:8px}
+.prompt b{color:#fff}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#a8cdd6" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP202607.20 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="ep202607-20-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 年中共學 · EP202607.20</span>
+  <h1>NotebookLM 最新<span>Agentic</span> 功能<br>打造你的 AI 研究助理</h1>
+  <p class="lead">EP202607.20 整理 NotebookLM 最新的 Agentic（能自己動手做事）能力：既有六大功能怎麼被 AI Agent 復刻成六步驟操作，以及 Google 把 NotebookLM 整合升級為 <b>Gemini Notebook</b> 的完整生態系變化。也一併看兩個目前的缺點，跟 Gemini 本身「整理思路」與「讀書與學習」兩大功能。本頁根據<b>真實課程簡報原圖與懶人包說明文件</b>整理。</p>
+  <div class="meta">
+    <span>📅 2026/07/20 直播</span>
+    <span>🗂️ 教材：10 頁簡報＋懶人包說明</span>
+    <span>🤖 主題：NotebookLM Agentic</span>
+    <span>📓 更名：Gemini Notebook</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-existing">1. NotebookLM 既有六大功能</a>
+  <a href="#sec-agentic">2. 用 AI Agent 復刻操作六步驟</a>
+  <a href="#sec-rename">3. NotebookLM 更名為 Gemini Notebook</a>
+  <a href="#sec-vehicle">4. Gemini Notebook 成為研究載體</a>
+  <a href="#sec-everywhere">5. 無處不在的筆記本</a>
+  <a href="#sec-cons">6. 目前的兩個缺點</a>
+  <a href="#sec-gemini2">7. Gemini 兩大功能</a>
+  <a href="#sec-pack">8. 附錄：NotebookLM Agentic Pack 懶人包</a>
+  <a href="#sec-recap">9. 重點整理</a>
+  <a href="#sec-src">10. 資料來源與製作說明</a>
+</nav>
+
+<article>
+
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--blue))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>EP202607.20「NotebookLM 最新 Agentic 功能：打造你的 AI 研究助理」（年中共學 5 天系列之一）</td></tr>
+    <tr><th>頻道</th><td>生成式 AI 應用電台・年中共學</td></tr>
+    <tr><th>教材</th><td>官方課程簡報 10 頁（逐頁原圖全收錄）；另附「NotebookLM Agentic Pack」懶人包（README＋4 個 Skills＋安裝腳本）與「懶人包介紹」補充簡報（74KB 純文字／向量版）</td></tr>
+    <tr><th>一句話先懂</th><td>NotebookLM 原本就有「上傳來源、摘要問答、引用來源」等六大功能；這集教你用 <b>AI Agent</b> 把這些功能拆成六個可操作步驟去復刻，同時 Google 也正把 NotebookLM 整合進 Gemini 生態系、更名為 <b>Gemini Notebook</b>。</td></tr>
+  </table></div>
+  <figure class="shot">
+    <img src="ep202607-20-img/s1-overview.jpg" alt="NotebookLM 既有功能與 AI Agent 操作復刻對照" loading="lazy">
+    <figcaption>簡報封面｜左側是 NotebookLM 既有六大功能（Agentic），右側是用 AI Agent 來操作及復刻的六個步驟，一一對應。</figcaption>
+  </figure>
+</section>
+
+<section class="chapter" id="sec-existing">
+  <span class="chip" style="background:linear-gradient(90deg,#2f7d92,#3b6bb0)">CHAPTER 01</span>
+  <h2 class="ct">1. NotebookLM 既有六大功能</h2>
+  <p class="cd">簡報封面左欄（原文照錄）。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:160px">功能</th><th>說明</th></tr>
+    <tr><td><b>上傳與整合來源</b></td><td>文件、PDF、網頁、YouTube、文字等</td></tr>
+    <tr><td><b>資料理解與摘要</b></td><td>快速摘要重點、解釋概念、回答問題</td></tr>
+    <tr><td><b>互動問答</b></td><td>根據來源回答問題，深入追問更理解</td></tr>
+    <tr><td><b>筆記／筆記本</b></td><td>整理重點、建立筆記與想法，持續累積知識</td></tr>
+    <tr><td><b>引用來源</b></td><td>答案皆附上來源引用，降低幻覺風險</td></tr>
+    <tr><td><b>音訊概述（Podcast 風格）</b></td><td>將重點轉換為對話式音訊摘要，方便聆聽</td></tr>
+  </table></div>
+</section>
+
+<section class="chapter" id="sec-agentic">
+  <span class="chip" style="background:linear-gradient(90deg,#3b6bb0,#5645D4)">CHAPTER 02</span>
+  <h2 class="ct">2. 用 AI Agent 復刻操作六步驟</h2>
+  <p class="cd">簡報封面右欄（原文照錄）——每一步都對應第 1 章的一項既有功能。</p>
+  <ol class="st">
+    <li><b>匯入來源</b>：上傳或連結文件、PDF、網頁、YouTube、文字等。</li>
+    <li><b>AI Agent 解析內容</b>：讀取來源、理解內容、擷取重點。</li>
+    <li><b>產生摘要與見解</b>：生成摘要、關鍵重點、洞見與結論。</li>
+    <li><b>互動問答與追問</b>：根據內容回答問題，支援多輪對話。</li>
+    <li><b>整理與輸出</b>：建立筆記、心智圖、表格或清單等。</li>
+    <li><b>引用與來源標註</b>：標註來源段落，提供可驗證依據。</li>
+  </ol>
+  <div class="twrap"><table>
+    <tr><th style="width:220px">對 NotebookLM 最新 Agentic 的觀點</th></tr>
+    <tr><td><b>研究更主動，效率大幅提升</b>：從大量資料中快速提煉重點，貼近研究需求，讓 AI 成為你的研究夥伴。</td></tr>
+    <tr><td><b>以來源為基礎，降低幻覺風險</b>：強制引用來源，提升可信度與可驗證性，更適合學術與專業應用。</td></tr>
+    <tr><td><b>可擴充、可客製，打造專屬助理</b>：透過 AI Agent 自行設計流程與工具，根據需求打造專屬研究助理。</td></tr>
+  </table></div>
+  <div class="note gold">⚠️ 會有幻覺嗎？在 NotebookLM 中，因為答案皆自你提供的來源並附引用，幻覺風險極低；但若使用外部模型打造 AI Agent，仍可能出現幻覺，建議嚴格限制來源、要求逐段引用並人工驗證。</div>
+</section>
+
+<section class="chapter" id="sec-rename">
+  <span class="chip" style="background:linear-gradient(90deg,#5645D4,#2f7d92)">CHAPTER 03</span>
+  <h2 class="ct">3. NotebookLM 更名為 Gemini Notebook</h2>
+  <figure class="shot">
+    <img src="ep202607-20-img/s2-rename.jpg" alt="Google 已將 NotebookLM 更名為 Gemini Notebook" loading="lazy">
+    <figcaption>簡報 3｜Google 已將 NotebookLM 更名為 Gemini Notebook——「你的資料・你的筆記・AI 助理」升級為「全新升級・更強大的 AI 筆記體驗：更智慧、更整合、激發更多可能」。</figcaption>
+  </figure>
+  <figure class="shot">
+    <img src="ep202607-20-img/s3-ecosystem-detail.jpg" alt="NotebookLM 整合升級為 Gemini Notebook 的組成" loading="lazy">
+    <figcaption>簡報 4｜NotebookLM 原本是獨立研究工具；整合升級為 Gemini Notebook＝Gemini＋Google Search＋Google 生態系（Drive、Docs、Sheets、Gmail 等）＋安全雲端電腦＋原生程式碼執行能力。Google 已開放給 AI Ultra 與指定 Workspace 用戶，未來數週將推送至所有 Google AI Pro 網頁版用戶；安全與信任：在安全的雲端環境中執行程式碼，保護資料與隱私。</figcaption>
+  </figure>
+</section>
+
+<section class="chapter" id="sec-vehicle">
+  <span class="chip" style="background:linear-gradient(90deg,#2f7d92,#0d8f80)">CHAPTER 04</span>
+  <h2 class="ct">4. Gemini Notebook 成為研究載體</h2>
+  <figure class="shot">
+    <img src="ep202607-20-img/s4-research-vehicle.jpg" alt="Gemini Notebook 成為 Google 研究載體" loading="lazy">
+    <figcaption>簡報 5｜Gemini App、Gemini Notebook（完整同步）、Google 搜尋（未來帶入 AI Mode）三者互通；筆記本成為共通研究載體，串連 Gemini App、Google 搜尋、獨立版 Gemini Notebook，做到研究、整理、同步、延伸搜尋、AI 延伸洞察、多端連結。</figcaption>
+  </figure>
+</section>
+
+<section class="chapter" id="sec-everywhere">
+  <span class="chip" style="background:linear-gradient(90deg,#0d8f80,#9c7b23)">CHAPTER 05</span>
+  <h2 class="ct">5. 無處不在的筆記本</h2>
+  <figure class="shot">
+    <img src="ep202607-20-img/s5-notebooks-everywhere.jpg" alt="無處不在的筆記本 Notebooks" loading="lazy">
+    <figcaption>簡報 6｜四個重點功能：① Gemini 上傳選項（可上傳檔案與資料）② Gemini Gem 加入檔案（提供 Gem 參考）③ Antigravity（可直接叫出使用）④ AI Mode（未來功能）。筆記本將串連上傳、Gem、工具與搜尋，讓研究、整理、延伸探索更方便。</figcaption>
+  </figure>
+</section>
+
+<section class="chapter" id="sec-cons">
+  <span class="chip" style="background:linear-gradient(90deg,#9c7b23,#bf6a1e)">CHAPTER 06</span>
+  <h2 class="ct">6. 目前的兩個缺點</h2>
+  <figure class="shot">
+    <img src="ep202607-20-img/s6-drawbacks.jpg" alt="Gemini + NotebookLM 兩個缺點" loading="lazy">
+    <figcaption>簡報 7｜① 幻覺跑出來了：有時會產生不正確或虛構內容 ② 無法分享：內容不易直接共享給他人。使用前要查核內容，協作分享也有限制。</figcaption>
+  </figure>
+</section>
+
+<section class="chapter" id="sec-gemini2">
+  <span class="chip" style="background:linear-gradient(90deg,#bf6a1e,#3f8560)">CHAPTER 07</span>
+  <h2 class="ct">7. Gemini 兩大功能：整理思路 vs 讀書與學習</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">功能</th><th>核心價值</th><th>適合情境</th></tr>
+    <tr><td><b>整理思路</b></td><td>把零散資訊整理成可理解的脈絡（匯入對話/資料 → 依主題分組 → 整理成重點）</td><td>會議重點整理、專案脈絡梳理、腦力激盪、依來源問答</td></tr>
+    <tr><td><b>讀書與學習</b></td><td>建立課程、追蹤進度、持續學習（設定主題/課程 → 取得學習內容 → 追蹤進度與複習）</td><td>自主學習、考試準備、建立讀書計畫、概念提問與複習</td></tr>
+  </table></div>
+  <figure class="shot">
+    <img src="ep202607-20-img/s7-func1-organize.jpg" alt="Gemini 功能一：整理思路" loading="lazy">
+    <figcaption>簡報 9｜功能一・整理思路：依主題將對話分組，並根據你提供的資料來源回覆。</figcaption>
+  </figure>
+  <figure class="shot">
+    <img src="ep202607-20-img/s8-func2-study.jpg" alt="Gemini 功能二：讀書與學習" loading="lazy">
+    <figcaption>簡報 10｜功能二・讀書與學習：取得自訂課程並追蹤進度，讓 AI 成為你的學習陪跑助手。</figcaption>
+  </figure>
+</section>
+
+<section class="chapter" id="sec-pack">
+  <span class="chip" style="background:linear-gradient(90deg,#3f8560,#2f7d92)">APPENDIX</span>
+  <h2 class="ct">8. 附錄：NotebookLM Agentic Pack 懶人包</h2>
+  <p class="cd">課程資料夾附上一份可交付的 Windows 懶人包，把 NotebookLM MCP 與 4 個研究 Skills 串接起來（README.md 原文整理）。</p>
+  <div class="prompt"><span class="tag">5 分鐘啟動（PowerShell）</span>Set-ExecutionPolicy -Scope Process Bypass
+cd "&lt;本資料夾&gt;"
+.\install_notebooklm_mcp.ps1
+.\login_notebooklm.ps1
+.\setup_codex.ps1
+.\install_skills.ps1 -Force
+.\verify_notebooklm.ps1</div>
+  <div class="twrap"><table>
+    <tr><th style="width:220px">元件</th><th>用途</th></tr>
+    <tr><td>install_notebooklm_mcp.ps1</td><td>安裝 Python 3.12（缺少時）、notebooklm-mcp-cli，並嘗試安裝 Chrome</td></tr>
+    <tr><td>login_notebooklm.ps1</td><td>開啟瀏覽器登入並檢查 cookie/token</td></tr>
+    <tr><td>setup_codex.ps1</td><td>以 codex mcp add 註冊 notebooklm-mcp，並提供通用 JSON</td></tr>
+    <tr><td>install_skills.ps1</td><td>將 4 個 Skills 複製到 %CODEX_HOME%\skills 或 %USERPROFILE%\.codex\skills</td></tr>
+    <tr><td>verify_notebooklm.ps1</td><td>執行 nlm doctor、登入檢查、Skill validator 與 JSON schema 驗證</td></tr>
+  </table></div>
+  <h3>4 個 Skill 的串接（來自「懶人包介紹」補充簡報）</h3>
+  <div class="prompt"><span class="tag">串接流程</span>Evidence Gap → Literature Critic（含三角檢證）
+ ↘ ↓
+ Cross-Notebook Compare → APA References → 研究稿件</div>
+  <ul class="pt">
+    <li><b>Evidence Gap（研究缺口）</b>：盤點現有證據，建立缺口矩陣（概念｜實證｜方法／樣本｜測量｜情境），核心規則「找不到 ≠ 不存在」，每個補充來源都要有理由與可定位證據。</li>
+    <li><b>Literature Critic（文獻批判與回顧）</b>：產出 Source Map、Claim Matrix（支持／反駁／不確定）、Critical Synthesis；每段輸出都要有 claim_id，沒有 citation 的內容會降級為 uncited／needs_verification。三角檢證：核心 claim × 理論（不同 lens）× 資料／來源（不同作者、場域）× 方法（量化、質性、混合），三軸不足就標記 not_triangulated。</li>
+    <li><b>Cross-Notebook Compare（跨筆記本比較）</b>：每本筆記本先獨立分析，再做 Claim Normalization 與比較矩陣（共識／爭議／可轉移性），規則是「不把 A notebook 的證據當成 B notebook 的證據，先隔離再比較」。</li>
+    <li><b>APA References（APA 7 引用）</b>：抽取 metadata（作者／年份／題名）、驗證 DOI/URL（Crossref／出版社），輸出文內引用＋參考文獻，可匯出 CSL-JSON／BibTeX／RIS；缺資料標記為 NEEDS_VERIFICATION，不自行補造。</li>
+  </ul>
+  <div class="note gold">⚠️ 重要限制（README 原文）：notebooklm-mcp-cli 是社群維護的非官方橋接器，透過瀏覽器登入與持久化 session 工作；請勿把敏感資料放入未審核的第三方橋接器。NotebookLM 的 source、配額與功能會依帳號／方案／地區改變。跨 notebook 比較由 Agent 逐一查詢後標準化，不是宣稱 NotebookLM 原生共享所有 notebook context。APA Skill 只格式化與驗證 metadata，不會以語言模型猜測 DOI、作者或年份。</div>
+  <p>上游 MCP/CLI：<a href="https://github.com/jacob-bd/notebooklm-mcp-cli" target="_blank" rel="noopener">jacob-bd/notebooklm-mcp-cli</a>；NotebookLM 官方說明：<a href="https://support.google.com/notebooklm/answer/16179559?hl=en" target="_blank" rel="noopener">使用 NotebookLM Chat</a>、<a href="https://support.google.com/notebooklm/answer/16206563?hl=en" target="_blank" rel="noopener">建立筆記本與獨立來源</a>。</p>
+</section>
+
+<section class="chapter" id="sec-recap">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#2f7d92)">RECAP</span>
+  <h2 class="ct">9. 重點整理</h2>
+  <ul class="pt">
+    <li><b>既有六大功能 → Agent 六步驟</b>：上傳來源、摘要理解、互動問答、筆記整理、引用來源、音訊概述，一一對應 Agent 的匯入、解析、產生、追問、輸出、標註六步驟。</li>
+    <li><b>更名為 Gemini Notebook</b>：整合 Gemini、Google 搜尋、Google 生態系、安全雲端電腦、原生程式碼執行能力。</li>
+    <li><b>成為共通研究載體</b>：串連 Gemini App、Google 搜尋（未來 AI Mode）、獨立版 Gemini Notebook。</li>
+    <li><b>兩個缺點</b>：仍有幻覺風險、內容不易分享，使用前要查核、協作分享有限制。</li>
+    <li><b>Gemini 兩大功能</b>：整理思路（工作向）vs 讀書與學習（學習陪跑向）。</li>
+    <li><b>懶人包附錄</b>：NotebookLM MCP + 4 個研究 Skills，串成「找缺口 → 批判回顧 → 跨筆記本比較 → APA 引用」的證據鏈研究工作流。</li>
+  </ul>
+</section>
+
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5a5866)">SOURCES</span>
+  <h2 class="ct">10. 資料來源與製作說明</h2>
+  <ul class="pt">
+    <li><b>原始教材：</b>EP202607.20「NotebookLM 最新 Agentic 功能：打造你的 AI 研究助理」官方課程簡報 10 頁；另附「NotebookLM Agentic Pack」懶人包（README＋4 Skills＋安裝腳本）與「懶人包介紹」補充簡報全文；均為 anyone-reader 權限、公開可下載。</li>
+    <li><b>製作方式：</b>下載原始 pptx → 取出 10 頁投影片原圖 → <b>逐頁親眼判讀</b>並整理重點 → 讀取懶人包 README.md 全文與補充簡報全文 → 對照整理成本頁章節。內容為<b>真實課程內容</b>，非推測改寫。</li>
+    <li><b>誠實聲明：</b>本集 Drive 資料夾未附獨立錄影，<b>示範操作畫面與逐字稿時間碼</b>暫缺，本頁以簡報實錄與懶人包說明文件為準；如日後取得錄影可再補入現場示範細節。NotebookLM／Gemini Notebook 相關功能開放對象與時程會持續更新，實際情況請以當下官方公告為準。</li>
+    <li><b>介面參考：</b>版型沿用本站 EP29–EP47 課堂筆記的乾淨白底編輯風格。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  EP202607.20「NotebookLM 最新 Agentic 功能」課堂筆記・2026/07 整理<br>
+  🍀 Learn AI with Tarshar｜搭配 <a href="ep202607-20-ai-skills.html">互動技能地圖</a> 使用效果最佳
+</footer>
+
+</body>
+</html>

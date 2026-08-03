@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Microsoft Copilot × Power Automate｜互動式學習地圖</title>
+<meta name="description" content="EP202607.23：三個產品定位、選工具原則、Copilot消費者版完整功能、M365 Copilot工作脈絡、Power Automate不可取代的核心，互動式多層次學習地圖">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269;
+  --green:#3f8560; --orange:#bf6a1e; --red:#c0453f; --teal:#0d8f80; --amber:#9c7b23;
+  --feat:#3b6bb0; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(26px,4.4vw,44px);font-weight:800;line-height:1.16;letter-spacing:-.025em;color:var(--txt);background:none;-webkit-text-fill-color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:660px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+figure.shot{margin:10px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--txt3);padding:9px 14px;border-top:1px solid var(--line);background:var(--bg2);line-height:1.7}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <a class="navlink" href="../radio/" style="border-color:#a9c0e8" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <div class="logo">
+    <div class="dot">🧭</div>
+    <div>Copilot×PA 地圖<small>YEAR-MID LEARNING · EP202607.23</small></div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋技能關鍵字：Copilot、M365、Power Automate…" autocomplete="off">
+  </div>
+  <a class="navlink" href="ep202607-23-notes.html">📝 課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">EP202607.23 · 年中共學 · 2026/07/23</span>
+  <h1>Microsoft Copilot<br>× Power Automate</h1>
+  <p class="sub">Copilot 負責理解與生成，Power Automate 負責受控執行——選對工具的關鍵在於「結果可變，還是步驟必須固定」。<br>點進每一章，逐層展開<b>本集實際教到</b>的產品定位與應用地圖，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🎙️ 生成式AI應用電台・年中共學</span>
+    <span>🧭 三個產品定位</span>
+    <span>⚖️ 選工具原則</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>4</b><span>大主題</span></div>
+  <div class="stat"><b>9</b><span>實戰技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 9 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--blue)" onclick="showChapter('foundation')">
+        <div class="glowline"></div><span class="emoji">🧭</span>
+        <h3><em>CHAPTER 01</em>三個產品＋選工具原則</h3>
+        <p>Copilot、M365 Copilot、Power Automate 各自定位，以及依授權與可變性選工具。</p>
+        <div class="foot"><div class="mini"><i data-mini="foundation"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--teal)" onclick="showChapter('consumer')">
+        <div class="glowline"></div><span class="emoji">💬</span>
+        <h3><em>CHAPTER 02</em>Copilot 消費者版功能</h3>
+        <p>聊天、檔案寫作、影像生成、Voice/Vision、研究、Windows 桌面入口。</p>
+        <div class="foot"><div class="mini"><i data-mini="consumer"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--purple)" onclick="showChapter('m365')">
+        <div class="glowline"></div><span class="emoji">🏢</span>
+        <h3><em>CHAPTER 03</em>M365 Copilot 工作脈絡</h3>
+        <p>Chat/Pages/Notebooks，以及 Word/Outlook/Teams/Excel/PowerPoint 深入應用。</p>
+        <div class="foot"><div class="mini"><i data-mini="m365"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--orange)" onclick="showChapter('pa')">
+        <div class="glowline"></div><span class="emoji">⚙️</span>
+        <h3><em>CHAPTER 04</em>Power Automate＋導入路線</h3>
+        <p>不可取代的核心能力，以及先 AI 輔助、再決定是否自動化的三步驟。</p>
+        <div class="foot"><div class="mini"><i data-mini="pa"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+
+    <div class="resources">
+      <h3>📦 <span>課程原始資料</span></h3>
+      <div class="res-grid">
+        <a href="ep202607-23-notes.html"><span class="ic">📝</span><span><b>課堂筆記</b>29 頁簡報全文＋畫面截圖</span></a>
+        <a href="../radio/"><span class="ic">📻</span><span><b>直播電台系列</b>回系列總覽，一集一卡</span></a>
+        <a href="ep202607-24-notes.html"><span class="ic">🤖</span><span><b>相關集數</b>用手機遙控 Claude Code</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-foundation" class="view" style="--c:var(--blue)"></section>
+  <section id="view-consumer" class="view" style="--c:var(--teal)"></section>
+  <section id="view-m365" class="view" style="--c:var(--purple)"></section>
+  <section id="view-pa" class="view" style="--c:var(--orange)"></section>
+</main>
+
+<footer>
+  本頁為 EP202607.23「Microsoft Copilot × Power Automate」課後整理・介面沿用本站互動式學習地圖<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2026｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+const DATA = {
+  foundation: {
+    key:'foundation', color:'var(--blue)', emoji:'🧭', code:'CHAPTER 01', title:'三個產品＋選工具原則',
+    intro:'先搞懂三個產品各自解決什麼問題，再看選工具的第一原則。',
+    topics:[
+      {t:'三個產品定位', s:'AI助手／工作AI／流程引擎｜開場',
+       blocks:[
+        {h:'三個產品',table:{head:['產品','定位'],rows:[['Microsoft Copilot','面向個人的網路型 AI；回答、寫作、創作與探索為主'],['Microsoft 365 Copilot','在工作帳號與 Microsoft 365 內容脈絡中協作'],['Power Automate','以觸發條件、連接器與規則，穩定地執行跨系統流程']]}},
+        {h:'帳號授權差異',ul:['免費 Copilot：核心聊天、網路搜尋、寫作、部分影像能力。','M365 個人/家用/Premium：更多 Office Copilot 功能，但有點數差異。','商務授權：可用工作資料脈絡、組織代理程式與企業資料保護。']},
+        {h:'看課堂筆記',p:'👉 <a href="ep202607-23-notes.html#sec-three" style="color:var(--blue)">筆記 1：三件事＋三個產品定位</a>'}]},
+      {t:'選工具第一原則', s:'結果可變 vs 步驟固定｜選工具原則',
+       blocks:[
+        {h:'判斷原則',ul:['需要摘要、草擬、分類、比較、建議 → 優先用 Copilot 理解與生成。','需要固定觸發、固定欄位、固定動作、可追蹤失敗 → 優先保留 Power Automate。','兩者都需要 → Copilot 產生內容或判讀，Power Automate 執行通知、核准、寫回與留痕。']},
+        {h:'核心原則',tip:'正確架構是：Copilot 負責理解與產生；Power Automate 負責受控執行、紀錄與回復。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep202607-23-notes.html#sec-auth" style="color:var(--blue)">筆記 2：選工具第一原則</a>'}]}
+    ]
+  },
+  consumer: {
+    key:'consumer', color:'var(--teal)', emoji:'💬', code:'CHAPTER 02', title:'Copilot 消費者版功能',
+    intro:'聊天、寫作、影像、Voice/Vision、研究到 Windows 桌面入口的完整功能地圖。',
+    topics:[
+      {t:'聊天／檔案／影像／Voice＆Vision', s:'消費者版核心功能',
+       blocks:[
+        {h:'功能一覽',ul:['<b>聊天</b>：自然語言問答、摘要、改寫與規劃，可查證來源。','<b>檔案與 Pages</b>：上傳檔案摘要比較，聊天結果可轉 Copilot Pages 持續編寫。','<b>影像生成編輯</b>：文字生圖、反覆編修，輸出視為草稿需人工審核。','<b>Voice</b>：口語對話。','<b>Vision</b>：理解分享的螢幕/App/鏡頭畫面，<b>看懂與建議，不是 RPA</b>，不會替你點擊操作。']},
+        {h:'看課堂筆記',shot:{img:'ep202607-23-img/s3-copilot-vision-create.jpg',cap:'錄影 17:12｜Windows Copilot Vision 生成與編輯圖片示範'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep202607-23-notes.html#sec-copilot-consumer" style="color:var(--teal)">筆記 3：Copilot 消費者版完整功能</a>'}]},
+      {t:'研究、連接資料與 Windows 入口', s:'Deep Research 即將退役｜錄影 11:33',
+       blocks:[
+        {h:'重點',warn:'Deep Research 官方已公告 2026/08/18 起將自消費者 Copilot 退役；M365 Premium 可改用 Researcher。'},
+        {h:'其他能力',ul:['個人連接器可在同意後找 Outlook/Gmail 郵件、聯絡人與行事曆。','Copilot on Windows 支援快捷鍵、喚醒詞、螢幕擷取，可搜尋本機或 OneDrive 檔案內容。']},
+        {h:'能取代／不能取代',table:{head:['能減少手工','還做不到'],rows:[['把找資料、寫初稿、整理待辦縮短為對話式工作','沒有通用事件觸發、重試、分支、執行紀錄與服務帳號模型']]}},
+        {h:'看課堂筆記',shot:{img:'ep202607-23-img/s2-copilot-settings.jpg',cap:'錄影 11:33｜Copilot 個人化設定畫面'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep202607-23-notes.html#sec-copilot-limits" style="color:var(--teal)">筆記 4：能取代與不能取代的</a>'}]}
+    ]
+  },
+  m365: {
+    key:'m365', color:'var(--purple)', emoji:'🏢', code:'CHAPTER 03', title:'M365 Copilot 工作脈絡',
+    intro:'從個人回答進入工作脈絡，以及深入各應用程式的具體能力。',
+    topics:[
+      {t:'工作資料基礎＋Chat/Pages/Notebooks', s:'權限與企業資料保護',
+       blocks:[
+        {h:'三個安全原則',ul:['Copilot 只能在既有權限內存取檔案、郵件、聊天、會議與網站，不會自動越權。','企業資料保護涵蓋傳輸/靜態加密、租戶隔離、敏感度標籤、保留政策與稽核。','不會用企業資料訓練公開模型，但過度共用的資料權限仍是治理風險。']},
+        {h:'三個工作模式',ul:['<b>Chat</b>：用工作或網路內容回答，回答帶引用可回原始資料驗證。','<b>Pages</b>：對話變成可共同維護的頁面，適合會議構想、決策草案，非建立流程。','<b>Notebooks</b>：限定參考資料範圍，建立專案指示維持既定語氣格式，商務帳號可生成 Audio Overview。']},
+        {h:'看課堂筆記',p:'👉 <a href="ep202607-23-notes.html#sec-m365-context" style="color:var(--purple)">筆記 5：M365 Copilot 工作脈絡</a>'}]},
+      {t:'深入各應用程式', s:'Word/Outlook/Teams/Excel/PowerPoint',
+       blocks:[
+        {h:'應用能力',table:{head:['應用','能做的事'],rows:[['Word','起草、重組、摘要長文件，共用文件先預覽後寫入'],['Outlook','摘要長郵件串、草擬回覆、理解收件匣行事曆'],['Teams','會議摘要、行動項目、Recap 持續提問'],['Excel','Edit/Plan/Chat 三模式，350+函數不取代精確計算'],['PowerPoint','建立簡報、摘要投影片、Rewrite 潤飾語氣']]}},
+        {h:'看課堂筆記',p:'👉 <a href="ep202607-23-notes.html#sec-m365-apps" style="color:var(--purple)">筆記 6：M365 Copilot 深入各應用程式</a>'}]},
+      {t:'Create、Agents、Workflows Agent', s:'品牌套件與代理程式',
+       blocks:[
+        {h:'重點',ul:['Create/Brand kit：產生影像資訊圖，套用已核准品牌元素。','Agents/Researcher：加入組織知識協助重複任務；Agent 不是免治理的自動化，要定義來源、身分驗證、測試監控。','Workflows Agent：描述需求即可建流程，但截至 2026/07 屬 Frontier 早期體驗，不可假設每租戶都可用。']},
+        {h:'看課堂筆記',p:'👉 <a href="ep202607-23-notes.html#sec-agents" style="color:var(--purple)">筆記 7：Create／Agents／Researcher</a>'}]}
+    ]
+  },
+  pa: {
+    key:'pa', color:'var(--orange)', emoji:'⚙️', code:'CHAPTER 04', title:'Power Automate＋導入路線',
+    intro:'不可取代的核心能力，以及先 AI 輔助、再決定是否自動化的路線。',
+    topics:[
+      {t:'不可取代的核心＋工作取捨', s:'雲端流程／桌面RPA',
+       blocks:[
+        {h:'核心能力',table:{head:['能力','說明'],rows:[['雲端流程','事件觸發，跨服務執行動作'],['桌面 RPA 與維運','桌面自動化，保留紀錄與錯誤處理']]}},
+        {h:'必須保留 Power Automate',warn:'涉及付款、核准、合規留存、客戶通知、主資料寫回或 SLA 的流程，需要第三方系統、服務帳號、複雜重試或高頻大量執行時。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep202607-23-notes.html#sec-pa" style="color:var(--orange)">筆記 8：Power Automate 核心能力</a>'}]},
+      {t:'導入路線三步驟', s:'先試行再固化',
+       blocks:[
+        {h:'三步驟',steps:['挑選高頻、低風險、文字與知識密集的工作，用 Copilot 先做人工在迴路試行。','量化節省時間、錯誤類型與人工覆核點，把可重複的決策條件寫清楚。','只有流程穩定後才用 Power Automate 或 Agent flow 固化，並持續驗證來源、權限與輸出。']},
+        {h:'看課堂筆記',p:'👉 <a href="ep202607-23-notes.html#sec-route" style="color:var(--orange)">筆記 9：導入路線與工作取捨</a>'}]}
+    ]
+  }
+};
+const ORDER = ['foundation','consumer','m365','pa'];
+const $ = s=>document.querySelector(s);
+function renderChapter(ch){
+  const d=DATA[ch];const next=ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];const prev=ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html=`<div class="chapter-head"><span class="emoji">${d.emoji}</span><div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div></div>`;
+  d.topics.forEach((tp,i)=>{const id=`${ch}-${i}`;
+    html+=`<div class="topic" id="topic-${id}"><div class="topic-head" onclick="toggleTopic('${id}')"><span class="num">${i+1}</span><h4>${tp.t}<small>${tp.s}</small></h4><input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)"><span class="chev">▶</span></div><div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{html+=`<div class="block"><h5>${b.h}</h5>`;
+      if(b.p)html+=`<p>${b.p}</p>`;
+      if(b.ul)html+=`<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps)html+=`<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.table)html+=`<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.shot)html+=`<figure class="shot"><img src="${b.shot.img}" alt="" loading="lazy"><figcaption>${b.shot.cap}</figcaption></figure>`;
+      if(b.tip)html+=`<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn)html+=`<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html+=`</div>`;});
+    html+=`</div></div></div>`;});
+  html+=`<div class="chapnav"><a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a><a onclick="showHome()" style="text-align:center">回總覽<b>🏠 四大主題</b></a><a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a></div>`;
+  $('#view-'+ch).innerHTML=html;
+}
+ORDER.forEach(renderChapter);
+function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('#view-'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function showHome(){switchView('home');$('#crumbs').style.display='none';clearSearch();}
+function showChapter(ch){switchView(ch);$('#crumbs').style.display='flex';$('#crumbHere').textContent=`${DATA[ch].emoji} ${DATA[ch].title}`;clearSearch();syncChecks();}
+function toggleTopic(id){$('#topic-'+id).classList.toggle('open');}
+function openTopic(ch,i){showChapter(ch);const el=$('#topic-'+ch+'-'+i);el.classList.add('open');setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+const KEY='ep202607-23-skills-v1';
+const store=()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){const s=store();if(val)s[id]=1;else delete s[id];localStorage.setItem(KEY,JSON.stringify(s));updateProgress();}
+const TOTAL=ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){const done=Object.keys(store()).length;const pct=Math.round(done/TOTAL*100);$('#progFill').style.width=pct+'%';$('#progText').textContent=`${done} / ${TOTAL} 項技能已掌握`;$('#statDone').textContent=done;$('#statPct').textContent=pct+'%';ORDER.forEach(ch=>{const sub=DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;const el=document.querySelector(`[data-mini="${ch}"]`);if(el)el.style.width=Math.round(sub/DATA[ch].topics.length*100)+'%';});}
+function syncChecks(){const s=store();document.querySelectorAll('input[data-skill]').forEach(cb=>{cb.checked=!!s[cb.dataset.skill];});}
+function resetProgress(){if(confirm('確定要清空所有打勾進度嗎？')){localStorage.removeItem(KEY);syncChecks();updateProgress();}}
+function stripTags(s){return s.replace(/<[^>]+>/g,'');}
+const INDEX=[];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{let body=tp.s+' ';tp.blocks.forEach(b=>{if(b.p)body+=stripTags(b.p)+' ';if(b.ul)body+=b.ul.map(stripTags).join(' ')+' ';if(b.steps)body+=b.steps.map(stripTags).join(' ')+' ';if(b.tip)body+=stripTags(b.tip)+' ';if(b.warn)body+=stripTags(b.warn)+' ';if(b.table)body+=b.table.rows.flat().map(stripTags).join(' ')+' ';});INDEX.push({ch,i,title:tp.t,body});}));
+$('#searchInput').addEventListener('input',e=>{const q=e.target.value.trim();const box=$('#searchResults');if(!q){box.classList.remove('show');box.innerHTML='';return;}const hits=INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));box.classList.add('show');if(!hits.length){box.innerHTML=`<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：Copilot、Power Automate、Agent）</div>`;return;}const hl=s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);box.innerHTML=hits.map(x=>{const pos=x.body.toLowerCase().indexOf(q.toLowerCase());const snip=x.body.substr(Math.max(0,pos-20),90);return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})"><div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div><h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;}).join('');});
+function clearSearch(){$('#searchInput').value='';$('#searchResults').classList.remove('show');$('#searchResults').innerHTML='';}
+(function(){const box=$('#stars');for(let i=0;i<70;i++){const s=document.createElement('i');s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';s.style.animationDelay=(Math.random()*3)+'s';s.style.transform=`scale(${.5+Math.random()*1.5})`;box.appendChild(s);}})();
+syncChecks();updateProgress();
+</script>
+</body>
+</html>

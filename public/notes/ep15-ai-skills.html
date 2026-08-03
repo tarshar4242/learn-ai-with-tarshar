@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NotebookLM 擴充工具百科 x 文獻筆記整理心法｜互動式學習地圖</title>
+<meta name="description" content="EP15 晨學講堂：NotebookLM 擴充工具生態系統六大工具、五種簡報客製化再製方式、輸出測試調整實務流程、固定查驗指令三版本、常見誤區與解決對策，互動式多層次學習地圖">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#7c3aed; --pink:#b23a5b;
+  --green:#3f8560; --orange:#c2620c; --red:#c0453f; --teal:#0d8f80;
+  --feat:#b23a5b; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(28px,4.6vw,46px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--txt);background:none;-webkit-text-fill-color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:660px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:9px}
+.steps li{list-style:none;counter-increment:st;display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--txt2);line-height:1.7}
+.steps li::before{content:counter(st);flex:none;width:25px;height:25px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:var(--c,var(--feat));margin-top:1px}
+.steps li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+.prompt,.promptbox{background:#1d1d1f;border:1px solid #2c2c31;border-radius:10px;padding:13px 15px;margin-top:6px;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt b,.promptbox b{color:#fff}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <a class="navlink" href="../radio/" style="border-color:#eec7d3" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <div class="logo">
+    <div class="dot">🔍</div>
+    <div>NLM 查驗心法地圖<small>MORNING LEARNING · EP15</small></div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋技能關鍵字：擴充工具、簡報客製化、查驗指令、偷懶…" autocomplete="off">
+  </div>
+  <a class="navlink" href="ep15-notes.html">📝 課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">EP15 · 晨學講堂 · 01/14</span>
+  <h1>NotebookLM 擴充工具百科<br>x 文獻筆記整理心法</h1>
+  <p class="sub"><b>NotebookLM 不太會亂編，但如果你沒規範，它會偷懶。</b>學會六大擴充工具、五種簡報再製方式，再用固定查驗指令把「有憑有據」變成流程。<br>點進每一章，逐層展開<b>本集實際教到</b>的概念與步驟，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🎙️ 生成式AI應用電台・晨學講堂</span>
+    <span>🧰 NotebookLM 擴充工具</span>
+    <span>🔍 固定查驗指令</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>4</b><span>大主題</span></div>
+  <div class="stat"><b>8</b><span>實戰技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 8 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--blue)" onclick="showChapter('tools')">
+        <div class="glowline"></div><span class="emoji">🧰</span>
+        <h3><em>CHAPTER 01</em>六大擴充工具</h3>
+        <p>萬能工具箱、Mindmap Extractor、網頁匯入器、Kortex、foldLM 分類、簡報風格工具，各司其職。</p>
+        <div class="foot"><div class="mini"><i data-mini="tools"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--orange)" onclick="showChapter('deck')">
+        <div class="glowline"></div><span class="emoji">🖼️</span>
+        <h3><em>CHAPTER 02</em>簡報客製化＋實務流程</h3>
+        <p>五種簡報再製方式（Lovart／Canva／NLM 編輯器／DeckEdit／Codia.ai），加上輸出→測試→調整迭代心法。</p>
+        <div class="foot"><div class="mini"><i data-mini="deck"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--rose)" onclick="showChapter('verify')">
+        <div class="glowline"></div><span class="emoji">🔍</span>
+        <h3><em>CHAPTER 03</em>固定查驗指令</h3>
+        <p>NotebookLM 不太會亂編但會偷懶；標準版查驗五規則、三個版本可選、完整版與超極簡版指令。</p>
+        <div class="foot"><div class="mini"><i data-mini="verify"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--purple)" onclick="showChapter('mistake')">
+        <div class="glowline"></div><span class="emoji">⚠️</span>
+        <h3><em>CHAPTER 04</em>常見誤區＋查驗方法</h3>
+        <p>三大常見誤區與對策，加上查驗原文兩套方法：偽代碼 vs Markdown 模板。</p>
+        <div class="foot"><div class="mini"><i data-mini="mistake"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+
+    <div class="resources">
+      <h3>📦 <span>課程原始資料</span></h3>
+      <div class="res-grid">
+        <a href="ep15-notes.html"><span class="ic">📝</span><span><b>課堂筆記</b>逐節整理課程簡報與查驗指令原文</span></a>
+        <a href="../radio/"><span class="ic">📻</span><span><b>直播電台系列</b>回系列總覽，一集一卡</span></a>
+        <a href="ep16-notes.html"><span class="ic">📊</span><span><b>相關 EP16</b>用 Claude Skills 學統計分析</span></a>
+        <a href="ep19-notes.html"><span class="ic">🧩</span><span><b>相關 EP19</b>用 YAML 打造可查證工作流</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-tools" class="view" style="--c:var(--blue)"></section>
+  <section id="view-deck" class="view" style="--c:var(--orange)"></section>
+  <section id="view-verify" class="view" style="--c:var(--rose)"></section>
+  <section id="view-mistake" class="view" style="--c:var(--purple)"></section>
+</main>
+
+<footer>
+  本頁為 EP15「NotebookLM 擴充工具百科介紹 x 文獻筆記整理心法」課後整理・介面沿用本站互動式學習地圖架構<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2026｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+const DATA = {
+  tools: {
+    key:'tools', color:'var(--blue)', emoji:'🧰', code:'CHAPTER 01', title:'六大擴充工具',
+    intro:'NotebookLM 擴充工具生態系統，分為「分類型」與「擷取型」兩類，各司其職。',
+    topics:[
+      {t:'擷取型四工具', s:'萬能工具箱／Mindmap Extractor／網頁匯入器／Kortex',
+       blocks:[
+        {h:'工具清單',table:{head:['工具','定位／使用時機'],rows:[['NotebookLM 萬能工具箱','快速複製筆記內容、匯出心智圖、固定保存常用語音摘要提示詞'],['Mindmap Extractor','長篇內容自動轉為結構正確、層級清楚的心智圖'],['NotebookLM 網頁匯入器','一鍵將網頁文章或 YouTube 影片匯入，建立可追溯來源的筆記本'],['Kortex','把 ChatGPT 等 LLM 對話成果系統化匯入 NotebookLM，批次管理筆記本']]}},
+        {h:'看課堂筆記',p:'👉 <a href="ep15-notes.html#sec-tools" style="color:var(--blue)">筆記 1：擴充工具生態系統</a>'}]},
+      {t:'分類型與簡報風格工具', s:'foldLM 分類｜生成簡報風格工具',
+       blocks:[
+        {h:'筆記本分類 foldLM',p:'適合 NotebookLM 筆記本數量逐漸增加後，用於建立清楚的分類結構，避免資料堆疊與知識迷航。'},
+        {h:'NotebookLM 生成簡報風格工具（BananaNL）',p:'內容整理完成後，將 NotebookLM 的文字輸出轉化為「簡報導向」的結構與視覺呈現。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep15-notes.html#sec-tools" style="color:var(--blue)">筆記 1：擴充工具生態系統</a>'}]}
+    ]
+  },
+  deck: {
+    key:'deck', color:'var(--orange)', emoji:'🖼️', code:'CHAPTER 02', title:'簡報客製化＋實務流程',
+    intro:'讓 NotebookLM 簡報從「只能看」變成「可以改」，並學會迭代優化的節奏。',
+    topics:[
+      {t:'五種簡報輸出客製化再製方式', s:'Lovart／Canva／NLM編輯器／DeckEdit／Codia.ai',
+       blocks:[
+        {h:'五種方式',table:{head:['方式','優點','注意事項'],rows:[['Lovart','自動拆解圖片元素、快速編輯文字','複雜圖片無法拆解，可能轉簡體字或色差'],['Canva Brush','文字圖層完全分離，魔法橡皮擦強大','複雜圖片無法拆解，可能消除材質紋路'],['NLM 簡報編輯器','專屬優化、線上編輯、結構保留','適合保持原始風格排版時使用'],['DeckEdit.com','免費免註冊、可轉 PPT 深度編輯','適合團隊協作需要標準格式'],['Codia.ai','AI 驅動編輯、視覺化增強、自動美化','另有 Gemini 版本可用']]}},
+        {h:'補充工具',p:'NBLM2PPTX（GitHub 開源工具）：把 NotebookLM 輸出的 PDF 轉成 PPTX，適合離線二次編輯。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep15-notes.html#sec-deck" style="color:var(--orange)">筆記 2：五種簡報客製化再製方式</a>'}]},
+      {t:'實務流程：輸出 → 測試 → 調整', s:'迭代心法｜快速應用技巧',
+       blocks:[
+        {h:'三階段',steps:['<b>輸出</b>：上傳來源文件 → 提示詞生成初版簡報 → 下載 PDF 檢視。','<b>測試</b>：檢查結構是否符合需求、內容是否來自來源、視覺是否清晰。','<b>調整</b>：修改提示詞重新生成、用五種客製化方式後製、迭代到理想效果。']},
+        {h:'快速應用技巧',ul:['明確指定結構：如「我需要 10 頁簡報」。','提供具體範例：如「參考 TED 演講風格」。','分段生成：先出大綱，確認後再生成內文。']},
+        {h:'心法',tip:'不要期待一次完美，而是透過快速迭代逐步優化。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep15-notes.html#sec-flow" style="color:var(--orange)">筆記 3：輸出→測試→調整</a>'}]}
+    ]
+  },
+  verify: {
+    key:'verify', color:'var(--rose)', emoji:'🔍', code:'CHAPTER 03', title:'固定查驗指令',
+    intro:'本集最重要的心法：把「有憑有據」變成流程，而非信仰。',
+    topics:[
+      {t:'標準版查驗指令五規則', s:'每開新 Notebook 先貼一次',
+       blocks:[
+        {h:'五規則',ol:['所有摘要、結論、數據，必須明確來自來源文件。','每一個重點後，列出來源文件名稱與對應章節。','不得自行補寫、推論、延伸解釋。','若來源未出現，直接回覆「資料中未出現，無法引述」。','不得合併不同文件的內容形成新結論。']},
+        {h:'三個版本',table:{head:['版本','適用情境'],rows:[['標準版','一般研究、報告撰寫、日常資料整理'],['嚴謹版','學術論文、法律文件、關鍵事實查核'],['教學友善版','備課、製作講義、學生作業指導']]}},
+        {h:'看課堂筆記',p:'👉 <a href="ep15-notes.html#sec-verify" style="color:var(--rose)">筆記 4：固定查驗指令</a>'}]},
+      {t:'完整版與超極簡版指令', s:'可直接複製使用',
+       blocks:[
+        {h:'完整版核心結構',ul:['角色設定：來源導向（Grounded）的研究助理，不得使用外部知識。','查驗流程：判斷敘述類型 → 定位來源 → 標示【可查驗摘要】或【資料中未出現】。','輸出格式：嚴格 Markdown，含來源文件、章節、查驗判斷三勾選項。']},
+        {h:'超極簡版',prompt:'所有回答都必須能回到我上傳的原文段落，若資料存在但你無法明確定位，請標示「資料中未出現，無法引述」。'},
+        {h:'使用建議',tip:'研究／論文與課堂示範用完整版；日常快速摘要用超極簡版即可。可追問：「哪些內容只能理解用，不能直接引用？」'},
+        {h:'看課堂筆記',p:'👉 <a href="ep15-notes.html#sec-verify" style="color:var(--rose)">筆記 4：完整版查驗指令</a>'}]}
+    ]
+  },
+  mistake: {
+    key:'mistake', color:'var(--purple)', emoji:'⚠️', code:'CHAPTER 04', title:'常見誤區＋查驗方法',
+    intro:'知道哪裡容易踩坑，以及兩套具體可執行的查驗做法。',
+    topics:[
+      {t:'常見誤區與解決對策', s:'NotebookLM 不太會亂編，但會偷懶',
+       blocks:[
+        {h:'三大誤區與對策',table:{head:['誤區','對策'],rows:[['過度信任自動摘要','強制 Markdown 查驗紀錄，含原文引述與出處章節欄位'],['接受模糊的來源標示','建立固定查驗指令，規定無資料需回報無法引述'],['一次詢問過多問題','拆解任務與分段驗證，逐一確認每步輸出']]}},
+        {h:'金句',tip:'NotebookLM 不太會亂編，但如果你沒規範，它會偷懶。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep15-notes.html#sec-mistake" style="color:var(--purple)">筆記 5：常見誤區與解決對策</a>'}]},
+      {t:'查驗原文兩套方法', s:'偽代碼 vs Markdown 模板',
+       blocks:[
+        {h:'方法比較',table:{head:['方法','特色','最佳情境'],rows:[['偽代碼','IF/ELSE 邏輯判斷，給明確思考路徑','需要精確邏輯推演的研究'],['Markdown 模板','限制輸出格式與結構，易讀易排版','標準化報告與筆記整理']]}},
+        {h:'偽代碼範例',prompt:'IF (Source contains X) THEN\n  Extract X\nELSE\n  Return "Not Found"\nEND IF'},
+        {h:'Markdown 模板範例',prompt:'# 重點摘要\n- {{Key_Point}} (Source: {{Page}})\n# 結論\n{{Conclusion}}'},
+        {h:'看課堂筆記',p:'👉 <a href="ep15-notes.html#sec-method" style="color:var(--purple)">筆記 6：查驗原文兩套方法</a>'}]}
+    ]
+  }
+};
+const ORDER = ['tools','deck','verify','mistake'];
+const $ = s=>document.querySelector(s);
+function renderChapter(ch){
+  const d=DATA[ch];const next=ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];const prev=ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html=`<div class="chapter-head"><span class="emoji">${d.emoji}</span><div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div></div>`;
+  d.topics.forEach((tp,i)=>{const id=`${ch}-${i}`;
+    html+=`<div class="topic" id="topic-${id}"><div class="topic-head" onclick="toggleTopic('${id}')"><span class="num">${i+1}</span><h4>${tp.t}<small>${tp.s}</small></h4><input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)"><span class="chev">▶</span></div><div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{html+=`<div class="block"><h5>${b.h}</h5>`;
+      if(b.p)html+=`<p>${b.p}</p>`;
+      if(b.ul)html+=`<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.ol)html+=`<ol class="steps">${b.ol.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.steps)html+=`<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.table)html+=`<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.shot)html+=`<figure class="shot"><img src="${b.shot.img}" alt="" loading="lazy"><figcaption>${b.shot.cap}</figcaption></figure>`;
+      if(b.prompt)html+=`<div class="prompt">${b.prompt.replace(/&/g,'&amp;').replace(/</g,'&lt;')}</div>`;
+      if(b.tip)html+=`<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn)html+=`<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html+=`</div>`;});
+    html+=`</div></div></div>`;});
+  html+=`<div class="chapnav"><a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a><a onclick="showHome()" style="text-align:center">回總覽<b>🏠 四大主題</b></a><a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a></div>`;
+  $('#view-'+ch).innerHTML=html;
+}
+ORDER.forEach(renderChapter);
+function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('#view-'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function showHome(){switchView('home');$('#crumbs').style.display='none';clearSearch();}
+function showChapter(ch){switchView(ch);$('#crumbs').style.display='flex';$('#crumbHere').textContent=`${DATA[ch].emoji} ${DATA[ch].title}`;clearSearch();syncChecks();}
+function toggleTopic(id){$('#topic-'+id).classList.toggle('open');}
+function openTopic(ch,i){showChapter(ch);const el=$('#topic-'+ch+'-'+i);el.classList.add('open');setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+const KEY='ep15-skills-v1';
+const store=()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){const s=store();if(val)s[id]=1;else delete s[id];localStorage.setItem(KEY,JSON.stringify(s));updateProgress();}
+const TOTAL=ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){const done=Object.keys(store()).length;const pct=Math.round(done/TOTAL*100);$('#progFill').style.width=pct+'%';$('#progText').textContent=`${done} / ${TOTAL} 項技能已掌握`;$('#statDone').textContent=done;$('#statPct').textContent=pct+'%';ORDER.forEach(ch=>{const sub=DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;const el=document.querySelector(`[data-mini="${ch}"]`);if(el)el.style.width=Math.round(sub/DATA[ch].topics.length*100)+'%';});}
+function syncChecks(){const s=store();document.querySelectorAll('input[data-skill]').forEach(cb=>{cb.checked=!!s[cb.dataset.skill];});}
+function resetProgress(){if(confirm('確定要清空所有打勾進度嗎？')){localStorage.removeItem(KEY);syncChecks();updateProgress();}}
+function stripTags(s){return s.replace(/<[^>]+>/g,'');}
+const INDEX=[];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{let body=tp.s+' ';tp.blocks.forEach(b=>{if(b.p)body+=stripTags(b.p)+' ';if(b.ul)body+=b.ul.map(stripTags).join(' ')+' ';if(b.ol)body+=b.ol.map(stripTags).join(' ')+' ';if(b.steps)body+=b.steps.map(stripTags).join(' ')+' ';if(b.tip)body+=stripTags(b.tip)+' ';if(b.warn)body+=stripTags(b.warn)+' ';if(b.table)body+=b.table.rows.flat().map(stripTags).join(' ')+' ';});INDEX.push({ch,i,title:tp.t,body});}));
+$('#searchInput').addEventListener('input',e=>{const q=e.target.value.trim();const box=$('#searchResults');if(!q){box.classList.remove('show');box.innerHTML='';return;}const hits=INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));box.classList.add('show');if(!hits.length){box.innerHTML=`<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：查驗指令、偷懶、DeckEdit）</div>`;return;}const hl=s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);box.innerHTML=hits.map(x=>{const pos=x.body.toLowerCase().indexOf(q.toLowerCase());const snip=x.body.substr(Math.max(0,pos-20),90);return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})"><div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div><h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;}).join('');});
+function clearSearch(){$('#searchInput').value='';$('#searchResults').classList.remove('show');$('#searchResults').innerHTML='';}
+syncChecks();updateProgress();
+</script>
+</body>
+</html>

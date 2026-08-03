@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AnythingLLM（NotebookLM 平替版）｜互動式學習地圖</title>
+<meta name="description" content="EP30 晨學講堂：AnythingLLM（NotebookLM 平替版）——NotebookLM 簡報上傳新功能、AnythingLLM 是什麼與核心功能、安裝與設定、與 NotebookLM 怎麼選、應用情境，互動式多層次學習地圖">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269;
+  --green:#3f8560; --orange:#bf6a1e; --red:#c0453f; --teal:#0d8f80;
+  --feat:#6f52c9; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(28px,4.6vw,46px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--txt);background:none;-webkit-text-fill-color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:660px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:9px}
+.steps li{list-style:none;counter-increment:st;display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--txt2);line-height:1.7}
+.steps li::before{content:counter(st);flex:none;width:25px;height:25px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:var(--c,var(--feat));margin-top:1px}
+.steps li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+.prompt,.promptbox{background:#1d1d1f;border:1px solid #2c2c31;border-radius:10px;padding:13px 15px;margin-top:6px;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt b,.promptbox b{color:#fff}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <a class="navlink" href="../radio/" style="border-color:#a8c686" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <div class="logo">
+    <div class="dot">🗂️</div>
+    <div>AnythingLLM 學習地圖<small>MORNING LEARNING · EP30</small></div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋技能關鍵字：RAG、安裝、比較表、會議錄音…" autocomplete="off">
+  </div>
+  <a class="navlink" href="ep30-notes.html">📝 課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">EP30 · 晨學講堂 · 2026/03/26</span>
+  <h1>AnythingLLM<br>NotebookLM 平替版</h1>
+  <p class="sub">NotebookLM 多了「pptx 直接上傳」，但資料還是在 Google 雲端；想要<b>本地跑、資料不外流、模型自己挑</b>，官方簡報把 AnythingLLM 介紹成「平替版」。<br>點進每一章，逐層展開<b>官方簡報全文＋直播聊天室真實問答</b>整理的技能與內容，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🎙️ 生成式AI應用電台・晨學講堂</span>
+    <span>📑 依官方簡報 14 頁整理</span>
+    <span>🗂️ 五大主題 · 11 項技能</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>5</b><span>大主題</span></div>
+  <div class="stat"><b>11</b><span>技能項目</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 11 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--cyan)" onclick="showChapter('nlm')">
+        <div class="glowline"></div>
+        <span class="emoji">📑</span>
+        <h3><em>CHAPTER 01</em>NotebookLM 新功能</h3>
+        <p>簡報直接上傳 NotebookLM 的新舊作法差異、200MB 限制與讀取速度提醒，以及官方三種應用情境。</p>
+        <div class="foot"><div class="mini"><i data-mini="nlm"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--blue)" onclick="showChapter('what')">
+        <div class="glowline"></div>
+        <span class="emoji">🧠</span>
+        <h3><em>CHAPTER 02</em>AnythingLLM 是什麼</h3>
+        <p>本地化／私有化 RAG 知識庫平台的定位，以及文件導入、語意檢索、對話式查詢等五項核心功能。</p>
+        <div class="foot"><div class="mini"><i data-mini="what"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--orange)" onclick="showChapter('install')">
+        <div class="glowline"></div>
+        <span class="emoji">🛠️</span>
+        <h3><em>CHAPTER 03</em>安裝與設定</h3>
+        <p>官方七步驟安裝流程與 anythingllm.com 連結，以及安裝時聊天室裡真實發生的記憶體不足、Meeting Assistant 提問。</p>
+        <div class="foot"><div class="mini"><i data-mini="install"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--pink)" onclick="showChapter('choose')">
+        <div class="glowline"></div>
+        <span class="emoji">⚖️</span>
+        <h3><em>CHAPTER 04</em>與 NotebookLM 怎麼選</h3>
+        <p>部署方式／資料控制／模型彈性／技術門檻四維度比較表，以及課堂上「該選哪一個、資安夠不夠」的真實提問。</p>
+        <div class="foot"><div class="mini"><i data-mini="choose"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--green)" onclick="showChapter('scenario')">
+        <div class="glowline"></div>
+        <span class="emoji">🎯</span>
+        <h3><em>CHAPTER 05</em>應用情境</h3>
+        <p>會議錄音實戰場景，以及兩個對照工具：雲端協作型的騰訊文檔、輕量對話式筆記的 UniNotebook。</p>
+        <div class="foot"><div class="mini"><i data-mini="scenario"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+
+    <div class="resources">
+      <h3>📦 <span>課程原始資料</span></h3>
+      <div class="res-grid">
+        <a href="https://drive.google.com/file/d/1WOh8Q2fw3zsSTMBUoIMIfupmR0UIb5DX/view" target="_blank" rel="noopener"><span class="ic">🎬</span><span><b>錄影回放</b>課程直播錄影（未逐幀抽格）</span></a>
+        <a href="ep30-notes.html"><span class="ic">📝</span><span><b>課堂筆記</b>官方簡報全文 + 聊天室真實問答佐證</span></a>
+        <a href="https://anythingllm.com/" target="_blank" rel="noopener"><span class="ic">🔗</span><span><b>AnythingLLM 官網</b>最新安裝流程與下載頁</span></a>
+        <a href="../radio/"><span class="ic">📻</span><span><b>直播電台系列</b>回系列總覽，一集一卡</span></a>
+        <a href="ep29-notes.html"><span class="ic">🌀</span><span><b>上一集 EP29</b>回顧上一堂課堂筆記</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-nlm" class="view" style="--c:var(--cyan)"></section>
+  <section id="view-what" class="view" style="--c:var(--blue)"></section>
+  <section id="view-install" class="view" style="--c:var(--orange)"></section>
+  <section id="view-choose" class="view" style="--c:var(--pink)"></section>
+  <section id="view-scenario" class="view" style="--c:var(--green)"></section>
+</main>
+
+<footer>
+  本頁為 EP30「AnythingLLM (NotebookLM平替版)」課後整理・依官方簡報全文與直播聊天室真實紀錄製作<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2026｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+/* ═══════════ 課程資料（章 → 技能 → 內容區塊） ═══════════ */
+const DATA = {
+  nlm: {
+    key:'nlm', color:'var(--cyan)', emoji:'📑', code:'CHAPTER 01', title:'NotebookLM 新功能',
+    intro:'開場先講 NotebookLM 本身的更新：上傳來源格式新增 pptx——把簡報直接變成「可檢索的知識資料庫」，也順勢帶出「如果連 pptx 都能直接上傳雲端，那麼想要資料不外流的人該怎麼辦」。',
+    topics:[
+      {t:'簡報直接上傳 NotebookLM', s:'早期作法 vs 現在作法｜官方簡報',
+       blocks:[
+        {h:'新舊作法對比',table:{head:['作法','怎麼做'],rows:[
+          ['早期作法','簡報先上傳 Google 雲端，再從雲端匯入 NotebookLM 當來源'],
+          ['現在作法','簡報直接上傳 NotebookLM，每份檔案上限 <b>200MB</b>']]}},
+        {h:'使用限制',warn:'若簡報<b>圖檔比較多</b>、且必須擷取圖檔中文字，仍建議改用「早期作法 + PDF」；現在直傳 pptx 的<b>讀取速度比較慢</b>，是實際使用要有的心理準備。'},
+        {h:'看完整筆記',p:'👉 <a href="ep30-notes.html#sec-nlm" style="color:var(--cyan)">課堂筆記 2：NotebookLM 簡報上傳新功能</a>'}]}
+    ]
+  },
+  what: {
+    key:'what', color:'var(--blue)', emoji:'🧠', code:'CHAPTER 02', title:'AnythingLLM 是什麼',
+    intro:'把鏡頭轉到 AnythingLLM（by Mintplex Labs）——一套本地化 / 私有化 LLM 知識庫平台（RAG 架構），概念上類似 NotebookLM，但更強調私有部署與資料安全，這是官方簡報稱它「NotebookLM 平替版」的原因。',
+    topics:[
+      {t:'AnythingLLM 是什麼', s:'本地化 / 私有化 RAG 平台｜官方簡報',
+       blocks:[
+        {h:'定位',ul:[
+          '<b>AnythingLLM（by Mintplex Labs）</b>：本地化 / 私有化 LLM 知識庫平台（RAG 架構）。',
+          '把文件（<b>PDF、簡報、網頁</b>）轉為「可對話資料庫」。',
+          '類似 NotebookLM，但更強調<b>私有部署與資料安全</b>。']},
+        {h:'一句話記憶',p:'「類似 NotebookLM，但更強調私有部署與資料安全。」'},
+        {h:'三種應用情境（NotebookLM 側同步整理）',ul:[
+          '相同簡報內容，但<b>風格轉換</b>。',
+          '不再只是「看投影片」，而是「<b>問知識</b>」。',
+          '<b>AI 助教</b>、內容交叉分析。']}]},
+      {t:'核心功能五項', s:'文件導入／RAG／對話／本地／多模型｜官方簡報',
+       blocks:[
+        {h:'官方五項核心功能',table:{head:['功能','說明'],rows:[
+          ['📥 文件導入 → 建立知識庫','支援 PDF / DOCX / TXT / 網頁'],
+          ['🔍 語意檢索（RAG）','問問題 → 精準從文件中找答案'],
+          ['💬 對話式查詢','像 ChatGPT 一樣與「你的資料」聊天'],
+          ['🖥️ 本地運行（Local-first）','可搭配 Ollama 使用本地模型'],
+          ['🔌 多模型整合','支援 OpenAI、Claude、Llama 等']]}},
+        {h:'看完整筆記',p:'👉 <a href="ep30-notes.html#sec-what" style="color:var(--blue)">課堂筆記 3：AnythingLLM 是什麼＋核心功能</a>'}]}
+    ]
+  },
+  install: {
+    key:'install', color:'var(--orange)', emoji:'🛠️', code:'CHAPTER 03', title:'安裝與設定',
+    intro:'官方簡報用 7 張畫面截圖依序示範安裝流程；聊天室紀錄則留下了安裝當下真實發生的狀況——記憶體不足、要不要多裝一個 2GB 的 Meeting Assistant 模型。',
+    topics:[
+      {t:'安裝七步驟（官方簡報標題）', s:'官網 anythingllm.com｜可對照錄影',
+       blocks:[
+        {h:'七個步驟（皆連到官網）',steps:[
+          '安裝步驟 1 — <a href="https://anythingllm.com/" target="_blank" rel="noopener">anythingllm.com</a>',
+          '安裝步驟 2 — <a href="https://anythingllm.com/" target="_blank" rel="noopener">anythingllm.com</a>',
+          '安裝步驟 3 — <a href="https://anythingllm.com/" target="_blank" rel="noopener">anythingllm.com</a>',
+          '安裝步驟 4 — <a href="https://anythingllm.com/" target="_blank" rel="noopener">anythingllm.com</a>',
+          '安裝步驟 5 — <a href="https://anythingllm.com/" target="_blank" rel="noopener">anythingllm.com</a>',
+          '安裝步驟 6 — <a href="https://anythingllm.com/" target="_blank" rel="noopener">anythingllm.com</a>',
+          '安裝步驟 7 — <a href="https://anythingllm.com/" target="_blank" rel="noopener">anythingllm.com</a>']},
+        {h:'誠實說明',warn:'這 7 頁在原始簡報中是<b>畫面截圖（圖片）</b>，文字擷取工具只能取得標題與連結，<b>無法讀出截圖裡的操作說明文字</b>。本頁不推測、不杜撰每一步實際內容；請開啟原始簡報、播放錄影回放，或到官網對照最新流程。'},
+        {h:'看完整筆記',p:'👉 <a href="ep30-notes.html#sec-install" style="color:var(--orange)">課堂筆記 4：安裝七步驟</a>'}]},
+      {t:'安裝時的真實狀況', s:'記憶體不足／Meeting Assistant｜聊天室真實紀錄',
+       blocks:[
+        {h:'真實案例',ul:[
+          '<b>Macro Chen</b> 提問：安裝到跳出「是否下載約 2GB 的 Meeting Assistant model」該不該裝？——這是<b>非必要的選配模型</b>，可以先略過，之後再補裝。',
+          '多位學員（Walker Dreaming、李芷儀、謝秋燕等）輸入「你好」後回報 <code>model requires more system memory (9.8 GiB) than is available (7.2 GiB)</code> 或 <code>model not found</code> 等錯誤。',
+          '<b>Shuan Wu</b> 現場判讀：「電腦容量不夠，沒有完整裝好模型」。',
+          '<b>Genna Lee</b>：「他回答的字一個一個吐字……我的跑好慢，顯卡太弱」。']},
+        {h:'安裝前建議',tip:'本地跑模型對電腦硬體（記憶體、顯卡）有真實門檻；安裝前先確認可用記憶體，並考慮是否需要 Meeting Assistant 等選配模型，避免像課堂上多位學員一樣卡在資源不足。'},
+        {h:'看完整筆記',p:'👉 <a href="ep30-notes.html#sec-qa" style="color:var(--orange)">課堂筆記 7：課堂問答精華（真實聊天室記錄）</a>'}]}
+    ]
+  },
+  choose: {
+    key:'choose', color:'var(--pink)', emoji:'⚖️', code:'CHAPTER 04', title:'與 NotebookLM 怎麼選',
+    intro:'官方簡報用一張四維度比較表，把「該選哪一個」的判斷依據攤開來看；聊天室裡也有學員當場問「到底該選哪個」，這裡誠實整理現有紀錄。',
+    topics:[
+      {t:'四維度比較表', s:'部署方式／資料控制／模型彈性／技術門檻｜官方簡報',
+       blocks:[
+        {h:'官方比較表',table:{head:['項目','AnythingLLM','NotebookLM'],rows:[
+          ['部署方式','本地 / 私有','雲端（Google）'],
+          ['資料控制','高（不外流）','中'],
+          ['模型彈性','高（可自選）','低（固定）'],
+          ['技術門檻','中','低']]}},
+        {h:'判斷方向',ul:[
+          '想<b>快速上手、不管安裝環境</b>：NotebookLM 技術門檻低，是首選。',
+          '在意<b>資料是否外流、要自選模型或需本地跑</b>：AnythingLLM 資料控制與模型彈性都更高，但要花時間走完七步驟安裝。']},
+        {h:'看完整筆記',p:'👉 <a href="ep30-notes.html#sec-compare" style="color:var(--pink)">課堂筆記 5：AnythingLLM vs NotebookLM 比較</a>'}]},
+      {t:'課堂真實提問：怎麼選、資安夠不夠', s:'聊天室真實紀錄（含未回覆缺口）',
+       blocks:[
+        {h:'真實提問',ul:[
+          '<b>Shuan Wu</b>：「想請問老師 open notebook 跟 Anything LLM 比較推薦哪一個？」',
+          '<b>ANNA</b>：「請問 NOTEBOOK ＆ ANYTHING，您會交叉使用嗎？還是偏向哪一個？可以建議我們做什麼樣的工作流，可以直接使用 ANYTHING？」',
+          '<b>Jun</b>：「資安問題比較小嗎？」',
+          '<b>范詩靈</b>：「請問老師 anything 如在 Linux 上的話也是要有圖形介面嗎？」']},
+        {h:'誠實聲明',warn:'聊天室文字紀錄中<b>只留下上述學員提問，未查到對應的書面回覆</b>（可能是老師口頭直接回答、未打字留存）。本頁不代替老師杜撰答案，如需正式回覆，建議對照錄影回放中對應時段的口說內容。'},
+        {h:'看完整筆記',p:'👉 <a href="ep30-notes.html#sec-qa" style="color:var(--pink)">課堂筆記 7：課堂問答精華</a>'}]}
+    ]
+  },
+  scenario: {
+    key:'scenario', color:'var(--green)', emoji:'🎯', code:'CHAPTER 05', title:'應用情境',
+    intro:'官方簡報介紹完 AnythingLLM 後，示範一個實際應用（會議錄音），並延伸帶到兩個對照工具：騰訊文檔、UniNotebook，讓學員比較「雲端協作 vs 本地私有 vs 輕量筆記」三種知識庫路線。',
+    topics:[
+      {t:'應用：會議錄音', s:'AnythingLLM 實戰場景｜官方簡報',
+       blocks:[
+        {h:'情境',p:'把公司會議錄音丟進本地知識庫，事後用問答方式檢索重點，資料全程留在自己的環境裡不外流——這是安裝完成後最直接的實戰應用（官方簡報第 12 頁「應用－會議錄音」）。'},
+        {h:'看完整筆記',p:'👉 <a href="ep30-notes.html#sc-meeting" style="color:var(--green)">課堂筆記 6.1：應用：會議錄音</a>'}]},
+      {t:'對照工具：騰訊文檔', s:'雲端協作型知識工具｜官方簡報',
+       blocks:[
+        {h:'特色',ul:[
+          '可上傳<b>整個資料夾／檔案</b>。',
+          '雲端文件協作平台，支援<b>即時多人協作</b>。',
+          '具備<b>模板與資料收集功能</b>。']},
+        {h:'看完整筆記',p:'👉 <a href="ep30-notes.html#sc-qq" style="color:var(--green)">課堂筆記 6.2：騰訊文檔</a>'}]},
+      {t:'對照工具：UniNotebook', s:'輕量對話式筆記知識庫｜官方簡報',
+       blocks:[
+        {h:'特色',ul:[
+          '定位是「<b>AI 筆記 → 知識庫化</b>」的雲端工具。',
+          '支援<b>對話式筆記</b>與<b>多來源資料整合</b>。',
+          '底層同樣是<b>語意檢索（RAG）</b>。']},
+        {h:'一句話記憶',p:'「會議錄音示範本地化優勢；騰訊文檔示範雲端協作；UniNotebook 示範輕量對話式筆記——三者剛好對應本集主軸的三條路線。」'},
+        {h:'看完整筆記',p:'👉 <a href="ep30-notes.html#sc-uni" style="color:var(--green)">課堂筆記 6.3：UniNotebook</a>'}]}
+    ]
+  }
+};
+
+/* ═══════════ 渲染 ═══════════ */
+const ORDER = ['nlm','what','install','choose','scenario'];
+const $ = s=>document.querySelector(s);
+
+function renderChapter(ch){
+  const d = DATA[ch];
+  const next = ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];
+  const prev = ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html = `
+  <div class="chapter-head">
+    <span class="emoji">${d.emoji}</span>
+    <div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div>
+  </div>`;
+  d.topics.forEach((tp,i)=>{
+    const id = `${ch}-${i}`;
+    html += `
+    <div class="topic" id="topic-${id}">
+      <div class="topic-head" onclick="toggleTopic('${id}')">
+        <span class="num">${i+1}</span>
+        <h4>${tp.t}<small>${tp.s}</small></h4>
+        <input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)">
+        <span class="chev">▶</span>
+      </div>
+      <div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{
+      html += `<div class="block"><h5>${b.h}</h5>`;
+      if(b.p) html += `<p>${b.p}</p>`;
+      if(b.ul) html += `<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps) html += `<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.prompt) html += `<div class="promptbox">${b.prompt}</div>`;
+      if(b.table) html += `<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.tip) html += `<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn) html += `<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html += `</div>`;
+    });
+    html += `</div></div></div>`;
+  });
+  html += `
+  <div class="chapnav">
+    <a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a>
+    <a onclick="showHome()" style="text-align:center">回總覽<b>🏠 五大主題</b></a>
+    <a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a>
+  </div>`;
+  $('#view-'+ch).innerHTML = html;
+}
+ORDER.forEach(renderChapter);
+
+function switchView(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  $('#view-'+id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function showHome(){ switchView('home'); $('#crumbs').style.display='none'; clearSearch(); }
+function showChapter(ch){
+  switchView(ch);
+  $('#crumbs').style.display='flex';
+  $('#crumbHere').textContent = `${DATA[ch].emoji} ${DATA[ch].title}`;
+  clearSearch(); syncChecks();
+}
+function toggleTopic(id){ $('#topic-'+id).classList.toggle('open'); }
+function openTopic(ch,i){
+  showChapter(ch);
+  const el = $('#topic-'+ch+'-'+i);
+  el.classList.add('open');
+  setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);
+}
+
+const KEY='ep30-skills-v1';
+const store = ()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){
+  const s = store(); if(val) s[id]=1; else delete s[id];
+  localStorage.setItem(KEY,JSON.stringify(s));
+  updateProgress();
+}
+const TOTAL = ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){
+  const done = Object.keys(store()).length;
+  const pct = Math.round(done/TOTAL*100);
+  $('#progFill').style.width = pct+'%';
+  $('#progText').textContent = `${done} / ${TOTAL} 項技能已掌握`;
+  $('#statDone').textContent = done;
+  $('#statPct').textContent = pct+'%';
+  ORDER.forEach(ch=>{
+    const sub = DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;
+    const el = document.querySelector(`[data-mini="${ch}"]`);
+    if(el) el.style.width = Math.round(sub/DATA[ch].topics.length*100)+'%';
+  });
+}
+function syncChecks(){
+  const s = store();
+  document.querySelectorAll('input[data-skill]').forEach(cb=>{ cb.checked = !!s[cb.dataset.skill]; });
+}
+function resetProgress(){
+  if(confirm('確定要清空所有打勾進度嗎？')){ localStorage.removeItem(KEY); syncChecks(); updateProgress(); }
+}
+
+function stripTags(s){ return s.replace(/<[^>]+>/g,''); }
+const INDEX = [];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{
+  let body = tp.s+' ';
+  tp.blocks.forEach(b=>{
+    if(b.p) body+=stripTags(b.p)+' ';
+    if(b.ul) body+=b.ul.map(stripTags).join(' ')+' ';
+    if(b.steps) body+=b.steps.map(stripTags).join(' ')+' ';
+    if(b.prompt) body+=b.prompt+' ';
+    if(b.tip) body+=stripTags(b.tip)+' ';
+    if(b.warn) body+=stripTags(b.warn)+' ';
+    if(b.table) body+=b.table.rows.flat().map(stripTags).join(' ')+' ';
+  });
+  INDEX.push({ch,i,title:tp.t,body});
+}));
+$('#searchInput').addEventListener('input',e=>{
+  const q = e.target.value.trim();
+  const box = $('#searchResults');
+  if(!q){ box.classList.remove('show'); box.innerHTML=''; return; }
+  const hits = INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));
+  box.classList.add('show');
+  if(!hits.length){ box.innerHTML = `<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：RAG、安裝、比較表、會議錄音）</div>`; return; }
+  const hl = s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);
+  box.innerHTML = hits.map(x=>{
+    const pos = x.body.toLowerCase().indexOf(q.toLowerCase());
+    const snip = x.body.substr(Math.max(0,pos-20),90);
+    return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})">
+      <div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div>
+      <h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;
+  }).join('');
+});
+function clearSearch(){ $('#searchInput').value=''; $('#searchResults').classList.remove('show'); $('#searchResults').innerHTML=''; }
+
+(function(){
+  const box = $('#stars');
+  for(let i=0;i<70;i++){
+    const s = document.createElement('i');
+    s.style.left = Math.random()*100+'%';
+    s.style.top = Math.random()*100+'%';
+    s.style.animationDelay = (Math.random()*3)+'s';
+    s.style.transform = `scale(${.5+Math.random()*1.5})`;
+    box.appendChild(s);
+  }
+})();
+
+syncChecks(); updateProgress();
+</script>
+</body>
+</html>

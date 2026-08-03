@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP8 課堂筆記｜NotebookLM 打造客服資料庫、甘特圖、文獻彙整神器</title>
+<meta name="description" content="晨學講堂 EP8 課堂筆記：NotebookLM 多模態輸入輸出、半自動化客服資料庫 SOP 六步驟、資料表 DATA TABLES 功能與六種應用情境、NotebookLM×Sheets×GAS 甘特圖十一步驟流程、GAS 自動繪圖程式碼。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#3b6bb0; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px;border-left:none}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.prompt{position:relative;background:#1d1d1f;border-radius:10px;padding:15px 16px;margin:12px 0;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt .tag{display:inline-block;font-size:11px;letter-spacing:.06em;color:#c9c4ff;border:1px solid #3a3a40;border-radius:6px;padding:2px 9px;margin-bottom:8px}
+.svgwrap{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg{display:block;width:100%;height:auto}
+.svgwrap figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#b7c8e8" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP8 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="ep8-ai-skills.html">🗺️ 互動地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 晨學講堂 · EP8</span>
+  <h1>NotebookLM <span>打造客服資料庫</span><br>甘特圖與文獻彙整神器</h1>
+  <p class="lead">NotebookLM 產出越多元，越需要確保資料匯入的便利與正確，才能發揮多模態效果。EP8 帶你實作兩個範例：<b>半自動化客服資料庫</b>（工作規則資源庫）與 <b>NotebookLM × Google Sheets × Apps Script</b> 一鍵甘特圖，外加「資料表」功能的六種應用情境。</p>
+  <div class="meta">
+    <span>📅 2025/12/29 直播</span>
+    <span>🗂️ 教材：官方課程簡報</span>
+    <span>🗂️ 主題：NotebookLM 資料表</span>
+    <span>📊 甘特圖自動化</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-multimodal">1. NotebookLM 多模態總覽</a>
+  <a href="#sec-service">2. 客服資料庫 SOP 六步驟</a>
+  <a href="#sec-table">3. NotebookLM 資料表功能</a>
+  <a href="#sec-cases">4. 更多資料表應用情境</a>
+  <a href="#sec-gantt">5. 甘特圖流程總覽（十一步驟）</a>
+  <a href="#sec-code">6. 實際操作範例＋GAS 程式碼</a>
+  <a href="#sec-src">7. 資料來源與製作說明</a>
+</nav>
+
+<article>
+
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--cyan))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>EP8_NotebookLM 打造客服資料庫、甘特圖、文獻彙整神器</td></tr>
+    <tr><th>頻道</th><td>生成式 AI 應用電台・晨學講堂（黃老師）</td></tr>
+    <tr><th>直播日期</th><td>2025/12/29（一）晚間直播</td></tr>
+    <tr><th>教材</th><td>官方課程簡報＋範例 1「半自動化客服資料庫」、範例 2「甘特圖表」</td></tr>
+    <tr><th>一句話先懂</th><td>NotebookLM 就像樂高——了解每塊「資料積木」後，就能自由混搭，把零散文字變成<b>客服資料庫</b>或<b>可自動更新的甘特圖</b>。</td></tr>
+  </table></div>
+  <div class="note blue">💡 本頁依<b>官方課程簡報文字全文</b>整理（真實課程內容），含 Google Apps Script 完整程式碼；示範操作的螢幕畫面與逐字稿時間碼待日後取得錄影授權後再補入。</div>
+</section>
+
+<section class="chapter" id="sec-multimodal">
+  <span class="chip" style="background:linear-gradient(90deg,#3b6bb0,#2f7d92)">CHAPTER 01</span>
+  <h2 class="ct">1. NotebookLM 多模態輸入輸出總覽</h2>
+  <p class="cd">NotebookLM 產出越多元，越需要確保資料匯入的便利與正確，才能發揮多模態效果！</p>
+  <div class="twrap"><table>
+    <tr><th style="width:160px">資料匯入模式（Input）</th><th>資料產出模式（Output）</th></tr>
+    <tr><td>文件類格式、語音類格式、圖片類格式、Google Drive、複製文字、連結（網站／YT）</td><td>Fast/Deep Research、資訊圖表、簡報、學習卡、測驗、心智圖、報告</td></tr>
+  </table></div>
+  <h3>學習軌跡：從基礎到落地</h3>
+  <ol class="st">
+    <li><b>基礎應用：</b>熟悉介面與核心功能。</li>
+    <li><b>功能搭配應用：</b>多模態檔案類型轉換、小技巧搭配輔助。</li>
+    <li><b>工具延伸：</b>結合 Google Chrome、AI Studio、Gemini、Felo AI、Gamma 等工具。</li>
+    <li><b>落地應用：</b>操作技巧使用時機痛點解決、實際案例應用、現場腦力激盪。</li>
+  </ol>
+  <div class="golden"><div class="q">「NotebookLM 就像樂高一樣，了解每塊『資料積木』後，就能自由混搭、延伸應用，打造專屬你的知識作品與研究密技。」</div><div class="a">—— 課程金句</div></div>
+</section>
+
+<section class="chapter" id="sec-service">
+  <span class="chip" style="background:linear-gradient(90deg,#2f7d92,#3f8560)">CHAPTER 02</span>
+  <h2 class="ct">2. 範例一：半自動化客服資料庫（員工必用問答系統）</h2>
+  <p class="cd">資料庫 ＝ 資料 ＋ 內部運作 SOP ＋ 外部回答 SOP ＋ 外部回答介面。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">步驟</th><th>這一步在做什麼</th><th>你要做的事</th><th>完成後的效果</th></tr>
+    <tr><td>Step 1 匯入資料</td><td>建立知識底座</td><td>將員工手冊、制度、SOP、常見 QA 上傳到 NotebookLM</td><td>系統「有資料可查」，不再憑空回答</td></tr>
+    <tr><td>Step 2 建立 SOP</td><td>規範怎麼回答</td><td>設定讀取順序（手冊→QA→SOP）與無法回答就轉人工</td><td>回答一致、不亂猜</td></tr>
+    <tr><td>Step 3 客服人設</td><td>統一回答風格</td><td>設定 AI 扮演「內部客服／HR 助理」，回答簡短、可條列</td><td>員工看得懂、像在問櫃台</td></tr>
+    <tr><td>Step 4 歡迎訊息</td><td>教員工怎麼用</td><td>設定開場說明：能問什麼、不能問什麼</td><td>降低亂問與學習成本</td></tr>
+    <tr><td>Step 5 分享設定</td><td>控制權限</td><td>決定是「只對話」或「對話＋可看資料」</td><td>符合資安、好管理</td></tr>
+    <tr><td>Step 6 回饋迭代</td><td>讓系統越來越準</td><td>蒐集常見問題，定期更新文件與 QA</td><td>問得越多，人力越省</td></tr>
+  </table></div>
+  <h3>優點與缺點一次看</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:90px">類別</th><th>說明</th></tr>
+    <tr><td rowspan="4">優點</td><td>可快速回覆員工常見問題（請假、福利、流程），降低 HR 重複性工作負擔。</td></tr>
+    <tr><td>回答依據既有人資制度文件，提升回覆一致性與專業度。</td></tr>
+    <tr><td>新進 HR 或代理人可快速上手，減少制度學習時間。</td></tr>
+    <tr><td>回覆可附來源文件，提升透明度與信任感。</td></tr>
+    <tr><td rowspan="3">缺點</td><td>若制度文件未即時更新，錯誤資訊可能被持續引用。</td></tr>
+    <tr><td>個案型、例外型問題（薪資、懲處）仍無法完全自動化。</td></tr>
+    <tr><td>需額外投入文件治理與維護成本（版本、權責、更新頻率）。</td></tr>
+  </table></div>
+</section>
+
+<section class="chapter" id="sec-table">
+  <span class="chip" style="background:linear-gradient(90deg,#3f8560,#9c7b23)">CHAPTER 03</span>
+  <h2 class="ct">3. NotebookLM 資料表功能介紹（DATA TABLES）</h2>
+  <p class="cd">2024 年 12 月 18 日全新推出。自動將零散的非結構化內容整理成清晰表格，開啟與 Apps Script 串接的無限可能。目前狀態：Pro 和 Ultra 用戶優先使用，免費用戶即將開放。</p>
+  <ul class="pt">
+    <li>一鍵生成結構化表格。</li>
+    <li>智慧摘要與欄位萃取。</li>
+    <li>可自訂提示詞指定欄位。</li>
+    <li>直接匯出至 Google Sheets。</li>
+  </ul>
+  <div class="svgwrap">
+    <svg viewBox="0 0 700 160" xmlns="http://www.w3.org/2000/svg">
+      <rect width="700" height="160" fill="#fff"/>
+      <g font-family="sans-serif" font-size="13" fill="#191919">
+        <rect x="20" y="55" width="180" height="50" rx="10" fill="#F7F6F3" stroke="#E7E6E3"/>
+        <text x="110" y="85" text-anchor="middle">文字／文件／文獻</text>
+        <path d="M200 80 H320" stroke="#3b6bb0" stroke-width="3" marker-end="url(#a8)"/>
+        <rect x="320" y="45" width="180" height="70" rx="10" fill="color-mix(in srgb,#3b6bb0 12%,#fff)" stroke="#3b6bb0"/>
+        <text x="410" y="75" text-anchor="middle" font-weight="700" fill="#3b6bb0">NotebookLM</text>
+        <text x="410" y="95" text-anchor="middle" font-size="11" fill="#1d5e8f">資料表 DATA TABLES</text>
+        <path d="M500 80 H600" stroke="#3b6bb0" stroke-width="3" marker-end="url(#a8)"/>
+        <rect x="600" y="55" width="80" height="50" rx="10" fill="#F7F6F3" stroke="#E7E6E3"/>
+        <text x="640" y="85" text-anchor="middle">結構化表格</text>
+      </g>
+      <defs><marker id="a8" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#3b6bb0"/></marker></defs>
+    </svg>
+    <figcaption>NotebookLM 資料表使用心法：Input（數字、圖片、語音、簡報）→ NotebookLM → Output（結構化表格）。</figcaption>
+  </div>
+</section>
+
+<section class="chapter" id="sec-cases">
+  <span class="chip" style="background:linear-gradient(90deg,#9c7b23,#b5476a)">CHAPTER 04</span>
+  <h2 class="ct">4. 更多資料表應用情境</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">情境</th><th>說明</th><th>適用對象</th></tr>
+    <tr><td>甘特圖資料</td><td>將專案任務與時程整理成結構化數據，方便匯入專案管理軟體或繪製甘特圖。</td><td>專案經理（PM）</td></tr>
+    <tr><td>收支表</td><td>彙總各類單據與發票資訊，自動分類並計算總金額，簡化報帳流程。</td><td>財務人員</td></tr>
+    <tr><td>行程表</td><td>從旅遊攻略或訂房確認信中提取資訊，生成包含時間、地點、交通的詳細行程。</td><td>一般用戶</td></tr>
+    <tr><td>顧客意見表</td><td>整理來自 Email、社群媒體的客戶回饋，分類問題類型與情緒反應。</td><td>客服團隊</td></tr>
+    <tr><td>規格比較表</td><td>從多份產品型錄或網頁中提取規格參數，建立並列比較的採購清單。</td><td>採購人員</td></tr>
+    <tr><td>編碼簿</td><td>協助質性研究，將訪談內容依據主題進行編碼與分類，建立研究架構。</td><td>研究人員</td></tr>
+  </table></div>
+</section>
+
+<section class="chapter" id="sec-gantt">
+  <span class="chip" style="background:linear-gradient(90deg,#b5476a,#5645D4)">CHAPTER 05</span>
+  <h2 class="ct">5. 範例二：NotebookLM × Sheets × GAS 一鍵化甘特圖（十一步驟）</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:70px">階段</th><th style="width:130px">工具</th><th>操作重點</th><th>目的與說明</th></tr>
+    <tr><td>1</td><td>NotebookLM</td><td>匯入原始資料（文件、表格、FAQ、SOP）</td><td>將非結構化文字集中，作為後續結構化基礎</td></tr>
+    <tr><td>2</td><td>NotebookLM</td><td>使用「資料表」定義欄位（任務名稱、開始／結束日期、狀態）</td><td>把文字轉為可運算的表格資料</td></tr>
+    <tr><td>3</td><td>NotebookLM</td><td>檢查日期格式與欄位一致性</td><td>確保匯出後能被 Sheets 正確辨識</td></tr>
+    <tr><td>4</td><td>Google Sheets</td><td>將資料表匯入試算表</td><td>作為視覺化與自動化的主要工作環境</td></tr>
+    <tr><td>5</td><td>Google Sheets</td><td>補齊分析用欄位（天數、開始偏移）</td><td>把「實際日期」轉為「相對時間軸」，為甘特圖做準備</td></tr>
+    <tr><td>6</td><td>Google Sheets</td><td>驗證資料是否可手動畫出甘特圖</td><td>確認資料結構正確</td></tr>
+    <tr><td>7</td><td>Google Apps Script</td><td>撰寫自動化流程（計算、清除舊圖、重建圖表）</td><td>把多步驟手動操作整合為單一流程</td></tr>
+    <tr><td>8</td><td>Google Apps Script</td><td>建立自訂選單（如「甘特小幫手」）</td><td>在試算表加入「像記帳小幫手」的功能入口</td></tr>
+    <tr><td>9</td><td>Google Apps Script</td><td>將核心流程綁定到選單功能</td><td>使用者只需點一次即可完成所有更新</td></tr>
+    <tr><td>10</td><td>使用者操作</td><td>點選「一鍵生成／重畫甘特圖」</td><td>真正的「一鍵化」，不需理解資料與技術細節</td></tr>
+    <tr><td>11</td><td>教學與擴充</td><td>延伸至多專案、狀態上色、權限控管</td><td>升級為可教學、可制度化的應用案例</td></tr>
+  </table></div>
+</section>
+
+<section class="chapter" id="sec-code">
+  <span class="chip" style="background:linear-gradient(90deg,#5645D4,#3b6bb0)">CHAPTER 06</span>
+  <h2 class="ct">6. 實際操作資料範例＋GAS 甘特圖程式碼</h2>
+  <h3>實際操作範例（任務資料）</h3>
+  <p class="cd">專案名稱：內部員工半自動化客服資料庫建置</p>
+  <ul class="pt">
+    <li><b>任務一 需求盤點與問題分類：</b>2025/01/02–01/05，負責人 HR，狀態：完成。</li>
+    <li><b>任務二 彙整既有文件與FAQ：</b>2025/01/06–01/12，負責人 行政，狀態：進行中。</li>
+    <li><b>任務三 建立NotebookLM資料來源：</b>2025/01/10–01/15，負責人 IT，狀態：未開始。</li>
+    <li><b>任務四 設定客服人設與回答規則：</b>2025/01/16–01/18，負責人 HR，狀態：未開始。</li>
+    <li><b>任務五 測試與內部試用回饋：</b>2025/01/20–01/25，負責人 全體，狀態：未開始。</li>
+  </ul>
+  <h3>GAS 核心函式：一鍵重畫甘特圖（節錄）</h3>
+  <div class="prompt"><span class="tag">Code.gs</span>function redrawGanttChart() {
+  const CONFIG = {
+    SHEET_NAME: '會議交辦事項追蹤表',
+    COL_TASK: '任務名稱', COL_START: '開始日期', COL_END: '結束日期',
+    COL_DURATION: '天數', COL_OFFSET: '開始偏移',
+    CHART_ANCHOR_ROW: 2, CHART_ANCHOR_COL: 1,
+    REMOVE_ALL_CHARTS_ON_SHEET: true
+  };
+  // 讀表頭 → 找必要欄位 → 取得/建立「天數」「開始偏移」欄
+  // 寫入公式：天數 = MAX(1, 結束日期 - 開始日期 + 1)
+  // 寫入公式：開始偏移 = 開始日期 - 最早開始日
+  // 刪除舊圖表 → 建立堆疊長條圖（開始偏移設透明，天數顯示）
+  // sheet.insertChart(chart);
+}</div>
+  <div class="note blue">💡 完整程式碼含 <code>buildColumnMap_</code>、<code>getOrCreateColumn_</code>、<code>getMinDate_</code>、<code>dateToSerial_</code> 等輔助函式，核心概念：<b>系列1（開始偏移）設透明、系列2（天數）顯示</b>，就能用堆疊長條圖模擬出甘特圖效果。</div>
+</section>
+
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5a5866)">SOURCES</span>
+  <h2 class="ct">7. 資料來源與製作說明</h2>
+  <ul class="pt">
+    <li><b>原始教材：</b>EP8「NotebookLM打造客服資料庫、甘特圖、文獻彙整神器」官方課程簡報全文，含範例 1「半自動化客服資料庫」、範例 2「甘特圖表」。</li>
+    <li><b>製作方式：</b>逐節對照官方簡報可讀文字整理，SOP 步驟、比較表與 GAS 程式碼<b>取自簡報原文</b>，圖解為自製 SVG。內容為<b>真實課程內容</b>。</li>
+    <li><b>誠實聲明：</b>本頁以簡報實錄為準；本集資料夾錄影檔案暫僅供擁有者存取，<b>示範操作畫面與逐字稿時間碼</b>待開放授權或網路政策開通後補入。NotebookLM 資料表功能持續更新，以你使用當下的介面為準。</li>
+    <li><b>介面參考：</b>互動地圖頁沿用本站 EP38–46 的卡片式多層導覽與遊戲化進度設計。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  EP8「NotebookLM 打造客服資料庫、甘特圖、文獻彙整神器」課堂筆記・2026/07 整理<br>
+  🍀 Learn AI with Tarshar｜搭配 <a href="ep8-ai-skills.html">互動地圖</a> 使用效果最佳
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>用 Claude Skills 來學統計分析吧！｜互動式學習地圖</title>
+<meta name="description" content="EP16 晨學講堂：Claude Skills 是什麼與為什麼需要、三大組成元素與三大特性、問卷資料統計分析器實戰案例、skill-creator手把手教學、Skills跨工具應用，互動式多層次學習地圖">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#7c3aed; --pink:#b25269;
+  --green:#3f8560; --orange:#c2620c; --red:#c0453f; --teal:#0d8f80;
+  --feat:#3f8560; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(28px,4.6vw,46px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--txt);background:none;-webkit-text-fill-color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:660px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:9px}
+.steps li{list-style:none;counter-increment:st;display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--txt2);line-height:1.7}
+.steps li::before{content:counter(st);flex:none;width:25px;height:25px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:var(--c,var(--feat));margin-top:1px}
+.steps li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+.prompt,.promptbox{background:#1d1d1f;border:1px solid #2c2c31;border-radius:10px;padding:13px 15px;margin-top:6px;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt b,.promptbox b{color:#fff}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <a class="navlink" href="../radio/" style="border-color:#bfe0cb" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <div class="logo">
+    <div class="dot">📊</div>
+    <div>統計分析 Skills 地圖<small>MORNING LEARNING · EP16</small></div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋技能關鍵字：Skills、t檢定、APA、skill-creator、團購小幫手…" autocomplete="off">
+  </div>
+  <a class="navlink" href="ep16-notes.html">📝 課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">EP16 · 晨學講堂 · 約 1 小時</span>
+  <h1>用 Claude Skills<br>來學統計分析吧！</h1>
+  <p class="sub">Skills 就像是為 AI 準備的「專業證照」——讓通用的 Claude 瞬間轉化為特定領域的專家。<br>點進每一章，逐層展開<b>本集實際教到</b>的概念與步驟，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🎙️ 生成式AI應用電台・晨學講堂</span>
+    <span>🧩 Claude Skills</span>
+    <span>📊 t 檢定／APA 報告</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>4</b><span>大主題</span></div>
+  <div class="stat"><b>8</b><span>實戰技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 8 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--green)" onclick="showChapter('what')">
+        <div class="glowline"></div><span class="emoji">🎓</span>
+        <h3><em>CHAPTER 01</em>是什麼＋為什麼＋怎麼組成</h3>
+        <p>Claude Skills 的定義與「專業證照」比喻、傳統做法的痛點、三大組成元素（指令／腳本／資源）與三大特性。</p>
+        <div class="foot"><div class="mini"><i data-mini="what"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--teal)" onclick="showChapter('setup')">
+        <div class="glowline"></div><span class="emoji">⚙️</span>
+        <h3><em>CHAPTER 02</em>前置準備＋介面導覽</h3>
+        <p>訂閱與啟用步驟、Skills 介面四大區塊（搜尋／新增／分頁／列表）。</p>
+        <div class="foot"><div class="mini"><i data-mini="setup"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--rose)" onclick="showChapter('case')">
+        <div class="glowline"></div><span class="emoji">📊</span>
+        <h3><em>CHAPTER 03</em>問卷統計分析器實戰</h3>
+        <p>壓力管理 APP 研究案例、五階段工作流、三層檢驗機制、缺失值處理策略。</p>
+        <div class="foot"><div class="mini"><i data-mini="case"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--purple)" onclick="showChapter('build')">
+        <div class="glowline"></div><span class="emoji">🛠️</span>
+        <h3><em>CHAPTER 04</em>動手做＋跨工具應用</h3>
+        <p>用 skill-creator 創建 Skill 的三種方式、裝入 ChatGPT 專案、團購小幫手實例。</p>
+        <div class="foot"><div class="mini"><i data-mini="build"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+
+    <div class="resources">
+      <h3>📦 <span>課程原始資料</span></h3>
+      <div class="res-grid">
+        <a href="ep16-notes.html"><span class="ic">📝</span><span><b>課堂筆記</b>逐節嵌入 22 張簡報原圖</span></a>
+        <a href="../radio/"><span class="ic">📻</span><span><b>直播電台系列</b>回系列總覽，一集一卡</span></a>
+        <a href="ep17-notes.html"><span class="ic">🧩</span><span><b>相關 EP17</b>打造第一個 Google 擴充功能</span></a>
+        <a href="ep20-notes.html"><span class="ic">🔗</span><span><b>相關 EP20</b>打通 Anthropic 任督二脈 Claude 篇</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-what" class="view" style="--c:var(--green)"></section>
+  <section id="view-setup" class="view" style="--c:var(--teal)"></section>
+  <section id="view-case" class="view" style="--c:var(--rose)"></section>
+  <section id="view-build" class="view" style="--c:var(--purple)"></section>
+</main>
+
+<footer>
+  本頁為 EP16「用 Claude Skills 來學統計分析吧！」課後整理・介面沿用本站互動式學習地圖架構<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2026｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+const DATA = {
+  what: {
+    key:'what', color:'var(--green)', emoji:'🎓', code:'CHAPTER 01', title:'是什麼＋為什麼＋怎麼組成',
+    intro:'先搞懂 Claude Skills 是什麼、為什麼需要，以及它由哪三塊拼起來。',
+    topics:[
+      {t:'Claude Skills 是什麼／為什麼需要', s:'模組化系統｜為 AI 準備的專業證照',
+       blocks:[
+        {h:'定義',p:'Claude Skills 是一種模組化系統，將特定任務的知識打包成獨立的「Skill」資料夾，讓 Claude 能夠在需要時動態載入這些專業能力。'},
+        {h:'四個特點',ul:['可重複使用的客製化指令。','Claude 可在任何對話中遵循。','將一次性 Prompt 轉化為可工程化的數位資產。','不僅告訴 AI「做什麼」，更定義「如何判斷」和「如何執行」。']},
+        {h:'傳統做法 vs Skills',table:{head:['傳統做法','Claude Skills'],rows:[['每次對話都要重新說明需求','模組化設計，靈活導入指令與資料'],['上下文視窗有限，記憶有限','按需載入，大幅節省 Token 消耗'],['容易被海量知識淹沒記憶體','把對的知識擺在對的時機']]}},
+        {h:'比喻',tip:'Skills 就像是為 AI 準備的「專業證照」，讓通用的 Claude 模型瞬間轉化為特定領域的專家。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep16-notes.html#sec-what" style="color:var(--green)">筆記 2：Claude Skills 是什麼／為什麼需要</a>'}]},
+      {t:'三大組成元素與三大特性', s:'指令／腳本／資源｜可描述性／可重現性／可移轉性',
+       blocks:[
+        {h:'三大組成元素',ul:['<b>指令【規則】</b>：該領域之必備、先備、專業知識與完整作業流程——Skill 的「大腦」。','<b>腳本【流程】</b>：實際執行時用到的固定工具，例如 Python、GAS 腳本——Skill 的「行動」能力。','<b>資源【範例】</b>：一起附上的補充資料，例如 API 說明文件——Skill 的「知識庫」。']},
+        {h:'三大特性',table:{head:['特性','說明'],rows:[['可描述性','讓 Claude 理解何時該使用這個技能，而非僅僅執行指令'],['可重現性','不同場景下維持穩定表現，將 AI 行為標準化'],['可移轉性','透過分享讓他人也能使用，將個人經驗轉化為組織資產']]}},
+        {h:'看課堂筆記',shot:{img:'ep16-img/slide13.jpg',cap:'簡報｜Skills 的三大組成元素'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep16-notes.html#sec-parts" style="color:var(--green)">筆記 3：三大組成元素與三大特性</a>'}]}
+    ]
+  },
+  setup: {
+    key:'setup', color:'var(--teal)', emoji:'⚙️', code:'CHAPTER 02', title:'前置準備＋介面導覽',
+    intro:'開通 Skills 功能，並認識介面上的四個關鍵區塊。',
+    topics:[
+      {t:'開始使用 Claude Skills：前置準備', s:'訂閱條件｜三步驟啟用',
+       blocks:[
+        {h:'必要條件',ul:['訂閱 Claude Pro 或 Team 方案。','使用網頁版介面（Web Interface）。']},
+        {h:'啟用三步驟',steps:['點擊左下角的個人頭像（Profile）。','選擇 Feature Preview 選單。','找到 Skills 並切換為 On。']},
+        {h:'看課堂筆記',p:'👉 <a href="ep16-notes.html#sec-setup" style="color:var(--teal)">筆記 4：前置準備與介面導覽</a>'}]},
+      {t:'Skills 介面導覽', s:'搜尋欄／新增按鈕／分頁切換／列表區域',
+       blocks:[
+        {h:'四大區塊',ul:['<b>搜尋欄 Search</b>：快速查找已安裝或官方提供的 Skills，支援關鍵字模糊搜尋。','<b>新增按鈕 + Add</b>：開始創建新 Skill，提供對話式創建、手動撰寫、上傳檔案三種模式。','<b>分頁切換 Tabs</b>：Your skills 管理自建、Example skills 瀏覽官方範例。','<b>列表區域 List Area</b>：顯示所有可用 Skills 卡片，含名稱、簡述與啟用狀態。']},
+        {h:'看課堂筆記',shot:{img:'ep16-img/slide25.jpg',cap:'簡報｜Skills 介面導覽'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep16-notes.html#sec-setup" style="color:var(--teal)">筆記 4：介面導覽</a>'}]}
+    ]
+  },
+  case: {
+    key:'case', color:'var(--rose)', emoji:'📊', code:'CHAPTER 03', title:'問卷統計分析器實戰',
+    intro:'用一個真實部署的 Claude Skill，走完整個統計分析流程。',
+    topics:[
+      {t:'案例設計：壓力管理 APP 介入研究', s:'n=50｜介入組 vs 對照組｜前測後測',
+       blocks:[
+        {h:'研究設計',p:'n=50，分成 APP 介入組與對照組各約 25 人，兩組皆做前測→後測，比較介入效果。'},
+        {h:'處理流程',steps:['資料清理：去除 NA、空白、格式不一致的異常值。','敘述統計：分布圖、直方圖等基本統計。','t 檢定：依設計選成對／獨立／單一樣本三種之一。','輸出 APA 格式報告：含 t(48) = 2.XX, p &lt; .05, d = 0.XX 等統計量。']},
+        {h:'看課堂筆記',shot:{img:'ep16-img/slide26.jpg',cap:'簡報｜壓力管理 APP 介入研究流程'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep16-notes.html#sec-case" style="color:var(--rose)">筆記 5：問卷資料統計分析器</a>'}]},
+      {t:'五階段工作流 + 三層檢驗機制', s:'資料清理→EDA→編碼→統計分析→APA報告',
+       blocks:[
+        {h:'五階段',steps:['<b>資料清理</b>（9項檢查）：結構檢查、缺失值識別、離群值識別等。','<b>探索性資料分析 EDA</b>（10項分析）：常態性判斷、群組分布比較、相關性分析。','<b>資料編碼</b>（10項檢查）：變數型態辨識、類別編碼、編碼驗證。','<b>統計分析</b>（10項判斷）：自動判定檢定類型、計算 Cohen\'s d 效果量。','<b>APA 報告生成</b>（10項檢查）：標題頁、方法、結果、討論，符合 APA 7th 格式。']},
+        {h:'三層檢驗',table:{head:['層級','內容'],rows:[['層級1 即時檢查','每完成一個步驟立即驗證數值合理性'],['層級2 階段檢查','每完成一個階段交叉驗證分析結果'],['層級3 最終檢查','完成所有分析後從頭確認前後一致']]}},
+        {h:'缺失值處理',warn:'缺失率 < 5% 自動報告建議；5-20% 必須詢問使用者決策；> 20% 警告風險並建議刪除變數。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep16-notes.html#sec-case" style="color:var(--rose)">筆記 5：五階段工作流與三層檢驗</a>'}]}
+    ]
+  },
+  build: {
+    key:'build', color:'var(--purple)', emoji:'🛠️', code:'CHAPTER 04', title:'動手做＋跨工具應用',
+    intro:'學會自己做一個 Skill，並看它如何延伸到其他工具。',
+    topics:[
+      {t:'手把手教學：skill-creator', s:'對話式創建｜三種創建方式',
+       blocks:[
+        {h:'skill-creator 四步驟',steps:['啟動對話模式：在新增選單點擊 Create with Claude。','描述你的需求：用自然語言告訴 Claude 你想做什麼。','測試與迭代：在右側 Preview 視窗實際測試，要求修正。','發布 Skill：點擊 Publish，新 Skill 出現在個人列表中。']},
+        {h:'創建三方式',table:{head:['方式','適合'],rows:[['Create with Claude 對話式創建','初學者、邏輯複雜需要 AI 協助梳理'],['Write Instructions 直接撰寫','已清楚 Prompt 寫法、簡單任務'],['Upload a Skill 匯入檔案','團隊共享、使用社群資源']]}},
+        {h:'看課堂筆記',shot:{img:'ep16-img/slide27.jpg',cap:'簡報｜手把手教學：使用 skill-creator 創建 Skill'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep16-notes.html#sec-create" style="color:var(--purple)">筆記 6：skill-creator</a>'}]},
+      {t:'產出延伸與跨工具應用', s:'裝入 ChatGPT 專案｜團購小幫手實例',
+       blocks:[
+        {h:'裝入 ChatGPT 專案',p:'Claude 產出的 .MD 檔（Workflow + Prompt 範例）裝入 ChatGPT 專案功能，即可產生可重複執行的工作流。應用場景：教學培訓、行政自動化、研究寫作、AI Agent 雛形。'},
+        {h:'實例：團購小幫手',p:'把雜亂的團購訂單文字自動整理成結構化報表：雜亂文字 → AI 工具及 Google Sheet → 統計總數相關數據 → 寄送信箱通知。同一份資料可用 Claude Skill＋Apps Script，或改用 NotebookLM，走出不同但同樣可靠的自動化路徑。'},
+        {h:'心法',tip:'這正是 Skills「可移轉性」的具體展現——一個好的工作流設計，可以在不同 AI 工具間搬移複用。'},
+        {h:'看課堂筆記',shot:{img:'ep16-img/slide35.jpg',cap:'簡報｜團購小幫手工作流示意'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep16-notes.html#sec-extend" style="color:var(--purple)">筆記 7：產出延伸與跨工具應用</a>'}]}
+    ]
+  }
+};
+const ORDER = ['what','setup','case','build'];
+const $ = s=>document.querySelector(s);
+function renderChapter(ch){
+  const d=DATA[ch];const next=ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];const prev=ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html=`<div class="chapter-head"><span class="emoji">${d.emoji}</span><div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div></div>`;
+  d.topics.forEach((tp,i)=>{const id=`${ch}-${i}`;
+    html+=`<div class="topic" id="topic-${id}"><div class="topic-head" onclick="toggleTopic('${id}')"><span class="num">${i+1}</span><h4>${tp.t}<small>${tp.s}</small></h4><input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)"><span class="chev">▶</span></div><div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{html+=`<div class="block"><h5>${b.h}</h5>`;
+      if(b.p)html+=`<p>${b.p}</p>`;
+      if(b.ul)html+=`<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps)html+=`<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.table)html+=`<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.shot)html+=`<figure class="shot"><img src="${b.shot.img}" alt="" loading="lazy"><figcaption>${b.shot.cap}</figcaption></figure>`;
+      if(b.tip)html+=`<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn)html+=`<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html+=`</div>`;});
+    html+=`</div></div></div>`;});
+  html+=`<div class="chapnav"><a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a><a onclick="showHome()" style="text-align:center">回總覽<b>🏠 四大主題</b></a><a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a></div>`;
+  $('#view-'+ch).innerHTML=html;
+}
+ORDER.forEach(renderChapter);
+function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('#view-'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function showHome(){switchView('home');$('#crumbs').style.display='none';clearSearch();}
+function showChapter(ch){switchView(ch);$('#crumbs').style.display='flex';$('#crumbHere').textContent=`${DATA[ch].emoji} ${DATA[ch].title}`;clearSearch();syncChecks();}
+function toggleTopic(id){$('#topic-'+id).classList.toggle('open');}
+function openTopic(ch,i){showChapter(ch);const el=$('#topic-'+ch+'-'+i);el.classList.add('open');setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+const KEY='ep16-skills-v1';
+const store=()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){const s=store();if(val)s[id]=1;else delete s[id];localStorage.setItem(KEY,JSON.stringify(s));updateProgress();}
+const TOTAL=ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){const done=Object.keys(store()).length;const pct=Math.round(done/TOTAL*100);$('#progFill').style.width=pct+'%';$('#progText').textContent=`${done} / ${TOTAL} 項技能已掌握`;$('#statDone').textContent=done;$('#statPct').textContent=pct+'%';ORDER.forEach(ch=>{const sub=DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;const el=document.querySelector(`[data-mini="${ch}"]`);if(el)el.style.width=Math.round(sub/DATA[ch].topics.length*100)+'%';});}
+function syncChecks(){const s=store();document.querySelectorAll('input[data-skill]').forEach(cb=>{cb.checked=!!s[cb.dataset.skill];});}
+function resetProgress(){if(confirm('確定要清空所有打勾進度嗎？')){localStorage.removeItem(KEY);syncChecks();updateProgress();}}
+function stripTags(s){return s.replace(/<[^>]+>/g,'');}
+const INDEX=[];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{let body=tp.s+' ';tp.blocks.forEach(b=>{if(b.p)body+=stripTags(b.p)+' ';if(b.ul)body+=b.ul.map(stripTags).join(' ')+' ';if(b.steps)body+=b.steps.map(stripTags).join(' ')+' ';if(b.tip)body+=stripTags(b.tip)+' ';if(b.warn)body+=stripTags(b.warn)+' ';if(b.table)body+=b.table.rows.flat().map(stripTags).join(' ')+' ';});INDEX.push({ch,i,title:tp.t,body});}));
+$('#searchInput').addEventListener('input',e=>{const q=e.target.value.trim();const box=$('#searchResults');if(!q){box.classList.remove('show');box.innerHTML='';return;}const hits=INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));box.classList.add('show');if(!hits.length){box.innerHTML=`<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：t檢定、APA、skill-creator）</div>`;return;}const hl=s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);box.innerHTML=hits.map(x=>{const pos=x.body.toLowerCase().indexOf(q.toLowerCase());const snip=x.body.substr(Math.max(0,pos-20),90);return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})"><div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div><h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;}).join('');});
+function clearSearch(){$('#searchInput').value='';$('#searchResults').classList.remove('show');$('#searchResults').innerHTML='';}
+syncChecks();updateProgress();
+</script>
+</body>
+</html>

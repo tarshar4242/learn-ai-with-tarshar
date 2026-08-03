@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP1 課堂筆記｜用曼陀羅九宮格解構 Google NotebookLM</title>
+<meta name="description" content="晨學講堂 EP1 課堂筆記：用曼陀羅九宮格拆解法理解 Google NotebookLM——九宮格全貌（核心定位轉變、多格式整合、互動式問答、智慧摘要生成、Audio Overview、Deep Research、手動分類標籤、協作與個性化）、可重複使用的 AI Prompt 模板、AI Agent 自動操作 NotebookLM 示範、多來源研究筆記本示範。根據真實錄影逐字稿與畫面截圖整理。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#3b6bb0; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px;border-left:none}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.prompt{position:relative;background:#1d1d1f;border-radius:10px;padding:15px 16px;margin:12px 0;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt .tag{display:inline-block;font-size:11px;letter-spacing:.06em;color:#c9c4ff;border:1px solid #3a3a40;border-radius:6px;padding:2px 9px;margin-bottom:8px}
+.prompt b{color:#fff}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.ts{display:inline-block;font-family:"Cascadia Code",Consolas,monospace;font-weight:700;font-size:12px;color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,#fff);border-radius:5px;padding:2px 8px;margin-right:7px;letter-spacing:.4px;vertical-align:middle}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#a9c0e8" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP1 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="ep1-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 晨學講堂 · EP1</span>
+  <h1>用曼陀羅<span>九宮格</span>解構<br>Google NotebookLM</h1>
+  <p class="lead">EP1 教一個能<b>套用到任何主題</b>的拆解法：把「曼陀羅九宮格」思考工具借來用在理解一套 AI 工具上——先用九宮格把 NotebookLM 的功能定位想清楚，再用一段<b>可重複使用的 AI Prompt</b> 把九宮格內容真的生出來，最後示範用 AI Agent 自動操作 NotebookLM。本頁根據<b>真實錄影逐字稿與畫面截圖</b>整理。</p>
+  <div class="meta">
+    <span>📅 2025/12/07 晨間直播</span>
+    <span>🎯 主題：曼陀羅九宮格 × NotebookLM</span>
+    <span>🎥 教材：錄影回放（41 分鐘）</span>
+    <span>🤖 示範：Gemini Agent 自動操作</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-what">1. 什麼是「九宮格拆解法」</a>
+  <a href="#sec-grid">2. 九宮格全貌：NotebookLM 九大定位</a>
+  <a href="#sec-prompt">3. 怎麼生出九宮格：AI Prompt 模板</a>
+  <a href="#sec-agent">4. 示範一：AI Agent 自動操作 NotebookLM</a>
+  <a href="#sec-multi">5. 示範二：多來源研究筆記本</a>
+  <a href="#sec-recap">6. 重點整理</a>
+  <a href="#sec-src">7. 資料來源與製作說明</a>
+</nav>
+
+<article>
+
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--purple))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>EP1「用曼陀羅九宮格解構 Google NotebookLM：發揮筆記本功能」</td></tr>
+    <tr><th>頻道</th><td>生成式 AI 應用電台・晨學講堂（早起場）</td></tr>
+    <tr><th>直播日期</th><td>2025/12/07 上午（畫面時鐘顯示 07:06–07:47）</td></tr>
+    <tr><th>教材</th><td>本集 Drive 資料夾只保留<b>錄影回放</b>（41 分鐘），簡報是講者當下開啟的本機 PowerPoint 檔（畫面可見 25 頁投影片縮圖），未附獨立檔案</td></tr>
+    <tr><th>一句話先懂</th><td>把「曼陀羅九宮格」這個思考工具借來理解 NotebookLM：<b>先想清楚九宮格內容，再用一段 Prompt 請 AI 幫你把內容生出來</b>，這套方法可以套用到任何你想介紹的主題或專業。</td></tr>
+  </table></div>
+  <figure class="shot">
+    <img src="ep1-img/shot01-title.jpg" alt="EP1 課程封面：用曼陀羅九宮格解構 Google NotebookLM" loading="lazy">
+    <figcaption>錄影 00:50｜投影片封面：<b>用曼陀羅九宮格解構 Google NotebookLM——發揮筆記本功能：從知識管理到智慧助理的革新之旅</b>。</figcaption>
+  </figure>
+  <div class="note blue">💡 開場（00:57）：「這應該是大家上過最早的 AI 課程」——EP1 是晨學講堂的第一集，時段訂在清晨、人數刻意控制在較小規模，方便大家「學習比較集中一點」。</div>
+</section>
+
+<section class="chapter" id="sec-what">
+  <span class="chip" style="background:linear-gradient(90deg,#3b6bb0,#0aa6c9)">CHAPTER 01</span>
+  <h2 class="ct">1. 什麼是「九宮格拆解法」</h2>
+  <p class="cd">開場（01:28–02:44）講者說明這集的兩個部分。</p>
+  <ol class="st">
+    <li><b>用九宮格思考</b>：先把「如果用九宮格來想 NotebookLM，大概會長什麼樣子」列出來——例如想介紹 NotebookLM，就先把自己心得上的重點交給 AI，請它幫忙整理成標題＋短說明，即使排版不會太漂亮，但能<b>把脈絡先釐清</b>。</li>
+    <li><b>把內容寫出來</b>：這一步「學完之後可以套用到各個主題」——不限 NotebookLM，換成你自己的學科或專業，也可以用同一套方式整理成一頁九宮格，再用 Google Gemini（講者提到 <b>Nano Banana Pro</b> 模型）把表格內容轉成一張示意圖。</li>
+  </ol>
+  <div class="note gold">⚠️ 逐字稿原話（01:51）：「通常我會用這一個工具作為一個筆記……我再理解一個 AI 工具、我再使用一個 AI 工具的心法，這樣會比以前寫一大堆文字介紹快很多。」——重點不是九宮格本身漂不漂亮，而是<b>用它逼自己先想清楚重點分類</b>。</div>
+</section>
+
+<section class="chapter" id="sec-grid">
+  <span class="chip" style="background:linear-gradient(90deg,#3b6bb0,#5645D4)">CHAPTER 02</span>
+  <h2 class="ct">2. 九宮格全貌：NotebookLM 的九大定位</h2>
+  <p class="cd">錄影 25:42 畫面實錄——當天簡報第 25／26 頁，完整九宮格內容（中心格是主題，其餘 8 格是延伸定位）。</p>
+  <figure class="shot">
+    <img src="ep1-img/shot05-mandala-grid.jpg" alt="曼陀羅九宮格：Google NotebookLM 九大定位" loading="lazy">
+    <figcaption>錄影 25:42｜九宮格實際內容——中心「Google NotebookLM」，外圍 8 格各為一個功能定位＋一句話說明。</figcaption>
+  </figure>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">格子</th><th>內容（原文照錄）</th></tr>
+    <tr><td><b>核心定位轉變</b></td><td>從被動儲存轉為主動分析，將資料視覺化呈現</td></tr>
+    <tr><td><b>多格式整合</b></td><td>統一管理 PDF、影片、音訊或圖片，跨平台的多種格式知識庫</td></tr>
+    <tr><td><b>互動式問答</b></td><td>直接向 AI 提問，根據筆記內容提供精準答案並附上引用來源</td></tr>
+    <tr><td><b>智慧摘要生成</b></td><td>自動生成摘要、常見問題與時間軸，快速掌握核心重點與脈絡</td></tr>
+    <tr><td style="background:color-mix(in srgb,var(--accent) 10%,#fff)"><b>Google NotebookLM</b>（中心）</td><td>AI 智慧筆記本，發揮知識管理的無限潛能</td></tr>
+    <tr><td><b>Audio Overview</b></td><td>將筆記內容轉為 Podcast 音訊，讓知識隨時可移動學習</td></tr>
+    <tr><td><b>Deep Research</b></td><td>主動搜尋跨比對來源，快速把筆記升級為專業 AI 研究員</td></tr>
+    <tr><td><b>手動分類標籤</b></td><td>生成檔案自動分類，建立個人化知識架構，減少手動整理</td></tr>
+    <tr><td><b>協作與個性化</b></td><td>支援筆記本共用與自訂回覆風格，讓知識轉化為團隊資產</td></tr>
+  </table></div>
+  <div class="golden"><div class="q">「不是只產出結果，整理資料的過程本身就在幫你釐清脈絡。」</div><div class="a">—— 開場（02:30）大意</div></div>
+</section>
+
+<section class="chapter" id="sec-prompt">
+  <span class="chip" style="background:linear-gradient(90deg,#2f6df0,#0aa6c9)">CHAPTER 03</span>
+  <h2 class="ct">3. 怎麼生出九宮格：可重複使用的 AI Prompt 模板</h2>
+  <p class="cd">錄影 31:21 畫面實錄——講者在文件裡直接打出來、當場示範的 Prompt 原文。</p>
+  <figure class="shot">
+    <img src="ep1-img/shot06-prompt-template.jpg" alt="生成九宮格內容的 AI Prompt 模板" loading="lazy">
+    <figcaption>錄影 31:21｜她實際打的 Prompt 草稿（word 文件截圖，原文照錄於下方）。</figcaption>
+  </figure>
+  <div class="prompt"><span class="tag">PROMPT 模板（可替換主題）</span>給我以下文字即可
+目的是製作「曼陀羅九宮格」的內容
+主題是：用曼陀羅九宮格解構 GOOGLE NOTEBOOKLM_發揮筆記本功能
+請依序幫我提供相關資料，資料提供方式為：
+一個簡明扼要的標題 + (20-30 個字內容)
+保留大標題，其他各格文字內容都用示意圖來呈現</div>
+  <div class="note blue">💡 這段 Prompt 只要把「主題」那一行換掉，就能套用到<b>任何你想拆解的主題或專業</b>——這正是開場承諾的「第二部分：怎麼把內容寫出來」。生出文字內容後，講者再用 Google Gemini（提到 <b>Nano Banana Pro</b> 模型）把表格轉成一張九宮格示意圖，不需要自己排版。</div>
+</section>
+
+<section class="chapter" id="sec-agent">
+  <span class="chip" style="background:linear-gradient(90deg,#5563d6,#0aa6c9)">CHAPTER 04</span>
+  <h2 class="ct">4. 示範一：用 AI Agent 自動操作 NotebookLM</h2>
+  <p class="cd">錄影約 16:08 畫面實錄——Google Meet 分割畫面，右側是一個對話式 Agent（畫面暱稱 Clara Shen）正在遠端操作瀏覽器。</p>
+  <figure class="shot">
+    <img src="ep1-img/shot03-ai-agent.jpg" alt="AI Agent 自動操作 NotebookLM 畫面" loading="lazy">
+    <figcaption>錄影 16:08｜Agent 對話紀錄顯示「已完成 10 步」，任務摘要：把左側來源區第一筆資料從「九宮格筆記法_Evernote 實作」重新命名為「測試」。</figcaption>
+  </figure>
+  <ul class="pt">
+    <li>操作步驟總結（畫面文字照錄）：① 選擇了第一筆資料 ② 點擊左側的「更多」按鈕 ③ 選擇「重新命名來源」選項 ④ 將名稱改為「測試」。</li>
+    <li>示範重點：不是自己手動一步步點，而是<b>直接下指令讓 Agent 幫你在 NotebookLM 介面裡操作</b>（重新命名來源檔案），完成後 Agent 會回報已完成的步驟數與結果。</li>
+  </ul>
+  <div class="note gold">⚠️ 誠實聲明：錄影中此區塊語音大多是操作時的短促回應（逐字稿多為「好」「OK」等語氣詞），詳細口語說明沒有完整錄到；本節內容以<b>實際截圖畫面上的文字紀錄</b>為準，不做語音以外的推測。</div>
+</section>
+
+<section class="chapter" id="sec-multi">
+  <span class="chip" style="background:linear-gradient(90deg,#1d9e6f,#0aa6c9)">CHAPTER 05</span>
+  <h2 class="ct">5. 示範二：多來源研究筆記本</h2>
+  <p class="cd">錄影 23:24 畫面實錄——另一個 NotebookLM 筆記本範例，主題與 EP1 主軸不同，用來展示 NotebookLM 一次彙整多種來源格式的能力。</p>
+  <figure class="shot">
+    <img src="ep1-img/shot04-multisource.jpg" alt="NotebookLM 多來源研究筆記本示範" loading="lazy">
+    <figcaption>錄影 23:24｜筆記本「聖誕節在華人社會的演變與爭議」，來源清單同時包含維基百科詞條、PDF、Reddit 討論串等多種格式，全部勾選匯入同一本筆記。</figcaption>
+  </figure>
+  <p>對應逐字稿（22:19）：「中間這個互動的問答其實非常重要，加上它現在的模型已經跟著 Gemini 更新到 3.0，所以它在互動問答的時候……」——呼應第 2 章九宮格裡的<b>互動式問答</b>與<b>多格式整合</b>兩格：不管來源是網頁、PDF 還是社群討論串，都能被同一本筆記統一吸收、統一問答。</p>
+  <figure class="shot">
+    <img src="ep1-img/shot02-notebooklm-home.jpg" alt="NotebookLM 官方介紹頁" loading="lazy">
+    <figcaption>錄影 10:26｜順帶帶大家看一次 NotebookLM 官網首頁定位——「Your research and thinking partner, grounded in the information you trust, built with the latest Gemini models.」</figcaption>
+  </figure>
+</section>
+
+<section class="chapter" id="sec-recap">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#3b6bb0)">RECAP</span>
+  <h2 class="ct">6. 重點整理</h2>
+  <ul class="pt">
+    <li><b>九宮格拆解法</b>：先想清楚「中心主題＋8 個延伸定位」，再動手整理內容，逼自己先釐清脈絡而不是急著產出。</li>
+    <li><b>NotebookLM 九大定位</b>：核心定位轉變、多格式整合、互動式問答、智慧摘要生成、Audio Overview、Deep Research、手動分類標籤、協作與個性化，圍繞著中心的 AI 智慧筆記本。</li>
+    <li><b>可重複使用的 Prompt 模板</b>：換個主題名稱，同一段 Prompt 就能幫任何領域生出一份九宮格草稿。</li>
+    <li><b>AI Agent 操作示範</b>：讓對話式 Agent 直接幫你在 NotebookLM 介面裡做重新命名之類的整理工作。</li>
+    <li><b>多來源研究筆記本</b>：維基百科、PDF、社群討論串等不同格式的來源，可以匯入同一本筆記，統一問答與摘要。</li>
+  </ul>
+</section>
+
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5a5866)">SOURCES</span>
+  <h2 class="ct">7. 資料來源與製作說明</h2>
+  <ul class="pt">
+    <li><b>原始教材：</b>EP1「用曼陀羅九宮格解構 Google NotebookLM：發揮筆記本功能」錄影回放（41 分鐘，anyone-reader 權限，公開可下載）。本集 Drive 資料夾未附獨立的簡報檔或課堂筆記 md。</li>
+    <li><b>製作方式：</b>下載完整錄影 → 抽取語音以 faster-whisper（small 模型）產出逐字稿 → 以場景變化偵測抽取畫面關鍵幀 → <b>親眼逐張判讀</b>畫面內容 → 對照逐字稿與畫面截圖整理成本頁章節，畫面文字（九宮格內容、Prompt 原文、Agent 操作紀錄）皆為<b>照片直接抄錄，非推測或改寫</b>。</li>
+    <li><b>誠實聲明：</b>本集約 20–27 分鐘與部分中段語音多為操作時的短促回應（「好」「OK」等語氣詞），推測講者當下多在<b>安靜示範操作畫面</b>而非持續講解；這幾段內容以<b>畫面截圖上可直接讀到的文字</b>為準，未在音訊中明確說出的細節不補述、不杜撰。</li>
+    <li><b>介面參考：</b>版型沿用本站 EP29–EP46 課堂筆記的乾淨白底編輯風格。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  EP1「用曼陀羅九宮格解構 Google NotebookLM」課堂筆記・2026/07 整理<br>
+  🍀 Learn AI with Tarshar｜搭配 <a href="ep1-ai-skills.html">互動技能地圖</a> 使用效果最佳
+</footer>
+
+</body>
+</html>

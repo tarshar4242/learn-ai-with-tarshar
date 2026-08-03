@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>自動化概念＋Notion x LINE 實作｜互動式學習地圖</title>
+<meta name="description" content="EP10 晨學講堂：不用 n8n、不用付費工具，靠 Notion 整合 API＋LINE Messaging API＋Google Apps Script 三步接起自動化——為什麼要自動化、設定 Notion、設定 LINE 官方帳號、Apps Script 接橋與實測，互動式多層次學習地圖">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269;
+  --green:#3f8560; --orange:#bf6a1e; --red:#c0453f; --teal:#0d8f80; --amber:#9c7b23;
+  --feat:#bf6a1e; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(28px,4.6vw,46px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--txt);background:none;-webkit-text-fill-color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:660px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:9px}
+.steps li{list-style:none;counter-increment:st;display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--txt2);line-height:1.7}
+.steps li::before{content:counter(st);flex:none;width:25px;height:25px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:var(--c,var(--feat));margin-top:1px}
+.steps li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+.prompt,.promptbox{background:#1d1d1f;border:1px solid #2c2c31;border-radius:10px;padding:13px 15px;margin-top:6px;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt b,.promptbox b{color:#fff}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <a class="navlink" href="../radio/" style="border-color:#e0bd97" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <div class="logo">
+    <div class="dot">🔗</div>
+    <div>自動化地圖<small>MORNING LEARNING · EP10</small></div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋技能關鍵字：Notion、天線、LINE、Webhook、Apps Script…" autocomplete="off">
+  </div>
+  <a class="navlink" href="ep10-notes.html">📝 課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">EP10 · 晨學講堂 · 自動化實作</span>
+  <h1>自動化概念<br>＋ Notion x LINE 實作</h1>
+  <p class="sub">不用 n8n、不用付費工具，靠 <b>Notion 整合 API＋LINE Messaging API＋Google Apps Script</b> 三個免費服務接起來，訊息傳進 LINE 就自動存進 Notion。<br>點進每一章，逐層展開<b>本集實際教到</b>的每一個操作步驟，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🎙️ 生成式AI應用電台・晨學講堂</span>
+    <span>🔗 自動化串接雛型</span>
+    <span>🆓 完全免費、免 n8n</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>4</b><span>大主題</span></div>
+  <div class="stat"><b>9</b><span>實戰技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 9 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--blue)" onclick="showChapter('concept')">
+        <div class="glowline"></div><span class="emoji">💡</span>
+        <h3><em>CHAPTER 01</em>為什麼要自動化</h3>
+        <p>今天到底要做什麼：不靠 n8n、不花錢，讓 LINE 直接連 Notion；以及四步驟總覽跟 n8n 節點概念的關係。</p>
+        <div class="foot"><div class="mini"><i data-mini="concept"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--cyan)" onclick="showChapter('notion')">
+        <div class="glowline"></div><span class="emoji">🗂️</span>
+        <h3><em>CHAPTER 02</em>設定 Notion</h3>
+        <p>建立資料庫、設定四個必要欄位，再打開「對外天線」（Integration）讓外部程式讀得到、寫得進去。</p>
+        <div class="foot"><div class="mini"><i data-mini="notion"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--green)" onclick="showChapter('line')">
+        <div class="glowline"></div><span class="emoji">💬</span>
+        <h3><em>CHAPTER 03</em>設定 LINE 官方帳號</h3>
+        <p>建立 Messaging API 頻道、關掉歡迎訊息開啟聊天，拿到 Channel secret 與 access token 兩把金鑰。</p>
+        <div class="foot"><div class="mini"><i data-mini="line"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--orange)" onclick="showChapter('bridge')">
+        <div class="glowline"></div><span class="emoji">🌉</span>
+        <h3><em>CHAPTER 04</em>Apps Script 接橋＋實測</h3>
+        <p>用 Google Apps Script 部署成 Web App、填入四個金鑰、設定 LINE Webhook 並驗證，最後實測成功與常見雷點。</p>
+        <div class="foot"><div class="mini"><i data-mini="bridge"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+
+    <div class="resources">
+      <h3>📦 <span>課程原始資料</span></h3>
+      <div class="res-grid">
+        <a href="ep10-notes.html"><span class="ic">📝</span><span><b>課堂筆記</b>逐字稿聽打＋畫面逐幀嵌入 9 張實錄截圖</span></a>
+        <a href="../radio/"><span class="ic">📻</span><span><b>直播電台系列</b>回系列總覽，一集一卡</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-concept" class="view" style="--c:var(--blue)"></section>
+  <section id="view-notion" class="view" style="--c:var(--cyan)"></section>
+  <section id="view-line" class="view" style="--c:var(--green)"></section>
+  <section id="view-bridge" class="view" style="--c:var(--orange)"></section>
+</main>
+
+<footer>
+  本頁為 EP10「自動化概念＋Notion x LINE 實作」課後整理・介面沿用本站互動式學習地圖設計<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2026｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+const DATA = {
+  concept: {
+    key:'concept', color:'var(--blue)', emoji:'💡', code:'CHAPTER 01', title:'為什麼要自動化',
+    intro:'先搞懂今天到底要做什麼、為什麼不用 n8n 也能做自動化，以及四步驟怎麼串成一條線。',
+    topics:[
+      {t:'今天要做什麼：免 n8n、免付費的 LINE x Notion', s:'開場破題｜00:44–03:00',
+       blocks:[
+        {h:'開場定調',p:'「你不用透過 n8n，你也不用透過任何付費的工具，就可以讓 LINE 直接去連接你的 Notion。」老師開場第一句話就把今天的目標講清楚。'},
+        {h:'基本模式',ul:['先在 <b>Notion</b> 建帳號、設定表格。','傳訊息給一個 <b>LINE 官方帳號</b>。','官方帳號自動把資料彙整到 Notion 的表格。']},
+        {h:'延伸想像',p:'代辦事項、研究訪談記錄、生活靈感，甚至照片轉文字稿後彙整摘要，都是同一套模式的延伸——今天教的只是一個 sample，怎麼玩看每個人自己的需求。'},
+        {h:'來源交代',tip:'老師特別聲明：今天示範的自動化流程不是自己寫的，是 Threads 上一位網友寫的範例，適合當 n8n／自動化入門教材，因此拿來延伸示範並公開告知出處。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep10-notes.html#sec-why" style="color:var(--blue)">筆記 1：為什麼要學自動化</a>'}]},
+      {t:'四步驟總覽＋跟 n8n 節點概念的關係', s:'串聯全貌｜56:00–66:57',
+       blocks:[
+        {h:'四步驟串起來',steps:['Notion 建資料庫（四個必要欄位）。','開 Notion 對外天線（Integration，三個讀寫權限）。','建 LINE 官方帳號並啟用 Messaging API（拿兩把金鑰）。','用 Google Apps Script 當橋樑（填四個值＋部署＋設定 Webhook）。']},
+        {h:'跟 n8n 的差別',p:'n8n 可以用付費方案把節點直接拖拉串接，快很多；今天這套完全免費，但逼你搞懂每一段串接在做什麼——這正是學 n8n 前最重要的地基：「理解每一個節點怎麼去把它接起來」。'},
+        {h:'老師的真實用法',tip:'把工作用的 LINE 訊息習慣性轉貼給自己的「小幫手」官方帳號，它自動整理進 Notion；之後只要打開 Notion 看整理過的清單就好，不用一直在 LINE 裡翻找。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep10-notes.html#sec-recap" style="color:var(--blue)">筆記 7：重點整理與 n8n 的關係</a>'}]}
+    ]
+  },
+  notion: {
+    key:'notion', color:'var(--cyan)', emoji:'🗂️', code:'CHAPTER 02', title:'設定 Notion',
+    intro:'把 Notion 準備成一個「收得到訊息、也讓外部程式讀寫得到」的資料庫。',
+    topics:[
+      {t:'建立資料庫，設定四個必要欄位', s:'訊息內容／建立時間／分類／狀態｜07:05–14:52',
+       blocks:[
+        {h:'四個必要欄位',table:{head:['欄位名稱','型態','用途'],rows:[['訊息內容','Title','儲存 LINE 訊息文字'],['建立時間','Date','自動記錄傳送時間'],['分類','Select','生活／記帳／教學等自訂分類'],['狀態','Status','必須有「待處理」「已完成」兩個選項']]}},
+        {h:'操作重點',ul:['新增頁面 → 資料庫 → <b>空白資料庫</b>（不要用範本，欄位名稱要跟程式碼對得上）。','狀態欄位的「待處理」「已完成」<b>一定要打</b>，程式要靠這個名稱抓資料型態。','命名資料庫後會立即自動存檔。']},
+        {h:'別忘記存起來',warn:'資料庫網址裡 notion.so/ 後面一長串到「?」問號之前，就是這個資料庫的 ID，之後串接一定會用到，要先框起來記下來。'},
+        {h:'看課堂筆記',shot:{img:'ep10-img/slide03.jpg',cap:'投影片：四個必要欄位對照表'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep10-notes.html#sec-notion" style="color:var(--cyan)">筆記 2：建立 Notion 資料庫</a>'}]},
+      {t:'打開對外天線（Integration／API Key）', s:'天線＝Integration，密碼＝API Key｜17:45–26:16',
+       blocks:[
+        {h:'老師的比喻',ul:['<b>資料庫＝家</b>。','<b>Integration＝天線</b>。','<b>API Key＝天線的 WiFi 密碼</b>。','把整合連結到資料庫＝把天線插進房子裡。']},
+        {h:'關鍵步驟',steps:['到 notion.so/my-integrations 建立新整合，命名、選工作區。','功能設定裡把 <b>讀取內容／更新內容／插入內容</b> 三個權限全部打開。','複製「內部整合密鑰」存起來，這是天線的密碼。','回到資料庫「⋯」→「連結」→「編輯連結」，在私人分類找到剛建的整合並連上。']},
+        {h:'驗證',tip:'回到資料庫「⋯」，看到「連結」欄位已列出整合名稱，就代表天線接好了。'},
+        {h:'看課堂筆記',shot:{img:'ep10-img/slide04.jpg',cap:'實際畫面：讀取內容／更新內容／插入內容三個權限全部勾選'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep10-notes.html#sec-antenna" style="color:var(--cyan)">筆記 3：打開 Notion 對外天線</a>'}]}
+    ]
+  },
+  line: {
+    key:'line', color:'var(--green)', emoji:'💬', code:'CHAPTER 03', title:'設定 LINE 官方帳號',
+    intro:'建立官方帳號並開通 Messaging API，才能讓外部程式接收使用者傳進來的訊息——這段最容易卡關。',
+    topics:[
+      {t:'建立 LINE 官方帳號與 Messaging API 頻道', s:'developers.line.biz｜27:00–34:56',
+       blocks:[
+        {h:'建立流程',steps:['LINE Developers 建立提供者（Provider）。','提供者底下 Create 一個 Channel，型態選 <b>Messaging API</b>。','導向官方帳號後台，填帳號名稱／Email／地區／業種。','認證選「稍後進行認證」（正式認證要付費，課堂不需要）。']},
+        {h:'常卡關提醒',warn:'老師特別提醒這段「很多人會卡在這裡，它要調來調去」，一定要照畫面順序一步步做，畫面跟老師不一樣時先確認自己是否用 LINE 帳號完成登入。'},
+        {h:'看課堂筆記',shot:{img:'ep10-img/slide05.jpg',cap:'LINE Developers 建立訊息傳遞 API 通道頁面'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep10-notes.html#sec-line" style="color:var(--green)">筆記 4：建立 LINE 官方帳號</a>'}]},
+      {t:'關鍵設定＋拿到兩把金鑰', s:'Channel secret／Channel access token｜34:56–39:19',
+       blocks:[
+        {h:'三個必做設定',ul:['「回應設定」關掉<b>加入歡迎訊息</b>。','打開<b>聊天</b>。','啟用 <b>Messaging API</b>（同意條款）。']},
+        {h:'兩把金鑰',table:{head:['金鑰','在哪裡拿'],rows:[['Channel secret','Basic settings 分頁直接複製'],['Channel access token','Messaging API 分頁按「issue」產生後複製']]}},
+        {h:'原本就有官方帳號怎麼辦',tip:'不用重新建立，一樣到既有帳號的 Basic Setting 頁面拿 Channel secret／token，可以直接接上同一套流程。'},
+        {h:'看課堂筆記',shot:{img:'ep10-img/slide06.jpg',cap:'Messaging API 設定頁：Bot basic ID 與加好友 QR code'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep10-notes.html#sec-line" style="color:var(--green)">筆記 4：兩把金鑰怎麼拿</a>'}]}
+    ]
+  },
+  bridge: {
+    key:'bridge', color:'var(--orange)', emoji:'🌉', code:'CHAPTER 04', title:'Apps Script 接橋＋實測',
+    intro:'用 Google Apps Script 當「翻譯機」把 LINE 跟 Notion 接起來，部署成 Web App，最後實際傳訊息驗收成果。',
+    topics:[
+      {t:'用 Google Apps Script 部署 Web App', s:'擴充功能＝Apps Script｜41:00–45:00',
+       blocks:[
+        {h:'部署流程',steps:['開新 Google 試算表，擴充功能 → Apps Script，貼上現成範本程式碼。','部署 → 新增部署作業 → 類型選 <b>網頁應用程式</b> → 存取權選 <b>所有人</b>。','第一次要授權：選帳號 → 進階 → 前往（不安全）→ 允許。','部署完成會自動生成 Setup 設定頁與內建使用說明。']},
+        {h:'內建使用說明（實際畫面文字）',blockquote:'📌 使用說明\n1. 在 B1~B4 填入對應的 Token 和 ID\n2. 在 B5 填入允許的 LINE User ID（多個以逗號分隔，留空則允許所有人）\n3. 部署此專案為網頁應用程式\n4. 將部署網址設定到 LINE Developers 的 Webhook URL'},
+        {h:'建議做法',tip:'不要直接用別人分享的試算表副本操作（權限可能受限），自己開一個全新試算表把整段程式碼複製貼上最保險。'},
+        {h:'看課堂筆記',shot:{img:'ep10-img/slide08.jpg',cap:'Apps Script「新增部署作業」對話框，選網頁應用程式'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep10-notes.html#sec-bridge" style="color:var(--orange)">筆記 5：Google Apps Script 接橋</a>'}]},
+      {t:'填入四把金鑰＋設定 LINE Webhook 並驗證', s:'B1~B5 設定值｜45:00–51:09',
+       blocks:[
+        {h:'B1~B5 要填什麼',table:{head:['欄位','內容'],rows:[['B1~B4','LINE Channel access token／Channel secret／Notion API Key／Notion 資料庫 ID'],['B5（選填）','允許的 LINE User ID，白名單，留空則允許所有人']]}},
+        {h:'串接最後一步',steps:['填完四個值後再部署一次，取得正式 Web App 網址。','回 LINE Developers → Messaging API → Webhook settings → 貼上網址 → 更新。','按 Verify（驗證），出現 <b>success</b> 代表接通。']},
+        {h:'驗證失敗怎麼辦',warn:'回頭檢查 B1~B4 四個值有沒有貼對貼全，這是最常見的失敗原因；Google 授權偶爾會判定失敗，等約 15 分鐘再重新部署即可。'},
+        {h:'看課堂筆記',shot:{img:'ep10-img/slide07.jpg',cap:'範本試算表內建教學：複製 Channel secret 與 access token 的步驟'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep10-notes.html#sec-bridge" style="color:var(--orange)">筆記 5：填值與 Webhook 設定</a>'}]},
+      {t:'實測成功＋常見雷點', s:'掃 QR 加好友、傳訊息驗收｜52:00–62:14',
+       blocks:[
+        {h:'實測步驟',steps:['掃畫面上的 QR code 加官方帳號好友。','傳一句話（老師示範「寫一本書的大綱」）。','Notion 資料庫立即自動多一筆記錄，訊息內容／建立時間／分類／狀態全部自動填好。']},
+        {h:'常見雷點',table:{head:['狀況','說明'],rows:[['圖片／檔案沒被記錄','程式預設只抓文字，要支援需加 Notion 欄位＋改 Apps Script 程式碼'],['怕陌生人也傳訊息','B5 只填自己的 LINE User ID 做白名單'],['Webhook 驗證失敗','檢查 B1~B4 四個設定值是否貼對貼全'],['部署／授權卡住','等約 15 分鐘重新部署即可']]}},
+        {h:'真實成果',tip:'課堂上多位學員同時測試都成功同步，證明「LINE → Google Apps Script → Notion」整條串接是通的。'},
+        {h:'看課堂筆記',shot:{img:'ep10-img/slide09.jpg',cap:'Notion 資料庫真實同步多筆 LINE 傳入訊息'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep10-notes.html#sec-test" style="color:var(--orange)">筆記 6：實測成功＋常見雷點</a>'}]}
+    ]
+  }
+};
+const ORDER = ['concept','notion','line','bridge'];
+const $ = s=>document.querySelector(s);
+function renderChapter(ch){
+  const d=DATA[ch];const next=ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];const prev=ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html=`<div class="chapter-head"><span class="emoji">${d.emoji}</span><div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div></div>`;
+  d.topics.forEach((tp,i)=>{const id=`${ch}-${i}`;
+    html+=`<div class="topic" id="topic-${id}"><div class="topic-head" onclick="toggleTopic('${id}')"><span class="num">${i+1}</span><h4>${tp.t}<small>${tp.s}</small></h4><input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)"><span class="chev">▶</span></div><div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{html+=`<div class="block"><h5>${b.h}</h5>`;
+      if(b.p)html+=`<p>${b.p}</p>`;
+      if(b.ul)html+=`<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps)html+=`<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.table)html+=`<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.shot)html+=`<figure class="shot" style="margin:0;border:1px solid var(--line);border-radius:10px;overflow:hidden"><img src="${b.shot.img}" alt="" loading="lazy" style="display:block;width:100%;height:auto"><figcaption style="font-size:12.5px;color:var(--txt3);padding:9px 14px;border-top:1px solid var(--line);background:var(--bg2)">${b.shot.cap}</figcaption></figure>`;
+      if(b.blockquote)html+=`<div class="prompt">${b.blockquote.replace(/\n/g,'<br>')}</div>`;
+      if(b.tip)html+=`<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn)html+=`<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html+=`</div>`;});
+    html+=`</div></div></div>`;});
+  html+=`<div class="chapnav"><a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a><a onclick="showHome()" style="text-align:center">回總覽<b>🏠 四大主題</b></a><a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a></div>`;
+  $('#view-'+ch).innerHTML=html;
+}
+ORDER.forEach(renderChapter);
+function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('#view-'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function showHome(){switchView('home');$('#crumbs').style.display='none';clearSearch();}
+function showChapter(ch){switchView(ch);$('#crumbs').style.display='flex';$('#crumbHere').textContent=`${DATA[ch].emoji} ${DATA[ch].title}`;clearSearch();syncChecks();}
+function toggleTopic(id){$('#topic-'+id).classList.toggle('open');}
+function openTopic(ch,i){showChapter(ch);const el=$('#topic-'+ch+'-'+i);el.classList.add('open');setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+const KEY='ep10-skills-v1';
+const store=()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){const s=store();if(val)s[id]=1;else delete s[id];localStorage.setItem(KEY,JSON.stringify(s));updateProgress();}
+const TOTAL=ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){const done=Object.keys(store()).length;const pct=Math.round(done/TOTAL*100);$('#progFill').style.width=pct+'%';$('#progText').textContent=`${done} / ${TOTAL} 項技能已掌握`;$('#statDone').textContent=done;$('#statPct').textContent=pct+'%';ORDER.forEach(ch=>{const sub=DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;const el=document.querySelector(`[data-mini="${ch}"]`);if(el)el.style.width=Math.round(sub/DATA[ch].topics.length*100)+'%';});}
+function syncChecks(){const s=store();document.querySelectorAll('input[data-skill]').forEach(cb=>{cb.checked=!!s[cb.dataset.skill];});}
+function resetProgress(){if(confirm('確定要清空所有打勾進度嗎？')){localStorage.removeItem(KEY);syncChecks();updateProgress();}}
+function stripTags(s){return s.replace(/<[^>]+>/g,'');}
+const INDEX=[];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{let body=tp.s+' ';tp.blocks.forEach(b=>{if(b.p)body+=stripTags(b.p)+' ';if(b.ul)body+=b.ul.map(stripTags).join(' ')+' ';if(b.steps)body+=b.steps.map(stripTags).join(' ')+' ';if(b.tip)body+=stripTags(b.tip)+' ';if(b.warn)body+=stripTags(b.warn)+' ';if(b.blockquote)body+=b.blockquote+' ';if(b.table)body+=b.table.rows.flat().map(stripTags).join(' ')+' ';});INDEX.push({ch,i,title:tp.t,body});}));
+$('#searchInput').addEventListener('input',e=>{const q=e.target.value.trim();const box=$('#searchResults');if(!q){box.classList.remove('show');box.innerHTML='';return;}const hits=INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));box.classList.add('show');if(!hits.length){box.innerHTML=`<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：天線、Webhook、金鑰、Apps Script）</div>`;return;}const hl=s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);box.innerHTML=hits.map(x=>{const pos=x.body.toLowerCase().indexOf(q.toLowerCase());const snip=x.body.substr(Math.max(0,pos-20),90);return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})"><div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div><h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;}).join('');});
+function clearSearch(){$('#searchInput').value='';$('#searchResults').classList.remove('show');$('#searchResults').innerHTML='';}
+syncChecks();updateProgress();
+</script>
+</body>
+</html>

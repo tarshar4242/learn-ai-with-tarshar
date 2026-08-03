@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>會議紀錄字幕工作流｜互動式學習地圖</title>
+<meta name="description" content="EP29 晨學講堂：會議紀錄字幕工作流——語音轉文字工具選擇、逐字稿產出與整理、會議紀錄生成、字幕(VTT)製作、NotebookLM 自動化工作流、結構化 YAML 指令五大應用，互動式多層次學習地圖">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269;
+  --green:#3f8560; --orange:#bf6a1e; --red:#c0453f; --teal:#0d8f80;
+  --feat:#2f8ba0; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(28px,4.6vw,46px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--txt);background:none;-webkit-text-fill-color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:660px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:9px}
+.steps li{list-style:none;counter-increment:st;display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--txt2);line-height:1.7}
+.steps li::before{content:counter(st);flex:none;width:25px;height:25px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:var(--c,var(--feat));margin-top:1px}
+.steps li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+.prompt,.promptbox{background:#1d1d1f;border:1px solid #2c2c31;border-radius:10px;padding:13px 15px;margin-top:6px;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt b,.promptbox b{color:#fff}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <a class="navlink" href="../radio/" style="border-color:#0aa6c9" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <div class="logo">
+    <div class="dot">🎙️</div>
+    <div>會議紀錄字幕工作流技能地圖<small>MORNING LEARNING · EP29</small></div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋技能關鍵字：逐字稿、VTT、時間戳、NotebookLM、YAML…" autocomplete="off">
+  </div>
+  <a class="navlink" href="ep29-notes.html">📝 逐節課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">EP29 · 晨學講堂 · 2026/03/13</span>
+  <h1>會議紀錄字幕工作流</h1>
+  <p class="sub">把錄音檔變成逐字稿、會議紀錄、字幕——再把口語提示詞升級成結構化 <b>YAML</b> 指令，讓 AI 每次輸出都精準重現。<br>點進每一章，逐層展開<b>本集實際教學</b>的工具、規則與 Prompt 範本，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🎙️ 生成式AI應用電台・晨學講堂</span>
+    <span>🧩 六大主題 · 13 項實錄技能</span>
+    <span>📄 逐字稿全長 07:34</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>6</b><span>大主題</span></div>
+  <div class="stat"><b>13</b><span>實錄技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 13 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--cyan)" onclick="showChapter('tools')">
+        <div class="glowline"></div>
+        <span class="emoji">🎙️</span>
+        <h3><em>CHAPTER 01</em>語音轉文字工具選擇</h3>
+        <p>Gemini／NotebookLM／Google AI Studio／雅婷／Word／Otter.ai 六工具比較，依錄音長度與使用頻率選對工具。</p>
+        <div class="foot"><div class="mini"><i data-mini="tools"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--blue)" onclick="showChapter('transcript')">
+        <div class="glowline"></div>
+        <span class="emoji">📝</span>
+        <h3><em>CHAPTER 02</em>逐字稿產出與整理</h3>
+        <p>時間戳格式規則、轉錄 Prompt 範本，再把口語內容整理成問題、回覆與決策。</p>
+        <div class="foot"><div class="mini"><i data-mini="transcript"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--purple)" onclick="showChapter('minutes')">
+        <div class="glowline"></div>
+        <span class="emoji">🗒️</span>
+        <h3><em>CHAPTER 03</em>會議紀錄生成</h3>
+        <p>用五要素（名稱／時間／出席／討論／決議）Prompt，把整理好的逐字稿轉成正式會議紀錄。</p>
+        <div class="foot"><div class="mini"><i data-mini="minutes"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--orange)" onclick="showChapter('subtitle')">
+        <div class="glowline"></div>
+        <span class="emoji">🎬</span>
+        <h3><em>CHAPTER 04</em>字幕（VTT）製作</h3>
+        <p>每段字幕不超過 3 秒的斷句規則、Google AI Studio 實機示範產出 WEBVTT、YouTube／雲端字幕軌上架流程。</p>
+        <div class="foot"><div class="mini"><i data-mini="subtitle"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--green)" onclick="showChapter('automation')">
+        <div class="glowline"></div>
+        <span class="emoji">🤖</span>
+        <h3><em>CHAPTER 05</em>NotebookLM 與自動化工作流</h3>
+        <p>NotebookLM 會議分析抽取重點與待辦，再把六步驟串成一套完整的 AI 會議紀錄自動化系統。</p>
+        <div class="foot"><div class="mini"><i data-mini="automation"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--pink)" onclick="showChapter('yaml')">
+        <div class="glowline"></div>
+        <span class="emoji">🧩</span>
+        <h3><em>CHAPTER 06</em>結構化 YAML 指令</h3>
+        <p>從口語提示詞升級到 YAML：task/input/output 精準定義，涵蓋文字、圖像、資訊圖表、報告、AI Agent 工作流五大應用。</p>
+        <div class="foot"><div class="mini"><i data-mini="yaml"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+
+    <div class="resources">
+      <h3>📦 <span>課程原始資料</span></h3>
+      <div class="res-grid">
+        <a href="https://drive.google.com/file/d/1oesyFmt3GKHDr4osP9ZErpUk3WGRvR_i/view" target="_blank" rel="noopener"><span class="ic">🎬</span><span><b>錄影回放</b>完整課程影片</span></a>
+        <a href="ep29-notes.html"><span class="ic">📝</span><span><b>逐節課堂筆記</b>官方簡報原圖 + 逐字稿時間戳佐證</span></a>
+        <a href="../radio/"><span class="ic">📻</span><span><b>直播電台系列</b>回系列總覽，一集一卡</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-tools" class="view" style="--c:var(--cyan)"></section>
+  <section id="view-transcript" class="view" style="--c:var(--blue)"></section>
+  <section id="view-minutes" class="view" style="--c:var(--purple)"></section>
+  <section id="view-subtitle" class="view" style="--c:var(--orange)"></section>
+  <section id="view-automation" class="view" style="--c:var(--green)"></section>
+  <section id="view-yaml" class="view" style="--c:var(--pink)"></section>
+</main>
+
+<footer>
+  本頁為 EP29「會議紀錄字幕工作流」課後整理・介面沿用本站 EP44～EP46 互動式學習地圖<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2026｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+/* ═══════════ 課程資料（章 → 技能 → 內容區塊） ═══════════ */
+const DATA = {
+  tools: {
+    key:'tools', color:'var(--cyan)', emoji:'🎙️', code:'CHAPTER 01', title:'語音轉文字工具選擇',
+    intro:'「市面上的工具真的超多的，你可能會想說到底要選哪一個？」選型關鍵只有兩個：錄音長度，跟你多常使用。',
+    topics:[
+      {t:'六工具分鐘限制比較', s:'Gemini／NotebookLM／AI Studio／雅婷／Word／Otter｜逐字稿 01:52',
+       blocks:[
+        {h:'比較表（官方簡報 2026 確認版）',table:{head:['工具','免費分鐘限制','單次音檔限制'],rows:[
+          ['Gemini（免費版）','未公開每月分鐘數','約 10 分鐘／次'],
+          ['NotebookLM','未公開，依檔案大小／token','未明確限制'],
+          ['Google AI Studio（API）','無免費分鐘概念（API計費）','約 8.4 小時／次（1M tokens）'],
+          ['雅婷逐字稿','約 3 分鐘試用','需購買時數'],
+          ['Microsoft Word 聽寫','300 分鐘／月','Microsoft 365 配額'],
+          ['Otter.ai（Free）','300 分鐘／月','30 分鐘／次錄音']]}},
+        {h:'選型原話',p:'逐字稿 <span class="ts" style="margin:0"></span>02:16：「短的錄音，免費版 Gemini 就綽綽有餘了；長達好幾個小時的演講或訪談，Google AI Studio 的 API 絕對是你的首選。」'},
+        {h:'看實錄截圖',p:'👉 <a href="ep29-notes.html#sec-tools" style="color:var(--cyan)">逐節筆記 2：語音轉文字工具比較（含官方分鐘限制原圖）</a>'}]},
+      {t:'選型三問', s:'長度／頻率／預算｜PDF 筆記概念一',
+       blocks:[
+        {h:'判斷步驟',steps:[
+          '先問：這份錄音有多長？短於 10 分鐘可用免費 Gemini。',
+          '再問：多常用？高頻率、大量長音訊，直接上 Google AI Studio API。',
+          '最後問：要不要付費？Word／Otter 有 300 分鐘／月的免費額度，適合中量使用者。']},
+        {h:'一句話記憶',p:'「短音訊、偶爾用 → Gemini；長音訊、常常用 → AI Studio API；中量、想要免費額度 → Word 或 Otter。」'}]}
+    ]
+  },
+  transcript: {
+    key:'transcript', color:'var(--blue)', emoji:'📝', code:'CHAPTER 02', title:'逐字稿產出與整理',
+    intro:'「第一，先把聲音錄下來；第二，丟給 AI 做語音轉文字。」拿到逐字稿只是半成品，還要整理成問題與決策，才是真正有用的資料。',
+    topics:[
+      {t:'逐字稿格式規則', s:'時間戳放句首｜官方簡報 p7',
+       blocks:[
+        {h:'四條規則',ul:[
+          '<b>逐句顯示</b>語音內容，不整段黏在一起。',
+          '<b>每句加時間戳</b>，方便回頭核對錄音原文。',
+          '格式固定 <b>00:00:00</b>，時分秒補零。',
+          '時間標示<b>放在句首</b>，一眼定位錄音秒數。']},
+        {h:'轉錄 Prompt 範本',prompt:'將錄音檔轉換為逐字稿，每句話需加入時間戳，格式為 00:00:00 開頭。'},
+        {h:'看實錄截圖',p:'👉 <a href="ep29-notes.html#t-rule" style="color:var(--blue)">逐節筆記 3.1：逐字稿格式規則</a>'}]},
+      {t:'整理成問題與決策', s:'刪語助詞、依議題分段｜逐字稿 01:36',
+       blocks:[
+        {h:'整理四步驟',ul:[
+          '<b>刪除語助詞與重複語句</b>（嗯、啊、就是說）。',
+          '<b>依照議題分段整理</b>，把跳來跳去的討論收攏。',
+          '<b>整理問題與回答</b>的配對關係。',
+          '<b>產生重點摘要</b>，沒開會的人也能三分鐘看懂。']},
+        {h:'整理 Prompt 範本',prompt:'以下為逐字稿，請整理為：討論問題、主要回覆、重要決策。'},
+        {h:'提醒',tip:'兩步驟拆開下指令（先整理、再生成正式紀錄）比一次到位更穩，逐字稿越長越明顯。'},
+        {h:'看實錄截圖',p:'👉 <a href="ep29-notes.html#o-clean" style="color:var(--blue)">逐節筆記 4.1：整理成問題與決策</a>'}]}
+    ]
+  },
+  minutes: {
+    key:'minutes', color:'var(--purple)', emoji:'🗒️', code:'CHAPTER 03', title:'會議紀錄生成',
+    intro:'整理完成後，再用一條指令把逐字稿轉成正式格式的會議紀錄——會議名稱、時間、出席人員、討論事項、決議事項，五個欄位一次到位。',
+    topics:[
+      {t:'五要素會議紀錄 Prompt', s:'匯入→整理→生成→輸出｜PDF 筆記概念四',
+       blocks:[
+        {h:'會議紀錄 Prompt',prompt:'根據逐字稿生成會議紀錄，包含：會議名稱、時間、出席人員、討論事項、決議事項。'},
+        {h:'五欄位對應',table:{head:['欄位','對應內容'],rows:[
+          ['會議名稱','逐字稿主題或使用者補充資訊'],
+          ['時間','錄音檔的日期／起訖時間'],
+          ['出席人員','逐字稿中辨識出的講者'],
+          ['討論事項','整理後的問題與主要回覆'],
+          ['決議事項','整理後的重要決策']]}},
+        {h:'看實錄截圖',p:'👉 <a href="ep29-notes.html#o-minutes" style="color:var(--purple)">逐節筆記 4.2：會議紀錄生成</a>'},
+        {h:'一句話記憶',p:'「先整理問題決策，再套五要素格式——順序不能反過來。」'}]}
+    ]
+  },
+  subtitle: {
+    key:'subtitle', color:'var(--orange)', emoji:'🎬', code:'CHAPTER 04', title:'字幕（VTT）製作',
+    intro:'「接下來我們就來實際操作一次，看看字幕到底是怎麼變出來的。」同一份逐字稿換個輸出格式，就能變成影片字幕。',
+    topics:[
+      {t:'斷句規則：每段不超過 3 秒', s:'依語句斷點分割｜PDF 筆記概念五',
+       blocks:[
+        {h:'字幕 Prompt（簡短版）',prompt:'請將逐字稿轉為 VTT 字幕，每段字幕不超過3秒並依語句斷點分割。'},
+        {h:'字幕 Prompt（官方 System Instructions 版）',prompt:'請產生影片逐字稿並翻譯為中文，轉成可下載的 .vtt 格式檔案，每個字幕段不超過 3 秒，並依據語句斷點分割。'},
+        {h:'看實錄截圖',p:'👉 <a href="ep29-notes.html#s-rule" style="color:var(--orange)">逐節筆記 5.1：斷句規則</a>'}]},
+      {t:'Google AI Studio 實機示範', s:'上傳影片→下指令→產出 WEBVTT｜逐字稿 02:34',
+       blocks:[
+        {h:'操作步驟',steps:[
+          '在 Google AI Studio 上傳影片。',
+          '貼上指令：「幫我把影片的逐字稿生出來，翻譯成中文，轉成可下載的 VTT 格式檔案」。',
+          'AI 自動產出時間碼精準到毫秒的 WEBVTT 檔（如 00:00.279 → 00:01.279）。',
+          '下載 .vtt，或先存成 .txt 編輯校對後再轉回 .vtt。',
+          '上傳到影片平台，完美同步的字幕就出現了。']},
+        {h:'看實錄截圖',p:'👉 <a href="ep29-notes.html#s-demo" style="color:var(--orange)">逐節筆記 5.2：AI Studio 實機示範（含真實截圖）</a>'}]},
+      {t:'YouTube／雲端字幕軌流程', s:'管理字幕軌 3–5 分鐘自動生成｜官方簡報「英文字幕」段落',
+       blocks:[
+        {h:'流程五步',ul:[
+          '影片上傳至 Google 雲端／YouTube。',
+          '點選「管理字幕軌」，約 3–5 分鐘自動偵測生成英文字幕。',
+          '需要中文字幕時，改用 AI Studio 上傳影片＋下達字幕 Prompt。',
+          '回到字幕軌管理，新增字幕軌、選語言、貼上 .vtt、啟用、儲存。',
+          '可保留系統偵測（自動）與手動上傳兩軌並存。']},
+        {h:'看實錄截圖',p:'👉 <a href="ep29-notes.html#s-youtube" style="color:var(--orange)">逐節筆記 5.3：YouTube／雲端字幕軌流程（含新增字幕軌對話框截圖）</a>'}]}
+    ]
+  },
+  automation: {
+    key:'automation', color:'var(--green)', emoji:'🤖', code:'CHAPTER 05', title:'NotebookLM 與自動化工作流',
+    intro:'單集操作示範講完後，官方簡報把整個工作流收斂成兩張總覽：NotebookLM 專責的「會議分析」，以及把六個部件串起來的「AI 會議紀錄自動化」系統。',
+    topics:[
+      {t:'NotebookLM 會議分析', s:'摘要、關鍵問題、待辦事項｜PDF 筆記概念七',
+       blocks:[
+        {h:'分析 Prompt',prompt:'分析會議逐字稿並輸出會議重點、關鍵問題與待辦事項。'},
+        {h:'定位',p:'NotebookLM 適合針對<b>已經很長</b>的逐字稿做摘要與決策抽取，不需要手動翻找整份逐字稿。官方示範影片台詞：「if you are drowning in a sea of notes, articles, meeting transcripts, you are definitely not alone」。'},
+        {h:'看實錄截圖',p:'👉 <a href="ep29-notes.html#a-nlm" style="color:var(--green)">逐節筆記 6.1：NotebookLM 會議分析</a>'}]},
+      {t:'完整 AI 會議自動化系統', s:'錄音→轉錄→摘要→字幕｜PDF 筆記概念八、九',
+       blocks:[
+        {h:'流程圖 Prompt',prompt:'請將錄音→語音轉文字→逐字稿→會議紀錄→字幕整理轉為流程圖。'},
+        {h:'系統設計 Prompt',prompt:'設計AI會議紀錄自動化系統，包含錄音、轉錄、摘要與字幕。'},
+        {h:'四大組件',table:{head:['組件','對應內容'],rows:[
+          ['AI 語音轉文字','工具選擇＋逐字稿＋時間戳'],
+          ['AI 摘要與會議紀錄','整理問題決策＋正式會議紀錄'],
+          ['AI 字幕翻譯','VTT 生成＋字幕軌流程'],
+          ['會議知識資料庫','NotebookLM 彙整多份逐字稿供查詢']]}},
+        {h:'看實錄截圖',p:'👉 <a href="ep29-notes.html#a-flow" style="color:var(--green)">逐節筆記 6.2：完整自動化流程圖</a>'}]}
+    ]
+  },
+  yaml: {
+    key:'yaml', color:'var(--pink)', emoji:'🧩', code:'CHAPTER 06', title:'結構化 YAML 指令',
+    intro:'「如果你希望每一次每一次的結果都一模一樣、完美重現呢？」這是逐字稿真實延伸出的第二條主線：把口語提示詞升級成結構化 YAML 指令。',
+    topics:[
+      {t:'為什麼要 YAML', s:'給 AI 的說明書／食譜｜逐字稿 03:44',
+       blocks:[
+        {h:'核心概念',ul:[
+          '從<b>聊天模式</b>升級到<b>寫程式的思維</b>——答案就是 YAML。',
+          'YAML 是<b>人跟機器都能看懂</b>的語言，用像填表格一樣的方式下指令。',
+          '可以下達<b>精準、可重複使用</b>的指令，讓 AI 做比較複雜的事。',
+          '核心價值：<b>沒有模糊的空間</b>，每次執行結果都可預期。']},
+        {h:'看實錄截圖',p:'👉 <a href="ep29-notes.html#y-why" style="color:var(--pink)">逐節筆記 7.1：為什麼要 YAML</a>'}]},
+      {t:'什麼時候用、什麼時候不用', s:'多步驟／模板 vs 簡單提問｜逐字稿 04:18',
+       blocks:[
+        {h:'判斷表',table:{head:['情境','建議'],rows:[
+          ['任務有很多步驟','用 YAML'],
+          ['需要定義報告架構','用 YAML'],
+          ['想建立可重複使用模板','用 YAML（超能力所在）'],
+          ['只是問個問題、簡單翻譯','不用 YAML（殺雞用牛刀）']]}},
+        {h:'白話文 vs YAML 對比',prompt:'白話文：「幫我翻譯」→ AI 還要猜要翻成什麼語言\n\nYAML：\ntask: translate\ninput: 中文\noutput: 英文\n→ 指令超清晰，完全沒有模糊空間'},
+        {h:'看實錄截圖',p:'👉 <a href="ep29-notes.html#y-when" style="color:var(--pink)">逐節筆記 7.2：什麼時候用、什麼時候不用</a>'}]},
+      {t:'五大應用實例', s:'文字／圖像／資訊圖表／報告／AI Agent｜逐字稿 04:58–07:17',
+       blocks:[
+        {h:'五大應用',steps:[
+          '<b>文字生成</b>：雙語文章，規定骨架含「背景、挑戰、解決方案」章節。',
+          '<b>圖像生成</b>：精準指定主題（未來 AI 城市）、風格（賽博龐克）、燈光、4K 解析度。',
+          '<b>資訊圖表生成</b>：定義標題、比較工具、比較指標，不再需要開 Illustrator。',
+          '<b>報告編排</b>：固定模板，確保每份報告都有一樣的專業結構。',
+          '<b>AI Agent 工作流</b>：研究員 AI 找資料 → 分析師 AI 挖洞見 → 寫手 AI 寫報告，全自動化團隊合作。']},
+        {h:'一句話記憶',p:'「今天從一個解決會議紀錄的小技巧開始，一路聊到怎麼用結構化的方式去精準控制 AI。」——課堂逐字稿 07:17 自我總結'},
+        {h:'看實錄截圖',p:'👉 <a href="ep29-notes.html#y-apps" style="color:var(--pink)">逐節筆記 7.3：五大應用實例</a>'}]}
+    ]
+  }
+};
+
+/* ═══════════ 渲染 ═══════════ */
+const ORDER = ['tools','transcript','minutes','subtitle','automation','yaml'];
+const $ = s=>document.querySelector(s);
+
+function renderChapter(ch){
+  const d = DATA[ch];
+  const next = ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];
+  const prev = ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html = `
+  <div class="chapter-head">
+    <span class="emoji">${d.emoji}</span>
+    <div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div>
+  </div>`;
+  d.topics.forEach((tp,i)=>{
+    const id = `${ch}-${i}`;
+    html += `
+    <div class="topic" id="topic-${id}">
+      <div class="topic-head" onclick="toggleTopic('${id}')">
+        <span class="num">${i+1}</span>
+        <h4>${tp.t}<small>${tp.s}</small></h4>
+        <input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)">
+        <span class="chev">▶</span>
+      </div>
+      <div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{
+      html += `<div class="block"><h5>${b.h}</h5>`;
+      if(b.p) html += `<p>${b.p}</p>`;
+      if(b.ul) html += `<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps) html += `<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.prompt) html += `<div class="promptbox">${b.prompt}</div>`;
+      if(b.table) html += `<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.tip) html += `<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn) html += `<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html += `</div>`;
+    });
+    html += `</div></div></div>`;
+  });
+  html += `
+  <div class="chapnav">
+    <a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a>
+    <a onclick="showHome()" style="text-align:center">回總覽<b>🏠 六大主題</b></a>
+    <a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a>
+  </div>`;
+  $('#view-'+ch).innerHTML = html;
+}
+ORDER.forEach(renderChapter);
+
+function switchView(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  $('#view-'+id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function showHome(){ switchView('home'); $('#crumbs').style.display='none'; clearSearch(); }
+function showChapter(ch){
+  switchView(ch);
+  $('#crumbs').style.display='flex';
+  $('#crumbHere').textContent = `${DATA[ch].emoji} ${DATA[ch].title}`;
+  clearSearch(); syncChecks();
+}
+function toggleTopic(id){ $('#topic-'+id).classList.toggle('open'); }
+function openTopic(ch,i){
+  showChapter(ch);
+  const el = $('#topic-'+ch+'-'+i);
+  el.classList.add('open');
+  setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);
+}
+
+const KEY='ep29-skills-v1';
+const store = ()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){
+  const s = store(); if(val) s[id]=1; else delete s[id];
+  localStorage.setItem(KEY,JSON.stringify(s));
+  updateProgress();
+}
+const TOTAL = ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){
+  const done = Object.keys(store()).length;
+  const pct = Math.round(done/TOTAL*100);
+  $('#progFill').style.width = pct+'%';
+  $('#progText').textContent = `${done} / ${TOTAL} 項技能已掌握`;
+  $('#statDone').textContent = done;
+  $('#statPct').textContent = pct+'%';
+  ORDER.forEach(ch=>{
+    const sub = DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;
+    const el = document.querySelector(`[data-mini="${ch}"]`);
+    if(el) el.style.width = Math.round(sub/DATA[ch].topics.length*100)+'%';
+  });
+}
+function syncChecks(){
+  const s = store();
+  document.querySelectorAll('input[data-skill]').forEach(cb=>{ cb.checked = !!s[cb.dataset.skill]; });
+}
+function resetProgress(){
+  if(confirm('確定要清空所有打勾進度嗎？')){ localStorage.removeItem(KEY); syncChecks(); updateProgress(); }
+}
+
+function stripTags(s){ return s.replace(/<[^>]+>/g,''); }
+const INDEX = [];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{
+  let body = tp.s+' ';
+  tp.blocks.forEach(b=>{
+    if(b.p) body+=stripTags(b.p)+' ';
+    if(b.ul) body+=b.ul.map(stripTags).join(' ')+' ';
+    if(b.steps) body+=b.steps.map(stripTags).join(' ')+' ';
+    if(b.prompt) body+=b.prompt+' ';
+    if(b.tip) body+=stripTags(b.tip)+' ';
+    if(b.warn) body+=stripTags(b.warn)+' ';
+    if(b.table) body+=b.table.rows.flat().map(stripTags).join(' ')+' ';
+  });
+  INDEX.push({ch,i,title:tp.t,body});
+}));
+$('#searchInput').addEventListener('input',e=>{
+  const q = e.target.value.trim();
+  const box = $('#searchResults');
+  if(!q){ box.classList.remove('show'); box.innerHTML=''; return; }
+  const hits = INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));
+  box.classList.add('show');
+  if(!hits.length){ box.innerHTML = `<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：逐字稿、VTT、時間戳、NotebookLM、YAML）</div>`; return; }
+  const hl = s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);
+  box.innerHTML = hits.map(x=>{
+    const pos = x.body.toLowerCase().indexOf(q.toLowerCase());
+    const snip = x.body.substr(Math.max(0,pos-20),90);
+    return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})">
+      <div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div>
+      <h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;
+  }).join('');
+});
+function clearSearch(){ $('#searchInput').value=''; $('#searchResults').classList.remove('show'); $('#searchResults').innerHTML=''; }
+
+(function(){
+  const box = $('#stars');
+  for(let i=0;i<70;i++){
+    const s = document.createElement('i');
+    s.style.left = Math.random()*100+'%';
+    s.style.top = Math.random()*100+'%';
+    s.style.animationDelay = (Math.random()*3)+'s';
+    s.style.transform = `scale(${.5+Math.random()*1.5})`;
+    box.appendChild(s);
+  }
+})();
+
+syncChecks(); updateProgress();
+</script>
+</body>
+</html>

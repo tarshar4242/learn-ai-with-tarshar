@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP44 課堂筆記｜2026 上半年一定會的 AI 技能（逐幀實錄）</title>
+<meta name="description" content="晨學講堂 EP44 逐幀課堂筆記：以「颱風」為貫穿案例，實錄文字篇、生圖篇、AI Agent 篇、自動化篇——含真實簡報截圖、影片時間戳與逐字稿佐證">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#4f56d6; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px;border-left:none}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+.note.violet{background:#F3EFFB;border-color:#DFD2F0;color:#5a34a8}
+.note.rose{background:#FBEEF1;border-color:#F0D2DB;color:#9c2f52}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.prompt{position:relative;background:#1d1d1f;border-radius:10px;padding:15px 16px;margin:12px 0;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt .tag{display:inline-block;font-size:11px;letter-spacing:.06em;color:#c9c4ff;border:1px solid #3a3a40;border-radius:6px;padding:2px 9px;margin-bottom:8px}
+.prompt b{color:#fff}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.embed{margin:14px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000}
+.embed iframe{display:block;width:100%;aspect-ratio:16/9;border:0}
+.embed .cap{font-size:12.5px;color:var(--ink3);padding:10px 16px;background:var(--paper);border-top:1px solid var(--line)}
+.ts{display:inline-block;font-family:"Cascadia Code",Consolas,monospace;font-weight:700;font-size:12px;color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,#fff);border-radius:5px;padding:2px 8px;margin-right:7px;letter-spacing:.4px;vertical-align:middle}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+.layers{display:grid;gap:10px;margin:14px 0}
+.lyr{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:13px 15px;background:#fff}
+.lyr .n{flex:none;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--accent)}
+.lyr h4{margin:0 0 3px;font-size:14.5px}
+.lyr p{font-size:13px;margin:0}
+.sub{color:var(--ink2)}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#a8c686" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP44 課堂筆記（逐幀實錄）</b>
+  <div class="right">
+    <a class="btn" href="ep44-ai-skills.html">🗺️ 互動技能地圖</a>
+    <a class="btn" href="https://drive.google.com/drive/folders/1nOGbITVV41m0mNoHz14Vdn4Q9_RUe1cb" target="_blank" rel="noopener">🗂️ 原始資料夾</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 晨學講堂 · EP44</span>
+  <h1>「2026 年上半年<span>一定會的 AI 技能</span>」<br>逐幀課堂筆記</h1>
+  <p class="lead">本頁為<b>照錄影逐段實錄</b>的筆記：每一節都標上錄影 <span class="ts" style="margin:0">mm:ss</span> 時間戳、附上該畫面的<b>真實截圖</b>，並以講師整堂課的貫穿案例——<b>「颱風」</b>（颱風預測專家、颱風擬人化、颱風假 SWOT）——把四大篇章串成一條完整示範。</p>
+  <div class="meta">
+    <span>📅 2026/07/03（五）晚間直播</span>
+    <span>⏱️ 本段錄影全長 59 分鐘</span>
+    <span>🧵 貫穿案例：颱風</span>
+    <span>🗂️ 文字 · 生圖 · Agent · 自動化</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-map">1. 一頁看懂全課程</a>
+  <a href="#sec-timeline">2. 逐幀時間軸（59 分鐘）</a>
+  <a href="#sec-text">3. 文字篇（實錄）</a>
+  <a class="sub" href="#t-project">3.1 專案／Gem／Notebooks</a>
+  <a class="sub" href="#t-expert">3.2 颱風預測專家角色指令</a>
+  <a class="sub" href="#t-verify">3.3 巴威颱風預測＝AI 查證課</a>
+  <a class="sub" href="#t-nlm">3.4 NotebookLM 知識庫</a>
+  <a href="#sec-image">4. 生圖篇（實錄）</a>
+  <a class="sub" href="#i-duel">4.1 生圖雙雄與修圖兩派</a>
+  <a class="sub" href="#i-yaml">4.2 YAML 颱風擬人化</a>
+  <a class="sub" href="#i-annotate">4.3 圖上畫紅線讓 AI 改</a>
+  <a class="sub" href="#i-canva">4.4 Canva 魔法圖層</a>
+  <a href="#sec-agent">5. AI Agent 篇（實錄）</a>
+  <a class="sub" href="#a-tools">5.1 四大 Agent 工具</a>
+  <a class="sub" href="#a-mcp">5.2 Codex 連 NotebookLM MCP</a>
+  <a class="sub" href="#a-skill">5.3 Skill 與手機連線</a>
+  <a href="#sec-auto">6. 自動化篇（實錄）</a>
+  <a class="sub" href="#u-swot">6.1 颱風假 SWOT 報告</a>
+  <a class="sub" href="#u-video">6.2 文字轉影片成片</a>
+  <a href="#sec-check">7. 課後自我檢核</a>
+  <a href="#sec-src">8. 資料來源與製作說明</a>
+</nav>
+
+<article>
+
+<!-- ═══ 0 課程資訊 ═══ -->
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--purple),var(--pink))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>EP44_「2026 年上半年一定會的 AI 技能」</td></tr>
+    <tr><th>頻道</th><td>生成式 AI 應用電台・晨學講堂</td></tr>
+    <tr><th>直播日期</th><td>2026/07/03（五）晚間；本份筆記依據的錄影段全長 <b>59 分鐘</b></td></tr>
+    <tr><th>課程定位</th><td>半年度總複習——講師開場即說明：<i>「隨著 Agent 出來，下半年的東西會變得更快，順便把上半年的技術了解一下」</i>，並預告 <i>「我今天不會講太多 Agent，因為第一個 Agent 要花一點時間」</i></td></tr>
+    <tr><th>四大篇章</th><td>✍️ 文字篇（4）　🎨 生圖篇（4）　🤖 AI Agent 篇（7）　⚙️ 自動化篇（2）——括號為簡報章節頁數</td></tr>
+    <tr><th>貫穿案例</th><td>全程以<b>「颱風」</b>當範例：颱風預測專家角色卡 → 颱風假查詢 → 颱風擬人化 Q 版生圖 → 颱風假 SWOT 報告 → 颱風擬人化影片</td></tr>
+  </table></div>
+
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="ep44-img/01-title.jpg" alt="EP44 標題投影片" loading="lazy">
+      <figcaption><span class="ts">00:45</span>簡報首頁（slide 1/18）：「LIVE 週五直播來談談・EP44・2026 年上半年一定會的 AI 技能・ON AIR」，四個主軸圖示：提升效率／內容創作／數據分析／自動化應用。</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="ep44-img/02-project-gem-notebooks.jpg" alt="專案 Gem Notebooks 投影片" loading="lazy">
+      <figcaption><span class="ts">03:15</span>slide 3：01 專案／02 Gem／03 Notebooks，把「自訂資料＋來源資料」統一<b>轉成 .md 檔</b>當個人知識庫。</figcaption>
+    </figure>
+  </div>
+
+  <h3>📊 課程簡報（可直接翻頁預覽）</h3>
+  <div class="embed">
+    <iframe src="https://drive.google.com/file/d/10MbFHlGMs_1ISJXDcX9vFdMFlI6JgyWj/preview" allow="autoplay" loading="lazy" title="EP44 課程簡報預覽"></iframe>
+    <div class="cap">簡報_EP44_2026年上半年一定會的AI技能.pptx（25MB，18 頁滿版圖解型簡報）— 需以你的 Google 帳號登入才會顯示。<a href="https://drive.google.com/file/d/10MbFHlGMs_1ISJXDcX9vFdMFlI6JgyWj/view" target="_blank" rel="noopener">在 Drive 開啟 ↗</a></div>
+  </div>
+
+  <h3>🎬 錄影回放（可直接播放）</h3>
+  <div class="embed">
+    <iframe src="https://drive.google.com/file/d/1qpIe2YcVoOew7REmSrv8qHhrekWD-ZVz/preview" allow="autoplay" loading="lazy" title="EP44 錄影回放"></iframe>
+    <div class="cap">錄影回放_EP44（608MB，59 分鐘）— 需登入 Google 帳號。備用來源：<a href="https://drive.google.com/file/d/1JN_7ioqD19TkDEeb26vauFZVm47a2FXu/view" target="_blank" rel="noopener">原始分享錄影 ↗</a>｜<a href="https://drive.google.com/drive/folders/1nOGbITVV41m0mNoHz14Vdn4Q9_RUe1cb" target="_blank" rel="noopener">EP44 原始資料夾 ↗</a></div>
+  </div>
+  <div class="note blue">💡 本頁截圖皆<b>直接擷取自這支錄影</b>（每 15 秒抽格＋場景切換偵測，逐格親眼判讀），並對照 faster-whisper 逐字稿。播放到對應 <span class="ts" style="margin:0">mm:ss</span> 就能核對畫面。</div>
+</section>
+
+<!-- ═══ 1 全景圖 ═══ -->
+<section class="chapter" id="sec-map">
+  <span class="chip" style="background:linear-gradient(90deg,var(--cyan),var(--purple))">OVERVIEW</span>
+  <h2 class="ct">1. 一頁看懂全課程</h2>
+  <p class="cd">這堂課用一個聰明的教學設計：<b>四大篇章共用同一個範例「颱風」</b>。從「請 AI 當颱風預測專家」開始，一路做到「把颱風擬人化成 Q 版角色、生成影片、再讓 Agent 自動查會不會放颱風假」——學員看到的不是四個孤立工具，而是同一件事被四種能力接力完成。</p>
+  <figure class="diagram">
+    <svg viewBox="0 0 920 430" xmlns="http://www.w3.org/2000/svg" font-family="'Noto Sans TC',sans-serif">
+      <defs>
+        <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0aa6c9"/><stop offset="1" stop-color="#5b4fd6"/></linearGradient>
+        <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d4508e"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient>
+        <linearGradient id="g3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7a4fd6"/><stop offset="1" stop-color="#4f7cff"/></linearGradient>
+        <linearGradient id="g4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1d9e6f"/><stop offset="1" stop-color="#0aa6c9"/></linearGradient>
+        <marker id="arw" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#b9b3d9"/></marker>
+      </defs>
+      <rect width="920" height="430" fill="#fbfaff"/>
+      <text x="460" y="42" text-anchor="middle" font-size="21" font-weight="900" fill="#2b2a33">EP44 · 一個「颱風」案例，串起四條技能主線</text>
+      <ellipse cx="460" cy="103" rx="235" ry="34" fill="#f1eefc" stroke="#c9bff2"/>
+      <text x="460" y="110" text-anchor="middle" font-size="14" font-weight="700" fill="#5b4fd6">貫穿案例：以「颱風」為題，逐篇示範 2026 上半年必備技能</text>
+      <line x1="250" y1="143" x2="140" y2="190" stroke="#b9b3d9" stroke-width="2" marker-end="url(#arw)"/>
+      <line x1="390" y1="148" x2="360" y2="190" stroke="#b9b3d9" stroke-width="2" marker-end="url(#arw)"/>
+      <line x1="530" y1="148" x2="560" y2="190" stroke="#b9b3d9" stroke-width="2" marker-end="url(#arw)"/>
+      <line x1="670" y1="143" x2="780" y2="190" stroke="#b9b3d9" stroke-width="2" marker-end="url(#arw)"/>
+      <g>
+        <rect x="30" y="196" width="205" height="176" rx="16" fill="url(#g1)"/>
+        <text x="132" y="230" text-anchor="middle" font-size="17" font-weight="900" fill="#fff">✍️ 文字篇</text>
+        <text x="132" y="258" text-anchor="middle" font-size="11.5" fill="#e8faff">颱風預測「專家角色指令」</text>
+        <text x="132" y="280" text-anchor="middle" font-size="11.5" fill="#e8faff">專案＋資料來源上傳</text>
+        <text x="132" y="302" text-anchor="middle" font-size="11.5" fill="#e8faff">巴威颱風預測＝查證課</text>
+        <text x="132" y="324" text-anchor="middle" font-size="11.5" fill="#e8faff">NotebookLM 知識庫</text>
+        <text x="132" y="352" text-anchor="middle" font-size="11.5" fill="#e8faff">輸出 docx / md</text>
+      </g>
+      <g>
+        <rect x="252" y="196" width="205" height="176" rx="16" fill="url(#g2)"/>
+        <text x="354" y="230" text-anchor="middle" font-size="17" font-weight="900" fill="#fff">🎨 生圖篇</text>
+        <text x="354" y="258" text-anchor="middle" font-size="11.5" fill="#ffeef6">Nano Banana × ChatGPT 2.0</text>
+        <text x="354" y="280" text-anchor="middle" font-size="11.5" fill="#ffeef6">YAML 颱風擬人化</text>
+        <text x="354" y="302" text-anchor="middle" font-size="11.5" fill="#ffeef6">玩具總動員風格・颱風寶寶</text>
+        <text x="354" y="324" text-anchor="middle" font-size="11.5" fill="#ffeef6">圖上畫紅線讓 AI 改</text>
+        <text x="354" y="352" text-anchor="middle" font-size="11.5" fill="#ffeef6">Canva 魔法圖層</text>
+      </g>
+      <g>
+        <rect x="474" y="196" width="205" height="176" rx="16" fill="url(#g3)"/>
+        <text x="576" y="230" text-anchor="middle" font-size="17" font-weight="900" fill="#fff">🤖 AI Agent 篇</text>
+        <text x="576" y="258" text-anchor="middle" font-size="11.5" fill="#efe9ff">Opencode／Codex</text>
+        <text x="576" y="280" text-anchor="middle" font-size="11.5" fill="#efe9ff">Claude code／Antigravity</text>
+        <text x="576" y="302" text-anchor="middle" font-size="11.5" fill="#efe9ff">Codex 連 NotebookLM MCP</text>
+        <text x="576" y="324" text-anchor="middle" font-size="11.5" fill="#efe9ff">Skill：PDF／Playwright</text>
+        <text x="576" y="352" text-anchor="middle" font-size="11.5" fill="#efe9ff">手機掃碼連線</text>
+      </g>
+      <g>
+        <rect x="696" y="196" width="195" height="176" rx="16" fill="url(#g4)"/>
+        <text x="793" y="230" text-anchor="middle" font-size="17" font-weight="900" fill="#fff">⚙️ 自動化篇</text>
+        <text x="793" y="258" text-anchor="middle" font-size="11.5" fill="#e8fff5">交辦 Agent 一句話</text>
+        <text x="793" y="280" text-anchor="middle" font-size="11.5" fill="#e8fff5">颱風假 SWOT 報告</text>
+        <text x="793" y="302" text-anchor="middle" font-size="11.5" fill="#e8fff5">自動查 cwa／dgpa</text>
+        <text x="793" y="324" text-anchor="middle" font-size="11.5" fill="#e8fff5">存檔＋畫圖佐證</text>
+        <text x="793" y="352" text-anchor="middle" font-size="11.5" fill="#e8fff5">文字轉影片成片</text>
+      </g>
+      <line x1="235" y1="284" x2="252" y2="284" stroke="#b9b3d9" stroke-width="2.5" marker-end="url(#arw)"/>
+      <line x1="457" y1="284" x2="474" y2="284" stroke="#b9b3d9" stroke-width="2.5" marker-end="url(#arw)"/>
+      <line x1="679" y1="284" x2="696" y2="284" stroke="#b9b3d9" stroke-width="2.5" marker-end="url(#arw)"/>
+      <text x="460" y="404" text-anchor="middle" font-size="13" fill="#8a879a">學習路徑：先會「說」→ 再建「視覺」→ 然後「交辦」→ 最後「自動跑」，同一個颱風案例走到底</text>
+    </svg>
+    <figcaption>圖 1｜EP44 全景：四篇章共用「颱風」案例（依錄影實際示範順序整理）</figcaption>
+  </figure>
+  <div class="golden"><div class="q">「工具每季都在換，能力的分層不會換：會說、會看、會交辦、會自動。」</div><div class="a">—— 本課四章背後的共同邏輯</div></div>
+</section>
+
+<!-- ═══ 2 逐幀時間軸 ═══ -->
+<section class="chapter" id="sec-timeline">
+  <span class="chip" style="background:linear-gradient(90deg,#c98a0a,#0aa6c9)">TIMELINE</span>
+  <h2 class="ct">2. 逐幀時間軸（59 分鐘全程）</h2>
+  <p class="cd">下表把整支錄影切成可核對的段落，每一列都是<b>親眼逐格判讀</b>的實錄。點各章節可看該段的詳細筆記與截圖。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:92px">時間</th><th style="width:120px">畫面／工具</th><th>發生了什麼</th></tr>
+    <tr><td><span class="ts">00:00</span></td><td>Google Meet</td><td>開場、螢幕分享（跳出「無限鏡室效應」提醒）、開啟 Meet Live Sidecar 即時字幕；聊天室陸續有人打「晚安／有」。</td></tr>
+    <tr><td><span class="ts">00:45</span></td><td>PowerPoint</td><td>翻開 18 頁簡報，標題頁「EP44・2026 上半年一定會的 AI 技能」；預告四大篇章，說明「今天主題很大，動作會比較快，有影片的人可自行複習」。</td></tr>
+    <tr><td><span class="ts">03:15</span></td><td>PowerPoint</td><td>slide 3「01 專案／02 Gem／03 Notebooks」＋「自訂資料＋來源資料轉成 .md 檔」的知識庫觀念。</td></tr>
+    <tr><td><span class="ts">04:30</span></td><td>ChatGPT</td><td>切到 ChatGPT（Plus／帳戶 Huang），示範<b>個人化</b>設定（暱稱「假日認真上的小黃」、溫暖／熱情／表情符號）。</td></tr>
+    <tr><td><span class="ts">06:45</span></td><td>ChatGPT</td><td><b>颱風預測專家角色指令</b>：輸入「寫出"專家角色指令" 颱風預測專家 "台灣脈絡"」，生成完整角色卡並下載成 PDF／DOCX／.md。</td></tr>
+    <tr><td><span class="ts">10:15</span></td><td>ChatGPT 專案</td><td>建立「颱風專家」<b>專案</b>、上傳 Doc1.docx 當資料來源、設定專案指令「回應時先用文字論述，並用 image2.0 生成一張佐證」。</td></tr>
+    <tr><td><span class="ts">16:45</span></td><td>ChatGPT</td><td>問「寫出 7/7–7/11 最新的預測」→ 帶出<b>巴威颱風</b>案例與 AI 查證討論。</td></tr>
+    <tr><td><span class="ts">17:15</span></td><td>ChatGPT</td><td>AI 坦承「7 天以上路徑誤差可超過 1000 公里，只能做風險判讀」，並指出使用者上傳的舊圖（2024／2025）不能當最新依據；再請它做 check list 複查。</td></tr>
+    <tr><td><span class="ts">21:00</span></td><td>PowerPoint／Gemini</td><td>slide 4 Gemini／NotebookLM／Notebooks；示範 Gemini 筆記本「菜單設計師」＝ NotebookLM，回答附引用，並設定「扮演港式料理專家」自訂記憶。</td></tr>
+    <tr><td><span class="ts">25:30</span></td><td>PowerPoint</td><td>slide 16「連結 NotebookLM 2 大途徑」：① Gemini 直連　② AI Agent 搭 notebooklm-mcp-cli 串接。</td></tr>
+    <tr><td><span class="ts">27:15</span></td><td>PowerPoint</td><td>slide 7「2026 AI 生圖雙雄對決」：Nano Banana（Gemini 3.1 Flash Image/Pro）× ChatGPT Image 2.0（gpt-image-2）。</td></tr>
+    <tr><td><span class="ts">28:45</span></td><td>Gemini／ChatGPT</td><td>生圖示範開始：「把可怕的颱風變成 Q 版的動畫（擬人化）模樣在台灣的四周圍」。</td></tr>
+    <tr><td><span class="ts">31:00</span></td><td>Gemini</td><td>把需求<b>轉成 YAML</b>：玩具總動員風格、颱風寶寶（Typhoon Kids）角色設定、4K 質感規格。</td></tr>
+    <tr><td><span class="ts">32:15</span></td><td>ChatGPT</td><td>生成「Q 版颱風環繞台灣」插畫（台北 101＋多隻擬人颱風角色）。</td></tr>
+    <tr><td><span class="ts">36:15</span></td><td>Gemini</td><td><b>在圖上畫紅線＋寫紅字「加入鯊魚」</b>，請 AI 照著改、改完把紅線紅字拿掉。</td></tr>
+    <tr><td><span class="ts">38:30</span></td><td>Gemini／ChatGPT</td><td>請 AI「依序生成十張不同風格圖」（童趣積木世界…）；再把整張圖拆解成八張、每張 16:9、去背。</td></tr>
+    <tr><td><span class="ts">42:45</span></td><td>Canva</td><td><b>Canva 魔法圖層</b>：把整張圖拆成可編輯圖層、局部重繪，匯出成 pptx。</td></tr>
+    <tr><td><span class="ts">45:00</span></td><td>Canva／PowerPoint</td><td>把颱風擬人化台灣地圖（山竹／天鵝／康芮／瑪娃／尼伯特／梅姬／杜蘇芮…）搬進 PowerPoint 排版。</td></tr>
+    <tr><td><span class="ts">47:30</span></td><td>PowerPoint</td><td>翻到「AI Agent 篇」章節：Opencode／Codex／Claude code／Antigravity 四工具卡。</td></tr>
+    <tr><td><span class="ts">48:30</span></td><td>Codex 桌面版</td><td>打開 Codex，交辦「請幫我連上 NotebookLM 的 MCP」，走 Google 登入授權流程。</td></tr>
+    <tr><td><span class="ts">51:00</span></td><td>Codex</td><td>看「外掛程式／Skill」：已裝 PDF、Playwright 兩個 skill。</td></tr>
+    <tr><td><span class="ts">52:00</span></td><td>Codex</td><td><b>颱風假 SWOT 報告</b>：交辦「颱風下禮拜有沒有機會放颱風假，做 SWOT 分析、存檔、畫圖」→ Codex 自動查 cwa.gov.tw、dgpa.gov.tw 停班停課標準。</td></tr>
+    <tr><td><span class="ts">54:15</span></td><td>Codex 行動版</td><td>示範用<b>手機掃 QR code</b> 連線、Windows 遠端控制此電腦。</td></tr>
+    <tr><td><span class="ts">55:00</span></td><td>Antigravity</td><td>「反重力智慧程式設計」（Antigravity，Gemini 3.1 Pro）與生成的「颱風寶寶_台灣拆解_8張.pptx」。</td></tr>
+    <tr><td><span class="ts">56:23</span></td><td>felo.ai</td><td><b>文字轉影片</b>：felo.ai Text to Video 把「颱風擬人化設計案」生成有旁白（zh-TW 女聲）、字幕、皮克斯風配樂的成品影片。</td></tr>
+    <tr><td><span class="ts">57:28</span></td><td>Google Meet</td><td>尾聲 Q&A：聊天室問「codex 手機如何連結／學校 IP 會不會擋／能不能開一堂教安裝 skill 的課」，講師回應後道晚安。</td></tr>
+  </table></div>
+</section>
+
+<!-- ═══ 3 文字篇 ═══ -->
+<section class="chapter" id="sec-text">
+  <span class="chip" style="background:linear-gradient(90deg,#0aa6c9,#4f7cff)">CHAPTER 01 · 實錄</span>
+  <h2 class="ct">3. 文字篇（實錄）</h2>
+  <p class="cd">文字是所有應用的地基。這一章講師沒有停在理論，而是<b>當場做一個「颱風預測專家」</b>，示範把「碰運氣的問法」升級成「可複用、有資料來源、會自我查證」的系統。</p>
+
+  <h3 id="t-project">3.1 專案／Gem／Notebooks：先把資料變成知識庫</h3>
+  <p><span class="ts">03:15</span>簡報 slide 3 提出三個容器：<b>專案</b>（集中管理資料）、<b>Gem</b>（與 AI 助理對話生成）、<b>Notebooks</b>（筆記本管理與知識整理），共同重點是把「自訂資料＋來源資料」統一<b>轉成 .md 檔</b>——輕量、跨平台、好餵給任何 AI。</p>
+  <p><span class="ts">04:30</span>接著切到 ChatGPT，先做一件很多人略過的事——<b>個人化設定</b>：填暱稱（現場填了「假日認真上的小黃」）、調整語氣（溫暖／熱情／表情符號），讓之後每次回答都對齊你的偏好。</p>
+
+  <h3 id="t-expert">3.2 颱風預測專家「角色指令」</h3>
+  <figure class="shot">
+    <img src="ep44-img/demo-typhoon-expert.jpg" alt="ChatGPT 生成颱風預測專家角色指令" loading="lazy">
+    <figcaption><span class="ts">06:45</span>ChatGPT 產出「可直接貼到 ChatGPT / Gemini / Claude 使用的『颱風預測專家｜台灣脈絡』專家角色指令」，開頭即定義：<i>「你是一位『颱風預測與防災研判專家』，熟悉西北太平洋颱風生成、路徑預測、強度變化、季風環流、海溫、垂直風切、導引氣流、副熱帶高壓、地形效應，以及台灣在颱風侵襲下的災害風險判讀。」</i></figcaption>
+  </figure>
+  <ul class="pt">
+    <li>指令只打了一句<b>「寫出"專家角色指令" 颱風預測專家 "台灣脈絡"」</b>，AI 就展開成含「角色定位（氣象分析師／防災顧問／台灣在地解讀者／不確定性說明者）」的完整卡片。</li>
+    <li>生成後一鍵下載成 <b>PDF／Microsoft Word .docx／.md</b> 三種格式——這就是 3.1 說的「轉成檔案、進知識庫」。</li>
+    <li><span class="ts">10:15</span>再把角色升級成<b>「專案」</b>：命名「颱風專家」、上傳 Doc1.docx 當資料來源，並在專案指令裡加一條「回應時先用文字論述，並用 image2.0 生成一張圖佐證」——讓角色每次回答都自帶圖文。</li>
+  </ul>
+  <div class="prompt">寫出"專家角色指令"
+颱風預測專家
+"台灣脈絡"
+—— 現場只打這三行，AI 就展開成完整角色卡＋四種角色定位，可下載成 pdf/docx/md</div>
+
+  <h3 id="t-verify">3.3 巴威颱風預測 ＝ 一堂「AI 查證」課</h3>
+  <figure class="shot">
+    <img src="ep44-img/demo-bavi-forecast.jpg" alt="ChatGPT 巴威颱風 7/7-7/11 預測與查證" loading="lazy">
+    <figcaption><span class="ts">17:15</span>問「寫出 7/7–7/11 最新的預測」，AI 回：<i>「第 9 號颱風『巴威』已於 7/2 上午形成……7 天以上路徑誤差可超過 1000 公里，所以現在只能做『風險判讀』」</i>，並主動提醒使用者上傳的 DOCX 內颱風圖是 <b>2024、2025 舊資料，不能作為最新預報依據</b>。</figcaption>
+  </figure>
+  <p>這一段是整堂文字篇的精華：講師刻意用「會不會放颱風假」這種<b>有標準答案、且答錯有後果</b>的問題，逼出 AI 的極限與正確用法。逐字稿裡他反覆提醒——就算給了角色、給了資料，<i>「他還是照樣給你幻覺」「他都會亂講話」</i>，所以：</p>
+  <ul class="pt">
+    <li><b>給來源</b>：把官方資料（中央氣象署、停班停課辦法）當來源餵進去，而不是讓它憑空講。</li>
+    <li><b>要它自己查證</b>：接著下「複查上述資訊，給我一個 check list 表」，讓 AI 逐項標記「符合／需修正／不可沿用」（例如「前一張圖若標示其他颱風名稱 → 不可沿用，本次應以巴威 BAVI 為主」）。</li>
+    <li><b>保留不確定性</b>：好的角色會說「現在不能判斷停班停課／不能斷定會發陸警」，而不是硬給你一個假確定。</li>
+  </ul>
+  <div class="golden"><div class="q">「就算給了角色、給了資料，他還是照樣給你幻覺——所以一定要有來源、要它複查。」</div><div class="a">文字篇金句（講師原話重點）</div></div>
+
+  <h3 id="t-nlm">3.4 NotebookLM 個人知識庫</h3>
+  <figure class="shot">
+    <img src="ep44-img/demo-notebooklm-menu.jpg" alt="Gemini 筆記本 菜單設計師 即 NotebookLM" loading="lazy">
+    <figcaption><span class="ts">22:00</span>講師用「菜單設計師」筆記本說明：<b>Gemini 的「筆記本」就是 NotebookLM</b>。它以上傳來源為依據作答、回覆附引用，並可在「筆記本設定」裡填自訂指令（現場填「扮演港式料理專家」）。</figcaption>
+  </figure>
+  <ul class="pt">
+    <li>把講義、網頁、文件、對話紀錄丟進同一個 Notebook 當<b>來源</b>；回答一律標引用，較不會亂編。</li>
+    <li><span class="ts">25:30</span>簡報 slide 16 點出<b>連結 NotebookLM 的 2 大途徑</b>：① 在 Gemini 生態系<b>直連使用</b>（操作直覺、適合日常知識整理）；② 透過 <b>AI Agent 串 notebooklm-mcp-cli</b>（可串接工具、流程自動化、適合進階）——這條路正好接到第 5 章的 Agent 篇。</li>
+  </ul>
+  <figure class="shot">
+    <img src="ep44-img/03-notebooklm-2ways.jpg" alt="連結 NotebookLM 2 大途徑 簡報" loading="lazy">
+    <figcaption><span class="ts">25:30</span>slide 16「連結 NotebookLM 2 大途徑」：① Gemini + NotebookLM 直連（操作直覺／上手快速／適合日常知識整理）；② AI Agent + notebooklm-mcp-cli 串接（可串接工具／流程自動化／適合進階應用）。</figcaption>
+  </figure>
+  <div class="note gold">⚠️ 來源品質決定答案品質——上傳前先清掉過時與重複的檔案（就像 3.3 那批舊颱風圖），是最容易被忽略、卻最關鍵的一步。</div>
+</section>
+
+<!-- ═══ 4 生圖篇 ═══ -->
+<section class="chapter" id="sec-image">
+  <span class="chip" style="background:linear-gradient(90deg,#d4508e,#8b5cf6)">CHAPTER 02 · 實錄</span>
+  <h2 class="ct">4. 生圖篇（實錄）</h2>
+  <p class="cd">生圖篇的主題是「<b>把可怕的颱風變成 Q 版擬人化角色</b>」。講師示範的重點不是「抽到一張漂亮圖」，而是<b>用 YAML 固定風格、在圖上畫記號讓 AI 改、再拆成圖層量產</b>——一條可控的生圖工作流。</p>
+
+  <h3 id="i-duel">4.1 生圖雙雄與「修圖分兩派」</h3>
+  <figure class="shot">
+    <img src="ep44-img/04-nano-vs-chatgpt.jpg" alt="2026 AI 生圖雙雄對決 簡報" loading="lazy">
+    <figcaption><span class="ts">27:15</span>slide 7「2026 AI 生圖雙雄對決」：左 <b>Nano Banana</b>（Google 智慧生圖，Gemini 3.1 Flash Image / Pro）主打高保真細節與多模態理解；右 <b>ChatGPT Image 2.0</b>（OpenAI gpt-image-2，GPT-5.4 backbone）主打文字渲染精準與構圖靈活。</figcaption>
+  </figure>
+  <p>緊接著的 slide 8/9「<b>生圖修正分成 2 派</b>」定調了整段工作流：</p>
+  <div class="twrap"><table>
+    <tr><th style="width:130px">修圖派別</th><th>做法</th><th>適合</th></tr>
+    <tr><td>① 請 AI 修</td><td>用 ChatGPT image 2.0 轉成去背細節圖（可匯出 PNG）</td><td>先求效率、快速局部重繪</td></tr>
+    <tr><td>② 轉成圖層自己修</td><td>用 Canva <b>魔法圖層</b>直接把圖拆開</td><td>細節可控、精修與完稿</td></tr>
+  </table></div>
+
+  <h3 id="i-yaml">4.2 用 YAML 把「颱風擬人化」變成規格</h3>
+  <figure class="shot">
+    <img src="ep44-img/demo-yaml-prompt.jpg" alt="Gemini 把颱風擬人化需求轉成 YAML" loading="lazy">
+    <figcaption><span class="ts">31:15</span>Gemini 把口語需求整理成結構化 <b>YAML「颱風擬人化設計案」</b>：視覺美學＝玩具總動員風格（Toy Story Style）、質感＝塑料光澤／鮮豔飽和／4K，角色＝<b>颱風寶寶（Typhoon Kids）</b>，含頭部旋渦造型、警戒色（黃橘紅）連身衣、場景為果凍質地海洋＋積木地形。</figcaption>
+  </figure>
+  <p><span class="ts">28:45</span>起手式是一句白話：「把可怕的颱風變成 Q 版的動畫（擬人化）模樣在台灣的四周圍」。但講師的關鍵動作是<b>再叫 AI「轉成 YAML 格式」</b>——把「玩具總動員風格、不要模糊邊緣、至少 4K」這些形容詞，固定成一張可以反覆套用、逐欄修改的規格卡。</p>
+  <figure class="shot">
+    <img src="ep44-img/demo-qtyphoon-gen.jpg" alt="ChatGPT 生成 Q 版颱風環繞台灣插畫" loading="lazy">
+    <figcaption><span class="ts">32:15</span>套上這張 YAML 後生成的成果：台灣島被多隻表情各異的 Q 版颱風／龍捲風角色環繞，色彩統一、風格一致——這就是「風格固定、內容替換」的系列感。</figcaption>
+  </figure>
+  <div class="prompt">把可怕的颱風變成 Q 版的動畫(擬人化)模樣在台灣的四周圍。
+轉成 YAML 格式（整體風格要像玩具總動員的風格）
+繁體中文，請不要有多餘的筆劃、模糊的邊緣，至少 4K
+—— 先出 YAML 規格卡，再用同一張卡生圖，就有系列感</div>
+
+  <h3 id="i-annotate">4.3 在圖上畫紅線，讓 AI 照著改</h3>
+  <figure class="shot">
+    <img src="ep44-img/demo-shark-annotate.jpg" alt="Gemini 圖片標註紅線加入鯊魚" loading="lazy">
+    <figcaption><span class="ts">36:15</span>最實用的一招：直接在生成圖上<b>用紅筆圈範圍、寫紅字「加入鯊魚」</b>，再把標註過的圖丟回去，指令是<i>「請按照圖片中的指示來完成我的需求，完成之後把紅線跟紅字拿掉。」</i>AI 就會在指定位置補上鯊魚並清掉標記。</figcaption>
+  </figure>
+  <ul class="pt">
+    <li>比起用文字描述「在左下角海面加一隻鯊魚」，<b>直接在圖上畫給它看</b>更精準、更省溝通。逐字稿裡講師也提到很多人會「拿手機截圖之後」再標。</li>
+    <li><span class="ts">38:30</span>接著請 AI「依序生成十張不同風格圖」（第一張＝童趣積木世界…），再下「把整張圖拆解、每個颱風跟台灣區隔開來、總共八張、每張 16:9、並且幫我去背」——一次量產一整套素材。</li>
+  </ul>
+
+  <h3 id="i-canva">4.4 Canva 魔法圖層：把一張圖拆成可編輯圖層</h3>
+  <figure class="shot">
+    <img src="ep44-img/demo-canva-layers.jpg" alt="Canva 魔法圖層編輯圖片面板" loading="lazy">
+    <figcaption><span class="ts">43:15</span>Canva 的「編輯圖片 → 魔法圖層／魔法編輯工具／背景移除／風格萃取」面板：一鍵把整張圖<b>拆解成可編輯的圖層</b>，就能個別調整、局部重繪，最後匯出成 pptx（現場匯出「未命名設計.pptx」）。</figcaption>
+  </figure>
+  <p>這正是 4.1「修圖第 2 派」的實作：AI 出圖負責<b>發想與粗胚</b>，Canva 圖層負責<b>精修與完稿</b>。<span class="ts">45:00</span>最後把颱風擬人化台灣地圖（標了山竹／天鵝／康芮／瑪娃／尼伯特／梅姬／杜蘇芮等颱風名）搬進 PowerPoint 收尾。</p>
+  <div class="golden"><div class="q">「抽卡靠運氣，YAML 風格卡靠系統；文字說不清的，就在圖上畫給它看。」</div><div class="a">生圖篇金句</div></div>
+</section>
+
+<!-- ═══ 5 Agent 篇 ═══ -->
+<section class="chapter" id="sec-agent">
+  <span class="chip" style="background:linear-gradient(90deg,#7a4fd6,#4f7cff)">CHAPTER 03 · 實錄</span>
+  <h2 class="ct">5. AI Agent 篇（實錄）</h2>
+  <p class="cd">開場講師就說「今天不會講太多 Agent，因為第一個 Agent 要花一點時間讓它跑」。實際上他用 <b>Codex</b> 現場示範了 Agent 最關鍵的一步——<b>連上工具（MCP）</b>，讓 AI 從「回答你」變成「幫你做完」。</p>
+
+  <h3 id="a-tools">5.1 四大 Agent 工具巡覽</h3>
+  <p><span class="ts">47:30</span>簡報「AI Agent 篇」章節一次列出四個當前主流的終端／桌面 Agent：</p>
+  <div class="twrap"><table>
+    <tr><th style="width:130px">工具</th><th>定位</th></tr>
+    <tr><td>Opencode</td><td>開源終端 Agent，模型可自選，練「交辦、拆解、驗收」的低成本入口。</td></tr>
+    <tr><td>Codex</td><td>OpenAI 的桌面／行動 Agent，本集主要示範對象（下方 5.2、5.3、6.1）。</td></tr>
+    <tr><td>Claude code</td><td>Anthropic 的工程代理，讀寫專案檔案、跑指令。</td></tr>
+    <tr><td>Antigravity</td><td>「反重力智慧程式設計」，本集用 Gemini 3.1 Pro，示範生成「颱風寶寶_台灣拆解_8張.pptx」。</td></tr>
+  </table></div>
+
+  <h3 id="a-mcp">5.2 Codex 連上 NotebookLM 的 MCP</h3>
+  <p><span class="ts">48:30</span>打開 Codex 桌面版（帳號 Beethoven Dr. Pro），語音／打字交辦一句：<b>「請幫我連上 NotebookLM 的 MCP。」</b>Codex 隨即：</p>
+  <ol class="st">
+    <li>開啟 Google 登入授權流程（跳出「Sign in - Google Accounts」）。</li>
+    <li>回報授權狀態——現場第一次授權沒完成，Codex 誠實回報「通常是登入流程被關閉、取消，或未在時限內完成」，再重試後顯示綠色勾選「NotebookLM 的 MCP 已經載入」。</li>
+  </ol>
+  <p>逐字稿裡講師的說法很白話：這一步就是<b>「直接讓 Agent 去串你的 Nano Banana／NotebookLM」「幫我把它用 MCP 的方式接起來」</b>，並點名<i>「這個叫做 MCP」</i>。MCP（Model Context Protocol）＝ AI 連外部工具的通用插座，接上它，Agent 才真的有手有腳。</p>
+  <div class="note blue">💡 呼應第 3 章 slide 16 的「2 大途徑」：日常用可以在 Gemini 裡<b>直連</b> NotebookLM；要進自動化工作流，就走 <b>notebooklm-mcp-cli ＋ Agent</b> 這條，正是這裡示範的做法。</div>
+
+  <h3 id="a-skill">5.3 Skill 外掛與手機掃碼連線</h3>
+  <ul class="pt">
+    <li><span class="ts">51:00</span><b>Skill（外掛技能）</b>：Codex 的「外掛程式 → skill」頁面已安裝 <b>PDF</b>（建立、編輯、審閱 PDF）與 <b>Playwright</b>（自動操作真實瀏覽器）兩個技能卡，需要什麼能力就加什麼 skill。</li>
+    <li><span class="ts">54:15</span><b>行動版連線</b>：用手機掃「Codex 行動版」QR code 就能連上、管理現有連線；並搭配 Windows 設定的「允許連線／遠端控制此電腦」。尾聲聊天室對這段反應最熱烈——「codex 手機如何連結」「學校的 IP 會不會擋」。</li>
+  </ul>
+  <div class="golden"><div class="q">「Chatbot 給答案，Agent 給結果；而 Agent 有沒有用，看它能不能透過 MCP 連上你的工具。」</div><div class="a">Agent 篇金句</div></div>
+</section>
+
+<!-- ═══ 6 自動化篇 ═══ -->
+<section class="chapter" id="sec-auto">
+  <span class="chip" style="background:linear-gradient(90deg,#1d9e6f,#0aa6c9)">CHAPTER 04 · 實錄</span>
+  <h2 class="ct">6. 自動化篇（實錄）</h2>
+  <p class="cd">最後一哩，把前面所有能力交給 Agent「一句話跑完」。講師用兩個颱風相關的成品收尾：一份<b>颱風假 SWOT 報告</b>、一支<b>颱風擬人化影片</b>——都是「你出一句需求，機器自己查、自己做、自己存檔」。</p>
+
+  <h3 id="u-swot">6.1 一句話交辦：颱風假 SWOT 報告</h3>
+  <figure class="shot">
+    <img src="ep44-img/demo-codex-swot.jpg" alt="Codex 製作颱風假 SWOT 報告自動查證" loading="lazy">
+    <figcaption><span class="ts">52:00</span>對 Codex 下一句：<i>「請告訴我颱風下禮拜有沒有機會放颱風假，給我 SWOT 分析做一份報告存檔下來，並畫一些圖來輔助。」</i>Codex（模型 5.4 超高、完整存取權）自己回覆「我先查台灣下週的官方天氣與颱風資訊，並把『放颱風假』判斷標準一起納進來」，接著<b>自動連網搜尋 cwa.gov.tw、dgpa.gov.tw</b>（天然災害停止上班上課作業辦法）。左側對話列滿是它平常在跑的任務（串接 NotebookLM MCP、安裝 notebooklm-py、連上 Gmail…）。</figcaption>
+  </figure>
+  <p>這一段把整堂課的能力收在一起：<b>角色與查證（文字篇）＋圖表佐證（生圖篇）＋工具串接（Agent 篇）</b>，全部濃縮成一句交辦。Agent 自己完成「查資料 → 套標準 → 出 SWOT → 畫圖 → 存檔」的流水線。</p>
+  <ul class="pt">
+    <li><b>觸發</b>：一句自然語言需求。</li>
+    <li><b>處理</b>：Agent 自動上網查官方標準、判讀、整理成 SWOT，並生成輔助圖。</li>
+    <li><b>輸出</b>：存成可直接打開的檔案。</li>
+  </ul>
+
+  <h3 id="u-video">6.2 文字轉影片：把設計案變成成片</h3>
+  <figure class="shot">
+    <img src="ep44-img/demo-felo-video.jpg" alt="felo.ai Text to Video 生成颱風擬人化影片成品" loading="lazy">
+    <figcaption><span class="ts">56:37</span>用 <b>felo.ai 的 Text to Video</b>（口號「文件負責沉澱，影片負責傳播」）把「颱風擬人化設計案」直接生成影片：視覺＝塑料光澤掃光、多角色漂浮，<b>全片繁體中文旁白（zh-TW 女聲）＋皮克斯風管弦配樂＋字幕</b>。畫面是生成完成、正在播放（0:22/0:47）的 Q 版颱風寶寶成片。</figcaption>
+  </figure>
+  <p>這正是「自動化」的精神——逐字稿裡講師把它一句帶過：<i>「叫做文字轉影片」</i>。你不必逐格剪片，把文件／設計案丟進去，旁白、字幕、配樂、動效一次生成。</p>
+  <div class="golden"><div class="q">「你出一句需求，機器自己查、自己做、自己存檔——這就是把技能『自動跑』起來。」</div><div class="a">自動化篇金句</div></div>
+</section>
+
+<!-- ═══ 7 檢核 ═══ -->
+<section class="chapter" id="sec-check">
+  <span class="chip" style="background:linear-gradient(90deg,#c98a0a,#d4508e)">SELF CHECK</span>
+  <h2 class="ct">7. 課後自我檢核（照本集實作）</h2>
+  <p class="cd">每章 5 個「做不做得到」——都對應本集真的示範過的動作。可到<a href="ep44-ai-skills.html">互動技能地圖</a>逐項打勾追蹤。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:90px">章節</th><th>你應該做得到…</th></tr>
+    <tr><td>✍️ 文字</td><td>① 用一句「寫出專家角色指令＋主題＋脈絡」生出角色卡　② 把角色存成 docx/md 進知識庫　③ 建 ChatGPT 專案並上傳資料來源　④ 讓 AI 對颱風這類問題「先查證、列 check list、保留不確定性」　⑤ 用 NotebookLM／Gemini 筆記本做附引用的回答</td></tr>
+    <tr><td>🎨 生圖</td><td>① 說出 Nano Banana 與 ChatGPT Image 2.0 的定位差異　② 把生圖需求轉成一張 YAML 風格卡（如颱風寶寶）　③ 在圖上畫紅線讓 AI 照著改　④ 請 AI 一次生成十張不同風格＋去背　⑤ 用 Canva 魔法圖層把圖拆成圖層精修</td></tr>
+    <tr><td>🤖 Agent</td><td>① 分辨 Opencode／Codex／Claude code／Antigravity　② 用 Codex 交辦「連上 NotebookLM 的 MCP」　③ 解釋 MCP 是什麼、為何 Agent 需要它　④ 為 Agent 加一個 skill（PDF／Playwright）　⑤ 用手機掃碼連上 Codex 行動版</td></tr>
+    <tr><td>⚙️ 自動化</td><td>① 用「觸發→處理→輸出」描述一條流程　② 一句話交辦 Agent 做一份會自動查證的 SWOT 報告　③ 讓 Agent 自動連網查官方標準（如 cwa／dgpa）　④ 把成果自動存成可打開的檔案　⑤ 用文字轉影片工具把文件生成有旁白字幕的成片</td></tr>
+  </table></div>
+</section>
+
+<!-- ═══ 8 來源 ═══ -->
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5a5866)">SOURCES</span>
+  <h2 class="ct">8. 資料來源與製作說明</h2>
+  <ul class="pt">
+    <li><b>原始教材：</b><a href="https://drive.google.com/drive/folders/1nOGbITVV41m0mNoHz14Vdn4Q9_RUe1cb" target="_blank" rel="noopener">EP44 講義及錄影回放資料夾</a>——課程簡報 pptx（18 頁）＋ 608MB／59 分鐘錄影。</li>
+    <li><b>逐幀製作方式（本次已實際執行）：</b>
+      <ol class="st">
+        <li>下載完整 608MB 錄影（drive.usercontent 直連）。</li>
+        <li>用 ffmpeg 每 15 秒抽 1 格、再加場景切換偵測，共產出約 360 張畫面。</li>
+        <li><b>親眼逐格判讀</b>每一張截圖，記錄各時間點的簡報頁、示範畫面與畫面上的實際文字。</li>
+        <li>用 faster-whisper 把音軌轉成中文逐字稿，核對講師口述（本頁引號內文字即取自逐字稿與畫面實錄）。</li>
+        <li>擷取 13 張關鍵畫面裁切後嵌入本頁（見各節截圖），時間戳皆為錄影實際位置。</li>
+      </ol>
+    </li>
+    <li><b>誠實聲明：</b>本頁內容以錄影實際發生的順序與畫面為準；引號內為逐字稿／畫面上可辨識的原文。語音辨識偶有錯字（如把「Nano Banana」聽成近音、颱風名稱等），已依畫面校正後採用。若需完整逐字稿，可另向作者索取。</li>
+    <li><b>介面參考：</b>互動技能地圖頁的 UI 風格參考 <a href="https://akira.ipas-ai.com/" target="_blank" rel="noopener">akira.ipas-ai.com</a> 的卡片式多層導覽與遊戲化進度設計。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  EP44「2026 年上半年一定會的 AI 技能」逐幀課堂筆記・2026/07 整理<br>
+  🍀 Learn AI with Tarshar｜搭配 <a href="ep44-ai-skills.html">互動技能地圖</a> 使用效果最佳
+</footer>
+
+</body>
+</html>

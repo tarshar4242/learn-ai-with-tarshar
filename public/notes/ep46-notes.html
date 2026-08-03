@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP46 課堂筆記｜抽絲剝繭談 ChatGPT Work：從提問到完整交付（逐幀實錄）</title>
+<meta name="description" content="晨學講堂 EP46 逐幀課堂筆記：ChatGPT Work 快速上手——Chat／Work／Codex 三模式、Work+Codex=Agent、目標式交付（新青安 3.0 動畫簡報 16 分鐘實作）、Sol／Terra／Luna 三模型、權限核准、Sites 建站、手機 Remote 遙控，含真實操作截圖、官方簡報原文與逐字稿佐證">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#0f9d78; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px;border-left:none}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+.note.violet{background:#F3EFFB;border-color:#DFD2F0;color:#5a34a8}
+.note.rose{background:#FBEEF1;border-color:#F0D2DB;color:#9c2f52}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.prompt{position:relative;background:#1d1d1f;border-radius:10px;padding:15px 16px;margin:12px 0;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt .tag{display:inline-block;font-size:11px;letter-spacing:.06em;color:#c9c4ff;border:1px solid #3a3a40;border-radius:6px;padding:2px 9px;margin-bottom:8px}
+.prompt b{color:#fff}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.embed{margin:14px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000}
+.embed iframe{display:block;width:100%;aspect-ratio:16/9;border:0}
+.embed .cap{font-size:12.5px;color:var(--ink3);padding:10px 16px;background:var(--paper);border-top:1px solid var(--line)}
+.ts{display:inline-block;font-family:"Cascadia Code",Consolas,monospace;font-weight:700;font-size:12px;color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,#fff);border-radius:5px;padding:2px 8px;margin-right:7px;letter-spacing:.4px;vertical-align:middle}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+.layers{display:grid;gap:10px;margin:14px 0}
+.lyr{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:13px 15px;background:#fff}
+.lyr .n{flex:none;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--accent)}
+.lyr h4{margin:0 0 3px;font-size:14.5px}
+.lyr p{font-size:13px;margin:0}
+.sub{color:var(--ink2)}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#a8c686" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP46 課堂筆記（逐幀實錄）</b>
+  <div class="right">
+    <a class="btn" href="ep46-ai-skills.html">🗺️ 互動技能地圖</a>
+    </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 晨學講堂 · EP46</span>
+  <h1>抽絲剝繭談 <span>ChatGPT Work</span><br>從提問到完整交付</h1>
+  <p class="lead">本頁為<b>照錄影逐段實錄</b>的筆記：每一節都標上錄影 <span class="ts" style="margin:0">mm:ss</span> 時間戳、附上該操作畫面的<b>真實截圖</b>，並對照官方課程簡報原文與講師逐字稿。主軸是把 ChatGPT 桌面新版的三種模式——<b>Chat／Work／Codex</b>講清楚，重點示範 <b>Work</b>：用一句「目標」讓它自己收資料、產出檔案、依回饋修正——現場<b>16 分鐘生出一份「新青安 3.0」動畫簡報</b>。</p>
+  <div class="meta">
+    <span>📅 2026/07/19（六）20:17 直播</span>
+    <span>⏱️ 錄影全長 37:09</span>
+    <span>🧩 示範案例：新青安 3.0 懶人包</span>
+    <span>🤖 主題：ChatGPT Work</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-map">1. 一頁看懂全課程</a>
+  <a href="#sec-timeline">2. 逐幀時間軸（37 分鐘）</a>
+  <a href="#sec-modes">3. 三種模式：Chat／Work／Codex</a>
+  <a class="sub" href="#m-three">3.1 一個 App，三種模式</a>
+  <a class="sub" href="#m-agent">3.2 Work＋Codex＝Agent</a>
+  <a class="sub" href="#m-surface">3.3 手機／網頁／桌面</a>
+  <a href="#sec-deliver">4. Work 目標式交付（實戰）</a>
+  <a class="sub" href="#d-goal">4.1 給目標，不是給問題</a>
+  <a class="sub" href="#d-plan">4.2 五步驟自動規劃</a>
+  <a class="sub" href="#d-make">4.3 查公告、做背景、疊文字</a>
+  <a class="sub" href="#d-done">4.4 16 分鐘交付與改稿</a>
+  <a href="#sec-model">5. 選對模型：Sol／Terra／Luna</a>
+  <a href="#sec-power">6. 權限、Sites 與手機 Remote</a>
+  <a class="sub" href="#p-approve">6.1 三種核准權限</a>
+  <a class="sub" href="#p-sites">6.2 Sites 建課程網站</a>
+  <a class="sub" href="#p-remote">6.3 手機 Remote 遙控</a>
+  <a href="#sec-terms">7. 專有名詞卡</a>
+  <a href="#sec-check">8. 課後自我檢核</a>
+  <a href="#sec-src">9. 資料來源與製作說明</a>
+</nav>
+
+<article>
+
+<!-- 0 課程資訊 -->
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--purple))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>EP46_「抽絲剝繭談 ChatGPT Work」（ChatGPT Work 快速上手：從提問到完整交付）</td></tr>
+    <tr><th>頻道</th><td>生成式 AI 應用電台・晨學講堂</td></tr>
+    <tr><th>直播日期</th><td>2026/07/19（六）20:17 CST；錄影全長 <b>37:09</b></td></tr>
+    <tr><th>教學結構</th><td>簡報導讀＋現場實作 <b>00:00–33:00</b>；課末問答與年中共學預告 <b>33:00–37:09</b>（Google Meet 約 235–246 人在線）</td></tr>
+    <tr><th>一句話先懂</th><td>ChatGPT 桌面新版把 <b>Chat（聊天）／Work（交付成果）／Codex（寫程式）</b>放進同一個 App。其中 <b>Work 是「目標式代理」</b>——你說「完成後交給我一份⋯⋯」，它就自己規劃步驟、查資料、開工具、產出檔案，過程中你可以補料、改方向、核准動作。</td></tr>
+    <tr><th>示範案例</th><td>全程以<b>「新青安 3.0 政策懶人包」</b>當範例：一句語音目標 → Work 自動查行政院／財政部公告 → 生 5 張 16:9 動畫背景 → 疊上可編輯中文 → <b>16 分鐘交付 5 頁 PPTX</b>；再示範改字型、生資訊圖表、用 Sites 建「AI Agent 課程網站」。</td></tr>
+  </table></div>
+
+  <h3>🎬 錄影回放（可直接播放）</h3>
+  <div class="embed">
+    <iframe src="https://drive.google.com/file/d/1-OjGBJva648jZ2z108BuoPSshNG7hcwR/preview" allow="autoplay" loading="lazy" title="EP46 錄影回放"></iframe>
+    <div class="cap">EP46_抽絲剝繭談 ChatGPT Work 課堂錄影（37:09）— 需登入可觀看的 Google 帳號。</div>
+  </div>
+  <div class="note blue">💡 本頁 17 張截圖皆<b>直接擷取自這支錄影</b>，逐幀親眼判讀操作畫面；文字方塊內容則對照<b>官方課程簡報《ChatGPT-Work-快速上手課程簡報.pptx》原文</b>與課堂逐字稿。播放到對應 <span class="ts" style="margin:0">mm:ss</span> 就能核對畫面。</div>
+</section>
+
+<!-- 1 全景 -->
+<section class="chapter" id="sec-map">
+  <span class="chip" style="background:linear-gradient(90deg,var(--cyan),var(--accent))">OVERVIEW</span>
+  <h2 class="ct">1. 一頁看懂全課程</h2>
+  <p class="cd">官方簡報第 2 頁就把整堂課的三個學習目標寫死了：<b>①選對模式 ②跑完流程 ③選對模型</b>。老師照這條線走——先分清三種模式，再現場用 Work 把一個目標「跑成一份可交付的檔案」，最後講模型與權限。金句：<b>「目標不是『會聊天』，而是能交付一份可直接使用的成果。」</b></p>
+  <figure class="diagram">
+    <svg viewBox="0 0 920 430" xmlns="http://www.w3.org/2000/svg" font-family="'Noto Sans TC',sans-serif">
+      <defs>
+        <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#10a37f"/><stop offset="1" stop-color="#0aa6c9"/></linearGradient>
+        <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2f6df0"/><stop offset="1" stop-color="#10a37f"/></linearGradient>
+        <linearGradient id="g3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d4508e"/><stop offset="1" stop-color="#7a4fd6"/></linearGradient>
+        <linearGradient id="g4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c98a0a"/><stop offset="1" stop-color="#d4508e"/></linearGradient>
+        <marker id="arw" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#b9b3d9"/></marker>
+      </defs>
+      <rect width="920" height="430" fill="#fbfcff"/>
+      <text x="460" y="42" text-anchor="middle" font-size="21" font-weight="900" fill="#2b2a33">EP46 · ChatGPT Work：從提問到完整交付 — 全景地圖</text>
+      <ellipse cx="460" cy="103" rx="270" ry="34" fill="#e6f6f0" stroke="#bfe8dc"/>
+      <text x="460" y="110" text-anchor="middle" font-size="13.5" font-weight="700" fill="#10a37f">核心：Chat 給你答案；Work 交你成果；Codex 幫你改軟體</text>
+      <line x1="250" y1="143" x2="140" y2="190" stroke="#b9b3d9" stroke-width="2" marker-end="url(#arw)"/>
+      <line x1="390" y1="148" x2="360" y2="190" stroke="#b9b3d9" stroke-width="2" marker-end="url(#arw)"/>
+      <line x1="530" y1="148" x2="560" y2="190" stroke="#b9b3d9" stroke-width="2" marker-end="url(#arw)"/>
+      <line x1="670" y1="143" x2="780" y2="190" stroke="#b9b3d9" stroke-width="2" marker-end="url(#arw)"/>
+      <g>
+        <rect x="30" y="196" width="205" height="176" rx="16" fill="url(#g1)"/>
+        <text x="132" y="230" text-anchor="middle" font-size="16" font-weight="900" fill="#fff">🧭 三種模式</text>
+        <text x="132" y="258" text-anchor="middle" font-size="11.5" fill="#eafaf5">Chat 問答搜尋</text>
+        <text x="132" y="280" text-anchor="middle" font-size="11.5" fill="#eafaf5">Work 交付成果</text>
+        <text x="132" y="302" text-anchor="middle" font-size="11.5" fill="#eafaf5">Codex 寫程式</text>
+        <text x="132" y="324" text-anchor="middle" font-size="11.5" fill="#eafaf5">Work＋Codex＝Agent</text>
+        <text x="132" y="350" text-anchor="middle" font-size="11.5" fill="#eafaf5">先選模式再寫提示</text>
+      </g>
+      <g>
+        <rect x="252" y="196" width="205" height="176" rx="16" fill="url(#g2)"/>
+        <text x="354" y="230" text-anchor="middle" font-size="16" font-weight="900" fill="#fff">🎯 目標式交付</text>
+        <text x="354" y="258" text-anchor="middle" font-size="11.5" fill="#eaf3ff">給目標不給問題</text>
+        <text x="354" y="280" text-anchor="middle" font-size="11.5" fill="#eaf3ff">自動規劃 5 步驟</text>
+        <text x="354" y="302" text-anchor="middle" font-size="11.5" fill="#eaf3ff">查官方公告</text>
+        <text x="354" y="324" text-anchor="middle" font-size="11.5" fill="#eaf3ff">16:9 背景＋疊字</text>
+        <text x="354" y="350" text-anchor="middle" font-size="11.5" fill="#eaf3ff">16 分鐘出 PPTX</text>
+      </g>
+      <g>
+        <rect x="474" y="196" width="205" height="176" rx="16" fill="url(#g3)"/>
+        <text x="576" y="230" text-anchor="middle" font-size="16" font-weight="900" fill="#fff">🧠 選對模型</text>
+        <text x="576" y="258" text-anchor="middle" font-size="11.5" fill="#fdeaf4">Sol 最深度</text>
+        <text x="576" y="280" text-anchor="middle" font-size="11.5" fill="#fdeaf4">Terra 最均衡</text>
+        <text x="576" y="302" text-anchor="middle" font-size="11.5" fill="#fdeaf4">Luna 最快速</text>
+        <text x="576" y="324" text-anchor="middle" font-size="11.5" fill="#fdeaf4">推理強度可調</text>
+        <text x="576" y="350" text-anchor="middle" font-size="11.5" fill="#fdeaf4">先低再往上加</text>
+      </g>
+      <g>
+        <rect x="696" y="196" width="195" height="176" rx="16" fill="url(#g4)"/>
+        <text x="793" y="230" text-anchor="middle" font-size="16" font-weight="900" fill="#fff">🔐 權限與延伸</text>
+        <text x="793" y="258" text-anchor="middle" font-size="11.5" fill="#fff5e6">三種核准權限</text>
+        <text x="793" y="280" text-anchor="middle" font-size="11.5" fill="#fff5e6">Sites 一句話建站</text>
+        <text x="793" y="302" text-anchor="middle" font-size="11.5" fill="#fff5e6">手機 Remote 遙控</text>
+        <text x="793" y="324" text-anchor="middle" font-size="11.5" fill="#fff5e6">寵物管理對話</text>
+        <text x="793" y="350" text-anchor="middle" font-size="11.5" fill="#fff5e6">人在迴路把關</text>
+      </g>
+      <line x1="235" y1="284" x2="252" y2="284" stroke="#b9b3d9" stroke-width="2.5" marker-end="url(#arw)"/>
+      <line x1="457" y1="284" x2="474" y2="284" stroke="#b9b3d9" stroke-width="2.5" marker-end="url(#arw)"/>
+      <line x1="679" y1="284" x2="696" y2="284" stroke="#b9b3d9" stroke-width="2.5" marker-end="url(#arw)"/>
+      <text x="460" y="404" text-anchor="middle" font-size="12.5" fill="#8a879a">動線：先分清「三模式」→ 用 Work「跑完一次交付」→ 學會「選模型」→ 掌握「權限與延伸功能」</text>
+    </svg>
+    <figcaption>圖 1｜EP46 全景：三模式 → 目標式交付 → 選模型 → 權限與延伸（依官方簡報三大學習目標與現場示範順序整理）</figcaption>
+  </figure>
+  <figure class="shot">
+    <img src="ep46-img/s01_cover.jpg" alt="EP46 課程簡報封面" loading="lazy">
+    <figcaption><span class="ts">00:05</span>官方課程簡報封面：「<b>ChatGPT Work 快速上手：從提問到完整交付</b>」，標籤 <b>Chat・Work・Codex・Sites・GPT-5.6</b>，資料更新 2026.07.19。課程定位＝一般辦公、教學與行政使用者的入門工作坊。</figcaption>
+  </figure>
+  <div class="golden"><div class="q">「要一個答案，用 Chat；要一個成果，用 Work；要修改軟體，用 Codex。」</div><div class="a">—— 官方簡報第 4 頁的判斷口訣，也是本集主線</div></div>
+</section>
+
+<!-- 2 逐幀時間軸 -->
+<section class="chapter" id="sec-timeline">
+  <span class="chip" style="background:linear-gradient(90deg,#c98a0a,#0aa6c9)">TIMELINE</span>
+  <h2 class="ct">2. 逐幀時間軸（37 分鐘全程）</h2>
+  <p class="cd">每一列都是<b>親眼逐幀判讀</b>的實錄；點各章節看該段詳細筆記與截圖。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:92px">時間</th><th style="width:150px">畫面／工具</th><th>發生了什麼</th></tr>
+    <tr><td><span class="ts">00:00</span></td><td>簡報 · 封面</td><td>開場破題：<b>ChatGPT 的 Work 到底在哪、跟 Claude 的 Code／Work 很像</b>？老師說「借在聊天與 Codex 中間」，中間可選 Sol／Terra／Luna 模型。</td></tr>
+    <tr><td><span class="ts">00:45</span></td><td>簡報 p3 · 三模式</td><td><b>一個桌面 App，三種工作模式</b>：Chat（問答・搜尋・腦力激盪）／Work（研究・分析・交付成果）／Codex（程式開發・測試・審查）。</td></tr>
+    <tr><td><span class="ts">01:00</span></td><td>紅筆手寫</td><td>老師在 Work↔Codex 之間畫括弧，手寫「<b>Agent</b>」——這兩個才是「會自己動手」的代理模式。</td></tr>
+    <tr><td><span class="ts">02:45</span></td><td>桌面 App</td><td>頂部「Chat｜Work」切換；Chat 問「今天想聊些什麼？」切到 Work 變「<b>What should we work on?</b>」。</td></tr>
+    <tr><td><span class="ts">03:00</span></td><td>Work 首頁</td><td>Work 輸入框「Work with ChatGPT」、<b>完整存取權</b>、模型 <b>5.6 Sol 極高</b>、選擇專案、外掛程式；三個建議：建立檔案或網站／研究並規劃下一步／自動化例行工作。</td></tr>
+    <tr><td><span class="ts">06:00</span></td><td>權限選單</td><td><b>ChatGPT 動作應如何核准？</b>三選項：要求核准／代我核准／完整存取權（＋自訂 config.toml）。</td></tr>
+    <tr><td><span class="ts">07:00</span></td><td>簡報 p4–p6</td><td>三欄比較表（適用情境／產出／介面／何時用）；<b>手機・網頁・桌面能力不同</b>；<b>Work 的關鍵不是回答，而是交付成果</b>。</td></tr>
+    <tr><td><span class="ts">08:00</span></td><td>模型選單</td><td>展開模型：<b>5.6 Sol／Terra（快思）／Luna、5.5、5.3 Codex Spark</b>；進階可調推理強度（快思／中）與速度（標準／快速）。</td></tr>
+    <tr><td><span class="ts">09:15</span></td><td>Work · 下目標</td><td>用<b>語音</b>下目標：<i>「用動畫方式的簡報介紹新青安 3.0 政策，作為政策懶人包，簡報 5 頁（image2.0）」</i>，命名「製作新青安 3.0 動畫簡報」，設為目標。</td></tr>
+    <tr><td><span class="ts">10:15</span></td><td>Work · 規劃</td><td>Work 自動列出<b>5 個步驟</b>並開始跑（步驟 1/5）；右側面板「輸出內容／來源」。</td></tr>
+    <tr><td><span class="ts">10:30</span></td><td>Work · 執行</td><td>自動<b>網頁搜尋 → 抓行政院財政部 2026/07/16 公告</b>；決定用 <b>presentations</b> 技能產 PPTX、先做 <b>5 張 16:9 無文字背景</b>（避免 AI 把中文畫錯），文字用簡報工具疊上。</td></tr>
+    <tr><td><span class="ts">12:30</span></td><td>Meet 聊天室</td><td>使用者補條件：<i>「文字部分，請使用標楷體、字型大小最少 24 號字」</i>；助理回覆會全用標楷體、最小 24pt。</td></tr>
+    <tr><td><span class="ts">17:30</span></td><td>Work · 建檔</td><td>5 張背景齊 → 複製到工作區、建 5 頁 PowerPoint、加來源註記與可編輯中文。</td></tr>
+    <tr><td><span class="ts">17:45</span></td><td>Work · Sites</td><td>另開一個 Work：<b>用 Sites 建「AI Agent 課程網站」</b>（介紹 Codex／Opencode／Claude Code／Antigravity 四工具）。</td></tr>
+    <tr><td><span class="ts">21:00</span></td><td>設定 · 寵物</td><td>示範<b>寵物設定</b>：粽寶／收音機寵物／Codex 等，寵物會管理對話串並提示需注意事項；demo 選「簡報鴞」。</td></tr>
+    <tr><td><span class="ts">24:45</span></td><td>簡報 p14–p17</td><td>Sites 三步驟、發布前的方案／區域／資料邊界、<b>三模型比較</b>（Sol／Terra／Luna）。</td></tr>
+    <tr><td><span class="ts">26:45</span></td><td>成果 · 交付</td><td><b>「製作新青安 3.0 動畫簡報」完成</b>：下載 5 頁 PPTX、<b>用時約 16 分鐘</b>；檔名「新青安3.0政策懶人包_5頁動畫風格.pptx（7,311KB）」。</td></tr>
+    <tr><td><span class="ts">27:45</span></td><td>改稿 demo</td><td><i>「把全部的字改成微軟正黑體」</i> → 拆 3 任務（掃描字型／套用微軟正黑體字級≥24pt／檢查文字溢位）；再追加「生一頁台北 101 風格資訊圖表」。</td></tr>
+    <tr><td><span class="ts">32:00</span></td><td>成果 · 網站</td><td><b>「AI Agent 課程網站」完成</b>：保存上傳供 Sites 發布；推送被 Git 安全檢查擋（執行身分不同）→ 加安全例外續發。</td></tr>
+    <tr><td><span class="ts">35:44</span></td><td>Portaly 課程頁</td><td>年中共學預告：7/22 簡報工具（6 種）、7/23 Copilot×Power Automate、7/24 手機遙控 Claude Code；5 場 300 分鐘、5 份講義。</td></tr>
+    <tr><td><span class="ts">36:00</span></td><td>Meet · Q&A</td><td>問答：Work 要先指定專案夾嗎？寵物設定提示詞？GPT for PPT 怎麼安裝？LINE 社群＋Portaly 連結；謝謝老師。</td></tr>
+  </table></div>
+</section>
+
+<!-- 3 三種模式 -->
+<section class="chapter" id="sec-modes">
+  <span class="chip" style="background:linear-gradient(90deg,#10a37f,#0aa6c9)">CHAPTER 01 · 實錄</span>
+  <h2 class="ct">3. 三種模式：Chat／Work／Codex</h2>
+  <p class="cd">很多人一打開新版 ChatGPT 就問「Work 到底在哪？」老師的答案：它跟 Chat、Codex 一起被放進<b>同一個桌面 App</b>，你要先分清楚「這件事要一個答案、一份成果、還是改一段程式」，再決定進哪個模式。</p>
+
+  <h3 id="m-three">3.1 一個桌面 App，三種工作模式</h3>
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="ep46-img/s03_agent.jpg" alt="簡報第3頁三種模式，老師紅筆標 Agent" loading="lazy">
+      <figcaption><span class="ts">01:00</span>簡報 p3「一個桌面 App，三種工作模式」：<b>Chat／Work／Codex</b>。老師用紅筆在 <b>Work 與 Codex 之間畫括弧、手寫「Agent」</b>——這兩個才是會自己規劃、動手的代理模式。</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="ep46-img/s04_modes.jpg" alt="簡報第4頁 Chat/Work/Codex 三欄比較" loading="lazy">
+      <figcaption><span class="ts">07:00</span>簡報 p4「先選模式，再寫提示詞」：三欄對照——<b>適用情境／產出／介面／何時用</b>。口訣寫在最下方：要答案用 Chat、要成果用 Work、要改軟體用 Codex。</figcaption>
+    </figure>
+  </div>
+  <div class="twrap"><table>
+    <tr><th style="width:90px">模式</th><th>適用</th><th>產出</th><th>什麼時候用</th></tr>
+    <tr><td><b>Chat</b></td><td>快速問答、搜尋、比較、草稿</td><td>回答、訊息、簡短內容</td><td>需求還在探索、要來回討論</td></tr>
+    <tr><td><b>Work</b></td><td>研究、跨工具流程、完成交付物</td><td>文件、簡報、試算表、報告、Site</td><td>成果規格已能說清楚、要一份可交付檔</td></tr>
+    <tr><td><b>Codex</b></td><td>程式碼、儲存庫、測試、PR</td><td>程式變更、差異、測試結果</td><td>核心工作是軟體工程</td></tr>
+  </table></div>
+  <div class="note blue">💡 老師開場原話：<i>「很多人會跟我說老師，那個 Work 到底在哪裡啊，它是不是跟 Claude 的 Code／Work 很像？基本上還蠻雷同的⋯⋯它剛好借在聊天跟 Codex 中間。」</i></div>
+
+  <h3 id="m-agent">3.2 Work＋Codex＝Agent：會「動手」的兩個模式</h3>
+  <figure class="shot">
+    <img src="ep46-img/d_work_home.jpg" alt="ChatGPT 桌面版 Work 首頁 What should we work on" loading="lazy">
+    <figcaption><span class="ts">03:00</span>切到 <b>Work</b> 分頁：大標「<b>What should we work on?</b>」、輸入框「Work with ChatGPT」、左下 <b>⚠ 完整存取權</b>、右下模型 <b>5.6 Sol 極高</b>。下方三個起手建議：<b>建立檔案或網站／研究並規劃下一步／自動化例行與重複性工作</b>。左欄已釘選「製作 Codex AI 員工備課包」「設定 OpenRouter 新模型」「設定 config.toml 連接本地模型」等。</figcaption>
+  </figure>
+  <ul class="pt">
+    <li><b>Chat</b> 產生一個「可讀的回答」，通常以文字為終點、由你主導下一步；速度快、適合來回討論。</li>
+    <li><b>Work</b> 把目標「跑成可審核的成果」：先規劃、再找資料與操作工具，能建立文件／簡報／試算表／Sites，途中可補資料、改方向、核准動作。官方定義它是 <b>outcome-oriented agent（目標導向代理）</b>。</li>
+    <li><b>Codex</b> 專攻軟體工程，會顯示開發細節與審查畫面。Work 與 Codex 都屬於「Agent 類」——差別在一個交付「辦公成果」、一個交付「程式變更」。</li>
+    <li>邊界（官方簡報 p5 附註）：<b>Codex 不能在網頁／手機當可選模式</b>；手機 Remote 只能存取「部分桌面 Codex 任務」。</li>
+  </ul>
+
+  <h3 id="m-surface">3.3 手機、網頁、桌面：能力並不相同</h3>
+  <figure class="shot">
+    <img src="ep46-img/s06_deliver.jpg" alt="簡報第5頁 手機網頁桌面能力比較" loading="lazy">
+    <figcaption><span class="ts">07:15</span>簡報 p5「手機、網頁、桌面：能力並不相同」——同一個 ChatGPT，在不同裝置能做的事不一樣。（畫面為 PowerPoint 放映前的編輯檢視，投影片 5/25）</figcaption>
+  </figure>
+  <div class="twrap"><table>
+    <tr><th style="width:80px">裝置</th><th>能做什麼</th></tr>
+    <tr><td><b>手機</b></td><td>Chat 與 Work 在<b>雲端執行</b>；可上傳檔案，<b>不能直接讀取電腦本機資料</b>。</td></tr>
+    <tr><td><b>網頁</b></td><td>用 Chat／Work、串接 Plugin、建立文件與 Sites；<b>雲端對話可跨裝置延續</b>。</td></tr>
+    <tr><td><b>桌面</b></td><td>同時提供 Chat／Work／Codex；<b>授權後可讀本機資料與桌面 App</b>。</td></tr>
+  </table></div>
+  <div class="note gold">⚠️ 官方重點：<b>雲端 Work 可同步；本機聊天與本機檔案仍留在該電腦。</b>要它讀你電腦裡的檔，就得用桌面版並授權。</div>
+</section>
+
+<!-- 4 目標式交付 -->
+<section class="chapter" id="sec-deliver">
+  <span class="chip" style="background:linear-gradient(90deg,#2f6df0,#10a37f)">CHAPTER 02 · 實錄</span>
+  <h2 class="ct">4. Work 目標式交付（新青安 3.0 實戰）</h2>
+  <p class="cd">這是本集的重頭戲：老師只講一句「目標」，讓 Work 自己把一份<b>「新青安 3.0 政策懶人包」動畫簡報</b>從無到有做出來——過程全程可見、可補料、可改方向，最後 <b>16 分鐘</b>交出 5 頁 PPTX。</p>
+
+  <h3 id="d-goal">4.1 給「目標」，不是給「問題」</h3>
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="ep46-img/d_plan5.jpg" alt="Work 下目標並開始規劃 5 步驟" loading="lazy">
+      <figcaption><span class="ts">10:15</span>語音目標送出：「<b>我目標是要做，用這個動畫的方式的簡報，然後來介紹新青安 3.0 政策，作為政策懶人包。簡報 5 頁（image2.0）</b>」→ <b>已設為目標</b>。助理回：<i>「我會先確認目前資料夾裡是否已有半成品，接著查核『新青安 3.0』的最新政策內容，避免簡報資訊過期或寫錯。」</i>顯示<b>步驟 1/5</b>，右側「輸出內容／來源」面板。</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="ep46-img/d_bg16x9.jpg" alt="Work 自動搜尋官方公告並產出 16:9 背景" loading="lazy">
+      <figcaption><span class="ts">10:45</span>Work 自動<b>已搜尋網路</b>：「政策資料我已抓到<b>行政院與財政部 2026/07/16 最新公告</b>，會用官方資料做內容基準。使用 <b>presentations</b> 技能產出簡報檔，並用圖像生成做動畫背景。」策略：先做 <b>5 張 16:9 無文字插畫背景</b>，避免 AI 把中文字畫錯；政策文字由簡報工具用「可編輯文字」疊上去。</figcaption>
+    </figure>
+  </div>
+  <p>老師示範的下指令方式，正好對應官方簡報 p9 的「<b>好提示詞＝結果＋脈絡＋來源＋限制＋驗收</b>」五欄公式：</p>
+  <div class="twrap"><table>
+    <tr><th style="width:70px">欄位</th><th>意義</th><th>本次示範對應</th></tr>
+    <tr><td>結果</td><td>要交付什麼？給誰用？</td><td>新青安 3.0 政策懶人包簡報</td></tr>
+    <tr><td>脈絡</td><td>背景、目的、已知決策</td><td>動畫風格、給一般民眾看的懶人包</td></tr>
+    <tr><td>來源</td><td>檔案、連結、資料範圍</td><td>行政院／財政部官方公告</td></tr>
+    <tr><td>限制</td><td>頁數、格式、語氣</td><td>5 頁、image2.0、後補「標楷體、字級≥24」</td></tr>
+    <tr><td>驗收</td><td>數字、版面、缺口</td><td>共 5 頁、無文字超出版面、依官方公告</td></tr>
+  </table></div>
+
+  <h3 id="d-plan">4.2 五步驟自動規劃：它先想好再動手</h3>
+  <p>下完目標後，Work 沒有立刻生圖，而是<b>先把任務拆成 5 個可驗收的步驟</b>再逐一執行——這正是它跟「聊天」最大的差別。實際跑出的步驟：</p>
+  <ol class="st">
+    <li>盤點現有檔案素材（先看資料夾有沒有半成品）</li>
+    <li>查核新青安 3.0 政策重點（自動網頁搜尋官方公告）</li>
+    <li>規劃 5 頁動畫懶人包腳本</li>
+    <li>產出 5 頁 Image 2.0 圖像（先背景、後疊字）</li>
+    <li>整理交付檔並驗證（頁數、版面、來源）</li>
+  </ol>
+  <div class="note green">✅ 對照官方簡報 p7「六步循環」：<b>定義成果 → 收集脈絡 → 規劃步驟 → 執行工具 → 產出檔案 → 預覽驗收</b>。任何一步都能補資料或改方向，不必等到最後才發現做錯。</div>
+
+  <h3 id="d-make">4.3 查公告、做背景、疊上可編輯文字</h3>
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="ep46-img/d_font3task.jpg" alt="生成的新青安封面與改字型任務" loading="lazy">
+      <figcaption><span class="ts">13:29</span>生出的<b>封面</b>（新青安 3.0・青年安心成家購屋優惠貸款・政策懶人包・2026/08/01 上路・重點：減負擔挺婚育精準補助強化查核）。右側 ChatGPT 正在處理使用者追加的「標楷體、字級≥24」要求，並說明<i>「這可能影響版面，但我尊重你的偏好，會把字級設到至少 24；『微軟正黑體』指的是字體本身要換。」</i></figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="ep46-img/d_pptx_policy.jpg" alt="新青安簡報資格頁" loading="lazy">
+      <figcaption><span class="ts">28:00</span>簡報第 2 頁「<b>先看你能不能申請</b>」核心資格：①本人、配偶、未成年子女均無自有住宅 ②申貸時未滿 50 歲 ③申貸年齡＋核貸年限 ≤ 80 ④本人年所得 ≤ 200 萬元；房屋總價上限：台北 3,500 萬、新北新竹 2,500 萬、其他 2,000 萬。<b>資料來源：行政院、財政部公告（2026/07/16）</b>。</figcaption>
+    </figure>
+  </div>
+  <ul class="pt">
+    <li><b>先背景、後文字</b>是關鍵手法：AI 生圖容易把中文寫成亂碼，所以讓它只畫「16:9 無文字插畫背景」，再用簡報工具把<b>可編輯的中文</b>疊上去——版面乾淨、文字也不會錯。</li>
+    <li><b>資料要有出處</b>：Work 自己去查行政院／財政部 2026/07/16 公告，每頁附上「資料來源」註記；老師強調只改版面、<b>不改政策內容</b>。</li>
+    <li><b>途中可加條件</b>：學員在 Meet 聊天室補「標楷體、字級≥24」，Work 立刻把它納入後續步驟——這就是官方講的 <b>steer（中途導引）</b>。</li>
+  </ul>
+
+  <h3 id="d-done">4.4 16 分鐘交付，再一句話改稿</h3>
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="ep46-img/d_pptx_done.jpg" alt="Work 完成簡報並可下載 PPTX" loading="lazy">
+      <figcaption><span class="ts">26:45</span>交付：「<b>已完成 5 頁動畫風格『新青安 3.0 政策懶人包』簡報。文字已使用標楷體風格，最小字級不低於 24pt；並依官方 2026/07/16 公告整理內容。已驗證：共 5 頁、無文字超出版面。</b>」提供 <b>🔴 下載簡報 PPTX</b>，標註「<b>適用於 16m 15s</b>／完成目標用時約 16 分鐘」。</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="ep46-img/d_deliver.jpg" alt="四張動畫背景與追加資訊圖表指令" loading="lazy">
+      <figcaption><span class="ts">29:15</span>4 張動畫背景排開（城市住宅／開會／情侶／房屋金幣儀表）。老師再追加：「<b>另外生成一頁資訊圖表，風格改成台北 101，做 2 頁</b>」——展示交付後還能持續迭代。（模型此時顯示 5.5 中）</figcaption>
+    </figure>
+  </div>
+  <p>官方簡報 p13 提醒：<b>產出不是終點</b>，交付後要看三件事，改稿時用「精準修正句型」把漂移降到最低——</p>
+  <div class="twrap"><table>
+    <tr><th style="width:70px">檢查</th><th>問自己</th></tr>
+    <tr><td>正確</td><td>數字、姓名、日期、引文與來源是否一致？</td></tr>
+    <tr><td>完整</td><td>是否覆蓋原始需求、必要章節與例外情況？</td></tr>
+    <tr><td>可用</td><td>字級、版面、公式、連結與檔案格式是否可交付？</td></tr>
+  </table></div>
+  <div class="prompt">精準修正句型（官方 p13）：
+• 只修改第 6 頁圖表標題；其餘版面不變。
+• 把所有百分比重新對照原始試算表，列出更動清單。
+• 將摘要改為主管閱讀的一頁版，保留來源與限制。</div>
+  <div class="golden"><div class="q">「如果你會說『完成後交給我一份⋯⋯』，那就用 Work。」</div><div class="a">官方簡報 p6 判斷口訣</div></div>
+</section>
+
+<!-- 5 選對模型 -->
+<section class="chapter" id="sec-model">
+  <span class="chip" style="background:linear-gradient(90deg,#d4508e,#7a4fd6)">CHAPTER 03 · 實錄</span>
+  <h2 class="ct">5. 選對模型：Sol／Terra／Luna</h2>
+  <p class="cd">GPT-5.6 之後模型命名變了——不再是一串代號，而是三個「性格」：<b>Sol、Terra、Luna</b>。加上「推理強度」，就能依任務難度與規模挑到最划算的組合。</p>
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="ep46-img/d_modelpick.jpg" alt="Work 模型下拉選單 Sol Terra Luna" loading="lazy">
+      <figcaption><span class="ts">08:15</span>Work 的模型下拉：<b>5.6 Sol／5.6 Terra（✓ 快思）／5.6 Luna／5.5／5.3 Codex Spark</b>。進階可分別調「<b>推理強度</b>（快思／中）」與「<b>速度</b>（標準／快速）」。左下此時是「代我核准」。</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="ep46-img/s17_models.jpg" alt="簡報 GPT-5.6 三模型定位" loading="lazy">
+      <figcaption><span class="ts">25:15</span>簡報 p16「<b>GPT-5.6：Sol、Terra、Luna 三種定位</b>」用太陽／地球／月亮視覺化：Sol＝最深度、Terra＝最均衡、Luna＝最快速。Source: openai.com/index/gpt-5-6。</figcaption>
+    </figure>
+  </div>
+  <div class="twrap"><table>
+    <tr><th style="width:70px">模型</th><th>定位</th><th>適合任務</th><th>特性</th></tr>
+    <tr><td><b>Sol</b></td><td>模糊、困難、需要判斷與精修</td><td>深度研究、策略、複雜文件、電腦操作</td><td>深度最高；通常較慢、用量較高</td></tr>
+    <tr><td><b>Terra</b></td><td>需求大致清楚的日常工作</td><td>報告、分析、簡報、流程文件</td><td>能力、速度與成本平衡</td></tr>
+    <tr><td><b>Luna</b></td><td>規則明確、可大量重複</td><td>擷取、分類、轉換、結構摘要</td><td>速度最快、成本最低</td></tr>
+  </table></div>
+  <ul class="pt">
+    <li><b>推理強度</b>（官方 p18）：Light（範圍明確）→ Medium（日常預設，Power 預設為 Sol Medium）→ High／Extra High（多步驟多來源）→ Max（讓單一模型想更久）→ <b>Ultra（用子 Agent 平行處理可拆分的工作）</b>。</li>
+    <li>原則：<b>先用「最低可達品質」的強度，不夠再往上調</b>——省 token、也省等待。</li>
+    <li>老師實務：做簡報 Terra 或 Sol 就夠；要省容量選 5.5；寫複雜、要夾東夾西的 code 才上更重的模型。</li>
+    <li>模型不是固定身份：同一個任務可以<b>先用 Terra，遇到模糊的關鍵點再升 Sol</b>。</li>
+  </ul>
+  <div class="golden"><div class="q">「你還不知道最佳解長什麼樣 → Sol；知道方向要完整處理 → Terra；已有規則格式範例 → Luna。」</div><div class="a">官方簡報 p17 選模型三問</div></div>
+</section>
+
+<!-- 6 權限 Sites Remote -->
+<section class="chapter" id="sec-power">
+  <span class="chip" style="background:linear-gradient(90deg,#c98a0a,#d4508e)">CHAPTER 04 · 實錄</span>
+  <h2 class="ct">6. 權限、Sites 與手機 Remote</h2>
+  <p class="cd">Work 能「動手」，就一定會碰到權限與安全。這一章收在三個延伸主題：<b>怎麼核准動作、用 Sites 一句話建站、用手機 Remote 遙控電腦</b>。</p>
+
+  <h3 id="p-approve">6.1 三種核准權限：把「動手的範圍」握在手上</h3>
+  <figure class="shot">
+    <img src="ep46-img/d_approval.jpg" alt="ChatGPT 動作核准三選項" loading="lazy">
+    <figcaption><span class="ts">06:00</span>「<b>ChatGPT 動作應如何核准？</b>」三選項：<b>要求核准</b>（一律先問是否要編輯外部檔案及使用網際網路）／<b>代我核准</b>（僅對偵測為可能不安全的操作要求核准）／<b>完整存取權</b>（✓，可無限制存取網際網路和你電腦上的任何檔案）＋<b>自訂（config.toml）</b>。</figcaption>
+  </figure>
+  <ul class="pt">
+    <li>對應官方簡報 p20「<b>人在迴路</b>」四原則：<b>最小授權</b>（只開任務需要的檔案／網站／App）、<b>憑證隔離</b>（密碼只在瀏覽器輸入、不貼進聊天）、<b>來源不盲信</b>（把網頁內容視為未受信任）、<b>敏感動作覆核</b>（送出、發布、變更權限、刪除前先確認）。</li>
+    <li>教學建議：熟悉前先用「要求核准」看它每一步想做什麼；上手後再視情況放寬到「代我核准」。<b>「完整存取權」= 它能碰你整台電腦</b>，要清楚自己在授權什麼。</li>
+    <li>金句（官方 p20）：<b>「AI 可以跑流程；責任與最終判斷仍由人承擔。」</b></li>
+  </ul>
+
+  <h3 id="p-sites">6.2 Sites：一句話生成可分享的互動頁面</h3>
+  <figure class="shot">
+    <img src="ep46-img/s14_sites.jpg" alt="Work 用 Sites 建立 AI Agent 課程網站的執行過程" loading="lazy">
+    <figcaption><span class="ts">32:00</span>另一個 Work 任務「<b>建立 AI Agent 課程網站</b>」的執行紀錄：「此環境沒有可用的 Linux 子系統，所以我會用等效的 <b>Windows 流程</b>建立同一套網站模板」「基礎環境已就緒，現在替換成正式網站內容，重點放在<b>四套工具的比較、課程模組與可交付成果</b>」——遇到系統限制會自己找等效做法繞過。</figcaption>
+  </figure>
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="ep46-img/d_aiagent.jpg" alt="AI Agent 課程網站成品海報" loading="lazy">
+      <figcaption><span class="ts">32:15</span>成品海報「<b>AI Agent 實戰課程</b>」——四工具主軸 <b>Codex／Opencode／Claude Code／Antigravity</b>，訴求「實戰導向・工具整合・能力升級」。發布前推送被 <b>Git 安全檢查擋下</b>（執行身分不同）→ 加安全例外後續傳 Sites。</figcaption>
+    </figure>
+    <figure class="shot" style="display:flex;flex-direction:column;justify-content:center;background:#fbfcff;padding:6px 16px">
+      <figcaption style="border:0;background:none;color:var(--ink2);font-size:13px;line-height:1.9">
+      <b>Sites 三步驟（官方 p14）</b><br>
+      1️⃣ 描述網站的對象、用途、資料與互動<br>
+      2️⃣ 檢查<b>私人預覽</b>，再用文字要求調整<br>
+      3️⃣ 設定可見對象，確認後<b>發布網址</b><br>
+      <span style="color:var(--pink)">⚠️ 發布邊界：每個部署網址都是正式環境；付費方案適用（Free／Go 不含）；首波不含 EEA／瑞士／英國。<b>課程與行政資料，別把學員名冊、成績、身分放進公開 Site。</b></span>
+      </figcaption>
+    </figure>
+  </div>
+
+  <h3 id="p-remote">6.3 手機 Remote：掃 QR 遙控你的電腦</h3>
+  <figure class="shot">
+    <img src="ep46-img/d_remote_qr.jpg" alt="ChatGPT 設定手機 Remote 遙控 QR 碼" loading="lazy">
+    <figcaption><span class="ts">05:15</span>設定 → 連線 → 「<b>控制其他裝置</b>」：手機端跳出「Allow this phone to access Codex on your computer?」，桌面顯示「<b>在你的裝置上核准，即可遠端控制這台電腦</b>」，可切「電話／電腦」並掃描 <b>QR 碼</b>配對。左側設定選單可見<b>寵物、外掛程式、瀏覽器、Computer use、掛勾、連線</b>等項目。</figcaption>
+  </figure>
+  <ul class="pt">
+    <li><b>手機 Remote</b> 讓你人不在電腦前，也能用手機核准／查看桌面 Codex 的部分任務（呼應簡報 p5：手機 Remote 可存取「部分」桌面 Codex 任務）。</li>
+    <li><b>寵物</b>（粽寶／簡報鴞等）不只是裝飾：它會<b>幫你管理對話串、提示需要注意的事項</b>；demo 中用「幫我設定我的寵物」一句話就能挑角色（晨學狐／研研貓／簡報鴞⋯⋯）。</li>
+    <li>這些延伸功能都建立在同一個安全前提上：<b>先確認登入的帳號、只授權需要的範圍、敏感動作自己覆核。</b></li>
+  </ul>
+  <div class="golden"><div class="q">「Work 幫你把流程跑完，但『要不要送出、要不要發布』永遠是你按的。」</div><div class="a">權限篇金句</div></div>
+</section>
+
+<!-- 7 名詞 -->
+<section class="chapter" id="sec-terms">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5a5866)">GLOSSARY</span>
+  <h2 class="ct">7. 專有名詞卡</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:130px">名詞</th><th>白話</th><th>正式定義</th></tr>
+    <tr><td>Chat</td><td>聊天問答</td><td>以對話為主、產生可讀回答的模式；速度快、你主導下一步</td></tr>
+    <tr><td>Work</td><td>交付成果的代理</td><td>目標導向 Agent：規劃步驟、找資料、操作工具，產出文件／簡報／表格／Site</td></tr>
+    <tr><td>Codex</td><td>寫程式的代理</td><td>針對程式碼、儲存庫、測試、PR 的開發模式，顯示開發與審查細節</td></tr>
+    <tr><td>Agent（代理）</td><td>會自己動手完成任務的 AI</td><td>結合模型、指令、工具、來源與執行迴圈；Work 與 Codex 皆屬此類</td></tr>
+    <tr><td>Sol／Terra／Luna</td><td>深／均衡／快 三種模型</td><td>GPT-5.6 的三種定位：Sol 最深、Terra 最平衡、Luna 最快最省</td></tr>
+    <tr><td>推理強度</td><td>讓 AI 想多久</td><td>Light→Medium→High／Extra High→Max→Ultra；Ultra 用子 Agent 平行處理</td></tr>
+    <tr><td>Sites</td><td>一句話生成網站</td><td>由描述生成可分享互動頁面，先私人預覽、再設可見對象發布</td></tr>
+    <tr><td>Plugin／App</td><td>技能包／外部連接</td><td>Plugin 打包可重複工作流程與技能；App 連接 Drive／Gmail／Slack 等資料與動作</td></tr>
+    <tr><td>Remote</td><td>手機遙控電腦</td><td>以 QR 配對，讓手機核准／存取桌面上部分 Codex 任務</td></tr>
+    <tr><td>完整存取權</td><td>放行 AI 碰整台電腦</td><td>核准層級之一：可無限制存取網際網路與本機任何檔案（相對「要求核准／代我核准」）</td></tr>
+    <tr><td>寵物（粽寶等）</td><td>對話小管家</td><td>管理對話串、提示需注意事項的桌面角色，可自訂</td></tr>
+    <tr><td>image2.0</td><td>新版生圖</td><td>本集用來生成 16:9 動畫風格背景的圖像生成能力</td></tr>
+  </table></div>
+</section>
+
+<!-- 8 檢核 -->
+<section class="chapter" id="sec-check">
+  <span class="chip" style="background:linear-gradient(90deg,#c98a0a,#d4508e)">SELF CHECK</span>
+  <h2 class="ct">8. 課後自我檢核（照本集實作）</h2>
+  <p class="cd">都對應本集真的示範過的動作與官方簡報要點。可到<a href="ep46-ai-skills.html">互動技能地圖</a>逐項打勾。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">主題</th><th>你應該做得到…</th></tr>
+    <tr><td>🧭 三模式</td><td>① 說出 Chat／Work／Codex 各自的產出與時機　② 解釋為什麼 Work＋Codex 才叫 Agent　③ 知道手機／網頁／桌面能力不同（本機資料只有桌面授權後能讀）</td></tr>
+    <tr><td>🎯 目標交付</td><td>① 用「結果＋脈絡＋來源＋限制＋驗收」五欄寫一個 Work 目標　② 看懂它「先規劃步驟再動手」　③ 懂「先生無字背景、再疊可編輯文字」避免中文亂碼　④ 交付後用精準修正句型改稿</td></tr>
+    <tr><td>🧠 選模型</td><td>① 依難度／規模選 Sol／Terra／Luna　② 調對推理強度（先低再往上）　③ 知道同一任務可先 Terra 再升 Sol</td></tr>
+    <tr><td>🔐 權限延伸</td><td>① 分清要求核准／代我核准／完整存取權　② 用 Sites 三步驟建站並記得發布邊界（別放個資）　③ 知道手機 Remote 與寵物的用途　④ 記得「送出／發布」由人按</td></tr>
+  </table></div>
+</section>
+
+<!-- 9 來源 -->
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5a5866)">SOURCES</span>
+  <h2 class="ct">9. 資料來源與製作說明</h2>
+  <ul class="pt">
+    <li><b>原始教材：</b>EP46「抽絲剝繭談 ChatGPT Work」課堂錄影（37:09）＋官方課程簡報《ChatGPT-Work-快速上手課程簡報.pptx》（25 頁，資料更新 2026.07.19）。</li>
+    <li><b>逐幀製作方式：</b>下載完整錄影 → ffmpeg 依節點時間碼與場景變化抽出畫面 → <b>親眼逐幀判讀</b>每個操作畫面（Chat／Work 切換、模型選單、新青安簡報生成、PowerPoint 檢視、Sites 建站、Remote QR）→ 裁切成 17 張真實截圖嵌入本頁；並對照課堂逐字稿與簡報原文，引號內文字取自逐字稿、畫面可辨識文字或官方簡報。</li>
+    <li><b>官方引用來源（簡報標註）：</b>ChatGPT Work and Codex（help.openai.com/articles/20001275）、GPT-5.6 in ChatGPT（20001354）、GPT-5.6 發表頁（openai.com/index/gpt-5-6）、Creating and managing ChatGPT Sites（20001339）、Plugins（20001256）、Built-in browser（20001277）。政策數據（新青安 3.0）以簡報引用之行政院、財政部 2026/07/16 公告為準。</li>
+    <li><b>誠實聲明：</b>本頁內容以錄影實際發生的順序與畫面為準。逐字稿由語音辨識產生、偶有錯字（如工具名、模型名），已依畫面與官方簡報校正後採用；示範中的「16 分鐘」「7,311KB」「步驟 1/5」等數字均取自畫面實際顯示。新青安 3.0 政策細節為<b>課程簡報示範內容</b>，實際申辦請以主管機關最新公告為準。</li>
+    <li><b>介面參考：</b>互動技能地圖頁沿用本站 EP44／EP45 的卡片式多層導覽與遊戲化進度設計。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  EP46「抽絲剝繭談 ChatGPT Work」逐幀課堂筆記・2026/07 整理<br>
+  🍀 Learn AI with Tarshar｜搭配 <a href="ep46-ai-skills.html">互動技能地圖</a> 使用效果最佳
+</footer>
+
+</body>
+</html>

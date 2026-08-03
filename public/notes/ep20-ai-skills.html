@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>打通 Anthropic 任督二脈：Claude 篇｜互動式學習地圖</title>
+<meta name="description" content="EP20 晨學講堂：Claude 全功能整理——額度與隱私、深度思考與寫作風格、Artifacts／SVG、Connectors 連接器、Projects 與 Research、桌面版與 Chrome 擴充、Excel 與數據分析、官方 Skills 一覽，互動式多層次學習地圖">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269;
+  --green:#3f8560; --orange:#bf6a1e; --red:#c0453f; --teal:#0d8f80;
+  --feat:#9c7b23; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(28px,4.6vw,46px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--txt);background:none;-webkit-text-fill-color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:660px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:9px}
+.steps li{list-style:none;counter-increment:st;display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--txt2);line-height:1.7}
+.steps li::before{content:counter(st);flex:none;width:25px;height:25px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:var(--c,var(--feat));margin-top:1px}
+.steps li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+.prompt,.promptbox{background:#1d1d1f;border:1px solid #2c2c31;border-radius:10px;padding:13px 15px;margin-top:6px;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt b,.promptbox b{color:#fff}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <a class="navlink" href="../radio/" style="border-color:#e0cf9c" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <div class="logo">
+    <div class="dot">🧭</div>
+    <div>Claude 任督二脈地圖<small>MORNING LEARNING · EP20</small></div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋技能關鍵字：額度、隱私、深度思考、Artifacts、Connectors、Excel…" autocomplete="off">
+  </div>
+  <a class="navlink" href="ep20-notes.html">📝 課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">EP20 · 晨學講堂 · 2026/01/24</span>
+  <h1>打通 Anthropic 任督二脈<br>Claude 篇（含 Cowork 介紹及應用）</h1>
+  <p class="sub">從額度與隱私設定開始，走過深度思考、寫作風格、Artifacts／SVG、Connectors 連接器、Projects 與 Research，一路到桌面版、Chrome 擴充、Excel 整合與官方 Skills 一覽。<br>點進每一章，逐層展開<b>本集實際教到</b>的設定與技巧，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🎙️ 生成式AI應用電台・晨學講堂</span>
+    <span>🧩 Connectors／Artifacts／Projects</span>
+    <span>📊 Excel 與數據分析</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>5</b><span>大主題</span></div>
+  <div class="stat"><b>18</b><span>實戰技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 18 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--blue)" onclick="showChapter('setup')">
+        <div class="glowline"></div><span class="emoji">🔧</span>
+        <h3><em>CHAPTER 01</em>基礎設置與隱私</h3>
+        <p>額度與成本管理、介面語言操作建議、隱私保護設定、自定義指令（Personal preferences）、MCP 讀取型擴充連結。</p>
+        <div class="foot"><div class="mini"><i data-mini="setup"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--cyan)" onclick="showChapter('thinking')">
+        <div class="glowline"></div><span class="emoji">🧠</span>
+        <h3><em>CHAPTER 02</em>深度思考與寫作風格</h3>
+        <p>Extended thinking 四步驟（定義→探索→分析→綜合）、內建四種寫作風格，以及打造專屬寫作風格的方法。</p>
+        <div class="foot"><div class="mini"><i data-mini="thinking"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--purple)" onclick="showChapter('artifacts')">
+        <div class="glowline"></div><span class="emoji">🎨</span>
+        <h3><em>CHAPTER 03</em>Artifacts：視覺化與 SVG</h3>
+        <p>SVG 文字雲／流程圖生成、拖入 PowerPoint 轉可編輯圖形、小遊戲示範，以及 Artifacts 五步驟工作流。</p>
+        <div class="foot"><div class="mini"><i data-mini="artifacts"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--green)" onclick="showChapter('connectors')">
+        <div class="glowline"></div><span class="emoji">🔌</span>
+        <h3><em>CHAPTER 04</em>Connectors／Projects／Research</h3>
+        <p>把 Claude 接上 Google Drive／Gmail／GitHub／Calendar、自訂 Connector 與風險、Projects 專案空間、Research 可查證研究。</p>
+        <div class="foot"><div class="mini"><i data-mini="connectors"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--orange)" onclick="showChapter('tools')">
+        <div class="glowline"></div><span class="emoji">🛠️</span>
+        <h3><em>CHAPTER 05</em>多端工具與數據分析</h3>
+        <p>桌面版應用與安裝、Chrome 瀏覽器擴充、Excel 整合與統計分析，以及其他介面設定與官方 Skills 一覽。</p>
+        <div class="foot"><div class="mini"><i data-mini="tools"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+
+    <div class="resources">
+      <h3>📦 <span>課程原始資料</span></h3>
+      <div class="res-grid">
+        <a href="ep20-notes.html"><span class="ic">📝</span><span><b>課堂筆記</b>課程筆記 Doc + 簡報 PDF 全文整理</span></a>
+        <a href="../radio/"><span class="ic">📻</span><span><b>直播電台系列</b>回系列總覽，一集一卡</span></a>
+        <a href="https://chromewebstore.google.com/publisher/anthropic/u308d63ea0533efcf7ba778ad42da7390" target="_blank" rel="noopener"><span class="ic">🌐</span><span><b>Claude in Chrome</b>官方擴充功能安裝頁</span></a>
+        <a href="https://marketplace.microsoft.com/en-us/product/saas/wa200009404?tab=overview" target="_blank" rel="noopener"><span class="ic">📊</span><span><b>Claude in Excel</b>Microsoft AppSource 安裝頁</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-setup" class="view" style="--c:var(--blue)"></section>
+  <section id="view-thinking" class="view" style="--c:var(--cyan)"></section>
+  <section id="view-artifacts" class="view" style="--c:var(--purple)"></section>
+  <section id="view-connectors" class="view" style="--c:var(--green)"></section>
+  <section id="view-tools" class="view" style="--c:var(--orange)"></section>
+</main>
+
+<footer>
+  本頁為 EP20「打通 Anthropic 任督二脈：Claude 篇」課後整理・介面沿用本站互動式學習地圖模板<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2026｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+const DATA = {
+  setup: {
+    key:'setup', color:'var(--blue)', emoji:'🔧', code:'CHAPTER 01', title:'基礎設置與隱私',
+    intro:'在正式使用 Claude 之前，先理解額度限制與隱私設定，是發揮效能與控管成本的第一步。',
+    topics:[
+      {t:'額度管理與介面語言', s:'免費 50 次／Pro 175–200 次｜課程筆記 一',
+       blocks:[
+        {h:'額度方案',ul:['免費版：約可進行 <b>50 次</b>對話。','Pro 版：約可進行 <b>175–200 次</b>對話。']},
+        {h:'重要提醒',warn:'在「設定（Settings）」中，建議關閉「額外增量付費」相關選項。除非是企業或專案需求，否則應避免因高頻使用而產生非預期費用。'},
+        {h:'介面語言建議',p:'目前 Claude 介面仍以<b>英文為主</b>；瀏覽器即時翻譯可用於閱讀，但執行<b>資料匯出、程式碼輸出、檔案處理</b>等複雜指令時，建議切回英文介面以降低錯誤率。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep20-notes.html#sec-setup" style="color:var(--blue)">筆記 1：基礎設置與使用策略</a>'}]},
+      {t:'隱私設定與自定義指令', s:'關閉改善模型／位置分享｜課程筆記 二',
+       blocks:[
+        {h:'隱私保護設定',ul:['建議關閉：<b>改善模型（Help improve Claude）</b>。','建議關閉：<b>分享位置（Location metadata）</b>。','可避免對話用於訓練，降低個人與地理資訊外洩風險。']},
+        {h:'自定義指令（Personal preferences）',p:'設定 Claude 的<b>長期行為規則</b>：角色定位（資料分析師／政策研究員／行銷顧問）、回覆風格（條列式／學術寫作／政策分析語氣）、語言與呈現方式。簡報範例填法：<b>"Be concise, use bullet points, always provide examples."</b>——屬帳號級預設，跨對話通用。'},
+        {h:'心法',tip:'這一區塊等同於為 Claude 建立「長期工作人格設定」，可套用到教學／顧問型、簡報型、SOP／流程型等不同任務。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep20-notes.html#sec-privacy" style="color:var(--blue)">筆記 2：隱私與個人化配置</a>'}]},
+      {t:'MCP 擴充連結（讀取為主）', s:'Google Drive／Gmail／日曆｜課程筆記 二',
+       blocks:[
+        {h:'目前能力範圍',p:'Claude 可連結 <b>Google Drive、日曆與 Gmail</b> 等服務，但目前功能<b>以「讀取」為主</b>，尚未支援直接寫入或自動修改內容。實務上較適合作為<b>輔助判讀與整理工具</b>，而非自動化執行工具。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep20-notes.html#sec-privacy" style="color:var(--blue)">筆記 2：MCP 擴充連結</a>'}]}
+    ]
+  },
+  thinking: {
+    key:'thinking', color:'var(--cyan)', emoji:'🧠', code:'CHAPTER 02', title:'深度思考與寫作風格',
+    intro:'Claude 的核心強項：結構清楚、推理完整、文字表現穩定。',
+    topics:[
+      {t:'深度思考模式 Extended thinking', s:'時鐘圖示｜定義→探索→分析→綜合｜簡報',
+       blocks:[
+        {h:'適合場景',ul:['技術或政策方案比較。','多方案利弊分析。','高風險或高影響決策判斷。']},
+        {h:'四步驟流程',steps:['定義問題（Define）：出發解讀問題核心。','探索分支（Explore）：探索不同解法分支。','深度分析（Analyze）：針對各分支做深度分析。','綜合方案（Synthesize）：綜合各分析結果成一個方案。']},
+        {h:'看課堂筆記',p:'👉 <a href="ep20-notes.html#sec-think" style="color:var(--cyan)">筆記 3：深度思考模式</a>'}]},
+      {t:'寫作風格四選一', s:'Normal／Concise／Formal／Explanatory｜簡報',
+       blocks:[
+        {h:'四種內建風格',table:{head:['風格','適用場景'],rows:[['Normal','一般溝通、日常任務的標準語氣'],['Concise','重點直接、精簡有力，快速摘要／條列／標題'],['Formal','正式專業，正式文件／商業書信／報告／學術寫作'],['Explanatory','逐步拆解概念＋範例，適合教學／指南']]}},
+        {h:'心法',tip:'用「風格」控制呈現方式，用「prompt」控制任務內容。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep20-notes.html#sec-think" style="color:var(--cyan)">筆記 3：寫作風格 Writing style</a>'}]},
+      {t:'打造專屬寫作風格', s:'分析語氣與結構特徵｜課程筆記 三',
+       blocks:[
+        {h:'三步驟',steps:['提供一段你自己的既有文字。','請 Claude 分析你的語氣與結構特徵（條列導向／台灣政策語境／行政體系寫作）。','將其作為「專屬寫作風格」長期套用。']},
+        {h:'誰特別需要',p:'這一步驟，對於<b>研究者、公部門寫作與課程講師</b>特別關鍵。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep20-notes.html#sec-think" style="color:var(--cyan)">筆記 3：寫作風格客製化</a>'}]}
+    ]
+  },
+  artifacts: {
+    key:'artifacts', color:'var(--purple)', emoji:'🎨', code:'CHAPTER 03', title:'Artifacts：視覺化與 SVG',
+    intro:'把 Claude 的輸出變成「作品」與「可分享的成品」——涵蓋圖表、簡報素材與小型互動工具。',
+    topics:[
+      {t:'SVG 圖形生成與簡報實戰', s:'文字雲／圓餅圖／流程圖→PPT 可編輯｜課程筆記 四',
+       blocks:[
+        {h:'可直接產出',ul:['文字雲。','圓餅圖。','架構流程圖。','簡報用示意圖（皆以 SVG 向量格式輸出）。']},
+        {h:'簡報實戰三步',ul:['SVG 下載後拖入 PowerPoint。','點選「轉換為圖形」，拆解為可編輯物件。','自由更換顏色與字型，作為正式簡報素材。']},
+        {h:'看課堂筆記',p:'👉 <a href="ep20-notes.html#sec-artifacts" style="color:var(--purple)">筆記 4：SVG 圖形生成與簡報實戰</a>'}]},
+      {t:'遊戲與小工具示範', s:'貪食蛇／俄羅斯方塊｜課程筆記 四',
+       blocks:[
+        {h:'適用情境',ul:['教學展示。','技術概念說明。','AI 能力示範。']},
+        {h:'看課堂筆記',p:'👉 <a href="ep20-notes.html#sec-artifacts" style="color:var(--purple)">筆記 4：遊戲與小工具示範</a>'}]},
+      {t:'Artifacts 五步驟工作流', s:'Create→Edit→Preview→Share→Collaborate｜簡報',
+       blocks:[
+        {h:'五步驟',steps:['創建（Create）。','編輯（Edit）。','預覽（Preview）。','分享（Share）。','協作（Collaborate）。']},
+        {h:'特別適合',p:'圖、表、流程圖、互動小工具、可重混的模板。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep20-notes.html#sec-artifacts" style="color:var(--purple)">筆記 4：Artifacts 五步驟</a>'}]}
+    ]
+  },
+  connectors: {
+    key:'connectors', color:'var(--green)', emoji:'🔌', code:'CHAPTER 04', title:'Connectors／Projects／Research',
+    intro:'把 Claude 接上你的資料與工具，並升級成可管理的工作空間與可查證的研究助手。',
+    topics:[
+      {t:'新增自訂連接器', s:'Google Drive／Gmail／GitHub／Calendar｜簡報',
+       blocks:[
+        {h:'常見 Connectors',ul:['Google Drive','Gmail','GitHub','Google Calendar']},
+        {h:'運作方式',p:'讓 Claude 連到自己或公司內部的系統／服務，在設定中運作及回應記憶。伺服器需要 <b>OAuth 驗證</b>，重複利用專屬功能按鈕。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep20-notes.html#sec-connectors" style="color:var(--green)">筆記 5：新增自訂連接器</a>'}]},
+      {t:'自訂 Connector 設定與風險', s:'Name／Remote MCP server URL／Advanced settings｜簡報',
+       blocks:[
+        {h:'需填欄位',ul:['<b>Name</b>：輸入 connector 名稱。','<b>Remote MCP server URL</b>：例如 https://api.mcp-server.com。','<b>Advanced settings</b>：OAuth／安全性配置。']},
+        {h:'設定五步驟',steps:['開始設定新 Connector。','輸入基本資訊。','配置伺服器 URL。','設定進階安全選項。','儲存並驗證連線。']},
+        {h:'風險提醒',warn:'未經驗證的伺服器、敏感資料傳輸風險、安全設定不足。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep20-notes.html#sec-connectors" style="color:var(--green)">筆記 5：自訂 Connector 詳細設定</a>'}]},
+      {t:'連接流程與權限', s:'選擇服務→授權→設置權限→確認範圍｜簡報',
+       blocks:[
+        {h:'四步驟',steps:['選擇服務。','授權連接。','設置權限。','確認範圍。']},
+        {h:'預設權限',p:'多數服務<b>預設為「只讀」權限</b>；連接不等於永久儲存，權限與資料邊界要先講清楚。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep20-notes.html#sec-connectors" style="color:var(--green)">筆記 5：連接流程與權限</a>'}]},
+      {t:'Projects 專案功能', s:'一套任務、資料、規則與產出格式｜簡報',
+       blocks:[
+        {h:'四步驟',steps:['設定專案名稱與目標。','匯入或創建教材與規範資料。','定義固定輸出格式與任務清單。','配置專案規則與工作流。']},
+        {h:'看課堂筆記',p:'👉 <a href="ep20-notes.html#sec-projects" style="color:var(--green)">筆記 6：Projects 專案功能</a>'}]},
+      {t:'Research 研究功能', s:'從「我覺得」到「我查到，且可引用」｜簡報',
+       blocks:[
+        {h:'ON／OFF 差異',ul:['<b>Research OFF</b>：只能憑內部知識回答。','<b>Research ON</b>：會實際搜尋官方文件、大型媒體、部落格／論壇等來源，並附引用。']},
+        {h:'看課堂筆記',p:'👉 <a href="ep20-notes.html#sec-projects" style="color:var(--green)">筆記 6：Research 研究功能</a>'}]}
+    ]
+  },
+  tools: {
+    key:'tools', color:'var(--orange)', emoji:'🛠️', code:'CHAPTER 05', title:'多端工具與數據分析',
+    intro:'從桌面版、瀏覽器擴充到 Excel 與統計分析，再到官方 Skills 生態一覽。',
+    topics:[
+      {t:'桌面版應用與安裝', s:'同步快、整合本機環境｜課程筆記＋簡報',
+       blocks:[
+        {h:'適合對象',p:'桌面版 Claude 適合<b>文字工作者、工程與資料分析人員</b>，優點是<b>同步速度快</b>，且與<b>本機環境整合度高</b>（尤其是 Claude Code／MCP）。'},
+        {h:'安裝三步驟',steps:['下載應用程式（Download App）。','執行安裝檔（Run Installer）。','登入帳戶（Log In）。']},
+        {h:'看課堂筆記',p:'👉 <a href="ep20-notes.html#sec-tools" style="color:var(--orange)">筆記 7：桌面版應用</a>'}]},
+      {t:'Chrome 瀏覽器擴充', s:'即時讀取當前網頁內容｜課程筆記 五',
+       blocks:[
+        {h:'操作方式',p:'可直接讀取當前網頁內容，操作方式接近即時助理，特別適合<b>資訊蒐集與快速整理</b>。'},
+        {h:'實務範例',p:'在 Google 地圖搜尋餐廳時，開啟側邊欄，要求 Claude：「整理目前畫面中所有餐廳名稱、評價與距離，並製成表格。」'},
+        {h:'看課堂筆記',p:'👉 <a href="ep20-notes.html#sec-tools" style="color:var(--orange)">筆記 7：Chrome 瀏覽器擴充功能</a>'}]},
+      {t:'Excel 整合與統計分析', s:'公式／樞紐分析表／趨勢圖／t 檢定／ANOVA｜課程筆記 六',
+       blocks:[
+        {h:'Excel 整合可做',ul:['生成 Excel 公式。','建立樞紐分析表。','視覺化趨勢圖。']},
+        {h:'學術與統計分析',ul:['成對樣本或獨立樣本 t 檢定。','變異數分析（ANOVA）。','迴歸分析。']},
+        {h:'投稿前小技巧',tip:'請 Claude 協助檢查：P 值是否達顯著水準、論述是否符合學術書寫慣例、統計結果敘述是否一致。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep20-notes.html#sec-excel" style="color:var(--orange)">筆記 8：Excel 與數據分析應用</a>'}]},
+      {t:'其他介面設定與官方 Skills', s:'Appearance／Chat font／Skills 一覽｜簡報',
+       blocks:[
+        {h:'介面選項（簡報列出）',ul:['Appearance 外觀（Light／Dark／System／Auto）。','Chat font（Sans／Dyslexic friendly）。','Domain allowlist、Extra usage、Plan usage limits。','Export data、Shared chats、Notifications。','Code execution and file creation、Allow network egress。']},
+        {h:'官方預先打包 Skills',table:{head:['Skill','用途'],rows:[['web-artifacts-builder','較複雜的互動式前端 Web 作品'],['slack-gif-creator','規劃與製作適合 Slack 的 GIF'],['skill-creator','把工作流程包裝成新技能'],['theme-factory','幫 Artifact 套一致主題視覺'],['canvas-design','設計海報、插畫等平面視覺稿'],['algorithmic-art','用程式畫演算法藝術／生成圖'],['doc-coauthoring','結構化流程共同撰寫文件'],['internal-comms','代寫公司內部公告／狀態更新'],['brand-guidelines','自動套用 Anthropic 品牌風格'],['mcp-builder','教你撰寫 MCP 伺服器']]}},
+        {h:'應用領域分類',p:'依用途大致歸類在：Life stuff、Marketing、Design、Legal、Human Resources、Finance、Data Science、Engineering、Operations、Product Management、Sales 等分類下。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep20-notes.html#sec-settings" style="color:var(--orange)">筆記 9：其他介面設定與官方 Skills 一覽</a>'}]}
+    ]
+  }
+};
+const ORDER = ['setup','thinking','artifacts','connectors','tools'];
+const $ = s=>document.querySelector(s);
+function renderChapter(ch){
+  const d=DATA[ch];const next=ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];const prev=ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html=`<div class="chapter-head"><span class="emoji">${d.emoji}</span><div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div></div>`;
+  d.topics.forEach((tp,i)=>{const id=`${ch}-${i}`;
+    html+=`<div class="topic" id="topic-${id}"><div class="topic-head" onclick="toggleTopic('${id}')"><span class="num">${i+1}</span><h4>${tp.t}<small>${tp.s}</small></h4><input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)"><span class="chev">▶</span></div><div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{html+=`<div class="block"><h5>${b.h}</h5>`;
+      if(b.p)html+=`<p>${b.p}</p>`;
+      if(b.ul)html+=`<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps)html+=`<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.table)html+=`<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.tip)html+=`<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn)html+=`<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html+=`</div>`;});
+    html+=`</div></div></div>`;});
+  html+=`<div class="chapnav"><a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a><a onclick="showHome()" style="text-align:center">回總覽<b>🏠 五大主題</b></a><a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a></div>`;
+  $('#view-'+ch).innerHTML=html;
+}
+ORDER.forEach(renderChapter);
+function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('#view-'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function showHome(){switchView('home');$('#crumbs').style.display='none';clearSearch();}
+function showChapter(ch){switchView(ch);$('#crumbs').style.display='flex';$('#crumbHere').textContent=`${DATA[ch].emoji} ${DATA[ch].title}`;clearSearch();syncChecks();}
+function toggleTopic(id){$('#topic-'+id).classList.toggle('open');}
+function openTopic(ch,i){showChapter(ch);const el=$('#topic-'+ch+'-'+i);el.classList.add('open');setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+const KEY='ep20-skills-v1';
+const store=()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){const s=store();if(val)s[id]=1;else delete s[id];localStorage.setItem(KEY,JSON.stringify(s));updateProgress();}
+const TOTAL=ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){const done=Object.keys(store()).length;const pct=Math.round(done/TOTAL*100);$('#progFill').style.width=pct+'%';$('#progText').textContent=`${done} / ${TOTAL} 項技能已掌握`;$('#statDone').textContent=done;$('#statPct').textContent=pct+'%';ORDER.forEach(ch=>{const sub=DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;const el=document.querySelector(`[data-mini="${ch}"]`);if(el)el.style.width=Math.round(sub/DATA[ch].topics.length*100)+'%';});}
+function syncChecks(){const s=store();document.querySelectorAll('input[data-skill]').forEach(cb=>{cb.checked=!!s[cb.dataset.skill];});}
+function resetProgress(){if(confirm('確定要清空所有打勾進度嗎？')){localStorage.removeItem(KEY);syncChecks();updateProgress();}}
+function stripTags(s){return s.replace(/<[^>]+>/g,'');}
+const INDEX=[];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{let body=tp.s+' ';tp.blocks.forEach(b=>{if(b.p)body+=stripTags(b.p)+' ';if(b.ul)body+=b.ul.map(stripTags).join(' ')+' ';if(b.steps)body+=b.steps.map(stripTags).join(' ')+' ';if(b.tip)body+=stripTags(b.tip)+' ';if(b.warn)body+=stripTags(b.warn)+' ';if(b.table)body+=b.table.rows.flat().map(stripTags).join(' ')+' ';});INDEX.push({ch,i,title:tp.t,body});}));
+$('#searchInput').addEventListener('input',e=>{const q=e.target.value.trim();const box=$('#searchResults');if(!q){box.classList.remove('show');box.innerHTML='';return;}const hits=INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));box.classList.add('show');if(!hits.length){box.innerHTML=`<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：深度思考、Connectors、Excel、Skills）</div>`;return;}const hl=s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);box.innerHTML=hits.map(x=>{const pos=x.body.toLowerCase().indexOf(q.toLowerCase());const snip=x.body.substr(Math.max(0,pos-20),90);return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})"><div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div><h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;}).join('');});
+function clearSearch(){$('#searchInput').value='';$('#searchResults').classList.remove('show');$('#searchResults').innerHTML='';}
+syncChecks();updateProgress();
+</script>
+</body>
+</html>

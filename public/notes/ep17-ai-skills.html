@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>從零到上線：打造你的第一個 Google 擴充功能｜互動式學習地圖</title>
+<meta name="description" content="EP17 晨學講堂：什麼是擴充功能、手刻理解派 vs AI 委外派、manifest/popup/scripts/styles 身體結構、未封裝載入與反查原始碼、把擴充功能變成 AI 工作流，互動式多層次學習地圖">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#7c3aed; --pink:#b25269;
+  --green:#3f8560; --orange:#c2620c; --red:#c0453f; --teal:#0d8f80;
+  --feat:#c2620c; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(28px,4.6vw,46px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--txt);background:none;-webkit-text-fill-color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:660px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:9px}
+.steps li{list-style:none;counter-increment:st;display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--txt2);line-height:1.7}
+.steps li::before{content:counter(st);flex:none;width:25px;height:25px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:var(--c,var(--feat));margin-top:1px}
+.steps li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+.prompt,.promptbox{background:#1d1d1f;border:1px solid #2c2c31;border-radius:10px;padding:13px 15px;margin-top:6px;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt b,.promptbox b{color:#fff}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <a class="navlink" href="../radio/" style="border-color:#eecba0" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <div class="logo">
+    <div class="dot">🧩</div>
+    <div>擴充功能地圖<small>MORNING LEARNING · EP17</small></div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋技能關鍵字：manifest、popup、scripts、載入未封裝、自動填入…" autocomplete="off">
+  </div>
+  <a class="navlink" href="ep17-notes.html">📝 課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">EP17 · 晨學講堂 · 01/20</span>
+  <h1>從零到上線<br>打造你的第一個 Google 擴充功能</h1>
+  <p class="sub">核心心法：<b>先存在，再談功能</b>。manifest.json 是入場券，popup 是介面，scripts 是邏輯工廠，styles 決定用戶信不信任你。<br>點進每一章，逐層展開<b>本集實際教到</b>的概念與步驟，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🎙️ 生成式AI應用電台・晨學講堂</span>
+    <span>🧩 Chrome 擴充功能</span>
+    <span>🛠️ manifest／popup／scripts</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>4</b><span>大主題</span></div>
+  <div class="stat"><b>10</b><span>實戰技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 10 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--blue)" onclick="showChapter('start')">
+        <div class="glowline"></div><span class="emoji">🚦</span>
+        <h3><em>CHAPTER 01</em>是什麼＋兩條路</h3>
+        <p>擴充功能能做什麼、和一般網站的差別，以及手刻理解派與 AI 委外派兩種學習路線。</p>
+        <div class="foot"><div class="mini"><i data-mini="start"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--orange)" onclick="showChapter('body')">
+        <div class="glowline"></div><span class="emoji">🧬</span>
+        <h3><em>CHAPTER 02</em>身體結構</h3>
+        <p>manifest.json 是入場券、popup.html/js 是畫面與行為、scripts 是邏輯工廠、styles 決定信任感。</p>
+        <div class="foot"><div class="mini"><i data-mini="body"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--green)" onclick="showChapter('load')">
+        <div class="glowline"></div><span class="emoji">📂</span>
+        <h3><em>CHAPTER 03</em>載入與避坑</h3>
+        <p>開發人員模式載入未封裝項目，以及最常卡住的 Reload 與編碼兩大地雷。</p>
+        <div class="foot"><div class="mini"><i data-mini="load"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--purple)" onclick="showChapter('ai')">
+        <div class="glowline"></div><span class="emoji">🤖</span>
+        <h3><em>CHAPTER 04</em>變成 AI 工作流</h3>
+        <p>自動填入 Prompt 的四層拆解、多平台策略式嘗試，以及如何改自己的 prompts 清單。</p>
+        <div class="foot"><div class="mini"><i data-mini="ai"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+
+    <div class="resources">
+      <h3>📦 <span>課程原始資料</span></h3>
+      <div class="res-grid">
+        <a href="ep17-notes.html"><span class="ic">📝</span><span><b>課堂筆記</b>逐節嵌入 22 張簡報原圖</span></a>
+        <a href="../radio/"><span class="ic">📻</span><span><b>直播電台系列</b>回系列總覽，一集一卡</span></a>
+        <a href="ep18-notes.html"><span class="ic">🔓</span><span><b>相關 EP18</b>打通 Open AI 任督二脈 ChatGPT 篇</span></a>
+        <a href="ep19-notes.html"><span class="ic">🧩</span><span><b>相關 EP19</b>用 YAML 打造可查證工作流</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-start" class="view" style="--c:var(--blue)"></section>
+  <section id="view-body" class="view" style="--c:var(--orange)"></section>
+  <section id="view-load" class="view" style="--c:var(--green)"></section>
+  <section id="view-ai" class="view" style="--c:var(--purple)"></section>
+</main>
+
+<footer>
+  本頁為 EP17「從零到上線：打造你的第一個 Google 擴充功能」課後整理・介面沿用本站互動式學習地圖架構<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2026｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+const DATA = {
+  start: {
+    key:'start', color:'var(--blue)', emoji:'🚦', code:'CHAPTER 01', title:'是什麼＋兩條路',
+    intro:'先搞懂擴充功能是什麼、能做什麼，再選一條適合自己的學習路線。',
+    topics:[
+      {t:'什麼是擴充功能', s:'加在瀏覽器上的小工具｜和一般網站的差別',
+       blocks:[
+        {h:'四種能力',ul:['<b>操作網頁內容</b>：擷取文字表格圖片、自動填表（content script）。','<b>在瀏覽器上新增功能按鈕</b>：popup.html/js 提供操作介面。','<b>背景自動運作</b>：監聽分頁切換、定時任務（background/service worker）。','<b>與瀏覽器深度整合</b>：取得分頁網址、存取本機儲存空間（browser API）。']},
+        {h:'和一般網站的差別',table:{head:['比較項目','一般網站','瀏覽器擴充功能'],rows:[['是否依附瀏覽器','否','是'],['是否能操作其他網站','❌','✅（有權限時）'],['是否可背景執行','❌','✅']]}},
+        {h:'看課堂筆記',shot:{img:'ep17-img/slide08.jpg',cap:'簡報｜常見的擴充功能能做什麼：四宮格'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep17-notes.html#sec-what" style="color:var(--blue)">筆記 1：什麼是擴充功能</a>'}]},
+      {t:'手刻理解派 vs AI 委外派', s:'兩條路都能到終點',
+       blocks:[
+        {h:'兩種作法',ul:['<b>塗法煉鋼（手刻路線）</b>：逐步理解每個檔案與設定的作用，適合想扎實掌握結構的人。','<b>AI 委外路線</b>：把需求與框架交給 AI 生成初版，再由人負責檢查與微調。']},
+        {h:'心法',warn:'不論走哪一條，都必須先看懂架構，才能真正掌控工具。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep17-notes.html#sec-path" style="color:var(--blue)">筆記 2：手刻理解派 vs AI 委外派</a>'}]}
+    ]
+  },
+  body: {
+    key:'body', color:'var(--orange)', emoji:'🧬', code:'CHAPTER 02', title:'身體結構',
+    intro:'用人體來理解擴充功能：入場券、介面、動作腳本、易讀性，四層分工。',
+    topics:[
+      {t:'manifest.json：入場券', s:'必備檔案｜門票比喻',
+       blocks:[
+        {h:'資料夾結構',ul:['<b>manifest.json</b>：一定要有，沒有 Chrome 根本不認得你。','<b>popup.html</b>：有介面才需要。','<b>popup.js</b>：有互動才需要。','<b>content.js</b>：要操作網頁才需要。','<b>icon.png</b>：要自訂圖示才需要。']},
+        {h:'比喻',tip:'Manifest 是門票：沒有它，後面寫再多都沒用。它告訴 Chrome「我是誰、我要做什麼、我要用哪些權限」。'},
+        {h:'最小範例',prompt:'{\n  "manifest_version": 3,\n  "name": "我的第一個擴充功能",\n  "version": "1.0",\n  "action": {\n    "default_title": "點我",\n    "default_popup": "popup.html"\n  }\n}'},
+        {h:'看課堂筆記',shot:{img:'ep17-img/slide14.jpg',cap:'簡報｜為什麼一定要先寫 manifest.json：門票比喻'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep17-notes.html#sec-body" style="color:var(--orange)">筆記 4：身體結構</a>'}]},
+      {t:'popup.html vs popup.js：畫面與行為', s:'一句話記憶：畫出來／動起來',
+       blocks:[
+        {h:'角色對照',table:{head:['項目','popup.html','popup.js'],rows:[['定位','畫面：按鈕、文字、排版','行為：事件監聽、資料處理'],['刪掉會怎樣','介面消失/空白','介面還在但按鈕沒反應'],['教學口訣','畫出來','動起來']]}},
+        {h:'重要提醒',warn:'popup 是「臨時視窗」，關掉就結束，不適合存重要資料——重要資料要用 chrome.storage 或交給 background/service worker。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep17-notes.html#sec-body" style="color:var(--orange)">筆記 4.2：Popup.html vs Popup.js</a>'}]},
+      {t:'Scripts：程式邏輯的真正所在地', s:'popup（入口）→ scripts（工廠）',
+       blocks:[
+        {h:'三分工',table:{head:['檔案','負責什麼'],rows:[['popup.js','介面互動、事件入口（使用者點了什麼）'],['content.js','與網頁互動 DOM（網頁發生了什麼）'],['formulas.js','計算、邏輯、共用功能（資料怎麼算）']]}},
+        {h:'popup.js 的界線',ul:['<b>適合做</b>：接收點擊、顯示 UI、呼叫其他程式。','<b>不適合做</b>：複雜邏輯、重複使用的功能、與網頁深度互動。']},
+        {h:'心法',tip:'一個檔案只負責一種類型的事情，這個原則會決定你未來專案會不會亂。'},
+        {h:'看課堂筆記',shot:{img:'ep17-img/slide22.jpg',cap:'簡報｜Scripts 資料夾的角色分工'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep17-notes.html#sec-body" style="color:var(--orange)">筆記 4.3：Scripts</a>'}]},
+      {t:'Styles：讓功能看得懂、用得久', s:'popup.css｜Icons 第一印象',
+       blocks:[
+        {h:'popup.css 控制重點',ul:['固定 popup 尺寸（寬高、捲軸）。','Header／Tabs／Card／Modal 的層次。','Hover／Active／Focus 的操作回饋。']},
+        {h:'除錯心法',tip:'UI 出問題時，九成不是 JS，而是 CSS。先用 DevTools 看元素有沒有出現，再看是不是被 overflow: hidden 蓋掉，最後才懷疑 JS 沒跑。'},
+        {h:'Icons 尺寸',p:'16×16（工具列）／32×32／48×48／128×128（商店、管理頁）。Icon 與 Styles 不會讓功能更強，但會決定使用者覺不覺得這個工具值得信任。'},
+        {h:'看課堂筆記',shot:{img:'ep17-img/slide31.jpg',cap:'簡報｜Styles popup.css：Before/After'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep17-notes.html#sec-body" style="color:var(--orange)">筆記 4.4：Styles</a>'}]}
+    ]
+  },
+  load: {
+    key:'load', color:'var(--green)', emoji:'📂', code:'CHAPTER 03', title:'載入與避坑',
+    intro:'學會把資料夾變成真的擴充功能，並避開新手最常卡住的兩個地雷。',
+    topics:[
+      {t:'載入未封裝項目', s:'開發人員模式｜反查原始碼',
+       blocks:[
+        {h:'操作步驟',steps:['前往 chrome://extensions/','開啟右上角「開發人員模式」','按「載入未封裝項目」，選資料夾（不是選 manifest.json）']},
+        {h:'反查原始碼觀念',p:'很多好用的擴充功能不一定在商店上架。即使沒有公開 GitHub，也能透過已安裝的檔案結構回推其設計邏輯，理解它如何運作，進而替換成你要的 AI 平台或工作流程。'},
+        {h:'看課堂筆記',shot:{img:'ep17-img/slide13.jpg',cap:'簡報｜按載入未封裝項目選資料夾'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep17-notes.html#sec-load" style="color:var(--green)">筆記 5：未封裝載入</a>'}]},
+      {t:'避坑指南：Reload 與編碼', s:'最常卡的兩個地方',
+       blocks:[
+        {h:'兩大地雷',ul:['<b>改完檔案一定要 Reload</b>：chrome://extensions → 按重新載入圖示。','<b>中文亂碼 99% 是檔案不是 UTF-8</b>：manifest／html／js 都要是 UTF-8。']},
+        {h:'終極解法',warn:'仍怪怪的？移除擴充功能 → 關 Chrome → 重新載入未封裝項目。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep17-notes.html#sec-load" style="color:var(--green)">筆記 5：未封裝載入與避坑指南</a>'}]}
+    ]
+  },
+  ai: {
+    key:'ai', color:'var(--purple)', emoji:'🤖', code:'CHAPTER 04', title:'變成 AI 工作流',
+    intro:'把擴充功能升級成「一個畫面控制多個 AI」的效率面板。',
+    topics:[
+      {t:'自動填入 Prompt：content.js 四層拆解', s:'Listener／Finder／Inserter／Trigger',
+       blocks:[
+        {h:'核心邏輯',p:'popup 送來一段文字 → content.js 找到網頁的輸入框 → 把文字寫進去 → 觸發網站的 input 事件，讓前端框架認得「文字真的變了」。'},
+        {h:'四層',steps:['<b>Listener</b>：chrome.runtime.onMessage 接收 popup 的填寫指令。','<b>Finder</b>：document.querySelector 在複雜網頁中抓到輸入框。','<b>Inserter</b>：inputBox.value = text，直接修改 DOM 元素。','<b>Trigger</b>：dispatchEvent(new Event(\'input\'))，「騙過」前端框架（React/Vue）。']},
+        {h:'心法',tip:'到這一刻使用者會第一次明確感覺到差別：不是「我有一個好看的 popup」，而是「它幫我省了一個動作」。'},
+        {h:'看課堂筆記',shot:{img:'ep17-img/slide25.jpg',cap:'簡報｜content.js 四層拆解'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep17-notes.html#sec-flow" style="color:var(--purple)">筆記 6.1：自動填入 Prompt</a>'}]},
+      {t:'多平台策略式嘗試 + 改自己的 prompts', s:'Strategy Pattern｜formulas.js',
+       blocks:[
+        {h:'策略式嘗試',p:'策略陣列：先試 ChatGPT → 再試 Claude → 再試 Gemini → … → 最後才走 insertGeneric() 當保底。for loop 逐個嘗試，成功就結束，全部失敗才回傳 false。'},
+        {h:'代表平台差異',table:{head:['平台','塞文字方式'],rows:[['ChatGPT','優先找 #prompt-textarea，用 React Native Value Setter 觸發'],['Claude／Gemini','富文本編輯器（ProseMirror），Focus → 改內容 → dispatch input'],['Copilot','Shadow DOM 特例，像俄羅斯娃娃一層一層挖進去']]}},
+        {h:'改自己 prompts 三招',ul:['<b>改內容</b>：找到 PROMPT_FORMULAS 裡該筆 id，修改 template。','<b>新增 Prompt</b>：在分類的 formulas: [] 陣列裡加一筆物件。','<b>新增分類</b>：在最外層新增一個 key，會自動產生新 tab。']},
+        {h:'看課堂筆記',shot:{img:'ep17-img/slide27.jpg',cap:'簡報｜核心：策略式嘗試 Strategy Pattern'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep17-notes.html#sec-flow" style="color:var(--purple)">筆記 6.2-6.3：多平台策略與改 prompts</a>'}]}
+    ]
+  }
+};
+const ORDER = ['start','body','load','ai'];
+const $ = s=>document.querySelector(s);
+function renderChapter(ch){
+  const d=DATA[ch];const next=ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];const prev=ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html=`<div class="chapter-head"><span class="emoji">${d.emoji}</span><div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div></div>`;
+  d.topics.forEach((tp,i)=>{const id=`${ch}-${i}`;
+    html+=`<div class="topic" id="topic-${id}"><div class="topic-head" onclick="toggleTopic('${id}')"><span class="num">${i+1}</span><h4>${tp.t}<small>${tp.s}</small></h4><input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)"><span class="chev">▶</span></div><div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{html+=`<div class="block"><h5>${b.h}</h5>`;
+      if(b.p)html+=`<p>${b.p}</p>`;
+      if(b.ul)html+=`<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps)html+=`<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.table)html+=`<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.shot)html+=`<figure class="shot"><img src="${b.shot.img}" alt="" loading="lazy"><figcaption>${b.shot.cap}</figcaption></figure>`;
+      if(b.prompt)html+=`<div class="prompt">${b.prompt.replace(/&/g,'&amp;').replace(/</g,'&lt;')}</div>`;
+      if(b.tip)html+=`<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn)html+=`<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html+=`</div>`;});
+    html+=`</div></div></div>`;});
+  html+=`<div class="chapnav"><a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a><a onclick="showHome()" style="text-align:center">回總覽<b>🏠 四大主題</b></a><a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a></div>`;
+  $('#view-'+ch).innerHTML=html;
+}
+ORDER.forEach(renderChapter);
+function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('#view-'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function showHome(){switchView('home');$('#crumbs').style.display='none';clearSearch();}
+function showChapter(ch){switchView(ch);$('#crumbs').style.display='flex';$('#crumbHere').textContent=`${DATA[ch].emoji} ${DATA[ch].title}`;clearSearch();syncChecks();}
+function toggleTopic(id){$('#topic-'+id).classList.toggle('open');}
+function openTopic(ch,i){showChapter(ch);const el=$('#topic-'+ch+'-'+i);el.classList.add('open');setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+const KEY='ep17-skills-v1';
+const store=()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){const s=store();if(val)s[id]=1;else delete s[id];localStorage.setItem(KEY,JSON.stringify(s));updateProgress();}
+const TOTAL=ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){const done=Object.keys(store()).length;const pct=Math.round(done/TOTAL*100);$('#progFill').style.width=pct+'%';$('#progText').textContent=`${done} / ${TOTAL} 項技能已掌握`;$('#statDone').textContent=done;$('#statPct').textContent=pct+'%';ORDER.forEach(ch=>{const sub=DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;const el=document.querySelector(`[data-mini="${ch}"]`);if(el)el.style.width=Math.round(sub/DATA[ch].topics.length*100)+'%';});}
+function syncChecks(){const s=store();document.querySelectorAll('input[data-skill]').forEach(cb=>{cb.checked=!!s[cb.dataset.skill];});}
+function resetProgress(){if(confirm('確定要清空所有打勾進度嗎？')){localStorage.removeItem(KEY);syncChecks();updateProgress();}}
+function stripTags(s){return s.replace(/<[^>]+>/g,'');}
+const INDEX=[];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{let body=tp.s+' ';tp.blocks.forEach(b=>{if(b.p)body+=stripTags(b.p)+' ';if(b.ul)body+=b.ul.map(stripTags).join(' ')+' ';if(b.steps)body+=b.steps.map(stripTags).join(' ')+' ';if(b.tip)body+=stripTags(b.tip)+' ';if(b.warn)body+=stripTags(b.warn)+' ';if(b.table)body+=b.table.rows.flat().map(stripTags).join(' ')+' ';});INDEX.push({ch,i,title:tp.t,body});}));
+$('#searchInput').addEventListener('input',e=>{const q=e.target.value.trim();const box=$('#searchResults');if(!q){box.classList.remove('show');box.innerHTML='';return;}const hits=INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));box.classList.add('show');if(!hits.length){box.innerHTML=`<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：manifest、Scripts、避坑）</div>`;return;}const hl=s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);box.innerHTML=hits.map(x=>{const pos=x.body.toLowerCase().indexOf(q.toLowerCase());const snip=x.body.substr(Math.max(0,pos-20),90);return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})"><div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div><h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;}).join('');});
+function clearSearch(){$('#searchInput').value='';$('#searchResults').classList.remove('show');$('#searchResults').innerHTML='';}
+syncChecks();updateProgress();
+</script>
+</body>
+</html>

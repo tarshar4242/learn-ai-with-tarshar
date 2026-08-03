@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Google AI Studio 偷藏了這些 Agent！｜互動式學習地圖</title>
+<meta name="description" content="EP45 晨學講堂：Google AI Studio 偷藏了這些 Agent！——Codex 語音聽寫、模型 vs Agent、TTS 情境、Build with Agents、Antigravity、AI Talk Radio、多 Agent 團隊，互動式多層次學習地圖">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269;
+  --green:#3f8560; --orange:#bf6a1e; --red:#c0453f; --teal:#0d8f80;
+  --feat:#3b6bb0; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(28px,4.6vw,46px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--txt);background:none;-webkit-text-fill-color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:660px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:9px}
+.steps li{list-style:none;counter-increment:st;display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--txt2);line-height:1.7}
+.steps li::before{content:counter(st);flex:none;width:25px;height:25px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:var(--c,var(--feat));margin-top:1px}
+.steps li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+.prompt,.promptbox{background:#1d1d1f;border:1px solid #2c2c31;border-radius:10px;padding:13px 15px;margin-top:6px;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt b,.promptbox b{color:#fff}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <a class="navlink" href="../radio/" style="border-color:#a8c686" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <div class="logo">
+    <div class="dot">🤖</div>
+    <div>AI Studio Agent 地圖<small>MORNING LEARNING · EP45</small></div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋技能關鍵字：TTS、Antigravity、AI Talk Radio、sources…" autocomplete="off">
+  </div>
+  <a class="navlink" href="ep45-notes.html">📝 逐幀課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">EP45 · 晨學講堂 · 2026/07/10</span>
+  <h1>Google AI Studio<br>偷藏了這些 Agent！</h1>
+  <p class="sub">AI Studio 不只是「挑一個 Gemini 來聊天」的 Playground——它偷藏了一整排官方 Agent。<br>點進每一章，逐層展開<b>本集實際示範</b>的技能、步驟與指令，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🎙️ 生成式AI應用電台・晨學講堂</span>
+    <span>🧵 示範案例：颱風</span>
+    <span>🗂️ 四大主題 · 11 項實錄技能</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>4</b><span>大主題</span></div>
+  <div class="stat"><b>11</b><span>實錄技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 11 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--cyan)" onclick="showChapter('input')">
+        <div class="glowline"></div>
+        <span class="emoji">⌨️</span>
+        <h3><em>CHAPTER 01</em>輸入加速</h3>
+        <p>貫穿全課的小技巧：Codex 按住說話、聽寫工具＋快捷鍵，游標在哪就寫哪——連 Word 都能用。</p>
+        <div class="foot"><div class="mini"><i data-mini="input"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--blue)" onclick="showChapter('studio')">
+        <div class="glowline"></div>
+        <span class="emoji">🧪</span>
+        <h3><em>CHAPTER 02</em>AI Studio 基礎</h3>
+        <p>Models 與 Agents 兩個世界：Live Translate／TTS／Lyria 3 模型，以及 TTS 情境範本（遊戲 NPC 聲音）。</p>
+        <div class="foot"><div class="mini"><i data-mini="studio"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--purple)" onclick="showChapter('agents')">
+        <div class="glowline"></div>
+        <span class="emoji">🤖</span>
+        <h3><em>CHAPTER 03</em>官方 Agent</h3>
+        <p>Build with Agents 展示間、Antigravity Preview、工具開關與 API 成本、AI Talk Radio，以及「學官方、自己重做」省 token。</p>
+        <div class="foot"><div class="mini"><i data-mini="agents"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--green)" onclick="showChapter('advanced')">
+        <div class="glowline"></div>
+        <span class="emoji">🧩</span>
+        <h3><em>CHAPTER 04</em>進階實作</h3>
+        <p>多 Agent 團隊把任務拆給音效／動畫／闖關子 Agent、做出颱風防災遊戲，並學會付費 vs 自建的取捨與限制。</p>
+        <div class="foot"><div class="mini"><i data-mini="advanced"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+
+    <div class="resources">
+      <h3>📦 <span>課程原始資料</span></h3>
+      <div class="res-grid">
+        <a href="https://drive.google.com/file/d/1fknRZpQIrP-k8W_4JK8zz-_LnMCeHkju/view" target="_blank" rel="noopener"><span class="ic">🎬</span><span><b>錄影回放</b>完整課程影片（37:08）</span></a>
+        <a href="ep45-notes.html"><span class="ic">📝</span><span><b>逐幀課堂筆記</b>真實截圖 + 時間戳 + 逐字稿佐證</span></a>
+        <a href="../radio/"><span class="ic">📻</span><span><b>直播電台系列</b>回系列總覽，一集一卡</span></a>
+        <a href="ep44-notes.html"><span class="ic">🌀</span><span><b>上一集 EP44</b>2026 上半年一定會的 AI 技能</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-input" class="view" style="--c:var(--cyan)"></section>
+  <section id="view-studio" class="view" style="--c:var(--blue)"></section>
+  <section id="view-agents" class="view" style="--c:var(--purple)"></section>
+  <section id="view-advanced" class="view" style="--c:var(--green)"></section>
+</main>
+
+<footer>
+  本頁為 EP45「Google AI Studio 偷藏了這些 Agent！」課後整理・介面沿用本站 EP44 互動式學習地圖<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2026｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+/* ═══════════ 課程資料（章 → 技能 → 內容區塊） ═══════════ */
+const DATA = {
+  input: {
+    key:'input', color:'var(--cyan)', emoji:'⌨️', code:'CHAPTER 01', title:'輸入加速',
+    intro:'開場老師先講一個「會貫穿今天所有工具」的小功能——不管是聊天機器人還是 AI Agent，都一定要下 Prompt；那就把「打字」換成「說話」。',
+    topics:[
+      {t:'Codex 按住說話：跨應用語音聽寫', s:'游標在哪就寫哪，連 Word 都能用｜錄影 00:44',
+       blocks:[
+        {h:'設定路徑',steps:[
+          '進入 Codex（ChatGPT 的桌面 Agent，下載到電腦端）。',
+          '左下角你的頭像 → Setting → 一般往下滑 → <b>聽寫工具</b>。',
+          '選麥克風，設定<b>按住快捷鍵</b>（老師以 Ctrl+A 為例）。',
+          '在任何有文字游標的地方<b>按住快捷鍵說話</b>，放開後語音一字不漏轉成文字。']},
+        {h:'關鍵重點',ul:[
+          '<b>游標在哪，聽寫就寫到哪</b>——不只 Codex 對話框，Word 等有游標的應用都能用。',
+          '簡繁：偶爾出簡體，可在 Codex 設定語言為繁中；在 Word 用<b>校閱 → 繁簡轉換</b>修正。',
+          '定位：這是<b>輸入輔助</b>（加快下 Prompt），不等於 Agent 自動完成任務。',
+          '送出前人工檢查專有名詞、數字與否定詞——語音最容易在這裡出錯。']},
+        {h:'看實錄截圖',p:'👉 <a href="ep45-notes.html#sec-input" style="color:var(--cyan)">逐幀筆記 3：Codex 語音聽寫（含設定頁與 Word 示範）</a>'},
+        {h:'一句話記憶',p:'「語音聽寫解決的是輸入速度，不是思考與驗證。」'}]}
+    ]
+  },
+  studio: {
+    key:'studio', color:'var(--blue)', emoji:'🧪', code:'CHAPTER 02', title:'AI Studio 基礎',
+    intro:'Google AI Studio 像一座 AI 實驗室：Models 是一台台不同用途的機器；Agents 則是已經把機器、工具與流程組裝好的工作站。先把兩個世界分清楚。',
+    topics:[
+      {t:'模型 vs 代理：兩個世界', s:'Models／Agents 分頁的差異｜錄影 06:36',
+       blocks:[
+        {h:'進入主軸',ul:[
+          'Chrome 搜「google ai studio」進入；IO 大會後改版、Logo 換成繽紛色彩。',
+          'Models 清單可見：<b>Gemini 3.5 Live Translate</b>（即時語音翻譯 70+ 語言）、<b>Gemini 3.1 Flash TTS</b>、<b>Lyria 3 Pro（Paid）</b> 音樂模型、生圖（Nano Banana／Imagen）、影片（Veo）、Real-time（Live API）。']},
+        {h:'正式定義',table:{head:['概念','定義'],rows:[
+          ['Model（模型）','接受輸入、產生輸出的基礎 AI 能力——回答一次'],
+          ['Agent（代理人）','以模型為核心，另配指令、工具、來源、權限、執行環境與步驟——會規劃、選工具、執行並組合結果']]}},
+        {h:'看實錄截圖',p:'👉 <a href="ep45-notes.html#s-model" style="color:var(--blue)">逐幀筆記 4.1：模型總覽</a>'},
+        {h:'一句話記憶',p:'「模型回答一次；Agent 會規劃、選工具、執行並組合結果。」'}]},
+      {t:'TTS 情境範本', s:'不只是「把文字唸出來」｜錄影 07:35',
+       blocks:[
+        {h:'課堂示範',ul:[
+          '以前只分 single／多人；現在多了按用途整理的<b>情境</b>：助理、遊戲 NPC、主持人、說故事／廣告。',
+          'Quickstart Templates：The Everyday Assistant／The Guarded NPC／The Energetic Co-Host／The Master Storyteller／The Ad Voiceover／The Training Guide／The Game Show Host／The Patient Teacher。',
+          '老師以「遊戲 NPC」示範，輸入「今天颱風準備要登陸」再換聲線與語速。']},
+        {h:'可調整項目',ul:[
+          '說話內容、角色情境、聲音（speaker）、英文口音／腔調、語速、單人或多人。',
+          '生成後可播放並<b>下載音訊</b>；這仍是單項模型能力，之後 AI Talk Radio 才會串成完整節目。']},
+        {h:'小提醒',warn:'中文腔調選項當時還沒有（英文才有多種口音）；操作以當下畫面與版本為準。'},
+        {h:'看實錄截圖',p:'👉 <a href="ep45-notes.html#s-tts" style="color:var(--blue)">逐幀筆記 4.2：TTS 情境範本</a>'}]}
+    ]
+  },
+  agents: {
+    key:'agents', color:'var(--purple)', emoji:'🤖', code:'CHAPTER 03', title:'官方 Agent',
+    intro:'切到 Agents 分頁，AI Studio 偷藏的一整排官方 Agent 就露出來了。老師先總覽，再挑 Antigravity 與 AI Talk Radio 深入示範，並教一招「省 token 的自建路」。',
+    topics:[
+      {t:'Build with Agents：官方做好的 Agent', s:'六張範本卡與選擇方法｜錄影 10:43',
+       blocks:[
+        {h:'六種官方範本',table:{head:['Agent','用途'],rows:[
+          ['Antigravity Preview','Google 託管遠端 Linux 環境的一般用途自主 Agent'],
+          ['AI Talk Radio','把文字轉成含主持人、來電者與背景音樂的模擬廣播'],
+          ['Customer Support','掃描網站建立客服知識庫並回答問題'],
+          ['Data Analyst','資料分析與互動式商業洞察'],
+          ['Document Processor','文件、費用／發票等處理'],
+          ['Repo Maintainer','分析程式碼庫、找問題並協助維護']]}},
+        {h:'選擇方法',steps:[
+          '先問：輸入是文字／網站／文件／資料／程式碼？',
+          '產物是答案／報告／知識庫／音訊／可執行成品？',
+          '需要哪些工具與外部資料？來源是靜態頁還是動態網站？']},
+        {h:'看實錄截圖',p:'👉 <a href="ep45-notes.html#a-gallery" style="color:var(--purple)">逐幀筆記 5.1：Build with Agents</a>'}]},
+      {t:'Antigravity Preview：雲端自主 Agent', s:'Agent 四大工具之一｜錄影 11:08',
+       blocks:[
+        {h:'重點',ul:[
+          'Agent 四大工具：<b>Claude Code、GPT 的 Codex、開源 OpenCode、Google 的 Antigravity</b>。',
+          'Antigravity 最大特色：<b>可在雲端直接用</b>（不必只靠本機）、模型可選、支援<b>多角色子代理協作</b>。',
+          '中文化非內建，需自行<b>安裝 skill</b>；Preview 代表功能仍會變動。',
+          '雲端 Agent 有自己的環境、來源與網路權限，不等於能自由讀取你整台電腦。']},
+        {h:'看實錄截圖',p:'👉 <a href="ep45-notes.html#a-antigravity" style="color:var(--purple)">逐幀筆記 5.2：Antigravity Preview</a>'}]},
+      {t:'工具開關與 API 成本', s:'Agent 的手、眼睛與通行證｜錄影 12:34',
+       blocks:[
+        {h:'Run settings 工具',table:{head:['工具','作用'],rows:[
+          ['Code execution','在隔離環境執行程式'],
+          ['Grounding with Google Search','查資料並作為回答依據'],
+          ['URL context','讀取指定網址內容作為上下文'],
+          ['Filesystem tools','管理隔離環境中的檔案'],
+          ['Sources / Network rules','已連結的來源／可連網域白名單']]}},
+        {h:'成本提醒',warn:'老師原話：「所有的 agent 都必須要用 API key，你要給他付費的 API key，他才能做使用。」介面能打開，不代表每一步都免費。'},
+        {h:'一句話記憶',p:'「Agent 能做什麼，取決於模型、工具、來源、網路規則與預算五件事。」'}]},
+      {t:'AI Talk Radio：文字變完整 Podcast', s:'TTS＋Lyria 3＋Nano Banana 串成節目｜錄影 14:00',
+       blocks:[
+        {h:'任務與產出',ul:[
+          'prompt：一分鐘、中文、颱風動態、<b>兩位主持人＋配樂</b>、可下載音訊。',
+          '產出不只語音：節目結構、口播、音效／配樂、封面、MP3。',
+          '模型分工：<b>TTS</b> 人聲、<b>Lyria 3</b> 配樂、<b>Nano Banana</b> 封面，Agent 負責排序與整合。',
+          '成品「颱風巴威一分鐘氣象快報」顯示 <b>442,416 tokens</b>——完整 Podcast 很炫，也很吃 token。']},
+        {h:'看實錄截圖',p:'👉 <a href="ep45-notes.html#a-radio" style="color:var(--purple)">逐幀筆記 5.4：AI Talk Radio（設定＋產出）</a>'},
+        {h:'一句話記憶',p:'「Podcast Agent 的價值不是某個模型特別強，而是把腳本、人聲、配樂與封面排成生產線。」'}]},
+      {t:'省 token：讓自己的 Agent 學官方', s:'18 sources／9 rules 先學再自建｜錄影 15:16',
+       blocks:[
+        {h:'建議 Prompt 結構',steps:[
+          '<b>先給目標</b>：例如「學習並打造 AI Talk Radio Agent」。',
+          '<b>給來源</b>：貼上官方 Agent 連結。',
+          '<b>指定學習範圍</b>：讀取 18 個 sources 與 9 個 network rules。',
+          '<b>先回報理解</b>：要它整理架構、工具、限制與流程（先學一次給你看）。',
+          '<b>再動手實作</b>：確認理解正確後才建立自己的版本。']},
+        {h:'界線',warn:'能學的是官方公開規格、流程與可觀察行為，不代表能複製 Google 的私有模型或後端；自建版本仍要確認 API、授權、費用與網路白名單。'},
+        {h:'看實錄截圖',p:'👉 <a href="ep45-notes.html#a-learn" style="color:var(--purple)">逐幀筆記 5.5：學官方、自己重做</a>'}]}
+    ]
+  },
+  advanced: {
+    key:'advanced', color:'var(--green)', emoji:'🧩', code:'CHAPTER 04', title:'進階實作',
+    intro:'把 Antigravity 放到雲端後，它「有手有腳」——這一章用「多 Agent 團隊做一個颱風遊戲」示範，並收在「怎麼選、有什麼限制」。',
+    topics:[
+      {t:'多 Agent 團隊：把大任務拆給角色', s:'音效／動畫／闖關子 Agent｜錄影 21:05',
+       blocks:[
+        {h:'現場任務',prompt:'請幫我針對颱風為主題做一個寓教娛樂的遊戲，\n包含音效、動畫、闖關性劇情設計，\n可以直接打包、用 HTML 呈現的網頁遊戲。\n— 分配給子 Agent：A1 音效、A2 動畫、A3 遊戲設計'},
+        {h:'核心觀念',ul:[
+          '用 Antigravity 的<b>「團隊合作」斜線指令</b>，把任務切更細、分派給不同子 Agent。',
+          '<b>Multi-agent collaboration</b>：主 Agent 接總目標 → 拆子任務 → 分派子 Agent → 整合驗證。',
+          '不是越多越好：子 Agent 過多會增加溝通、重工與成本。適合拆分＝工作能明確分界、可獨立驗收、最後有整合角色。']},
+        {h:'看實錄截圖',p:'👉 <a href="ep45-notes.html#v-team" style="color:var(--green)">逐幀筆記 6.1：多 Agent 團隊</a>'}]},
+      {t:'颱風寓教娛樂遊戲', s:'把知識藏進選擇與後果｜錄影 23:19',
+       blocks:[
+        {h:'成果特徵',ul:[
+          '成品「颱風指揮官」防災遊戲：距登陸 6 小時、防災預算 $300。',
+          '以突發事件推進（海水倒灌、玻璃破裂），玩家<b>選擇應對方式</b>，選擇影響健康／精神狀態。',
+          '有颱風、雷雨背景音效；系統說明錯誤選擇的風險與較好做法。',
+          '老師比較：「會比原本用 Gemini 的 Canvas 做出來的品質再更好一點——畢竟他長出手跟腳了。」']},
+        {h:'驗收清單',steps:[
+          '每個事件是否有正確防災依據？',
+          '錯誤選項是否清楚說明原因？音效／動畫是否干擾閱讀？',
+          '手機是否能操作？HTML 是否能離線開啟或直接部署？']},
+        {h:'看實錄截圖',p:'👉 <a href="ep45-notes.html#v-game" style="color:var(--green)">逐幀筆記 6.2：颱風防災遊戲成果</a>'}]},
+      {t:'選擇路徑與限制', s:'付費 vs 自建、動態網站、CLI｜錄影 25:04',
+       blocks:[
+        {h:'兩條路徑',table:{head:['路徑','適合'],rows:[
+          ['A｜直接用官方 Agent','要快速驗證、願提供 API key、可接受 token 成本'],
+          ['B｜讓自己的 Agent 學官方','想控制流程、重用既有配額、願理解 sources／rules／工具限制']]}},
+        {h:'重要限制',ul:[
+          '<b>Customer Support</b> 偏靜態網頁才好爬；Facebook 等動態、需登入內容爬不到，Google 評論還可以。建知識庫前先驗證「來源能否存取、是否穩定、是否允許使用」。',
+          '<b>CLI Teamwork</b>：用 CLI 介面時，teamwork 要<b>主動用指令叫出</b>，不像網頁版直接有按鈕。',
+          '對 Agent 還不熟 → 先從 <b>Antigravity Preview</b> 試作，再決定是否自建。']},
+        {h:'看實錄截圖',p:'👉 <a href="ep45-notes.html#v-choose" style="color:var(--green)">逐幀筆記 6.3：選擇與限制</a>'},
+        {h:'一句話記憶',p:'「付費買的是速度與已整合流程；自建換來控制力，但要承擔設計、測試與維護。」'}]}
+    ]
+  }
+};
+
+/* ═══════════ 渲染 ═══════════ */
+const ORDER = ['input','studio','agents','advanced'];
+const $ = s=>document.querySelector(s);
+
+function renderChapter(ch){
+  const d = DATA[ch];
+  const next = ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];
+  const prev = ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html = `
+  <div class="chapter-head">
+    <span class="emoji">${d.emoji}</span>
+    <div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div>
+  </div>`;
+  d.topics.forEach((tp,i)=>{
+    const id = `${ch}-${i}`;
+    html += `
+    <div class="topic" id="topic-${id}">
+      <div class="topic-head" onclick="toggleTopic('${id}')">
+        <span class="num">${i+1}</span>
+        <h4>${tp.t}<small>${tp.s}</small></h4>
+        <input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)">
+        <span class="chev">▶</span>
+      </div>
+      <div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{
+      html += `<div class="block"><h5>${b.h}</h5>`;
+      if(b.p) html += `<p>${b.p}</p>`;
+      if(b.ul) html += `<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps) html += `<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.prompt) html += `<div class="promptbox">${b.prompt}</div>`;
+      if(b.table) html += `<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.tip) html += `<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn) html += `<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html += `</div>`;
+    });
+    html += `</div></div></div>`;
+  });
+  html += `
+  <div class="chapnav">
+    <a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a>
+    <a onclick="showHome()" style="text-align:center">回總覽<b>🏠 四大主題</b></a>
+    <a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a>
+  </div>`;
+  $('#view-'+ch).innerHTML = html;
+}
+ORDER.forEach(renderChapter);
+
+function switchView(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  $('#view-'+id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function showHome(){ switchView('home'); $('#crumbs').style.display='none'; clearSearch(); }
+function showChapter(ch){
+  switchView(ch);
+  $('#crumbs').style.display='flex';
+  $('#crumbHere').textContent = `${DATA[ch].emoji} ${DATA[ch].title}`;
+  clearSearch(); syncChecks();
+}
+function toggleTopic(id){ $('#topic-'+id).classList.toggle('open'); }
+function openTopic(ch,i){
+  showChapter(ch);
+  const el = $('#topic-'+ch+'-'+i);
+  el.classList.add('open');
+  setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);
+}
+
+const KEY='ep45-skills-v1';
+const store = ()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){
+  const s = store(); if(val) s[id]=1; else delete s[id];
+  localStorage.setItem(KEY,JSON.stringify(s));
+  updateProgress();
+}
+const TOTAL = ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){
+  const done = Object.keys(store()).length;
+  const pct = Math.round(done/TOTAL*100);
+  $('#progFill').style.width = pct+'%';
+  $('#progText').textContent = `${done} / ${TOTAL} 項技能已掌握`;
+  $('#statDone').textContent = done;
+  $('#statPct').textContent = pct+'%';
+  ORDER.forEach(ch=>{
+    const sub = DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;
+    const el = document.querySelector(`[data-mini="${ch}"]`);
+    if(el) el.style.width = Math.round(sub/DATA[ch].topics.length*100)+'%';
+  });
+}
+function syncChecks(){
+  const s = store();
+  document.querySelectorAll('input[data-skill]').forEach(cb=>{ cb.checked = !!s[cb.dataset.skill]; });
+}
+function resetProgress(){
+  if(confirm('確定要清空所有打勾進度嗎？')){ localStorage.removeItem(KEY); syncChecks(); updateProgress(); }
+}
+
+function stripTags(s){ return s.replace(/<[^>]+>/g,''); }
+const INDEX = [];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{
+  let body = tp.s+' ';
+  tp.blocks.forEach(b=>{
+    if(b.p) body+=stripTags(b.p)+' ';
+    if(b.ul) body+=b.ul.map(stripTags).join(' ')+' ';
+    if(b.steps) body+=b.steps.map(stripTags).join(' ')+' ';
+    if(b.prompt) body+=b.prompt+' ';
+    if(b.tip) body+=stripTags(b.tip)+' ';
+    if(b.warn) body+=stripTags(b.warn)+' ';
+    if(b.table) body+=b.table.rows.flat().map(stripTags).join(' ')+' ';
+  });
+  INDEX.push({ch,i,title:tp.t,body});
+}));
+$('#searchInput').addEventListener('input',e=>{
+  const q = e.target.value.trim();
+  const box = $('#searchResults');
+  if(!q){ box.classList.remove('show'); box.innerHTML=''; return; }
+  const hits = INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));
+  box.classList.add('show');
+  if(!hits.length){ box.innerHTML = `<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：TTS、Antigravity、sources）</div>`; return; }
+  const hl = s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);
+  box.innerHTML = hits.map(x=>{
+    const pos = x.body.toLowerCase().indexOf(q.toLowerCase());
+    const snip = x.body.substr(Math.max(0,pos-20),90);
+    return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})">
+      <div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div>
+      <h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;
+  }).join('');
+});
+function clearSearch(){ $('#searchInput').value=''; $('#searchResults').classList.remove('show'); $('#searchResults').innerHTML=''; }
+
+(function(){
+  const box = $('#stars');
+  for(let i=0;i<70;i++){
+    const s = document.createElement('i');
+    s.style.left = Math.random()*100+'%';
+    s.style.top = Math.random()*100+'%';
+    s.style.animationDelay = (Math.random()*3)+'s';
+    s.style.transform = `scale(${.5+Math.random()*1.5})`;
+    box.appendChild(s);
+  }
+})();
+
+syncChecks(); updateProgress();
+</script>
+</body>
+</html>
