@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>行程管理 PWA 設定頁｜逆向工程規格書 手帳版</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Huninn&display=swap" rel="stylesheet">
+<style>
+  *{ box-sizing:border-box; margin:0; padding:0; }
+
+  :root{
+    --kraft:#d9b98a;
+    --kraft-dark:#c7a26e;
+    --cream:#fdf8ec;
+    --cream-2:#faf3e0;
+    --pista:#a8c686;
+    --pista-light:#dce9c8;
+    --pista-dark:#6d8f4e;
+    --pista-deeper:#55763a;
+    --brown:#8a6a42;
+    --brown-dark:#6b4f2d;
+    --ink:#4a3b28;
+    --pink:#f3cdc8;
+    --pink-deep:#c07f76;
+    --blue:#c3d8e8;
+    --blue-deep:#5f86a3;
+    --yellow:#f6e3a1;
+    --yellow-deep:#a3822f;
+  }
+
+  body{
+    font-family:'Huninn','jf-openhuninn','Yuanti TC','YuanTi TC','PingFang TC','Microsoft JhengHei',sans-serif;
+    color:var(--ink);
+    line-height:1.9;
+    letter-spacing:.03em;
+    background-color:var(--kraft);
+    background-image:
+      radial-gradient(ellipse at 18% 12%, rgba(255,244,214,.35) 0%, rgba(255,244,214,0) 46%),
+      radial-gradient(ellipse at 85% 30%, rgba(120,84,40,.14) 0%, rgba(120,84,40,0) 42%),
+      repeating-linear-gradient(0deg, rgba(139,101,54,.04) 0px, rgba(139,101,54,.04) 1px, transparent 1px, transparent 7px);
+    padding:34px 14px 96px;
+  }
+
+  .page{ max-width:760px; margin:0 auto; }
+
+  /* ── 紙卡 ───────────────────────── */
+  .paper{
+    position:relative;
+    background:var(--cream);
+    background-image:
+      linear-gradient(180deg, rgba(168,198,134,.05) 0%, rgba(255,255,255,0) 22%),
+      repeating-linear-gradient(0deg, transparent 0px, transparent 35px, rgba(138,106,66,.035) 35px, rgba(138,106,66,.035) 36px);
+    border-radius:14px;
+    box-shadow:0 3px 10px rgba(94,66,28,.22), 0 1px 3px rgba(94,66,28,.16);
+    padding:34px 28px 30px;
+    margin:0 0 44px;
+  }
+  .paper::after{
+    content:"";
+    position:absolute; inset:8px;
+    border:2px dashed rgba(168,198,134,.55);
+    border-radius:10px;
+    pointer-events:none;
+  }
+  .paper > *{ position:relative; z-index:1; }
+
+  /* ── 和紙膠帶 ───────────────────── */
+  .tape{
+    position:absolute;
+    width:118px; height:32px;
+    top:-14px; left:50%;
+    transform:translateX(-50%) rotate(-3deg);
+    background:repeating-linear-gradient(45deg,
+      rgba(168,198,134,.82) 0px, rgba(168,198,134,.82) 9px,
+      rgba(253,248,236,.82) 9px, rgba(253,248,236,.82) 18px);
+    opacity:.88;
+    border-left:1px dashed rgba(255,255,255,.7);
+    border-right:1px dashed rgba(255,255,255,.7);
+    box-shadow:0 2px 4px rgba(94,66,28,.18);
+    z-index:2;
+  }
+  .tape.alt{
+    background:repeating-linear-gradient(45deg,
+      rgba(243,205,200,.85) 0px, rgba(243,205,200,.85) 9px,
+      rgba(253,248,236,.85) 9px, rgba(253,248,236,.85) 18px);
+    transform:translateX(-50%) rotate(2.5deg);
+  }
+  .tape.blue{
+    background:repeating-linear-gradient(45deg,
+      rgba(195,216,232,.85) 0px, rgba(195,216,232,.85) 9px,
+      rgba(253,248,236,.85) 9px, rgba(253,248,236,.85) 18px);
+    transform:translateX(-50%) rotate(-2deg);
+  }
+  .tape.corner-l{ left:6px; transform:translateX(0) rotate(-40deg); width:92px; top:-8px; }
+  .tape.corner-r{ left:auto; right:6px; transform:rotate(40deg); width:92px; top:-8px; }
+
+  /* ── 標題區 ─────────────────────── */
+  .cover{ text-align:center; padding-top:44px; }
+  .cover .kicker{
+    display:inline-block; font-size:.85rem; color:var(--brown);
+    background:var(--pista-light); border-radius:999px;
+    padding:2px 16px; margin-bottom:14px;
+  }
+  .cover h1{ font-size:1.72rem; color:var(--pista-deeper); line-height:1.5; margin-bottom:8px; }
+  .cover .sub{ color:var(--brown); font-size:.95rem; }
+  .cover .meta{
+    margin-top:16px; font-size:.8rem; color:var(--brown);
+    border-top:1px dashed var(--kraft-dark); padding-top:12px; display:inline-block;
+  }
+  .deco-line{ color:var(--pista-dark); letter-spacing:.4em; font-size:.9rem; margin-top:10px; }
+
+  /* ── 章節標題 ───────────────────── */
+  h2{
+    display:flex; align-items:center; gap:10px;
+    font-size:1.22rem; color:var(--pista-deeper);
+    margin:0 0 16px; line-height:1.5;
+  }
+  h2 .no{
+    flex:none; width:38px; height:38px;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--pista); color:#fff; border-radius:50%;
+    font-size:1rem; box-shadow:0 2px 0 var(--pista-dark);
+  }
+  h3{ font-size:1.02rem; color:var(--brown-dark); margin:20px 0 8px; }
+  p{ margin:0 0 12px; }
+  strong{ color:var(--pista-deeper); }
+  code{
+    font-family:'SFMono-Regular',Consolas,'Liberation Mono',monospace;
+    background:var(--cream-2); border:1px solid var(--kraft-dark);
+    border-radius:5px; padding:0 5px; font-size:.82em; color:var(--brown-dark);
+    letter-spacing:0;
+  }
+
+  /* ── 導讀卡 ─────────────────────── */
+  .intro-list{ list-style:none; }
+  .intro-list li{ position:relative; padding-left:34px; margin-bottom:10px; }
+  .intro-list li::before{ content:"🍀"; position:absolute; left:2px; top:0; }
+
+  /* ── 便利貼小卡（白話說明） ─────── */
+  .sticky{
+    display:block; background:var(--yellow);
+    background-image:linear-gradient(180deg, rgba(255,255,255,.4) 0%, rgba(255,255,255,0) 30%);
+    border-radius:4px 4px 12px 4px;
+    box-shadow:1px 3px 6px rgba(94,66,28,.2);
+    transform:rotate(-1.2deg);
+    padding:10px 14px; margin:12px 0 16px;
+    font-size:.9rem; color:var(--yellow-deep); max-width:94%;
+  }
+  .sticky b{ color:var(--brown-dark); }
+  .sticky.tilt-r{ transform:rotate(1.2deg); margin-left:auto; }
+  .sticky.note::before{ content:"📌 白話說　"; font-weight:700; color:var(--brown-dark); }
+
+  /* ── 書架格（區塊導覽） ─────────── */
+  .shelf{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:8px 0 6px; }
+  .shelf .book{
+    background:var(--cream-2); border:1.5px dashed var(--kraft-dark);
+    border-radius:10px; padding:10px 14px; font-size:.9rem;
+  }
+  .shelf .book b{ display:block; color:var(--pista-deeper); font-size:.95rem; margin-bottom:2px; }
+
+  /* ── 條列 ───────────────────────── */
+  ul.plain{ list-style:none; }
+  ul.plain li{ position:relative; padding-left:20px; margin-bottom:7px; }
+  ul.plain li::before{ content:"•"; position:absolute; left:4px; color:var(--pista-dark); }
+
+  /* ── 規格表 ─────────────────────── */
+  .tbl-wrap{ overflow-x:auto; margin:6px 0 16px; }
+  table.spec{
+    width:100%; border-collapse:collapse; font-size:.86rem;
+    background:var(--cream-2); border-radius:10px; overflow:hidden;
+  }
+  table.spec th, table.spec td{
+    text-align:left; padding:8px 12px;
+    border-bottom:1px dashed var(--kraft-dark); vertical-align:top;
+  }
+  table.spec th{ background:var(--pista-light); color:var(--pista-deeper); font-weight:700; }
+  table.spec tr:last-child td{ border-bottom:none; }
+  table.spec code{ background:rgba(255,255,255,.6); }
+
+  /* ── 徽章 ───────────────────────── */
+  .badge{ display:inline-block; padding:1px 10px; border-radius:999px; font-size:.76rem; margin-left:4px; }
+  .b-green{ background:#d7ecc4; color:#3f6b28; }
+  .b-amber{ background:var(--yellow); color:var(--yellow-deep); }
+  .b-red{ background:var(--pink); color:#a2554c; }
+  .b-blue{ background:var(--blue); color:var(--blue-deep); }
+
+  /* ── 色票 ───────────────────────── */
+  .swatch{
+    display:inline-block; width:14px; height:14px; border-radius:3px;
+    border:1px solid rgba(0,0,0,.15); vertical-align:-2px; margin-right:5px;
+  }
+
+  /* ── 流程小步 ───────────────────── */
+  .flow{ display:flex; flex-direction:column; gap:6px; }
+  .step{
+    border-radius:12px; padding:10px 14px; font-size:.9rem; line-height:1.7;
+    box-shadow:0 2px 5px rgba(94,66,28,.14); border:1.5px solid rgba(94,66,28,.08);
+  }
+  .st-a{ background:var(--pink); color:#6d3c36; }
+  .st-b{ background:var(--blue); color:#35566e; }
+  .st-tag{ display:inline-block; font-size:.72rem; padding:1px 10px; border-radius:999px; margin-right:8px; background:rgba(255,255,255,.65); }
+  .arrow{ text-align:center; color:var(--brown); font-size:1rem; line-height:1; }
+
+  .divider{ text-align:center; color:var(--pista-dark); letter-spacing:.5em; margin:-16px 0 28px; font-size:.9rem; }
+
+  /* ── 頁尾浮水印 ─────────────────── */
+  .watermark{
+    position:fixed; left:0; right:0; bottom:0; text-align:center;
+    padding:10px 0; font-size:.82rem; color:#7a5c34;
+    background:rgba(217,185,138,.96); border-top:1px dashed rgba(122,92,52,.5);
+    letter-spacing:.08em; z-index:50;
+  }
+
+  @media (max-width:480px){
+    body{ padding:26px 10px 90px; }
+    .paper{ padding:28px 18px 24px; }
+    .cover h1{ font-size:1.4rem; }
+    h2{ font-size:1.1rem; }
+    .shelf{ grid-template-columns:1fr; }
+    .tape{ width:96px; }
+  }
+
+  @media print{
+    body{ background:#f6ecd9; padding:10mm 6mm 14mm; }
+    .paper{ box-shadow:none; border:1px solid var(--kraft-dark); break-inside:avoid; margin-bottom:8mm; }
+    .tape{ box-shadow:none; }
+    .watermark{ position:static; background:none; border-top:1px dashed var(--brown); margin-top:6mm; }
+    .step, .sticky, table.spec{ break-inside:avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ═══ 封面 ═══ -->
+  <section class="paper cover">
+    <span class="tape corner-l"></span>
+    <span class="tape alt corner-r"></span>
+    <span class="kicker">圖書館 ・ 逆向工程規格書</span>
+    <h1>📅 行程管理 PWA｜設定頁</h1>
+    <p class="sub">從前端原始碼還原的「完全一致」規格書 手帳版</p>
+    <div class="deco-line">✦ ✦ ✦</div>
+    <p class="meta">
+      整理：Clover｜建立於 2026-07-24｜方法：前端 chunk 還原逆向工程<br>
+      已去識別化：人名、信箱、網域、憑證、產品品牌名一律移除或改為功能角色
+    </p>
+  </section>
+
+  <!-- ═══ 導讀 ═══ -->
+  <section class="paper">
+    <span class="tape"></span>
+    <h2><span class="no">☕</span>這份規格書在講什麼</h2>
+    <ul class="intro-list">
+      <li>這是一款手機優先的 <b>PWA</b>：拍照辨識會議通知單 → 自動變成行程 → 全部存在自己手機 → 需要時再匯出到行事曆。</li>
+      <li>本文只逆向它的「<b>設定頁</b>」，但一路把設定會牽動的資料規則（提醒、配額、備份、主題）全部拆解出來，目標是照著就能重寫、行為一模一樣。</li>
+      <li>網頁本體是 Next.js 動態產生的，直接看原始碼只有「載入中…」；我把背後的程式檔抓下來還原，才看得到真正的邏輯。</li>
+      <li>依妳的要求，凡是「是誰做的、什麼牌子」的字眼都拿掉了，第三方服務改用功能角色稱呼。</li>
+    </ul>
+    <div class="sticky note">拍照辨識那一步，照片會加密傳到伺服器請 AI 看一眼；<b>其餘所有資料都只留在自己手機，不上雲。</b></div>
+  </section>
+
+  <!-- ═══ 設定頁全區塊 ═══ -->
+  <section class="paper">
+    <span class="tape blue"></span>
+    <h2><span class="no">1</span>設定頁長什麼樣（由上到下 13 區）</h2>
+    <div class="shelf">
+      <div class="book"><b>① 辨識金鑰卡</b>填自己的 AI 辨識金鑰，填了就不限次數</div>
+      <div class="book"><b>② 辨識次數說明</b>每日配額規則＋今日用量</div>
+      <div class="book"><b>③ 外觀與風格</b>4 款佈景主題</div>
+      <div class="book"><b>④ 字體大小</b>小／中／大</div>
+      <div class="book"><b>⑤ 預設提醒＋通知開關</b>提前分鐘＋允許/封鎖/未設定</div>
+      <div class="book"><b>⑥ 匯出行事曆</b>企業郵件／OAuth雲端／僅本機</div>
+      <div class="book"><b>⑦ OAuth 行事曆卡</b>選雲端行事曆時才出現</div>
+      <div class="book"><b>⑧ 匯出／分享</b>有行程才顯示，否則空狀態</div>
+      <div class="book"><b>⑨ 裝置同步 A→B</b>本機備份庫＋備份檔合併</div>
+      <div class="book"><b>⑩ 分享與匯入說明</b>依 iOS／Android 不同</div>
+      <div class="book"><b>⑪ 本機儲存說明</b>一句話聲明不上雲</div>
+      <div class="book"><b>⑫ 開發者資訊</b>已去識別化</div>
+    </div>
+    <p style="margin-top:12px">頁首標題就是「<b>設定</b>」，掛載前先顯示「載入中…」骨架，資料就緒後由全域 Store 提供行程與偏好。</p>
+  </section>
+
+  <!-- ═══ 辨識金鑰＋配額 ═══ -->
+  <section class="paper">
+    <span class="tape"></span>
+    <h2><span class="no">2</span>拍照辨識：金鑰與每日配額</h2>
+    <p><b>沒填金鑰</b>：用平台的免費辨識，每天 <b>10 次</b>（台灣時間每天 0:00 歸零），伺服器備兩組 Key 自動輪替。<br>
+       <b>填了自己的金鑰</b>：改用自己的金鑰計費，<b>不限次數</b>。</p>
+    <ul class="plain">
+      <li>金鑰只暫存在本次瀏覽階段（分頁全關就清掉），拍照時才透過加密連線傳給伺服器代呼叫。</li>
+      <li>輸入框可切換顯示／隱藏（眼睛鈕），等寬字型，提示貼上金鑰。</li>
+      <li>狀態徽章：<span class="badge b-green">已設定・不限次數</span> 或 <span class="badge b-amber">未設定・每日 10 次</span></li>
+      <li>只有「拍照成功完成 AI 辨識（非示範資料）」才扣 1 次；<b>手動輸入行程不算</b>。</li>
+    </ul>
+    <div class="sticky note tilt-r">配額怎麼算：今天用 <code>Asia/Taipei</code> 時區的日期判定；若偏好裡記的日期不是今天，用量就從 0 重算。剩餘 = 10 − 已用。</div>
+  </section>
+
+  <!-- ═══ 佈景主題 ═══ -->
+  <section class="paper">
+    <span class="tape alt"></span>
+    <h2><span class="no">3</span>四款佈景主題（含完整配色）</h2>
+    <div class="tbl-wrap">
+    <table class="spec">
+      <tr><th>id</th><th>名稱</th><th>個性</th><th>主色</th></tr>
+      <tr><td><code>corporate</code></td><td>企業專業 <span class="badge b-blue">辦公室推薦</span></td><td>清晰、低干擾</td><td><span class="swatch" style="background:#0F4C81"></span><code>#0F4C81</code></td></tr>
+      <tr><td><code>paper</code></td><td>紙本月曆</td><td>米白底、紅圈標今天</td><td><span class="swatch" style="background:#c41e3a"></span><code>#c41e3a</code></td></tr>
+      <tr><td><code>minimal</code></td><td>簡約清晰</td><td>灰白極簡</td><td><span class="swatch" style="background:#0071e3"></span><code>#0071e3</code></td></tr>
+      <tr><td><code>vivid</code></td><td>繽紛色塊</td><td>彩色事件、活潑</td><td><span class="swatch" style="background:#7c3aed"></span><code>#7c3aed</code></td></tr>
+    </table>
+    </div>
+    <p style="font-size:.85rem">每款主題各定義一整組 CSS 變數（<code>--bg</code>／<code>--text</code>／<code>--primary</code>／<code>--border</code>／<code>--today-ring</code> 等）。<code>--surface</code> 沒給時回退 <code>--bg-card</code>；<code>--shadow-card</code> 沒給時回退 <code>0 1px 3px rgba(15,23,42,.08)</code>；查無 id 時回退 <code>corporate</code>。完整色碼見 Markdown 版 §4.1。</p>
+  </section>
+
+  <!-- ═══ 提醒與通知 ═══ -->
+  <section class="paper">
+    <span class="tape blue"></span>
+    <h2><span class="no">4</span>提醒與通知</h2>
+    <p><b>預設提醒</b>：下拉選 <b>5／15／30／60</b> 分鐘（新行程預設提前多久）。此下拉<b>只在通知為「已允許」時可用</b>。</p>
+    <p><b>通知總開關</b>三選一：</p>
+    <div class="tbl-wrap">
+    <table class="spec">
+      <tr><th>模式</th><th>意思</th><th>徽章</th></tr>
+      <tr><td>已允許 <code>allowed</code></td><td>會議前跳出提醒通知</td><td><span class="badge b-green">success</span></td></tr>
+      <tr><td>已封鎖 <code>blocked</code></td><td>不接收任何提醒</td><td><span class="badge b-red">error</span></td></tr>
+      <tr><td>尚未設定 <code>unset</code></td><td>暫不啟用</td><td><span class="badge b-amber">warning</span></td></tr>
+    </table>
+    </div>
+    <div class="sticky note">提醒怎麼跳：切到「已允許」時，會為每筆行程算好「開始時間 − 提前分鐘」設定鬧鐘，<b>只排 7 天內</b>要響的；時間到用系統通知，若沒權限但畫面開著就在 App 內跳提醒。切到其他模式會清掉所有鬧鐘。</div>
+  </section>
+
+  <!-- ═══ 匯出行事曆 ═══ -->
+  <section class="paper">
+    <span class="tape"></span>
+    <h2><span class="no">5</span>匯出行事曆（三種偏好）</h2>
+    <div class="tbl-wrap">
+    <table class="spec">
+      <tr><th>偏好</th><th>匯出行為</th></tr>
+      <tr><td>企業郵件行事曆（公司主要）<code>outlook</code></td><td>寄 Email 給自己或下載 <code>.ics</code> 匯入；手機推薦寄信後開郵件 App 點附件</td></tr>
+      <tr><td>OAuth 雲端行事曆 <code>google</code></td><td>可一鍵自動寫入，需先在下方連結帳號</td></tr>
+      <tr><td>僅保留在本 App <code>app_only</code></td><td>只提供下載 <code>.ics</code> 備份</td></tr>
+    </table>
+    </div>
+    <ul class="plain">
+      <li><b>預設是「企業郵件行事曆」。</b>選單下方會依當前選項顯示對應操作提示。</li>
+      <li>選「OAuth 雲端行事曆」時，下方才會出現 <b>OAuth 行事曆自動匯入卡</b>；若管理員沒設定 OAuth Client ID（環境變數 <code>NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID</code>），該卡呈虛線停用狀態。</li>
+      <li>連結 token 存在 sessionStorage，<b>到期前 60 秒內</b>視為即將失效。</li>
+      <li>匯出的 <code>.ics</code> 為標準 iCalendar：每筆 VEVENT 含起訖時間、標題、地點、備註；有提醒則加 VALARM（<code>TRIGGER:-PT{n}M</code>）。</li>
+    </ul>
+  </section>
+
+  <!-- ═══ 裝置同步 ═══ -->
+  <section class="paper">
+    <span class="tape alt"></span>
+    <h2><span class="no">6</span>裝置同步 A → B（不上雲）</h2>
+    <p>核心觀念：資料不上雲，A 裝置匯出、B 裝置匯入本機資料庫（IndexedDB）完成合併。</p>
+    <div class="flow">
+      <div class="step st-a"><span class="st-tag">A 裝置</span>三顆按鈕：① 存到本機備份庫 ② 下載備份檔 <code>.json</code> ③ 分享備份檔（即時通訊／Email，優先用系統分享，不支援就退回下載）</div>
+      <div class="arrow">↓ 把備份檔傳到另一台</div>
+      <div class="step st-b"><span class="st-tag">B 裝置</span>兩種匯入：① 從本機備份庫匯入 ② 選備份檔匯入（上限 <b>10MB</b>、單檔上限 <b>5000</b> 筆）→ 驗證 → 算出「新增／更新／略過」→ 確認匯入</div>
+    </div>
+    <div class="sticky note">合併規則很保守：<b>只會新增或更新，不會刪掉本機獨有的行程。</b>同一筆以 id 對應，比「最後更新時間」決定誰蓋誰；時間一樣就逐欄比對，完全相同才略過。</div>
+  </section>
+
+  <!-- ═══ 資料模型 ═══ -->
+  <section class="paper">
+    <span class="tape blue"></span>
+    <h2><span class="no">7</span>背後的資料規則（重寫時要照著）</h2>
+
+    <h3>偏好設定 prefs 預設值</h3>
+    <div class="tbl-wrap">
+    <table class="spec">
+      <tr><th>欄位</th><th>預設</th><th>欄位</th><th>預設</th></tr>
+      <tr><td><code>themeId</code></td><td>corporate</td><td><code>defaultReminderMinutes</code></td><td>15</td></tr>
+      <tr><td><code>fontScale</code></td><td>md</td><td><code>primaryCalendar</code></td><td>outlook</td></tr>
+      <tr><td><code>defaultView</code></td><td>month</td><td><code>notificationMode</code></td><td>unset</td></tr>
+      <tr><td><code>geminiApiKey</code></td><td>（空）</td><td><code>ocrQuotaUsed</code></td><td>0</td></tr>
+      <tr><td><code>accentColor</code></td><td>#c41e3a</td><td><code>onboardingDone</code></td><td>false</td></tr>
+    </table>
+    </div>
+
+    <h3>行程 Event 結構</h3>
+    <div class="tbl-wrap">
+    <table class="spec">
+      <tr><th>欄位</th><th>限制</th></tr>
+      <tr><td><code>id</code> / <code>title</code></td><td>非空字串，≤ 200 字元（title 會 trim）</td></tr>
+      <tr><td><code>startAt</code> / <code>endAt</code></td><td>可被解析的時間字串，≤ 64 字元</td></tr>
+      <tr><td><code>location</code> / <code>notes</code></td><td>≤ 200 / ≤ 4000 字元</td></tr>
+      <tr><td><code>source</code></td><td><code>ocr</code> / <code>manual</code> / <code>booking</code>（其他歸 manual）</td></tr>
+      <tr><td><code>reminderMinutes</code></td><td>0 ~ 10080（7 天），預設 0</td></tr>
+      <tr><td><code>color</code></td><td>由優先度推導（見下）</td></tr>
+    </table>
+    </div>
+
+    <h3>優先度與顏色</h3>
+    <div class="tbl-wrap">
+    <table class="spec">
+      <tr><th>優先度</th><th>標籤</th><th>色</th><th>說明</th></tr>
+      <tr><td><code>high</code></td><td>最重要</td><td><span class="swatch" style="background:#DC2626"></span><code>#DC2626</code></td><td>必須參加、主管會議</td></tr>
+      <tr><td><code>medium</code></td><td>中等</td><td><span class="swatch" style="background:#EAB308"></span><code>#EAB308</code></td><td>重要但可協調</td></tr>
+      <tr><td><code>low</code></td><td>普通</td><td><span class="swatch" style="background:#16A34A"></span><code>#16A34A</code></td><td>一般行程</td></tr>
+    </table>
+    </div>
+    <p style="font-size:.85rem">來源對應：<code>meeting→high</code>、<code>travel→medium</code>、<code>personal→low</code>、<code>other→low</code>；無法辨識時預設 <code>medium</code>。</p>
+  </section>
+
+  <!-- ═══ 去識別化對照 ═══ -->
+  <section class="paper">
+    <span class="tape"></span>
+    <h2><span class="no">🕵</span>去識別化：我改了哪些</h2>
+    <div class="tbl-wrap">
+    <table class="spec">
+      <tr><th>原始（品牌／識別資訊）</th><th>本規格改為</th></tr>
+      <tr><td>產品品牌名、專屬網域</td><td>「行程管理 PWA」／<code>&lt;app-id&gt;</code> 佔位符</td></tr>
+      <tr><td>特定雲端 AI 視覺辨識服務名</td><td>「雲端 AI 視覺辨識服務／AI 服務商」</td></tr>
+      <tr><td>特定 OAuth 雲端行事曆品牌</td><td>「OAuth 雲端行事曆服務」</td></tr>
+      <tr><td>特定企業郵件行事曆品牌</td><td>「企業郵件行事曆平台」</td></tr>
+      <tr><td>特定即時通訊軟體名</td><td>「即時通訊軟體」</td></tr>
+      <tr><td>開發者代號、信箱、作品集</td><td>全數移除，僅保留欄位骨架</td></tr>
+      <tr><td>OAuth Client ID 憑證字串</td><td>移除，僅保留「需設定環境變數」的事實</td></tr>
+    </table>
+    </div>
+    <div class="sticky note tilt-r"><code>iOS／Android</code>、<code>PWA</code>、<code>.ics</code>、<code>IndexedDB</code>、<code>OAuth</code> 這些是<b>通用技術名詞</b>，不是誰的品牌，所以保留，這樣規格才實作得出來、行為才會一致。</div>
+    <p style="text-align:center; margin-top:6px; font-size:.85rem; color:var(--brown)">完整逐段規格見同資料夾 <code>行程管理PWA_設定頁逆向規格書.md</code>（17 章）</p>
+  </section>
+
+  <div class="divider">✦ ✦ ✦</div>
+
+</div>
+<div class="watermark">🍀 圖書館 ・ 專案中樞 ・ 逆向工程規格書手帳版 ・ 已去識別化</div>
+</body>
+</html>

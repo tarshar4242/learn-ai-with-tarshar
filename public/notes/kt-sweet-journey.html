@@ -1,0 +1,2402 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>K&T 甜蜜日之旅 🌸 箱根・鎌倉・東京 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sakura: #f7b8c4;
+    --sakura-deep: #e8869a;
+    --cream: #fdf8f3;
+    --warm-gold: #c9996a;
+    --soft-green: #9bbf8a;
+    --deep-rose: #c05f7e;
+    --charcoal: #3a3232;
+    --warm-gray: #8a7d7d;
+    --mist: #f0e8e8;
+    --sky-blue: #b8d4e8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans TC', sans-serif;
+    background: var(--cream);
+    color: var(--charcoal);
+    overflow-x: hidden;
+  }
+
+  /* ========== HERO ========== */
+  .hero {
+    min-height: 100vh;
+    background: linear-gradient(160deg, #fce4ec 0%, #f8bbd0 30%, #e8d5f5 60%, #bbdefb 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: 
+      radial-gradient(circle at 20% 20%, rgba(247,184,196,0.4) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(184,212,232,0.4) 0%, transparent 50%),
+      radial-gradient(circle at 60% 30%, rgba(232,213,245,0.3) 0%, transparent 40%);
+  }
+
+  .petals-container {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .petal {
+    position: absolute;
+    font-size: 1.2rem;
+    animation: falling linear infinite;
+    opacity: 0.7;
+  }
+
+  @keyframes falling {
+    0% { transform: translateY(-50px) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.7; }
+    90% { opacity: 0.5; }
+    100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+  }
+
+  .hero-content {
+    position: relative;
+    text-align: center;
+    z-index: 2;
+    animation: heroReveal 1.2s ease both;
+  }
+
+  @keyframes heroReveal {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .couple-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    display: block;
+    animation: heartbeat 2s ease-in-out infinite;
+  }
+
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 8vw, 5rem);
+    color: var(--deep-rose);
+    line-height: 1.1;
+    text-shadow: 2px 4px 20px rgba(192,95,126,0.2);
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-subtitle {
+    font-family: 'Noto Serif TC', serif;
+    font-size: clamp(1rem, 3vw, 1.4rem);
+    color: var(--warm-gold);
+    letter-spacing: 0.3em;
+    margin-bottom: 2rem;
+    font-weight: 300;
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+  }
+
+  .meta-pill {
+    background: rgba(255,255,255,0.65);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(247,184,196,0.5);
+    padding: 0.5rem 1.2rem;
+    border-radius: 30px;
+    font-size: 0.9rem;
+    color: var(--charcoal);
+  }
+
+  .scroll-hint {
+    animation: bounce 2s infinite;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(8px); }
+  }
+
+  /* ========== BUDGET OVERVIEW ========== */
+  .budget-strip {
+    background: var(--charcoal);
+    color: white;
+    padding: 1.5rem 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .budget-item {
+    text-align: center;
+    padding: 0.5rem 1.5rem;
+    border-right: 1px solid rgba(255,255,255,0.2);
+  }
+
+  .budget-item:last-child { border-right: none; }
+
+  .budget-item .label {
+    font-size: 0.75rem;
+    opacity: 0.6;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.25rem;
+  }
+
+  .budget-item .value {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: var(--sakura);
+  }
+
+  /* ========== MAIN LAYOUT ========== */
+  .main-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+  }
+
+  /* ========== DAY CARDS ========== */
+  .day-section {
+    margin-bottom: 4rem;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.7s ease;
+  }
+
+  .day-section.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .day-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    cursor: pointer;
+  }
+
+  .day-badge {
+    min-width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    flex-shrink: 0;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+    transition: transform 0.3s;
+  }
+
+  .day-header:hover .day-badge { transform: scale(1.08) rotate(5deg); }
+
+  .day-badge .day-num { font-size: 1.8rem; font-weight: 700; line-height: 1; }
+  .day-badge .day-label { font-size: 0.65rem; letter-spacing: 0.1em; margin-top: 2px; }
+
+  .day-1 .day-badge { background: linear-gradient(135deg, var(--sakura), var(--deep-rose)); color: white; }
+  .day-2 .day-badge { background: linear-gradient(135deg, #a8d8a8, #5c9e5c); color: white; }
+  .day-3 .day-badge { background: linear-gradient(135deg, var(--sky-blue), #5a8fa8); color: white; }
+  .day-4 .day-badge { background: linear-gradient(135deg, #ffd49e, var(--warm-gold)); color: white; }
+  .day-5 .day-badge { background: linear-gradient(135deg, #d4a8e0, #8a5c9e); color: white; }
+  .day-6 .day-badge { background: linear-gradient(135deg, #f7c5a0, #e07050); color: white; }
+
+  .day-title-block {}
+  .day-date { font-size: 0.8rem; color: var(--warm-gray); letter-spacing: 0.1em; margin-bottom: 0.2rem; }
+  .day-title { font-family: 'Noto Serif TC', serif; font-size: 1.6rem; color: var(--charcoal); font-weight: 600; }
+  .day-emoji { font-size: 1.2rem; margin-left: 0.5rem; }
+
+  /* ========== PHOTO BANNER ========== */
+  .photo-banner {
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    position: relative;
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+  }
+
+  .photo-banner::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, rgba(0,0,0,0.4) 0%, transparent 50%, rgba(0,0,0,0.1) 100%);
+  }
+
+  .photo-caption {
+    position: absolute;
+    bottom: 1rem;
+    left: 1.5rem;
+    color: white;
+    z-index: 1;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  }
+
+  .photo-caption .place-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+  }
+
+  .photo-caption .place-sub {
+    font-size: 0.8rem;
+    opacity: 0.9;
+  }
+
+  /* ========== TRANSPORT SECTION ========== */
+  .transport-chain {
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.06);
+    border-left: 4px solid var(--sakura);
+  }
+
+  .transport-chain h3 {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 0.85rem;
+    color: var(--warm-gray);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    margin-bottom: 1rem;
+  }
+
+  .transport-step {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1rem;
+    align-items: center;
+    padding: 0.8rem 0;
+    border-bottom: 1px dashed var(--mist);
+  }
+
+  .transport-step:last-child { border-bottom: none; }
+
+  .step-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  .step-train { background: #e3f2fd; }
+  .step-bus { background: #f3e5f5; }
+  .step-cable { background: #e8f5e9; }
+  .step-boat { background: #e0f4ff; }
+  .step-walk { background: #fff8e1; }
+  .step-plane { background: #fce4ec; }
+
+  .step-info .route {
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: var(--charcoal);
+  }
+
+  .step-info .detail {
+    font-size: 0.8rem;
+    color: var(--warm-gray);
+    margin-top: 2px;
+  }
+
+  .step-time {
+    text-align: right;
+    font-size: 0.8rem;
+    color: var(--warm-gray);
+  }
+
+  .step-time .duration {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--deep-rose);
+    display: block;
+  }
+
+  /* ========== TIMELINE ========== */
+  .timeline {
+    position: relative;
+    padding-left: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--sakura), var(--sky-blue));
+    border-radius: 2px;
+  }
+
+  .tl-item {
+    position: relative;
+    padding: 0.6rem 0 0.6rem 1.5rem;
+    display: grid;
+    grid-template-columns: 70px 1fr;
+    gap: 1rem;
+    align-items: start;
+  }
+
+  .tl-item::before {
+    content: '';
+    position: absolute;
+    left: -1.52rem;
+    top: 1.1rem;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: white;
+    border: 2.5px solid var(--sakura-deep);
+    z-index: 1;
+  }
+
+  .tl-time {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: var(--deep-rose);
+    font-weight: 700;
+    padding-top: 2px;
+  }
+
+  .tl-content {
+    background: white;
+    padding: 0.8rem 1rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  }
+
+  .tl-spot { font-weight: 500; font-size: 0.95rem; }
+  .tl-note { font-size: 0.8rem; color: var(--warm-gray); margin-top: 3px; }
+
+  /* ========== INFO CARDS ========== */
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  @media (max-width: 600px) { .info-grid { grid-template-columns: 1fr; } }
+
+  .info-card {
+    background: white;
+    border-radius: 14px;
+    padding: 1.2rem;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+
+  .info-card.hotel { border-top: 3px solid var(--warm-gold); }
+  .info-card.meal { border-top: 3px solid var(--soft-green); }
+  .info-card.budget-card { border-top: 3px solid var(--sky-blue); }
+
+  .card-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--warm-gray);
+    margin-bottom: 0.5rem;
+  }
+
+  .card-name {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--charcoal);
+    margin-bottom: 0.3rem;
+  }
+
+  .card-detail {
+    font-size: 0.82rem;
+    color: var(--warm-gray);
+    line-height: 1.6;
+  }
+
+  .card-detail a {
+    color: var(--deep-rose);
+    text-decoration: none;
+  }
+
+  .card-detail a:hover { text-decoration: underline; }
+
+  .price-tag {
+    display: inline-block;
+    background: var(--mist);
+    color: var(--deep-rose);
+    padding: 0.2rem 0.7rem;
+    border-radius: 20px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    margin-top: 0.5rem;
+  }
+
+  /* ========== HOTEL FEATURE ========== */
+  .hotel-feature {
+    background: linear-gradient(135deg, #fff5f8, #fff8f0);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(247,184,196,0.4);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1rem;
+    align-items: start;
+  }
+
+  .hotel-feature .hotel-emoji {
+    font-size: 3rem;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .hotel-name {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--charcoal);
+    margin-bottom: 0.3rem;
+  }
+
+  .hotel-name-ja {
+    font-size: 0.85rem;
+    color: var(--warm-gray);
+    margin-bottom: 0.6rem;
+  }
+
+  .hotel-desc {
+    font-size: 0.88rem;
+    color: var(--charcoal);
+    line-height: 1.7;
+    margin-bottom: 0.8rem;
+  }
+
+  .hotel-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .hotel-tag {
+    background: rgba(247,184,196,0.3);
+    color: var(--deep-rose);
+    padding: 0.2rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.78rem;
+  }
+
+  /* ========== SPOT HIGHLIGHT ========== */
+  .spot-card {
+    background: white;
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    display: grid;
+    grid-template-columns: 120px 1fr;
+  }
+
+  @media (max-width: 500px) { .spot-card { grid-template-columns: 1fr; } }
+
+  .spot-img {
+    height: 120px;
+    background-size: cover;
+    background-position: center;
+  }
+
+  @media (max-width: 500px) { .spot-img { height: 160px; } }
+
+  .spot-info {
+    padding: 1rem;
+  }
+
+  .spot-name {
+    font-family: 'Noto Serif TC', serif;
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .spot-desc { font-size: 0.82rem; color: var(--warm-gray); line-height: 1.6; }
+
+  /* ========== DIVIDER ========== */
+  .day-divider {
+    text-align: center;
+    margin: 3rem 0;
+    position: relative;
+  }
+
+  .day-divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--sakura), transparent);
+  }
+
+  .day-divider span {
+    position: relative;
+    background: var(--cream);
+    padding: 0 1rem;
+    font-size: 1.2rem;
+  }
+
+  /* ========== FINAL BUDGET ========== */
+  .final-budget {
+    background: linear-gradient(135deg, var(--charcoal), #5a4040);
+    color: white;
+    border-radius: 20px;
+    padding: 2.5rem;
+    margin-top: 3rem;
+    text-align: center;
+  }
+
+  .final-budget h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    color: var(--sakura);
+    margin-bottom: 1.5rem;
+  }
+
+  .budget-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .budget-box {
+    background: rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 1rem;
+    border: 1px solid rgba(247,184,196,0.2);
+  }
+
+  .budget-box .b-label { font-size: 0.75rem; opacity: 0.6; margin-bottom: 0.4rem; }
+  .budget-box .b-value { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--sakura); }
+
+  .total-amount {
+    border-top: 1px solid rgba(247,184,196,0.3);
+    padding-top: 1.5rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    color: var(--sakura);
+  }
+
+  .total-label { font-size: 0.9rem; opacity: 0.6; margin-bottom: 0.5rem; }
+
+  /* ========== FOOTER ========== */
+  .footer {
+    text-align: center;
+    padding: 3rem 3rem 7rem;
+    font-size: 0.85rem;
+    color: var(--warm-gray);
+    line-height: 2;
+  }
+
+  .footer .heart-line {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  /* ========== STICKY NAV ========== */
+  .sticky-nav {
+    position: fixed;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(58,50,50,0.92);
+    backdrop-filter: blur(10px);
+    border-radius: 40px;
+    padding: 0.6rem 1rem;
+    display: flex;
+    gap: 0.3rem;
+    z-index: 100;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+  }
+
+  .nav-btn {
+    background: transparent;
+    border: none;
+    color: white;
+    padding: 0.4rem 0.8rem;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 0.78rem;
+    font-family: 'Noto Sans TC', sans-serif;
+    transition: background 0.2s;
+    white-space: nowrap;
+  }
+
+  .nav-btn:hover, .nav-btn.active {
+    background: var(--sakura-deep);
+  }
+
+  /* ========== IMPORTANT NOTE ========== */
+  .note-box {
+    background: linear-gradient(135deg, #fff3cd, #fff8e1);
+    border-left: 4px solid var(--warm-gold);
+    border-radius: 0 12px 12px 0;
+    padding: 1rem 1.2rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.85rem;
+    color: #6d4c00;
+    line-height: 1.7;
+  }
+
+  .note-box strong { display: block; margin-bottom: 0.3rem; }
+
+  /* ========== LINK BUTTON ========== */
+  .link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--mist);
+    color: var(--deep-rose);
+    padding: 0.35rem 0.9rem;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    text-decoration: none;
+    transition: background 0.2s;
+    margin-top: 0.4rem;
+    margin-right: 0.4rem;
+  }
+
+  .link-btn:hover { background: var(--sakura); color: white; }
+
+  /* scroll fade */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===== TRANSPORT QUICK REFERENCE ===== */
+  .transport-ref {
+    max-width: 900px;
+    margin: 3rem auto 0;
+    padding: 0 1.5rem;
+  }
+  .transport-ref h2 {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 1.5rem;
+    color: var(--deep-rose);
+    text-align: center;
+    margin-bottom: 0.4rem;
+  }
+  .transport-ref .sub {
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--warm-gray);
+    margin-bottom: 1.5rem;
+    line-height: 1.7;
+  }
+  .tp-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-bottom: 1.8rem;
+  }
+  .tp-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3rem 0.9rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #fff;
+  }
+  .tp-jr     { background: #4a90d9; }
+  .tp-metro  { background: #e0728c; }
+  .tp-tozan  { background: #5ca15c; }
+  .tp-rope   { background: #e8943a; }
+  .tp-boat   { background: #3aa6b0; }
+  .tp-plane  { background: #9b6dc4; }
+  .tp-walk   { background: #b0a08f; }
+
+  .tp-day { margin-bottom: 1.6rem; }
+  .tp-day-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: var(--charcoal);
+    background: var(--mist);
+    padding: 0.4rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 0.6rem;
+    font-weight: 700;
+  }
+  .tp-row {
+    display: grid;
+    grid-template-columns: 8px 1fr auto;
+    gap: 0.8rem;
+    align-items: stretch;
+    background: #fff;
+    border-radius: 10px;
+    padding: 0.7rem 1rem 0.7rem 0;
+    margin-bottom: 0.5rem;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.05);
+    overflow: hidden;
+  }
+  .tp-bar { border-radius: 8px 0 0 8px; }
+  .tp-bar.tp-jr{background:#4a90d9}.tp-bar.tp-metro{background:#e0728c}
+  .tp-bar.tp-tozan{background:#5ca15c}.tp-bar.tp-rope{background:#e8943a}
+  .tp-bar.tp-boat{background:#3aa6b0}.tp-bar.tp-plane{background:#9b6dc4}
+  .tp-bar.tp-walk{background:#b0a08f}
+  .tp-mid { padding: 0.1rem 0; }
+  .tp-route { font-size: 0.92rem; font-weight: 500; color: var(--charcoal); }
+  .tp-mode { font-size: 0.78rem; color: var(--warm-gray); margin-top: 2px; }
+  .tp-freq {
+    text-align: right;
+    font-size: 0.75rem;
+    min-width: 96px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 3px;
+  }
+  .tp-interval { font-weight: 700; font-size: 0.9rem; color: var(--charcoal); }
+  .tp-risk {
+    display: inline-block;
+    padding: 1px 8px;
+    border-radius: 12px;
+    font-size: 0.68rem;
+    align-self: flex-end;
+  }
+  .risk-low  { background: #e3f5e3; color: #2e7d32; }
+  .risk-mid  { background: #fff3d6; color: #b8860b; }
+  .risk-high { background: #fde0e0; color: #c0392b; }
+  @media (max-width: 560px) {
+    .tp-row { grid-template-columns: 6px 1fr; }
+    .tp-freq { text-align: left; min-width: 0; flex-direction: row; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 4px; grid-column: 2; }
+    .tp-risk { align-self: center; }
+  }
+
+  /* ===== CHECKLIST ===== */
+  .ck-progress {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(253,248,243,0.96);
+    backdrop-filter: blur(6px);
+    padding: 0.8rem 0 0.9rem;
+    margin-bottom: 1rem;
+  }
+  .ck-progress-bar {
+    height: 12px; border-radius: 10px; background: var(--mist); overflow: hidden;
+  }
+  .ck-progress-fill {
+    height: 100%; width: 0%;
+    background: linear-gradient(90deg, var(--sakura), var(--soft-green));
+    border-radius: 10px; transition: width 0.4s ease;
+  }
+  .ck-progress-txt {
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 0.82rem; color: var(--charcoal); margin-top: 0.5rem;
+  }
+  .ck-reset {
+    background: #fff; border: 1px solid var(--sakura-deep); color: var(--deep-rose);
+    border-radius: 20px; padding: 0.25rem 0.9rem; font-size: 0.76rem; cursor: pointer;
+    font-family: 'Noto Sans TC', sans-serif;
+  }
+  .ck-reset:hover { background: var(--sakura); color: #fff; }
+  .ck-day-title {
+    font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--charcoal);
+    background: var(--mist); padding: 0.45rem 1rem; border-radius: 8px;
+    margin: 1.4rem 0 0.6rem; font-weight: 700;
+  }
+  .ck-sub {
+    font-size: 0.72rem; color: var(--warm-gray);
+    margin: 0.8rem 0 0.4rem 0.2rem; letter-spacing: 0.05em;
+  }
+  .ck {
+    display: flex; gap: 0.7rem; align-items: flex-start;
+    background: #fff; border-radius: 10px; padding: 0.7rem 0.9rem;
+    margin-bottom: 0.5rem; box-shadow: 0 1px 8px rgba(0,0,0,0.05);
+    cursor: pointer; transition: opacity 0.2s, background 0.2s;
+    user-select: none;
+  }
+  .ck.step { background: #faf5f0; padding: 0.55rem 0.9rem; }
+  .ck-tick {
+    width: 22px; height: 22px; border-radius: 6px; border: 2px solid #d9c3c9;
+    flex-shrink: 0; margin-top: 2px; display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .ck.done .ck-tick { background: var(--soft-green); border-color: var(--soft-green); }
+  .ck.done .ck-tick::after { content: '✓'; color: #fff; font-size: 14px; font-weight: bold; }
+  .ck.done .ck-c { opacity: 0.5; }
+  .ck.done .ck-route, .ck.done .ck-label { text-decoration: line-through; }
+  .ck-c { flex: 1; min-width: 0; }
+  .tp-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+  .tp-dot.tp-jr{background:#4a90d9}.tp-dot.tp-metro{background:#e0728c}
+  .tp-dot.tp-tozan{background:#5ca15c}.tp-dot.tp-rope{background:#e8943a}
+  .tp-dot.tp-boat{background:#3aa6b0}.tp-dot.tp-plane{background:#9b6dc4}
+  .tp-dot.tp-walk{background:#b0a08f}
+  .ck-route { font-weight: 500; font-size: 0.92rem; color: var(--charcoal); }
+  .ck-label { font-size: 0.9rem; color: var(--charcoal); }
+  .ck-mode { font-size: 0.78rem; color: var(--warm-gray); margin-top: 2px; }
+  .ck-freq { font-size: 0.75rem; margin-top: 4px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .ck-freq b { color: var(--charcoal); }
+  .ck-note {
+    font-size: 0.76rem; margin-top: 6px; background: #fbf1e3; border-radius: 6px;
+    padding: 6px 9px; color: #8a5a22; line-height: 1.55;
+  }
+  .ck-note.fix { background: #eaf5ea; color: #2e6b32; }
+
+  /* ===== SUNTORY OFFICIAL VISIT BLOCK ===== */
+  .sv-box {
+    background: linear-gradient(135deg, #fffdf6, #fff8e8);
+    border: 2px solid #d4a843;
+    border-radius: 16px;
+    padding: 1.4rem;
+    margin: 1.5rem 0;
+  }
+  .sv-box h3 {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 1.15rem;
+    color: #8a6a1a;
+    margin-bottom: 0.3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .sv-box .sv-sub { font-size: 0.8rem; color: var(--warm-gray); margin-bottom: 1rem; }
+  .sv-alert {
+    background: #fde0e0;
+    border-left: 4px solid #c0392b;
+    border-radius: 0 8px 8px 0;
+    padding: 0.8rem 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    color: #c0392b;
+    font-weight: 600;
+    line-height: 1.6;
+  }
+  .sv-flow { margin-bottom: 1rem; }
+  .sv-step {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 0.8rem;
+    align-items: start;
+    padding: 0.6rem 0;
+    border-bottom: 1px dashed #e8d9b0;
+  }
+  .sv-step:last-child { border-bottom: none; }
+  .sv-time {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    color: #c0392b;
+    font-size: 0.95rem;
+    background: #fff;
+    border-radius: 8px;
+    padding: 0.2rem 0;
+    text-align: center;
+  }
+  .sv-time.ok { color: #2e7d32; }
+  .sv-act { font-size: 0.9rem; color: var(--charcoal); }
+  .sv-act .sv-note2 { font-size: 0.78rem; color: var(--warm-gray); margin-top: 2px; }
+  .sv-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+    margin-top: 0.8rem;
+  }
+  @media (max-width: 520px) { .sv-info-grid { grid-template-columns: 1fr; } }
+  .sv-info-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 0.7rem 0.9rem;
+    font-size: 0.82rem;
+  }
+  .sv-info-card b { color: #8a6a1a; display: block; margin-bottom: 0.2rem; font-size: 0.78rem; }
+
+  /* ===== ACCORDION ===== */
+  .acc-trigger {
+    display: flex; align-items: center; justify-content: space-between;
+    cursor: pointer; padding: 0.75rem 1rem;
+    background: linear-gradient(135deg, #fff5f8, #fff8f0);
+    border: 1px solid rgba(247,184,196,0.5);
+    border-radius: 10px; margin-bottom: 0.4rem;
+    font-family: 'Noto Serif TC', serif; font-size: 0.95rem; font-weight: 600;
+    color: var(--charcoal); user-select: none; transition: background 0.2s;
+  }
+  .acc-trigger:hover { background: linear-gradient(135deg, #fde8ee, #fff0e4); }
+  .acc-trigger .acc-arrow {
+    font-size: 0.8rem; color: var(--deep-rose); transition: transform 0.3s;
+    flex-shrink: 0; margin-left: 0.5rem;
+  }
+  .acc-trigger.open .acc-arrow { transform: rotate(180deg); }
+  .acc-body {
+    display: none; overflow: hidden;
+    background: white; border-radius: 0 0 10px 10px;
+    border: 1px solid rgba(247,184,196,0.3); border-top: none;
+    margin-bottom: 0.8rem;
+  }
+  .acc-body.open { display: block; animation: slideDown 0.25s ease; }
+  @keyframes slideDown { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } }
+
+  /* ===== 餐廳推薦卡 ===== */
+  .food-section { padding: 0.8rem; }
+  .food-section-title {
+    font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--warm-gray); margin-bottom: 0.7rem; font-weight: 600;
+  }
+  .food-cards { display: flex; flex-direction: column; gap: 0.6rem; }
+  .food-card {
+    display: grid; grid-template-columns: 44px 1fr auto;
+    align-items: start; gap: 0.7rem;
+    background: #fdfaf6; border-radius: 10px; padding: 0.75rem 0.9rem;
+    border: 1px solid rgba(200,180,160,0.25);
+  }
+  .food-emoji { font-size: 1.6rem; line-height: 1; text-align: center; padding-top: 2px; }
+  .food-name { font-weight: 600; font-size: 0.9rem; color: var(--charcoal); margin-bottom: 2px; }
+  .food-type { font-size: 0.72rem; color: var(--warm-gray); margin-bottom: 4px; letter-spacing: 0.05em; }
+  .food-desc { font-size: 0.78rem; color: var(--charcoal); line-height: 1.55; }
+  .food-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; }
+  .food-tag {
+    font-size: 0.68rem; padding: 1px 7px; border-radius: 10px;
+    background: var(--mist); color: var(--deep-rose);
+  }
+  .food-price {
+    font-size: 0.75rem; color: var(--warm-gold); font-weight: 600;
+    white-space: nowrap; padding-top: 2px;
+  }
+  .walk-snack {
+    background: linear-gradient(135deg, #fff9f0, #fffdf6);
+    border-radius: 10px; padding: 0.7rem 0.9rem;
+    border-left: 3px solid var(--warm-gold); margin-bottom: 0.5rem;
+  }
+  .walk-snack-title { font-size: 0.8rem; font-weight: 600; color: #8a6a1a; margin-bottom: 0.3rem; }
+  .walk-snack p { font-size: 0.78rem; color: var(--charcoal); line-height: 1.6; }
+
+</style>
+</head>
+<body>
+<a href="../life/" class="clv-home" style="position:fixed;top:14px;left:14px;z-index:99999;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.96);color:#3f6b2e;border:1.5px solid #a8c686;border-radius:999px;padding:8px 15px;font-size:13.5px;font-weight:700;text-decoration:none;box-shadow:0 4px 16px rgba(0,0,0,.22);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);font-family:'Noto Sans TC','PingFang TC',system-ui,sans-serif" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+<!-- HERO -->
+<section class="hero">
+  <div class="petals-container" id="petals"></div>
+  <div class="hero-content">
+    <span class="couple-icon">💑</span>
+    <div style="display:flex;align-items:center;justify-content:center;gap:0.8rem;margin-bottom:0.8rem;">
+      <span style="font-family:'Playfair Display',serif;font-size:2rem;color:#c05f7e;font-weight:700;background:rgba(255,255,255,0.55);width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 15px rgba(192,95,126,0.25);">K</span>
+      <span style="font-size:1.4rem;">💕</span>
+      <span style="font-family:'Playfair Display',serif;font-size:2rem;color:#c05f7e;font-weight:700;background:rgba(255,255,255,0.55);width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 15px rgba(192,95,126,0.25);">T</span>
+    </div>
+    <h1 class="hero-title">K&T 甜蜜日之旅</h1>
+    <p class="hero-subtitle">箱根 · 鎌倉 · 東京　2026 夏</p>
+    <p style="font-size:0.85rem;color:#a06070;letter-spacing:0.15em;margin-bottom:1.2rem;font-family:'Noto Serif TC',serif;">為 K 與 T 量身打造的六日蜜遊計畫</p>
+    <div class="hero-meta">
+      <span class="meta-pill">📅 2026 夏・六日五夜</span>
+      <span class="meta-pill">✈️ 星宇航空</span>
+      <span class="meta-pill">🏨 3 飯店</span>
+      <span class="meta-pill">💰 基本旅費 NT$76,800</span>
+    </div>
+    <div class="scroll-hint" onclick="document.getElementById('day1').scrollIntoView({behavior:'smooth'})">
+      🌸 向下探索旅程 🌸
+    </div>
+  </div>
+</section>
+
+<!-- BUDGET STRIP -->
+<div class="budget-strip">
+  <div class="budget-item">
+    <div class="label">機票</div>
+    <div class="value">NT$34,000</div>
+  </div>
+  <div class="budget-item">
+    <div class="label">住宿</div>
+    <div class="value">NT$28,800</div>
+  </div>
+  <div class="budget-item">
+    <div class="label">交通</div>
+    <div class="value">NT$6,000</div>
+  </div>
+  <div class="budget-item">
+    <div class="label">餐飲</div>
+    <div class="value">NT$6,000</div>
+  </div>
+  <div class="budget-item">
+    <div class="label">景點</div>
+    <div class="value">NT$2,000</div>
+  </div>
+  <div class="budget-item">
+    <div class="label">已確認基本旅費</div>
+    <div class="value" style="color:#f7b8c4;font-size:1.6rem">NT$76,800</div>
+  </div>
+</div>
+
+<!-- ===== TRANSPORT QUICK REFERENCE (CHECKLIST) ===== -->
+<section class="transport-ref" id="transport">
+  <h2>🚦 交通接駁執行清單</h2>
+  <p class="sub">
+    每完成一項就點一下打勾，進度會自動記在這支手機裡（關掉再開還在）<br>
+    顏色點 = 交通工具種類　／　<span style="color:#c0392b;font-weight:600;">紅標 = 班次稀疏要卡準</span>　／　⚠️ = 現場再確認、✅ = 已查證固定資訊
+  </p>
+
+  <div class="tp-legend">
+    <span class="tp-chip tp-jr">🚃 JR</span>
+    <span class="tp-chip tp-metro">🚇 私鐵</span>
+    <span class="tp-chip tp-tozan">🚞 箱根登山</span>
+    <span class="tp-chip tp-rope">🚡 纜車</span>
+    <span class="tp-chip tp-boat">⛵ 海賊船</span>
+    <span class="tp-chip tp-plane">✈️ 飛機</span>
+    <span class="tp-chip tp-walk">🚶 步行/巴士</span>
+  </div>
+
+  <div class="ck-progress">
+    <div class="ck-progress-bar"><div class="ck-progress-fill" id="ckFill"></div></div>
+    <div class="ck-progress-txt"><span><b id="ckCount">0 / 0</b> 項完成</span><button id="ckReset" class="ck-reset">🔄 重置進度</button></div>
+  </div>
+
+  <!-- DAY 1 -->
+  <div class="ck-day-title">Day 1　出發・抵日進箱根</div>
+  <div class="ck-sub">✈️ 桃園機場出發流程</div>
+  <div class="ck" data-ck="d1-a1"><div class="ck-tick"></div><div class="ck-c"><div class="ck-label">桃園機場報到、劃位</div><div class="ck-note">⚠️ 星宇在第一航廈，國際線建議起飛前 3 小時到（你們提早 4 小時出門很充裕）</div></div></div>
+  <div class="ck step" data-ck="d1-a2"><div class="ck-tick"></div><div class="ck-c"><div class="ck-label">託運行李、拿登機證</div></div></div>
+  <div class="ck step" data-ck="d1-a3"><div class="ck-tick"></div><div class="ck-c"><div class="ck-label">出境安檢、護照查驗</div></div></div>
+  <div class="ck step" data-ck="d1-a4"><div class="ck-tick"></div><div class="ck-c"><div class="ck-label">找到登機門、登機</div></div></div>
+  <div class="ck" data-ck="d1-fly"><div class="ck-tick"></div><div class="ck-c"><div class="ck-line"><span class="tp-dot tp-plane"></span><span class="ck-route">桃園 → 東京成田</span></div><div class="ck-mode">✈️ 星宇航空　約 4h20m</div></div></div>
+
+  <div class="ck-sub">🛬 成田入境流程</div>
+  <div class="ck" data-ck="d1-b1"><div class="ck-tick"></div><div class="ck-c"><div class="ck-label">填寫入境卡＋海關申報</div><div class="ck-note">⚠️ 出發前先上「Visit Japan Web」線上登錄，入境掃 QR code 最快，免手寫</div></div></div>
+  <div class="ck step" data-ck="d1-b2"><div class="ck-tick"></div><div class="ck-c"><div class="ck-label">入境審查（走外國人通道）</div></div></div>
+  <div class="ck step" data-ck="d1-b3"><div class="ck-tick"></div><div class="ck-c"><div class="ck-label">領取託運行李</div></div></div>
+  <div class="ck" data-ck="d1-b4"><div class="ck-tick"></div><div class="ck-c"><div class="ck-label">找到 N'EX 月台</div><div class="ck-note fix">✅ 成田 N'EX 在地下 1F，月台 1／2，跟著紫色「Narita Express／JR」指標走</div></div></div>
+
+  <div class="ck-sub">🚆 成田 → 箱根（接駁）</div>
+  <div class="ck" data-ck="d1-t1"><div class="ck-tick"></div><div class="ck-c"><div class="ck-line"><span class="tp-dot tp-jr"></span><span class="ck-route">成田T1 → 東京站</span></div><div class="ck-mode">🚃 N'EX 成田特快　約 57 分</div><div class="ck-freq"><b>約 30–60 分/班</b><span class="tp-risk risk-high">錯過等久</span></div><div class="ck-note">⚠️ 上車前確認車廂是「往東京方面」，N'EX 部分班次中途會分割車廂，看清楚座位車號</div></div></div>
+  <div class="ck" data-ck="d1-t2"><div class="ck-tick"></div><div class="ck-c"><div class="ck-line"><span class="tp-dot tp-jr"></span><span class="ck-route">東京站 → 小田原</span></div><div class="ck-mode">🚃 JR東海道線　約 34 分</div><div class="ck-freq"><b>約 5–10 分/班</b><span class="tp-risk risk-low">放心</span></div><div class="ck-note">⚠️ 月台 7–10，搭「往熱海／小田原方向」，別上錯往宇都宮、高崎方向的</div></div></div>
+  <div class="ck" data-ck="d1-t3"><div class="ck-tick"></div><div class="ck-c"><div class="ck-line"><span class="tp-dot tp-tozan"></span><span class="ck-route">小田原 → 強羅</span></div><div class="ck-mode">🚞 箱根登山電車　約 44 分</div><div class="ck-freq"><b>約 15 分/班</b><span class="tp-risk risk-mid">注意末班</span></div><div class="ck-note">⚠️ 小田原站轉「箱根登山線」，多數班次需在「箱根湯本」站換車一次，跟著粉紅色登山電車指標</div></div></div>
+  <div class="ck" data-ck="d1-t4"><div class="ck-tick"></div><div class="ck-c"><div class="ck-line"><span class="tp-dot tp-walk"></span><span class="ck-route">強羅站 → 雪月花</span></div><div class="ck-mode">🚶 步行 1 分</div><div class="ck-note fix">✅ 出站即達，免轉乘</div></div></div>
+
+  <!-- DAY 2 -->
+  <div class="ck-day-title">Day 2　箱根環線（全程周遊券包）</div>
+  <div class="ck" data-ck="d2-1"><div class="ck-tick"></div><div class="ck-c"><div class="ck-line"><span class="tp-dot tp-tozan"></span><span class="ck-route">強羅 → 雕刻之森</span></div><div class="ck-mode">🚞 箱根登山電車　1 站約 2 分</div><div class="ck-freq"><b>約 15 分/班</b><span class="tp-risk risk-mid">中等</span></div></div></div>
+  <div class="ck" data-ck="d2-2"><div class="ck-tick"></div><div class="ck-c"><div class="ck-line"><span class="tp-dot tp-rope"></span><span class="ck-route">強羅 → 早雲山 → 大涌谷</span></div><div class="ck-mode">🚡 登山纜車＋空中纜車</div><div class="ck-freq"><b>約 1 分/班</b><span class="tp-risk risk-low">幾乎不等</span></div><div class="ck-note fix">✅ 強羅站轉登山纜車步行約 3 分，連續發車免排隊</div></div></div>
+  <div class="ck" data-ck="d2-3"><div class="ck-tick"></div><div class="ck-c"><div class="ck-line"><span class="tp-dot tp-boat"></span><span class="ck-route">桃源台 → 元箱根港</span></div><div class="ck-mode">⛵ 海賊觀光船　約 25–40 分</div><div class="ck-freq"><b>約 30–40 分/班</b><span class="tp-risk risk-high">最稀疏！</span></div><div class="ck-note">⚠️ 全程最容易卡關的一段，上船前先拍下回程船班時刻，錯過要等半小時以上</div></div></div>
+  <div class="ck" data-ck="d2-4"><div class="ck-tick"></div><div class="ck-c"><div class="ck-line"><span class="tp-dot tp-walk"></span><span class="ck-route">元箱根 → 箱根神社 → 強羅</span></div><div class="ck-mode">🚶 步行 10 分　＋　🚌 登山巴士回飯店</div><div class="ck-freq"><b>巴士約 15–20 分</b><span class="tp-risk risk-mid">中等</span></div><div class="ck-note">⚠️ 搭巴士認明「有英文編號的路線」才可用周遊券，未編號路段不可搭</div></div></div>
+
+  <!-- DAY 3 -->
+  <div class="ck-day-title">Day 3　箱根 → 鎌倉</div>
+  <div class="ck" data-ck="d3-1"><div class="ck-tick"></div><div class="ck-c"><div class="ck-line"><span class="tp-dot tp-tozan"></span><span class="ck-route">強羅 → 小田原</span></div><div class="ck-mode">🚞 箱根登山電車　約 44 分（周遊券第3天）</div><div class="ck-freq"><b>約 15 分/班</b><span class="tp-risk risk-mid">中等</span></div></div></div>
+  <div class="ck" data-ck="d3-2"><div class="ck-tick"></div><div class="ck-c"><div class="ck-line"><span class="tp-dot tp-jr"></span><span class="ck-route">小田原 → 大船</span></div><div class="ck-mode">🚃 JR東海道線　約 35 分</div><div class="ck-freq"><b>約 5–10 分/班</b><span class="tp-risk risk-low">放心</span></div><div class="ck-note">⚠️ 月台 7–10，往東京／上野方向</div></div></div>
+  <div class="ck" data-ck="d3-3"><div class="ck-tick"></div><div class="ck-c"><div class="ck-line"><span class="tp-dot tp-jr"></span><span class="ck-route">大船 → 鎌倉</span></div><div class="ck-mode">🚃 JR橫須賀線　約 10 分</div><div class="ck-freq"><b>約 10–15 分/班</b><span class="tp-risk risk-low">放心</span></div><div class="ck-note">⚠️ 大船站同站轉乘，跟著「橫須賀線・往逗子／久里濱」指標</div></div></div>
+  <div class="ck" data-ck="d3-4"><div class="ck-tick"></div><div class="ck-c"><div class="ck-line"><span class="tp-dot tp-metro"></span><span class="ck-route">鎌倉 → 長谷 → 江之島</span></div><div class="ck-mode">🚇 江之電</div><div class="ck-freq"><b>固定 12 分/班</b><span class="tp-risk risk-low">穩定</span></div><div class="ck-note">⚠️ 江之電鎌倉站在 JR 鎌倉站東口旁，多站上下車建議買一日券「のりおりくん」¥800</div></div></div>
+
+  <!-- DAY 4 -->
+  <div class="ck-day-title">Day 4　鎌倉 → 東京（代官山中目黑）</div>
+  <div class="ck" data-ck="d4-1"><div class="ck-tick"></div><div class="ck-c"><div class="ck-line"><span class="tp-dot tp-jr"></span><span class="ck-route">鎌倉 → 東京站</span></div><div class="ck-mode">🚃 JR橫須賀線　約 60 分（直達）</div><div class="ck-freq"><b>約 10–15 分/班</b><span class="tp-risk risk-low">放心</span></div><div class="ck-note">⚠️ 鎌倉直達東京，不用換車，認明「往東京／千葉方向」</div></div></div>
+  <div class="ck" data-ck="d4-2"><div class="ck-tick"></div><div class="ck-c"><div class="ck-line"><span class="tp-dot tp-jr"></span><span class="ck-route">東京站 → 大塚</span></div><div class="ck-mode">🚃 山手線　約 20 分</div><div class="ck-freq"><b>約 3–4 分/班</b><span class="tp-risk risk-low">超密集</span></div></div></div>
+  <div class="ck" data-ck="d4-3"><div class="ck-tick"></div><div class="ck-c"><div class="ck-line"><span class="tp-dot tp-metro"></span><span class="ck-route">鎌倉 → 澀谷 → 代官山</span></div><div class="ck-mode">🚃 湘南新宿線直達澀谷約 50 分 → 東急東橫線一站到代官山</div><div class="ck-freq"><b>約 10–15 分/班</b><span class="tp-risk risk-low">直達</span></div><div class="ck-note">⚠️ 湘南新宿線認明「往大宮・宇都宮方面」不用換車；若搭到往藤澤方向需在戶塚換（對面月台）。澀谷轉東急東橫線走約 6 分，搭一站到代官山。代官山走到中目黑約 20 分下坡好走</div></div></div>
+
+  <!-- DAY 5 -->
+  <div class="ck-day-title">Day 5　府中・三得利啤酒工廠</div>
+  <div class="ck" data-ck="d5-1"><div class="ck-tick"></div><div class="ck-c"><div class="ck-line"><span class="tp-dot tp-jr"></span><span class="ck-route">08:00 大塚 → 新宿</span></div><div class="ck-mode">🚃 山手線　約 12 分（07:50 出門，提早 1 小時抓緩衝）</div><div class="ck-freq"><b>約 3–4 分/班</b><span class="tp-risk risk-low">超密集</span></div></div></div>
+  <div class="ck" data-ck="d5-2"><div class="ck-tick"></div><div class="ck-c"><div class="ck-line"><span class="tp-dot tp-metro"></span><span class="ck-route">新宿 → 分倍河原 → 府中本町</span></div><div class="ck-mode">🚇 京王線特急約 30 分 → 分倍河原轉 JR 南武線約 2 分</div><div class="ck-freq"><b>約 5–10 分/班</b><span class="tp-risk risk-mid">10:00 集合</span></div><div class="ck-note">⚠️ 最重要：在「府中本町駅」下車集合，不是府中駅！10:00 集合，務必提早出發抓緩衝。新宿轉京王線要走 8 分，搭特急較快</div></div></div>
+  <div class="ck" data-ck="d5-3"><div class="ck-tick"></div><div class="ck-c"><div class="ck-line"><span class="tp-dot tp-walk"></span><span class="ck-route">府中本町駅 → 三得利武藏野啤酒工廠</span></div><div class="ck-mode">🚶 改札口左側樓梯下樓，沿遊步道步行約 15 分</div><div class="ck-freq"><b>10:00 集合</b><span class="tp-risk risk-high">別跑錯站</span></div><div class="ck-note">⚠️ 府中本町駅（JR 南武線/武藏野線）出改札口左側樓梯下樓，沿指示牌走 15 分。導覽 10:50–12:20，門票每人 1,000 円，需事先預約</div></div></div>
+
+  <!-- DAY 6 -->
+  <div class="ck-day-title">Day 6　回程（JX803 16:20 起飛）</div>
+  <div class="ck" data-ck="d6-0"><div class="ck-tick"></div><div class="ck-c"><div class="ck-label">大塚退房、寄物拿行李</div><div class="ck-note fix">✅ 從容版：約 11:00 退房即可，不用太早</div></div></div>
+  <div class="ck" data-ck="d6-1"><div class="ck-tick"></div><div class="ck-c"><div class="ck-line"><span class="tp-dot tp-jr"></span><span class="ck-route">大塚 → 上野</span></div><div class="ck-mode">🚃 山手線　約 20 分</div><div class="ck-freq"><b>約 3–4 分/班</b><span class="tp-risk risk-low">超密集</span></div></div></div>
+  <div class="ck" data-ck="d6-2"><div class="ck-tick"></div><div class="ck-c"><div class="ck-line"><span class="tp-dot tp-metro"></span><span class="ck-route">上野 → 成田T1</span></div><div class="ck-mode">🚄 京成 Skyliner　約 40 分</div><div class="ck-freq"><b>約 20–40 分/班</b><span class="tp-risk risk-high">要卡準</span></div><div class="ck-note">⚠️ 在「京成上野站」搭乘（與 JR 上野站不同出口），跟著「Skyliner」指標，需指定席券，可先在閘口售票機買</div></div></div>
+  <div class="ck" data-ck="d6-3"><div class="ck-tick"></div><div class="ck-c"><div class="ck-label">回程報到、託運行李</div></div></div>
+  <div class="ck step" data-ck="d6-4"><div class="ck-tick"></div><div class="ck-c"><div class="ck-label">辦理退稅（如有購物）</div><div class="ck-note">⚠️ 退稅櫃台多在安檢「前」，先辦退稅再過安檢</div></div></div>
+  <div class="ck step" data-ck="d6-5"><div class="ck-tick"></div><div class="ck-c"><div class="ck-label">出境安檢、找登機門</div></div></div>
+  <div class="ck" data-ck="d6-fly"><div class="ck-tick"></div><div class="ck-c"><div class="ck-line"><span class="tp-dot tp-plane"></span><span class="ck-route">東京成田 → 桃園</span></div><div class="ck-mode">✈️ 星宇 JX803　成田T2 16:20 → 桃園 19:00</div></div></div>
+
+  <div class="note-box" style="margin-top:1rem;">
+    <strong>💡 防延誤三原則</strong>
+    紅標三段（N'EX、海賊船、Skyliner）班次最稀疏，抓時間務必預留 1 班緩衝；藍綠色的 JR 與山手線班次密集，臨時錯過也不怕。實際時刻出發前用 Google Maps 再對一次最準。
+  </div>
+</section>
+
+<!-- MAIN -->
+<div class="main-container">
+
+  <!-- ===== DAY 1 ===== -->
+  <div class="day-section" id="day1">
+    <div class="day-header">
+      <div class="day-badge day-1">
+        <span class="day-num">1</span>
+        <span class="day-label">DAY</span>
+      </div>
+      <div class="day-title-block">
+        <div class="day-date">出發日</div>
+        <div class="day-title">抵日・箱根入山 <span class="day-emoji">✈️🏔️</span></div>
+      </div>
+    </div>
+
+    <div class="photo-banner" style="background-image: url('https://images.unsplash.com/photo-1571104508999-893933ded431?w=900&q=80')">
+      <div class="photo-caption">
+        <div class="place-name">箱根 Hakone</div>
+        <div class="place-sub">火山與溫泉的秘境山城</div>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <strong>⚠️ 行前提醒</strong>
+      星宇航空 10:40 台北桃園起飛，實際班次以官網確認為準。抵達成田後需預留過海關行李提領時間約 60 分鐘，建議 16:00 前抵達月台候車。
+    </div>
+
+    <!-- 航班 -->
+    <div class="transport-chain">
+      <h3>🛫 出發航班</h3>
+      <div class="transport-step">
+        <div class="step-icon step-plane">✈️</div>
+        <div class="step-info">
+          <div class="route">台北桃園 TPE → 東京成田 NRT</div>
+          <div class="detail">星宇航空 JX800 系列 · 起飛 10:40 → 抵達 15:00</div>
+        </div>
+        <div class="step-time">
+          <span class="duration">4h20m</span>飛行時間
+        </div>
+      </div>
+    </div>
+
+    <div class="transport-chain">
+      <h3>🚂 成田 → 箱根（3段接駁）</h3>
+      <div class="transport-step">
+        <div class="step-icon step-train">🚆</div>
+        <div class="step-info">
+          <div class="route">成田機場 T1 → 東京站</div>
+          <div class="detail">成田特快 N'EX · 建議搭 16:03 班次 → 抵達 17:00 · 月台 1/2</div>
+          <a href="https://www.jreast.co.jp/multi/en/nex/" class="link-btn" target="_blank">🔗 JR東日本官方</a>
+        </div>
+        <div class="step-time">
+          <span class="duration">57min</span>
+        </div>
+      </div>
+      <div class="transport-step">
+        <div class="step-icon step-train">🚃</div>
+        <div class="step-info">
+          <div class="route">東京站 → 小田原</div>
+          <div class="detail">JR東海道線 · 建議搭 17:26 班次 → 抵達 18:00 · 月台 7–10</div>
+          <a href="https://world.jorudan.co.jp/mln/en/" class="link-btn" target="_blank">🔗 路線查詢</a>
+        </div>
+        <div class="step-time">
+          <span class="duration">34min</span>
+        </div>
+      </div>
+      <div class="transport-step">
+        <div class="step-icon step-train">🚞</div>
+        <div class="step-info">
+          <div class="route">小田原 → 強羅（Gora）</div>
+          <div class="detail">箱根登山鐵道 · 建議搭 18:12 班次 → 抵達 18:56</div>
+        </div>
+        <div class="step-time">
+          <span class="duration">44min</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hotel -->
+    <div class="hotel-feature">
+      <div>
+        <div class="card-label">🏨 今晚住宿</div>
+        <div class="hotel-name">箱根季之湯 雪月花</div>
+        <div class="hotel-name-ja">Tokinoyu Setsugetsuka · 強羅站步行 1 分鐘</div>
+        <div class="hotel-desc">
+          藏身強羅山腰，以「雪月花」詩意命名的溫泉旅館。客房皆設露天風呂，夜晚靜聽山林蟲鳴，泡湯望星。懷石料理以當季食材精心料理，是初抵箱根最溫柔的迎接方式。
+        </div>
+        <div class="hotel-meta">
+          <span class="hotel-tag">♨️ 客室露天風呂</span>
+          <span class="hotel-tag">🍱 懷石料理</span>
+          <span class="hotel-tag">🚞 強羅站1分</span>
+          <span class="hotel-tag">📞 +81 460 82 1166</span>
+        </div>
+      </div>
+      <div class="hotel-emoji">🏯</div>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-card meal">
+        <div class="card-label">🍽️ 晚餐</div>
+        <div class="card-name">飯店懷石料理</div>
+        <div class="card-detail">入住後於旅館享用精緻的懷石全席，無需出門，輕鬆愜意迎接日本第一夜。</div>
+        <span class="price-tag">每人 NT$3,500 起（含於住宿）</span>
+      </div>
+      <div class="info-card budget-card">
+        <div class="card-label">📋 Day 1 已確認費用</div>
+        <div class="card-name">交通 + 晚餐</div>
+        <div class="card-detail">
+          N'EX 成田特快：約 NT$3,100<br>
+          東海道線：約 NT$1,680<br>
+          箱根登山：約 NT$760<br>
+          晚餐：NT$7,000
+        </div>
+        <span class="price-tag">合計約 NT$12,540</span>
+      </div>
+    </div>
+  </div><!-- end day1 -->
+
+  <div class="day-divider"><span>🌸</span></div>
+
+  <!-- ===== DAY 2 ===== -->
+  <div class="day-section" id="day2">
+    <div class="day-header">
+      <div class="day-badge day-2">
+        <span class="day-num">2</span>
+        <span class="day-label">DAY</span>
+      </div>
+      <div class="day-title-block">
+        <div class="day-date">Day 2</div>
+        <div class="day-title">箱根大環線 <span class="day-emoji">🚡🌋⛵</span></div>
+      </div>
+    </div>
+
+    <div class="photo-banner" style="background-image: url('https://images.unsplash.com/photo-1533050487297-09b450131914?w=900&q=80')">
+      <div class="photo-caption">
+        <div class="place-name">大涌谷 · 蘆之湖</div>
+        <div class="place-sub">火山煙霧與寧靜湖景的壯麗對話</div>
+      </div>
+    </div>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-time">09:00</div>
+        <div class="tl-content">
+          <div class="tl-spot">🌅 飯店早餐</div>
+          <div class="tl-note">享用旅館精心準備的和式早膳</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">09:30</div>
+        <div class="tl-content">
+          <div class="tl-spot">🚞 強羅出發</div>
+          <div class="tl-note">登山電車 Gora → Chokoku-no-mori，車程 2 分鐘</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">09:35</div>
+        <div class="tl-content">
+          <div class="tl-spot">🗿 雕刻之森美術館</div>
+          <div class="tl-note">戶外雕塑園區，Picasso 館，夏季繡球花盛開</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">11:30</div>
+        <div class="tl-content">
+          <div class="tl-spot">🚡 強羅 → 大涌谷</div>
+          <div class="tl-note">纜車 + 箱根空中纜車（ロープウェイ），約 35 分</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">13:00</div>
+        <div class="tl-content">
+          <div class="tl-spot">🍛 午餐：大涌谷名物</div>
+          <div class="tl-note">黑玉子（温泉蛋）＋ 黑色咖哩飯，每人 NT$1,500</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">14:00</div>
+        <div class="tl-content">
+          <div class="tl-spot">🌋 大涌谷觀光</div>
+          <div class="tl-note">硫磺煙霧奇景，富士山遠景（晴天）</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">14:45</div>
+        <div class="tl-content">
+          <div class="tl-spot">⛵ 大涌谷 → 桃源台</div>
+          <div class="tl-note">空中纜車至桃源台（Togendai），俯瞰蘆之湖全景</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">15:00</div>
+        <div class="tl-content">
+          <div class="tl-spot">⛵ 蘆之湖海盜船</div>
+          <div class="tl-note">桃源台（Togendai）→ 元箱根（Moto-Hakone），約 30 分</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">16:00</div>
+        <div class="tl-content">
+          <div class="tl-spot">⛩️ 箱根神社・水中鳥居</div>
+          <div class="tl-note">蘆之湖畔最上相景點，傍晚光線絕美</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">18:00</div>
+        <div class="tl-content">
+          <div class="tl-spot">🏨 返回飯店</div>
+          <div class="tl-note">巴士返強羅，溫泉放鬆</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="spot-card">
+      <div class="spot-img" style="background-image: url('https://images.unsplash.com/photo-1609179630370-04b7196e9ab6?w=300&q=80')"></div>
+      <div class="spot-info">
+        <div class="spot-name">🗿 雕刻之森美術館</div>
+        <div class="spot-desc">日本首座戶外美術館，20 英畝的綠地散落 120 件雕塑，夏季繡球花盛放，是箱根最文藝的早晨散步地。Picasso 館為必看亮點。</div>
+      </div>
+    </div>
+
+    <div class="spot-card">
+      <div class="spot-img" style="background-image: url('https://images.unsplash.com/photo-1570459027562-4a916cc6113f?w=300&q=80')"></div>
+      <div class="spot-info">
+        <div class="spot-name">⛩️ 箱根神社</div>
+        <div class="spot-desc">建於奈良時代，蘆之湖畔的朱紅水中鳥居是最標誌性的景象。傍晚逆光時分最為夢幻，適合夫妻在此許願祈福。</div>
+      </div>
+    </div>
+
+    <!-- 箱根餐廳推薦 accordion -->
+    <div class="acc-trigger" onclick="toggleAcc(this)">
+      🍽️ 箱根周邊美食推薦（展開看） <span class="acc-arrow">▼</span>
+    </div>
+    <div class="acc-body">
+      <div class="food-section">
+        <div class="food-section-title">🌋 大涌谷・箱根神社周邊</div>
+        <div class="food-cards">
+          <div class="food-card">
+            <div class="food-emoji">🥚</div>
+            <div>
+              <div class="food-name">大涌谷くろたまご館</div>
+              <div class="food-type">溫泉黑玉子・黑色咖哩</div>
+              <div class="food-desc">硫磺溫泉染黑的雞蛋，傳說多活7年。現場購買5顆500円，黑色咖哩飯是必點午餐。</div>
+              <div class="food-tags"><span class="food-tag">纜車站旁</span><span class="food-tag">排隊購買</span></div>
+            </div>
+            <div class="food-price">¥500起</div>
+          </div>
+          <div class="food-card">
+            <div class="food-emoji">🍵</div>
+            <div>
+              <div class="food-name">甘酒茶屋</div>
+              <div class="food-type">300年歷史茶屋</div>
+              <div class="food-desc">元箱根到箱根湯本舊東海道途中，江戶時代就在的茅草屋頂茶屋。甘酒（米麴釀，無酒精）搭烤麻糬，秘境感十足。</div>
+              <div class="food-tags"><span class="food-tag">步行旅人聖地</span><span class="food-tag">現金支付</span></div>
+            </div>
+            <div class="food-price">¥400</div>
+          </div>
+          <div class="food-card">
+            <div class="food-emoji">☕</div>
+            <div>
+              <div class="food-name">箱根湯本 菜の花</div>
+              <div class="food-type">抹茶甜點・和菓子</div>
+              <div class="food-desc">箱根湯本駅附近名店，當季和菓子搭抹茶，悠閒下午茶首選，有雅緻日式座位。</div>
+              <div class="food-tags"><span class="food-tag">湯本駅5分</span><span class="food-tag">外帶盒裝當伴手禮</span></div>
+            </div>
+            <div class="food-price">¥800</div>
+          </div>
+        </div>
+        <div class="walk-snack" style="margin-top:0.8rem;">
+          <div class="walk-snack-title">🚞 強羅站周邊邊走邊吃</div>
+          <p><b>強羅プリン</b>（網紅布丁，強羅站旁小店）、<b>箱根BAKERY</b> 麵包現烤早晨採購。若有路過箱根湯本，<b>千条の滝前的水信玄餅</b>（夏季限定）晶透好拍。</p>
+        </div>
+      </div>
+    </div>
+  </div><!-- end day2 -->
+
+  <div class="day-divider"><span>🌊</span></div>
+
+  <!-- ===== DAY 3 ===== -->
+  <div class="day-section" id="day3">
+    <div class="day-header">
+      <div class="day-badge day-3">
+        <span class="day-num">3</span>
+        <span class="day-label">DAY</span>
+      </div>
+      <div class="day-title-block">
+        <div class="day-date">Day 3</div>
+        <div class="day-title">箱根 → 鎌倉 <span class="day-emoji">🏯🌊🚃</span></div>
+      </div>
+    </div>
+
+    <div class="photo-banner" style="background-image: url('https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=900&q=80')">
+      <div class="photo-caption">
+        <div class="place-name">鎌倉 Kamakura</div>
+        <div class="place-sub">古都佛境與海風江之電的浪漫</div>
+      </div>
+    </div>
+
+    <div class="transport-chain">
+      <h3>🚂 箱根 → 鎌倉（3段）</h3>
+      <div class="transport-step">
+        <div class="step-icon step-train">🚞</div>
+        <div class="step-info">
+          <div class="route">強羅（Gora）→ 小田原（Odawara）</div>
+          <div class="detail">箱根登山鐵道 · 退房後出發，建議 09:30 班次</div>
+        </div>
+        <div class="step-time"><span class="duration">45min</span></div>
+      </div>
+      <div class="transport-step">
+        <div class="step-icon step-train">🚃</div>
+        <div class="step-info">
+          <div class="route">小田原 → 大船（Ofuna）</div>
+          <div class="detail">JR 東海道線 · 月台 7–10 · 建議 10:30 左右班次</div>
+        </div>
+        <div class="step-time"><span class="duration">35min</span></div>
+      </div>
+      <div class="transport-step">
+        <div class="step-icon step-train">🚃</div>
+        <div class="step-info">
+          <div class="route">大船 → 鎌倉</div>
+          <div class="detail">JR 橫須賀線 · 約 11:30 抵達鎌倉</div>
+        </div>
+        <div class="step-time"><span class="duration">10min</span></div>
+      </div>
+    </div>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-time">09:00</div>
+        <div class="tl-content">
+          <div class="tl-spot">🌅 早餐 + 退房</div>
+          <div class="tl-note">旅館最後一個早晨，慢慢享用，珍惜溫泉時光</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">11:30</div>
+        <div class="tl-content">
+          <div class="tl-spot">🍜 小町通午餐</div>
+          <div class="tl-note">鎌倉最熱鬧商店街，推薦鎌倉蕎麥麵或海鮮丼，參考費用 NT$2,000</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">13:00</div>
+        <div class="tl-content">
+          <div class="tl-spot">🌺 長谷寺</div>
+          <div class="tl-note">7月正值繡球花（紫陽花）盛期！山丘景觀台可俯瞰鎌倉全景</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">14:30</div>
+        <div class="tl-content">
+          <div class="tl-spot">🗿 鎌倉大佛</div>
+          <div class="tl-note">高岳院阿彌陀佛，高 13.35 公尺，夏日綠蔭環繞莊嚴聖地</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">15:30</div>
+        <div class="tl-content">
+          <div class="tl-spot">🚃 江之電散策</div>
+          <div class="tl-note">搭乘百年江之電電車，穿越民家小徑，前往江之島方向</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">17:00</div>
+        <div class="tl-content">
+          <div class="tl-spot">🌅 江之島海岸</div>
+          <div class="tl-note">七里濱海岸，夏日傍晚漫步，遠眺富士山剪影（晴天可見）</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">19:00</div>
+        <div class="tl-content">
+          <div class="tl-spot">🏨 飯店入住</div>
+          <div class="tl-note">片瀨江之島站步行 5 分鐘</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="spot-card">
+      <div class="spot-img" style="background-image: url('https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=300&q=80')"></div>
+      <div class="spot-info">
+        <div class="spot-name">🌺 長谷寺（繡球花勝地）</div>
+        <div class="spot-desc">7 月正值繡球花（紫陽花）盛季，長谷寺的「良縁地蔵」旁滿開繡球花是夏日鎌倉最美景色，建議早上前往避開人潮。</div>
+      </div>
+    </div>
+
+    <div class="hotel-feature">
+      <div>
+        <div class="card-label">🏨 今晚住宿</div>
+        <div class="hotel-name">汐彩飯店 Hotel Shiosai</div>
+        <div class="hotel-name-ja">片瀨江之島站步行 5 分鐘 · 📞 +81 467 22 4241</div>
+        <div class="hotel-desc">
+          面向相模灣，夜晚可在房間聆聽海濤聲入眠。飯店保留昭和時代日式溫泉旅館的風情，餐廳可享用湘南地產海鮮料理。距離江之島橋僅數步之遙，是鎌倉海岸住宿的絕佳選擇。
+        </div>
+        <div class="hotel-meta">
+          <span class="hotel-tag">🌊 海景客房</span>
+          <span class="hotel-tag">🐟 海鮮料理</span>
+          <span class="hotel-tag">♨️ 大浴場</span>
+          <span class="hotel-tag">🏝️ 江之島 5 分</span>
+        </div>
+      </div>
+      <div class="hotel-emoji">🌊</div>
+    </div>
+
+    <!-- 鎌倉餐廳推薦 accordion -->
+    <div class="acc-trigger" onclick="toggleAcc(this)">
+      🍽️ 鎌倉美食地圖（展開看） <span class="acc-arrow">▼</span>
+    </div>
+    <div class="acc-body">
+      <div class="food-section">
+        <div class="food-section-title">🏯 鎌倉駅・段葛周邊</div>
+        <div class="food-cards">
+          <div class="food-card">
+            <div class="food-emoji">🍮</div>
+            <div>
+              <div class="food-name">段葛 こ寿々</div>
+              <div class="food-type">葛切り冷麵・甜點</div>
+              <div class="food-desc">鎌倉必吃！透明葛切配黑蜜，入口冰涼Q彈，段葛参道上最優雅的甜點午餐。假日排隊，建議早到。</div>
+              <div class="food-tags"><span class="food-tag">鎌倉駅北口5分</span><span class="food-tag">排隊名店</span></div>
+            </div>
+            <div class="food-price">¥1,100</div>
+          </div>
+          <div class="food-card">
+            <div class="food-emoji">🍛</div>
+            <div>
+              <div class="food-name">OXYMORON コマチ</div>
+              <div class="food-type">藥膳咖哩・網美食堂</div>
+              <div class="food-desc">鎌倉最上鏡的咖哩店，椰奶系咖哩清爽不膩，白色磁磚小清新空間，IG打卡必訪。小町通附近。</div>
+              <div class="food-tags"><span class="food-tag">小町通り旁</span><span class="food-tag">超上相</span></div>
+            </div>
+            <div class="food-price">¥1,500</div>
+          </div>
+        </div>
+        <div class="food-section-title" style="margin-top:1rem;">🌊 江之島・海邊邊走邊吃</div>
+        <div class="food-cards">
+          <div class="food-card">
+            <div class="food-emoji">🐟</div>
+            <div>
+              <div class="food-name">とびっちょ 本店</div>
+              <div class="food-type">しらす丼・白魚料理</div>
+              <div class="food-desc">江之島No.1必吃！生しらす（生白魚）産地直送，江之島名物しらす丼，配上海景吃最美味。</div>
+              <div class="food-tags"><span class="food-tag">江之島弁天橋旁</span><span class="food-tag">夏季生しらす限定</span></div>
+            </div>
+            <div class="food-price">¥1,800</div>
+          </div>
+          <div class="food-card">
+            <div class="food-emoji">🍡</div>
+            <div>
+              <div class="food-name">江之島 SHIRASU TOAST</div>
+              <div class="food-type">邊走邊吃・海景早午餐</div>
+              <div class="food-desc">白魚吐司配海景，江之島名物邊走邊享用，IG打卡熱點，份量輕巧。</div>
+              <div class="food-tags"><span class="food-tag">江之島青銅鳥居旁</span><span class="food-tag">外帶拍照</span></div>
+            </div>
+            <div class="food-price">¥600</div>
+          </div>
+        </div>
+        <div class="walk-snack" style="margin-top:0.8rem;">
+          <div class="walk-snack-title">🚃 江之電沿線邊走邊吃</div>
+          <p><b>長谷駅</b>周邊：Café Lumière 海景咖啡、鎌倉の地ビール、手作りロールケーキ。<b>由比ガ浜</b>：海灘旁的 Seaside Café 吹海風喝啤酒。<b>七里ガ浜</b>：Bills（澳洲鬆餅名店，有海景）——去之前先查等待時間。</p>
+        </div>
+      </div>
+    </div>
+  </div><!-- end day3 -->
+
+  <div class="day-divider"><span>🗼</span></div>
+
+  <!-- ===== DAY 4 ===== -->
+  <div class="day-section" id="day4">
+    <div class="day-header">
+      <div class="day-badge day-4">
+        <span class="day-num">4</span>
+        <span class="day-label">DAY</span>
+      </div>
+      <div class="day-title-block">
+        <div class="day-date">Day 4</div>
+        <div class="day-title">鎌倉 → 東京入城 <span class="day-emoji">🎭🌟</span></div>
+      </div>
+    </div>
+
+    <div class="photo-banner" style="background-image: url('https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=900&q=80')">
+      <div class="photo-caption">
+        <div class="place-name">東京 Tokyo</div>
+        <div class="place-sub">代官山中目黑・文青散步的午後</div>
+      </div>
+    </div>
+
+    <div class="transport-chain">
+      <h3>🚂 鎌倉 → 東京大塚</h3>
+      <div class="transport-step">
+        <div class="step-icon step-train">🚃</div>
+        <div class="step-info">
+          <div class="route">鎌倉（Kamakura）→ 東京（Tokyo）</div>
+          <div class="detail">JR 橫須賀線 · 建議 09:30 出發 → 抵達約 10:30</div>
+        </div>
+        <div class="step-time"><span class="duration">60min</span></div>
+      </div>
+      <div class="transport-step">
+        <div class="step-icon step-train">🚃</div>
+        <div class="step-info">
+          <div class="route">東京（Tokyo）→ 大塚（Otsuka）</div>
+          <div class="detail">山手線外回り · 約 20 分</div>
+        </div>
+        <div class="step-time"><span class="duration">20min</span></div>
+      </div>
+    </div>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-time">09:00</div>
+        <div class="tl-content">
+          <div class="tl-spot">🌅 早餐 + 退房</div>
+          <div class="tl-note">最後一個海景早晨，聽海聲吃早餐</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">10:00</div>
+        <div class="tl-content">
+          <div class="tl-spot">🚃 江之島 → 鎌倉</div>
+          <div class="tl-note">江之電到鎌倉站，準備搭車進東京</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">12:00</div>
+        <div class="tl-content">
+          <div class="tl-spot">🚃 鎌倉 → 澀谷（直達）</div>
+          <div class="tl-note">湘南新宿線直達澀谷約 50 分，認明往大宮・宇都宮方面，不用換車。大件行李可寄澀谷置物櫃或送飯店</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">13:15</div>
+        <div class="tl-content">
+          <div class="tl-spot">🛍️ 代官山散步</div>
+          <div class="tl-note">澀谷轉東急東橫線一站到代官山。蔦屋書店 T-SITE、B.C.STOCK、HENRY's 漢堡，舊山手通老屋巷弄</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">15:00</div>
+        <div class="tl-content">
+          <div class="tl-spot">🚶 走去中目黑</div>
+          <div class="tl-note">代官山到中目黑步行約 20 分，一路下坡到目黑川，邊走邊逛，輕鬆好走</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">15:30</div>
+        <div class="tl-content">
+          <div class="tl-spot">☕ 中目黑目黑川河畔</div>
+          <div class="tl-note">SIDEWALK STAND 河畔咖啡、中目黑蔦屋書店、金元漢堡排，川風散步</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">17:30</div>
+        <div class="tl-content">
+          <div class="tl-spot">🏨 OMO5 入住</div>
+          <div class="tl-note">中目黑搭日比谷線（往北千住方向）回大塚一帶，或轉山手線。JR 大塚站步行 1 分</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">19:00</div>
+        <div class="tl-content">
+          <div class="tl-spot">🍜 大塚商店街晚餐</div>
+          <div class="tl-note">大塚站周邊推薦：拉麵、居酒屋，在地不觀光的庶民風味</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <strong>💡 7/5 代官山中目黑文青散步</strong>
+      從鎌倉搭湘南新宿線直達澀谷不用換車，轉東急東橫線一站到代官山。代官山到中目黑用走的就到（約 20 分、下坡好走），沿途選物店、河畔咖啡邊走邊逛，是大人風的悠閒散步路線，週六午後氛圍剛好。
+    </div>
+
+    <div class="hotel-feature">
+      <div>
+        <div class="card-label">🏨 今晚住宿（Day 4–5）</div>
+        <div class="hotel-name">OMO5 東京大塚 by Hoshino Resorts</div>
+        <div class="hotel-name-ja">JR 大塚站步行 1 分鐘 · 📞 +81 50 3134 8095</div>
+        <div class="hotel-desc">
+          星野集團旗下都市型 OMO 品牌，專為「街道探索者」設計的設計感旅宿。OMO Rangers（在地嚮導）服務讓你深入大塚的老街居酒屋文化，與一般觀光飯店截然不同。公共空間活潑有趣，是感受東京庶民活力的絕佳基地。
+        </div>
+        <div class="hotel-meta">
+          <span class="hotel-tag">⭐ 星野集團</span>
+          <span class="hotel-tag">🗺️ OMO Ranger 導覽</span>
+          <span class="hotel-tag">🚃 大塚站 1 分</span>
+          <span class="hotel-tag">🏙️ 設計感旅宿</span>
+        </div>
+      </div>
+      <div class="hotel-emoji">🏙️</div>
+    </div>
+
+    <!-- 代官山中目黑餐廳推薦 accordion -->
+    <div class="acc-trigger" onclick="toggleAcc(this)">
+      ☕ 代官山・中目黑美食地圖（展開看） <span class="acc-arrow">▼</span>
+    </div>
+    <div class="acc-body">
+      <div class="food-section">
+        <div class="food-section-title">🌿 代官山 Daikanyama</div>
+        <div class="food-cards">
+          <div class="food-card">
+            <div class="food-emoji">🥞</div>
+            <div>
+              <div class="food-name">Ivy Place</div>
+              <div class="food-type">西式早午餐・花園餐廳</div>
+              <div class="food-desc">代官山最美的早午餐，大片落地窗配白樺樹庭院，法式吐司和酪梨吐司都是人氣必點，建議提前訂位。</div>
+              <div class="food-tags"><span class="food-tag">代官山T-SITE旁</span><span class="food-tag">建議訂位</span><span class="food-tag">IG熱點</span></div>
+            </div>
+            <div class="food-price">¥1,800</div>
+          </div>
+          <div class="food-card">
+            <div class="food-emoji">📚</div>
+            <div>
+              <div class="food-name">SATÉN coffee（蔦屋T-SITE內）</div>
+              <div class="food-type">精品咖啡</div>
+              <div class="food-desc">代官山蔦屋書店旁，精品咖啡配設計書，在這坐一個早上是代官山最標準的生活感體驗。</div>
+              <div class="food-tags"><span class="food-tag">T-SITE 2號館</span><span class="food-tag">拿書配咖啡</span></div>
+            </div>
+            <div class="food-price">¥700</div>
+          </div>
+          <div class="food-card">
+            <div class="food-emoji">🍩</div>
+            <div>
+              <div class="food-name">SPRING VALLEY BREWERY</div>
+              <div class="food-type">手工啤酒・漢堡</div>
+              <div class="food-desc">Log Road Daikanyama 裡的精釀啤酒廠，白天也開，漢堡搭啤酒是代官山最道地的午餐選擇。</div>
+              <div class="food-tags"><span class="food-tag">Log Road內</span><span class="food-tag">精釀啤酒</span></div>
+            </div>
+            <div class="food-price">¥2,000</div>
+          </div>
+        </div>
+        <div class="food-section-title" style="margin-top:1rem;">🌊 中目黑 Nakameguro 目黑川沿岸</div>
+        <div class="food-cards">
+          <div class="food-card">
+            <div class="food-emoji">☕</div>
+            <div>
+              <div class="food-name">Onibus Coffee</div>
+              <div class="food-type">精品單品咖啡</div>
+              <div class="food-desc">中目黑最具代表性的精品咖啡店，豆子自家烘焙，吧台座位俯瞰目黑川，早晨或下午來都完美。</div>
+              <div class="food-tags"><span class="food-tag">目黑川旁</span><span class="food-tag">業界指標</span></div>
+            </div>
+            <div class="food-price">¥600</div>
+          </div>
+          <div class="food-card">
+            <div class="food-emoji">🍺</div>
+            <div>
+              <div class="food-name">中目黑 葱や平吉</div>
+              <div class="food-type">居酒屋・晚餐</div>
+              <div class="food-desc">中目黑居酒屋老店，蔥料理為主打，人氣炸雞和烤串搭日本酒，晚餐絕配。目黑川旁走路可到。</div>
+              <div class="food-tags"><span class="food-tag">中目黑駅5分</span><span class="food-tag">晚餐居酒屋</span></div>
+            </div>
+            <div class="food-price">¥2,500</div>
+          </div>
+          <div class="food-card">
+            <div class="food-emoji">🍦</div>
+            <div>
+              <div class="food-name">SLOW JET COFFEE</div>
+              <div class="food-type">河畔咖啡・甜點</div>
+              <div class="food-desc">目黑川邊的小房子，外賣窗口點咖啡和蛋糕，站在河邊看水景享用，特別有感覺。</div>
+              <div class="food-tags"><span class="food-tag">目黑川正對岸</span><span class="food-tag">邊走邊喝</span></div>
+            </div>
+            <div class="food-price">¥500</div>
+          </div>
+        </div>
+        <div class="walk-snack" style="margin-top:0.8rem;">
+          <div class="walk-snack-title">🚶 代官山→中目黑步行沿途</div>
+          <p>舊山手通往中目黑下坡路約20分，沿途：<b>Blue Bottle Coffee 代官山店</b>（白色工業風，網紅必打）、<b>Ata（アタ）</b> 高端日式料理（若預算允許晚餐首選）、<b>目黑川沿岸咖啡攤車</b>：週末多有快閃甜點與咖啡車。</p>
+        </div>
+      </div>
+    </div>
+  </div><!-- end day4 -->
+
+  <div class="day-divider"><span>🌸</span></div>
+
+  <!-- ===== DAY 5 ===== -->
+  <div class="day-section" id="day5">
+    <div class="day-header">
+      <div class="day-badge day-5">
+        <span class="day-num">5</span>
+        <span class="day-label">DAY</span>
+      </div>
+      <div class="day-title-block">
+        <div class="day-date">Day 5</div>
+        <div class="day-title">三得利啤酒工廠 + 淺草寺 <span class="day-emoji">🍺⛩️</span></div>
+      </div>
+    </div>
+
+    <div class="photo-banner" style="background-image: url('https://images.unsplash.com/photo-1513407030348-c983a97b98d8?w=900&q=80')">
+      <div class="photo-caption">
+        <div class="place-name">東京 · 府中 · 新宿</div>
+        <div class="place-sub">都市探索的悠閒一日</div>
+      </div>
+    </div>
+
+    <div class="transport-chain">
+      <h3>🚂 大塚 → 府中 → 新宿</h3>
+      <div class="transport-step">
+        <div class="step-icon step-train">🚃</div>
+        <div class="step-info">
+          <div class="route">大塚（Otsuka）→ 新宿（Shinjuku）</div>
+          <div class="detail">山手線外回り · 約 12 分</div>
+        </div>
+        <div class="step-time"><span class="duration">12min</span></div>
+      </div>
+      <div class="transport-step">
+        <div class="step-icon step-train">🚃</div>
+        <div class="step-info">
+          <div class="route">新宿（Shinjuku）→ 府中（Fuchu）</div>
+          <div class="detail">京王線特急 · 約 30 分</div>
+        </div>
+        <div class="step-time"><span class="duration">30min</span></div>
+      </div>
+    </div>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-time">07:50</div>
+        <div class="tl-content">
+          <div class="tl-spot">🚃 出發前往府中本町</div>
+          <div class="tl-note">大塚→新宿→（京王線特急）分倍河原→（JR南武線）府中本町。提早 1 小時，目標 09:00 到</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">10:00</div>
+        <div class="tl-content">
+          <div class="tl-spot">📍 府中本町駅集合</div>
+          <div class="tl-note">⚠️ 在府中本町駅集合，不是府中駅！出改札口左側樓梯下樓，步行 15 分到工廠</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">10:50</div>
+        <div class="tl-content">
+          <div class="tl-spot">🍺 三得利武藏野啤酒工廠導覽</div>
+          <div class="tl-note">天然水啤酒工廠導覽試飲 10:50–12:20，門票每人 1,000 円</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">12:30</div>
+        <div class="tl-content">
+          <div class="tl-spot">🍱 府中市場午餐</div>
+          <div class="tl-note">工廠步行 3 分的大東京綜合卸売中心（府中市場），海鮮丼、在地特產，參考費用 NT$1,500</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">13:30</div>
+        <div class="tl-content">
+          <div class="tl-spot">🚃 府中 → 淺草</div>
+          <div class="tl-note">JR南武線回分倍河原→京王線回新宿→轉東京Metro／都營淺草線到淺草，約 1 小時</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">15:00</div>
+        <div class="tl-content">
+          <div class="tl-spot">⛩️ 雷門・仲見世通</div>
+          <div class="tl-note">雷門大燈籠拍照，仲見世通邊走邊吃人形燒、炸饅頭、煎餅，觀光區中文標示多</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">16:00</div>
+        <div class="tl-content">
+          <div class="tl-spot">🏯 淺草寺・傳法院通</div>
+          <div class="tl-note">淺草寺本堂參拜，傳法院通復古老街街景，江戶風情滿滿</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">18:00</div>
+        <div class="tl-content">
+          <div class="tl-spot">🍷 淺草晚餐或回大塚</div>
+          <div class="tl-note">淺草老店，或搭車回大塚，旅程最終晚餐</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">21:00</div>
+        <div class="tl-content">
+          <div class="tl-spot">🏨 返回 OMO5</div>
+          <div class="tl-note">山手線返大塚，打包行李準備明日回程</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUNTORY OFFICIAL VISIT INFO -->
+    <div class="sv-box">
+      <h3>🍺 三得利參訪・當天交通動線</h3>
+      <div class="sv-sub">2026/7/6（一）學校海外參訪官方資訊 · 21 人團 · 導覽 10:50–12:20 · 門票每人 1,000 円</div>
+
+      <div class="sv-alert">
+        ⚠️ 最重要：10:00 在「府中本町駅」集合，不是府中駅，千萬別跑錯站！這天提早 1 小時、目標 09:00 就到。
+      </div>
+
+      <div class="sv-flow">
+        <div class="sv-step">
+          <div class="sv-time">07:50</div>
+          <div class="sv-act">大塚 OMO5 出門
+            <div class="sv-note2">提早 1 小時，寧可早到吃個早餐</div>
+          </div>
+        </div>
+        <div class="sv-step">
+          <div class="sv-time">08:00</div>
+          <div class="sv-act">大塚 → 新宿（山手線約 12 分）
+            <div class="sv-note2">超密集，約 3–4 分一班</div>
+          </div>
+        </div>
+        <div class="sv-step">
+          <div class="sv-time">08:20</div>
+          <div class="sv-act">新宿 → 分倍河原(京王線特急約 30 分)
+            <div class="sv-note2">新宿站內轉京王線要走 8 分，搭「特急/準特急」別搭各停</div>
+          </div>
+        </div>
+        <div class="sv-step">
+          <div class="sv-time">08:55</div>
+          <div class="sv-act">分倍河原 → 府中本町(JR南武線 1 站約 2 分)
+            <div class="sv-note2">全程怕轉錯也可改走：新宿→中央線→西國分寺→武藏野線→府中本町（全程 JR）</div>
+          </div>
+        </div>
+        <div class="sv-step">
+          <div class="sv-time ok">09:00</div>
+          <div class="sv-act">抵達府中本町駅 ✅
+            <div class="sv-note2">比 10:00 集合早 1 小時，從容等候、上廁所</div>
+          </div>
+        </div>
+        <div class="sv-step">
+          <div class="sv-time ok">10:00</div>
+          <div class="sv-act">府中本町駅集合
+            <div class="sv-note2">出改札口左側樓梯下樓，沿遊步道步行約 15 分到工廠</div>
+          </div>
+        </div>
+        <div class="sv-step">
+          <div class="sv-time ok">10:50</div>
+          <div class="sv-act">啤酒工廠導覽開始
+            <div class="sv-note2">導覽試飲至 12:20</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sv-info-grid">
+        <div class="sv-info-card">
+          <b>🚉 集合站出口</b>
+          府中本町駅（JR南武線/武藏野線）改札口出站，左側樓梯下樓，往 JR南武線川崎方面直走，沿指示牌步行 15 分
+        </div>
+        <div class="sv-info-card">
+          <b>🍱 順遊午餐</b>
+          大東京綜合卸売中心（府中市場），工廠步行 3 分，海鮮丼、在地特產，營業 05:00–14:00，CP 值高
+        </div>
+        <div class="sv-info-card">
+          <b>👕 服裝</b>
+          參觀含生產線走動，請穿好走的鞋
+        </div>
+        <div class="sv-info-card">
+          <b>🍺 飲酒守則</b>
+          試飲後嚴禁駕駛，未成年提供天然水或軟性飲料
+        </div>
+      </div>
+    </div>
+
+    <!-- 淺草美食推薦 accordion -->
+    <div class="acc-trigger" onclick="toggleAcc(this)">
+      🏮 淺草・仲見世美食地圖（展開看） <span class="acc-arrow">▼</span>
+    </div>
+    <div class="acc-body">
+      <div class="food-section">
+        <div class="food-section-title">🏮 淺草 Asakusa・仲見世通</div>
+        <div class="food-cards">
+          <div class="food-card">
+            <div class="food-emoji">🐡</div>
+            <div>
+              <div class="food-name">駒形どぜう</div>
+              <div class="food-type">泥鰍鍋・江戶老料理</div>
+              <div class="food-desc">創業200年，東京最古老泥鰍料理名店，口感獨特、江戶風味正宗，觀光客少、在地老饕多。淺草橋旁。</div>
+              <div class="food-tags"><span class="food-tag">淺草駅5分</span><span class="food-tag">江戶傳統料理</span></div>
+            </div>
+            <div class="food-price">¥2,500</div>
+          </div>
+          <div class="food-card">
+            <div class="food-emoji">🥩</div>
+            <div>
+              <div class="food-name">ちんや（浅草今半）</div>
+              <div class="food-type">壽喜燒・牛肉料理</div>
+              <div class="food-desc">明治時代老店，淺草壽喜燒代表，黑毛和牛細膩香甜，若有預算想吃一頓高級晚餐就選這。</div>
+              <div class="food-tags"><span class="food-tag">淺草雷門旁</span><span class="food-tag">明治創業</span><span class="food-tag">建議訂位</span></div>
+            </div>
+            <div class="food-price">¥5,000+</div>
+          </div>
+          <div class="food-card">
+            <div class="food-emoji">🍺</div>
+            <div>
+              <div class="food-name">神谷バー（Kamiya Bar）</div>
+              <div class="food-type">日本最古老洋酒酒吧</div>
+              <div class="food-desc">1880年創業，日本最古老的洋酒吧。招牌「電氣白蘭地」（Denki Bran）是東京必喝特飲，¥270一杯，三得利參觀後午後小酌剛剛好。</div>
+              <div class="food-tags"><span class="food-tag">淺草駅正對面</span><span class="food-tag">電氣白蘭地必喝</span></div>
+            </div>
+            <div class="food-price">¥270～</div>
+          </div>
+        </div>
+        <div class="food-section-title" style="margin-top:1rem;">🥡 仲見世通・邊走邊吃</div>
+        <div class="walk-snack">
+          <div class="walk-snack-title">🍡 仲見世通五大必吃邊走邊吃</div>
+          <p>
+            <b>①人形焼き</b>（仲見世中段，雷神造型燒菓子，現烤熱呼呼 ¥600/8個）<br>
+            <b>②浅草亀十のどら焼き</b>（鬆軟如雲的銅鑼燒，排隊店，週末售完要趁早 ¥250/個）<br>
+            <b>③常盤堂の雷おこし</b>（雷門造型米果，最標誌性淺草伴手禮 ¥500起）<br>
+            <b>④ペリカンカフェ</b>（距淺草5分，超厚片吐司三明治，昭和老咖啡館氛圍）<br>
+            <b>⑤メロンパン専門店</b>（現烤哈密瓜麵包，仲見世入口旁，¥200邊走邊啃）
+          </p>
+        </div>
+      </div>
+    </div>
+  </div><!-- end day5 -->
+
+  <div class="day-divider"><span>✈️</span></div>
+
+  <!-- ===== DAY 6 ===== -->
+  <div class="day-section" id="day6">
+    <div class="day-header">
+      <div class="day-badge day-6">
+        <span class="day-num">6</span>
+        <span class="day-label">DAY</span>
+      </div>
+      <div class="day-title-block">
+        <div class="day-date">回程日</div>
+        <div class="day-title">啟程回家・滿載甜蜜 <span class="day-emoji">✈️💕</span></div>
+      </div>
+    </div>
+
+    <div class="photo-banner" style="background-image: url('https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=900&q=80'); background-position: center 40%;">
+      <div class="photo-caption">
+        <div class="place-name">再見了，日本 👋</div>
+        <div class="place-sub">帶著滿滿回憶回家</div>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <strong>✈️ 回程提醒</strong>
+      成田機場免稅區是最後採購伴手禮的好機會，記得預留充裕的時間。建議提前 3.5 小時從飯店出發，從容不迫地結束這趟甜蜜旅程。
+    </div>
+
+    <div class="transport-chain">
+      <h3>🚂 大塚 → 成田機場</h3>
+      <div class="transport-step">
+        <div class="step-icon step-train">🚃</div>
+        <div class="step-info">
+          <div class="route">大塚（Otsuka）→ 上野（Ueno）</div>
+          <div class="detail">山手線外回り · 建議依航班時間提前 3.5 小時出發</div>
+        </div>
+        <div class="step-time"><span class="duration">20min</span></div>
+      </div>
+      <div class="transport-step">
+        <div class="step-icon step-train">🚄</div>
+        <div class="step-info">
+          <div class="route">上野（Ueno）→ 成田機場（Narita Airport）</div>
+          <div class="detail">京成 Skyliner · 每小時 2 班 · 抵達 T1</div>
+          <a href="https://www.keisei.co.jp/keisei/tetudou/skyliner/us/" class="link-btn" target="_blank">🔗 Skyliner 官方時刻表</a>
+        </div>
+        <div class="step-time"><span class="duration">40min</span></div>
+      </div>
+    </div>
+
+    <div class="note-box" style="background:linear-gradient(135deg,#eafaea,#f0fff0);border-left-color:#4caf50;">
+      <strong>🕐 JX803 16:20 起飛逆推時間表</strong>
+      最關鍵：Skyliner 需在<b>京成上野站（與 JR 不同出口）</b>搭乘，走路需 8 分鐘，請勿跑錯站。
+    </div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-time">11:00</div>
+        <div class="tl-content">
+          <div class="tl-spot">🏨 大塚退房・行李送櫃台</div>
+          <div class="tl-note">辦理退房，行李可先存前台，輕鬆出門逛</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">11:10</div>
+        <div class="tl-content">
+          <div class="tl-spot">🛒 上野阿美橫丁（最後採購）</div>
+          <div class="tl-note">大塚→上野 山手線約 20 分（約 11:30 到）。阿美橫丁伴手禮、乾貨、藥妝，最後逛一圈</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">12:15</div>
+        <div class="tl-content">
+          <div class="tl-spot">🍱 上野午餐（最後一餐）</div>
+          <div class="tl-note">回大塚拿行李前在上野吃完，或直接去成田機場吃（免稅區有拉麵街）</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">12:30</div>
+        <div class="tl-content">
+          <div class="tl-spot">🎒 大塚取行李・出發</div>
+          <div class="tl-note">回大塚站旁飯店取行李，拖著走到大塚站搭山手線</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">12:50</div>
+        <div class="tl-content">
+          <div class="tl-spot">🚃 大塚 → 上野（山手線 20分）</div>
+          <div class="tl-note">抵達 JR 上野站後，跟著「京成電鐵」指標步行 <b>8分鐘</b> 至京成上野站</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">13:21</div>
+        <div class="tl-content">
+          <div class="tl-spot">🚄 Skyliner 搭乘（京成上野出發）</div>
+          <div class="tl-note">建議搭 <b>13:21 班次</b>（下一班 14:01 抵達機場太晚）。需指定席券，在閘口售票機購買，¥2,570/人</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">13:57</div>
+        <div class="tl-content">
+          <div class="tl-spot">🛬 成田機場第二航廈（T2）抵達</div>
+          <div class="tl-note">星宇 JX803 在 T2 辦理，Skyliner 先停 T2・T3，直接在這裡下車</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">14:00</div>
+        <div class="tl-content">
+          <div class="tl-spot">🎫 報到・託運行李</div>
+          <div class="tl-note">星宇櫃台在 T2，帶護照辦理報到，行李掛牌送出</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">14:30</div>
+        <div class="tl-content">
+          <div class="tl-spot">🧾 退稅（安檢前辦！）</div>
+          <div class="tl-note">有購物退稅務必在「安檢前」辦理，成田 T2 退稅台在辦理登機手續同層</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">14:45</div>
+        <div class="tl-content">
+          <div class="tl-spot">🔐 出境安檢</div>
+          <div class="tl-note">過安檢後進免稅區，預留 1.5 小時採購</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">15:00</div>
+        <div class="tl-content">
+          <div class="tl-spot">🛍️ 免稅區最後採購</div>
+          <div class="tl-note">資生堂、GODIVA、日本酒、零食伴手禮一次買齊</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">15:50</div>
+        <div class="tl-content">
+          <div class="tl-spot">🚪 前往登機門</div>
+          <div class="tl-note">T2 成田出境區，跟著班次指示牌走</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">16:20</div>
+        <div class="tl-content">
+          <div class="tl-spot">✈️ JX803 起飛！</div>
+          <div class="tl-note">帶著箱根湯香、鎌倉海風、東京霓虹，滿載回家 💕</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 上野最後一餐推薦 -->
+    <div class="acc-trigger" onclick="toggleAcc(this)">
+      🍜 上野最後一餐推薦 <span class="acc-arrow">▼</span>
+    </div>
+    <div class="acc-body">
+      <div class="food-section">
+        <div class="food-section-title">📍 上野駅周邊・拉行李也能吃</div>
+        <div class="food-cards">
+          <div class="food-card">
+            <div class="food-emoji">🍜</div>
+            <div>
+              <div class="food-name">大勝軒 上野店</div>
+              <div class="food-type">沾麵・拉麵</div>
+              <div class="food-desc">東京老字號沾麵名店分店，湯頭醇厚，行李放腳邊吃也完全沒問題。</div>
+              <div class="food-tags"><span class="food-tag">步行5分</span><span class="food-tag">不用排太久</span></div>
+            </div>
+            <div class="food-price">¥1,000</div>
+          </div>
+          <div class="food-card">
+            <div class="food-emoji">🐟</div>
+            <div>
+              <div class="food-name">魚力海鮮食堂</div>
+              <div class="food-type">海鮮丼・定食</div>
+              <div class="food-desc">新鮮海鮮丼，份量實在，吃完去機場不怕餓。</div>
+              <div class="food-tags"><span class="food-tag">上野マルイ旁</span><span class="food-tag">迴轉壽司選擇多</span></div>
+            </div>
+            <div class="food-price">¥1,200</div>
+          </div>
+        </div>
+        <div class="walk-snack" style="margin-top:0.8rem;">
+          <div class="walk-snack-title">🛒 阿美橫丁邊走邊吃</div>
+          <p>上野駅公園口往阿美橫丁走：<b>たい焼き鯛魚燒</b>（現烤，¥200）、<b>肉の大山 牛肉串</b>（招牌邊走邊吃，¥300）、<b>藥妝店</b>一路延伸到御徒町</p>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end day6 -->
+
+  <!-- ===== BUDGET ===== -->
+  <div class="final-budget">
+    <h2>💰 已確認基本旅費明細</h2>
+    <div class="budget-grid">
+      <div class="budget-box">
+        <div class="b-label">✈️ 機票（2人）</div>
+        <div class="b-value">NT$34,000</div>
+      </div>
+      <div class="budget-box">
+        <div class="b-label">🏨 住宿（5晚）</div>
+        <div class="b-value">NT$28,800</div>
+      </div>
+      <div class="budget-box">
+        <div class="b-label">🚃 交通</div>
+        <div class="b-value">NT$6,000</div>
+      </div>
+      <div class="budget-box">
+        <div class="b-label">🍽️ 餐飲</div>
+        <div class="b-value">NT$6,000</div>
+      </div>
+      <div class="budget-box">
+        <div class="b-label">🗿 景點票務</div>
+        <div class="b-value">NT$2,000</div>
+      </div>
+    </div>
+    <div class="total-label">6 日 · 2 人 · 已確認基本旅費合計</div>
+    <div class="total-amount">NT$ 76,800</div>
+    <p style="font-size:0.8rem;opacity:0.55;margin-top:1.2rem;line-height:1.8;">＊以上為機票、住宿、交通、餐食、景點門票之已確認費用<br>購物、伴手禮、臨時消費另計，實際花費因人而異 😊</p>
+  </div>
+
+</div><!-- end main-container -->
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="heart-line">💕🌸💕</div>
+  <strong>K & T 甜蜜日之旅</strong><br>
+  箱根季之湯雪月花 · 鎌倉汐彩飯店 · 東京OMO5大塚<br>
+  K 與 T 的 2026 夏・六日五夜專屬旅程<br><br>
+  <span style="font-size:0.75rem;opacity:0.6">時刻表請以 Google Maps 或各鐵道官網確認最新班次</span><br><br>
+  <span style="font-size:0.82rem;opacity:0.75">🍀 Learn AI with Tarshar</span>
+</div>
+
+<!-- STICKY NAV -->
+<nav class="sticky-nav">
+  <button class="nav-btn" onclick="scrollTo('transport')">🚦交通</button>
+  <button class="nav-btn" onclick="scrollTo('day1')">Day1</button>
+  <button class="nav-btn" onclick="scrollTo('day2')">Day2</button>
+  <button class="nav-btn" onclick="scrollTo('day3')">Day3</button>
+  <button class="nav-btn" onclick="scrollTo('day4')">Day4</button>
+  <button class="nav-btn" onclick="scrollTo('day5')">Day5</button>
+  <button class="nav-btn" onclick="scrollTo('day6')">Day6</button>
+</nav>
+
+<script>
+  // ===== CHECKLIST PERSISTENCE =====
+  (function () {
+    var KEY = 'kt_checklist_v1';
+    var items = Array.prototype.slice.call(document.querySelectorAll('.ck'));
+    var fill = document.getElementById('ckFill');
+    var countEl = document.getElementById('ckCount');
+    var resetBtn = document.getElementById('ckReset');
+
+    function load() {
+      try { return JSON.parse(localStorage.getItem(KEY) || '{}'); }
+      catch (e) { return {}; }
+    }
+    function save(state) {
+      try { localStorage.setItem(KEY, JSON.stringify(state)); }
+      catch (e) { /* preview sandbox may block; checkboxes still toggle visually */ }
+    }
+    function update() {
+      var done = items.filter(function (el) { return el.classList.contains('done'); }).length;
+      var total = items.length;
+      var pct = total ? Math.round(done / total * 100) : 0;
+      if (fill) fill.style.width = pct + '%';
+      if (countEl) countEl.textContent = done + ' / ' + total;
+    }
+
+    var state = load();
+    items.forEach(function (el) {
+      var id = el.getAttribute('data-ck');
+      if (state[id]) el.classList.add('done');
+      el.addEventListener('click', function () {
+        el.classList.toggle('done');
+        var s = load();
+        if (el.classList.contains('done')) s[id] = 1; else delete s[id];
+        save(s);
+        update();
+      });
+    });
+    update();
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (!confirm('確定要清空所有打勾進度嗎？')) return;
+        items.forEach(function (el) { el.classList.remove('done'); });
+        save({});
+        update();
+      });
+    }
+  })();
+
+  // Petal animation
+  const emojis = ['🌸','🌺','🌷','✿','❀','💮'];
+  const container = document.getElementById('petals');
+  for (let i = 0; i < 18; i++) {
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.animationDuration = (6 + Math.random() * 8) + 's';
+    p.style.animationDelay = (Math.random() * 10) + 's';
+    p.style.fontSize = (0.8 + Math.random() * 1.2) + 'rem';
+    container.appendChild(p);
+  }
+
+  // Scroll nav
+  function scrollTo(id) {
+    document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // Intersection observer for fade-in
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('visible');
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.day-section').forEach(el => observer.observe(el));
+
+  // Active nav highlight
+  const sections = ['day1','day2','day3','day4','day5','day6'];
+  const navBtns = document.querySelectorAll('.nav-btn');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(id => {
+      const el = document.getElementById(id);
+      if (el && el.getBoundingClientRect().top < window.innerHeight * 0.5) current = id;
+    });
+    navBtns.forEach((btn, i) => {
+      btn.classList.toggle('active', 'day' + (i+1) === current);
+    });
+  });
+</script>
+
+
+<script>
+function toggleAcc(trigger) {
+  const body = trigger.nextElementSibling;
+  const isOpen = body.classList.contains('open');
+  trigger.classList.toggle('open', !isOpen);
+  body.classList.toggle('open', !isOpen);
+}
+</script>
+
+<!-- 隨身口譯機入口 -->
+<a href="interpreter.html" style="position:fixed; right:1rem; bottom:1.5rem; z-index:100;
+   background:rgba(232,134,154,0.95); color:#fff; text-decoration:none;
+   width:56px; height:56px; border-radius:50%; display:flex; flex-direction:column;
+   align-items:center; justify-content:center; font-size:1.3rem; line-height:1;
+   box-shadow:0 8px 30px rgba(0,0,0,0.25); backdrop-filter:blur(10px);"
+   title="隨身口譯機">🎙<span style="font-size:.55rem; margin-top:2px;">口譯</span></a>
+</body>
+</html>

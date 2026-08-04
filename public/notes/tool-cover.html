@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>封面圖產生器｜TARSHAR 工具集</title>
+<meta name="description" content="不會 Canva 也沒關係，打字就有封面。選尺寸、打標題、挑背景，一鍵下載 FB／IG／YouTube／簡報封面 PNG。免費、免註冊、圖片不離開你的瀏覽器。">
+<meta name="theme-color" content="#0e91ad">
+<style>
+:root{
+  --primary:#0e91ad; --primary-soft:#e3f4f8; --primary-deep:#0b6f85;
+  --accent:#e8752a; --accent-soft:#fdeee2;
+  --bg:#f7f9fb; --card:#ffffff; --border:#e6eaef;
+  --text:#1e2a38; --muted:#64748b;
+  --ok:#2e7d4f; --ok-soft:#e3f4ea;
+  --shadow:0 1px 3px rgba(15,23,42,.06);
+  --shadow-lift:0 10px 28px rgba(15,23,42,.12);
+  --radius:14px;
+}
+html[data-theme="dark"]{
+  --primary:#35b6d2; --primary-soft:#123742; --primary-deep:#7fd6e8;
+  --accent:#f08a45; --accent-soft:#3a2718;
+  --bg:#101418; --card:#1a2027; --border:#2a323c;
+  --text:#eef2f6; --muted:#9aa7b5;
+  --ok:#7fd6a4; --ok-soft:#14301f;
+  --shadow:0 1px 3px rgba(0,0,0,.4);
+  --shadow-lift:0 10px 28px rgba(0,0,0,.5);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',-apple-system,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.7;min-height:100dvh}
+a{color:var(--primary);text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+header{background:radial-gradient(ellipse 60% 120% at 85% -20%, var(--accent-soft) 0%, transparent 60%),
+  radial-gradient(ellipse 70% 130% at 10% -30%, var(--primary-soft) 0%, transparent 65%), var(--card);
+  border-bottom:1px solid var(--border);padding:2rem 1.2rem 1.6rem;text-align:center;position:relative}
+.theme-btn{position:absolute;top:1rem;right:1rem;width:40px;height:40px;border-radius:50%;
+  border:1px solid var(--border);background:var(--card);font-size:1.1rem;box-shadow:var(--shadow);
+  display:flex;align-items:center;justify-content:center}
+h1{font-size:clamp(1.45rem,4.5vw,2rem);font-weight:900;letter-spacing:.03em}
+.hero-sub{max-width:30em;margin:.5rem auto 0;color:var(--muted);font-size:clamp(.9rem,2.6vw,.98rem)}
+.badges{display:flex;flex-wrap:wrap;justify-content:center;gap:.45rem;margin-top:.8rem}
+.badges span{font-size:.76rem;font-weight:700;border:1px solid var(--border);background:var(--card);
+  border-radius:999px;padding:.2rem .7rem;color:var(--muted)}
+.badges .free{color:var(--ok);background:var(--ok-soft);border-color:transparent}
+main{max-width:860px;margin:0 auto;padding:1.2rem 1.2rem 2.5rem}
+.panel{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:1.1rem;margin-top:1rem}
+.panel h2{font-size:.95rem;font-weight:800;margin-bottom:.5rem}
+.opts{display:flex;flex-wrap:wrap;gap:.5rem;margin:.4rem 0}
+.opt{font-size:.85rem;font-weight:700;color:var(--muted);border:1.5px solid var(--border);
+  background:var(--card);border-radius:999px;padding:.32rem .9rem;transition:.15s}
+.opt.on{background:var(--primary);border-color:var(--primary);color:#fff}
+.actions{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.8rem}
+.btn{display:inline-flex;align-items:center;gap:.4rem;font-size:.95rem;font-weight:800;
+  border-radius:999px;padding:.6rem 1.4rem;box-shadow:var(--shadow);transition:.15s}
+.btn:hover{transform:translateY(-2px)}
+.btn-main{background:var(--primary);color:#fff}
+.btn-sub{background:var(--card);border:1.5px solid var(--border);color:var(--text)}
+.stat{font-size:.8rem;color:var(--muted);margin-top:.5rem}
+.tip{background:var(--primary-soft);border-radius:10px;padding:.7rem .9rem;font-size:.85rem;
+  color:var(--text);margin-top:1rem}
+.tip b{color:var(--primary-deep)}
+footer{border-top:1px solid var(--border);background:var(--card);text-align:center;
+  padding:1.4rem 1.2rem 5.5rem;color:var(--muted);font-size:.82rem}
+.home-fab{position:fixed;left:14px;bottom:14px;z-index:50;display:inline-flex;align-items:center;
+  gap:.35rem;font-size:.85rem;font-weight:800;color:var(--text);background:var(--card);
+  border:1.5px solid var(--border);border-radius:999px;padding:.5rem 1rem;box-shadow:var(--shadow-lift)}
+@media (max-width:520px){header{padding:1.6rem 1rem 1.3rem}}
+
+/* 本工具專屬 */
+.field{margin-top:.7rem}
+.field label{display:block;font-size:.82rem;font-weight:800;color:var(--muted);margin-bottom:.25rem}
+.field input[type="text"]{width:100%;border:1.5px solid var(--border);border-radius:10px;
+  background:var(--bg);color:var(--text);font:inherit;font-size:.95rem;padding:.65rem .8rem;outline:none}
+.field input[type="text"]:focus{border-color:var(--primary)}
+.swatches{display:flex;flex-wrap:wrap;gap:.55rem;margin-top:.6rem}
+.sw{width:46px;height:46px;border-radius:12px;border:2.5px solid var(--border);box-shadow:var(--shadow);transition:.15s}
+.sw.on{border-color:var(--primary);transform:scale(1.08)}
+.bg-extra{margin-top:.7rem;display:flex;flex-wrap:wrap;align-items:center;gap:.6rem;font-size:.85rem}
+.bg-extra input[type="color"]{width:52px;height:38px;border:1.5px solid var(--border);border-radius:10px;
+  background:var(--card);padding:2px;cursor:pointer}
+.file-btn{font-size:.85rem;font-weight:700;border:1.5px dashed var(--border);border-radius:10px;
+  padding:.5rem 1rem;color:var(--muted);background:var(--bg)}
+.preview-wrap{background:repeating-conic-gradient(var(--bg) 0% 25%, var(--border) 0% 50%) 0 0/22px 22px;
+  border:1px solid var(--border);border-radius:10px;padding:.6rem;margin-top:.4rem}
+#cv{display:block;width:100%;height:auto;border-radius:8px;box-shadow:var(--shadow)}
+.hidden{display:none}
+</style>
+</head>
+<body>
+
+<a href="tools.html" class="home-fab" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+
+<header>
+  <button class="theme-btn" id="themeBtn" aria-label="切換深淺色">🌙</button>
+  <h1>🖼️ 封面圖產生器</h1>
+  <p class="hero-sub">不會 Canva 也沒關係，打字就有封面。</p>
+  <div class="badges"><span class="free">✅ 免費即用</span><span>🔒 資料不離開瀏覽器</span><span>📱 手機也好用</span></div>
+</header>
+
+<main>
+  <div class="panel">
+    <h2>1️⃣ 這張封面要用在哪裡？</h2>
+    <div class="opts" id="sizeOpts">
+      <button class="opt on" data-w="1200" data-h="630">FB 貼文 1200×630</button>
+      <button class="opt" data-w="1080" data-h="1080">IG 方形 1080×1080</button>
+      <button class="opt" data-w="1280" data-h="720">YouTube 1280×720</button>
+      <button class="opt" data-w="1920" data-h="1080">簡報 1920×1080</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>2️⃣ 打上你的字（打完下面馬上看得到）</h2>
+    <div class="field">
+      <label for="titleIn">大標（必填，可以長一點，會自動幫你排好）</label>
+      <input type="text" id="titleIn" placeholder="例如：AI 開機日：兩小時跟上 AI 那班車" maxlength="60">
+    </div>
+    <div class="field">
+      <label for="subIn">小標（想加再加）</label>
+      <input type="text" id="subIn" placeholder="例如：寫給完全沒碰過 AI 的你" maxlength="60">
+    </div>
+    <div class="field">
+      <label for="markIn">右下角落款（可以改成你自己的）</label>
+      <input type="text" id="markIn" value="🍀 Learn AI with Tarshar" maxlength="40">
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>3️⃣ 挑個背景</h2>
+    <div class="opts" id="bgOpts">
+      <button class="opt on" data-bg="grad">品牌漸層</button>
+      <button class="opt" data-bg="solid">純色自選</button>
+      <button class="opt" data-bg="image">用自己的圖</button>
+      <button class="opt" data-bg="paper">可愛紙紋</button>
+    </div>
+    <div id="gradRow" class="swatches"></div>
+    <div id="solidRow" class="bg-extra hidden">
+      <input type="color" id="solidPick" value="#0e91ad"><span>點色塊挑一個你喜歡的顏色</span>
+    </div>
+    <div id="imageRow" class="bg-extra hidden">
+      <button class="file-btn" id="fileBtn">📷 選一張你的照片</button>
+      <input type="file" id="fileIn" accept="image/*" class="hidden">
+      <span id="fileName" style="color:var(--muted)">會自動裁滿版面，再幫字加一層薄薄的深色打底</span>
+    </div>
+    <div class="bg-extra">
+      <span style="font-weight:800;color:var(--muted)">字的顏色：</span>
+      <div class="opts" id="inkOpts" style="margin:0">
+        <button class="opt on" data-ink="auto">自動（背景亮就深字、暗就白字）</button>
+        <button class="opt" data-ink="dark">深色字</button>
+        <button class="opt" data-ink="light">白色字</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>4️⃣ 預覽滿意就帶走</h2>
+    <div class="preview-wrap"><canvas id="cv" width="1200" height="630"></canvas></div>
+    <div class="actions">
+      <button class="btn btn-main" id="dlBtn">⬇️ 下載 PNG</button>
+    </div>
+    <p class="stat" id="stat"></p>
+  </div>
+
+  <div class="tip">💡 <b>放心用：</b>你打的字、上傳的照片，全都只在你的瀏覽器裡處理，不會上傳到任何地方。下載的 PNG 是原尺寸高解析，直接拿去發 FB、IG、YouTube 或貼進簡報都清楚。字太長也不怕，工具會自動換行、自動縮小字級，保證不爆版。</div>
+
+  <div class="actions" style="justify-content:center;margin-top:1.2rem">
+    <a class="btn btn-sub" href="tool-cover.html" download="封面圖產生器.html">📦 打包帶走這個工具</a>
+  </div>
+</main>
+
+<footer>🍀 <b>Learn AI with Tarshar</b>・TARSHAR 工具集｜更多小工具 → <a href="tools.html">打開工具箱</a></footer>
+
+<script>
+const $ = s => document.querySelector(s);
+const FONT = "'Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif";
+
+/* ---------- 狀態 ---------- */
+const GRADS = [
+  { name:'品牌青藍→橘', from:'#0e91ad', to:'#e8752a' },
+  { name:'四葉草綠',     from:'#1f8a5b', to:'#a8e6c3' },
+  { name:'湖水藍',       from:'#0b6f85', to:'#35b6d2' },
+  { name:'蜜柑暖橘',     from:'#e8752a', to:'#ffc75f' },
+  { name:'莓果紫粉',     from:'#8e5aa8', to:'#f2a6c8' },
+  { name:'夜空深藍',     from:'#1e2a38', to:'#0e6f85' },
+];
+const state = {
+  w:1200, h:630,
+  bg:'grad',        // grad | solid | image | paper
+  grad:0,
+  solid:'#0e91ad',
+  ink:'auto',       // auto | dark | light
+  img:null,         // Image 物件（不存 localStorage）
+};
+
+/* ---------- localStorage ---------- */
+function save(){
+  try{
+    localStorage.setItem('tt_cover_size', state.w + 'x' + state.h);
+    localStorage.setItem('tt_cover_bg', state.bg);
+    localStorage.setItem('tt_cover_grad', String(state.grad));
+    localStorage.setItem('tt_cover_solid', state.solid);
+    localStorage.setItem('tt_cover_ink', state.ink);
+    localStorage.setItem('tt_cover_mark', $('#markIn').value);
+  }catch(e){}
+}
+function restore(){
+  try{
+    const size = localStorage.getItem('tt_cover_size');
+    if (size){
+      const btn = document.querySelector(`#sizeOpts .opt[data-w="${size.split('x')[0]}"][data-h="${size.split('x')[1]}"]`);
+      if (btn) pickChip('#sizeOpts', btn);
+    }
+    const bg = localStorage.getItem('tt_cover_bg');
+    if (bg && bg !== 'image'){ // 圖片不會留著，重開就回到當時選的其他模式或漸層
+      const btn = document.querySelector(`#bgOpts .opt[data-bg="${bg}"]`);
+      if (btn) pickChip('#bgOpts', btn);
+    }
+    const g = parseInt(localStorage.getItem('tt_cover_grad'), 10);
+    if (!isNaN(g) && GRADS[g]) state.grad = g;
+    const solid = localStorage.getItem('tt_cover_solid');
+    if (solid){ state.solid = solid; $('#solidPick').value = solid; }
+    const ink = localStorage.getItem('tt_cover_ink');
+    if (ink){
+      const btn = document.querySelector(`#inkOpts .opt[data-ink="${ink}"]`);
+      if (btn) pickChip('#inkOpts', btn);
+    }
+    const mark = localStorage.getItem('tt_cover_mark');
+    if (mark !== null) $('#markIn').value = mark;
+  }catch(e){}
+}
+
+/* ---------- 小工具 ---------- */
+function lum(hex){ // 0(黑)~1(白) 的感知亮度
+  const n = hex.replace('#','');
+  const r = parseInt(n.slice(0,2),16), g = parseInt(n.slice(2,4),16), b = parseInt(n.slice(4,6),16);
+  return (0.299*r + 0.587*g + 0.114*b) / 255;
+}
+function bgLum(){
+  if (state.bg === 'grad'){ const g = GRADS[state.grad]; return (lum(g.from)+lum(g.to))/2; }
+  if (state.bg === 'solid') return lum(state.solid);
+  if (state.bg === 'image') return state.img ? 0.25 : (lum(GRADS[state.grad].from)+lum(GRADS[state.grad].to))/2; // 有深色遮罩→偏暗
+  return 0.95; // 紙紋是淺色
+}
+function inkColor(){
+  if (state.ink === 'dark') return '#1e2a38';
+  if (state.ink === 'light') return '#ffffff';
+  return bgLum() > 0.6 ? '#1e2a38' : '#ffffff';
+}
+
+/* 中文逐字換行（驗收重點）：一個字一個字量寬度，塞不下就換行 */
+function wrapChars(ctx, text, maxW){
+  const lines = []; let line = '';
+  for (const ch of text){
+    if (ch === '\n'){ lines.push(line.trimEnd()); line = ''; continue; }
+    const test = line + ch;
+    if (ctx.measureText(test).width > maxW && line !== ''){
+      lines.push(line.trimEnd()); // 行尾空白拿掉，置中才不會偏
+      line = (ch === ' ') ? '' : ch; // 換行後行首不留空白
+    } else {
+      line = test;
+    }
+  }
+  if (line !== '') lines.push(line.trimEnd());
+  return lines.length ? lines : [''];
+}
+
+/* 自動縮字級：從 baseFs 往下試，直到整塊字塞得進 maxW×maxH */
+function fitText(ctx, text, maxW, maxH, baseFs, minFs){
+  let fs = baseFs;
+  while (fs > minFs){
+    ctx.font = `900 ${fs}px ${FONT}`;
+    const lines = wrapChars(ctx, text, maxW);
+    if (lines.length * fs * 1.32 <= maxH) return { fs, lines, lh: fs * 1.32 };
+    fs -= 2;
+  }
+  ctx.font = `900 ${minFs}px ${FONT}`;
+  const lines = wrapChars(ctx, text, maxW);
+  return { fs: minFs, lines, lh: minFs * 1.32 };
+}
+
+/* ---------- 畫背景 ---------- */
+function drawBg(ctx, W, H){
+  if (state.bg === 'solid'){
+    ctx.fillStyle = state.solid; ctx.fillRect(0,0,W,H); return;
+  }
+  if (state.bg === 'paper'){
+    ctx.fillStyle = '#fdf6ec'; ctx.fillRect(0,0,W,H);
+    const gap = Math.round(Math.min(W,H) / 16);
+    const r = gap * 0.16;
+    for (let row = 0; row * gap < H + gap; row++){
+      for (let col = 0; col * gap < W + gap; col++){
+        const x = col * gap + (row % 2 ? gap/2 : 0);
+        const y = row * gap;
+        ctx.fillStyle = (row + col) % 3 === 0 ? 'rgba(232,117,42,.14)' : 'rgba(14,145,173,.12)';
+        ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI*2); ctx.fill();
+      }
+    }
+    return;
+  }
+  if (state.bg === 'image' && state.img){
+    const img = state.img;
+    const scale = Math.max(W / img.width, H / img.height); // cover 裁滿
+    const dw = img.width * scale, dh = img.height * scale;
+    ctx.drawImage(img, (W - dw)/2, (H - dh)/2, dw, dh);
+    ctx.fillStyle = 'rgba(10,16,24,.45)'; // 半透明深色遮罩讓字浮出
+    ctx.fillRect(0,0,W,H);
+    return;
+  }
+  // 品牌漸層（也是「選了上傳但還沒給圖」時的墊背）
+  const g = GRADS[state.grad];
+  const grad = ctx.createLinearGradient(0, 0, W, H);
+  grad.addColorStop(0, g.from); grad.addColorStop(1, g.to);
+  ctx.fillStyle = grad; ctx.fillRect(0,0,W,H);
+}
+
+/* ---------- 主渲染 ---------- */
+function render(){
+  const cv = $('#cv');
+  const W = state.w, H = state.h;
+  if (cv.width !== W) cv.width = W;
+  if (cv.height !== H) cv.height = H;
+  const ctx = cv.getContext('2d');
+
+  drawBg(ctx, W, H);
+
+  const ink = inkColor();
+  const title = $('#titleIn').value.trim();
+  const sub = $('#subIn').value.trim();
+  const mark = $('#markIn').value.trim();
+
+  const maxW = W * 0.84;
+  const baseTitle = Math.round(Math.min(W * 0.09, H * 0.14));
+  const minFs = Math.max(18, Math.round(H * 0.035));
+
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+
+  // 白字時加一點陰影，照片背景上也看得清楚
+  const useShadow = ink === '#ffffff';
+  function shadowOn(fs){
+    if (!useShadow) return;
+    ctx.shadowColor = 'rgba(0,0,0,.4)';
+    ctx.shadowBlur = fs * 0.12;
+    ctx.shadowOffsetY = fs * 0.04;
+  }
+  function shadowOff(){ ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0; ctx.shadowOffsetY = 0; }
+
+  const titleText = title || '在上面打幾個字\n封面就長出來了 🙂';
+  const t = fitText(ctx, titleText, maxW, H * 0.52, baseTitle, minFs);
+  let s = null;
+  if (sub) s = fitText(ctx, sub, maxW, H * 0.18, Math.round(t.fs * 0.42), Math.max(14, Math.round(minFs * 0.7)));
+
+  const gapTS = s ? t.fs * 0.5 : 0;
+  const blockH = t.lines.length * t.lh + (s ? gapTS + s.lines.length * s.lh : 0);
+  let y = (H * 0.94 - blockH) / 2 + t.lh / 2; // 稍微上移，讓給右下落款空間
+
+  ctx.fillStyle = title ? ink : (ink === '#ffffff' ? 'rgba(255,255,255,.8)' : 'rgba(30,42,56,.55)');
+  ctx.font = `900 ${t.fs}px ${FONT}`;
+  shadowOn(t.fs);
+  for (const line of t.lines){ ctx.fillText(line, W/2, y); y += t.lh; }
+  shadowOff();
+
+  if (s){
+    y += gapTS;
+    ctx.fillStyle = ink;
+    ctx.globalAlpha = 0.92;
+    ctx.font = `700 ${s.fs}px ${FONT}`;
+    shadowOn(s.fs);
+    for (const line of s.lines){ ctx.fillText(line, W/2, y); y += s.lh; }
+    shadowOff();
+    ctx.globalAlpha = 1;
+  }
+
+  if (mark){
+    const mfs = Math.max(16, Math.round(H * 0.034));
+    ctx.font = `700 ${mfs}px ${FONT}`;
+    ctx.textAlign = 'right';
+    ctx.globalAlpha = 0.88;
+    ctx.fillStyle = ink;
+    shadowOn(mfs);
+    ctx.fillText(mark, W - H * 0.05, H - H * 0.06);
+    shadowOff();
+    ctx.globalAlpha = 1;
+    ctx.textAlign = 'center';
+  }
+}
+
+/* ---------- 漸層色票 ---------- */
+function buildSwatches(){
+  const row = $('#gradRow');
+  row.innerHTML = '';
+  GRADS.forEach((g, i) => {
+    const b = document.createElement('button');
+    b.className = 'sw' + (i === state.grad ? ' on' : '');
+    b.style.background = `linear-gradient(135deg, ${g.from}, ${g.to})`;
+    b.title = g.name;
+    b.setAttribute('aria-label', g.name);
+    b.addEventListener('click', () => {
+      state.grad = i;
+      row.querySelectorAll('.sw').forEach((x, j) => x.classList.toggle('on', j === i));
+      save(); render();
+    });
+    row.appendChild(b);
+  });
+}
+
+/* ---------- 事件 ---------- */
+function pickChip(rowSel, btn){
+  document.querySelectorAll(rowSel + ' .opt').forEach(x => x.classList.toggle('on', x === btn));
+  if (rowSel === '#sizeOpts'){ state.w = +btn.dataset.w; state.h = +btn.dataset.h; }
+  if (rowSel === '#bgOpts'){
+    state.bg = btn.dataset.bg;
+    $('#gradRow').classList.toggle('hidden', state.bg !== 'grad');
+    $('#solidRow').classList.toggle('hidden', state.bg !== 'solid');
+    $('#imageRow').classList.toggle('hidden', state.bg !== 'image');
+  }
+  if (rowSel === '#inkOpts'){ state.ink = btn.dataset.ink; }
+}
+['#sizeOpts','#bgOpts','#inkOpts'].forEach(sel => {
+  document.querySelector(sel).addEventListener('click', e => {
+    const b = e.target.closest('.opt'); if (!b) return;
+    pickChip(sel, b);
+    if (sel === '#bgOpts' && state.bg === 'image' && !state.img){
+      $('#stat').textContent = '還沒選照片喔，先幫你墊一張品牌漸層，選好照片就換上 🙂';
+    }
+    save(); render();
+  });
+});
+
+['#titleIn','#subIn','#markIn'].forEach(sel => {
+  document.querySelector(sel).addEventListener('input', () => { save(); render(); });
+});
+
+$('#solidPick').addEventListener('input', e => { state.solid = e.target.value; save(); render(); });
+
+$('#fileBtn').addEventListener('click', () => $('#fileIn').click());
+$('#fileIn').addEventListener('change', e => {
+  const f = e.target.files && e.target.files[0];
+  if (!f) return;
+  if (!f.type.startsWith('image/')){
+    $('#stat').textContent = '這個檔案不是圖片耶，換一張 JPG 或 PNG 再試一次 🙂';
+    return;
+  }
+  const url = URL.createObjectURL(f);
+  const img = new Image();
+  img.onload = () => {
+    state.img = img;
+    $('#fileName').textContent = '已用你的照片：' + f.name;
+    $('#stat').textContent = '照片上好了！它只待在你的瀏覽器裡，不會被上傳。';
+    render();
+  };
+  img.onerror = () => {
+    $('#stat').textContent = '這張圖讀不進來，可能檔案怪怪的。換一張試試看 🙂';
+  };
+  img.src = url;
+});
+
+/* ---------- 下載 ---------- */
+$('#dlBtn').addEventListener('click', () => {
+  if (!$('#titleIn').value.trim()){
+    $('#stat').textContent = '至少給我一句話嘛，不然封面會很害羞 🙂';
+    $('#titleIn').focus();
+    return;
+  }
+  render(); // 確保畫的是最新內容
+  const name = `封面-${state.w}x${state.h}.png`;
+  $('#cv').toBlob(blob => {
+    if (!blob){ $('#stat').textContent = '咦，圖片打包失敗了。重新整理頁面再試一次看看 🙂'; return; }
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 3000);
+    $('#stat').textContent = `下載好了：${name}，直接拿去用吧！`;
+  }, 'image/png');
+});
+
+/* ---------- 深淺色 ---------- */
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme', t);
+  $('#themeBtn').textContent = t === 'dark' ? '☀️' : '🌙';
+}
+const saved = localStorage.getItem('tools_theme');
+applyTheme(saved || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+$('#themeBtn').addEventListener('click', () => {
+  const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('tools_theme', next); applyTheme(next);
+});
+
+/* ---------- 啟動 ---------- */
+restore();
+buildSwatches();
+render();
+// 字體載好後重畫一次，量字寬才準
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(render);
+</script>
+</body>
+</html>

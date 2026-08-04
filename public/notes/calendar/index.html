@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>四葉草行事曆</title>
+<meta name="theme-color" content="#b79fe8">
+<meta name="description" content="拍照辨識會議通知，四葉草陪你排程">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="四葉草行事曆">
+<style>
+  :root{
+    --mint:#7ed6a0; --mint-deep:#4fb87a; --gold:#ffcf7a;
+    --coral:#f4a98d; --lav:#bda6ec; --lav-deep:#9d81dd; --pink:#f6a9cf;
+    --accent1:#c3aef0; --accent2:#9d81dd;
+    --text:#403a58; --muted:#918aa6;
+    --card:#ffffff; --card-brd:rgba(150,120,180,.12); --evt-bg:#fbf8fd;
+    --silk1:#cbb6f2; --silk2:#b79fe8; --silk3:#e9d9f6; --silk-op:1; --star-op:0;
+    --fs:16px;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+  html{ font-size:var(--fs); }
+  body{
+    font-family:-apple-system,'PingFang TC','Noto Sans TC',sans-serif; color:var(--text);
+    min-height:100dvh; padding-bottom:92px; position:relative; overflow-x:hidden;
+    background:radial-gradient(72% 46% at 100% 0%, rgba(170,142,230,.34), transparent 60%),radial-gradient(58% 40% at 0% 6%, rgba(197,178,240,.28), transparent 60%),radial-gradient(85% 52% at 88% 100%, rgba(157,129,221,.24), transparent 60%),radial-gradient(40% 30% at 6% 92%, rgba(244,169,141,.14), transparent 60%),linear-gradient(180deg,#fbf9ff 0%, #f7f4fc 100%);
+  }
+  .silk,.stars{ position:fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:0; }
+  .silk{ opacity:var(--silk-op); }
+  .stars{ opacity:var(--star-op); }
+  .stars i{ position:absolute; background:#fff; border-radius:50%; animation:tw 3s infinite ease-in-out; }
+  @keyframes tw{ 0%,100%{opacity:.3} 50%{opacity:.9} }
+  main{ position:relative; z-index:1; max-width:640px; margin:0 auto; padding:0 16px; }
+  .view{ display:none; }
+  .view.active{ display:block; }
+
+  button,input,select,textarea{ font-family:inherit; font-size:1rem; color:inherit; }
+  button{ cursor:pointer; border:none; background:none; }
+  a{ color:var(--lav-deep); }
+  .grad{ background:linear-gradient(135deg,var(--accent1),var(--accent2)); }
+  .grad-txt{ background:linear-gradient(135deg,var(--accent1),var(--accent2)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .card{ background:var(--card); border:1px solid var(--card-brd); border-radius:24px; box-shadow:0 10px 30px rgba(120,90,160,.12),0 2px 8px rgba(120,90,160,.05); }
+  .muted{ color:var(--muted); }
+  .icon{ width:26px; height:26px; display:inline-block; vertical-align:middle; }
+  .hidden{ display:none !important; }
+
+  /* 標題 */
+  .ptitle{ font-size:1.42rem; font-weight:800; padding:20px 4px 14px; letter-spacing:.5px; }
+  .slabel{ font-size:.82rem; font-weight:700; color:var(--muted); margin-bottom:.55rem; letter-spacing:.4px; }
+
+  /* 問候 */
+  .greet{ display:flex; align-items:center; gap:14px; padding:20px 6px 16px; }
+  .mascot{ width:66px; height:66px; flex:none; filter:drop-shadow(0 6px 12px rgba(126,214,160,.4)); animation:float 4s ease-in-out infinite; }
+  @keyframes float{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+  .greet .hi{ font-size:.9rem; color:var(--lav-deep); font-weight:800; letter-spacing:.6px; }
+  .greet .sub{ font-size:.74rem; color:var(--muted); font-weight:600; margin:2px 0 3px; }
+  .greet .big{ font-size:1.24rem; font-weight:800; }
+  .greet .big b{ font-weight:800; }
+  .greet .sun{ margin-left:auto; width:36px; height:36px; flex:none; }
+
+  /* 月曆 */
+  .cal{ padding:16px 14px 18px; margin-bottom:16px; }
+  .cal-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; padding:0 4px; }
+  .cal-head .m{ font-size:1.12rem; font-weight:800; }
+  .cal-head button{ width:36px; height:36px; border-radius:50%; background:rgba(157,129,221,.14); color:var(--lav-deep); font-size:1.2rem; font-weight:800; display:flex; align-items:center; justify-content:center; }
+  .grid{ display:grid; grid-template-columns:repeat(7,1fr); gap:4px; }
+  .wd{ text-align:center; font-size:.7rem; color:var(--muted); padding:4px 0 8px; font-weight:700; }
+  .cell{ aspect-ratio:1/1; border-radius:14px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; font-size:.9rem; font-weight:700; color:var(--text); position:relative; }
+  .cell.other{ color:#c9c2d6; font-weight:500; }
+  .cell.today .n{ width:30px; height:30px; display:flex; align-items:center; justify-content:center; border-radius:50%; background:linear-gradient(135deg,var(--accent1),var(--accent2)); color:#fff; box-shadow:0 4px 12px rgba(157,129,221,.5); }
+  .cell.sel:not(.today){ background:rgba(157,129,221,.12); }
+  .dots{ display:flex; gap:3px; height:6px; }
+  .dots i{ width:6px; height:6px; border-radius:50%; display:block; }
+
+  /* 行程卡 */
+  .day{ padding:16px; }
+  .day h3{ font-size:.98rem; margin-bottom:12px; display:flex; align-items:center; gap:8px; font-weight:800; }
+  .day h3 .tag{ font-size:.7rem; color:var(--muted); font-weight:600; }
+  .evt{ display:flex; gap:12px; align-items:flex-start; padding:12px 14px; border-radius:16px; background:var(--evt-bg); border:1px solid var(--card-brd); margin-bottom:10px; }
+  .evt .bar{ width:4px; align-self:stretch; border-radius:4px; flex:none; min-height:34px; }
+  .evt .t{ font-weight:700; font-size:.98rem; }
+  .evt .meta{ font-size:.8rem; color:var(--muted); margin-top:2px; line-height:1.6; }
+  .date-group{ font-size:.82rem; font-weight:800; color:var(--lav-deep); margin:16px 4px 8px; }
+  .empty{ text-align:center; padding:26px 12px; }
+  .empty .m2{ width:96px; height:96px; margin:0 auto 10px; animation:float 4s ease-in-out infinite; }
+  .empty p{ color:var(--muted); font-size:.92rem; margin-bottom:14px; }
+  .btn-grad{ display:inline-flex; align-items:center; justify-content:center; gap:8px; background:linear-gradient(135deg,var(--accent1),var(--accent2)); color:#fff; font-weight:800; padding:12px 22px; border-radius:999px; box-shadow:0 8px 20px rgba(157,129,221,.4); }
+  .btn-soft{ display:inline-flex; align-items:center; justify-content:center; gap:8px; background:var(--card); color:var(--text); border:1px solid var(--card-brd); font-weight:700; padding:11px 18px; border-radius:16px; }
+  .btn-grad:disabled,.btn-soft:disabled{ opacity:.55; }
+  .w100{ width:100%; }
+
+  /* 表單 */
+  label.field{ display:block; margin-bottom:.9rem; }
+  label.field>span{ display:block; font-size:.85rem; font-weight:700; margin-bottom:.35rem; }
+  input,select,textarea{ width:100%; background:var(--evt-bg); border:1px solid var(--card-brd); border-radius:14px; padding:.7rem .85rem; }
+  input:focus,select:focus,textarea:focus{ outline:2px solid var(--lav); outline-offset:-1px; }
+  textarea{ min-height:80px; resize:vertical; }
+  .row{ display:flex; gap:.6rem; }
+  .grow{ flex:1; }
+  .seg{ display:flex; gap:.45rem; margin-bottom:1rem; }
+  .seg button{ flex:1; border:1px solid var(--card-brd); border-radius:14px; padding:.6rem; font-size:.9rem; font-weight:700; background:var(--card); color:var(--muted); display:flex; align-items:center; justify-content:center; gap:5px; }
+  .seg button.on{ border-color:transparent; background:linear-gradient(135deg,var(--accent1),var(--accent2)); color:#fff; }
+  .prio{ display:flex; gap:.45rem; }
+  .prio button{ flex:1; border:2px solid var(--card-brd); border-radius:14px; padding:.55rem; font-size:.85rem; font-weight:700; background:var(--card); }
+  .prio button.on{ border-color:var(--lav-deep); background:rgba(157,129,221,.08); }
+  .prio .d{ width:.7rem; height:.7rem; border-radius:50%; display:inline-block; vertical-align:-1px; margin-right:.3rem; }
+  .hint{ font-size:.85rem; color:var(--muted); line-height:1.7; margin:.4rem 0; }
+  .addbar{ display:flex; align-items:center; gap:10px; padding:18px 2px 12px; }
+  .addbar #add-cancel{ color:var(--lav-deep); font-weight:800; font-size:1rem; padding:.2rem .2rem; }
+  .photo-drop{ display:flex; align-items:center; justify-content:center; gap:8px; width:100%; min-height:120px; border:2px dashed var(--lav); border-radius:20px; background:var(--evt-bg); color:var(--lav-deep); font-weight:800; font-size:1.05rem; text-align:center; padding:1rem; }
+  .setup-card{ margin-top:1rem; padding:1rem; border:1px solid var(--card-brd); border-radius:16px; background:var(--evt-bg); }
+  .confirm{ background:linear-gradient(135deg,var(--accent1),var(--accent2)); color:#fff; font-weight:800; text-align:center; padding:.7rem 1rem; border-radius:14px; margin-bottom:1rem; }
+
+  /* 設定 */
+  .set-sec{ margin-bottom:1.4rem; }
+  .badge{ display:inline-flex; align-items:center; padding:.2rem .7rem; border-radius:999px; font-size:.75rem; font-weight:700; }
+  .b-green{ background:rgba(126,214,160,.22); color:#2f7a52; } .b-amber{ background:rgba(255,207,122,.28); color:#8a6a1e; }
+  .b-info{ background:rgba(157,129,221,.16); color:var(--lav-deep); }
+  .theme-card{ width:100%; text-align:left; border:2px solid var(--card-brd); border-radius:18px; padding:.85rem 1rem; margin-bottom:.55rem; background:var(--card); display:flex; align-items:center; gap:12px; }
+  .theme-card .prev{ width:40px; height:40px; border-radius:12px; flex:none; border:1px solid rgba(0,0,0,.06); }
+  .theme-card b{ font-size:.98rem; } .theme-card .d2{ font-size:.76rem; color:var(--muted); margin-top:1px; }
+  .list-note{ font-size:.83rem; color:var(--muted); line-height:1.75; }
+  .list-note li{ margin-left:1.1rem; margin-bottom:.25rem; }
+
+  /* 底部導覽 */
+  nav{ position:fixed; bottom:0; left:0; right:0; z-index:20; display:flex; justify-content:space-around; align-items:flex-end;
+    padding:8px 10px calc(10px + env(safe-area-inset-bottom));
+    background:var(--card); border-top:1px solid var(--card-brd); }
+  html[data-dark] nav{ background:rgba(20,22,43,.86); backdrop-filter:blur(12px); }
+  nav button{ flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; color:var(--muted); font-size:.66rem; font-weight:700; }
+  nav button.on{ color:var(--lav-deep); }
+  nav button svg{ width:26px; height:26px; }
+  nav .fab{ flex:none; margin:0 6px; transform:translateY(-14px); }
+  nav .fab .c{ width:60px; height:60px; border-radius:50%; background:linear-gradient(135deg,var(--accent1),var(--accent2)); display:flex; align-items:center; justify-content:center; box-shadow:0 10px 24px rgba(157,129,221,.5); }
+  nav .fab .c svg{ width:30px; height:30px; color:#fff; }
+
+  /* Modal / toast */
+  .modal-bg{ position:fixed; inset:0; background:rgba(60,45,90,.4); z-index:40; display:none; align-items:flex-end; justify-content:center; }
+  .modal-bg.show{ display:flex; }
+  .modal{ background:var(--card); width:100%; max-width:640px; border-radius:24px 24px 0 0; padding:1.2rem 1.1rem calc(1.2rem + env(safe-area-inset-bottom)); max-height:88dvh; overflow:auto; }
+  .toast{ position:fixed; left:50%; bottom:100px; transform:translateX(-50%); background:var(--lav-deep); color:#fff; padding:.65rem 1.1rem; border-radius:14px; font-size:.85rem; z-index:60; opacity:0; transition:opacity .2s; max-width:90%; text-align:center; white-space:pre-line; box-shadow:0 8px 24px rgba(120,90,160,.4); pointer-events:none; }
+  .toast.show{ opacity:.97; }
+  .home-fab{ position:fixed; top:12px; right:12px; z-index:30; width:2.3rem; height:2.3rem; border-radius:50%; background:var(--card); border:1px solid var(--card-brd); box-shadow:0 4px 12px rgba(120,90,160,.2); display:flex; align-items:center; justify-content:center; text-decoration:none; font-size:1.1rem; opacity:.9; }
+  @media (display-mode:standalone){ .home-fab{ display:none; } }
+  .onboard{ position:fixed; inset:0; z-index:200; display:flex; align-items:center; justify-content:center; padding:18px; overflow:auto;
+    background:radial-gradient(80% 50% at 100% 0%, rgba(170,142,230,.4), transparent 60%),radial-gradient(70% 50% at 0% 10%, rgba(197,178,240,.4), transparent 60%),linear-gradient(180deg,#f3eefc,#efe7fa); }
+  .onboard[hidden]{ display:none; }
+  .onboard-card{ background:#fff; border-radius:26px; padding:1.8rem 1.4rem 1.5rem; max-width:430px; width:100%; box-shadow:0 20px 50px rgba(120,90,160,.28); text-align:center; }
+  .ob-mascot{ width:92px; height:92px; margin:0 auto .4rem; display:block; filter:drop-shadow(0 6px 12px rgba(126,214,160,.4)); }
+  .onboard-card h2{ font-size:1.3rem; color:#403a58; margin-bottom:.6rem; }
+  .ob-lead{ font-size:.95rem; color:#5a5470; line-height:1.75; margin-bottom:1rem; }
+  .ob-steps{ text-align:left; margin:0 auto 1rem; padding-left:1.3rem; font-size:.9rem; color:#5a5470; line-height:1.9; }
+  .ob-apply{ display:inline-block; font-weight:800; margin-bottom:.9rem; color:#9d81dd; }
+  .onboard-card input{ width:100%; background:#faf8fd; border:1px solid rgba(150,120,180,.25); border-radius:14px; padding:.8rem .9rem; font-family:monospace; margin-bottom:.7rem; }
+  .ob-note{ font-size:.78rem; color:#918aa6; margin-top:.8rem; }
+</style>
+</head>
+<body>
+<a class="home-fab" href="../../life/" title="回上一頁" onclick="if(history.length&gt;1){history.back();return false}">←</a>
+<svg class="silk" viewBox="0 0 390 844" preserveAspectRatio="xMidYMid slice">
+  <defs><filter id="blur" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="9"/></filter></defs>
+  <g filter="url(#blur)" fill="none" stroke-linecap="round">
+    <path d="M-40 60 C 120 10 260 120 460 30" style="stroke:var(--silk2)" stroke-width="46" opacity=".55"/>
+    <path d="M-40 110 C 130 70 250 180 460 90" style="stroke:var(--silk3)" stroke-width="30" opacity=".4"/>
+    <path d="M-60 760 C 120 700 240 850 470 770" style="stroke:var(--silk2)" stroke-width="52" opacity=".45"/>
+    <path d="M-60 810 C 130 760 260 880 470 820" style="stroke:var(--silk1)" stroke-width="34" opacity=".38"/>
+    <path d="M-40 250 C 60 220 120 300 40 360" style="stroke:var(--silk1)" stroke-width="26" opacity=".26"/>
+  </g>
+</svg>
+<div class="stars" id="stars"></div>
+
+<!-- 定義：四葉草精靈 + 圖示漸層 -->
+<svg width="0" height="0" style="position:absolute"><defs>
+  <linearGradient id="clg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a6f0b8"/><stop offset="1" stop-color="#5fc98a"/></linearGradient>
+  <symbol id="sprite" viewBox="0 0 100 100">
+    <path d="M50 54 Q47 74 38 83" stroke="#4fb87a" stroke-width="3.4" fill="none" stroke-linecap="round"/>
+    <g fill="url(#clg)">
+      <path d="M0 0 C -16 -14 -18 -33 -8 -33 C -3 -33 0 -29 0 -26 C 0 -29 3 -33 8 -33 C 18 -33 16 -14 0 0 Z" transform="translate(50 50) rotate(0)"/>
+      <path d="M0 0 C -16 -14 -18 -33 -8 -33 C -3 -33 0 -29 0 -26 C 0 -29 3 -33 8 -33 C 18 -33 16 -14 0 0 Z" transform="translate(50 50) rotate(90)"/>
+      <path d="M0 0 C -16 -14 -18 -33 -8 -33 C -3 -33 0 -29 0 -26 C 0 -29 3 -33 8 -33 C 18 -33 16 -14 0 0 Z" transform="translate(50 50) rotate(180)"/>
+      <path d="M0 0 C -16 -14 -18 -33 -8 -33 C -3 -33 0 -29 0 -26 C 0 -29 3 -33 8 -33 C 18 -33 16 -14 0 0 Z" transform="translate(50 50) rotate(270)"/>
+    </g>
+    <circle cx="43.5" cy="51" r="3.2" fill="#20362a"/><circle cx="56.5" cy="51" r="3.2" fill="#20362a"/>
+    <circle cx="44.7" cy="49.9" r=".9" fill="#fff"/><circle cx="57.7" cy="49.9" r=".9" fill="#fff"/>
+    <path d="M46.5 56 Q50 59.5 53.5 56" stroke="#20362a" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <circle cx="38.5" cy="55" r="2.7" fill="#f7b8d6" opacity=".8"/><circle cx="61.5" cy="55" r="2.7" fill="#f7b8d6" opacity=".8"/>
+    <path d="M80 20 l1.6 3.6 3.9.4-2.9 2.6.8 3.8-3.4-2-3.4 2 .8-3.8-2.9-2.6 3.9-.4z" fill="#ffcf7a"/>
+  </symbol>
+</defs></svg>
+
+<main>
+  <!-- 月曆 -->
+  <section id="v-cal" class="view active">
+    <div class="greet">
+      <svg class="mascot"><use href="#sprite"/></svg>
+      <div class="grow">
+        <div class="hi" id="g-poem"></div>
+        <div class="sub" id="g-date"></div>
+        <div class="big" id="g-count"></div>
+      </div>
+      <svg class="sun" id="g-orb" viewBox="0 0 24 24"></svg>
+    </div>
+    <section class="card cal">
+      <div class="cal-head"><button id="cal-prev">‹</button><div class="m" id="cal-month"></div><button id="cal-next">›</button></div>
+      <div class="grid" id="cal-grid"></div>
+    </section>
+    <div id="cal-day"></div>
+  </section>
+
+  <!-- 清單 -->
+  <section id="v-list" class="view">
+    <div class="ptitle">近期行程</div>
+    <div id="list-body"></div>
+  </section>
+
+  <!-- 新增 -->
+  <section id="v-add" class="view">
+    <div class="addbar"><button type="button" id="add-cancel">‹ 返回</button><div class="ptitle" id="add-title" style="padding:0">拍照加行程</div></div>
+    <div class="seg" id="add-mode">
+      <button data-m="photo" class="on">📸 拍照</button>
+      <button data-m="paste">📋 貼文字</button>
+      <button data-m="manual">✍️ 手寫</button>
+    </div>
+
+    <div id="pane-photo" style="margin-bottom:1rem">
+      <p class="hint">拍或選一張通知單的照片，App 幫你認出上面的日期時間地點，變成行程。</p>
+      <label class="photo-drop" for="photo-file">📷　拍照 / 選一張通知單</label>
+      <input type="file" id="photo-file" accept="image/*" capture="environment" hidden>
+      <div id="photo-name" class="hint" style="text-align:center"></div>
+      <button class="btn-grad w100" id="photo-run" style="margin-top:.7rem">開始認字</button>
+      <p id="photo-status" class="hint"></p>
+      <div id="photo-setup" class="hidden setup-card">
+        <b>第一次用：開通「拍照認字」（只要做一次）</b>
+        <p class="hint" style="margin:.4rem 0">拍照認字需要一組免費的辨識碼。點下面免費申請，複製後貼進來，之後就不用再弄了。</p>
+        <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer" style="font-weight:700">→ 免費申請辨識碼（Google AI Studio）</a>
+        <input id="photo-key" type="text" placeholder="把申請到的一串碼貼在這" autocomplete="off" spellcheck="false" style="font-family:monospace;margin-top:.5rem">
+        <button class="btn-grad w100" id="photo-key-save" style="margin-top:.5rem">存好，開始認字</button>
+      </div>
+    </div>
+
+    <div id="pane-paste" class="hidden" style="margin-bottom:1rem">
+      <p class="hint">把 LINE／email 裡的開會文字貼進來，自動認出日期時間地點。</p>
+      <textarea id="paste-text" placeholder="例如：3/15 下午2點 在 302 會議室 開產品週會"></textarea>
+      <button class="btn-grad w100" id="paste-parse" style="margin-top:.5rem">認出時間地點</button>
+    </div>
+
+    <div id="confirm-banner" class="confirm hidden">✅ 認出來了！下面確認一下就存，有錯可以直接改</div>
+
+    <form id="evt-form" class="hidden">
+      <input type="hidden" id="f-id">
+      <label class="field"><span>標題 *</span><input id="f-title" required placeholder="會議／行程名稱"></label>
+      <label class="field"><span>日期 *</span><input type="date" id="f-date" required></label>
+      <div class="row">
+        <label class="field grow"><span>開始</span><input type="time" id="f-start"></label>
+        <label class="field grow"><span>結束</span><input type="time" id="f-end"></label>
+      </div>
+      <label class="field"><span>地點</span><input id="f-loc" placeholder="會議室／地址"></label>
+      <label class="field"><span>備註</span><textarea id="f-notes"></textarea></label>
+      <label class="field"><span>重要程度</span>
+        <div class="prio" id="f-prio">
+          <button type="button" data-v="high"><span class="d" style="background:#DC2626"></span>最重要</button>
+          <button type="button" data-v="medium" class="on"><span class="d" style="background:#EAB308"></span>中等</button>
+          <button type="button" data-v="low"><span class="d" style="background:#16A34A"></span>普通</button>
+        </div></label>
+      <label class="field"><span>提醒</span>
+        <select id="f-remind"><option value="0">不提醒</option><option value="5">5 分鐘前</option><option value="15">15 分鐘前</option><option value="30">30 分鐘前</option><option value="60">60 分鐘前</option></select></label>
+      <div class="row" style="margin-top:.3rem">
+        <button type="submit" class="btn-grad grow">存進行事曆</button>
+        <button type="button" id="f-delete" class="btn-soft hidden">刪除</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- 設定 -->
+  <section id="v-set" class="view"><div id="set-body"></div></section>
+</main>
+
+<nav>
+  <button data-v="v-cal" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="4"/><path d="M3 9h18M8 2.5v4M16 2.5v4"/><circle cx="8.5" cy="14" r="1.3" fill="currentColor" stroke="none"/><circle cx="12" cy="14" r="1.3" fill="currentColor" stroke="none"/></svg>月曆</button>
+  <button data-v="v-list"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="3.6" cy="6" r="1.3" fill="currentColor" stroke="none"/><circle cx="3.6" cy="12" r="1.3" fill="currentColor" stroke="none"/><circle cx="3.6" cy="18" r="1.3" fill="currentColor" stroke="none"/></svg>清單</button>
+  <button data-v="v-add" class="fab"><span class="c"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></button>
+  <button data-v="v-set"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-2.9 1.2 2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-2.9-1.2l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.7 1.7 0 0 0 4 15a1.7 1.7 0 0 0-1.5-1H2a2 2 0 1 1 0-4h.1A1.7 1.7 0 0 0 4 9a1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.7 1.7 0 0 0 9 4.5h.1A1.7 1.7 0 0 0 10 3V2a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9v.1a1.7 1.7 0 0 0 1.5 1h.1a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/><circle cx="12" cy="12" r="3"/></svg>設定</button>
+</nav>
+
+<div class="modal-bg" id="modal-bg"><div class="modal" id="modal"></div></div>
+<div class="toast" id="toast"></div>
+
+<!-- 第一次啟動：必須先貼金鑰才能進 -->
+<div class="onboard" id="onboard" hidden>
+  <div class="onboard-card">
+    <svg class="ob-mascot"><use href="#sprite"/></svg>
+    <h2>歡迎使用四葉草行事曆 🍀</h2>
+    <p class="ob-lead">這個 App 最厲害的功能是「<b>拍一張通知單，自動變成行程</b>」。這需要一組<b>免費的辨識碼</b>，第一次使用請先完成這一步。</p>
+    <ol class="ob-steps">
+      <li>點下面連結，用 Google 帳號<b>免費申請</b>一組辨識碼</li>
+      <li>複製申請到的那一串碼</li>
+      <li>貼回下面框框，按「開始使用」</li>
+    </ol>
+    <a class="ob-apply" href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer">→ 免費申請辨識碼（Google AI Studio）</a>
+    <input id="ob-key" type="text" placeholder="把申請到的一串碼貼在這" autocomplete="off" spellcheck="false">
+    <button class="btn-grad w100" id="ob-go" disabled>開始使用 🍀</button>
+    <p class="ob-note">辨識碼只會存在你這支手機，不會外傳。</p>
+  </div>
+</div>
+
+<script>
+"use strict";
+/* ===== 常數 ===== */
+const DB_NAME="clover-cal",STORE="events",PREFS_KEY="clover-cal-prefs",BACKUP_KEY="clover-cal-backup";
+const BACKUP_MAX_BYTES=0xa00000,MAX_EVENTS=5000,TITLE_MAX=200,LOC_MAX=200,NOTES_MAX=4000,REMIND_MAX=10080;
+const PRIO={high:{label:"最重要",hex:"#DC2626"},medium:{label:"中等",hex:"#EAB308"},low:{label:"普通",hex:"#16A34A"}};
+const SRC2P={high:"high",medium:"medium",low:"low",meeting:"high",travel:"medium",personal:"low",other:"low"};
+const VALID_SRC=new Set(["ocr","manual","booking","paste"]);
+const THEMES=[
+  {id:"clover",name:"四葉草柔霧",desc:"淺紫絲綢、療癒不刺眼（預設）",dark:false,
+   accent1:"#c3aef0",accent2:"#9d81dd",text:"#403a58",muted:"#918aa6",card:"#ffffff",cardBrd:"rgba(150,120,180,.12)",evtBg:"#fbf8fd",
+   silk:["#cbb6f2","#b79fe8","#e9d9f6"],silkOp:1,starOp:0,prev:"linear-gradient(135deg,#e9d9f6,#b79fe8)",
+   bg:"radial-gradient(72% 46% at 100% 0%, rgba(170,142,230,.34), transparent 60%),radial-gradient(58% 40% at 0% 6%, rgba(197,178,240,.28), transparent 60%),radial-gradient(85% 52% at 88% 100%, rgba(157,129,221,.24), transparent 60%),radial-gradient(40% 30% at 6% 92%, rgba(244,169,141,.14), transparent 60%),linear-gradient(180deg,#fbf9ff 0%, #f7f4fc 100%)"},
+  {id:"sakura",name:"櫻花微醺",desc:"粉嫩甜美、少女感",dark:false,
+   accent1:"#f6a9cf",accent2:"#ec7fb0",text:"#5a3b4c",muted:"#a98594",card:"#ffffff",cardBrd:"rgba(200,120,160,.14)",evtBg:"#fdf6fa",
+   silk:["#f8c9de","#f3a9cb","#fbe0ec"],silkOp:1,starOp:0,prev:"linear-gradient(135deg,#fbe0ec,#f3a9cb)",
+   bg:"radial-gradient(72% 46% at 100% 0%, rgba(243,169,203,.34), transparent 60%),radial-gradient(58% 40% at 0% 6%, rgba(248,201,222,.3), transparent 60%),radial-gradient(85% 52% at 88% 100%, rgba(236,127,176,.2), transparent 60%),linear-gradient(180deg,#fffafc 0%, #fdf3f8 100%)"},
+  {id:"matcha",name:"抹茶森林",desc:"清新綠意、自然舒服",dark:false,
+   accent1:"#8ed6a0",accent2:"#4fb87a",text:"#33473a",muted:"#7d9585",card:"#ffffff",cardBrd:"rgba(90,150,110,.14)",evtBg:"#f4fbf6",
+   silk:["#bfe8c9","#8ed6a0","#dcefdf"],silkOp:1,starOp:0,prev:"linear-gradient(135deg,#dcefdf,#8ed6a0)",
+   bg:"radial-gradient(72% 46% at 100% 0%, rgba(142,214,160,.32), transparent 60%),radial-gradient(58% 40% at 0% 6%, rgba(191,232,201,.3), transparent 60%),radial-gradient(85% 52% at 88% 100%, rgba(79,184,122,.18), transparent 60%),linear-gradient(180deg,#fafefb 0%, #f2fbf5 100%)"},
+  {id:"starry",name:"星空夜貓",desc:"深色柔霧、夜間護眼",dark:true,
+   accent1:"#8ee6a8",accent2:"#6fd0ff",text:"#e8eaff",muted:"#9aa0cf",card:"rgba(255,255,255,.055)",cardBrd:"rgba(180,190,255,.16)",evtBg:"rgba(255,255,255,.04)",
+   silk:["#2a2d55","#232750","#2a2d55"],silkOp:0,starOp:1,prev:"linear-gradient(135deg,#232750,#8ee6a8)",
+   bg:"radial-gradient(120% 80% at 80% -10%, rgba(183,169,255,.22), transparent 55%),radial-gradient(90% 60% at 10% 5%, rgba(142,230,168,.10), transparent 50%),linear-gradient(180deg,#1b1e3a 0%,#14162b 60%,#101227 100%)"},
+];
+const DEFAULT_PREFS={themeId:"clover",fontScale:"md",defaultReminderMinutes:15,primaryCalendar:"outlook",geminiApiKey:"",ocrQuotaDate:"",ocrQuotaUsed:0,notificationMode:"unset"};
+const FONT_PX={sm:16,md:18,lg:21};
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const pad=n=>String(n).padStart(2,"0");
+const uid=()=>Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,9);
+const nowISO=()=>new Date().toISOString();
+const twToday=(d=new Date())=>d.toLocaleDateString("en-CA",{timeZone:"Asia/Taipei"});
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove("show"),2600);}
+function esc(s){return(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+function fmtTime(iso){const d=new Date(iso);return pad(d.getHours())+":"+pad(d.getMinutes());}
+function fmtFull(iso){const d=new Date(iso);return `${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()}（${"日一二三四五六"[d.getDay()]}）`;}
+function localInputToISO(dt,tm){return new Date(`${dt}T${tm||"00:00"}:00`).toISOString();}
+
+/* ===== 干支＋國字日期＋詩詞 ===== */
+function ganzhi(y){const g="甲乙丙丁戊己庚辛壬癸",z="子丑寅卯辰巳午未申酉戌亥";return g[((y-4)%10+10)%10]+z[((y-4)%12+12)%12];}
+function cnNum(n){const d="零一二三四五六七八九";if(n<10)return d[n];if(n===10)return "十";if(n<20)return "十"+d[n-10];const t=Math.floor(n/10),u=n%10;const tens=t===2?"廿":t===3?"卅":d[t]+"十";return u?tens+d[u]:tens;}
+function poemLine(h){if(h<5)return "夜深千帳燈 🍀";if(h<11)return "花開堪折直須折 🍀";if(h<14)return "綠樹陰濃夏日長 🍀";if(h<18)return "偷得浮生半日閒 🍀";if(h<21)return "夕陽無限好 🍀";return "月上柳梢頭 🍀";}
+const SUN=`<circle cx="12" cy="12" r="4.5" fill="#ffe0a3" stroke="#f6b64a" stroke-width="2"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8l1.8-1.8M18 6l1.8-1.8" stroke="#f6b64a" stroke-width="2" stroke-linecap="round"/>`;
+const MOON=`<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" fill="#ffd98a"/>`;
+
+/* ===== IndexedDB ===== */
+let _db=null;
+function db(){return _db?Promise.resolve(_db):new Promise((res,rej)=>{const r=indexedDB.open(DB_NAME,1);r.onupgradeneeded=()=>{const d=r.result;if(!d.objectStoreNames.contains(STORE))d.createObjectStore(STORE,{keyPath:"id"});};r.onsuccess=()=>{_db=r.result;res(_db);};r.onerror=()=>rej(r.error);});}
+async function dbAll(){const d=await db();return new Promise((res,rej)=>{const r=d.transaction(STORE).objectStore(STORE).getAll();r.onsuccess=()=>res(r.result||[]);r.onerror=()=>rej(r.error);});}
+async function dbPut(ev){const d=await db();return new Promise((res,rej)=>{const tx=d.transaction(STORE,"readwrite");tx.objectStore(STORE).put(ev);tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error);});}
+async function dbDel(id){const d=await db();return new Promise((res,rej)=>{const tx=d.transaction(STORE,"readwrite");tx.objectStore(STORE).delete(id);tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error);});}
+
+/* ===== Prefs / State ===== */
+function loadPrefs(){try{return{...DEFAULT_PREFS,...JSON.parse(localStorage.getItem(PREFS_KEY)||"{}")};}catch(e){return{...DEFAULT_PREFS};}}
+function savePrefs(p){localStorage.setItem(PREFS_KEY,JSON.stringify(p));}
+let state={events:[],prefs:loadPrefs(),calRef:new Date(),calSel:twToday(),formPrio:"medium"};
+
+/* ===== 主題 ===== */
+function applyTheme(){
+  const t=THEMES.find(x=>x.id===state.prefs.themeId)||THEMES[0],r=document.documentElement.style;
+  document.body.style.background=t.bg;
+  r.setProperty("--accent1",t.accent1);r.setProperty("--accent2",t.accent2);
+  r.setProperty("--text",t.text);r.setProperty("--muted",t.muted);
+  r.setProperty("--card",t.card);r.setProperty("--card-brd",t.cardBrd);r.setProperty("--evt-bg",t.evtBg);
+  r.setProperty("--lav-deep",t.accent2);
+  r.setProperty("--silk1",t.silk[0]);r.setProperty("--silk2",t.silk[1]);r.setProperty("--silk3",t.silk[2]);
+  r.setProperty("--silk-op",t.silkOp);r.setProperty("--star-op",t.starOp);
+  r.setProperty("--fs",(FONT_PX[state.prefs.fontScale]||16)+"px");
+  document.documentElement.toggleAttribute("data-dark",!!t.dark);
+  const m=document.querySelector('meta[name=theme-color]');if(m)m.content=t.accent2;
+}
+
+/* ===== 提醒 ===== */
+const timers=new Map();
+async function reqNotify(){if(!("Notification"in window))return false;if(Notification.permission==="granted")return true;if(Notification.permission==="denied")return false;return(await Notification.requestPermission())==="granted";}
+function clearTimers(){timers.forEach(id=>clearTimeout(id));timers.clear();}
+function scheduleAll(){clearTimers();if(state.prefs.notificationMode!=="allowed")return;for(const e of state.events){const rm=e.reminderMinutes||0,delay=new Date(e.startAt).getTime()-rm*60000-Date.now();if(delay<=0||delay>604800000)continue;timers.set(e.id,setTimeout(()=>{fireNotify(e);timers.delete(e.id);},delay));}}
+function fireNotify(e){const title="即將開始："+e.title,body=[fmtFull(e.startAt).replace(/（.）/,"")+" "+fmtTime(e.startAt),e.location].filter(Boolean).join(" · ");if("Notification"in window&&Notification.permission==="granted"){try{new Notification(title,{body,tag:e.id});return;}catch(x){}}if(document.visibilityState==="visible")toast(title+"\n"+body);}
+
+/* ===== 資料 ===== */
+async function reload(){state.events=await dbAll();scheduleAll();renderAll();}
+function sanitizeEvent(raw){const t=nowISO(),src=VALID_SRC.has(raw.source)?raw.source:"manual";return{id:(raw.id||uid()).slice(0,200),title:(raw.title||"").trim().slice(0,TITLE_MAX),startAt:raw.startAt,endAt:raw.endAt||raw.startAt,location:(raw.location||"").slice(0,LOC_MAX),notes:(raw.notes||"").slice(0,NOTES_MAX),color:SRC2P[raw.color]||(PRIO[raw.color]?raw.color:"medium"),source:src,reminderMinutes:Math.min(Math.max(0,Number(raw.reminderMinutes)||0),REMIND_MAX),createdAt:raw.createdAt||t,updatedAt:t};}
+async function upsert(raw){const ev=sanitizeEvent(raw);await dbPut(ev);await reload();return ev;}
+
+/* ===== 導覽 ===== */
+function show(v){$$(".view").forEach(x=>x.classList.toggle("active",x.id===v));$$("nav button").forEach(b=>b.classList.toggle("on",b.dataset.v===v));if(v==="v-set")renderSettings();if(v==="v-list")renderList();if(v==="v-cal")renderCal();window.scrollTo(0,0);}
+$$("nav button").forEach(b=>b.onclick=()=>{if(b.dataset.v==="v-add")openAdd();else show(b.dataset.v);});
+
+/* ===== 月曆 ===== */
+function renderGreet(){
+  const now=new Date(),h=now.getHours();
+  $("#g-poem").textContent=poemLine(h);
+  $("#g-date").textContent=`${ganzhi(now.getFullYear())}年 · ${cnNum(now.getMonth()+1)}月${cnNum(now.getDate())} · 週${"日一二三四五六"[now.getDay()]}`;
+  const todayEvts=state.events.filter(e=>new Date(e.startAt).toLocaleDateString("en-CA")===twToday()).length;
+  $("#g-count").innerHTML=todayEvts?`今日 <b class="grad-txt">${todayEvts}</b> 樁行程待赴`:`今日無事，樂得清閒 🍀`;
+  $("#g-orb").innerHTML=(h<6||h>=18)?MOON:SUN;
+}
+function renderCal(){
+  renderGreet();
+  const ref=state.calRef,y=ref.getFullYear(),m=ref.getMonth();
+  $("#cal-month").textContent=`${y} 年 ${m+1} 月`;
+  const first=new Date(y,m,1),start=new Date(first);start.setDate(1-first.getDay());
+  const todayStr=twToday(),byDay={};
+  state.events.forEach(e=>{const k=new Date(e.startAt).toLocaleDateString("en-CA");(byDay[k]=byDay[k]||[]).push(e);});
+  let html=["日","一","二","三","四","五","六"].map(w=>`<div class="wd">${w}</div>`).join("");
+  for(let i=0;i<42;i++){const d=new Date(start);d.setDate(start.getDate()+i);const key=d.toLocaleDateString("en-CA"),other=d.getMonth()!==m,isToday=key===todayStr,sel=key===state.calSel,evs=byDay[key]||[];const dots=evs.slice(0,4).map(e=>`<i style="background:${PRIO[e.color]?.hex||'#9d81dd'}"></i>`).join("");html+=`<button class="cell ${other?'other':''} ${isToday?'today':''} ${sel?'sel':''}" data-k="${key}"><span class="n">${d.getDate()}</span><span class="dots">${dots}</span></button>`;}
+  $("#cal-grid").innerHTML=html;
+  $$("#cal-grid .cell").forEach(c=>c.onclick=()=>{state.calSel=c.dataset.k;renderCal();});
+  renderDayList();
+}
+function renderDayList(){
+  const key=state.calSel,d=new Date(key+"T00:00:00");
+  const evs=state.events.filter(e=>new Date(e.startAt).toLocaleDateString("en-CA")===key).sort((a,b)=>new Date(a.startAt)-new Date(b.startAt));
+  let h=`<section class="card day"><h3>${fmtFull(d.toISOString())} <span class="tag">${evs.length?evs.length+" 樁行程":""}</span></h3>`;
+  h+= evs.length? evs.map(evtCard).join("") : `<div class="empty"><svg class="m2"><use href="#sprite"/></svg><p>這天還沒有行程，要不要安排一下？</p><button class="btn-grad" onclick="openAdd('${key}')">＋ 新增行程</button></div>`;
+  h+=`</section>`;
+  $("#cal-day").innerHTML=h;bindEvtCards();
+}
+function evtCard(e){const time=(fmtTime(e.startAt)==="00:00"&&fmtTime(e.endAt)==="00:00")?"整天":fmtTime(e.startAt)+(e.endAt&&e.endAt!==e.startAt?"–"+fmtTime(e.endAt):"");return `<div class="evt" data-id="${e.id}"><span class="bar" style="background:${PRIO[e.color]?.hex||'#9d81dd'}"></span><div class="grow"><div class="t">${esc(e.title)}</div><div class="meta">🕐 ${time}${e.location?" · 📍 "+esc(e.location):""}${e.reminderMinutes?" · 🔔 "+e.reminderMinutes+" 分前":""}</div></div></div>`;}
+function bindEvtCards(){$$(".evt[data-id]").forEach(el=>el.onclick=()=>openAdd(null,el.dataset.id));}
+$("#cal-prev").onclick=()=>{state.calRef=new Date(state.calRef.getFullYear(),state.calRef.getMonth()-1,1);renderCal();};
+$("#cal-next").onclick=()=>{state.calRef=new Date(state.calRef.getFullYear(),state.calRef.getMonth()+1,1);renderCal();};
+
+/* ===== 清單 ===== */
+function renderList(){
+  const now=Date.now();
+  const up=state.events.filter(e=>new Date(e.endAt||e.startAt).getTime()>=now-86400000).sort((a,b)=>new Date(a.startAt)-new Date(b.startAt));
+  if(!up.length){$("#list-body").innerHTML=`<section class="card day"><div class="empty"><svg class="m2"><use href="#sprite"/></svg><p>還沒有任何行程，開始安排吧 🍀</p><button class="btn-grad" onclick="openAdd()">＋ 新增第一筆</button></div></section>`;return;}
+  let h="",lastK="";
+  for(const e of up){const k=new Date(e.startAt).toLocaleDateString("en-CA");if(k!==lastK){h+=`<div class="date-group">${fmtFull(e.startAt)}</div>`;lastK=k;}h+=evtCard(e);}
+  $("#list-body").innerHTML=h;bindEvtCards();
+}
+
+/* ===== 新增/編輯 ===== */
+let addContext="photo";
+function switchMode(m){addContext=m;$$("#add-mode button").forEach(b=>b.classList.toggle("on",b.dataset.m===m));$("#pane-paste").classList.toggle("hidden",m!=="paste");$("#pane-photo").classList.toggle("hidden",m!=="photo");$("#evt-form").classList.toggle("hidden",m!=="manual");$("#confirm-banner").classList.add("hidden");$("#photo-setup").classList.add("hidden");}
+function revealForm(){$("#evt-form").classList.remove("hidden");$("#confirm-banner").classList.remove("hidden");$("#confirm-banner").scrollIntoView({behavior:"smooth",block:"start"});}
+$$("#add-mode button").forEach(b=>b.onclick=()=>switchMode(b.dataset.m));
+$("#add-cancel").onclick=()=>show("v-cal");
+$("#photo-file").onchange=()=>{const f=$("#photo-file").files[0];$("#photo-name").textContent=f?("已選好照片："+f.name):"";};
+function openAdd(dateKey,editId){
+  show("v-add");const f=$("#evt-form");
+  if(editId){const e=state.events.find(x=>x.id===editId);if(!e)return;
+    switchMode("manual");$("#add-title").textContent="編輯行程";$("#f-id").value=e.id;$("#f-title").value=e.title;
+    $("#f-date").value=new Date(e.startAt).toLocaleDateString("en-CA");
+    $("#f-start").value=(fmtTime(e.startAt)==="00:00"&&(!e.endAt||e.endAt===e.startAt))?"":fmtTime(e.startAt);
+    $("#f-end").value=e.endAt&&e.endAt!==e.startAt?fmtTime(e.endAt):"";
+    $("#f-loc").value=e.location;$("#f-notes").value=e.notes;setPrio(e.color);$("#f-remind").value=String(e.reminderMinutes||0);
+    $("#f-delete").classList.remove("hidden");$("#f-delete").onclick=async()=>{if(confirm("確定刪除這筆行程？")){await dbDel(e.id);await reload();toast("已刪除");show("v-cal");}};
+  }else{
+    f.reset();$("#f-id").value="";$("#f-date").value=dateKey||state.calSel||twToday();setPrio("medium");$("#f-remind").value=String(state.prefs.defaultReminderMinutes);$("#f-delete").classList.add("hidden");$("#photo-name").textContent="";$("#photo-status").textContent="";$("#photo-file").value="";
+    if(dateKey){switchMode("manual");$("#add-title").textContent="手寫新增";}
+    else{switchMode("photo");$("#add-title").textContent="拍照加行程";}
+  }
+}
+function setPrio(v){state.formPrio=v;$$("#f-prio button").forEach(b=>b.classList.toggle("on",b.dataset.v===v));}
+$$("#f-prio button").forEach(b=>b.onclick=()=>setPrio(b.dataset.v));
+$("#evt-form").onsubmit=async e=>{e.preventDefault();const date=$("#f-date").value;if(!$("#f-title").value.trim()||!date){toast("請填標題和日期");return;}
+  const start=$("#f-start").value,end=$("#f-end").value,editing=!!$("#f-id").value;
+  const raw={id:$("#f-id").value||undefined,title:$("#f-title").value,startAt:localInputToISO(date,start),endAt:localInputToISO(date,end||start||"00:00"),location:$("#f-loc").value,notes:$("#f-notes").value,color:state.formPrio,source:editing?undefined:(addContext==="photo"?"ocr":addContext==="paste"?"paste":"manual"),reminderMinutes:Number($("#f-remind").value)};
+  if(editing){const old=state.events.find(x=>x.id===$("#f-id").value);raw.createdAt=old?.createdAt;raw.source=old?.source;}
+  await upsert(raw);
+  if(raw.reminderMinutes>0&&state.prefs.notificationMode!=="allowed"){const ok=await reqNotify();if(ok){state.prefs.notificationMode="allowed";savePrefs(state.prefs);scheduleAll();}}
+  if(!editing&&(addContext==="photo"||addContext==="paste")){switchMode(addContext);$("#f-title").value="";$("#f-loc").value="";$("#f-notes").value="";$("#paste-text").value="";$("#photo-name").textContent="";$("#photo-file").value="";toast("已存 🍀 可以接著下一張");}
+  else{toast("已存 🍀");show("v-cal");}
+};
+
+/* ===== 貼文字 / 拍照 ===== */
+$("#paste-parse").onclick=async()=>{const txt=$("#paste-text").value.trim();if(!txt){toast("請先貼上文字");return;}let p=null;if(state.prefs.geminiApiKey.trim()){try{p=await aiParse(txt,"text");}catch(e){toast("線上認字失敗，改用內建規則");}}if(!p)p=localParse(txt);fillForm(p);revealForm();toast("認出來了，確認就存");};
+function localParse(txt){let work=" "+txt.replace(/\n/g," ")+" ";let y=new Date().getFullYear(),mo=null,da=null;let md=work.match(/(\d{4})[\/\-年](\d{1,2})[\/\-月](\d{1,2})日?/)||work.match(/(\d{1,2})[\/月](\d{1,2})日?/);if(md){if(md.length===4){y=+md[1];mo=+md[2];da=+md[3];}else{mo=+md[1];da=+md[2];}work=work.replace(md[0]," ");}if(/今天/.test(work)){const d=new Date();mo=d.getMonth()+1;da=d.getDate();work=work.replace(/今天/g," ");}if(/明天/.test(work)){const d=new Date(Date.now()+86400000);mo=d.getMonth()+1;da=d.getDate();work=work.replace(/明天/g," ");}let hh=null,mm=0;const tm=work.match(/(上午|下午|早上|晚上|中午)?\s*(\d{1,2})[:：點時](\d{0,2})分?/);if(tm){hh=+tm[2];mm=tm[3]?+tm[3]:0;if(/(下午|晚上)/.test(tm[1]||"")&&hh<12)hh+=12;if(/中午/.test(tm[1]||"")&&hh<12)hh=12;work=work.replace(tm[0]," ");}let loc="",titleHint="";const lm=work.match(/(?:在|地點[:：]?|＠|@)\s*([^\n，,。;；]{1,30})/);if(lm){let l=lm[1].trim();const vm=l.match(/^(.*?)(開會|開|召開|舉行|進行|討論|報告|參加)(.+)$/);if(vm&&vm[1].trim()){loc=vm[1].trim();titleHint=((vm[2]==="開會")?"開會":"")+vm[3];titleHint=titleHint.trim();}else loc=l;work=work.replace(lm[0]," ");}let title=titleHint||work.replace(/\s+/g," ").trim();title=title.replace(/^(開會|召開|舉行|進行|參加|開)\s*/,"").trim();title=(title||"新行程").slice(0,TITLE_MAX);return{title,date:(mo&&da)?`${y}-${pad(mo)}-${pad(da)}`:twToday(),start:hh!=null?`${pad(hh)}:${pad(mm)}`:"",end:"",location:loc,notes:""};}
+function fillForm(p){$("#f-title").value=p.title||"";$("#f-date").value=p.date||twToday();$("#f-start").value=p.start||"";$("#f-end").value=p.end||"";$("#f-loc").value=p.location||"";$("#f-notes").value=p.notes||"";setPrio(p.priority&&PRIO[p.priority]?p.priority:"medium");$("#f-remind").value=String(state.prefs.defaultReminderMinutes);}
+async function runPhoto(){const file=$("#photo-file").files[0];if(!file){toast("請先拍照或選一張照片");return;}const key=state.prefs.geminiApiKey.trim();if(!key){$("#photo-setup").classList.remove("hidden");$("#photo-setup").scrollIntoView({behavior:"smooth",block:"center"});toast("第一次要先開通拍照認字（下方）");return;}$("#photo-status").textContent="認字中…請稍候（約 3～8 秒）";$("#photo-run").disabled=true;try{const b64=await fileToB64(file),p=await aiParse(b64,"image","image/jpeg");fillForm(p);markQuota();$("#photo-status").textContent="";revealForm();toast("認出來了，確認就存 🍀");}catch(e){const raw=e.message||String(e),invalid=/not valid|API_KEY_INVALID|invalid.*key/i.test(raw);$("#photo-status").textContent="認字失敗："+keyErrMsg(raw)+"（可改用『手寫』或再試）";if(invalid){$("#photo-setup").classList.remove("hidden");$("#photo-setup").scrollIntoView({behavior:"smooth",block:"center"});toast("辨識碼無效，請重新設定");}}finally{$("#photo-run").disabled=false;}}
+$("#photo-run").onclick=runPhoto;
+$("#photo-key-save").onclick=async()=>{const k=$("#photo-key").value.trim();if(k.length<12){toast("請先貼上辨識碼");return;}const btn=$("#photo-key-save"),t0=btn.textContent;btn.disabled=true;btn.textContent="檢查中…";const res=await testKey(k);btn.disabled=false;btn.textContent=t0;if(!res.ok){toast("辨識碼不能用："+keyErrMsg(res.error));return;}state.prefs.geminiApiKey=k;savePrefs(state.prefs);$("#photo-setup").classList.add("hidden");toast("開通完成 🍀");if($("#photo-file").files[0])runPhoto();};
+function loadImg(file){return new Promise((res,rej)=>{const u=URL.createObjectURL(file);const i=new Image();i.onload=()=>{URL.revokeObjectURL(u);res(i);};i.onerror=e=>{URL.revokeObjectURL(u);rej(e);};i.src=u;});}
+async function fileToB64(file){try{const img=await loadImg(file);let w=img.naturalWidth||img.width,h=img.naturalHeight||img.height;const max=1600;if(Math.max(w,h)>max){const s=max/Math.max(w,h);w=Math.round(w*s);h=Math.round(h*s);}const c=document.createElement("canvas");c.width=w;c.height=h;c.getContext("2d").drawImage(img,0,0,w,h);const url=c.toDataURL("image/jpeg",0.85);if(url&&url.length>50)return url.split(",")[1];}catch(e){}return await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(",")[1]);r.onerror=rej;r.readAsDataURL(file);});}
+async function aiParse(payload,kind,mime){const key=state.prefs.geminiApiKey.trim();if(!key)throw new Error("無金鑰");const prompt=`你是行程解析助手。從輸入抓出單一行程，只回傳 JSON（不要多餘文字）：{"title":"","date":"YYYY-MM-DD","start":"HH:MM","end":"HH:MM","location":"","notes":"","priority":"high|medium|low"}。找不到的欄位給空字串。今天是 ${twToday()}（台灣時間）。`;const parts=[{text:prompt}];if(kind==="image")parts.push({inline_data:{mime_type:mime||"image/jpeg",data:payload}});else parts.push({text:"\n輸入內容：\n"+payload});const url=`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${encodeURIComponent(key)}`;const r=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({contents:[{parts}]})});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j?.error?.message||("HTTP "+r.status));const txt=j?.candidates?.[0]?.content?.parts?.[0]?.text||"",mm=txt.match(/\{[\s\S]*\}/);if(!mm)throw new Error("看不懂辨識結果，請再試一次");return JSON.parse(mm[0]);}
+async function testKey(k){try{const url=`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${encodeURIComponent(k)}`;const r=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({contents:[{parts:[{text:"ping"}]}]})});if(r.ok)return{ok:true};const j=await r.json().catch(()=>({}));return{ok:false,error:j?.error?.message||("HTTP "+r.status)};}catch(e){return{ok:false,error:"連不到辨識服務，請確認網路"};}}
+function keyErrMsg(e){e=String(e||"");if(/not valid|API_KEY_INVALID|invalid.*key/i.test(e))return "這串碼不是有效的辨識碼（可能貼錯或貼漏）";if(/quota|RESOURCE_EXHAUSTED|429/i.test(e))return "今天的免費用量已用完，明天再試";if(/連不到/.test(e))return e;if(/PERMISSION|403|SERVICE_DISABLED/i.test(e))return "這組辨識碼沒有開通辨識服務";return e;}
+function markQuota(){const t=twToday(),p=state.prefs;p.ocrQuotaUsed=(p.ocrQuotaDate===t?p.ocrQuotaUsed:0)+1;p.ocrQuotaDate=t;savePrefs(p);}
+
+/* ===== 設定 ===== */
+function renderSettings(){
+  const p=state.prefs,keySet=!!p.geminiApiKey.trim();
+  $("#set-body").innerHTML=`
+  <div class="ptitle">設定</div>
+  <section class="card" style="padding:1rem;margin-bottom:1.4rem">
+    <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.6rem"><span>📸</span><b>拍照認字（幫照片認出時間地點）</b></div>
+    <p class="list-note" style="margin-bottom:.7rem">要用「拍照加行程」，需要一組免費的辨識碼（只設定一次）。點下面免費申請、複製貼進來就好。不想弄也沒關係——「貼文字」和「手寫」不用設定、也不花錢。</p>
+    <span class="badge ${keySet?'b-green':'b-amber'}">${keySet?'✅ 已開通 · 可以拍照認字':'尚未開通 · 拍照需先設定一次'}</span>
+    <label class="field" style="margin-top:.8rem"><span>辨識碼</span>
+      <div style="position:relative"><input id="s-key" type="password" value="${esc(p.geminiApiKey)}" placeholder="把申請到的一串碼貼在這" autocomplete="off" spellcheck="false" style="font-family:monospace;padding-right:2.6rem">
+      <button id="s-key-eye" type="button" style="position:absolute;right:.6rem;top:50%;transform:translateY(-50%)">👁</button></div></label>
+    <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer" class="list-note" style="display:inline-block;margin-bottom:.6rem">→ 免費申請辨識碼（Google AI Studio）</a>
+    <div class="row"><button id="s-key-save" class="btn-grad grow">存好辨識碼</button>${keySet?'<button id="s-key-clear" class="btn-soft">清除</button>':''}</div>
+  </section>
+
+  <div class="set-sec"><div class="slabel">外觀主題</div>
+    ${THEMES.map(t=>`<button class="theme-card" data-theme="${t.id}" style="${t.id===p.themeId?'border-color:'+t.accent2:''}"><span class="prev" style="background:${t.prev}"></span><span class="grow"><b>${t.name}</b><span class="d2">${t.desc}</span></span>${t.id===p.themeId?'<span class="badge b-info">使用中</span>':''}</button>`).join("")}
+  </div>
+
+  <div class="set-sec"><div class="slabel">字體大小</div>
+    <div class="seg">${["sm","md","lg"].map(s=>`<button data-fs="${s}" class="${p.fontScale===s?'on':''}">${s==='sm'?'小':s==='md'?'中':'大'}</button>`).join("")}</div>
+  </div>
+
+  <div class="set-sec"><div class="slabel">開會提醒</div>
+    <p class="list-note" style="margin:.2rem 0 .5rem">在新增行程時選了「幾分鐘前提醒」，App 會在開會前跳通知給你。第一次會問你要不要「允許通知」，按允許就會響。</p>
+    <select id="s-remind" ${p.notificationMode!=='allowed'?'disabled':''}>${[5,15,30,60].map(n=>`<option value="${n}" ${p.defaultReminderMinutes===n?'selected':''}>新行程預設 ${n} 分鐘前提醒</option>`).join("")}</select>
+    <section class="card" style="padding:1rem;margin-top:.7rem">
+      <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem"><b>通知開關</b> <span class="badge ${p.notificationMode==='allowed'?'b-green':'b-amber'}">${p.notificationMode==='allowed'?'已開啟':p.notificationMode==='blocked'?'已關閉':'尚未開啟'}</span></div>
+      <p class="list-note" style="margin-bottom:.6rem">${p.notificationMode==='allowed'?'提醒已開啟，開會前會跳通知。':p.notificationMode==='blocked'?'提醒已關閉，不會收到通知。可隨時改回「開啟」。':'還沒開啟提醒。按「開啟」就能開始收到開會通知。'}</p>
+      <div class="seg">${[["allowed","開啟"],["blocked","關閉"],["unset","先不要"]].map(([v,l])=>`<button data-nm="${v}" class="${p.notificationMode===v?'on':''}">${l}</button>`).join("")}</div>
+    </section>
+  </div>
+
+  <div class="set-sec"><div class="slabel">把行程存成檔案</div>
+    <p class="list-note" style="margin:.2rem 0 .5rem">可以把行程存成一個行事曆檔案（.ics），用手機內建日曆、Outlook 或 Google 日曆打開就能加進去。（這是「存成檔案」，不是即時同步；之後在這裡改了行程，那邊不會自動變。）</p>
+    ${state.events.length?`<button id="s-export" class="btn-grad w100" style="margin-bottom:.5rem">⬇️ 存成行事曆檔案（.ics）</button><button id="s-share" class="btn-soft w100">🔗 用文字分享行程</button>`:`<section class="card day"><div class="empty" style="padding:18px"><p>還沒有行程可以存，先加一筆吧 🍀</p></div></section>`}
+  </div>
+
+  <section class="card" style="padding:1rem;margin-bottom:1.4rem">
+    <b>備份 / 換手機</b>
+    <p class="list-note" style="margin:.4rem 0 .7rem">行程只存在這支手機裡（不上雲）。要換手機、或怕不見，就存一個備份檔傳到新手機，再讀回來。</p>
+    <div class="slabel">這支手機：存備份</div>
+    <button id="s-bk-save" class="btn-grad w100" style="margin-bottom:.4rem">💾 先存一份在這支手機（${state.events.length} 場）</button>
+    <button id="s-bk-dl" class="btn-soft w100" style="margin-bottom:.9rem">📄 下載備份檔（傳到別支手機用）</button>
+    <div class="slabel">另一支手機：讀回來</div>
+    <p class="list-note" style="margin-bottom:.4rem">${backupInfo()}</p>
+    <button id="s-bk-local" class="btn-grad w100" style="margin-bottom:.4rem" ${localStorage.getItem(BACKUP_KEY)?'':'disabled'}>📥 讀回這支手機存的備份</button>
+    <input type="file" id="s-bk-file" accept=".json,application/json" class="hidden">
+    <button id="s-bk-pick" class="btn-soft w100">📂 讀入別支傳來的備份檔</button>
+  </section>
+
+  <section class="card" style="padding:1rem;margin-bottom:1.4rem">
+    <p class="list-note">你記的行程只存在這支手機的瀏覽器裡，不會上傳雲端，別人看不到。換手機或清除瀏覽器資料前，記得先用上面「備份」存一份。</p>
+  </section>
+
+  <section class="card" style="padding:1rem">
+    <b>關於</b>
+    <p class="list-note" style="margin-top:.4rem">四葉草行事曆 🍀｜拍照加行程、行程只存這支手機、可存成行事曆檔案。單一檔案、免安裝、離線可用、記行程完全免費。</p>
+    <p class="list-note" style="margin-top:.5rem"><a href="#" id="s-install">📲 如何安裝到手機主畫面</a></p>
+  </section>`;
+  bindSettings();
+}
+function backupInfo(){const raw=localStorage.getItem(BACKUP_KEY);if(!raw)return "本機備份庫尚無資料；跨裝置請先從 A 傳備份檔到此裝置";try{const b=JSON.parse(raw);return `本機備份庫：${b.events.length} 場 · ${b.exportedAt?fmtFull(b.exportedAt).slice(5):''}`;}catch(e){return "本機備份庫資料異常";}}
+function bindSettings(){
+  const p=state.prefs;
+  $("#s-key-eye").onclick=()=>{const i=$("#s-key");i.type=i.type==="password"?"text":"password";};
+  $("#s-key-save").onclick=()=>{p.geminiApiKey=$("#s-key").value.trim();savePrefs(p);toast("已儲存金鑰 🍀");renderSettings();};
+  $("#s-key-clear")&&($("#s-key-clear").onclick=()=>{p.geminiApiKey="";savePrefs(p);toast("已清除");renderSettings();});
+  $$("[data-theme]").forEach(b=>b.onclick=()=>{p.themeId=b.dataset.theme;savePrefs(p);applyTheme();renderSettings();});
+  $$("[data-fs]").forEach(b=>b.onclick=()=>{p.fontScale=b.dataset.fs;savePrefs(p);applyTheme();renderSettings();});
+  $("#s-remind")&&($("#s-remind").onchange=e=>{p.defaultReminderMinutes=Number(e.target.value);savePrefs(p);});
+  $$("[data-nm]").forEach(b=>b.onclick=async()=>{const v=b.dataset.nm;if(v==="allowed")await reqNotify();p.notificationMode=v;savePrefs(p);scheduleAll();renderSettings();});
+  $("#s-export")&&($("#s-export").onclick=()=>exportICS(state.events));
+  $("#s-share")&&($("#s-share").onclick=()=>shareText(state.events));
+  $("#s-bk-save").onclick=()=>{const b=makeBackup(state.events);localStorage.setItem(BACKUP_KEY,JSON.stringify(b));toast(`已存到本機備份庫（${b.events.length} 場）`);renderSettings();};
+  $("#s-bk-dl").onclick=()=>{if(!state.events.length){toast("目前沒有行程可匯出");return;}downloadBackup(state.events);};
+  $("#s-bk-local")&&($("#s-bk-local").onclick=async()=>{const raw=localStorage.getItem(BACKUP_KEY);if(!raw){toast("本機備份庫尚無資料");return;}await importBackupText(raw);});
+  $("#s-bk-pick").onclick=()=>$("#s-bk-file").click();
+  $("#s-bk-file").onchange=async e=>{const f=e.target.files[0];if(!f)return;if(f.size>BACKUP_MAX_BYTES){toast("檔案過大（上限 10MB）");return;}const txt=await f.text();localStorage.setItem(BACKUP_KEY,txt);await importBackupText(txt);e.target.value="";};
+  $("#s-install").onclick=ev=>{ev.preventDefault();toast("iPhone：Safari 分享 → 加入主畫面\nAndroid：瀏覽器選單 → 安裝應用程式");};
+}
+
+/* ===== 備份 ===== */
+function makeBackup(events){return{version:1,app:"clover-cal",exportedAt:nowISO(),events:[...events].sort((a,b)=>new Date(a.startAt)-new Date(b.startAt))};}
+function downloadBackup(events){const b=makeBackup(events),d=new Date(),name=`clover-cal-${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}.json`,blob=new Blob([JSON.stringify(b,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=name;a.click();URL.revokeObjectURL(url);toast(`已下載備份檔（${b.events.length} 場）`);}
+function parseBackup(text){let t;try{t=JSON.parse(text);}catch(e){return{ok:false,error:"檔案不是有效的 JSON"};}if(!t||typeof t!=="object")return{ok:false,error:"備份檔格式不正確"};if(t.app!=="clover-cal")return{ok:false,error:"這不是本 App 的備份檔"};if(t.version!==1)return{ok:false,error:"不支援的備份版本"};if(!Array.isArray(t.events))return{ok:false,error:"備份檔缺少行程資料"};if(t.events.length>MAX_EVENTS)return{ok:false,error:"備份檔筆數過多（上限 5000）"};const out=[];let invalid=0;for(const e of t.events){if(!e||typeof e!=="object"||!e.id||!e.title||isNaN(new Date(e.startAt))||isNaN(new Date(e.endAt))){invalid++;continue;}out.push(sanitizeEvent(e));}if(out.length===0&&t.events.length>0)return{ok:false,error:"備份檔內的行程資料無法辨識"};return{ok:true,backup:{version:1,app:"clover-cal",exportedAt:t.exportedAt||nowISO(),events:out},invalid};}
+function diff(backup,current){const map=new Map(current.map(e=>[e.id,e])),toAdd=[],toUpdate=[];let skipped=0;for(const e of backup.events){const cur=map.get(e.id);if(!cur){toAdd.push(e);continue;}const a=new Date(cur.updatedAt).getTime(),b=new Date(e.updatedAt).getTime();if(b>a)toUpdate.push(e);else if(b===a){const same=["title","startAt","endAt","location","notes","color","reminderMinutes"].every(k=>cur[k]===e[k]);same?skipped++:toUpdate.push(e);}else skipped++;}return{toAdd,toUpdate,skipped};}
+async function importBackupText(text){const r=parseBackup(text);if(!r.ok){toast(r.error);return;}const d=diff(r.backup,state.events);if(d.toAdd.length===0&&d.toUpdate.length===0){toast("本機資料已是最新，無需匯入"+(r.invalid?`\n另有 ${r.invalid} 筆格式錯誤已略過`:""));return;}if(!confirm(`確認匯入？\n新增 ${d.toAdd.length} 場\n更新 ${d.toUpdate.length} 場${d.skipped?`\n略過 ${d.skipped} 場（本機較新）`:""}\n（不會刪除本機獨有的行程）`))return;for(const e of[...d.toAdd,...d.toUpdate])await dbPut(e);await reload();renderSettings();toast(`已匯入：新增 ${d.toAdd.length}、更新 ${d.toUpdate.length}`);}
+
+/* ===== .ics / 分享 ===== */
+function icsEsc(s){return(s||"").replace(/\\/g,"\\\\").replace(/\n/g,"\\n").replace(/,/g,"\\,").replace(/;/g,"\\;");}
+function icsDate(iso){const d=new Date(iso);return `${d.getUTCFullYear()}${pad(d.getUTCMonth()+1)}${pad(d.getUTCDate())}T${pad(d.getUTCHours())}${pad(d.getUTCMinutes())}${pad(d.getUTCSeconds())}Z`;}
+function buildICS(events){let l=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//clover-cal//TW//ZH","CALSCALE:GREGORIAN"];for(const e of events){l.push("BEGIN:VEVENT","UID:"+icsEsc(e.id)+"@clover-cal","DTSTAMP:"+icsDate(nowISO()),"DTSTART:"+icsDate(e.startAt),"DTEND:"+icsDate(e.endAt),"SUMMARY:"+icsEsc(e.title));if(e.location)l.push("LOCATION:"+icsEsc(e.location));if(e.notes)l.push("DESCRIPTION:"+icsEsc(e.notes));if(e.reminderMinutes>0)l.push("BEGIN:VALARM","ACTION:DISPLAY","TRIGGER:-PT"+e.reminderMinutes+"M","DESCRIPTION:行程提醒","END:VALARM");l.push("END:VEVENT");}l.push("END:VCALENDAR");return l.join("\r\n");}
+function exportICS(events){if(!events.length){toast("目前沒有行程可匯出");return;}const blob=new Blob([buildICS(events)],{type:"text/calendar"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="行程.ics";a.click();URL.revokeObjectURL(url);toast(`已下載 .ics（${events.length} 場）`);}
+function eventsToText(events){return events.slice().sort((a,b)=>new Date(a.startAt)-new Date(b.startAt)).map(e=>`📅 ${e.title}\n🕐 ${fmtFull(e.startAt)} ${fmtTime(e.startAt)}${e.location?"\n📍 "+e.location:""}`).join("\n\n");}
+async function shareText(events){if(!events.length){toast("目前沒有行程可分享");return;}const text=eventsToText(events);if(navigator.share){try{await navigator.share({title:"我的行程",text});return;}catch(e){if(e.name==="AbortError")return;}}try{await navigator.clipboard.writeText(text);toast("已複製行程文字，可貼到即時通訊");}catch(e){prompt("複製以下文字：",text);}}
+
+/* ===== 全部渲染 ===== */
+function renderAll(){renderCal();if($("#v-list").classList.contains("active"))renderList();if($("#v-set").classList.contains("active"))renderSettings();}
+
+/* ===== 星點 ===== */
+(function(){let h="";for(let i=0;i<42;i++){h+=`<i style="left:${(i*37+13)%100}%;top:${(i*53+7)%72}%;width:${1+(i%3)}px;height:${1+(i%3)}px;animation-delay:${(i%30)/10}s"></i>`;}document.getElementById("stars").innerHTML=h;})();
+
+/* ===== PWA manifest ===== */
+(function(){try{
+  const c=document.createElement("canvas");c.width=c.height=192;const x=c.getContext("2d");
+  const g=x.createLinearGradient(0,0,192,192);g.addColorStop(0,"#c3aef0");g.addColorStop(1,"#9d81dd");x.fillStyle=g;x.fillRect(0,0,192,192);
+  x.font="120px sans-serif";x.textAlign="center";x.textBaseline="middle";x.fillText("🍀",96,104);const icon=c.toDataURL("image/png");
+  const man={name:"四葉草行事曆",short_name:"行事曆",start_url:".",display:"standalone",background_color:"#f7f4fc",theme_color:"#b79fe8",icons:[{src:icon,sizes:"192x192",type:"image/png"},{src:icon,sizes:"512x512",type:"image/png"}]};
+  const link=document.createElement("link");link.rel="manifest";link.href=URL.createObjectURL(new Blob([JSON.stringify(man)],{type:"application/manifest+json"}));document.head.appendChild(link);
+  const ai=document.createElement("link");ai.rel="apple-touch-icon";ai.href=icon;document.head.appendChild(ai);
+}catch(e){}})();
+
+/* ===== 第一次啟動：必須先貼金鑰 ===== */
+function showOnboard(){const ob=$("#onboard"),key=$("#ob-key"),go=$("#ob-go");ob.hidden=false;key.oninput=()=>{go.disabled=key.value.trim().length<12;};go.onclick=async()=>{const k=key.value.trim();if(k.length<12){toast("請貼上申請到的辨識碼");return;}go.disabled=true;const t0=go.textContent;go.textContent="檢查辨識碼中…";const res=await testKey(k);if(!res.ok){go.disabled=false;go.textContent=t0;toast("這組辨識碼不能用：\n"+keyErrMsg(res.error)+"\n請確認貼對，或重新申請一組");return;}state.prefs.geminiApiKey=k;state.prefs.onboardingDone=true;savePrefs(state.prefs);ob.hidden=true;toast("開通成功，開始用吧 🍀");};}
+
+/* 啟動時背景檢查已存的金鑰是否還有效；只有「明確失效」才清掉重新開通（離線不動作） */
+async function verifyStoredKey(){const k=state.prefs.geminiApiKey.trim();if(!k)return;const res=await testKey(k);if(!res.ok&&/not valid|API_KEY_INVALID|invalid.*key|PERMISSION|SERVICE_DISABLED/i.test(res.error)){state.prefs.geminiApiKey="";savePrefs(state.prefs);toast("原本的辨識碼失效了，請重新貼一次");showOnboard();}}
+
+/* ===== 啟動 ===== */
+applyTheme();
+if(!state.prefs.geminiApiKey.trim())showOnboard();else verifyStoredKey();
+show("v-cal");
+reload().then(()=>{if(state.prefs.notificationMode==="allowed")reqNotify();});
+window.openAdd=openAdd;
+</script>
+</body>
+</html>

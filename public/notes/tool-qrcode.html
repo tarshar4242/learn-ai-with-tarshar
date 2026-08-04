@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QR Code 產生器｜TARSHAR 工具集</title>
+<meta name="description" content="網址太長唸不出來？貼進來馬上變 QR Code，還能做成掃碼海報。免費、免註冊、資料不離開你的瀏覽器。">
+<meta name="theme-color" content="#0e91ad">
+<style>
+:root{
+  --primary:#0e91ad; --primary-soft:#e3f4f8; --primary-deep:#0b6f85;
+  --accent:#e8752a; --accent-soft:#fdeee2;
+  --bg:#f7f9fb; --card:#ffffff; --border:#e6eaef;
+  --text:#1e2a38; --muted:#64748b;
+  --ok:#2e7d4f; --ok-soft:#e3f4ea;
+  --shadow:0 1px 3px rgba(15,23,42,.06);
+  --shadow-lift:0 10px 28px rgba(15,23,42,.12);
+  --radius:14px;
+}
+html[data-theme="dark"]{
+  --primary:#35b6d2; --primary-soft:#123742; --primary-deep:#7fd6e8;
+  --accent:#f08a45; --accent-soft:#3a2718;
+  --bg:#101418; --card:#1a2027; --border:#2a323c;
+  --text:#eef2f6; --muted:#9aa7b5;
+  --ok:#7fd6a4; --ok-soft:#14301f;
+  --shadow:0 1px 3px rgba(0,0,0,.4);
+  --shadow-lift:0 10px 28px rgba(0,0,0,.5);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',-apple-system,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.7;min-height:100dvh}
+a{color:var(--primary);text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+header{background:radial-gradient(ellipse 60% 120% at 85% -20%, var(--accent-soft) 0%, transparent 60%),
+  radial-gradient(ellipse 70% 130% at 10% -30%, var(--primary-soft) 0%, transparent 65%), var(--card);
+  border-bottom:1px solid var(--border);padding:2rem 1.2rem 1.6rem;text-align:center;position:relative}
+.theme-btn{position:absolute;top:1rem;right:1rem;width:40px;height:40px;border-radius:50%;
+  border:1px solid var(--border);background:var(--card);font-size:1.1rem;box-shadow:var(--shadow);
+  display:flex;align-items:center;justify-content:center}
+h1{font-size:clamp(1.45rem,4.5vw,2rem);font-weight:900;letter-spacing:.03em}
+.hero-sub{max-width:30em;margin:.5rem auto 0;color:var(--muted);font-size:clamp(.9rem,2.6vw,.98rem)}
+.badges{display:flex;flex-wrap:wrap;justify-content:center;gap:.45rem;margin-top:.8rem}
+.badges span{font-size:.76rem;font-weight:700;border:1px solid var(--border);background:var(--card);
+  border-radius:999px;padding:.2rem .7rem;color:var(--muted)}
+.badges .free{color:var(--ok);background:var(--ok-soft);border-color:transparent}
+main{max-width:860px;margin:0 auto;padding:1.2rem 1.2rem 2.5rem}
+.panel{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:1.1rem;margin-top:1rem}
+.panel h2{font-size:.95rem;font-weight:800;margin-bottom:.5rem}
+textarea,input[type="text"]{width:100%;border:1.5px solid var(--border);border-radius:10px;
+  background:var(--bg);color:var(--text);font:inherit;font-size:.95rem;padding:.8rem;outline:none}
+textarea{min-height:96px;resize:vertical}
+textarea:focus,input[type="text"]:focus{border-color:var(--primary)}
+.opts{display:flex;flex-wrap:wrap;gap:.5rem;margin:.8rem 0 0}
+.opt{font-size:.85rem;font-weight:700;color:var(--muted);border:1.5px solid var(--border);
+  background:var(--card);border-radius:999px;padding:.32rem .9rem;transition:.15s;
+  display:inline-flex;align-items:center;gap:.4rem}
+.opt.on{background:var(--primary);border-color:var(--primary);color:#fff}
+.dot{width:14px;height:14px;border-radius:50%;display:inline-block;border:1px solid rgba(0,0,0,.12)}
+.actions{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.8rem}
+.btn{display:inline-flex;align-items:center;gap:.4rem;font-size:.95rem;font-weight:800;
+  border-radius:999px;padding:.6rem 1.4rem;box-shadow:var(--shadow);transition:.15s}
+.btn:hover{transform:translateY(-2px)}
+.btn-main{background:var(--primary);color:#fff}
+.btn-sub{background:var(--card);border:1.5px solid var(--border);color:var(--text)}
+.stat{font-size:.8rem;color:var(--muted);margin-top:.5rem;min-height:1.2em}
+.tip{background:var(--primary-soft);border-radius:10px;padding:.7rem .9rem;font-size:.85rem;
+  color:var(--text);margin-top:1rem}
+.tip b{color:var(--primary-deep)}
+footer{border-top:1px solid var(--border);background:var(--card);text-align:center;
+  padding:1.4rem 1.2rem 5.5rem;color:var(--muted);font-size:.82rem}
+.home-fab{position:fixed;left:14px;bottom:14px;z-index:50;display:inline-flex;align-items:center;
+  gap:.35rem;font-size:.85rem;font-weight:800;color:var(--text);background:var(--card);
+  border:1.5px solid var(--border);border-radius:999px;padding:.5rem 1rem;box-shadow:var(--shadow-lift)}
+.qr-wrap{display:flex;justify-content:center;margin-top:.9rem}
+#qrBox{background:#fff;border:1px solid var(--border);border-radius:12px;padding:12px;
+  box-shadow:var(--shadow);display:none}
+#qrCanvas{display:block;width:min(240px,70vw);height:auto}
+.poster-wrap{display:flex;justify-content:center;margin-top:.9rem}
+#posterCanvas{display:none;width:min(240px,60vw);height:auto;border-radius:10px;
+  border:1px solid var(--border);box-shadow:var(--shadow)}
+.check{display:inline-flex;align-items:center;gap:.45rem;font-size:.88rem;font-weight:700;
+  color:var(--text);margin-top:.8rem;cursor:pointer;user-select:none}
+.check input{width:17px;height:17px;accent-color:var(--primary)}
+.field-label{font-size:.82rem;font-weight:700;color:var(--muted);margin:.8rem 0 .3rem}
+.hist{display:flex;flex-direction:column;gap:.45rem;margin-top:.4rem}
+.hist button{text-align:left;font-size:.85rem;border:1.5px solid var(--border);background:var(--bg);
+  border-radius:10px;padding:.5rem .8rem;color:var(--text);overflow:hidden;text-overflow:ellipsis;
+  white-space:nowrap;transition:.15s}
+.hist button:hover{border-color:var(--primary)}
+.hist-empty{font-size:.83rem;color:var(--muted)}
+@media (max-width:520px){header{padding:1.6rem 1rem 1.3rem}}
+</style>
+</head>
+<body>
+
+<a href="tools.html" class="home-fab" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+
+<header>
+  <button class="theme-btn" id="themeBtn" aria-label="切換深淺色">🌙</button>
+  <h1>📱 QR Code 產生器</h1>
+  <p class="hero-sub">網址太長唸不出來？掃一下就到。</p>
+  <div class="badges"><span class="free">✅ 免費即用</span><span>🔒 資料不離開瀏覽器</span><span>📱 手機也好用</span></div>
+</header>
+
+<main>
+  <div class="panel">
+    <h2>1️⃣ 貼上網址（或任何文字），QR Code 馬上生出來</h2>
+    <textarea id="src" placeholder="例如：https://tarshar4242.github.io/
+（打字停下來就會自動更新，不用按任何鈕）"></textarea>
+    <div class="opts" id="colorOpts" aria-label="選顏色"></div>
+    <label class="check"><input type="checkbox" id="logoChk">在 QR 中心蓋一個 🍀 小圖章（放心，一樣掃得到）</label>
+    <div class="qr-wrap"><div id="qrBox"><canvas id="qrCanvas" width="512" height="512"></canvas></div></div>
+    <p class="stat" id="stat"></p>
+  </div>
+
+  <div class="panel">
+    <h2>2️⃣ 海報模式（要貼在教室門口、投影幕旁邊都好看）</h2>
+    <div class="field-label">海報大字標題（想寫什麼都行）</div>
+    <input type="text" id="titleIn" placeholder="例如：掃碼進教材" maxlength="20">
+    <div class="poster-wrap"><canvas id="posterCanvas" width="1200" height="1600"></canvas></div>
+  </div>
+
+  <div class="panel">
+    <h2>3️⃣ 下載帶走（都是高解析 PNG，投影放大也不糊）</h2>
+    <div class="actions">
+      <button class="btn btn-main" id="dlQrBtn">⬇️ 下載 QR Code（1024×1024）</button>
+      <button class="btn btn-sub" id="dlPosterBtn">🖼️ 下載海報（1200×1600）</button>
+    </div>
+    <p class="stat" id="dlStat"></p>
+  </div>
+
+  <div class="panel">
+    <h2>🕘 最近產生過的（點一下就重新變出來）</h2>
+    <div class="hist" id="histBox"><span class="hist-empty">還沒有紀錄，上面貼點東西就有了 🙂</span></div>
+  </div>
+
+  <div class="tip">💡 <b>放心用：</b>你貼的網址和文字全程在你的瀏覽器裡變成 QR Code，不會上傳到任何地方。中心的 🍀 圖章之所以不影響掃描，是因為 QR Code 天生有「容錯超能力」，破一個小角照樣讀得出來。<b>另外提醒：</b>打包帶走後第一次開啟需要網路載入產生元件，之後瀏覽器通常會自己記住。</div>
+
+  <div class="actions" style="justify-content:center;margin-top:1.2rem">
+    <a class="btn btn-sub" href="tool-qrcode.html" download="QRCode產生器.html">📦 打包帶走這個工具</a>
+  </div>
+</main>
+
+<footer>🍀 <b>Learn AI with Tarshar</b>・TARSHAR 工具集｜更多小工具 → <a href="tools.html">打開工具箱</a></footer>
+
+<!-- 產生元件：qrcode 函式庫（QRCode.toCanvas）。註：1.5.2 之後官方不再發佈瀏覽器單檔版，
+     規格原指定的 qrcode@1.5.3/build/qrcode.min.js 在 CDN 上是 404，故採用 API 完全相同的 1.5.1 單檔版。 -->
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"
+        onerror="window.__qrLibFail=true"></script>
+<script>
+const $ = s => document.querySelector(s);
+const FONT = "'Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif";
+const COLORS = [
+  { name:'青藍', c:'#0e91ad' },
+  { name:'墨黑', c:'#1f2937' },
+  { name:'橘紅', c:'#d95f1e' },
+  { name:'森綠', c:'#2e7d4f' },
+  { name:'葡萄紫', c:'#6d3fc0' }
+];
+const LIB_FAIL_MSG = '產生器暫時連不上，等網路好一點再試 🙂';
+const K_COLOR='tt_qr_color', K_LOGO='tt_qr_logo', K_TITLE='tt_qr_title', K_HIST='tt_qr_history';
+
+let color = localStorage.getItem(K_COLOR) || COLORS[0].c;
+if (!COLORS.some(x => x.c === color)) color = COLORS[0].c;
+let timer = null;
+
+/* ---------- 顏色選項 ---------- */
+const optsBox = $('#colorOpts');
+COLORS.forEach(({name, c}) => {
+  const b = document.createElement('button');
+  b.className = 'opt' + (c === color ? ' on' : '');
+  b.dataset.c = c;
+  b.innerHTML = `<span class="dot" style="background:${c}"></span>${name}`;
+  b.addEventListener('click', () => {
+    color = c;
+    localStorage.setItem(K_COLOR, c);
+    document.querySelectorAll('#colorOpts .opt').forEach(x => x.classList.toggle('on', x === b));
+    render();
+  });
+  optsBox.appendChild(b);
+});
+
+/* ---------- 小工具函式 ---------- */
+function libReady(){
+  if (window.__qrLibFail || typeof QRCode === 'undefined'){
+    $('#stat').textContent = LIB_FAIL_MSG;
+    return false;
+  }
+  return true;
+}
+function drawLogo(ctx, size){
+  const cx = size / 2, r = size * 0.11;
+  ctx.save();
+  ctx.beginPath(); ctx.arc(cx, cx, r, 0, Math.PI * 2);
+  ctx.fillStyle = '#ffffff'; ctx.fill();
+  ctx.lineWidth = Math.max(2, size * 0.006);
+  ctx.strokeStyle = 'rgba(0,0,0,.08)'; ctx.stroke();
+  ctx.font = `${Math.round(r * 1.25)}px ${FONT}`;
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText('🍀', cx, cx + r * 0.06);
+  ctx.restore();
+}
+async function makeQrCanvas(text, size){
+  const c = document.createElement('canvas');
+  await QRCode.toCanvas(c, text, {
+    width: size, margin: 2, errorCorrectionLevel: 'H',
+    color: { dark: color, light: '#ffffff' }
+  });
+  if ($('#logoChk').checked) drawLogo(c.getContext('2d'), size);
+  return c;
+}
+function roundRect(ctx, x, y, w, h, r){
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+function fitText(ctx, text, maxW, startPx, minPx, weight){
+  let px = startPx;
+  do {
+    ctx.font = `${weight} ${px}px ${FONT}`;
+    if (ctx.measureText(text).width <= maxW) break;
+    px -= 4;
+  } while (px > minPx);
+  return px;
+}
+function truncate(ctx, text, maxW){
+  if (ctx.measureText(text).width <= maxW) return text;
+  let t = text;
+  while (t.length > 1 && ctx.measureText(t + '…').width > maxW) t = t.slice(0, -1);
+  return t + '…';
+}
+
+/* ---------- 即時預覽 ---------- */
+async function render(){
+  const text = $('#src').value.trim();
+  if (!text){
+    $('#qrBox').style.display = 'none';
+    $('#posterCanvas').style.display = 'none';
+    $('#stat').textContent = '';
+    return;
+  }
+  if (!libReady()) return;
+  try {
+    const qr = await makeQrCanvas(text, 512);
+    const pv = $('#qrCanvas'), ctx = pv.getContext('2d');
+    pv.width = 512; pv.height = 512;
+    ctx.drawImage(qr, 0, 0);
+    $('#qrBox').style.display = 'block';
+    $('#stat').textContent = '出爐了！用手機相機對準掃掃看 🙂';
+    await renderPoster(text);
+  } catch (e) {
+    $('#stat').textContent = '這段內容變不出 QR Code，試試短一點的文字 🙂';
+  }
+}
+
+/* ---------- 海報 ---------- */
+async function renderPoster(text, targetCanvas){
+  const W = 1200, H = 1600;
+  const cv = targetCanvas || $('#posterCanvas');
+  cv.width = W; cv.height = H;
+  const ctx = cv.getContext('2d');
+
+  ctx.fillStyle = color;
+  ctx.fillRect(0, 0, W, H);
+  const g = ctx.createLinearGradient(0, 0, 0, H);
+  g.addColorStop(0, 'rgba(255,255,255,.12)');
+  g.addColorStop(1, 'rgba(0,0,0,.18)');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, W, H);
+
+  const title = $('#titleIn').value.trim();
+  ctx.fillStyle = '#ffffff';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  if (title){
+    fitText(ctx, title, 1020, 96, 48, '900');
+    ctx.fillText(title, W / 2, 175);
+  }
+
+  const cardW = 920, cardX = (W - cardW) / 2, cardY = 300;
+  ctx.save();
+  ctx.shadowColor = 'rgba(0,0,0,.25)'; ctx.shadowBlur = 40; ctx.shadowOffsetY = 14;
+  roundRect(ctx, cardX, cardY, cardW, cardW, 42);
+  ctx.fillStyle = '#ffffff'; ctx.fill();
+  ctx.restore();
+
+  const qrSize = 800;
+  const qr = await makeQrCanvas(text, qrSize);
+  ctx.drawImage(qr, (W - qrSize) / 2, cardY + (cardW - qrSize) / 2, qrSize, qrSize);
+
+  ctx.fillStyle = 'rgba(255,255,255,.92)';
+  ctx.font = `700 34px ${FONT}`;
+  ctx.fillText(truncate(ctx, text, 1040), W / 2, 1360);
+  ctx.font = `800 40px ${FONT}`;
+  ctx.fillStyle = '#ffffff';
+  ctx.fillText('🍀 Learn AI with Tarshar', W / 2, 1470);
+
+  cv.style.display = 'block';
+}
+
+/* ---------- 下載 ---------- */
+function saveCanvas(cv, filename){
+  cv.toBlob(blob => {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 3000);
+  }, 'image/png');
+}
+function needInput(){
+  if ($('#src').value.trim()) return false;
+  $('#dlStat').textContent = '先在上面貼個網址或文字，才有東西可以下載嘛 🙂';
+  return true;
+}
+$('#dlQrBtn').addEventListener('click', async () => {
+  if (needInput()) return;
+  if (!libReady()){ $('#dlStat').textContent = LIB_FAIL_MSG; return; }
+  try {
+    const qr = await makeQrCanvas($('#src').value.trim(), 1024);
+    saveCanvas(qr, 'QR碼.png');
+    $('#dlStat').textContent = '下載好了！這張投影放大也不會糊 🙂';
+    pushHistory($('#src').value.trim());
+  } catch (e) { $('#dlStat').textContent = '下載的時候卡了一下，再按一次試試 🙂'; }
+});
+$('#dlPosterBtn').addEventListener('click', async () => {
+  if (needInput()) return;
+  if (!libReady()){ $('#dlStat').textContent = LIB_FAIL_MSG; return; }
+  try {
+    const cv = document.createElement('canvas');
+    await renderPoster($('#src').value.trim(), cv);
+    saveCanvas(cv, 'QR海報.png');
+    $('#dlStat').textContent = '海報下載好了！直接印出來貼就行 🙂';
+    pushHistory($('#src').value.trim());
+  } catch (e) { $('#dlStat').textContent = '下載的時候卡了一下，再按一次試試 🙂'; }
+});
+
+/* ---------- 歷史紀錄 ---------- */
+function getHistory(){
+  try { return JSON.parse(localStorage.getItem(K_HIST)) || []; }
+  catch { return []; }
+}
+function pushHistory(text){
+  if (!text) return;
+  let h = getHistory().filter(x => x !== text);
+  h.unshift(text);
+  h = h.slice(0, 5);
+  localStorage.setItem(K_HIST, JSON.stringify(h));
+  renderHistory();
+}
+function renderHistory(){
+  const box = $('#histBox');
+  const h = getHistory();
+  box.innerHTML = '';
+  if (!h.length){
+    box.innerHTML = '<span class="hist-empty">還沒有紀錄，上面貼點東西就有了 🙂</span>';
+    return;
+  }
+  h.forEach(text => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = text.length > 60 ? text.slice(0, 60) + '…' : text;
+    b.title = text;
+    b.addEventListener('click', () => {
+      $('#src').value = text;
+      render();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    box.appendChild(b);
+  });
+}
+
+/* ---------- 事件 ---------- */
+function schedule(){
+  clearTimeout(timer);
+  timer = setTimeout(render, 300);
+}
+$('#src').addEventListener('input', schedule);
+$('#src').addEventListener('change', () => pushHistory($('#src').value.trim()));
+$('#titleIn').addEventListener('input', () => {
+  localStorage.setItem(K_TITLE, $('#titleIn').value);
+  schedule();
+});
+$('#logoChk').addEventListener('change', () => {
+  localStorage.setItem(K_LOGO, $('#logoChk').checked ? '1' : '0');
+  render();
+});
+
+/* ---------- 還原設定 ---------- */
+$('#logoChk').checked = localStorage.getItem(K_LOGO) === '1';
+$('#titleIn').value = localStorage.getItem(K_TITLE) || '';
+renderHistory();
+window.addEventListener('load', () => {
+  if (window.__qrLibFail || typeof QRCode === 'undefined') $('#stat').textContent = LIB_FAIL_MSG;
+});
+
+/* ---------- 深淺色切換 ---------- */
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme', t);
+  $('#themeBtn').textContent = t === 'dark' ? '☀️' : '🌙';
+}
+const saved = localStorage.getItem('tools_theme');
+applyTheme(saved || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+$('#themeBtn').addEventListener('click', () => {
+  const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('tools_theme', next); applyTheme(next);
+});
+</script>
+</body>
+</html>

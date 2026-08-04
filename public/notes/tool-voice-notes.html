@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>語音速記器｜TARSHAR 工具集</title>
+<meta name="description" content="用講的比用打的快，嘴巴就是鍵盤。按下麥克風開始講，文字自動接在同一篇筆記後面，邊講邊補標點，複製或下載 .txt 帶走。免費、免註冊。">
+<meta name="theme-color" content="#0e91ad">
+<style>
+:root{
+  --primary:#0e91ad; --primary-soft:#e3f4f8; --primary-deep:#0b6f85;
+  --accent:#e8752a; --accent-soft:#fdeee2;
+  --bg:#f7f9fb; --card:#ffffff; --border:#e6eaef;
+  --text:#1e2a38; --muted:#64748b;
+  --ok:#2e7d4f; --ok-soft:#e3f4ea;
+  --shadow:0 1px 3px rgba(15,23,42,.06);
+  --shadow-lift:0 10px 28px rgba(15,23,42,.12);
+  --radius:14px;
+}
+html[data-theme="dark"]{
+  --primary:#35b6d2; --primary-soft:#123742; --primary-deep:#7fd6e8;
+  --accent:#f08a45; --accent-soft:#3a2718;
+  --bg:#101418; --card:#1a2027; --border:#2a323c;
+  --text:#eef2f6; --muted:#9aa7b5;
+  --ok:#7fd6a4; --ok-soft:#14301f;
+  --shadow:0 1px 3px rgba(0,0,0,.4);
+  --shadow-lift:0 10px 28px rgba(0,0,0,.5);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',-apple-system,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.7;min-height:100dvh}
+a{color:var(--primary);text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+header{background:radial-gradient(ellipse 60% 120% at 85% -20%, var(--accent-soft) 0%, transparent 60%),
+  radial-gradient(ellipse 70% 130% at 10% -30%, var(--primary-soft) 0%, transparent 65%), var(--card);
+  border-bottom:1px solid var(--border);padding:2rem 1.2rem 1.6rem;text-align:center;position:relative}
+.theme-btn{position:absolute;top:1rem;right:1rem;width:40px;height:40px;border-radius:50%;
+  border:1px solid var(--border);background:var(--card);font-size:1.1rem;box-shadow:var(--shadow);
+  display:flex;align-items:center;justify-content:center}
+h1{font-size:clamp(1.45rem,4.5vw,2rem);font-weight:900;letter-spacing:.03em}
+.hero-sub{max-width:30em;margin:.5rem auto 0;color:var(--muted);font-size:clamp(.9rem,2.6vw,.98rem)}
+.badges{display:flex;flex-wrap:wrap;justify-content:center;gap:.45rem;margin-top:.8rem}
+.badges span{font-size:.76rem;font-weight:700;border:1px solid var(--border);background:var(--card);
+  border-radius:999px;padding:.2rem .7rem;color:var(--muted)}
+.badges .free{color:var(--ok);background:var(--ok-soft);border-color:transparent}
+main{max-width:860px;margin:0 auto;padding:1.2rem 1.2rem 2.5rem}
+.panel{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:1.1rem;margin-top:1rem}
+.panel h2{font-size:.95rem;font-weight:800;margin-bottom:.5rem}
+textarea{width:100%;min-height:170px;border:1.5px solid var(--border);border-radius:10px;
+  background:var(--bg);color:var(--text);font:inherit;font-size:.95rem;padding:.8rem;resize:vertical;outline:none}
+textarea:focus{border-color:var(--primary)}
+.actions{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.8rem}
+.btn{display:inline-flex;align-items:center;gap:.4rem;font-size:.95rem;font-weight:800;
+  border-radius:999px;padding:.6rem 1.4rem;box-shadow:var(--shadow);transition:.15s}
+.btn:hover{transform:translateY(-2px)}
+.btn-main{background:var(--primary);color:#fff}
+.btn-sub{background:var(--card);border:1.5px solid var(--border);color:var(--text)}
+.stat{font-size:.8rem;color:var(--muted);margin-top:.5rem}
+.tip{background:var(--primary-soft);border-radius:10px;padding:.7rem .9rem;font-size:.85rem;
+  color:var(--text);margin-top:1rem}
+.tip b{color:var(--primary-deep)}
+footer{border-top:1px solid var(--border);background:var(--card);text-align:center;
+  padding:1.4rem 1.2rem 5.5rem;color:var(--muted);font-size:.82rem}
+.home-fab{position:fixed;left:14px;bottom:14px;z-index:50;display:inline-flex;align-items:center;
+  gap:.35rem;font-size:.85rem;font-weight:800;color:var(--text);background:var(--card);
+  border:1.5px solid var(--border);border-radius:999px;padding:.5rem 1rem;box-shadow:var(--shadow-lift)}
+@media (max-width:520px){header{padding:1.6rem 1rem 1.3rem}}
+
+/* ── 語音速記器專屬 ── */
+.mic-wrap{text-align:center;padding:.6rem 0 .2rem}
+.mic-btn{width:96px;height:96px;border-radius:50%;background:var(--primary);color:#fff;
+  font-size:2.4rem;box-shadow:var(--shadow-lift);display:inline-flex;align-items:center;
+  justify-content:center;transition:transform .15s, background .2s}
+.mic-btn:active{transform:scale(.95)}
+.mic-btn.rec{background:var(--accent);animation:breathe 1.6s ease-in-out infinite}
+@keyframes breathe{
+  0%,100%{box-shadow:0 0 0 0 rgba(232,117,42,.45)}
+  50%{box-shadow:0 0 0 22px rgba(232,117,42,0)}
+}
+.mic-state{font-size:.9rem;font-weight:800;margin-top:.6rem;color:var(--muted)}
+.mic-state.on{color:var(--accent)}
+.interim{min-height:1.6em;margin-top:.4rem;font-size:.95rem;color:var(--muted);opacity:.75;
+  font-style:italic;word-break:break-all}
+.punct-row{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.8rem;justify-content:center}
+.punct{font-size:1rem;font-weight:800;min-width:52px;border:1.5px solid var(--border);
+  background:var(--card);border-radius:10px;padding:.4rem .8rem;box-shadow:var(--shadow);transition:.15s}
+.punct:active{transform:scale(.93);background:var(--primary-soft)}
+.nosup{background:var(--accent-soft);border:1.5px solid var(--accent);border-radius:var(--radius);
+  padding:1rem 1.1rem;font-size:.92rem;margin-top:.2rem}
+.nosup b{color:var(--accent)}
+.permhelp{display:none;background:var(--accent-soft);border-radius:10px;padding:.7rem .9rem;
+  font-size:.85rem;margin-top:.8rem;text-align:left}
+.permhelp b{color:var(--accent)}
+</style>
+</head>
+<body>
+
+<a href="tools.html" class="home-fab" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+
+<header>
+  <button class="theme-btn" id="themeBtn" aria-label="切換深淺色">🌙</button>
+  <h1>🎤 語音速記器</h1>
+  <p class="hero-sub">用講的比用打的快，嘴巴就是鍵盤。</p>
+  <div class="badges"><span class="free">✅ 免費即用</span><span>🔒 筆記只存在你的瀏覽器</span><span>📱 手機也好用</span></div>
+</header>
+
+<main>
+  <div class="panel" id="micPanel">
+    <h2>1️⃣ 按下麥克風，開始講（再按一下就停）</h2>
+    <div class="mic-wrap">
+      <button class="mic-btn" id="micBtn" aria-label="開始或停止語音辨識">🎤</button>
+      <p class="mic-state" id="micState">按一下開始，講完的每一段都會自動接在下面的筆記後面。</p>
+      <p class="interim" id="interim"></p>
+      <div class="permhelp" id="permHelp">
+        🙈 <b>麥克風被擋住了。</b>發生什麼事：瀏覽器不確定你願不願意讓這一頁聽你講話，所以先擋下來了。
+        你可以這樣做：點<b>網址列左邊的鎖頭（或設定圖示）</b>→ 找到「麥克風」→ 改成<b>「允許」</b>→
+        重新整理這一頁，再按一次麥克風就好。手機版 Chrome 一樣是點網址列旁邊的圖示進去改。
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>2️⃣ 你的筆記（可以直接點進去改字）</h2>
+    <textarea id="note" placeholder="講出來的字會自動出現在這裡，一段一段接下去，一堂課存成一篇。
+放心講，內容會即時存在你的瀏覽器裡，重新整理也不會不見。"></textarea>
+    <div class="punct-row" id="punctRow" aria-label="快速標點">
+      <button class="punct" data-ch="，">，</button>
+      <button class="punct" data-ch="。">。</button>
+      <button class="punct" data-ch="？">？</button>
+      <button class="punct" data-ch="！">！</button>
+      <button class="punct" data-ch="&#10;">換行</button>
+    </div>
+    <p class="stat" id="stat">目前 0 個字</p>
+    <div class="actions">
+      <button class="btn btn-main" id="copyBtn">📋 複製全文</button>
+      <button class="btn btn-sub" id="dlBtn">⬇️ 下載 .txt</button>
+      <button class="btn btn-sub" id="clearBtn">🗑 清空</button>
+    </div>
+    <p class="stat" id="msg"></p>
+  </div>
+
+  <div class="tip">💡 <b>小撇步：</b>中文語音辨識不會自動幫你加標點，所以講到一個段落，就點上面的「，」「。」小按鈕補一下，或直接在筆記裡打字修。辨識用的是瀏覽器內建的語音服務（講話當下聲音會交給它翻成文字），翻好的<b>筆記內容只存在你自己的瀏覽器裡</b>，不會上傳到別的地方。</div>
+
+  <div class="actions" style="justify-content:center;margin-top:1.2rem">
+    <a class="btn btn-sub" href="tool-voice-notes.html" download="語音速記器.html">📦 打包帶走這個工具</a>
+  </div>
+</main>
+
+<footer>🍀 <b>Learn AI with Tarshar</b>・TARSHAR 工具集｜更多小工具 → <a href="tools.html">打開工具箱</a></footer>
+
+<script>
+const $ = s => document.querySelector(s);
+const KEY = 'tt_voice_note';
+
+/* ── 筆記：載入、即時存檔、字數 ── */
+const note = $('#note');
+note.value = localStorage.getItem(KEY) || '';
+
+function save(){ localStorage.setItem(KEY, note.value); count(); }
+function count(){
+  const n = note.value.replace(/\s/g, '').length;
+  $('#stat').textContent = `目前 ${n} 個字`;
+}
+note.addEventListener('input', save);
+count();
+
+function appendText(t){
+  if (note.value && !/\s$/.test(note.value)) note.value += ' ';
+  note.value += t;
+  save();
+  note.scrollTop = note.scrollHeight;
+}
+
+/* ── 快速標點（插到筆記結尾）── */
+$('#punctRow').addEventListener('click', e => {
+  const b = e.target.closest('.punct'); if (!b) return;
+  note.value = note.value.replace(/ $/, '') + b.dataset.ch;
+  save();
+  note.scrollTop = note.scrollHeight;
+});
+
+/* ── 語音辨識 ── */
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+let rec = null, listening = false;
+
+if (!SR){
+  $('#micPanel').innerHTML = `
+    <h2>1️⃣ 按下麥克風，開始講</h2>
+    <div class="nosup">😅 <b>你的瀏覽器聽不懂人話（字面上的意思）🙂</b><br>
+    發生什麼事：這個瀏覽器沒有內建語音辨識功能（Firefox、部分 iPhone Safari 會這樣）。<br>
+    你可以這樣做：改用 <b>Chrome</b> 或 <b>Edge</b> 開這一頁，手機用 <b>Chrome App</b> 也可以。
+    換過去之後，麥克風按鈕就會出現囉。下面的筆記區還是可以直接打字用。</div>`;
+} else {
+  rec = new SR();
+  rec.lang = 'zh-TW';
+  rec.continuous = true;
+  rec.interimResults = true;
+
+  rec.onresult = e => {
+    let interim = '';
+    for (let i = e.resultIndex; i < e.results.length; i++){
+      const r = e.results[i];
+      if (r.isFinal){
+        const t = r[0].transcript.trim();
+        if (t) appendText(t);
+      } else {
+        interim += r[0].transcript;
+      }
+    }
+    $('#interim').textContent = interim;
+  };
+
+  rec.onerror = e => {
+    if (e.error === 'not-allowed' || e.error === 'service-not-allowed'){
+      listening = false;
+      setMicUI(false);
+      $('#permHelp').style.display = 'block';
+    }
+    /* no-speech、aborted 之類的小狀況不吵使用者，onend 會自動接手 */
+  };
+
+  rec.onend = () => {
+    $('#interim').textContent = '';
+    if (listening){
+      /* 瀏覽器講一講會自己斷線，還在錄就默默幫她接回去 */
+      try { rec.start(); } catch (_){}
+    } else {
+      setMicUI(false);
+    }
+  };
+
+  $('#micBtn').addEventListener('click', () => {
+    if (listening){
+      listening = false;
+      rec.stop();
+      setMicUI(false);
+    } else {
+      $('#permHelp').style.display = 'none';
+      try {
+        rec.start();
+        listening = true;
+        setMicUI(true);
+      } catch (_){
+        $('#micState').textContent = '麥克風有點卡住，等一秒再按一次看看 🙂';
+      }
+    }
+  });
+}
+
+function setMicUI(on){
+  const b = $('#micBtn'), s = $('#micState');
+  if (!b) return;
+  b.classList.toggle('rec', on);
+  b.textContent = on ? '⏸' : '🎤';
+  s.classList.toggle('on', on);
+  s.textContent = on
+    ? '正在聽你講⋯⋯講完一段會自動寫進筆記，再按一下就停。'
+    : '按一下開始，講完的每一段都會自動接在下面的筆記後面。';
+  if (!on) $('#interim').textContent = '';
+}
+
+/* ── 複製 ── */
+$('#copyBtn').addEventListener('click', async () => {
+  if (!note.value.trim()){ $('#msg').textContent = '筆記還空空的，先講兩句嘛 🙂'; return; }
+  try { await navigator.clipboard.writeText(note.value); }
+  catch { note.select(); document.execCommand('copy'); }
+  const b = $('#copyBtn'); b.textContent = '✅ 複製好了！';
+  setTimeout(() => b.textContent = '📋 複製全文', 1800);
+});
+
+/* ── 下載 .txt ── */
+$('#dlBtn').addEventListener('click', () => {
+  if (!note.value.trim()){ $('#msg').textContent = '筆記還空空的，沒東西好下載耶 🙂'; return; }
+  const d = new Date();
+  const ymd = d.getFullYear() + String(d.getMonth() + 1).padStart(2, '0') + String(d.getDate()).padStart(2, '0');
+  const blob = new Blob(['﻿' + note.value], { type: 'text/plain;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `語音速記-${ymd}.txt`;
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(a.href);
+  $('#msg').textContent = `已下載「語音速記-${ymd}.txt」，去下載資料夾找它！`;
+});
+
+/* ── 清空（二次確認）── */
+$('#clearBtn').addEventListener('click', () => {
+  if (!note.value){ $('#msg').textContent = '本來就空空的啦 🙂'; return; }
+  if (!confirm('真的要全部清掉嗎？')) return;
+  note.value = '';
+  save();
+  $('#msg').textContent = '清好了，一張白紙重新開始 ✨';
+});
+
+/* ── 深淺色切換 ── */
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme', t);
+  $('#themeBtn').textContent = t === 'dark' ? '☀️' : '🌙';
+}
+const saved = localStorage.getItem('tools_theme');
+applyTheme(saved || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+$('#themeBtn').addEventListener('click', () => {
+  const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('tools_theme', next); applyTheme(next);
+});
+</script>
+</body>
+</html>

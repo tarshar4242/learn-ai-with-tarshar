@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Before/After 對比展示器｜TARSHAR 工具集</title>
+<meta name="description" content="上傳兩張圖，拉動中間滑桿看修圖前後對比，一鍵匯出並排對比圖或可互動的單檔網頁。免費、免註冊、圖片不離開你的瀏覽器。">
+<meta name="theme-color" content="#0e91ad">
+<style>
+:root{
+  --primary:#0e91ad; --primary-soft:#e3f4f8; --primary-deep:#0b6f85;
+  --accent:#e8752a; --accent-soft:#fdeee2;
+  --bg:#f7f9fb; --card:#ffffff; --border:#e6eaef;
+  --text:#1e2a38; --muted:#64748b;
+  --ok:#2e7d4f; --ok-soft:#e3f4ea;
+  --shadow:0 1px 3px rgba(15,23,42,.06);
+  --shadow-lift:0 10px 28px rgba(15,23,42,.12);
+  --radius:14px;
+}
+html[data-theme="dark"]{
+  --primary:#35b6d2; --primary-soft:#123742; --primary-deep:#7fd6e8;
+  --accent:#f08a45; --accent-soft:#3a2718;
+  --bg:#101418; --card:#1a2027; --border:#2a323c;
+  --text:#eef2f6; --muted:#9aa7b5;
+  --ok:#7fd6a4; --ok-soft:#14301f;
+  --shadow:0 1px 3px rgba(0,0,0,.4);
+  --shadow-lift:0 10px 28px rgba(0,0,0,.5);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',-apple-system,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.7;min-height:100dvh}
+a{color:var(--primary);text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+header{background:radial-gradient(ellipse 60% 120% at 85% -20%, var(--accent-soft) 0%, transparent 60%),
+  radial-gradient(ellipse 70% 130% at 10% -30%, var(--primary-soft) 0%, transparent 65%), var(--card);
+  border-bottom:1px solid var(--border);padding:2rem 1.2rem 1.6rem;text-align:center;position:relative}
+.theme-btn{position:absolute;top:1rem;right:1rem;width:40px;height:40px;border-radius:50%;
+  border:1px solid var(--border);background:var(--card);font-size:1.1rem;box-shadow:var(--shadow);
+  display:flex;align-items:center;justify-content:center}
+h1{font-size:clamp(1.45rem,4.5vw,2rem);font-weight:900;letter-spacing:.03em}
+.hero-sub{max-width:30em;margin:.5rem auto 0;color:var(--muted);font-size:clamp(.9rem,2.6vw,.98rem)}
+.badges{display:flex;flex-wrap:wrap;justify-content:center;gap:.45rem;margin-top:.8rem}
+.badges span{font-size:.76rem;font-weight:700;border:1px solid var(--border);background:var(--card);
+  border-radius:999px;padding:.2rem .7rem;color:var(--muted)}
+.badges .free{color:var(--ok);background:var(--ok-soft);border-color:transparent}
+main{max-width:860px;margin:0 auto;padding:1.2rem 1.2rem 2.5rem}
+.panel{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:1.1rem;margin-top:1rem}
+.panel h2{font-size:.95rem;font-weight:800;margin-bottom:.5rem}
+.actions{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.8rem}
+.btn{display:inline-flex;align-items:center;gap:.4rem;font-size:.95rem;font-weight:800;
+  border-radius:999px;padding:.6rem 1.4rem;box-shadow:var(--shadow);transition:.15s}
+.btn:hover{transform:translateY(-2px)}
+.btn-main{background:var(--primary);color:#fff}
+.btn-sub{background:var(--card);border:1.5px solid var(--border);color:var(--text)}
+.stat{font-size:.8rem;color:var(--muted);margin-top:.5rem}
+.tip{background:var(--primary-soft);border-radius:10px;padding:.7rem .9rem;font-size:.85rem;
+  color:var(--text);margin-top:1rem}
+.tip b{color:var(--primary-deep)}
+footer{border-top:1px solid var(--border);background:var(--card);text-align:center;
+  padding:1.4rem 1.2rem 5.5rem;color:var(--muted);font-size:.82rem}
+.home-fab{position:fixed;left:14px;bottom:14px;z-index:50;display:inline-flex;align-items:center;
+  gap:.35rem;font-size:.85rem;font-weight:800;color:var(--text);background:var(--card);
+  border:1.5px solid var(--border);border-radius:999px;padding:.5rem 1rem;box-shadow:var(--shadow-lift)}
+@media (max-width:520px){header{padding:1.6rem 1rem 1.3rem}}
+
+/* ── 本工具專屬 ── */
+.drops{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+@media (max-width:420px){.drops{grid-template-columns:1fr}}
+.drop{border:2px dashed var(--border);border-radius:10px;background:var(--bg);
+  min-height:150px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:.3rem;text-align:center;padding:.7rem;cursor:pointer;transition:.15s;position:relative;overflow:hidden}
+.drop:hover,.drop.over{border-color:var(--primary);background:var(--primary-soft)}
+.drop .big{font-size:1.6rem;line-height:1}
+.drop .hint{font-size:.78rem;color:var(--muted)}
+.drop .who{font-size:.85rem;font-weight:800}
+.drop img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.drop .redo{position:absolute;left:0;right:0;bottom:0;background:rgba(0,0,0,.55);color:#fff;
+  font-size:.72rem;font-weight:700;padding:.15rem .4rem;display:none}
+.drop.filled .redo{display:block}
+.drop.filled .ph{display:none}
+.labels{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin-top:.7rem}
+@media (max-width:420px){.labels{grid-template-columns:1fr}}
+.labels label{font-size:.78rem;font-weight:700;color:var(--muted);display:block}
+.labels input{width:100%;border:1.5px solid var(--border);border-radius:10px;background:var(--bg);
+  color:var(--text);font:inherit;font-size:.9rem;padding:.45rem .7rem;outline:none;margin-top:.15rem}
+.labels input:focus{border-color:var(--primary)}
+.cmp-wrap{margin-top:.3rem}
+.cmp{position:relative;width:auto;max-width:100%;max-height:70vh;margin:0 auto;
+  border-radius:10px;overflow:hidden;background:#000;touch-action:none;user-select:none;
+  -webkit-user-select:none;border:1px solid var(--border)}
+.cmp img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;display:block}
+.cmp .top{clip-path:inset(0 50% 0 0)}
+.cmp .bar{position:absolute;top:0;bottom:0;left:50%;width:3px;background:#fff;
+  transform:translateX(-50%);box-shadow:0 0 6px rgba(0,0,0,.5);pointer-events:none}
+.cmp .knob{position:absolute;top:50%;left:50%;width:42px;height:42px;border-radius:50%;
+  background:#fff;color:#333;transform:translate(-50%,-50%);display:flex;align-items:center;
+  justify-content:center;font-size:.85rem;font-weight:900;box-shadow:0 2px 10px rgba(0,0,0,.4);
+  pointer-events:none;letter-spacing:-1px}
+.cmp .tag{position:absolute;top:.5rem;font-size:.75rem;font-weight:800;color:#fff;
+  background:rgba(0,0,0,.55);border-radius:999px;padding:.15rem .7rem;pointer-events:none;
+  max-width:45%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cmp .tag-b{left:.5rem}.cmp .tag-a{right:.5rem}
+.cmp-empty{border:2px dashed var(--border);border-radius:10px;padding:2rem 1rem;text-align:center;
+  color:var(--muted);font-size:.88rem}
+</style>
+</head>
+<body>
+
+<a href="tools.html" class="home-fab" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+
+<header>
+  <button class="theme-btn" id="themeBtn" aria-label="切換深淺色">🌙</button>
+  <h1>🪞 Before/After 對比展示器</h1>
+  <p class="hero-sub">左邊是昨天的你，右邊是學會 AI 的你。</p>
+  <div class="badges"><span class="free">✅ 免費即用</span><span>🔒 圖片不離開瀏覽器</span><span>📱 手機也好用</span></div>
+</header>
+
+<main>
+  <div class="panel">
+    <h2>1️⃣ 放兩張圖進來（點擊、拖放，或複製圖片後按 Ctrl+V 貼上）</h2>
+    <div class="drops">
+      <div class="drop" id="dropB" tabindex="0">
+        <span class="ph big">🌚</span>
+        <span class="ph who">Before（修改前）</span>
+        <span class="ph hint">點我選圖，或把圖拖進來</span>
+        <span class="redo">點一下可以換圖</span>
+      </div>
+      <div class="drop" id="dropA" tabindex="0">
+        <span class="ph big">🌝</span>
+        <span class="ph who">After（修改後）</span>
+        <span class="ph hint">點我選圖，或把圖拖進來</span>
+        <span class="redo">點一下可以換圖</span>
+      </div>
+    </div>
+    <input type="file" id="fileB" accept="image/*" hidden>
+    <input type="file" id="fileA" accept="image/*" hidden>
+    <div class="labels">
+      <div><label for="labB">左邊的標籤（可改成中文，例如「AI 修圖前」）</label>
+        <input id="labB" maxlength="20" value="Before"></div>
+      <div><label for="labA">右邊的標籤</label>
+        <input id="labA" maxlength="20" value="After"></div>
+    </div>
+    <p class="stat" id="upStat">圖片全程只待在你的瀏覽器裡處理，不會上傳到任何地方。</p>
+  </div>
+
+  <div class="panel">
+    <h2>2️⃣ 拉拉看中間的把手（手機用手指滑也可以）</h2>
+    <div class="cmp-wrap" id="cmpWrap">
+      <div class="cmp-empty" id="cmpEmpty">兩張圖都放好，這裡就會出現可以左右拉的對比檢視器 🙂</div>
+      <div class="cmp" id="cmp" style="display:none">
+        <img class="under" id="imgA" alt="After">
+        <img class="top" id="imgB" alt="Before">
+        <span class="tag tag-b" id="tagB">Before</span>
+        <span class="tag tag-a" id="tagA">After</span>
+        <div class="bar" id="bar"></div>
+        <div class="knob" id="knob">◀▶</div>
+      </div>
+    </div>
+    <p class="stat">兩張圖大小不一樣也沒關係，會自動裁切對齊到同一個框，滑桿拉起來不會穿幫。</p>
+  </div>
+
+  <div class="panel">
+    <h2>3️⃣ 匯出成果</h2>
+    <div class="actions">
+      <button class="btn btn-main" id="pngBtn">⬇️ 匯出對比圖</button>
+      <button class="btn btn-main" id="htmlBtn">📦 匯出互動網頁</button>
+    </div>
+    <p class="stat" id="exStat">「匯出對比圖」是左右並排的一張 PNG，貼簡報、發貼文都好用；「匯出互動網頁」是一個 HTML 檔，傳給任何人打開都能自己拉滑桿。</p>
+  </div>
+
+  <div class="tip">💡 <b>什麼時候用得上？</b>AI 修圖前後、簡報改造前後、房間整理前後⋯⋯任何「以前 vs 現在」的故事，用一張會動的對比圖講，比一千個字有力。標籤文字會記在你的瀏覽器裡，下次打開不用重打。</div>
+
+  <div class="actions" style="justify-content:center;margin-top:1.2rem">
+    <a class="btn btn-sub" href="tool-beforeafter.html" download="對比展示器.html">📦 打包帶走這個工具</a>
+  </div>
+</main>
+
+<footer>🍀 <b>Learn AI with Tarshar</b>・TARSHAR 工具集｜更多小工具 → <a href="tools.html">打開工具箱</a></footer>
+
+<script>
+const $ = s => document.querySelector(s);
+const imgs = { b:null, a:null };   // { el:Image, url:dataURL, bytes:number }
+let activeSlot = 'b';
+let pos = 50;
+
+/* ── 標籤（記在瀏覽器） ── */
+const LKEY = { b:'tt_beforeafter_label_b', a:'tt_beforeafter_label_a' };
+$('#labB').value = localStorage.getItem(LKEY.b) || 'Before';
+$('#labA').value = localStorage.getItem(LKEY.a) || 'After';
+function labB(){ return $('#labB').value.trim() || 'Before'; }
+function labA(){ return $('#labA').value.trim() || 'After'; }
+function syncLabels(){
+  $('#tagB').textContent = labB();
+  $('#tagA').textContent = labA();
+  localStorage.setItem(LKEY.b, $('#labB').value);
+  localStorage.setItem(LKEY.a, $('#labA').value);
+}
+$('#labB').addEventListener('input', syncLabels);
+$('#labA').addEventListener('input', syncLabels);
+
+/* ── 收圖：點選、拖放、貼上 ── */
+function loadFile(file, slot){
+  if (!file || !file.type.startsWith('image/')){
+    $('#upStat').textContent = '這個檔案好像不是圖片耶，換一張 jpg／png／webp 試試 🙂';
+    return;
+  }
+  const rd = new FileReader();
+  rd.onload = () => {
+    const im = new Image();
+    im.onload = () => {
+      imgs[slot] = { el: im, url: rd.result, bytes: Math.round(rd.result.length * 0.75) };
+      const zone = slot === 'b' ? $('#dropB') : $('#dropA');
+      let pv = zone.querySelector('img');
+      if (!pv){ pv = document.createElement('img'); zone.prepend(pv); }
+      pv.src = rd.result;
+      zone.classList.add('filled');
+      $('#upStat').textContent = (slot === 'b' ? '左邊' : '右邊') + '的圖收到了！' +
+        (imgs.b && imgs.a ? '往下拉拉看滑桿吧。' : '再放另一張就能開始對比。');
+      renderCmp();
+    };
+    im.onerror = () => { $('#upStat').textContent = '這張圖打不開耶，可能檔案壞了，換一張試試 🙂'; };
+    im.src = rd.result;
+  };
+  rd.readAsDataURL(file);
+}
+[['dropB','fileB','b'],['dropA','fileA','a']].forEach(([dz, fi, slot]) => {
+  const zone = $('#' + dz), input = $('#' + fi);
+  zone.addEventListener('click', () => { activeSlot = slot; input.click(); });
+  input.addEventListener('change', () => { loadFile(input.files[0], slot); input.value = ''; });
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('over'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('over'));
+  zone.addEventListener('drop', e => {
+    e.preventDefault(); zone.classList.remove('over'); activeSlot = slot;
+    loadFile(e.dataTransfer.files[0], slot);
+  });
+});
+document.addEventListener('paste', e => {
+  const item = [...(e.clipboardData?.items || [])].find(i => i.type.startsWith('image/'));
+  if (!item) return;
+  e.preventDefault();
+  const slot = !imgs.b ? 'b' : (!imgs.a ? 'a' : activeSlot);
+  loadFile(item.getAsFile(), slot);
+});
+
+/* ── 對比檢視器 ── */
+function renderCmp(){
+  if (!imgs.b || !imgs.a) return;
+  $('#cmpEmpty').style.display = 'none';
+  const c = $('#cmp');
+  c.style.display = 'block';
+  c.style.aspectRatio = imgs.b.el.naturalWidth + ' / ' + imgs.b.el.naturalHeight; // 框比例取第一張圖
+  $('#imgB').src = imgs.b.url;
+  $('#imgA').src = imgs.a.url;
+  syncLabels();
+  setPos(50);
+}
+function setPos(p){
+  pos = Math.max(0, Math.min(100, p));
+  $('#imgB').style.clipPath = 'inset(0 ' + (100 - pos) + '% 0 0)';
+  $('#bar').style.left = pos + '%';
+  $('#knob').style.left = pos + '%';
+}
+const cmp = $('#cmp');
+let dragging = false;
+function posFromEvent(e){
+  const r = cmp.getBoundingClientRect();
+  setPos((e.clientX - r.left) / r.width * 100);
+}
+cmp.addEventListener('pointerdown', e => {
+  dragging = true; cmp.setPointerCapture(e.pointerId); posFromEvent(e);
+});
+cmp.addEventListener('pointermove', e => { if (dragging) posFromEvent(e); });
+cmp.addEventListener('pointerup', () => dragging = false);
+cmp.addEventListener('pointercancel', () => dragging = false);
+
+/* ── 共用：cover 裁切繪圖 ── */
+function drawCover(ctx, im, dx, dy, dw, dh){
+  const sr = im.naturalWidth / im.naturalHeight, dr = dw / dh;
+  let sw, sh;
+  if (sr > dr){ sh = im.naturalHeight; sw = sh * dr; } else { sw = im.naturalWidth; sh = sw / dr; }
+  const sx = (im.naturalWidth - sw) / 2, sy = (im.naturalHeight - sh) / 2;
+  ctx.drawImage(im, sx, sy, sw, sh, dx, dy, dw, dh);
+}
+function needBoth(){
+  if (imgs.b && imgs.a) return true;
+  $('#exStat').textContent = '要先把兩張圖都放進來，才有東西可以匯出嘛 🙂 回到第 1 步放圖吧。';
+  return false;
+}
+
+/* ── 匯出並排 PNG ── */
+$('#pngBtn').addEventListener('click', () => {
+  if (!needBoth()) return;
+  const ar = imgs.b.el.naturalWidth / imgs.b.el.naturalHeight;
+  const H = Math.min(imgs.b.el.naturalHeight, 1400);
+  const W = Math.round(H * ar);
+  const GAP = Math.max(3, Math.round(W * 0.004));
+  const cv = document.createElement('canvas');
+  cv.width = W * 2 + GAP; cv.height = H;
+  const ctx = cv.getContext('2d');
+  drawCover(ctx, imgs.b.el, 0, 0, W, H);
+  drawCover(ctx, imgs.a.el, W + GAP, 0, W, H);
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(W, 0, GAP, H);
+  const fs = Math.max(20, Math.round(H * 0.038));
+  ctx.font = '800 ' + fs + 'px "Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif';
+  ctx.textBaseline = 'middle';
+  const chip = (text, x) => {
+    const pw = ctx.measureText(text).width + fs * 1.2, ph = fs * 1.8, y = fs * 0.6;
+    ctx.fillStyle = 'rgba(0,0,0,.55)';
+    ctx.beginPath(); ctx.roundRect(x, y, pw, ph, ph / 2); ctx.fill();
+    ctx.fillStyle = '#fff';
+    ctx.fillText(text, x + fs * 0.6, y + ph / 2);
+  };
+  chip(labB(), fs * 0.6);
+  chip(labA(), W + GAP + fs * 0.6);
+  const a = document.createElement('a');
+  a.href = cv.toDataURL('image/png');
+  a.download = labB() + '－' + labA() + ' 對比圖.png';
+  a.click();
+  $('#exStat').textContent = '對比圖做好了！已經開始下載，直接拖進簡報或貼文就能用。';
+});
+
+/* ── 匯出互動網頁（招牌功能） ── */
+const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+$('#htmlBtn').addEventListener('click', () => {
+  if (!needBoth()) return;
+  const total = imgs.b.bytes + imgs.a.bytes;
+  if (total > 8 * 1024 * 1024){
+    const mb = (total / 1048576).toFixed(1);
+    if (!confirm('圖有點肥（兩張合計約 ' + mb + ' MB），匯出的檔案會很大，傳給別人可能要等很久。建議先把圖縮小再回來，或按「確定」直接匯出。')) return;
+  }
+  const ar = imgs.b.el.naturalWidth + ' / ' + imgs.b.el.naturalHeight;
+  const html = '<!DOCTYPE html>\n<html lang="zh-Hant-TW">\n<head>\n<meta charset="UTF-8">\n' +
+'<meta name="viewport" content="width=device-width, initial-scale=1">\n' +
+'<title>' + esc(labB()) + ' vs ' + esc(labA()) + '｜Before/After 對比</title>\n<style>\n' +
+'*{box-sizing:border-box;margin:0;padding:0}\n' +
+'body{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",-apple-system,sans-serif;' +
+'background:#101418;color:#eef2f6;min-height:100dvh;display:flex;flex-direction:column;' +
+'align-items:center;justify-content:center;padding:1rem;gap:.8rem}\n' +
+'.cmp{position:relative;width:auto;max-width:100%;max-height:70vh;aspect-ratio:' + ar + ';' +
+'border-radius:12px;overflow:hidden;background:#000;touch-action:none;user-select:none;-webkit-user-select:none}\n' +
+'.cmp img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;display:block}\n' +
+'.bar{position:absolute;top:0;bottom:0;left:50%;width:3px;background:#fff;transform:translateX(-50%);' +
+'box-shadow:0 0 6px rgba(0,0,0,.5);pointer-events:none}\n' +
+'.knob{position:absolute;top:50%;left:50%;width:42px;height:42px;border-radius:50%;background:#fff;' +
+'color:#333;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;' +
+'font-size:.85rem;font-weight:900;box-shadow:0 2px 10px rgba(0,0,0,.4);pointer-events:none;letter-spacing:-1px}\n' +
+'.tag{position:absolute;top:.5rem;font-size:.78rem;font-weight:800;color:#fff;background:rgba(0,0,0,.55);' +
+'border-radius:999px;padding:.15rem .7rem;pointer-events:none;max-width:45%;overflow:hidden;' +
+'text-overflow:ellipsis;white-space:nowrap}\n.tag-b{left:.5rem}.tag-a{right:.5rem}\n' +
+'.hint{font-size:.82rem;color:#9aa7b5}\n' +
+'footer{font-size:.78rem;color:#9aa7b5}\nfooter a{color:#35b6d2;text-decoration:none}\nfooter b{color:#eef2f6}\n' +
+'</style>\n</head>\n<body>\n' +
+'<div class="cmp" id="cmp">\n' +
+'  <img src="' + imgs.a.url + '" alt="' + esc(labA()) + '">\n' +
+'  <img src="' + imgs.b.url + '" alt="' + esc(labB()) + '" id="top" style="clip-path:inset(0 50% 0 0)">\n' +
+'  <span class="tag tag-b">' + esc(labB()) + '</span>\n' +
+'  <span class="tag tag-a">' + esc(labA()) + '</span>\n' +
+'  <div class="bar" id="bar"></div>\n  <div class="knob" id="knob">◀▶</div>\n' +
+'</div>\n<p class="hint">👆 按住中間的把手左右拉，看看差多少</p>\n' +
+'<footer>🍀 <b>Learn AI with Tarshar</b>・TARSHAR 工具集｜這個對比是用 <a href="https://tarshar4242.github.io/kt-sweet-journey/tool-beforeafter.html">Before/After 對比展示器</a> 做的</footer>\n' +
+'<script>\n' +
+'var cmp=document.getElementById("cmp"),top2=document.getElementById("top"),' +
+'bar=document.getElementById("bar"),knob=document.getElementById("knob"),drag=false;\n' +
+'function setP(p){p=Math.max(0,Math.min(100,p));top2.style.clipPath="inset(0 "+(100-p)+"% 0 0)";' +
+'bar.style.left=p+"%";knob.style.left=p+"%";}\n' +
+'function fromE(e){var r=cmp.getBoundingClientRect();setP((e.clientX-r.left)/r.width*100);}\n' +
+'cmp.addEventListener("pointerdown",function(e){drag=true;cmp.setPointerCapture(e.pointerId);fromE(e);});\n' +
+'cmp.addEventListener("pointermove",function(e){if(drag)fromE(e);});\n' +
+'cmp.addEventListener("pointerup",function(){drag=false;});\n' +
+'cmp.addEventListener("pointercancel",function(){drag=false;});\n' +
+'<\/script>\n</body>\n</html>\n';
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = labB() + '－' + labA() + ' 互動對比.html';
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 3000);
+  $('#exStat').textContent = '互動網頁做好了！這個檔案傳 LINE、寄信給任何人，對方點開就能自己拉滑桿。';
+});
+
+/* ── 深淺色切換 ── */
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme', t);
+  $('#themeBtn').textContent = t === 'dark' ? '☀️' : '🌙';
+}
+const saved = localStorage.getItem('tools_theme');
+applyTheme(saved || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+$('#themeBtn').addEventListener('click', () => {
+  const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('tools_theme', next); applyTheme(next);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>空白換行轉換器｜TARSHAR 工具集</title>
+<meta name="description" content="FB、IG、Threads 貼文的空行老是被吃掉？貼進來、按一下、複製走——空行一格都不會少。免費、免註冊、文字不離開你的瀏覽器。">
+<meta name="theme-color" content="#0e91ad">
+<style>
+:root{
+  --primary:#0e91ad; --primary-soft:#e3f4f8; --primary-deep:#0b6f85;
+  --accent:#e8752a; --accent-soft:#fdeee2;
+  --bg:#f7f9fb; --card:#ffffff; --border:#e6eaef;
+  --text:#1e2a38; --muted:#64748b;
+  --ok:#2e7d4f; --ok-soft:#e3f4ea;
+  --shadow:0 1px 3px rgba(15,23,42,.06);
+  --shadow-lift:0 10px 28px rgba(15,23,42,.12);
+  --radius:14px;
+}
+html[data-theme="dark"]{
+  --primary:#35b6d2; --primary-soft:#123742; --primary-deep:#7fd6e8;
+  --accent:#f08a45; --accent-soft:#3a2718;
+  --bg:#101418; --card:#1a2027; --border:#2a323c;
+  --text:#eef2f6; --muted:#9aa7b5;
+  --ok:#7fd6a4; --ok-soft:#14301f;
+  --shadow:0 1px 3px rgba(0,0,0,.4);
+  --shadow-lift:0 10px 28px rgba(0,0,0,.5);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',-apple-system,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.7;min-height:100dvh}
+a{color:var(--primary);text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+header{background:radial-gradient(ellipse 60% 120% at 85% -20%, var(--accent-soft) 0%, transparent 60%),
+  radial-gradient(ellipse 70% 130% at 10% -30%, var(--primary-soft) 0%, transparent 65%), var(--card);
+  border-bottom:1px solid var(--border);padding:2rem 1.2rem 1.6rem;text-align:center;position:relative}
+.theme-btn{position:absolute;top:1rem;right:1rem;width:40px;height:40px;border-radius:50%;
+  border:1px solid var(--border);background:var(--card);font-size:1.1rem;box-shadow:var(--shadow);
+  display:flex;align-items:center;justify-content:center}
+h1{font-size:clamp(1.45rem,4.5vw,2rem);font-weight:900;letter-spacing:.03em}
+.hero-sub{max-width:30em;margin:.5rem auto 0;color:var(--muted);font-size:clamp(.9rem,2.6vw,.98rem)}
+.badges{display:flex;flex-wrap:wrap;justify-content:center;gap:.45rem;margin-top:.8rem}
+.badges span{font-size:.76rem;font-weight:700;border:1px solid var(--border);background:var(--card);
+  border-radius:999px;padding:.2rem .7rem;color:var(--muted)}
+.badges .free{color:var(--ok);background:var(--ok-soft);border-color:transparent}
+main{max-width:860px;margin:0 auto;padding:1.2rem 1.2rem 2.5rem}
+.panel{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:1.1rem;margin-top:1rem}
+.panel h2{font-size:.95rem;font-weight:800;margin-bottom:.5rem}
+textarea{width:100%;min-height:170px;border:1.5px solid var(--border);border-radius:10px;
+  background:var(--bg);color:var(--text);font:inherit;font-size:.95rem;padding:.8rem;resize:vertical;outline:none}
+textarea:focus{border-color:var(--primary)}
+.opts{display:flex;flex-wrap:wrap;gap:.5rem;margin:.8rem 0}
+.opt{font-size:.85rem;font-weight:700;color:var(--muted);border:1.5px solid var(--border);
+  background:var(--card);border-radius:999px;padding:.32rem .9rem;transition:.15s}
+.opt.on{background:var(--primary);border-color:var(--primary);color:#fff}
+.actions{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.8rem}
+.btn{display:inline-flex;align-items:center;gap:.4rem;font-size:.95rem;font-weight:800;
+  border-radius:999px;padding:.6rem 1.4rem;box-shadow:var(--shadow);transition:.15s}
+.btn:hover{transform:translateY(-2px)}
+.btn-main{background:var(--primary);color:#fff}
+.btn-sub{background:var(--card);border:1.5px solid var(--border);color:var(--text)}
+.stat{font-size:.8rem;color:var(--muted);margin-top:.5rem}
+.tip{background:var(--primary-soft);border-radius:10px;padding:.7rem .9rem;font-size:.85rem;
+  color:var(--text);margin-top:1rem}
+.tip b{color:var(--primary-deep)}
+footer{border-top:1px solid var(--border);background:var(--card);text-align:center;
+  padding:1.4rem 1.2rem 5.5rem;color:var(--muted);font-size:.82rem}
+.home-fab{position:fixed;left:14px;bottom:14px;z-index:50;display:inline-flex;align-items:center;
+  gap:.35rem;font-size:.85rem;font-weight:800;color:var(--text);background:var(--card);
+  border:1.5px solid var(--border);border-radius:999px;padding:.5rem 1rem;box-shadow:var(--shadow-lift)}
+@media (max-width:520px){header{padding:1.6rem 1rem 1.3rem}}
+</style>
+</head>
+<body>
+
+<a href="tools.html" class="home-fab" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+
+<header>
+  <button class="theme-btn" id="themeBtn" aria-label="切換深淺色">🌙</button>
+  <h1>✍️ 空白換行轉換器</h1>
+  <p class="hero-sub">貼文的空行老是被 FB、IG、Threads 偷吃掉？貼進來、按一下、複製走——空行一格都不會少，排版跟你想的一模一樣。</p>
+  <div class="badges"><span class="free">✅ 免費即用</span><span>🔒 文字不離開瀏覽器</span><span>📱 手機也好用</span></div>
+</header>
+
+<main>
+  <div class="panel">
+    <h2>1️⃣ 把貼文貼進來（照你想要的排版，空行盡量空）</h2>
+    <textarea id="src" placeholder="例如：
+
+今天上課學員問我
+AI 到底會不會取代人類？
+
+我說：先擔心它取代你的空行吧 🙂
+
+（在這裡打好排版，下面按一下就防吃）"></textarea>
+    <div class="opts" id="opts">
+      <button class="opt on" data-m="nbsp">隱形空白（推薦，FB/IG/Threads 都吃這套）</button>
+      <button class="opt" data-m="braille">點字空白（換行超頑固時用這招）</button>
+      <button class="opt" data-m="clean">還原模式（把隱形字元全部清掉）</button>
+    </div>
+    <div class="actions">
+      <button class="btn btn-main" id="goBtn">🪄 施展防吃咒</button>
+      <button class="btn btn-sub" id="copyBtn">📋 複製結果</button>
+    </div>
+    <p class="stat" id="stat"></p>
+  </div>
+
+  <div class="panel">
+    <h2>2️⃣ 轉換結果（直接全選複製，或按上面的複製鈕）</h2>
+    <textarea id="out" placeholder="轉換好的貼文會出現在這裡，複製後直接貼到 FB／IG／Threads 就好。" readonly></textarea>
+  </div>
+
+  <div class="tip">💡 <b>為什麼空行會被吃掉？</b>因為社群平台看到「什麼都沒有的行」就自動幫你刪掉了。這個工具偷偷在空行裡放一個「隱形字元」，平台以為那行有東西，就不敢動它。文字全程在你的瀏覽器裡處理，不會上傳到任何地方。</div>
+
+  <div class="actions" style="justify-content:center;margin-top:1.2rem">
+    <a class="btn btn-sub" href="tool-linebreak.html" download="空白換行轉換器.html">📦 打包帶走這個工具</a>
+  </div>
+</main>
+
+<footer>🍀 <b>Learn AI with Tarshar</b>・TARSHAR 工具集｜更多小工具 → <a href="tools.html">打開工具箱</a></footer>
+
+<script>
+const $ = s => document.querySelector(s);
+let mode = 'nbsp';
+const CHARS = { nbsp:' ', braille:'⠀' };
+const INVISIBLES = /[ ⠀​‌‍﻿]/g;
+
+$('#opts').addEventListener('click', e => {
+  const b = e.target.closest('.opt'); if (!b) return;
+  mode = b.dataset.m;
+  document.querySelectorAll('.opt').forEach(x => x.classList.toggle('on', x === b));
+});
+
+function convert(){
+  const src = $('#src').value;
+  if (!src.trim()){ $('#stat').textContent = '先貼點東西進來嘛 🙂'; return; }
+  let out, n = 0;
+  if (mode === 'clean'){
+    out = src.replace(INVISIBLES, m => (n++, ''));
+    $('#stat').textContent = `還原完成！清掉了 ${n} 個隱形字元，貼文恢復素顏。`;
+  } else {
+    const ch = CHARS[mode];
+    out = src.split('\n').map(line => line.trim() === '' ? (n++, ch) : line).join('\n');
+    $('#stat').textContent = n
+      ? `防吃咒生效！保護了 ${n} 個空行，平台再也偷不走。`
+      : '這篇沒有空行，不用施咒也很安全 🙂';
+  }
+  $('#out').value = out;
+}
+
+async function copyOut(){
+  if (!$('#out').value) convert();
+  if (!$('#out').value) return;
+  try { await navigator.clipboard.writeText($('#out').value); }
+  catch { $('#out').select(); document.execCommand('copy'); }
+  const b = $('#copyBtn'); b.textContent = '✅ 複製好了，去貼吧！';
+  setTimeout(() => b.textContent = '📋 複製結果', 1800);
+}
+
+$('#goBtn').addEventListener('click', convert);
+$('#copyBtn').addEventListener('click', copyOut);
+
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme', t);
+  $('#themeBtn').textContent = t === 'dark' ? '☀️' : '🌙';
+}
+const saved = localStorage.getItem('tools_theme');
+applyTheme(saved || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+$('#themeBtn').addEventListener('click', () => {
+  const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('tools_theme', next); applyTheme(next);
+});
+</script>
+</body>
+</html>

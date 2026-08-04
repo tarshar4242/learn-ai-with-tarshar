@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Email 美化編輯器｜TARSHAR 工具集</title>
+<meta name="description" content="Markdown 進，漂亮信出。左邊打字、右邊即時預覽 Gmail 樣式，一鍵複製帶格式貼進信件，還能降級成 LINE 純文字版。免費、免註冊、文字不離開你的瀏覽器。">
+<meta name="theme-color" content="#0e91ad">
+<style>
+:root{
+  --primary:#0e91ad; --primary-soft:#e3f4f8; --primary-deep:#0b6f85;
+  --accent:#e8752a; --accent-soft:#fdeee2;
+  --bg:#f7f9fb; --card:#ffffff; --border:#e6eaef;
+  --text:#1e2a38; --muted:#64748b;
+  --ok:#2e7d4f; --ok-soft:#e3f4ea;
+  --shadow:0 1px 3px rgba(15,23,42,.06);
+  --shadow-lift:0 10px 28px rgba(15,23,42,.12);
+  --radius:14px;
+}
+html[data-theme="dark"]{
+  --primary:#35b6d2; --primary-soft:#123742; --primary-deep:#7fd6e8;
+  --accent:#f08a45; --accent-soft:#3a2718;
+  --bg:#101418; --card:#1a2027; --border:#2a323c;
+  --text:#eef2f6; --muted:#9aa7b5;
+  --ok:#7fd6a4; --ok-soft:#14301f;
+  --shadow:0 1px 3px rgba(0,0,0,.4);
+  --shadow-lift:0 10px 28px rgba(0,0,0,.5);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',-apple-system,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.7;min-height:100dvh}
+a{color:var(--primary);text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+header{background:radial-gradient(ellipse 60% 120% at 85% -20%, var(--accent-soft) 0%, transparent 60%),
+  radial-gradient(ellipse 70% 130% at 10% -30%, var(--primary-soft) 0%, transparent 65%), var(--card);
+  border-bottom:1px solid var(--border);padding:2rem 1.2rem 1.6rem;text-align:center;position:relative}
+.theme-btn{position:absolute;top:1rem;right:1rem;width:40px;height:40px;border-radius:50%;
+  border:1px solid var(--border);background:var(--card);font-size:1.1rem;box-shadow:var(--shadow);
+  display:flex;align-items:center;justify-content:center}
+h1{font-size:clamp(1.45rem,4.5vw,2rem);font-weight:900;letter-spacing:.03em}
+.hero-sub{max-width:30em;margin:.5rem auto 0;color:var(--muted);font-size:clamp(.9rem,2.6vw,.98rem)}
+.badges{display:flex;flex-wrap:wrap;justify-content:center;gap:.45rem;margin-top:.8rem}
+.badges span{font-size:.76rem;font-weight:700;border:1px solid var(--border);background:var(--card);
+  border-radius:999px;padding:.2rem .7rem;color:var(--muted)}
+.badges .free{color:var(--ok);background:var(--ok-soft);border-color:transparent}
+main{max-width:860px;margin:0 auto;padding:1.2rem 1.2rem 2.5rem}
+.panel{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:1.1rem;margin-top:1rem}
+.panel h2{font-size:.95rem;font-weight:800;margin-bottom:.5rem}
+textarea{width:100%;min-height:170px;border:1.5px solid var(--border);border-radius:10px;
+  background:var(--bg);color:var(--text);font:inherit;font-size:.95rem;padding:.8rem;resize:vertical;outline:none}
+textarea:focus{border-color:var(--primary)}
+.opts{display:flex;flex-wrap:wrap;gap:.5rem;margin:.8rem 0}
+.opt{font-size:.85rem;font-weight:700;color:var(--muted);border:1.5px solid var(--border);
+  background:var(--card);border-radius:999px;padding:.32rem .9rem;transition:.15s}
+.opt.on{background:var(--primary);border-color:var(--primary);color:#fff}
+.actions{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.8rem}
+.btn{display:inline-flex;align-items:center;gap:.4rem;font-size:.95rem;font-weight:800;
+  border-radius:999px;padding:.6rem 1.4rem;box-shadow:var(--shadow);transition:.15s}
+.btn:hover{transform:translateY(-2px)}
+.btn-main{background:var(--primary);color:#fff}
+.btn-sub{background:var(--card);border:1.5px solid var(--border);color:var(--text)}
+.stat{font-size:.8rem;color:var(--muted);margin-top:.5rem}
+.tip{background:var(--primary-soft);border-radius:10px;padding:.7rem .9rem;font-size:.85rem;
+  color:var(--text);margin-top:1rem}
+.tip b{color:var(--primary-deep)}
+footer{border-top:1px solid var(--border);background:var(--card);text-align:center;
+  padding:1.4rem 1.2rem 5.5rem;color:var(--muted);font-size:.82rem}
+.home-fab{position:fixed;left:14px;bottom:14px;z-index:50;display:inline-flex;align-items:center;
+  gap:.35rem;font-size:.85rem;font-weight:800;color:var(--text);background:var(--card);
+  border:1.5px solid var(--border);border-radius:999px;padding:.5rem 1rem;box-shadow:var(--shadow-lift)}
+@media (max-width:520px){header{padding:1.6rem 1rem 1.3rem}}
+/* ―― 本工具專屬版面 ―― */
+main{max-width:1180px}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:1rem;align-items:start}
+@media (max-width:820px){.duo{grid-template-columns:1fr}}
+.duo .panel{margin-top:1rem}
+#src{min-height:420px;font-size:.92rem;line-height:1.75}
+.mailwrap{background:#e8ecf1;border:1.5px solid var(--border);border-radius:10px;
+  padding:1rem .7rem;min-height:420px;overflow:auto}
+html[data-theme="dark"] .mailwrap{background:#0b0f13}
+.mailcard{max-width:600px;margin:0 auto;background:#ffffff;border-radius:8px;
+  box-shadow:0 1px 4px rgba(20,30,45,.15);padding:26px 24px;word-break:break-word}
+.mail-empty{color:#8a97a5;text-align:center;padding:40px 10px;font-size:.9rem}
+</style>
+</head>
+<body>
+
+<a href="tools.html" class="home-fab" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+
+<header>
+  <button class="theme-btn" id="themeBtn" aria-label="切換深淺色">🌙</button>
+  <h1>✉️ Email 美化編輯器</h1>
+  <p class="hero-sub">Markdown 進，漂亮信出，老闆以為你會排版。</p>
+  <div class="badges"><span class="free">✅ 免費即用</span><span>🔒 資料不離開瀏覽器</span><span>📱 手機也好用</span></div>
+</header>
+
+<main>
+  <div class="duo">
+    <div class="panel">
+      <h2>1️⃣ 左邊用 Markdown 打信（不會寫？先按下面的範本抄一份）</h2>
+      <div class="opts">
+        <button class="opt" data-tpl="course">📣 課程通知信</button>
+        <button class="opt" data-tpl="event">🎉 活動報名信</button>
+        <button class="opt" data-tpl="thanks">💌 感謝信</button>
+      </div>
+      <textarea id="src" placeholder="在這裡打 Markdown，例如：
+
+# 大標題
+## 小標題
+
+**粗體**、*斜體*、`重點字`
+
+- 清單一
+- 清單二
+  - 縮兩格就是子清單
+
+> 引用一句話
+
+[連結文字](https://example.com)
+
+空一行就是新的一段。右邊會即時變成漂亮的信 →"></textarea>
+      <p class="stat" id="stat">全文 0 字</p>
+    </div>
+
+    <div class="panel">
+      <h2>2️⃣ 右邊即時預覽（模擬 Gmail 收到信的樣子）</h2>
+      <div class="mailwrap"><div class="mailcard" id="mail"></div></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>3️⃣ 複製去用</h2>
+    <div class="actions">
+      <button class="btn btn-main" id="copyMailBtn">📋 複製成漂亮信</button>
+      <button class="btn btn-sub" id="copyLineBtn">📋 複製 LINE 版</button>
+    </div>
+    <p class="stat" id="msg"></p>
+  </div>
+
+  <div class="tip">💡 <b>怎麼貼進 Gmail？</b>按「複製成漂亮信」之後，到 Gmail 寫信的地方直接 Ctrl+V（Mac 是 Cmd+V）貼上，格式會整個帶過去；<b>千萬別用「純文字貼上」</b>，那樣排版會被打回原形。「LINE 版」則是把格式降級成【標題】和 ・ 清單的純文字，貼到 LINE、簡訊都好讀。你打的每一個字都自動存在這台裝置的瀏覽器裡，關掉再開還在，也不會上傳到任何地方。</div>
+
+  <div class="actions" style="justify-content:center;margin-top:1.2rem">
+    <a class="btn btn-sub" href="tool-email-md.html" download="Email美化編輯器.html">📦 打包帶走這個工具</a>
+  </div>
+</main>
+
+<footer>🍀 <b>Learn AI with Tarshar</b>・TARSHAR 工具集｜更多小工具 → <a href="tools.html">打開工具箱</a></footer>
+
+<script>
+const $ = s => document.querySelector(s);
+
+/* ―――――――――― 迷你 Markdown 解析器（信件版，全 inline style） ―――――――――― */
+const F = "font-family:'Helvetica Neue',Arial,'PingFang TC','Microsoft JhengHei',sans-serif;";
+const ST = {
+  p:  F + "font-size:15px;line-height:1.9;color:#333333;margin:0 0 16px;",
+  h1: F + "font-size:22px;line-height:1.5;font-weight:700;color:#1a2733;margin:0 0 16px;",
+  h2: F + "font-size:18px;line-height:1.5;font-weight:700;color:#1a2733;margin:24px 0 12px;padding-bottom:6px;border-bottom:2px solid #e3f4f8;",
+  h3: F + "font-size:16px;line-height:1.5;font-weight:700;color:#0b6f85;margin:20px 0 8px;",
+  ul: F + "font-size:15px;line-height:1.9;color:#333333;margin:0 0 16px;padding:0 0 0 26px;",
+  ol: F + "font-size:15px;line-height:1.9;color:#333333;margin:0 0 16px;padding:0 0 0 26px;",
+  subul: "margin:4px 0 4px;padding:0 0 0 22px;",
+  li: "margin:0 0 4px;",
+  bq: F + "font-size:15px;line-height:1.9;color:#55636f;background:#f4f8fa;border-left:4px solid #0e91ad;margin:0 0 16px;padding:10px 14px;border-radius:0 6px 6px 0;",
+  hr: "border:none;border-top:1px solid #dde3e9;margin:24px 0;",
+  a:  "color:#0e91ad;text-decoration:underline;",
+  code: "font-family:Consolas,Menlo,monospace;font-size:13px;color:#b13355;background:#f2f4f7;border-radius:4px;padding:2px 6px;",
+  strong: "font-weight:700;color:#111a22;",
+  em: "font-style:italic;"
+};
+
+function esc(s){
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function inline(s){
+  s = esc(s);
+  s = s.replace(/`([^`]+)`/g, (m,c) => '<code style="' + ST.code + '">' + c + '</code>');
+  s = s.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (m,t,u) => {
+    if(!/^(https?:\/\/|mailto:)/i.test(u)) u = 'https://' + u;
+    return '<a href="' + u + '" style="' + ST.a + '">' + t + '</a>';
+  });
+  s = s.replace(/\*\*([^*]+)\*\*/g, '<strong style="' + ST.strong + '">$1</strong>');
+  s = s.replace(/\*([^*]+)\*/g, '<em style="' + ST.em + '">$1</em>');
+  return s;
+}
+function renderList(items){
+  const root = items[0].ordered ? 'ol' : 'ul';
+  let html = '<' + root + ' style="' + ST[root] + '">';
+  let i = 0;
+  while(i < items.length){
+    const it = items[i];
+    let li = '<li style="' + ST.li + '">' + inline(it.text);
+    const subs = [];
+    let j = i + 1;
+    while(j < items.length && items[j].nested){ subs.push(items[j]); j++; }
+    if(subs.length){
+      const st = subs[0].ordered ? 'ol' : 'ul';
+      li += '<' + st + ' style="' + ST.subul + '">' +
+            subs.map(x => '<li style="' + ST.li + '">' + inline(x.text) + '</li>').join('') +
+            '</' + st + '>';
+    }
+    li += '</li>';
+    html += li;
+    i = j;
+  }
+  return html + '</' + root + '>';
+}
+function mdToHtml(md){
+  const lines = md.replace(/\r\n?/g,'\n').split('\n');
+  const blocks = [];
+  let para = [], quote = [], list = [];
+  const flushPara = () => {
+    if(para.length){ blocks.push('<p style="' + ST.p + '">' + para.map(inline).join('<br>') + '</p>'); para = []; }
+  };
+  const flushQuote = () => {
+    if(quote.length){ blocks.push('<blockquote style="' + ST.bq + '">' + quote.map(inline).join('<br>') + '</blockquote>'); quote = []; }
+  };
+  const flushList = () => {
+    if(list.length){ blocks.push(renderList(list)); list = []; }
+  };
+  for(const line of lines){
+    const lm = line.match(/^(\s*)([-*]|\d+\.)\s+(.*)$/);
+    if(lm){
+      flushPara(); flushQuote();
+      list.push({ nested: lm[1].length >= 2, ordered: /^\d/.test(lm[2]), text: lm[3] });
+      continue;
+    }
+    flushList();
+    if(/^\s*$/.test(line)){ flushPara(); flushQuote(); continue; }
+    if(/^\s*(-{3,}|\*{3,}|_{3,})\s*$/.test(line)){ flushPara(); flushQuote(); blocks.push('<hr style="' + ST.hr + '">'); continue; }
+    const hm = line.match(/^(#{1,3})\s+(.*)$/);
+    if(hm){
+      flushPara(); flushQuote();
+      const tag = 'h' + hm[1].length;
+      blocks.push('<' + tag + ' style="' + ST[tag] + '">' + inline(hm[2]) + '</' + tag + '>');
+      continue;
+    }
+    if(/^>\s?/.test(line)){ flushPara(); quote.push(line.replace(/^>\s?/,'')); continue; }
+    flushQuote(); para.push(line);
+  }
+  flushList(); flushPara(); flushQuote();
+  return blocks.join('');
+}
+
+/* ―――――――――― LINE 純文字降級 ―――――――――― */
+function stripInline(s){
+  return s
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '$1（$2）')
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/\*([^*]+)\*/g, '$1');
+}
+function toPlain(md){
+  return md.replace(/\r\n?/g,'\n').split('\n').map(line => {
+    const hm = line.match(/^#{1,3}\s+(.*)$/);
+    if(hm) return '【' + stripInline(hm[1]) + '】';
+    if(/^\s*(-{3,}|\*{3,}|_{3,})\s*$/.test(line)) return '──────────';
+    let s = line.replace(/^(\s*)[-*]\s+/, '$1・').replace(/^>\s?/, '▍');
+    return stripInline(s);
+  }).join('\n').replace(/\n{3,}/g,'\n\n').trim();
+}
+
+/* ―――――――――― 範本（Tarshar 口吻） ―――――――――― */
+const TPL = {
+course: `# 📣 下週三晚上，AI 開機日要開課啦
+
+親愛的同學：
+
+先說重點：**7/30（三）晚上 7:30**，我們線上見！
+
+## 這次要玩什麼
+
+- 三句話讓 AI 幫你寫完週報（老闆看不出來的那種）
+- 用 AI 做出你人生第一張活動海報
+  - 不會畫畫也行，我就是活生生的例子
+- 大亂鬥時間：把你被 AI 氣到的瞬間帶來，我們一起收拾它
+
+## 上課前請準備
+
+1. 一台能上網的電腦（手機也行，但眼睛會辛苦）
+2. 註冊好一個 AI 帳號
+3. 一顆「做壞了也沒關係」的心
+
+> 上課連結會在前一天寄給大家。找不到信就翻翻垃圾郵件——我的信很愛住那裡。
+
+有問題直接回信，或到 [課程筆記館](https://tarshar4242.github.io/) 逛逛。
+
+---
+
+Tarshar 敬上
+*一個曾經寄信忘記附連結的講師*`,
+event: `# 🎉 「AI 秋季小聚」開放報名！
+
+哈囉：
+
+每次都說「下次一定參加」的你——**下次，就是現在。**
+
+## 活動資訊
+
+- **時間**：8/16（六）下午 2:00–5:00
+- **地點**：台北，一個有冷氣和插座的好地方（報名成功後告訴你）
+- **費用**：免費，但椅子有限，先搶先贏
+
+## 給你三個來的理由
+
+1. 現場示範：一杯咖啡的時間，做出一個能用的小工具
+2. 交朋友：來的都是「也想搞懂 AI」的同路人
+3. 有點心。對，有點心。
+
+> 名額只有 30 位，上一場兩天就滿了，別怪我沒提醒你。
+
+👉 [點這裡報名](https://example.com/signup)，30 秒填完，比泡麵還快。
+
+---
+
+Tarshar
+*負責試吃點心把關品質的主辦人*`,
+thanks: `# 💌 謝謝你，今天辛苦了
+
+嗨：
+
+課程圓滿結束，最想跟你說的是：**謝謝你願意把三個小時交給我。**
+
+## 今天我們一起做到的事
+
+- 你跟 AI 的對話，從「你好」進化到「幫我寫企劃」
+- 那張海報真的做出來了（我有偷偷截圖存證）
+- 有同學笑到打嗝——這是我教學生涯收過的最高評價
+
+## 接下來你可以
+
+1. 把今天的筆記翻出來，*睡前看五分鐘*就好
+2. 明天挑一件小事丟給 AI 做做看
+3. 卡住就回信給我，我保證 \`已讀必回\`（速度看緣分）
+
+> 學 AI 最怕的不是學不會，是回家之後就再也不碰。陪你走到會為止。
+
+講義都在這：[課程筆記館](https://tarshar4242.github.io/)
+
+---
+
+Tarshar 敬上
+*你的 AI 陪跑教練 🍀*`
+};
+
+/* ―――――――――― 畫面邏輯 ―――――――――― */
+const DRAFT_KEY = 'tt_email_draft';
+let msgTimer = null;
+
+function render(){
+  const md = $('#src').value;
+  if(!md.trim()){
+    $('#mail').innerHTML = '<p class="mail-empty">先在左邊打點字嘛 🙂<br>或按上面的範本鈕，抄一封來改最快。</p>';
+  } else {
+    $('#mail').innerHTML = mdToHtml(md);
+  }
+  const chars = md.replace(/\s/g,'').length;
+  $('#stat').textContent = chars
+    ? '全文 ' + chars + ' 字・對方讀完約 ' + Math.max(1, Math.ceil(chars / 350)) + ' 分鐘'
+    : '全文 0 字';
+}
+function saveDraft(){
+  try{ localStorage.setItem(DRAFT_KEY, $('#src').value); }catch(e){}
+}
+function showMsg(t){
+  $('#msg').textContent = t;
+  clearTimeout(msgTimer);
+  msgTimer = setTimeout(() => { $('#msg').textContent = ''; }, 6000);
+}
+function fullEmailHtml(){
+  return '<div style="' + F + 'max-width:600px;">' + mdToHtml($('#src').value) + '</div>';
+}
+
+async function copyMail(){
+  render();
+  if(!$('#src').value.trim()){ showMsg('先貼點東西進來嘛 🙂'); return; }
+  const okMsg = '複製好了！到 Gmail 直接 Ctrl+V 貼上（不要用「純文字貼上」喔）';
+  try{
+    if(!navigator.clipboard || !window.ClipboardItem) throw new Error('old');
+    await navigator.clipboard.write([ new ClipboardItem({
+      'text/html':  new Blob([fullEmailHtml()], { type:'text/html' }),
+      'text/plain': new Blob([toPlain($('#src').value)], { type:'text/plain' })
+    })]);
+    showMsg(okMsg);
+  }catch(e){
+    // 舊瀏覽器 fallback：選取預覽區再 execCommand 複製
+    try{
+      const range = document.createRange();
+      range.selectNodeContents($('#mail'));
+      const sel = window.getSelection();
+      sel.removeAllRanges(); sel.addRange(range);
+      const ok = document.execCommand('copy');
+      sel.removeAllRanges();
+      showMsg(ok ? okMsg : '你的瀏覽器不讓我幫你複製，請手動全選右邊的預覽再按 Ctrl+C 🙂');
+    }catch(e2){
+      showMsg('你的瀏覽器不讓我幫你複製，請手動全選右邊的預覽再按 Ctrl+C 🙂');
+    }
+  }
+}
+async function copyLine(){
+  if(!$('#src').value.trim()){ showMsg('先貼點東西進來嘛 🙂'); return; }
+  const txt = toPlain($('#src').value);
+  try{
+    await navigator.clipboard.writeText(txt);
+  }catch(e){
+    const ta = document.createElement('textarea');
+    ta.value = txt; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy'); ta.remove();
+  }
+  showMsg('LINE 版複製好了！【標題】和 ・ 清單都排好了，直接貼進聊天室吧。');
+}
+
+$('#src').addEventListener('input', () => { render(); saveDraft(); });
+$('#copyMailBtn').addEventListener('click', copyMail);
+$('#copyLineBtn').addEventListener('click', copyLine);
+document.querySelectorAll('.opt[data-tpl]').forEach(b => {
+  b.addEventListener('click', () => {
+    const cur = $('#src').value.trim();
+    if(cur && cur !== TPL.course && cur !== TPL.event && cur !== TPL.thanks){
+      if(!confirm('你打到一半的內容會被範本蓋掉，確定要換嗎？')) return;
+    }
+    $('#src').value = TPL[b.dataset.tpl];
+    render(); saveDraft();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
+
+/* 載入草稿（沒有就先放課程通知範本當示範） */
+try{
+  const draft = localStorage.getItem(DRAFT_KEY);
+  $('#src').value = (draft !== null) ? draft : TPL.course;
+}catch(e){ $('#src').value = TPL.course; }
+render();
+
+/* ―――――――――― 深淺色切換 ―――――――――― */
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme', t);
+  $('#themeBtn').textContent = t === 'dark' ? '☀️' : '🌙';
+}
+const saved = localStorage.getItem('tools_theme');
+applyTheme(saved || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+$('#themeBtn').addEventListener('click', () => {
+  const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('tools_theme', next); applyTheme(next);
+});
+</script>
+</body>
+</html>

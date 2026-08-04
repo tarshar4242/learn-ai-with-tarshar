@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>課堂抽獎神器｜TARSHAR 工具集</title>
+<meta name="description" content="上課點名不尷尬：把名單貼進來，轉盤、抽籤、隨機分組一鍵搞定，中獎的是命運不是我。免費、免註冊、名單不離開你的瀏覽器。">
+<meta name="theme-color" content="#0e91ad">
+<style>
+:root{
+  --primary:#0e91ad; --primary-soft:#e3f4f8; --primary-deep:#0b6f85;
+  --accent:#e8752a; --accent-soft:#fdeee2;
+  --bg:#f7f9fb; --card:#ffffff; --border:#e6eaef;
+  --text:#1e2a38; --muted:#64748b;
+  --ok:#2e7d4f; --ok-soft:#e3f4ea;
+  --shadow:0 1px 3px rgba(15,23,42,.06);
+  --shadow-lift:0 10px 28px rgba(15,23,42,.12);
+  --radius:14px;
+}
+html[data-theme="dark"]{
+  --primary:#35b6d2; --primary-soft:#123742; --primary-deep:#7fd6e8;
+  --accent:#f08a45; --accent-soft:#3a2718;
+  --bg:#101418; --card:#1a2027; --border:#2a323c;
+  --text:#eef2f6; --muted:#9aa7b5;
+  --ok:#7fd6a4; --ok-soft:#14301f;
+  --shadow:0 1px 3px rgba(0,0,0,.4);
+  --shadow-lift:0 10px 28px rgba(0,0,0,.5);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',-apple-system,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.7;min-height:100dvh}
+a{color:var(--primary);text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+header{background:radial-gradient(ellipse 60% 120% at 85% -20%, var(--accent-soft) 0%, transparent 60%),
+  radial-gradient(ellipse 70% 130% at 10% -30%, var(--primary-soft) 0%, transparent 65%), var(--card);
+  border-bottom:1px solid var(--border);padding:2rem 1.2rem 1.6rem;text-align:center;position:relative}
+.theme-btn{position:absolute;top:1rem;right:1rem;width:40px;height:40px;border-radius:50%;
+  border:1px solid var(--border);background:var(--card);font-size:1.1rem;box-shadow:var(--shadow);
+  display:flex;align-items:center;justify-content:center}
+h1{font-size:clamp(1.45rem,4.5vw,2rem);font-weight:900;letter-spacing:.03em}
+.hero-sub{max-width:30em;margin:.5rem auto 0;color:var(--muted);font-size:clamp(.9rem,2.6vw,.98rem)}
+.badges{display:flex;flex-wrap:wrap;justify-content:center;gap:.45rem;margin-top:.8rem}
+.badges span{font-size:.76rem;font-weight:700;border:1px solid var(--border);background:var(--card);
+  border-radius:999px;padding:.2rem .7rem;color:var(--muted)}
+.badges .free{color:var(--ok);background:var(--ok-soft);border-color:transparent}
+main{max-width:860px;margin:0 auto;padding:1.2rem 1.2rem 2.5rem}
+.panel{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:1.1rem;margin-top:1rem}
+.panel h2{font-size:.95rem;font-weight:800;margin-bottom:.5rem}
+textarea{width:100%;min-height:150px;border:1.5px solid var(--border);border-radius:10px;
+  background:var(--bg);color:var(--text);font:inherit;font-size:.95rem;padding:.8rem;resize:vertical;outline:none}
+textarea:focus{border-color:var(--primary)}
+.opts{display:flex;flex-wrap:wrap;gap:.5rem;margin:.8rem 0}
+.opt{font-size:.85rem;font-weight:700;color:var(--muted);border:1.5px solid var(--border);
+  background:var(--card);border-radius:999px;padding:.32rem .9rem;transition:.15s}
+.opt.on{background:var(--primary);border-color:var(--primary);color:#fff}
+.actions{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.8rem;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:.4rem;font-size:.95rem;font-weight:800;
+  border-radius:999px;padding:.6rem 1.4rem;box-shadow:var(--shadow);transition:.15s}
+.btn:hover{transform:translateY(-2px)}
+.btn:disabled{opacity:.5;transform:none;cursor:not-allowed}
+.btn-main{background:var(--primary);color:#fff}
+.btn-sub{background:var(--card);border:1.5px solid var(--border);color:var(--text)}
+.stat{font-size:.8rem;color:var(--muted);margin-top:.5rem}
+.tip{background:var(--primary-soft);border-radius:10px;padding:.7rem .9rem;font-size:.85rem;
+  color:var(--text);margin-top:1rem}
+.tip b{color:var(--primary-deep)}
+footer{border-top:1px solid var(--border);background:var(--card);text-align:center;
+  padding:1.4rem 1.2rem 5.5rem;color:var(--muted);font-size:.82rem}
+.home-fab{position:fixed;left:14px;bottom:14px;z-index:50;display:inline-flex;align-items:center;
+  gap:.35rem;font-size:.85rem;font-weight:800;color:var(--text);background:var(--card);
+  border:1.5px solid var(--border);border-radius:999px;padding:.5rem 1rem;box-shadow:var(--shadow-lift)}
+@media (max-width:520px){header{padding:1.6rem 1rem 1.3rem}}
+
+/* ── 抽獎神器專用 ── */
+.mode-tabs{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem}
+.mode-tabs .opt{font-size:.92rem;padding:.45rem 1.1rem}
+.mode-sec{display:none}
+.mode-sec.show{display:block}
+.wheel-wrap{position:relative;width:min(86vw,340px);margin:1rem auto .3rem}
+.wheel-wrap canvas{display:block;width:100%;height:auto}
+.pointer{position:absolute;top:-6px;left:50%;transform:translateX(-50%);width:0;height:0;
+  border-left:13px solid transparent;border-right:13px solid transparent;
+  border-top:22px solid var(--accent);filter:drop-shadow(0 2px 2px rgba(0,0,0,.25));z-index:2}
+.hub{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:52px;height:52px;
+  border-radius:50%;background:var(--card);border:3px solid var(--border);display:flex;
+  align-items:center;justify-content:center;font-size:1.5rem;box-shadow:var(--shadow);z-index:2}
+.winner-box{display:none;text-align:center;margin-top:1rem;padding:1rem;border-radius:var(--radius);
+  background:var(--accent-soft);border:1.5px dashed var(--accent)}
+.winner-box.show{display:block;animation:pop .35s}
+.winner-box .who{font-size:clamp(1.6rem,7vw,2.4rem);font-weight:900;color:var(--accent);
+  line-height:1.4;word-break:break-all}
+.winner-box .label{font-size:.85rem;color:var(--muted);font-weight:700}
+@keyframes pop{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.06)}100%{transform:scale(1);opacity:1}}
+.num-input{width:5.5em;border:1.5px solid var(--border);border-radius:10px;background:var(--bg);
+  color:var(--text);font:inherit;font-size:1rem;font-weight:800;padding:.45rem .6rem;text-align:center;outline:none}
+.num-input:focus{border-color:var(--primary)}
+.inline-lab{font-size:.88rem;font-weight:700;color:var(--muted)}
+.switch{display:inline-flex;align-items:center;gap:.5rem;cursor:pointer;user-select:none;
+  font-size:.88rem;font-weight:700}
+.switch input{display:none}
+.sw-track{width:44px;height:24px;border-radius:999px;background:var(--border);position:relative;transition:.2s;flex:none}
+.sw-track::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;
+  background:var(--card);box-shadow:var(--shadow);transition:.2s}
+.switch input:checked + .sw-track{background:var(--ok)}
+.switch input:checked + .sw-track::after{left:23px}
+.chips{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.6rem}
+.chip{font-size:.83rem;font-weight:700;border:1px solid var(--border);background:var(--bg);
+  border-radius:999px;padding:.18rem .75rem;color:var(--muted)}
+.group-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:.7rem;margin-top:.9rem}
+.gcard{background:var(--bg);border:1.5px solid var(--border);border-radius:12px;padding:.7rem .8rem}
+.gcard h3{font-size:.85rem;font-weight:800;color:var(--primary-deep);margin-bottom:.3rem}
+.gcard p{font-size:.92rem;font-weight:700;line-height:1.9;word-break:break-all}
+.hist{list-style:none;margin-top:.5rem}
+.hist li{font-size:.85rem;padding:.35rem 0;border-bottom:1px dashed var(--border);color:var(--muted)}
+.hist li b{color:var(--text)}
+.confetti-bit{position:fixed;top:-4vh;z-index:99;pointer-events:none;will-change:transform}
+</style>
+</head>
+<body>
+
+<a href="tools.html" class="home-fab" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+
+<header>
+  <button class="theme-btn" id="themeBtn" aria-label="切換深淺色">🌙</button>
+  <h1>🎡 課堂抽獎神器</h1>
+  <p class="hero-sub">點名不尷尬，中獎的是命運不是我。</p>
+  <div class="badges"><span class="free">✅ 免費即用</span><span>🔒 資料不離開瀏覽器</span><span>📱 手機也好用</span></div>
+</header>
+
+<main>
+  <div class="panel">
+    <h2>1️⃣ 把同學們請進名單（一行一位，逗號分隔也可以）</h2>
+    <textarea id="names" placeholder="例如：
+小明
+小美
+阿寶
+（名單會自動記住，下次上課打開還在）"></textarea>
+    <div class="actions">
+      <button class="btn btn-sub" id="sampleBtn">🧑‍🎓 載入範例名單</button>
+      <label class="switch"><input type="checkbox" id="exclude"><span class="sw-track"></span>排除已中獎（連抽不重複）</label>
+    </div>
+    <p class="stat" id="nameStat"></p>
+  </div>
+
+  <div class="panel">
+    <h2>2️⃣ 挑一種玩法</h2>
+    <div class="mode-tabs" id="modeTabs">
+      <button class="opt on" data-mode="wheel">🎡 幸運轉盤</button>
+      <button class="opt" data-mode="draw">🎫 抽籤模式</button>
+      <button class="opt" data-mode="group">👥 隨機分組</button>
+    </div>
+
+    <!-- 轉盤 -->
+    <section class="mode-sec show" id="sec-wheel">
+      <div class="wheel-wrap">
+        <div class="pointer"></div>
+        <canvas id="wheel" width="680" height="680"></canvas>
+        <div class="hub">🎡</div>
+      </div>
+      <div class="opts" id="durOpts" style="justify-content:center">
+        <button class="opt on" data-d="1000">⚡ 快版 1 秒</button>
+        <button class="opt" data-d="4000">🥁 儀式感 4 秒</button>
+      </div>
+      <div class="actions" style="justify-content:center">
+        <button class="btn btn-main" id="spinBtn">🎯 開抽！</button>
+      </div>
+      <p class="stat" id="wheelStat" style="text-align:center"></p>
+    </section>
+
+    <!-- 抽籤 -->
+    <section class="mode-sec" id="sec-draw">
+      <div class="actions">
+        <span class="inline-lab">一次抽出</span>
+        <input type="number" class="num-input" id="drawN" min="1" max="10" value="1">
+        <span class="inline-lab">位</span>
+        <button class="btn btn-main" id="drawBtn">🎫 抽籤！</button>
+      </div>
+      <p class="stat" id="drawStat"></p>
+    </section>
+
+    <!-- 分組 -->
+    <section class="mode-sec" id="sec-group">
+      <div class="opts" id="gmOpts">
+        <button class="opt on" data-gm="size">照「每組幾人」分</button>
+        <button class="opt" data-gm="count">照「分成幾組」分</button>
+      </div>
+      <div class="actions">
+        <span class="inline-lab" id="gmLab">每組</span>
+        <input type="number" class="num-input" id="groupN" min="1" value="3">
+        <span class="inline-lab" id="gmLab2">人</span>
+        <button class="btn btn-main" id="groupBtn">🔀 洗牌分組！</button>
+        <button class="btn btn-sub" id="copyGroupBtn" style="display:none">📋 複製分組結果</button>
+      </div>
+      <p class="stat" id="groupStat"></p>
+      <div class="group-grid" id="groupGrid"></div>
+    </section>
+
+    <div class="winner-box" id="winnerBox">
+      <p class="label" id="winnerLabel">🎉 恭喜中獎</p>
+      <p class="who" id="winnerWho"></p>
+    </div>
+  </div>
+
+  <div class="panel" id="wonPanel" style="display:none">
+    <h2>🏆 已中獎區（開著「排除已中獎」時，中過的先在這裡休息）</h2>
+    <div class="chips" id="wonChips"></div>
+    <div class="actions">
+      <button class="btn btn-sub" id="restoreBtn">♻️ 全部放回名單</button>
+    </div>
+  </div>
+
+  <div class="panel" id="histPanel" style="display:none">
+    <h2>📜 本次中獎歷史（關掉頁面就歸零，不留案底）</h2>
+    <ul class="hist" id="histList"></ul>
+  </div>
+
+  <div class="tip">💡 <b>怎麼用最順？</b>上課前把名單貼一次就好，之後每次打開名單都還在。想連抽好幾輪不重複，就打開「排除已中獎」；抽完想重來，按「全部放回名單」即可。名單全程只存在你自己的瀏覽器裡，不會上傳到任何地方。</div>
+
+  <div class="actions" style="justify-content:center;margin-top:1.2rem">
+    <a class="btn btn-sub" href="tool-lottery.html" download="課堂抽獎神器.html">📦 打包帶走這個工具</a>
+  </div>
+</main>
+
+<footer>🍀 <b>Learn AI with Tarshar</b>・TARSHAR 工具集｜更多小工具 → <a href="tools.html">打開工具箱</a></footer>
+
+<script>
+const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+
+/* ── 狀態 ── */
+const EMPTY_MSG = '名單還空著喔，先把同學們請進來 🙂';
+const ALLWON_MSG = '大家都中過獎啦！按「♻️ 全部放回名單」再開新的一輪 🙂';
+let won = [];        // 已中獎（本次 session）
+let history = [];    // 中獎歷史（本次 session）
+let dur = 1000;      // 轉盤動畫時長
+let gm = 'size';     // 分組方式：size=每組幾人 / count=分成幾組
+let rot = 0, spinning = false;
+const COLORS = ['#0e91ad','#e8752a','#2e7d4f','#7c5cd6','#d6567c','#e0a63c','#3c7fd6','#5aa88a'];
+
+/* ── 名單 ── */
+function parseNames(){
+  return $('#names').value.split(/[\n,，、]/).map(s => s.trim()).filter(Boolean);
+}
+function avail(){
+  const names = parseNames();
+  if (!$('#exclude').checked) return names;
+  const rest = [...names];
+  for (const w of won){
+    const i = rest.indexOf(w);
+    if (i > -1) rest.splice(i, 1);
+  }
+  return rest;
+}
+function refreshNames(){
+  localStorage.setItem('tt_lottery_names', $('#names').value);
+  const n = parseNames().length;
+  $('#nameStat').textContent = n ? `名單裡有 ${n} 位同學，準備開抽 🎉` : EMPTY_MSG;
+  drawWheel();
+}
+$('#names').addEventListener('input', refreshNames);
+$('#sampleBtn').addEventListener('click', () => {
+  $('#names').value = ['小明','小美','阿寶','靜香','大雄','胖虎','小夫','花輪','丸尾','小玉','美環','藤木'].join('\n');
+  refreshNames();
+});
+
+/* ── 模式切換 ── */
+$('#modeTabs').addEventListener('click', e => {
+  const b = e.target.closest('.opt'); if (!b) return;
+  $$('#modeTabs .opt').forEach(x => x.classList.toggle('on', x === b));
+  $$('.mode-sec').forEach(s => s.classList.remove('show'));
+  $('#sec-' + b.dataset.mode).classList.add('show');
+  $('#winnerBox').classList.remove('show');
+  if (b.dataset.mode === 'wheel') drawWheel();
+});
+
+/* ── 轉盤 ── */
+const cv = $('#wheel'), ctx = cv.getContext('2d');
+function drawWheel(){
+  const list = avail();
+  const W = cv.width, R = W / 2;
+  ctx.clearRect(0, 0, W, W);
+  ctx.save();
+  ctx.translate(R, R);
+  ctx.rotate(rot);
+  if (!list.length){
+    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--border').trim() || '#e6eaef';
+    ctx.beginPath(); ctx.arc(0, 0, R - 6, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+    return;
+  }
+  const seg = Math.PI * 2 / list.length;
+  const fontPx = list.length > 16 ? 26 : (list.length > 8 ? 32 : 40);
+  list.forEach((name, i) => {
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.arc(0, 0, R - 6, i * seg, (i + 1) * seg);
+    ctx.closePath();
+    ctx.fillStyle = COLORS[i % COLORS.length];
+    if (list.length % COLORS.length === 1 && i === list.length - 1) ctx.fillStyle = COLORS[1];
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,.85)';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+    // 名字
+    ctx.save();
+    ctx.rotate(i * seg + seg / 2);
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = '#fff';
+    ctx.font = `800 ${fontPx}px 'Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif`;
+    let label = name.length > 5 ? name.slice(0, 4) + '…' : name;
+    if (list.length === 1) label = name.length > 8 ? name.slice(0, 7) + '…' : name;
+    ctx.fillText(label, R - 26, 0);
+    ctx.restore();
+  });
+  ctx.restore();
+}
+$('#durOpts').addEventListener('click', e => {
+  const b = e.target.closest('.opt'); if (!b) return;
+  dur = +b.dataset.d;
+  $$('#durOpts .opt').forEach(x => x.classList.toggle('on', x === b));
+});
+$('#spinBtn').addEventListener('click', () => {
+  if (spinning) return;
+  const list = avail();
+  if (!parseNames().length){ $('#wheelStat').textContent = EMPTY_MSG; return; }
+  if (!list.length){ $('#wheelStat').textContent = ALLWON_MSG; return; }
+  spinning = true;
+  $('#spinBtn').disabled = true;
+  $('#winnerBox').classList.remove('show');
+  $('#wheelStat').textContent = '命運轉動中⋯⋯🥁';
+  const idx = Math.floor(Math.random() * list.length);
+  const winner = list[idx];
+  const seg = Math.PI * 2 / list.length;
+  // 讓中獎格中心（加一點隨機偏移）停在頂端指針（-90°）
+  const jitter = (Math.random() - .5) * seg * .6;
+  const target = -Math.PI / 2 - (idx * seg + seg / 2) - jitter;
+  const spins = dur >= 4000 ? 6 : 3;
+  const delta = spins * Math.PI * 2 + ((target - rot) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2);
+  const from = rot, t0 = performance.now();
+  (function frame(now){
+    const p = Math.min((now - t0) / dur, 1);
+    const ease = 1 - Math.pow(1 - p, 3); // ease-out cubic
+    rot = from + delta * ease;
+    drawWheel();
+    if (p < 1){ requestAnimationFrame(frame); }
+    else {
+      rot = ((from + delta) % (Math.PI * 2));
+      drawWheel();
+      spinning = false;
+      $('#spinBtn').disabled = false;
+      $('#wheelStat').textContent = '';
+      announce([winner], '🎡 轉盤');
+    }
+  })(t0);
+});
+
+/* ── 抽籤 ── */
+$('#drawBtn').addEventListener('click', () => {
+  if (!parseNames().length){ $('#drawStat').textContent = EMPTY_MSG; return; }
+  const list = avail();
+  if (!list.length){ $('#drawStat').textContent = ALLWON_MSG; return; }
+  let n = Math.min(10, Math.max(1, Math.floor(+$('#drawN').value || 1)));
+  $('#drawN').value = n;
+  let note = '';
+  if (n > list.length){
+    note = `還沒中獎的只剩 ${list.length} 位，就通通抽出來囉 🙂`;
+    n = list.length;
+  }
+  const picked = shuffle([...list]).slice(0, n);
+  $('#drawStat').textContent = note;
+  announce(picked, '🎫 抽籤');
+});
+
+/* ── 分組 ── */
+let lastGroups = null;
+$('#gmOpts').addEventListener('click', e => {
+  const b = e.target.closest('.opt'); if (!b) return;
+  gm = b.dataset.gm;
+  $$('#gmOpts .opt').forEach(x => x.classList.toggle('on', x === b));
+  $('#gmLab').textContent = gm === 'size' ? '每組' : '分成';
+  $('#gmLab2').textContent = gm === 'size' ? '人' : '組';
+});
+$('#groupBtn').addEventListener('click', () => {
+  const names = parseNames();
+  if (!names.length){ $('#groupStat').textContent = EMPTY_MSG; renderGroups(null); return; }
+  let n = Math.max(1, Math.floor(+$('#groupN').value || 1));
+  const gCount = gm === 'size'
+    ? Math.max(1, Math.ceil(names.length / n))
+    : Math.min(Math.max(1, n), names.length);
+  const pool = shuffle([...names]);
+  const groups = Array.from({ length: gCount }, () => []);
+  pool.forEach((name, i) => groups[i % gCount].push(name));
+  lastGroups = groups;
+  renderGroups(groups);
+  $('#groupStat').textContent = `${names.length} 位同學洗好牌，分成 ${gCount} 組完成 ✅`;
+});
+function renderGroups(groups){
+  const grid = $('#groupGrid');
+  grid.innerHTML = '';
+  $('#copyGroupBtn').style.display = groups ? '' : 'none';
+  if (!groups) return;
+  groups.forEach((g, i) => {
+    const card = document.createElement('div');
+    card.className = 'gcard';
+    const h = document.createElement('h3');
+    h.textContent = `第 ${i + 1} 組（${g.length} 人）`;
+    const p = document.createElement('p');
+    p.textContent = g.join('、');
+    card.append(h, p);
+    grid.append(card);
+  });
+}
+$('#copyGroupBtn').addEventListener('click', async () => {
+  if (!lastGroups) return;
+  const text = lastGroups.map((g, i) => `第 ${i + 1} 組（${g.length} 人）：${g.join('、')}`).join('\n');
+  try { await navigator.clipboard.writeText(text); }
+  catch {
+    const ta = document.createElement('textarea');
+    ta.value = text; document.body.append(ta); ta.select();
+    document.execCommand('copy'); ta.remove();
+  }
+  const b = $('#copyGroupBtn'); b.textContent = '✅ 複製好了，去公佈吧！';
+  setTimeout(() => b.textContent = '📋 複製分組結果', 1800);
+});
+
+/* ── 中獎公告＋排除＋歷史 ── */
+function announce(winners, modeLabel){
+  $('#winnerLabel').textContent = `🎉 恭喜中獎（${modeLabel}）`;
+  $('#winnerWho').textContent = winners.join('、');
+  const box = $('#winnerBox');
+  box.classList.remove('show');
+  void box.offsetWidth; // 重播 pop 動畫
+  box.classList.add('show');
+  confetti();
+  history.unshift({ t: new Date(), mode: modeLabel, names: winners });
+  renderHistory();
+  if ($('#exclude').checked){
+    won.push(...winners);
+    renderWon();
+    drawWheel();
+  }
+}
+function renderWon(){
+  $('#wonPanel').style.display = won.length ? '' : 'none';
+  const box = $('#wonChips');
+  box.innerHTML = '';
+  won.forEach(name => {
+    const c = document.createElement('span');
+    c.className = 'chip';
+    c.textContent = '🏅 ' + name;
+    box.append(c);
+  });
+}
+$('#restoreBtn').addEventListener('click', () => {
+  won = [];
+  renderWon();
+  drawWheel();
+  $('#wheelStat').textContent = '';
+  $('#drawStat').textContent = '';
+});
+$('#exclude').addEventListener('change', () => {
+  localStorage.setItem('tt_lottery_exclude', $('#exclude').checked ? '1' : '0');
+  drawWheel();
+});
+function renderHistory(){
+  $('#histPanel').style.display = history.length ? '' : 'none';
+  const ul = $('#histList');
+  ul.innerHTML = '';
+  history.slice(0, 30).forEach(h => {
+    const li = document.createElement('li');
+    const hh = String(h.t.getHours()).padStart(2, '0');
+    const mm = String(h.t.getMinutes()).padStart(2, '0');
+    const b = document.createElement('b');
+    b.textContent = h.names.join('、');
+    li.append(`${hh}:${mm}　${h.mode}　`, b);
+    ul.append(li);
+  });
+}
+
+/* ── 撒花 ── */
+function confetti(){
+  const emojis = ['🎉','✨','🎊'];
+  for (let i = 0; i < 70; i++){
+    const bit = document.createElement('span');
+    bit.className = 'confetti-bit';
+    if (Math.random() < .25){
+      bit.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      bit.style.fontSize = (12 + Math.random() * 14) + 'px';
+    } else {
+      bit.style.width = bit.style.height = (6 + Math.random() * 7) + 'px';
+      bit.style.background = COLORS[Math.floor(Math.random() * COLORS.length)];
+      bit.style.borderRadius = Math.random() < .5 ? '50%' : '2px';
+      bit.style.display = 'inline-block';
+    }
+    bit.style.left = Math.random() * 100 + 'vw';
+    document.body.append(bit);
+    const fall = 105 + Math.random() * 10;
+    const drift = (Math.random() - .5) * 30;
+    bit.animate(
+      [{ transform: 'translate(0,0) rotate(0deg)', opacity: 1 },
+       { transform: `translate(${drift}vw, ${fall}vh) rotate(${540 + Math.random() * 540}deg)`, opacity: .9 }],
+      { duration: 1400 + Math.random() * 1300, easing: 'cubic-bezier(.2,.6,.4,1)' }
+    ).onfinish = () => bit.remove();
+  }
+}
+
+/* ── 工具 ── */
+function shuffle(arr){
+  for (let i = arr.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+/* ── 深淺色 ── */
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme', t);
+  $('#themeBtn').textContent = t === 'dark' ? '☀️' : '🌙';
+  drawWheel();
+}
+const saved = localStorage.getItem('tools_theme');
+applyTheme(saved || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+$('#themeBtn').addEventListener('click', () => {
+  const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('tools_theme', next); applyTheme(next);
+});
+
+/* ── 開機：載回名單與設定 ── */
+$('#names').value = localStorage.getItem('tt_lottery_names') || '';
+$('#exclude').checked = localStorage.getItem('tt_lottery_exclude') === '1';
+refreshNames();
+</script>
+</body>
+</html>

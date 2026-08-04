@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI 留言分析器｜TARSHAR 工具集</title>
+<meta name="description" content="三百則留言不用一則一則看，AI 幫你先讀完。把 YouTube、FB、IG 的留言整坨貼進來，用你自己的 Gemini 金鑰做情緒統計、主題分類、還幫你挑出值得回的留言。金鑰只存你的瀏覽器。">
+<meta name="theme-color" content="#0e91ad">
+<style>
+:root{
+  --primary:#0e91ad; --primary-soft:#e3f4f8; --primary-deep:#0b6f85;
+  --accent:#e8752a; --accent-soft:#fdeee2;
+  --bg:#f7f9fb; --card:#ffffff; --border:#e6eaef;
+  --text:#1e2a38; --muted:#64748b;
+  --ok:#2e7d4f; --ok-soft:#e3f4ea;
+  --shadow:0 1px 3px rgba(15,23,42,.06);
+  --shadow-lift:0 10px 28px rgba(15,23,42,.12);
+  --radius:14px;
+}
+html[data-theme="dark"]{
+  --primary:#35b6d2; --primary-soft:#123742; --primary-deep:#7fd6e8;
+  --accent:#f08a45; --accent-soft:#3a2718;
+  --bg:#101418; --card:#1a2027; --border:#2a323c;
+  --text:#eef2f6; --muted:#9aa7b5;
+  --ok:#7fd6a4; --ok-soft:#14301f;
+  --shadow:0 1px 3px rgba(0,0,0,.4);
+  --shadow-lift:0 10px 28px rgba(0,0,0,.5);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',-apple-system,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.7;min-height:100dvh}
+a{color:var(--primary);text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+header{background:radial-gradient(ellipse 60% 120% at 85% -20%, var(--accent-soft) 0%, transparent 60%),
+  radial-gradient(ellipse 70% 130% at 10% -30%, var(--primary-soft) 0%, transparent 65%), var(--card);
+  border-bottom:1px solid var(--border);padding:2rem 1.2rem 1.6rem;text-align:center;position:relative}
+.theme-btn{position:absolute;top:1rem;right:1rem;width:40px;height:40px;border-radius:50%;
+  border:1px solid var(--border);background:var(--card);font-size:1.1rem;box-shadow:var(--shadow);
+  display:flex;align-items:center;justify-content:center}
+h1{font-size:clamp(1.45rem,4.5vw,2rem);font-weight:900;letter-spacing:.03em}
+.hero-sub{max-width:30em;margin:.5rem auto 0;color:var(--muted);font-size:clamp(.9rem,2.6vw,.98rem)}
+.badges{display:flex;flex-wrap:wrap;justify-content:center;gap:.45rem;margin-top:.8rem}
+.badges span{font-size:.76rem;font-weight:700;border:1px solid var(--border);background:var(--card);
+  border-radius:999px;padding:.2rem .7rem;color:var(--muted)}
+.badges .free{color:var(--ok);background:var(--ok-soft);border-color:transparent}
+main{max-width:860px;margin:0 auto;padding:1.2rem 1.2rem 2.5rem}
+.panel{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:1.1rem;margin-top:1rem}
+.panel h2{font-size:.95rem;font-weight:800;margin-bottom:.5rem}
+textarea{width:100%;min-height:170px;border:1.5px solid var(--border);border-radius:10px;
+  background:var(--bg);color:var(--text);font:inherit;font-size:.95rem;padding:.8rem;resize:vertical;outline:none}
+textarea:focus{border-color:var(--primary)}
+.actions{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.8rem}
+.btn{display:inline-flex;align-items:center;gap:.4rem;font-size:.95rem;font-weight:800;
+  border-radius:999px;padding:.6rem 1.4rem;box-shadow:var(--shadow);transition:.15s}
+.btn:hover{transform:translateY(-2px)}
+.btn-main{background:var(--primary);color:#fff}
+.btn-sub{background:var(--card);border:1.5px solid var(--border);color:var(--text)}
+.btn:disabled{opacity:.55;cursor:wait;transform:none}
+.stat{font-size:.8rem;color:var(--muted);margin-top:.5rem}
+.tip{background:var(--primary-soft);border-radius:10px;padding:.7rem .9rem;font-size:.85rem;
+  color:var(--text);margin-top:1rem}
+.tip b{color:var(--primary-deep)}
+footer{border-top:1px solid var(--border);background:var(--card);text-align:center;
+  padding:1.4rem 1.2rem 5.5rem;color:var(--muted);font-size:.82rem}
+.home-fab{position:fixed;left:14px;bottom:14px;z-index:50;display:inline-flex;align-items:center;
+  gap:.35rem;font-size:.85rem;font-weight:800;color:var(--text);background:var(--card);
+  border:1.5px solid var(--border);border-radius:999px;padding:.5rem 1rem;box-shadow:var(--shadow-lift)}
+@media (max-width:520px){header{padding:1.6rem 1rem 1.3rem}}
+
+/* ——— 本工具專屬樣式 ——— */
+.guide-head{display:flex;align-items:center;justify-content:space-between;gap:.6rem;width:100%;
+  text-align:left;font-size:.95rem;font-weight:800;color:var(--text)}
+.guide-head .chev{font-size:.85rem;color:var(--muted);transition:.2s;flex:none}
+.guide.closed .chev{transform:rotate(-90deg)}
+.guide-body{margin-top:.7rem}
+.guide.closed .guide-body{display:none}
+.steps{list-style:none;display:flex;flex-direction:column;gap:.55rem}
+.steps li{display:flex;gap:.6rem;align-items:flex-start;font-size:.9rem}
+.steps .no{flex:none;width:1.6rem;height:1.6rem;border-radius:50%;background:var(--primary-soft);
+  color:var(--primary-deep);font-weight:900;font-size:.8rem;display:flex;align-items:center;justify-content:center;margin-top:.15rem}
+.key-row{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center}
+.key-row input{flex:1 1 220px;border:1.5px solid var(--border);border-radius:10px;background:var(--bg);
+  color:var(--text);font:inherit;font-size:.95rem;padding:.6rem .8rem;outline:none;min-width:0}
+.key-row input:focus{border-color:var(--primary)}
+.key-msg{font-size:.85rem;font-weight:700;margin-top:.5rem}
+.key-msg.ok{color:var(--ok)}
+.key-msg.bad{color:var(--accent)}
+.loading{display:none;align-items:center;gap:.6rem;font-size:.9rem;color:var(--muted);margin-top:.8rem}
+.loading.show{display:flex}
+.spin{width:18px;height:18px;border:3px solid var(--border);border-top-color:var(--primary);
+  border-radius:50%;animation:sp 1s linear infinite;flex:none}
+@keyframes sp{to{transform:rotate(360deg)}}
+#result{display:none}
+#result.show{display:block}
+.sumline{font-size:1rem;font-weight:800;background:var(--accent-soft);border-radius:10px;
+  padding:.8rem 1rem;color:var(--text)}
+.moodbar{display:flex;height:26px;border-radius:999px;overflow:hidden;margin-top:.6rem;border:1px solid var(--border)}
+.moodbar div{min-width:2px}
+.m-pos{background:#3fa26c}.m-neu{background:#9aa7b5}.m-neg{background:#e0664f}
+.moodlegend{display:flex;flex-wrap:wrap;gap:.4rem 1rem;margin-top:.5rem;font-size:.83rem;color:var(--muted);font-weight:700}
+.moodlegend i{display:inline-block;width:.7em;height:.7em;border-radius:3px;margin-right:.3em}
+.topic{border:1px solid var(--border);border-radius:10px;padding:.7rem .9rem;margin-top:.6rem;background:var(--bg)}
+.topic h3{font-size:.92rem;font-weight:800}
+.topic h3 small{color:var(--muted);font-weight:700;margin-left:.4em}
+.quote{font-size:.85rem;color:var(--muted);border-left:3px solid var(--primary);
+  padding:.15rem 0 .15rem .7rem;margin-top:.45rem}
+.reply{border:1px solid var(--border);border-radius:10px;padding:.7rem .9rem;margin-top:.6rem;background:var(--bg)}
+.reply .orig{font-size:.88rem;font-weight:700}
+.reply .draft{font-size:.88rem;margin-top:.45rem;background:var(--primary-soft);border-radius:8px;padding:.5rem .7rem}
+.reply .draft b{color:var(--primary-deep)}
+</style>
+</head>
+<body>
+
+<a href="tools.html" class="home-fab" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+
+<header>
+  <button class="theme-btn" id="themeBtn" aria-label="切換深淺色">🌙</button>
+  <h1>🤖 AI 留言分析器</h1>
+  <p class="hero-sub">三百則留言不用一則一則看，AI 幫你先讀完。</p>
+  <div class="badges"><span style="color:#b3541e;background:#fdeadd;border-color:transparent">🔑 需自備金鑰</span><span>🔒 金鑰只存你的瀏覽器</span><span>📱 手機也好用</span></div>
+</header>
+
+<main>
+
+  <div class="panel guide" id="guide">
+    <button class="guide-head" id="guideBtn" aria-expanded="true">
+      <span>🔑 第一次用？金鑰申請教學（1 分鐘搞定）</span><span class="chev">▼</span>
+    </button>
+    <div class="guide-body">
+      <ol class="steps">
+        <li><span class="no">1</span><span>打開 <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a>（會另開分頁），用你的 Google 帳號登入。</span></li>
+        <li><span class="no">2</span><span>按藍色的「<b>Create API key</b>」按鈕，把跳出來的那串英數字複製起來。</span></li>
+        <li><span class="no">3</span><span>回到這裡，貼到下面的欄位，按「🔓 測試金鑰」就完成了！</span></li>
+      </ol>
+      <div class="tip">💛 <b>安心話：</b>金鑰像你家鑰匙，只存在你自己的瀏覽器裡（localStorage），Tarshar 拿不到也看不到。免費額度就夠課堂用，不會被收錢。</div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>1️⃣ 貼上你的 Gemini 金鑰</h2>
+    <div class="key-row">
+      <input type="password" id="keyInput" placeholder="把那串英數字貼在這裡（AIza 開頭）" autocomplete="off">
+      <button class="btn btn-sub" id="testBtn">🔓 測試金鑰</button>
+    </div>
+    <p class="key-msg" id="keyMsg"></p>
+  </div>
+
+  <div class="panel">
+    <h2>2️⃣ 把留言整坨貼進來（YouTube／FB／IG 都可以）</h2>
+    <textarea id="src" placeholder="到你的影片或貼文下面，把留言全選複製，整坨貼進來就好。
+一行一則、或亂七八糟一大坨都行，AI 自己會分。
+
+例如：
+老師講得好清楚！
+請問簡報會分享嗎
+這集資訊量好大，要重看三次
+..."></textarea>
+    <div class="actions">
+      <button class="btn btn-main" id="goBtn">🚀 開始分析</button>
+    </div>
+    <div class="loading" id="loading"><span class="spin"></span><span>AI 正在幫你讀留言，大概 10～30 秒，去喝口水 ☕</span></div>
+    <p class="stat" id="stat"></p>
+  </div>
+
+  <div class="panel" id="result">
+    <h2>3️⃣ 分析結果</h2>
+    <p class="sumline" id="sumline"></p>
+
+    <div style="margin-top:1rem">
+      <h2>🌡️ 情緒溫度計</h2>
+      <div class="moodbar" id="moodbar"></div>
+      <div class="moodlegend" id="moodlegend"></div>
+    </div>
+
+    <div style="margin-top:1.2rem">
+      <h2>🗂️ 大家都在聊什麼</h2>
+      <div id="topics"></div>
+    </div>
+
+    <div style="margin-top:1.2rem">
+      <h2>💬 這三則值得你親自回（附草稿）</h2>
+      <div id="replies"></div>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-sub" id="csvBtn">⬇️ 匯出 CSV</button>
+      <button class="btn btn-sub" id="copyBtn">📋 複製摘要</button>
+    </div>
+  </div>
+
+  <div class="tip">💡 <b>怎麼收集留言？</b>在 YouTube 影片下面把留言區捲到底（讓它全部載入），滑鼠從第一則拖到最後一則全選複製；FB、IG 也一樣，展開全部留言再複製。夾到名字、時間、「回覆」這些字也沒關係，AI 看得懂。留言只在分析那一刻直接從你的瀏覽器送到 Google Gemini，不會經過 Tarshar 或任何其他地方。</div>
+
+  <div class="actions" style="justify-content:center;margin-top:1.2rem">
+    <a class="btn btn-sub" href="tool-comments-ai.html" download="AI留言分析器.html">📦 打包帶走這個工具</a>
+  </div>
+</main>
+
+<footer>🍀 <b>Learn AI with Tarshar</b>・TARSHAR 工具集｜更多小工具 → <a href="tools.html">打開工具箱</a></footer>
+
+<script>
+const $ = s => document.querySelector(s);
+const API = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=';
+let lastData = null;
+
+/* ——— 教學面板收合（記住狀態） ——— */
+function setGuide(closed){
+  $('#guide').classList.toggle('closed', closed);
+  $('#guideBtn').setAttribute('aria-expanded', String(!closed));
+  localStorage.setItem('tt_comments_guide', closed ? 'closed' : 'open');
+}
+setGuide(localStorage.getItem('tt_comments_guide') === 'closed');
+$('#guideBtn').addEventListener('click', () =>
+  setGuide(!$('#guide').classList.contains('closed')));
+
+/* ——— 金鑰 ——— */
+$('#keyInput').value = localStorage.getItem('tt_gemini_key') || '';
+
+function keyMsg(text, ok){
+  const m = $('#keyMsg');
+  m.textContent = text;
+  m.className = 'key-msg ' + (ok ? 'ok' : 'bad');
+}
+
+async function callGemini(key, body){
+  const res = await fetch(API + encodeURIComponent(key), {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  if (!res.ok){
+    const err = new Error('api');
+    err.status = res.status;
+    throw err;
+  }
+  const data = await res.json();
+  const parts = data?.candidates?.[0]?.content?.parts;
+  const text = (parts || []).map(p => p.text || '').join('');
+  if (!text) throw new Error('empty');
+  return text;
+}
+
+async function testKey(){
+  const key = $('#keyInput').value.trim();
+  if (!key){ keyMsg('先把金鑰貼進來嘛 🙂 不知道去哪拿？看上面的教學。', false); return; }
+  const btn = $('#testBtn');
+  btn.disabled = true; btn.textContent = '⏳ 測試中…';
+  try {
+    await callGemini(key, { contents: [{ parts: [{ text: '回覆OK兩個字' }] }] });
+    localStorage.setItem('tt_gemini_key', key);
+    keyMsg('✅ 金鑰能用！已經幫你記在這台瀏覽器裡，下次不用再貼。', true);
+  } catch (e) {
+    if (e.message === 'api' && (e.status === 400 || e.status === 401 || e.status === 403)){
+      keyMsg('金鑰好像貼錯了，回上面教學第 2 步看看（前後不要有空格喔）。', false);
+    } else if (e.message === 'api' && e.status === 429){
+      keyMsg('金鑰是對的，但今天的免費額度先用完了，明天再來就會恢復 🙂', false);
+    } else {
+      keyMsg('連不上 Google 那邊，先檢查一下網路，再按一次試試。', false);
+    }
+  }
+  btn.disabled = false; btn.textContent = '🔓 測試金鑰';
+}
+$('#testBtn').addEventListener('click', testKey);
+
+/* ——— 分析 ——— */
+const PROMPT_HEAD = `你是社群小編的分析助手。下面是從 YouTube／FB／IG 複製下來的留言（可能夾雜使用者名稱、時間、按讚數、「回覆」等雜訊，請自行忽略雜訊、辨認出一則一則的留言）。
+請用台灣繁體中文分析，只輸出 JSON（不要多餘文字），格式如下：
+{
+ "total": 留言總則數(數字),
+ "sentiment": {"positive": 正面則數, "neutral": 中立則數, "negative": 負面則數},
+ "topics": [ {"name":"主題名稱","count":則數,"examples":["代表留言1","代表留言2"]} ]  // 3~6 類
+ ,"worth_reply": [ {"comment":"原留言","reason":"為什麼值得回","draft":"建議回覆草稿"} ]  // 恰好 3 則
+ ,"summary": "一句話總結整體留言風向"
+ ,"classified": [ {"text":"留言內容","topic":"所屬主題名稱","sentiment":"正面|中立|負面"} ]  // 每一則留言都要列
+}
+worth_reply 的 draft 請用這個口吻寫：親切、口語、短句、像朋友聊天、帶一點溫暖的幽默，署名感覺是講師本人（Tarshar）在回，但不用真的寫名字。
+以下是留言原文：
+`;
+
+function analysisBody(comments){
+  return {
+    contents: [{ parts: [{ text: PROMPT_HEAD + '\n' + comments }] }],
+    generationConfig: { responseMimeType: 'application/json', temperature: 0.3 }
+  };
+}
+
+function parseResult(text){
+  const d = JSON.parse(text);
+  if (!d || !d.sentiment || !Array.isArray(d.topics) || !Array.isArray(d.worth_reply) || !d.summary) throw new Error('shape');
+  return d;
+}
+
+async function analyze(){
+  const key = $('#keyInput').value.trim();
+  const src = $('#src').value.trim();
+  $('#stat').textContent = '';
+  if (!src){ $('#stat').textContent = '留言區還空空的，先把留言貼進來嘛 🙂'; return; }
+  if (!key){
+    $('#stat').textContent = '還沒有金鑰喔！先看最上面的教學拿一把，貼到 1️⃣ 那格測試一下。';
+    setGuide(false);
+    return;
+  }
+  const btn = $('#goBtn');
+  btn.disabled = true;
+  $('#loading').classList.add('show');
+  $('#result').classList.remove('show');
+  try {
+    let data = null;
+    for (let attempt = 1; attempt <= 2; attempt++){
+      try {
+        const text = await callGemini(key, analysisBody(src));
+        data = parseResult(text);
+        break;
+      } catch (e) {
+        if (e.message === 'api' || attempt === 2) throw e; // API 錯不重試；格式錯重試一次
+        $('#stat').textContent = 'AI 回的格式怪怪的，幫你重問一次…';
+      }
+    }
+    lastData = data;
+    render(data);
+    $('#stat').textContent = `讀完了！一共 ${data.total || '好多'} 則留言，結果在下面 👇`;
+  } catch (e) {
+    if (e.message === 'api' && e.status === 429){
+      $('#stat').textContent = '今天的免費額度先用完了（Google 每天會重新計算），明天再來分析就好 🙂';
+    } else if (e.message === 'api' && (e.status === 400 || e.status === 401 || e.status === 403)){
+      $('#stat').textContent = '金鑰好像失效了，回到 1️⃣ 重新測試一下金鑰（前後不要有空格喔）。';
+    } else if (e.message === 'api' || e instanceof TypeError){
+      $('#stat').textContent = '連不上 Google 那邊，可能是網路打瞌睡，檢查一下網路再按一次。';
+    } else {
+      $('#stat').textContent = 'AI 今天有點恍神，再按一次試試 🙂';
+    }
+  }
+  $('#loading').classList.remove('show');
+  btn.disabled = false;
+}
+$('#goBtn').addEventListener('click', analyze);
+
+/* ——— 呈現 ——— */
+function esc(s){
+  return String(s ?? '').replace(/[&<>"']/g,
+    c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function render(d){
+  $('#sumline').textContent = '📌 ' + d.summary;
+
+  const s = d.sentiment;
+  const pos = +s.positive || 0, neu = +s.neutral || 0, neg = +s.negative || 0;
+  const total = Math.max(pos + neu + neg, 1);
+  const pct = n => Math.round(n / total * 100);
+  $('#moodbar').innerHTML =
+    `<div class="m-pos" style="width:${pct(pos)}%"></div>` +
+    `<div class="m-neu" style="width:${pct(neu)}%"></div>` +
+    `<div class="m-neg" style="width:${pct(neg)}%"></div>`;
+  $('#moodlegend').innerHTML =
+    `<span><i class="m-pos"></i>正面 ${pos} 則（${pct(pos)}%）</span>` +
+    `<span><i class="m-neu"></i>中立 ${neu} 則（${pct(neu)}%）</span>` +
+    `<span><i class="m-neg"></i>負面 ${neg} 則（${pct(neg)}%）</span>`;
+
+  $('#topics').innerHTML = (d.topics || []).map(t =>
+    `<div class="topic"><h3>${esc(t.name)}<small>${esc(t.count)} 則</small></h3>` +
+    (t.examples || []).slice(0, 2).map(q => `<p class="quote">「${esc(q)}」</p>`).join('') +
+    `</div>`).join('');
+
+  $('#replies').innerHTML = (d.worth_reply || []).slice(0, 3).map(r =>
+    `<div class="reply"><p class="orig">💬「${esc(r.comment)}」</p>` +
+    `<p class="stat" style="margin-top:.3rem">為什麼值得回：${esc(r.reason)}</p>` +
+    `<p class="draft"><b>建議回覆：</b>${esc(r.draft)}</p></div>`).join('');
+
+  $('#result').classList.add('show');
+  $('#result').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* ——— 匯出 ——— */
+function csvCell(s){ return '"' + String(s ?? '').replace(/"/g, '""') + '"'; }
+
+$('#csvBtn').addEventListener('click', () => {
+  if (!lastData){ $('#stat').textContent = '要先分析過才有東西可以匯出喔 🙂'; return; }
+  const rows = [['分類', '情緒', '留言內容']];
+  const list = Array.isArray(lastData.classified) && lastData.classified.length
+    ? lastData.classified
+    : (lastData.topics || []).flatMap(t =>
+        (t.examples || []).map(q => ({ topic: t.name, sentiment: '', text: q })));
+  list.forEach(c => rows.push([c.topic, c.sentiment, c.text]));
+  const csv = '﻿' + rows.map(r => r.map(csvCell).join(',')).join('\r\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+  a.download = '留言分析.csv';
+  a.click();
+  URL.revokeObjectURL(a.href);
+});
+
+$('#copyBtn').addEventListener('click', async () => {
+  if (!lastData){ $('#stat').textContent = '要先分析過才有摘要可以複製喔 🙂'; return; }
+  const d = lastData, s = d.sentiment;
+  const lines = [
+    '🤖 AI 留言分析摘要',
+    `📌 一句話總結：${d.summary}`,
+    `🌡️ 情緒：正面 ${s.positive}／中立 ${s.neutral}／負面 ${s.negative}`,
+    '🗂️ 主題：',
+    ...(d.topics || []).map(t => `・${t.name}（${t.count} 則）`),
+    '💬 值得回覆：',
+    ...(d.worth_reply || []).map((r, i) => `${i + 1}.「${r.comment}」→ 建議回覆：${r.draft}`)
+  ];
+  const text = lines.join('\n');
+  try { await navigator.clipboard.writeText(text); }
+  catch {
+    const ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy'); ta.remove();
+  }
+  const b = $('#copyBtn'); b.textContent = '✅ 複製好了！';
+  setTimeout(() => b.textContent = '📋 複製摘要', 1800);
+});
+
+/* ——— 深淺色 ——— */
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme', t);
+  $('#themeBtn').textContent = t === 'dark' ? '☀️' : '🌙';
+}
+const saved = localStorage.getItem('tools_theme');
+applyTheme(saved || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+$('#themeBtn').addEventListener('click', () => {
+  const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('tools_theme', next); applyTheme(next);
+});
+</script>
+</body>
+</html>

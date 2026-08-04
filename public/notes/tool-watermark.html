@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI 圖片浮水印修復器｜TARSHAR 工具集</title>
+<meta name="description" content="Gemini、ChatGPT 生成圖角落的小星星浮水印看了礙眼？丟進來、選角落、按一下就修好。免費、免註冊、圖片不離開你的瀏覽器。">
+<meta name="theme-color" content="#0e91ad">
+<style>
+:root{
+  --primary:#0e91ad; --primary-soft:#e3f4f8; --primary-deep:#0b6f85;
+  --accent:#e8752a; --accent-soft:#fdeee2;
+  --bg:#f7f9fb; --card:#ffffff; --border:#e6eaef;
+  --text:#1e2a38; --muted:#64748b;
+  --ok:#2e7d4f; --ok-soft:#e3f4ea;
+  --shadow:0 1px 3px rgba(15,23,42,.06);
+  --shadow-lift:0 10px 28px rgba(15,23,42,.12);
+  --radius:14px;
+}
+html[data-theme="dark"]{
+  --primary:#35b6d2; --primary-soft:#123742; --primary-deep:#7fd6e8;
+  --accent:#f08a45; --accent-soft:#3a2718;
+  --bg:#101418; --card:#1a2027; --border:#2a323c;
+  --text:#eef2f6; --muted:#9aa7b5;
+  --ok:#7fd6a4; --ok-soft:#14301f;
+  --shadow:0 1px 3px rgba(0,0,0,.4);
+  --shadow-lift:0 10px 28px rgba(0,0,0,.5);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',-apple-system,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.7;min-height:100dvh}
+a{color:var(--primary);text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+header{background:radial-gradient(ellipse 60% 120% at 85% -20%, var(--accent-soft) 0%, transparent 60%),
+  radial-gradient(ellipse 70% 130% at 10% -30%, var(--primary-soft) 0%, transparent 65%), var(--card);
+  border-bottom:1px solid var(--border);padding:2rem 1.2rem 1.6rem;text-align:center;position:relative}
+.theme-btn{position:absolute;top:1rem;right:1rem;width:40px;height:40px;border-radius:50%;
+  border:1px solid var(--border);background:var(--card);font-size:1.1rem;box-shadow:var(--shadow);
+  display:flex;align-items:center;justify-content:center}
+h1{font-size:clamp(1.45rem,4.5vw,2rem);font-weight:900;letter-spacing:.03em}
+.hero-sub{max-width:30em;margin:.5rem auto 0;color:var(--muted);font-size:clamp(.9rem,2.6vw,.98rem)}
+.badges{display:flex;flex-wrap:wrap;justify-content:center;gap:.45rem;margin-top:.8rem}
+.badges span{font-size:.76rem;font-weight:700;border:1px solid var(--border);background:var(--card);
+  border-radius:999px;padding:.2rem .7rem;color:var(--muted)}
+.badges .free{color:var(--ok);background:var(--ok-soft);border-color:transparent}
+main{max-width:860px;margin:0 auto;padding:1.2rem 1.2rem 2.5rem}
+.panel{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:1.1rem;margin-top:1rem}
+.panel h2{font-size:.95rem;font-weight:800;margin-bottom:.5rem}
+.opts{display:flex;flex-wrap:wrap;gap:.5rem;margin:.8rem 0}
+.opt{font-size:.85rem;font-weight:700;color:var(--muted);border:1.5px solid var(--border);
+  background:var(--card);border-radius:999px;padding:.32rem .9rem;transition:.15s}
+.opt.on{background:var(--primary);border-color:var(--primary);color:#fff}
+.actions{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.8rem}
+.btn{display:inline-flex;align-items:center;gap:.4rem;font-size:.95rem;font-weight:800;
+  border-radius:999px;padding:.6rem 1.4rem;box-shadow:var(--shadow);transition:.15s}
+.btn:hover{transform:translateY(-2px)}
+.btn-main{background:var(--primary);color:#fff}
+.btn-sub{background:var(--card);border:1.5px solid var(--border);color:var(--text)}
+.stat{font-size:.8rem;color:var(--muted);margin-top:.5rem}
+.tip{background:var(--primary-soft);border-radius:10px;padding:.7rem .9rem;font-size:.85rem;
+  color:var(--text);margin-top:1rem}
+.tip b{color:var(--primary-deep)}
+footer{border-top:1px solid var(--border);background:var(--card);text-align:center;
+  padding:1.4rem 1.2rem 5.5rem;color:var(--muted);font-size:.82rem}
+.home-fab{position:fixed;left:14px;bottom:14px;z-index:50;display:inline-flex;align-items:center;
+  gap:.35rem;font-size:.85rem;font-weight:800;color:var(--text);background:var(--card);
+  border:1.5px solid var(--border);border-radius:999px;padding:.5rem 1rem;box-shadow:var(--shadow-lift)}
+@media (max-width:520px){header{padding:1.6rem 1rem 1.3rem}}
+
+/* ── 本工具專屬 ── */
+.drop{border:2px dashed var(--border);border-radius:12px;background:var(--bg);
+  text-align:center;padding:1.6rem 1rem;cursor:pointer;transition:.15s;font-size:.9rem;color:var(--muted)}
+.drop.over{border-color:var(--primary);background:var(--primary-soft);color:var(--primary-deep)}
+.drop .big{font-size:1.8rem;display:block;margin-bottom:.3rem}
+.thumbs{display:flex;gap:.55rem;flex-wrap:wrap;margin-top:.8rem}
+.thumb{position:relative;width:76px;height:76px;border-radius:10px;overflow:hidden;
+  border:2.5px solid var(--border);cursor:pointer;background:var(--bg);flex:0 0 auto}
+.thumb.on{border-color:var(--primary)}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .rm{position:absolute;top:2px;right:2px;width:20px;height:20px;border-radius:50%;
+  background:rgba(0,0,0,.55);color:#fff;font-size:.72rem;line-height:20px;text-align:center}
+.lbl{font-size:.82rem;font-weight:800;color:var(--muted);margin:.9rem 0 .2rem}
+.sliders{display:grid;gap:.3rem;margin-top:.4rem}
+.srow{display:flex;align-items:center;gap:.6rem;font-size:.82rem;color:var(--muted)}
+.srow input[type=range]{flex:1;accent-color:var(--primary);min-width:0}
+.srow .val{font-weight:800;color:var(--text);min-width:3.2em;text-align:right}
+.stage{margin-top:.6rem;border:1px solid var(--border);border-radius:10px;background:var(--bg);
+  display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;
+  min-height:120px;touch-action:manipulation}
+.stage canvas{max-width:100%;height:auto;display:block;cursor:pointer}
+.stage .flag{position:absolute;top:8px;left:8px;font-size:.72rem;font-weight:800;color:#fff;
+  background:rgba(0,0,0,.55);border-radius:999px;padding:.1rem .6rem;pointer-events:none}
+.empty-note{color:var(--muted);font-size:.85rem;padding:1.2rem;text-align:center}
+</style>
+</head>
+<body>
+
+<a href="tools.html" class="home-fab" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+
+<header>
+  <button class="theme-btn" id="themeBtn" aria-label="切換深淺色">🌙</button>
+  <h1>✨ AI 圖片浮水印修復器</h1>
+  <p class="hero-sub">圖不出門，角落那朵小星星自己消失。</p>
+  <div class="badges"><span class="free">✅ 免費即用</span><span>🔒 圖片不離開瀏覽器</span><span>📱 手機也好用</span></div>
+</header>
+
+<main>
+  <div class="panel">
+    <h2>1️⃣ 把圖片丟進來（可以一次丟很多張）</h2>
+    <div class="drop" id="drop">
+      <span class="big">🖼️</span>
+      點這裡選圖片，或直接拖進來、Ctrl+V 貼上都行<br>吃 PNG／JPG／WebP
+    </div>
+    <input type="file" id="file" accept="image/png,image/jpeg,image/webp" multiple hidden>
+    <div class="thumbs" id="thumbs"></div>
+    <p class="stat" id="loadStat"></p>
+  </div>
+
+  <div class="panel">
+    <h2>2️⃣ 告訴我浮水印躲在哪、想怎麼修</h2>
+    <p class="lbl">修復方式</p>
+    <div class="opts" id="modeOpts">
+      <button class="opt on" data-v="patch">🪄 智慧修補（用旁邊的背景把它蓋掉）</button>
+      <button class="opt" data-v="crop">✂️ 裁切避開（直接把那條邊剪掉）</button>
+    </div>
+    <p class="lbl">浮水印在哪個角落？（Gemini 通常在左下或右下）</p>
+    <div class="opts" id="cornerOpts">
+      <button class="opt" data-v="tl">↖ 左上</button>
+      <button class="opt" data-v="tr">↗ 右上</button>
+      <button class="opt" data-v="bl">↙ 左下</button>
+      <button class="opt on" data-v="br">↘ 右下</button>
+    </div>
+    <p class="lbl">處理範圍（蓋不乾淨就拉大一點）</p>
+    <div class="sliders">
+      <div class="srow">寬度<input type="range" id="rw" min="10" max="45" value="22"><span class="val" id="rwVal">22%</span></div>
+      <div class="srow">高度<input type="range" id="rh" min="4" max="20" value="8"><span class="val" id="rhVal">8%</span></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>3️⃣ 看看修得怎麼樣（<b>用手指或滑鼠「點住」畫面可以看原圖</b>）</h2>
+    <div class="stage" id="stage">
+      <span class="flag" id="flag" hidden>原圖（虛線框＝處理範圍）</span>
+      <canvas id="view" hidden></canvas>
+      <p class="empty-note" id="emptyNote">還沒有圖片喔，先去上面丟一張進來 🙂</p>
+    </div>
+    <p class="stat" id="sizeStat"></p>
+    <div class="actions">
+      <button class="btn btn-main" id="dlBtn">⬇️ 下載這張乾淨版</button>
+      <button class="btn btn-sub" id="dlAllBtn" hidden>📦 全部下載</button>
+    </div>
+  </div>
+
+  <div class="tip">💡 <b>先說好：</b>圖片全程只在你的瀏覽器裡處理，<b>不會上傳到任何地方</b>，網路斷了照樣能用。另外，這工具是幫你收拾「自己生成的圖」角落那個小標記；別人的作品請尊重版權，拿去亂修的話，Clover 會傷心的 🥺</div>
+
+  <div class="actions" style="justify-content:center;margin-top:1.2rem">
+    <a class="btn btn-sub" href="tool-watermark.html" download="AI圖片浮水印修復器.html">📦 打包帶走這個工具</a>
+  </div>
+</main>
+
+<footer>🍀 <b>Learn AI with Tarshar</b>・TARSHAR 工具集｜更多小工具 → <a href="tools.html">打開工具箱</a></footer>
+
+<script>
+const $ = s => document.querySelector(s);
+const LS = k => 'tt_watermark_' + k;
+
+/* ── 設定狀態（記在 localStorage）── */
+const state = {
+  mode:   localStorage.getItem(LS('mode'))   || 'patch',
+  corner: localStorage.getItem(LS('corner')) || 'br',
+  w: +(localStorage.getItem(LS('w')) || 22),
+  h: +(localStorage.getItem(LS('h')) || 8)
+};
+function saveState(){
+  localStorage.setItem(LS('mode'), state.mode);
+  localStorage.setItem(LS('corner'), state.corner);
+  localStorage.setItem(LS('w'), state.w);
+  localStorage.setItem(LS('h'), state.h);
+}
+
+/* ── 圖片清單 ── */
+let items = [];      // {name, img(HTMLImageElement), url}
+let active = -1;
+let holding = false;
+
+function addFiles(fileList){
+  const files = [...fileList];
+  if (!files.length) return;
+  let bad = 0, pending = 0;
+  files.forEach(f => {
+    if (!/^image\/(png|jpeg|webp)$/.test(f.type)){ bad++; return; }
+    pending++;
+    const url = URL.createObjectURL(f);
+    const img = new Image();
+    img.onload = () => {
+      items.push({ name: f.name || '貼上的圖片.png', img, url });
+      active = items.length - 1;
+      renderThumbs(); renderPreview();
+      if (--pending === 0) doneMsg(bad);
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url); bad++;
+      if (--pending === 0) doneMsg(bad);
+    };
+    img.src = url;
+  });
+  if (pending === 0) doneMsg(bad);
+}
+function doneMsg(bad){
+  const s = $('#loadStat');
+  if (bad && items.length) s.textContent = `收到 ${items.length} 張！另外有 ${bad} 個檔案不是圖片，我就先不吃了 🙈`;
+  else if (bad) s.textContent = '這個不是圖片喔 🙈 我只吃 PNG／JPG／WebP，麻煩換一個檔案再試一次。';
+  else s.textContent = `收到 ${items.length} 張，點下面縮圖可以換張看。`;
+  $('#dlAllBtn').hidden = items.length < 2;
+}
+
+function renderThumbs(){
+  const box = $('#thumbs');
+  box.innerHTML = '';
+  items.forEach((it, i) => {
+    const d = document.createElement('div');
+    d.className = 'thumb' + (i === active ? ' on' : '');
+    const im = document.createElement('img');
+    im.src = it.url; im.alt = it.name;
+    const x = document.createElement('button');
+    x.className = 'rm'; x.textContent = '✕'; x.setAttribute('aria-label','移除這張');
+    x.addEventListener('click', e => {
+      e.stopPropagation();
+      URL.revokeObjectURL(it.url);
+      items.splice(i, 1);
+      if (active >= items.length) active = items.length - 1;
+      renderThumbs(); renderPreview();
+      $('#dlAllBtn').hidden = items.length < 2;
+      $('#loadStat').textContent = items.length ? `剩 ${items.length} 張。` : '都清空了，再丟新的進來吧。';
+    });
+    d.appendChild(im); d.appendChild(x);
+    d.addEventListener('click', () => { active = i; renderThumbs(); renderPreview(); });
+    box.appendChild(d);
+  });
+}
+
+/* ── 區域計算 ── */
+function regionOf(W, H){
+  const rw = Math.max(1, Math.round(W * state.w / 100));
+  const rh = Math.max(1, Math.min(Math.round(H * state.h / 100), Math.floor(H / 2)));
+  return {
+    rx: state.corner.includes('l') ? 0 : W - rw,
+    ry: state.corner.includes('t') ? 0 : H - rh,
+    rw, rh, isTop: state.corner.includes('t')
+  };
+}
+
+/* ── 核心處理：回傳處理後的 canvas ── */
+function processItem(it){
+  const W = it.img.naturalWidth, H = it.img.naturalHeight;
+  const base = document.createElement('canvas');
+  base.width = W; base.height = H;
+  const bctx = base.getContext('2d');
+  bctx.drawImage(it.img, 0, 0);
+  const { rx, ry, rw, rh, isTop } = regionOf(W, H);
+
+  if (state.mode === 'crop'){
+    const out = document.createElement('canvas');
+    out.width = W; out.height = H - rh;
+    out.getContext('2d').drawImage(base, 0, isTop ? rh : 0, W, H - rh, 0, 0, W, H - rh);
+    return out;
+  }
+
+  /* 智慧修補：拿區域「內側」相鄰的一條背景，鏡像翻過來蓋住，再輕輕糊一下融合 */
+  const src = document.createElement('canvas');
+  src.width = W; src.height = H;
+  src.getContext('2d').drawImage(base, 0, 0);
+
+  const mirrorLine = isTop ? ry + rh : ry;            // 以這條水平線做鏡像
+  const bandY = isTop ? mirrorLine : mirrorLine - rh; // 被借來的乾淨背景帶
+  const ctx = bctx;
+  ctx.save();
+  ctx.beginPath(); ctx.rect(rx, ry, rw, rh); ctx.clip();
+  ctx.translate(0, 2 * mirrorLine);
+  ctx.scale(1, -1);
+  // 第一層：實心鏡像，保證整個區域被蓋滿
+  ctx.drawImage(src, rx, bandY, rw, rh, rx, bandY, rw, rh);
+  // 第二層：帶模糊的鏡像半透明疊上去，讓紋理柔和、接縫看不出來
+  ctx.filter = 'blur(3px)';
+  ctx.globalAlpha = 0.65;
+  ctx.drawImage(src, rx, bandY, rw, rh, rx, bandY, rw, rh);
+  ctx.restore();
+  return base;
+}
+
+/* ── 預覽 ── */
+function renderPreview(){
+  const view = $('#view'), note = $('#emptyNote'), stat = $('#sizeStat');
+  if (active < 0 || !items.length){
+    view.hidden = true; note.hidden = false; $('#flag').hidden = true;
+    stat.textContent = '';
+    return;
+  }
+  note.hidden = true; view.hidden = false;
+  const it = items[active];
+  const W = it.img.naturalWidth, H = it.img.naturalHeight;
+  const ctx = view.getContext('2d');
+
+  if (holding){
+    // 原圖＋虛線框標出處理範圍
+    view.width = W; view.height = H;
+    ctx.drawImage(it.img, 0, 0);
+    const { rx, ry, rw, rh } = regionOf(W, H);
+    ctx.save();
+    ctx.strokeStyle = '#ff4d6d';
+    ctx.lineWidth = Math.max(2, Math.round(W / 300));
+    ctx.setLineDash([10, 7]);
+    ctx.strokeRect(rx + 1, ry + 1, rw - 2, rh - 2);
+    ctx.restore();
+    $('#flag').hidden = false;
+    stat.textContent = `原圖 ${W}×${H}（放開手指回到修好的樣子）`;
+  } else {
+    const done = processItem(it);
+    view.width = done.width; view.height = done.height;
+    ctx.drawImage(done, 0, 0);
+    $('#flag').hidden = true;
+    stat.textContent = state.mode === 'crop'
+      ? `裁切後尺寸：${done.width}×${done.height}（原本 ${W}×${H}）`
+      : `修補完成，尺寸不變：${W}×${H}`;
+  }
+}
+
+/* ── 下載 ── */
+function cleanName(name){
+  return name.replace(/\.[^.]+$/, '') + '-乾淨版.png';
+}
+function downloadItem(it){
+  const c = processItem(it);
+  c.toBlob(blob => {
+    const u = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = u;
+    a.download = cleanName(it.name);
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(u), 4000);
+  }, 'image/png');
+}
+$('#dlBtn').addEventListener('click', () => {
+  if (active < 0){ $('#sizeStat').textContent = '還沒有圖片喔，先去上面丟一張進來 🙂'; return; }
+  downloadItem(items[active]);
+  $('#sizeStat').textContent = '下載囉！去下載資料夾找「' + cleanName(items[active].name) + '」。';
+});
+$('#dlAllBtn').addEventListener('click', () => {
+  items.forEach((it, i) => setTimeout(() => downloadItem(it), i * 400));
+  $('#sizeStat').textContent = `好，${items.length} 張排隊下載中，瀏覽器若跳出「允許下載多個檔案」記得按允許。`;
+});
+
+/* ── 輸入：點選／拖放／貼上 ── */
+const drop = $('#drop');
+drop.addEventListener('click', () => $('#file').click());
+$('#file').addEventListener('change', e => { addFiles(e.target.files); e.target.value = ''; });
+['dragenter','dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
+['dragleave','drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('over'); }));
+drop.addEventListener('drop', e => addFiles(e.dataTransfer.files));
+window.addEventListener('paste', e => {
+  if (e.clipboardData && e.clipboardData.files.length) addFiles(e.clipboardData.files);
+});
+
+/* ── 控制項 ── */
+function bindOpts(boxId, key){
+  $(boxId).addEventListener('click', e => {
+    const b = e.target.closest('.opt'); if (!b) return;
+    state[key] = b.dataset.v;
+    document.querySelectorAll(boxId + ' .opt').forEach(x => x.classList.toggle('on', x === b));
+    saveState(); renderPreview();
+  });
+}
+bindOpts('#modeOpts', 'mode');
+bindOpts('#cornerOpts', 'corner');
+[['rw','w'],['rh','h']].forEach(([id, key]) => {
+  $('#' + id).addEventListener('input', e => {
+    state[key] = +e.target.value;
+    $('#' + id + 'Val').textContent = state[key] + '%';
+    saveState(); renderPreview();
+  });
+});
+
+/* 還原上次的設定到畫面 */
+document.querySelectorAll('#modeOpts .opt').forEach(b => b.classList.toggle('on', b.dataset.v === state.mode));
+document.querySelectorAll('#cornerOpts .opt').forEach(b => b.classList.toggle('on', b.dataset.v === state.corner));
+$('#rw').value = state.w; $('#rwVal').textContent = state.w + '%';
+$('#rh').value = state.h; $('#rhVal').textContent = state.h + '%';
+
+/* 點住看原圖 */
+const stage = $('#stage');
+stage.addEventListener('pointerdown', e => {
+  if (active < 0) return;
+  e.preventDefault();
+  holding = true; renderPreview();
+});
+['pointerup','pointerleave','pointercancel'].forEach(ev =>
+  stage.addEventListener(ev, () => { if (holding){ holding = false; renderPreview(); } }));
+stage.addEventListener('contextmenu', e => { if (items.length) e.preventDefault(); });
+
+/* ── 深淺色切換 ── */
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme', t);
+  $('#themeBtn').textContent = t === 'dark' ? '☀️' : '🌙';
+}
+const saved = localStorage.getItem('tools_theme');
+applyTheme(saved || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+$('#themeBtn').addEventListener('click', () => {
+  const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('tools_theme', next); applyTheme(next);
+});
+</script>
+</body>
+</html>

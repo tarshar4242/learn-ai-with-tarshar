@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>行政助手｜LINE 訊息自動變行程</title>
+<meta name="description" content="LINE 訊息（連截圖）丟給它，AI 自動讀懂、寫進試算表、排進 Google 日曆、時間到主動提醒——含完整程式碼與小白安裝教學，全部免費工具。">
+<style>
+:root{
+  --cream:#F6F1E7; --card:#FFFDF8; --card2:#FBF8F0;
+  --ink:#2F4858; --ink2:#5F6E77; --ink3:#939B98;
+  --green:#5F8575; --green-dk:#44685A; --green-lt:#E7EFE9; --green-line:#BFD2C6;
+  --gold:#B98F4E; --gold-lt:#F4EBDA; --line:#E7DfCB; --blue-lt:#E9EFF2;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  background:var(--cream);color:var(--ink);line-height:1.8;
+  background-image:radial-gradient(700px 360px at 90% -5%,rgba(95,133,117,.08),transparent 60%),
+                   radial-gradient(600px 320px at 0% 12%,rgba(185,143,78,.07),transparent 60%)}
+main{max-width:760px;margin:0 auto;padding:0 18px 80px}
+
+/* ── 頁首 ── */
+header{text-align:center;padding:74px 20px 10px}
+.brand{display:inline-block;font-size:12px;letter-spacing:1.2px;white-space:nowrap;color:var(--green-dk);
+  border:1px solid var(--green-line);background:var(--green-lt);border-radius:999px;padding:6px 18px;margin-bottom:18px;font-weight:700}
+header h1{font-size:clamp(27px,6vw,42px);font-weight:900;line-height:1.35;color:var(--ink)}
+header h1 em{font-style:normal;color:var(--green)}
+header .sub{margin:14px auto 0;max-width:560px;color:var(--ink2);font-size:15px}
+.pain{max-width:600px;margin:26px auto 0;background:var(--card);border:1px solid var(--line);
+  border-radius:18px;padding:18px 22px;font-size:14.5px;color:var(--ink2);text-align:left}
+.pain b{color:var(--ink)}
+
+/* ── 流程帶 ── */
+.flow{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px;margin:30px auto 8px;max-width:640px}
+.flow .node{background:var(--green);color:#fff;font-weight:700;font-size:14px;border-radius:999px;padding:7px 18px;box-shadow:0 3px 10px rgba(95,133,117,.25)}
+.flow .node.alt{background:var(--gold)}
+.flow .arrow{color:var(--ink3);font-size:13px;white-space:nowrap}
+.flow .arrow small{display:block;text-align:center;font-size:11px;color:var(--green-dk)}
+
+/* ── 區塊標題 ── */
+section{margin-top:64px}
+.sec-head{text-align:center;margin-bottom:26px}
+.sec-head .num{display:inline-flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:50%;
+  background:var(--green);color:#fff;font-size:24px;font-weight:900;margin-bottom:12px;box-shadow:0 4px 14px rgba(95,133,117,.3)}
+.sec-head .num.gold{background:var(--gold);box-shadow:0 4px 14px rgba(185,143,78,.3)}
+.sec-head .num.navy{background:var(--ink)}
+.sec-head h2{font-size:clamp(22px,5vw,30px);font-weight:900;color:var(--ink)}
+.sec-head .hr{width:86%;max-width:520px;height:1px;background:var(--line);margin:16px auto 14px}
+.sec-head .lead{color:var(--ink3);font-size:14.5px}
+.chip{display:inline-flex;align-items:center;gap:6px;background:var(--gold);color:#fff;font-weight:800;font-size:14px;border-radius:999px;padding:6px 20px;margin-bottom:12px}
+
+/* ── 展示卡片 ── */
+.demo-card{background:var(--card);border:1.5px solid var(--green);border-radius:22px;padding:24px 22px;max-width:600px;margin:0 auto;text-align:center}
+.demo-card .msg{font-size:clamp(16px,4.2vw,21px);font-weight:800;line-height:2;color:var(--ink)}
+.demo-card .msg .hl{color:var(--green)}
+.demo-note{text-align:center;margin-top:18px;font-weight:900;font-size:clamp(17px,4.5vw,22px);color:var(--gold)}
+.soft-box{background:var(--green-lt);border-radius:18px;padding:18px 22px;max-width:600px;margin:18px auto 0;text-align:center;color:var(--ink2);font-size:14.5px}
+
+/* LINE 聊天模擬 */
+.chat{background:#AECFE4;border-radius:22px;max-width:480px;margin:0 auto;padding:18px 14px 20px}
+.chat .day{text-align:center;margin-bottom:12px}
+.chat .day span{background:rgba(255,255,255,.5);color:#4a6274;font-size:12px;border-radius:999px;padding:3px 14px}
+.chat .row{display:flex;gap:8px;margin-bottom:10px;align-items:flex-start}
+.chat .avatar{width:34px;height:34px;border-radius:50%;background:var(--green-dk);flex:none;display:flex;align-items:center;justify-content:center;font-size:17px}
+.chat .bubble{background:#fff;border-radius:4px 16px 16px 16px;padding:10px 14px;font-size:14px;max-width:78%;text-align:left;color:#33424d}
+.chat .bubble .hl{color:#3477c2;font-weight:700}
+.chat .row.me{justify-content:flex-end}
+.chat .row.me .bubble{background:#8FE38F;border-radius:16px 4px 16px 16px}
+.chat .blur{filter:blur(4px);user-select:none}
+
+/* 欄位列（讀懂你的話） */
+.fields{max-width:600px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+.field{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 18px}
+.field .tag{flex:none;background:var(--ink);color:#fff;font-size:13.5px;font-weight:700;border-radius:8px;padding:4px 12px}
+.field .val{font-size:clamp(15px,4vw,18px);font-weight:800;color:var(--ink)}
+
+/* LINE → 日曆 */
+.duo{display:flex;gap:12px;align-items:stretch;justify-content:center;max-width:600px;margin:0 auto;flex-wrap:wrap}
+.duo .box{flex:1;min-width:180px;border-radius:16px;padding:18px;text-align:center;background:var(--card)}
+.duo .box.from{border:1.5px solid var(--green)}
+.duo .box.to{border:1.5px solid var(--gold)}
+.duo .box b{font-size:19px;display:block}
+.duo .box.from b{color:var(--green-dk)}
+.duo .box.to b{color:var(--gold)}
+.duo .box span{font-size:13px;color:var(--ink3)}
+.duo .mid{display:flex;align-items:center;font-size:22px;color:var(--gold)}
+.bullets{max-width:600px;margin:16px auto 0;display:flex;flex-direction:column;gap:10px}
+.bullets .b{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 18px;font-size:15px;display:flex;gap:10px;align-items:baseline}
+.bullets .b::before{content:"●";color:var(--green);font-size:10px;flex:none;transform:translateY(-2px)}
+
+/* 確認卡模擬 */
+.confirm{max-width:480px;margin:0 auto;background:#EDF1F4;border-radius:20px;padding:22px 24px;box-shadow:0 6px 22px rgba(47,72,88,.08)}
+.confirm .title{font-weight:900;font-size:17px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.confirm .title .done{color:var(--green-dk);font-size:14px}
+.confirm ul{list-style:none;margin-top:12px;border-top:1px solid #d8dee3;padding-top:12px}
+.confirm li{font-size:15px;padding:3px 0;color:var(--ink)}
+.confirm li b{color:var(--ink2);font-weight:700;margin-right:6px}
+.confirm li .hl{color:var(--green-dk);font-weight:800}
+.confirm .sync{margin-top:12px;color:#B04A2F;font-weight:800;font-size:14px}
+
+/* ── 材料 ── */
+.mats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;max-width:640px;margin:0 auto}
+.mat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 14px;text-align:center}
+.mat .ico{font-size:28px}
+.mat b{display:block;margin-top:6px;font-size:15px}
+.mat span{font-size:12.5px;color:var(--ink3)}
+.free{max-width:640px;margin:16px auto 0;text-align:center;background:var(--gold-lt);border:1px solid #E8D9B8;border-radius:14px;padding:12px 16px;font-size:14px;color:#8a6a33}
+
+/* ── 安裝步驟 ── */
+.step{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px 22px 18px;margin-bottom:18px;position:relative}
+.step .shead{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.step .sn{flex:none;width:38px;height:38px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:17px}
+.step h3{font-size:18px;font-weight:900;color:var(--ink);flex:1;line-height:1.4}
+.step .time{flex:none;font-size:12px;color:var(--ink3);background:var(--card2);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.step ol{margin:6px 0 0 22px;font-size:15px;color:var(--ink2);display:flex;flex-direction:column;gap:8px}
+.step ol b{color:var(--ink)}
+.step .tip{margin-top:12px;background:var(--green-lt);border-radius:12px;padding:10px 14px;font-size:13.5px;color:var(--green-dk)}
+.step .warn{margin-top:12px;background:#FBEFE7;border-radius:12px;padding:10px 14px;font-size:13.5px;color:#a15b2e}
+.step .done-row{margin-top:14px;border-top:1px dashed var(--line);padding-top:10px}
+.step label{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--ink2);cursor:pointer;user-select:none}
+.step input[type=checkbox]{width:18px;height:18px;accent-color:var(--green)}
+.step.checked{border-color:var(--green-line);background:#FBFDF9}
+.step.checked h3::after{content:" ✅";font-size:15px}
+kbd{background:var(--card2);border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;padding:1px 7px;font-size:13px;font-family:inherit;color:var(--ink);white-space:nowrap}
+a{color:var(--green-dk)}
+.progress{position:fixed;right:14px;bottom:14px;z-index:9999;background:rgba(255,255,255,.96);border:1.5px solid var(--green-line);border-radius:999px;padding:8px 15px;font-size:13px;color:var(--green-dk);font-weight:700;box-shadow:0 4px 16px rgba(0,0,0,.18);backdrop-filter:blur(6px);display:none}
+.progress.show{display:inline-flex}
+
+/* ── 程式碼 ── */
+.codewrap{position:relative;max-width:760px;margin:14px auto 0}
+.codebar{display:flex;justify-content:space-between;align-items:center;background:var(--ink);color:#cfe0d7;border-radius:14px 14px 0 0;padding:10px 16px;font-size:13px}
+.codebar .btns{display:flex;gap:8px}
+.codebar button,.codebar a.dl{background:var(--green);border:none;color:#fff;font-weight:700;font-size:13px;border-radius:8px;padding:6px 14px;cursor:pointer;text-decoration:none;font-family:inherit}
+.codebar button:active{transform:scale(.97)}
+pre{background:#26333B;color:#DCE7E0;border-radius:0 0 14px 14px;padding:18px 16px;overflow-x:auto;font-size:12.5px;line-height:1.7;max-height:480px;overflow-y:auto}
+pre code{font-family:"SF Mono",Consolas,Menlo,monospace;white-space:pre}
+
+/* 測試句 */
+.trybox{max-width:600px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
+.try{background:var(--card);border:1px dashed var(--green-line);border-radius:14px;padding:12px 16px;font-size:14.5px;color:var(--ink2)}
+.try b{color:var(--green-dk)}
+
+/* FAQ */
+details{max-width:640px;margin:0 auto 10px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:0 18px}
+summary{cursor:pointer;font-weight:800;font-size:15px;padding:14px 0;color:var(--ink);list-style:none;display:flex;gap:8px}
+summary::before{content:"❓";flex:none}
+details[open] summary{border-bottom:1px dashed var(--line)}
+details .a{padding:12px 2px 16px;font-size:14.5px;color:var(--ink2)}
+details .a b{color:var(--ink)}
+
+/* 頁尾 */
+footer{text-align:center;margin-top:70px;color:var(--ink3);font-size:13px;letter-spacing:2px}
+.homebtn{position:fixed;top:14px;left:14px;z-index:99999;display:inline-flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,.96);color:#3f6b2e;border:1.5px solid #a8c686;border-radius:999px;padding:8px 15px;
+  font-size:13.5px;font-weight:700;text-decoration:none;box-shadow:0 4px 16px rgba(0,0,0,.22);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+@media (max-width:520px){
+  .duo{flex-direction:column}
+  .duo .mid{transform:rotate(90deg);justify-content:center}
+}
+</style>
+</head>
+<body>
+<a class="homebtn" href="../life/" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+<div class="progress" id="progress"></div>
+
+<header>
+  <span class="brand">🍀 Learn AI with Tarshar · 行政助手</span>
+  <h1>LINE 傳個訊息<br>行程<em>自動</em>進日曆、自動提醒</h1>
+  <p class="sub">客戶在 LINE 東交代一句、西丟一張截圖，一忙就忘、事情散在各處？<br>這個小工具幫你全部接住——而且<b>用的都是免費工具</b>。</p>
+  <div class="pain">
+    <b>它做四件事：</b>① 用 AI（Google Gemini）自動「讀懂」訊息，連截圖裡的字都認得出來 → ② 抽出「誰、哪天、幾點、哪個地址」 → ③ 寫進 Google 試算表當追蹤中樞 → ④ 自動排進 Google 日曆，時間到主動提醒。你只要最後看一眼確認。
+  </div>
+  <div class="flow">
+    <span class="node">訊息</span>
+    <span class="arrow">→<small>AI 判讀</small></span>
+    <span class="node alt">記錄</span>
+    <span class="arrow">→<small>自動排程</small></span>
+    <span class="node">提醒</span>
+  </div>
+</header>
+
+<main>
+
+<!-- ═══ 它長什麼樣子 ═══ -->
+<section id="demo1">
+  <div class="sec-head">
+    <span class="num">1</span>
+    <h2>在 LINE 傳訊息</h2>
+    <div class="hr"></div>
+    <p class="lead">打開 LINE，把話丟給它：</p>
+  </div>
+  <div class="demo-card">
+    <p class="msg">哥，<span class="hl">房東問禮拜四早上 10 點</span><br>能不能見面談出租細節<br>地址：台北市〇〇區〇〇路100號5樓<br><span class="hl">7/23 早上 10:00</span></p>
+  </div>
+  <p class="demo-note">就這樣，打字就好</p>
+  <div class="soft-box">不用打開日曆 App．不用填一堆欄位．用你平常說話的方式就行</div>
+</section>
+
+<section id="demo-img">
+  <div class="sec-head">
+    <span class="chip">⭐ 它的強項</span>
+    <h2>連客戶的截圖都能讀</h2>
+    <div class="hr"></div>
+    <p class="lead">客戶隨手轉來的對話截圖，丟進去它照樣看懂</p>
+  </div>
+  <div class="chat">
+    <div class="day"><span>今天</span></div>
+    <div class="row"><span class="avatar">🌲</span><div class="bubble">📷 照片・轉發訊息</div></div>
+    <div class="row"><span class="avatar">🌲</span><div class="bubble">哥，<span class="hl">房東問禮拜四早上10點</span>可以跟您見面談細節嗎，他是有想做的</div></div>
+    <div class="row me"><div class="bubble">當然可以啊</div></div>
+    <div class="row"><span class="avatar">🌲</span><div class="bubble">出租地址：<span class="blur">台北市中山區民生東路100號5樓</span><br>7/23 早上10:00</div></div>
+    <div class="row"><span class="avatar">🌲</span><div class="bubble">再麻煩哥了</div></div>
+  </div>
+  <div class="soft-box" style="border:1.5px dashed var(--gold);background:var(--card)">它自動讀出 → <b style="color:var(--green-dk)">〇房東 出租會面</b>｜7/23 10:00｜〇〇路<br>不用你重打，截圖丟進去就好</div>
+</section>
+
+<section id="demo2">
+  <div class="sec-head">
+    <span class="num gold">2</span>
+    <h2>它自動讀懂你的話</h2>
+    <div class="hr"></div>
+    <p class="lead">一句零散的話（或一張截圖），它自己拆成一件事</p>
+  </div>
+  <div class="fields">
+    <div class="field"><span class="tag">標題</span><span class="val">〇房東 出租會面</span></div>
+    <div class="field"><span class="tag">日期</span><span class="val">7/23（週四）</span></div>
+    <div class="field"><span class="tag">時間</span><span class="val">10:00 – 12:30</span></div>
+    <div class="field"><span class="tag">地點</span><span class="val">台北市〇〇區〇〇路100號5樓</span></div>
+  </div>
+  <div class="soft-box"><b style="color:var(--green-dk)">自動判斷，不用一個一個填</b><br>看不清楚會反問你、說錯隨時傳訊息改</div>
+</section>
+
+<section id="demo3">
+  <div class="sec-head">
+    <span class="num navy">3</span>
+    <h2>自動建到 Google 日曆</h2>
+    <div class="hr"></div>
+    <p class="lead">它透過腳本，直接把行程寫進日曆（也同步記進試算表）</p>
+  </div>
+  <div class="duo">
+    <div class="box from"><b>LINE</b><span>你的訊息 / 截圖</span></div>
+    <div class="mid">→</div>
+    <div class="box to"><b>Google 日曆</b><span>行程已建立</span></div>
+  </div>
+  <div class="bullets">
+    <div class="b">不用開日曆 App</div>
+    <div class="b">不用手動輸入任何東西</div>
+    <div class="b">幾秒鐘自動完成</div>
+    <div class="b">同一筆也寫進 Google 試算表，當所有待辦的追蹤中樞</div>
+    <div class="b">建好回你一張確認卡＋前 2 小時提醒</div>
+  </div>
+</section>
+
+<section id="demo4">
+  <div class="sec-head">
+    <span class="num">4</span>
+    <h2>它回你一張確認卡</h2>
+    <div class="hr"></div>
+    <p class="lead">整理好的一張卡，一眼確認、行事曆同時建好</p>
+  </div>
+  <div class="confirm">
+    <div class="title"><span>🏡 [ 〇房東 出租會面 ]</span><span class="done">✏️ 已記錄</span></div>
+    <ul>
+      <li><b>・日期：</b><span class="hl">7/23（週四）</span></li>
+      <li><b>・時間：</b>10:00 – 12:30</li>
+      <li><b>・提醒：</b>前 2 小時</li>
+      <li><b>・地點：</b>台北市〇〇區〇〇路100號5樓</li>
+      <li><b>・備註：</b>與房東會面談出租細節</li>
+    </ul>
+    <div class="sync">⏰ 已同步更新行事曆</div>
+  </div>
+  <div class="soft-box">看一眼就知道它有沒有聽對<br>不對？回一句話它馬上改</div>
+</section>
+
+<!-- ═══ 材料 ═══ -->
+<section id="materials">
+  <div class="sec-head">
+    <h2>🧺 要準備的材料</h2>
+    <div class="hr"></div>
+    <p class="lead">串起來的就是這四樣，幾乎零成本</p>
+  </div>
+  <div class="mats">
+    <div class="mat"><span class="ico">💬</span><b>LINE 官方帳號</b><span>收訊息的入口（免費）</span></div>
+    <div class="mat"><span class="ico">🤖</span><b>Google Gemini</b><span>AI 判讀（免費額度）</span></div>
+    <div class="mat"><span class="ico">📊</span><b>Google 試算表</b><span>追蹤中樞（免費）</span></div>
+    <div class="mat"><span class="ico">⚙️</span><b>Apps Script</b><span>把大家串起來（免費）</span></div>
+  </div>
+  <div class="free">💰 費用說明：這個工具只用「回覆訊息」，LINE 官方帳號的回覆<b>不算</b>在每月免費則數裡；Gemini 用免費額度、Apps Script 與試算表本來就免費——個人使用<b>整套 $0</b>。</div>
+</section>
+
+<!-- ═══ 安裝教學 ═══ -->
+<section id="setup">
+  <div class="sec-head">
+    <h2>🔧 動手做（約 30 分鐘）</h2>
+    <div class="hr"></div>
+    <p class="lead">照順序做完 6 步就能用。每一步做完可以打勾，進度會自動記住。</p>
+  </div>
+
+  <div class="step" data-step="1">
+    <div class="shead"><span class="sn">1</span><h3>建一張 Google 試算表</h3><span class="time">2 分鐘</span></div>
+    <ol>
+      <li>到 <a href="https://sheets.new" target="_blank" rel="noopener">sheets.new</a> 開一張新的試算表。</li>
+      <li>左上角把名稱改成 <b>行政助手</b>（叫什麼都可以，認得出來就好）。</li>
+      <li>上方選單點 <kbd>擴充功能</kbd> → <kbd>Apps Script</kbd>，會開出一個程式編輯器。</li>
+    </ol>
+    <div class="tip">💡 之後所有記錄都會自動寫進這張表——它就是你的「待辦追蹤中樞」，表頭欄位程式會自己建，不用手動畫表格。</div>
+    <div class="done-row"><label><input type="checkbox"> 這步完成了</label></div>
+  </div>
+
+  <div class="step" data-step="2">
+    <div class="shead"><span class="sn">2</span><h3>貼上程式碼</h3><span class="time">1 分鐘</span></div>
+    <ol>
+      <li>在 Apps Script 編輯器裡，把原本那幾行 <b>function myFunction()...</b> 全部刪掉。</li>
+      <li>按下面的 <b>「複製全部程式碼」</b>，貼進編輯器，按 <kbd>Ctrl／⌘ + S</kbd> 存檔。</li>
+      <li>左上角專案名稱也順手改成 <b>行政助手</b>。</li>
+    </ol>
+    <div class="tip">💡 程式碼裡每一段都有中文註解，想知道它在做什麼可以慢慢看；不想看也完全沒關係，能動就好 😄</div>
+    <div class="done-row"><label><input type="checkbox"> 這步完成了</label></div>
+  </div>
+
+  <div class="step" data-step="3">
+    <div class="shead"><span class="sn">3</span><h3>申請 Gemini API 金鑰（AI 的鑰匙）</h3><span class="time">3 分鐘</span></div>
+    <ol>
+      <li>到 <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a>，用你的 Google 帳號登入。</li>
+      <li>按 <b>Create API key（建立 API 金鑰）</b>，複製那串 <b>AIza 開頭</b>的金鑰。</li>
+      <li>回到程式碼最上面的「設定區」，把金鑰貼進 <b>GEMINI_API_KEY</b> 的引號裡。</li>
+      <li>先試車：編輯器上方函式下拉選 <kbd>測試Gemini</kbd> → 按 <kbd>執行</kbd>（第一次會要你授權，一路按允許）。下方「執行紀錄」出現一段 JSON，就代表 AI 判讀通了 🎉</li>
+    </ol>
+    <div class="warn">⚠️ 金鑰就像家裡鑰匙，只貼在自己的程式裡，不要貼給別人、不要公開貼文。</div>
+    <div class="done-row"><label><input type="checkbox"> 這步完成了</label></div>
+  </div>
+
+  <div class="step" data-step="4">
+    <div class="shead"><span class="sn">4</span><h3>建 LINE 官方帳號，拿另一把鑰匙</h3><span class="time">10 分鐘</span></div>
+    <ol>
+      <li>到 <a href="https://entry.line.biz/start/jp/" target="_blank" rel="noopener">LINE 官方帳號</a> 免費建一個帳號（就是你這個小助手的 LINE 身分）。</li>
+      <li>進入 <a href="https://manager.line.biz" target="_blank" rel="noopener">LINE Official Account Manager</a> → 右上 <kbd>設定</kbd> → 左側 <kbd>Messaging API</kbd> → 按 <b>啟用 Messaging API</b>（會順便幫你建立一個 Provider，名稱隨意取）。</li>
+      <li>到 <a href="https://developers.line.biz/console/" target="_blank" rel="noopener">LINE Developers Console</a>，點進你的頻道 → <kbd>Messaging API</kbd> 分頁 → 最下面 <b>Channel access token</b> 按 <kbd>Issue（發行）</kbd>，複製整串。</li>
+      <li>貼進程式碼設定區的 <b>CHANNEL_ACCESS_TOKEN</b> 引號裡，存檔。</li>
+    </ol>
+    <div class="done-row"><label><input type="checkbox"> 這步完成了</label></div>
+  </div>
+
+  <div class="step" data-step="5">
+    <div class="shead"><span class="sn">5</span><h3>部署：讓程式有一個網址</h3><span class="time">3 分鐘</span></div>
+    <ol>
+      <li>Apps Script 右上角按 <kbd>部署</kbd> → <kbd>新增部署作業</kbd>。</li>
+      <li>左邊齒輪選 <b>網頁應用程式</b>。</li>
+      <li>「執行身分」選 <b>我</b>；「誰可以存取」選 <b>所有人</b>（LINE 的伺服器才進得來）。</li>
+      <li>按 <kbd>部署</kbd>，複製出現的 <b>網頁應用程式網址</b>（https://script.google.com/macros/s/…/exec）。</li>
+    </ol>
+    <div class="warn">⚠️ 最容易踩的坑：以後每次<b>改完程式碼</b>，都要到 <kbd>部署</kbd> → <kbd>管理部署作業</kbd> → ✏️ 編輯 → 版本選 <b>新版本</b> → 部署，改動才會生效。只按存檔是不夠的！</div>
+    <div class="done-row"><label><input type="checkbox"> 這步完成了</label></div>
+  </div>
+
+  <div class="step" data-step="6">
+    <div class="shead"><span class="sn">6</span><h3>把網址接回 LINE，開始用！</h3><span class="time">5 分鐘</span></div>
+    <ol>
+      <li>回 <a href="https://developers.line.biz/console/" target="_blank" rel="noopener">LINE Developers Console</a> → 你的頻道 → <kbd>Messaging API</kbd> 分頁。</li>
+      <li><b>Webhook URL</b> 貼上剛剛複製的網址 → <kbd>Update</kbd> → 把 <b>Use webhook</b> 打開 → 按 <kbd>Verify</kbd> 出現 Success。</li>
+      <li>回 <a href="https://manager.line.biz" target="_blank" rel="noopener">Official Account Manager</a> → <kbd>設定</kbd> → <kbd>回應設定</kbd>：<b>自動回應訊息</b>關掉、<b>Webhook</b> 開啟（不然它會跟機器人搶著回話）。</li>
+      <li>用 Messaging API 分頁的 QR Code <b>加自己的助手為好友</b>，傳一句：<br><b>「幫我記：下週四早上 10 點跟房東見面談出租，台北市中山區民生東路100號5樓」</b></li>
+      <li>收到莫蘭迪綠的確認卡、日曆出現行程、試算表多一列——完工 🎉</li>
+    </ol>
+    <div class="done-row"><label><input type="checkbox"> 全部完成，我有自己的行政助手了！</label></div>
+  </div>
+</section>
+
+<!-- ═══ 程式碼 ═══ -->
+<section id="code">
+  <div class="sec-head">
+    <h2>📜 完整程式碼</h2>
+    <div class="hr"></div>
+    <p class="lead">整份複製貼上就能用，只需要改最上面「設定區」的兩把鑰匙</p>
+  </div>
+  <div class="codewrap">
+    <div class="codebar">
+      <span>Code.gs（Google Apps Script）</span>
+      <div class="btns">
+        <a class="dl" href="admin-assistant-code.gs" download>下載檔案</a>
+        <button id="copyBtn" onclick="copyCode()">複製全部程式碼</button>
+      </div>
+    </div>
+    <pre><code id="gascode">/**********************************************************************
+ * 🏡 行政助手 —— LINE 訊息自動變行程
+ * LINE 官方帳號 × Google Gemini × Google 試算表 × Google 日曆
+ *
+ * 使用方式：只要改下面「設定區」前兩行，其他都不用動。
+ * 安裝教學：https://tarshar4242.github.io/kt-sweet-journey/admin-assistant.html
+ **********************************************************************/
+
+//══════════ ① 設定區（只改這裡）══════════
+const CHANNEL_ACCESS_TOKEN = &#x27;請貼上你的 LINE Channel access token&#x27;;
+const GEMINI_API_KEY       = &#x27;請貼上你的 Gemini API 金鑰&#x27;;
+const SHEET_NAME       = &#x27;行政助手&#x27;;  // 試算表分頁名稱（沒有會自動建立）
+const REMINDER_MINUTES = 120;         // 提前幾分鐘提醒（120 ＝ 前 2 小時）
+const DEFAULT_HOURS    = 2.5;         // 沒講結束時間時，行程預設幾小時
+//═════════════════════════════════════════
+
+const GEMINI_URL = &#x27;https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=&#x27; + GEMINI_API_KEY;
+
+/*── LINE 把訊息送進來的大門 ──*/
+function doPost(e) {
+  try {
+    const body = JSON.parse(e.postData.contents);
+    (body.events || []).forEach(handleEvent);
+  } catch (err) {
+    console.error(&#x27;doPost 錯誤：&#x27; + err);
+  }
+  return ContentService.createTextOutput(&#x27;ok&#x27;);
+}
+
+/*── 一則訊息進來後的完整流程 ──*/
+function handleEvent(event) {
+  if (event.type !== &#x27;message&#x27;) return;
+  const msg = event.message;
+  let userText = &#x27;&#x27;;
+  let imageBase64 = null;
+
+  if (msg.type === &#x27;text&#x27;) {
+    userText = msg.text;
+  } else if (msg.type === &#x27;image&#x27;) {
+    imageBase64 = fetchLineImage(msg.id);          // 截圖也能讀
+    userText = &#x27;（使用者傳來一張截圖，請直接閱讀圖片裡的內容）&#x27;;
+  } else {
+    return;  // 貼圖、語音等其他類型先不處理
+  }
+
+  try {
+    const result = askGemini(userText, imageBase64);   // AI 判讀
+    if (result.action === &#x27;create&#x27;) {
+      const record = saveRecord(result);               // 記錄＋排日曆
+      replyFlexCard(event.replyToken, record, false);  // 回確認卡
+    } else if (result.action === &#x27;update&#x27;) {
+      const record = updateLastRecord(result);         // 說錯了？改上一筆
+      if (record) {
+        replyFlexCard(event.replyToken, record, true);
+      } else {
+        replyText(event.replyToken, &#x27;我找不到可以修改的行程耶，直接把整件事再跟我說一次就好～&#x27;);
+      }
+    } else {
+      // question（資訊不夠，反問）或 chat（純聊天）
+      replyText(event.replyToken, result.reply || &#x27;收到！有行程要記，直接跟我說就好 😊&#x27;);
+    }
+  } catch (err) {
+    console.error(&#x27;handleEvent 錯誤：&#x27; + err);
+    replyText(event.replyToken, &#x27;哎呀，我這邊處理時出了點狀況，再傳一次試試？&#x27;);
+  }
+}
+
+/*── 請 Gemini 讀懂訊息（或截圖），拆成一件事 ──*/
+function askGemini(userText, imageBase64) {
+  const today = new Date();
+  const week = [&#x27;日&#x27;, &#x27;一&#x27;, &#x27;二&#x27;, &#x27;三&#x27;, &#x27;四&#x27;, &#x27;五&#x27;, &#x27;六&#x27;][today.getDay()];
+  const todayStr = Utilities.formatDate(today, &#x27;Asia/Taipei&#x27;, &#x27;yyyy-MM-dd&#x27;);
+  const last = getLastRecord();
+
+  const prompt =
+    &#x27;你是「行政助手」，幫使用者把 LINE 訊息整理成行程。今天是 &#x27; + todayStr + &#x27;（星期&#x27; + week + &#x27;）。\n&#x27; +
+    (last ? &#x27;使用者最近一筆行程（若這次是在修改它，請以它為底、只改掉有講到的部分，其他照舊填回）：&#x27; + JSON.stringify(last) + &#x27;\n&#x27; : &#x27;&#x27;) +
+    &#x27;請閱讀使用者的訊息（或截圖），只輸出下面格式的 JSON，不要多任何文字：\n&#x27; +
+    &#x27;{&quot;action&quot;:&quot;create 或 update 或 question 或 chat&quot;,&#x27; +
+    &#x27;&quot;title&quot;:&quot;行程標題（誰＋做什麼，例：王房東 出租會面）&quot;,&#x27; +
+    &#x27;&quot;date&quot;:&quot;yyyy-MM-dd&quot;,&quot;start&quot;:&quot;HH:mm 或空字串&quot;,&quot;end&quot;:&quot;HH:mm 或空字串&quot;,&#x27; +
+    &#x27;&quot;location&quot;:&quot;地點或空字串&quot;,&quot;note&quot;:&quot;一句話備註或空字串&quot;,&#x27; +
+    &#x27;&quot;reply&quot;:&quot;要回覆使用者的話（question 或 chat 時使用）&quot;}\n&#x27; +
+    &#x27;判斷規則：\n&#x27; +
+    &#x27;1. 訊息裡有明確的「事情＋日期」→ action 填 create。\n&#x27; +
+    &#x27;2. 訊息是在修改剛才那一筆（例：改成 11 點、地點換一下）→ action 填 update。\n&#x27; +
+    &#x27;3. 想記行程但資訊不夠（連日期都沒有）→ action 填 question，把要反問的話放在 reply。\n&#x27; +
+    &#x27;4. 純聊天、問候 → action 填 chat，reply 放簡短友善的回覆。\n&#x27; +
+    &#x27;5. 「禮拜四」「明天」「下週三」這類說法，換算成今天之後最近的那個日期。\n&#x27; +
+    &#x27;6. 台灣用語，繁體中文。&#x27;;
+
+  const parts = [{ text: prompt }, { text: &#x27;使用者訊息：&#x27; + userText }];
+  if (imageBase64) {
+    parts.push({ inline_data: { mime_type: &#x27;image/jpeg&#x27;, data: imageBase64 } });
+  }
+
+  const res = UrlFetchApp.fetch(GEMINI_URL, {
+    method: &#x27;post&#x27;,
+    contentType: &#x27;application/json&#x27;,
+    payload: JSON.stringify({
+      contents: [{ parts: parts }],
+      generationConfig: { response_mime_type: &#x27;application/json&#x27;, temperature: 0.2 }
+    }),
+    muteHttpExceptions: true
+  });
+  const data = JSON.parse(res.getContentText());
+  return JSON.parse(data.candidates[0].content.parts[0].text);
+}
+
+/*── 從 LINE 下載使用者傳的截圖 ──*/
+function fetchLineImage(messageId) {
+  const res = UrlFetchApp.fetch(&#x27;https://api-data.line.me/v2/bot/message/&#x27; + messageId + &#x27;/content&#x27;, {
+    headers: { Authorization: &#x27;Bearer &#x27; + CHANNEL_ACCESS_TOKEN }
+  });
+  return Utilities.base64Encode(res.getBlob().getBytes());
+}
+
+/*── 試算表：追蹤中樞 ──*/
+function getSheet() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet = ss.getSheetByName(SHEET_NAME);
+  if (!sheet) sheet = ss.insertSheet(SHEET_NAME);
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow([&#x27;記錄時間&#x27;, &#x27;標題&#x27;, &#x27;日期&#x27;, &#x27;開始&#x27;, &#x27;結束&#x27;, &#x27;地點&#x27;, &#x27;備註&#x27;, &#x27;日曆事件ID&#x27;, &#x27;狀態&#x27;]);
+    sheet.setFrozenRows(1);
+  }
+  return sheet;
+}
+
+/*── 寫進試算表＋排進 Google 日曆（含提醒）──*/
+function saveRecord(r) {
+  let end = r.end || &#x27;&#x27;;
+  if (r.start) {
+    if (!end) {
+      const s = toDate(r.date, r.start);
+      const e2 = new Date(s.getTime() + DEFAULT_HOURS * 60 * 60 * 1000);
+      end = Utilities.formatDate(e2, &#x27;Asia/Taipei&#x27;, &#x27;HH:mm&#x27;);
+    }
+  }
+
+  let eventId = &#x27;&#x27;;
+  const cal = CalendarApp.getDefaultCalendar();
+  if (r.date) {
+    let ev;
+    if (r.start) {
+      ev = cal.createEvent(r.title, toDate(r.date, r.start), toDate(r.date, end),
+        { location: r.location || &#x27;&#x27;, description: r.note || &#x27;&#x27; });
+    } else {
+      ev = cal.createAllDayEvent(r.title, toDate(r.date, &#x27;00:00&#x27;),
+        { location: r.location || &#x27;&#x27;, description: r.note || &#x27;&#x27; });
+    }
+    ev.addPopupReminder(REMINDER_MINUTES);
+    eventId = ev.getId();
+  }
+
+  const now = Utilities.formatDate(new Date(), &#x27;Asia/Taipei&#x27;, &#x27;yyyy-MM-dd HH:mm&#x27;);
+  getSheet().appendRow([now, r.title, r.date, r.start || &#x27;&#x27;, end, r.location || &#x27;&#x27;, r.note || &#x27;&#x27;, eventId, eventId ? &#x27;已排入日曆&#x27; : &#x27;待安排&#x27;]);
+
+  return { title: r.title, date: r.date, start: r.start || &#x27;&#x27;, end: end, location: r.location || &#x27;&#x27;, note: r.note || &#x27;&#x27; };
+}
+
+/*── 讀最近一筆（給「說錯隨時改」用）──*/
+function getLastRecord() {
+  const sheet = getSheet();
+  const rowN = sheet.getLastRow();
+  if (rowN === 1 || rowN === 0) return null;
+  const v = sheet.getRange(rowN, 1, 1, 9).getValues()[0];
+  return { title: String(v[1]), date: normDate(v[2]), start: normTime(v[3]), end: normTime(v[4]), location: String(v[5]), note: String(v[6]) };
+}
+
+/*── 修改最近一筆：舊日曆事件刪掉、整筆重建 ──*/
+function updateLastRecord(r) {
+  const sheet = getSheet();
+  const rowN = sheet.getLastRow();
+  if (rowN === 1 || rowN === 0) return null;
+  const oldId = String(sheet.getRange(rowN, 8).getValue());
+  if (oldId) {
+    try { CalendarApp.getEventById(oldId).deleteEvent(); } catch (e) { /* 事件可能已被手動刪掉，略過 */ }
+  }
+  sheet.deleteRow(rowN);
+  return saveRecord(r);
+}
+
+/*── 回覆：莫蘭迪綠確認卡 ──*/
+function replyFlexCard(replyToken, r, isUpdate) {
+  const week = [&#x27;日&#x27;, &#x27;一&#x27;, &#x27;二&#x27;, &#x27;三&#x27;, &#x27;四&#x27;, &#x27;五&#x27;, &#x27;六&#x27;][toDate(r.date, &#x27;00:00&#x27;).getDay()];
+  const dateText = r.date.slice(5).replace(&#x27;-&#x27;, &#x27;/&#x27;) + &#x27;（週&#x27; + week + &#x27;）&#x27;;
+  const timeText = r.start ? (r.start + &#x27; – &#x27; + r.end) : &#x27;整天（沒講到幾點）&#x27;;
+
+  const rows = [
+    infoRow(&#x27;日期&#x27;, dateText),
+    infoRow(&#x27;時間&#x27;, timeText),
+    infoRow(&#x27;提醒&#x27;, &#x27;前 &#x27; + (REMINDER_MINUTES / 60) + &#x27; 小時&#x27;)
+  ];
+  if (r.location) rows.push(infoRow(&#x27;地點&#x27;, r.location));
+  if (r.note) rows.push(infoRow(&#x27;備註&#x27;, r.note));
+
+  const bubble = {
+    type: &#x27;bubble&#x27;,
+    styles: { body: { backgroundColor: &#x27;#F7F4EC&#x27; } },
+    body: {
+      type: &#x27;box&#x27;, layout: &#x27;vertical&#x27;, spacing: &#x27;md&#x27;, paddingAll: &#x27;20px&#x27;,
+      contents: [
+        {
+          type: &#x27;box&#x27;, layout: &#x27;baseline&#x27;, spacing: &#x27;sm&#x27;, contents: [
+            { type: &#x27;text&#x27;, text: &#x27;🏡 &#x27; + r.title, weight: &#x27;bold&#x27;, size: &#x27;md&#x27;, color: &#x27;#2F4858&#x27;, flex: 7, wrap: true },
+            { type: &#x27;text&#x27;, text: isUpdate ? &#x27;✏️ 已改好&#x27; : &#x27;✏️ 已記錄&#x27;, size: &#x27;xs&#x27;, color: &#x27;#5F8575&#x27;, flex: 3, align: &#x27;end&#x27; }
+          ]
+        },
+        { type: &#x27;separator&#x27;, color: &#x27;#DFD8C8&#x27; },
+        { type: &#x27;box&#x27;, layout: &#x27;vertical&#x27;, spacing: &#x27;sm&#x27;, contents: rows },
+        { type: &#x27;text&#x27;, text: &#x27;⏰ 已同步更新行事曆&#x27;, size: &#x27;xs&#x27;, weight: &#x27;bold&#x27;, color: &#x27;#B0763B&#x27; }
+      ]
+    }
+  };
+
+  lineReply(replyToken, [{ type: &#x27;flex&#x27;, altText: &#x27;已記錄：&#x27; + r.title + &#x27;｜&#x27; + dateText + &#x27; &#x27; + timeText, contents: bubble }]);
+}
+
+function infoRow(label, value) {
+  return {
+    type: &#x27;box&#x27;, layout: &#x27;baseline&#x27;, spacing: &#x27;sm&#x27;,
+    contents: [
+      { type: &#x27;text&#x27;, text: label, size: &#x27;sm&#x27;, color: &#x27;#8AA096&#x27;, flex: 2 },
+      { type: &#x27;text&#x27;, text: value, size: &#x27;sm&#x27;, color: &#x27;#2F4858&#x27;, flex: 6, wrap: true }
+    ]
+  };
+}
+
+function replyText(replyToken, text) {
+  lineReply(replyToken, [{ type: &#x27;text&#x27;, text: text }]);
+}
+
+function lineReply(replyToken, messages) {
+  UrlFetchApp.fetch(&#x27;https://api.line.me/v2/bot/message/reply&#x27;, {
+    method: &#x27;post&#x27;,
+    contentType: &#x27;application/json&#x27;,
+    headers: { Authorization: &#x27;Bearer &#x27; + CHANNEL_ACCESS_TOKEN },
+    payload: JSON.stringify({ replyToken: replyToken, messages: messages }),
+    muteHttpExceptions: true
+  });
+}
+
+/*── 小工具：把「日期＋時間」組成台灣時區的時間點 ──*/
+function toDate(dateStr, timeStr) {
+  return new Date(dateStr + &#x27;T&#x27; + (timeStr || &#x27;00:00&#x27;) + &#x27;:00+08:00&#x27;);
+}
+function normDate(v) {
+  if (v instanceof Date) return Utilities.formatDate(v, &#x27;Asia/Taipei&#x27;, &#x27;yyyy-MM-dd&#x27;);
+  return String(v || &#x27;&#x27;);
+}
+function normTime(v) {
+  if (v instanceof Date) return Utilities.formatDate(v, &#x27;Asia/Taipei&#x27;, &#x27;HH:mm&#x27;);
+  return String(v || &#x27;&#x27;);
+}
+
+/**********************************************************************
+ * 🧪 測試用：貼好 Gemini 金鑰後，在上方選「測試Gemini」按執行，
+ * 下方「執行紀錄」看得到 JSON 就代表 AI 判讀通了（不需要 LINE）。
+ **********************************************************************/
+function 測試Gemini() {
+  const r = askGemini(&#x27;哥，房東問禮拜四早上 10 點能不能見面談出租細節，地址：台北市中山區民生東路100號5樓&#x27;, null);
+  console.log(JSON.stringify(r, null, 2));
+}</code></pre>
+  </div>
+</section>
+
+<!-- ═══ 測試句 ═══ -->
+<section id="try">
+  <div class="sec-head">
+    <h2>💬 可以這樣跟它說</h2>
+    <div class="hr"></div>
+    <p class="lead">平常怎麼講話就怎麼傳，這些它都接得住</p>
+  </div>
+  <div class="trybox">
+    <div class="try"><b>記行程：</b>「明天下午 3 點半陳代書事務所簽約，信義路五段 7 號」</div>
+    <div class="try"><b>丟截圖：</b>直接把客戶轉來的對話截圖傳給它，一個字都不用打</div>
+    <div class="try"><b>說錯就改：</b>「啊時間改成 11 點」「地點換成 2 樓會議室」——它會把上一筆改好、日曆同步更新</div>
+    <div class="try"><b>沒講清楚它會反問：</b>只說「幫我記要跟房東見面」，它會回問你哪一天、幾點</div>
+  </div>
+</section>
+
+<!-- ═══ FAQ ═══ -->
+<section id="faq">
+  <div class="sec-head">
+    <h2>🙋 卡住了？先看這裡</h2>
+    <div class="hr"></div>
+  </div>
+  <details>
+    <summary>傳訊息完全沒反應</summary>
+    <div class="a">照順序檢查三件事：① Developers Console 的 <b>Use webhook</b> 有沒有打開、Verify 是不是 Success；② Official Account Manager 的回應設定裡 <b>Webhook</b> 是否開啟；③ 你是不是改過程式碼卻沒有「<b>管理部署作業 → 新版本</b>」重新部署（最常見！）。</div>
+  </details>
+  <details>
+    <summary>它回「處理時出了點狀況」</summary>
+    <div class="a">九成是 <b>Gemini 金鑰</b>的問題：檢查設定區的金鑰有沒有貼完整（AIza 開頭、引號沒弄丟）。可以回 Apps Script 跑一次 <b>測試Gemini</b>，執行紀錄會告訴你錯在哪。</div>
+  </details>
+  <details>
+    <summary>日曆的時間不對（差了好幾個小時）</summary>
+    <div class="a">到 Apps Script 左側 <kbd>⚙️ 專案設定</kbd>，把<b>時區</b>改成 <b>(GMT+08:00) 台北</b>，重新部署新版本即可。</div>
+  </details>
+  <details>
+    <summary>截圖讀不出來或讀錯</summary>
+    <div class="a">截圖太糊、字太小時 AI 也會看不清。傳<b>原始截圖</b>（不要再翻拍螢幕）成功率最高；讀錯的話直接回一句「時間是 11 點才對」，它會自己改。</div>
+  </details>
+  <details>
+    <summary>第一次執行一直跳授權視窗，還警告「未經驗證」</summary>
+    <div class="a">這是正常的——因為這支程式是<b>你自己寫的</b>，Google 對自家以外的程式都會這樣提醒。點 <b>進階</b> → <b>前往「行政助手」(不安全)</b> → 允許即可。它只會存取你自己的試算表和日曆。</div>
+  </details>
+  <details>
+    <summary>會不會收費？</summary>
+    <div class="a">個人使用<b>整套 $0</b>：這個工具只用 LINE 的「回覆」（不吃每月免費則數）、Gemini 走免費額度、Apps Script 和試算表本來就免費。除非你拿去做大量商用推播，才需要考慮付費方案。</div>
+  </details>
+  <details>
+    <summary>想改「提前提醒的時間」或「預設行程長度」</summary>
+    <div class="a">都在程式碼最上面的設定區：<b>REMINDER_MINUTES</b>（120 就是前 2 小時提醒）、<b>DEFAULT_HOURS</b>（沒講結束時間時預設 2.5 小時）。改完記得「管理部署作業 → 新版本」。</div>
+  </details>
+</section>
+
+<footer>
+  🍀 Learn AI with Tarshar ｜ 行政助手
+</footer>
+</main>
+
+<script>
+/* 複製程式碼 */
+function copyCode(){
+  const txt = document.getElementById('gascode').textContent;
+  const btn = document.getElementById('copyBtn');
+  navigator.clipboard.writeText(txt).then(()=>{
+    btn.textContent = '✅ 已複製！';
+    setTimeout(()=>btn.textContent='複製全部程式碼', 2000);
+  }).catch(()=>{
+    const ta = document.createElement('textarea');
+    ta.value = txt; document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+    btn.textContent = '✅ 已複製！';
+    setTimeout(()=>btn.textContent='複製全部程式碼', 2000);
+  });
+}
+/* 步驟進度：存 localStorage */
+(function(){
+  const KEY = 'adminAssistantSteps';
+  const saved = JSON.parse(localStorage.getItem(KEY) || '{}');
+  const steps = document.querySelectorAll('.step');
+  const bar = document.getElementById('progress');
+  function refresh(){
+    let done = 0;
+    steps.forEach(s=>{
+      const cb = s.querySelector('input[type=checkbox]');
+      s.classList.toggle('checked', cb.checked);
+      if(cb.checked) done++;
+    });
+    if(done > 0){
+      bar.classList.add('show');
+      bar.textContent = done === steps.length ? '🎉 六步全部完成——你的行政助手上線了！' : `安裝進度：${done} / ${steps.length} 步完成`;
+    } else bar.classList.remove('show');
+  }
+  steps.forEach(s=>{
+    const cb = s.querySelector('input[type=checkbox]');
+    cb.checked = !!saved[s.dataset.step];
+    cb.addEventListener('change', ()=>{
+      saved[s.dataset.step] = cb.checked;
+      localStorage.setItem(KEY, JSON.stringify(saved));
+      refresh();
+    });
+  });
+  refresh();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>課堂倒數計時器｜TARSHAR 工具集</title>
+<meta name="description" content="討論五分鐘，是真的五分鐘。超大字倒數、全螢幕投影、溫柔提示音、螢幕不休眠——課堂討論、分組活動的時間管理神器。免費、免註冊。">
+<meta name="theme-color" content="#0e91ad">
+<style>
+:root{
+  --primary:#0e91ad; --primary-soft:#e3f4f8; --primary-deep:#0b6f85;
+  --accent:#e8752a; --accent-soft:#fdeee2;
+  --bg:#f7f9fb; --card:#ffffff; --border:#e6eaef;
+  --text:#1e2a38; --muted:#64748b;
+  --ok:#2e7d4f; --ok-soft:#e3f4ea;
+  --shadow:0 1px 3px rgba(15,23,42,.06);
+  --shadow-lift:0 10px 28px rgba(15,23,42,.12);
+  --radius:14px;
+}
+html[data-theme="dark"]{
+  --primary:#35b6d2; --primary-soft:#123742; --primary-deep:#7fd6e8;
+  --accent:#f08a45; --accent-soft:#3a2718;
+  --bg:#101418; --card:#1a2027; --border:#2a323c;
+  --text:#eef2f6; --muted:#9aa7b5;
+  --ok:#7fd6a4; --ok-soft:#14301f;
+  --shadow:0 1px 3px rgba(0,0,0,.4);
+  --shadow-lift:0 10px 28px rgba(0,0,0,.5);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',-apple-system,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.7;min-height:100dvh}
+a{color:var(--primary);text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+header{background:radial-gradient(ellipse 60% 120% at 85% -20%, var(--accent-soft) 0%, transparent 60%),
+  radial-gradient(ellipse 70% 130% at 10% -30%, var(--primary-soft) 0%, transparent 65%), var(--card);
+  border-bottom:1px solid var(--border);padding:2rem 1.2rem 1.6rem;text-align:center;position:relative}
+.theme-btn{position:absolute;top:1rem;right:1rem;width:40px;height:40px;border-radius:50%;
+  border:1px solid var(--border);background:var(--card);font-size:1.1rem;box-shadow:var(--shadow);
+  display:flex;align-items:center;justify-content:center}
+h1{font-size:clamp(1.45rem,4.5vw,2rem);font-weight:900;letter-spacing:.03em}
+.hero-sub{max-width:30em;margin:.5rem auto 0;color:var(--muted);font-size:clamp(.9rem,2.6vw,.98rem)}
+.badges{display:flex;flex-wrap:wrap;justify-content:center;gap:.45rem;margin-top:.8rem}
+.badges span{font-size:.76rem;font-weight:700;border:1px solid var(--border);background:var(--card);
+  border-radius:999px;padding:.2rem .7rem;color:var(--muted)}
+.badges .free{color:var(--ok);background:var(--ok-soft);border-color:transparent}
+main{max-width:860px;margin:0 auto;padding:1.2rem 1.2rem 2.5rem}
+.panel{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:1.1rem;margin-top:1rem}
+.panel h2{font-size:.95rem;font-weight:800;margin-bottom:.5rem}
+.opts{display:flex;flex-wrap:wrap;gap:.5rem;margin:.8rem 0}
+.opt{font-size:.85rem;font-weight:700;color:var(--muted);border:1.5px solid var(--border);
+  background:var(--card);border-radius:999px;padding:.32rem .9rem;transition:.15s}
+.opt.on{background:var(--primary);border-color:var(--primary);color:#fff}
+.actions{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.8rem}
+.btn{display:inline-flex;align-items:center;gap:.4rem;font-size:.95rem;font-weight:800;
+  border-radius:999px;padding:.6rem 1.4rem;box-shadow:var(--shadow);transition:.15s}
+.btn:hover{transform:translateY(-2px)}
+.btn-main{background:var(--primary);color:#fff}
+.btn-sub{background:var(--card);border:1.5px solid var(--border);color:var(--text)}
+.stat{font-size:.8rem;color:var(--muted);margin-top:.5rem}
+.tip{background:var(--primary-soft);border-radius:10px;padding:.7rem .9rem;font-size:.85rem;
+  color:var(--text);margin-top:1rem}
+.tip b{color:var(--primary-deep)}
+footer{border-top:1px solid var(--border);background:var(--card);text-align:center;
+  padding:1.4rem 1.2rem 5.5rem;color:var(--muted);font-size:.82rem}
+.home-fab{position:fixed;left:14px;bottom:14px;z-index:50;display:inline-flex;align-items:center;
+  gap:.35rem;font-size:.85rem;font-weight:800;color:var(--text);background:var(--card);
+  border:1.5px solid var(--border);border-radius:999px;padding:.5rem 1rem;box-shadow:var(--shadow-lift)}
+@media (max-width:520px){header{padding:1.6rem 1rem 1.3rem}}
+
+/* ===== 計時器專屬 ===== */
+.custom-row{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;margin-top:.3rem;font-size:.9rem;font-weight:700;color:var(--muted)}
+.custom-row input{width:5.2em;border:1.5px solid var(--border);border-radius:10px;background:var(--bg);
+  color:var(--text);font:inherit;font-size:1rem;font-weight:800;text-align:center;padding:.45rem .3rem;outline:none}
+.custom-row input:focus{border-color:var(--primary)}
+#stage{text-align:center;padding:1.4rem 1rem 1.6rem}
+.time{font-weight:900;font-variant-numeric:tabular-nums;letter-spacing:.02em;line-height:1.05;
+  font-size:clamp(3.6rem,20vw,11rem);color:var(--text);transition:color .3s}
+#stage.warn .time{color:var(--accent)}
+#stage.danger .time{color:#d84040;animation:pulse 1s ease-in-out infinite}
+html[data-theme="dark"] #stage.danger .time{color:#ff7a7a}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+#stage.finish{animation:flashbg .6s ease-in-out 8 alternate}
+@keyframes flashbg{from{background:var(--card)}to{background:var(--accent-soft)}}
+.done-msg{display:none;font-size:clamp(1.1rem,4vw,1.8rem);font-weight:900;color:var(--accent);margin-top:.4rem}
+#stage.finish .done-msg{display:block}
+.stage-label{font-size:.85rem;font-weight:800;color:var(--muted);letter-spacing:.15em}
+.key-hint{font-size:.78rem;color:var(--muted);margin-top:.7rem}
+@media (hover:none){.key-hint{display:none}}
+#stage:fullscreen{display:flex;flex-direction:column;justify-content:center;align-items:center;
+  border-radius:0;border:none;background:var(--card)}
+#stage:fullscreen .time{font-size:min(26vw,46vh)}
+#stage:fullscreen .done-msg{font-size:clamp(1.4rem,4.5vw,3rem)}
+</style>
+</head>
+<body>
+
+<a href="tools.html" class="home-fab" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+
+<header>
+  <button class="theme-btn" id="themeBtn" aria-label="切換深淺色">🌙</button>
+  <h1>⏰ 課堂倒數計時器</h1>
+  <p class="hero-sub">討論五分鐘，是真的五分鐘。</p>
+  <div class="badges"><span class="free">✅ 免費即用</span><span>🔒 資料不離開瀏覽器</span><span>📱 手機也好用</span></div>
+</header>
+
+<main>
+  <div class="panel">
+    <h2>1️⃣ 選模式、選時間</h2>
+    <div class="opts" id="modeTabs">
+      <button class="opt on" data-mode="down">⏳ 倒數計時</button>
+      <button class="opt" data-mode="up">⏱ 正數碼表（計活動用時）</button>
+    </div>
+    <div id="pickWrap">
+      <div class="opts" id="quickBtns">
+        <button class="opt" data-min="1">1 分鐘</button>
+        <button class="opt" data-min="3">3 分鐘</button>
+        <button class="opt on" data-min="5">5 分鐘</button>
+        <button class="opt" data-min="10">10 分鐘</button>
+        <button class="opt" data-min="15">15 分鐘</button>
+      </div>
+      <div class="custom-row">
+        自訂：<input type="number" id="cMin" min="0" max="999" inputmode="numeric" placeholder="分"> 分
+        <input type="number" id="cSec" min="0" max="59" inputmode="numeric" placeholder="秒"> 秒
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" id="stage">
+    <div class="stage-label" id="stageLabel">倒數計時</div>
+    <div class="time" id="timeText">05:00</div>
+    <div class="done-msg">⏰ 時間到！同學們回魂囉</div>
+    <div class="actions" style="justify-content:center">
+      <button class="btn btn-main" id="startBtn">▶️ 開始</button>
+      <button class="btn btn-sub" id="resetBtn">🔄 重設</button>
+      <button class="btn btn-sub" id="soundBtn">🔔 音效開</button>
+    </div>
+    <p class="key-hint">小訣竅：桌機按「空白鍵」＝開始／暫停，投影上課單手搞定。</p>
+    <p class="stat" id="stat"></p>
+  </div>
+
+  <div class="tip">💡 <b>投影小撇步：</b>按「開始」會自動進全螢幕、數字放到後排也看得到，Esc 鍵可退出。倒數時螢幕會保持常亮（不會投影到一半黑掉，尷尬掰掰）；剩 1 分鐘數字轉橘、剩 10 秒轉紅提醒收尾。時間到會播「溫柔版」提示音——不是嚇人的嗶嗶聲，怕吵可先按「音效開」關掉。</div>
+
+  <div class="actions" style="justify-content:center;margin-top:1.2rem">
+    <a class="btn btn-sub" href="tool-timer.html" download="課堂倒數計時器.html">📦 打包帶走這個工具</a>
+  </div>
+</main>
+
+<footer>🍀 <b>Learn AI with Tarshar</b>・TARSHAR 工具集｜更多小工具 → <a href="tools.html">打開工具箱</a></footer>
+
+<script>
+const $ = s => document.querySelector(s);
+const BASE_TITLE = '課堂倒數計時器｜TARSHAR 工具集';
+const stage = $('#stage'), timeText = $('#timeText'), stat = $('#stat');
+
+let mode = 'down';            // down=倒數 up=碼表
+let durationMs = 5 * 60 * 1000;
+let running = false, paused = false, finished = false;
+let endAt = 0, pauseLeft = 0;  // 倒數用
+let upBase = 0, upAcc = 0;     // 碼表用
+let tick = null, wakeLock = null;
+let soundOn = (localStorage.getItem('tt_timer_sound') || 'on') === 'on';
+
+/* ---- 顯示 ---- */
+function fmt(sec){
+  sec = Math.max(0, sec);
+  const h = Math.floor(sec / 3600), m = Math.floor(sec % 3600 / 60), s = sec % 60;
+  const mm = String(m).padStart(2, '0'), ss = String(s).padStart(2, '0');
+  return h ? h + ':' + mm + ':' + ss : mm + ':' + ss;
+}
+function show(sec, sync){
+  const t = fmt(sec);
+  timeText.textContent = t;
+  if (sync) document.title = (mode === 'down' ? '⏳ ' : '⏱ ') + t + '｜課堂倒數計時器';
+}
+
+/* ---- 螢幕常亮（不支援就默默跳過） ---- */
+async function keepAwake(){
+  try { if ('wakeLock' in navigator) wakeLock = await navigator.wakeLock.request('screen'); } catch (e) {}
+}
+function releaseAwake(){
+  try { if (wakeLock) wakeLock.release(); } catch (e) {}
+  wakeLock = null;
+}
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && running && !paused) keepAwake();
+});
+
+/* ---- 全螢幕（失敗就頁內大字，不報錯） ---- */
+function goFull(){
+  try { if (stage.requestFullscreen) stage.requestFullscreen().catch(() => {}); } catch (e) {}
+}
+function exitFull(){
+  try { if (document.fullscreenElement) document.exitFullscreen().catch(() => {}); } catch (e) {}
+}
+
+/* ---- 溫柔提示音（Web Audio 合成三音和弦，不刺耳） ---- */
+let audioCtx = null;
+function ensureAudio(){
+  // 要在使用者按按鈕的當下先把音訊引擎叫醒，時間到才出得了聲（瀏覽器的規矩）
+  try {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return;
+    if (!audioCtx) audioCtx = new AC();
+    if (audioCtx.state === 'suspended') audioCtx.resume().catch(() => {});
+  } catch (e) {}
+}
+function chime(){
+  if (!soundOn) return;
+  try {
+    ensureAudio();
+    const ac = audioCtx;
+    if (!ac) return;
+    if (ac.state === 'suspended') ac.resume().catch(() => {});
+    const notes = [523.25, 659.25, 783.99]; // C5 E5 G5
+    const t0 = ac.currentTime + 0.05;
+    for (let r = 0; r < 3; r++){
+      notes.forEach((f, i) => {
+        const o = ac.createOscillator(), g = ac.createGain();
+        o.type = 'sine'; o.frequency.value = f;
+        const t = t0 + r * 1.5 + i * 0.12;
+        g.gain.setValueAtTime(0, t);
+        g.gain.linearRampToValueAtTime(0.13, t + 0.25);
+        g.gain.exponentialRampToValueAtTime(0.001, t + 1.35);
+        o.connect(g); g.connect(ac.destination);
+        o.start(t); o.stop(t + 1.4);
+      });
+    }
+  } catch (e) {}
+}
+
+/* ---- 主循環 ---- */
+function loop(){
+  if (mode === 'down'){
+    const left = endAt - Date.now();
+    if (left <= 0){ finish(); return; }
+    const sec = Math.ceil(left / 1000);
+    show(sec, true);
+    stage.classList.toggle('warn', sec <= 60 && sec > 10);
+    stage.classList.toggle('danger', sec <= 10);
+  } else {
+    show(Math.floor((upAcc + Date.now() - upBase) / 1000), true);
+  }
+}
+function startLoop(){ clearInterval(tick); tick = setInterval(loop, 200); loop(); }
+
+function finish(){
+  clearInterval(tick);
+  running = false; paused = false; finished = true;
+  show(0, false);
+  stage.classList.remove('warn', 'danger');
+  stage.classList.add('finish');
+  document.title = '⏰ 時間到！｜課堂倒數計時器';
+  $('#startBtn').textContent = '▶️ 再來一輪';
+  stat.textContent = '辛苦了！按「再來一輪」用同樣時間重跑，或上面換個時間。';
+  chime();
+  releaseAwake();
+}
+
+/* ---- 開始／暫停／繼續 ---- */
+function startPause(){
+  if (!running){                       // 開始
+    if (finished){ resetTimer(false); }
+    if (mode === 'down'){
+      if (durationMs <= 0){ stat.textContent = '先選個時間嘛 🙂 上面按一顆，或自己填分秒。'; return; }
+      endAt = Date.now() + durationMs;
+    } else {
+      upAcc = 0; upBase = Date.now();
+    }
+    running = true; paused = false; finished = false;
+    stage.classList.remove('finish');
+    $('#startBtn').textContent = '⏸ 暫停';
+    stat.textContent = '';
+    ensureAudio(); goFull(); keepAwake(); startLoop();
+  } else if (!paused){                 // 暫停
+    paused = true;
+    clearInterval(tick);
+    if (mode === 'down') pauseLeft = endAt - Date.now();
+    else upAcc += Date.now() - upBase;
+    $('#startBtn').textContent = '▶️ 繼續';
+    stat.textContent = '暫停中，時間先幫你凍結住了 ❄️';
+    releaseAwake();
+  } else {                             // 繼續
+    paused = false;
+    if (mode === 'down') endAt = Date.now() + pauseLeft;
+    else upBase = Date.now();
+    $('#startBtn').textContent = '⏸ 暫停';
+    stat.textContent = '';
+    keepAwake(); startLoop();
+  }
+}
+
+function resetTimer(alsoExitFull){
+  clearInterval(tick);
+  running = false; paused = false; finished = false;
+  stage.classList.remove('warn', 'danger', 'finish');
+  $('#startBtn').textContent = '▶️ 開始';
+  stat.textContent = '';
+  document.title = BASE_TITLE;
+  releaseAwake();
+  if (alsoExitFull !== false) exitFull();
+  show(mode === 'down' ? Math.round(durationMs / 1000) : 0, false);
+}
+
+$('#startBtn').addEventListener('click', startPause);
+$('#resetBtn').addEventListener('click', () => resetTimer(true));
+
+/* ---- 空白鍵＝開始/暫停 ---- */
+document.addEventListener('keydown', e => {
+  if (e.code !== 'Space') return;
+  const tag = (e.target.tagName || '').toUpperCase();
+  if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+  e.preventDefault();
+  if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+  startPause();
+});
+
+/* ---- 音效開關（記在 localStorage） ---- */
+function paintSound(){ $('#soundBtn').textContent = soundOn ? '🔔 音效開' : '🔕 音效關'; }
+$('#soundBtn').addEventListener('click', () => {
+  soundOn = !soundOn;
+  localStorage.setItem('tt_timer_sound', soundOn ? 'on' : 'off');
+  paintSound();
+  stat.textContent = soundOn ? '時間到會播溫柔和弦提醒 🎵' : '好，時間到就安安靜靜，只閃畫面不出聲。';
+});
+paintSound();
+
+/* ---- 選時間 ---- */
+function setDuration(ms, fromQuick){
+  durationMs = ms;
+  localStorage.setItem('tt_timer_last', String(Math.round(ms / 1000)));
+  if (!running) show(Math.round(ms / 1000), false);
+}
+$('#quickBtns').addEventListener('click', e => {
+  const b = e.target.closest('.opt'); if (!b) return;
+  document.querySelectorAll('#quickBtns .opt').forEach(x => x.classList.toggle('on', x === b));
+  $('#cMin').value = ''; $('#cSec').value = '';
+  setDuration(Number(b.dataset.min) * 60000, true);
+  if (running || finished) resetTimer(false);
+});
+function customChange(){
+  const m = Math.max(0, parseInt($('#cMin').value, 10) || 0);
+  const s = Math.min(59, Math.max(0, parseInt($('#cSec').value, 10) || 0));
+  if (m === 0 && s === 0) return;
+  document.querySelectorAll('#quickBtns .opt').forEach(x => x.classList.remove('on'));
+  setDuration((m * 60 + s) * 1000, false);
+  if (running || finished) resetTimer(false);
+}
+$('#cMin').addEventListener('input', customChange);
+$('#cSec').addEventListener('input', customChange);
+
+/* ---- 模式切換 ---- */
+$('#modeTabs').addEventListener('click', e => {
+  const b = e.target.closest('.opt'); if (!b || b.dataset.mode === mode) return;
+  mode = b.dataset.mode;
+  document.querySelectorAll('#modeTabs .opt').forEach(x => x.classList.toggle('on', x === b));
+  $('#pickWrap').style.display = mode === 'down' ? '' : 'none';
+  $('#stageLabel').textContent = mode === 'down' ? '倒數計時' : '正數碼表';
+  resetTimer(true);
+});
+
+/* ---- 還原上次設定 ---- */
+(function restore(){
+  const last = parseInt(localStorage.getItem('tt_timer_last'), 10);
+  if (last > 0){
+    durationMs = last * 1000;
+    const hit = document.querySelector('#quickBtns .opt[data-min="' + (last / 60) + '"]');
+    document.querySelectorAll('#quickBtns .opt').forEach(x => x.classList.remove('on'));
+    if (hit && last % 60 === 0) hit.classList.add('on');
+    else { $('#cMin').value = Math.floor(last / 60); $('#cSec').value = last % 60; }
+  }
+  show(Math.round(durationMs / 1000), false);
+})();
+
+/* ---- 深淺色切換 ---- */
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme', t);
+  $('#themeBtn').textContent = t === 'dark' ? '☀️' : '🌙';
+}
+const saved = localStorage.getItem('tools_theme');
+applyTheme(saved || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+$('#themeBtn').addEventListener('click', () => {
+  const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('tools_theme', next); applyTheme(next);
+});
+</script>
+</body>
+</html>

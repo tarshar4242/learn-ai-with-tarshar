@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>研究生的日常思維・生圖指令包 | 🍀Learn AI with Tarshar</title>
+<meta name="description" content="研究生的日常思維・生圖指令包：文獻閱讀、筆記與知識管理、寫作與輸出、心態與節奏四大類，共 32 組 YAML 結構化生圖咒語，點擊即可複製貼給 AI 生圖。">
+<style>
+:root{
+  --green:#5aa657; --green2:#3f8c52; --greenD:#3f6b2e; --paper:#f4f8f3; --ink:#3a4038; --ink2:#5f6b5a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;color:var(--ink);line-height:1.7;
+  background-color:var(--paper);background-image:radial-gradient(#cfe3cc 2px,transparent 2px);background-size:30px 30px;padding-bottom:40px}
+a{text-decoration:none}
+::-webkit-scrollbar{width:12px}
+::-webkit-scrollbar-track{background:#eef5ec;border-radius:10px}
+::-webkit-scrollbar-thumb{background:#a3c99d;border-radius:10px;border:3px solid #eef5ec}
+::-webkit-scrollbar-thumb:hover{background:#7fb377}
+@keyframes float{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-15px) rotate(3deg)}}
+.float-item{position:absolute;animation:float 4s ease-in-out infinite;opacity:.9;user-select:none}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+
+/* ── 回入口鈕 ── */
+.gdt-home{position:fixed;top:14px;left:14px;z-index:99999;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.96);color:var(--greenD);border:1.5px solid #a8c686;border-radius:999px;padding:8px 15px;font-size:13.5px;font-weight:700;box-shadow:0 4px 16px rgba(0,0,0,.22);backdrop-filter:blur(6px)}
+
+/* ── Header ── */
+header.hero{position:relative;overflow:hidden;background:linear-gradient(100deg,#2f8f6b,#3f9e57,#2f9e86);color:#fff;border-bottom:8px solid #a7e0b4;border-radius:0 0 3rem 3rem;margin-bottom:2rem;box-shadow:0 12px 30px -12px rgba(50,110,70,.5)}
+.hero .inner{max-width:64rem;margin:0 auto;padding:3rem 1rem;text-align:center;position:relative;z-index:2}
+.hero h1{font-size:clamp(26px,5vw,46px);font-weight:900;letter-spacing:1px;margin-bottom:1.6rem;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:.5rem;text-shadow:0 2px 6px rgba(0,0,0,.18)}
+.hero h1 .tag{background:#fff;color:#2f9e6b;padding:.15em .6em;border-radius:999px;font-size:.82em;transform:rotate(-2deg);border:4px dashed #bfe8cf}
+.yaml-box{background:rgba(255,255,255,.14);border:2px solid rgba(255,255,255,.3);border-radius:2rem;padding:1.4rem 1.5rem;max-width:48rem;margin:0 auto;text-align:left;box-shadow:0 8px 20px -8px rgba(0,0,0,.25);backdrop-filter:blur(6px)}
+.yaml-box .lbl{font-weight:800;font-size:1.05rem;display:flex;align-items:center;gap:.4rem;border-bottom:2px solid rgba(255,255,255,.25);padding-bottom:.6rem;margin-bottom:.7rem;color:#eafff0}
+.yaml-box pre{white-space:pre-wrap;font-family:"Noto Sans TC",ui-monospace,monospace;font-size:.86rem;line-height:1.8;color:#eafff2}
+.hero .sub1{font-size:clamp(17px,2.4vw,22px);font-weight:800;margin:1.4rem 0 .7rem;text-shadow:0 2px 6px rgba(0,0,0,.18)}
+.hero .sub2{display:inline-block;background:rgba(20,80,50,.4);border:1px solid rgba(160,230,180,.5);padding:.5rem 1.2rem;border-radius:999px;font-size:clamp(14px,1.8vw,17px)}
+
+main{max-width:72rem;margin:0 auto;padding:1.5rem 1rem}
+
+/* ── 提醒 ── */
+.remind{background:rgba(255,255,255,.96);border:4px dashed #9ed49a;border-radius:2rem;padding:1.5rem;max-width:56rem;margin:0 auto 4rem;display:flex;gap:1.2rem;align-items:flex-start;box-shadow:0 8px 22px -14px rgba(90,140,80,.5)}
+.remind .ic{flex:none;width:64px;height:64px;border-radius:50%;background:#dff3dd;display:grid;place-items:center;font-size:30px;animation:bounce 2s infinite}
+.remind h3{font-size:1.25rem;font-weight:900;color:#3f7a3a;margin-bottom:.4rem}
+.remind p{color:var(--ink2);font-size:1.02rem;line-height:1.85}
+.remind code{font-family:ui-monospace,monospace;font-size:.82em;background:#eef2ec;padding:2px 7px;border-radius:6px;color:#3f6b2e}
+.remind .hl{color:#3f8c52;background:#e9f6e6;padding:2px 8px;border-radius:8px;font-weight:700}
+.remind .rt{background:#fff5d6;color:#c56a1a;padding:2px 9px;border-radius:8px;font-weight:800;border:1px solid #f2dfa0;display:inline-block;transform:rotate(1deg)}
+
+/* ── 傳送門索引 ── */
+.portal-wrap{background:rgba(255,255,255,.96);border:4px solid #c7e6c3;border-radius:2.4rem;padding:2rem;max-width:56rem;margin:0 auto 4rem;box-shadow:0 10px 26px -16px rgba(90,140,80,.5)}
+.portal-wrap h3{font-size:1.5rem;font-weight:900;color:#3f7a3a;text-align:center;margin-bottom:1.4rem}
+.portal-grid{display:grid;grid-template-columns:1fr;gap:1rem}
+@media(min-width:640px){.portal-grid{grid-template-columns:1fr 1fr}}
+.portal{display:flex;align-items:center;padding:1rem;border-radius:1.2rem;border:2px dashed var(--cb);background:var(--cl);transition:transform .18s}
+.portal:hover{transform:scale(1.04)}
+.portal .badge{flex:none;width:40px;height:40px;border-radius:50%;background:var(--c);color:#fff;display:grid;place-items:center;font-weight:800;font-size:1.1rem;margin-right:1rem;box-shadow:0 2px 0 rgba(0,0,0,.08)}
+.portal .t1{font-weight:900;color:var(--cd);font-size:1rem;display:flex;align-items:center;gap:.35rem}
+.portal .t2{font-size:.76rem;color:var(--c);font-weight:700;margin-top:2px}
+.portal .arw{margin-left:auto;color:var(--c);font-size:1.3rem;font-weight:900;transition:transform .18s}
+.portal:hover .arw{transform:translateX(4px)}
+
+/* ── section ── */
+section{margin-bottom:4rem;scroll-margin-top:1.5rem}
+.cat-header{position:sticky;top:15px;z-index:10;background:rgba(255,255,255,.9);backdrop-filter:blur(12px);border:4px dashed var(--cb);border-radius:999px;padding:.7rem 1.5rem;max-width:48rem;margin:0 auto 2rem;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px -8px rgba(90,140,80,.4)}
+.cat-header h2{font-size:1.5rem;font-weight:900;color:var(--cd);display:flex;align-items:center;gap:.5rem}
+.cat-header .badge{width:40px;height:40px;border-radius:50%;background:var(--c);color:#fff;display:grid;place-items:center;font-size:1.1rem;border:2px solid var(--cb)}
+.cards{display:grid;grid-template-columns:1fr;gap:2rem}
+@media(min-width:768px){.cards{grid-template-columns:1fr 1fr}}
+@media(min-width:1024px){.cards{grid-template-columns:1fr 1fr 1fr}}
+
+/* ── card ── */
+.card{position:relative;overflow:hidden;background:#fff;border:2px dashed #e2e2dc;border-radius:2rem;padding:1.5rem;display:flex;flex-direction:column;box-shadow:0 4px 14px -10px rgba(90,140,80,.4);transition:transform .28s cubic-bezier(.4,0,.2,1),box-shadow .28s,border-color .28s}
+.card:hover{transform:translateY(-8px) scale(1.02) rotate(1deg);box-shadow:0 20px 25px -6px rgba(134,179,128,.45);border-color:var(--c)}
+.card .bgemo{position:absolute;right:-8px;bottom:-14px;font-size:120px;opacity:.05;transform:rotate(-12deg);pointer-events:none;transition:.3s;line-height:1}
+.card:hover .bgemo{opacity:.12;transform:rotate(0) scale(1.06)}
+.card .head{display:flex;align-items:flex-start;gap:.75rem;position:relative;z-index:2}
+.card .chip{flex:none;width:44px;height:44px;border-radius:.9rem;background:var(--cl);border:1px solid var(--cb);display:grid;place-items:center;font-size:22px}
+.card h3{font-size:1.2rem;font-weight:900;color:#39413a;line-height:1.35;padding-top:2px}
+.card .ratio{display:inline-block;margin-top:.7rem;background:var(--cl);color:var(--cd);border:1px solid var(--cb);border-radius:999px;font-family:ui-monospace,monospace;font-weight:800;font-size:.72rem;padding:.25rem .8rem}
+.card .use{position:relative;z-index:2;margin:1rem 0;font-size:.86rem;color:var(--ink2);font-weight:600;background:var(--cl);border:1px solid var(--cb);border-radius:.9rem;padding:.7rem .8rem}
+.card .use .lb{background:#fff;color:var(--c);border:1px solid var(--cb);border-radius:.4rem;font-size:.72rem;padding:.1rem .5rem;margin-right:.4rem;font-weight:800}
+.card .promptbox{position:relative;z-index:2;background:#f7f8f6;border:2px solid #eef0ec;border-radius:1.1rem;padding:1rem;font-family:ui-monospace,monospace;font-size:.82rem;color:#4a5248;white-space:pre-wrap;line-height:1.75;flex-grow:1;cursor:pointer;transition:.2s;margin-bottom:1.2rem}
+.card .promptbox:hover{background:#fff;border-color:var(--cb);box-shadow:0 6px 16px -10px var(--c)}
+.card .promptbox .hint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.6);backdrop-filter:blur(1px);border:2px solid var(--c);border-radius:1.1rem;opacity:0;transition:.2s;pointer-events:none}
+.card .promptbox:hover .hint{opacity:1}
+.card .promptbox .hint span{background:var(--cl);color:var(--cd);font-family:"Noto Sans TC",sans-serif;font-weight:900;font-size:.9rem;padding:.5rem 1rem;border-radius:.8rem;box-shadow:0 6px 16px -6px rgba(0,0,0,.25)}
+.card .copybtn{position:relative;z-index:2;width:100%;border:none;cursor:pointer;background:var(--c);color:#fff;font-weight:800;font-size:1rem;padding:.8rem;border-radius:.9rem;display:flex;align-items:center;justify-content:center;gap:.5rem;box-shadow:0 4px 0 var(--cd);transition:transform .1s,box-shadow .1s,background .2s}
+.card .copybtn:hover{transform:translateY(2px);box-shadow:0 2px 0 var(--cd)}
+.card .copybtn:active{transform:translateY(4px);box-shadow:none}
+.card .copybtn.copied{background:#4caf6a;box-shadow:none;transform:translateY(2px)}
+
+/* ── toast ── */
+#toast{position:fixed;bottom:2.5rem;left:50%;transform:translate(-50%,2.5rem);background:#fff;border:4px solid #9ed49a;color:#3f7a3a;padding:1rem 2rem;border-radius:999px;box-shadow:0 18px 40px -12px rgba(0,0,0,.35);opacity:0;transition:.3s;z-index:50;display:flex;align-items:center;gap:.6rem;font-weight:800;font-size:1.05rem;pointer-events:none}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ── footer ── */
+footer.gdt-footer{background:#333a34;color:#d3ddd2;padding:2.5rem 1rem;margin-top:3rem}
+footer.gdt-footer .fin{max-width:56rem;margin:0 auto;text-align:center}
+footer.gdt-footer .brand{font-weight:900;color:#fff;font-size:1.3rem;margin-bottom:.5rem}
+footer.gdt-footer .sub{color:#bfe6c4;font-size:.9rem}
+footer.gdt-footer .made{font-size:.85rem;color:#9fb09d;margin:1.2rem 0}
+footer.gdt-footer .ask{background:#414a42;border-radius:.8rem;padding:1rem 1.2rem;font-size:.8rem;text-align:left;max-width:34rem;margin:0 auto;line-height:1.8}
+
+.t-blue{--c:#4f9df5;--cd:#1d64c4;--cl:#eff6ff;--cb:#bfdbfe}
+.t-orange{--c:#f89543;--cd:#c2610c;--cl:#fff7ed;--cb:#fed7aa}
+.t-purple{--c:#b06ef0;--cd:#7e22ce;--cl:#faf5ff;--cb:#e9d5ff}
+.t-teal{--c:#2bbfac;--cd:#0f766e;--cl:#f0fdfa;--cb:#99f6e4}
+</style>
+</head>
+<body>
+<a href="../life/" class="gdt-home" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+
+<header class="hero">
+  <div class="float-item" style="top:2.5rem;left:8%;font-size:2.8rem;animation-delay:0s">🎓</div>
+  <div class="float-item" style="top:6rem;right:10%;font-size:2.3rem;animation-delay:1s">📚</div>
+  <div class="float-item" style="bottom:2.5rem;left:18%;font-size:2.2rem;animation-delay:2s">☕</div>
+  <div class="float-item" style="bottom:4rem;right:9%;font-size:2.7rem;animation-delay:.5s">✍️</div>
+  <div class="float-item" style="top:2rem;left:50%;font-size:2rem;opacity:.6;animation-delay:1.5s">🌱</div>
+
+  <div class="inner">
+    <h1><span>🍀</span><span>研究生的日常思維</span><span class="tag">生圖指令包</span><span>🍀</span></h1>
+
+    <div class="yaml-box">
+      <div class="lbl">✨ YAML 咒語精選範例：拆論證讀 Paper 思維圖卡</div>
+<pre>persona: 你是一位擅長把抽象思維畫成溫暖插畫的知識視覺設計師
+task: 請生成一張「拆論證讀 Paper」的研究生思維圖卡
+audience: 每天與文獻搏鬥的碩博士研究生
+scene: 一位研究生把一篇放大的論文像積木一樣拆開，分成「主張」「假設」「方法」「證據」四塊漂浮的積木
+golden_line: 「讀 Paper 不是讀小說，而是在拆論證。」
+style: 溫暖手繪知識插畫，米白紙質底，墨線搭配深藍重點色
+layout: 主視覺置中，金句置於下方三分之一處，四周留白乾淨
+ratio: "3:4"</pre>
+    </div>
+
+    <p class="sub1">👋 哈囉！這裡是研究生思維 YAML 咒語庫！</p>
+    <p class="sub2">👇 點擊卡片複製 YAML 咒語，貼給你的 AI 生圖吧！ 🎁</p>
+  </div>
+</header>
+
+<main>
+  <!-- 使用小提醒 -->
+  <div class="remind">
+    <div class="ic">💡</div>
+    <div>
+      <h3>使用小提醒 🔔</h3>
+      <p>這些指令使用了 <span class="hl">YAML 結構化框架</span>：<code>persona</code>（角色）、<code>task</code>（任務）、<code>audience</code>（對象）、<code>scene</code>（畫面）、<code>golden_line</code>（金句）、<code>style</code>（風格）、<code>layout</code>（版面）。欄位清楚，AI 就不會亂猜！最後的 <span class="rt">ratio</span> 是尺寸關鍵，一定要留著它喔！🪄</p>
+    </div>
+  </div>
+
+  <!-- 快速召喚傳送門 -->
+  <div class="portal-wrap">
+    <h3>🎯 快速召喚傳送門（分類大標索引）🎯</h3>
+    <div class="portal-grid">
+      <a href="#sec-a" class="portal t-blue"><span class="badge">A</span><div><div class="t1">📖 文獻閱讀思維</div><div class="t2">精選 8 個思維咒語</div></div><span class="arw">›</span></a>
+      <a href="#sec-b" class="portal t-orange"><span class="badge">B</span><div><div class="t1">🗂️ 筆記與知識管理思維</div><div class="t2">精選 8 個思維咒語</div></div><span class="arw">›</span></a>
+      <a href="#sec-c" class="portal t-purple"><span class="badge">C</span><div><div class="t1">✍️ 寫作與輸出思維</div><div class="t2">精選 8 個思維咒語</div></div><span class="arw">›</span></a>
+      <a href="#sec-d" class="portal t-teal"><span class="badge">D</span><div><div class="t1">🧘 心態與節奏思維</div><div class="t2">精選 8 個思維咒語</div></div><span class="arw">›</span></a>
+    </div>
+  </div>
+
+  <section id="sec-a" class="t-blue">
+    <div class="cat-header"><h2><span class="badge">A</span><span>📖</span> 文獻閱讀思維</h2></div>
+    <div class="cards" id="section-a"></div>
+  </section>
+  <section id="sec-b" class="t-orange">
+    <div class="cat-header"><h2><span class="badge">B</span><span>🗂️</span> 筆記與知識管理思維</h2></div>
+    <div class="cards" id="section-b"></div>
+  </section>
+  <section id="sec-c" class="t-purple">
+    <div class="cat-header"><h2><span class="badge">C</span><span>✍️</span> 寫作與輸出思維</h2></div>
+    <div class="cards" id="section-c"></div>
+  </section>
+  <section id="sec-d" class="t-teal">
+    <div class="cat-header"><h2><span class="badge">D</span><span>🧘</span> 心態與節奏思維</h2></div>
+    <div class="cards" id="section-d"></div>
+  </section>
+</main>
+
+<footer class="gdt-footer">
+  <div class="fin">
+    <div class="brand">🍀 Learn AI with Tarshar ｜ 2026</div>
+    <div class="sub">陪你把 AI 變成日常的學習夥伴 🌱</div>
+    <div class="made">Made with 🍀 Learn AI with Tarshar via AI</div>
+    <div class="ask">
+      🔸 小小請求：為了讓創作能持續產出，請勿在未經同意下任意轉載或二次上傳這份指令包。<br>
+      您的尊重是創作的最大動力！下一期還有更多驚喜等著你！
+    </div>
+  </div>
+</footer>
+
+<div id="toast">🎉 <span>YAML 咒語已複製！去生圖吧！✨</span></div>
+
+<script>
+// Lucide 圖示改用 emoji（單檔、不依賴 CDN）
+const EMO = {
+  "book-open":"📖","door-open":"🚪","map":"🗺️","search":"🔍","library":"📚","bot":"🤖","turtle":"🐢","user-round":"🧑",
+  "sticky-note":"🗒️","archive":"🗄️","compass":"🧭","network":"🕸️","signpost":"🪧","scale":"⚖️","sprout":"🌱","refresh-cw":"🔄",
+  "pen-line":"🖊️","mic":"🎤","audio-lines":"🎙️","pencil-ruler":"📐","gauge":"⏱️","key-round":"🗝️","palette":"🎨","book-a":"📗",
+  "waves":"🌊","shield-check":"🛡️","moon":"🌙","battery-charging":"🔋","mountain":"⛰️","heart-pulse":"💗","users":"👥","hourglass":"⏳"
+};
+const prompts = {
+  a: [
+    { title: "拆論證讀 Paper", ratio: "3:4", use: "文獻閱讀 / 論證拆解", icon: "book-open", color: "blue", prompt: "persona: 你是一位擅長把抽象思維畫成溫暖插畫的知識視覺設計師\ntask: 請生成一張「拆論證讀 Paper」的研究生思維圖卡\naudience: 每天與文獻搏鬥的碩博士研究生\nscene: 一位研究生把一篇放大的論文像積木一樣拆開，分成「主張」「假設」「方法」「證據」四塊漂浮的積木\ngolden_line: 「讀 Paper 不是讀小說，而是在拆論證。」\nstyle: 溫暖手繪知識插畫，米白紙質底，墨線搭配深藍重點色\nlayout: 主視覺置中，金句置於下方三分之一處，四周留白乾淨\nratio: \"3:4\"" },
+    { title: "每篇 Paper 都是一種可能性", ratio: "1:1", use: "文獻閱讀 / 批判思考", icon: "door-open", color: "blue", prompt: "persona: 你是一位擅長概念隱喻的繪本風插畫家\ntask: 請生成一張「每篇 Paper 都是一種可能性」的思維圖卡\naudience: 容易把單篇文獻當成唯一答案的研究生\nscene: 一條溫暖的長廊兩側有許多扇微微打開的門，每扇門後透出不同顏色的光，研究生站在走廊中間好奇張望\ngolden_line: 「每篇 Paper 都只是一種可能性的展示。」\nstyle: 柔和水彩繪本風，光影層次豐富，色調溫暖不刺眼\nlayout: 走廊透視構圖引導視線，金句橫放在畫面底部\nratio: \"1:1\"" },
+    { title: "貢獻是差異，不是清單", ratio: "4:3", use: "論文定位 / 貢獻論述", icon: "map", color: "blue", prompt: "persona: 你是一位擅長地圖隱喻的學術視覺化插畫師\ntask: 請生成一張「貢獻是差異定位」的思維圖卡\naudience: 正在寫論文貢獻段落的研究生\nscene: 一張手繪探險地圖上有一條前人走出的舊路線，以及一條新畫出的分岔路線，分岔點插著一面發光的小旗子\ngolden_line: 「貢獻不是你做了什麼，而是你和既有文獻差在哪裡。」\nstyle: 復古手繪地圖風，米黃紙質感，墨綠與磚紅重點色\nlayout: 地圖佔畫面上方三分之二，金句像圖例一樣放在下方框內\nratio: \"4:3\"" },
+    { title: "找差異，不是找相同", ratio: "1:1", use: "研究選題 / 問題意識", icon: "search", color: "blue", prompt: "persona: 你是一位極簡風格的概念插畫設計師\ntask: 請生成一張「研究者在找差異」的思維圖卡\naudience: 還在尋找研究缺口的研究生\nscene: 放大鏡下有一整排幾乎一模一樣的灰色圓點，其中一個是金色的小星星，放大鏡正好停在它上面\ngolden_line: 「研究的突破，藏在不一致、反例與邊界條件裡。」\nstyle: 極簡扁平插畫，大面積留白，灰階中僅一處亮金色點睛\nlayout: 視覺焦點集中在星星與放大鏡，金句放在下方置中\nratio: \"1:1\"" },
+    { title: "補背景，回教科書", ratio: "3:4", use: "基礎補強 / 系統學習", icon: "library", color: "blue", prompt: "persona: 你是一位溫暖的書齋風格插畫家\ntask: 請生成一張「補背景知識回教科書」的思維圖卡\naudience: 一直追新論文卻覺得基礎越補越破的研究生\nscene: 空中漂浮著許多零散的紙張碎片，全部化成光流匯入桌上一本厚實攤開的教科書，書頁散發安定的暖光\ngolden_line: 「補背景最快的路，不是更多論文，而是回到教科書。」\nstyle: 溫暖書齋插畫風，木質桌面與暖黃檯燈光，細節溫柔\nlayout: 光流動線由上而下引導視線到書本，金句在底部\nratio: \"3:4\"" },
+    { title: "AI 陪讀，判斷在你", ratio: "16:9", use: "AI 輔助閱讀 / 學術判斷", icon: "bot", color: "blue", prompt: "persona: 你是一位擅長描繪人機協作的未來感插畫師\ntask: 請生成一張「AI 陪讀但判斷在你」的思維圖卡\naudience: 開始用 AI 讀文獻的研究生\nscene: 一個圓潤可愛的小機器人恭敬遞上一疊整理好的摘要卡片，研究生坐在書桌前拿著一枚印章，正在為其中一張卡片蓋下「貢獻確認」的章\ngolden_line: 「AI 可以幫你讀 Paper，但不能替你判斷貢獻。」\nstyle: 溫暖科技風插畫，柔和藍綠色調，人物與機器人都圓潤親切\nlayout: 左側機器人、右側人物的對話式構圖，金句橫放底部\nratio: \"16:9\"" },
+    { title: "慢讀的地方，理解才發生", ratio: "3:4", use: "深度閱讀 / 逐句咀嚼", icon: "turtle", color: "blue", prompt: "persona: 你是一位童趣哲思風格的插畫家\ntask: 請生成一張「慢讀是理解發生的地方」的思維圖卡\naudience: 總覺得自己讀太慢而焦慮的研究生\nscene: 一隻戴著小眼鏡的蝸牛沿著一行放大的文字慢慢爬行，身後的字都亮了起來，留下一道發光的軌跡\ngolden_line: 「讀得最慢的地方，常常也是最有效的地方。」\nstyle: 溫柔童趣插畫，奶油色底，文字軌跡用螢光黃綠點亮\nlayout: 對角線構圖呈現爬行路徑，金句沿底部橫放\nratio: \"3:4\"" },
+    { title: "讀懂一個人，不只讀句子", ratio: "4:3", use: "輸出導向閱讀 / 作者思路", icon: "user-round", color: "blue", prompt: "persona: 你是一位擅長雙重曝光效果的概念藝術家\ntask: 請生成一張「讀懂作者而非只讀句子」的思維圖卡\naudience: 抄了很多金句卻長不出自己觀點的研究生\nscene: 攤開的書頁上文字緩緩浮起，在空中聚成一位思考者的側臉輪廓，輪廓裡透出星圖般的思路連線\ngolden_line: 「你是在讀句子，還是在讀一個人的問題意識？」\nstyle: 雙重曝光插畫風，深藍夜空色調搭配暖白文字光點\nlayout: 書本在下、側臉輪廓在上的垂直構圖，金句置底\nratio: \"4:3\"" }
+  ],
+  b: [
+    { title: "一張卡片，一個概念", ratio: "1:1", use: "卡片盒筆記 / 原子化筆記", icon: "sticky-note", color: "orange", prompt: "persona: 你是一位文具控最愛的手帳風插畫家\ntask: 請生成一張「一卡片一概念」的筆記思維圖卡\naudience: 筆記總是越寫越長、越寫越亂的研究生\nscene: 一個溫潤的木質卡片盒裡整齊站著一排卡片，其中一張卡片輕輕飛出、散發光芒，卡片上畫著一顆單獨的星星\ngolden_line: 「一張卡片，一個概念，知識才能自由組合。」\nstyle: 日系手帳插畫風，木質與奶油色調，細節精緻療癒\nlayout: 卡片盒置中偏下，飛出的卡片是視覺焦點，金句在底部\nratio: \"1:1\"" },
+    { title: "索引是卡片盒的靈魂", ratio: "4:3", use: "歸檔與索引 / 檢索系統", icon: "archive", color: "orange", prompt: "persona: 你是一位懷舊圖書館美學的插畫師\ntask: 請生成一張「索引技術是筆記系統底層」的思維圖卡\naudience: 存了很多筆記卻找不回來的研究生\nscene: 一座復古圖書館的木質目錄抽屜櫃，其中一格抽屜被拉開，透出溫暖的金光，光裡浮著一張張帶編號的索引卡\ngolden_line: 「卡片盒的底層不是靈感，而是索引技術。」\nstyle: 復古圖書館風，深木色與黃銅把手，光影對比溫暖\nlayout: 抽屜櫃正面構圖，發光抽屜是焦點，金句放在下方\nratio: \"4:3\"" },
+    { title: "MOC 是地圖，不是目錄", ratio: "16:9", use: "知識導航 / 筆記架構", icon: "compass", color: "orange", prompt: "persona: 你是一位航海圖美學的視覺設計師\ntask: 請生成一張「MOC 是導航地圖」的思維圖卡\naudience: 把筆記首頁做成分類清單卻越用越迷路的研究生\nscene: 一張攤開的手繪航海圖，海上散布著一座座「筆記小島」，虛線航道把小島串連起來，一枚指南針指向下一站\ngolden_line: 「地圖告訴你的不是東西在哪，而是下一步去哪。」\nstyle: 手繪航海圖風，米黃羊皮紙質感，海水用柔和藍綠\nlayout: 橫幅地圖構圖，航道動線清楚，金句放在圖框下緣\nratio: \"16:9\"" },
+    { title: "連結力是練出來的", ratio: "1:1", use: "知識連結 / 全局思考", icon: "network", color: "orange", prompt: "persona: 你是一位擅長星空隱喻的數位藝術家\ntask: 請生成一張「連結能力靠刻意練習」的思維圖卡\naudience: 筆記存了很多卻彼此孤立的研究生\nscene: 深藍星空中散布著發光的知識節點，像星座圖一樣已有數條連線，一隻手正拿著光之筆在兩顆星之間畫出一條新的亮線\ngolden_line: 「全局圖不是拿來欣賞，是拿來發現缺口。」\nstyle: 星空插畫風，深藍底色配金色光線，寧靜而有張力\nlayout: 節點網佈滿畫面，新連線位於視覺中心，金句置底\nratio: \"1:1\"" },
+    { title: "先決定跟誰學", ratio: "3:4", use: "知識庫佈局 / 學習脈絡", icon: "signpost", color: "orange", prompt: "persona: 你是一位溫暖敘事風的插畫家\ntask: 請生成一張「先決定跟誰學，再整理資料」的思維圖卡\naudience: 一開知識庫就先建幾十個分類資料夾的研究生\nscene: 一棵大樹的根系向下延伸，每條根都連向一盞溫暖的小燈籠，燈籠象徵不同的學習源頭，樹冠則結出纍纍的筆記果實\ngolden_line: 「不是先分類資料，而是先決定你要跟誰學。」\nstyle: 溫暖童話插畫風，大地色系配燈籠暖光，畫面安定\nlayout: 垂直構圖上樹冠下根系，金句放在畫面底部\nratio: \"3:4\"" },
+    { title: "別為了管理而管理", ratio: "4:3", use: "筆記系統 / 反過度整理", icon: "scale", color: "orange", prompt: "persona: 你是一位幽默感十足的概念插畫家\ntask: 請生成一張「筆記不該變成第二份工作」的思維圖卡\naudience: 花在整理筆記的時間比思考還多的研究生\nscene: 一座天平，一端堆著華麗但空洞的彩色資料夾塔，另一端只放著一支正在寫字的鋼筆，鋼筆那端穩穩下沉勝出\ngolden_line: 「筆記系統不該變成你的第二份工作。」\nstyle: 輕鬆扁平插畫風，對比色明確，帶一點趣味誇張\nlayout: 天平置中的對稱構圖，勝負一目了然，金句在下方\nratio: \"4:3\"" },
+    { title: "一場講座長出十篇內容", ratio: "16:9", use: "輸入轉輸出 / 內容生長", icon: "sprout", color: "orange", prompt: "persona: 你是一位植物系療癒風插畫家\ntask: 請生成一張「一場講座長出十篇內容」的思維圖卡\naudience: 聽完講座只留下一頁筆記就束之高閣的研究生\nscene: 一顆寫著「講座」的種子落進土裡，向上長出十根嫩綠的新芽，每根芽的頂端都托著一張小小的內容卡片\ngolden_line: 「一場講座的價值不在筆記，而在後續的生長。」\nstyle: 清新植物插畫風，嫩綠與土壤棕色調，生命感十足\nlayout: 橫幅構圖由左下種子延伸至右上枝枒，金句在底部\nratio: \"16:9\"" },
+    { title: "每週復盤，複利成長", ratio: "1:1", use: "復盤習慣 / 週回顧", icon: "refresh-cw", color: "orange", prompt: "persona: 你是一位擅長成長隱喻的視覺設計師\ntask: 請生成一張「每週回顧產生複利」的思維圖卡\naudience: 一直努力卻感覺原地打轉的研究生\nscene: 一座螺旋階梯不斷向上盤旋，每繞一圈就更高一層，每層平台插著一面寫著小勾勾的旗子，象徵每週一次的回顧\ngolden_line: 「能力的差距，從每週一次的回顧開始。」\nstyle: 等距視角插畫，柔和漸層色，階梯越高顏色越亮\nlayout: 螺旋動線由下往上，最高處留光，金句放在底部\nratio: \"1:1\"" }
+  ],
+  c: [
+    { title: "日更累積的是能力", ratio: "3:4", use: "每日輸出 / 寫作手感", icon: "pen-line", color: "purple", prompt: "persona: 你是一位擅長把努力可視化的插畫家\ntask: 請生成一張「日更累積能力」的思維圖卡\naudience: 想開始每天輸出卻怕寫不好的研究生\nscene: 一疊疊寫滿字的稿紙堆成一座階梯，一個小小的人物正踩著稿紙階梯往上走，最上方透出晨光\ngolden_line: 「日更真正累積的，不是內容，而是能力。」\nstyle: 溫暖勵志插畫風，紙張米白與晨光金黃，筆觸柔和\nlayout: 對角線上升構圖，人物位於中上，金句在底部\nratio: \"3:4\"" },
+    { title: "用說的開始寫", ratio: "1:1", use: "語音寫作 / 打破卡關", icon: "mic", color: "purple", prompt: "persona: 你是一位擅長聲音視覺化的插畫藝術家\ntask: 請生成一張「語音寫作」的思維圖卡\naudience: 面對空白文件就寫不出字的研究生\nscene: 一個人放鬆地對著麥克風說話，嘴邊流出的彩色聲波在空中輕輕一轉，化成一行行整齊的文字落在筆記本上\ngolden_line: 「當你開始用講的寫作，你會得到另一個自己。」\nstyle: 流動感插畫風，聲波用漸層紫粉色，畫面輕盈\nlayout: 左人物右筆記本，聲波動線串連兩者，金句置底\nratio: \"1:1\"" },
+    { title: "把想法錄下來", ratio: "4:3", use: "想法捕捉 / 思緒外化", icon: "audio-lines", color: "purple", prompt: "persona: 你是一位擅長思緒可視化的療癒系插畫家\ntask: 請生成一張「把腦中想法錄下來」的思維圖卡\naudience: 覺得自己「沒什麼想法」的研究生\nscene: 頭頂上飄著一大朵裝滿雜訊符號的思緒雲，雲朵順著一條細線流進一台可愛的復古錄音機，變成整齊排列的發光膠卷\ngolden_line: 「把腦中的想法錄下來，才知道自己其實想了很多。」\nstyle: 復古文具插畫風，奶茶色調配淡紫點綴，溫柔療癒\nlayout: 由上而下的流動構圖，錄音機是焦點，金句在底部\nratio: \"4:3\"" },
+    { title: "改 Paper 是改思想", ratio: "4:3", use: "論文修改 / 論證重構", icon: "pencil-ruler", color: "purple", prompt: "persona: 你是一位建築隱喻大師級的概念插畫家\ntask: 請生成一張「改 Paper 是在重構思想」的思維圖卡\naudience: 以為修改論文只是改錯字的研究生\nscene: 一篇放大的論文被建築鷹架整個包住，幾位迷你工人正在調整裡面的樑柱結構，而不是粉刷表面的文字\ngolden_line: 「你修改的不是文字，而是思想的骨架。」\nstyle: 精緻等距插畫風，藍圖藍與工程黃配色，細節有趣\nlayout: 論文大樓置中，工人分布各層，金句放在下方\nratio: \"4:3\"" },
+    { title: "資訊密度決勝負", ratio: "1:1", use: "AI 時代寫作 / 內容品質", icon: "gauge", color: "purple", prompt: "persona: 你是一位咖啡美學風格的插畫師\ntask: 請生成一張「資訊密度拉開差距」的思維圖卡\naudience: 在 AI 時代擔心文字貶值的研究生\nscene: 桌上並排兩個杯子：一杯是幾乎透明的淡水，另一杯是濃醇發亮的濃縮咖啡，濃縮那杯散發溫暖金光與香氣線條\ngolden_line: 「文字變便宜了，密度才是你的差距。」\nstyle: 咖啡館手繪插畫風，暖棕色調，質感對比鮮明\nlayout: 左右對比構圖，視覺重心在濃縮咖啡，金句置底\nratio: \"1:1\"" },
+    { title: "好問題比答案稀缺", ratio: "3:4", use: "研究提問 / 選題思維", icon: "key-round", color: "purple", prompt: "persona: 你是一位擅長光影敘事的概念插畫家\ntask: 請生成一張「好問題最稀缺」的思維圖卡\naudience: 讓 AI 代寫卻不知道要問什麼的研究生\nscene: 一把問號形狀的金色鑰匙，正插進一扇厚重大門上發光的鎖孔，門縫透出新世界的光\ngolden_line: 「AI 讓寫作變容易，卻讓好問題更稀缺。」\nstyle: 戲劇光影插畫風，深色背景襯金色鑰匙，神祕而有希望\nlayout: 鑰匙與鎖孔置中特寫，光線引導視覺，金句在底部\nratio: \"3:4\"" },
+    { title: "審美是慢慢養的", ratio: "4:3", use: "學術寫作品味 / 刻意練習", icon: "palette", color: "purple", prompt: "persona: 你是一位畫室氛圍的溫暖插畫家\ntask: 請生成一張「學術審美靠養成」的思維圖卡\naudience: 覺得論文寫得好看是天分的研究生\nscene: 一個調色盤上的顏色從左到右由灰階漸變成飽滿鮮豔，一支畫筆蘸著最美的那個顏色，正在描一行優雅的文字\ngolden_line: 「論文的審美，靠反覆模仿與精修慢慢養出來。」\nstyle: 畫室手繪風，漸層色彩是主角，筆觸細膩溫暖\nlayout: 調色盤在上、文字在下的構圖，金句與畫面融合\nratio: \"4:3\"" },
+    { title: "先把詞定義清楚", ratio: "1:1", use: "問題定義 / 概念釐清", icon: "book-a", color: "purple", prompt: "persona: 你是一位極簡標本美學的插畫設計師\ntask: 請生成一張「先定義問題裡的詞」的思維圖卡\naudience: 討論半天才發現彼此定義不同的研究生\nscene: 一個模糊發霧的詞語被小心地放進透明玻璃罐中，罐口貼上手寫標籤，罐內霧氣散去、詞語變得清晰發光\ngolden_line: 「很多人不是不懂答案，而是還沒定義清楚問題裡的詞。」\nstyle: 極簡標本風插畫，大量留白，玻璃質感通透\nlayout: 玻璃罐置中特寫，標籤細節清楚，金句在下方\nratio: \"1:1\"" }
+  ],
+  d: [
+    { title: "最大挑戰是節奏與心態", ratio: "16:9", use: "研究生活 / 長期抗戰", icon: "waves", color: "teal", prompt: "persona: 你是一位擅長航海敘事的溫暖插畫家\ntask: 請生成一張「研究生活的挑戰是節奏與心態」的思維圖卡\naudience: 在不確定與長期壓力中前行的研究生\nscene: 一艘小帆船在起伏的深藍海浪上穩穩前行，船上的人握著舵沉著望向遠方，海平線上有一座溫暖的燈塔\ngolden_line: 「研究生活最大的挑戰，常常不是研究本身。」\nstyle: 海洋插畫風，深藍與暖黃燈光對比，波浪有節奏感\nlayout: 橫幅構圖，小船在左、燈塔在右，金句放在下方\nratio: \"16:9\"" },
+    { title: "學會界線感", ratio: "3:4", use: "時間管理 / 拒絕的藝術", icon: "shield-check", color: "teal", prompt: "persona: 你是一位溫柔而堅定的生活風插畫家\ntask: 請生成一張「研究所最該學會界線感」的思維圖卡\naudience: 什麼都答應、專注時間被切碎的研究生\nscene: 一張溫馨的書桌與檯燈被一圈低矮溫柔的木柵欄圍住，柵欄外飄著許多寫著待辦事項的紙片，但都安靜地停在柵欄外\ngolden_line: 「守住界線，才能守住長期的累積。」\nstyle: 溫暖居家插畫風，柵欄內暖光、柵欄外冷色的光影對比\nlayout: 書桌置中，界線內外對比清楚，金句放在底部\nratio: \"3:4\"" },
+    { title: "睡眠是研究基本功", ratio: "1:1", use: "恢復力 / 睡眠優先", icon: "moon", color: "teal", prompt: "persona: 你是一位夜色療癒系插畫家\ntask: 請生成一張「睡眠是研究基礎設施」的思維圖卡\naudience: 以為熬夜才是努力的研究生\nscene: 彎月與星星下，一個人蓋著厚被安穩熟睡，枕頭底下壓著一本微微發光的筆記本，象徵靈感在睡眠中沉澱\ngolden_line: 「睡眠不是奢侈，而是研究的基礎設施。」\nstyle: 靜謐夜色插畫風，深藍與暖黃星光，畫面極度放鬆\nlayout: 人物置中，發光筆記本是小亮點，金句在下方\nratio: \"1:1\"" },
+    { title: "積極休息", ratio: "4:3", use: "休息策略 / 能量管理", icon: "battery-charging", color: "teal", prompt: "persona: 你是一位公園午後氛圍的插畫家\ntask: 請生成一張「積極休息」的思維圖卡\naudience: 連休息都覺得有罪惡感的研究生\nscene: 一個人在公園長椅上愜意地喝著熱茶看樹，頭頂上方浮著一格一格正在亮起的電量條，從紅色慢慢充到滿格綠色\ngolden_line: 「研究生最難學的，不是工作，而是積極休息。」\nstyle: 清新日常插畫風，綠意盎然，光線像午後三點的太陽\nlayout: 人物偏左、樹蔭偏右，電量條是趣味焦點，金句置底\nratio: \"4:3\"" },
+    { title: "靠韌性，不靠熱情", ratio: "3:4", use: "長期心態 / 韌性系統", icon: "mountain", color: "teal", prompt: "persona: 你是一位山岳題材的溫暖插畫家\ntask: 請生成一張「韌性比熱情可靠」的思維圖卡\naudience: 熱情退潮就想放棄的研究生\nscene: 一位登山者在長長的緩坡上一步一步穩穩前進，天氣有霧但他不急，背包上綁著一面小小的旗子，身後是已走過的長路\ngolden_line: 「真正支撐你走遠的，不是熱情，而是韌性。」\nstyle: 山岳插畫風，霧面灰綠色調配橘色背包點綴\nlayout: 之字形山路構圖呈現路途感，金句放在下方\nratio: \"3:4\"" },
+    { title: "情緒是訊號，不是指令", ratio: "1:1", use: "情緒調節 / 冷靜決策", icon: "heart-pulse", color: "teal", prompt: "persona: 你是一位擅長儀表隱喻的概念插畫師\ntask: 請生成一張「不讓情緒決定下一步」的思維圖卡\naudience: 被實驗失敗或審稿意見打亂陣腳的研究生\nscene: 駕駛座上有兩個儀表：左邊的「情緒指針」正在劇烈搖擺，右邊寫著「原則」的方向盤被一雙手穩穩握住，車子行駛得很平穩\ngolden_line: 「情緒是訊號，不是指令；下一步交給原則。」\nstyle: 復古儀表板插畫風，深色底配暖光儀表，沉穩安心\nlayout: 左右對比構圖，穩定的手是焦點，金句在底部\nratio: \"1:1\"" },
+    { title: "有人一起走", ratio: "16:9", use: "共學 / 同儕支持", icon: "users", color: "teal", prompt: "persona: 你是一位夜燈氛圍的溫情插畫家\ntask: 請生成一張「研究路上有人同行」的思維圖卡\naudience: 覺得研究是一場孤獨長跑的研究生\nscene: 夜色中的一條長路上，幾位同行者各自提著溫暖的燈籠並肩前行，燈光在路上連成一條溫柔的光帶，彼此的影子靠得很近\ngolden_line: 「研究的路沒有終點，但有人一起走，就不容易放棄。」\nstyle: 夜色溫情插畫風，深藍夜空與暖橘燈光，情感濃度高\nlayout: 橫幅道路延伸構圖，燈光帶引導視線，金句在下方\nratio: \"16:9\"" },
+    { title: "留三小時想人生", ratio: "4:3", use: "自我對話 / 人生回顧", icon: "hourglass", color: "teal", prompt: "persona: 你是一位靜物哲思風的插畫藝術家\ntask: 請生成一張「留時間給自己想人生」的思維圖卡\naudience: 被待辦清單推著走、很久沒停下來的研究生\nscene: 一座優雅的大沙漏靜靜立在窗邊，流下的沙粒化成點點星光，旁邊一個人安靜地坐著寫日記，窗外是傍晚的天色\ngolden_line: 「留三個小時給自己，人生才不會被待辦清單推著走。」\nstyle: 靜物哲思插畫風，暮色紫橘漸層，畫面安靜有餘韻\nlayout: 沙漏與人物一左一右，星光沙粒串連兩者，金句置底\nratio: \"4:3\"" }
+  ]
+};
+const THEME = {blue:'t-blue',orange:'t-orange',purple:'t-purple',teal:'t-teal'};
+
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function renderCards(sectionId, items){
+  const container = document.getElementById(sectionId);
+  if(!container) return;
+  items.forEach(item=>{
+    const emo = EMO[item.icon] || '📝';
+    const card = document.createElement('div');
+    card.className = 'card ' + (THEME[item.color]||'t-blue');
+    card.innerHTML = `
+      <div class="bgemo">${emo}</div>
+      <div class="head">
+        <div class="chip">${emo}</div>
+        <h3>${esc(item.title)}</h3>
+      </div>
+      <span class="ratio">📐 ratio ${esc(item.ratio)}</span>
+      <p class="use"><span class="lb">情境</span>${esc(item.use)}</p>
+      <div class="promptbox" onclick="copyText(this.dataset.prompt, this.parentElement.querySelector('.copybtn'))" data-prompt="${esc(item.prompt)}">${esc(item.prompt)}<div class="hint"><span>👆 點擊複製咒語</span></div></div>
+      <button class="copybtn" data-prompt="${esc(item.prompt)}" onclick="copyText(this.dataset.prompt, this)">複製 YAML 咒語 ✨</button>
+    `;
+    container.appendChild(card);
+  });
+}
+renderCards('section-a', prompts.a);
+renderCards('section-b', prompts.b);
+renderCards('section-c', prompts.c);
+renderCards('section-d', prompts.d);
+
+function copyText(text, btn){
+  const doToast=()=>{const t=document.getElementById('toast');t.classList.add('show');clearTimeout(t._tm);t._tm=setTimeout(()=>t.classList.remove('show'),2000);};
+  const done=()=>{
+    doToast();
+    if(btn && btn.tagName==='BUTTON'){
+      const orig=btn.textContent;
+      btn.textContent='太棒了！已複製 🎉';
+      btn.classList.add('copied');
+      setTimeout(()=>{btn.textContent=orig;btn.classList.remove('copied');},2000);
+    }
+  };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done).catch(()=>fallback(text,done));
+  } else fallback(text,done);
+}
+function fallback(text,done){
+  const el=document.createElement('textarea');el.value=text;el.style.position='fixed';el.style.opacity='0';
+  document.body.appendChild(el);el.select();
+  try{document.execCommand('copy');}catch(e){}
+  document.body.removeChild(el);done();
+}
+</script>
+</body>
+</html>

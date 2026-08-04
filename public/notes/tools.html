@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TARSHAR 工具集｜課堂抽獎、倒數計時、QR 產生器、封面圖、口譯機</title>
+<meta name="description" content="Tarshar 與 AI 一起打造的免費線上工具箱：每一樣都是單一用途、點進來就能直接完成一件事的小工具。瀏覽器打開就能用，免安裝、免註冊，新工具持續增加中。">
+<meta name="theme-color" content="#0e91ad">
+<meta property="og:type" content="website">
+<meta property="og:title" content="TARSHAR 工具集｜免費線上工具箱">
+<meta property="og:description" content="每一樣都是單一用途、點進來就能直接完成一件事的免費小工具。瀏覽器打開就能用，免安裝、免註冊。">
+<meta property="og:url" content="https://tarshar4242.github.io/kt-sweet-journey/tools.html">
+<meta property="og:image" content="https://tarshar4242.github.io/kt-sweet-journey/home-hero.jpg">
+<meta property="og:locale" content="zh_TW">
+<style>
+:root{
+  --primary:#0e91ad; --primary-soft:#e3f4f8; --primary-deep:#0b6f85;
+  --accent:#e8752a; --accent-soft:#fdeee2;
+  --bg:#f7f9fb; --card:#ffffff; --border:#e6eaef;
+  --text:#1e2a38; --muted:#64748b;
+  --shadow:0 1px 3px rgba(15,23,42,.06);
+  --shadow-lift:0 10px 28px rgba(15,23,42,.12);
+  --radius:14px;
+}
+html[data-theme="dark"]{
+  --primary:#35b6d2; --primary-soft:#123742; --primary-deep:#7fd6e8;
+  --accent:#f08a45; --accent-soft:#3a2718;
+  --bg:#101418; --card:#1a2027; --border:#2a323c;
+  --text:#eef2f6; --muted:#9aa7b5;
+  --shadow:0 1px 3px rgba(0,0,0,.4);
+  --shadow-lift:0 10px 28px rgba(0,0,0,.5);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{
+  font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',-apple-system,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.7;min-height:100dvh;
+  transition:background .25s,color .25s;
+}
+a{color:var(--primary);text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+
+/* ── 頁首 ── */
+header{
+  background:
+    radial-gradient(ellipse 60% 120% at 85% -20%, var(--accent-soft) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 130% at 10% -30%, var(--primary-soft) 0%, transparent 65%),
+    var(--card);
+  border-bottom:1px solid var(--border);
+  padding:2.6rem 1.2rem 2.1rem;text-align:center;position:relative;
+}
+.theme-btn{
+  position:absolute;top:1rem;right:1rem;width:42px;height:42px;border-radius:50%;
+  border:1px solid var(--border);background:var(--card);font-size:1.15rem;
+  box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:.4rem;font-size:.82rem;font-weight:700;
+  color:var(--primary);background:var(--primary-soft);border-radius:999px;
+  padding:.3rem .95rem;margin-bottom:.9rem;letter-spacing:.05em;
+}
+h1{font-size:clamp(1.7rem,5.5vw,2.5rem);font-weight:900;letter-spacing:.04em}
+h1 .en{color:var(--primary)}
+.hero-sub{
+  max-width:34em;margin:.7rem auto 0;color:var(--muted);
+  font-size:clamp(.92rem,2.8vw,1.02rem);
+}
+.hero-note{
+  display:inline-flex;flex-wrap:wrap;justify-content:center;gap:.45rem;margin-top:1.1rem;
+}
+.hero-note span{
+  font-size:.78rem;font-weight:600;color:var(--muted);
+  border:1px solid var(--border);background:var(--card);border-radius:999px;padding:.22rem .75rem;
+}
+
+/* ── 工具列（搜尋＋分類） ── */
+.toolbar{max-width:1080px;margin:1.4rem auto 0;padding:0 1.2rem}
+.search{
+  display:flex;align-items:center;gap:.55rem;background:var(--card);
+  border:1.5px solid var(--border);border-radius:999px;padding:.6rem 1.1rem;
+  box-shadow:var(--shadow);max-width:480px;margin:0 auto;
+}
+.search:focus-within{border-color:var(--primary)}
+.search input{
+  flex:1;border:none;outline:none;background:none;color:var(--text);
+  font-size:1rem;font-family:inherit;min-width:0;
+}
+.search input::placeholder{color:var(--muted)}
+.chips{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:.5rem;margin-top:1rem;
+}
+.chip{
+  font-size:.86rem;font-weight:700;color:var(--muted);
+  border:1.5px solid var(--border);background:var(--card);border-radius:999px;
+  padding:.34rem .95rem;transition:.15s;box-shadow:var(--shadow);
+}
+.chip:hover{border-color:var(--primary);color:var(--primary)}
+.chip.on{background:var(--primary);border-color:var(--primary);color:#fff}
+.count-line{text-align:center;color:var(--muted);font-size:.85rem;margin-top:.9rem}
+
+/* ── 卡片網格 ── */
+main{max-width:1080px;margin:0 auto;padding:1.1rem 1.2rem 2rem}
+.grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:1rem;
+}
+.tool{
+  display:flex;flex-direction:column;background:var(--card);
+  border:1px solid var(--border);border-radius:var(--radius);
+  padding:1.15rem 1.15rem 1rem;box-shadow:var(--shadow);
+  transition:transform .18s,box-shadow .18s,border-color .18s;
+  color:var(--text);
+}
+.tool:hover{transform:translateY(-4px);box-shadow:var(--shadow-lift);border-color:var(--primary)}
+.tool-head{display:flex;align-items:center;gap:.75rem;margin-bottom:.6rem}
+.tool-icon{
+  width:48px;height:48px;flex:0 0 48px;border-radius:12px;font-size:1.5rem;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--tint,var(--primary-soft));
+}
+.tool h2{font-size:1.06rem;font-weight:800;line-height:1.35}
+.tool .cat-tag{
+  display:inline-block;font-size:.72rem;font-weight:700;color:var(--primary);
+  background:var(--primary-soft);border-radius:6px;padding:.05rem .5rem;margin-top:.15rem;
+}
+.tool .cost{
+  display:inline-block;font-size:.72rem;font-weight:700;border-radius:6px;
+  padding:.05rem .5rem;margin:.15rem 0 0 .3rem;
+}
+.cost.c-free{color:#2e7d4f;background:#e3f4ea}
+.cost.c-device{color:#8a6d1a;background:#faf3d9}
+.cost.c-key{color:#b3541e;background:#fdeadd}
+html[data-theme="dark"] .cost.c-free{color:#7fd6a4;background:#14301f}
+html[data-theme="dark"] .cost.c-device{color:#e5c96a;background:#332a10}
+html[data-theme="dark"] .cost.c-key{color:#f0a06a;background:#3a2213}
+.tool p{font-size:.88rem;color:var(--muted);flex:1}
+.tool .foot{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-top:.85rem;padding-top:.7rem;border-top:1px dashed var(--border);
+}
+.tool .tags{display:flex;flex-wrap:wrap;gap:.3rem}
+.tool .tags span{font-size:.72rem;color:var(--muted)}
+.tool .go{font-size:.86rem;font-weight:800;color:var(--primary);white-space:nowrap}
+.empty{
+  display:none;text-align:center;color:var(--muted);padding:3rem 1rem;font-size:.95rem;
+}
+.tool.soon{
+  border-style:dashed;box-shadow:none;align-items:center;justify-content:center;
+  text-align:center;color:var(--muted);gap:.4rem;min-height:180px;
+}
+.tool.soon:hover{transform:none;border-color:var(--border);box-shadow:none}
+.tool.soon .plus{font-size:1.8rem;line-height:1}
+.tool.soon p{flex:0;font-size:.85rem}
+
+/* ── 分享區 ── */
+.share{
+  max-width:1080px;margin:0 auto 1.5rem;padding:0 1.2rem;
+}
+.share-box{
+  background:linear-gradient(135deg,var(--primary-soft),var(--accent-soft));
+  border:1px solid var(--border);border-radius:var(--radius);
+  padding:1.4rem 1.2rem;text-align:center;
+}
+.share-box h3{font-size:1.05rem;font-weight:800}
+.share-box p{font-size:.86rem;color:var(--muted);margin:.3rem 0 .9rem}
+.share-btns{display:flex;justify-content:center;flex-wrap:wrap;gap:.6rem}
+.share-btns a,.share-btns button{
+  display:inline-flex;align-items:center;gap:.4rem;font-size:.9rem;font-weight:700;
+  border-radius:999px;padding:.5rem 1.2rem;box-shadow:var(--shadow);transition:.15s;
+}
+.btn-line{background:#06c755;color:#fff}
+.btn-copy{background:var(--card);color:var(--text);border:1.5px solid var(--border)}
+.share-btns a:hover,.share-btns button:hover{transform:translateY(-2px)}
+
+/* ── 頁尾 ── */
+footer{
+  border-top:1px solid var(--border);background:var(--card);
+  text-align:center;padding:1.6rem 1.2rem 5.5rem;color:var(--muted);font-size:.83rem;
+}
+footer b{color:var(--text)}
+footer a{font-weight:700}
+
+/* ── 回入口浮動鈕 ── */
+.home-fab{
+  position:fixed;left:14px;bottom:14px;z-index:50;
+  display:inline-flex;align-items:center;gap:.35rem;
+  font-size:.85rem;font-weight:800;color:var(--text);
+  background:var(--card);border:1.5px solid var(--border);border-radius:999px;
+  padding:.5rem 1rem;box-shadow:var(--shadow-lift);
+}
+@media (max-width:520px){
+  header{padding:2.1rem 1rem 1.7rem}
+  .grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<a href="../courses/" class="home-fab" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+
+<header>
+  <button class="theme-btn" id="themeBtn" aria-label="切換深淺色" title="切換深淺色">🌙</button>
+  <div class="hero-badge">🧰 LEARN AI WITH TARSHAR</div>
+  <h1><span class="en">TARSHAR</span> 工具集</h1>
+  <p class="hero-sub">我跟 AI 一起做出來的工具箱——這裡的每一樣都只解決<b>一件具體的事</b>。公開工具可以直接打開使用；家庭專用工具會清楚標示測試狀態，不會把半成品說成完成品。</p>
+  <div class="hero-note"><span>✅ 公開工具免安裝</span><span>📱 手機也好用</span><span>🏠 家庭工具標示狀態</span><span>🌱 持續增加</span></div>
+</header>
+
+<div class="toolbar">
+  <div class="search">🔍<input type="search" id="q" placeholder="搜尋工具：抽獎、倒數、QR、封面⋯"></div>
+  <div class="chips" id="chips"></div>
+  <p class="count-line" id="countLine"></p>
+  <p class="count-line" style="margin-top:.3rem">標示說明：✅ 免費即用｜⚡ 本機運算｜🔑 需自備 AI 金鑰｜☁️ 家庭主機處理｜🔒 私人測試</p>
+</div>
+
+<main>
+  <div class="grid" id="grid"></div>
+  <p class="empty" id="empty">找不到符合的工具，換個關鍵字試試看 🙂</p>
+</main>
+
+<section class="share">
+  <div class="share-box">
+    <h3>覺得好用嗎？分享給朋友 💌</h3>
+    <p>這一頁會持續收錄我做過的新工具，收藏這個網址就不會迷路。</p>
+    <div class="share-btns">
+      <a class="btn-line" id="lineShare" target="_blank" rel="noopener">💬 LINE 傳給朋友</a>
+      <button class="btn-copy" id="copyBtn">🔗 複製網址</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <b>🍀 Learn AI with Tarshar</b>・非工程師也能把 AI 變成日常隊友<br>
+  更多課程筆記與教案 → <a href="../courses/" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+</footer>
+
+<script>
+/* 收錄定義（嚴格）：只放「單一用途、點進來就能直接完成一件事」的線上小工具，
+   免安裝免註冊、不用先學。行程手冊、日誌、教學頁、目錄頁都不算工具，不收。
+   新工具做好 → 加一筆進 TOOLS，並在 CATS 補上還沒有的分類。
+   cost 欄位（必填）：'free'＝免費即用（純前端或免費公開資料源）；
+   'device'＝在使用者裝置上跑 AI 模型（免費但速度看設備）；
+   'key'＝需使用者自備 AI 金鑰。凡是 device／key 的工具，工具頁內
+   「開始使用前」必須先跳出白話提示說明要準備什麼、會發生什麼。 */
+const TOOLS = [
+  {
+    icon:'🎤', tint:'#fff0f1', tintD:'#3b1d22',
+    name:'緣聚 KTV', cat:'family', cost:'hosted',
+    desc:'貼一個歌曲影片網址，工作會排進雲端，再由 Mac mini 製作伴奏 MP3 與動態歌詞 TXT，完成後送進家庭 Google Drive。公開測試版已可使用，歌詞時間仍持續優化。',
+    tags:['公開測試版','伴奏MP3','動態歌詞TXT'],
+    href:'https://yuanju-ktv.tarshar4242.chatgpt.site', ext:true
+  },
+  {
+    icon:'👨‍👧', tint:'#edf4ff', tintD:'#17283e',
+    name:'歌來囉 ♫', cat:'family', cost:'private',
+    desc:'手機打開專用網址，貼上 YouTube 連結並按下轉換，Mac mini 就會產生手機好播放的 MP4，完成後直接在頁面下載。因影片涉及著作權，這個工具只限家人自己使用，無法公開分享工具網址。',
+    tags:['家庭私人版','不公開分享','MP4下載'],
+    availability:'private'
+  },
+  {
+    icon:'🎡', tint:'#fdeee2', tintD:'#3a2718',
+    name:'課堂抽獎神器', cat:'random', cost:'free',
+    desc:'點名不尷尬，中獎的是命運不是我。幸運轉盤、抽籤、隨機分組三合一，名單記得住、中過獎的可以排除，連抽多輪不重複。',
+    tags:['幸運轉盤','隨機分組','名單記憶'],
+    href:'tool-lottery.html'
+  },
+  {
+    icon:'⏰', tint:'#faf3d9', tintD:'#332a10',
+    name:'課堂倒數計時器', cat:'time', cost:'free',
+    desc:'討論五分鐘，是真的五分鐘。全螢幕大字倒數、最後十秒變紅提醒、溫柔版鈴聲、螢幕不休眠，投影幕後排也看得到。',
+    tags:['全螢幕','防休眠','碼表'],
+    href:'tool-timer.html'
+  },
+  {
+    icon:'🎙', tint:'#e0f2f7', tintD:'#12333d',
+    name:'隨身口譯機', cat:'voice', cost:'free',
+    desc:'即時中日雙語口譯：點進來按下麥克風就能用——自動辨識你說的語言、雙區大字顯示、逐字稿留存。旅行、會話場景直接開。',
+    tags:['語音辨識','中↔日','即時'],
+    href:'interpreter.html'
+  },
+  {
+    icon:'🎤', tint:'#e3f4f8', tintD:'#123742',
+    name:'語音速記器', cat:'voice', cost:'free',
+    desc:'用講的比用打的快，嘴巴就是鍵盤。一直講一直記，自動接成同一篇筆記，隨時複製或下載，重新整理也不會不見。',
+    tags:['說話變文字','累積筆記','一鍵複製'],
+    href:'tool-voice-notes.html'
+  },
+  {
+    icon:'✍️', tint:'#e6f4ea', tintD:'#16321e',
+    name:'空白換行轉換器', cat:'text', cost:'free',
+    desc:'貼文空行老是被 FB、IG、Threads 偷吃掉？貼進來施展防吃咒，空行一格都不會少，還有還原模式可以把隱形字元清乾淨。',
+    tags:['防吃空行','FB/IG/Threads','一鍵複製'],
+    href:'tool-linebreak.html'
+  },
+  {
+    icon:'🎬', tint:'#efeafa', tintD:'#251c3d',
+    name:'SRT 字幕轉逐字稿', cat:'text', cost:'free',
+    desc:'時間碼掰掰，逐字稿直接帶走。丟進字幕檔自動去時間碼、智慧併段，還有每分鐘一個時間戳的重點版，回看影片超方便。',
+    tags:['SRT/VTT','智慧分段','下載txt'],
+    href:'tool-srt.html'
+  },
+  {
+    icon:'✉️', tint:'#fdeaf1', tintD:'#3a1725',
+    name:'Email 美化編輯器', cat:'text', cost:'free',
+    desc:'Markdown 進，漂亮信出，老闆以為你會排版。左邊打字右邊即時預覽，一鍵複製貼進 Gmail 直接帶格式，還有 LINE 純文字版。',
+    tags:['Markdown','Gmail 格式','內建範本'],
+    href:'tool-email-md.html'
+  },
+  {
+    icon:'📱', tint:'#e8f0f8', tintD:'#152a3d',
+    name:'QR Code 產生器', cat:'convert', cost:'free',
+    desc:'網址太長唸不出來？掃一下就到。高解析 QR 投影不糊，還有海報模式：大字標題＋掃碼圖一次生好，印出來貼教室門口。',
+    tags:['高解析','海報模式','🍀 圖章'],
+    href:'tool-qrcode.html'
+  },
+  {
+    icon:'🖼️', tint:'#fdf3e2', tintD:'#3a2c12',
+    name:'封面圖產生器', cat:'image', cost:'free',
+    desc:'不會 Canva 也沒關係，打字就有封面。FB、IG、YouTube、簡報四種尺寸，字太長自動排好不爆版，挑個漸層按下載就完工。',
+    tags:['四種尺寸','自動排版','品牌漸層'],
+    href:'tool-cover.html'
+  },
+  {
+    icon:'🪞', tint:'#eef7e8', tintD:'#1e3317',
+    name:'Before/After 對比展示器', cat:'image', cost:'free',
+    desc:'左邊是昨天的你，右邊是學會 AI 的你。兩張圖拉滑桿對比，可以匯出並排對比圖，還能打包成互動網頁傳給別人玩。',
+    tags:['滑桿對比','匯出圖','互動網頁'],
+    href:'tool-beforeafter.html'
+  },
+  {
+    icon:'✨', tint:'#e3f4f8', tintD:'#123742',
+    name:'AI 圖片浮水印修復器', cat:'image', cost:'free',
+    desc:'圖不出門，角落那朵小星星自己消失。智慧修補或裁切避開兩種方式，處理自己 AI 生成圖的角落標記，圖片全程不上傳。',
+    tags:['智慧修補','批次處理','不上傳'],
+    href:'tool-watermark.html'
+  },
+  {
+    icon:'💱', tint:'#e6f4ea', tintD:'#16321e',
+    name:'貨幣轉換器', cat:'convert', cost:'free',
+    desc:'出國前算一下，回國後不心痛。免費匯率即時換算，斷網也能用上次的匯率，還附旅日小抄：這筆錢等於幾碗一蘭拉麵。',
+    tags:['免費匯率','旅日小抄','離線可用'],
+    href:'tool-currency.html'
+  },
+  {
+    icon:'🤖', tint:'#fdeadd', tintD:'#3a2213',
+    name:'AI 留言分析器', cat:'ai', cost:'key',
+    desc:'三百則留言不用一則一則看，AI 幫你先讀完。留言整坨貼進來，情緒統計、主題分類、值得回覆的都幫你挑好，附白話金鑰教學。',
+    tags:['情緒統計','主題分類','匯出CSV'],
+    href:'tool-comments-ai.html'
+  },
+  {
+    icon:'🪶', tint:'#fdeee2', tintD:'#3a2718',
+    name:'PDF 瘦身機', cat:'file', cost:'free',
+    desc:'PDF 太胖上傳被打槍？告訴它要瘦到幾 MB（例如 5），它幫你精準壓到剛剛好。全程在瀏覽器裡運算，檔案不上傳、個資不離線。',
+    tags:['目標大小','精準壓縮','不上傳'],
+    href:'tool-pdf-compress.html'
+  }
+];
+
+/* 分類主檔：晶片只會顯示「目前有工具」的分類，先留著的不會出現 */
+const CATS = [
+  {key:'all',       label:'✨ 全部'},
+  {key:'random',    label:'🎲 抽選'},
+  {key:'time',      label:'⏰ 時間'},
+  {key:'voice',     label:'🎙 語音'},
+  {key:'text',      label:'✍️ 文字'},
+  {key:'image',     label:'🎨 圖片'},
+  {key:'convert',   label:'🔄 轉換'},
+  {key:'file',      label:'📄 檔案'},
+  {key:'ai',        label:'🤖 AI 幫手'}
+  ,{key:'family',   label:'🏠 家庭自動化'}
+];
+
+const COST_LABEL = {free:'✅ 免費即用', device:'⚡ 本機運算', key:'🔑 需自備金鑰', hosted:'☁️ 家庭主機處理', private:'🔒 私人測試'};
+
+let curCat = 'all', curQ = '';
+const $ = s => document.querySelector(s);
+
+function isDark(){ return document.documentElement.getAttribute('data-theme') === 'dark'; }
+
+function render(){
+  const grid = $('#grid');
+  const dark = isDark();
+  const list = TOOLS.filter(t => {
+    if (curCat !== 'all' && t.cat !== curCat) return false;
+    if (!curQ) return true;
+    const hay = (t.name + t.desc + t.tags.join('')).toLowerCase();
+    return hay.includes(curQ);
+  });
+  grid.innerHTML = list.map(t => {
+    const tag = t.availability === 'private' ? 'div' : 'a';
+    const link = t.availability === 'private' ? '' : ` href="${t.href}"${t.ext ? ' target="_blank" rel="noopener"' : ''}`;
+    const action = t.availability === 'private' ? '尚未公開' : '打開 ›';
+    return `
+    <${tag} class="tool${t.availability === 'private' ? ' private-tool' : ''}"${link} style="--tint:${dark ? t.tintD : t.tint}">
+      <div class="tool-head">
+        <div class="tool-icon">${t.icon}</div>
+        <div>
+          <h2>${t.name}</h2>
+          <span class="cat-tag">${CATS.find(c => c.key === t.cat).label}</span><span class="cost c-${t.cost || 'free'}">${COST_LABEL[t.cost || 'free']}</span>
+        </div>
+      </div>
+      <p>${t.desc}</p>
+      <div class="foot">
+        <div class="tags">${t.tags.map(x => `<span>#${x}</span>`).join('')}</div>
+        <span class="go">${action}</span>
+      </div>
+    </${tag}>`;
+  }).join('');
+  if (curCat === 'all' && !curQ) {
+    grid.innerHTML += `
+    <div class="tool soon">
+      <span class="plus">＋</span>
+      <p>新工具設計中，一個一個加進來<br>想要什麼小工具，跟 Tarshar 說 🙂</p>
+    </div>`;
+  }
+  $('#empty').style.display = list.length ? 'none' : 'block';
+  $('#countLine').textContent = curCat === 'all' && !curQ
+    ? `目前收錄 ${TOOLS.length} 樣工具，持續增加中 🌱`
+    : `找到 ${list.length} 樣工具`;
+}
+
+function renderChips(){
+  const used = new Set(TOOLS.map(t => t.cat));
+  $('#chips').innerHTML = CATS.filter(c => c.key === 'all' || used.has(c.key)).map(c =>
+    `<button class="chip${c.key === curCat ? ' on' : ''}" data-k="${c.key}">${c.label}</button>`).join('');
+}
+
+$('#chips').addEventListener('click', e => {
+  const b = e.target.closest('.chip'); if (!b) return;
+  curCat = b.dataset.k; renderChips(); render();
+});
+$('#q').addEventListener('input', e => { curQ = e.target.value.trim().toLowerCase(); render(); });
+
+/* 深淺色：跟隨系統，手動切換記進 localStorage */
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme', t);
+  $('#themeBtn').textContent = t === 'dark' ? '☀️' : '🌙';
+  render();
+}
+const saved = localStorage.getItem('tools_theme');
+applyTheme(saved || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+$('#themeBtn').addEventListener('click', () => {
+  const next = isDark() ? 'light' : 'dark';
+  localStorage.setItem('tools_theme', next); applyTheme(next);
+});
+
+/* 分享 */
+const PAGE_URL = 'https://tarshar4242.github.io/kt-sweet-journey/tools.html';
+$('#lineShare').href = 'https://line.me/R/share?text=' + encodeURIComponent('🧰 TARSHAR 工具集｜免費線上工具箱，免安裝免註冊：' + PAGE_URL);
+$('#copyBtn').addEventListener('click', async () => {
+  try { await navigator.clipboard.writeText(PAGE_URL); }
+  catch { const i = document.createElement('input'); i.value = PAGE_URL; document.body.appendChild(i); i.select(); document.execCommand('copy'); i.remove(); }
+  const b = $('#copyBtn'); b.textContent = '✅ 已複製！'; setTimeout(() => b.textContent = '🔗 複製網址', 1800);
+});
+
+renderChips(); render();
+</script>
+</body>
+</html>
