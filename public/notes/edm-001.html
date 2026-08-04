@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>電子報 001｜會議記錄我不聽打了</title>
+<meta name="description" content="主題式電子報第一期：把散會後那一小時外包給自己家的電腦。地端 AI 語音轉紀錄，離線、免費、資料不外流。">
+<style>
+  :root{
+    --ink:#2b2a26; --soft:#6b6760; --line:#e7e2d8;
+    --paper:#faf7f0; --card:#fffdf8; --clover:#5b8c5a;
+    --clover-soft:#eef4ec; --accent:#c98a3a; --accent-soft:#f7eddb;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"PingFang TC","Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;
+    background:var(--paper); color:var(--ink); line-height:1.85;
+    -webkit-font-smoothing:antialiased; padding:0 0 90px;
+  }
+  .wrap{max-width:720px; margin:0 auto; padding:0 20px}
+
+  /* masthead */
+  .band{background:linear-gradient(135deg,#b7728a,#c98a3a); color:#fff; padding:34px 0 30px; margin-bottom:26px}
+  .band .wrap{display:flex; flex-direction:column; gap:10px}
+  .kicker{font-size:.8rem; letter-spacing:2px; opacity:.95; display:flex; align-items:center; gap:8px}
+  .kicker .dot{width:6px;height:6px;background:#fff;border-radius:50%;opacity:.8}
+  .issue{font-size:.85rem; opacity:.95; letter-spacing:1px}
+  .band h1{font-size:1.5rem; line-height:1.5; font-weight:800}
+  .meta-row{display:flex; flex-wrap:wrap; gap:8px; margin-top:6px}
+  .chip{background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.35);
+    padding:4px 12px; border-radius:999px; font-size:.82rem}
+
+  section{background:var(--card); border:1px solid var(--line); border-radius:18px;
+    padding:22px 22px 20px; margin-bottom:16px; box-shadow:0 1px 0 rgba(0,0,0,.02)}
+  h2{font-size:1.12rem; color:var(--clover); font-weight:800; margin-bottom:12px;
+    display:flex; align-items:center; gap:9px}
+  h2 .em{font-size:1.15rem}
+  section p{margin:0 0 12px; font-size:1rem}
+  section p:last-child{margin-bottom:0}
+  .lead p{font-size:1.05rem}
+
+  .pull{border-left:4px solid var(--clover); background:var(--clover-soft);
+    padding:12px 16px; border-radius:0 12px 12px 0; margin:14px 0; font-weight:700}
+
+  ul.flow{list-style:none; display:flex; flex-direction:column; gap:10px; margin:6px 0 4px}
+  ul.flow li{background:#fbf9f3; border:1px solid var(--line); border-radius:12px;
+    padding:11px 14px; font-size:.98rem}
+  ul.flow li .lead-emoji{font-size:1.1rem; margin-right:6px}
+
+  .cats{display:grid; gap:10px; margin:6px 0}
+  .cat{border:1px solid var(--line); border-radius:12px; padding:12px 14px; background:#fbf9f3}
+  .cat b{display:block; color:var(--accent); font-size:.92rem; margin-bottom:3px}
+  .cat span{font-size:.95rem; color:var(--soft)}
+
+  .link-btn{display:inline-flex; align-items:center; gap:8px; text-decoration:none;
+    background:var(--clover); color:#fff; padding:11px 18px; border-radius:999px;
+    font-weight:700; font-size:.95rem; margin-top:4px}
+  .link-btn:active{transform:translateY(1px)}
+
+  .about{font-size:.96rem; color:var(--soft)}
+  footer{text-align:center; color:var(--soft); font-size:.82rem; margin-top:26px}
+
+  /* 固定回入口浮動鈕（左上角） */
+  .home-fab{position:fixed; left:14px; top:14px; z-index:50;
+    background:rgba(255,255,255,.94); color:var(--clover); text-decoration:none; font-weight:800; font-size:.9rem;
+    padding:9px 15px; border-radius:999px; box-shadow:0 8px 22px -8px rgba(60,50,30,.5); border:1px solid rgba(255,255,255,.7)}
+  .home-fab:active{transform:translateY(1px)}
+  /* 手機上把報頭往下推，避免和左上角返回鈕重疊 */
+  @media (max-width:760px){ .band{padding-top:60px} }
+</style>
+</head>
+<body>
+
+  <div class="band">
+    <div class="wrap">
+      <div class="kicker"><span class="dot"></span>主題式電子報<span class="dot"></span></div>
+      <div class="issue">電子報 001｜2026.07.23</div>
+      <h1>會議記錄我不聽打了，<br>丟給電腦，它離線幫我排好版 🎙️</h1>
+      <div class="meta-row">
+        <span class="chip">效率工具與自動化</span>
+        <span class="chip">Whisper</span>
+        <span class="chip">Ollama</span>
+        <span class="chip">Claude Code</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+
+    <section class="lead">
+      <h2><span class="em">😮‍💨</span>先講一個我很討厭的時刻</h2>
+      <p>開完會、上完課，討論本身其實還好。真正累的是散會後那一小時：把錄音倒帶、一句一句聽打、抓重點、再排版成一份能交出去的紀錄。</p>
+      <p>我不想再做這件事了。不是因為難，是因為它每週都來，而且它把我的時間一點一點吃掉。</p>
+      <p>所以我把它交出去。丟給誰？丟給我自己家那台電腦。</p>
+    </section>
+
+    <section>
+      <h2><span class="em">🔒</span>我要的不只是「能轉錄」</h2>
+      <p>市面上的雲端轉錄工具很多，我不敢用。我教的是機關單位、帶的是社大學員，會議內容、學員個資、論文討論，我不想把這些錄音上傳到別人的伺服器。</p>
+      <p>所以我給自己開的條件有點貪：要離線、要免費、錄音和內容都留在我自己電腦、而且轉出來要直接是排好版的紀錄，不是一坨逐字稿。</p>
+      <p>聽起來很多要求。但這些條件我一個都沒讓步，因為現在的開源工具其實做得到，缺的只是把它們串成一條我這種不會寫程式的人也能用的線。</p>
+    </section>
+
+    <section>
+      <h2><span class="em">✋</span>我只做一個動作</h2>
+      <p>整條線我只碰第一步：把錄音檔（mp3／m4a／wav）丟進一個叫「丟音檔到這裡」的資料夾。</p>
+      <p>接下來電腦自己跑：</p>
+      <ul class="flow">
+        <li><span class="lead-emoji">🎙️</span>Whisper 把語音轉成文字</li>
+        <li><span class="lead-emoji">🧠</span>本地 AI（Ollama）判斷這是哪一類紀錄、抓出該有的重點欄位</li>
+        <li><span class="lead-emoji">📄</span>程式把重點套進固定版面，成品連逐字稿一起放進「完成」資料夾，右上角跳通知</li>
+      </ul>
+      <p>我去倒杯水回來，紀錄就好了。裝好之後不用網路，斷網也能跑。</p>
+    </section>
+
+    <section>
+      <h2><span class="em">🗝️</span>我在這裡藏了一個原理</h2>
+      <p>這套東西最關鍵的一句話是：</p>
+      <div class="pull">AI 只負責聽懂內容，版面永遠由程式鎖定。</div>
+      <p>我一開始貪心，讓 AI 連排版一起做。結果每份紀錄長得都不一樣，該對齊的沒對齊，交出去很不專業。後來我把版面從 AI 手上收回來，交給程式用模板鎖死。AI 就乖乖做它最強的那件事：讀懂一段話在講什麼。</p>
+      <p>分工分對了，成品每次都穩。這比 AI 聰不聰明重要多了。</p>
+    </section>
+
+    <section>
+      <h2><span class="em">📚</span>現在它能跑出什麼</h2>
+      <p>同一套引擎，依紀錄類型分成五大群、十六種紀錄。每一種配最適合它的版面：該有表格的有表格，該有甘特圖的有甘特圖。</p>
+      <div class="cats">
+        <div class="cat"><b>職場會議</b><span>一般會議 · 專案會議 · 董事會／理監事</span></div>
+        <div class="cat"><b>業務・人資</b><span>客戶洽談 · 面試記錄 · 一對一面談</span></div>
+        <div class="cat"><b>專業諮詢</b><span>醫療諮詢 · 法律諮詢 · 心理諮商</span></div>
+        <div class="cat"><b>學習・研究</b><span>課堂筆記 · 論文 Meeting · 讀書會討論</span></div>
+        <div class="cat"><b>個人・生活</b><span>語音備忘轉待辦 · 訪談整理 · 演講摘要</span></div>
+      </div>
+      <p>作品頁裡掛了四份真的跑出來的成品，可以點開看：課堂筆記（附知識地圖、老師金句、名詞白話對照）、專案會議（附里程碑甘特圖、風險矩陣、責任到人的行動項）、論文 Meeting（附可打勾的待修改清單）、演講摘要（三句話重點、金句摘錄、時間軸）。</p>
+      <a class="link-btn" href="voice-to-notes.html" target="_blank" rel="noopener">👉 打開作品頁看實際成品</a>
+    </section>
+
+    <section>
+      <h2><span class="em">⚖️</span>我做過的兩個取捨</h2>
+      <p><b>一，離線換方便。</b>雲端 AI 更聰明、裝起來更省事，我還是選了本地跑。因為我的場景是機關和學員個資，資安不外流這條紅線，比聰明一點點重要。</p>
+      <p><b>二，把版面從 AI 手上收回來</b>（就是上面那個原理）。這是整套系統我最滿意的一次決定。</p>
+    </section>
+
+    <section>
+      <h2><span class="em">🚀</span>下一步</h2>
+      <p>現在還是要動手把音檔丟進資料夾。下一步想讓錄音一結束就自動進生產線，人完全不用碰。然後把我自己最常用的兩種（論文 Meeting、課堂筆記）重點欄位再調得更貼近我的需求。</p>
+    </section>
+
+    <section>
+      <h2><span class="em">💬</span>想跟你說的一句話</h2>
+      <p>不要把 AI 當成「一個更聰明的人」，把它當成生產線上的一個工站。先想清楚一件重複的苦差事有哪幾步，再決定哪一步交給 AI（懂內容）、哪一步交給程式（鎖版面、搬檔案）。全丟給 AI，你會每次都要重弄；分工分對，它每次都幫你穩穩交件。</p>
+      <p>還有，我真的不會寫程式。我做的只有一件事：把需求和分工講清楚。剩下的，是我把時間還給自己的方式。</p>
+    </section>
+
+    <section>
+      <h2><span class="em">🍀</span>關於我</h2>
+      <p class="about">Tarshar，淡江 EMBA 資管研究生，AI 課程講師。在經營「🍀Learn AI with Tarshar」，記錄一個非工程師怎麼把 AI 變成日常隊友，把重複繁瑣、吃掉時間的事交出去，把時間留給真正重要的人和事。</p>
+    </section>
+
+    <footer>📮 主題式電子報 · 電子報 001 · 🍀Learn AI with Tarshar · 2026.07.23</footer>
+
+  </div>
+
+  <a class="home-fab" href="../edm/" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+</body>
+</html>

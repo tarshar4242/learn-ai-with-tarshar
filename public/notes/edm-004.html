@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>電子報 004｜網路上看到一款好用的 App，我自己也做了一個</title>
+<meta name="description" content="主題式電子報第四期：在網路上看到有人做的 PDF 壓縮 App，我也想要，所以自己動手做了一個網頁版——輸入目標大小、精準壓到剛好，檔案全程不上傳。一個非工程師的仿作歷程，圖文並茂。">
+<style>
+  :root{
+    --ink:#2b2a26; --soft:#6b6760; --line:#e7e2d8;
+    --paper:#faf7f0; --card:#fffdf8; --clover:#5b8c5a;
+    --clover-soft:#eef4ec; --accent:#c98a3a; --accent-soft:#f7eddb;
+    --red:#b06a6a; --red-soft:#f6e8e6;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"PingFang TC","Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;
+    background:var(--paper); color:var(--ink); line-height:1.85;
+    -webkit-font-smoothing:antialiased; padding:0 0 90px;
+  }
+  .wrap{max-width:720px; margin:0 auto; padding:0 20px}
+
+  /* masthead */
+  .band{background:linear-gradient(135deg,#c98a3a,#5b8c5a); color:#fff; padding:34px 0 30px; margin-bottom:26px}
+  .band .wrap{display:flex; flex-direction:column; gap:10px}
+  .kicker{font-size:.8rem; letter-spacing:2px; opacity:.95; display:flex; align-items:center; gap:8px}
+  .kicker .dot{width:6px;height:6px;background:#fff;border-radius:50%;opacity:.8}
+  .issue{font-size:.85rem; opacity:.95; letter-spacing:1px}
+  .band h1{font-size:1.5rem; line-height:1.5; font-weight:800}
+  .meta-row{display:flex; flex-wrap:wrap; gap:8px; margin-top:6px}
+  .chip{background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.35);
+    padding:4px 12px; border-radius:999px; font-size:.82rem}
+
+  section{background:var(--card); border:1px solid var(--line); border-radius:18px;
+    padding:22px 22px 20px; margin-bottom:16px; box-shadow:0 1px 0 rgba(0,0,0,.02)}
+  h2{font-size:1.12rem; color:var(--clover); font-weight:800; margin-bottom:12px;
+    display:flex; align-items:center; gap:9px}
+  h2 .em{font-size:1.15rem}
+  section p{margin:0 0 12px; font-size:1rem}
+  section p:last-child{margin-bottom:0}
+  .lead p{font-size:1.05rem}
+
+  .pull{border-left:4px solid var(--clover); background:var(--clover-soft);
+    padding:12px 16px; border-radius:0 12px 12px 0; margin:14px 0; font-weight:700}
+
+  ul.flow{list-style:none; display:flex; flex-direction:column; gap:10px; margin:6px 0 4px}
+  ul.flow li{background:#fbf9f3; border:1px solid var(--line); border-radius:12px;
+    padding:11px 14px; font-size:.98rem}
+  ul.flow li .lead-emoji{font-size:1.1rem; margin-right:6px}
+
+  /* 圖片 figure */
+  figure{margin:14px 0 6px; border:1px solid var(--line); border-radius:14px; overflow:hidden;
+    background:#fff; box-shadow:0 3px 12px rgba(60,50,30,.07)}
+  figure img{width:100%; display:block}
+  figure.pad img{padding:14px}
+  figcaption{font-size:.82rem; color:var(--soft); text-align:center; padding:9px 12px;
+    background:#fbf9f3; border-top:1px solid var(--line)}
+
+  /* 螢幕外框：讓截圖像在瀏覽器視窗裡 */
+  .browser{border:1px solid var(--line); border-radius:14px; overflow:hidden; margin:14px 0 6px;
+    box-shadow:0 6px 20px -6px rgba(60,50,30,.28); background:#fff}
+  .browser .bar{display:flex; align-items:center; gap:6px; padding:9px 12px;
+    background:#efe9dd; border-bottom:1px solid var(--line)}
+  .browser .bar i{width:11px; height:11px; border-radius:50%; display:inline-block}
+  .browser .bar i:nth-child(1){background:#e6837c}
+  .browser .bar i:nth-child(2){background:#e6bd6a}
+  .browser .bar i:nth-child(3){background:#8fc18a}
+  .browser .bar span{margin-left:8px; font-size:.76rem; color:var(--soft);
+    background:#fff; border:1px solid var(--line); border-radius:999px; padding:2px 12px}
+  .browser img{width:100%; display:block}
+  .browser .shot-pad{padding:14px}
+
+  /* 三步流程 */
+  .steps{display:grid; grid-template-columns:1fr auto 1fr auto 1fr; align-items:stretch; gap:8px; margin:12px 0 4px}
+  .steps .st{background:#fbf9f3; border:1px solid var(--line); border-radius:14px; padding:14px 10px; text-align:center}
+  .steps .st .ic{font-size:1.7rem; line-height:1}
+  .steps .st .no{display:inline-block; font-size:.72rem; font-weight:800; color:#fff; background:var(--clover);
+    border-radius:999px; padding:1px 9px; margin-bottom:6px}
+  .steps .st b{display:block; font-size:.95rem; margin-top:4px}
+  .steps .st span{font-size:.8rem; color:var(--soft)}
+  .steps .ar{display:flex; align-items:center; justify-content:center; color:var(--accent); font-size:1.3rem; font-weight:800}
+  @media (max-width:560px){
+    .steps{grid-template-columns:1fr; }
+    .steps .ar{transform:rotate(90deg); padding:2px 0}
+  }
+
+  /* 對比：.app vs 網頁 */
+  .versus{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:12px 0 4px}
+  .versus .col{border:1px solid var(--line); border-radius:14px; padding:14px; background:#fbf9f3}
+  .versus .col.win{border-color:var(--clover); background:var(--clover-soft)}
+  .versus .col .tt{font-weight:800; font-size:.98rem; display:flex; align-items:center; gap:6px; margin-bottom:8px}
+  .versus .col.win .tt{color:var(--clover)}
+  .versus .col ul{list-style:none; display:flex; flex-direction:column; gap:6px}
+  .versus .col li{font-size:.88rem; color:var(--soft); display:flex; gap:6px; align-items:flex-start}
+  .versus .col li b{color:var(--ink); font-weight:700}
+  @media (max-width:520px){ .versus{grid-template-columns:1fr} }
+
+  /* Before / After 對照 */
+  .ba{display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:10px; margin:12px 0 4px}
+  .ba .box{border:1px solid var(--line); border-radius:12px; padding:14px; text-align:center; background:#fbf9f3}
+  .ba .box.before{background:var(--red-soft); border-color:transparent}
+  .ba .box.after{background:var(--clover-soft); border-color:transparent}
+  .ba .box .t{font-size:.8rem; color:var(--soft); margin-bottom:4px}
+  .ba .box .n{font-size:1.5rem; font-weight:800}
+  .ba .box.before .n{color:var(--red)}
+  .ba .box.after .n{color:var(--clover)}
+  .ba .arrow{font-size:1.4rem; color:var(--accent); font-weight:800}
+  .ba-note{text-align:center; font-size:.85rem; color:var(--soft); margin-top:4px}
+
+  .svg-box{margin:12px 0 4px; border:1px solid var(--line); border-radius:14px; background:#fff;
+    padding:16px 12px 10px; box-shadow:0 3px 12px rgba(60,50,30,.06)}
+  .svg-box svg{width:100%; height:auto; display:block}
+  .svg-cap{font-size:.82rem; color:var(--soft); text-align:center; margin-top:6px}
+
+  .link-btn{display:inline-flex; align-items:center; gap:8px; text-decoration:none;
+    background:var(--clover); color:#fff; padding:11px 18px; border-radius:999px;
+    font-weight:700; font-size:.95rem; margin-top:8px}
+  .link-btn:active{transform:translateY(1px)}
+
+  .about{font-size:.96rem; color:var(--soft)}
+  footer{text-align:center; color:var(--soft); font-size:.82rem; margin-top:26px}
+
+  /* 固定回入口浮動鈕（左上角） */
+  .home-fab{position:fixed; left:14px; top:14px; z-index:50;
+    background:rgba(255,255,255,.94); color:var(--clover); text-decoration:none; font-weight:800; font-size:.9rem;
+    padding:9px 15px; border-radius:999px; box-shadow:0 8px 22px -8px rgba(60,50,30,.5); border:1px solid rgba(255,255,255,.7)}
+  .home-fab:active{transform:translateY(1px)}
+  /* 手機上把報頭往下推，避免和左上角返回鈕重疊 */
+  @media (max-width:760px){ .band{padding-top:60px} }
+</style>
+</head>
+<body>
+
+  <div class="band">
+    <div class="wrap">
+      <div class="kicker"><span class="dot"></span>主題式電子報<span class="dot"></span></div>
+      <div class="issue">電子報 004｜2026.07.31</div>
+      <h1>網路上看到一款好用的 App，<br>我自己也做了一個 🪶</h1>
+      <div class="meta-row">
+        <span class="chip">PDF 壓縮</span>
+        <span class="chip">瀏覽器內運算</span>
+        <span class="chip">二分搜尋</span>
+        <span class="chip">非工程師仿作</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+
+    <section class="lead">
+      <h2><span class="em">📄</span>先講一個每個人都遇過的小卡關</h2>
+      <p>你有沒有過這種時刻：一份 PDF 要上傳，系統跳出一行紅字「檔案不得超過 10MB」。偏偏你那份 31MB。</p>
+      <p>報名表、投稿、上傳作業、寄給客戶——每次都卡在這關。網路上壓縮工具一大堆，但多半要嘛把檔案傳到別人的伺服器，要嘛壓完糊得看不清楚，要嘛只能「壓一點點」，沒辦法讓我說「我就是要壓到 5MB 以內」。</p>
+      <p>這件事本身不難，但它一直來。這一期，我把它收拾掉了。</p>
+    </section>
+
+    <section>
+      <h2><span class="em">👀</span>起點：我在網路上滑到一款很不錯的 App</h2>
+      <p>前陣子我在網路上滑到一段影片：有人用 Manus 做了一個小程式叫「嘟嘟厚 PDF」。介面乾乾淨淨——把 PDF 丟進去、輸入你要的目標大小、按一下，就精準壓到那個數字以內。畫面上還特別寫著一句「100% 本地運算，個資絕對不離線」。</p>
+      <p>我看著那個畫面，心裡冒出一句很熟悉的話：<b>「這個我也很需要，我也想要一個一模一樣的。」</b>於是我決定，自己動手做一個。</p>
+      <p>以前的我看到這種東西，反應是「好厲害，可惜我不會寫程式」。現在的我反應是「先看清楚它在做哪幾件事，然後把需求講清楚，讓 AI 幫我做出來」。這中間的轉變，就是這一年我一直在練的事。</p>
+    </section>
+
+    <section>
+      <h2><span class="em">🔀</span>我把它做成「打開網頁就能用」的樣子</h2>
+      <p>我在網路上看到的版本，是要下載、要安裝的。我想做的，是一個<b>打開網頁就能用</b>的——不挑系統、不用裝、一個網址就能傳給別人。</p>
+      <div class="versus">
+        <div class="col">
+          <div class="tt">💻 要下載安裝的版本</div>
+          <ul>
+            <li>▸ 得先下載、再安裝才能用</li>
+            <li>▸ 常常<b>只有某一種系統</b>能開</li>
+            <li>▸ 要分享，得請對方也裝一次</li>
+          </ul>
+        </div>
+        <div class="col win">
+          <div class="tt">🌐 我做的網頁版</div>
+          <ul>
+            <li>▸ <b>Mac、Windows、手機</b>都能開</li>
+            <li>▸ 免下載免安裝，點開就壓</li>
+            <li>▸ <b>一個網址</b>就能傳給學員、朋友</li>
+          </ul>
+        </div>
+      </div>
+      <p style="margin-top:12px">同樣一個需求，載體選對了，能用的人就從「一個人」變成「所有人」。這是我這次最開心的一個決定。</p>
+    </section>
+
+    <section>
+      <h2><span class="em">🖐️</span>做出來長這樣，用起來只有三步</h2>
+      <p>整個工具我把它收斂成三個動作，白話到不用教：</p>
+      <div class="steps">
+        <div class="st"><span class="no">1</span><div class="ic">📄</div><b>丟進 PDF</b><span>拖進來就好</span></div>
+        <div class="ar">→</div>
+        <div class="st"><span class="no">2</span><div class="ic">🎯</div><b>說出目標大小</b><span>填數字或點快選</span></div>
+        <div class="ar">→</div>
+        <div class="st"><span class="no">3</span><div class="ic">⚡</div><b>精準壓好下載</b><span>剛好塞進去</span></div>
+      </div>
+      <div class="browser">
+        <div class="bar"><i></i><i></i><i></i><span>PDF 瘦身機</span></div>
+        <div class="shot-pad"><img src="edm-004-img/ui-target.png" alt="PDF 瘦身機的目標大小輸入框，下方有 1MB／3MB／5MB／10MB 四個快選鈕，以及開始壓縮按鈕"></div>
+      </div>
+      <figcaption style="border:1px solid var(--line);border-top:none;border-radius:0 0 12px 12px;margin-top:-6px">第二步的畫面：我多加了四個快選鈕，因為大家其實記不住要填幾——1MB（超省）、3MB（LINE 好傳）、5MB（Email 附件）、10MB（一般系統上限），點一下就好。</figcaption>
+    </section>
+
+    <section>
+      <h2><span class="em">🗝️</span>我在這裡藏了一個原理</h2>
+      <p>那個「目標大小」欄位，其實是整個工具最聰明的地方。它背後用的是一個叫<b>二分搜尋</b>的老方法。</p>
+      <div class="pull">與其亂猜要壓多少，不如像猜數字遊戲：一半一半地逼近，找出「還看得清楚、又剛好塞進你要的大小」的那個甜蜜點。</div>
+      <div class="svg-box">
+        <svg viewBox="0 0 660 250" role="img" aria-label="畫質階梯示意圖：從最清晰到最省，工具找出剛好落在目標線以下、又最清晰的那一階">
+          <!-- 目標線 -->
+          <line x1="30" y1="150" x2="630" y2="150" stroke="#c98a3a" stroke-width="2" stroke-dasharray="7 6"/>
+          <text x="634" y="150" font-size="13" fill="#c98a3a" font-weight="700" text-anchor="end" dy="-6">🎯 你要的目標大小</text>
+          <!-- 8 根遞減長條（越右越省、檔案越小） -->
+          <!-- baseline y=210；高度=MB*4.4 -->
+          <!-- 32,27,22,18(以上超標,紅)  12(剛好達標,最清晰=選這根,綠深)  9,7,5(達標,綠淺) -->
+          <g font-size="12" text-anchor="middle">
+            <rect x="40"  y="69"  width="58" height="141" rx="5" fill="#e0a9a4"/>
+            <rect x="113" y="91"  width="58" height="119" rx="5" fill="#e0a9a4"/>
+            <rect x="186" y="113" width="58" height="97"  rx="5" fill="#e0a9a4"/>
+            <rect x="259" y="131" width="58" height="79"  rx="5" fill="#e0a9a4"/>
+            <!-- 選中的那一階 -->
+            <rect x="332" y="157" width="58" height="53"  rx="5" fill="#5b8c5a"/>
+            <rect x="405" y="171" width="58" height="39"  rx="5" fill="#bcd6b4"/>
+            <rect x="478" y="181" width="58" height="29"  rx="5" fill="#bcd6b4"/>
+            <rect x="551" y="189" width="58" height="21"  rx="5" fill="#bcd6b4"/>
+            <!-- 選中標註 -->
+            <circle cx="361" cy="157" r="7" fill="none" stroke="#5b8c5a" stroke-width="2.5"/>
+            <text x="361" y="230" fill="#5b8c5a" font-weight="800">選這一階</text>
+            <text x="361" y="246" fill="#6b6760">達標又最清晰</text>
+            <text x="151" y="230" fill="#b06a6a">還太大 →降一階</text>
+            <text x="520" y="230" fill="#8ca67f">更省但沒必要</text>
+          </g>
+          <text x="40" y="24" font-size="12" fill="#6b6760">◀ 最清晰、檔案最大</text>
+          <text x="620" y="24" font-size="12" fill="#6b6760" text-anchor="end">最省、檔案最小 ▶</text>
+        </svg>
+        <p class="svg-cap">工具準備一整排畫質階梯，反覆試：太大就往下降一階、還有空間就往上升一階，幾輪之內就框到「符合你要的大小、又最清晰」的那一階。</p>
+      </div>
+      <p>所以你只要負責講出一個數字，剩下的邏輯它自己跑。<b>你出需求，程式出力氣。</b></p>
+    </section>
+
+    <section>
+      <h2><span class="em">📉</span>實際跑一次長這樣</h2>
+      <p>我拿一份 38MB 的測試 PDF，設定目標 3MB，按下開始，幾秒後畫面就跳出這個：</p>
+      <div class="browser">
+        <div class="bar"><i></i><i></i><i></i><span>壓縮成功</span></div>
+        <img src="edm-004-img/result.png" alt="工具的壓縮成功畫面：38.13 MB 變成 2.30 MB，瘦了 94%，符合目標 3MB 以內，下方有下載瘦身版 PDF 按鈕">
+      </div>
+      <div class="ba">
+        <div class="box before"><div class="t">壓縮前</div><div class="n">38 MB</div></div>
+        <div class="arrow">→</div>
+        <div class="box after"><div class="t">壓縮後</div><div class="n">2.3 MB</div></div>
+      </div>
+      <p class="ba-note">瘦了 94%，穩穩落在 3MB 以內 · 頁數一頁不少</p>
+    </section>
+
+    <section>
+      <h2><span class="em">🔒</span>那句「個資絕對不離線」，我也做到了</h2>
+      <p>我看到的那款 App 強調檔案不上傳，這一點我完全同意，而且對我來說是紅線。我教的是機關單位、帶的是社大學員，大家要壓的常常是有個資的公文、名冊、報表。</p>
+      <p>所以我的網頁版一樣<b>全程在你自己的瀏覽器裡運算，檔案不會上傳到任何地方</b>。你甚至可以把網路關掉再壓，照樣能用。壓完的檔案，只在你自己電腦裡。</p>
+    </section>
+
+    <section>
+      <h2><span class="em">⚖️</span>我要老實說的一個取捨</h2>
+      <p>天下沒有白吃的午餐。這種壓縮的原理，是把 PDF 的<b>每一頁重新拍成一張清晰照片，再裝回一份新的 PDF</b>。</p>
+      <p>好處是壓縮效果很強、看起來幾乎一樣。代價是：瘦身版的<b>文字不能再反白複製、也不適合再編輯</b>，因為它已經變成「圖」了。</p>
+      <p>所以我在工具裡老實寫了一句提醒：拿去上傳系統、寄信、繳交，剛剛好；之後還要動的檔案，請留著原始版。<b>把限制講在前面，比事後被抱怨好。</b></p>
+    </section>
+
+    <section>
+      <h2><span class="em">🧰</span>它現在住在哪</h2>
+      <p>這個工具已經上線，收進我的「TARSHAR 工具集」了——那是我跟 AI 一起做的免費線上工具箱，每一樣都是「單一用途、點進來就能完成一件事」的小工具，現在收錄第 14 樣。</p>
+      <a class="link-btn" href="tool-pdf-compress.html" target="_blank" rel="noopener">👉 打開 PDF 瘦身機來壓一份</a>
+    </section>
+
+    <section>
+      <h2><span class="em">💬</span>想跟你說的一句話</h2>
+      <p>看到別人做的好東西，「我也想要」不必停在羨慕。你不用會寫程式，你要練的是另一件事：把那個東西拆開看——它在幫使用者完成哪一件事？中間有哪幾步？然後把這件事清清楚楚交代給 AI。</p>
+      <p>網路上那位不認識的人給了我靈感，AI 給了我手，我做的是那個最關鍵、也最像人的部分：<b>決定要做什麼、為誰做、做成什麼樣子。</b>仿作不丟臉，能把看到的好點子變成自己也用得上、還能分享出去的東西，這本身就是一種本事。</p>
+    </section>
+
+    <section>
+      <h2><span class="em">🍀</span>關於我</h2>
+      <p class="about">Tarshar，淡江 EMBA 資管研究生，AI 課程講師。在經營「🍀Learn AI with Tarshar」，記錄一個非工程師怎麼把 AI 變成日常隊友，把重複繁瑣、吃掉時間的事交出去，把時間留給真正重要的人和事。</p>
+    </section>
+
+    <footer>📮 主題式電子報 · 電子報 004 · 🍀Learn AI with Tarshar · 2026.07.31</footer>
+
+  </div>
+
+  <a class="home-fab" href="../edm/" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+</body>
+</html>

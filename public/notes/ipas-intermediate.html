@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="iPAS AI 應用規劃師中級：三科 34 個能力單元、30 天讀書路線、白話比喻與本機學習進度。">
+<title>iPAS AI 應用規劃師中級｜🍀Learn AI with Tarshar</title>
+<style>
+:root{
+  --bg:#08101f;--bg2:#0d1830;--panel:#111f3b;--panel2:#152746;
+  --line:rgba(137,172,255,.18);--text:#eef4ff;--muted:#a7b7d8;--dim:#7183aa;
+  --cyan:#41dcff;--blue:#6690ff;--purple:#b57bff;--green:#4de1a1;--orange:#ffc45b;
+  --pink:#ff78b5;--shadow:0 24px 70px rgba(0,0,0,.28)
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;color:var(--text);background:
+radial-gradient(900px 500px at 10% -10%,rgba(65,220,255,.13),transparent 65%),
+radial-gradient(900px 520px at 95% 10%,rgba(181,123,255,.14),transparent 62%),var(--bg);min-height:100vh}
+button,input{font:inherit}a{color:inherit}.wrap{width:min(1180px,calc(100% - 32px));margin:auto}
+.topbar{position:sticky;top:0;z-index:20;background:rgba(8,16,31,.84);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.topbar .wrap{min-height:62px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.back{text-decoration:none;color:var(--cyan);font-size:14px;font-weight:800}.brand{font-size:12px;color:var(--muted);letter-spacing:1.5px}
+.hero{padding:64px 0 30px}.hero-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:24px;align-items:stretch}
+.eyebrow{display:inline-flex;gap:8px;align-items:center;padding:7px 14px;border:1px solid rgba(65,220,255,.35);border-radius:999px;color:var(--cyan);font-size:12px;letter-spacing:2px;background:rgba(65,220,255,.06)}
+h1{font-size:clamp(34px,5.8vw,68px);line-height:1.1;margin:20px 0 16px;letter-spacing:-.04em}h1 span{background:linear-gradient(90deg,var(--cyan),#fff 48%,var(--purple));background-clip:text;-webkit-background-clip:text;color:transparent}
+.lead{max-width:700px;color:var(--muted);font-size:16px;line-height:1.9}.hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}
+.btn{border:1px solid var(--line);border-radius:14px;padding:12px 18px;text-decoration:none;background:var(--panel);color:var(--text);font-weight:800;cursor:pointer}.btn.primary{background:linear-gradient(135deg,#1ebbdc,#6f7dff);border:0;color:white}.btn:hover{transform:translateY(-2px)}
+.mission{background:linear-gradient(145deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:24px;padding:24px;box-shadow:var(--shadow);display:flex;flex-direction:column;justify-content:space-between}.mission small{color:var(--green);font-weight:900;letter-spacing:2px}.mission h2{font-size:24px;margin:12px 0 8px}.mission p{color:var(--muted);line-height:1.7;margin:0}.mission .code{display:inline-block;margin-top:16px;color:var(--cyan);font-weight:900}.mission button{margin-top:20px;border:0;border-radius:14px;padding:13px;background:var(--green);color:#062418;font-weight:900;cursor:pointer}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0 34px}.stat{background:rgba(17,31,59,.72);border:1px solid var(--line);border-radius:16px;padding:18px}.stat b{display:block;font-size:26px}.stat span{color:var(--dim);font-size:12px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 24px}.tab{border:1px solid var(--line);border-radius:999px;padding:10px 16px;background:transparent;color:var(--muted);cursor:pointer;font-weight:800}.tab.active{background:var(--text);color:var(--bg);border-color:var(--text)}
+.view{display:none}.view.active{display:block}.section-head{display:flex;justify-content:space-between;gap:18px;align-items:end;margin:20px 0 16px}.section-head h2{font-size:28px;margin:0}.section-head p{color:var(--muted);margin:6px 0 0;line-height:1.7}.progress-label{white-space:nowrap;color:var(--green);font-weight:900}.progress{height:10px;background:#09142a;border-radius:999px;overflow:hidden;border:1px solid var(--line);margin-bottom:24px}.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--green));transition:width .3s}
+.subject-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.subject{border:1px solid var(--line);border-radius:20px;padding:22px;background:linear-gradient(155deg,var(--panel),var(--bg2));cursor:pointer;text-align:left;color:inherit}.subject:hover{transform:translateY(-4px);border-color:var(--c)}.subject .no{color:var(--c);font-size:12px;font-weight:900;letter-spacing:2px}.subject h3{font-size:21px;line-height:1.45;margin:10px 0}.subject p{color:var(--muted);font-size:13.5px;line-height:1.7}.subject .foot{display:flex;justify-content:space-between;color:var(--dim);font-size:12px;margin-top:16px}.subject .done{color:var(--c);font-weight:900}
+.toolbar{display:grid;grid-template-columns:1fr auto;gap:12px;margin:24px 0 16px}.search{width:100%;border:1px solid var(--line);border-radius:14px;background:var(--panel);color:var(--text);padding:13px 16px;outline:none}.search:focus{border-color:var(--cyan)}
+.filters{display:flex;gap:7px}.filter{border:1px solid var(--line);background:var(--panel);color:var(--muted);padding:10px 12px;border-radius:12px;cursor:pointer}.filter.active{color:var(--bg);background:var(--cyan);border-color:var(--cyan)}
+.module{border:1px solid var(--line);border-radius:18px;background:rgba(17,31,59,.75);overflow:hidden;margin-bottom:12px}.module summary{list-style:none;cursor:pointer;padding:18px 20px;display:flex;justify-content:space-between;align-items:center;gap:14px}.module summary::-webkit-details-marker{display:none}.module summary b{font-size:17px}.module summary span{color:var(--dim);font-size:12px}.lesson-list{border-top:1px solid var(--line)}
+.lesson{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:start;padding:17px 20px;border-bottom:1px solid rgba(137,172,255,.1)}.lesson:last-child{border-bottom:0}.check{width:24px;height:24px;margin-top:2px;accent-color:var(--green);cursor:pointer}.lesson-code{color:var(--cyan);font-size:12px;font-weight:900}.lesson h4{margin:4px 0 6px;font-size:16px}.lesson p{margin:0;color:var(--muted);font-size:13px;line-height:1.65}.lesson .keywords{margin-top:8px;color:var(--dim);font-size:11.5px}.lesson .go{align-self:center;border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:transparent;color:var(--muted);cursor:pointer}.lesson.completed{opacity:.58}.lesson.completed h4{text-decoration:line-through}.empty{padding:34px;text-align:center;color:var(--dim)}
+.plan-setup{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:end;border:1px solid rgba(77,225,161,.3);border-radius:20px;background:rgba(77,225,161,.06);padding:18px;margin-bottom:16px}.plan-setup label{display:grid;gap:7px;color:var(--muted);font-size:12px}.plan-setup input{width:100%;max-width:260px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--text);padding:11px}.today-summary{color:var(--green);font-weight:900}.plan-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.week{border:1px solid var(--line);border-radius:20px;background:var(--panel);padding:20px}.week .week-no{color:var(--orange);font-size:12px;font-weight:900;letter-spacing:2px}.week h3{margin:8px 0}.day{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:10px;padding:12px 0;border-top:1px solid rgba(137,172,255,.1);align-items:center}.day:first-of-type{margin-top:12px}.day b{color:var(--cyan);font-size:12px}.day span{color:var(--muted);font-size:13px}.day em{font-style:normal;color:var(--dim);font-size:11px}.day.today{margin:0 -10px;padding:12px 10px;border:1px solid rgba(65,220,255,.45);border-radius:13px;background:rgba(65,220,255,.07)}.day.done{opacity:.58}.day.done b{color:var(--green)}.day-actions{display:flex;gap:6px}.day-actions button,.day-actions a{border:1px solid var(--line);border-radius:9px;background:var(--bg2);color:var(--text);padding:7px 9px;text-decoration:none;font-size:11px;cursor:pointer}.day-actions .practice-link{color:var(--orange)}
+.method-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.method{border:1px solid var(--line);border-radius:18px;background:var(--panel);padding:20px}.method .icon{font-size:28px}.method h3{margin:10px 0 8px}.method p{margin:0;color:var(--muted);font-size:13px;line-height:1.7}
+.bridge{border:1px solid rgba(255,196,91,.35);background:linear-gradient(135deg,rgba(255,196,91,.09),rgba(181,123,255,.08));border-radius:20px;padding:22px;margin-bottom:20px}.bridge b{color:var(--orange)}.bridge p{color:var(--muted);line-height:1.8;margin:8px 0 0}
+.graph-note{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px;color:var(--muted);font-size:12px}.graph-note span{border:1px solid var(--line);border-radius:999px;padding:6px 10px}.graph-scroll{overflow:auto;border:1px solid var(--line);border-radius:22px;background:radial-gradient(circle at center,rgba(79,124,255,.08),transparent 55%),#091329;padding:12px}.graph-stage{position:relative;width:980px;height:1100px}.graph-stage canvas{position:absolute;inset:0}.graph-node{position:absolute;width:220px;min-height:58px;border:1px solid var(--line);border-left:4px solid var(--node);border-radius:13px;background:rgba(17,31,59,.94);color:var(--text);padding:9px 11px;text-align:left;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.2)}.graph-node:hover{transform:scale(1.035);border-color:var(--node);z-index:3}.graph-node.done{opacity:.55}.graph-node b{display:block;color:var(--node);font-size:11px}.graph-node span{display:block;margin-top:4px;font-size:12px;line-height:1.35}.graph-column{position:absolute;top:12px;font-size:12px;font-weight:900;letter-spacing:1px;color:var(--dim)}
+.drawer{position:fixed;inset:0;z-index:50;display:none}.drawer.open{display:block}.shade{position:absolute;inset:0;background:rgba(0,0,0,.68)}.sheet{position:absolute;right:0;top:0;bottom:0;width:min(600px,100%);background:var(--bg2);border-left:1px solid var(--line);padding:28px;overflow:auto}.close{float:right;border:1px solid var(--line);border-radius:10px;background:transparent;color:var(--text);padding:8px 11px;cursor:pointer}.sheet .code{color:var(--cyan);font-weight:900}.sheet h2{font-size:28px;margin:18px 0 20px}.coach-label{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(65,220,255,.35);border-radius:999px;padding:7px 12px;color:var(--cyan);font-size:12px;font-weight:900}.block{border:1px solid var(--line);border-radius:16px;padding:18px;margin:12px 0;background:var(--panel)}.block b{display:block;color:var(--orange);margin-bottom:8px}.block p{color:var(--muted);line-height:1.75;margin:0}.checkpoint{width:100%;border:0;border-radius:13px;padding:13px;background:var(--green);color:#052419;font-weight:900;cursor:pointer;margin-top:14px}
+footer{text-align:center;color:var(--dim);font-size:12px;line-height:1.9;border-top:1px solid var(--line);margin-top:50px;padding:34px 20px 46px}
+@media(max-width:850px){.hero-grid{grid-template-columns:1fr}.subject-grid,.method-grid{grid-template-columns:1fr 1fr}.stats{grid-template-columns:1fr 1fr}.plan-grid{grid-template-columns:1fr}}
+@media(max-width:600px){.wrap{width:min(100% - 22px,1180px)}.hero{padding-top:38px}.brand{display:none}.subject-grid,.method-grid{grid-template-columns:1fr}.toolbar{grid-template-columns:1fr}.lesson{grid-template-columns:auto 1fr}.lesson .go{grid-column:2;justify-self:start}.section-head{align-items:start;flex-direction:column}.day{grid-template-columns:46px 1fr}.day em{grid-column:2}.stats{gap:8px}.stat{padding:14px}.stat b{font-size:21px}}
+.course-level{display:inline-flex;border:1px solid rgba(255,196,91,.45);background:rgba(255,196,91,.08);color:var(--orange);border-radius:999px;padding:6px 10px;font-size:11px;font-weight:900;margin:8px 0}.lesson-intro{font-size:15px;line-height:1.8;color:var(--muted)}.objective-list,.case-list{color:var(--muted);line-height:1.75;padding-left:22px}.deep-unit{border:1px solid var(--line);border-radius:15px;background:rgba(8,16,31,.48);margin:11px 0;overflow:hidden}.deep-unit summary{cursor:pointer;padding:15px 17px;font-weight:900;color:var(--cyan)}.unit-body{padding:0 17px 17px}.unit-body h5{margin:16px 0 5px;color:var(--orange);font-size:12px}.unit-body p{margin:0;color:var(--muted);line-height:1.78}.unit-check{border-left:3px solid var(--green);padding:10px 12px;margin-top:15px;background:rgba(77,225,161,.06);color:var(--text)!important}.trap{border:1px solid rgba(255,117,151,.28);border-radius:13px;padding:13px;margin:9px 0}.trap b{color:var(--red)}.trap p{margin:5px 0;color:var(--muted);line-height:1.65}.consultant-case{border:1px solid rgba(181,123,255,.45);background:rgba(181,123,255,.07);border-radius:17px;padding:17px;margin:14px 0}.consultant-case h3{margin-top:0;color:var(--purple)}.consultant-case h5{color:var(--orange);margin:14px 0 4px}.consultant-case p{color:var(--muted);line-height:1.75;margin:0}.toolkit{display:grid;grid-template-columns:1fr 1fr;gap:9px}.tool{border:1px solid var(--line);border-radius:13px;padding:13px}.tool b{color:var(--cyan)}.tool small{display:block;color:var(--muted);line-height:1.55;margin-top:5px}.lesson-loading{padding:30px 10px;text-align:center;color:var(--cyan);line-height:1.8}@media(max-width:600px){.toolkit{grid-template-columns:1fr}}
+.lesson-assets{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 18px}.lesson-assets a{border:1px solid var(--line);border-radius:11px;background:var(--panel2);color:var(--text);padding:10px 13px;text-decoration:none;font-size:12px;font-weight:900}.lesson-assets a:first-child{background:var(--green);color:#05251a;border-color:var(--green)}
+</style>
+</head>
+<body>
+<nav class="topbar"><div class="wrap"><a class="back" href="../courses/" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a><span class="brand">🍀 LEARN AI WITH TARSHAR · iPAS 中級</span></div></nav>
+<header class="hero"><div class="wrap hero-grid">
+  <div>
+    <span class="eyebrow">IPAS AI APPLICATION PLANNER · INTERMEDIATE</span>
+    <h1>把 573 頁官方指引<br><span>變成每天學得完的一小步</span></h1>
+    <p class="lead">給已經有初級基礎、正在準備中級，也要把知識帶回企業現場的人。三科、34 個能力單元，用像上課聊天的方式先問「這東西到底拿來幹嘛？」，再補正式定義、決策重點與工作產出。</p>
+    <div class="hero-actions"><button class="btn primary" data-tab="map">開始今天的任務</button><button class="btn" data-tab="graph">打開知識節點圖</button><a class="btn" href="https://ipas-intermediate-learning.tarshar4242.chatgpt.site">練考古題型＋看錯題趨勢</a><button class="btn" data-tab="plan">查看 30 天路線</button><button class="btn" data-tab="method">這套方法怎麼學</button></div>
+  </div>
+  <aside class="mission"><div><small>今天只做一件事</small><span class="code" id="nextCode">L21101</span><h2 id="nextTitle">自然語言處理技術與應用</h2><p id="nextHint">像教一位新同事聽懂人話：先拆句子，再理解上下文，最後給出合適回應。</p></div><button id="continueBtn">繼續學習 →</button></aside>
+</div></header>
+
+<main class="wrap">
+  <section class="stats"><div class="stat"><b>3 科</b><span>官方中級評鑑範圍</span></div><div class="stat"><b>34 課</b><span>能力單元逐一攻克</span></div><div class="stat"><b>30 天</b><span>每天約 25–40 分鐘</span></div><div class="stat"><b id="totalDone">0%</b><span>你的整體完成度</span></div></section>
+  <nav class="tabs" aria-label="學習網站分頁"><button class="tab active" data-tab="map">三科學習地圖</button><button class="tab" data-tab="graph">Obsidian 知識節點</button><button class="tab" data-tab="plan">30 天讀書計畫</button><button class="tab" data-tab="method">我的學習法</button></nav>
+
+  <section class="view active" id="view-map">
+    <div class="section-head"><div><h2>三科學習地圖</h2><p>先選科目掌握全貌，再逐課完成。進度只存在你的裝置，不會上傳。</p></div><div class="progress-label"><span id="doneCount">0</span> / 34 已完成</div></div>
+    <div class="progress"><i id="progressBar"></i></div>
+    <div class="subject-grid" id="subjectGrid"></div>
+    <div class="toolbar"><input class="search" id="search" type="search" placeholder="搜尋：例如 RAG、統計、資料清理、模型評估…" aria-label="搜尋課程"><div class="filters" id="filters"><button class="filter active" data-filter="all">全部</button><button class="filter" data-filter="todo">未完成</button><button class="filter" data-filter="done">已完成</button></div></div>
+    <div id="modules"></div>
+  </section>
+
+  <section class="view" id="view-graph">
+    <div class="section-head"><div><h2>Obsidian 式知識節點圖</h2><p>線不是裝飾：它代表「先懂這個，下一課會比較順」。點任何節點即可開課，跨科連線則提醒你同一個企業問題會用到哪些知識。</p></div></div>
+    <div class="graph-note"><span>藍綠：AI 導入與應用</span><span>紫色：資料到洞察</span><span>橘色：模型建構與治理</span><span>亮線：主要學習路徑</span></div>
+    <div class="graph-scroll"><div class="graph-stage" id="graphStage"><canvas id="graphCanvas" width="980" height="1100"></canvas></div></div>
+  </section>
+
+  <section class="view" id="view-plan">
+    <div class="section-head"><div><h2>30 天每日陪跑</h2><p>每一天都直接連到當天的知識節點、哈哈老師圖卡、章末練習與錯題複習；完成後才會打勾並推進進度。</p></div><div class="progress-label"><span id="dayDoneCount">0</span> / 30 天完成</div></div>
+    <div class="plan-setup"><label>你的第 1 天從哪一天開始？<input id="startDate" type="date"></label><div class="today-summary" id="todaySummary">設定後會顯示今天的任務</div></div>
+    <div class="progress"><i id="dayProgressBar"></i></div>
+    <div class="plan-grid" id="planGrid"></div>
+  </section>
+
+  <section class="view" id="view-method">
+    <div class="section-head"><div><h2>最適合你的四步學習法</h2><p>沿用你喜歡的「重點＋官方指引＋試題」，再加上真正能持續的學習節奏。</p></div></div>
+    <div class="bridge"><b>這不是初級課程重講一次</b><p>初級在確認「你認不認得概念」；中級要進一步回答「企業為什麼選它、何時不該選、資料與風險怎麼處理、最後交付什麼」。因此每一課都會從概念接到決策情境與工作產出。</p></div>
+    <div class="method-grid">
+      <article class="method"><div class="icon">🏠</div><h3>1. 生活比喻</h3><p>先把抽象概念放進熟悉情境。知道它「像什麼」，才不會只背名詞。</p></article>
+      <article class="method"><div class="icon">📘</div><h3>2. 正式定義</h3><p>回到官方能力代碼與精準用語，建立考試能辨認的知識骨架。</p></article>
+      <article class="method"><div class="icon">🎯</div><h3>3. 考點辨識</h3><p>比較容易混淆的概念、適用時機、優缺點與流程順序。</p></article>
+      <article class="method"><div class="icon">✅</div><h3>4. 檢查點</h3><p>每課做一道小題並打勾；答不出來就停一下，不急著翻到下一頁。</p></article>
+    </div>
+  </section>
+</main>
+
+<div class="drawer" id="drawer" aria-hidden="true"><div class="shade" id="shade"></div><article class="sheet" role="dialog" aria-modal="true" aria-labelledby="drawerTitle"><button class="close" id="closeDrawer" aria-label="關閉">✕</button><span class="code" id="drawerCode"></span><h2 id="drawerTitle"></h2><div id="drawerBody"></div><button class="checkpoint" id="markDone">完成這一課 ✓</button></article></div>
+
+<footer>本學習地圖依經濟部產業人才能力鑑定「AI 應用規劃師（中級）」三科官方學習指引架構整理。<br>🍀 Learn AI with Tarshar ｜2026</footer>
+
+<script>
+const SUBJECTS={
+ L21:{name:'人工智慧技術應用與規劃',short:'AI 導入與應用',color:'var(--cyan)',desc:'從 AI 技術能做什麼，到企業如何評估、規劃、部署與管理風險。'},
+ L22:{name:'大數據處理分析與應用',short:'資料到洞察',color:'var(--purple)',desc:'從統計、資料清理與儲存，到分析、視覺化及 AI 應用。'},
+ L23:{name:'機器學習技術與應用',short:'模型建構與治理',color:'var(--orange)',desc:'從數學基礎、演算法與深度學習，到訓練、調校、公平與治理。'}
+};
+const LESSONS=[
+['L21101','自然語言處理技術與應用','L21','L211 AI 相關技術應用','像教新同事聽懂人話：拆句、看上下文，再做出合適回應。','斷詞、向量、Transformer、LLM'],
+['L21102','電腦視覺技術與應用','L21','L211 AI 相關技術應用','像教電腦戴上一副眼鏡，從像素辨認物件、位置與動作。','影像分類、物件偵測、分割、OCR'],
+['L21103','生成式 AI 技術與應用','L21','L211 AI 相關技術應用','像一位看過大量作品的創作者，依提示重新組合出新內容。','生成模型、提示工程、RAG、幻覺'],
+['L21104','多模態人工智慧應用','L21','L211 AI 相關技術應用','像人同時用眼睛、耳朵和語言理解同一件事。','文字、影像、音訊、跨模態'],
+['L21201','AI 導入評估','L21','L212 AI 導入評估規劃','像裝潢前先量房子：問題、資料、成本與效益都先確認。','可行性、資料成熟度、ROI、PoC'],
+['L21202','AI 導入規劃','L21','L212 AI 導入評估規劃','像排一趟團體旅行：目標、角色、里程碑與備案缺一不可。','利害關係人、時程、資源、KPI'],
+['L21203','AI 風險管理','L21','L212 AI 導入評估規劃','像開車前繫安全帶：先預想偏誤、隱私、資安與錯誤後果。','風險辨識、偏誤、隱私、人類監督'],
+['L21301','數據準備與模型選擇','L21','L213 AI 技術應用與系統部署','像選食材與鍋具：先看資料品質，再選最適合任務的模型。','資料品質、基準模型、準確度、成本'],
+['L21302','AI 技術系統集成與部署','L21','L213 AI 技術應用與系統部署','像把新家電接進舊廚房：介面、權限、監控與維修都要配合。','API、雲端、MLOps、監控'],
+['L22101','敘述性統計與資料摘要技術','L22','L221 機率統計基礎','像看全班成績單：平均看水準，標準差看差距，箱形圖找異常。','平均數、中位數、標準差、IQR'],
+['L22102','機率分佈與資料分佈模型','L22','L221 機率統計基礎','像看天氣機率：不是預言單一結果，而是描述各種結果有多可能。','常態分佈、二項分佈、條件機率'],
+['L22103','假設檢定與統計推論','L22','L221 機率統計基礎','像法庭判決：先假設無罪，再看證據是否足以推翻。','虛無假設、p 值、信賴區間、型一型二錯誤'],
+['L22201','數據收集與清理','L22','L222 大數據處理技術','像煮菜前洗菜挑菜：格式不一、缺值、重複與錯字先處理。','ETL、缺失值、異常值、資料品質'],
+['L22202','數據儲存與管理','L22','L222 大數據處理技術','像整理大型倉庫：不同貨物需要不同貨架與索引方式。','SQL、NoSQL、資料倉儲、Data Lake'],
+['L22203','數據處理技術與工具','L22','L222 大數據處理技術','像廚房分工：小份用單機，大量訂單要分散處理與排程。','Hadoop、Spark、批次、串流'],
+['L22301','統計學在大數據中的應用','L22','L223 大數據分析方法與工具','像從一整片森林取樣：資料多不代表沒有偏誤，仍需統計判斷。','抽樣、偏差、相關、迴歸'],
+['L22302','常見的大數據分析方法','L22','L223 大數據分析方法與工具','像偵探依問題選工具：找群體、找關聯、預測或發現異常。','分類、分群、關聯規則、時間序列'],
+['L22303','數據可視化工具','L22','L223 大數據分析方法與工具','像替資料安排舞台：選對圖，觀眾才能一眼看見重點。','圖表選擇、儀表板、Power BI、視覺誤導'],
+['L22401','大數據與機器學習','L22','L224 大數據在人工智慧之應用','像用大量練習題訓練學生，但題目品質比數量更重要。','訓練資料、特徵、可擴展性、資料漂移'],
+['L22402','大數據在鑑別式 AI 中的應用','L22','L224 大數據在人工智慧之應用','像裁判在選答案：判斷類別、分數或真偽。','分類、回歸、推薦、異常偵測'],
+['L22403','大數據在生成式 AI 中的應用','L22','L224 大數據在人工智慧之應用','像圖書館支援創作者：資料蒐集、訓練、檢索與回饋形成循環。','預訓練、微調、RAG、向量資料庫'],
+['L22404','大數據隱私保護、安全與合規','L22','L224 大數據在人工智慧之應用','像保管健康檔案：最少蒐集、限制使用、去識別並留下紀錄。','個資、匿名化、存取控制、合規'],
+['L23101','機率／統計之機器學習基礎應用','L23','L231 機器學習基礎數學','像用過去經驗估計明天：模型輸出其實是在管理不確定性。','機率、貝氏、期望值、最大概似'],
+['L23102','線性代數之機器學習基礎應用','L23','L231 機器學習基礎數學','像用座標描述空間：向量放資料，矩陣一次做大量轉換。','向量、矩陣、特徵值、降維'],
+['L23103','數值優化技術與方法','L23','L231 機器學習基礎數學','像在濃霧中下山：每一步看坡度，逐漸走到最低點。','損失函數、梯度下降、學習率、凸優化'],
+['L23201','機器學習原理與技術','L23','L232 機器學習與深度學習','像讓學生從例題找規則，再用沒看過的題目驗證是否真的學會。','監督、非監督、強化、泛化'],
+['L23202','常見機器學習演算法','L23','L232 機器學習與深度學習','像不同專科醫師：樹、迴歸、SVM 與分群各有適合的問題。','決策樹、迴歸、SVM、K-means'],
+['L23203','深度學習原理與框架','L23','L232 機器學習與深度學習','像多層濾鏡逐步抓特徵，從線條、形狀到完整物件。','神經網路、反向傳播、CNN、Transformer'],
+['L23301','數據準備與特徵工程','L23','L233 機器學習建模與參數調校','像替選手整理裝備：清理、轉換、編碼，才能公平上場。','切分、標準化、編碼、特徵選擇'],
+['L23302','模型選擇與架構設計','L23','L233 機器學習建模與參數調校','像選交通工具：不是越豪華越好，要看距離、預算與限制。','基準模型、複雜度、偏差變異、AutoML'],
+['L23303','模型訓練、評估與驗證','L23','L233 機器學習建模與參數調校','像模擬考不能偷看答案：訓練、驗證、測試必須分開。','交叉驗證、混淆矩陣、Precision、Recall'],
+['L23304','模型調整與優化','L23','L233 機器學習建模與參數調校','像調咖啡配方：一次改動參數，再依客觀評分比較。','超參數、正則化、早停、網格搜尋'],
+['L23401','數據隱私、安全與合規','L23','L234 機器學習治理','像銀行金庫不只要鎖門，也要限制誰能看、能改、能帶走。','隱私攻擊、模型安全、稽核、法遵'],
+['L23402','演算法偏見與公平性','L23','L234 機器學習治理','像裁判規則看似一致，資料偏差仍可能讓某些人吃虧。','偏見、代表性、公平指標、可解釋性']
+].map(([id,title,subject,group,analogy,keywords])=>({id,title,subject,group,analogy,keywords}));
+
+const DAILY_PLAN=[
+ {d:1,title:'三科地圖＋中級診斷',codes:[],type:'review'},
+ {d:2,title:'自然語言與電腦視覺',codes:['L21101','L21102']},{d:3,title:'生成式 AI 與多模態',codes:['L21103','L21104']},
+ {d:4,title:'AI 導入評估與規劃',codes:['L21201','L21202']},{d:5,title:'AI 風險管理',codes:['L21203']},{d:6,title:'數據準備、模型選擇與部署',codes:['L21301','L21302']},{d:7,title:'科目一回想測驗',codes:['L21101','L21102','L21103','L21104','L21201','L21202','L21203','L21301','L21302'],type:'review'},
+ {d:8,title:'敘述性統計',codes:['L22101']},{d:9,title:'機率與資料分佈',codes:['L22102']},{d:10,title:'假設檢定與統計推論',codes:['L22103']},
+ {d:11,title:'數據收集與清理',codes:['L22201']},{d:12,title:'數據儲存與管理',codes:['L22202']},{d:13,title:'大數據處理技術與工具',codes:['L22203']},{d:14,title:'科目二前半回想測驗',codes:['L22101','L22102','L22103','L22201','L22202','L22203'],type:'review'},
+ {d:15,title:'統計學在大數據的應用',codes:['L22301']},{d:16,title:'常見大數據分析方法',codes:['L22302']},{d:17,title:'數據可視化與決策',codes:['L22303']},
+ {d:18,title:'大數據與機器學習',codes:['L22401']},{d:19,title:'鑑別式 AI 應用',codes:['L22402']},{d:20,title:'生成式 AI 與 RAG',codes:['L22403']},{d:21,title:'隱私、安全與合規',codes:['L22404']},{d:22,title:'科目二總整理',codes:LESSONS.filter(l=>l.subject==='L22').map(l=>l.id),type:'review'},
+ {d:23,title:'機率、線代與數值優化',codes:['L23101','L23102','L23103']},{d:24,title:'機器學習原理與演算法',codes:['L23201','L23202']},{d:25,title:'深度學習原理與框架',codes:['L23203']},
+ {d:26,title:'特徵工程與模型設計',codes:['L23301','L23302']},{d:27,title:'模型評估、驗證與優化',codes:['L23303','L23304']},{d:28,title:'模型隱私、偏見與公平',codes:['L23401','L23402']},
+ {d:29,title:'三科錯題回補',codes:LESSONS.map(l=>l.id),type:'review'},{d:30,title:'完整模擬＋考前清單',codes:LESSONS.map(l=>l.id),type:'review'}
+];
+const WEEKS=[
+ {no:'WEEK 01',title:'先懂 AI，才談導入',days:DAILY_PLAN.slice(0,7)},
+ {no:'WEEK 02',title:'建立資料與統計底座',days:DAILY_PLAN.slice(7,14)},
+ {no:'WEEK 03',title:'讓資料變成洞察與 AI',days:DAILY_PLAN.slice(14,22)},
+ {no:'WEEK 04',title:'模型建構、調校與治理',days:DAILY_PLAN.slice(22,30)}
+];
+const EDGES=[
+['L21101','L21103'],['L21102','L21104'],['L21103','L21104'],['L21201','L21202'],['L21202','L21203'],['L21202','L21301'],['L21301','L21302'],
+['L22101','L22102'],['L22102','L22103'],['L22103','L22301'],['L22201','L22202'],['L22202','L22203'],['L22203','L22401'],['L22301','L22302'],['L22302','L22303'],['L22401','L22402'],['L22401','L22403'],['L22402','L22404'],['L22403','L22404'],
+['L23101','L23201'],['L23102','L23201'],['L23103','L23201'],['L23201','L23202'],['L23201','L23203'],['L23202','L23301'],['L23203','L23301'],['L23301','L23302'],['L23302','L23303'],['L23303','L23304'],['L23304','L23401'],['L23401','L23402'],
+['L21103','L22403'],['L21203','L22404'],['L22401','L23301'],['L22404','L23401'],['L21301','L23302'],['L21302','L23303']
+];
+let state=JSON.parse(localStorage.getItem('ipasIntermediateProgress')||'{}');let filter='all';let current=null;let activeDay=null;
+const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
+function save(){localStorage.setItem('ipasIntermediateProgress',JSON.stringify(state));renderAll();renderPlan()}
+function switchTab(id){$$('.tab,.hero-actions [data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===id));$$('.view').forEach(v=>v.classList.toggle('active',v.id==='view-'+id));if(id==='map')setTimeout(()=>$('#view-map').scrollIntoView({behavior:'smooth'}),10);if(id==='graph')setTimeout(()=>{renderGraph();$('#view-graph').scrollIntoView({behavior:'smooth'})},10)}
+function renderSubjects(){
+ $('#subjectGrid').innerHTML=Object.entries(SUBJECTS).map(([id,s])=>{const list=LESSONS.filter(l=>l.subject===id),done=list.filter(l=>state[l.id]).length;return `<button class="subject" style="--c:${s.color}" data-subject="${id}"><span class="no">${id} · ${s.short}</span><h3>${s.name}</h3><p>${s.desc}</p><div class="foot"><span>${list.length} 個能力單元</span><span class="done">${done}/${list.length}</span></div></button>`}).join('');
+ $$('.subject').forEach(b=>b.onclick=()=>{filter='all';$$('.filter').forEach(x=>x.classList.toggle('active',x.dataset.filter==='all'));$('#search').value=b.dataset.subject;renderModules();$('#modules').scrollIntoView({behavior:'smooth'})});
+}
+function renderModules(){
+ const q=$('#search').value.trim().toLowerCase();let list=LESSONS.filter(l=>(filter==='all'||(filter==='done'&&state[l.id])||(filter==='todo'&&!state[l.id]))&&(!q||[l.id,l.title,l.subject,l.group,l.keywords].join(' ').toLowerCase().includes(q)));
+ const groups=[...new Set(list.map(l=>l.group))];
+ $('#modules').innerHTML=groups.length?groups.map(g=>{const items=list.filter(l=>l.group===g);return `<details class="module" open><summary><b>${g}</b><span>${items.filter(l=>state[l.id]).length}/${items.length} 已完成 ＋</span></summary><div class="lesson-list">${items.map(l=>`<article class="lesson ${state[l.id]?'completed':''}"><input class="check" type="checkbox" data-check="${l.id}" ${state[l.id]?'checked':''} aria-label="標記 ${l.title} 完成"><div><span class="lesson-code">${l.id}</span><h4>${l.title}</h4><p>${l.analogy}</p><div class="keywords">考點：${l.keywords}</div></div><button class="go" data-open="${l.id}">進入本課</button></article>`).join('')}</div></details>`}).join(''):'<div class="empty">沒有符合條件的課程，試試其他關鍵字。</div>';
+ $$('[data-check]').forEach(c=>c.onchange=()=>{state[c.dataset.check]=c.checked;save()});$$('[data-open]').forEach(b=>b.onclick=()=>openLesson(b.dataset.open));
+}
+function updateProgress(){const n=LESSONS.filter(l=>state[l.id]).length,p=Math.round(n/LESSONS.length*100);$('#doneCount').textContent=n;$('#totalDone').textContent=p+'%';$('#progressBar').style.width=p+'%';const day=DAILY_PLAN[currentDay()-1],next=LESSONS.find(l=>day.codes.includes(l.id)&&!state[l.id])||LESSONS.find(l=>!state[l.id])||LESSONS[0];$('#nextCode').textContent=`D${day.d} · ${next.id}`;$('#nextTitle').textContent=day.title;$('#nextHint').textContent=day.type==='review'?'今天不開新章節：用題目把記不牢的節點找出來，再回頭補圖卡。':next.analogy;$('#continueBtn').onclick=()=>launchDay(day.d)}
+function getLearnerId(){let id=localStorage.getItem('ipasLearnerId');if(!id){id=crypto.randomUUID();localStorage.setItem('ipasLearnerId',id)}return id}
+function dayDone(day){return day.type==='review'?!!state['day-'+day.d]:day.codes.length>0&&day.codes.every(c=>state[c])}
+function currentDay(){const start=localStorage.getItem('ipasStartDate');if(!start)return 1;const a=new Date(start+'T00:00:00'),b=new Date();b.setHours(0,0,0,0);return Math.max(1,Math.min(30,Math.floor((b-a)/86400000)+1))}
+function practiceUrl(day){return `https://ipas-intermediate-learning.tarshar4242.chatgpt.site/?day=D${day.d}&codes=${encodeURIComponent(day.codes.join(','))}&learnerId=${encodeURIComponent(getLearnerId())}`}
+function launchDay(n){const day=DAILY_PLAN.find(x=>x.d===n);activeDay=day;if(!day)return;if(day.type==='review'){location.href=practiceUrl(day);return}const next=day.codes.find(c=>!state[c])||day.codes[0];if(next)openLesson(next)}
+function toggleReview(n){state['day-'+n]=!state['day-'+n];save()}
+function renderPlan(){const today=currentDay(),done=DAILY_PLAN.filter(dayDone).length;$('#dayDoneCount').textContent=done;$('#dayProgressBar').style.width=Math.round(done/30*100)+'%';$('#todaySummary').textContent=`今天是 D${today}：${DAILY_PLAN[today-1].title}`;$('#planGrid').innerHTML=WEEKS.map(w=>`<article class="week"><span class="week-no">${w.no}</span><h3>${w.title}</h3>${w.days.map(day=>`<div class="day ${day.d===today?'today':''} ${dayDone(day)?'done':''}"><b>${dayDone(day)?'✓ ':''}D${day.d}</b><span>${day.title}</span><div class="day-actions">${day.type==='review'?`<a class="practice-link" href="${practiceUrl(day)}">練習</a><button data-review="${day.d}">${dayDone(day)?'取消':'完成'}</button>`:`<button data-day="${day.d}">學圖卡</button><a class="practice-link" href="${practiceUrl(day)}">練習</a>`}</div></div>`).join('')}</article>`).join('');$$('[data-day]').forEach(b=>b.onclick=()=>launchDay(Number(b.dataset.day)));$$('[data-review]').forEach(b=>b.onclick=()=>toggleReview(Number(b.dataset.review)))}
+function renderGraph(){
+ const stage=$('#graphStage'),canvas=$('#graphCanvas'),ctx=canvas.getContext('2d');stage.querySelectorAll('.graph-node,.graph-column').forEach(n=>n.remove());const xs={L21:55,L22:380,L23:705};const colors={L21:'#41dcff',L22:'#b57bff',L23:'#ffc45b'};const pos={};
+ Object.keys(SUBJECTS).forEach(s=>{const h=document.createElement('div');h.className='graph-column';h.style.left=xs[s]+'px';h.textContent=s+' '+SUBJECTS[s].short;stage.appendChild(h);LESSONS.filter(l=>l.subject===s).forEach((l,i)=>{const x=xs[s],y=48+i*78;pos[l.id]={x:x+110,y:y+29};const b=document.createElement('button');b.className='graph-node'+(state[l.id]?' done':'');b.style.left=x+'px';b.style.top=y+'px';b.style.setProperty('--node',colors[s]);b.innerHTML=`<b>${l.id}</b><span>${l.title}</span>`;b.onclick=()=>openLesson(l.id);stage.appendChild(b)})});
+ ctx.clearRect(0,0,canvas.width,canvas.height);ctx.lineWidth=1.4;EDGES.forEach(([a,b])=>{if(!pos[a]||!pos[b])return;const same=LESSONS.find(l=>l.id===a).subject===LESSONS.find(l=>l.id===b).subject;ctx.strokeStyle=same?'rgba(126,171,255,.35)':'rgba(77,225,161,.55)';ctx.beginPath();ctx.moveTo(pos[a].x,pos[a].y);const mid=(pos[a].x+pos[b].x)/2;ctx.bezierCurveTo(mid,pos[a].y,mid,pos[b].y,pos[b].x,pos[b].y);ctx.stroke()})
+}
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const LESSON_ASSETS={L22101:{pptx:'assets/slides/L22101-敘述性統計與資料摘要技術.pptx',text:'assets/text/L22101-敘述性統計與資料摘要技術.md'}};
+function assetLinks(id){const a=LESSON_ASSETS[id];return a?`<div class="lesson-assets"><a href="${a.pptx}" download>下載完整簡報 PPTX</a><a href="${a.text}" download>下載深度教材 Markdown</a></div>`:''}
+function renderDeepLesson(l){const u=l.units||[],c=l.consultantCase||{},tools=l.consultantToolkit||[];return `<span class="coach-label">哈 · 哈哈老師研究所／顧問級陪跑</span><div class="course-level">基礎補橋 → 考試判斷 → 顧問實戰</div>${assetLinks(current?.id)}<p class="lesson-intro">${esc(l.intro)}</p><div class="block"><b>這一課學完，你必須做得到</b><ul class="objective-list">${(l.objectives||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div><h3>完整課程</h3>${u.map((x,i)=>`<details class="deep-unit" ${i===0?'open':''}><summary>${i+1}. ${esc(x.title)}</summary><div class="unit-body"><h5>先用生活比喻</h5><p>${esc(x.analogy)}</p><h5>白話把原理說清楚</h5><p>${esc(x.plain)}</p><h5>正式定義、公式或流程</h5><p>${esc(x.formal)}</p><h5>具體企業例子</h5><p>${esc(x.example)}</p><h5>要看什麼證據</h5><p>${esc(x.evidence)}</p><h5>顧問如何做決策</h5><p>${esc(x.decision)}</p><h5>什麼時候會失效</h5><p>${esc(x.limits)}</p><p class="unit-check">停一下，整理重點：${esc(x.checkpoint)}</p></div></details>`).join('')}<div class="block"><b>考試與實務最容易踩的陷阱</b>${(l.examTraps||[]).map(x=>`<div class="trap"><b>${esc(x.trap)}</b><p>為什麼會錯：${esc(x.why)}</p><p>修正判斷：${esc(x.fix)}</p></div>`).join('')}</div><section class="consultant-case"><h3>完整企業顧問案例｜${esc(c.company)}</h3><h5>問題情境</h5><p>${esc(c.situation)}</p><h5>資料現況</h5><p>${esc(c.data)}</p><h5>分析方法</h5><p>${esc(c.analysis)}</p><h5>方案權衡</h5><p>${esc(c.tradeoffs)}</p><h5>顧問建議</h5><p>${esc(c.recommendation)}</p><h5>KPI</h5><ul class="case-list">${(c.kpis||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul><h5>風險</h5><ul class="case-list">${(c.risks||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul><h5>應交付的成果</h5><ul class="case-list">${(c.deliverables||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></section><div class="block"><b>顧問工具箱</b><div class="toolkit">${tools.map(x=>`<div class="tool"><b>${esc(x.name)}</b><small>何時用：${esc(x.when)}</small><small>怎麼用：${esc(x.how)}</small><small>注意：${esc(x.warning)}</small></div>`).join('')}</div></div><div class="block"><b>企業實作任務</b><p>${esc(l.workplaceTask)}</p></div><div class="block"><b>研究生級離堂檢核</b><ul class="objective-list">${(l.finalCheckpoint||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`}
+async function openLesson(id){current=LESSONS.find(l=>l.id===id);if(!current)return;$('#drawerCode').textContent=current.id+' · '+SUBJECTS[current.subject].name;$('#drawerTitle').textContent=current.title;$('#markDone').textContent=state[id]?'取消完成標記':'完成這一課 ✓';$('#drawer').classList.add('open');$('#drawer').setAttribute('aria-hidden','false');document.body.style.overflow='hidden';if(current.subject==='L22'){$('#drawerBody').innerHTML=`${assetLinks(id)}<div class="lesson-loading">哈哈老師正在從官方學習指引整理完整教材…<br><small>第一次建立會稍等，之後會從資料庫直接載入。</small></div>`;try{const r=await fetch(`https://ipas-intermediate-learning.tarshar4242.chatgpt.site/api/lesson?code=${encodeURIComponent(id)}`,{credentials:'include'});if(!r.ok)throw new Error();const data=await r.json();if(current?.id===id)$('#drawerBody').innerHTML=renderDeepLesson(data.lesson)}catch{if(current?.id===id)$('#drawerBody').innerHTML=`${assetLinks(id)}<div class="block"><b>線上完整教材暫時無法載入</b><p>已完成的教材與簡報仍可由上方下載；系統不會拿幾句摘要冒充完整課程。</p></div>`}return}const decision=current.subject==='L21'?'評估效益、可行性、風險與部署條件':'選擇模型、評估指標與治理方式';$('#drawerBody').innerHTML=`<span class="coach-label">哈 · 完整教材建置中</span><div class="block"><b>目前先保留能力節點，不把摘要當完整課</b><p>${esc(current.analogy)}</p></div><div class="block"><b>本課必須補到的顧問能力</b><p>${esc(decision)}；完整內容將依對應官方學習指引，用與科目二相同的研究所／顧問級規格建置。</p></div>`}
+function closeDrawer(){$('#drawer').classList.remove('open');$('#drawer').setAttribute('aria-hidden','true');document.body.style.overflow=''}
+function renderAll(){renderSubjects();renderModules();updateProgress()}
+$$('[data-tab]').forEach(b=>b.onclick=()=>switchTab(b.dataset.tab));$('#search').oninput=renderModules;$$('.filter').forEach(b=>b.onclick=()=>{filter=b.dataset.filter;$$('.filter').forEach(x=>x.classList.toggle('active',x===b));renderModules()});$('#closeDrawer').onclick=closeDrawer;$('#shade').onclick=closeDrawer;document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer()});$('#markDone').onclick=()=>{if(current){const completing=!state[current.id];state[current.id]=completing;save();closeDrawer();if(completing&&activeDay){const next=activeDay.codes.find(c=>!state[c]);if(next)setTimeout(()=>openLesson(next),220);else{activeDay=null;switchTab('plan')}}}};
+const startInput=$('#startDate');if(!localStorage.getItem('ipasStartDate')){const now=new Date(),local=new Date(now.getTime()-now.getTimezoneOffset()*60000).toISOString().slice(0,10);localStorage.setItem('ipasStartDate',local)}startInput.value=localStorage.getItem('ipasStartDate');startInput.onchange=()=>{localStorage.setItem('ipasStartDate',startInput.value);renderPlan()};
+renderPlan();renderAll();renderGraph();
+</script>
+</body>
+</html>

@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PDF 瘦身機｜TARSHAR 工具集</title>
+<meta name="description" content="PDF 太大上傳被打槍？輸入目標大小（例如 5MB），幫你精準壓縮到剛剛好。免費、免註冊、檔案全程不離開你的瀏覽器。">
+<meta name="theme-color" content="#0e91ad">
+<style>
+:root{
+  --primary:#0e91ad; --primary-soft:#e3f4f8; --primary-deep:#0b6f85;
+  --accent:#e8752a; --accent-soft:#fdeee2;
+  --bg:#f7f9fb; --card:#ffffff; --border:#e6eaef;
+  --text:#1e2a38; --muted:#64748b;
+  --ok:#2e7d4f; --ok-soft:#e3f4ea;
+  --warn:#8a6d1a; --warn-soft:#faf3d9;
+  --shadow:0 1px 3px rgba(15,23,42,.06);
+  --shadow-lift:0 10px 28px rgba(15,23,42,.12);
+  --radius:14px;
+}
+html[data-theme="dark"]{
+  --primary:#35b6d2; --primary-soft:#123742; --primary-deep:#7fd6e8;
+  --accent:#f08a45; --accent-soft:#3a2718;
+  --bg:#101418; --card:#1a2027; --border:#2a323c;
+  --text:#eef2f6; --muted:#9aa7b5;
+  --ok:#7fd6a4; --ok-soft:#14301f;
+  --warn:#e5c96a; --warn-soft:#332a10;
+  --shadow:0 1px 3px rgba(0,0,0,.4);
+  --shadow-lift:0 10px 28px rgba(0,0,0,.5);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',-apple-system,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.7;min-height:100dvh}
+a{color:var(--primary);text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+header{background:radial-gradient(ellipse 60% 120% at 85% -20%, var(--accent-soft) 0%, transparent 60%),
+  radial-gradient(ellipse 70% 130% at 10% -30%, var(--primary-soft) 0%, transparent 65%), var(--card);
+  border-bottom:1px solid var(--border);padding:2rem 1.2rem 1.6rem;text-align:center;position:relative}
+.theme-btn{position:absolute;top:1rem;right:1rem;width:40px;height:40px;border-radius:50%;
+  border:1px solid var(--border);background:var(--card);font-size:1.1rem;box-shadow:var(--shadow);
+  display:flex;align-items:center;justify-content:center}
+h1{font-size:clamp(1.45rem,4.5vw,2rem);font-weight:900;letter-spacing:.03em}
+.hero-sub{max-width:30em;margin:.5rem auto 0;color:var(--muted);font-size:clamp(.9rem,2.6vw,.98rem)}
+.badges{display:flex;flex-wrap:wrap;justify-content:center;gap:.45rem;margin-top:.8rem}
+.badges span{font-size:.76rem;font-weight:700;border:1px solid var(--border);background:var(--card);
+  border-radius:999px;padding:.2rem .7rem;color:var(--muted)}
+.badges .free{color:var(--ok);background:var(--ok-soft);border-color:transparent}
+main{max-width:760px;margin:0 auto;padding:1.2rem 1.2rem 2.5rem}
+.panel{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:1.1rem;margin-top:1rem}
+.panel h2{font-size:.95rem;font-weight:800;margin-bottom:.5rem}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;font-size:.95rem;font-weight:800;
+  border-radius:999px;padding:.6rem 1.4rem;box-shadow:var(--shadow);transition:.15s}
+.btn:hover{transform:translateY(-2px)}
+.btn-main{background:var(--primary);color:#fff}
+.btn-main:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.btn-sub{background:var(--card);border:1.5px solid var(--border);color:var(--text)}
+.btn-big{width:100%;font-size:1.05rem;padding:.85rem 1.4rem;margin-top:1rem}
+.stat{font-size:.82rem;color:var(--muted);margin-top:.5rem}
+.tip{background:var(--primary-soft);border-radius:10px;padding:.7rem .9rem;font-size:.85rem;
+  color:var(--text);margin-top:1rem}
+.tip b{color:var(--primary-deep)}
+footer{border-top:1px solid var(--border);background:var(--card);text-align:center;
+  padding:1.4rem 1.2rem 5.5rem;color:var(--muted);font-size:.82rem}
+.home-fab{position:fixed;left:14px;bottom:14px;z-index:50;display:inline-flex;align-items:center;
+  gap:.35rem;font-size:.85rem;font-weight:800;color:var(--text);background:var(--card);
+  border:1.5px solid var(--border);border-radius:999px;padding:.5rem 1rem;box-shadow:var(--shadow-lift)}
+@media (max-width:520px){header{padding:1.6rem 1rem 1.3rem}}
+
+/* ── 本工具專屬 ── */
+.drop{border:2px dashed var(--border);border-radius:12px;background:var(--bg);
+  text-align:center;padding:1.8rem 1rem;cursor:pointer;transition:.15s;font-size:.9rem;color:var(--muted)}
+.drop.over{border-color:var(--primary);background:var(--primary-soft);color:var(--primary-deep)}
+.drop .big{font-size:2rem;display:block;margin-bottom:.3rem}
+.filecard{display:none;align-items:center;gap:.8rem;background:var(--bg);
+  border:1px solid var(--border);border-radius:12px;padding:.85rem 1rem;margin-top:.8rem}
+.filecard .ic{font-size:1.7rem;flex:0 0 auto}
+.filecard .nm{font-weight:800;font-size:.92rem;word-break:break-all}
+.filecard .sz{font-size:.82rem;color:var(--muted)}
+.filecard .rm{margin-left:auto;flex:0 0 auto;font-size:.82rem;font-weight:800;color:var(--primary)}
+.target-row{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-top:.4rem}
+.target-row label{font-size:.9rem;font-weight:800}
+.target-box{display:flex;align-items:center;gap:.45rem;background:var(--bg);
+  border:1.5px solid var(--border);border-radius:12px;padding:.45rem .9rem}
+.target-box:focus-within{border-color:var(--primary)}
+.target-box input{width:5.5em;border:none;outline:none;background:none;color:var(--text);
+  font-size:1.25rem;font-weight:900;font-family:inherit;text-align:center}
+.target-box .unit{font-size:.9rem;font-weight:800;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.7rem}
+.chip{font-size:.85rem;font-weight:700;color:var(--muted);border:1.5px solid var(--border);
+  background:var(--card);border-radius:999px;padding:.3rem .9rem;transition:.15s}
+.chip.on{background:var(--primary);border-color:var(--primary);color:#fff}
+.chip small{font-weight:600;opacity:.75}
+.progress{display:none;margin-top:1rem}
+.bar{height:10px;border-radius:999px;background:var(--bg);border:1px solid var(--border);overflow:hidden}
+.bar i{display:block;height:100%;width:0%;border-radius:999px;
+  background:linear-gradient(90deg,var(--primary),var(--accent));transition:width .25s}
+.progress p{font-size:.84rem;color:var(--muted);margin-top:.45rem;text-align:center}
+.result{display:none;margin-top:1rem;text-align:center;background:var(--ok-soft);
+  border:1px solid transparent;border-radius:12px;padding:1.1rem 1rem}
+.result.warn{background:var(--warn-soft)}
+.result .face{font-size:2rem}
+.result h3{font-size:1.05rem;font-weight:900;color:var(--ok);margin-top:.15rem}
+.result.warn h3{color:var(--warn)}
+.result .nums{display:flex;justify-content:center;align-items:center;gap:.7rem;
+  flex-wrap:wrap;margin-top:.5rem;font-size:.95rem;font-weight:800}
+.result .nums .arrow{color:var(--muted)}
+.result .save{font-size:.84rem;color:var(--muted);margin-top:.2rem}
+.result .note{font-size:.82rem;color:var(--muted);margin-top:.4rem}
+.err{display:none;margin-top:.8rem;background:var(--accent-soft);border-radius:10px;
+  padding:.7rem .9rem;font-size:.87rem}
+</style>
+</head>
+<body>
+
+<a href="../tools/" class="home-fab" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+
+<header>
+  <button class="theme-btn" id="themeBtn" aria-label="切換深淺色">🌙</button>
+  <h1>🪶 PDF 瘦身機</h1>
+  <p class="hero-sub">PDF 太胖被系統打槍？告訴我要瘦到幾 MB，我幫你精準壓到剛剛好。</p>
+  <div class="badges"><span class="free">✅ 免費即用</span><span>🔒 檔案不離開瀏覽器</span><span>📱 手機也好用</span></div>
+</header>
+
+<main>
+  <div class="panel">
+    <h2>1️⃣ 把 PDF 丟進來</h2>
+    <div class="drop" id="drop">
+      <span class="big">📄</span>
+      點這裡選 PDF 檔案，或直接拖進來
+    </div>
+    <input type="file" id="file" accept="application/pdf,.pdf" hidden>
+    <div class="filecard" id="filecard">
+      <span class="ic">📕</span>
+      <div><div class="nm" id="fname"></div><div class="sz" id="fsize"></div></div>
+      <button class="rm" id="reselect">重新選擇</button>
+    </div>
+    <p class="stat" id="loadStat"></p>
+  </div>
+
+  <div class="panel">
+    <h2>2️⃣ 想瘦到多小？</h2>
+    <div class="target-row">
+      <label for="target">目標大小</label>
+      <div class="target-box"><input type="number" id="target" min="0.2" step="0.5" placeholder="例如：5"><span class="unit">MB</span></div>
+    </div>
+    <div class="chips" id="chips">
+      <button class="chip" data-mb="1">1 MB <small>·超省</small></button>
+      <button class="chip" data-mb="3">3 MB <small>·LINE 好傳</small></button>
+      <button class="chip" data-mb="5">5 MB <small>·Email 附件</small></button>
+      <button class="chip" data-mb="10">10 MB <small>·一般系統上限</small></button>
+    </div>
+    <button class="btn btn-main btn-big" id="goBtn" disabled>⚡ 開始壓縮</button>
+    <div class="progress" id="progress">
+      <div class="bar"><i id="barFill"></i></div>
+      <p id="progText">準備中⋯</p>
+    </div>
+    <div class="err" id="err"></div>
+    <div class="result" id="result">
+      <div class="face" id="rFace">🎉</div>
+      <h3 id="rTitle">壓縮成功！</h3>
+      <div class="nums"><span id="rBefore"></span><span class="arrow">→</span><span id="rAfter"></span></div>
+      <p class="save" id="rSave"></p>
+      <p class="note" id="rNote"></p>
+      <button class="btn btn-main" id="dlBtn" style="margin-top:.8rem">⬇️ 下載瘦身版 PDF</button>
+    </div>
+  </div>
+
+  <div class="tip">💡 <b>先說好：</b>檔案全程只在你的瀏覽器裡處理，<b>不會上傳到任何地方</b>，個資絕對不離線。壓縮的原理是把每一頁重新拍成清晰照片再裝回 PDF，所以瘦身版<b>看起來一樣、但文字不能再反白複製</b>——拿去上傳系統、寄信、繳交剛剛好；之後還要編輯的檔案，請留著原始版。</div>
+
+  <div style="display:flex;justify-content:center;margin-top:1.2rem">
+    <a class="btn btn-sub" href="tool-pdf-compress.html" download="PDF瘦身機.html">📦 打包帶走這個工具</a>
+  </div>
+</main>
+
+<footer>🍀 <b>Learn AI with Tarshar</b>・TARSHAR 工具集｜更多小工具 → <a href="../tools/">打開工具箱</a></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script>
+const $ = s => document.querySelector(s);
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+const PDFJS_OPTS = {
+  cMapUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/cmaps/',
+  cMapPacked: true,
+  standardFontDataUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/standard_fonts/'
+};
+
+/* 畫質階梯：由「最清晰、檔案最大」排到「最省、檔案最小」。
+   s＝頁面放大倍率（越大越清晰）、q＝JPEG 品質。
+   二分搜尋在這條階梯上找「符合目標大小的最高畫質」那一階。 */
+const LADDER = [
+  {s:2.0, q:0.85}, {s:1.8, q:0.78}, {s:1.6, q:0.72}, {s:1.5, q:0.65},
+  {s:1.4, q:0.58}, {s:1.3, q:0.52}, {s:1.2, q:0.46}, {s:1.1, q:0.40},
+  {s:1.0, q:0.35}, {s:0.9, q:0.30}, {s:0.8, q:0.26}, {s:0.7, q:0.22}, {s:0.6, q:0.18}
+];
+const MAX_SIDE = 4000;       // 單頁畫布最長邊上限，避免超大頁面撐爆記憶體
+const OVERHEAD = 3000;       // jsPDF 檔頭等固定開銷（估）
+const PER_PAGE = 400;        // 每頁物件開銷（估）
+
+let pdfFile = null;          // 使用者選的檔案
+let pdfDoc  = null;          // pdf.js 開好的文件
+let outBlob = null, outName = '';
+let busy = false;
+
+const fmtMB = b => (b / 1048576).toFixed(2) + ' MB';
+
+/* ── 選檔 ── */
+async function pickFile(f){
+  if (busy) return;
+  hideResult(); hideErr();
+  if (!f) return;
+  if (!(f.type === 'application/pdf' || /\.pdf$/i.test(f.name))){
+    showErr('這個不是 PDF 喔 🙈 我只吃 .pdf 檔案，麻煩換一個再試一次。');
+    return;
+  }
+  $('#loadStat').textContent = '讀取中⋯';
+  try{
+    const buf = await f.arrayBuffer();
+    pdfDoc = await pdfjsLib.getDocument({ data: buf, ...PDFJS_OPTS }).promise;
+  }catch(e){
+    pdfDoc = null;
+    $('#loadStat').textContent = '';
+    if (e && e.name === 'PasswordException')
+      showErr('這個 PDF 有密碼保護 🔒，我打不開。請先用原本的軟體把密碼拿掉，再丟進來。');
+    else
+      showErr('這個檔案我打不開，可能已經損壞了。換一個檔案試試看？');
+    return;
+  }
+  pdfFile = f;
+  $('#drop').style.display = 'none';
+  $('#filecard').style.display = 'flex';
+  $('#fname').textContent = f.name;
+  $('#fsize').textContent = `原始大小：${fmtMB(f.size)}｜共 ${pdfDoc.numPages} 頁`;
+  $('#loadStat').textContent = f.size > 80 * 1048576
+    ? '這個檔案蠻大的，手機處理會比較久，建議用電腦跑 🙂' : '';
+  updateGoBtn();
+}
+
+/* ── 目標大小 ── */
+function targetBytes(){
+  const v = parseFloat($('#target').value);
+  return (isFinite(v) && v > 0) ? v * 1048576 : 0;
+}
+function updateGoBtn(){ $('#goBtn').disabled = busy || !pdfDoc || !targetBytes(); }
+
+/* ── 壓縮一輪：整份 PDF 用階梯第 idx 階重新拍照，回傳每頁 JPEG 與尺寸 ── */
+async function renderRound(idx, roundNo, estRounds){
+  const { s, q } = LADDER[idx];
+  const pages = [];
+  let total = OVERHEAD;
+  for (let i = 1; i <= pdfDoc.numPages; i++){
+    const page = await pdfDoc.getPage(i);
+    let vp = page.getViewport({ scale: s });
+    const long = Math.max(vp.width, vp.height);
+    if (long * (window.devicePixelRatio > 1 ? 1 : 1) > MAX_SIDE)
+      vp = page.getViewport({ scale: s * MAX_SIDE / long });
+    const canvas = document.createElement('canvas');
+    canvas.width  = Math.round(vp.width);
+    canvas.height = Math.round(vp.height);
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#ffffff';                 // JPEG 沒有透明，先鋪白底
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    await page.render({ canvasContext: ctx, viewport: vp }).promise;
+    const blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', q));
+    const base = page.getViewport({ scale: 1 });   // PDF 原始尺寸（pt）
+    pages.push({ bytes: new Uint8Array(await blob.arrayBuffer()),
+                 w: base.width, h: base.height });
+    total += blob.size + PER_PAGE;
+    canvas.width = canvas.height = 0;              // 主動釋放畫布記憶體
+    setProgress((roundNo - 1 + i / pdfDoc.numPages) / estRounds,
+      `第 ${roundNo} 輪微調畫質：處理第 ${i}/${pdfDoc.numPages} 頁⋯`);
+  }
+  return { pages, total };
+}
+
+/* ── 把某一輪的頁面照片裝回一份新 PDF ── */
+function buildPdf(pages){
+  const { jsPDF } = window.jspdf;
+  const first = pages[0];
+  const doc = new jsPDF({
+    unit: 'pt',
+    format: [first.w, first.h],
+    orientation: first.w > first.h ? 'landscape' : 'portrait',
+    compress: true
+  });
+  pages.forEach((p, i) => {
+    if (i > 0) doc.addPage([p.w, p.h], p.w > p.h ? 'landscape' : 'portrait');
+    doc.addImage(p.bytes, 'JPEG', 0, 0, p.w, p.h);
+  });
+  return doc.output('blob');
+}
+
+/* ── 主流程：二分搜尋找「達標的最高畫質」 ── */
+async function compress(){
+  if (busy || !pdfDoc) return;
+  const target = targetBytes();
+  if (!target) return;
+  hideResult(); hideErr();
+
+  if (pdfFile.size <= target){
+    showResult({
+      ok: true, face: '😎', title: '不用壓，本來就夠瘦！',
+      before: pdfFile.size, after: pdfFile.size,
+      save: `這個檔案本來就只有 ${fmtMB(pdfFile.size)}，已經比你的目標 ${$('#target').value} MB 還小囉。`,
+      note: '直接拿原始檔去用就可以了 🙂', blob: null
+    });
+    return;
+  }
+
+  busy = true; updateGoBtn();
+  $('#progress').style.display = 'block';
+  setProgress(0, '準備中⋯');
+
+  try{
+    const estRounds = Math.ceil(Math.log2(LADDER.length)) + 1;  // 約 5 輪
+    let lo = 0, hi = LADDER.length - 1, best = null, round = 0;
+    while (lo <= hi){
+      const mid = (lo + hi) >> 1;
+      round++;
+      const r = await renderRound(mid, round, estRounds);
+      if (r.total <= target){ best = { idx: mid, ...r }; hi = mid - 1; }
+      else lo = mid + 1;
+    }
+
+    let warnTooSmall = false;
+    if (!best){
+      // 連最省的一階都壓不進目標 → 交出最省的版本並老實說
+      round++;
+      best = { idx: LADDER.length - 1,
+               ...(await renderRound(LADDER.length - 1, round, round)) };
+      warnTooSmall = true;
+    }
+
+    setProgress(0.97, '打包成 PDF 檔⋯');
+    let blob = buildPdf(best.pages);
+    // 實際檔案若比估算略大而超標，往下降一階保險
+    let guard = 0;
+    while (!warnTooSmall && blob.size > target && best.idx < LADDER.length - 1 && guard < 2){
+      guard++; round++;
+      const r = await renderRound(best.idx + 1, round, round);
+      best = { idx: best.idx + 1, ...r };
+      blob = buildPdf(best.pages);
+    }
+
+    outBlob = blob;
+    outName = pdfFile.name.replace(/\.pdf$/i, '') + '-瘦身版.pdf';
+    $('#progress').style.display = 'none';
+
+    if (warnTooSmall && blob.size > target){
+      showResult({
+        ok: false, face: '😅', title: '已經盡力壓到最扁了',
+        before: pdfFile.size, after: blob.size,
+        save: `省下 ${Math.round((1 - blob.size / pdfFile.size) * 100)}%，但這份 PDF 頁數多，壓到 ${$('#target').value} MB 以內畫質會爛掉，我停在還看得清楚的底線。`,
+        note: '可以把目標調大一點，或把 PDF 拆成兩份再各自瘦身。', blob
+      });
+    }else{
+      showResult({
+        ok: true, face: '🎉', title: '壓縮成功！',
+        before: pdfFile.size, after: blob.size,
+        save: `瘦了 ${Math.round((1 - blob.size / pdfFile.size) * 100)}%，符合你的目標 ${$('#target').value} MB 以內 ✅`,
+        note: '', blob
+      });
+    }
+  }catch(e){
+    console.error(e);
+    $('#progress').style.display = 'none';
+    showErr('壓縮到一半出了點狀況 😥 通常是檔案太大、記憶體不夠。把目標調大一點、或換台電腦再試一次看看。');
+  }finally{
+    busy = false; updateGoBtn();
+  }
+}
+
+/* ── 畫面小工具 ── */
+function setProgress(ratio, text){
+  $('#barFill').style.width = Math.min(100, Math.round(ratio * 100)) + '%';
+  $('#progText').textContent = text;
+}
+function showResult(r){
+  const box = $('#result');
+  box.style.display = 'block';
+  box.classList.toggle('warn', !r.ok);
+  $('#rFace').textContent = r.face;
+  $('#rTitle').textContent = r.title;
+  $('#rBefore').textContent = fmtMB(r.before);
+  $('#rAfter').textContent = fmtMB(r.after);
+  $('#rSave').textContent = r.save;
+  $('#rNote').textContent = r.note;
+  $('#dlBtn').style.display = r.blob ? 'inline-flex' : 'none';
+}
+function hideResult(){ $('#result').style.display = 'none'; outBlob = null; }
+function showErr(msg){ const e = $('#err'); e.textContent = '⚠️ ' + msg; e.style.display = 'block'; }
+function hideErr(){ $('#err').style.display = 'none'; }
+
+/* ── 下載 ── */
+$('#dlBtn').addEventListener('click', () => {
+  if (!outBlob) return;
+  const u = URL.createObjectURL(outBlob);
+  const a = document.createElement('a');
+  a.href = u; a.download = outName;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(u), 4000);
+});
+
+/* ── 輸入：點選／拖放 ── */
+const drop = $('#drop');
+drop.addEventListener('click', () => $('#file').click());
+$('#reselect').addEventListener('click', () => { if (!busy) $('#file').click(); });
+$('#file').addEventListener('change', e => { pickFile(e.target.files[0]); e.target.value = ''; });
+['dragenter','dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
+['dragleave','drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('over'); }));
+drop.addEventListener('drop', e => pickFile(e.dataTransfer.files[0]));
+
+/* ── 目標大小：輸入框＋快選 chips（記住上次的選擇）── */
+const LS_TARGET = 'tt_pdfcompress_target';
+function syncChips(){
+  const v = $('#target').value;
+  document.querySelectorAll('.chip').forEach(c => c.classList.toggle('on', c.dataset.mb === v));
+}
+$('#chips').addEventListener('click', e => {
+  const c = e.target.closest('.chip'); if (!c) return;
+  $('#target').value = c.dataset.mb;
+  localStorage.setItem(LS_TARGET, c.dataset.mb);
+  syncChips(); updateGoBtn(); hideResult();
+});
+$('#target').addEventListener('input', () => {
+  localStorage.setItem(LS_TARGET, $('#target').value);
+  syncChips(); updateGoBtn(); hideResult();
+});
+const savedTarget = localStorage.getItem(LS_TARGET);
+if (savedTarget){ $('#target').value = savedTarget; syncChips(); }
+
+$('#goBtn').addEventListener('click', compress);
+
+/* ── 深淺色切換 ── */
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme', t);
+  $('#themeBtn').textContent = t === 'dark' ? '☀️' : '🌙';
+}
+const saved = localStorage.getItem('tools_theme');
+applyTheme(saved || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+$('#themeBtn').addEventListener('click', () => {
+  const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('tools_theme', next); applyTheme(next);
+});
+</script>
+</body>
+</html>

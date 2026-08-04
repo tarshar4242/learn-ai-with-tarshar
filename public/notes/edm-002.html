@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>電子報 002｜一份簡報，五分鐘後它自己會講課了</title>
+<meta name="description" content="主題式電子報第二期：把一份靜靜的簡報 PDF，變成有旁白、有字幕的教學影片。我只做兩個動作，剩下交給生產線。">
+<style>
+  :root{
+    --ink:#2b2a26; --soft:#6b6760; --line:#e7e2d8;
+    --paper:#faf7f0; --card:#fffdf8; --clover:#5b8c5a;
+    --clover-soft:#eef4ec; --accent:#c98a3a; --accent-soft:#f7eddb;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"PingFang TC","Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;
+    background:var(--paper); color:var(--ink); line-height:1.85;
+    -webkit-font-smoothing:antialiased; padding:0 0 90px;
+  }
+  .wrap{max-width:720px; margin:0 auto; padding:0 20px}
+
+  /* masthead */
+  .band{background:linear-gradient(135deg,#b7728a,#c98a3a); color:#fff; padding:34px 0 30px; margin-bottom:26px}
+  .band .wrap{display:flex; flex-direction:column; gap:10px}
+  .kicker{font-size:.8rem; letter-spacing:2px; opacity:.95; display:flex; align-items:center; gap:8px}
+  .kicker .dot{width:6px;height:6px;background:#fff;border-radius:50%;opacity:.8}
+  .issue{font-size:.85rem; opacity:.95; letter-spacing:1px}
+  .band h1{font-size:1.5rem; line-height:1.5; font-weight:800}
+  .meta-row{display:flex; flex-wrap:wrap; gap:8px; margin-top:6px}
+  .chip{background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.35);
+    padding:4px 12px; border-radius:999px; font-size:.82rem}
+
+  section{background:var(--card); border:1px solid var(--line); border-radius:18px;
+    padding:22px 22px 20px; margin-bottom:16px; box-shadow:0 1px 0 rgba(0,0,0,.02)}
+  h2{font-size:1.12rem; color:var(--clover); font-weight:800; margin-bottom:12px;
+    display:flex; align-items:center; gap:9px}
+  h2 .em{font-size:1.15rem}
+  section p{margin:0 0 12px; font-size:1rem}
+  section p:last-child{margin-bottom:0}
+  .lead p{font-size:1.05rem}
+
+  .pull{border-left:4px solid var(--clover); background:var(--clover-soft);
+    padding:12px 16px; border-radius:0 12px 12px 0; margin:14px 0; font-weight:700}
+
+  ul.flow{list-style:none; display:flex; flex-direction:column; gap:10px; margin:6px 0 4px}
+  ul.flow li{background:#fbf9f3; border:1px solid var(--line); border-radius:12px;
+    padding:11px 14px; font-size:.98rem}
+  ul.flow li .lead-emoji{font-size:1.1rem; margin-right:6px}
+
+  .cats{display:grid; gap:10px; margin:6px 0}
+  .cat{border:1px solid var(--line); border-radius:12px; padding:12px 14px; background:#fbf9f3}
+  .cat b{display:block; color:var(--accent); font-size:.92rem; margin-bottom:3px}
+  .cat span{font-size:.95rem; color:var(--soft)}
+
+  .link-btn{display:inline-flex; align-items:center; gap:8px; text-decoration:none;
+    background:var(--clover); color:#fff; padding:11px 18px; border-radius:999px;
+    font-weight:700; font-size:.95rem; margin-top:4px}
+  .link-btn:active{transform:translateY(1px)}
+
+  .about{font-size:.96rem; color:var(--soft)}
+  footer{text-align:center; color:var(--soft); font-size:.82rem; margin-top:26px}
+
+  /* 固定回入口浮動鈕（左上角） */
+  .home-fab{position:fixed; left:14px; top:14px; z-index:50;
+    background:rgba(255,255,255,.94); color:var(--clover); text-decoration:none; font-weight:800; font-size:.9rem;
+    padding:9px 15px; border-radius:999px; box-shadow:0 8px 22px -8px rgba(60,50,30,.5); border:1px solid rgba(255,255,255,.7)}
+  .home-fab:active{transform:translateY(1px)}
+  /* 手機上把報頭往下推，避免和左上角返回鈕重疊 */
+  @media (max-width:760px){ .band{padding-top:60px} }
+</style>
+</head>
+<body>
+
+  <div class="band">
+    <div class="wrap">
+      <div class="kicker"><span class="dot"></span>主題式電子報<span class="dot"></span></div>
+      <div class="issue">電子報 002｜2026.07.31</div>
+      <h1>一份簡報躺在那裡不會說話，<br>五分鐘後它自己會講課了 🎬</h1>
+      <div class="meta-row">
+        <span class="chip">簡報變影片</span>
+        <span class="chip">語音合成</span>
+        <span class="chip">自動字幕</span>
+        <span class="chip">Claude Code</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+
+    <section class="lead">
+      <h2><span class="em">📄</span>我手上有一份很好的簡報</h2>
+      <p>十三頁，講 Power BI 怎麼做業務數據分析。內容我很滿意，圖也漂亮。但它就是一份 PDF，安安靜靜躺在那裡。</p>
+      <p>學員下載回去，看得懂嗎？看得懂一半。因為簡報上寫的是重點，重點旁邊那些「為什麼」，本來是要我站在旁邊講出來的。</p>
+      <p>可是我不可能每個人都講一次。所以我想試試看：能不能讓這份簡報自己開口。</p>
+    </section>
+
+    <section>
+      <h2><span class="em">🙋</span>我開的條件也有點貪</h2>
+      <p>我要的不是把字唸出來。我要它像有個老師在旁邊講解，講到你懂為止。</p>
+      <p>然後：要有字幕，因為很多人是在通勤、在午休、在不方便開聲音的地方看。字幕還不能亂跳，要跟聲音對得準。</p>
+      <p>最後，我不想學新軟體。我沒有時間再去搞懂一套剪輯工具的介面。</p>
+    </section>
+
+    <section>
+      <h2><span class="em">✋</span>我只做兩個動作</h2>
+      <p>第一個動作：把 PDF 丟給 Claude，說「我想把它做成影片，要配字幕跟語音」。</p>
+      <p>第二個動作：它先做了前八頁的短片給我看，我聽完說「可以，繼續」。</p>
+      <p>中間這條線是這樣跑的：</p>
+      <ul class="flow">
+        <li><span class="lead-emoji">👀</span>它把每一頁「看過」，不是抓文字，是真的看圖，看懂這一頁在講什麼</li>
+        <li><span class="lead-emoji">✍️</span>幫每一頁寫一段口播稿，講課的口吻，不是照唸投影片</li>
+        <li><span class="lead-emoji">🎙️</span>合成台灣中文女聲旁白</li>
+        <li><span class="lead-emoji">💬</span>把旁白切成一句一句，對回聲音的時間點，做成同步字幕</li>
+        <li><span class="lead-emoji">🎬</span>圖、聲音、字幕組成 1080p 影片</li>
+      </ul>
+      <p>五分二十一秒的成品。我全程沒有打開過任何一個剪輯軟體。</p>
+    </section>
+
+    <section>
+      <h2><span class="em">🗝️</span>我在這裡藏了一個原理</h2>
+      <p>這次最關鍵的一句話是：</p>
+      <div class="pull">先看一小段，再跑一整批。</div>
+      <p>一開始它就要直接做全部。我讓它停下來，先做八頁給我聽。因為如果聲音我不喜歡、語速我嫌快、字幕位置我覺得擋到圖，做完整部再來改，等於整批重做。</p>
+      <p>這不是 AI 的規矩，是我自己給自己定的規矩。任何一次大量產出之前，先要一個樣品。這一步花五分鐘，省下的是後面的整個下午。</p>
+    </section>
+
+    <section>
+      <h2><span class="em">😅</span>途中還真的出了一件事</h2>
+      <p>系統一開始告訴我們這份 PDF 有一百七十二頁。我心想，那不就要做成一小時的影片。</p>
+      <p>結果它去查了實際頁數，只有十三頁。那個一百七十二是檔案內部圖層的數量，不是頁數。</p>
+      <p>我很喜歡它處理這件事的方式：不是照著錯的數字硬做，也不是編幾頁出來湊數，而是停下來查清楚，然後告訴我「這裡跟一開始講的不一樣」。</p>
+      <p>這件事後來被寫進流程裡：<b>動手之前，先自己確認一次數字。</b></p>
+    </section>
+
+    <section>
+      <h2><span class="em">📚</span>然後我把它變成一個技能</h2>
+      <p>做完影片我做了第二件事：請它把整套流程寫成一份「技能」，存進我的圖書館，推上 GitHub 主線，三方協作都看得到。</p>
+      <div class="cats">
+        <div class="cat"><b>怎麼寫口播稿</b><span>講課口吻、每頁幾句、數字要寫成中文讀法</span></div>
+        <div class="cat"><b>先示範再全跑</b><span>超過二十頁的簡報，一律先做短片給我確認</span></div>
+        <div class="cat"><b>環境怎麼準備</b><span>包含這次卡住的那個網路憑證問題，寫下解法</span></div>
+        <div class="cat"><b>交付前怎麼驗</b><span>抽畫面看字幕有沒有燒上、有沒有對到那一頁</span></div>
+      </div>
+      <p>意思是，下一次我只要說「這份做成影片」，這一整套會自己跑起來。今天踩過的坑，明天不用再踩第二次。</p>
+      <a class="link-btn" href="../edm/">📮 回到電子報系列</a>
+    </section>
+
+    <section>
+      <h2><span class="em">⚖️</span>我做過的兩個取捨</h2>
+      <p><b>一，先用現成的聲音，不等完美。</b>我問過能不能用我自己的聲音。可以，但要另外申請服務、要付月費。我選擇先用現成的台灣女聲把整部做完，先有一個能交的成品。想換聲音的時候再換，稿子和流程都還在，前面的工不會白費。</p>
+      <p><b>二，接受它現在還不夠有我的味道。</b>旁白現在講得很清楚，但還是有點像一個很專業的陌生人。我知道差在哪：少了我平常上課會冒出來的那些話。這是下一版要補的，但不是現在不交件的理由。</p>
+    </section>
+
+    <section>
+      <h2><span class="em">🚀</span>下一步</h2>
+      <p>兩件事。第一，讓口播稿更像我在講，把我上課常用的比喻、常說的口頭禪放進去，讓它有我的顏色，而不是一份標準的旁白。</p>
+      <p>第二，如果第一步做到了，再來考慮換成我自己的聲音。順序不能反過來，因為就算聲音像我，講出來的話不像我，一樣還是別人。</p>
+    </section>
+
+    <section>
+      <h2><span class="em">💬</span>想跟你說的一句話</h2>
+      <p>我們常常在等一個完美的版本才敢交出去。但這次我學到的是，先有一個「已經能用」的東西，比一個還在腦袋裡的完美計畫值錢太多了。</p>
+      <p>影片現在不夠有我的味道，我知道。可是它已經能讓看不懂那份簡報的人看懂了。那它就已經在做事了，而我可以邊用邊改。</p>
+      <p>還有，我一樣不會寫程式。我做的還是同一件事：把我要什麼講清楚，然後在該喊停的地方喊停。</p>
+    </section>
+
+    <section>
+      <h2><span class="em">🍀</span>關於我</h2>
+      <p class="about">Tarshar，淡江 EMBA 資管研究生，AI 課程講師。在經營「🍀Learn AI with Tarshar」，記錄一個非工程師怎麼把 AI 變成日常隊友，把重複繁瑣、吃掉時間的事交出去，把時間留給真正重要的人和事。</p>
+    </section>
+
+    <footer>📮 主題式電子報 · 電子報 002 · 🍀Learn AI with Tarshar · 2026.07.31</footer>
+
+  </div>
+
+  <a class="home-fab" href="../edm/" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+</body>
+</html>

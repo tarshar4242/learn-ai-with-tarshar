@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>電子報 003｜做一張圖卡以前要熬一小時，現在我一句話出一整組</title>
+<meta name="description" content="主題式電子報第三期：一篇文章躺在那裡沒人點，我把它拆成九張品牌一致的 IG 圖卡。關鍵是先給 AI 一本品牌說明書，還有一個先預覽再匯出的原理。">
+<style>
+  :root{
+    --ink:#2b2a26; --soft:#6b6760; --line:#e7e2d8;
+    --paper:#faf7f0; --card:#fffdf8; --clover:#5b8c5a;
+    --clover-soft:#eef4ec; --accent:#c98a3a; --accent-soft:#f7eddb;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"PingFang TC","Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;
+    background:var(--paper); color:var(--ink); line-height:1.85;
+    -webkit-font-smoothing:antialiased; padding:0 0 90px;
+  }
+  .wrap{max-width:720px; margin:0 auto; padding:0 20px}
+
+  /* masthead */
+  .band{background:linear-gradient(135deg,#b7728a,#c98a3a); color:#fff; padding:34px 0 30px; margin-bottom:26px}
+  .band .wrap{display:flex; flex-direction:column; gap:10px}
+  .kicker{font-size:.8rem; letter-spacing:2px; opacity:.95; display:flex; align-items:center; gap:8px}
+  .kicker .dot{width:6px;height:6px;background:#fff;border-radius:50%;opacity:.8}
+  .issue{font-size:.85rem; opacity:.95; letter-spacing:1px}
+  .band h1{font-size:1.5rem; line-height:1.5; font-weight:800}
+  .meta-row{display:flex; flex-wrap:wrap; gap:8px; margin-top:6px}
+  .chip{background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.35);
+    padding:4px 12px; border-radius:999px; font-size:.82rem}
+
+  section{background:var(--card); border:1px solid var(--line); border-radius:18px;
+    padding:22px 22px 20px; margin-bottom:16px; box-shadow:0 1px 0 rgba(0,0,0,.02)}
+  h2{font-size:1.12rem; color:var(--clover); font-weight:800; margin-bottom:12px;
+    display:flex; align-items:center; gap:9px}
+  h2 .em{font-size:1.15rem}
+  section p{margin:0 0 12px; font-size:1rem}
+  section p:last-child{margin-bottom:0}
+  .lead p{font-size:1.05rem}
+
+  .pull{border-left:4px solid var(--clover); background:var(--clover-soft);
+    padding:12px 16px; border-radius:0 12px 12px 0; margin:14px 0; font-weight:700}
+
+  ul.flow{list-style:none; display:flex; flex-direction:column; gap:10px; margin:6px 0 4px}
+  ul.flow li{background:#fbf9f3; border:1px solid var(--line); border-radius:12px;
+    padding:11px 14px; font-size:.98rem}
+  ul.flow li .lead-emoji{font-size:1.1rem; margin-right:6px}
+
+  .cats{display:grid; gap:10px; margin:6px 0}
+  .cat{border:1px solid var(--line); border-radius:12px; padding:12px 14px; background:#fbf9f3}
+  .cat b{display:block; color:var(--accent); font-size:.92rem; margin-bottom:3px}
+  .cat span{font-size:.95rem; color:var(--soft)}
+
+  .shots{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:8px 0 6px}
+  .shots a{display:block; border-radius:12px; overflow:hidden; border:1px solid var(--line);
+    box-shadow:0 3px 10px rgba(60,50,30,.10)}
+  .shots a:active{transform:translateY(1px)}
+  .shots img{width:100%; height:auto; display:block}
+  .shot-cap{font-size:.92rem; color:var(--soft); margin-top:6px}
+
+  .link-btn{display:inline-flex; align-items:center; gap:8px; text-decoration:none;
+    background:var(--clover); color:#fff; padding:11px 18px; border-radius:999px;
+    font-weight:700; font-size:.95rem; margin-top:4px}
+  .link-btn:active{transform:translateY(1px)}
+
+  .about{font-size:.96rem; color:var(--soft)}
+  footer{text-align:center; color:var(--soft); font-size:.82rem; margin-top:26px}
+
+  /* 固定回入口浮動鈕（左上角） */
+  .home-fab{position:fixed; left:14px; top:14px; z-index:50;
+    background:rgba(255,255,255,.94); color:var(--clover); text-decoration:none; font-weight:800; font-size:.9rem;
+    padding:9px 15px; border-radius:999px; box-shadow:0 8px 22px -8px rgba(60,50,30,.5); border:1px solid rgba(255,255,255,.7)}
+  .home-fab:active{transform:translateY(1px)}
+  /* 手機上把報頭往下推，避免和左上角返回鈕重疊 */
+  @media (max-width:760px){ .band{padding-top:60px} }
+</style>
+</head>
+<body>
+
+  <div class="band">
+    <div class="wrap">
+      <div class="kicker"><span class="dot"></span>主題式電子報<span class="dot"></span></div>
+      <div class="issue">電子報 003｜2026.07.31</div>
+      <h1>做一張圖卡以前要熬一小時，<br>現在我一句話出一整組 🎴</h1>
+      <div class="meta-row">
+        <span class="chip">社群圖卡</span>
+        <span class="chip">品牌一致</span>
+        <span class="chip">DESIGN.md</span>
+        <span class="chip">Claude Code</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+
+    <section class="lead">
+      <h2><span class="em">😮‍💨</span>先講一件我一直在逃避的事</h2>
+      <p>我常常寫好一篇還不錯的內容，想發到 IG，然後就卡在那裡。因為要做圖卡。</p>
+      <p>打開 Canva，光選模板就二十分鐘，配色又調了快一小時。做完還是覺得哪裡怪，而且每一次做出來的顏色都不太一樣，根本看不出是同一個品牌。</p>
+      <p>我不是不會做，是每一次都要從頭來一遍。它不難，但它每次都來，一點一點把我的時間吃掉。</p>
+    </section>
+
+    <section>
+      <h2><span class="em">🎨</span>我要的不只是「好看」</h2>
+      <p>我要的是每一張都看得出來是我。不是這次橘、下次綠、再下次又換一種字，而是不管做十張還是一百張，都像同一個品牌做出來的。</p>
+      <p>可是品牌感如果每次都靠當下重調，就永遠不會一致。它得先被固定下來，變成一個 AI 每次都會照著看的東西。</p>
+      <p>還有，我不想再學一套新的設計軟體。我沒有時間去搞懂一堆工具列跟圖層。</p>
+    </section>
+
+    <section>
+      <h2><span class="em">🗂️</span>關鍵是先給 AI 一本「品牌說明書」</h2>
+      <p>這次我學到最重要的一件事：與其每次重講一遍「我的品牌長怎樣」，不如把它寫成一份說明書，讓 AI 記住。</p>
+      <p>這份說明書叫 DESIGN.md。裡面寫好我的主色、字體、風格。寫這一次，之後它每次幫我做圖，都會照同一套規則走，風格自然就一致了。</p>
+      <div class="pull">CLAUDE.md 告訴 AI 我是誰，DESIGN.md 告訴 AI 我的品牌長什麼樣。</div>
+      <p>所以真正花時間的不是每一張圖，是把「我的樣子」講清楚這一次。講清楚了，後面全部都省下來。</p>
+    </section>
+
+    <section>
+      <h2><span class="em">✋</span>我只做三個動作</h2>
+      <p>第一個動作：把整篇文章丟給它，說「幫我做成一組 IG 圖卡」。</p>
+      <p>第二個動作：它問我幾個選擇題，我點一點就好。尺寸要四比五還是正方形，用哪一套品牌形象，帳號掛什麼。</p>
+      <p>第三個動作：它先把文章拆成九張、列出每一張講什麼給我看，我說「照這版做」。</p>
+      <p>中間這條線是這樣跑的：</p>
+      <ul class="flow">
+        <li><span class="lead-emoji">📖</span>它把整篇文章讀過，抓出一張一張的重點</li>
+        <li><span class="lead-emoji">✂️</span>拆成九張：封面、七段內容、結尾，一張只講一件事</li>
+        <li><span class="lead-emoji">🎨</span>套上我固定的品牌形象，顏色、字體、署名全部照 DESIGN.md</li>
+        <li><span class="lead-emoji">👀</span>先在瀏覽器出一個預覽，讓我看整組長怎樣</li>
+        <li><span class="lead-emoji">🖼️</span>我點頭之後，才一次匯出九張可以直接發的圖檔</li>
+      </ul>
+      <p>九張成品，全套同一個風格。從丟文章到拿到圖，我沒有打開過任何一個設計軟體。</p>
+    </section>
+
+    <section>
+      <h2><span class="em">🎴</span>這就是最後長出來的九張</h2>
+      <p>同一篇文章，一組九張圖卡，全套同一個品牌形象。點任何一張可以看大圖。</p>
+      <div class="shots">
+        <a href="edm-003-img/card-01-cover.jpg" target="_blank" rel="noopener"><img src="edm-003-img/card-01-cover.jpg" alt="封面"></a>
+        <a href="edm-003-img/card-02-flow.jpg" target="_blank" rel="noopener"><img src="edm-003-img/card-02-flow.jpg" alt="內容 1"></a>
+        <a href="edm-003-img/card-03-stack.jpg" target="_blank" rel="noopener"><img src="edm-003-img/card-03-stack.jpg" alt="內容 2"></a>
+        <a href="edm-003-img/card-04-reset.jpg" target="_blank" rel="noopener"><img src="edm-003-img/card-04-reset.jpg" alt="內容 3"></a>
+        <a href="edm-003-img/card-05-direction.jpg" target="_blank" rel="noopener"><img src="edm-003-img/card-05-direction.jpg" alt="內容 4"></a>
+        <a href="edm-003-img/card-06-companion.jpg" target="_blank" rel="noopener"><img src="edm-003-img/card-06-companion.jpg" alt="內容 5"></a>
+        <a href="edm-003-img/card-07-parking.jpg" target="_blank" rel="noopener"><img src="edm-003-img/card-07-parking.jpg" alt="內容 6"></a>
+        <a href="edm-003-img/card-08-one-thing.jpg" target="_blank" rel="noopener"><img src="edm-003-img/card-08-one-thing.jpg" alt="內容 7"></a>
+        <a href="edm-003-img/card-09-closing.jpg" target="_blank" rel="noopener"><img src="edm-003-img/card-09-closing.jpg" alt="結尾"></a>
+      </div>
+      <p class="shot-cap">封面、七頁內容、結尾，一張只講一件事。顏色、字體、署名和頁碼全部照品牌說明書對齊。</p>
+    </section>
+
+    <section>
+      <h2><span class="em">🗝️</span>我在這裡藏了一個原理</h2>
+      <p>這次最關鍵的一句話，其實跟上一期是同一條：</p>
+      <div class="pull">先看預覽，再一次匯出。</div>
+      <p>它可以直接把九張圖全部產出。但我讓它先在瀏覽器出一個預覽。因為如果字太長、標題我想改、某一張我不滿意，先看預覽當場改掉，只要動那一張；等九張都匯出成圖了再來改，等於整組重做。</p>
+      <p>這不是工具的規矩，是我給自己定的規矩。任何一次大量產出之前，先看一個樣子。這一步花兩分鐘，省下的是後面重做一整批的力氣。</p>
+    </section>
+
+    <section>
+      <h2><span class="em">😅</span>途中我多做了一件小事</h2>
+      <p>要匯出之前，我先把那九張預覽的原始檔備份了一份起來。</p>
+      <p>不是麻煩，是留一條退路。萬一圖都出好了，我隔天又想改一個字，手上還有可以改的原稿，不用從頭再拆一次。</p>
+      <p>這件事後來也變成習慣：<b>把成品變成圖片之前，先留一份還能改的原稿。</b></p>
+    </section>
+
+    <section>
+      <h2><span class="em">⚖️</span>我做過的兩個取捨</h2>
+      <p><b>一，先用預設的品牌形象，不糾結要不要換一套。</b>我其實有三套品牌形象可以選。但這次我沒有停下來比來比去，先用預設那一套把整組做完，先有一組能發的圖。想換風格的時候再換，文章和拆卡都還在，前面的工不會白費。</p>
+      <p><b>二，接受第一版就是照文章順順地拆。</b>它拆出來的九張很好，但一定還有我想微調的地方。這是之後邊用邊改的事，不是現在不發的理由。</p>
+    </section>
+
+    <section>
+      <h2><span class="em">🚀</span>下一步</h2>
+      <p>兩件事。第一，把這一整套變成一個固定動作，下一次我只要說「這篇做成圖卡」，它就自己跑起來，今天摸熟的流程明天不用再摸一次。</p>
+      <p>第二，我也想把電子報本身用同一套品牌做出來，讓信、圖卡、貼文看起來都是同一個人寫的。這封信就是往那個方向的第一步。</p>
+      <a class="link-btn" href="../edm/">📮 回到電子報系列</a>
+    </section>
+
+    <section>
+      <h2><span class="em">💬</span>想跟你說的一句話</h2>
+      <p>我不會設計，也不會寫程式。我做的還是同一件事：把我要的東西講清楚一次，然後在該點頭的地方點頭、該喊停的地方喊停。</p>
+      <p>風格一致看起來很專業，但它不是因為我變厲害了。是因為我讓 AI 記住了我的樣子，所以它每一次都幫我做回同一個我。</p>
+      <p>如果你也常常卡在「想發，卻懶得排版」，也許你缺的不是設計能力，是先把自己的樣子，好好講給工具聽一次。</p>
+    </section>
+
+    <section>
+      <h2><span class="em">🍀</span>關於我</h2>
+      <p class="about">Tarshar，淡江 EMBA 資管研究生，AI 課程講師。在經營「🍀Learn AI with Tarshar」，記錄一個非工程師怎麼把 AI 變成日常隊友，把重複繁瑣、吃掉時間的事交出去，把時間留給真正重要的人和事。</p>
+    </section>
+
+    <footer>📮 主題式電子報 · 電子報 003 · 🍀Learn AI with Tarshar · 2026.07.31</footer>
+
+  </div>
+
+  <a class="home-fab" href="../edm/" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+</body>
+</html>
