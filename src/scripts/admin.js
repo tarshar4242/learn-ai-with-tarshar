@@ -253,16 +253,8 @@
       head.appendChild(actions);
       card.appendChild(head);
 
-      section.fields.forEach((f) => {
-        const long = f === 'desc' || f === 'summary';
-        const input = el(long ? 'textarea' : 'input', { type: 'text', rows: long ? '2' : undefined });
-        input.value = item[f] || '';
-        input.addEventListener('input', (e) => { item[f] = e.target.value; persistDraft(); });
-        card.appendChild(fieldGroup(FIELD_LABELS[f] || f, input));
-      });
-
       if (hasAud) {
-        const audRow = el('div', { class: 'aud-row' }, [el('span', { text: '誰看得到：', style: 'font-size:12px;color:var(--c-faintest);' })]);
+        const audRow = el('div', { class: 'aud-row aud-row-top' }, [el('span', { text: '誰看得到：', style: 'font-size:12px;color:var(--c-faintest);' })]);
         const publicChip = el('button', {
           type: 'button',
           class: 'aud-chip' + (item.aud.length === 0 ? ' on' : ''),
@@ -282,6 +274,14 @@
         });
         card.appendChild(audRow);
       }
+
+      section.fields.forEach((f) => {
+        const long = f === 'desc' || f === 'summary';
+        const input = el(long ? 'textarea' : 'input', { type: 'text', rows: long ? '2' : undefined });
+        input.value = item[f] || '';
+        input.addEventListener('input', (e) => { item[f] = e.target.value; persistDraft(); });
+        card.appendChild(fieldGroup(FIELD_LABELS[f] || f, input));
+      });
 
       wrap.appendChild(card);
     });
