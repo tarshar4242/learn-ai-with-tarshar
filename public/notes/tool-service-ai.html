@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>客服回覆小幫手｜TARSHAR 工具集</title>
+<meta name="description" content="客人私訊不再已讀焦慮。貼上 LINE、FB、IG 的客人訊息，AI 讀過你存好的商家資料後生出三種語氣的回覆草稿，挑一個複製貼回去就好。用你自己的 Gemini 金鑰，金鑰與商家資料都只存你的瀏覽器。">
+<meta name="theme-color" content="#0e91ad">
+<style>
+:root{
+  --primary:#0e91ad; --primary-soft:#e3f4f8; --primary-deep:#0b6f85;
+  --accent:#e8752a; --accent-soft:#fdeee2;
+  --bg:#f7f9fb; --card:#ffffff; --border:#e6eaef;
+  --text:#1e2a38; --muted:#64748b;
+  --ok:#2e7d4f; --ok-soft:#e3f4ea;
+  --shadow:0 1px 3px rgba(15,23,42,.06);
+  --shadow-lift:0 10px 28px rgba(15,23,42,.12);
+  --radius:14px;
+}
+html[data-theme="dark"]{
+  --primary:#35b6d2; --primary-soft:#123742; --primary-deep:#7fd6e8;
+  --accent:#f08a45; --accent-soft:#3a2718;
+  --bg:#101418; --card:#1a2027; --border:#2a323c;
+  --text:#eef2f6; --muted:#9aa7b5;
+  --ok:#7fd6a4; --ok-soft:#14301f;
+  --shadow:0 1px 3px rgba(0,0,0,.4);
+  --shadow-lift:0 10px 28px rgba(0,0,0,.5);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',-apple-system,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.7;min-height:100dvh}
+a{color:var(--primary);text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+header{background:radial-gradient(ellipse 60% 120% at 85% -20%, var(--accent-soft) 0%, transparent 60%),
+  radial-gradient(ellipse 70% 130% at 10% -30%, var(--primary-soft) 0%, transparent 65%), var(--card);
+  border-bottom:1px solid var(--border);padding:2rem 1.2rem 1.6rem;text-align:center;position:relative}
+.theme-btn{position:absolute;top:1rem;right:1rem;width:40px;height:40px;border-radius:50%;
+  border:1px solid var(--border);background:var(--card);font-size:1.1rem;box-shadow:var(--shadow);
+  display:flex;align-items:center;justify-content:center}
+h1{font-size:clamp(1.45rem,4.5vw,2rem);font-weight:900;letter-spacing:.03em}
+.hero-sub{max-width:30em;margin:.5rem auto 0;color:var(--muted);font-size:clamp(.9rem,2.6vw,.98rem)}
+.badges{display:flex;flex-wrap:wrap;justify-content:center;gap:.45rem;margin-top:.8rem}
+.badges span{font-size:.76rem;font-weight:700;border:1px solid var(--border);background:var(--card);
+  border-radius:999px;padding:.2rem .7rem;color:var(--muted)}
+main{max-width:860px;margin:0 auto;padding:1.2rem 1.2rem 2.5rem}
+.panel{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:1.1rem;margin-top:1rem}
+.panel h2{font-size:.95rem;font-weight:800;margin-bottom:.5rem}
+textarea{width:100%;min-height:120px;border:1.5px solid var(--border);border-radius:10px;
+  background:var(--bg);color:var(--text);font:inherit;font-size:.95rem;padding:.8rem;resize:vertical;outline:none}
+textarea:focus{border-color:var(--primary)}
+.actions{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.8rem}
+.btn{display:inline-flex;align-items:center;gap:.4rem;font-size:.95rem;font-weight:800;
+  border-radius:999px;padding:.6rem 1.4rem;box-shadow:var(--shadow);transition:.15s}
+.btn:hover{transform:translateY(-2px)}
+.btn-main{background:var(--primary);color:#fff}
+.btn-sub{background:var(--card);border:1.5px solid var(--border);color:var(--text)}
+.btn:disabled{opacity:.55;cursor:wait;transform:none}
+.stat{font-size:.8rem;color:var(--muted);margin-top:.5rem}
+.tip{background:var(--primary-soft);border-radius:10px;padding:.7rem .9rem;font-size:.85rem;
+  color:var(--text);margin-top:1rem}
+.tip b{color:var(--primary-deep)}
+footer{border-top:1px solid var(--border);background:var(--card);text-align:center;
+  padding:1.4rem 1.2rem 5.5rem;color:var(--muted);font-size:.82rem}
+.home-fab{position:fixed;left:14px;bottom:14px;z-index:50;display:inline-flex;align-items:center;
+  gap:.35rem;font-size:.85rem;font-weight:800;color:var(--text);background:var(--card);
+  border:1.5px solid var(--border);border-radius:999px;padding:.5rem 1rem;box-shadow:var(--shadow-lift)}
+@media (max-width:520px){header{padding:1.6rem 1rem 1.3rem}}
+
+/* ——— 本工具專屬樣式 ——— */
+.guide-head{display:flex;align-items:center;justify-content:space-between;gap:.6rem;width:100%;
+  text-align:left;font-size:.95rem;font-weight:800;color:var(--text)}
+.guide-head .chev{font-size:.85rem;color:var(--muted);transition:.2s;flex:none}
+.guide.closed .chev{transform:rotate(-90deg)}
+.guide-body{margin-top:.7rem}
+.guide.closed .guide-body{display:none}
+.steps{list-style:none;display:flex;flex-direction:column;gap:.55rem}
+.steps li{display:flex;gap:.6rem;align-items:flex-start;font-size:.9rem}
+.steps .no{flex:none;width:1.6rem;height:1.6rem;border-radius:50%;background:var(--primary-soft);
+  color:var(--primary-deep);font-weight:900;font-size:.8rem;display:flex;align-items:center;justify-content:center;margin-top:.15rem}
+.key-row{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center}
+.key-row input{flex:1 1 220px;border:1.5px solid var(--border);border-radius:10px;background:var(--bg);
+  color:var(--text);font:inherit;font-size:.95rem;padding:.6rem .8rem;outline:none;min-width:0}
+.key-row input:focus{border-color:var(--primary)}
+.key-msg{font-size:.85rem;font-weight:700;margin-top:.5rem}
+.key-msg.ok{color:var(--ok)}
+.key-msg.bad{color:var(--accent)}
+.loading{display:none;align-items:center;gap:.6rem;font-size:.9rem;color:var(--muted);margin-top:.8rem}
+.loading.show{display:flex}
+.spin{width:18px;height:18px;border:3px solid var(--border);border-top-color:var(--primary);
+  border-radius:50%;animation:sp 1s linear infinite;flex:none}
+@keyframes sp{to{transform:rotate(360deg)}}
+.kb-note{font-size:.82rem;color:var(--muted);margin-top:.4rem}
+.kb-saved{font-size:.82rem;font-weight:800;color:var(--ok);margin-top:.4rem;display:none}
+.opts{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.3rem}
+.chip{font-size:.85rem;font-weight:700;color:var(--muted);border:1.5px solid var(--border);
+  background:var(--card);border-radius:999px;padding:.32rem .9rem;transition:.15s}
+.chip:hover{border-color:var(--primary);color:var(--primary)}
+.chip.on{border-color:var(--primary);color:#fff;background:var(--primary)}
+.opt-label{font-size:.78rem;font-weight:800;color:var(--muted);margin-top:.7rem}
+#result{display:none}
+#result.show{display:block}
+.draft{border:1px solid var(--border);border-radius:10px;padding:.8rem .9rem;margin-top:.7rem;background:var(--bg)}
+.draft h3{font-size:.85rem;font-weight:800;color:var(--primary-deep);display:flex;justify-content:space-between;align-items:center;gap:.5rem}
+.draft p{font-size:.93rem;margin-top:.4rem;white-space:pre-wrap}
+.copy-btn{font-size:.8rem;font-weight:800;border:1.5px solid var(--border);border-radius:999px;
+  padding:.25rem .8rem;background:var(--card);flex:none;transition:.15s}
+.copy-btn:hover{border-color:var(--primary);color:var(--primary)}
+</style>
+</head>
+<body>
+
+<a href="tools.html" class="home-fab">🧰 回工具箱</a>
+
+<header>
+  <button class="theme-btn" id="themeBtn" aria-label="切換深淺色">🌙</button>
+  <h1>💬 客服回覆小幫手</h1>
+  <p class="hero-sub">客人私訊不再已讀焦慮，三種草稿讓你挑。</p>
+  <div class="badges"><span style="color:#b3541e;background:#fdeadd;border-color:transparent">🔑 需自備金鑰</span><span>🔒 金鑰與商家資料只存你的瀏覽器</span><span>📱 手機也好用</span></div>
+</header>
+
+<main>
+
+  <div class="panel guide" id="guide">
+    <button class="guide-head" id="guideBtn" aria-expanded="true">
+      <span>🔑 開始前先看：要準備什麼、會不會花錢？</span><span class="chev">▼</span>
+    </button>
+    <div class="guide-body">
+      <ol class="steps">
+        <li><span class="no">1</span><span>這個工具需要一把 <b>Google Gemini 免費金鑰</b>。打開 <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a>（會另開分頁），用你的 Google 帳號登入。</span></li>
+        <li><span class="no">2</span><span>按藍色的「<b>Create API key</b>」按鈕，把跳出來的那串英數字複製起來。</span></li>
+        <li><span class="no">3</span><span>回到這裡，貼到下面的欄位，按「🔓 測試金鑰」就完成了！在「AI 留言分析器」貼過的話，這裡會自動帶入，不用再貼。</span></li>
+      </ol>
+      <div class="tip">💛 <b>安心話：</b>免費額度拿來回客人訊息綽綽有餘，不會被收錢。金鑰和你存的商家資料都只放在你自己的瀏覽器裡（localStorage），Tarshar 拿不到也看不到；客人訊息只在按下產生的那一刻，直接從你的瀏覽器送到 Google Gemini，不經過任何其他地方。</div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>1️⃣ 貼上你的 Gemini 金鑰</h2>
+    <div class="key-row">
+      <input type="password" id="keyInput" placeholder="把那串英數字貼在這裡（AIza 開頭）" autocomplete="off">
+      <button class="btn btn-sub" id="testBtn">🔓 測試金鑰</button>
+    </div>
+    <p class="key-msg" id="keyMsg"></p>
+  </div>
+
+  <div class="panel">
+    <h2>2️⃣ 存一份商家資料（存一次就好，AI 回覆會照這份講）</h2>
+    <textarea id="kb" placeholder="把你希望 AI 知道的都寫進來，例如：
+
+我是誰：Learn AI with Tarshar，開 AI 入門課與工作坊
+營業時間／上課時間：…
+價格：…
+常見問題：
+Q 課程有錄影嗎？A 有，回放連結課後寄出
+Q 可以刷卡嗎？A 可以，也能轉帳
+不能答應的事：不保證考試一定過、不代寫作業"></textarea>
+    <div class="actions">
+      <button class="btn btn-sub" id="kbSave">💾 儲存商家資料</button>
+    </div>
+    <p class="kb-saved" id="kbSaved">✅ 存好了，以後打開這頁都在。</p>
+    <p class="kb-note">寫得越具體，AI 回得越準；沒寫到的事 AI 會請客人等你親自回覆，不會亂編。</p>
+  </div>
+
+  <div class="panel">
+    <h2>3️⃣ 貼上客人的訊息，選語氣，產生草稿</h2>
+    <textarea id="msg" style="min-height:100px" placeholder="把客人的私訊複製貼進來，例如：
+請問這週六的課還有名額嗎？兩個人一起報有優惠嗎？"></textarea>
+    <p class="opt-label">回覆語氣</p>
+    <div class="opts" id="tones">
+      <button class="chip on" data-v="親切熱情">😊 親切熱情</button>
+      <button class="chip" data-v="專業穩重">🤝 專業穩重</button>
+      <button class="chip" data-v="簡短俐落">⚡ 簡短俐落</button>
+      <button class="chip" data-v="可愛活潑">🎈 可愛活潑</button>
+    </div>
+    <p class="opt-label">要貼回哪個平台（影響長度和表情符號用量）</p>
+    <div class="opts" id="plats">
+      <button class="chip on" data-v="LINE">LINE</button>
+      <button class="chip" data-v="FB Messenger">FB</button>
+      <button class="chip" data-v="IG 私訊">IG</button>
+    </div>
+    <div class="actions">
+      <button class="btn btn-main" id="goBtn">✨ 產生三種回覆草稿</button>
+    </div>
+    <div class="loading" id="loading"><span class="spin"></span><span>AI 正在想怎麼回，大概 5～15 秒 ☕</span></div>
+    <p class="stat" id="stat"></p>
+  </div>
+
+  <div class="panel" id="result">
+    <h2>4️⃣ 挑一個複製，貼回去就好</h2>
+    <div id="drafts"></div>
+    <p class="kb-note">草稿只是起點，貼回去前記得看一眼，數字和承諾要自己把關。</p>
+  </div>
+
+</main>
+
+<footer>🍀 <b>Learn AI with Tarshar</b>・TARSHAR 工具集｜更多小工具 → <a href="tools.html">打開工具箱</a></footer>
+
+<script>
+const $ = s => document.querySelector(s);
+const API = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=';
+
+/* ——— 教學面板收合（記住狀態） ——— */
+function setGuide(closed){
+  $('#guide').classList.toggle('closed', closed);
+  $('#guideBtn').setAttribute('aria-expanded', String(!closed));
+  localStorage.setItem('tt_service_guide', closed ? 'closed' : 'open');
+}
+setGuide(localStorage.getItem('tt_service_guide') === 'closed');
+$('#guideBtn').addEventListener('click', () =>
+  setGuide(!$('#guide').classList.contains('closed')));
+
+/* ——— 金鑰（與 AI 留言分析器共用同一把） ——— */
+$('#keyInput').value = localStorage.getItem('tt_gemini_key') || '';
+
+function keyMsg(text, ok){
+  const m = $('#keyMsg');
+  m.textContent = text;
+  m.className = 'key-msg ' + (ok ? 'ok' : 'bad');
+}
+
+async function callGemini(key, body){
+  const res = await fetch(API + encodeURIComponent(key), {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  if (!res.ok){
+    const err = new Error('api');
+    err.status = res.status;
+    throw err;
+  }
+  const data = await res.json();
+  const parts = data?.candidates?.[0]?.content?.parts;
+  return (parts || []).map(p => p.text || '').join('');
+}
+
+$('#testBtn').addEventListener('click', async () => {
+  const key = $('#keyInput').value.trim();
+  if (!key){ keyMsg('先把金鑰貼進來嘛 🙂 不知道去哪拿？看上面的教學。', false); return; }
+  const btn = $('#testBtn');
+  btn.disabled = true; btn.textContent = '測試中…';
+  try {
+    await callGemini(key, { contents: [{ parts: [{ text: '回覆OK兩個字' }] }] });
+    localStorage.setItem('tt_gemini_key', key);
+    keyMsg('✅ 金鑰能用！已經幫你記在這台瀏覽器裡，下次不用再貼。', true);
+  } catch (e){
+    if (e.status === 400 || e.status === 403){
+      keyMsg('金鑰好像貼錯了，回上面教學第 2 步看看（前後不要有空格喔）。', false);
+    } else if (e.status === 429){
+      keyMsg('金鑰是對的，但今天的免費額度先用完了，明天再來就會恢復 🙂', false);
+    } else {
+      keyMsg('連不上 Google，檢查一下網路再試一次。', false);
+    }
+  }
+  btn.disabled = false; btn.textContent = '🔓 測試金鑰';
+});
+
+/* ——— 商家資料 ——— */
+$('#kb').value = localStorage.getItem('tt_service_kb') || '';
+$('#kbSave').addEventListener('click', () => {
+  localStorage.setItem('tt_service_kb', $('#kb').value);
+  $('#kbSaved').style.display = 'block';
+  setTimeout(() => $('#kbSaved').style.display = 'none', 2500);
+});
+
+/* ——— 語氣與平台晶片 ——— */
+function chipGroup(sel){
+  document.querySelectorAll(sel + ' .chip').forEach(c => c.addEventListener('click', () => {
+    document.querySelectorAll(sel + ' .chip').forEach(x => x.classList.remove('on'));
+    c.classList.add('on');
+  }));
+}
+chipGroup('#tones'); chipGroup('#plats');
+const picked = sel => document.querySelector(sel + ' .chip.on').dataset.v;
+
+/* ——— 產生草稿 ——— */
+$('#goBtn').addEventListener('click', async () => {
+  const key = ($('#keyInput').value || '').trim();
+  const msg = $('#msg').value.trim();
+  const kb = $('#kb').value.trim();
+  $('#stat').textContent = '';
+  if (!key){ $('#stat').textContent = '還沒有金鑰喔！先看最上面的教學拿一把，貼到 1️⃣ 那格測試一下。'; return; }
+  if (!msg){ $('#stat').textContent = '先把客人的訊息貼進 3️⃣ 的框框裡 🙂'; return; }
+
+  const prompt = `你是台灣一位小型品牌的客服，用台灣慣用的繁體中文回覆客人私訊。
+
+【商家資料】
+${kb || '（店主沒有提供商家資料。凡是需要商家資訊才能回答的問題，一律禮貌告訴客人稍後由本人回覆，不可以自己編造。）'}
+
+【客人訊息】
+${msg}
+
+【要求】
+1. 產生 3 種不同的回覆草稿，語氣都採用「${picked('#tones')}」，要貼回「${picked('#plats')}」（LINE 可稍長並適量表情符號；FB 中等；IG 精簡、表情符號少）。
+2. 三種草稿的差異：A 標準版、B 更精簡版、C 多帶一個貼心提醒或加值資訊版。
+3. 只能根據商家資料回答；資料裡沒有的（價格、名額、日期等），要自然地說會再由本人確認回覆，絕對不可以編造。
+4. 不要署名、不要加「草稿A：」以外的說明文字。
+
+【輸出格式】務必回傳純 JSON（不要 markdown 圍欄）：
+{"drafts":[{"label":"標準版","text":"..."},{"label":"精簡版","text":"..."},{"label":"加值版","text":"..."}]}`;
+
+  const btn = $('#goBtn');
+  btn.disabled = true; $('#loading').classList.add('show'); $('#result').classList.remove('show');
+  try {
+    let text = await callGemini(key, {
+      contents: [{ parts: [{ text: prompt }] }],
+      generationConfig: { temperature: 0.8 }
+    });
+    text = text.replace(/```json|```/g, '').trim();
+    const data = JSON.parse(text.slice(text.indexOf('{'), text.lastIndexOf('}') + 1));
+    const box = $('#drafts');
+    box.innerHTML = '';
+    for (const d of (data.drafts || []).slice(0, 3)){
+      const el = document.createElement('div');
+      el.className = 'draft';
+      const h = document.createElement('h3');
+      const cp = document.createElement('button');
+      cp.className = 'copy-btn'; cp.textContent = '📋 複製這則';
+      const p = document.createElement('p');
+      p.textContent = d.text || '';
+      h.append(document.createTextNode('💬 ' + (d.label || '草稿')), cp);
+      el.append(h, p);
+      cp.addEventListener('click', async () => {
+        await navigator.clipboard.writeText(p.textContent);
+        cp.textContent = '✅ 複製好了';
+        setTimeout(() => cp.textContent = '📋 複製這則', 1800);
+      });
+      box.appendChild(el);
+    }
+    $('#result').classList.add('show');
+    $('#result').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } catch (e){
+    if (e.status === 429){
+      $('#stat').textContent = '今天的免費額度先用完了，明天就會恢復 🙂';
+    } else if (e.status === 400 || e.status === 403){
+      $('#stat').textContent = '金鑰好像失效了，回到 1️⃣ 重新測試一下金鑰（前後不要有空格喔）。';
+    } else {
+      $('#stat').textContent = 'AI 這次沒回好，再按一次通常就行了。';
+    }
+  }
+  btn.disabled = false; $('#loading').classList.remove('show');
+});
+
+/* ——— 深淺色 ——— */
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme', t);
+  $('#themeBtn').textContent = t === 'dark' ? '☀️' : '🌙';
+}
+const savedTheme = localStorage.getItem('tools_theme');
+applyTheme(savedTheme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+$('#themeBtn').addEventListener('click', () => {
+  const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('tools_theme', next); applyTheme(next);
+});
+</script>
+</body>
+</html>

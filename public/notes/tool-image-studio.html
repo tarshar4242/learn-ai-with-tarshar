@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI 圖片生成工作室｜TARSHAR 工具集</title>
+<meta name="description" content="廣告圖、社群圖、簡報封面，用講的就生出來。選用途和風格、打描述，AI 直接出圖下載，還能幫你把描述越寫越專業。用你自己的 Gemini 金鑰，金鑰只存你的瀏覽器。">
+<meta name="theme-color" content="#0e91ad">
+<style>
+:root{
+  --primary:#0e91ad; --primary-soft:#e3f4f8; --primary-deep:#0b6f85;
+  --accent:#e8752a; --accent-soft:#fdeee2;
+  --bg:#f7f9fb; --card:#ffffff; --border:#e6eaef;
+  --text:#1e2a38; --muted:#64748b;
+  --ok:#2e7d4f; --ok-soft:#e3f4ea;
+  --shadow:0 1px 3px rgba(15,23,42,.06);
+  --shadow-lift:0 10px 28px rgba(15,23,42,.12);
+  --radius:14px;
+}
+html[data-theme="dark"]{
+  --primary:#35b6d2; --primary-soft:#123742; --primary-deep:#7fd6e8;
+  --accent:#f08a45; --accent-soft:#3a2718;
+  --bg:#101418; --card:#1a2027; --border:#2a323c;
+  --text:#eef2f6; --muted:#9aa7b5;
+  --ok:#7fd6a4; --ok-soft:#14301f;
+  --shadow:0 1px 3px rgba(0,0,0,.4);
+  --shadow-lift:0 10px 28px rgba(0,0,0,.5);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',-apple-system,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.7;min-height:100dvh}
+a{color:var(--primary);text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+header{background:radial-gradient(ellipse 60% 120% at 85% -20%, var(--accent-soft) 0%, transparent 60%),
+  radial-gradient(ellipse 70% 130% at 10% -30%, var(--primary-soft) 0%, transparent 65%), var(--card);
+  border-bottom:1px solid var(--border);padding:2rem 1.2rem 1.6rem;text-align:center;position:relative}
+.theme-btn{position:absolute;top:1rem;right:1rem;width:40px;height:40px;border-radius:50%;
+  border:1px solid var(--border);background:var(--card);font-size:1.1rem;box-shadow:var(--shadow);
+  display:flex;align-items:center;justify-content:center}
+h1{font-size:clamp(1.45rem,4.5vw,2rem);font-weight:900;letter-spacing:.03em}
+.hero-sub{max-width:30em;margin:.5rem auto 0;color:var(--muted);font-size:clamp(.9rem,2.6vw,.98rem)}
+.badges{display:flex;flex-wrap:wrap;justify-content:center;gap:.45rem;margin-top:.8rem}
+.badges span{font-size:.76rem;font-weight:700;border:1px solid var(--border);background:var(--card);
+  border-radius:999px;padding:.2rem .7rem;color:var(--muted)}
+main{max-width:860px;margin:0 auto;padding:1.2rem 1.2rem 2.5rem}
+.panel{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:1.1rem;margin-top:1rem}
+.panel h2{font-size:.95rem;font-weight:800;margin-bottom:.5rem}
+textarea{width:100%;min-height:110px;border:1.5px solid var(--border);border-radius:10px;
+  background:var(--bg);color:var(--text);font:inherit;font-size:.95rem;padding:.8rem;resize:vertical;outline:none}
+textarea:focus{border-color:var(--primary)}
+.actions{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.8rem}
+.btn{display:inline-flex;align-items:center;gap:.4rem;font-size:.95rem;font-weight:800;
+  border-radius:999px;padding:.6rem 1.4rem;box-shadow:var(--shadow);transition:.15s}
+.btn:hover{transform:translateY(-2px)}
+.btn-main{background:var(--primary);color:#fff}
+.btn-sub{background:var(--card);border:1.5px solid var(--border);color:var(--text)}
+.btn:disabled{opacity:.55;cursor:wait;transform:none}
+.stat{font-size:.8rem;color:var(--muted);margin-top:.5rem}
+.tip{background:var(--primary-soft);border-radius:10px;padding:.7rem .9rem;font-size:.85rem;
+  color:var(--text);margin-top:1rem}
+.tip b{color:var(--primary-deep)}
+footer{border-top:1px solid var(--border);background:var(--card);text-align:center;
+  padding:1.4rem 1.2rem 5.5rem;color:var(--muted);font-size:.82rem}
+.home-fab{position:fixed;left:14px;bottom:14px;z-index:50;display:inline-flex;align-items:center;
+  gap:.35rem;font-size:.85rem;font-weight:800;color:var(--text);background:var(--card);
+  border:1.5px solid var(--border);border-radius:999px;padding:.5rem 1rem;box-shadow:var(--shadow-lift)}
+@media (max-width:520px){header{padding:1.6rem 1rem 1.3rem}}
+
+/* ——— 本工具專屬樣式 ——— */
+.guide-head{display:flex;align-items:center;justify-content:space-between;gap:.6rem;width:100%;
+  text-align:left;font-size:.95rem;font-weight:800;color:var(--text)}
+.guide-head .chev{font-size:.85rem;color:var(--muted);transition:.2s;flex:none}
+.guide.closed .chev{transform:rotate(-90deg)}
+.guide-body{margin-top:.7rem}
+.guide.closed .guide-body{display:none}
+.steps{list-style:none;display:flex;flex-direction:column;gap:.55rem}
+.steps li{display:flex;gap:.6rem;align-items:flex-start;font-size:.9rem}
+.steps .no{flex:none;width:1.6rem;height:1.6rem;border-radius:50%;background:var(--primary-soft);
+  color:var(--primary-deep);font-weight:900;font-size:.8rem;display:flex;align-items:center;justify-content:center;margin-top:.15rem}
+.key-row{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center}
+.key-row input{flex:1 1 220px;border:1.5px solid var(--border);border-radius:10px;background:var(--bg);
+  color:var(--text);font:inherit;font-size:.95rem;padding:.6rem .8rem;outline:none;min-width:0}
+.key-row input:focus{border-color:var(--primary)}
+.key-msg{font-size:.85rem;font-weight:700;margin-top:.5rem}
+.key-msg.ok{color:var(--ok)}
+.key-msg.bad{color:var(--accent)}
+.loading{display:none;align-items:center;gap:.6rem;font-size:.9rem;color:var(--muted);margin-top:.8rem}
+.loading.show{display:flex}
+.spin{width:18px;height:18px;border:3px solid var(--border);border-top-color:var(--primary);
+  border-radius:50%;animation:sp 1s linear infinite;flex:none}
+@keyframes sp{to{transform:rotate(360deg)}}
+.opts{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.3rem}
+.chip{font-size:.85rem;font-weight:700;color:var(--muted);border:1.5px solid var(--border);
+  background:var(--card);border-radius:999px;padding:.32rem .9rem;transition:.15s}
+.chip:hover{border-color:var(--primary);color:var(--primary)}
+.chip.on{border-color:var(--primary);color:#fff;background:var(--primary)}
+.opt-label{font-size:.78rem;font-weight:800;color:var(--muted);margin-top:.7rem}
+.note{font-size:.82rem;color:var(--muted);margin-top:.4rem}
+#result{display:none}
+#result.show{display:block}
+.out-wrap{border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--bg);
+  display:flex;align-items:center;justify-content:center;margin-top:.5rem}
+.out-wrap img{max-width:100%;height:auto;display:block}
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:.5rem;margin-top:.7rem}
+.gallery img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;border:1px solid var(--border);cursor:pointer}
+</style>
+</head>
+<body>
+
+<a href="tools.html" class="home-fab">🧰 回工具箱</a>
+
+<header>
+  <button class="theme-btn" id="themeBtn" aria-label="切換深淺色">🌙</button>
+  <h1>🎨 AI 圖片生成工作室</h1>
+  <p class="hero-sub">廣告圖、社群圖、簡報封面，用講的就生出來。</p>
+  <div class="badges"><span style="color:#b3541e;background:#fdeadd;border-color:transparent">🔑 需自備金鑰</span><span>🔒 金鑰只存你的瀏覽器</span><span>📱 手機也好用</span></div>
+</header>
+
+<main>
+
+  <div class="panel guide" id="guide">
+    <button class="guide-head" id="guideBtn" aria-expanded="true">
+      <span>🔑 開始前先看：要準備什麼、會不會花錢？</span><span class="chev">▼</span>
+    </button>
+    <div class="guide-body">
+      <ol class="steps">
+        <li><span class="no">1</span><span>這個工具需要一把 <b>Google Gemini 免費金鑰</b>。打開 <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a>（會另開分頁），用你的 Google 帳號登入。</span></li>
+        <li><span class="no">2</span><span>按藍色的「<b>Create API key</b>」按鈕，把跳出來的那串英數字複製起來。</span></li>
+        <li><span class="no">3</span><span>回到這裡貼到下面欄位，按「🔓 測試金鑰」。在「AI 留言分析器」或「客服回覆小幫手」貼過的話，這裡會自動帶入。</span></li>
+      </ol>
+      <div class="tip">💛 <b>先說清楚：</b>生圖不用付錢，但<b>免費額度比文字緊</b>——每天能生的張數有限，用完會提示你「明天再來」，不會默默扣款（免費金鑰沒綁信用卡，想扣也扣不到）。金鑰只存你自己的瀏覽器，你打的描述只在生成那一刻直接送到 Google Gemini，生好的圖也只留在你的瀏覽器裡。</div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>1️⃣ 貼上你的 Gemini 金鑰</h2>
+    <div class="key-row">
+      <input type="password" id="keyInput" placeholder="把那串英數字貼在這裡（AIza 開頭）" autocomplete="off">
+      <button class="btn btn-sub" id="testBtn">🔓 測試金鑰</button>
+    </div>
+    <p class="key-msg" id="keyMsg"></p>
+  </div>
+
+  <div class="panel">
+    <h2>2️⃣ 選用途、選風格、描述你要的畫面</h2>
+    <p class="opt-label">用途（決定圖片比例）</p>
+    <div class="opts" id="uses">
+      <button class="chip on" data-ar="1:1" data-v="FB／IG 貼文方圖">⬜ 社群貼文 1:1</button>
+      <button class="chip" data-ar="16:9" data-v="橫幅、簡報封面或廣告橫圖">🖥️ 橫幅/簡報 16:9</button>
+      <button class="chip" data-ar="9:16" data-v="IG 限時動態或直式短影音封面">📱 限動直式 9:16</button>
+      <button class="chip" data-ar="4:3" data-v="部落格或電子報配圖">📄 文章配圖 4:3</button>
+    </div>
+    <p class="opt-label">風格</p>
+    <div class="opts" id="styles">
+      <button class="chip on" data-v="寫實攝影風格，自然光，淺景深">📷 寫實攝影</button>
+      <button class="chip" data-v="溫暖手繪插畫風格，柔和色調">🖍️ 手繪插畫</button>
+      <button class="chip" data-v="可愛 3D 立體渲染風格，圓潤造型">🧸 3D 立體</button>
+      <button class="chip" data-v="水彩畫風格，暈染筆觸，留白">🎨 水彩</button>
+      <button class="chip" data-v="極簡扁平設計風格，大色塊，幾何構圖">▪️ 極簡扁平</button>
+      <button class="chip" data-v="莫蘭迪色系文青風格，低飽和，質感紙紋">🪴 莫蘭迪文青</button>
+    </div>
+    <p class="opt-label">畫面描述（中文就可以）</p>
+    <textarea id="prompt" placeholder="例如：一杯冒著熱氣的拿鐵放在木桌上，旁邊有一台筆電和一株小盆栽，晨光從窗戶灑進來，溫馨的學習氛圍"></textarea>
+    <div class="actions">
+      <button class="btn btn-sub" id="polishBtn">✨ 幫我把描述加強成專業版</button>
+      <button class="btn btn-main" id="goBtn">🎨 生成圖片</button>
+    </div>
+    <div class="loading" id="loading"><span class="spin"></span><span id="loadTxt">AI 正在畫，大概 10～30 秒 🖌️</span></div>
+    <p class="stat" id="stat"></p>
+    <p class="note">💡 小提醒：AI 畫「中文字」容易出錯字，圖裡要放標題文字的話，建議生成乾淨底圖，再用工具箱的「封面圖產生器」壓字，最穩。</p>
+  </div>
+
+  <div class="panel" id="result">
+    <h2>3️⃣ 生好了！</h2>
+    <div class="out-wrap"><img id="outImg" alt="AI 生成的圖片"></div>
+    <div class="actions">
+      <a class="btn btn-main" id="dlBtn" download="tarshar-ai-image.png">⬇️ 下載這張</a>
+      <button class="btn btn-sub" id="againBtn">🔁 同樣描述再生一張</button>
+    </div>
+    <p class="opt-label" id="galLabel" style="display:none">這次生過的圖（關掉網頁就消失，喜歡的記得先下載）</p>
+    <div class="gallery" id="gallery"></div>
+  </div>
+
+</main>
+
+<footer>🍀 <b>Learn AI with Tarshar</b>・TARSHAR 工具集｜更多小工具 → <a href="tools.html">打開工具箱</a></footer>
+
+<script>
+const $ = s => document.querySelector(s);
+const API_BASE = 'https://generativelanguage.googleapis.com/v1beta/models/';
+const TEXT_MODEL = 'gemini-2.0-flash';
+/* 圖片模型依序嘗試，第一個不能用就自動換下一個 */
+const IMG_MODELS = ['gemini-2.5-flash-image', 'gemini-2.0-flash-preview-image-generation'];
+
+/* ——— 教學面板收合（記住狀態） ——— */
+function setGuide(closed){
+  $('#guide').classList.toggle('closed', closed);
+  $('#guideBtn').setAttribute('aria-expanded', String(!closed));
+  localStorage.setItem('tt_imgstudio_guide', closed ? 'closed' : 'open');
+}
+setGuide(localStorage.getItem('tt_imgstudio_guide') === 'closed');
+$('#guideBtn').addEventListener('click', () =>
+  setGuide(!$('#guide').classList.contains('closed')));
+
+/* ——— 金鑰（與其他 AI 工具共用同一把） ——— */
+$('#keyInput').value = localStorage.getItem('tt_gemini_key') || '';
+
+function keyMsg(text, ok){
+  const m = $('#keyMsg');
+  m.textContent = text;
+  m.className = 'key-msg ' + (ok ? 'ok' : 'bad');
+}
+
+async function callApi(model, key, body){
+  const res = await fetch(API_BASE + model + ':generateContent?key=' + encodeURIComponent(key), {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  if (!res.ok){
+    const err = new Error('api');
+    err.status = res.status;
+    throw err;
+  }
+  return res.json();
+}
+
+$('#testBtn').addEventListener('click', async () => {
+  const key = $('#keyInput').value.trim();
+  if (!key){ keyMsg('先把金鑰貼進來嘛 🙂 不知道去哪拿？看上面的教學。', false); return; }
+  const btn = $('#testBtn');
+  btn.disabled = true; btn.textContent = '測試中…';
+  try {
+    await callApi(TEXT_MODEL, key, { contents: [{ parts: [{ text: '回覆OK兩個字' }] }] });
+    localStorage.setItem('tt_gemini_key', key);
+    keyMsg('✅ 金鑰能用！已經幫你記在這台瀏覽器裡，下次不用再貼。', true);
+  } catch (e){
+    if (e.status === 400 || e.status === 403){
+      keyMsg('金鑰好像貼錯了，回上面教學第 2 步看看（前後不要有空格喔）。', false);
+    } else if (e.status === 429){
+      keyMsg('金鑰是對的，但今天的免費額度先用完了，明天再來就會恢復 🙂', false);
+    } else {
+      keyMsg('連不上 Google，檢查一下網路再試一次。', false);
+    }
+  }
+  btn.disabled = false; btn.textContent = '🔓 測試金鑰';
+});
+
+/* ——— 晶片 ——— */
+function chipGroup(sel){
+  document.querySelectorAll(sel + ' .chip').forEach(c => c.addEventListener('click', () => {
+    document.querySelectorAll(sel + ' .chip').forEach(x => x.classList.remove('on'));
+    c.classList.add('on');
+  }));
+}
+chipGroup('#uses'); chipGroup('#styles');
+const pickedChip = sel => document.querySelector(sel + ' .chip.on');
+
+/* ——— 描述加強 ——— */
+$('#polishBtn').addEventListener('click', async () => {
+  const key = ($('#keyInput').value || '').trim();
+  const raw = $('#prompt').value.trim();
+  $('#stat').textContent = '';
+  if (!key){ $('#stat').textContent = '還沒有金鑰喔！先看最上面的教學拿一把，貼到 1️⃣ 那格測試一下。'; return; }
+  if (!raw){ $('#stat').textContent = '先在描述框裡隨便寫幾個字，AI 才有東西可以加強 🙂'; return; }
+  const btn = $('#polishBtn');
+  btn.disabled = true; $('#loadTxt').textContent = 'AI 正在幫你潤描述，幾秒鐘就好 ✍️'; $('#loading').classList.add('show');
+  try {
+    const data = await callApi(TEXT_MODEL, key, {
+      contents: [{ parts: [{ text:
+`把下面這段圖片描述改寫成專業的 AI 生圖提示。保留原本的主體與意圖，補上構圖、光線、色調、氛圍、細節質感的描述。用繁體中文，直接輸出改寫後的描述本身，不要任何說明或前後綴。
+
+原始描述：${raw}
+圖片用途：${pickedChip('#uses').dataset.v}
+指定風格：${pickedChip('#styles').dataset.v}` }] }],
+      generationConfig: { temperature: 0.7 }
+    });
+    const text = (data?.candidates?.[0]?.content?.parts || []).map(p => p.text || '').join('').trim();
+    if (text) $('#prompt').value = text;
+    $('#stat').textContent = '✨ 加強好了，直接按「生成圖片」，或再自己改幾個字。';
+  } catch (e){
+    $('#stat').textContent = e.status === 429 ? '今天的免費額度先用完了，明天就會恢復 🙂' : 'AI 這次沒回好，再按一次通常就行了。';
+  }
+  btn.disabled = false; $('#loading').classList.remove('show');
+});
+
+/* ——— 生成圖片 ——— */
+let lastObjectUrl = null;
+
+function buildBody(withAspect){
+  const use = pickedChip('#uses'), style = pickedChip('#styles');
+  const text = `${$('#prompt').value.trim()}。${style.dataset.v}。用途：${use.dataset.v}，圖片比例 ${use.dataset.ar}。高品質、細節豐富、構圖乾淨。`;
+  const body = {
+    contents: [{ parts: [{ text }] }],
+    generationConfig: { responseModalities: ['TEXT', 'IMAGE'] }
+  };
+  if (withAspect) body.generationConfig.imageConfig = { aspectRatio: use.dataset.ar };
+  return body;
+}
+
+async function generate(){
+  const key = ($('#keyInput').value || '').trim();
+  $('#stat').textContent = '';
+  if (!key){ $('#stat').textContent = '還沒有金鑰喔！先看最上面的教學拿一把，貼到 1️⃣ 那格測試一下。'; return; }
+  if (!$('#prompt').value.trim()){ $('#stat').textContent = '先描述一下你要的畫面 🙂 寫個大概就好，可以按「加強描述」讓 AI 幫你補。'; return; }
+
+  const btns = [$('#goBtn'), $('#againBtn'), $('#polishBtn')];
+  btns.forEach(b => b.disabled = true);
+  $('#loadTxt').textContent = 'AI 正在畫，大概 10～30 秒 🖌️';
+  $('#loading').classList.add('show');
+
+  let img = null, lastErr = null;
+  outer:
+  for (const model of IMG_MODELS){
+    for (const withAspect of [true, false]){
+      try {
+        const data = await callApi(model, key, buildBody(withAspect));
+        const parts = data?.candidates?.[0]?.content?.parts || [];
+        const p = parts.find(x => x.inlineData?.data);
+        if (p){ img = p.inlineData; break outer; }
+        lastErr = new Error('noimage');
+      } catch (e){
+        lastErr = e;
+        if (e.status === 429) break outer;      /* 額度用完，換模型也沒用 */
+        if (e.status !== 400 && e.status !== 404) break outer;
+      }
+    }
+  }
+
+  if (img){
+    const bin = atob(img.data);
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    const blob = new Blob([bytes], { type: img.mimeType || 'image/png' });
+    if (lastObjectUrl) URL.revokeObjectURL(lastObjectUrl);
+    lastObjectUrl = URL.createObjectURL(blob);
+    $('#outImg').src = lastObjectUrl;
+    $('#dlBtn').href = lastObjectUrl;
+    const th = document.createElement('img');
+    th.src = lastObjectUrl;
+    th.addEventListener('click', () => { $('#outImg').src = th.src; $('#dlBtn').href = th.src; });
+    $('#gallery').prepend(th);
+    $('#galLabel').style.display = 'block';
+    $('#result').classList.add('show');
+    $('#result').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } else if (lastErr?.status === 429){
+    $('#stat').textContent = '今天的生圖免費額度用完了（圖片比文字額度緊），明天就會恢復，不會被收錢 🙂';
+  } else if (lastErr?.status === 400 || lastErr?.status === 403){
+    $('#stat').textContent = '金鑰好像失效了，回到 1️⃣ 重新測試一下金鑰（前後不要有空格喔）。';
+  } else if (lastErr?.message === 'noimage'){
+    $('#stat').textContent = 'AI 這次沒有出圖（可能描述碰到安全限制），換個說法再試一次。';
+  } else {
+    $('#stat').textContent = '這次沒生成功，再按一次通常就行；一直不行就檢查網路。';
+  }
+  btns.forEach(b => b.disabled = false);
+  $('#loading').classList.remove('show');
+}
+$('#goBtn').addEventListener('click', generate);
+$('#againBtn').addEventListener('click', generate);
+
+/* ——— 深淺色 ——— */
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme', t);
+  $('#themeBtn').textContent = t === 'dark' ? '☀️' : '🌙';
+}
+const savedTheme = localStorage.getItem('tools_theme');
+applyTheme(savedTheme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+$('#themeBtn').addEventListener('click', () => {
+  const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('tools_theme', next); applyTheme(next);
+});
+</script>
+</body>
+</html>
