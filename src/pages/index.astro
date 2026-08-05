@@ -4,11 +4,16 @@ import SeriesCard from '../components/SeriesCard.astro';
 import PostRow from '../components/PostRow.astro';
 import NewsletterBox from '../components/NewsletterBox.astro';
 import content from '../data/content.json';
+import { visibleAudiences } from '../lib/visibility.js';
 
 const base = import.meta.env.BASE_URL;
 const { text, stats, series, pillars, posts } = content;
 const featuredSeries = series.slice(0, 3);
 const recentPosts = posts.slice(0, 4);
+const seriesNonEmpty = visibleAudiences(series);
+const postsNonEmpty = visibleAudiences(posts);
+const seriesHidden = seriesNonEmpty.indexOf('public') === -1;
+const postsHidden = postsNonEmpty.indexOf('public') === -1;
 ---
 
 <Layout page="home" title="首頁" description={text.heroLead}>
@@ -24,7 +29,12 @@ const recentPosts = posts.slice(0, 4);
         </h1>
         <p class="hero-lead">{text.heroLead}</p>
         <div class="cta-row">
-          <a href={`${base}courses/`} class="cta-primary">{text.ctaPrimary}</a>
+          <a
+            href={`${base}courses/`}
+            class="cta-primary"
+            data-nonempty-for={seriesNonEmpty.join(',')}
+            hidden={seriesHidden}
+          >{text.ctaPrimary}</a>
           <a href={`${base}contact/`} class="cta-secondary">{text.ctaSecondary}</a>
         </div>
         <div class="stats-row">
@@ -55,7 +65,7 @@ const recentPosts = posts.slice(0, 4);
       </div>
       <div class="pillars">
         {pillars.map((p) => (
-          <div class="pillar-card">
+          <div class="pillar-card" data-aud={p.aud.length ? p.aud.join(',') : undefined} hidden={p.aud.length > 0}>
             <div class="pillar-title">{p.title}</div>
             <div class="pillar-desc">{p.desc}</div>
           </div>
@@ -64,8 +74,8 @@ const recentPosts = posts.slice(0, 4);
     </div>
   </section>
 
-  <!-- 課程系列 -->
-  <section class="series-section">
+  <!-- 課程系列：整區對「一般訪客」是空的就整區不出現，等身分解鎖了才由 audience.js 補回來 -->
+  <section class="series-section" data-nonempty-for={seriesNonEmpty.join(',')} hidden={seriesHidden}>
     <div class="series-inner">
       <div class="series-head" data-reveal="1">
         <div>
@@ -80,10 +90,10 @@ const recentPosts = posts.slice(0, 4);
     </div>
   </section>
 
-  <!-- 最新文章 + 電子報 -->
+  <!-- 最新文章 + 電子報：電子報訂閱本身是公開的，所以只把「最新文章」那半邊獨立出來擋 -->
   <section class="journal-section">
     <div class="journal-inner" data-reveal="1">
-      <div>
+      <div data-nonempty-for={postsNonEmpty.join(',')} hidden={postsHidden}>
         <div class="eyebrow">JOURNAL</div>
         <h2 class="section-title">最新文章</h2>
         <div class="posts-list">

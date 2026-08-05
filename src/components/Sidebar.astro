@@ -1,10 +1,19 @@
 ---
 import { NAV_ITEMS } from '../lib/nav.js';
+import { visibleAudiences } from '../lib/visibility.js';
 import content from '../data/content.json';
 
 const base = import.meta.env.BASE_URL;
 const currentPage = Astro.props.page;
 const series = content.series;
+
+/* 算出每個導覽頁面「哪些身分至少看得到一項內容」，public 代表沒解鎖任何身分的一般訪客。
+   home/about/contact 一定有基本文案內容，不會整頁空掉，不用算。 */
+const navNonEmpty = {
+  courses: visibleAudiences(series),
+  blog: visibleAudiences(content.posts),
+  tools: visibleAudiences(content.tools),
+};
 ---
 
 <aside class="sidebar" id="sidebar">
@@ -17,8 +26,17 @@ const series = content.series;
   <nav class="nav">
     {NAV_ITEMS.map((item) => {
       const active = currentPage === item.key;
+      const nonEmpty = navNonEmpty[item.key];
+      const gated = !!nonEmpty;
+      const hidden = gated && nonEmpty.indexOf('public') === -1;
       return (
-        <a href={`${base}${item.href}`} class={active ? 'active' : ''} data-nav-link>
+        <a
+          href={`${base}${item.href}`}
+          class={active ? 'active' : ''}
+          data-nav-link
+          data-nonempty-for={gated ? nonEmpty.join(',') : undefined}
+          hidden={hidden}
+        >
           <span class="dot"></span>
           <span>{item.label}</span>
         </a>
@@ -26,7 +44,7 @@ const series = content.series;
     })}
   </nav>
 
-  <div class="series-list">
+  <div class="series-list" data-nonempty-for={navNonEmpty.courses.join(',')} hidden={navNonEmpty.courses.indexOf('public') === -1}>
     <div class="series-label">SERIES</div>
     <div class="series-links">
       {series.map((s) => (
@@ -39,12 +57,12 @@ const series = content.series;
   </div>
 
   <div class="bottom">
-    <div class="identity-badge" id="identity-badge" hidden>
-      <div class="identity-label">你的專屬入口</div>
-      <div class="identity-name" id="identity-name"></div>
-      <div class="identity-hint">這個網址已為你開啟專屬內容</div>
-    </div>
-    <a href={`${base}courses/`} class="cta">{content.text.ctaPrimary}</a>
+    <a
+      href={`${base}courses/`}
+      class="cta"
+      data-nonempty-for={navNonEmpty.courses.join(',')}
+      hidden={navNonEmpty.courses.indexOf('public') === -1}
+    >{content.text.ctaPrimary}</a>
     <div class="copyright">© 2026 Learn AI with Tarshar</div>
   </div>
 </aside>
@@ -140,28 +158,6 @@ const series = content.series;
   .bottom {
     margin-top: auto;
     padding: 18px 22px 22px;
-  }
-  .identity-badge {
-    padding: 14px 16px;
-    border-radius: var(--radius-md);
-    background: rgba(31, 107, 69, .07);
-    margin-bottom: 14px;
-  }
-  .identity-label {
-    font-size: var(--fs-12);
-    letter-spacing: .16em;
-    color: var(--c-lightest);
-  }
-  .identity-name {
-    font-size: var(--fs-15);
-    color: var(--c-brand);
-    margin-top: 6px;
-  }
-  .identity-hint {
-    font-size: var(--fs-12);
-    color: var(--c-faintest);
-    margin-top: 6px;
-    line-height: 1.7;
   }
   .cta {
     display: block;
