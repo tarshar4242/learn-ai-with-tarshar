@@ -21,7 +21,7 @@ const { text, pillars, timeline } = content;
       <h2 class="section-title">我能幫你做什麼</h2>
       <div class="pillars">
         {pillars.map((p) => (
-          <div class="pillar-card">
+          <div class="pillar-card" data-aud={p.aud.length ? p.aud.join(',') : undefined} hidden={p.aud.length > 0}>
             <div class="pillar-title">{p.title}</div>
             <div class="pillar-desc">{p.desc}</div>
           </div>
@@ -33,7 +33,7 @@ const { text, pillars, timeline } = content;
       <h2 class="section-title">授課與經歷</h2>
       <div class="timeline">
         {timeline.map((i) => (
-          <div class="timeline-row">
+          <div class="timeline-row" data-aud={i.aud.length ? i.aud.join(',') : undefined} hidden={i.aud.length > 0}>
             <div class="year">{i.year}</div>
             <div>
               <div class="timeline-title">{i.title}</div>

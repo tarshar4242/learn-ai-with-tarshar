@@ -54,6 +54,12 @@ const audiencesJson = JSON.stringify(content.audiences).replace(/</g, '\\u003c')
 </html>
 
 <style is:global>
+  /* 分眾權限保護：元件自己的 display:flex/grid/block 設定，
+     在 CSS 優先權上會蓋掉瀏覽器對 [hidden] 的預設隱藏行為，
+     導致設了「誰看得到」限定的內容還是對所有人顯示。
+     這條規則用 !important 確保 hidden 一定贏，不管元件自己怎麼設 display。 */
+  [hidden] { display: none !important; }
+
   .shell {
     display: flex;
     min-height: 100vh;

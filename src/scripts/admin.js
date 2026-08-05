@@ -41,16 +41,16 @@
   } catch (e) { /* localStorage 不可用時，安靜地只用檔案內容 */ }
 
   const SECTIONS = [
-    { key: 'text', label: '文案', type: 'fields' },
-    { key: 'theme', label: '字型', type: 'theme' },
-    { key: 'audiences', label: '觀眾群', type: 'audiences' },
-    { key: 'series', label: '課程系列', type: 'list', itemLabel: '系列', fields: ['code', 'title', 'accent', 'count', 'url', 'desc'] },
-    { key: 'posts', label: '文章', type: 'list', itemLabel: '文章', fields: ['date', 'title', 'tag', 'url', 'summary'] },
-    { key: 'tools', label: '工具', type: 'list', itemLabel: '工具', fields: ['name', 'tag', 'url', 'desc'] },
-    { key: 'pillars', label: '支柱', type: 'list', itemLabel: '重點', fields: ['title', 'desc'] },
-    { key: 'timeline', label: '時間軸', type: 'list', itemLabel: '經歷', fields: ['year', 'title', 'desc'] },
-    { key: 'contactInfo', label: '聯絡資訊', type: 'list', itemLabel: '項目', fields: ['label', 'value'] },
-    { key: 'stats', label: '首頁數據', type: 'list', itemLabel: '數據', fields: ['value', 'label'] },
+    { key: 'text', label: '文案（各頁文字）', type: 'fields' },
+    { key: 'theme', label: '字型（全站）', type: 'theme' },
+    { key: 'audiences', label: '觀眾群（通行碼設定）', type: 'audiences' },
+    { key: 'series', label: '課程系列 → 課程筆記館', type: 'list', itemLabel: '系列', fields: ['code', 'title', 'accent', 'count', 'url', 'desc'] },
+    { key: 'posts', label: '文章 → 部落格文章', type: 'list', itemLabel: '文章', fields: ['date', 'title', 'tag', 'url', 'summary'] },
+    { key: 'tools', label: '工具 → 工具集', type: 'list', itemLabel: '工具', fields: ['name', 'tag', 'url', 'desc'] },
+    { key: 'pillars', label: '支柱 → 關於 Tarshar', type: 'list', itemLabel: '重點', fields: ['title', 'desc'] },
+    { key: 'timeline', label: '時間軸 → 關於 Tarshar', type: 'list', itemLabel: '經歷', fields: ['year', 'title', 'desc'] },
+    { key: 'contactInfo', label: '聯絡資訊 → 邀約授課', type: 'list', itemLabel: '項目', fields: ['label', 'value'] },
+    { key: 'stats', label: '首頁數據 → 首頁', type: 'list', itemLabel: '數據', fields: ['value', 'label'] },
   ];
 
   const FIELD_LABELS = {
