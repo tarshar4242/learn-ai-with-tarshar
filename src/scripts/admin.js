@@ -204,11 +204,11 @@
 
     if (hasAud) {
       const bulkRow = el('div', { class: 'bulk-row' });
-      bulkRow.appendChild(el('span', { text: '一鍵套用到整區（點了會覆蓋下面每一筆的設定）：' }));
+      bulkRow.appendChild(el('span', { text: '一鍵套用到整區（可以連續點多個身分，會疊加不會互相蓋掉；只有「整區設為公開」會清空重來）：' }));
       state.audiences.forEach((a) => {
-        const chip = el('button', { type: 'button', class: 'bulk-apply-all', text: '全部設成「' + a.name + '」' });
+        const chip = el('button', { type: 'button', class: 'bulk-apply-all', text: '全部加選「' + a.name + '」' });
         chip.addEventListener('click', () => {
-          items.forEach((it) => { it.aud = [a.id]; });
+          items.forEach((it) => { if (it.aud.indexOf(a.id) === -1) it.aud.push(a.id); });
           markDirty();
         });
         bulkRow.appendChild(chip);
