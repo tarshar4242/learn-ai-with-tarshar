@@ -251,8 +251,9 @@
 </div>
 
 <div class="pack-bar">
-  <span style="flex:1; min-width:220px;"><b>想帶回去自己用？</b>每張卡都有「📄 SKILL 原文」可看可複製、「⬇️ 下載」存單檔。安裝方式：把檔案放到你電腦的 <code>~/.claude/skills/技能名/SKILL.md</code>，或直接把原文貼給 Claude 請它照著做。標「Claude 內建」的不用安裝。</span>
-  <a class="zip-btn" href="skills-files/tarshar-skills-pack.zip" download>⬇️ 下載全部 43 份可安裝 SKILL（zip）</a>
+  <span style="flex:1; min-width:220px;"><b>想帶回去自己用？</b>每張卡都有「📄 SKILL 原文」可看可複製、「⬇️ 下載」存單檔。需要模板、參考資料或腳本的常用 Skill，請改下載右側的「完整原始包」。安裝方式：把技能資料夾放到你電腦的 <code>~/.claude/skills/</code> 或 <code>~/.codex/skills/</code>。標「Claude 內建」的不用安裝。</span>
+  <a class="zip-btn" href="skills-files/tarshar-skills-pack.zip" download>⬇️ 下載全部 60 份 SKILL 原文（zip）</a>
+  <a class="zip-btn" href="skills-files/tarshar-ray-common-skills-pack.zip" download>🧰 下載 Ray 常用 18 個完整原始包（zip）</a>
 </div>
 
 <main>
@@ -284,6 +285,12 @@ const SKILLS = [
   { line:'thesis', ico:'🌐', title:'論文雙語對照＋大綱摘要', name:'anthropic-skills:paper-bilingual-notes',
     desc:'丟英文論文 PDF，產出保留原版面、每段附中文注釋的對照 Word，加一份口語大綱摘要。',
     kws:['翻譯這篇論文','中英對照','雙語版本','幫我翻這篇','做成對照版','大綱摘要'] },
+  { line:'thesis', ico:'🧠', title:'論文主動研讀', name:'paper-active-reading',
+    desc:'先自己回答，再由 AI 依原文追問與回饋；不取代中英對照翻譯。',
+    kws:['陪我讀這篇論文','不要先告訴我答案','考考我','把翻譯改成互動研讀'] },
+  { line:'thesis', ico:'🗣️', title:'先說再煉口述回答', name:'say-then-refine',
+    desc:'從資料庫、題庫或筆記一次出一題；先口述，再校準成考試、面試、會議或論文能說出口的版本。',
+    kws:['先說再煉','考我','陪我口述練習','幫我把回答講得更專業','用資料庫出題'] },
   { line:'thesis', ico:'📦', title:'論文研讀包三件套', name:'anthropic-skills:paper-study-pack',
     desc:'一篇論文一次產出：研讀簡報＋段落中英對照＋Drive 連結放進簡報。',
     kws:['幫我做這篇的研讀包','論文研讀包','這篇照那一套做'] },
@@ -313,6 +320,18 @@ const SKILLS = [
   { line:'brand', ico:'🎴', title:'圖卡 Prompt 五風格工作室', name:'anthropic-skills:tarshar-card-prompt-studio',
     desc:'一個主題產 5 份 ChatGPT 生圖 prompt（莫蘭迪、手帳、復古報紙、京劇東方、工業科技）。',
     kws:['幫我做圖卡','圖卡 prompt','我要 5 種風格','生圖文案'] },
+  { line:'brand', ico:'📚', title:'教案一源多用', name:'lesson-pack',
+    desc:'把一份課程素材整理成簡報大綱、學員講義、教師手冊、AI 協作手冊與學習日誌素材。',
+    kws:['這份做成教案','我下週要教這個','整理成講義','幫我準備上課用的'] },
+  { line:'brand', ico:'🖼️', title:'社群圖卡產生器', name:'cards',
+    desc:'把文章、筆記或文字素材拆成 Learn AI with Tarshar 風格的社群圖卡。',
+    kws:['做圖卡','幫我做 IG 圖','社群圖卡','把這篇做成圖卡'] },
+  { line:'brand', ico:'📮', title:'主題式電子報', name:'newsletter',
+    desc:'把剛完成的一件事寫成主題式電子報，接續既有系列並準備上架。',
+    kws:['做成電子報','發一期電子報','把今天做的事寫成電子報','這個做一封電子報'] },
+  { line:'brand', ico:'✍️', title:'Facebook 貼文寫作', name:'write-facebook-post',
+    desc:'依提供的真實素材與指定範本，寫、改或潤飾可直接使用的繁中 Facebook 貼文。',
+    kws:['寫 FB 貼文','改成我的語氣','照這個版本寫','把素材整理成貼文'] },
   { line:'brand', ico:'🗃️', title:'教案圖卡總管', name:'tar-lesson-card-manager',
     desc:'圖卡從發想、審稿、命名、分組到上傳 Google Drive 歸檔，一條龍管理。',
     kws:['整理圖卡','圖卡歸檔','知識卡片系列'] },
@@ -403,11 +422,44 @@ const SKILLS = [
   { line:'deliver', ico:'🎬', title:'簡報 PDF 變配音影片', name:'pdf-to-video',
     desc:'丟一份簡報 PDF，每頁自動寫成講課口吻的旁白，配台灣中文語音與逐句同步字幕，組成 1080p 教學影片。超過 20 頁會先做短示範確認風格。',
     kws:['做成影片','簡報變影片','配音影片','PDF 轉影片','加字幕跟語音做成影片'] },
+  { line:'deliver', ico:'🎞️', title:'影片逐幀筆記', name:'video-frame-notes',
+    desc:'把一批課程影片做成關鍵畫面、OCR、逐字稿與 HTML／Markdown 圖文筆記；全程本機處理。',
+    kws:['逐幀擷取筆記','把影片做成筆記','影片重點截圖','把影片變成圖文筆記','影片轉逐字稿'] },
+  { line:'deliver', ico:'🎥', title:'影片規格書產生器', name:'video-spec-builder',
+    desc:'以分鏡層級釐清影片需求，產出可交給渲染流程使用的 video-spec.md。',
+    kws:['我想做一支宣傳片','產品演示影片','改分鏡','調節奏','加配音'] },
+  { line:'deliver', ico:'✨', title:'HyperFrames 影片與動態圖', name:'hyperframes',
+    desc:'影片、動畫、動態圖或互動簡報的統一入口，依素材與目標選擇合適工作流程。',
+    kws:['做一支影片','做動畫','做動態圖','改影片','渲染影片'] },
+  { line:'deliver', ico:'🎬', title:'MiniMax H3 提示詞', name:'h3-prompt-writing',
+    desc:'依 MiniMax H3 規格，把影片概念寫成 T2VA、I2VA、FL2VA、L2VA 或 Ref2VA 提示詞。',
+    kws:['幫我寫 H3 提示詞','用兩張參考圖寫 Ref2VA','MiniMax H3 prompt'] },
+  { line:'deliver', ico:'🎞️', title:'MiniMax H3 批次影片', name:'comfy-h3-video-batch',
+    desc:'透過本機 ComfyUI 規劃、排隊並收回多圖參考的 MiniMax H3 影片批次。',
+    kws:['用 H3 做三段影片','ComfyUI 自動生影片','兩張照片做 3 段 10 秒'] },
 
   // ── 制度與日常 ──
   { line:'system', ico:'🏃', title:'對話接力棒', name:'anthropic-skills:chat-checkpoint',
     desc:'對話快滿或要換新對話時，把進度、脈絡、待辦提煉成接力棒文件，新對話無縫接手。',
     kws:['存檔','快滿了','幫我做接力棒','保存進度','先這樣'] },
+  { line:'system', ico:'🧩', title:'ADHD 友善輸出模式', name:'i-have-adhd',
+    desc:'把答案與下一步放在第一行，標出進度與工作編號，降低岔題與認知負荷。',
+    kws:['ADHD模式','開 ADHD 模式','停止 ADHD 模式','一般模式'] },
+  { line:'system', ico:'📓', title:'五題學習日記', name:'journal',
+    desc:'以事實、感受、反思、改進、明日行動五題，寫下 AI 協作與工作學習紀錄。',
+    kws:['寫日記','今天結束了','學習紀錄','記錄一下今天','journal'] },
+  { line:'system', ico:'💡', title:'先想清楚再動手', name:'brainstorm',
+    desc:'用引導式問答把模糊想法變成可執行計畫，再開始實作。',
+    kws:['幫我規劃','我有個想法','用 brainstorm','先想清楚'] },
+  { line:'system', ico:'🗒️', title:'Apple 備忘錄整理', name:'mac-notes',
+    desc:'讀取、搜尋、整理與新增 Mac／iCloud 備忘錄，並盤點文字待辦。',
+    kws:['幫我看最近的備忘錄','找某則備忘錄','備忘錄還有哪些事沒做','把這段記到備忘錄'] },
+  { line:'system', ico:'🌅', title:'早安簡報', name:'morning-brief',
+    desc:'整合 Gmail、Google 日曆與 Notion 任務，產出手機好讀的每日繁中簡報。',
+    kws:['早安簡報','早安','今天有什麼','幫我看一下今天','今天要幹嘛'] },
+  { line:'system', ico:'🛠️', title:'Skill 建立與優化', name:'anthropic-skill-creator',
+    desc:'建立、修改與評估 AI Skill，包含觸發描述優化與成效測試。',
+    kws:['幫我做一個 skill','我每次都在重複做','優化這個 skill','測試 skill'] },
   { line:'system', ico:'🌅', title:'晨間簡報', name:'anthropic-skills:morning',
     desc:'把今天行程與任務彙整成一份晨間 brief，可設成每個工作日自動跑。',
     kws:['今天有什麼','晨間簡報','morning brief'] },
