@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>電子報 010｜我幫新工作開了一間「熟成局」，第一天就跟 AI 吵了兩次</title>
+<meta name="description" content="進新單位，工具越開越多，我怕的是「我記得做過，但不知道最後版本在哪」。開一間熟成局本來只是想整理資料，結果整天在做的是把判斷權從 AI 手上拿回來。這期記一句最貴的話：一條做不到的規則，比沒有規則更糟。">
+<style>
+  :root{--ink:#2b2a26;--soft:#6b6760;--line:#e7e2d8;--paper:#faf7f0;--card:#fffdf8;--clover:#5b8c5a;--clover-soft:#eef4ec;--accent:#c98a3a;--accent-soft:#f7eddb;--slate:#4a6b8a;--slate-soft:#eaf0f6;--rust:#a85a42;--rust-soft:#f8ece8;--plum:#8a5a7a;--plum-soft:#f4ecf2}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"PingFang TC","Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.85;-webkit-font-smoothing:antialiased;padding:0 0 90px}
+  .wrap{max-width:720px;margin:0 auto;padding:0 20px}
+  .band{background:linear-gradient(135deg,#5b8c5a,#4a6b8a);color:#fff;padding:34px 0 30px;margin-bottom:26px}
+  .band .wrap{display:flex;flex-direction:column;gap:10px}.kicker{font-size:.8rem;letter-spacing:2px;opacity:.95;display:flex;align-items:center;gap:8px}.kicker .dot{width:6px;height:6px;background:#fff;border-radius:50%;opacity:.8}.issue{font-size:.85rem;opacity:.95;letter-spacing:1px}.band h1{font-size:1.5rem;line-height:1.5;font-weight:800}.meta-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}.chip{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);padding:4px 12px;border-radius:999px;font-size:.82rem}
+  section{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px 22px 20px;margin-bottom:16px;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+  h2{font-size:1.12rem;color:var(--clover);font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:9px}h2 .em{font-size:1.15rem}section p{margin:0 0 12px;font-size:1rem}section p:last-child{margin-bottom:0}.lead p{font-size:1.05rem}
+  .pull{border-left:4px solid var(--clover);background:var(--clover-soft);padding:12px 16px;border-radius:0 12px 12px 0;margin:14px 0;font-weight:700}
+  .cite{border-left:4px solid var(--accent);background:var(--accent-soft);padding:12px 16px;border-radius:0 12px 12px 0;margin:12px 0}.cite p{font-style:italic;margin-bottom:6px!important}.cite .src{display:block;font-size:.85rem;color:var(--soft);font-style:normal}.cite .src a{color:var(--accent);font-weight:700;text-decoration:none}.cite .resp{margin-top:8px;font-weight:700;font-style:normal;color:var(--ink)}
+  ul.flow{list-style:none;display:flex;flex-direction:column;gap:10px;margin:6px 0 4px}ul.flow li{background:#fbf9f3;border:1px solid var(--line);border-radius:12px;padding:11px 14px;font-size:.98rem}ul.flow li .lead-emoji{font-size:1.1rem;margin-right:6px}
+  .layer{border-radius:13px;padding:14px 16px;margin:11px 0;border:1px solid var(--line)}
+  .layer .lv{display:inline-block;font-size:.74rem;font-weight:800;letter-spacing:1px;padding:2px 9px;border-radius:999px;margin-bottom:6px}
+  .layer b{display:block;font-size:1.02rem;margin-bottom:4px}
+  .layer span{display:block;font-size:.95rem;color:var(--soft);line-height:1.72}
+  .layer .verdict{display:block;margin-top:7px;font-size:.96rem;font-weight:700;color:var(--ink)}
+  .f1{background:var(--slate-soft);border-color:var(--slate)}.f1 .lv{background:var(--slate);color:#fff}.f1 b{color:var(--slate)}
+  .f2{background:var(--plum-soft);border-color:var(--plum)}.f2 .lv{background:var(--plum);color:#fff}.f2 b{color:var(--plum)}
+  .f3{background:var(--clover-soft);border-color:var(--clover)}.f3 .lv{background:var(--clover);color:#fff}.f3 b{color:var(--clover)}
+  .f4{background:var(--rust-soft);border-color:var(--rust)}.f4 .lv{background:var(--rust);color:#fff}.f4 b{color:var(--rust)}
+  .status{display:inline-block;font-size:.82rem;font-weight:800;padding:3px 10px;border-radius:999px;background:var(--accent-soft);color:#8a5a20;margin-bottom:8px}.about{font-size:.96rem;color:var(--soft)}footer{text-align:center;color:var(--soft);font-size:.82rem;margin-top:26px}.home-fab{position:fixed;left:14px;top:14px;z-index:50;background:rgba(255,255,255,.94);color:var(--clover);text-decoration:none;font-weight:800;font-size:.9rem;padding:9px 15px;border-radius:999px;box-shadow:0 8px 22px -8px rgba(60,50,30,.5);border:1px solid rgba(255,255,255,.7)}
+  /* 配置草稿小工具 */
+  .alloc{margin:10px 0 4px}
+  .alloc-row{display:grid;grid-template-columns:7.2em 1fr 3.2em;align-items:center;gap:10px;padding:8px 0;border-bottom:1px dashed var(--line)}
+  .alloc-row:last-of-type{border-bottom:none}
+  .alloc-row label{font-size:.95rem;font-weight:700}
+  .alloc-row input[type=range]{width:100%;accent-color:var(--clover)}
+  .alloc-row output{font-size:.92rem;font-weight:800;color:var(--clover);text-align:right}
+  .alloc-total{margin-top:12px;padding:11px 14px;border-radius:12px;font-weight:800;font-size:.98rem;background:var(--clover-soft);border:1px solid var(--clover);color:var(--ink)}
+  .alloc-total.over{background:var(--rust-soft);border-color:var(--rust)}
+  .happy{margin-top:14px;display:flex;flex-wrap:wrap;gap:8px}
+  .happy button{border:1px solid var(--line);background:#fbf9f3;border-radius:999px;padding:8px 16px;font-size:.92rem;font-weight:700;cursor:pointer;font-family:inherit;color:var(--ink)}
+  .happy button.on{background:var(--clover);border-color:var(--clover);color:#fff}
+  .happy-note{margin-top:10px;font-size:.94rem;color:var(--soft)}
+  @media(max-width:760px){.band{padding-top:60px}.alloc-row{grid-template-columns:6em 1fr 2.8em}}
+</style>
+</head>
+<body>
+  <a class="home-fab" href="../">🏠 回入口</a>
+  <div class="band"><div class="wrap">
+    <div class="kicker"><span class="dot"></span>主題式電子報<span class="dot"></span></div>
+    <div class="issue">電子報 010｜2026.08.18</div>
+    <h1>我幫新工作開了一間「熟成局」<br>第一天就跟 AI 吵了兩次 🫙</h1>
+    <div class="meta-row"><span class="chip">工作基地</span><span class="chip">AI 邊界</span><span class="chip">誰說了算</span></div>
+  </div></div>
+
+  <div class="wrap">
+
+    <section class="lead">
+      <h2><span class="em">🎯</span>先講結論，這句是今天最貴的一句</h2>
+      <div class="pull">一條做不到的規則，比沒有規則更糟。<br><br>因為它<strong>保證</strong>會被繞過，而繞過的時候，沒有任何指引。</div>
+      <p>我進新單位一個多月，手上同時開著 ChatGPT、Claude、Notion、雲端硬碟、程式庫。工具越開越多，我怕的其實只有一句話：<strong>「我記得做過，但不知道最後版本在哪裡。」</strong></p>
+      <p>所以我開了一間「熟成局」——一個專門放工作思考的聊天室，名字是我自己取的，取「熟成」是因為新工作的每一件事，都需要時間才會變成我真的懂的東西。</p>
+      <p>本來以為今天的任務是「整理資料要放哪」。結果一整天下來，我真正做的是另一件事：<strong>把判斷權從 AI 手上拿回來。</strong></p>
+    </section>
+
+    <section>
+      <h2><span class="em">🗂️</span>第一個發現：我七月就寫好了，只是忘了簽名</h2>
+      <p>我請 AI 幫我確認一套資料管理架構會不會跟現有的方式打架。它讀完我的知識庫，第一句話是：</p>
+      <div class="pull">「這件事你七月就做完了。」</div>
+      <p>我的知識庫裡真的有一份《資料位置共識》，七月底就寫好、兩個 AI 都覆核過，狀態停在「<strong>待我確認</strong>」——然後被我忘了三個星期。而且它比我後來看到的新建議還完整。</p>
+      <p>這件事本身就很諷刺：我怕資料散落，結果最先散落的是我自己訂的規則。它躺在正確的位置、格式正確、內容正確，只差一個我的簽名。</p>
+      <div class="pull">如果你也有那種「我好像整理過」的檔案——<strong>先去把它找出來，通常比重做一份快得多。</strong></div>
+    </section>
+
+    <section>
+      <h2><span class="em">⚖️</span>第一次吵架：它說不行，我說我做不到</h2>
+      <p>整套架構九成都對得上，唯一真正缺的一塊是「公務資料邊界」。我換了工作，規則還停在上一個我。</p>
+      <p>AI 寫出來的第一版我看了就知道不能用。條條都對，但我在機關上班，那些條文的意思等於「你什麼都別問」。我回它一句：</p>
+      <div class="pull">「但實務上難以避免，看你有多嚴格⋯⋯若一定需要時該如何處理？」</div>
+      <p>它承認第一版寫太硬，然後給了我今天最有用的一個工具——<strong>把兩件事分開看</strong>：</p>
+
+      <div class="layer f1">
+        <span class="lv">情況 A</span>
+        <b>貼進 AI 對話：可以做，但要先處理過</b>
+        <span>問完就過去了。暫時、可控、貼多少由我決定。把人名改成代稱、案號刪掉、金額改成量級，這些動作花不到一分鐘。</span>
+        <span class="verdict">👉 這一區有辦法安全地做，不需要因噎廢食。</span>
+      </div>
+
+      <div class="layer f2">
+        <span class="lv">情況 B</span>
+        <b>存進雲端、筆記軟體、程式庫：沒有彈性</b>
+        <span>這是不可逆的。版本控制會保留歷史，刪掉檔案不等於刪掉紀錄。而且放寬這條，我什麼也沒換到——我要的是討論，不是把它存起來。</span>
+        <span class="verdict">👉 真正會出事的是這一區，所以我把嚴格度全押在這裡。</span>
+      </div>
+
+      <p>分開之後，規則從「不准」變成「可以，但怎麼做」。這才是我要的東西。</p>
+    </section>
+    <section>
+      <h2><span class="em">🚦</span>我要的不是禁令，是一套當場能用的判斷</h2>
+      <p>分層之後，剩下的就好處理了。我把它收成兩個問題、三盞燈：</p>
+
+      <div class="layer f3">
+        <span class="lv">問題一</span>
+        <b>這個動作可不可逆？</b>
+        <span>問完就算的，往下走；要存下來的，直接停。</span>
+      </div>
+
+      <div class="layer f4">
+        <span class="lv">問題二</span>
+        <b>把名字、案號、金額拿掉之後，它還是「只有我們機關才有的事」嗎？</b>
+        <span>是通則，就可以問；還是本機關沒公開的事，就不能貼。</span>
+        <span class="verdict">👉 這一關是大部分人漏掉的。去識別化只解決「是誰」，沒解決「這件事公開了沒」。</span>
+      </div>
+
+      <p>差別長這樣：<strong>「我這件核銷為什麼被退？」</strong>不行，就算拿掉案號還是我們機關的具體案件；<strong>「一般核銷退件常見原因有哪些？」</strong>可以，而且答案一樣有用。</p>
+      <div class="pull">把問題<strong>往上抽一層</strong>——你要的本來就是那個判斷邏輯，不是那個案子的答案。</div>
+      <p>這套東西我今天順手做成了一份教案放上網站，公部門的朋友可以直接拿去用，裡面有法源、有去識別化的六個動作、也有我自己踩線的那一次。</p>
+    </section>
+
+    <section>
+      <h2><span class="em">✋</span>第二次吵架：它想當守門員，我把筆拿回來</h2>
+      <p>規則訂好之後，我還是覺得哪裡怪。因為 AI 開始幫我判斷「這個類別可不可以碰」，連我的論文、我的品牌線，它都要分類一下。</p>
+      <p>我停下來，打了一段話給它：</p>
+      <div class="pull">第一關是我，由我決定做不做。你們需要的是<strong>落不落地、落在哪</strong>。<br><br>我可以做去識別化，但我沒有辦法都不去測試——<strong>我在單位裡就是負責 AI 導入的人，測邊界本身就是我的工作性質。</strong>先有一堆限制，後面怎麼逐步開放？<br><br>請做到提醒就好。</div>
+      <p>它承認越線了，把整套規則改寫。分工現在只剩兩行：</p>
+      <ul>
+        <li><strong>要不要做、能不能碰、風險自負</strong> ＝ 我。我說做就做，AI 不阻擋、不說教、不重複勸。</li>
+        <li><strong>落不落地、落在哪、怎麼記錄</strong> ＝ AI。這才是它真正該把關的。</li>
+      </ul>
+      <p>我為什麼在意這件事到要吵一架？因為如果連我自己用的 AI 都先幫我畫一堵牆，那我等於在替一個我要推動的東西示範「它很難用」。</p>
+      <div class="pull">逐步開放的前提是先能測；能測的前提是<strong>判斷權在人手上，不在工具手上。</strong></div>
+    </section>
+
+    <section>
+      <h2><span class="em">🔭</span>別人怎麼看</h2>
+      <p>我後來去查了資料，發現「規則跟現實對不上」這件事，不是只有我在遇到。</p>
+
+      <div class="cite">
+        <p>「78% 使用 AI 的人是自己帶工具進辦公室的（BYOAI）——在中小型企業更普遍，達 80%。」（78% of AI users are bringing their own AI tools to work (BYOAI)—it's even more common at small and medium-sized companies (80%).）</p>
+        <span class="src">— Microsoft ＆ LinkedIn《2024 Work Trend Index Annual Report》　<a href="https://www.microsoft.com/en-us/worklab/work-trend-index/ai-at-work-is-here-now-comes-the-hard-part" target="_blank" rel="noopener">微軟官方報告頁</a></span>
+        <p class="resp">我的回應：這個數字說明一件事——<strong>員工不會等組織想清楚</strong>。他們手上有事情要做，就會找工具。所以組織能決定的其實不是「員工要不要用」，只是「他們是在明處用，還是在暗處用」。</p>
+      </div>
+
+      <div class="cite">
+        <p>「在上面沒有給出指引或許可的情況下，員工會自己想辦法，並且把 AI 的使用藏起來。」（Without guidance or clearance from the top, employees are taking things into their own hands and keeping AI use under wraps.）</p>
+        <span class="src">— 同上，Microsoft WorkLab　<a href="https://www.microsoft.com/en-us/worklab/work-trend-index/ai-at-work-is-here-now-comes-the-hard-part" target="_blank" rel="noopener">微軟官方報告頁</a></span>
+        <p class="resp">我的回應：「藏起來」這三個字才是真正的風險。一個把規則訂到沒人做得到的組織，得到的不是零使用率，是<strong>零能見度</strong>——大家照樣用，只是你不知道誰在用、用在哪、貼了什麼出去。這比公開的、有邊界的使用危險太多了。所以我今天那句「一條做不到的規則比沒有規則更糟」，不是在替自己找方便，是真的比較安全。</p>
+      </div>
+    </section>
+    <section>
+      <h2><span class="em">🫙</span>所以熟成局最後長這樣</h2>
+      <p>吵完兩次、規則訂完，熟成局才真的成形。它有六個構面：<strong>工作日誌、業務地圖、AI 協作、公文採購、策展專案、熟成筆記</strong>。</p>
+      <p>但真正讓它動起來的是一條每天跑的迴路：</p>
+      <div class="layer f1">
+        <span class="lv">17:15</span>
+        <b>熟成局整理當天工作日誌</b>
+        <span>今天發生什麼、我理解了什麼、卡在哪、下一步。寫進 Notion。</span>
+      </div>
+      <div class="layer f2">
+        <span class="lv">17:30</span>
+        <b>Claude 接手，把「通則」寫進知識庫</b>
+        <span>不是整包搬家。它要挑出「去識別化之後仍然成立」的那部分，其餘留在原地。</span>
+        <span class="verdict">👉 中間這道過濾不能省，不然就等於每天自動把公務內容存到外面。</span>
+      </div>
+      <p>設定這個排程的時候還踩到一個坑，值得講：我第一次在錯的地方建，平台直接回警告說那個環境接不到 Notion。<strong>如果沒發現，它會每天準時執行、每天什麼都沒做，而且不會有人通知我。</strong></p>
+      <div class="pull">自動化最危險的不是壞掉，是<strong>看起來沒壞</strong>。</div>
+      <p>後來改到對的地方建，順手還把不需要的權限砍掉——設定畫面預設幫我掛了四個連接器（信箱、日曆、雲端硬碟、筆記），這個任務只用得到一個。用不到卻掛著，等於白白開了三扇門。</p>
+    </section>
+
+    <section>
+      <h2><span class="em">🌱</span>今天真正學到的</h2>
+      <p>我原本以為今天是在確認一份架構建議能不能用。後來發現我真正在做的是兩件事：<strong>把七月就寫好卻忘了簽名的規則拿回來</strong>，還有<strong>在 AI 想替我畫界線的時候，把筆收回自己手上</strong>。</p>
+      <p>如果你也剛換工作、或剛開始把 AI 放進日常，我會建議三件事：</p>
+      <ul>
+        <li><strong>先找，再做。</strong>你可能已經整理過了，只是忘了。</li>
+        <li><strong>規則要訂在你做得到的地方。</strong>訂到自己都繞過去，那是自欺欺人。</li>
+        <li><strong>分清楚誰決定什麼。</strong>AI 很會提醒，但要不要做是你的事。它比你更不了解你的處境。</li>
+      </ul>
+      <div class="pull">熟成不是天生，是每天的選擇與累積。<br><br>今天我選的是：<strong>把界線畫清楚，然後在界線內放心用力。</strong></div>
+    </section>
+
+    <section>
+      <h2><span class="em">🍀</span>關於我</h2>
+      <p class="about">Tarshar，淡江 EMBA 資管研究生，AI 課程講師。在經營「🍀Learn AI with Tarshar」，記錄一個非工程師怎麼把 AI 變成日常隊友，也記錄自己怎麼在職涯轉彎的路上，一邊走一邊把想通的事情寫下來。</p>
+    </section>
+
+    <footer>📮 主題式電子報 · 電子報 010 · 🍀Learn AI with Tarshar · 2026.08.18</footer>
+
+  </div>
+</body>
+</html>
