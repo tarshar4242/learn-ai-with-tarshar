@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>這句話能不能貼給 AI？公務用 AI 的紅黃綠燈｜Tarshar 教案集</title>
+<meta name="description" content="Tarshar 教案集：公部門人員最常卡的不是不會用 AI，是不確定哪段能貼。這篇給你一套當場能用的判斷規則——兩個問題（可不可逆、去機關性）、三盞燈、去識別化六個動作，全部附法源，含事前申請、封閉式地端與最小權限三個容易漏掉的重點。">
+<style>
+:root{
+  --paper:#f4f0e8; --card:#fffdf7; --card2:#fbf8ef; --ink:#3a3528; --ink2:#766f61; --ink3:#8a8674;
+  --line:#d8d0bf; --accent:#c2620c; --accent2:#e0a377;
+  --code:#fffdf7;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.9}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(244,240,232,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:10px 20px;display:flex;align-items:center;gap:14px}
+.topbar b{font-size:15px}
+.topbar .right{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.topbar a.btn{font-size:12.5px;text-decoration:none;border:1px solid var(--line);border-radius:9px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap}
+.topbar a.btn:hover{border-color:var(--accent);color:var(--accent)}
+.hero{max-width:900px;margin:0 auto;padding:52px 22px 10px;text-align:center}
+.hero .ep{display:inline-block;font-size:12.5px;letter-spacing:3px;color:var(--accent);border:1px solid var(--accent2);border-radius:999px;padding:5px 16px;background:#fbeee2;margin-bottom:18px}
+.hero h1{font-size:clamp(24px,4.4vw,40px);font-weight:900;line-height:1.4;color:var(--ink)}
+.hero .lead{margin-top:14px;font-size:14.5px;color:var(--ink2)}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:18px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.showcase{max-width:900px;margin:26px auto 0;padding:0 22px}
+.showcase-box{background:linear-gradient(120deg,#fbeee2,#fbf8ef);border:1px solid var(--accent2);border-radius:18px;padding:24px 26px;text-align:center}
+.showcase-box .kicker{font-size:12.5px;color:var(--accent);font-weight:800;letter-spacing:1px;margin-bottom:8px}
+.showcase-box p{font-size:14px;color:var(--ink2);margin:6px 0 16px}
+.showcase-box .ctarow{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.showcase-box a.cta{display:inline-flex;align-items:center;gap:8px;text-decoration:none;background:var(--accent);color:#fff;font-weight:800;font-size:14.5px;padding:12px 22px;border-radius:999px;box-shadow:0 6px 18px rgba(194,98,12,.26)}
+.showcase-box a.cta:hover{background:#a45209}
+.showcase-box a.cta.alt{background:#fff;color:var(--accent);border:1px solid var(--accent2);box-shadow:none}
+.showcase-box a.cta.alt:hover{background:#fbeee2}
+.layout{max-width:1120px;margin:30px auto 0;padding:0 22px;display:grid;grid-template-columns:236px 1fr;gap:34px;align-items:start}
+nav.toc{position:sticky;top:66px;border:1px solid var(--line);border-radius:14px;background:var(--card);padding:16px 14px;font-size:13.5px}
+nav.toc .t{font-size:12px;letter-spacing:2px;color:var(--ink3);margin-bottom:10px}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:8px;border-left:3px solid transparent}
+nav.toc a:hover{background:#fbeee2;color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:30px 32px;margin-bottom:26px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:2px;font-weight:700;color:#fff;border-radius:999px;padding:5px 14px;margin-bottom:12px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+h2.ct{font-size:22px;font-weight:900;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:16.5px;font-weight:800;margin:24px 0 10px;padding-left:12px;border-left:4px solid var(--accent2);color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink)}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 24px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"◆";position:absolute;left:4px;font-size:9px;top:12px;color:var(--accent2)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:8px;width:23px;height:23px;border-radius:7px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:800;display:grid;place-items:center}
+.codebox{background:var(--code);border:1px solid var(--line);border-left:4px solid var(--accent2);border-radius:10px;padding:14px 16px;font-family:"Cascadia Code",Consolas,monospace;font-size:12.6px;color:#3a3528;white-space:pre-wrap;line-height:1.8;margin:12px 0;overflow-x:auto}
+.note{display:flex;gap:10px;border-radius:12px;padding:14px 16px;font-size:14px;margin:14px 0;line-height:1.85}
+.note.green{background:#fbeee2;border:1px solid var(--accent2);color:var(--accent)}
+.note.gold{background:#fdf6e7;border:1px solid #eeddb4;color:#7a5b12}
+.golden{background:linear-gradient(120deg,#fbeee2,#fbf8ef);border:1px solid var(--accent2);border-radius:14px;padding:16px 20px;margin:16px 0;text-align:center}
+.golden .q{font-size:17px;font-weight:900;color:var(--accent)}
+.golden .a{font-size:12.5px;color:var(--ink3);margin-top:6px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+@media (max-width:560px){ .grid2{grid-template-columns:1fr} }
+.mini{border:1px solid var(--line);border-radius:14px;padding:14px 16px;background:#fff}
+.mini .n{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:8px;background:var(--accent2);color:#fff;font-weight:800;font-size:12.5px;margin-bottom:6px}
+.mini h5{font-size:14px;font-weight:800;margin-bottom:4px;color:var(--ink)}
+.mini p{font-size:12.8px;color:var(--ink2)}
+.stage{display:inline-block;font-weight:800;font-size:11.5px;color:#fff;background:var(--accent);border-radius:6px;padding:2px 9px;margin-right:7px;letter-spacing:1px;vertical-align:middle}
+.action{border:1px solid var(--accent2);border-radius:16px;padding:18px 20px;background:#fff;margin:14px 0}
+.action .n{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:10px;background:var(--accent);color:#fff;font-weight:900;font-size:15px;margin-bottom:8px}
+.action h4{font-size:15.5px;font-weight:800;color:var(--ink);margin-bottom:4px}
+.action p{font-size:13.5px}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:#fbeee2;padding:9px 12px;text-align:left;font-size:12.8px;border:1px solid var(--line);color:var(--ink)}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.backhome{position:fixed;left:14px;bottom:14px;z-index:9999;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;text-decoration:none;color:#fff;background:var(--accent);border:1px solid #a45209;border-radius:999px;padding:9px 16px;box-shadow:0 4px 18px rgba(0,0,0,.18)}
+.backhome:hover{background:#a45209}
+footer{max-width:1120px;margin:20px auto 0;padding:30px 22px 70px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:2}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} }
+@media print{ .topbar,nav.toc,.backhome{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<a href="../plans/" class="backhome" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+
+<div class="topbar">
+  <b>📚 Tarshar 教案集</b>
+  <div class="right">
+    <a class="btn" href="../plans/">📚 教案集系列</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">Tarshar 教案集 · 方法教學 #20</span>
+  <h1>這句話能不能貼給 AI？<br>公務用 AI 的紅黃綠燈</h1>
+  <p class="lead">在公家機關上班，最常卡住的不是「不會用 AI」，是<b>「我不確定這段能不能貼」</b>——於是乾脆不用，或者偷偷用、心裡毛毛的。這篇不談 AI 有多神，只解決一件事：<b>給你一套當場就能判斷的規則</b>。三盞燈、兩個問題、六個動作，看完就能用。全部有法源，不是我自己想的。</p>
+  <div class="meta">
+    <span>🏛️ 公部門／機關人員</span>
+    <span>🎓 零程式基礎</span>
+    <span>⏱️ 讀完約 12 分鐘</span>
+    <span>📅 2026/08</span>
+  </div>
+</header>
+
+<div class="showcase">
+  <div class="showcase-box">
+    <div class="kicker">先給你結論，剩下的都是解釋</div>
+    <p>不確定能不能貼的時候，照這兩句話問自己就好：</p>
+    <div class="ctarow">
+      <a class="cta" href="#c2">① 這個動作可不可逆？ →</a>
+      <a class="cta alt" href="#c3">② 換成別的機關也成立嗎？ →</a>
+    </div>
+  </div>
+</div>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#c0">0. 一張圖看完整套判斷</a>
+  <a href="#c1">1. 先搞清楚誰在管你</a>
+  <a href="#c2">2. 第一個問題：可不可逆</a>
+  <a href="#c3">3. 第二個問題：去機關性</a>
+  <a href="#c4">4. 三盞燈：綠、黃、紅</a>
+  <a href="#c5">5. 去識別化的六個動作</a>
+  <a href="#c6">6. 三件你可能沒想到的事</a>
+  <a href="#c7">7. 我自己踩線的那一次</a>
+  <a href="#c8">8. 你的三步驟行動建議</a>
+</nav>
+
+<article>
+
+<section class="chapter" id="c0">
+  <span class="chip">OVERVIEW</span>
+  <h2 class="ct">0. 一張圖看完整套判斷</h2>
+  <p class="cd">整套規則只有兩個問題、三盞燈。先看全貌，後面每一章再拆開講。</p>
+  <div class="codebox">手上有一段公務內容，想丟給 AI
+        │
+        ▼
+【問題一】這個動作可不可逆？
+   貼進對話（處理完就算了）……… 可控，往下走
+   存進雲端硬碟／筆記軟體／程式庫… 不可逆，直接停
+        │
+        ▼
+【問題二】把名字、案號、金額拿掉之後，
+         它還是「只有我們機關才有的事」嗎？
+   不是，任何機關都適用 ……… 🟢 綠燈，直接用
+   是，本機關未公開的事 ……… 🟡 黃燈，先處理過再用
+        │
+        ▼
+【例外】有密等的公文、招標評選期間文件、
+       完整個資名冊 …………………… 🔴 紅燈，怎麼處理都不行</div>
+  <div class="golden"><div class="q">「會出事的不是你問了 AI 什麼，是你把什麼存了下來。」</div><div class="a">這篇教案的一句話版</div></div>
+</section>
+
+<section class="chapter" id="c1">
+  <span class="chip">BASIS</span>
+  <h2 class="ct">1. 先搞清楚誰在管你</h2>
+  <p class="cd">很多人以為有一部大法管這件事。其實管你日常操作的，是下面那一層。</p>
+
+  <h3>三層規定，越下面越貼身</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">層級</th><th>它管什麼</th><th style="width:180px">會不會告訴你「這段能不能貼」</th></tr>
+    <tr><td><b>《人工智慧基本法》</b></td><td>國家層級的原則與方向，指定各主管機關去訂細則</td><td>❌ 不會。它是框架法</td></tr>
+    <tr><td><b>行政院《使用生成式 AI 參考指引》</b></td><td>共十點，直接寫給承辦人看的操作規範</td><td>✅ 會。這是你的主要依據</td></tr>
+    <tr><td><b>你機關自己的規定</b></td><td>依參考指引另訂，通常更嚴、更具體</td><td>✅ 會，而且優先於上面兩層</td></tr>
+  </table></div>
+  <div class="note green">🚦 <b>白話總結：</b>要查法規，查到「最貼近你這一層」的那一份，不是最有名的那一份。</div>
+
+  <h3>參考指引裡跟你最有關的四點</h3>
+  <ul class="pt">
+    <li><b>第三點</b>：製作機密文書應由承辦人親自撰寫，<b>禁止使用生成式 AI</b>。所謂機密文書指文書處理手冊所定的國家機密文書及一般公務機密文書。</li>
+    <li><b>第四點（最關鍵）</b>：不得向 AI 提供涉及<b>公務應保密、個人、及未經機關同意公開</b>之資訊，也不得詢問可能涉及機密業務或個人資料的問題。</li>
+    <li><b>第五點</b>：不得以未經確認的 AI 產出直接作成行政行為，或當作公務決策的唯一依據。</li>
+    <li><b>第六點</b>：用 AI 當業務輔助工具時，<b>應適當揭露</b>。</li>
+  </ul>
+  <div class="note gold">⚠️ 注意第四點那個「<b>未經機關同意公開</b>」。它擋的不只是機密和個資——這是大多數人漏掉的一句，也是第 3 章要解的問題。</div>
+  <p style="font-size:13px;margin-top:12px">📎 參考指引全文：<a href="https://www.ey.gov.tw/Page/448DE008087A1971/40c1a925-121d-4b6b-8f40-7e9e1a5401f2" target="_blank" rel="noopener">行政院院會議案頁</a></p>
+</section>
+
+<section class="chapter" id="c2">
+  <span class="chip">STEP 1</span>
+  <h2 class="ct">2. 第一個問題：這個動作可不可逆？</h2>
+  <p class="cd">同樣一段文字，「拿去問」跟「存起來」的風險完全不同。把這兩件事分開看，整件事就清楚了。</p>
+
+  <div class="grid2">
+    <div class="mini"><span class="n">A</span><h5>貼進 AI 對話</h5><p>處理完就算了。暫時、可控、貼多少由你決定。<b>可以做，但要先處理過。</b></p></div>
+    <div class="mini"><span class="n">B</span><h5>存進雲端硬碟、筆記軟體、程式庫</h5><p><b>不可逆。</b>版本控制系統會保留歷史，刪掉檔案不等於刪掉紀錄。這一項沒有彈性。</p></div>
+  </div>
+
+  <h3>為什麼要特別強調「不可逆」</h3>
+  <p>很多人以為「我放在私人的雲端硬碟、只有我看得到」就沒事。但那仍然是外部商業服務，AI 也讀得到它，而且——最麻煩的是——<b>你以後想清乾淨會非常難</b>。對話講完就過去了，檔案會一直在。</p>
+  <div class="golden"><div class="q">「貼進對話是暫時的，存進雲端是永久的。真正會出事的是第二個。」</div><div class="a">先分清楚這兩件事，判斷會快很多</div></div>
+
+  <h3>可複製的做法</h3>
+  <ol class="st">
+    <li>要問 AI 的東西，<b>處理過再貼</b>（第 5 章有六個動作）。</li>
+    <li>AI 給你的產出，<b>帶回機關內部系統</b>再用，不要順手存在外面。</li>
+    <li>真的想長期留著的，只留<b>去識別化後的通用做法</b>，不留案件本身。</li>
+  </ol>
+</section>
+<section class="chapter" id="c3">
+  <span class="chip">STEP 2</span>
+  <h2 class="ct">3. 第二個問題：拿掉名字之後，它還是「你們機關的事」嗎？</h2>
+  <p class="cd">這一章是大部分人漏掉的那一關。去識別化只解決一半。</p>
+
+  <h3>為什麼去識別化不夠</h3>
+  <p>參考指引第四點擋的是三類：公務應保密、個人資料、<b>以及未經機關同意公開之資訊</b>。把人名案號拿掉，你解決的是前兩類。第三類還在。</p>
+  <p>換句話說：<b>就算沒有人認得出是誰、是哪個案子，只要那件事本身還沒對外公開，它仍然在禁止範圍內。</b></p>
+
+  <h3>兩關長什麼樣</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:130px">關卡</th><th>問自己</th><th style="width:200px">沒過怎麼辦</th></tr>
+    <tr><td><b>第一關<br>去識別化</b></td><td>「這段貼出去，一個完全不相干的人看到，能不能反查出是哪個案子、哪個人？」</td><td>照第 5 章六個動作處理</td></tr>
+    <tr><td><b>第二關<br>去機關性</b></td><td>「這件事換成任何一個機關，都成立嗎？」</td><td>不成立就<b>不能貼</b>。改成通則問法，或取得機關同意公開</td></tr>
+  </table></div>
+
+  <h3>同一件事，兩種問法</h3>
+  <div class="grid2">
+    <div class="mini"><span class="n">✕</span><h5>「我這件核銷為什麼被退？」</h5><p>就算拿掉案號金額，這仍然是<b>你們機關還沒公開的具體案件</b>。第二關沒過。</p></div>
+    <div class="mini"><span class="n">✓</span><h5>「一般核銷退件常見原因有哪些？」</h5><p>任何機關都適用的通則。第二關過了，可以問，而且答案一樣有用。</p></div>
+  </div>
+  <div class="note green">🌱 <b>這是最重要的技巧：</b>把問題「往上抽一層」。你要的其實是那個判斷邏輯，不是那個案子的答案。抽象化之後，AI 給你的通則你自己套回去，效果一樣好，而且完全合規。</div>
+</section>
+
+<section class="chapter" id="c4">
+  <span class="chip">RULES</span>
+  <h2 class="ct">4. 三盞燈：綠燈、黃燈、紅燈</h2>
+  <p class="cd">兩個問題問完，答案自然落在三盞燈的其中一盞。</p>
+
+  <h3>🟢 綠燈｜直接用，不用處理</h3>
+  <ul class="pt">
+    <li>已公開的法規、公開招標公告、機關官網已經發布的內容。</li>
+    <li><b>不帶具體案件的流程知識</b>：「核銷要過哪幾關、每關要準備什麼」這種。</li>
+    <li>你自己的學習筆記、業務地圖骨架、待確認問題清單。</li>
+    <li><b>通用化的問題</b>：把情境抽象到「任何機關都可能遇到」的程度再問。</li>
+  </ul>
+  <p>新人最需要的「搞懂這件事怎麼運作」，八成落在這裡。這一區完全不用綁手綁腳。</p>
+
+  <h3>🟡 黃燈｜兩關都過才貼，而且產出不落地</h3>
+  <p>不涉密、不涉個資，但屬於機關未公開事項的內容。<b>要同時過第一關（去識別化）與第二關（去機關性）</b>，處理完的產出只帶回機關內部系統，不存在外面。</p>
+
+  <h3>🔴 紅燈｜怎麼處理都不外流</h3>
+  <ul class="pt">
+    <li><b>機密文書</b>（國家機密文書、一般公務機密文書）。參考指引第三點明定製作時<b>禁止使用生成式 AI</b>——這不是去識別化的問題，是連拿來輔助撰寫都不行。</li>
+    <li><b>招標、評選、議價期間尚未公開的文件</b>。這階段有法定保密義務，外流可能是違法問題，不是內規問題。</li>
+    <li><b>完整個資名冊</b>。就算只有姓名加電話的清單也算。</li>
+    <li>契約正本條款且看得出當事人是誰。</li>
+    <li>內部簽辦意見、還沒定案的決策、人事相關。</li>
+  </ul>
+  <div class="note gold">⚠️ 紅燈這幾類要處理，官方給的唯一合法出口是<b>封閉式地端部署</b>的 AI（見第 6 章）。不是「小心一點就好」。</div>
+</section>
+
+<section class="chapter" id="c5">
+  <span class="chip">HOW-TO</span>
+  <h2 class="ct">5. 去識別化的六個動作</h2>
+  <p class="cd">第一關的實際操作。這六個動作花不到一分鐘，但省掉的麻煩很大。</p>
+
+  <div class="twrap"><table>
+    <tr><th style="width:200px">原始內容</th><th>貼之前改成</th></tr>
+    <tr><td>人名（承辦、主管、廠商窗口）</td><td>角色代稱：A 承辦、B 廠商、C 主管</td></tr>
+    <tr><td>案號、文號、標案編號、契約編號</td><td>直接刪掉，或寫成 ◯◯</td></tr>
+    <tr><td>金額</td><td>改成量級（「約百萬級」）或假數字，拿到結構後自己填回去</td></tr>
+    <tr><td>機關名、單位名、廠商名</td><td>「本單位」「甲機關」「乙廠商」</td></tr>
+    <tr><td>身分證字號、電話、地址、帳號、車號</td><td><b>直接刪除，不要用星號遮罩</b></td></tr>
+    <tr><td>日期</td><td>只保留必要的先後關係，不寫確切日期</td></tr>
+  </table></div>
+
+  <div class="note gold">⚠️ <b>為什麼個資要「刪除」而不是「遮罩」：</b>遮罩過的資料常常可以被前後文推回來。例如「王◯明，◯◯區公所」加上其他線索，可能就指認得出。刪掉最乾淨。</div>
+
+  <h3>實際操作長這樣</h3>
+  <p>你要寫一份核銷說明，把案號、金額、廠商全部換掉再貼給 AI，請它幫你把<b>結構和文字</b>做好，你拿回機關內部系統再把真實數字填回去。AI 從頭到尾沒碰過真的東西，你也沒少做成一件事。</p>
+  <div class="golden"><div class="q">「AI 要的是你的問題結構，不是你的案件資料。」</div><div class="a">想通這句，去識別化就不會覺得是在扣自己的分</div></div>
+</section>
+
+<section class="chapter" id="c6">
+  <span class="chip">EXTRA</span>
+  <h2 class="ct">6. 三件你可能沒想到的事</h2>
+  <p class="cd">這三件不在「內容能不能貼」的範圍，但一樣會絆到你。</p>
+
+  <h3>① 有些機關要「事前申請」，不是做了再說</h3>
+  <p>不少機關依參考指引另訂了自己的管理程序書，其中可能規定：<b>使用生成式 AI 協助執行業務，要先填申請表、經主管核准後才能開始</b>，申請表還要由資安窗口保管數年並列入交接。</p>
+  <p>這是<b>前置門檻</b>，不是內容限制。所以第一件該做的事其實不是學怎麼問 AI，是去問你們的資安窗口：<b>「本機關對生成式 AI 有沒有使用規範？有沒有核准可以用的工具？」</b></p>
+
+  <h3>② 「封閉式地端」的定義比你想的嚴格</h3>
+  <p>規定裡允許處理機密等級內容的唯一路徑是封閉式地端部署，而它的定義通常是：<b>不與外部網路連線的地端環境</b>；或者租用環境但必須座落國內、虛擬主機專屬使用、以 VPN 或專線連入。</p>
+  <div class="note green">🚦 <b>白話：</b>ChatGPT、Claude、Gemini、Notion、Google Drive <b>全都不符合</b>。所以「用地端處理機密」這條路，除非你們機關真的有建，否則你現在沒有。</div>
+
+  <h3>③ 自動化要用「最小權限」，不要一次全開</h3>
+  <p>如果你開始設定自動化（例如每天固定跑一次的排程），設定畫面通常會<b>預設把所有連接器都掛上</b>——信箱、日曆、雲端硬碟一次全給。而且它會提醒你：執行期間 AI 可以使用這些工具，<b>包含寫入，而且不會再問你</b>。</p>
+  <p>只留這個任務真正需要的那一個，其他全部移除。這叫最小權限，跟你申請系統帳號只申請必要權限是同一件事。</p>
+  <div class="note gold">⚠️ 預設值通常是為了「方便」，不是為了「安全」。要主動砍。</div>
+</section>
+<section class="chapter" id="c7">
+  <span class="chip">REAL CASE</span>
+  <h2 class="ct">7. 我自己踩線的那一次</h2>
+  <p class="cd">這一段是真的發生過的事，不是舉例。我留著它，因為它比任何條文都有說服力。</p>
+
+  <h3>發生什麼事</h3>
+  <p>我為了讓 AI 讀懂規則、給我正確的判斷，把一份標著「內部使用」的規定文件<b>直接整份上傳</b>給它。</p>
+  <p>動機完全正當——我就是想把事情做對。但那個動作本身，就落在「不得提供未經同意公開之資訊給生成式 AI」這條裡面。</p>
+
+  <h3>我學到什麼</h3>
+  <ul class="pt">
+    <li><b>動機正當跟動作合規是兩回事。</b>我不是想偷懶，我是想做對，但規定不看動機。</li>
+    <li><b>真正的閘門在我打字的那一刻</b>，不在後面任何一道流程。檔案一旦送出去，後面再怎麼過濾也只是控制「要不要存下來」，救不回已經送出去的。</li>
+    <li>最容易跨線的時刻，往往是<b>你最認真的時候</b>——為了給 AI 完整脈絡、為了讓它答得準，於是把原檔整份丟過去。</li>
+  </ul>
+
+  <h3>可複製的做法</h3>
+  <ol class="st">
+    <li>要讓 AI 理解一份內部文件時，<b>把重點打字轉述</b>，不要傳原檔。</li>
+    <li>轉述時順手做去識別化，反正你本來就要挑重點。</li>
+    <li>如果 AI 一定要看到完整結構才能幫你，那代表這件事應該在<b>機關核准的環境</b>做，不是在外面。</li>
+  </ol>
+  <div class="golden"><div class="q">「最容易越線的不是想偷懶的人，是想把事情做對的人。」</div><div class="a">因為做對需要脈絡，而給脈絡最快的方式就是把原檔丟過去</div></div>
+</section>
+
+<section class="chapter" id="c8">
+  <span class="chip">ACTION</span>
+  <h2 class="ct">8. 你的三步驟行動建議</h2>
+  <p class="cd">不用等到主管交辦，這三件今天就能做。</p>
+
+  <div class="action"><span class="n">1</span><h4>今天：去問一句話</h4><p>找你們的 MIS 或資安窗口問：<b>「本機關對生成式 AI 有沒有使用規範？有沒有核准可以用的工具？要不要事前申請？」</b>一句話，決定你後面所有事情的做法。得到的答案優先於這篇教案的所有內容。</p></div>
+
+  <div class="action"><span class="n">2</span><h4>這週：練習把問題「往上抽一層」</h4><p>挑一件你這週真的卡住的公務，先用第 3 章的方式改寫成通則問法（「一般來說⋯⋯」「常見的做法有哪些」），再拿去問 AI。你會發現拿到的答案一樣有用，而且完全不用擔心。</p></div>
+
+  <div class="action"><span class="n">3</span><h4>建立習慣：貼之前先過兩句話</h4><p>把這兩句話變成反射動作——<b>「這個動作可不可逆？」</b>和<b>「這件事換成任何一個機關都成立嗎？」</b>兩句都過了再按送出。花三秒鐘，省掉的是之後說不清楚的麻煩。</p></div>
+
+  <div class="note green">🌱 <b>最後一句真心話：</b>這套規則不是要讓你不敢用 AI，剛好相反——<b>把界線畫清楚，你才敢放心地在界線內用力用。</b>最怕的是不知道線在哪，於是整天提心吊膽，或者乾脆不用，白白錯過。</div>
+
+  <div class="note gold">⚠️ <b>免責說明：</b>這是操作通則，不是法律意見。你機關自己的規定優先於本文所有內容；涉及個資法、國家機密保護法、政府採購法保密義務的具體個案，請走機關內部法制、資安或政風管道確認。</div>
+</section>
+
+</article>
+</div>
+
+<footer>
+  方法教案 #20・這句話能不能貼給 AI？公務用 AI 的紅黃綠燈・Tarshar 教案集・2026/08<br>
+  🍀 Learn AI with Tarshar｜把複雜的事變成一般人做得到的事
+</footer>
+
+</body>
+</html>
