@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP49 課堂筆記｜在 AI 時代下，GitHub 角色定位？</title>
+<meta name="description" content="晨學講堂 EP49 課堂筆記：AI 小白也能上手 GitHub——認識 Git 與 GitHub、建立帳號 2FA、README 判讀、五指標評估、搜尋與 Awesome、ZIP/Clone/Fork、建立 Repository 與 Branch/PR，加上 ChatGPT GitHub 連接器、AI Agent 安裝 Frontend Slides、SPSS MCP 搜尋、安全掃描工具與安裝前檢核五段真實示範。逐幀（每15秒184格）＋逐字稿＋20頁簡報原圖整理。">
+<style>
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#c2620c; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px;max-height:calc(100vh - 90px);overflow-y:auto}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:7px;border-left:none;font-size:13px}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.code{position:relative;background:var(--code);border:1px solid var(--line2);border-radius:10px;padding:13px 15px;margin:10px 0;font-size:13px;line-height:1.75;color:var(--ink);white-space:pre-wrap;font-family:"Cascadia Code",Consolas,monospace;overflow-x:auto}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static;max-height:none} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#e6b98a" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP49 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="ep49-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 晨學講堂 · EP49</span>
+  <h1>在 AI 時代下，<span>GitHub</span> 角色定位？</h1>
+  <p class="lead">EP49 帶完全不會寫程式的你上手 <b>GitHub</b>——它是<b>程式專用的 Google Drive＋版本履歷＋社群網站</b>，更是 AI 時代的<b>工具寶庫</b>。這一集從<b>認識 Git 與 GitHub、建立帳號、判讀 README</b>，一路走到 <b>ZIP／Clone／Fork、建立 Repository 與 Branch/PR 協作</b>，中間穿插五段真實示範：<b>ChatGPT GitHub 連接器推薦簡報 Skill、AI Agent 安裝 Frontend Slides、搜尋 SPSS 的 MCP、安全掃描工具與安裝前檢核、Explore／Trending／HelloGitHub 挖寶</b>。本頁依<b>錄影逐幀（每 15 秒一格，共 184 格）＋全程逐字稿＋20 頁簡報原圖</b>整理，重點段落附影片時間戳。</p>
+  <div class="meta">
+    <span>📅 2026/08/14（五）20:30 直播</span>
+    <span>🗂️ 教材：21 頁簡報＋46 分鐘錄影</span>
+    <span>🐙 主題：AI × GitHub</span>
+    <span>🔰 小白友善</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-overview">1. 一張圖看懂本集</a>
+  <a href="#sec-opening">2. 開場：AI 時代的 GitHub</a>
+  <a href="#sec-what">3. GitHub 到底是什麼</a>
+  <a href="#sec-git">4. Git 不等於 GitHub</a>
+  <a href="#sec-account">5. 建立帳號與 2FA</a>
+  <a href="#sec-repo">6. Repository 是什麼</a>
+  <a href="#sec-demo1">7. 示範一：ChatGPT × GitHub</a>
+  <a href="#sec-readme">8. README 與專案頁面</a>
+  <a href="#sec-judge">9. 判斷專案值不值得用</a>
+  <a href="#sec-search">10. 搜尋入門與進階</a>
+  <a href="#sec-demo2">11. 示範二：AI 裝 Skill 做簡報</a>
+  <a href="#sec-explore">12. 探索、Trending 與 HelloGitHub</a>
+  <a href="#sec-demo3">13. 示範三：README 丟給 AI</a>
+  <a href="#sec-get">14. 取得專案：ZIP／Clone／Fork</a>
+  <a href="#sec-create">15. 建立 Repo 到協作</a>
+  <a href="#sec-security">16. 安全守則與掃描工具</a>
+  <a href="#sec-recap">17. 完成第一次練習</a>
+  <a href="#sec-qa">18. Q&amp;A 問答時間</a>
+  <a href="#sec-check">19. 課後自我檢核表</a>
+  <a href="#sec-src">20. 資料來源與整理說明</a>
+</nav>
+
+<article>
+
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--amber))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>「EP49_在AI時代下，GitHub角色定位?」</td></tr>
+    <tr><th>頻道</th><td>生成式 AI 應用電台・晨學講堂</td></tr>
+    <tr><th>直播日期</th><td>2026/08/14（五）20:30–21:30</td></tr>
+    <tr><th>教材</th><td>官方課程簡報 <b>21 頁</b>（封面＋19 張內容頁，頁碼標示 01–20，其中 07 頁未收錄於簡報檔）＋<b>46 分鐘</b>課堂錄影</td></tr>
+    <tr><th>一句話先懂</th><td>GitHub＝<b>程式專用的 Google Drive＋版本履歷＋社群網站</b>。在 AI 時代，它更是 <b>Skill、MCP、開源電子書與掃描工具的寶庫</b>——不會寫程式，也能從「閱讀、下載與收藏」開始。</td></tr>
+  </table></div>
+  <h3>教材原檔（Drive 內嵌預覽）</h3>
+  <div class="shotgrid">
+    <figure class="shot" style="margin:0">
+      <iframe src="https://drive.google.com/file/d/1fQrHyCf3pnhv6FTKihw8YyOdBRHn1UP8/preview" style="width:100%;aspect-ratio:16/10;border:0;display:block" allow="autoplay" loading="lazy"></iframe>
+      <figcaption>📑 課程簡報（可直接翻頁）</figcaption>
+    </figure>
+    <figure class="shot" style="margin:0">
+      <iframe src="https://drive.google.com/file/d/1H9AK9v3EtSunI-0mNm8gCHNY_2gr-5WX/preview" style="width:100%;aspect-ratio:16/10;border:0;display:block" allow="autoplay" loading="lazy"></iframe>
+      <figcaption>🎬 課堂錄影回放（46:05）</figcaption>
+    </figure>
+  </div>
+  <figure class="shot">
+    <img src="ep49-img/slide00.jpg" alt="EP49 課程封面：在AI時代下，GitHub角色定位？" loading="lazy">
+    <figcaption>簡報封面｜像素風 RPG 世界觀：LV.49、AI × GitHub 開源冒險，右側四個任務徽章——AI 助手時代、開發者生產力、社群協作中心、開源未來戰場；下方五個關卡：主題探討、實戰案例、工具推薦、開源趨勢、互動抽獎。</figcaption>
+  </figure>
+  <div class="note blue"><span>💡 本頁依「<b>逐幀筆記</b>」流程製作：錄影每 15 秒抽 1 格、共 <b>184 格全部親眼判讀</b>，搭配 faster-whisper 全程逐字稿與 20 張簡報原圖交叉整理；示範段落均附影片時間戳 <code>[mm:ss]</code>，可對照 Drive 錄影回放。</span></div>
+</section>
+
+<section class="chapter" id="sec-overview">
+  <span class="chip" style="background:linear-gradient(90deg,#3b6bb0,#0d8f80)">OVERVIEW</span>
+  <h2 class="ct">1. 一張圖看懂本集</h2>
+  <p class="cd">整堂課只做一件事：讓 AI 小白「<b>先會找、會看、會安全使用，再慢慢學會開發</b>」。觀念（簡報）與實戰（五段示範）交錯進行。</p>
+  <div class="svgwrap">
+    <svg viewBox="0 0 900 430" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,'PingFang TC','Noto Sans TC',sans-serif">
+      <rect width="900" height="430" fill="#fff"/>
+      <text x="450" y="34" text-anchor="middle" font-size="19" font-weight="700" fill="#191919">EP49 學習主線：AI 小白也能上手 GitHub</text>
+      <g>
+        <rect x="30" y="60" width="200" height="86" rx="12" fill="#EEF4FB" stroke="#3b6bb0" stroke-width="1.5"/>
+        <text x="130" y="88" text-anchor="middle" font-size="15" font-weight="700" fill="#1d5e8f">🧭 觀念地基</text>
+        <text x="130" y="110" text-anchor="middle" font-size="12" fill="#38546c">GitHub 四種角色</text>
+        <text x="130" y="128" text-anchor="middle" font-size="12" fill="#38546c">Git ≠ GitHub・Repo・2FA</text>
+        <rect x="255" y="60" width="200" height="86" rx="12" fill="#EDF7F1" stroke="#3f8560" stroke-width="1.5"/>
+        <text x="355" y="88" text-anchor="middle" font-size="15" font-weight="700" fill="#166a4c">🔍 會找・會看</text>
+        <text x="355" y="110" text-anchor="middle" font-size="12" fill="#2e5f47">搜尋＋進階條件＋Awesome</text>
+        <text x="355" y="128" text-anchor="middle" font-size="12" fill="#2e5f47">README・五指標判讀</text>
+        <rect x="480" y="60" width="200" height="86" rx="12" fill="#FBF7EC" stroke="#9c7b23" stroke-width="1.5"/>
+        <text x="580" y="88" text-anchor="middle" font-size="15" font-weight="700" fill="#7a5b12">🛡️ 會安全使用</text>
+        <text x="580" y="110" text-anchor="middle" font-size="12" fill="#6c5620">不上傳機密・掃描工具</text>
+        <text x="580" y="128" text-anchor="middle" font-size="12" fill="#6c5620">安裝前檢核 SOP</text>
+        <rect x="705" y="60" width="165" height="86" rx="12" fill="#F4F0FB" stroke="#5645D4" stroke-width="1.5"/>
+        <text x="787" y="88" text-anchor="middle" font-size="15" font-weight="700" fill="#4636ad">🛠️ 會動手</text>
+        <text x="787" y="110" text-anchor="middle" font-size="12" fill="#4a4180">ZIP/Clone/Fork</text>
+        <text x="787" y="128" text-anchor="middle" font-size="12" fill="#4a4180">Repo・Commit・PR</text>
+        <path d="M230 103 h20" stroke="#9B9B9B" stroke-width="2" marker-end="url(#ar)"/>
+        <path d="M455 103 h20" stroke="#9B9B9B" stroke-width="2" marker-end="url(#ar)"/>
+        <path d="M680 103 h20" stroke="#9B9B9B" stroke-width="2" marker-end="url(#ar)"/>
+      </g>
+      <text x="450" y="192" text-anchor="middle" font-size="15" font-weight="700" fill="#c2620c">⚡ 課堂五段真實示範（AI × GitHub）</text>
+      <g font-size="12">
+        <rect x="30" y="210" width="160" height="74" rx="10" fill="#fff" stroke="#c2620c" stroke-width="1.4"/>
+        <text x="110" y="234" text-anchor="middle" font-weight="700" fill="#c2620c">① 連接器推薦</text>
+        <text x="110" y="252" text-anchor="middle" fill="#5f5f5f">ChatGPT @GitHub</text>
+        <text x="110" y="268" text-anchor="middle" fill="#5f5f5f">找最多星的簡報 Skill</text>
+        <rect x="205" y="210" width="160" height="74" rx="10" fill="#fff" stroke="#c2620c" stroke-width="1.4"/>
+        <text x="285" y="234" text-anchor="middle" font-weight="700" fill="#c2620c">② Agent 裝 Skill</text>
+        <text x="285" y="252" text-anchor="middle" fill="#5f5f5f">Frontend Slides→Codex</text>
+        <text x="285" y="268" text-anchor="middle" fill="#5f5f5f">做出 6 頁示範簡報</text>
+        <rect x="380" y="210" width="160" height="74" rx="10" fill="#fff" stroke="#c2620c" stroke-width="1.4"/>
+        <text x="460" y="234" text-anchor="middle" font-weight="700" fill="#c2620c">③ 找 SPSS 工具</text>
+        <text x="460" y="252" text-anchor="middle" fill="#5f5f5f">近 3 年 MCP／Skill</text>
+        <text x="460" y="268" text-anchor="middle" fill="#5f5f5f">比較表＋星等推薦</text>
+        <rect x="555" y="210" width="160" height="74" rx="10" fill="#fff" stroke="#c2620c" stroke-width="1.4"/>
+        <text x="635" y="234" text-anchor="middle" font-weight="700" fill="#c2620c">④ 安全檢核</text>
+        <text x="635" y="252" text-anchor="middle" fill="#5f5f5f">掃描工具比較表</text>
+        <text x="635" y="268" text-anchor="middle" fill="#5f5f5f">安裝前檢核自訂指令</text>
+        <rect x="730" y="210" width="140" height="74" rx="10" fill="#fff" stroke="#c2620c" stroke-width="1.4"/>
+        <text x="800" y="234" text-anchor="middle" font-weight="700" fill="#c2620c">⑤ 逛寶庫</text>
+        <text x="800" y="252" text-anchor="middle" fill="#5f5f5f">Explore・Trending</text>
+        <text x="800" y="268" text-anchor="middle" fill="#5f5f5f">HelloGitHub</text>
+      </g>
+      <rect x="150" y="320" width="600" height="72" rx="12" fill="#EDF7F1" stroke="#3f8560" stroke-width="1.5"/>
+      <text x="450" y="350" text-anchor="middle" font-size="15" font-weight="700" fill="#166a4c">🏁 課後行動：註冊＋2FA → 搜尋 → 讀 README → Star → hello-world</text>
+      <text x="450" y="374" text-anchor="middle" font-size="13" fill="#2e5f47">→ 修改 README 完成一次 Commit → Branch、PR、Merge ＝ GitHub 新手達成 🏆</text>
+      <defs><marker id="ar" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#9B9B9B"/></marker></defs>
+    </svg>
+    <div class="cap">全景圖｜上排是四個能力階段（觀念 → 會找會看 → 會安全 → 會動手），中排是課堂五段 AI × GitHub 真實示範，下排是簡報 20/20 的課後七步驟練習。</div>
+  </div>
+  <h3>這堂課會學到什麼（簡報 01–02/20）</h3>
+  <div class="shotgrid">
+    <figure class="shot"><img src="ep49-img/slide01.jpg" alt="AI 小白也能上手 GitHub" loading="lazy"><figcaption>簡報 01/20｜AI 小白也能上手 GitHub——把 GitHub 變成你的 AI 工具寶庫；不會寫程式，也能從閱讀、下載與收藏開始。</figcaption></figure>
+    <figure class="shot"><img src="ep49-img/slide02.jpg" alt="這堂課會學到什麼" loading="lazy"><figcaption>簡報 02/20｜五步路徑：① 認識 Git 與 GitHub → ② 尋找／搜尋 AI 資源 → ③ 判讀 README 與項目狀態 → ④ 使用下載、Clone、Fork → ⑤ 建立 Repository 與協作。</figcaption></figure>
+  </div>
+  <div class="golden"><div class="q">「先學會使用，再逐步理解技術名詞。」</div><div class="a">—— 簡報 02/20 金句</div></div>
+</section>
+
+<section class="chapter" id="sec-opening">
+  <span class="chip" style="background:linear-gradient(90deg,#2f7d92,#3b6bb0)">OPENING</span>
+  <h2 class="ct">2. 開場：AI 時代的 GitHub 角色定位 <small style="font-weight:400;color:var(--ink3)">[00:00–04:45]</small></h2>
+  <p class="cd">老師開宗明義：有了 AI 之後，GitHub 反而會讓「非工程師」更熟悉它。</p>
+  <ul class="pt">
+    <li><b>[00:00]</b> 工程師本來就熟 GitHub；但最近三年才開始廣泛用 AI 的一般人可能陌生——有了 AI 之後，這個「非常好的開源平台」上的功能、課程、資料都值得挖掘。</li>
+    <li><b>[01:00]</b> 可以把 GitHub 想成兩個框架：一是<b>工程師的社群平台</b>——就像學藝術要有作品集，你的 vibe coding 作品放上 GitHub 就是你的作品集；二是<b>開源資源庫</b>——上面有非常多 Skill、MCP、寫好的程式可以看可以用。</li>
+    <li><b>[01:41]</b> ⚠️ 第一個提醒就是安全：把作品放上去時，小心不要把 <b>API Key、帳號</b>一起串上去。</li>
+    <li><b>[02:14]</b> 開源「有利也有弊」：有些人（惡意或不經意）會把帶病毒、會挖你資料的程式放上 GitHub，大家覺得好用就下載，<b>不知不覺資料就被抓走</b>——所以 GitHub 上也有「掃毒式」的掃描工具，可以檢測程式碼裡有沒有惡意指令、有沒有讀你帳號密碼、抓你 API 的隱藏程式碼（本集後段會示範）。</li>
+    <li><b>[03:14]</b> 介面雖是英文，其實都有繁中方案（翻譯外掛），等等會教；時間夠的話也會講「做好的小東西怎麼上傳」。</li>
+    <li><b>[04:01]</b> 現在可以直接請 AI Agent 下載安裝 GitHub 上的資源：<b>Codex（Work）、ChatGPT（Work）都可以直接連</b>；Gemini 的 Spark 目前要繞一下網頁、還沒把 GitHub 深度整合進 Google 家族。</li>
+  </ul>
+  <div class="note steel"><span>🖥️ 畫面實錄：老師用 Google Meet 分享螢幕（Beethoven Dr.），[00:30] 打開 PowerPoint 課程簡報，工具列上就掛著 Slido、ChatGPT、Claude 外掛。</span></div>
+</section>
+
+<section class="chapter" id="sec-what">
+  <span class="chip" style="background:linear-gradient(90deg,#3b6bb0,#5645D4)">CHAPTER 03</span>
+  <h2 class="ct">3. GitHub 到底是什麼 <small style="font-weight:400;color:var(--ink3)">[01:15–02:00]</small></h2>
+  <p class="cd">不只是工程師存放程式碼的地方。（簡報 03/20）</p>
+  <figure class="shot"><img src="ep49-img/slide03.jpg" alt="GitHub 到底是什麼" loading="lazy"><figcaption>簡報 03/20｜GitHub 的四種角色：雲端空間、版本履歷、協作平台、作品名片。</figcaption></figure>
+  <div class="twrap"><table>
+    <tr><th style="width:120px">角色</th><th>說明</th></tr>
+    <tr><td><b>☁️ 雲端空間</b></td><td>存放程式、文件與圖片</td></tr>
+    <tr><td><b>🕘 版本履歷</b></td><td>保留每一次修改紀錄</td></tr>
+    <tr><td><b>👥 協作平台</b></td><td>多人討論與修改項目</td></tr>
+    <tr><td><b>🪪 作品名片</b></td><td>展示專案與個人能力——面試、找工作時的作品集</td></tr>
+  </table></div>
+  <div class="golden"><div class="q">「GitHub＝程式專用的 Google Drive ＋ 版本履歷 ＋ 社群網站。」</div><div class="a">—— 簡報 03/20 金句</div></div>
+  <div class="note blue"><span>💡 課堂補充 [09:15]：GitHub 官網首頁的標語正好回答本集主題——「<b>The future of building happens together</b>：Tools and trends evolve, but collaboration endures. With GitHub, developers, <b>agents</b>, and code come together on one platform.」AI 時代的 GitHub，把「agents」直接寫進了自己的定位。</span></div>
+</section>
+
+<section class="chapter" id="sec-git">
+  <span class="chip" style="background:linear-gradient(90deg,#0d8f80,#3f8560)">CHAPTER 04</span>
+  <h2 class="ct">4. Git 不等於 GitHub <small style="font-weight:400;color:var(--ink3)">[04:45–06:20]</small></h2>
+  <p class="cd">一個管版本，一個管雲端與協作。（簡報 04/20）</p>
+  <figure class="shot"><img src="ep49-img/slide04.jpg" alt="Git 不等於 GitHub" loading="lazy"><figcaption>簡報 04/20｜Git＝電腦上的版本管理；GitHub＝線上託管與協作平台。</figcaption></figure>
+  <div class="twrap"><table>
+    <tr><th></th><th>Git</th><th>GitHub</th></tr>
+    <tr><td><b>定位</b></td><td>電腦上的版本管理</td><td>線上託管與協作平台</td></tr>
+    <tr><td><b>能做什麼</b></td><td>記錄檔案修改・建立版本檢查點・可以回到以前的版本</td><td>把項目放到雲端・與其他人共同修改・公開展示與分享</td></tr>
+  </table></div>
+  <h3>老師的「遊戲存檔」比喻 [05:00–06:20]</h3>
+  <p>之前直播有同學問「vibe coding 想儲存版本怎麼辦」——Git 就是那個存檔工具。老師直接在簡報上手繪：</p>
+  <ol class="st">
+    <li>你 vibe coding 做出「出國匯率轉換表」做到 A 線路這裡，就設一個<b>存檔點</b>（老師在畫面上圈出 Git 卡片、畫出分岔線）。</li>
+    <li>之後不管往哪個方向繼續改，都可以<b>回到這個存檔點</b>——就像打遊戲存檔。</li>
+    <li>想把存檔放上雲端分享給別人，才輪到 GitHub。後面的專有名詞（Commit、分支給別人改）都是從這個概念長出來的。</li>
+  </ol>
+  <div class="svgwrap">
+    <svg viewBox="0 0 900 250" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,'PingFang TC','Noto Sans TC',sans-serif">
+      <rect width="900" height="250" fill="#fff"/>
+      <text x="450" y="32" text-anchor="middle" font-size="17" font-weight="700" fill="#191919">Git 的「遊戲存檔」概念（課堂手繪版重繪）</text>
+      <line x1="80" y1="130" x2="500" y2="130" stroke="#3f8560" stroke-width="3"/>
+      <circle cx="140" cy="130" r="9" fill="#3f8560"/>
+      <circle cx="260" cy="130" r="9" fill="#3f8560"/>
+      <circle cx="380" cy="130" r="12" fill="#c2620c" stroke="#fff" stroke-width="2.5"/>
+      <text x="140" y="162" text-anchor="middle" font-size="12" fill="#5f5f5f">開工</text>
+      <text x="260" y="162" text-anchor="middle" font-size="12" fill="#5f5f5f">做出雛形</text>
+      <text x="380" y="166" text-anchor="middle" font-size="12.5" font-weight="700" fill="#c2620c">存檔點（Commit）</text>
+      <text x="380" y="184" text-anchor="middle" font-size="11.5" fill="#8a6b3a">匯率轉換表完成 A 線路</text>
+      <path d="M392 122 C 470 70, 560 70, 640 88" stroke="#3b6bb0" stroke-width="2.5" fill="none" marker-end="url(#ag)"/>
+      <path d="M392 138 C 470 190, 560 190, 640 172" stroke="#5645D4" stroke-width="2.5" fill="none" marker-end="url(#ag)"/>
+      <text x="700" y="86" font-size="12.5" fill="#3b6bb0">改法一：繼續往這方向做</text>
+      <text x="700" y="176" font-size="12.5" fill="#5645D4">改法二：換一條路試試</text>
+      <text x="660" y="130" font-size="12" fill="#9B9B9B">↩ 兩條路隨時都能退回存檔點</text>
+      <defs><marker id="ag" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#9B9B9B"/></marker></defs>
+    </svg>
+    <div class="cap">概念圖｜[05:30–05:52] 老師在簡報上用綠筆圈出 Git、手繪存檔點與分岔線講解；此圖依課堂講解重繪。</div>
+  </div>
+  <div class="note green"><span>💡 初學者可以先用 GitHub 網頁，不必立刻學指令列。</span></div>
+</section>
+
+<section class="chapter" id="sec-account">
+  <span class="chip" style="background:linear-gradient(90deg,#b25269,#bf6a1e)">CHAPTER 05</span>
+  <h2 class="ct">5. 第一步：建立帳號＋2FA</h2>
+  <p class="cd">先把帳號安全設定做好。（簡報 05/20）</p>
+  <figure class="shot"><img src="ep49-img/slide05.jpg" alt="第一步：建立帳號" loading="lazy"><figcaption>簡報 05/20｜五步驟註冊＋「一定要做」三件事。</figcaption></figure>
+  <ol class="st">
+    <li>前往 github.com</li>
+    <li>選擇 Sign up</li>
+    <li>輸入 Email 與帳號名稱</li>
+    <li>驗證電子郵件</li>
+    <li>設定 2FA（兩階段驗證）</li>
+  </ol>
+  <div class="note gold"><span>⚠️ <b>一定要做</b>：使用獨立且高強度密碼｜開啟 2FA｜妥善保存 Recovery Codes。使用常用信箱註冊，並立即開啟兩階段驗證。</span></div>
+  <div class="note blue"><span>💡 課堂補充 [08:59–10:10]：用 Google 帳號綁定登入即可；<b>沒登入也可以搜尋、瀏覽</b>（老師現場示範未登入畫面照樣能找東西），但登入後才能 Star、Fork、接收更新提醒，也才能與 ChatGPT 的 GitHub 連接器綁在一起，搜尋與應用都更方便。</span></div>
+</section>
+
+<section class="chapter" id="sec-repo">
+  <span class="chip" style="background:linear-gradient(90deg,#5645D4,#3b6bb0)">CHAPTER 06</span>
+  <h2 class="ct">6. Repository 是什麼</h2>
+  <p class="cd">一個專案，就是一個數位倉庫。（簡報 06/20）</p>
+  <figure class="shot"><img src="ep49-img/slide06.jpg" alt="Repository 是什麼" loading="lazy"><figcaption>簡報 06/20｜倉庫四組成：程式與檔案、README、版本紀錄、協作功能；Public 任何人可見、Private 僅授權者。</figcaption></figure>
+  <div class="twrap"><table>
+    <tr><th style="width:130px">倉庫裡有什麼</th><th>內容</th></tr>
+    <tr><td><b>① 程式與檔案</b></td><td>Python、HTML、圖片、資料</td></tr>
+    <tr><td><b>② README</b></td><td>專案使用說明書</td></tr>
+    <tr><td><b>③ 版本紀錄</b></td><td>每次 Commit 的內容</td></tr>
+    <tr><td><b>④ 協作功能</b></td><td>Issues、PR、Discussions</td></tr>
+  </table></div>
+  <div class="note steel"><span>🔒 <b>Public</b>｜任何人都能看見　·　<b>Private</b>｜只有授權者可以進入。簡報 07/20 未收錄於檔案中，介面導覽改以第 8 節的真實專案頁示範。</span></div>
+</section>
+
+<section class="chapter" id="sec-demo1">
+  <span class="chip" style="background:linear-gradient(90deg,#c2620c,#b25269)">DEMO 1</span>
+  <h2 class="ct">7. 示範一：ChatGPT 的 GitHub 連接器 <small style="font-weight:400;color:var(--ink3)">[06:30–11:30]</small></h2>
+  <p class="cd">先從最熟悉的工具開始——打開 ChatGPT，GitHub 幾乎已是它的「標配」連接器。</p>
+  <ol class="st">
+    <li><b>[06:30]</b> 打開 chatgpt.com → 左側選單 →「<b>外掛程式</b>」（Plugins／Connectors）。</li>
+    <li><b>[07:00]</b> 搜尋 GitHub：官方連接器說明寫著「Inspect PRs, triage issues, debug failing checks, and prepare code changes for review」——可以看你 GitHub 上的內容、也能協助上傳你的 vibe coding 作品。</li>
+    <li><b>[07:45–08:15]</b> 在輸入框 <b>@GitHub</b> 下指令：「<b>請推薦目前 2026.8 最多人點星號的簡報 skill</b>」→ ChatGPT 開始上網作業（Working）。</li>
+    <li><b>[10:15]</b> 1 分 14 秒後回覆：「截至 2026 年 8 月 14 日，我最推薦、也是目前星號最多的獨立簡報 Skill 是：<b>Frontend Slides</b>」——27,473 Stars、MIT 授權、支援 Codex、Claude Code 等 Coding Agent。</li>
+  </ol>
+  <h3>ChatGPT 回覆的比較表（課堂實錄）</h3>
+  <div class="twrap"><table>
+    <tr><th>排名</th><th>Repository</th><th>Stars</th><th>主要產物</th></tr>
+    <tr><td>1</td><td>frontend-slides</td><td>27,473</td><td>互動式 HTML 簡報</td></tr>
+    <tr><td>2</td><td>guizang-ppt-skill</td><td>23,957</td><td>雜誌風、瑞士風 HTML 簡報</td></tr>
+    <tr><td>3</td><td>html-ppt-skill</td><td>約 7,900</td><td>多主題 HTML 簡報</td></tr>
+    <tr><td>4</td><td>dashi-ppt-skill</td><td>約 5,100</td><td>HTML・PDF・可編輯 PPTX</td></tr>
+  </table></div>
+  <ul class="pt">
+    <li>Frontend Slides 主要優點（AI 整理）：自動製作固定 <b>16:9 HTML 簡報</b>、先產生 3 種視覺預覽再讓使用者選風格、內建 12 種基礎風格及 34 套進階視覺系統、可將既有 PowerPoint 轉為網頁簡報、單一 HTML 檔不需 npm、支援動畫／瀏覽器文字編輯／PDF 匯出、特別避免常見的「制式 AI 簡報感」。</li>
+    <li>AI 的結論：要「星號最多、高質感、16:9、互動展示」選 <b>Frontend Slides</b>；要直接輸出可編輯 <code>.pptx</code> 則選 Dashi PPT Skill。補充：OpenAI 的 openai/skills 約 24,930 Stars，但那是完整 Skill 合集，星號不能直接視為單一 Skill 的人氣。</li>
+  </ul>
+  <div class="note gold"><span>💰 <b>省扣打技巧 [16:00–16:30]</b>：先在 <b>Chat</b> 模式用連接器「問」與「比較」（不耗 Agent 額度），確定要裝哪個之後，再切到 <b>Work／Codex</b> 執行安裝——「你不要浪費扣打，直接在 Chat 這邊推薦就好；Work 會用你的 Agent 容量。」</span></div>
+  <div class="note blue"><span>🎯 防幻覺提醒 [17:10–17:30]：請 AI 推薦 GitHub 資源時，記得<b>開啟連接器或聯網搜尋</b>讓它真的上 GitHub 抓資料——「不然它可能幻覺跟你亂講。」</span></div>
+</section>
+
+<section class="chapter" id="sec-readme">
+  <span class="chip" style="background:linear-gradient(90deg,#3f8560,#0d8f80)">CHAPTER 08</span>
+  <h2 class="ct">8. README 與專案頁面判讀 <small style="font-weight:400;color:var(--ink3)">[11:30–15:00]</small></h2>
+  <p class="cd">使用任何項目前，請先讀 README。（簡報 08、09/20）老師以 Frontend Slides 的真實專案頁走一遍每個區塊。</p>
+  <div class="shotgrid">
+    <figure class="shot"><img src="ep49-img/slide08.jpg" alt="README 是專案說明書" loading="lazy"><figcaption>簡報 08/20｜README 要回答五件事＋AI 小白技巧＋紅線提醒。</figcaption></figure>
+    <figure class="shot"><img src="ep49-img/slide09.jpg" alt="其他四個重要區域" loading="lazy"><figcaption>簡報 09/20｜Releases、Issues、Discussions、License 四大區域。</figcaption></figure>
+  </div>
+  <h3>README 要回答你五件事</h3>
+  <ul class="pt">
+    <li>這個項目能做什麼？</li>
+    <li>需要安裝哪些軟體？</li>
+    <li>支援哪一種作業系統？</li>
+    <li>如何安裝與執行？</li>
+    <li>是否有使用限制？</li>
+  </ul>
+  <div class="note gold"><span>⚠️ 紅線：<b>不要只看到 Install 指令就直接執行</b>。AI 小白技巧：看不懂時，可下載 README.md 請 AI 用繁體中文解釋（第 13 節有現場示範）。</span></div>
+  <h3>專案頁面怎麼看（Frontend Slides 實地導覽 [11:30–14:00]）</h3>
+  <ol class="st">
+    <li><b>標題列</b>：zarazhangrui / frontend-slides——前面是<b>作者</b>、後面是專案名。「為什麼要看作者？因為它是工程師專屬的社群平台」，作者頁可看到其他作品與貢獻紀錄。</li>
+    <li><b>Watch／Fork／Star</b>：按 Watch 有更新就提醒你（要登入）；<b>Fork</b> 把專案放到自己的倉庫（開源平台的精神）；<b>Star 27.5k</b>＝越多人收藏、越多人在用。</li>
+    <li><b>檔案列表</b>：整個專案的完整程式碼都在這（.claude-plugin、bold-template-pack、plugins、scripts、LICENSE、README.md、SKILL.md、STYLE_PRESETS.md、animation-patterns.md…）。看不懂沒關係——以前要按 <b>Download ZIP</b> 打包下載，現在直接請 AI 進來裝一裝就好。</li>
+    <li><b>右側欄</b>：About 簡介與標籤（ai-slides、anthropic、claude、vibe-coding…）、<b>Releases</b>（更新版本：v2.1.0 Bold Templates and Agent-Neutral Packaging）、<b>Contributors 8 人</b>（zarazhang 和 claude——對，AI 也在貢獻者名單裡）、<b>Languages</b>（JavaScript 45.4%、Shell 43.3%、Python 5.8%、CSS 5.5%）。</li>
+    <li><b>往下捲就是 README</b>：作者把示範教學影片（Watch the Walkthrough &amp; Tutorial）、主要特點、安裝方式都寫在這裡——HTML 簡報、可轉換 PPT、以 Claude Code 插件打包；<b>[15:00]</b> 明寫也支援 Codex、Kimi Code、OpenCode、Gemini CLI 等其他編碼代理（git clone 到 <code>~/.claude/skills/frontend-slides</code> 後用 <code>/frontend-slides</code> 呼叫）。</li>
+  </ol>
+  <h3>四大區域（簡報 09/20）</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:140px">區域</th><th>用途</th></tr>
+    <tr><td><b>📦 Releases</b></td><td>下載正式版本或安裝檔</td></tr>
+    <tr><td><b>🐛 Issues</b></td><td>查看錯誤、問題與解法</td></tr>
+    <tr><td><b>💬 Discussions</b></td><td>提問與交流使用經驗</td></tr>
+    <tr><td><b>📜 License</b></td><td>確認是否可以使用、修改或散布</td></tr>
+  </table></div>
+  <div class="note gold"><span>⚠️ <b>沒有 License，不代表可以任意複製或商業使用。</b></span></div>
+  <div class="note blue"><span>🌐 中文介面 [14:15–14:45]：整頁英文看不懂？老師示範用瀏覽器的 Google 翻譯／沉浸式翻譯外掛把 README 直接翻成繁中——「有沒有翻譯成中文其實不影響使用，你只要記得它怎麼下載跟怎麼使用。」</span></div>
+</section>
+
+<section class="chapter" id="sec-judge">
+  <span class="chip" style="background:linear-gradient(90deg,#9c7b23,#bf6a1e)">CHAPTER 09</span>
+  <h2 class="ct">9. 如何判斷項目是否值得使用</h2>
+  <p class="cd">不要只看 Stars。（簡報 10/20）</p>
+  <figure class="shot"><img src="ep49-img/slide10.jpg" alt="如何判斷項目是否值得使用" loading="lazy"><figcaption>簡報 10/20｜五指標雷達：README、Updated、Issues、Releases、License。</figcaption></figure>
+  <ol class="st">
+    <li><b>README</b>｜說明是否完整？</li>
+    <li><b>Updated</b>｜最近是否仍有更新？——「有在更新的我都會關注」[27:15]</li>
+    <li><b>Issues</b>｜問題是否有人回應？</li>
+    <li><b>Releases</b>｜是否有穩定版本？</li>
+    <li><b>License</b>｜授權是否清楚？</li>
+  </ol>
+  <div class="note gold"><span>⚠️ 常見誤解：<b>Stars 很多，不代表程式一定安全、適合你或沒有惡意內容。</b></span></div>
+  <div class="golden"><div class="q">「星號是點讚的意思，不是下載率。點讚越多，代表越多人覺得它不錯。」</div><div class="a">—— 課堂 [27:20–27:33]，直接回答了 Q&amp;A 裡「星號代表下載率還是瀏覽率」的問題</div></div>
+</section>
+
+<section class="chapter" id="sec-search">
+  <span class="chip" style="background:linear-gradient(90deg,#2f7d92,#3f8560)">CHAPTER 10</span>
+  <h2 class="ct">10. 搜尋入門與進階 <small style="font-weight:400;color:var(--ink3)">[09:30、16:30–18:15、26:45–29:05]</small></h2>
+  <p class="cd">從你想完成的任務開始搜尋。（簡報 11、12/20）</p>
+  <div class="shotgrid">
+    <figure class="shot"><img src="ep49-img/slide11.jpg" alt="GitHub 搜尋入門" loading="lazy"><figcaption>簡報 11/20｜四種示範搜尋＋「主題＋功能＋語言或平台」關鍵字公式。</figcaption></figure>
+    <figure class="shot"><img src="ep49-img/slide12.jpg" alt="進階搜尋與資源清單" loading="lazy"><figcaption>簡報 12/20｜stars:&gt;500、in:name、in:description、language:python＋三種探索方式。</figcaption></figure>
+  </div>
+  <h3>入門：四種示範搜尋</h3>
+  <div class="twrap"><table>
+    <tr><th>想找什麼</th><th>搜尋關鍵字</th></tr>
+    <tr><td>免費 AI 工具</td><td><code>open source AI tools</code></td></tr>
+    <tr><td>AI 簡報工具</td><td><code>AI presentation generator</code></td></tr>
+    <tr><td>提示詞資源</td><td><code>awesome prompts</code></td></tr>
+    <tr><td>中文 AI 項目</td><td><code>Chinese AI assistant</code></td></tr>
+  </table></div>
+  <div class="note blue"><span>💡 [28:10–28:30] 老師實測搜「簡報」（中文）：只找到台大計算機安全課程、NYCU 程式安全等零星結果——「<b>建議直接用英文搜尋</b>，中文也可以，只是找到的沒辦法那麼詳細。」英文工具名稱與任務關鍵字更容易找到資源。</span></div>
+  <h3>進階：搜尋條件與排序</h3>
+  <ul class="pt">
+    <li><code>stars:&gt;500</code>：只看較多人收藏的｜<code>in:name</code>：搜項目名稱｜<code>in:description</code>：搜項目描述｜<code>language:python</code>：指定程式語言。</li>
+    <li><b>[27:00] 實測</b>：搜 <code>notebooklm</code> 依星號排序→ 10.5k 個結果，前三名：teng-lin/<b>notebooklm-py</b>（18.7k★，非官方 Python API 與 agentic skill）、MODSetter/<b>SurfSense</b>（15.9k★，開源 NotebookLM 替代品）、PleasePrompto/<b>notebooklm-skill</b>（7.6k★，讓 Claude Code 直接對接你的 NotebookLM）。</li>
+    <li><b>[27:45] 加上條件</b>：<code>notebooklm stars:&gt;10</code> → 結果從 10.5k 筆縮到 13 筆，一眼看完。</li>
+    <li><b>[28:45–29:05] 排序選項</b>：「最佳匹配」綜合所有元素；「最多星號」看最多人用的；「最近更新」會看到熱騰騰剛上傳的（但可能還沒人用過，要小心）。</li>
+  </ul>
+  <h3>三種探索方式（簡報 12/20）</h3>
+  <ol class="st">
+    <li>搜尋 <b>Awesome＋主題</b>：GitHub 慣例，社群整理的優質資源清單都叫 awesome-某主題——awesome-python、awesome-chatgpt、awesome-mcp-servers、awesome-agent-skills…[16:15] 老師的 ChatGPT 專案裡就存著「GitHub Awesome 使用方法」筆記，可直接下指令「@GitHub 搜尋與 NotebookLM 有關的 Awesome 專案，依 Star 數、最近更新時間、功能特色整理成表格」。</li>
+    <li>點選 Repository 的 <b>Topics</b> 標籤。</li>
+    <li>查看<b>相關項目與其他作品</b>。</li>
+  </ol>
+  <div class="note gold"><span>⚠️ Awesome 是整理入口，仍要確認安全、更新與授權。</span></div>
+  <h3>實戰：請 AI 找 SPSS 的 MCP／Skill [16:30–18:15]</h3>
+  <p>當天剛好教到 SPSS，老師現場示範在 Chat 模式輸入：「<b>請推薦 GitHub 上近 3 年有關 SPSS 的 MCP 或 skill</b>」（記得開聯網）。AI 回覆的重點：</p>
+  <div class="twrap"><table>
+    <tr><th>專案</th><th>類型</th><th>特點</th><th>推薦度</th></tr>
+    <tr><td>SPSS-MCP</td><td>MCP</td><td>直接控制 SPSS（Claude Code → SPSS）</td><td>★★★★★</td></tr>
+    <tr><td>claude-statistical-analysis-skill</td><td>Skill</td><td>直接讀 .sav，自動做統計＋APA 報告</td><td>★★★★★</td></tr>
+    <tr><td>psychology-agent</td><td>Agent/Skill</td><td>直接讀 .sav/.zsav/.por，心理、社科研究</td><td>★★★★☆</td></tr>
+    <tr><td>statistical-analysis／Claude Code Templates</td><td>Skill</td><td>SPSS 預設計流程：t 檢定、ANOVA、迴歸</td><td>★★★★☆</td></tr>
+    <tr><td>AMOS SEM Workflow Skill</td><td>Skill</td><td>SPSS/AMOS：CFA、SEM、中介調節</td><td>★★★☆☆</td></tr>
+    <tr><td>InsightGenius（quack2025/spss-insightgenius-api）</td><td>MCP Server</td><td>問卷分析、Crosstab＋顯著性檢定、ANOVA、相關、Excel 匯出——<b>但連的是 hosted API</b>，不是你電腦裡的 IBM SPSS</td><td>★★★☆☆</td></tr>
+  </table></div>
+  <ul class="pt">
+    <li><b>[17:40–17:59]</b> 有了這些工具，「你要分析 data，連 SPSS 都不用打開」：告訴它把 CSV 匯進去、給我 <code>.sav</code> 檔（SPSS 資料庫檔）或 <code>.spv</code> 檔（輸出檔），它可以幫你做。</li>
+    <li><b>[17:45]</b> AI 補充：工具可保留 SPSS 的 Variable Labels／Value Labels／Missing Values；丟一句「Load survey_data.sav and tell me what you find」，Agent 會回報樣本數、變數、遺漏值、量表結構、Cronbach's α，再建議 CFA、階層迴歸、moderation 等分析方向。</li>
+  </ul>
+</section>
+
+<section class="chapter" id="sec-demo2">
+  <span class="chip" style="background:linear-gradient(90deg,#5645D4,#c2620c)">DEMO 2</span>
+  <h2 class="ct">11. 示範二：AI Agent 安裝 Skill、做出簡報 <small style="font-weight:400;color:var(--ink3)">[10:49–11:15、15:15–18:45、29:10–30:15]</small></h2>
+  <p class="cd">從「推薦」到「裝好、做出成品」——全程不用自己下載任何檔案。</p>
+  <div class="svgwrap">
+    <svg viewBox="0 0 900 235" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,'PingFang TC','Noto Sans TC',sans-serif">
+      <rect width="900" height="235" fill="#fff"/>
+      <text x="450" y="32" text-anchor="middle" font-size="17" font-weight="700" fill="#191919">AI × GitHub 的三步工作流（課堂示範主線）</text>
+      <rect x="40" y="60" width="240" height="110" rx="12" fill="#EEF4FB" stroke="#3b6bb0" stroke-width="1.5"/>
+      <text x="160" y="90" text-anchor="middle" font-size="14.5" font-weight="700" fill="#1d5e8f">① Chat 模式：問</text>
+      <text x="160" y="114" text-anchor="middle" font-size="12" fill="#38546c">@GitHub 請推薦最多星的簡報 Skill</text>
+      <text x="160" y="134" text-anchor="middle" font-size="12" fill="#38546c">比較表・星數・授權・結論</text>
+      <text x="160" y="154" text-anchor="middle" font-size="11.5" fill="#7591ad">（不耗 Agent 扣打）</text>
+      <rect x="330" y="60" width="240" height="110" rx="12" fill="#F4F0FB" stroke="#5645D4" stroke-width="1.5"/>
+      <text x="450" y="90" text-anchor="middle" font-size="14.5" font-weight="700" fill="#4636ad">② Work／Codex：裝</text>
+      <text x="450" y="114" text-anchor="middle" font-size="12" fill="#4a4180">「安裝並示範 Frontend Slides」</text>
+      <text x="450" y="134" text-anchor="middle" font-size="12" fill="#4a4180">Agent 精簡外掛包→驗證→安裝</text>
+      <text x="450" y="154" text-anchor="middle" font-size="11.5" fill="#8078ab">（盯：34 套模板只裝 3 套？）</text>
+      <rect x="620" y="60" width="240" height="110" rx="12" fill="#EDF7F1" stroke="#3f8560" stroke-width="1.5"/>
+      <text x="740" y="90" text-anchor="middle" font-size="14.5" font-weight="700" fill="#166a4c">③ 驗證成品</text>
+      <text x="740" y="114" text-anchor="middle" font-size="12" fill="#2e5f47">6 頁繁中 16:9「GitHub 新手上路」</text>
+      <text x="740" y="134" text-anchor="middle" font-size="12" fill="#2e5f47">瀏覽器實際打開檢查無溢位</text>
+      <text x="740" y="154" text-anchor="middle" font-size="11.5" fill="#5e8571">（自動裝 Chromium 補檢查）</text>
+      <path d="M280 115 h45" stroke="#9B9B9B" stroke-width="2.5" marker-end="url(#ah)"/>
+      <path d="M570 115 h45" stroke="#9B9B9B" stroke-width="2.5" marker-end="url(#ah)"/>
+      <text x="450" y="212" text-anchor="middle" font-size="13" fill="#5f5f5f">先用 Chat 問清楚 → 再用 Agent 動手 → 最後人來驗證：跟 EP48 的「人決策、AI 執行、人驗證」一脈相承</text>
+      <defs><marker id="ah" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#9B9B9B"/></marker></defs>
+    </svg>
+    <div class="cap">流程圖｜課堂示範的完整動線：Chat 問（省扣打）→ Agent 裝（要盯）→ 人驗證（看成品）。</div>
+  </div>
+  <h3>安裝過程實錄（Agent 回報逐段翻譯自畫面）</h3>
+  <ol class="st">
+    <li><b>[10:49]</b> 在 ChatGPT Work 對 Agent 說「<b>安裝並示範 Frontend Slides</b>」，它開始跑「技能建立／安裝」流程。</li>
+    <li><b>[15:15]</b> Agent 回報：讀取技能並檢查投影片專案檔案——原始專案包含 Claude 外掛包與重複檔案；依安裝規範<b>只保留 Codex 實際需要的核心 SKILL、樣式庫、模板與匯出腳本</b>，避免不必要的外掛包一併裝入。</li>
+    <li><b>[15:30]</b> 安裝驗證通過，但「完整上游包（<b>34 套大型模板</b>）超過個人 Skill 儲存限制」→ 保留核心功能與三套代表性差異模板（黑白、專業編輯風、醒目網格風），不影響 16:9、動畫、PPT 轉換與 PDF 匯出。</li>
+    <li><b>[15:30–15:45]</b> 進入示範階段：採用「<b>Neo-Grid Bold</b>」醒目網格風，製作一份 <b>6 頁、繁體中文、固定 16:9</b> 的 GitHub 入門互動簡報，並用瀏覽器做畫面檢查。</li>
+    <li><b>[18:30]</b> 第一次視覺檢查發現環境缺瀏覽器核心，Agent 自己安裝 Playwright Chromium 後重新渲染——「這只影響檢查工具，不影響簡報本身。完成後我會確認六頁無溢位、手機瀏覽器仍維持 16:9。」</li>
+    <li><b>[29:10–30:15]</b> 成品展示：<code>frontend-slides-github-demo.html</code>——第 1 頁「GitHub 新手上路」（GITHUB FOR ABSOLUTE BEGINNERS，6 SLIDES · 10 MINUTES）、中段「你的第一個作品：README」（README 要回答：這是什麼？如何使用？目標讀者？）、最後一頁「現在就建立第一個倉庫」＋10 分鐘挑戰（建立公開倉庫、新增 README、完成 Commit、複製分享網址），黑底螢光黃的雜誌風設計。</li>
+  </ol>
+  <div class="note gold"><span>⚠️ <b>要盯的地方 [15:48–16:01]</b>：AI 裝 Skill 有時會「偷懶」——明明 34 套模板只裝了 3 套。裝完務必進去看它實際下載了什麼；老師經驗：<b>用 Codex 裝會比較完整</b>，ChatGPT Work 遇到大專案容易自行精簡。</span></div>
+  <div class="note blue"><span>💡 延伸實錄 [33:41–34:15]：老師同場也用 Codex 桌面版裝了另一套簡報工具 <b>Open-Slide</b>（github.com/1weiho/open-slide）：Open-Slide CLI 1.18.0、含 create-slide、slide-authoring、apply-comments、create-theme、current-slide 五個 Skills，啟動方式 <code>pnpm dev</code>——這次搭配的正是下一節的「安裝前安全檢核」。</span></div>
+</section>
+
+<section class="chapter" id="sec-explore">
+  <span class="chip" style="background:linear-gradient(90deg,#0d8f80,#5645D4)">DEMO 5</span>
+  <h2 class="ct">12. 探索、Topics、Trending 與 HelloGitHub <small style="font-weight:400;color:var(--ink3)">[18:45–24:00]</small></h2>
+  <p class="cd">不靠 AI，自己也能逛出寶——四個入口。</p>
+  <h3>① Explore 探索 [18:26–19:14]</h3>
+  <ul class="pt">
+    <li>github.com/explore：「有點像社群媒體，你看了什麼、按了什麼 Star，它就會推薦給你」——老師帳號（genaiairradio-cmd）因為只 Star 過一個項目，推薦頁還很陽春。</li>
+    <li>推薦清單裡看到：diagram-design（16.4k★）、needle（5.3k★，14MB 端側基礎模型）、The Download 開發者新聞等。</li>
+  </ul>
+  <h3>② Topics 主題 [18:45–19:15]</h3>
+  <ul class="pt">
+    <li>github.com/topics：從主題進入——Awesome Lists、Chrome、Code quality、Compiler、CSS…熱門主題就有 <b>ai-agents、agent-skills、claude-code、claude-skills</b>。</li>
+    <li>點進 <b>awesome</b> 主題：trimstray/the-book-of-secret-knowledge（238k★ 的祕笈合集）、avelino/awesome-go 等經典清單；做模型策略、要讓模型扮演 RAG 角色時，可以直接下載這些整理好的資源庫。</li>
+  </ul>
+  <h3>③ HelloGitHub：中文入口 [19:36–23:10]</h3>
+  <ul class="pt">
+    <li>hellogithub.com：「一個中文網站，每一期都會介紹 GitHub 上有趣的東西」（簡中）——發現和分享入門級開源專案的平台，使用者 6.1 萬、收錄專案 4,411 個。</li>
+    <li>可依標籤逛：<b>AI 標籤</b>下有 magic-resume（在線 AI 簡歷編輯器）、archify（讓 AI 讀代碼輸出架構圖，支援 Codex、Claude Code、Cursor、OpenCode）、hallmark（拒絕 AI 味的網頁設計技能）、OpenMontage（把 AI 編程助手變成視頻工作室）、GOD（AI 智能體小鎮——「就像社群上看過的那種一間辦公室裡不同 AI 各自工作：畫圖的、行銷的、SEO 的」，本地優化的多智能體模擬平台，1k★）；<b>遊戲標籤</b>下還有修仙世界模擬器、文字版鬥地主等。</li>
+    <li><b>重點案例 [20:00–21:42]</b>：<b>bojieli/ai-agent-book</b>《深入理解 AI Agent：設計原理與工程實踐》（李博杰 著）——HelloGitHub 評分 10.0、GitHub <b>37.3k★</b>、10 章正文從基礎到生產、<b>93 個配套實驗全部開源</b>、13 種語言含繁體中文（台灣）；圍繞「Agent = LLM + 上下文 + 工具」展開，含上下文工程、記憶與知識庫、MCP 協議。</li>
+    <li>PDF／EPUB 可直接下載——「看到 PDF、看到 EPUB 都可以直接放到你的 NotebookLM」；老師當場打開 323 頁的繁中版 PDF 翻到第 7 章強化學習段落：「無聊可以當課外書看一看，有興趣可以細看人家怎麼寫沙盒、環境設定，其實蠻有趣的。」</li>
+  </ul>
+  <h3>④ Trending 熱門 [23:24–24:00]</h3>
+  <ul class="pt">
+    <li>github.com/trending：「把今天最多人點星號的排出來」——當天第一名 <b>cathrynlavery/diagram-design</b>，光今天就 <b>+3,651 星</b>（總數 16.4k），頁面上還掛著「GITHUB TRENDING #1 Repository Of The Day」徽章。</li>
+    <li>同榜還有 cactus-compute/needle（給手機、穿戴、智慧家庭的 14MB 基礎模型）、macro-inc/macro（信件、聊天、文件、任務、Agent 共用 AI 記憶的整合工作區）。</li>
+  </ul>
+</section>
+
+<section class="chapter" id="sec-demo3">
+  <span class="chip" style="background:linear-gradient(90deg,#bf6a1e,#9c7b23)">DEMO 3</span>
+  <h2 class="ct">13. 示範三：README 下載丟給 AI，30 秒看懂專案 <small style="font-weight:400;color:var(--ink3)">[24:00–26:15]</small></h2>
+  <p class="cd">以 Trending 第一名 diagram-design 為例——「想快速知道它能幹嘛，就做一件事：把 README 下載下來。」</p>
+  <ol class="st">
+    <li><b>[24:00–24:45]</b> 進入 diagram-design 專案頁：29 種編輯級圖解類型的 Claude Code Skill，「Editorial diagrams your designer won't hate」；README 裡作者自述：每次要畫架構圖，問 AI 得到的都是「generic rounded-box」圓角方框圖，跟 Figma 奮戰 30 分鐘或乾脆放棄——所以做了這個 Skill：27 種視覺類型、編輯級品質、讀你的網站 60 秒配好品牌色。</li>
+    <li><b>[24:41]</b> README 就是它的 <b>SOP 操作手冊</b>。英文都寫得很簡單，不像學術論文。</li>
+    <li><b>[25:02–25:30]</b> 把剛下載的 README.md 丟進 ChatGPT：「快速介紹」→ AI 回覆：這是一套讓 AI Agent 製作「高品質、編輯設計感圖解」的 Skill，可用於 Claude Code、Codex；內建 <b>27 種圖表類型</b>（Architecture 系統架構圖、Flowchart 流程圖、Sequence 循序圖、State machine、ER/data model、Timeline…），每種有 Minimal Light／Minimal Dark／Full Editorial 三種靜態風格。</li>
+    <li><b>[25:45–26:00]</b> 輸出格式 HTML／SVG／PNG，可固定 16:9——「SVG 可以直接在你的 PowerPoint 裡解構使用」；還能控制資訊複雜度（Detail：faithful／balanced／simplified）與受眾（Audience：engineer／mixed／exec），同一張架構圖能一鍵簡化成主管簡報版。</li>
+    <li><b>[26:05]</b> 為什麼它今天衝上排行榜？「還蠻簡約的，大家喜歡用、今天看的人多，星號就多，就衝上這個排行榜。」</li>
+  </ol>
+  <div class="note green"><span>💡 這一段就是簡報 08/20「AI 小白技巧」的現場版：README 看不懂→下載→丟 AI→用繁中秒懂。</span></div>
+</section>
+
+<section class="chapter" id="sec-get">
+  <span class="chip" style="background:linear-gradient(90deg,#3b6bb0,#2f7d92)">CHAPTER 14</span>
+  <h2 class="ct">14. 找到項目後，怎麼取得？ZIP／Clone／Fork</h2>
+  <p class="cd">先判斷你只是使用，還是需要修改。（簡報 13、14/20）</p>
+  <div class="shotgrid">
+    <figure class="shot"><img src="ep49-img/slide13.jpg" alt="找到項目後怎麼取得" loading="lazy"><figcaption>簡報 13/20｜三選一：Releases／Download ZIP／Clone。</figcaption></figure>
+    <figure class="shot"><img src="ep49-img/slide14.jpg" alt="ZIP、Clone、Fork 有什麼不同" loading="lazy"><figcaption>簡報 14/20｜三個常被混淆的操作。</figcaption></figure>
+  </div>
+  <div class="twrap"><table>
+    <tr><th>你的需求</th><th>用什麼</th><th>版本歷史</th></tr>
+    <tr><td>我只想安裝使用</td><td><b>Releases</b>：正式安裝檔與版本說明</td><td>—</td></tr>
+    <tr><td>我只想下載目前檔案</td><td><b>Download ZIP</b>：當下版本的檔案快照</td><td>❌ 不含</td></tr>
+    <tr><td>我要保留版本歷史</td><td><b>Clone</b>：完整 Repository 與版本紀錄</td><td>✅ 完整</td></tr>
+    <tr><td>我要改出自己的版本</td><td><b>Fork</b>：建立自己的線上副本</td><td>✅ 保留與原項目的關係</td></tr>
+  </table></div>
+  <div class="golden"><div class="q">「ZIP＝拿一份｜Clone＝搬回家｜Fork＝複製自己的分店。」</div><div class="a">—— 簡報 14/20 金句</div></div>
+  <ul class="pt">
+    <li><b>原則</b>：優先遵循 README 提供的官方安裝方式。</li>
+    <li><b>[45:30] 現場示範</b>（回答聊天室「下載要按哪裡」）：專案頁綠色 <b>Code</b> 按鈕內有四條路——複製 Web URL、Open in GitHub Copilot、在 GitHub Desktop 中打開、<b>下載 ZIP 壓縮包</b>。</li>
+    <li><b>[44:38–45:11]</b> README 最下面通常有安裝說明——傳統安裝方式與 AI 安裝方式都有；「懶一點的就叫 AI（Work）直接做完，直接幫你安裝好。」</li>
+  </ul>
+</section>
+
+<section class="chapter" id="sec-create">
+  <span class="chip" style="background:linear-gradient(90deg,#3f8560,#9c7b23)">CHAPTER 15</span>
+  <h2 class="ct">15. 建立 Repo → 寫 README → Commit → Branch/PR <small style="font-weight:400;color:var(--ink3)">[36:14–36:57 帶讀]</small></h2>
+  <p class="cd">上傳與協作的完整一輪。課堂尾聲時間不夠，老師帶讀簡報並預告下次實作；四頁簡報內容如下。（簡報 15–18/20）</p>
+  <h3>建立第一個 Repository（簡報 15/20）</h3>
+  <figure class="shot"><img src="ep49-img/slide15.jpg" alt="建立第一個 Repository" loading="lazy"><figcaption>簡報 15/20｜六步驟＋New repository 表單示意；練習名稱：hello-world。</figcaption></figure>
+  <ol class="st">
+    <li>右上角選擇「＋」</li>
+    <li>點選 New repository</li>
+    <li>輸入 Repository name（練習用 <code>hello-world</code> 最安全）</li>
+    <li>填寫 Description</li>
+    <li>選擇 Public 或 Private</li>
+    <li>勾選 Add a README file</li>
+  </ol>
+  <div class="note green"><span>💡 先建立簡單的練習倉庫，不必一開始就上傳複雜程式。</span></div>
+  <h3>寫好你的 README（簡報 16/20）</h3>
+  <figure class="shot"><img src="ep49-img/slide16.jpg" alt="寫好你的 README" loading="lazy"><figcaption>簡報 16/20｜五段結構＋AI 輔助寫法。</figcaption></figure>
+  <ul class="pt">
+    <li>五段結構：<code># 專案名稱</code>（一句話說明用途）→ <code>## 功能</code> → <code>## 使用方法</code> → <code>## 注意事項</code>（限制與風險）→ <code>## License</code>。</li>
+    <li><b>AI 輔助寫法</b>：先告訴 AI 專案用途，產生簡短初稿後再由自己確認。</li>
+    <li>好的 README 要回答：<b>這是什麼、怎麼用、要注意什麼</b>。</li>
+  </ul>
+  <h3>Commit 就像建立安全存檔（簡報 17/20）</h3>
+  <figure class="shot"><img src="ep49-img/slide17.jpg" alt="Commit 就像建立安全存檔" loading="lazy"><figcaption>簡報 17/20｜四步驟＋好壞訊息對照；Commit 是某個時間點的版本快照。</figcaption></figure>
+  <div class="twrap"><table>
+    <tr><th>✅ 好的訊息</th><th>❌ 避免這樣寫</th></tr>
+    <tr><td>新增 README 使用說明</td><td>修改</td></tr>
+    <tr><td>修正登入頁面錯字</td><td>update</td></tr>
+    <tr><td>更新安裝步驟</td><td>test</td></tr>
+  </table></div>
+  <h3>Branch、PR 與 Merge（簡報 18/20）</h3>
+  <figure class="shot"><img src="ep49-img/slide18.jpg" alt="Branch、PR 與 Merge" loading="lazy"><figcaption>簡報 18/20｜先在分支修改，再安全合併：main → Branch → Commit → Pull Request → Merge。</figcaption></figure>
+  <ul class="pt">
+    <li><b>main</b>｜主要且穩定的版本 → <b>Branch</b>｜獨立進行新功能或修改 → <b>Commit</b>｜保存分支上的修改 → <b>Pull Request</b>｜提出合併與審查 → <b>Merge</b>｜確認後合併回 main。</li>
+    <li>⚠️ <b>Branch 讓新修改不直接影響 main</b>——要「分流給別人改」也是用這個方式。</li>
+    <li><b>[36:31–36:57]</b> 老師：「做好的工具可以上傳、可以 Commit、可以分支、不同的工作一起做——今天先不講，下次有開發時間再來講。」</li>
+  </ul>
+</section>
+
+<section class="chapter" id="sec-security">
+  <span class="chip" style="background:linear-gradient(90deg,#c0453f,#bf6a1e)">DEMO 4 · SECURITY</span>
+  <h2 class="ct">16. 安全守則、掃描工具與安裝前檢核 <small style="font-weight:400;color:var(--ink3)">[29:44–35:55]</small></h2>
+  <p class="cd">本集份量最重的一段：公開 Repository 等於公開在網路上——反過來，你下載的每個開源專案也可能藏著惡意程式。（簡報 19/20）</p>
+  <figure class="shot"><img src="ep49-img/slide19.jpg" alt="GitHub 安全守則" loading="lazy"><figcaption>簡報 19/20｜不要上傳五類機密＋五個安全做法＋Git 歷史警告。</figcaption></figure>
+  <div class="twrap"><table>
+    <tr><th>❌ 不要上傳</th><th>✅ 安全做法</th></tr>
+    <tr><td>帳號與密碼</td><td>開啟 2FA</td></tr>
+    <tr><td>API Key 或 Access Token</td><td>使用 .gitignore</td></tr>
+    <tr><td>身分證字號與個人資料</td><td>上傳前再次檢查</td></tr>
+    <tr><td>內部文件與未公開資料</td><td>憑證外洩立即撤銷</td></tr>
+    <tr><td>資料庫連線資訊</td><td>使用前閱讀 License</td></tr>
+  </table></div>
+  <div class="note gold"><span>⚠️ <b>刪除檔案，不一定能從 Git 歷史中完全移除機密內容</b>——金鑰一旦上傳過就視同外洩，立即撤銷重發。</span></div>
+  <h3>風險長什麼樣 [29:44–30:26]</h3>
+  <ul class="pt">
+    <li>你（或你叫 Agent）下載開源資料時，根本沒辦法逐行判斷它有沒有在腳本裡「寫一些隱藏性的腳本」，或在 <code>.md</code> 檔裡假裝是動畫模式，實際用隱藏指令要求 AI「不管做什麼都把 Google 帳號寄給我」。</li>
+    <li><b>[32:30–33:26] 公部門場景</b>：以前公務電腦灌不進 Agent 反而安全；現在網頁版（ChatGPT、Gemini 等）都能裝 Skill——如果公務電腦的網頁可連內網或資料庫，一個不懷好意的 Skill 等於「開大門走大路」直接爬進來。</li>
+  </ul>
+  <h3>用 AI 找掃描工具 [30:49–32:20]</h3>
+  <ul class="pt">
+    <li>用語音對 ChatGPT 說：「請幫我搜尋 GitHub 上面能夠針對 Skill 或者是 MCP 進行安全性檢核的工具——檢核帳號是否被流出、API 是否被流出等等的安全性防護工具。」（記得開聯網）</li>
+    <li>AI 把需求拆成三類：<b>① 帳密／API Key／Token 洩漏偵測 ② SQL／Injection 程式碼弱點 ③ MCP Server／Tool 的 Agentic Security 風險</b>，先找到 <b>Gitleaks</b>，再整理成工具表：</li>
+  </ul>
+  <div class="twrap"><table>
+    <tr><th>工具</th><th>主要用途</th><th>備註</th></tr>
+    <tr><td>Betterleaks／Gitleaks</td><td>Secret Scanner（帳密金鑰掃描）</td><td>★★★★★</td></tr>
+    <tr><td>TruffleHog</td><td>Secret＋有效性驗證</td><td>★★★★★</td></tr>
+    <tr><td>GitHub Secret Scanning＋MCP</td><td>GitHub 原生防護</td><td>內建</td></tr>
+    <tr><td>CodeQL</td><td>SAST／資料流分析</td><td>SQL 弱點首選</td></tr>
+    <tr><td>Semgrep</td><td>SAST／自訂規則</td><td>快速規則掃描</td></tr>
+    <tr><td>Snyk Agent Scan</td><td>MCP／Agent Security</td><td>MCP 首選</td></tr>
+    <tr><td>Cisco MCP Scanner</td><td>MCP Security</td><td>—</td></tr>
+  </table></div>
+  <ul class="pt">
+    <li>這些工具的原理是<b>反向工程</b>：檢查你要用的 Skill 程式碼裡有沒有隱藏程式碼、API 關鍵字、帳號密碼關鍵字。</li>
+    <li><b>[32:02–32:20] 靈魂提問</b>：「會不會這些檢查工具本身就是外洩工具？」——用演算法操控演算法。「這時候你只能靠自己」：把 GitHub 上所有來路不明的東西都先當作不可信任。</li>
+  </ul>
+  <h3>自己的檢核自己建：安裝前檢核 SOP [33:34–35:05]</h3>
+  <ol class="st">
+    <li>老師以本週流行的 Open-Slide 為例，把指令改成：「我去下載 open-slide skill 的時候，先去檢查它所有的程式碼裡面，有沒有會去抓我的帳號密碼、抓我的 API、或有外洩風險的相關 code，請幫我列出一張 checklist。」</li>
+    <li>Agent 生成的「<b>安裝第三方 Skill 前的安全檢核</b>」自訂指令包含 13 項：檢查所有原始碼腳本與安裝程序／讀取帳號密碼 Cookie／存取 API Key、Token、SSH Key、環境變數（<b>連 .env 檔都會讀</b>）／讀取使用者目錄與工作區以外檔案／檔案或憑證外傳／列出所有外部網址、API、Webhook、遙測行為／preinstall・postinstall・Shell Script 下載後執行／eval 動態執行與混淆程式碼／背景程序與持久化服務／要求系統管理員權限／第三方相依套件供應鏈風險／確認安裝範圍與完整解除安裝方式。</li>
+    <li>把這份 checklist <b>設成 AI Agent 的預設（默認）規則</b>——之後每次說「安裝某某 Skill」，Agent 會先跑完檢核、回報紅黃綠燈，確認沒有明顯風險才安裝。</li>
+  </ol>
+  <div class="note green"><span>🌿 加分判斷 [35:24–35:55]：看 <b>Contributors（貢獻者）</b>——所有貢獻者都是公開可見的（frontend-slides 的貢獻者名單裡連 claude 都在），「正常大家會愛惜羽毛」，有公開身分的作者相對可信。</span></div>
+</section>
+
+<section class="chapter" id="sec-recap">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),#3f8560)">CHAPTER 17</span>
+  <h2 class="ct">17. 完成第一次 GitHub 練習</h2>
+  <p class="cd">今天就從一個 README 開始。（簡報 20/20）</p>
+  <figure class="shot"><img src="ep49-img/slide20.jpg" alt="完成第一次 GitHub 練習" loading="lazy"><figcaption>簡報 20/20｜七步驟解鎖「GitHub 新手達成」徽章。</figcaption></figure>
+  <ol class="st">
+    <li>註冊 GitHub 並開啟 2FA</li>
+    <li>搜尋一個感興趣的 AI 項目</li>
+    <li>閱讀 README、Issues 與 License</li>
+    <li>Star 收藏該項目</li>
+    <li>建立 hello-world Repository</li>
+    <li>修改 README 並完成一次 Commit</li>
+    <li>建立 Branch、PR 並完成 Merge → 🏆 GitHub 新手達成</li>
+  </ol>
+  <div class="golden"><div class="q">「先會找、會看、會安全使用，再慢慢學會開發。」</div><div class="a">—— 簡報 20/20 金句，也是本集的收束（[37:00] 老師：把 GitHub 當作一個雲端資料庫，既然它開源，安全性也要注意）</div></div>
+</section>
+
+<section class="chapter" id="sec-qa">
+  <span class="chip" style="background:linear-gradient(90deg,#5645D4,#2f7d92)">Q&amp;A</span>
+  <h2 class="ct">18. Q&amp;A 問答時間 <small style="font-weight:400;color:var(--ink3)">[37:15–45:55]</small></h2>
+  <p class="cd">最後十分鐘開 Slido（slido.com #1768 127）收問題，加上 Meet 聊天室的追問。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:44%">學員問題</th><th>老師的回答（實錄摘要）</th></tr>
+    <tr><td><b>AI 這麼風行，有沒有技巧讓 AI 產出的字句比較像人話？</b></td><td><b>[40:43–41:57]</b> 把自己過去寫的東西、常用的字整理成資料庫／RAG，放進 Agent 或 NotebookLM，要求它「每次要寫東西之前先看這些字再寫」——像字典的概念，AI 就會照你的寫作風格。不知道自己常用字？想訓練「回應風格」就翻出你的 LINE 對話紀錄來訓練。（現在已不太需要叫它「扮演某角色」，直接給語料庫最有效。）</td></tr>
+    <tr><td><b>NotebookLM 最近有什麼新功能值得學習？</b></td><td><b>[41:58–42:37]</b> 有——新模型進來之後，它可以直接寫出視覺化圖表、畫圖，也可以做簡報了。但擁有這些工具後內容變得更不穩定：「以前會偷懶，現在不只偷懶還會亂講」，產出要盯。GitHub 上也有一些有趣的「說人話」「講臺灣人的話」相關資源可搭配。</td></tr>
+    <tr><td><b>下載的 Skill 要如何手動安裝到 GPT？從 GitHub 或 Gemini 呢？</b></td><td><b>[42:50–43:00]</b> 打開你的 PowerShell 或終端機，照著 README 貼上安裝指令，AI 會一步步教你。（也可以直接叫 Work／Codex 幫你裝到好——見第 11 節。）</td></tr>
+    <tr><td><b>星號代表下載率、瀏覽率，還是使用評價？</b></td><td><b>[27:20]</b>（課中已答）星號是「點讚／收藏」，不是下載率——越多代表越多人覺得它不錯。判斷品質還要搭配五指標（第 9 節）。</td></tr>
+    <tr><td><b>如何判斷專案安全性？</b></td><td>用第 16 節的做法：掃描工具（Gitleaks、CodeQL…）＋安裝前檢核 SOP＋看貢獻者是否公開可信；來路不明的一律先假設不可信。</td></tr>
+    <tr><td><b>看到 AI 有時候已經有點反感…</b></td><td><b>[43:01–43:16]</b> 老師坦白說：目前看簡報、看社群文字，大部分都是 AI 做的——這就是現況（所以更要學會讓 AI 說你的話，見第一題）。</td></tr>
+    <tr><td><b>請問如何在 GitHub 上取得在 PowerShell 安裝模型（像是 Llama）的網址？</b></td><td><b>[44:18–45:13]</b> 安裝說明通常放在專案頁「下面」的 README：往下捲會有 Installation 段落——傳統安裝指令（直接複製到終端機執行）與 AI 安裝方式都有；或從 Releases 下載。懶一點就叫 Work 直接裝完。（老師以 IQKeyboardManager〔16.6k★〕現場示範 Installation 段落長相。）</td></tr>
+    <tr><td><b>進到專案頁面只看到一大堆資料夾，該從哪開始看？下載按哪裡？</b></td><td><b>[45:15–45:40]</b> 先讀 README（它就是 SOP），要下載按綠色 <b>Code</b> 按鈕：複製網址、GitHub Desktop、Copilot 開啟、或下載 ZIP。</td></tr>
+    <tr><td><b>可以提供上課講義嗎？</b></td><td><b>[40:17–40:28]</b> 講義在訂閱制群組都有，保留給訂閱的夥伴。</td></tr>
+  </table></div>
+  <div class="note steel"><span>📣 下集預告 [43:47–44:12]：公部門版的 AI 新方針——會盡量帶一些操作，也會講新的指令與課程。</span></div>
+</section>
+
+<section class="chapter" id="sec-check">
+  <span class="chip" style="background:linear-gradient(90deg,#3f8560,#2f7d92)">CHECKLIST</span>
+  <h2 class="ct">19. 課後自我檢核表</h2>
+  <ul class="pt">
+    <li>☐ 我能用一句話說出 GitHub 的四種角色（雲端空間／版本履歷／協作平台／作品名片）。</li>
+    <li>☐ 我能講出 Git 和 GitHub 差在哪，並用「遊戲存檔」比喻 Commit。</li>
+    <li>☐ 我已註冊 GitHub、開啟 2FA 並保存 Recovery Codes。</li>
+    <li>☐ 我知道 README 要回答的五件事，且不會看到 Install 就直接執行。</li>
+    <li>☐ 我會用 stars:&gt;N、in:name、language: 縮小搜尋，也知道 Awesome 清單怎麼找。</li>
+    <li>☐ 我能分辨 ZIP／Clone／Fork（拿一份／搬回家／開分店）。</li>
+    <li>☐ 我知道星號＝收藏點讚，判斷專案還要看 README／Updated／Issues／Releases／License 五指標。</li>
+    <li>☐ 我會用 ChatGPT 的 GitHub 連接器「先問再裝」，且知道要開聯網防幻覺。</li>
+    <li>☐ 我知道 AI 裝 Skill 可能「偷工減料」，裝完會檢查它實際裝了什麼。</li>
+    <li>☐ 我記得五類東西不能上傳（帳密／API Key／個資／內部文件／資料庫連線），也知道刪檔不等於從 Git 歷史消失。</li>
+    <li>☐ 我已把「安裝第三方 Skill 前的安全檢核」存成自己的 AI 自訂指令。</li>
+    <li>☐ 我完成了 hello-world 倉庫＋一次 Commit（進階：Branch → PR → Merge）。</li>
+  </ul>
+</section>
+
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,#8a879a,#5a5866)">SOURCES</span>
+  <h2 class="ct">20. 資料來源與整理說明</h2>
+  <ul class="pt">
+    <li><b>原始教材：</b>「EP49_在AI時代下，GitHub角色定位?」官方課程簡報 21 頁（封面＋頁碼 01–20 的內容頁；07/20 未收錄於簡報檔）＋課堂錄影 46 分 05 秒（2026/08/14 直播，Drive 資料夾提供）。</li>
+    <li><b>逐幀製作方式：</b>錄影以 ffmpeg 每 15 秒抽 1 格、共 184 格<b>全部親眼逐格判讀</b>（含所有簡報頁、瀏覽器示範、ChatGPT／Codex 畫面與 Slido 問答）；音訊以 faster-whisper 產出全程逐字稿並與影格交叉比對；簡報下載原始 pptx 取出投影片原圖，縮圖後逐頁嵌入本頁。時間戳 <code>[mm:ss]</code> 對應錄影時間軸。</li>
+    <li><b>誠實標註：</b>課堂語音之工具名稱多有口語變體（如 GPUB＝GitHub、扣打＝額度 quota），本頁已依畫面實錄校正；「Git 存檔概念圖」與「AI × GitHub 三步工作流」兩張 SVG 為依課堂手繪與示範動線重繪之圖解。示範中出現的星數、排名為 2026/08/14 當日畫面數字，會隨時間變動。第 15 節（建立 Repo 到協作）課堂僅帶讀簡報、未逐步操作，內容依簡報 15–18/20 原文整理。</li>
+    <li><b>介面參考：</b>頁面版型沿用本站 EP29–48 系列的乾淨白底編輯風格。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  EP49「在 AI 時代下，GitHub 角色定位？」課堂筆記・2026/08 整理<br>
+  🍀 Learn AI with Tarshar｜搭配 <a href="ep49-ai-skills.html">互動技能地圖</a> 使用效果最佳
+</footer>
+
+</body>
+</html>

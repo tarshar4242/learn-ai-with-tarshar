@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>在 AI 時代下，GitHub 角色定位？｜EP49 互動式學習地圖</title>
+<meta name="description" content="EP49 晨學講堂：在 AI 時代下，GitHub 角色定位？AI 小白也能上手 GitHub——認識 Git 與 GitHub、搜尋 AI 資源、判讀 README 與專案狀態、ZIP/Clone/Fork、建立 Repository 與協作，加上 ChatGPT GitHub 連接器、AI Agent 安裝 Skill、安全掃描工具等課堂實戰示範，互動式多層次學習地圖">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269;
+  --green:#3f8560; --orange:#bf6a1e; --red:#c0453f; --teal:#0d8f80; --amber:#9c7b23;
+  --feat:#c2620c; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(28px,4.6vw,46px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--txt);background:none;-webkit-text-fill-color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:660px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:9px}
+.steps li{list-style:none;counter-increment:st;display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--txt2);line-height:1.7}
+.steps li::before{content:counter(st);flex:none;width:25px;height:25px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:var(--c,var(--feat));margin-top:1px}
+.steps li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+.prompt,.promptbox{background:#1d1d1f;border:1px solid #2c2c31;border-radius:10px;padding:13px 15px;margin-top:6px;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt b,.promptbox b{color:#fff}
+figure.shot{margin:10px 0 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12px;color:var(--txt3);padding:8px 12px;border-top:1px solid var(--line);background:var(--bg2);line-height:1.6}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <a class="navlink" href="../radio/" style="border-color:#e6b98a" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <div class="logo">
+    <div class="dot">🐙</div>
+    <div>GitHub 地圖<small>MORNING LEARNING · EP49</small></div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋技能關鍵字：README、Fork、Clone、Commit、Awesome、2FA、掃描…" autocomplete="off">
+  </div>
+  <a class="navlink" href="ep49-notes.html">📝 課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">EP49 · 晨學講堂 · 2026/08/14</span>
+  <h1>在 AI 時代下<br>GitHub 角色定位？</h1>
+  <p class="sub">GitHub 不只是工程師存放程式碼的地方——它是<b>程式專用的 Google Drive＋版本履歷＋社群網站</b>，更是 AI 時代的<b>工具寶庫</b>：Skill、MCP、開源電子書、掃描工具都在上面。不會寫程式，也能從<b>閱讀、下載與收藏</b>開始。<br>點進每一章，逐層展開<b>本集實際教到</b>的觀念、示範與操作，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🎙️ 生成式AI應用電台・晨學講堂</span>
+    <span>🐙 AI × GitHub 開源冒險</span>
+    <span>🔰 小白友善</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>5</b><span>大主題</span></div>
+  <div class="stat"><b>23</b><span>實戰技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 23 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--blue)" onclick="showChapter('concept')">
+        <div class="glowline"></div><span class="emoji">🧭</span>
+        <h3><em>CHAPTER 01</em>觀念地基：GitHub 是什麼</h3>
+        <p>GitHub 的四種角色、Git 不等於 GitHub、Repository 是數位倉庫，以及第一步建立帳號與 2FA。</p>
+        <div class="foot"><div class="mini"><i data-mini="concept"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--teal)" onclick="showChapter('find')">
+        <div class="glowline"></div><span class="emoji">🔍</span>
+        <h3><em>CHAPTER 02</em>找資源與判讀專案</h3>
+        <p>搜尋入門與進階條件、Awesome 清單、README 判讀、四大區域，以及不要只看 Stars 的五指標評估。</p>
+        <div class="foot"><div class="mini"><i data-mini="find"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--purple)" onclick="showChapter('ai')">
+        <div class="glowline"></div><span class="emoji">🤖</span>
+        <h3><em>CHAPTER 03</em>AI × GitHub 課堂實戰</h3>
+        <p>ChatGPT GitHub 連接器、AI Agent 安裝簡報 Skill、找 SPSS 的 MCP、安全掃描工具與探索趨勢。</p>
+        <div class="foot"><div class="mini"><i data-mini="ai"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--orange)" onclick="showChapter('hands')">
+        <div class="glowline"></div><span class="emoji">🛠️</span>
+        <h3><em>CHAPTER 04</em>動手做：取得到協作</h3>
+        <p>ZIP／Clone／Fork 三種取得方式、建立第一個 Repository、寫好 README、Commit 與 Branch/PR/Merge。</p>
+        <div class="foot"><div class="mini"><i data-mini="hands"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--amber)" onclick="showChapter('safe')">
+        <div class="glowline"></div><span class="emoji">🛡️</span>
+        <h3><em>CHAPTER 05</em>安全守則與課後行動</h3>
+        <p>公開 Repository 等於公開在網路上——不要上傳什麼、安全做法有哪些，加上第一次 GitHub 練習與 Q&amp;A。</p>
+        <div class="foot"><div class="mini"><i data-mini="safe"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+
+    <div class="resources">
+      <h3>📦 <span>課程原始資料</span></h3>
+      <div class="res-grid">
+        <a href="ep49-notes.html"><span class="ic">📝</span><span><b>課堂筆記</b>逐頁嵌入 20 張簡報原圖</span></a>
+        <a href="../radio/"><span class="ic">📻</span><span><b>直播電台系列</b>回系列總覽，一集一卡</span></a>
+        <a href="ep48-notes.html"><span class="ic">💻</span><span><b>相關 EP48</b>OpenCode：低成本 AI Agent</span></a>
+        <a href="ep47-notes.html"><span class="ic">🧰</span><span><b>相關 EP47</b>Skill 可以在哪裡用</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-concept" class="view" style="--c:var(--blue)"></section>
+  <section id="view-find" class="view" style="--c:var(--teal)"></section>
+  <section id="view-ai" class="view" style="--c:var(--purple)"></section>
+  <section id="view-hands" class="view" style="--c:var(--orange)"></section>
+  <section id="view-safe" class="view" style="--c:var(--amber)"></section>
+</main>
+
+<footer>
+  本頁為 EP49「在 AI 時代下，GitHub 角色定位？」課後整理・介面沿用本站互動式學習地圖版型<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2026｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+const DATA = {
+  concept: {
+    key:'concept', color:'var(--blue)', emoji:'🧭', code:'CHAPTER 01', title:'觀念地基：GitHub 是什麼',
+    intro:'先把四個地基觀念站穩：GitHub 扮演什麼角色、它跟 Git 差在哪、Repository 是什麼，以及帳號安全怎麼設。',
+    topics:[
+      {t:'GitHub 到底是什麼：四種角色', s:'不只是工程師存放程式碼的地方｜簡報 03/20', blocks:[
+        {h:'四種角色',table:{head:['角色','說明'],rows:[['☁️ 雲端空間','存放程式、文件與圖片'],['🕘 版本履歷','保留每一次修改紀錄'],['👥 協作平台','多人討論與修改項目'],['🪪 作品名片','展示專案與個人能力——面試、找工作時的作品集']]}},
+        {h:'一句話記住',tip:'GitHub＝程式專用的 Google Drive ＋ 版本履歷 ＋ 社群網站。老師課堂補充：它同時是工程師專屬的社群平台，也是你 vibe coding 作品的展示櫃。'},
+        {h:'課堂提醒',warn:'把 vibe coding 作品放上 GitHub 前要小心——不要把 API Key、帳號密碼一起放上去（第五章安全守則會展開）。'},
+        {h:'簡報原圖',shot:{img:'ep49-img/slide03.jpg',cap:'簡報 03/20｜GitHub 到底是什麼'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep49-notes.html#sec-what" style="color:var(--blue)">筆記 3：GitHub 到底是什麼</a>'}]},
+      {t:'Git 不等於 GitHub', s:'一個管版本，一個管雲端與協作｜簡報 04/20', blocks:[
+        {h:'兩者對照',table:{head:['','Git','GitHub'],rows:[['定位','電腦上的版本管理','線上託管與協作平台'],['能做什麼','記錄檔案修改、建立版本檢查點、可以回到以前的版本','把項目放到雲端、與其他人共同修改、公開展示與分享']]}},
+        {h:'老師的存檔比喻',steps:['把 Git 想成打遊戲的存檔：vibe coding 做到一個階段（例如做好匯率轉換表），就設一個「存檔點」。','之後不管往哪個方向改，都可以隨時回到這個存檔點。','想把存檔放上雲端與人分享，才輪到 GitHub 出場。'],},
+        {h:'小白路線',tip:'初學者可以先用 GitHub 網頁，不必立刻學指令列。'},
+        {h:'簡報原圖',shot:{img:'ep49-img/slide04.jpg',cap:'簡報 04/20｜Git 不等於 GitHub'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep49-notes.html#sec-git" style="color:var(--blue)">筆記 4：Git 不等於 GitHub</a>'}]},
+      {t:'Repository 是什麼：一個專案＝一個數位倉庫', s:'程式、README、版本紀錄、協作功能｜簡報 06/20', blocks:[
+        {h:'倉庫裡有什麼',ul:['<b>程式與檔案</b>：Python、HTML、圖片、資料','<b>README</b>：專案使用說明書','<b>版本紀錄</b>：每次 Commit 的內容','<b>協作功能</b>：Issues、PR、Discussions'],},
+        {h:'公開範圍',table:{head:['類型','誰看得到'],rows:[['Public','任何人都能看見'],['Private','只有授權者可以進入']]}},
+        {h:'簡報原圖',shot:{img:'ep49-img/slide06.jpg',cap:'簡報 06/20｜Repository 是什麼'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep49-notes.html#sec-repo" style="color:var(--blue)">筆記 6：Repository 是什麼</a>'}]},
+      {t:'第一步：建立帳號＋開啟 2FA', s:'先把帳號安全設定做好｜簡報 05/20', blocks:[
+        {h:'五步驟',steps:['前往 github.com','選擇 Sign up','輸入 Email 與帳號名稱','驗證電子郵件','設定 2FA（兩階段驗證）'],},
+        {h:'一定要做',warn:'使用獨立且高強度密碼、開啟 2FA、妥善保存 Recovery Codes。用常用信箱註冊，並立即開啟兩階段驗證。'},
+        {h:'課堂補充',tip:'用 Google 帳號綁定登入即可；沒登入也能搜尋瀏覽，但登入後才能 Star、Fork，也才能跟 ChatGPT 的 GitHub 連接器綁在一起。'},
+        {h:'簡報原圖',shot:{img:'ep49-img/slide05.jpg',cap:'簡報 05/20｜第一步：建立帳號'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep49-notes.html#sec-account" style="color:var(--blue)">筆記 5：建立帳號與 2FA</a>'}]}
+    ]
+  },
+  find: {
+    key:'find', color:'var(--teal)', emoji:'🔍', code:'CHAPTER 02', title:'找資源與判讀專案',
+    intro:'GitHub 上什麼都有，重點是怎麼找、怎麼看懂、怎麼判斷值不值得用——這一章是「會找、會看」的核心。',
+    topics:[
+      {t:'GitHub 搜尋入門', s:'從你想完成的任務開始搜尋｜簡報 11/20', blocks:[
+        {h:'四種常用搜尋',table:{head:['想找什麼','搜尋關鍵字'],rows:[['免費 AI 工具','open source AI tools'],['AI 簡報工具','AI presentation generator'],['提示詞資源','awesome prompts'],['中文 AI 項目','Chinese AI assistant']]}},
+        {h:'關鍵字公式',tip:'主題＋功能＋語言或平台。英文工具名稱與任務關鍵字，通常更容易找到資源。'},
+        {h:'簡報原圖',shot:{img:'ep49-img/slide11.jpg',cap:'簡報 11/20｜GitHub 搜尋入門'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep49-notes.html#sec-search" style="color:var(--teal)">筆記 10：搜尋入門與進階</a>'}]},
+      {t:'進階搜尋條件與 Awesome 清單', s:'用條件縮小搜尋結果｜簡報 12/20', blocks:[
+        {h:'四個搜尋條件',ul:['<b>stars:&gt;500</b>：只看較多人收藏的','<b>in:name</b>：搜尋項目名稱','<b>in:description</b>：搜尋項目描述','<b>language:python</b>：指定程式語言'],},
+        {h:'三種探索方式',steps:['搜尋 Awesome＋主題（如 awesome-python、awesome-chatgpt、awesome-mcp-servers、awesome-agent-skills）','點選 Repository 的 Topics 標籤','查看相關項目與其他作品'],},
+        {h:'課堂實測',p:'老師在搜尋列示範 <code>notebooklm stars:&gt;10</code>：儲存庫從 10.5k 筆縮到 13 筆，一眼看到 notebooklm-py、SurfSense、notebooklm-skill 等主力專案。'},
+        {h:'注意',warn:'Awesome 是整理入口，仍要確認安全、更新與授權。'},
+        {h:'簡報原圖',shot:{img:'ep49-img/slide12.jpg',cap:'簡報 12/20｜進階搜尋與資源清單'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep49-notes.html#sec-search" style="color:var(--teal)">筆記 10：搜尋入門與進階</a>'}]},
+      {t:'README 是專案說明書', s:'使用任何項目前，請先讀 README｜簡報 08/20', blocks:[
+        {h:'README 要回答你',ul:['這個項目能做什麼？','需要安裝哪些軟體？','支援哪一種作業系統？','如何安裝與執行？','是否有使用限制？'],},
+        {h:'AI 小白技巧',tip:'看不懂時，可下載 README.md，請 AI 用繁體中文解釋。課堂示範：把 diagram-design 的 README 丟給 ChatGPT，馬上得到中文功能總覽。也可以裝「沉浸式翻譯」外掛直接翻整頁。'},
+        {h:'紅線',warn:'不要只看到 Install 指令就直接執行。'},
+        {h:'簡報原圖',shot:{img:'ep49-img/slide08.jpg',cap:'簡報 08/20｜README 是專案說明書'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep49-notes.html#sec-readme" style="color:var(--teal)">筆記 8：README 與專案頁面</a>'}]},
+      {t:'其他四個重要區域', s:'找版本、看問題、問問題、確認授權｜簡報 09/20', blocks:[
+        {h:'四大區域',table:{head:['區域','用途'],rows:[['📦 Releases','下載正式版本或安裝檔'],['🐛 Issues','查看錯誤、問題與解法'],['💬 Discussions','提問與交流使用經驗'],['📜 License','確認是否可以使用、修改或散布']]}},
+        {h:'授權紅線',warn:'沒有 License，不代表可以任意複製或商業使用。'},
+        {h:'簡報原圖',shot:{img:'ep49-img/slide09.jpg',cap:'簡報 09/20｜其他四個重要區域'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep49-notes.html#sec-readme" style="color:var(--teal)">筆記 8：README 與專案頁面</a>'}]},
+      {t:'如何判斷項目是否值得使用', s:'不要只看 Stars 的五指標雷達｜簡報 10/20', blocks:[
+        {h:'五個指標',steps:['README｜說明是否完整？','Updated｜最近是否仍有更新？','Issues｜問題是否有人回應？','Releases｜是否有穩定版本？','License｜授權是否清楚？'],},
+        {h:'常見誤解',warn:'Stars 很多，不代表程式一定安全、適合你或沒有惡意內容。'},
+        {h:'星號怎麼看',tip:'星號越多代表越多人使用（例如課堂看到的 ai-agent-book 有 37.3k 星）——它是熱門度指標，拿來當「初篩」，再用五指標把關。'},
+        {h:'簡報原圖',shot:{img:'ep49-img/slide10.jpg',cap:'簡報 10/20｜如何判斷項目是否值得使用'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep49-notes.html#sec-judge" style="color:var(--teal)">筆記 9：判斷專案值不值得用</a>'}]}
+    ]
+  },
+  ai: {
+    key:'ai', color:'var(--purple)', emoji:'🤖', code:'CHAPTER 03', title:'AI × GitHub 課堂實戰',
+    intro:'本集最精彩的部分：讓 AI 幫你逛 GitHub、裝 Skill、做安全檢核——五段真實示範全記錄。',
+    topics:[
+      {t:'ChatGPT 的 GitHub 連接器', s:'課堂示範一｜錄影 06:30–11:30', blocks:[
+        {h:'開啟方式',steps:['打開 ChatGPT，左側選單點「外掛程式」（Plugins／Connectors）。','搜尋 GitHub——它幾乎是 ChatGPT 的標配連接器（官方說明：Inspect PRs, triage issues, debug failing checks…）。','啟用後就能在對話裡 @GitHub 下指令。'],},
+        {h:'課堂實測指令',p:'「<b>GitHub 請推薦目前 2026.8 最多人點星號的簡報 skill</b>」→ ChatGPT 花 1 分 14 秒回覆：第一名 <b>Frontend Slides（27,473 Stars，MIT 授權）</b>，並列出 guizang-ppt-skill（23,957）、html-ppt-skill（約 7,900）、dashi-ppt-skill（約 5,100）比較表與結論。'},
+        {h:'省扣打技巧',tip:'先在 Chat 模式用連接器「問」與「比較」（不耗 Agent 額度），確定要裝哪個，再切到 Work／Codex 模式執行安裝——不要一開始就用 Work 慢慢逛。'},
+        {h:'防幻覺',warn:'請 AI 推薦時建議開啟連接器或聯網搜尋，讓它真的上 GitHub 抓資料，不然可能幻覺亂編專案名稱與星數。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep49-notes.html#sec-demo1" style="color:var(--purple)">筆記 7：示範一 ChatGPT × GitHub</a>'}]},
+      {t:'用 AI Agent 安裝簡報 Skill', s:'課堂示範二｜Frontend Slides → Codex｜錄影 15:00–18:45、29:15–30:15', blocks:[
+        {h:'發生了什麼',steps:['對 Agent 說「安裝並示範 Frontend Slides」。','Agent 讀取技能、檢查專案檔案：原始專案含 Claude 外掛包與 34 套大型模板，超過個人 Skill 儲存限制。','Agent 自動精簡：保留核心 SKILL.md、樣式庫與三套代表性模板，不影響 16:9、動畫、PPT 轉換與 PDF 匯出。','安裝驗證通過後進入示範：用「Neo-Grid Bold」風格做出 6 頁、繁體中文、固定 16:9 的「GitHub 新手上路」互動簡報，並自動開瀏覽器檢查有無溢位。'],},
+        {h:'跨代理通用',tip:'Frontend Slides 以 Claude Code 插件形式打包，但核心 SKILL.md 也可被 Codex、Kimi Code、OpenCode、Gemini CLI 等其他編碼代理讀取——安裝指令：git clone 到 ~/.claude/skills/ 後用 /frontend-slides 呼叫。'},
+        {h:'要盯的地方',warn:'AI 裝 Skill 有時會「偷懶」：明明 34 套模板只裝了 3 套。裝完務必檢查它實際下載了什麼；老師經驗：用 Codex 裝會比用 ChatGPT Work 裝更完整。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep49-notes.html#sec-demo2" style="color:var(--purple)">筆記 11：示範二 安裝 Skill 做簡報</a>'}]},
+      {t:'請 AI 找 SPSS 的 MCP 與 Skill', s:'課堂示範三｜錄影 16:30–18:15', blocks:[
+        {h:'指令',p:'「<b>請推薦 GitHub 上近 3 年有關 SPSS 的 MCP 或 skill</b>」——在 Chat 模式問，記得開聯網。'},
+        {h:'AI 回覆的比較表',table:{head:['專案','類型','特點'],rows:[['SPSS-MCP','MCP','直接控制 SPSS（Claude Code → SPSS）★★★★★'],['claude-statistical-analysis-skill','Skill','直接讀 .sav，自動做統計＋APA 報告 ★★★★★'],['psychology-agent','Agent/Skill','讀 .sav/.zsav/.por，心理、社科研究 ★★★★☆'],['InsightGenius','MCP Server','問卷分析、Crosstab、ANOVA——但連的是 hosted API，不是你電腦裡的 IBM SPSS']]}},
+        {h:'實用場景',tip:'有了這類工具，連 SPSS 都不用打開：把 .sav 檔丟給 Agent 說「Load survey_data.sav and tell me what you find」，它會回報樣本數、變數、遺漏值、Cronbach\'s α，再建議 CFA、階層迴歸等分析方向。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep49-notes.html#sec-demo3" style="color:var(--purple)">筆記 10：搜尋示範（SPSS）</a>'}]},
+      {t:'安全掃描工具與安裝前檢核 SOP', s:'課堂示範四｜錄影 31:00–35:30', blocks:[
+        {h:'用語音問 AI',p:'「請幫我搜尋 GitHub 上面針對 SQL 或者是 MCP 進行安全性檢核的工具，檢核是否帳號被洩出、API 被洩出等等的安全性防護工具。」AI 拆成三類來找：<b>帳密/API Key 洩漏偵測、SQL/Injection 程式碼弱點、MCP Server/Tool 的 Agentic Security</b>。'},
+        {h:'AI 整理的工具表',table:{head:['工具','主要用途'],rows:[['Gitleaks / Betterleaks','Secret Scanner，掃帳密與金鑰洩漏'],['TruffleHog','Secret＋有效性驗證'],['GitHub Secret Scanning','GitHub 原生防護（內建）'],['CodeQL','SAST／資料流分析，SQL 弱點首選'],['Semgrep','SAST／自訂規則，快速掃描'],['Snyk Agent Scan／Cisco MCP Scanner','MCP／Agent Security 檢核']]}},
+        {h:'安裝前檢核 SOP',steps:['課堂亮點：老師直接把需求變成一份「安裝第三方 Skill 前的安全檢核」自訂指令存進 Agent。','檢核項目包含：讀取帳號密碼 Cookie、存取 API Key/Token/SSH Key、讀取工作區以外檔案、外傳資料、preinstall/postinstall 後門、eval 動態執行、背景程序、要求管理員權限、供應鏈風險等 13 項。','之後每次說「安裝某 Skill」，Agent 會先跑完檢核、確認沒有明顯風險才安裝。'],},
+        {h:'看課堂筆記',p:'👉 <a href="ep49-notes.html#sec-security" style="color:var(--purple)">筆記 16：安全守則與掃描工具</a>'}]},
+      {t:'探索、Topics、Trending 與 HelloGitHub', s:'課堂示範五｜錄影 18:45–24:00', blocks:[
+        {h:'四個逛法',ul:['<b>Explore（探索）</b>：像社群媒體一樣，依你按過的 Star 推薦內容。','<b>Topics（主題）</b>：從 Awesome Lists、ai-agents、claude-skills 等主題標籤進入。','<b>Trending（熱門）</b>：看今天全站竄升的專案——課堂當天第一名是 diagram-design（單日 +3,651 星）。','<b>HelloGitHub</b>：中文網站，每月介紹 GitHub 上有趣的入門級開源專案（簡中）。'],},
+        {h:'課堂看到的寶藏',table:{head:['專案','是什麼'],rows:[['bojieli/ai-agent-book','《深入理解 AI Agent》開源電子書：37.3k 星、10 章、93 個配套實驗、13 種語言含繁中，PDF/EPUB 可直接下載餵給 NotebookLM'],['cathrynlavery/diagram-design','29 種編輯級圖解類型的 Claude Code Skill，當日 Trending 第一'],['GOD','AI 智能體小鎮：本地優化的多智能體模擬平台'],['hallmark','拒絕 AI 味的網頁設計技能（支援 Claude Code、Cursor、Codex）']]}},
+        {h:'順手練習',tip:'開源電子書的 PDF／EPUB 下載後可以直接放進 NotebookLM 當資料來源，把「找到的資源」變成「你的知識庫」。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep49-notes.html#sec-explore" style="color:var(--purple)">筆記 12：探索與趨勢</a>'}]}
+    ]
+  },
+  hands: {
+    key:'hands', color:'var(--orange)', emoji:'🛠️', code:'CHAPTER 04', title:'動手做：從取得到協作',
+    intro:'找到喜歡的專案之後：怎麼拿回家、怎麼開自己的倉庫、怎麼存檔與協作——GitHub 操作的完整一輪。',
+    topics:[
+      {t:'找到項目後，怎麼取得？', s:'先判斷你只是使用，還是需要修改｜簡報 13/20', blocks:[
+        {h:'三選一',table:{head:['你的需求','用什麼'],rows:[['我只想安裝使用','Releases：正式安裝檔與版本說明'],['我只想下載目前檔案','Download ZIP：當下版本的檔案快照'],['我要保留版本歷史','Clone：完整 Repository 與版本紀錄']]}},
+        {h:'原則',tip:'優先遵循 README 提供的官方安裝方式。課堂示範：綠色 Code 按鈕裡有「複製網址、Open in GitHub Copilot、GitHub Desktop 開啟、下載 ZIP」四條路。'},
+        {h:'簡報原圖',shot:{img:'ep49-img/slide13.jpg',cap:'簡報 13/20｜找到項目後怎麼取得'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep49-notes.html#sec-get" style="color:var(--orange)">筆記 14：取得專案三選一</a>'}]},
+      {t:'ZIP、Clone、Fork 有什麼不同', s:'三個常被混淆的操作｜簡報 14/20', blocks:[
+        {h:'三者對照',table:{head:['操作','用途','版本歷史'],rows:[['Download ZIP','單純查看或使用檔案','不含完整版本歷史'],['Clone','在電腦持續修改與同步','包含完整版本歷史'],['Fork','建立自己的線上副本','保留與原項目的關係']]}},
+        {h:'金句',tip:'ZIP＝拿一份｜Clone＝搬回家｜Fork＝複製自己的分店。'},
+        {h:'簡報原圖',shot:{img:'ep49-img/slide14.jpg',cap:'簡報 14/20｜ZIP、Clone、Fork 差異'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep49-notes.html#sec-get" style="color:var(--orange)">筆記 14：ZIP／Clone／Fork</a>'}]},
+      {t:'建立第一個 Repository', s:'從 hello-world 練習最安全｜簡報 15/20', blocks:[
+        {h:'六步驟',steps:['右上角選擇「＋」','點選 New repository','輸入 Repository name（練習用 hello-world）','填寫 Description','選擇 Public 或 Private','勾選 Add a README file'],},
+        {h:'提醒',tip:'先建立簡單的練習倉庫，不必一開始就上傳複雜程式。'},
+        {h:'簡報原圖',shot:{img:'ep49-img/slide15.jpg',cap:'簡報 15/20｜建立第一個 Repository'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep49-notes.html#sec-create" style="color:var(--orange)">筆記 15：建立 Repo 到協作</a>'}]},
+      {t:'寫好你的 README', s:'讓別人一眼看懂這個項目｜簡報 16/20', blocks:[
+        {h:'五段結構',steps:['# 專案名稱｜一句話說明用途','## 功能｜列出主要功能','## 使用方法｜提供操作步驟','## 注意事項｜列出限制與風險','## License｜說明使用授權'],},
+        {h:'AI 輔助寫法',tip:'先告訴 AI 專案用途，產生簡短初稿後再由自己確認。好的 README 要回答：這是什麼、怎麼用、要注意什麼。'},
+        {h:'簡報原圖',shot:{img:'ep49-img/slide16.jpg',cap:'簡報 16/20｜寫好你的 README'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep49-notes.html#sec-create" style="color:var(--orange)">筆記 15：建立 Repo 到協作</a>'}]},
+      {t:'Commit 就像建立安全存檔', s:'每次重要修改，都留下清楚紀錄｜簡報 17/20', blocks:[
+        {h:'四步驟',steps:['修改前｜原始版本','修改檔案｜加入新內容','Commit｜建立版本檢查點','需要時｜查看或還原紀錄'],},
+        {h:'訊息怎麼寫',table:{head:['✅ 好的訊息','❌ 避免這樣寫'],rows:[['新增 README 使用說明','修改'],['修正登入頁面錯字','update'],['更新安裝步驟','test']]}},
+        {h:'一句話',tip:'Commit 是某個時間點的版本快照——就像遊戲存檔。'},
+        {h:'簡報原圖',shot:{img:'ep49-img/slide17.jpg',cap:'簡報 17/20｜Commit 就像建立安全存檔'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep49-notes.html#sec-create" style="color:var(--orange)">筆記 15：建立 Repo 到協作</a>'}]},
+      {t:'Branch、PR 與 Merge', s:'先在分支修改，再安全合併｜簡報 18/20', blocks:[
+        {h:'五個角色',steps:['main｜主要且穩定的版本','Branch｜獨立進行新功能或修改','Commit｜保存分支上的修改','Pull Request｜提出合併與審查','Merge｜確認後合併回 main'],},
+        {h:'流程',p:'<b>main → Branch → Commit → Pull Request → Merge</b>'},
+        {h:'為什麼要分支',tip:'Branch 讓新修改不直接影響 main——要分流給別人改，也用這個方式。'},
+        {h:'簡報原圖',shot:{img:'ep49-img/slide18.jpg',cap:'簡報 18/20｜Branch、PR 與 Merge'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep49-notes.html#sec-create" style="color:var(--orange)">筆記 15：建立 Repo 到協作</a>'}]}
+    ]
+  },
+  safe: {
+    key:'safe', color:'var(--amber)', emoji:'🛡️', code:'CHAPTER 05', title:'安全守則與課後行動',
+    intro:'公開 Repository 等於公開在網路上。最後一章把紅線畫清楚，並給你一份今天就能完成的練習清單。',
+    topics:[
+      {t:'GitHub 安全守則', s:'公開 Repository 等於公開在網路上｜簡報 19/20', blocks:[
+        {h:'不要上傳',ul:['帳號與密碼','API Key 或 Access Token','身分證字號與個人資料','內部文件與未公開資料','資料庫連線資訊'],},
+        {h:'安全做法',ul:['開啟 2FA','使用 .gitignore','上傳前再次檢查','憑證外洩立即撤銷','使用前閱讀 License'],},
+        {h:'最重要的一條',warn:'刪除檔案，不一定能從 Git 歷史中完全移除機密內容——外洩的金鑰一律視為已洩漏，立即撤銷重發。'},
+        {h:'簡報原圖',shot:{img:'ep49-img/slide19.jpg',cap:'簡報 19/20｜GitHub 安全守則'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep49-notes.html#sec-security" style="color:var(--amber)">筆記 16：安全守則與掃描工具</a>'}]},
+      {t:'完成第一次 GitHub 練習', s:'今天就從一個 README 開始｜簡報 20/20', blocks:[
+        {h:'七步驟達成「GitHub 新手」',steps:['註冊 GitHub 並開啟 2FA','搜尋一個感興趣的 AI 項目','閱讀 README、Issues 與 License','Star 收藏該項目','建立 hello-world Repository','修改 README 並完成一次 Commit','建立 Branch、PR 並完成 Merge'],},
+        {h:'核心心法',tip:'先會找、會看、會安全使用，再慢慢學會開發。'},
+        {h:'簡報原圖',shot:{img:'ep49-img/slide20.jpg',cap:'簡報 20/20｜完成第一次 GitHub 練習'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep49-notes.html#sec-recap" style="color:var(--amber)">筆記 17：完成第一次練習</a>'}]},
+      {t:'課堂 Q&A 精華', s:'Slido 問答時間＋聊天室｜錄影 38:00–46:00', blocks:[
+        {h:'學員問了什麼',ul:['AI 這麼風行，老師有沒有什麼技巧讓 AI 產出的字句比較像人話？','NotebookLM 最近有什麼新功能值得學習？','下載的 Skill 要如何手動安裝到 GPT？從 GitHub 或 Gemini 呢？','星號代表的是下載率、瀏覽率，還是使用過評價好的代表？','如何判斷專案的安全性？','進到專案頁面只看到一大堆資料夾，該從哪裡開始看、下載要按哪裡？'],},
+        {h:'老師的回答線索',steps:['星號＝收藏數，代表使用與關注的人多，是熱門度初篩，搭配五指標判讀。','安全性：用第三章的掃描工具（Gitleaks、CodeQL 等）＋安裝前檢核 SOP。','看不懂專案頁：先讀 README，再看 Releases；下載走綠色 Code 按鈕（ZIP／Desktop／Copilot）——課堂用 IQKeyboardManager（16.6k 星）現場示範。'],},
+        {h:'看課堂筆記',p:'👉 <a href="ep49-notes.html#sec-qa" style="color:var(--amber)">筆記 18：Q&amp;A 問答時間</a>'}]}
+    ]
+  }
+};
+const ORDER = ['concept','find','ai','hands','safe'];
+const $ = s=>document.querySelector(s);
+function renderChapter(ch){
+  const d=DATA[ch];const next=ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];const prev=ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html=`<div class="chapter-head"><span class="emoji">${d.emoji}</span><div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div></div>`;
+  d.topics.forEach((tp,i)=>{const id=`${ch}-${i}`;
+    html+=`<div class="topic" id="topic-${id}"><div class="topic-head" onclick="toggleTopic('${id}')"><span class="num">${i+1}</span><h4>${tp.t}<small>${tp.s}</small></h4><input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)"><span class="chev">▶</span></div><div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{html+=`<div class="block"><h5>${b.h}</h5>`;
+      if(b.p)html+=`<p>${b.p}</p>`;
+      if(b.ul)html+=`<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps)html+=`<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.table)html+=`<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.shot)html+=`<figure class="shot"><img src="${b.shot.img}" alt="" loading="lazy"><figcaption>${b.shot.cap}</figcaption></figure>`;
+      if(b.tip)html+=`<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn)html+=`<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html+=`</div>`;});
+    html+=`</div></div></div>`;});
+  html+=`<div class="chapnav"><a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a><a onclick="showHome()" style="text-align:center">回總覽<b>🏠 五大主題</b></a><a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a></div>`;
+  $('#view-'+ch).innerHTML=html;
+}
+ORDER.forEach(renderChapter);
+function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('#view-'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function showHome(){switchView('home');$('#crumbs').style.display='none';clearSearch();}
+function showChapter(ch){switchView(ch);$('#crumbs').style.display='flex';$('#crumbHere').textContent=`${DATA[ch].emoji} ${DATA[ch].title}`;clearSearch();syncChecks();}
+function toggleTopic(id){$('#topic-'+id).classList.toggle('open');}
+function openTopic(ch,i){showChapter(ch);const el=$('#topic-'+ch+'-'+i);el.classList.add('open');setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+const KEY='ep49-skills-v1';
+const store=()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){const s=store();if(val)s[id]=1;else delete s[id];localStorage.setItem(KEY,JSON.stringify(s));updateProgress();}
+const TOTAL=ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){const done=Object.keys(store()).length;const pct=Math.round(done/TOTAL*100);$('#progFill').style.width=pct+'%';$('#progText').textContent=`${done} / ${TOTAL} 項技能已掌握`;$('#statDone').textContent=done;$('#statPct').textContent=pct+'%';ORDER.forEach(ch=>{const sub=DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;const el=document.querySelector(`[data-mini="${ch}"]`);if(el)el.style.width=Math.round(sub/DATA[ch].topics.length*100)+'%';});}
+function syncChecks(){const s=store();document.querySelectorAll('input[data-skill]').forEach(cb=>{cb.checked=!!s[cb.dataset.skill];});}
+function resetProgress(){if(confirm('確定要清空所有打勾進度嗎？')){localStorage.removeItem(KEY);syncChecks();updateProgress();}}
+function stripTags(s){return s.replace(/<[^>]+>/g,'');}
+const INDEX=[];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{let body=tp.s+' ';tp.blocks.forEach(b=>{if(b.p)body+=stripTags(b.p)+' ';if(b.ul)body+=b.ul.map(stripTags).join(' ')+' ';if(b.steps)body+=b.steps.map(stripTags).join(' ')+' ';if(b.tip)body+=stripTags(b.tip)+' ';if(b.warn)body+=stripTags(b.warn)+' ';if(b.table)body+=b.table.rows.flat().map(stripTags).join(' ')+' ';});INDEX.push({ch,i,title:tp.t,body});}));
+$('#searchInput').addEventListener('input',e=>{const q=e.target.value.trim();const box=$('#searchResults');if(!q){box.classList.remove('show');box.innerHTML='';return;}const hits=INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));box.classList.add('show');if(!hits.length){box.innerHTML=`<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：AGENTS.md、MCP、Zen、Harness）</div>`;return;}const hl=s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);box.innerHTML=hits.map(x=>{const pos=x.body.toLowerCase().indexOf(q.toLowerCase());const snip=x.body.substr(Math.max(0,pos-20),90);return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})"><div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div><h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;}).join('');});
+function clearSearch(){$('#searchInput').value='';$('#searchResults').classList.remove('show');$('#searchResults').innerHTML='';}
+(function(){const box=$('#stars');for(let i=0;i<70;i++){const s=document.createElement('i');s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';s.style.animationDelay=(Math.random()*3)+'s';s.style.transform=`scale(${.5+Math.random()*1.5})`;box.appendChild(s);}})();
+syncChecks();updateProgress();
+</script>
+</body>
+</html>

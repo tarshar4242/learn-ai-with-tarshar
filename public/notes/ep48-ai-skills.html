@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OpenCode 篇：不想花大錢，也能體驗 AI Agent｜互動式學習地圖</title>
+<meta name="description" content="EP48 晨學講堂：OpenCode——開源、可自由切換模型的終端機 AI Coding Agent，涵蓋演進脈絡、五大特色、安裝設定、TUI、AGENTS.md、SKILL、MCP、Build/Plan、語音外掛、Zen/Go 比較與 Harness Engineering，互動式多層次學習地圖">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269;
+  --green:#3f8560; --orange:#bf6a1e; --red:#c0453f; --teal:#0d8f80; --amber:#9c7b23;
+  --feat:#c2620c; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(28px,4.6vw,46px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--txt);background:none;-webkit-text-fill-color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:660px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:9px}
+.steps li{list-style:none;counter-increment:st;display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--txt2);line-height:1.7}
+.steps li::before{content:counter(st);flex:none;width:25px;height:25px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:var(--c,var(--feat));margin-top:1px}
+.steps li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+.prompt,.promptbox{background:#1d1d1f;border:1px solid #2c2c31;border-radius:10px;padding:13px 15px;margin-top:6px;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt b,.promptbox b{color:#fff}
+figure.shot{margin:10px 0 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12px;color:var(--txt3);padding:8px 12px;border-top:1px solid var(--line);background:var(--bg2);line-height:1.6}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <a class="navlink" href="../radio/" style="border-color:#e6b98a" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <div class="logo">
+    <div class="dot">💻</div>
+    <div>OpenCode 地圖<small>MORNING LEARNING · EP48</small></div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋技能關鍵字：安裝、TUI、AGENTS.md、SKILL、MCP、Zen、Harness…" autocomplete="off">
+  </div>
+  <a class="navlink" href="ep48-notes.html">📝 課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">EP48 · 晨學講堂 · 2026/07</span>
+  <h1>不想花大錢，也能體驗 AI Agent<br>OpenCode 篇</h1>
+  <p class="sub">開源、可自由切換任意模型的終端機 AI Coding Agent——從三階段演進脈絡、五大特色，一路走到安裝、TUI、AGENTS.md、SKILL、MCP、Build/Plan 兩種 Agent、語音外掛、Zen/Go 選模型，最後認識 Harness Engineering。<br>點進每一章，逐層展開<b>本集實際教到</b>的概念與步驟，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🎙️ 生成式AI應用電台・晨學講堂</span>
+    <span>💻 終端機 AI Coding Agent</span>
+    <span>💰 開源低成本</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>5</b><span>大主題</span></div>
+  <div class="stat"><b>12</b><span>實戰技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 12 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--blue)" onclick="showChapter('concept')">
+        <div class="glowline"></div><span class="emoji">🧭</span>
+        <h3><em>CHAPTER 01</em>演進脈絡＋為什麼值得學</h3>
+        <p>AI 從 Chat 到 Agent 的三階段演進、OpenCode 核心理念，以及五大特色與四世代演進定位。</p>
+        <div class="foot"><div class="mini"><i data-mini="concept"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--teal)" onclick="showChapter('setup')">
+        <div class="glowline"></div><span class="emoji">⚙️</span>
+        <h3><em>CHAPTER 02</em>安裝、設定與 TUI</h3>
+        <p>官網／curl／npm 三種安裝方式、第一次開啟該設定什麼、進入終端機介面實際操作。</p>
+        <div class="foot"><div class="mini"><i data-mini="setup"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--purple)" onclick="showChapter('project')">
+        <div class="glowline"></div><span class="emoji">📄</span>
+        <h3><em>CHAPTER 03</em>專案規則與進階功能</h3>
+        <p>AGENTS.md 把規則講清楚、SKILL 把常用任務變技能、MCP 把 AI 接到外部工具。</p>
+        <div class="foot"><div class="mini"><i data-mini="project"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--orange)" onclick="showChapter('agent')">
+        <div class="glowline"></div><span class="emoji">🤖</span>
+        <h3><em>CHAPTER 04</em>Agent 模式與語音</h3>
+        <p>Build vs Plan 兩種 Agent 怎麼分工，加上用說的也能操作的語音外掛 opencode-voice。</p>
+        <div class="foot"><div class="mini"><i data-mini="agent"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--amber)" onclick="showChapter('choose')">
+        <div class="glowline"></div><span class="emoji">🧩</span>
+        <h3><em>CHAPTER 05</em>選模型與方法論</h3>
+        <p>OpenCode Zen vs Go 兩種可選 Provider 比較，以及更高一層的 Harness Engineering 概念。</p>
+        <div class="foot"><div class="mini"><i data-mini="choose"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+
+    <div class="resources">
+      <h3>📦 <span>課程原始資料</span></h3>
+      <div class="res-grid">
+        <a href="ep48-notes.html"><span class="ic">📝</span><span><b>課堂筆記</b>逐頁嵌入 16 張簡報原圖</span></a>
+        <a href="../radio/"><span class="ic">📻</span><span><b>直播電台系列</b>回系列總覽，一集一卡</span></a>
+        <a href="ep47-notes.html"><span class="ic">🧰</span><span><b>相關 EP47</b>Skill 可以在哪裡用</span></a>
+        <a href="ep43-notes.html"><span class="ic">🎬</span><span><b>相關 EP43</b>影片製作與 Agent 應用</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-concept" class="view" style="--c:var(--blue)"></section>
+  <section id="view-setup" class="view" style="--c:var(--teal)"></section>
+  <section id="view-project" class="view" style="--c:var(--purple)"></section>
+  <section id="view-agent" class="view" style="--c:var(--orange)"></section>
+  <section id="view-choose" class="view" style="--c:var(--amber)"></section>
+</main>
+
+<footer>
+  本頁為 EP48「不想花大錢，也能體驗 AI Agent：OpenCode 篇」課後整理・介面沿用本站互動式學習地圖版型<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2026｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+const DATA = {
+  concept: {
+    key:'concept', color:'var(--blue)', emoji:'🧭', code:'CHAPTER 01', title:'演進脈絡＋為什麼值得學',
+    intro:'先搞懂 AI 為什麼會走到 Agent 這一步，以及 OpenCode 在整個演進脈絡裡站在哪個位置。',
+    topics:[
+      {t:'AI 使用方式的演進：從 Chat 到 Agent', s:'三階段演進＋核心理念｜簡報 p4',
+       blocks:[
+        {h:'三階段',table:{head:['階段','代表工具','特點'],rows:[['① Chat','ChatGPT、Gemini、Claude','AI 給答案，人負責完成工作'],['② Copilot','GitHub Copilot、Cursor','AI 可協助補程式、解釋、修改部分內容，仍以人主導'],['③ Agent','OpenCode、Claude Code、Codex','具備 Planning、Tool Calling、Memory、Skills、Workflow、MCP、Multi-Agent']]}},
+        {h:'核心理念',steps:['人類負責決策：定義目標、需求與約束。','AI 負責執行：規劃步驟、調用工具、撰寫程式、整合與測試。','人類負責驗證：檢查結果、確保符合需求與標準。']},
+        {h:'看課堂筆記',shot:{img:'ep48-img/slide03.jpg',cap:'簡報 2｜三階段演進與核心理念'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep48-notes.html#sec-evolve" style="color:var(--blue)">筆記 2：AI 使用方式的演進</a>'}]},
+      {t:'為什麼 OpenCode 值得學：五大特色', s:'完全開源、模型自由、Terminal First｜簡報 p3',
+       blocks:[
+        {h:'五大特色',ul:['<b>Open Source</b>：可自行修改 Agent、Skills、Workflow、Prompt、Hooks、MCP。','<b>Provider Agnostic</b>：不綁單一模型，GPT／Claude／Gemini／Grok／Ollama／本地模型皆可切換。','<b>Terminal First</b>：把 Terminal 當工作環境，可直接執行 Shell、Git、Docker、測試、Deploy。','<b>Context-aware</b>：理解專案架構、Git History、Dependencies、專案規則。','<b>Agent Workflow</b>：不只是 Coding，而是完整工作流程。']},
+        {h:'完整工作流',p:'需求 → 分析 → 規劃 → Coding → Test → Debug → Commit → Review → 完成。'},
+        {h:'看課堂筆記',shot:{img:'ep48-img/slide04.jpg',cap:'簡報 3｜五大特色＋完整工作流'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep48-notes.html#sec-why" style="color:var(--blue)">筆記 3：為什麼值得學</a>'}]},
+      {t:'OpenCode 是什麼：四世代演進', s:'AI Coding Agent 的新世代｜簡報 p5',
+       blocks:[
+        {h:'四個世代',table:{head:['世代','代表','AI 能力'],rows:[['第一代','ChatGPT','問答式 Coding'],['第二代','GitHub Copilot','程式補全'],['第三代','Claude Code、Codex','可操作 Terminal'],['第四代','OpenCode','Agent 自主完成工作流']]}},
+        {h:'一句話總結',tip:'OpenCode = Terminal 中的 AI Software Engineer。核心思想：Human writes code → Human assigns tasks, AI executes tasks.'},
+        {h:'看課堂筆記',shot:{img:'ep48-img/slide05.jpg',cap:'簡報 4｜OpenCode 是什麼＋四世代演進'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep48-notes.html#sec-what" style="color:var(--blue)">筆記 4：OpenCode 是什麼</a>'}]}
+    ]
+  },
+  setup: {
+    key:'setup', color:'var(--teal)', emoji:'⚙️', code:'CHAPTER 02', title:'安裝、設定與 TUI',
+    intro:'從官網下載或指令安裝，第一次開啟先做好 4 項設定，再進入終端機介面實際跟 AI 協作。',
+    topics:[
+      {t:'安裝 OpenCode', s:'官網下載／curl／npm 三種方式｜簡報 p8-9',
+       blocks:[
+        {h:'安裝方式',steps:['進入 opencode.ai，桌面版支援 macOS／Windows／Linux Beta。','點右上角「下載」，或直接用指令安裝。','指令安裝：<code>curl -fsSL https://opencode.ai/install | bash</code>（也支援 npm、bun、brew、paru）。']},
+        {h:'看課堂筆記',shot:{img:'ep48-img/slide06.jpg',cap:'簡報 5｜安裝 OpenCode：先到官網'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep48-notes.html#sec-install" style="color:var(--teal)">筆記 5：安裝 OpenCode</a>'}]},
+      {t:'第一次開啟先設定：4 項就夠了', s:'語言、Shell、權限、推理摘要｜簡報 p6',
+       blocks:[
+        {h:'4 項設定',table:{head:['設定項','建議值'],rows:[['語言','繁體中文'],['Shell','依系統選擇（如 powershell）'],['自動接受權限','先關閉'],['推理摘要／Shell 區塊','建議開啟']]}},
+        {h:'安全提醒',warn:'「自動接受權限」先關閉——熟悉 OpenCode 的行為模式後再視情況開啟，避免權限請求被自動批准。'},
+        {h:'看課堂筆記',shot:{img:'ep48-img/slide07.jpg',cap:'簡報 6｜第一次開啟先設定'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep48-notes.html#sec-setup" style="color:var(--teal)">筆記 6：第一次開啟先設定</a>'}]},
+      {t:'用 npm 安裝，進入 TUI', s:'終端機裡直接跟 AI 協作｜簡報 p7-8',
+       blocks:[
+        {h:'npm 三步驟',steps:['先安裝 Node.js。','貼上安裝指令：<code>npm install -g opencode-ai</code>。','輸入 <code>opencode</code> 開始，進入終端介面。']},
+        {h:'TUI 畫面組成',ul:['左側對話區：你與 OpenCode 的往來訊息。','右側檔案區：即時顯示專案檔案樹。','底部狀態列：模型、模式、Token 用量、連線狀態。','操作提示：<code>/help</code> 顯示指令、<code>Tab</code> 切換面板、<code>Esc</code> 退出。']},
+        {h:'看課堂筆記',shot:{img:'ep48-img/slide09.jpg',cap:'簡報 8｜OpenCode 的 TUI'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep48-notes.html#sec-tui" style="color:var(--teal)">筆記 7：npm 安裝＋進入 TUI</a>'}]}
+    ]
+  },
+  project: {
+    key:'project', color:'var(--purple)', emoji:'📄', code:'CHAPTER 03', title:'專案規則與進階功能',
+    intro:'讓 OpenCode 更懂你的專案：先用 AGENTS.md 講清楚規則，再用 SKILL 把常做的事變流程，用 MCP 接上外部工具。',
+    topics:[
+      {t:'建立 AGENTS.md', s:'把專案規則先講清楚｜簡報 p10',
+       blocks:[
+        {h:'三步驟',steps:['專案根目錄新增 AGENTS.md。','寫下規則與偏好：回覆語言、程式風格、測試要求、Git 規則。','OpenCode 會自動讀取，不用每次對話重講。']},
+        {h:'一句話記憶',tip:'AGENTS.md = 專案專用的 AI 工作守則。'},
+        {h:'看課堂筆記',shot:{img:'ep48-img/slide10.jpg',cap:'簡報 9｜建立 AGENTS.md'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep48-notes.html#sec-agentsmd" style="color:var(--purple)">筆記 8：建立 AGENTS.md</a>'}]},
+      {t:'SKILL：把常用任務變成技能', s:'重複工作，不用每次重講｜簡報 p10',
+       blocks:[
+        {h:'三步驟',steps:['建立技能資料夾，例如 <code>.opencode/skills/review/SKILL.md</code>。','新增 SKILL.md。','寫用途與步驟（如 Code Review、文件整理、測試清單、Release Note）。']},
+        {h:'一句話記憶',tip:'Skill 適合把常做的事，變成可重複使用的流程；需要時載入，用完就好。'},
+        {h:'看課堂筆記',shot:{img:'ep48-img/slide11.jpg',cap:'簡報 10｜SKILL'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep48-notes.html#sec-skillmcp" style="color:var(--purple)">筆記 9：SKILL 與 MCP</a>'}]},
+      {t:'MCP：連接外部工具', s:'把 AI 接到更多工具上｜簡報 p11',
+       blocks:[
+        {h:'三步驟',steps:['在 <code>opencode.json</code> 設定 MCP。','可接本地或遠端 Server（GitHub、Browser、Database、API…）。','Agent 可直接調用工具；用 <code>opencode mcp list</code> 查看狀態。']},
+        {h:'一句話記憶',tip:'MCP = 讓 OpenCode 不只會寫碼，也會用工具。'},
+        {h:'看課堂筆記',shot:{img:'ep48-img/slide12.jpg',cap:'簡報 11｜MCP：連接外部工具'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep48-notes.html#sec-skillmcp" style="color:var(--purple)">筆記 9：SKILL 與 MCP</a>'}]}
+    ]
+  },
+  agent: {
+    key:'agent', color:'var(--orange)', emoji:'🤖', code:'CHAPTER 04', title:'Agent 模式與語音',
+    intro:'知道什麼時候該想、什麼時候該做，再加上用說的也能操作的語音外掛。',
+    topics:[
+      {t:'兩種主要 Agent：Build vs Plan', s:'Build 負責做，Plan 負責想｜簡報 p12',
+       blocks:[
+        {h:'兩種模式',table:{head:['Agent','特性'],rows:[['Build','預設模式・可讀寫檔案・可執行命令・全功能'],['Plan','規劃模式・只分析不修改・適合先討論方案']]}},
+        {h:'操作方式',p:'可用 <b>Tab</b> 鍵在兩種 Agent 間切換；先 Plan 再 Build 是很好用的工作流。'},
+        {h:'看課堂筆記',shot:{img:'ep48-img/slide13.jpg',cap:'簡報 12｜兩種主要 Agent'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep48-notes.html#sec-buildplan" style="color:var(--orange)">筆記 10：兩種主要 Agent</a>'}]},
+      {t:'語音外掛：opencode-voice', s:'用說的也能操作 OpenCode｜簡報 p13',
+       blocks:[
+        {h:'功能',ul:['<b>語音轉文字</b>（Whisper STT）。','<b>回覆可朗讀</b>（Piper TTS）。','設定：<code>tui.json</code> 加入 <code>plugin → @renjfk/opencode-voice</code>。','操作：<code>ctrl+r</code> 錄音、語音輸入、語音朗讀。']},
+        {h:'適用情境',tip:'會議中、走動時、口述想法時都很方便。'},
+        {h:'看課堂筆記',shot:{img:'ep48-img/slide14.jpg',cap:'簡報 13｜語音外掛 opencode-voice'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep48-notes.html#sec-voice" style="color:var(--orange)">筆記 11：語音外掛</a>'}]}
+    ]
+  },
+  choose: {
+    key:'choose', color:'var(--amber)', emoji:'🧩', code:'CHAPTER 05', title:'選模型與方法論',
+    intro:'想省成本還是要品質優先？認識 Zen 與 Go 兩種可選 Provider，再拉高一層看 OpenCode 在整個方法論裡的定位。',
+    topics:[
+      {t:'OpenCode Zen vs Go 差異比較', s:'品質導向 vs 成本導向｜簡報 p20',
+       blocks:[
+        {h:'比較表',table:{head:['項目','Zen','Go'],rows:[['定位','精選、驗證、品質導向','低成本、穩定、開源模型導向'],['計費','按次計費，可自行儲值 credits','首月 US$5，之後 US$10/月'],['模型特色','經挑選推薦模型（如 GPT 5.5系列）','偏開源模型（GLM、Kimi、Qwen、DeepSeek…）'],['適合誰','新手與品質優先者','重視成本與穩定連線的使用者']]}},
+        {h:'一句話總結',tip:'Zen 比較像「幫你挑好、驗證好」；Go 比較像「幫你用更低成本穩定取得開源模型」。共同點：都由 OpenCode 團隊提供、都是可選 provider、都能透過 OpenCode 連接選模型。'},
+        {h:'看課堂筆記',shot:{img:'ep48-img/slide15.jpg',cap:'簡報 14｜Zen vs Go 差異比較'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep48-notes.html#sec-zengo" style="color:var(--amber)">筆記 12：Zen vs Go 差異比較</a>'}]},
+      {t:'延伸概念：Harness Engineering', s:'Codex、Claude Code 是執行平台，不是 Harness 本身｜簡報 p21',
+       blocks:[
+        {h:'三層工程',steps:['Prompt Engineering：讓 AI 回答。','Context Engineering：讓 AI 擁有正確知識。','Harness Engineering：讓 AI 可以完成工作（Tools、Skills、MCP、RAG、Memory、Workflow、Permission/Planning）。']},
+        {h:'比喻',tip:'Harness Engineering 像是打造一台車；Codex、Claude Code、Antigravity、OpenCode 則像是不同的駕駛座。'},
+        {h:'結論',p:'<b>Harness Engineering = 方法論；Codex／Claude Code／Antigravity／OpenCode = 執行載體。</b>'},
+        {h:'看課堂筆記',shot:{img:'ep48-img/slide16.jpg',cap:'簡報 15｜Harness Engineering 是什麼'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep48-notes.html#sec-harness" style="color:var(--amber)">筆記 13：Harness Engineering</a>'}]}
+    ]
+  }
+};
+const ORDER = ['concept','setup','project','agent','choose'];
+const $ = s=>document.querySelector(s);
+function renderChapter(ch){
+  const d=DATA[ch];const next=ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];const prev=ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html=`<div class="chapter-head"><span class="emoji">${d.emoji}</span><div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div></div>`;
+  d.topics.forEach((tp,i)=>{const id=`${ch}-${i}`;
+    html+=`<div class="topic" id="topic-${id}"><div class="topic-head" onclick="toggleTopic('${id}')"><span class="num">${i+1}</span><h4>${tp.t}<small>${tp.s}</small></h4><input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)"><span class="chev">▶</span></div><div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{html+=`<div class="block"><h5>${b.h}</h5>`;
+      if(b.p)html+=`<p>${b.p}</p>`;
+      if(b.ul)html+=`<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps)html+=`<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.table)html+=`<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.shot)html+=`<figure class="shot"><img src="${b.shot.img}" alt="" loading="lazy"><figcaption>${b.shot.cap}</figcaption></figure>`;
+      if(b.tip)html+=`<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn)html+=`<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html+=`</div>`;});
+    html+=`</div></div></div>`;});
+  html+=`<div class="chapnav"><a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a><a onclick="showHome()" style="text-align:center">回總覽<b>🏠 五大主題</b></a><a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a></div>`;
+  $('#view-'+ch).innerHTML=html;
+}
+ORDER.forEach(renderChapter);
+function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('#view-'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function showHome(){switchView('home');$('#crumbs').style.display='none';clearSearch();}
+function showChapter(ch){switchView(ch);$('#crumbs').style.display='flex';$('#crumbHere').textContent=`${DATA[ch].emoji} ${DATA[ch].title}`;clearSearch();syncChecks();}
+function toggleTopic(id){$('#topic-'+id).classList.toggle('open');}
+function openTopic(ch,i){showChapter(ch);const el=$('#topic-'+ch+'-'+i);el.classList.add('open');setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+const KEY='ep48-skills-v1';
+const store=()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){const s=store();if(val)s[id]=1;else delete s[id];localStorage.setItem(KEY,JSON.stringify(s));updateProgress();}
+const TOTAL=ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){const done=Object.keys(store()).length;const pct=Math.round(done/TOTAL*100);$('#progFill').style.width=pct+'%';$('#progText').textContent=`${done} / ${TOTAL} 項技能已掌握`;$('#statDone').textContent=done;$('#statPct').textContent=pct+'%';ORDER.forEach(ch=>{const sub=DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;const el=document.querySelector(`[data-mini="${ch}"]`);if(el)el.style.width=Math.round(sub/DATA[ch].topics.length*100)+'%';});}
+function syncChecks(){const s=store();document.querySelectorAll('input[data-skill]').forEach(cb=>{cb.checked=!!s[cb.dataset.skill];});}
+function resetProgress(){if(confirm('確定要清空所有打勾進度嗎？')){localStorage.removeItem(KEY);syncChecks();updateProgress();}}
+function stripTags(s){return s.replace(/<[^>]+>/g,'');}
+const INDEX=[];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{let body=tp.s+' ';tp.blocks.forEach(b=>{if(b.p)body+=stripTags(b.p)+' ';if(b.ul)body+=b.ul.map(stripTags).join(' ')+' ';if(b.steps)body+=b.steps.map(stripTags).join(' ')+' ';if(b.tip)body+=stripTags(b.tip)+' ';if(b.warn)body+=stripTags(b.warn)+' ';if(b.table)body+=b.table.rows.flat().map(stripTags).join(' ')+' ';});INDEX.push({ch,i,title:tp.t,body});}));
+$('#searchInput').addEventListener('input',e=>{const q=e.target.value.trim();const box=$('#searchResults');if(!q){box.classList.remove('show');box.innerHTML='';return;}const hits=INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));box.classList.add('show');if(!hits.length){box.innerHTML=`<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：AGENTS.md、MCP、Zen、Harness）</div>`;return;}const hl=s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);box.innerHTML=hits.map(x=>{const pos=x.body.toLowerCase().indexOf(q.toLowerCase());const snip=x.body.substr(Math.max(0,pos-20),90);return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})"><div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div><h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;}).join('');});
+function clearSearch(){$('#searchInput').value='';$('#searchResults').classList.remove('show');$('#searchResults').innerHTML='';}
+(function(){const box=$('#stars');for(let i=0;i<70;i++){const s=document.createElement('i');s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';s.style.animationDelay=(Math.random()*3)+'s';s.style.transform=`scale(${.5+Math.random()*1.5})`;box.appendChild(s);}})();
+syncChecks();updateProgress();
+</script>
+</body>
+</html>
