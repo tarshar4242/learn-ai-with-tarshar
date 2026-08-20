@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Node-RED 研習營 (I) 課堂筆記｜從第一條流程到串接 AI API</title>
+<meta name="description" content="2026/7/19 Node-RED 研習營 (I)（益師傅／楊俊益）逐幀課堂筆記：Node-RED 是什麼、安裝與介面、inject→debug 第一條流程、排程、flow JSON 匯入匯出、串接 Groq 與 OpenRouter 兩種 AI API、環境部空氣品質 AQI 實戰與 find is not a function 除錯全紀錄。依錄影逐幀（每 35 秒、共 245 格）＋全程逐字稿整理。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#b5372f; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:760px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px;max-height:calc(100vh - 90px);overflow-y:auto}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:7px;font-size:13px}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+code{background:var(--code);border:1px solid var(--line2);border-radius:5px;padding:1px 5px;font-size:12.5px;font-family:"Cascadia Code",Consolas,monospace;color:var(--ink)}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+.note.red{background:#FCF0EE;border-color:#F0D3CE;color:#93372c}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.code{position:relative;background:var(--code);border:1px solid var(--line2);border-radius:10px;padding:13px 15px;margin:10px 0;font-size:13px;line-height:1.75;color:var(--ink);white-space:pre-wrap;font-family:"Cascadia Code",Consolas,monospace;overflow-x:auto}
+.svgwrap{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg{display:block;width:100%;height:auto}
+.svgwrap figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.iframe-wrap{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000;margin:14px 0}
+.iframe-wrap iframe{display:block;width:100%;height:460px;border:0}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+.ts{display:inline-block;font-size:11.5px;font-family:"Cascadia Code",Consolas,monospace;color:var(--accent);background:color-mix(in srgb,var(--accent) 7%,#fff);border:1px solid color-mix(in srgb,var(--accent) 20%,#fff);border-radius:5px;padding:1px 6px;margin-right:6px}
+ul.chk{list-style:none;margin:10px 0}
+ul.chk li{position:relative;padding:7px 0 7px 30px;font-size:14.5px;color:var(--ink2);border-bottom:1px dashed var(--line)}
+ul.chk li::before{content:"☐";position:absolute;left:4px;top:7px;color:var(--accent);font-size:16px}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static;max-height:none} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} .iframe-wrap iframe{height:320px} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/#subscription" style="border-color:#e6b5b0" onclick="if(history.length>1){history.back();return false}">← 回上一頁</a>
+  <b>📝 Node-RED 研習營 (I) 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="nodered1-ai-skills.html">🗺️ 互動技能地圖</a>
+    <a class="btn" href="nodered2-notes.html">➡️ 研習營 (II)</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">訂閱制課程 · Node-RED 研習營 (I)</span>
+  <h1>從第一條流程到<span>串接 AI API</span></h1>
+  <p class="lead">益師傅推 Node-RED 推了四、五年，這是他為「一系列研習營」開的第一場。上半場先講清楚<b>Node-RED 到底在解決什麼問題</b>：它把各種平台的串接<b>封裝成一顆一顆節點</b>，讓你用拖拉的方式把功能接起來，不必每次都從頭寫程式。下半場直接動手——<b>inject → debug 的第一條流程</b>、時間排程、<b>flow JSON 的匯入匯出</b>、串 <b>Groq</b> 與 <b>OpenRouter（DeepSeek R1）</b>兩種免費 AI API，最後拿<b>環境部空氣品質 AQI 開放資料</b>做一次真實實戰，連中途踩到的 <code>msg.payload.find is not a function</code> 都完整重現，包含他當場丟給 ChatGPT 除錯的過程。<br>本頁依<b>錄影逐幀（每 35 秒一格、共 245 格）＋全程逐字稿</b>整理，重點段落附影片時間戳。</p>
+  <div class="meta">
+    <span>📅 2026/07/19（六）14:00</span>
+    <span>👤 講師：益師傅（楊俊益・ECF）</span>
+    <span>⏱️ 全長 2 小時 22 分</span>
+    <span>👥 線上約 100 位學員</span>
+    <span>🔰 小白友善</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-overview">1. 一張圖看懂本場</a>
+  <a href="#sec-why">2. Node-RED 是什麼、為什麼是它</a>
+  <a href="#sec-ui">3. 安裝與介面：四大區塊</a>
+  <a href="#sec-first">4. 第一條流程：inject → debug</a>
+  <a href="#sec-json">5. flow JSON：匯入與匯出</a>
+  <a href="#sec-api">6. 串 AI API：Groq 與 OpenRouter</a>
+  <a href="#sec-aqi">7. 實戰：空氣品質 AQI 與除錯全紀錄</a>
+  <a href="#sec-gallery">8. 老師的自製節點展示</a>
+  <a href="#sec-check">9. 課後自我檢核表</a>
+  <a href="#sec-quotes">10. 老師金句</a>
+  <a href="#sec-src">11. 資料來源與整理說明</a>
+</nav>
+
+<article>
+
+<!-- 0 -->
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--orange))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>AI Node-RED 研習（第一場）</td></tr>
+    <tr><th>上課日期</th><td>2026/07/19（六）下午 14:00 開始，全長 <b>2 小時 22 分 41 秒</b></td></tr>
+    <tr><th>講師</th><td>益師傅（楊俊益，暱稱 ECF；智慧立方有限公司）</td></tr>
+    <tr><th>參與人數</th><td>約 100 位學員（Teams 線上直播，畫面最高顯示 104 人在線）</td></tr>
+    <tr><th>本場主題</th><td>Node-RED 基礎：介面、inject／debug、排程、flow 匯入匯出、串接 Groq／OpenRouter API、環境部 AQI 開放資料實戰</td></tr>
+    <tr><th>課程教材</th><td>Drive 資料夾：課堂錄影 ×1，以及 4 個可直接匯入的 flow JSON</td></tr>
+  </table></div>
+
+  <h3>📁 課程資料夾（Google Drive）</h3>
+  <p>錄影與四個 flow JSON 都放在同一個共享資料夾：</p>
+  <p style="margin-top:8px"><a href="https://drive.google.com/drive/folders/1mxF4eKWWE-pQm_riuJN25Y5mc6W-zYbZ" target="_blank">🔗 開啟「2026/7/19 Node-RED (I) 研習」資料夾 ›</a></p>
+
+  <h3>🎬 課堂錄影（可直接在頁面播放）</h3>
+  <div class="iframe-wrap"><iframe src="https://drive.google.com/file/d/1ZxdgwOrPNlYWGHpsp0v2HXXnaVAswnPI/preview" allow="autoplay" allowfullscreen></iframe></div>
+  <div class="note steel">🔧 <div>錄影為老師分享的檔案，內嵌播放時若出現權限提示，請先登入你自己的 Google 帳號，或改從上面的資料夾連結進去看。</div></div>
+
+  <h3>🧩 四個 flow JSON（課堂上一個一個匯入）</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">檔案</th><th>節點數</th><th>這個 flow 在做什麼</th></tr>
+    <tr><td><code>BasicAQI.json</code></td><td>5 顆</td><td>inject → http request（環境部 AQI）→ json → debug，最單純的「抓開放資料」流程</td></tr>
+    <tr><td><code>Flow與Global.json</code></td><td>20 顆</td><td>兩個標籤頁 ×6 個 function（F1～F6），示範 context／flow／global 三層變數的差別</td></tr>
+    <tr><td><code>Groq_API.json</code></td><td>7 顆</td><td>inject（問題）→ function（組請求）→ http request（Groq）→ function（處理回應）→ 兩個 debug</td></tr>
+    <tr><td><code>OpenRouter.json</code></td><td>5 顆</td><td>inject → function（組 headers／payload，指定 DeepSeek R1 模型）→ http request（OpenRouter）→ debug</td></tr>
+  </table></div>
+  <div class="note gold">⚠️ <div>老師在課堂上為了方便，把自己的 API 金鑰直接寫死在 function 節點裡，並提醒<b>「你們要換成自己的 key」</b>。<span class="ts">[01:47:10]</span> 他也提到金鑰放在共用檔案裡會被鎖住的風險。本頁所有程式碼範例一律改成 <code>&lt;你的 API Key&gt;</code> 佔位，教材原檔裡的金鑰請自行替換後再用。</div></div>
+</section>
+
+<!-- 1 -->
+<section class="chapter" id="sec-overview">
+  <span class="chip" style="background:linear-gradient(90deg,var(--orange),var(--amber))">BIG PICTURE</span>
+  <h2 class="ct">1. 一張圖看懂本場</h2>
+  <p class="cd">這場的骨架很清楚：先懂<b>為什麼是 Node-RED</b>，再學會<b>拉一條會跑的流程</b>，最後把<b>外面的資料與 AI</b> 接進來。</p>
+  <div class="svgwrap">
+  <svg viewBox="0 0 960 500" xmlns="http://www.w3.org/2000/svg" font-family="'PingFang TC','Noto Sans TC',sans-serif">
+    <rect width="960" height="500" fill="#fff"/>
+    <text x="480" y="40" text-anchor="middle" font-size="20" font-weight="800" fill="#191919">Node-RED 研習營 (I)：三個層次，一條主線</text>
+    <text x="480" y="64" text-anchor="middle" font-size="13" fill="#5f5f5f">看懂工具 → 拉出流程 → 接上真實世界的資料與 AI</text>
+
+    <rect x="40" y="92" width="270" height="128" rx="14" fill="#fdf2f0" stroke="#f0d3ce"/>
+    <text x="60" y="120" font-size="15" font-weight="800" fill="#b5372f">① 為什麼是 Node-RED</text>
+    <text x="60" y="146" font-size="12.5" fill="#444">十幾年前 IBM 為物聯網做的工具</text>
+    <text x="60" y="168" font-size="12.5" fill="#444">把「串接別的平台」封裝成節點</text>
+    <text x="60" y="190" font-size="12.5" fill="#444">節點＝現成的 Library，拖拉就能接</text>
+    <text x="60" y="210" font-size="12" fill="#b5372f">不只 IoT：資料庫／排程／AI 都能串</text>
+
+    <rect x="345" y="92" width="270" height="128" rx="14" fill="#fdf7ee" stroke="#f0e2cc"/>
+    <text x="365" y="120" font-size="15" font-weight="800" fill="#bf6a1e">② 拉出第一條流程</text>
+    <text x="365" y="146" font-size="12.5" fill="#444">inject（觸發）→ debug（看結果）</text>
+    <text x="365" y="168" font-size="12.5" fill="#444">payload／topic：訊息長什麼樣子</text>
+    <text x="365" y="190" font-size="12.5" fill="#444">部署才算數，改完一定要按部署</text>
+    <text x="365" y="210" font-size="12" fill="#bf6a1e">重複執行／指定時間＝內建排程器</text>
+
+    <rect x="650" y="92" width="270" height="128" rx="14" fill="#eef4fb" stroke="#cfe0f1"/>
+    <text x="670" y="120" font-size="15" font-weight="800" fill="#3b6bb0">③ 接上外面的世界</text>
+    <text x="670" y="146" font-size="12.5" fill="#444">http request：抓 API、送 API</text>
+    <text x="670" y="168" font-size="12.5" fill="#444">Groq／OpenRouter：免費 AI 模型</text>
+    <text x="670" y="190" font-size="12.5" fill="#444">環境部 AQI：真實開放資料</text>
+    <text x="670" y="210" font-size="12" fill="#3b6bb0">function：把資料整理成你要的樣子</text>
+
+    <text x="322" y="160" font-size="22" fill="#9B9B9B">›</text>
+    <text x="628" y="160" font-size="22" fill="#9B9B9B">›</text>
+
+    <rect x="120" y="256" width="720" height="66" rx="14" fill="#b5372f"/>
+    <text x="480" y="284" text-anchor="middle" font-size="15" font-weight="800" fill="#fff">一條流程的通用長相</text>
+    <text x="480" y="308" text-anchor="middle" font-size="13" fill="#f6e2e0">inject（誰來按下開始） → http request（去拿東西） → json／function（整理） → debug（看結果）</text>
+
+    <rect x="40" y="352" width="880" height="112" rx="14" fill="#f7f6f3" stroke="#e7e6e3"/>
+    <text x="60" y="380" font-size="14" font-weight="800" fill="#191919">🔑 這場真正的收穫，其實是「卡住的時候怎麼辦」</text>
+    <text x="60" y="406" font-size="12.5" fill="#444">1. 除錯窗口先看：錯誤訊息長什麼樣、msg.payload 到底是陣列還是字串</text>
+    <text x="60" y="428" font-size="12.5" fill="#444">2. 把錯誤訊息連同資料範例貼給 ChatGPT，直接問「在 Node-RED 的 function 節點裡該怎麼寫」</text>
+    <text x="60" y="450" font-size="12.5" fill="#444">3. 老師自己在課堂上也卡了兩次，一樣是這樣解的——這比背語法更值得學</text>
+  </svg>
+  <figcaption>本場全景圖。三個層次由左到右堆疊，最下面那格是老師示範最多次、也最實用的工作流。</figcaption>
+  </div>
+</section>
+
+<!-- 2 -->
+<section class="chapter" id="sec-why">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--rose))">WHY</span>
+  <h2 class="ct">2. Node-RED 是什麼、為什麼是它</h2>
+  <p class="cd">開場前 40 分鐘老師幾乎沒碰程式，全在講這件事的來龍去脈。他的說法很白話，值得完整記下來。</p>
+
+  <h3>從一個物聯網的老問題說起</h3>
+  <p><span class="ts">[00:03:33]</span> 以前玩 Arduino、ESP32 這類晶片，想把感測到的溫度、濕度顯示出來，就得寫在那塊「小小的顯示器」上。想把數值送到網頁、送到手機、存進資料庫，每一個平台<b>都有自己不同的串接方式</b><span class="ts">[00:05:54]</span>，每次都得重寫一次。</p>
+  <p><span class="ts">[00:06:47]</span> Node-RED 的做法是：<b>把「跟某個平台串接」這件事簡化成一顆節點</b>。老師的比喻是——<b>你就把節點想成一個 Library 的概念</b>。要接 MQTT 就拉 MQTT 節點，要接資料庫就拉資料庫節點，你只要負責把它們連起來。</p>
+
+  <div class="svgwrap">
+  <svg viewBox="0 0 960 330" xmlns="http://www.w3.org/2000/svg" font-family="'PingFang TC','Noto Sans TC',sans-serif">
+    <rect width="960" height="330" fill="#fff"/>
+    <text x="480" y="36" text-anchor="middle" font-size="17" font-weight="800" fill="#191919">同一件事，兩種做法</text>
+
+    <rect x="40" y="62" width="410" height="230" rx="12" fill="#faf8f7" stroke="#e7e6e3"/>
+    <text x="245" y="90" text-anchor="middle" font-size="14" font-weight="700" fill="#9B9B9B">以前：每個平台各寫一套</text>
+    <rect x="70" y="110" width="120" height="40" rx="8" fill="#fff" stroke="#dbd9d5"/><text x="130" y="135" text-anchor="middle" font-size="12" fill="#5f5f5f">感測器</text>
+    <rect x="300" y="104" width="120" height="34" rx="8" fill="#fff" stroke="#dbd9d5"/><text x="360" y="126" text-anchor="middle" font-size="11.5" fill="#5f5f5f">網頁：寫一套</text>
+    <rect x="300" y="150" width="120" height="34" rx="8" fill="#fff" stroke="#dbd9d5"/><text x="360" y="172" text-anchor="middle" font-size="11.5" fill="#5f5f5f">資料庫：再一套</text>
+    <rect x="300" y="196" width="120" height="34" rx="8" fill="#fff" stroke="#dbd9d5"/><text x="360" y="218" text-anchor="middle" font-size="11.5" fill="#5f5f5f">手機：再一套</text>
+    <path d="M190 130 L300 121 M190 132 L300 167 M190 134 L300 213" stroke="#c9c7c3" stroke-width="1.5" fill="none"/>
+    <text x="245" y="268" text-anchor="middle" font-size="12" fill="#93372c">每加一個平台，就多一份要維護的程式</text>
+
+    <rect x="490" y="62" width="430" height="230" rx="12" fill="#fdf2f0" stroke="#f0d3ce"/>
+    <text x="705" y="90" text-anchor="middle" font-size="14" font-weight="700" fill="#b5372f">Node-RED：串接被封裝成節點</text>
+    <rect x="520" y="112" width="96" height="38" rx="8" fill="#fff" stroke="#e6b5b0"/><text x="568" y="136" text-anchor="middle" font-size="12" fill="#b5372f">感測器</text>
+    <rect x="646" y="112" width="96" height="38" rx="8" fill="#fff" stroke="#e6b5b0"/><text x="694" y="136" text-anchor="middle" font-size="12" fill="#b5372f">function</text>
+    <rect x="772" y="112" width="118" height="38" rx="8" fill="#fff" stroke="#e6b5b0"/><text x="831" y="136" text-anchor="middle" font-size="12" fill="#b5372f">MQTT／DB／AI</text>
+    <path d="M616 131 L646 131 M742 131 L772 131" stroke="#b5372f" stroke-width="2" fill="none"/>
+    <text x="705" y="190" text-anchor="middle" font-size="12.5" fill="#444">每顆節點＝別人已經寫好、測好的 Library</text>
+    <text x="705" y="214" text-anchor="middle" font-size="12.5" fill="#444">你負責的是「怎麼把它們接起來、接成什麼」</text>
+    <text x="705" y="252" text-anchor="middle" font-size="12" fill="#b5372f">現成節點有幾十個；常用的人 Library 裡可能有好幾百顆</text>
+  </svg>
+  <figcaption>老師花最多時間解釋的一張概念圖：Node-RED 的價值不是「畫圖比較漂亮」，而是把重複的串接工作變成可以重用的零件。</figcaption>
+  </div>
+
+  <h3>它不只是物聯網</h3>
+  <ul class="pt">
+    <li><span class="ts">[00:08:30]</span> <b>背後能做的遠不只感測器</b>：可以串 MySQL 等資料庫，也能串 TensorFlow 這類機器學習的東西。</li>
+    <li><span class="ts">[00:33:57]</span> <b>內建排程</b>：想每天固定時間跑一次，不用另外寫 cron，inject 節點就做得到。</li>
+    <li><span class="ts">[01:41:08]</span> 老師自問自答「你們知道 Node-RED 最大的好處是什麼？」——答案是<b>它可以把兩個原本不相干的功能串接起來</b>，變成一個很強大的功能。</li>
+  </ul>
+
+  <div class="note blue">💡 <div><b>跟 n8n 的差別？</b><span class="ts">[02:11:22]</span> 有學員問到，老師的回答很直接：n8n 上手更快，Node-RED 稍微有一點點難度；但 Node-RED 的彈性在於<b>你可以自己做節點</b>，把任何自己寫的程式包成一顆節點來用（這正是第二場整場在做的事）。</div></div>
+
+  <h3>他為什麼要推這件事</h3>
+  <p><span class="ts">[00:09:21]</span>「這樣一個那麼棒的平台，為什麼大家不去推它？」——這是他四、五年前決定主動推 Node-RED 的原因。<span class="ts">[00:12:35]</span> 他也講明這不會是單堂課，而是<b>一系列課程</b>，會從基礎一路往上疊。</p>
+</section>
+
+<!-- 3 -->
+<section class="chapter" id="sec-ui">
+  <span class="chip" style="background:linear-gradient(90deg,var(--orange),var(--amber))">SETUP</span>
+  <h2 class="ct">3. 安裝與介面：四大區塊</h2>
+
+  <h3>裝好之後怎麼打開</h3>
+  <ol class="st">
+    <li><b>先裝 Node.js</b>：Node-RED 跑在 Node.js 上，這是前置。<span class="ts">[00:15:05]</span> 老師課前就把安裝連結給大家了。</li>
+    <li><b>在瀏覽器輸入本機網址</b>：預設是 <code>127.0.0.1:1880</code>。<span class="ts">[00:17:25]</span> 老師自己的環境改成 <code>127.0.0.1:18800</code>，所以你看錄影裡的網址跟預設不一樣是正常的。</li>
+    <li><b>Chrome、Edge 都可以</b><span class="ts">[00:17:34]</span>，它就是一個網頁介面。</li>
+  </ol>
+
+  <h3>畫面上你需要認得的四塊</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:130px">區塊</th><th>位置</th><th>做什麼用</th></tr>
+    <tr><td><b>節點面板</b></td><td>左側</td><td>所有可用的節點，分成「共通」「功能」等群組；上面有搜尋框可以過濾。<span class="ts">[00:21:35]</span> 也可以額外安裝新節點。</td></tr>
+    <tr><td><b>工作區</b></td><td>中間</td><td>把節點拖進來、用線接起來的地方。</td></tr>
+    <tr><td><b>標籤頁（流程）</b></td><td>工作區上方</td><td>一個標籤頁＝一個流程（flow）。<span class="ts">[00:20:11]</span> 老師的環境有非常多標籤頁，他提醒可以整理、也可以摺疊。</td></tr>
+    <tr><td><b>右側面板</b></td><td>右側</td><td>三個分頁：<b>資訊</b>（選到的節點的說明）、<b>說明</b>（節點文件）、<b>除錯窗口</b>（那隻小蟲圖示，所有 debug 輸出都在這）。<span class="ts">[00:24:42]</span></td></tr>
+  </table></div>
+
+  <figure class="shot">
+    <img src="nodered1-img/01-basic-aqi-flow.jpg" alt="Node-RED 編輯器介面，左側節點面板、中間工作區的 Basic AQI 流程、右側除錯窗口">
+    <figcaption>錄影實際畫面：左側是節點面板（inject／debug／function／switch／change…），中間工作區是當天的 Basic AQI 流程，右側是除錯窗口。上方一整排標籤頁就是不同的流程。</figcaption>
+  </figure>
+
+  <div class="note gold">⚠️ <div><b>改完一定要按「部署」。</b><span class="ts">[01:32:06]</span> 老師反覆提醒：在工作區改了東西，右上角的部署鈕會變紅，<b>按下部署才算真的生效</b>，否則你觸發的還是舊的程式。</div></div>
+</section>
+
+<!-- 4 -->
+<section class="chapter" id="sec-first">
+  <span class="chip" style="background:linear-gradient(90deg,var(--green),var(--teal))">HANDS-ON</span>
+  <h2 class="ct">4. 第一條流程：inject → debug</h2>
+  <p class="cd"><span class="ts">[01:10:59]</span> 起 這一段開始全班一起動手。這條流程只有兩顆節點，但把 Node-RED 的核心觀念全講完了。</p>
+
+  <h3>做出來</h3>
+  <ol class="st">
+    <li>從左側把 <b>inject</b> 拖到工作區。<span class="ts">[01:11:31]</span> 老師形容它「有點像是一個開關」——它是<b>觸發者</b>，負責讓流程開始跑。</li>
+    <li>再拖一顆 <b>debug</b> 進來。</li>
+    <li>把 inject 右邊的小圓點<b>拉一條線</b>接到 debug 左邊的小圓點。這樣就叫做一條流程。<span class="ts">[01:12:41]</span></li>
+    <li>按右上角<b>部署</b>。<span class="ts">[01:13:43]</span> 部署代表「這個程式已經完成、開始運作了」。</li>
+    <li>點 inject 左邊的方形按鈕觸發，右側除錯窗口就會跳出一個數值。</li>
+  </ol>
+
+  <h3>那個跳出來的數字是什麼？</h3>
+  <p><span class="ts">[01:14:01]</span> inject 預設送出的是<b>時間戳（timestamp）</b>——一長串數字，是所謂的 Unix 時間，以千分之一秒為單位記錄的時間。<span class="ts">[01:14:34]</span> 老師提醒台灣是 UTC+8。</p>
+
+  <h4>訊息（msg）長什麼樣子</h4>
+  <p><span class="ts">[01:15:06]</span> 在 Node-RED 裡，節點之間傳來傳去的東西叫 <code>msg</code>，它是一個 JSON 物件，裡面最重要的欄位是 <code>msg.payload</code>——<b>payload 就是「這則訊息真正的內容」</b>。除了 payload，還有 <code>msg.topic</code>（主題，之後串 MQTT 會用到）。</p>
+  <div class="code">// inject 節點送出去的訊息，大致長這樣
+{
+  "_msgid": "5c6062d062c7a248",
+  "payload": 1752901234567,   // ← 預設是時間戳
+  "topic": ""
+}</div>
+  <p><span class="ts">[01:16:28]</span> inject 節點的設定裡可以把 payload 從時間戳<b>改成字串、數字、布林值</b>等等。老師示範改成字串 <code>Hello World</code>，觸發後除錯窗口就印出 Hello World。<span class="ts">[01:17:03]</span></p>
+
+  <h3>debug 節點的兩個實用習慣</h3>
+  <ul class="pt">
+    <li><b>幫節點取名字。</b><span class="ts">[01:17:56]</span> 點兩下節點可以改名稱（例如叫「測試」），流程一多就靠名字辨識。</li>
+    <li><b>除錯訊息太亂就篩選。</b><span class="ts">[01:18:44]</span> 除錯窗口上方可以切「當前流程／全部」，只看你正在做的那條。</li>
+  </ul>
+
+  <h3>把 inject 變成排程器</h3>
+  <p>這是老師特別強調、很多人不知道的功能。<span class="ts">[01:21:41]</span> 點兩下 inject 節點，除了「立刻觸發」之外還有：</p>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">設定</th><th>意思</th><th>典型用途</th></tr>
+    <tr><td>間隔重複</td><td>每隔 N 秒／分鐘自動觸發一次</td><td>每 5 分鐘抓一次感測值</td></tr>
+    <tr><td>指定時間</td><td>幾點幾分做什麼動作，可挑星期幾</td><td><span class="ts">[01:22:02]</span> 每天早上九點送一則 LINE 訊息</td></tr>
+    <tr><td>部署後立即執行</td><td>Node-RED 一啟動就先跑一次</td><td>開機自動初始化</td></tr>
+  </table></div>
+  <div class="note green">✅ <div><span class="ts">[01:24:03]</span>「這個我們以前要寫成程式」——尤其在 MQTT、物聯網的場景，排程原本要另外寫一支程式或設 cron，在 Node-RED 裡就是一個下拉選單。</div></div>
+</section>
+
+<!-- 5 -->
+<section class="chapter" id="sec-json">
+  <span class="chip" style="background:linear-gradient(90deg,var(--purple),var(--blue))">IMPORT</span>
+  <h2 class="ct">5. flow JSON：匯入與匯出</h2>
+  <p class="cd">整場課「請大家匯入這個檔案」出現了至少五次，這是 Node-RED 分享程式的標準方式，一定要熟。</p>
+
+  <h3>匯入別人給你的 flow</h3>
+  <ol class="st">
+    <li>點右上角的<b>三條線</b>選單。<span class="ts">[01:25:32]</span></li>
+    <li>選<b>匯入（Import）</b>。</li>
+    <li>選「<b>匯入所選擇的檔案</b>」，挑那個 <code>.json</code> 檔，按開啟。<span class="ts">[01:26:02]</span></li>
+    <li>它會問要匯入到<b>目前流程</b>還是<b>新流程</b>；老師建議選新流程（導入副本），比較不會跟現有的東西混在一起。<span class="ts">[02:02:56]</span></li>
+    <li>看右下角有沒有錯誤訊息，沒有就成功了。</li>
+  </ol>
+
+  <h3>把自己的 flow 匯出給別人</h3>
+  <p><span class="ts">[01:45:41]</span> 匯出前有個關鍵動作老師特別強調：<b>先確認你有沒有選到任何節點</b>。</p>
+  <div class="note red">🚫 <div><b>常見錯誤：只匯出到一顆節點。</b>如果匯出前剛好點到某一顆節點，匯出的就只有那一顆。<span class="ts">[01:45:48]</span> 老師的做法是先在空白處點一下取消選取，再匯出整個流程。</div></div>
+
+  <div class="note steel">📌 <div><b>JSON 不能亂丟。</b><span class="ts">[02:01:55]</span> 老師提醒：不要把「隨便一個 JSON」丟進來匯入，Node-RED 的 flow JSON 有固定結構（每個節點有 id／type／wires），格式不對就會出錯。</div></div>
+</section>
+
+<!-- 6 -->
+<section class="chapter" id="sec-api">
+  <span class="chip" style="background:linear-gradient(90deg,var(--blue),var(--cyan))">AI API</span>
+  <h2 class="ct">6. 串 AI API：Groq 與 OpenRouter</h2>
+  <p class="cd">這一段是本場的第一個高潮：讓 Node-RED 直接去問 AI。老師示範了兩家<b>都有免費額度</b>的服務。</p>
+
+  <h3>共同的四段式結構</h3>
+  <div class="svgwrap">
+  <svg viewBox="0 0 960 240" xmlns="http://www.w3.org/2000/svg" font-family="'PingFang TC','Noto Sans TC',sans-serif">
+    <rect width="960" height="240" fill="#fff"/>
+    <text x="480" y="34" text-anchor="middle" font-size="17" font-weight="800" fill="#191919">串任何 AI API 都是這四段</text>
+    <rect x="34" y="66" width="200" height="76" rx="12" fill="#eef4fb" stroke="#cfe0f1"/>
+    <text x="134" y="96" text-anchor="middle" font-size="14" font-weight="700" fill="#3b6bb0">① inject</text>
+    <text x="134" y="120" text-anchor="middle" font-size="12" fill="#444">把你的問題放在 payload</text>
+    <rect x="256" y="66" width="200" height="76" rx="12" fill="#fdf7ee" stroke="#f0e2cc"/>
+    <text x="356" y="96" text-anchor="middle" font-size="14" font-weight="700" fill="#bf6a1e">② function</text>
+    <text x="356" y="120" text-anchor="middle" font-size="12" fill="#444">組 headers＋payload</text>
+    <rect x="478" y="66" width="200" height="76" rx="12" fill="#fdf2f0" stroke="#f0d3ce"/>
+    <text x="578" y="96" text-anchor="middle" font-size="14" font-weight="700" fill="#b5372f">③ http request</text>
+    <text x="578" y="120" text-anchor="middle" font-size="12" fill="#444">POST 到 API 網址</text>
+    <rect x="700" y="66" width="226" height="76" rx="12" fill="#edf7f1" stroke="#cbe6d5"/>
+    <text x="813" y="96" text-anchor="middle" font-size="14" font-weight="700" fill="#3f8560">④ function → debug</text>
+    <text x="813" y="120" text-anchor="middle" font-size="12" fill="#444">把回應挖出想要的那一段</text>
+    <path d="M234 104 L256 104 M456 104 L478 104 M678 104 L700 104" stroke="#9B9B9B" stroke-width="2"/>
+    <rect x="34" y="168" width="892" height="52" rx="10" fill="#f7f6f3" stroke="#e7e6e3"/>
+    <text x="480" y="190" text-anchor="middle" font-size="13" font-weight="700" fill="#191919">三個一定要給對的東西</text>
+    <text x="480" y="210" text-anchor="middle" font-size="12.5" fill="#5f5f5f">Authorization 帶 API Key ｜ Content-Type: application/json ｜ 指定 model 名稱</text>
+  </svg>
+  <figcaption>Groq 與 OpenRouter 的 flow 幾乎一模一樣，差別只在網址與模型名稱。看懂這四段，換任何一家 API 都會接。</figcaption>
+  </div>
+
+  <h3>Groq</h3>
+  <p><span class="ts">[01:29:37]</span> 到 Groq 主控台申請一把 key（申請時要設到期日），複製下來貼進 function 節點的 <code>apiKey</code> 變數裡。老師教材裡的 <code>Groq_API.json</code> 就是這個結構：</p>
+  <div class="code">// function 節點：組出 Groq 的請求
+const apiKey = "&lt;你的 Groq API Key&gt;";
+
+msg.headers = {
+  "Content-Type": "application/json",
+  "Authorization": "Bearer " + apiKey
+};
+msg.payload = {
+  model: "llama-3.3-70b-versatile",
+  messages: [{ role: "user", content: msg.payload }]
+};
+return msg;</div>
+  <p><span class="ts">[01:31:30]</span> 課堂上大家一起把 inject 的問題改成「請用繁體中文介紹…」，觸發後在除錯窗口<b>一層一層展開</b>回應：<code>payload → choices → 陣列第 0 筆 → message → content</code>。<span class="ts">[01:33:17]</span></p>
+
+  <h3>OpenRouter（DeepSeek R1）</h3>
+  <p><span class="ts">[01:44:04]</span> OpenRouter 的好處是<b>一把 key 可以串很多家平台的模型</b>。教材 <code>OpenRouter.json</code> 裡指定的是 DeepSeek R1：</p>
+  <div class="code">// function 節點：OpenRouter API 串接
+msg.headers = {
+  'Content-Type': 'application/json',
+  'Authorization': 'Bearer &lt;你的 OpenRouter API Key&gt;'
+};
+msg.payload = {
+  "model": "deepseek/deepseek-r1:free",
+  "messages": [{ "role": "user", "content": "你的問題" }]
+};
+return msg;</div>
+  <div class="note blue">💡 <div><span class="ts">[01:40:31]</span> 有學員問「到底哪一個比較好用」，老師的態度是<b>兩個都試</b>——反正都有免費額度。他也提醒 <span class="ts">[01:39:15]</span> 免費服務<b>太多人同時用會變慢或沒回應</b>，課堂上就真的遇到過。</div></div>
+
+  <h3>看不懂 API 文件怎麼辦</h3>
+  <p><span class="ts">[01:52:57]</span> 老師的實際做法：API 官網的範例通常是 curl 或 Python，<b>直接把那段範例丟給 AI，請它改寫成 Node-RED function 節點的寫法</b>，然後移植過來。他強調自己串接時也是<b>層層卡關</b><span class="ts">[01:56:55]</span>，靠問 AI 一關一關過。</p>
+</section>
+
+<!-- 7 -->
+<section class="chapter" id="sec-aqi">
+  <span class="chip" style="background:linear-gradient(90deg,var(--teal),var(--green))">REAL DATA</span>
+  <h2 class="ct">7. 實戰：空氣品質 AQI 與除錯全紀錄</h2>
+  <p class="cd">最後一小時的主軸。這一段最值得看的不是成功，而是<b>老師當場卡住、當場除錯</b>的完整過程。</p>
+
+  <h3>先把資料抓下來（BasicAQI.json）</h3>
+  <p><span class="ts">[01:41:05]</span> 環境部「環境資料開放平臺」提供空氣品質指標（資料集代號 <code>AQX_P_432</code>）。要先<b>註冊會員取得 API Key</b>，網址格式如下：</p>
+  <div class="code">GET https://data.moenv.gov.tw/api/v2/aqx_p_432
+      ?api_key=&lt;你的 API Key&gt;
+      &amp;limit=1000
+      &amp;sort=ImportDate%20desc
+      &amp;format=json</div>
+
+  <figure class="shot">
+    <img src="nodered1-img/03-moenv-apply.jpg" alt="Google 搜尋環境部 AQI API 的結果頁，指向環境資料開放平臺的 API 使用說明">
+    <figcaption><span class="ts">[01:44:20]</span> 老師當場示範怎麼找到申請頁：搜尋「環境部 aqi api key」→ 進「API 使用說明」→ 註冊會員後平台會寄給你一把 key（有效期一年）。</figcaption>
+  </figure>
+
+  <p>flow 只有四顆節點：</p>
+  <div class="code">inject（時間戳） → http request（GET 上面那個網址） → json → debug</div>
+  <ul class="pt">
+    <li><b>http request 節點</b>：請求方式選 GET，URL 貼上去，「返回」選 <b>UTF-8 字串</b>。</li>
+    <li><b>json 節點</b>：把回來的字串轉成 JavaScript 物件，這樣後面才好處理。</li>
+    <li><b>debug</b>：觸發後可以看到一個 <code>array[84]</code>，裡面是全台 84 個測站，每站有 sitename（測站名）、county（縣市）、aqi、status、pm2.5、o3、wind_speed 等欄位。<span class="ts">[02:00:00]</span></li>
+  </ul>
+
+  <figure class="shot">
+    <img src="nodered1-img/02-http-request-node.jpg" alt="Node-RED 中 Basic AQI 流程與右側除錯窗口顯示回傳的測站 JSON 資料">
+    <figcaption>觸發後右側除錯窗口的實際輸出：基隆 aqi 33、汐止 aqi 38，每一筆都是一個測站的完整資料。</figcaption>
+  </figure>
+
+  <h3>接著遇到真正的問題：我只要「基隆」那一筆</h3>
+  <p><span class="ts">[02:05:44]</span> 全台 84 筆資料太多了，老師的目標是只抓出特定測站的 AQI。他當場示範<b>不會寫就去問</b>：把資料範例貼給 ChatGPT，問「若我需要找出 sitename = 基隆，JavaScript 該如何寫」。</p>
+
+  <figure class="shot">
+    <img src="nodered1-img/05-chatgpt-find-debug.jpg" alt="ChatGPT 回答如何在 Node-RED function 節點中用 find 取出指定測站">
+    <figcaption><span class="ts">[02:14:09]</span> 關鍵在他追加的第二句話：<b>「若在 Node-RED 中？」</b>——同樣的邏輯，在 function 節點裡要用 <code>msg.payload</code> 並且 <code>return msg</code>，這是初學者最常漏掉的一步。</figcaption>
+  </figure>
+
+  <div class="code">// function 節點：只取出基隆測站的 AQI
+const result = msg.payload.find(item =&gt; item.sitename === "基隆");
+
+msg.payload = result ? result.aqi : "找不到基隆測站";
+return msg;</div>
+
+  <h3>然後就報錯了：find is not a function</h3>
+  <div class="note red">🐛 <div><b><code>"TypeError: msg.payload.find is not a function"</code></b><br><span class="ts">[02:16:00]</span> 課堂上真的跳出這個錯誤。老師的處理方式一樣：<b>把錯誤訊息原封不動貼給 ChatGPT</b>。</div></div>
+
+  <figure class="shot">
+    <img src="nodered1-img/06-debug-typeerror.jpg" alt="Node-RED 除錯窗口顯示 TypeError: Cannot read properties of undefined">
+    <figcaption>除錯窗口裡紅色的錯誤訊息。整堂課出現了好幾種：<code>find is not a function</code>、<code>Cannot read properties of undefined</code>——都是同一類問題：<b>你以為的資料形狀，跟實際拿到的不一樣</b>。</figcaption>
+  </figure>
+
+  <h4>原因與解法</h4>
+  <p><code>.find()</code> 是<b>陣列</b>才有的方法。如果 <code>msg.payload</code> 這時候還是<b>字串</b>（或是外面還包了一層物件），它就沒有 find 可以用。ChatGPT 給的解法有兩個層次：</p>
+  <ol class="st">
+    <li><b>確認 JSON 節點的設定</b>：在 json 節點裡把動作設成「<b>永遠轉換為 JavaScript 物件</b>」，確保進到 function 之前已經是物件／陣列。<span class="ts">[02:18:07]</span></li>
+    <li><b>先驗證資料形狀再處理</b>：在 function 節點裡加一行檢查，直接把答案印在除錯窗口。</li>
+  </ol>
+  <div class="code">// 先確認 msg.payload 到底是什麼形狀
+node.warn(Array.isArray(msg.payload));   // true 才能用 .find()
+node.warn(typeof msg.payload);</div>
+
+  <figure class="shot">
+    <img src="nodered1-img/04-function-editor.jpg" alt="Node-RED function 節點的 JavaScript 編輯器，顯示自動完成提示">
+    <figcaption>function 節點的編輯器有自動完成（例如 <code>RED.util.getMessageProperty</code>）。<span class="ts">[02:08:20]</span> 老師提醒：<b>每一行結尾的分號、以及最後的 <code>return msg;</code> 都不能漏</b>，漏了流程就斷在這裡。</figcaption>
+  </figure>
+
+  <div class="note green">✅ <div><b>這一段的方法論，比語法本身值錢：</b><br>① 先用 debug 看清楚<b>資料實際長什麼樣</b>（是陣列還是字串？外面包了幾層？）<br>② 不會寫就<b>連同資料範例一起問 AI</b>，並且要講明「在 Node-RED 的 function 節點裡」<br>③ 報錯就<b>把錯誤訊息整段貼回去</b>，讓 AI 針對錯誤修正<br><span class="ts">[02:19:11]</span> 老師自己的說法是：熟 AI 的人，卡關的時間會短很多。</div></div>
+</section>
+
+<!-- 8 -->
+<section class="chapter" id="sec-gallery">
+  <span class="chip" style="background:linear-gradient(90deg,var(--purple),var(--pink))">SHOWCASE</span>
+  <h2 class="ct">8. 老師的自製節點展示</h2>
+  <p class="cd">前半場老師快速展示了一輪自己做的東西，當作「學完能做到什麼」的預告。這些大多是<b>第二場</b>的主題，這裡先建立印象。</p>
+
+  <div class="twrap"><table>
+    <tr><th style="width:170px">作品</th><th>它在做什麼</th><th>時間戳</th></tr>
+    <tr><td><b>全能辨識 OCR 節點</b></td><td>原本是一支網頁程式，被包成 Node-RED 節點；可辨識圖片文字、發票、流程圖，並用繁體中文描述圖像內容</td><td><span class="ts">[00:34:40]</span></td></tr>
+    <tr><td><b>台語語音節點</b></td><td>台語的語音合成與語音轉文字，也做成節點</td><td><span class="ts">[00:22:27]</span></td></tr>
+    <tr><td><b>AI 股市分析儀表板</b></td><td>抓個股資料＋AI 分析，做成一個標籤頁的流程</td><td><span class="ts">[00:30:55]</span></td></tr>
+    <tr><td><b>UVI／空氣品質查詢</b></td><td>紫外線指數與空品資料，抓完直接用 MQTT 丟出去</td><td><span class="ts">[00:41:33]</span></td></tr>
+    <tr><td><b>Node-RED Flow Simulator</b></td><td>他自己寫的模擬器網頁，可以拖拉節點、<b>單步執行</b>、逐步看訊息跑到哪裡，用來教學與除錯</td><td><span class="ts">[01:04:19]</span></td></tr>
+    <tr><td><b>數位儀表板（新舊版）</b></td><td>舊版 UI 與新版 Dashboard 2.0 的對照展示</td><td><span class="ts">[00:52:35]</span></td></tr>
+    <tr><td><b>拉霸／骰子小遊戲</b></td><td>用 Node-RED 做的互動小遊戲，證明它不只是工業用途</td><td><span class="ts">[00:51:09]</span></td></tr>
+  </table></div>
+
+  <div class="note steel">📌 <div><span class="ts">[00:44:48]</span> 老師坦言「寫這種程式對我來講就是差一點」，所以他大量用 <b>Codex</b> 幫忙：<b>幫你安裝節點、甚至做出你想要的節點</b>。這句話是第二場整場的伏筆——第二場就在示範怎麼把一支 HTML 程式變成一顆真的 Node-RED 節點。</div></div>
+</section>
+
+<!-- 9 -->
+<section class="chapter" id="sec-check">
+  <span class="chip" style="background:linear-gradient(90deg,var(--green),var(--teal))">CHECKLIST</span>
+  <h2 class="ct">9. 課後自我檢核表</h2>
+  <p class="cd">照著勾，勾不起來的那項就回去看對應章節。</p>
+  <ul class="chk">
+    <li>我裝好了 <b>Node.js 與 Node-RED</b>，能在瀏覽器用 <code>127.0.0.1:1880</code> 打開編輯器。</li>
+    <li>我認得畫面上的<b>四個區塊</b>：節點面板、工作區、標籤頁、右側面板（資訊／說明／除錯窗口）。</li>
+    <li>我能自己拉出 <b>inject → debug</b>，按下部署後觸發，並在除錯窗口看到輸出。</li>
+    <li>我知道 <code>msg.payload</code> 是什麼，也會把 inject 的 payload <b>從時間戳改成字串</b>。</li>
+    <li>我會用 inject 設定<b>間隔重複</b>與<b>指定時間</b>，知道它可以當排程器用。</li>
+    <li>我會用三條線選單<b>匯入 flow JSON</b>，也知道匯出前要<b>先取消選取節點</b>。</li>
+    <li>我照著串起了 <b>Groq 或 OpenRouter</b> 其中一支 API，並在除錯窗口一層層展開找到 AI 的回覆文字。</li>
+    <li>我抓得到<b>環境部 AQI 開放資料</b>，看得懂回來的是一個 84 筆的陣列。</li>
+    <li>我會在 function 節點裡用 <code>find()</code> <b>取出指定測站</b>，而且記得 <code>return msg;</code>。</li>
+    <li>★ 最重要：遇到報錯時，我會<b>先用 debug 確認資料形狀</b>，再把<b>錯誤訊息＋資料範例＋「在 Node-RED 的 function 節點裡」</b>一起丟給 AI 問。</li>
+  </ul>
+</section>
+
+<!-- 10 -->
+<section class="chapter" id="sec-quotes">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--amber))">GOLDEN LINE</span>
+  <h2 class="ct">10. 老師金句</h2>
+  <div class="golden"><div class="q">「你把節點想成就像一個 Library 的概念一樣。」</div><div class="a"><span class="ts">[00:06:47]</span> 一句話講完 Node-RED 的本質：別人寫好測好的串接，你拿來接就好。</div></div>
+  <div class="golden"><div class="q">「Node-RED 最大的好處，是可以把兩個不同的功能串接起來。」</div><div class="a"><span class="ts">[01:41:30]</span> 它的價值不在單一節點多強，而在你能把原本不相干的東西接成一件新的事。</div></div>
+  <div class="golden"><div class="q">「不要完全都只是依賴 debug。」</div><div class="a"><span class="ts">[00:28:12]</span> 在講變數的段落說的：看懂變數怎麼傳遞，比一直印訊息更快找到問題。</div></div>
+  <div class="golden"><div class="q">「熟 AI 的人，卡關的時間會短很多。」</div><div class="a"><span class="ts">[02:19:11]</span> 整場課示範最多次的其實不是語法，是「卡住了要怎麼問」。</div></div>
+</section>
+
+<!-- 11 -->
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,var(--ink3),var(--ink2))">SOURCE</span>
+  <h2 class="ct">11. 資料來源與整理說明</h2>
+  <ul class="pt">
+    <li><b>原始教材：</b>Google Drive 資料夾「2026/7/19 Node-RED (I) 研習」——課堂錄影一段（2 小時 22 分 41 秒），以及四個 flow JSON（BasicAQI、Flow與Global、Groq_API、OpenRouter）。</li>
+    <li><b>整理方法：</b>錄影用 ffmpeg <b>每 35 秒抽一格</b>（共 <b>245 格</b>），逐格用眼睛看過並記錄畫面內容；同時用 faster-whisper（small／int8）產出<b>全程逐字稿</b>（4,764 段），兩者交叉比對。四個 flow JSON 逐檔解析節點結構，用來還原程式碼片段。</li>
+    <li><b>可信度標註：</b>畫面截圖、節點設定、錯誤訊息皆為<b>錄影實錄</b>；程式碼片段以教材 JSON 的實際內容為準，僅將 API 金鑰替換為佔位符。時間戳來自逐字稿，因語音辨識可能有數秒誤差。</li>
+    <li><b>金鑰處理：</b>錄影中有數個畫面出現老師的 API 金鑰明碼（環境部、Groq、OpenRouter），依專案規則<b>一律不收錄</b>，本頁改用不含金鑰的畫面，程式碼一律寫成 <code>&lt;你的 API Key&gt;</code>。</li>
+    <li><b>沒有簡報檔：</b>這場沒有傳統投影片，「畫面」就是老師的實機操作，所以截圖全部取自錄影抽格。</li>
+  </ul>
+  <div class="note steel">📌 <div>這場在課程館歸在<b>「📦 訂閱制課程」</b>系列，卡片編號寫<b>「訂閱制 Node-RED 研習營 (I)」</b>。它與晨學講堂 EP 系列同一位講師、不同軌道；因為是獨立的研習營場次而非固定堂數，故不佔用 S＜季＞E＜堂＞ 編號。</div></div>
+</section>
+
+</article>
+</div>
+
+<footer>
+  <p>📝 Node-RED 研習營 (I) 逐幀課堂筆記 · 益師傅（楊俊益・ECF）</p>
+  <p>依錄影逐幀（每 35 秒／共 245 格）＋全程逐字稿整理 · <a href="nodered1-ai-skills.html">🗺️ 互動技能地圖</a> · <a href="nodered2-notes.html">➡️ 研習營 (II)</a> · <a href="../radio/#subscription">🏠 回筆記館入口</a></p>
+</footer>
+
+</body>
+</html>

@@ -1,159 +1,126 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import episodes from '../data/radio.json';
+import subscription from '../data/subscription.json';
+import ecf from '../data/ecf.json';
 
 const base = import.meta.env.BASE_URL;
 const lead =
-  '「生成式 AI 應用電台・晨學講堂」每週五晚間直播——每一集把當週最重要的 AI 工具與 Agent 實際操作一遍，課後做成逐幀筆記＋互動地圖。最新一集在最前面。';
+  '直播學習成果集中在這裡，依內容分成「直播電台、訂閱制、ECF」三個系列。每張卡片都保留課堂筆記與互動地圖；受保護的會員內容只列索引，不在公開網站揭露。';
+const radio = episodes.map((ep) => ({
+  ...ep,
+  links: [
+    { label: '📝 課堂筆記', href: ep.notes },
+    { label: '🗺️ 互動地圖', href: ep.map }
+  ]
+}));
+const series = [
+  { id: 'radio', name: '直播電台', icon: '📻', items: radio },
+  { id: 'subscription', name: '訂閱制', icon: '📦', items: subscription },
+  { id: 'ecf', name: 'ECF 系列', icon: '🧭', items: ecf }
+];
 ---
 
-<Layout page="courses" title="直播電台" description={lead}>
+<Layout page="courses" title="直播筆記" description={lead}>
   <section class="page-section">
     <div class="head" data-reveal="1">
-      <h1 class="page-title">直播<span class="accent">電台</span></h1>
-      <div class="divider"><span class="line"></span>晨學講堂・每週五晚間直播<span class="line"></span></div>
+      <h1 class="page-title">直播<span class="accent">筆記</span></h1>
+      <div class="divider"><span class="line"></span>三個系列・集中整理<span class="line"></span></div>
       <p class="lead">{lead}</p>
     </div>
 
-    <div class="count-row">
-      <span>共 {episodes.length} 集</span>
+    <nav class="series-nav" aria-label="直播筆記系列">
+      {series.map((group) => (
+        <a href={`#${group.id}`}>
+          <span>{group.icon} {group.name}</span>
+          <b>{group.items.length}</b>
+        </a>
+      ))}
+    </nav>
+
+    <div class="back-row">
+      <span>共 {radio.length + subscription.length + ecf.length} 筆索引</span>
       <a class="back-link" href={`${base}courses/`}>‹ 回課程筆記館</a>
     </div>
 
-    <div class="grid">
-      {episodes.map((ep) => (
-        <div class="ep-card" style={`--c:${ep.accent}`}>
-          <div class="top"></div>
-          <div class="body">
-            <span class="code">{ep.ep}</span>
-            <div class="title">{ep.title}</div>
-            <div class="desc">{ep.desc}</div>
-            {ep.tags.length > 0 && (
-              <div class="tags">
-                {ep.tags.map((t) => <span>{t}</span>)}
-              </div>
-            )}
-            {ep.date && <div class="date">{ep.date}</div>}
+    {series.map((group) => (
+      <section class="series-section" id={group.id}>
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">{group.icon} LIVE NOTES</span>
+            <h2>{group.name}</h2>
           </div>
-          <div class="links">
-            <a href={`${base}notes/${ep.notes}`}>📝 課堂筆記</a>
-            <a href={`${base}notes/${ep.map}`}>🗺️ 互動地圖</a>
-          </div>
+          <span class="count">{group.items.length} 筆</span>
         </div>
-      ))}
-    </div>
+
+        <div class="grid">
+          {group.items.map((ep) => (
+            <article class:list={["ep-card", { protected: ep.status }]} style={`--c:${ep.accent}`}>
+              <div class="top"></div>
+              <div class="body">
+                <span class="code">{ep.ep}</span>
+                <h3 class="title">{ep.title}</h3>
+                <p class="desc">{ep.desc}</p>
+                {ep.tags.length > 0 && (
+                  <div class="tags">
+                    {ep.tags.map((tag) => <span>{tag}</span>)}
+                  </div>
+                )}
+                {ep.date && <div class="date">{ep.date}</div>}
+                {ep.status && <div class="status">{ep.status}</div>}
+              </div>
+              {ep.links.length > 0 && (
+                <div class="links">
+                  {ep.links.map((link) => <a href={`${base}notes/${link.href}`}>{link.label}</a>)}
+                </div>
+              )}
+            </article>
+          ))}
+        </div>
+      </section>
+    ))}
   </section>
 </Layout>
 
 <style>
-  .page-section {
-    width: 88%;
-    max-width: var(--content-max);
-    margin: 0 auto;
-    padding: 64px var(--space-h) 80px;
-  }
-  .head { text-align: center; margin-bottom: 40px; }
-  .page-title {
-    font-family: var(--font-head);
-    font-size: var(--fs-page-title);
-    margin: 0 0 16px;
-  }
+  .page-section { width: 88%; max-width: var(--content-max); margin: 0 auto; padding: 64px var(--space-h) 80px; }
+  .head { text-align: center; margin-bottom: 32px; }
+  .page-title { font-family: var(--font-head); font-size: var(--fs-page-title); margin: 0 0 16px; }
   .page-title .accent { color: var(--c-brand); }
-  .divider {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    color: var(--c-accent);
-    font-size: var(--fs-15);
-    letter-spacing: .14em;
-  }
+  .divider { display: flex; align-items: center; justify-content: center; gap: 16px; color: var(--c-accent); font-size: var(--fs-15); letter-spacing: .14em; }
   .divider .line { width: 44px; height: 1px; background: rgba(124, 168, 92, .5); }
-  .lead {
-    font-size: var(--fs-17);
-    line-height: 2;
-    color: var(--c-body);
-    max-width: 36em;
-    margin: 24px auto 0;
-  }
-  .count-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    flex-wrap: wrap;
-    font-size: var(--fs-15);
-    color: var(--c-faintest);
-    margin-bottom: 18px;
-  }
+  .lead { font-size: var(--fs-17); line-height: 2; color: var(--c-body); max-width: 40em; margin: 24px auto 0; }
+  .series-nav { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 0 auto 20px; }
+  .series-nav a { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 15px 18px; background: #fff; border: 1px solid var(--c-border); border-radius: var(--radius-md); box-shadow: 0 2px 10px var(--c-shadow); color: var(--c-ink-strong); }
+  .series-nav a:hover { border-color: var(--c-accent); transform: translateY(-2px); }
+  .series-nav b { min-width: 2em; padding: 3px 8px; border-radius: var(--radius-pill); background: var(--c-accent-chip-bg); color: var(--c-brand); text-align: center; }
+  .back-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: var(--fs-15); color: var(--c-faintest); margin-bottom: 46px; }
   .back-link { font-size: var(--fs-15); }
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 22px;
-  }
-  .ep-card {
-    display: flex;
-    flex-direction: column;
-    background: #fff;
-    border: 1px solid var(--c-border);
-    border-radius: var(--radius-md);
-    overflow: hidden;
-    box-shadow: 0 2px 10px var(--c-shadow);
-    transition: transform .25s ease, box-shadow .25s ease;
-  }
-  .ep-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 16px 34px var(--c-shadow-strong);
-  }
+  .series-section { scroll-margin-top: 90px; margin-top: 54px; }
+  .series-section:first-of-type { margin-top: 0; }
+  .section-head { display: flex; justify-content: space-between; align-items: end; gap: 18px; padding-bottom: 14px; margin-bottom: 20px; border-bottom: 1px solid var(--c-border); }
+  .section-head h2 { margin: 4px 0 0; font-family: var(--font-head); font-size: clamp(1.65rem, 3vw, 2.2rem); }
+  .eyebrow { color: var(--c-accent); font-size: var(--fs-12); letter-spacing: .12em; }
+  .count { color: var(--c-faintest); font-size: var(--fs-15); white-space: nowrap; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 22px; }
+  .ep-card { display: flex; flex-direction: column; background: #fff; border: 1px solid var(--c-border); border-radius: var(--radius-md); overflow: hidden; box-shadow: 0 2px 10px var(--c-shadow); transition: transform .25s ease, box-shadow .25s ease; }
+  .ep-card:hover { transform: translateY(-4px); box-shadow: 0 16px 34px var(--c-shadow-strong); }
   .ep-card .top { height: 5px; background: var(--c); }
   .ep-card .body { padding: 22px 22px 16px; flex: 1; }
-  .ep-card .code {
-    font-size: var(--fs-12);
-    letter-spacing: .14em;
-    color: var(--c);
-    font-weight: 600;
-  }
-  .ep-card .title {
-    font-family: var(--font-body);
-    font-weight: 500;
-    font-size: var(--fs-17);
-    color: var(--c-ink-strong);
-    line-height: 1.6;
-    margin: 10px 0 10px;
-  }
-  .ep-card .desc {
-    font-size: var(--fs-13);
-    line-height: 1.9;
-    color: var(--c-body-soft);
-  }
-  .ep-card .tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 12px;
-  }
-  .ep-card .tags span {
-    font-size: var(--fs-12);
-    padding: 3px 10px;
-    border-radius: var(--radius-pill);
-    background: var(--c-accent-chip-bg);
-    color: var(--c-body-soft);
-  }
-  .ep-card .date {
-    font-size: var(--fs-12);
-    color: var(--c-faintest);
-    margin-top: 12px;
-  }
-  .ep-card .links {
-    display: flex;
-    border-top: 1px solid var(--c-border);
-  }
-  .ep-card .links a {
-    flex: 1;
-    text-align: center;
-    padding: 12px 8px;
-    font-size: var(--fs-15);
-  }
+  .ep-card .code { font-size: var(--fs-12); letter-spacing: .14em; color: var(--c); font-weight: 600; }
+  .ep-card .title { font-family: var(--font-body); font-weight: 500; font-size: var(--fs-17); color: var(--c-ink-strong); line-height: 1.6; margin: 10px 0; }
+  .ep-card .desc { font-size: var(--fs-13); line-height: 1.9; color: var(--c-body-soft); margin: 0; }
+  .ep-card .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .ep-card .tags span { font-size: var(--fs-12); padding: 3px 10px; border-radius: var(--radius-pill); background: var(--c-accent-chip-bg); color: var(--c-body-soft); }
+  .ep-card .date { font-size: var(--fs-12); color: var(--c-faintest); margin-top: 12px; }
+  .ep-card .status { font-size: var(--fs-12); line-height: 1.7; margin-top: 14px; padding: 9px 11px; border-radius: 8px; background: #f5f1e8; color: #765b2b; }
+  .ep-card.protected { background: #fcfbf8; }
+  .ep-card .links { display: flex; border-top: 1px solid var(--c-border); }
+  .ep-card .links a { flex: 1; text-align: center; padding: 12px 8px; font-size: var(--fs-15); }
   .ep-card .links a + a { border-left: 1px solid var(--c-border); }
+  @media (max-width: 680px) {
+    .page-section { width: 94%; padding-top: 42px; }
+    .series-nav { grid-template-columns: 1fr; }
+    .back-row { margin-bottom: 32px; }
+  }
 </style>

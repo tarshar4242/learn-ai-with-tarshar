@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>聲音復刻 × 貼課通：把單檔 AI 工具送上雲端｜S3E3 互動式學習地圖</title>
+<meta name="description" content="訂閱制第三季第三堂（益師傅）互動式學習地圖：聲刻 Voice Foundry 本機聲音克隆、ElevenLabs 雲端 TTS 對照、CAST Podcast 多角色工作室、貼課通課堂即時牆全功能，以及核心一課——把純前端單檔工具用 CAST-STUDIO.exe 與 Google Sites 嵌入＋發布上雲。多層次可點擊、可打勾記憶進度。">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269;
+  --green:#3f8560; --orange:#bf6a1e; --red:#c0453f; --teal:#0d8f80; --amber:#9c7b23;
+  --feat:#7a4bd0; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(28px,4.6vw,46px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--txt);background:none;-webkit-text-fill-color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:680px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:9px}
+.steps li{list-style:none;counter-increment:st;display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--txt2);line-height:1.7}
+.steps li::before{content:counter(st);flex:none;width:25px;height:25px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:var(--c,var(--feat));margin-top:1px}
+.steps li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+.prompt,.promptbox{background:#1d1d1f;border:1px solid #2c2c31;border-radius:10px;padding:13px 15px;margin-top:6px;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt b,.promptbox b{color:#fff}
+figure.shot{margin:10px 0 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12px;color:var(--txt3);padding:8px 12px;border-top:1px solid var(--line);background:var(--bg2);line-height:1.6}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <a class="navlink" href="../radio/#ecf" style="border-color:#c3aee8" onclick="if(history.length>1){history.back();return false}">← 回上一頁</a>
+  <div class="logo">
+    <div class="dot">🎙️</div>
+    <div>聲刻 × 貼課通 地圖<small>SUBSCRIPTION S3 · S3E3</small></div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋技能關鍵字：聲刻、克隆、ElevenLabs、CUDA、CAST、貼課通、理解度、Google Sites、CORS…" autocomplete="off">
+  </div>
+  <a class="navlink" href="s3e3-notes.html">📝 課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">S3E3 · 訂閱制第三季第三堂 · 2026/08/14</span>
+  <h1>聲音復刻 × 貼課通<br>把單檔 AI 工具送上雲端</h1>
+  <p class="sub">益師傅一次示範兩套自己用 AI 打造的工具：<b>聲刻</b>（本機聲音克隆＋Podcast）與<b>貼課通</b>（課堂即時牆）。但真正的重點是——它們都是<b>純前端單檔 HTML</b>，可以本機雙擊即用，也能<b>嵌進 Google Sites 一鍵發布</b>成公開網址給任何人用。<br>點進每一章，逐層展開<b>本堂實際教到</b>的觀念、示範與操作，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🎙️ 生成式AI應用電台・訂閱制第三季</span>
+    <span>👤 益師傅（楊俊益・ECF）</span>
+    <span>🔰 小白友善</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>5</b><span>大主題</span></div>
+  <div class="stat"><b>18</b><span>實戰技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 18 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--purple)" onclick="showChapter('voice')">
+        <div class="glowline"></div><span class="emoji">🎙️</span>
+        <h3><em>CHAPTER 01</em>聲刻：本機聲音克隆</h3>
+        <p>聲刻是什麼、可攜版打包、聲音克隆六步驟 SOP、必勾的倫理聲明，以及 RTX 50 系列 CUDA 錯誤與 CPU fallback。</p>
+        <div class="foot"><div class="mini"><i data-mini="voice"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--cyan)" onclick="showChapter('eleven')">
+        <div class="glowline"></div><span class="emoji">☁️</span>
+        <h3><em>CHAPTER 02</em>對照組：ElevenLabs 雲端 TTS</h3>
+        <p>三個模型怎麼選、音色庫／我的音色／音色設計，以及「一個工具開一把受限 API 金鑰」的安全習慣。</p>
+        <div class="foot"><div class="mini"><i data-mini="eleven"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--blue)" onclick="showChapter('cast')">
+        <div class="glowline"></div><span class="emoji">🎧</span>
+        <h3><em>CHAPTER 03</em>CAST：Podcast 多角色工作室</h3>
+        <p>8 步驟精靈把素材變多角色 Podcast、台語意傳＋本機/雲端聲音混搭，以及 CAST STUDIO .exe 為何要本機小伺服器。</p>
+        <div class="foot"><div class="mini"><i data-mini="cast"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--teal)" onclick="showChapter('tiketong')">
+        <div class="glowline"></div><span class="emoji">🧑‍🏫</span>
+        <h3><em>CHAPTER 04</em>貼課通：課堂即時牆</h3>
+        <p>教師版建房／學生版加入、貼文互動與評分排行、理解度紅綠燈、匿名提問、點名出席、即時投票與整牆匯出。</p>
+        <div class="foot"><div class="mini"><i data-mini="tiketong"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--orange)" onclick="showChapter('cloud')">
+        <div class="glowline"></div><span class="emoji">🚀</span>
+        <h3><em>CHAPTER 05</em>核心一課：單檔工具上雲</h3>
+        <p>純前端單頁的本質、用 Google Sites 嵌入＋發布成公開網址、GAS／自架與資料保存，以及用 Codex／Claude 開發與除錯。</p>
+        <div class="foot"><div class="mini"><i data-mini="cloud"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+
+    <div class="resources">
+      <h3>📦 <span>課程原始資料</span></h3>
+      <div class="res-grid">
+        <a href="s3e3-notes.html"><span class="ic">📝</span><span><b>課堂筆記</b>逐幀整理＋錄影內嵌</span></a>
+        <a href="../radio/#ecf"><span class="ic">📻</span><span><b>直播電台系列</b>回系列總覽，一集一卡</span></a>
+        <a href="https://drive.google.com/drive/folders/1GZoJFQsthck9M7hn3F3__lUx6WBjTFVv" target="_blank"><span class="ic">🗂️</span><span><b>課程資料夾</b>錄影×2＋四個工具檔</span></a>
+        <a href="ep49-notes.html"><span class="ic">🐙</span><span><b>相關 EP49</b>在 AI 時代下，GitHub 角色定位？</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-voice" class="view" style="--c:var(--purple)"></section>
+  <section id="view-eleven" class="view" style="--c:var(--cyan)"></section>
+  <section id="view-cast" class="view" style="--c:var(--blue)"></section>
+  <section id="view-tiketong" class="view" style="--c:var(--teal)"></section>
+  <section id="view-cloud" class="view" style="--c:var(--orange)"></section>
+</main>
+
+<footer>
+  本頁為 S3E3「聲音復刻 × 貼課通：把單檔 AI 工具送上雲端」課後整理・介面沿用本站互動式學習地圖版型<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2026｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+const DATA = {
+  voice: {
+    key:'voice', color:'var(--purple)', emoji:'🎙️', code:'CHAPTER 01', title:'聲刻：本機聲音克隆',
+    intro:'雙擊聲刻.exe，瀏覽器打開 127.0.0.1:7860，就是一個跑在你電腦上的聲音克隆工具。放一段乾淨人聲＋輸入新文字，它用相同音色產生全新 MP3。',
+    topics:[
+      {t:'聲刻是什麼、為什麼要「可攜版」', s:'本機 web app、內嵌 Python 免安裝｜錄影 17:45', blocks:[
+        {h:'本質',ul:['一個跑在你電腦上的 <b>本機 web app</b>（Python 服務 + 瀏覽器介面，port 7860）','放乾淨人聲＋輸入新文字 → 用相同音色產生全新 MP3','資料在本機，<b>不用把聲音上傳雲端</b>']},
+        {h:'可攜版打包',ul:['內含免安裝的內嵌 Python（python-3.12.10-embed）','＋模型快取＋<code>聲刻.exe</code> 啟動器','整包約 7 GB，換電腦解壓即用']},
+        {h:'啟動提醒',warn:'看到「模型已就緒」再按生成；啟動後超過 3 分鐘仍無畫面＝啟動失敗（首次生成需下載數 GB 模型，之後用本機快取）。'},
+        {h:'實機畫面',shot:{img:'s3e3-img/01-shengke-home.jpg',cap:'聲刻 Voice Foundry 首頁：左放參考聲音、右輸入要說的話。［17:45］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3e3-notes.html#sec-shengke" style="color:var(--purple)">筆記 3：主角一 聲刻 Voice Foundry</a>'}]},
+      {t:'聲音克隆六步驟 SOP', s:'放聲音→填逐字稿→解析存 ID→勾倫理→輸入文字→生成｜錄影 23:30', blocks:[
+        {h:'六個步驟',steps:['<b>放參考聲音</b>：拖入 MP3／WAV，10–30 秒乾淨人聲，系統轉 24 kHz 單聲道，≤ 25 MB','<b>填參考音訊逐字稿</b>：寫下這段聲音實際說的內容，音色與節奏更準','<b>解析聲音＋儲存 Voice ID</b>：命名（如「益師傅」）後存起來重複用','<b>勾倫理聲明</b>（必勾，見下一項）','<b>輸入要說的話</b>：貼新文字（≤ 10000 字）、選語言與擬演情緒','<b>開始生成語音</b>：產出 MP3，留在生成歷史，可重播、下載']},
+        {h:'實測',p:'老師到 Yahoo 財經複製一段 178 字 ETF 新聞，貼進聲刻、勾好倫理、按生成。CPU 模式跑一分多鐘後產出——全班一致認證「有，超像」。'},
+        {h:'實機畫面',shot:{img:'s3e3-img/04-shengke-generated.jpg',cap:'「這是你的新聲音」：用 19 秒參考聲音唸出整段新聞，附波形與下載 MP3。［32:00］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3e3-notes.html#sec-clone" style="color:var(--purple)">筆記 5：聲音克隆 SOP 與倫理聲明</a>'}]},
+      {t:'倫理聲明：一定要勾的那一格', s:'確認聲音屬於我或已授權、不冒充不詐騙｜負責任的 AI', blocks:[
+        {h:'勾選框原文',p:'「我確認此聲音屬於我，或已取得聲音本人明確授權；不會用於冒充、詐騙或誤導。」'},
+        {h:'為什麼重要',warn:'聲音克隆很強大，也很容易被濫用。這一格不是形式——用別人的聲音去冒充、詐騙是違法的。復刻自己的聲音、或取得授權才動手。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3e3-notes.html#sec-clone" style="color:var(--purple)">筆記 5：聲音克隆 SOP 與倫理聲明</a>'}]},
+      {t:'CUDA 錯誤與 CPU fallback', s:'RTX 50 系列常見錯誤，不是檔案壞掉｜錄影 27:30 · 40:00', blocks:[
+        {h:'現象',p:'RTX 50 系列（5060／5090…）常跳「CUDA error: no kernel image is available for execution on the device」。'},
+        {h:'原因',warn:'內建的 PyTorch/CUDA 版本不支援這張新顯卡的架構，<b>不是聲音檔壞掉</b>。聲刻會自動退回 CPU fallback（能跑，只是慢）。'},
+        {h:'CPU 速度參考',table:{head:['內容','時間'],rows:[['150 字','約 2–4 分鐘'],['500 字','約 6–8 分鐘'],['Podcast 多段','10–30 分鐘以上']]}},
+        {h:'修法（在可攜版資料夾開 PowerShell）',prompt:'.\\runtime\\python\\python.exe -m pip uninstall -y torch torchaudio\n.\\runtime\\python\\python.exe -m pip install torch==2.7.1+cu128 torchaudio==2.7.1+cu128 --index-url https://download.pytorch.org/whl/cu128\n# 驗證：應看到 2.7.1+cu128 / True / 你的顯示卡名稱\n# 臨時方案（改 CPU 版，較慢但一定能跑）：\n# ...install torch==2.7.1 torchaudio==2.7.1 --index-url https://download.pytorch.org/whl/cpu'},
+        {h:'實機畫面',shot:{img:'s3e3-img/05-shengke-diagnostics.jpg',cap:'系統診斷：CPU fallback（橘字）、Voice ID 管理與生成歷史。［27:30］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3e3-notes.html#sec-aidev" style="color:var(--purple)">筆記 11：用 Codex／Claude 除錯</a>'}]}
+    ]
+  },
+  eleven: {
+    key:'eleven', color:'var(--cyan)', emoji:'☁️', code:'CHAPTER 02', title:'對照組：ElevenLabs 雲端 TTS',
+    intro:'示範本機聲刻之前，先看雲端的對照組 ElevenLabs，理解「雲端 TTS」與「本機克隆」的差別：誰花錢、資料在哪、快慢。',
+    topics:[
+      {t:'三個模型怎麼選', s:'v3 表現力、Multilingual v2 品質、Flash v2.5 快而便宜｜錄影 07:30', blocks:[
+        {h:'三個模型',table:{head:['模型','特色'],rows:[['Eleven v3','最具表現力、70+ 語言、可用 [laughing]／[whispers] 標籤控制語氣、能多講者對話'],['Eleven Multilingual v2','Studio 級品質、最自然、情感最豐富、29 語言，適合旁白／有聲書'],['Eleven Flash v2.5','便宜 50%、延遲最低、32 語言，適合對話式即時應用']]}},
+        {h:'看課堂筆記',p:'👉 <a href="s3e3-notes.html#sec-eleven" style="color:var(--cyan)">筆記 4：對照組 ElevenLabs</a>'}]},
+      {t:'音色庫、我的音色、音色設計', s:'用文字描述就能生出新音色｜錄影 13:30', blocks:[
+        {h:'三種來源',ul:['<b>音色庫（voice library）</b>：官方分類的現成音色','<b>我的音色（My Voices）</b>：自建／克隆的音色清單','<b>音色設計（voice design）</b>：用一段文字描述生成新音色（約 350 點數）']},
+        {h:'老師的小技巧',tip:'要寫音色描述時，先請 AI 幫你寫一段形容詞（例：「請給我一段描述台灣中年男子、嘮叨但精神奕奕的聲音形容詞，用 50 個字」），再貼進音色設計，音色更到位。'},
+        {h:'實機畫面',shot:{img:'s3e3-img/03-elevenlabs-voicedesign.jpg',cap:'音色設計：用文字描述生成新音色（Evil Ogre、Southern Woman…）。［14:15］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3e3-notes.html#sec-eleven" style="color:var(--cyan)">筆記 4：對照組 ElevenLabs</a>'}]},
+      {t:'API Key：一個工具開一把受限金鑰', s:'限制權限、可設到期與用量、外洩自動停用｜錄影 10:00', blocks:[
+        {h:'建立金鑰的重點',steps:['到「開發者 → API 密鑰」建立一把 key','開啟「限制密鑰」，把用不到的權限關掉（逐項可設無存取／存取）','可設到期時間、用量限制（點數）','金鑰只顯示一次，關掉對話框前務必複製']},
+        {h:'貼心防呆',tip:'ElevenLabs 有「若外洩則自動停用」：偵測到金鑰被公開（例如上傳到 GitHub）會自動停用。'},
+        {h:'紅線',warn:'金鑰＝帳號密碼，不可分享。一個工具開一把受限金鑰，出事只影響那一把。音色克隆與設計會消耗點數（花錢）；聲刻則是本機跑、不花這筆錢。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3e3-notes.html#sec-eleven" style="color:var(--cyan)">筆記 4：對照組 ElevenLabs</a>'}]}
+    ]
+  },
+  cast: {
+    key:'cast', color:'var(--blue)', emoji:'🎧', code:'CHAPTER 03', title:'CAST：Podcast 多角色工作室',
+    intro:'聲刻的第二個分頁 CAST（AI PODCAST 語音生成工作室）：貼一份素材，AI 寫出完整訪談文案，再合成語音，輸出 MP3 與字幕 MP4。',
+    topics:[
+      {t:'8 步驟精靈：素材變 Podcast', s:'貼文自動填表→主題→聽眾→節奏→主持人→關鍵字→禁詞→節目設定｜錄影 19:00', blocks:[
+        {h:'八個步驟',steps:['貼上文章自動填表（AI 解析後自動填欄，需 Groq API Key）','分析主題（例：親子餐廳企劃分析）','目標聽眾（初學者／一般大眾／專業人士／主管／投資人）','情緒節奏曲線（W 型起伏／漸強式／先高後穩／雲霄飛車）','主持人設定（1 人獨白／2 人對談／3 人圓桌，每位可設語氣與人設）','焦點關鍵字（必須提及的詞彙或數據）','禁止提及（不得出現的主題或詞彙）','節目設定（自我介紹、長度、互動風格）']},
+        {h:'產出',p:'AI 生成完整對談文案（例：94 句、4121 字），每句一張卡片可改情緒標籤、切換講者、重錄試聽。輸出可選 16:9／9:16、封面標題卡、BGM（Pollinations.ai 自動生成意境圖）、SRT 字幕與 Show Notes。'},
+        {h:'實機畫面',shot:{img:'s3e3-img/06-cast-script.jpg',cap:'AI 產生的對談腳本：每句一張卡片，可改情緒、切換講者。［46:00］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3e3-notes.html#sec-cast" style="color:var(--blue)">筆記 6：CAST Podcast 工作室</a>'}]},
+      {t:'台語意傳＋本機/雲端聲音混搭', s:'主持人 A 用你的克隆聲、B 用 ElevenLabs 或台語｜錄影 39:00', blocks:[
+        {h:'台語（意傳）',ul:['主持人語言可選「台語（意傳）」','由意傳科技「嘀聲」合成（免 Key、免費展示限流 3 句/分鐘）','可選台語聲線 1／2／3 以變調區分講者','教材使用要標示「語音來源 意傳科技」']},
+        {h:'聲音混搭',ul:['主持人 A 可用<b>聲刻本機 Clone Voice</b>（你自己的聲音）','主持人 B 用 <b>ElevenLabs</b>（George、Sarah…）或台語','本機與雲端聲音<b>同一張表選用</b>']},
+        {h:'看課堂筆記',p:'👉 <a href="s3e3-notes.html#sec-cast" style="color:var(--blue)">筆記 6：CAST Podcast 工作室</a>'}]},
+      {t:'CAST STUDIO .exe：為何要本機小伺服器', s:'單檔執行檔、免 CORS 代理｜錄影第二段 02:00', blocks:[
+        {h:'運作方式',steps:['雙擊 CAST-STUDIO-win.exe → 啟動本機小伺服器（僅監聽 127.0.0.1）→ 自動開瀏覽器','內嵌 /p 免 CORS 代理：台語標音/合成、TWSE、TPEx 都由 exe 伺服器端抓','自動偵測環境：localhost 走本機代理，開網頁版 HTML 則退回 Worker（同一份介面兩用）','ElevenLabs／Groq／Pollinations／ffmpeg 等原本就開 CORS 的服務照舊直連']},
+        {h:'白話',tip:'瀏覽器有個安全限制叫 CORS（跨來源請求會被擋）。把工具包成本機小伺服器，請求改由伺服器端發，就繞過這個限制——這就是為什麼要做成 .exe 而不是純網頁。'},
+        {h:'實機畫面',shot:{img:'s3e3-img/09-cast-studio.jpg',cap:'CAST STUDIO 獨立版：同一套 8 步驟，跑在 127.0.0.1:59767。［第二段 03:00］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3e3-notes.html#sec-caststudio" style="color:var(--blue)">筆記 7：CAST STUDIO 獨立版</a>'}]}
+    ]
+  },
+  tiketong: {
+    key:'tiketong', color:'var(--teal)', emoji:'🧑‍🏫', code:'CHAPTER 04', title:'貼課通：課堂即時牆',
+    intro:'開一間房，全班連進來一起貼文字／圖片／影音／PDF，配上一整排互動功能——對標 Padlet／Kahoot／Slido 就很好懂。',
+    topics:[
+      {t:'教師版建房／學生版加入', s:'房號連線、同一份程式兩種角色｜錄影第二段 07:30', blocks:[
+        {h:'兩個檔案',ul:['<b>教師版</b>：填教室名稱、密碼、人數、背景 → 建房 → 得到房號（如 UNPJ56）','<b>學生版</b>：填暱稱＋房號即可加入（不能建房、不能匯出，其餘同步）']},
+        {h:'連線技術',ul:['即時同步走 <b>WebRTC（PeerJS P2P）</b>','學校/公司網路連不上時，可在「連線設定」填 <b>TURN 中繼</b>或勾「強制走中繼」']},
+        {h:'一份程式兩種角色',tip:'學生版與教師版同源（單檔 2839 行、271 KB），房主功能（建房／教材庫／錄製…）被一個 _block 函式擋掉，提示「請輸入老師提供的代碼加入課堂」。'},
+        {h:'實機畫面',shot:{img:'s3e3-img/10-tiketong-room.jpg',cap:'建房完成：房號 UNPJ56＋一整排功能工具列。［第二段 10:00］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3e3-notes.html#sec-tiketong" style="color:var(--teal)">筆記 8：貼課通課堂即時牆</a>'}]},
+      {t:'貼文互動與評分排行', s:'貼圖/PDF/錄音、反應累計成積分｜錄影第二段 11:00', blocks:[
+        {h:'張貼到牆上',ul:['貼文字／圖片／檔案 PDF／拍照／錄音／語音輸入','卡片可選顏色、@提及、加表情','老師可用「畫」在貼文圖上標註']},
+        {h:'評分總計',p:'依貼文收到的反應累計到作者（👍1／⭐2／❤️3／🎉5 分），即時排行榜（例 🥇ECF 22 分、🥈耀州 21 分…）——遊戲化積分讓互動更熱絡。'},
+        {h:'實機畫面',shot:{img:'s3e3-img/11-tiketong-scoreboard.jpg',cap:'評分總計即時排行榜。［第二段 16:00］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3e3-notes.html#sec-features" style="color:var(--teal)">筆記 9：貼課通功能巡禮</a>'}]},
+      {t:'理解度紅綠燈、匿名提問、搶答', s:'即時教學節奏調節｜錄影第二段 12:30 · 30:00', blocks:[
+        {h:'三個即時互動',table:{head:['功能','作用'],rows:[['🚦 理解度紅綠燈','學生匿名選 跟得上／有點快／聽不懂，老師看即時長條圖調節奏'],['❓ 匿名提問','不顯示姓名、可按讚排序，老師可「聚焦」放大投影'],['🔔 搶答','搶答鈴，依先後排名 🥇🥈🥉']]}},
+        {h:'實機畫面',shot:{img:'s3e3-img/12-tiketong-comprehension.jpg',cap:'理解度紅綠燈：老師只看到統計（例 23 人 48%/52%/0%）。［第二段 30:00］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3e3-notes.html#sec-features" style="color:var(--teal)">筆記 9：貼課通功能巡禮</a>'}]},
+      {t:'協作白板、看板、點名、投票、匯出', s:'一整排課堂工具｜錄影第二段全程', blocks:[
+        {h:'更多功能',table:{head:['功能','對標'],rows:[['畫布／協作白板（全班同畫）','Jamboard'],['看板分組（第一～四組欄位）','Trello'],['簡報播放（貼文變投影片）','—'],['點名／出席（發起簽到）','—'],['即時投票／問答（單選/複選/是非/簡答）','Mentimeter'],['計時器（結束自動鎖定發文）','—'],['退場券（下課前收回饋）','Exit Ticket'],['抽座號／抽人','—'],['匯出（zip/csv/PPTX/長圖/PDF）','—']]}},
+        {h:'學員回饋',p:'學員把貼課通與 Padlet／Kahoot 對標，提出下一版願景：可暫時關閉部分學生功能、AI 立即出題、私訊對談、可自訂理解度選項等。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3e3-notes.html#sec-features" style="color:var(--teal)">筆記 9：貼課通功能巡禮</a>'}]}
+    ]
+  },
+  cloud: {
+    key:'cloud', color:'var(--orange)', emoji:'🚀', code:'CHAPTER 05', title:'核心一課：單檔工具上雲',
+    intro:'本堂最重要的觀念：這些工具都是「純前端單檔 HTML」，所以有好幾條免費上雲的路。看懂本質，就看懂怎麼部署。',
+    topics:[
+      {t:'純前端單頁應用（SPA）的本質', s:'WebRTC 連線、瀏覽器暫存｜錄影第二段 17:00', blocks:[
+        {h:'Codex 的關鍵回答',p:'學員耀州問 Codex「貼課通可改成 GAS 嗎？」，得到：「這支程式本質上是一支完整的<b>純前端單頁應用（SPA）</b>，即時連線用 WebRTC(P2P)、暫存用瀏覽器 IndexedDB／LocalStorage。透過 GAS 的 HtmlService 可直接託管並發布成 Web App 網頁，免費、無須架設伺服器，還自帶 Google 的 HTTPS 憑證。」'},
+        {h:'為什麼這很關鍵',tip:'純前端＝沒有後端伺服器，整個工具就是一個 HTML 檔。所以哪裡能放 HTML，哪裡就能跑它。'},
+        {h:'實機畫面',shot:{img:'s3e3-img/13-codex-gas.jpg',cap:'Codex 說明貼課通可用 GAS 的 HtmlService 免費託管。［第二段 17:00］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3e3-notes.html#sec-cloud" style="color:var(--orange)">筆記 10：把單檔工具送上雲端</a>'}]},
+      {t:'用 Google Sites 嵌入＋發布', s:'內嵌程式碼→發布公開網址｜錄影第二段 33:00–39:00', blocks:[
+        {h:'五步驟',steps:['開 Google Sites 新網站，新增一頁','用「內嵌 ＜＞ → 自訂內嵌（貼程式碼）」把貼課通學生版整頁嵌進去','右上「發布」，網址填 ecf-class → 得到公開網址 sites.google.com/view/ecf-class','誰可以查看：所有人 → 發布 → 「已成功發布」','用無痕視窗開這個網址，貼課通正常載入、能加入房間、能貼文——完全走通']},
+        {h:'當堂最有感的一幕',tip:'發布後全班學員紛紛複製老師做法，把貼課通嵌進自己的 Google Sites、發布成自己的網址，再把成果截圖貼回牆上互相展示。一堂課下來全班都學會「把單檔工具掛上雲」。'},
+        {h:'實機畫面',shot:{img:'s3e3-img/15-sites-published.jpg',cap:'公開網址 sites.google.com/view/ecf-class 實測：貼課通正常運作。［第二段 37:30］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3e3-notes.html#sec-cloud" style="color:var(--orange)">筆記 10：把單檔工具送上雲端</a>'}]},
+      {t:'GAS／自架與資料保存', s:'離開頁面資料就不在，要保存怎麼辦｜錄影第二段 Q&A', blocks:[
+        {h:'三條上雲路徑',table:{head:['路徑','說明'],rows:[['本機雙擊即用','CAST-STUDIO.exe 內建小伺服器、天然無 CORS'],['Google Sites 嵌入＋發布','最簡單，一鍵得到公開網址'],['GAS／自架伺服器','用 Google Apps Script HtmlService，免費＋HTTPS']]}},
+        {h:'資料保存提醒',warn:'純前端工具的資料存在瀏覽器（IndexedDB／LocalStorage），關掉就清掉；要長期保存就自己部署，並善用貼課通的「匯出／專案庫」把牆面存下來。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3e3-notes.html#sec-cloud" style="color:var(--orange)">筆記 10：把單檔工具送上雲端</a>'}]},
+      {t:'用 Codex／Claude 打造與除錯', s:'把報錯丟給 AI、現場改功能｜錄影貫穿全堂', blocks:[
+        {h:'AI 協作開發工作流',ul:['<b>現場除錯</b>：把 CUDA 錯誤截圖貼進 Codex，30 秒得到「是 PyTorch/CUDA 版本問題，不是檔案壞掉」＋修復步驟','<b>現場改功能</b>：把貼課通 HTML 上傳 Claude（Opus 5·High），要求「新的貼文都產生在最上方」','<b>工具軍火庫</b>：下載資料夾滿是 AI 做的工具（debate_arena、ollama_studio、BMC 生成器…）']},
+        {h:'心法',tip:'遇到報錯不要慌，把錯誤截圖丟給 AI，它會告訴你怎麼修。這是整個訂閱制課程的主軸：用 AI 當你的工程師。'},
+        {h:'實機畫面',shot:{img:'s3e3-img/14-tools-arsenal.jpg',cap:'老師下載資料夾一隅：全是用 AI 做出來的單檔工具。［第二段 34:15］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3e3-notes.html#sec-aidev" style="color:var(--orange)">筆記 11：用 Codex／Claude 打造與除錯</a>'}]}
+    ]
+  }
+};
+const ORDER = ['voice','eleven','cast','tiketong','cloud'];
+const $ = s=>document.querySelector(s);
+function renderChapter(ch){
+  const d=DATA[ch];const next=ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];const prev=ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html=`<div class="chapter-head"><span class="emoji">${d.emoji}</span><div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div></div>`;
+  d.topics.forEach((tp,i)=>{const id=`${ch}-${i}`;
+    html+=`<div class="topic" id="topic-${id}"><div class="topic-head" onclick="toggleTopic('${id}')"><span class="num">${i+1}</span><h4>${tp.t}<small>${tp.s}</small></h4><input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)"><span class="chev">▶</span></div><div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{html+=`<div class="block"><h5>${b.h}</h5>`;
+      if(b.p)html+=`<p>${b.p}</p>`;
+      if(b.ul)html+=`<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps)html+=`<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.table)html+=`<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.prompt)html+=`<div class="promptbox">${b.prompt}</div>`;
+      if(b.shot)html+=`<figure class="shot"><img src="${b.shot.img}" alt="" loading="lazy"><figcaption>${b.shot.cap}</figcaption></figure>`;
+      if(b.tip)html+=`<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn)html+=`<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html+=`</div>`;});
+    html+=`</div></div></div>`;});
+  html+=`<div class="chapnav"><a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a><a onclick="showHome()" style="text-align:center">回總覽<b>🏠 五大主題</b></a><a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a></div>`;
+  $('#view-'+ch).innerHTML=html;
+}
+ORDER.forEach(renderChapter);
+function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('#view-'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function showHome(){switchView('home');$('#crumbs').style.display='none';clearSearch();}
+function showChapter(ch){switchView(ch);$('#crumbs').style.display='flex';$('#crumbHere').textContent=`${DATA[ch].emoji} ${DATA[ch].title}`;clearSearch();syncChecks();}
+function toggleTopic(id){$('#topic-'+id).classList.toggle('open');}
+function openTopic(ch,i){showChapter(ch);const el=$('#topic-'+ch+'-'+i);el.classList.add('open');setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+const KEY='s3e3-skills-v1';
+const store=()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){const s=store();if(val)s[id]=1;else delete s[id];localStorage.setItem(KEY,JSON.stringify(s));updateProgress();}
+const TOTAL=ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){const done=Object.keys(store()).length;const pct=Math.round(done/TOTAL*100);$('#progFill').style.width=pct+'%';$('#progText').textContent=`${done} / ${TOTAL} 項技能已掌握`;$('#statDone').textContent=done;$('#statPct').textContent=pct+'%';ORDER.forEach(ch=>{const sub=DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;const el=document.querySelector(`[data-mini="${ch}"]`);if(el)el.style.width=Math.round(sub/DATA[ch].topics.length*100)+'%';});}
+function syncChecks(){const s=store();document.querySelectorAll('input[data-skill]').forEach(cb=>{cb.checked=!!s[cb.dataset.skill];});}
+function resetProgress(){if(confirm('確定要清空所有打勾進度嗎？')){localStorage.removeItem(KEY);syncChecks();updateProgress();}}
+function stripTags(s){return s.replace(/<[^>]+>/g,'');}
+const INDEX=[];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{let body=tp.s+' ';tp.blocks.forEach(b=>{if(b.p)body+=stripTags(b.p)+' ';if(b.ul)body+=b.ul.map(stripTags).join(' ')+' ';if(b.steps)body+=b.steps.map(stripTags).join(' ')+' ';if(b.tip)body+=stripTags(b.tip)+' ';if(b.warn)body+=stripTags(b.warn)+' ';if(b.prompt)body+=stripTags(b.prompt)+' ';if(b.table)body+=b.table.rows.flat().map(stripTags).join(' ')+' ';});INDEX.push({ch,i,title:tp.t,body});}));
+$('#searchInput').addEventListener('input',e=>{const q=e.target.value.trim();const box=$('#searchResults');if(!q){box.classList.remove('show');box.innerHTML='';return;}const hits=INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));box.classList.add('show');if(!hits.length){box.innerHTML=`<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：聲刻、CUDA、CAST、理解度、CORS、Google Sites）</div>`;return;}const hl=s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);box.innerHTML=hits.map(x=>{const pos=x.body.toLowerCase().indexOf(q.toLowerCase());const snip=x.body.substr(Math.max(0,pos-20),90);return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})"><div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div><h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;}).join('');});
+function clearSearch(){$('#searchInput').value='';$('#searchResults').classList.remove('show');$('#searchResults').innerHTML='';}
+syncChecks();updateProgress();
+</script>
+</body>
+</html>

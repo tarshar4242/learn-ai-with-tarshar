@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Node-RED 研習營 (II) 課堂筆記｜把自己的程式變成一顆節點</title>
+<meta name="description" content="2026/7/25 Node-RED 研習營 (II)（益師傅／楊俊益）逐幀課堂筆記：CAST 語音摘要提示詞產生器與 ElevenLabs V3、context／flow／global 三層變數實作、用 Codex 把 HTML 工具與 SKILL.md 轉成真正的 Node-RED 自訂節點（OCR、PDF_Split）、節點安裝與 file inject 踩坑修正、IoT MQTT 儀表板與圖像解析。依錄影逐幀（每 40 秒、共 239 格）＋全程逐字稿整理。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#0d7a8f; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a; --red:#b5372f;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:760px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px;max-height:calc(100vh - 90px);overflow-y:auto}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:7px;font-size:13px}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+code{background:var(--code);border:1px solid var(--line2);border-radius:5px;padding:1px 5px;font-size:12.5px;font-family:"Cascadia Code",Consolas,monospace;color:var(--ink)}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+.note.red{background:#FCF0EE;border-color:#F0D3CE;color:#93372c}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.code{position:relative;background:var(--code);border:1px solid var(--line2);border-radius:10px;padding:13px 15px;margin:10px 0;font-size:13px;line-height:1.75;color:var(--ink);white-space:pre-wrap;font-family:"Cascadia Code",Consolas,monospace;overflow-x:auto}
+.svgwrap{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg{display:block;width:100%;height:auto}
+.svgwrap figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.iframe-wrap{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000;margin:14px 0}
+.iframe-wrap iframe{display:block;width:100%;height:460px;border:0}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+.ts{display:inline-block;font-size:11.5px;font-family:"Cascadia Code",Consolas,monospace;color:var(--accent);background:color-mix(in srgb,var(--accent) 7%,#fff);border:1px solid color-mix(in srgb,var(--accent) 20%,#fff);border-radius:5px;padding:1px 6px;margin-right:6px}
+ul.chk{list-style:none;margin:10px 0}
+ul.chk li{position:relative;padding:7px 0 7px 30px;font-size:14.5px;color:var(--ink2);border-bottom:1px dashed var(--line)}
+ul.chk li::before{content:"☐";position:absolute;left:4px;top:7px;color:var(--accent);font-size:16px}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static;max-height:none} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} .iframe-wrap iframe{height:320px} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/#subscription" style="border-color:#a8d3dc" onclick="if(history.length>1){history.back();return false}">← 回上一頁</a>
+  <b>📝 Node-RED 研習營 (II) 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="nodered2-ai-skills.html">🗺️ 互動技能地圖</a>
+    <a class="btn" href="nodered1-notes.html">⬅️ 研習營 (I)</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">訂閱制課程 · Node-RED 研習營 (II)</span>
+  <h1>把自己的程式<span>變成一顆節點</span></h1>
+  <p class="lead">第一場學會了拉流程、串 API，這一場處理的是更關鍵的一步：<b>當現成節點不夠用怎麼辦？</b>益師傅的答案是——<b>自己做一顆</b>。他當場示範用 <b>Codex</b> 把兩樣東西塞進 Node-RED：一支網頁版的「全能辨識」HTML 程式變成 <b>OCR 節點</b>，一份寫好的 <code>SKILL.md</code> 變成 <b>PDF_Split 節點</b>，然後真的把一本 389 頁的 PDF 依章節切成 25 份。<br>中間穿插三個硬底子的基本功：<b>context／flow／global 三層變數</b>的實作對照、<b>節點安裝</b>的兩種方式（npm 指令與 palette），以及 <b>file inject 只給檔名不給路徑</b>導致分割失敗的完整除錯過程。開場另外用了 40 分鐘介紹他自製的 <b>CAST 語音摘要提示詞產生器</b>與 <b>ElevenLabs V3</b> 聲音合成。<br>本頁依<b>錄影逐幀（每 40 秒一格、共 239 格）＋全程逐字稿</b>整理，重點段落附影片時間戳。</p>
+  <div class="meta">
+    <span>📅 2026/07/25（六）14:00</span>
+    <span>👤 講師：益師傅（楊俊益・ECF）</span>
+    <span>⏱️ 全長 2 小時 39 分</span>
+    <span>👥 線上約 55 位學員</span>
+    <span>🛠️ 主題：自訂節點</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-overview">1. 一張圖看懂本場</a>
+  <a href="#sec-cast">2. CAST 語音摘要提示詞產生器</a>
+  <a href="#sec-eleven">3. ElevenLabs V3：申請與接上</a>
+  <a href="#sec-vars">4. 三層變數：context／flow／global</a>
+  <a href="#sec-tonode">5. 核心：把程式變成一顆節點</a>
+  <a href="#sec-pdfsplit">6. 實戰：PDF_Split 節點</a>
+  <a href="#sec-install">7. 節點安裝與 file inject 踩坑</a>
+  <a href="#sec-more">8. 延伸：MQTT 圖像解析與 IoT 儀表板</a>
+  <a href="#sec-check">9. 課後自我檢核表</a>
+  <a href="#sec-quotes">10. 老師金句</a>
+  <a href="#sec-src">11. 資料來源與整理說明</a>
+</nav>
+
+<article>
+
+<!-- 0 -->
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--blue))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>Node-RED 研習營 (II)</td></tr>
+    <tr><th>上課日期</th><td>2026/07/25（六）下午開始，全長 <b>2 小時 39 分 4 秒</b></td></tr>
+    <tr><th>講師</th><td>益師傅（楊俊益，暱稱 ECF；智慧立方有限公司）</td></tr>
+    <tr><th>參與人數</th><td>約 55 位學員（Teams 線上直播）</td></tr>
+    <tr><th>本場主題</th><td>CAST 提示詞產生器與 ElevenLabs、三層變數、<b>用 Codex 把程式與 SKILL 轉成 Node-RED 自訂節點</b>、節點安裝、PDF 章節切割實戰</td></tr>
+    <tr><th>課程教材</th><td>Drive 資料夾：課程錄影（子資料夾）、PDF_Split 節點完整專案（子資料夾）、5 個檔案</td></tr>
+  </table></div>
+
+  <h3>📁 課程資料夾（Google Drive）</h3>
+  <p style="margin-top:8px"><a href="https://drive.google.com/drive/folders/1fUmTT0tSZ1KHBK0wYvFllYDI3BFF1obF" target="_blank">🔗 開啟「20260725 Node-RED 研習營 (II)」資料夾 ›</a></p>
+
+  <h3>🎬 課堂錄影（可直接在頁面播放）</h3>
+  <div class="iframe-wrap"><iframe src="https://drive.google.com/file/d/1NJhP6tiKDraWg4AVRKIZpxyJnfEMlmfV/preview" allow="autoplay" allowfullscreen></iframe></div>
+  <div class="note steel">🔧 <div>錄影為老師分享的檔案，內嵌播放時若出現權限提示，請先登入你自己的 Google 帳號，或改從上面的資料夾連結進去看。</div></div>
+
+  <h3>🧩 教材檔案清單</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:190px">檔案／資料夾</th><th>內容</th></tr>
+    <tr><td><b>Node-RED PDF_Split 節點</b>（資料夾）</td><td>完整的節點專案：<code>node-red-contrib-pdf-split/</code>（package.json／pdf-split.js／pdf-split.html／README）、<code>examples/</code>（三個範例 flow）、<code>docs/</code>（安裝與範例說明）、<code>INSTALL.md</code>、<code>README.md</code></td></tr>
+    <tr><td><code>Split_PDF_Chapters_SKILL.md</code></td><td>PDF 章節切割的 Skill 規格書——<b>這份就是被 Codex 拿去變成節點的原料</b></td></tr>
+    <tr><td><code>PDF切割練習.json</code></td><td>可直接匯入的練習 flow：inject（放入 PDF 路徑）＋ file inject → PDF_Split → 兩個 debug（manifest／分割後 PDF）</td></tr>
+    <tr><td><code>Podcast-prompt_v13.6.html</code></td><td>CAST 語音摘要提示詞產生器（單檔 HTML，210 KB）</td></tr>
+    <tr><td><code>變數 (2).json</code></td><td>三層變數的實作 flow（F1～F6，兩個標籤頁）</td></tr>
+    <tr><td><code>BASIC_AQI (2).json</code></td><td>第一場 AQI flow 的加強版，多了一顆處理用的 function 節點</td></tr>
+  </table></div>
+  <div class="note gold">⚠️ <div>錄影中出現過老師的 ElevenLabs 與 Groq 金鑰明碼畫面，依專案規則<b>一律不收錄</b>；本頁截圖已避開，程式碼一律寫成 <code>&lt;你的 API Key&gt;</code>。</div></div>
+</section>
+
+<!-- 1 -->
+<section class="chapter" id="sec-overview">
+  <span class="chip" style="background:linear-gradient(90deg,var(--blue),var(--purple))">BIG PICTURE</span>
+  <h2 class="ct">1. 一張圖看懂本場</h2>
+  <p class="cd">這場的主線只有一句話：<b>把「你已經有的東西」變成 Node-RED 裡可以重複使用的零件。</b></p>
+  <div class="svgwrap">
+  <svg viewBox="0 0 960 470" xmlns="http://www.w3.org/2000/svg" font-family="'PingFang TC','Noto Sans TC',sans-serif">
+    <rect width="960" height="470" fill="#fff"/>
+    <text x="480" y="40" text-anchor="middle" font-size="20" font-weight="800" fill="#191919">研習營 (II)：從「用節點」到「做節點」</text>
+    <text x="480" y="64" text-anchor="middle" font-size="13" fill="#5f5f5f">你已經有的資產 → 交給 Codex 轉換 → 變成 Node-RED 裡的一顆節點</text>
+
+    <rect x="40" y="96" width="230" height="150" rx="14" fill="#f7f6f3" stroke="#e7e6e3"/>
+    <text x="155" y="126" text-anchor="middle" font-size="14" font-weight="800" fill="#5f5f5f">你手上已有的東西</text>
+    <text x="155" y="156" text-anchor="middle" font-size="12.5" fill="#444">一支 HTML 網頁工具</text>
+    <text x="155" y="180" text-anchor="middle" font-size="12.5" fill="#444">一份 SKILL.md 規格</text>
+    <text x="155" y="204" text-anchor="middle" font-size="12.5" fill="#444">一段 Python 腳本</text>
+    <text x="155" y="230" text-anchor="middle" font-size="12" fill="#9B9B9B">缺點：每次都要另外打開來用</text>
+
+    <path d="M275 171 L340 171" stroke="#0d7a8f" stroke-width="2.5"/>
+    <polygon points="340,171 332,166 332,176" fill="#0d7a8f"/>
+
+    <rect x="348" y="96" width="264" height="150" rx="14" fill="#e9f4f7" stroke="#a8d3dc"/>
+    <text x="480" y="126" text-anchor="middle" font-size="14" font-weight="800" fill="#0d7a8f">交給 Codex 做轉換</text>
+    <text x="480" y="154" text-anchor="middle" font-size="12" fill="#444">「將這程式轉換成 Node-RED 節點運用，</text>
+    <text x="480" y="174" text-anchor="middle" font-size="12" fill="#444">名稱為 OCR，可以支援 Groq API，</text>
+    <text x="480" y="194" text-anchor="middle" font-size="12" fill="#444">並將這個節點進行安裝，</text>
+    <text x="480" y="214" text-anchor="middle" font-size="12" fill="#444">提供範例並置入 Node-RED 環境中」</text>
+    <text x="480" y="236" text-anchor="middle" font-size="11.5" fill="#0d7a8f">一句話包含：轉換＋安裝＋範例＋置入</text>
+
+    <path d="M617 171 L682 171" stroke="#0d7a8f" stroke-width="2.5"/>
+    <polygon points="682,171 674,166 674,176" fill="#0d7a8f"/>
+
+    <rect x="690" y="96" width="230" height="150" rx="14" fill="#edf7f1" stroke="#cbe6d5"/>
+    <text x="805" y="126" text-anchor="middle" font-size="14" font-weight="800" fill="#3f8560">變成一顆節點</text>
+    <text x="805" y="156" text-anchor="middle" font-size="12.5" fill="#444">左側節點面板找得到</text>
+    <text x="805" y="180" text-anchor="middle" font-size="12.5" fill="#444">有自己的設定畫面</text>
+    <text x="805" y="204" text-anchor="middle" font-size="12.5" fill="#444">可以跟其他節點串接</text>
+    <text x="805" y="230" text-anchor="middle" font-size="12" fill="#3f8560">好處：進入排程與流程管理</text>
+
+    <rect x="40" y="278" width="880" height="60" rx="12" fill="#0d7a8f"/>
+    <text x="480" y="304" text-anchor="middle" font-size="14.5" font-weight="800" fill="#fff">當天實際做出來的兩顆節點</text>
+    <text x="480" y="326" text-anchor="middle" font-size="12.5" fill="#d6ecf1">OCR（Groq 視覺模型辨識圖片文字） ＋ PDF_Split（依書籤／目錄／標題把 PDF 切成一章一檔）</text>
+
+    <rect x="40" y="360" width="880" height="94" rx="12" fill="#f7f6f3" stroke="#e7e6e3"/>
+    <text x="60" y="386" font-size="13.5" font-weight="800" fill="#191919">⚠️ 但這件事不會一次成功</text>
+    <text x="60" y="410" font-size="12.5" fill="#444">節點做好了，用 file inject 選檔案卻分割失敗——因為 file inject 送出的 msg.filename 只有檔名、不是完整路徑</text>
+    <text x="60" y="434" font-size="12.5" fill="#444">把這個現象講給 Codex 聽 → 它改寫判斷邏輯（路徑存在就用路徑，否則把 payload 內容存成暫存 PDF）→ 重裝重啟 → 成功</text>
+  </svg>
+  <figcaption>本場全景圖。上排是主線流程，下面兩格是這堂課最有價值的部分：<b>失敗的那一次，以及怎麼修好它</b>。</figcaption>
+  </div>
+</section>
+
+<!-- 2 -->
+<section class="chapter" id="sec-cast">
+  <span class="chip" style="background:linear-gradient(90deg,var(--purple),var(--pink))">TOOL</span>
+  <h2 class="ct">2. CAST 語音摘要提示詞產生器</h2>
+  <p class="cd">開場先花約 40 分鐘介紹他自己做的一支單檔 HTML 工具（教材裡的 <code>Podcast-prompt_v13.6.html</code>），這是他持續迭代到 13.6 版的作品。</p>
+
+  <h3>它在解決什麼問題</h3>
+  <p><span class="ts">[00:16:44]</span> 老師的說法是：NotebookLM 這類工具給你的是「一張白紙」，你要自己想怎麼寫提示詞，<b>坦白講不容易</b>。CAST 的做法是把「一集語音節目該設定的東西」拆成八個步驟的表單，填完一鍵產生完整提示詞，可以直接貼進 NotebookLM、Claude 或 ChatGPT。</p>
+
+  <figure class="shot">
+    <img src="nodered2-img/01-cast-prompt-builder.jpg" alt="CAST PROMPT 語音摘要提示詞產生器的主畫面，顯示八步驟進度條與貼上文章自動填表區">
+    <figcaption>CAST v13.6 主畫面。上方是 8 步驟進度條，左邊「貼上文章自動填表」可以丟純文字、網址或 .txt／.md／.pdf／.docx，由 AI 解析後自動填滿下面的欄位。</figcaption>
+  </figure>
+
+  <h3>八個步驟填什麼</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:120px">步驟</th><th>內容</th><th>課堂上的示範值</th></tr>
+    <tr><td>01 分析主題</td><td>主題名稱，附常用主題快選</td><td><span class="ts">[00:21:04]</span>「提示詞工程於製造業的落地運用」</td></tr>
+    <tr><td>02 目標聽眾</td><td>初學者／一般大眾／專業人士／主管／投資人，影響術語密度</td><td>一般大眾</td></tr>
+    <tr><td>03 情緒節奏曲線</td><td>W 型起伏／漸強式／先高後穩／雲霄飛車</td><td>先高後穩（嚴肅知識型）</td></tr>
+    <tr><td>04 主持人設定</td><td>兩位主持人的姓名、性別、語氣風格、人設專長；一正一反</td><td>「益師傅」（正方・樂觀，聲音磁性、穩重）／「小美人」（反方・質疑，活潑好奇，常問「真的嗎？」）</td></tr>
+    <tr><td>05 節目設定</td><td>自我介紹長度、節目長度（3-5／8-12／15-20 分）、互動風格</td><td><span class="ts">[00:23:41]</span> 15-20 分</td></tr>
+    <tr><td>06 焦點關鍵字</td><td>節目中必須提到的詞</td><td><span class="ts">[00:24:23]</span> 指定要談到 AI、Agent</td></tr>
+    <tr><td>07 禁止提及</td><td>不得出現的主題或詞彙</td><td><span class="ts">[00:24:36]</span> 例如不能提到競品名稱</td></tr>
+    <tr><td>08 額外要求</td><td>繁中／口語化／幽默／金句／引用數據／Hook 等</td><td>繁中＋口語化</td></tr>
+  </table></div>
+
+  <figure class="shot">
+    <img src="nodered2-img/02-cast-hosts.jpg" alt="CAST 工具的主持人設定畫面，兩位主持人各有姓名、性別、語氣風格與人設欄位">
+    <figcaption>04 主持人設定的實際畫面。右側是特殊領域模板（八字命理、姓名學、股市解盤）與一般模板（新聞快報、教學課程、人物訪談、故事說書）。</figcaption>
+  </figure>
+
+  <h3>不只產提示詞，還能直接生出音檔</h3>
+  <p><span class="ts">[00:42:15]</span> 右側「<b>完整語音文案 → 音檔／MP4</b>」會請 AI 分段寫出完整的雙主持人逐句對話（帶情緒標籤如 <code>[excited]</code>、<code>[curious]</code>、<code>[thoughtful]</code>），依節目長度約 3200／4500／6000 字，再交給 ElevenLabs 用 A／B 兩個聲音合成完整音檔（WAV）與黑底字幕 MP4。</p>
+  <div class="note blue">💡 <div><span class="ts">[00:46:47]</span> 老師特別指出這個工具的細節：它會<b>依照每一段話的情境模式</b>切換情緒標籤，所以合成出來的對話不是平板地唸稿。<span class="ts">[00:25:40]</span> 工具內的「AI 解析填表」與「AI 優化」用的是 Groq API（免費申請），語音才需要 ElevenLabs。</div></div>
+</section>
+
+<!-- 3 -->
+<section class="chapter" id="sec-eleven">
+  <span class="chip" style="background:linear-gradient(90deg,var(--pink),var(--rose))">SETUP</span>
+  <h2 class="ct">3. ElevenLabs V3：申請與接上</h2>
+  <p class="cd"><span class="ts">[00:26:32]</span> 起 全班一起註冊 ElevenLabs 並取得金鑰，這一段是純操作，但幾個細節很容易卡住。</p>
+
+  <ol class="st">
+    <li><b>註冊帳號</b>：<code>elevenlabs.io</code>，可用 Google 帳號登入。<span class="ts">[00:27:18]</span></li>
+    <li><b>免費方案能做什麼</b>：<span class="ts">[00:30:58]</span> 可以克隆自己的聲音，音色庫可以存到 10 個。老師說他自己也<b>沒有很常用</b>，付費一個月幾塊美金，看需求決定。<span class="ts">[00:34:26]</span></li>
+    <li><b>建立 API 金鑰</b>：左側選<b>開發者（Developers）</b> → <b>API 金鑰</b> → 右上角「<b>建立密鑰</b>」。<span class="ts">[00:31:57]</span></li>
+    <li><b>一定要設到期時間</b><span class="ts">[00:32:21]</span>，而且金鑰<b>只會顯示這一次</b>，關掉對話框就看不到了，務必先複製。</li>
+    <li><b>貼回 CAST 工具</b>：貼進右側「AI 設定」的 ELEVENLABS API KEY 欄位，並在「試聽語音引擎」選 <b>ElevenLabs V3</b>。<span class="ts">[00:38:48]</span> 老師提醒：<b>這裡要記得寫 V3</b>，才會有聲音。</li>
+    <li><b>設定 A／B 兩位主持人的聲音</b>：主持人 A 可以填自訂 Voice ID（用自己克隆的聲音），主持人 B 從內建音色挑（課堂上用 Matilda 女聲）。</li>
+  </ol>
+
+  <figure class="shot">
+    <img src="nodered2-img/03-elevenlabs-voices.jpg" alt="ElevenLabs 音色庫畫面，顯示熱門音色與依使用情境精選的分類">
+    <figcaption>ElevenLabs 的音色庫（探索頁）。每個音色標了適用情境：教育性、社交媒體、對話式、旁白、娛樂等，點旁邊的播放鈕可以直接試聽。</figcaption>
+  </figure>
+
+  <div class="note gold">⚠️ <div><b>課堂實況：</b><span class="ts">[00:40:34]</span> 老師當場生成自己的聲音，出來的語氣「很開心、很 High」，他自己也覺得意外——<b>情緒標籤會明顯影響合成結果</b>，這是使用時要預期的。<span class="ts">[02:20:25]</span> 另外提醒工具有<b>一萬字的限制</b>，長文要先切段。</div></div>
+</section>
+
+<!-- 4 -->
+<section class="chapter" id="sec-vars">
+  <span class="chip" style="background:linear-gradient(90deg,var(--orange),var(--amber))">CORE SKILL</span>
+  <h2 class="ct">4. 三層變數：context／flow／global</h2>
+  <p class="cd"><span class="ts">[00:48:02]</span> 起 這是本場最扎實的基本功。老師用教材 <code>變數 (2).json</code>（F1～F6 六個 function）一格一格示範，看完就懂了。</p>
+
+  <h3>先講變數是什麼</h3>
+  <p><span class="ts">[00:48:15]</span> 老師用 Google 圖片裡「<b>變數像個盒子</b>」的比喻開場：盒子裡的東西是什麼，端視你放了什麼進去，放進去的也可以改變；為變數命名，就像為一個空盒子貼上標籤。相對的，<b>常數</b>就是固定不變的那種。</p>
+
+  <h3>三層的差別</h3>
+  <div class="svgwrap">
+  <svg viewBox="0 0 960 340" xmlns="http://www.w3.org/2000/svg" font-family="'PingFang TC','Noto Sans TC',sans-serif">
+    <rect width="960" height="340" fill="#fff"/>
+    <text x="480" y="36" text-anchor="middle" font-size="17" font-weight="800" fill="#191919">同一個計數器，放在三個不同的層級</text>
+
+    <rect x="60" y="62" width="840" height="240" rx="14" fill="#f2f8fa" stroke="#a8d3dc"/>
+    <text x="80" y="88" font-size="13.5" font-weight="800" fill="#0d7a8f">global（全域）：整個 Node-RED 都看得到，跨所有標籤頁</text>
+
+    <rect x="90" y="102" width="780" height="180" rx="12" fill="#fdf7ee" stroke="#f0e2cc"/>
+    <text x="110" y="128" font-size="13.5" font-weight="800" fill="#bf6a1e">flow（流程）：只有「這一個標籤頁」裡的節點看得到</text>
+
+    <rect x="122" y="144" width="360" height="120" rx="10" fill="#fff" stroke="#dbd9d5"/>
+    <text x="302" y="170" text-anchor="middle" font-size="13" font-weight="700" fill="#5f5f5f">context（節點自己的）</text>
+    <text x="302" y="196" text-anchor="middle" font-size="12" fill="#444">F1 的 counter：1、2、3…</text>
+    <text x="302" y="220" text-anchor="middle" font-size="12" fill="#444">只屬於 F1 這一顆 function</text>
+    <text x="302" y="246" text-anchor="middle" font-size="11.5" fill="#b5372f">F2 有自己的一份，兩邊互不影響</text>
+
+    <rect x="500" y="144" width="340" height="120" rx="10" fill="#fff" stroke="#dbd9d5"/>
+    <text x="670" y="170" text-anchor="middle" font-size="13" font-weight="700" fill="#5f5f5f">同一個標籤頁裡的其他節點</text>
+    <text x="670" y="196" text-anchor="middle" font-size="12" fill="#444">F3 加 1、F4 加 2</text>
+    <text x="670" y="220" text-anchor="middle" font-size="12" fill="#444">都在動<b>同一個</b> flowValue</text>
+    <text x="670" y="246" text-anchor="middle" font-size="11.5" fill="#3f8560">所以按 F3 再按 F4，數字會累加</text>
+  </svg>
+  <figcaption>三層的關係是包含關係：context 最小（一顆節點）、flow 中間（一個標籤頁）、global 最大（整個 Node-RED）。</figcaption>
+  </div>
+
+  <div class="twrap"><table>
+    <tr><th style="width:110px">層級</th><th>寫法</th><th>看得到的範圍</th><th>什麼時候用</th></tr>
+    <tr><td><b>context</b></td><td><code>context.get()</code> / <code>context.set()</code></td><td>只有<b>這一顆節點</b>自己</td><td>這顆節點的內部計數、暫存</td></tr>
+    <tr><td><b>flow</b></td><td><code>flow.get()</code> / <code>flow.set()</code></td><td>同一個<b>標籤頁</b>裡的所有節點<span class="ts">[00:52:22]</span></td><td>一條流程裡多個節點要共用的值</td></tr>
+    <tr><td><b>global</b></td><td><code>global.get()</code> / <code>global.set()</code></td><td><b>整個 Node-RED</b>，跨所有標籤頁<span class="ts">[01:08:00]</span></td><td>設定值、跨流程共用的狀態</td></tr>
+  </table></div>
+
+  <h3>課堂上實際跑的程式碼</h3>
+  <figure class="shot">
+    <img src="nodered2-img/04-context-variable-code.jpg" alt="Node-RED function 節點的 JavaScript 編輯器，顯示 context.get 與 context.set 的計數器程式碼">
+    <figcaption>F1 的完整程式碼（錄影實際畫面）。<code>|| 0</code> 是關鍵：第一次跑的時候 <code>context.get()</code> 拿到的是 undefined，用 <code>|| 0</code> 給它一個初始值。</figcaption>
+  </figure>
+
+  <div class="code">// F1／F2：context（只有自己看得到）
+var counter = context.get('contextValue') || 0;
+counter += 1;
+msg.payload = "F1 " + msg.payload + " " + counter;
+context.set('contextValue', counter);
+return msg;
+
+// F3／F4：flow（同一個標籤頁共用）
+var counter = flow.get('flowValue') || 0;
+counter += 1;                       // F4 這裡是 += 2
+msg.payload = "F3 " + msg.payload + " " + counter;
+flow.set('flowValue', counter);
+return msg;
+
+// F5／F6：同時動 flow 與 global
+var counter  = flow.get('flowValue') || 0;
+var gcounter = global.get('globalValue') || 0;
+counter  += 2;
+gcounter += 3;
+msg.payload = "F5 " + msg.payload + " flow= " + counter + "  global= " + gcounter;
+return msg;</div>
+
+  <figure class="shot">
+    <img src="nodered2-img/05-flow-global-flows.jpg" alt="Node-RED 中五條並排的流程，各自是 ON 觸發、function、debug">
+    <figcaption>「flow 與 global 變數」標籤頁的五條流程。由上而下：一般變數 ×2（context）、With Flow +1、With Flow +2、With Global +3。第二個標籤頁「取得 global」放 F6，用來證明 global 跨得過標籤頁。</figcaption>
+  </figure>
+
+  <h4>觀察重點（老師逐條驗證）</h4>
+  <ul class="pt">
+    <li><span class="ts">[00:59:45]</span> <b>F1 按一次變 1，再按變 2</b>——context 會記住上一次的值。</li>
+    <li><span class="ts">[01:01:14]</span> <b>F1 跟 F2 各數各的</b>，互不影響，因為 context 是節點自己的。</li>
+    <li><span class="ts">[01:04:26]</span> <b>F3 加 1、F4 加 2，動的是同一個 flowValue</b>，所以交替按數字會一路累加。</li>
+    <li><span class="ts">[01:06:16]</span> <b>切到另一個標籤頁的 F6，仍讀得到 globalValue</b>——這就是 global 的用途。</li>
+  </ul>
+
+  <div class="note gold">⚠️ <div><span class="ts">[00:52:45]</span> 老師提醒的實務問題：<b>變數名稱會不會打架？</b>flow 變數在同一個標籤頁裡共用，如果兩個不相干的功能都取名 <code>counter</code>，就會互相覆蓋。這是選擇用哪一層的判斷依據——<b>能用小的就不要用大的</b>。</div></div>
+</section>
+
+<!-- 5 -->
+<section class="chapter" id="sec-tonode">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--teal))">THE POINT</span>
+  <h2 class="ct">5. 核心：把程式變成一顆節點</h2>
+  <p class="cd">這是整場的重點，也是第一場埋下的伏筆（第一場老師說「甚至你可以做自己想要做的節點」）。</p>
+
+  <h3>為什麼要做成節點</h3>
+  <p><span class="ts">[01:27:09]</span> 老師的理由很實際：如果只是一支網頁程式，你每次都得另外打開它、手動操作。<b>做成節點之後，它就進到 Node-RED 裡</b>——可以被排程觸發、可以跟其他節點串接、可以納入流程管理。他的原話是：「我以後都只要在 Node-RED 裡頭去執行這個程式，全部都放在 Node-RED 裡頭來，所謂的排程管理的概念。」</p>
+
+  <h3>案例一：全能辨識 HTML → OCR 節點</h3>
+  <p><span class="ts">[01:25:14]</span> 素材是他之前寫的一支網頁程式「全能辨識系統 v3.html」。他丟給 Codex 的指令，值得原句抄下來：</p>
+  <div class="code">將這程式 轉換成 Node-RED 節點運用，名稱為 OCR，
+可以支援 Groq API 運用，也將這個節點進行安裝，
+並提供 Node-RED 程式案例 置入於 Node-RED 環境中</div>
+  <p><span class="ts">[01:28:01]</span> 老師強調這句話的結構：<b>轉換 ＋ 命名 ＋ 指定要支援什麼 ＋ 順便安裝 ＋ 順便給範例 ＋ 順便放進環境</b>。一次講完，Codex 就會一路做到底。</p>
+
+  <h4>Codex 產出了什麼</h4>
+  <div class="twrap"><table>
+    <tr><th style="width:210px">檔案</th><th>作用</th></tr>
+    <tr><td><code>package.json</code></td><td>節點套件的定義檔（Node-RED 靠它認得這是一顆節點）</td></tr>
+    <tr><td><code>ocr.js</code></td><td>節點的後端邏輯（實際去呼叫 Groq 視覺模型）</td></tr>
+    <tr><td><code>ocr.html</code></td><td>節點在編輯器裡的<b>設定畫面</b>與說明文件</td></tr>
+    <tr><td><code>README.md</code></td><td>使用說明</td></tr>
+    <tr><td><code>examples/OCR_Groq_example_flow.json</code></td><td>可直接匯入的範例流程</td></tr>
+  </table></div>
+
+  <figure class="shot">
+    <img src="nodered2-img/06-ocr-node-config.jpg" alt="Node-RED 中 OCR 節點的設定畫面，顯示 Groq API Key、辨識功能、輸出格式、Vision Model 等欄位">
+    <figcaption><span class="ts">[01:23:00]</span> 做出來的 OCR 節點設定畫面（錄影實際畫面）。欄位包含：Groq API Key、辨識功能（通用 OCR）、輸出格式（OCR 文字／Markdown／Txt／Excel）、摘要語言（繁體中文）、Vision Model（<code>qwen/qwen3.6-27b</code>）、摘要 Model（<code>llama-3.3-70b-versatile</code>）、圖片 MIME、OCR tokens、摘要 tokens、自訂 Prompt。左上角節點面板已經出現 <b>ECF › OCR</b> 這顆節點。</figcaption>
+  </figure>
+
+  <div class="note blue">💡 <div><b>Codex 自己講出的限制，很重要：</b><span class="ts">[01:25:00]</span> 原本的 HTML 版是靠瀏覽器的 PDF.js 先把 PDF 轉圖片；改成 Node-RED 節點後<b>先支援圖片</b>（Buffer、base64、data URL、圖片 URL、本機圖片路徑）。<b>會被 AI 講明的限制，比默默略過的好</b>——這是驗收 AI 產出時要看的地方。</div></div>
+
+  <h3>案例二：SKILL.md → PDF_Split 節點</h3>
+  <p><span class="ts">[01:14:16]</span> 更有意思的是這個：素材不是程式，而是一份<b>寫好的規格文件</b> <code>Split_PDF_Chapters_SKILL.md</code>。老師先示範怎麼把它變成 Codex 的 Skill：</p>
+  <div class="code">請將上傳的檔案 製作成一個 PDF切割.skill 為全域運用</div>
+  <p><span class="ts">[01:17:11]</span> 做好之後，「下次只要在這邊輸入一個斜線」就能叫用（<code>/PDF切割</code>），把 PDF 丟進去就會切。接著再進一步：<b>把這個 Skill 變成 Node-RED 節點</b>。<span class="ts">[01:36:28]</span></p>
+
+  <div class="note green">✅ <div><b>這條路徑的意義：</b>你手上的「工作方法」只要能寫成一份規格文件（做什麼、依什麼順序、成功標準是什麼、什麼情況要拒絕），就能一路變成 Skill、再變成節點。<b>SKILL.md 裡最有價值的其實是那些「不要做什麼」的規則</b>——例如這份規格明訂：封面、版權、目錄、前言、附錄、索引<b>預設都不切成章節</b>，不允許重疊或零頁的範圍，不可以默默接受可疑的頁碼範圍。</div></div>
+</section>
+
+<!-- 6 -->
+<section class="chapter" id="sec-pdfsplit">
+  <span class="chip" style="background:linear-gradient(90deg,var(--teal),var(--green))">HANDS-ON</span>
+  <h2 class="ct">6. 實戰：PDF_Split 節點</h2>
+  <p class="cd">教材資料夾裡有完整的節點專案與練習 flow，這一節把它拆開來看。</p>
+
+  <h3>節點長什麼樣、怎麼用</h3>
+  <figure class="shot">
+    <img src="nodered2-img/08-pdf-split-node.jpg" alt="Node-RED 中 PDF_Split 範例流程與右側節點說明文件">
+    <figcaption>PDF_Split 範例流程（錄影實際畫面）：兩種輸入方式（inject 放入 PDF 路徑／file inject 選檔案）→ PDF_Split → 兩個輸出接到 debug。右側是節點自己的說明文件。</figcaption>
+  </figure>
+
+  <div class="twrap"><table>
+    <tr><th style="width:120px">項目</th><th>內容</th></tr>
+    <tr><td><b>輸入</b></td><td><code>msg.pdfPath</code>（PDF 檔案路徑）、<code>msg.filename</code>（檔案路徑）、<code>msg.payload</code>（路徑字串或 PDF Buffer）</td></tr>
+    <tr><td><b>可覆蓋設定</b></td><td><code>msg.splitMode</code>、<code>msg.outputParent</code>、<code>msg.tocPage</code>、<code>msg.offset</code>、<code>msg.chapters</code>、<code>msg.dryRun</code>、<code>msg.overwrite</code></td></tr>
+    <tr><td><b>分割模式</b></td><td><b>auto</b>（書籤／目錄／標題自動偵測）、<b>toc</b>（目錄）、<b>headings</b>（標題）、<b>manual</b>（手動指定頁碼範圍）</td></tr>
+    <tr><td><b>第一個輸出</b></td><td><code>msg.payload</code> 是 <b>manifest</b>：完整分割結果與驗證資訊</td></tr>
+    <tr><td><b>第二個輸出</b></td><td>每個分割後的 PDF 各送一則訊息，<code>msg.filename</code> 是輸出檔案路徑</td></tr>
+    <tr><td><b>底層</b></td><td>包裝本機 <code>pdf-split-tool</code> skill 的 <code>split_pdf_chapters.py</code>，需要 Python 與 <code>pypdf</code></td></tr>
+  </table></div>
+
+  <h3>實際切出來的結果</h3>
+  <figure class="shot">
+    <img src="nodered2-img/07-codex-pdf-split-result.jpg" alt="Codex 顯示 PDF 已依書籤分割完成，列出八個章節檔案與頁數範圍">
+    <figcaption><span class="ts">[01:17:30]</span> Codex 端的執行結果：一本 Tableau 的書依書籤分割完成，共 8 個章節檔案，每一項都標了頁碼範圍與頁數（例如「01_1._AI_in_the_Tableau_Platform.pdf：第 20–43 頁，共 24 頁」），並產生 <code>manifest.json</code>。最後一行是驗證：<b>8 個 PDF 均可正常讀取，實際頁數全部符合章節範圍；原始 PDF 未被修改。</b></figcaption>
+  </figure>
+
+  <div class="note green">✅ <div><b>注意最後那一句驗證。</b>這正是 SKILL.md 裡寫的成功標準之一：「每個產生的 PDF 都要被讀回來驗證過」。<span class="ts">[02:03:44]</span> 課堂後段老師再切一本 389 頁的書，一口氣切出 <b>25 份 PDF</b>。</div></div>
+
+  <h3>老師在課堂上的 Node-RED 端實測</h3>
+  <p><span class="ts">[01:41:05]</span> 有學員在聊天室貼出自己成功的畫面：PDF_Split 節點下方顯示 <code>Split 3 files</code>，除錯窗口印出 <code>count: 3, files: array[3], manifest: object</code>，以及自訂的警告訊息「成功分割產出 3 個章節 PDF 檔案！」，下游還接了一顆 function 解析 manifest 再輸出摘要物件。</p>
+</section>
+
+<!-- 7 -->
+<section class="chapter" id="sec-install">
+  <span class="chip" style="background:linear-gradient(90deg,var(--red),var(--orange))">DEBUG</span>
+  <h2 class="ct">7. 節點安裝與 file inject 踩坑</h2>
+
+  <h3>安裝節點的兩種方式</h3>
+  <h4>① 從 palette 安裝（找得到現成的）</h4>
+  <ol class="st">
+    <li>右上角三條線 → <b>設定（Settings）</b> → <b>控制板／Palette</b>。<span class="ts">[01:32:40]</span></li>
+    <li>切到「<b>安裝</b>」分頁，搜尋節點名稱，按安裝。</li>
+    <li>「節點」分頁可以看到已安裝的所有模組，也能在這裡移除或停用。</li>
+  </ol>
+
+  <h4>② 用 npm 指令裝本機做好的節點</h4>
+  <p><span class="ts">[02:29:04]</span> 自己（或 Codex）做好的節點還沒發佈到 npm，就用本機路徑安裝。老師直接把指令貼在聊天室：</p>
+  <div class="code">cd C:\Users\User\.node-red
+npm.cmd install "E:\Codex\Node-RED OCR 節點\node-red-contrib-pdf-split" --save</div>
+  <ul class="pt">
+    <li><b>要切到 <code>.node-red</code> 目錄底下</b>再裝，這是 Node-RED 讀取模組的位置。</li>
+    <li>裝完<b>要重新啟動 Node-RED</b>，節點才會出現在左側面板。</li>
+    <li><span class="ts">[01:34:24]</span> 老師提醒：<b>你們做出來的節點名稱可能跟我不一樣</b>（因為是各自的 AI 生成的），安裝路徑要換成自己的。</li>
+    <li><span class="ts">[01:34:24]</span> 要用 file inject 選檔案的話，<b>得先裝 <code>node-red-contrib-browser-utils</code></b>，file inject 就是這個套件提供的。</li>
+  </ul>
+
+  <h3>🐛 踩坑：選了檔案卻「分割失敗」</h3>
+  <div class="note red">❌ <div><b>現象：</b>用畫面上的 file inject 選一個 PDF，接到 PDF_Split，結果顯示分割失敗。<br><b>原因：</b><span class="ts">[01:59:53]</span> file inject 送出的 <code>msg.filename</code> <b>只有檔名</b>（例如 <code>OceanofPDF.com_Learning_AI_Tools_in_Tableau_-_Ann_Jackson.pdf</code>），<b>不是完整路徑</b>。舊版 PDF_Split 拿到 <code>msg.filename</code> 就直接當路徑去找，當然找不到。</div></div>
+
+  <p>老師的處理方式跟第一場一模一樣：<b>把現象講給 Codex 聽</b>——「能否根據自己所選的 PDF 檔？」Codex 改寫了判斷邏輯：</p>
+  <ol class="st">
+    <li>如果 <code>msg.pdfPath</code> / <code>msg.filename</code> / <code>msg.payload</code> 是<b>實際存在的 PDF 路徑</b>，才當路徑使用。</li>
+    <li>如果不是完整路徑，但 <code>msg.payload</code> 是使用者選取的 PDF 內容，就<b>先存成暫存 PDF</b> 再進行分割。</li>
+    <li>同時支援 <code>Buffer</code>、<code>Uint8Array</code>、陣列、<code>payload.data</code> 等常見的 file inject 格式。</li>
+  </ol>
+  <p><span class="ts">[02:00:03]</span> 改完重新安裝、重啟 Node-RED，新版節點載入成功，再選檔案就正常切了。</p>
+
+  <div class="note gold">⚠️ <div><b>另一個相關的坑：輸出資料夾。</b><span class="ts">[01:57:35]</span> 老師發現第一次用的時候，切出來的檔案<b>全部疊在同一層</b>。他的要求是：<b>每一本書必須獨立給它一個資料夾</b>，才不會一本一本混在一起。這也是回頭跟 AI 講一句話就改掉的事。</div></div>
+
+  <div class="note steel">📌 <div><b>遇到問題還可以去哪裡找答案：</b><span class="ts">[02:07:43]</span> 老師介紹了 Node-RED 官方論壇 <a href="https://discourse.nodered.org/" target="_blank">discourse.nodered.org</a>，不用登入就能看，裡面有大量 Dashboard 2.0 遷移、節點問題的討論串。他建議<b>讓學生自己去看是最好的</b>。</div></div>
+</section>
+
+<!-- 8 -->
+<section class="chapter" id="sec-more">
+  <span class="chip" style="background:linear-gradient(90deg,var(--blue),var(--cyan))">EXTRA</span>
+  <h2 class="ct">8. 延伸：MQTT 圖像解析與 IoT 儀表板</h2>
+  <p class="cd">課堂中段老師快速帶過兩個他已經做好的流程，當作「節點做出來以後可以怎麼用」的示範。</p>
+
+  <h3>IoT MQTT 儀表板</h3>
+  <figure class="shot">
+    <img src="nodered2-img/09-iot-mqtt-dashboard.jpg" alt="Node-RED 的 IoT MQTT Dashboard 流程，左側每三秒產生模擬值，右側發布十一種感測主題">
+    <figcaption>這是他請 Codex 做的：<b>每 3 秒產生一組 IoT 模擬數值</b> → 發布到 MQTT public broker（溫度、濕度、CO2、照度、氣壓、震動、電壓、電流、功率、電池、水位共 11 個主題）→ 再用 mqtt in 訂閱回來 → 分流到 Dashboard 的 Gauge／Chart 呈現。<span class="ts">[01:34:00]</span> Codex 的執行結果顯示：新增 IoT demo 節點數 29、Dashboard HTTP 回應 200、使用 <code>node-red-dashboard</code> 3.6.5。</figcaption>
+  </figure>
+
+  <h3>MQTT 圖像解析＋免費網頁 TTS</h3>
+  <p><span class="ts">[02:15:00]</span> 另一條流程：訂閱 MQTT 傳來的即時影像 → <code>Parse Data URI</code>（解析 data URI、判斷是 Buffer 還是字串）→ <code>Extract Base64</code> → 送去 Groq 圖像解析 → 把解析出的文字唸出來。這裡有個省錢的關鍵改動，老師給 Codex 的指令是：</p>
+  <div class="code">將圖像解析運用改成 Groq API，並將原本 Gemini 語音運用
+改為免費的網頁 TTS 語音播放，並將這個新程式放入 Node-RED 中</div>
+  <p>Codex 實際做的修改：把 Gemini Vision API 換成 Groq 圖像解析 API（模型 <code>meta-llama/llama-4-scout-17b-16e-instruct</code>）、<b>移除 Gemini TTS 與音訊轉 WAV、存檔的流程</b>、改用 Dashboard 內<b>瀏覽器內建的免費 TTS</b>（<code>speechSynthesis</code>）播放解析文字，並順手修正原流程中 HTTP 回應沒有接到解析節點的問題。</p>
+  <div class="note green">✅ <div>這個案例示範的是<b>成本替換</b>的思路：要花錢的雲端 TTS，在「只是要唸出來」的場景，可以換成瀏覽器內建的語音合成，效果夠用而且不用錢。</div></div>
+
+  <h3>老師課堂上展示的其他節點</h3>
+  <ul class="pt">
+    <li><b>台語語音節點</b>（台語語音轉文字案例、台語節點案例兩個標籤頁）</li>
+    <li><b>Pollinations 圖片生成</b>、<b>Gemini-Image</b>、<b>DeepSeek R1</b>、<b>存取 Local Ollama</b></li>
+    <li><b>MySQL Example／MQTT to MySQL／Chart 資料儲存／uiTable</b></li>
+    <li><b>骰子（dice）、3×3 拉霸遊戲</b>——他反覆強調 Node-RED 不是只能做工業應用</li>
+  </ul>
+</section>
+
+<!-- 9 -->
+<section class="chapter" id="sec-check">
+  <span class="chip" style="background:linear-gradient(90deg,var(--green),var(--teal))">CHECKLIST</span>
+  <h2 class="ct">9. 課後自我檢核表</h2>
+  <ul class="chk">
+    <li>我能講出 <b>context／flow／global</b> 三層變數各自看得到的範圍。</li>
+    <li>我會在 function 節點裡用 <code>flow.get()</code> / <code>flow.set()</code>，也知道 <code>|| 0</code> 是在給初始值。</li>
+    <li>我知道<b>變數名稱在同一個標籤頁會打架</b>，所以能用小的層級就不用大的。</li>
+    <li>我會從 <b>palette 安裝節點</b>，也會用 <code>npm.cmd install "本機路徑" --save</code> 裝自己做的節點。</li>
+    <li>我知道裝完節點<b>必須重啟 Node-RED</b>，而且要先裝 <code>node-red-contrib-browser-utils</code> 才有 file inject。</li>
+    <li>我看得懂 PDF_Split 的<b>兩個輸出</b>：manifest 與每一份分割後的 PDF。</li>
+    <li>我能寫出一句<b>完整的轉換指令</b>給 AI：轉換＋命名＋指定支援什麼＋安裝＋給範例＋置入環境。</li>
+    <li>我知道 file inject 的 <code>msg.filename</code> <b>只有檔名不是完整路徑</b>，遇到「找不到檔案」時會往這個方向查。</li>
+    <li>我會用 <b>ElevenLabs 建立 API 金鑰</b>，也記得金鑰只顯示一次、要設到期時間。</li>
+    <li>★ 最重要：我理解這堂課的心法——<b>手上任何一支程式或一份規格文件，都可以被轉成 Node-RED 的一顆節點</b>，從此納入排程與流程管理。</li>
+  </ul>
+</section>
+
+<!-- 10 -->
+<section class="chapter" id="sec-quotes">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--amber))">GOLDEN LINE</span>
+  <h2 class="ct">10. 老師金句</h2>
+  <div class="golden"><div class="q">「我以後都只要在 Node-RED 裡頭去執行這個程式，全部都放在 Node-RED 裡頭來，所謂的排程管理的概念。」</div><div class="a"><span class="ts">[01:27:09]</span> 一句話講完「為什麼要做成節點」。</div></div>
+  <div class="golden"><div class="q">「這些一定要動手做，你才有辦法去駕馭這個 Node-RED 的節點。」</div><div class="a"><span class="ts">[01:40:44]</span> 整場課他不斷回到這句，中間還為了學員都不動手而停下來等。</div></div>
+  <div class="golden"><div class="q">「代表他絕對不是一次成功。」</div><div class="a"><span class="ts">[01:30:43]</span> 講 file inject 那個坑時說的。AI 生成的節點也要來回修，這是常態不是意外。</div></div>
+  <div class="golden"><div class="q">「你要會有這些想法，都是別人的技能，你的能力就一直往上提升。」</div><div class="a"><span class="ts">[02:12:18]</span> 這場真正在教的不是語法，是「把別人的能力接進自己的流程」這件事。</div></div>
+</section>
+
+<!-- 11 -->
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,var(--ink3),var(--ink2))">SOURCE</span>
+  <h2 class="ct">11. 資料來源與整理說明</h2>
+  <ul class="pt">
+    <li><b>原始教材：</b>Google Drive 資料夾「20260725 Node-RED 研習營 (II)」——課堂錄影一段（2 小時 39 分 4 秒）、PDF_Split 節點完整專案資料夾，以及 <code>Split_PDF_Chapters_SKILL.md</code>、<code>PDF切割練習.json</code>、<code>Podcast-prompt_v13.6.html</code>、<code>變數 (2).json</code>、<code>BASIC_AQI (2).json</code>。</li>
+    <li><b>整理方法：</b>錄影用 ffmpeg <b>每 40 秒抽一格</b>（共 <b>239 格</b>），逐格用眼睛看過並記錄畫面內容；同時用 faster-whisper（small／int8）產出<b>全程逐字稿</b>（5,419 段），兩者交叉比對。節點專案的 README／INSTALL／SKILL.md 與 flow JSON 逐檔閱讀，用來還原設定欄位與程式碼。</li>
+    <li><b>可信度標註：</b>畫面截圖、節點設定欄位、Codex 的回覆內容、模型名稱皆為<b>錄影實錄</b>；程式碼片段以教材檔案的實際內容為準。時間戳來自逐字稿，因語音辨識可能有數秒誤差。</li>
+    <li><b>金鑰處理：</b>錄影中出現過 ElevenLabs 與環境部的金鑰明碼畫面，依專案規則<b>一律不收錄</b>。</li>
+    <li><b>一則畫面上的說明：</b><span class="ts">[02:13:00]</span> 老師中途打開了一份標題為「訂閱制第三季｜第二堂課」的簡報（六格圖：流程模擬／教學封裝／版型資產／簡報復刻／Skill 協作／多模態產品，底下寫「先拆解需求 → 再交給 Agent → 最後驗證輸出」），那是他<b>另一門訂閱制課程的教材</b>，在這場當作補充展示，不是本場的簡報。</li>
+  </ul>
+  <div class="note steel">📌 <div>這場在課程館歸在<b>「📦 訂閱制課程」</b>系列，卡片編號寫<b>「訂閱制 Node-RED 研習營 (II)」</b>。與研習營 (I) 是同一系列的第二場，建議照順序看。</div></div>
+</section>
+
+</article>
+</div>
+
+<footer>
+  <p>📝 Node-RED 研習營 (II) 逐幀課堂筆記 · 益師傅（楊俊益・ECF）</p>
+  <p>依錄影逐幀（每 40 秒／共 239 格）＋全程逐字稿整理 · <a href="nodered2-ai-skills.html">🗺️ 互動技能地圖</a> · <a href="nodered1-notes.html">⬅️ 研習營 (I)</a> · <a href="../radio/#subscription">🏠 回筆記館入口</a></p>
+</footer>
+
+</body>
+</html>

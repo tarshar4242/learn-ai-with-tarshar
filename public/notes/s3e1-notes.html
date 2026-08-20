@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S3E1 課堂筆記｜台語 TTS × 風格復刻 × 反向工程：一個人的 AI 工具工廠</title>
+<meta name="description" content="訂閱制第三季第一堂（益師傅／楊俊益）逐幀課堂筆記：TTS益值玩多引擎台語語音實驗室（意傳科技×ElevenLabs×Gemini TTS×瀏覽器TTS）、風格擷取師R2＋ChatGPT專案/Gemini Gem圖像風格復刻、HTML反向工程R2（程式→提示詞→跨模型重建驗證）、數據清洗正規化分析v6、意境壓縮器v2 Token瘦身、AI SWOT分析工具、壓軸把HTML工具變Codex全域Skill。依錄影逐幀（每40秒、共288格）＋逐字稿整理。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#0d7d72; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:780px;font-size:16px;color:var(--ink2);line-height:1.7;text-align:left}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px;max-height:calc(100vh - 90px);overflow-y:auto}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:7px;font-size:13px}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.code{position:relative;background:var(--code);border:1px solid var(--line2);border-radius:10px;padding:13px 15px;margin:10px 0;font-size:13px;line-height:1.75;color:var(--ink);white-space:pre-wrap;font-family:"Cascadia Code",Consolas,monospace;overflow-x:auto}
+.svgwrap{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg{display:block;width:100%;height:auto}
+.svgwrap .cap{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.iframe-wrap{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000;margin:14px 0}
+.iframe-wrap iframe{display:block;width:100%;height:460px;border:0}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+.ts{font-size:12px;color:var(--ink3);font-family:Consolas,monospace}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static;max-height:none} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} .iframe-wrap iframe{height:320px} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/#ecf" onclick="if(history.length>1){history.back();return false}">← 回上一頁</a>
+  <b>📝 S3E1 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="s3e1-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 訂閱制第三季第一堂</span>
+  <h1>台語 TTS × 風格復刻 × 反向工程：<span>一個人的 AI 工具工廠</span></h1>
+  <p class="lead">第三季開季第一堂，益師傅端出<b>整桌自製單檔 HTML 工具</b>：會講台語的 <b>TTS益值玩</b>（意傳科技×ElevenLabs×Gemini TTS×瀏覽器 TTS 四引擎、14 種語言、批次合成、字幕影片）、把任何圖抄成規格書的<b>風格擷取師 R2</b>、把任何程式拆回提示詞的 <b>HTML 反向工程 R2</b>、吃得下 Access 資料庫的<b>數據清洗正規化分析 v6</b>、幫文件減肥七成的<b>意境壓縮器 v2</b>、還有能貼網址就 PK 的 <b>AI SWOT 分析工具</b>。<br>串起這一切的是三招心法：<b>工具是用一句話跟 AI「聊」出來的</b>（全程重播 7/9 的 vibe-coding 對話）、<b>風格與程式都可以復刻</b>（ChatGPT 專案＝Gemini Gem，提示詞可跨模型重建驗證）、<b>最後把工具「技能化」</b>——現場把 PDF 拆分工具改造成 Codex 全域 Skill，學員一句話總結：「skill &gt;&gt; 程式」。本頁依<b>錄影逐幀（每 40 秒一格、共 288 格）＋全程逐字稿</b>整理，重點段落附影片時間戳。</p>
+  <div class="meta">
+    <span>📅 2026/07/10（五）20:00 直播 · 錄影 3:12:01</span>
+    <span>👤 講師：益師傅（楊俊益・ECF）</span>
+    <span>👥 93 人上線</span>
+    <span>🗂️ 教材：12 個 HTML 工具＋4 張風格圖＋sample.mdb</span>
+    <span>🔰 小白友善</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目錄</div>
+  <a href="#s0">0. 課程資訊與原始教材</a>
+  <a href="#s1">1. 一頁看懂這堂課</a>
+  <a href="#s2">2. 開場：一人工具廠日常</a>
+  <a href="#s3">3. TTS益值玩與台語生態系</a>
+  <a href="#s4">4. ElevenLabs 與四引擎</a>
+  <a href="#s5">5. 圖像風格復刻三件套</a>
+  <a href="#s6">6. HTML 反向工程與重建</a>
+  <a href="#s7">7. 資料雙工具：清洗×瘦身</a>
+  <a href="#s8">8. AI SWOT：貼網址就能 PK</a>
+  <a href="#s9">9. 壓軸：工具變 Codex Skill</a>
+  <a href="#s10">10. 課後自我檢核</a>
+  <a href="#s11">11. 金句與 QA</a>
+  <a href="#s12">12. 資料來源與整理說明</a>
+</nav>
+<article>
+
+<!-- ====== 0 課程資訊 ====== -->
+<section class="chapter" id="s0">
+  <span class="chip" style="background:var(--ink)">0 · 課程資訊</span>
+  <h2 class="ct">課程資訊與原始教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:120px">課程</th><td>生成式AI應用電台 · <b>訂閱制 第三季 第一堂（S3E1）</b>（與晨學講堂 EP 直播系列同講師、不同軌道）</td></tr>
+    <tr><th>日期</th><td>2026/07/10（五）19:55 開始錄影，正課 20:00–23:05，錄影全長 3:12:01</td></tr>
+    <tr><th>講師</th><td>益師傅（楊俊益），智慧立方有限公司；Teams 直播，最高 93 人上線</td></tr>
+    <tr><th>本堂主軸</th><td>①多引擎台語 TTS 工具全解 ②圖像風格復刻工作流 ③HTML 反向工程與跨模型重建 ④資料清洗／Token 壓縮／SWOT 三工具 ⑤把 HTML 工具改造成 Codex 全域 Skill</td></tr>
+    <tr><th>原始教材</th><td>Drive「第一堂」資料夾：12 個單檔 HTML 工具、4 張風格圖（1霓虹／2手機／3版型／4程式）、sample.mdb、課程錄影 mp4</td></tr>
+  </table></div>
+
+  <h3>課程錄影（Google Drive 內嵌）</h3>
+  <div class="iframe-wrap"><iframe src="https://drive.google.com/file/d/1GbJ5gxD-hsGB4MXS4UlTZNawl_5RrDhB/preview" allow="autoplay" allowfullscreen loading="lazy"></iframe></div>
+  <p>原始資料夾：<a href="https://drive.google.com/drive/folders/1c6AoFjqyugptDw0nX7RKiOxn7XnWFQdN" target="_blank" rel="noopener">20260710 課程資料（第一堂）</a></p>
+</section>
+
+<!-- ====== 1 全景 ====== -->
+<section class="chapter" id="s1">
+  <span class="chip" style="background:var(--accent)">1 · 全景圖</span>
+  <h2 class="ct">一頁看懂這堂課</h2>
+  <p class="cd">七套工具不是七個孤島——它們排成一條「做工具 → 復刻 → 反向工程 → 重建驗證 → 壓縮省錢 → 技能化」的生產線。</p>
+  <div class="svgwrap">
+  <svg viewBox="0 0 980 560" xmlns="http://www.w3.org/2000/svg" font-family="'Noto Sans TC','PingFang TC',sans-serif">
+    <rect width="980" height="560" fill="#fbfaf8"/>
+    <text x="490" y="36" text-anchor="middle" font-size="21" font-weight="800" fill="#191919">S3E1 全景：一個人的 AI 工具工廠</text>
+    <text x="490" y="58" text-anchor="middle" font-size="12.5" fill="#8a8a8a">Groq 免費 API 當引擎 · 單檔 HTML 當車體 · 提示詞當設計圖</text>
+    <!-- lane 1 -->
+    <rect x="30" y="80" width="920" height="128" rx="12" fill="#eef7f5" stroke="#bcded8"/>
+    <text x="50" y="106" font-size="14" font-weight="700" fill="#0d7d72">① 做工具：vibe-coding（7/9 對話全重播）</text>
+    <rect x="50" y="120" width="200" height="70" rx="9" fill="#fff" stroke="#bcded8"/>
+    <text x="150" y="147" text-anchor="middle" font-size="13" font-weight="700" fill="#191919">TTS益值玩 (9)</text>
+    <text x="150" y="166" text-anchor="middle" font-size="11" fill="#5f5f5f">14 語言 × 4 引擎 × 字幕影片</text>
+    <rect x="266" y="120" width="200" height="70" rx="9" fill="#fff" stroke="#bcded8"/>
+    <text x="366" y="147" text-anchor="middle" font-size="13" font-weight="700" fill="#191919">意傳科技 台語 API</text>
+    <text x="366" y="166" text-anchor="middle" font-size="11" fill="#5f5f5f">標音＋合成 · Node-RED 也能接</text>
+    <rect x="482" y="120" width="200" height="70" rx="9" fill="#fff" stroke="#bcded8"/>
+    <text x="582" y="147" text-anchor="middle" font-size="13" font-weight="700" fill="#191919">Groq 降級鏈</text>
+    <text x="582" y="166" text-anchor="middle" font-size="11" fill="#5f5f5f">gpt-oss-120b → llama → 8b 自動輪替</text>
+    <rect x="698" y="120" width="230" height="70" rx="9" fill="#fff" stroke="#bcded8"/>
+    <text x="813" y="147" text-anchor="middle" font-size="13" font-weight="700" fill="#191919">ElevenLabs / Gemini TTS</text>
+    <text x="813" y="166" text-anchor="middle" font-size="11" fill="#5f5f5f">音色複製四式 · 瀏覽器 TTS 免費檔</text>
+    <!-- lane 2 -->
+    <rect x="30" y="224" width="450" height="128" rx="12" fill="#f4f0fb" stroke="#d4c8ee"/>
+    <text x="50" y="250" font-size="14" font-weight="700" fill="#5645D4">② 復刻風格：一張圖變規格書</text>
+    <rect x="50" y="264" width="195" height="70" rx="9" fill="#fff" stroke="#d4c8ee"/>
+    <text x="147" y="291" text-anchor="middle" font-size="13" font-weight="700" fill="#191919">風格擷取師 R2</text>
+    <text x="147" y="310" text-anchor="middle" font-size="11" fill="#5f5f5f">18 項元素盤點 → style_record.md</text>
+    <rect x="261" y="264" width="200" height="70" rx="9" fill="#fff" stroke="#d4c8ee"/>
+    <text x="361" y="285" text-anchor="middle" font-size="12.5" font-weight="700" fill="#191919">ChatGPT 專案 ＝ Gemini Gem</text>
+    <text x="361" y="303" text-anchor="middle" font-size="11" fill="#5f5f5f">同一段指令＋4 張風格圖</text>
+    <text x="361" y="320" text-anchor="middle" font-size="11" fill="#5f5f5f">附檔案→生成宣傳圖／心智圖</text>
+    <!-- lane 3 -->
+    <rect x="500" y="224" width="450" height="128" rx="12" fill="#fdf3ec" stroke="#f0d4bc"/>
+    <text x="520" y="250" font-size="14" font-weight="700" fill="#bf6a1e">③ 反向工程：程式拆回提示詞</text>
+    <rect x="520" y="264" width="195" height="70" rx="9" fill="#fff" stroke="#f0d4bc"/>
+    <text x="617" y="291" text-anchor="middle" font-size="13" font-weight="700" fill="#191919">HTML 反向工程 R2</text>
+    <text x="617" y="310" text-anchor="middle" font-size="11" fill="#5f5f5f">99,667 tokens → 1,629 字提示詞</text>
+    <rect x="731" y="264" width="199" height="70" rx="9" fill="#fff" stroke="#f0d4bc"/>
+    <text x="830" y="285" text-anchor="middle" font-size="12.5" font-weight="700" fill="#191919">跨模型重建驗證</text>
+    <text x="830" y="303" text-anchor="middle" font-size="11" fill="#5f5f5f">Gemini Canvas / LMArena / Claude</text>
+    <text x="830" y="320" text-anchor="middle" font-size="11" fill="#5f5f5f">同一份提示詞三家各建一版</text>
+    <!-- lane 4 -->
+    <rect x="30" y="368" width="450" height="128" rx="12" fill="#eef4fb" stroke="#cfe0f1"/>
+    <text x="50" y="394" font-size="14" font-weight="700" fill="#3b6bb0">④ 資料三工具：清洗 × 瘦身 × SWOT</text>
+    <rect x="50" y="408" width="132" height="70" rx="9" fill="#fff" stroke="#cfe0f1"/>
+    <text x="116" y="431" text-anchor="middle" font-size="12" font-weight="700" fill="#191919">數據清洗 v6</text>
+    <text x="116" y="449" text-anchor="middle" font-size="10.5" fill="#5f5f5f">吃 .mdb 多表</text>
+    <text x="116" y="465" text-anchor="middle" font-size="10.5" fill="#5f5f5f">自動抓 JOIN 關聯</text>
+    <rect x="196" y="408" width="132" height="70" rx="9" fill="#fff" stroke="#cfe0f1"/>
+    <text x="262" y="431" text-anchor="middle" font-size="12" font-weight="700" fill="#191919">意境壓縮器 v2</text>
+    <text x="262" y="449" text-anchor="middle" font-size="10.5" fill="#5f5f5f">7,799→3,172 tok</text>
+    <text x="262" y="465" text-anchor="middle" font-size="10.5" fill="#5f5f5f">數字專名稽核</text>
+    <rect x="342" y="408" width="132" height="70" rx="9" fill="#fff" stroke="#cfe0f1"/>
+    <text x="408" y="431" text-anchor="middle" font-size="12" font-weight="700" fill="#191919">AI SWOT v3.8</text>
+    <text x="408" y="449" text-anchor="middle" font-size="10.5" fill="#5f5f5f">貼商品網址</text>
+    <text x="408" y="465" text-anchor="middle" font-size="10.5" fill="#5f5f5f">雷達圖對決</text>
+    <!-- lane 5 -->
+    <rect x="500" y="368" width="450" height="128" rx="12" fill="#fbf7ec" stroke="#efe3c4"/>
+    <text x="520" y="394" font-size="14" font-weight="700" fill="#9c7b23">⑤ 技能化：skill ＞＞ 程式</text>
+    <rect x="520" y="408" width="195" height="70" rx="9" fill="#fff" stroke="#efe3c4"/>
+    <text x="617" y="431" text-anchor="middle" font-size="12.5" font-weight="700" fill="#191919">PDF拆分工具 → pdf-split-tool</text>
+    <text x="617" y="449" text-anchor="middle" font-size="10.5" fill="#5f5f5f">HTML 核心改寫成 Python 腳本</text>
+    <text x="617" y="465" text-anchor="middle" font-size="10.5" fill="#5f5f5f">SKILL.md＋agents/openai.yaml</text>
+    <rect x="731" y="408" width="199" height="70" rx="9" fill="#fff" stroke="#efe3c4"/>
+    <text x="830" y="431" text-anchor="middle" font-size="12.5" font-weight="700" fill="#191919">/pdf 一句話呼叫</text>
+    <text x="830" y="449" text-anchor="middle" font-size="10.5" fill="#5f5f5f">已開源 Split_PDF_Chapters</text>
+    <text x="830" y="465" text-anchor="middle" font-size="10.5" fill="#5f5f5f">Skill 配對器：213 個技能挑著用</text>
+    <!-- arrows -->
+    <g stroke="#9B9B9B" stroke-width="2" fill="none" marker-end="url(#ar)">
+      <path d="M255 288 h-8"/><path d="M490 144 v0"/>
+    </g>
+    <defs><marker id="ar" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#9B9B9B"/></marker></defs>
+    <text x="490" y="536" text-anchor="middle" font-size="12" fill="#8a8a8a">主線：① 用 AI 聊出工具 → ② 風格可以復刻 → ③ 程式可以拆回提示詞 → ④ 日常資料工作交給工具 → ⑤ 工具進化成一句話技能</text>
+  </svg>
+  <div class="cap">本堂五條生產線。所有工具共同特徵：單檔 HTML、金鑰存 localStorage 不離開瀏覽器、Groq 免費模型當引擎、內建多金鑰輪替與模型降級。</div>
+  </div>
+
+  <h3>本堂工具總表（原始教材 12 檔）</h3>
+  <div class="twrap"><table>
+    <tr><th>工具</th><th>一句話功能</th><th>引擎／模型</th></tr>
+    <tr><td><b>TTS益值玩 (9)</b></td><td>繁中→14 種語言×4 引擎語音，批次合成 ZIP＋SRT，一鍵字幕影片 MP4</td><td>Groq（台語轉換）＋意傳／ElevenLabs／Gemini TTS／瀏覽器 TTS</td></tr>
+    <tr><td><b>風格擷取師 R2</b></td><td>上傳一張圖→元素座標層級全盤點→風格紀錄 .md</td><td>Llama 4 Maverick（視覺，自動降級）</td></tr>
+    <tr><td><b>HTML 反向工程 R2</b></td><td>貼任意 HTML→自動拆解成完整創作提示詞（九章）</td><td>llama-3.3-70b，多金鑰輪換＋TPM 自動壓縮</td></tr>
+    <tr><td><b>Groq解析 × Gemini 圖像生成器</b></td><td>Groq 優化提示詞＋Gemini 生圖，13 種佈局模式×多風格</td><td>Llama（解析）＋gemini-3.1-flash-lite-image</td></tr>
+    <tr><td><b>數據清洗正規化分析 v6</b></td><td>CSV/Excel/SQLite/Access 多表載入→AI 清洗建議→圖表→關聯偵測→進階分析</td><td>llama-3.3-70b（可換 deepseek-r1、kimi-k2 等）</td></tr>
+    <tr><td><b>意境壓縮器 v2（Token 瘦身引擎）</b></td><td>用最少 token 表達相同意境：L1 結構化／L2 精煉／L3 電報體＋數字專名稽核</td><td>llama-3.3-70b＋llama-4-scout（OCR）＋whisper-v3-turbo（音檔）</td></tr>
+    <tr><td><b>AI SWOT 分析工具 v3.7／v3.8</b></td><td>主題＋參考文件／商品網址→SWOT＋雷達圖＋競爭對手 PK＋情境模擬＋趨勢預測</td><td>llama-3.3-70b（推薦）</td></tr>
+    <tr><td><b>PDF 拆分工具 v9／v10</b></td><td>上傳 PDF→AI 偵測章節→逐章切割下載／JPG 轉換／單頁摘要</td><td>llama-3.3-70b＋llama-4-scout</td></tr>
+    <tr><td><b>Skills 配對器 Groq 版 v3</b></td><td>描述需求→從 213 個 Claude/Codex Skill 挑 5 個配對推薦＋安裝指引</td><td>Groq＋Gemini 2.0 Flash</td></tr>
+    <tr><td><b>八字姓名學 v3</b></td><td>ECF 八字×姓名合參（示範「舊工具當復刻素材」）</td><td>Groq 多模型（含 qwen3-32b）</td></tr>
+    <tr><td>1～4 風格圖</td><td>霓虹／手機／版型／程式四種風格範本，餵給 ChatGPT 專案與 Gemini Gem</td><td>—</td></tr>
+    <tr><td>sample.mdb</td><td>Access 範例資料庫（customers/orders/products 三表），數據清洗工具的教材</td><td>—</td></tr>
+  </table></div>
+</section>
+
+<!-- ====== 2 開場 ====== -->
+<section class="chapter" id="s2">
+  <span class="chip" style="background:var(--cyan)">2 · 開場</span>
+  <h2 class="ct">開場：一人工具廠的日常 <span class="ts">[00:00–08:00]</span></h2>
+  <p class="cd">正課前的暖場其實是這堂課最好的預告——講師把自己的工作目錄攤開給大家看。</p>
+  <ul class="pt">
+    <li><b>Codex 桌面版側欄</b>躺著幾十個專案：程式解構運用、教學影片分析、環保稽查員、Gmail 信件檢查、台股智能分析、出題小幫手⋯⋯剛完成的「講師分析運用」還做成了<b>全域 Codex Skill（instructor-analysis-ops）</b>，一次產出資策會講師分析 PPTX＋股市影片講師分析 PPTX。</li>
+    <li><b>outputs 資料夾 118 項產出物</b>：每個工具都配套「操作手冊 docx＋逐頁語音教學 mp3＋簡報輪播教學 mp4」——工具做完，教材也是 AI 生的。</li>
+    <li>下載資料夾裡 <b>TTS益值玩從 (1) 排到 (9)</b>：一個工具九個版本，「每次跟 AI 多聊一輪，就多一版」。</li>
+    <li>開場播放自製<b>字幕影片</b>：颱風停班停課新聞旁白（「這次巴威是 25 年來暴風圈最大一次」）——正是 TTS益值玩「字幕影片」功能的成品。</li>
+  </ul>
+  <div class="note gold">💡 <b>觀念</b>：工具會迭代、教材會自動生、舊產出物會變成新課的素材。這不是天分，是把「跟 AI 對話」當成日常工作流。</div>
+</section>
+
+<!-- ====== 3 TTS ====== -->
+<section class="chapter" id="s3">
+  <span class="chip" style="background:var(--teal)">3 · 台語 TTS</span>
+  <h2 class="ct">TTS益值玩與台語生態系 <span class="ts">[08:00–36:00]</span></h2>
+  <p class="cd">本堂主角。從「為什麼台語 TTS 難」講到「怎麼跟 Claude 聊出一個多引擎語音實驗室」。</p>
+
+  <h3>3.1 台語的家底：意傳科技（ithuan.tw）</h3>
+  <ul class="pt">
+    <li>台灣本土團隊，維護<b>台語、Pangcah（阿美語）、Kaxabu（噶哈巫語）、客話</b>等語言專案，出品「厝鳥仔講台語」App。</li>
+    <li>提供「<b>標漢字音標</b>」（分詞＋台羅標音）與「<b>台灣媠聲</b>」（語音合成）API——是 TTS益值玩台語聲音的來源。</li>
+    <li>限制：<b>每 IP 每分鐘最多 3 句音檔</b>——連按太快就沒聲音，工具內建「逐句合成＋節流」來配合。</li>
+    <li>加映：<b>Node-RED 也接得起來</b>——「台語語音節點案例」流程：inject 繁中→「繁中轉台語語音」節點（ithuan）→台語漢字輸出／存 MP3／Buffer／編輯器播放。除錯窗誠實標註「台語漢字為規則式草稿，正式用途請人工確認」。<span class="ts">[15:20]</span></li>
+  </ul>
+  <figure class="shot"><img src="s3e1-img/01-nodered-taigi.jpg" alt="Node-RED 台語語音節點案例" loading="lazy"><figcaption>Node-RED「台語語音節點案例」：一條流程把繁中變台語漢字＋MP3。示範前還先踩了一次「本機服務沒開，127.0.0.1 連不上」的小坑——先啟動服務再示範。</figcaption></figure>
+
+  <h3>3.2 TTS益值玩 (9)：多引擎台語語音實驗室</h3>
+  <figure class="shot"><img src="s3e1-img/02-tts-playground.jpg" alt="TTS益值玩 主畫面" loading="lazy"><figcaption>TTS益值玩：左欄輸入繁中→選目標語言→翻譯／轉換→合成；右欄結果卡疊＋字幕影片。API 金鑰只存本機 localStorage。</figcaption></figure>
+  <div class="twrap"><table>
+    <tr><th>功能</th><th>內容</th></tr>
+    <tr><td>語言</td><td>14 種：台語（預設）、華語（原文直接發音，不經翻譯）、英日韓西法德義葡越泰印尼粵</td></tr>
+    <tr><td>四引擎</td><td>台灣媠聲（台語，免 API 金鑰）／ElevenLabs（填 Voice ID＋Key）／Gemini TTS／瀏覽器 TTS（免費，但<b>無法輸出 MP3</b>）</td></tr>
+    <tr><td>台語輸出</td><td>台語漢字（教育部推薦用字）＋台羅拼音（可手動編修重新合成）＋用詞解說</td></tr>
+    <tr><td>批次合成</td><td>多句一次跑→ZIP（逐句 mp3＋combined.mp3＋<b>SRT 字幕</b>＋index.csv）；HTS 引擎每 3 句自動斷流配合意傳限制</td></tr>
+    <tr><td>字幕影片</td><td>單句或批次結果皆可→Canvas 渲染動態字幕影片，優先輸出 MP4——開場那支颱風新聞影片就是這裡出來的</td></tr>
+  </table></div>
+
+  <div class="svgwrap">
+  <svg viewBox="0 0 980 300" xmlns="http://www.w3.org/2000/svg" font-family="'Noto Sans TC','PingFang TC',sans-serif">
+    <rect width="980" height="300" fill="#fbfaf8"/>
+    <text x="490" y="34" text-anchor="middle" font-size="17" font-weight="800" fill="#191919">TTS益值玩 台語管線（vibe-coding 聊出來的架構）</text>
+    <defs><marker id="ar2" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 z" fill="#0d7d72"/></marker></defs>
+    <g font-size="12.5">
+      <rect x="26" y="70" width="140" height="66" rx="10" fill="#fff" stroke="#bcded8" stroke-width="1.5"/>
+      <text x="96" y="98" text-anchor="middle" font-weight="700" fill="#191919">輸入繁體中文</text>
+      <text x="96" y="118" text-anchor="middle" fill="#5f5f5f" font-size="11">「咱一起去⋯」</text>
+      <rect x="212" y="70" width="170" height="66" rx="10" fill="#eef7f5" stroke="#0d7d72" stroke-width="1.5"/>
+      <text x="297" y="92" text-anchor="middle" font-weight="700" fill="#0d7d72">Groq 轉台語</text>
+      <text x="297" y="110" text-anchor="middle" fill="#5f5f5f" font-size="11">台語漢字（教育部用字）</text>
+      <text x="297" y="126" text-anchor="middle" fill="#5f5f5f" font-size="11">＋台羅拼音＋用詞解說</text>
+      <rect x="428" y="70" width="170" height="66" rx="10" fill="#eef7f5" stroke="#0d7d72" stroke-width="1.5"/>
+      <text x="513" y="92" text-anchor="middle" font-weight="700" fill="#0d7d72">意傳 標漢字音標</text>
+      <text x="513" y="110" text-anchor="middle" fill="#5f5f5f" font-size="11">分詞＋標音（不可用時退</text>
+      <text x="513" y="126" text-anchor="middle" fill="#5f5f5f" font-size="11">Groq 推估，標「AI 推估」）</text>
+      <rect x="644" y="70" width="160" height="66" rx="10" fill="#eef7f5" stroke="#0d7d72" stroke-width="1.5"/>
+      <text x="724" y="92" text-anchor="middle" font-weight="700" fill="#0d7d72">台灣媠聲 合成</text>
+      <text x="724" y="110" text-anchor="middle" fill="#5f5f5f" font-size="11">逐句送（每 IP 每分鐘</text>
+      <text x="724" y="126" text-anchor="middle" fill="#5f5f5f" font-size="11">3 句）＋magic bytes 驗證</text>
+      <rect x="840" y="70" width="116" height="66" rx="10" fill="#fff" stroke="#bcded8" stroke-width="1.5"/>
+      <text x="898" y="98" text-anchor="middle" font-weight="700" fill="#191919">lamejs 轉 MP3</text>
+      <text x="898" y="118" text-anchor="middle" fill="#5f5f5f" font-size="11">前端下載（附 WAV）</text>
+      <g stroke="#0d7d72" stroke-width="2" fill="none" marker-end="url(#ar2)">
+        <path d="M166 103 h38"/><path d="M382 103 h38"/><path d="M598 103 h38"/><path d="M804 103 h28"/>
+      </g>
+      <rect x="140" y="188" width="700" height="76" rx="10" fill="#fdf3ec" stroke="#f0d4bc"/>
+      <text x="490" y="212" text-anchor="middle" font-weight="700" fill="#bf6a1e" font-size="13">抗爆量三層保險（429 / TPM / TPD）</text>
+      <text x="490" y="233" text-anchor="middle" fill="#5f5f5f" font-size="11.5">模型降級鏈：gpt-oss-120b → llama-3.3-70b → llama-4-scout → maverick → llama-3.1-8b 自動輪替</text>
+      <text x="490" y="251" text-anchor="middle" fill="#5f5f5f" font-size="11.5">JSON mode 失敗退一般模式 → 三段式解析（parse → 撈 {} 修補 → regex 逐欄位），自動剝 &lt;think&gt; 與圍欄</text>
+      <path d="M297 136 v30 m216 -30 v30" stroke="#bf6a1e" stroke-width="1.5" stroke-dasharray="4 3" fill="none"/>
+    </g>
+  </svg>
+  <div class="cap">核心流程圖：一句繁中到一顆台語 MP3 要過四站，每一站都有 7/9 對話裡真實踩過的坑與對策。</div>
+  </div>
+
+  <h3>3.3 這個工具是怎麼「聊」出來的：7/9 vibe-coding 對話全重播 <span class="ts">[18:40–22:00]</span></h3>
+  <figure class="shot"><img src="s3e1-img/03-claude-vibecoding.jpg" alt="claude.ai 台語轉換網頁程式開發對話" loading="lazy"><figcaption>講師把 7/9 與 Claude 的「台語轉換網頁程式開發」對話原封不動打開重播，聊天室同步貼出分享連結——需求怎麼下、卡關怎麼修，全部攤開。</figcaption></figure>
+  <ol class="st">
+    <li><b>起手需求</b>：「針對 YouTube 台語運用影片做獨立網頁，輸入繁中→轉台語→mp3 下載，資料整理透過 Groq API。」</li>
+    <li><b>管線設計</b>：繁中→Groq 轉台語漢字＋台羅＋解說→意傳「標漢字音標」分詞標音→台灣媠聲合成→lamejs 前端轉 MP3（附 WAV 備援）。</li>
+    <li><b>抗 429 降級鏈</b>：gpt-oss-120b→llama-3.3-70b→llama-4-scout→maverick→llama-3.1-8b，額度滿了自動換下一棒。</li>
+    <li><b>強韌解析</b>：Groq JSON mode 失敗自動退一般模式；三段式解析（直接 parse→撈最外層 {} 修補換行→逐欄位 regex），自動剝 <code>&lt;think&gt;</code> 與程式碼圍欄；解析器 6/6 測試通過＋Playwright 端對端驗證。</li>
+    <li><b>除錯實錄</b>：音檔空白＝送錯格式伺服器回錯誤頁→加 <b>magic bytes（fffb）與 Content-Type 驗證</b>；發音不道地（「食飯」唸錯）→查官方作法改<b>逐句分開合成</b>＋台羅欄位開放手動編修。</li>
+    <li><b>道地性 prompt</b>：加嚴格對應表＋鐵則「<b>寧可改寫句構、不可保留華語詞</b>」（咱一起去→咱做伙去）；意傳標音不可用而退回 Groq 推估時，畫面明確標「台羅為 AI 推估」。</li>
+    <li><b>大改版</b>：台語降為 14 種語言之一→「選語言 × 選引擎」通用 TTS 平台；課前又加碼串 ElevenLabs（Voice ID）、Gemini TTS、瀏覽器 TTS。</li>
+  </ol>
+  <div class="note green">🧭 <b>為什麼要重播對話？</b>因為工具本身會過時，但「需求怎麼講、卡關怎麼問、AI 的錯怎麼抓」這套過程才是可複製的。學員羅州課後回饋：自己也試過台語 TTS，「意傳好很多」。</div>
+</section>
+
+<!-- ====== 4 ElevenLabs ====== -->
+<section class="chapter" id="s4">
+  <span class="chip" style="background:var(--blue)">4 · 語音引擎</span>
+  <h2 class="ct">ElevenLabs 與四引擎的選擇題 <span class="ts">[08:40–33:00]</span></h2>
+  <p class="cd">同一句話，四個引擎唸：品質、價格、限制一次講清楚。</p>
+  <figure class="shot"><img src="s3e1-img/04-elevenlabs-voices.jpg" alt="ElevenLabs 我的音色" loading="lazy"><figcaption>ElevenLabs「我的音色」已建 21/30 個（中年大叔、低沉溫暖的人、沒朝氣的年輕人、有為的台灣年輕人⋯⋯）；建立音色四式：文字提示設計（&lt;1 分）／即時複製（10 秒音訊）／專業複製（30 分鐘音訊）／音色重混。</figcaption></figure>
+  <div class="twrap"><table>
+    <tr><th>引擎</th><th>特色</th><th>成本／限制</th></tr>
+    <tr><td><b>台灣媠聲（意傳）</b></td><td>真・台語，含台羅標音</td><td>免金鑰；每 IP 每分鐘 3 句</td></tr>
+    <tr><td><b>ElevenLabs</b></td><td>高擬真、可複製自己聲音、v3 增強</td><td>Creator $22/月 30 萬點；API 計價 Flash/Turbo $0.05／Multilingual $0.1（每 1K 字元）、Scribe STT $0.22/hr</td></tr>
+    <tr><td><b>Gemini TTS</b></td><td>gemini-2.5-flash-preview-tts，雲端快、聲音自然</td><td>Google AI Studio 金鑰；免費層有量限，可 Prepay 升 Tier 1</td></tr>
+    <tr><td><b>瀏覽器 TTS</b></td><td>Microsoft Hanhan 等內建語音，零成本即唸</td><td><b>無法輸出 MP3</b>，只能現場播</td></tr>
+  </table></div>
+  <ul class="pt">
+    <li>講師示範把台股新聞稿貼進 ElevenLabs（172/5000 字元、v3 增強）生成語音；點數頁顯示已用 10,423／300,000。</li>
+    <li><b>金鑰管理習慣</b> <span class="ts">[38:00]</span>：Groq console 裡金鑰按用途命名（八字、風格擷取⋯⋯）、一工具一金鑰；Google AI Studio 同樣分（TTS、Voice App、出題小幫手、SWOT_Analysis）——金鑰洩漏時才知道是誰漏的、要停哪一把。畫面上正好出現「publicly exposed API key」警告當反面教材。</li>
+  </ul>
+</section>
+
+<!-- ====== 5 風格復刻 ====== -->
+<section class="chapter" id="s5">
+  <span class="chip" style="background:var(--purple)">5 · 風格復刻</span>
+  <h2 class="ct">圖像風格復刻三件套 <span class="ts">[38:40–65:20]</span></h2>
+  <p class="cd">「風格」不再是感覺，是一份可以量化、可以重複使用的規格書。</p>
+
+  <h3>5.1 風格擷取師 R2：把圖抄成規格書</h3>
+  <figure class="shot"><img src="s3e1-img/05-style-extractor.jpg" alt="風格擷取師 R2 執行結果" loading="lazy"><figcaption>上傳「2手機風格.jpg」→Groq 視覺分析（Llama 4 Maverick，品質優先自動降級）→輸出 style_record.md。</figcaption></figure>
+  <ul class="pt">
+    <li>輸出四大塊：<b>整體風格摘要</b>（核心定位／情緒感受／適合與不適合用途）、<b>元素完整盤點表 18 項</b>（類別／內容／中心座標 x%,y%／尺寸／九宮格方位／層級／對齊鄰接）、<b>版面配置座標圖</b>（ASCII）、<b>文字內容逐字抄錄</b>（字體特徵／HEX 色／大小）。</li>
+    <li>可預覽／看 Markdown 原始碼／複製／下載 .md——這份 .md 就是「風格的原始碼」。</li>
+  </ul>
+
+  <h3>5.2 ChatGPT 專案 ＝ Gemini Gem：把風格變成常駐設定</h3>
+  <figure class="shot"><img src="s3e1-img/07-chatgpt-project.jpg" alt="ChatGPT 專案 圖像風格及版型復刻" loading="lazy"><figcaption>ChatGPT 專案「圖像風格及版型復刻」：指令留空，改把 4 張風格圖放進「資料來源」；另一專案「圖像風格復刻」則把規則寫進指令。兩種做法現場對照。</figcaption></figure>
+  <div class="code">專案指令（講師原文，已貼到聊天室分享）：
+請將上傳的圖像風格或提供的檔案資料/連結先整理完資料，
+依據資料來源中的檔案的原本版型與風格來設計圖像，
+若上傳檔案為圖像時只做風格的轉換。
+輸入1為 1霓虹風格.png　輸入2為 2手機風格.jpg
+輸入3為 3版型風格.jpg　輸入4為 4程式風格.jpg</div>
+  <ul class="pt">
+    <li>實測一：附 <b>TTS益值玩(9).html＋2手機風格_style_record.md</b>→「創作圖像」→2 分 15 秒產出五手機並排霓虹宣傳圖，六大功能籤全對。<span class="ts">[49:20]</span></li>
+    <li>實測二：附 <b>八字姓名學_v3.html</b>→4 分 4 秒產出「ECF 八字×姓名合參」紫金資訊圖。</li>
+    <li>實測三：附 <b>Skill配對器_v3.html</b>→六手機推廣海報。聊天室瞬間刷「需要」×8。</li>
+    <li><b>同一套搬去 Gemini</b> <span class="ts">[79:20]</span>：建 Gem「圖像風格與版型復刻」，使用說明貼同段指令、相關資訊上傳同 4 張圖——<b>ChatGPT 專案＝Gemini Gem</b>，觀念一通兩邊都會。</li>
+    <li>收尾加映「<b>心智圖復刻</b>」：Google 圖搜心智圖範本存 png→「請將 PDF拆分工具-v9.html 重新整理為心智圖摘要結構，版型／風格／配色參考 png(19).png」→1 分 49 秒得到十枝幹心智圖。<span class="ts">[155:20]</span></li>
+  </ul>
+  <div class="shotgrid">
+    <figure class="shot"><img src="s3e1-img/06-chatgpt-tts-poster.jpg" alt="TTS益值玩宣傳圖" loading="lazy"><figcaption>ChatGPT 照 style_record.md 生成的「TTS益值玩」五手機宣傳圖。</figcaption></figure>
+    <figure class="shot"><img src="s3e1-img/19-mindmap.jpg" alt="PDF拆分工具心智圖" loading="lazy"><figcaption>把 HTML 丟給 ChatGPT 畫成心智圖：十大功能枝幹自動歸納。</figcaption></figure>
+  </div>
+
+  <h3>5.3 免費試玩場：LMArena 與 Groq×Gemini 圖像生成器</h3>
+  <div class="shotgrid">
+    <figure class="shot"><img src="s3e1-img/08-lmarena.jpg" alt="LMArena" loading="lazy"><figcaption>arena.ai：Battle 對戰或 Direct 直選模型（gemini-3.1-flash-lite-image＝nano-banana-2-lite），免費試玩各家生圖。</figcaption></figure>
+    <figure class="shot"><img src="s3e1-img/09-groq-gemini-image.jpg" alt="Groq解析 Gemini圖像生成器" loading="lazy"><figcaption>自製「Groq解析×Gemini圖像生成器」：勾選「Groq AI 解析優化」自動幫你把提示詞跟上傳圖分析到位，再交給 Gemini 生圖。</figcaption></figure>
+  </div>
+  <ul class="pt">
+    <li>四步驟：驗證金鑰（Groq＋Gemini）→輸入提示（可 AI 優化）→選佈局模式（單張大圖／並排雙圖／四格／漸變融合／Q版貼圖／換衣／分解物品／立體剖面／6 幅漫畫／7 格資訊圖／城市天氣／證件照／名人合照）→選藝術風格（水彩、油畫、皮克斯、日本動漫、照片寫實⋯⋯）。</li>
+    <li>英文老師 Alanis 的現場應用問答：「我禮拜五要教中二國中生」「考卷要黑白，那下『黑白日漫風』嗎？」——講師：「懂。」風格詞彙＝生圖的控制語言。</li>
+  </ul>
+</section>
+
+<!-- ====== 6 反向工程 ====== -->
+<section class="chapter" id="s6">
+  <span class="chip" style="background:var(--orange)">6 · 反向工程</span>
+  <h2 class="ct">HTML 反向工程 R2：程式拆回提示詞，再讓三家 AI 重建 <span class="ts">[96:40–106:00]</span></h2>
+  <p class="cd">下半場開場即核心觀念：<b>提示詞才是資產</b>。程式碼 99,667 tokens，拆回提示詞只要 1,629 字。</p>
+  <figure class="shot"><img src="s3e1-img/12-reverse-eng-result.jpg" alt="HTML 反向工程輸出" loading="lazy"><figcaption>「HTML 反向工程 R2 · AI Reverse Engineering Atelier」：左貼原始 HTML，右出九章創作提示詞；TTS益值玩整包拆完＝1,629 字。</figcaption></figure>
+  <ul class="pt">
+    <li><b>設定面</b>：Groq Key 可多組（每行一把自動輪換）、模型 llama-3.3-70b、創意溫度 0.35、TPM 上限 6000（免費層 8b=6000/70b=12000）、自動壓縮以符合 TPM、附帶 One-Shot 範例（TPM 不足自動改精簡）。</li>
+    <li><b>四種模式</b>：單檔反向／差異比對（v1→v2 改了什麼）／圖像反向／批次 ZIP。另可匯出 .puml（PlantUML 流程圖）。</li>
+    <li><b>提示詞九章</b>：⋯4 版型結構（Header/Content/Footer）、5 元件清單與規格、6 功能規格（核心流程＋錯誤容錯）、<b>7 實作陷阱</b>（Canvas/DPR、座標換算、API 回傳尺寸、SSE 串流解析、CORS、localStorage）、8 文案與語氣、9 一句話濃縮版。</li>
+  </ul>
+  <div class="svgwrap">
+  <svg viewBox="0 0 980 330" xmlns="http://www.w3.org/2000/svg" font-family="'Noto Sans TC','PingFang TC',sans-serif">
+    <rect width="980" height="330" fill="#fbfaf8"/>
+    <text x="490" y="34" text-anchor="middle" font-size="17" font-weight="800" fill="#191919">核心觀念：提示詞才是資產（程式 ⇄ 提示詞 雙向道）</text>
+    <defs><marker id="ar3" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 z" fill="#bf6a1e"/></marker></defs>
+    <rect x="60" y="90" width="240" height="110" rx="12" fill="#fff" stroke="#DBD9D5" stroke-width="1.5"/>
+    <text x="180" y="122" text-anchor="middle" font-size="14.5" font-weight="700" fill="#191919">HTML 程式碼</text>
+    <text x="180" y="145" text-anchor="middle" font-size="11.5" fill="#5f5f5f">TTS益值玩(9).html</text>
+    <text x="180" y="163" text-anchor="middle" font-size="11.5" fill="#5f5f5f">≈ 99,667 tokens</text>
+    <text x="180" y="181" text-anchor="middle" font-size="11.5" fill="#9B9B9B">會過時、綁平台、佔 token</text>
+    <rect x="380" y="90" width="240" height="110" rx="12" fill="#fdf3ec" stroke="#bf6a1e" stroke-width="2"/>
+    <text x="500" y="122" text-anchor="middle" font-size="14.5" font-weight="700" fill="#bf6a1e">創作提示詞（九章）</text>
+    <text x="500" y="145" text-anchor="middle" font-size="11.5" fill="#5f5f5f">1,629 字 · 版型/元件/功能規格</text>
+    <text x="500" y="163" text-anchor="middle" font-size="11.5" fill="#5f5f5f">＋實作陷阱＋一句話濃縮版</text>
+    <text x="500" y="181" text-anchor="middle" font-size="11.5" fill="#9B9B9B">可保存、可強化、可轉手</text>
+    <rect x="700" y="58" width="230" height="52" rx="10" fill="#fff" stroke="#CFE0F1" stroke-width="1.5"/>
+    <text x="815" y="80" text-anchor="middle" font-size="12.5" font-weight="700" fill="#3b6bb0">Gemini Canvas 重建</text>
+    <text x="815" y="98" text-anchor="middle" font-size="11" fill="#5f5f5f">tts.html 開起來能用</text>
+    <rect x="700" y="124" width="230" height="52" rx="10" fill="#fff" stroke="#CFE0F1" stroke-width="1.5"/>
+    <text x="815" y="146" text-anchor="middle" font-size="12.5" font-weight="700" fill="#3b6bb0">LMArena（Max）重建</text>
+    <text x="815" y="164" text-anchor="middle" font-size="11" fill="#5f5f5f">taiwanese-voice-lab 四引擎版</text>
+    <rect x="700" y="190" width="230" height="52" rx="10" fill="#fff" stroke="#CFE0F1" stroke-width="1.5"/>
+    <text x="815" y="212" text-anchor="middle" font-size="12.5" font-weight="700" fill="#3b6bb0">claude.ai（Fable 5）</text>
+    <text x="815" y="230" text-anchor="middle" font-size="11" fill="#5f5f5f">先評估缺漏、強化提示詞再生成</text>
+    <g stroke="#bf6a1e" stroke-width="2" fill="none" marker-end="url(#ar3)">
+      <path d="M300 125 h74"/>
+      <path d="M380 172 h-74"/>
+      <path d="M620 120 q40 -30 76 -36"/>
+      <path d="M620 145 h76"/>
+      <path d="M620 172 q40 30 76 40"/>
+    </g>
+    <text x="340" y="112" text-anchor="middle" font-size="11" fill="#bf6a1e">反向工程</text>
+    <text x="340" y="192" text-anchor="middle" font-size="11" fill="#bf6a1e">重建生成</text>
+    <text x="490" y="286" text-anchor="middle" font-size="12" fill="#8a8a8a">四種入口：單檔反向（自己的舊程式）· 圖像反向（別人的好介面）· 差異比對 v1→v2（大改版前）· 批次 ZIP（整個工具庫建檔）</text>
+    <text x="490" y="308" text-anchor="middle" font-size="12" fill="#8a8a8a">同一份提示詞三家都蓋得出來 ＝ 不被任何平台綁架的保險</text>
+  </svg>
+  <div class="cap">反向工程的價值鏈：程式碼壓成 1.6% 大小的提示詞，再讓任何模型重建回可用的工具。</div>
+  </div>
+
+  <h3>重建驗證：同一份提示詞，三家各蓋一棟</h3>
+  <figure class="shot"><img src="s3e1-img/13-gemini-canvas-rebuild.jpg" alt="Gemini Canvas 重建" loading="lazy"><figcaption>提示詞 .md 丟 Gemini Canvas「來和我寫作或開發吧！」→重建版四大重點：設計系統完全吻合（--bg/--gold/--jade＋三種 Google 字體）、三階段核心流程、API 金鑰 localStorage、Vanilla JS 純手工。下載 tts.html 開起來真的能用。</figcaption></figure>
+  <ul class="pt">
+    <li><b>Gemini Canvas</b>：重建版含台語翻譯＋Gemini TTS（Aoede）＋預留 ElevenLabs 欄位＋Canvas 字幕影片模擬。</li>
+    <li><b>LMArena（Max 模型）</b>：「I'll create this TTS Playground…」→產出 taiwanese-voice-lab：四引擎籤（台灣媠聲 FREE／ElevenLabs／Groq Orpheus／Gemini TTS）＋操作記錄。</li>
+    <li><b>claude.ai（Fable 5）</b>：附上提示詞後 Claude 反問四選項——直接生成／先強化再生成／只強化提示詞／評估缺漏——示範「提示詞本身也能再進廠保養」。</li>
+  </ul>
+  <div class="note blue">🎯 <b>這一段在教什麼</b>：①別人的好網頁→圖像反向→提示詞；②自己的舊程式→單檔反向→提示詞庫；③大改版前先跑差異比對。提示詞在手，換哪家模型都能把工具重建回來——這就是「不被平台綁架」的保險。</div>
+</section>
+
+<!-- ====== 7 資料工具 ====== -->
+<section class="chapter" id="s7">
+  <span class="chip" style="background:var(--green)">7 · 資料工具</span>
+  <h2 class="ct">資料雙工具：數據清洗 v6 × 意境壓縮器 v2 <span class="ts">[106:40–124:40]</span></h2>
+
+  <h3>7.1 數據清洗、正規化及分析 v6：Excel 老手的 AI 分析台</h3>
+  <figure class="shot"><img src="s3e1-img/14-dataclean-relation.jpg" alt="資料關聯偵測" loading="lazy"><figcaption>「資料關聯」分頁自動比對所有資料集：sample.mdb 三表（customers/orders/products）偵測出 9 組主鍵-外鍵關聯（信心 100%）；換餐廳真實資料 5 個資料集抓出 16 組。</figcaption></figure>
+  <ul class="pt">
+    <li><b>吃得下的格式</b>：CSV／TSV／JSON／Excel（多工作表自動拆）／SQLite（.db）／SQL 傾印（含 MySQL dump）／<b>Access（.mdb/.accdb）</b>，可多檔多資料集。</li>
+    <li><b>七個分頁</b>＝一條分析流水線：資料載入→數據檢視→數據清洗→正規化→分析圖表→資料關聯→進階分析建議。</li>
+    <li><b>AI 清洗建議</b>：依欄位剖析列「清洗優先清單」（每項含問題／建議做法／風險等級）＋自動可修復項。</li>
+    <li><b>AI 正規化策略</b>：數值欄位處理、類別欄位編碼（Label／One-Hot）、1NF/2NF/3NF 拆表建議、五步前處理流水線。</li>
+    <li><b>互動圖表</b>：不知道選哪種？點「建議圖表」一鍵產生（占比→圓餅、排行→長條、分佈→直方）；實測餐廳資料「各名稱Σ銷售量排行」＋Pearson 相關矩陣＋自動洞察（強相關：點選率↔銷售量）。</li>
+    <li><b>進階分析建議</b>：①關聯解讀（該怎麼 JOIN）②現在就能做的四種分析（各附演算法＋需要欄位＋能回答的商業問題）③建議補充的資料④後續步驟。</li>
+  </ul>
+
+  <h3>7.2 意境壓縮器 v2 · Token 瘦身引擎：省 70% 的長文預處理</h3>
+  <figure class="shot"><img src="s3e1-img/15-token-slim.jpg" alt="意境壓縮器" loading="lazy"><figcaption>實測「智慧建築評估手冊 2024 年版評定基準 q&amp;a.pdf」（10 頁 8,936 字≈7,799 tokens）→壓縮後 3,172 tokens：每跑一次省 4,627、跑 100 次省 46 萬 tokens。</figcaption></figure>
+  <ul class="pt">
+    <li><b>理念來自 microsoft/MarkItDown</b>（GitHub 165k 星）：「用最精簡的標記保留結構，主流 LLM 原生看得懂」——把同樣思路推進到內容層。<span class="ts">[122:40]</span></li>
+    <li><b>三檔壓縮強度</b>：L1 結構化（MarkItDown 式 Markdown，保留全部資訊與語氣）／L2 精煉（刪贅字、合併重複、長句改短）／L3 電報體（符號縮寫極限壓縮，仍可還原意境）。</li>
+    <li><b>必留項目</b>直接寫進壓縮指令：數字金額日期／專有名詞人名／語氣風格。</li>
+    <li><b>數字／專名稽核</b>：自動抓原文的數字與英數專名逐一比對壓縮版，缺了直接亮紅籤（實測遺漏 9/33）＋「AI 補抓」一鍵補。</li>
+    <li><b>來源全吃</b>：貼上／PDF/TXT/MD／網頁 URL（Jina Reader 抓文）／圖片 OCR（Llama-4 Vision）／音檔（Whisper v3 turbo 轉錄再壓縮，上限 25MB）；內建 TPM 節流、TPD 降級、429 重試、多金鑰輪替。</li>
+  </ul>
+  <div class="golden"><div class="q">「壓縮到剩二、三十趴，你就省了七十趴，為什麼不用呢？」</div><div class="a">— 益師傅談長文先壓縮再餵 AI 的成本觀念 <span class="ts">[46:25 逐字稿]</span></div></div>
+</section>
+
+<!-- ====== 8 SWOT ====== -->
+<section class="chapter" id="s8">
+  <span class="chip" style="background:var(--rose)">8 · SWOT</span>
+  <h2 class="ct">AI SWOT 分析工具：貼個網址就能打商戰 <span class="ts">[126:40–169:20]</span></h2>
+  <figure class="shot"><img src="s3e1-img/16-swot-radar.jpg" alt="AI SWOT 分析工具" loading="lazy"><figcaption>AI SWOT 分析工具 專業版 v3.7/v3.8 Groq：資料輸入（主題＋補充＋參考文件＋AI 圖片識別）→六軸雷達（優勢總分/劣勢控制度/機會總分/威脅防禦度/整體競爭力/策略完整度）→趨勢預測→互動儀表板。</figcaption></figure>
+  <ul class="pt">
+    <li><b>輸入很隨性</b>：打主題、貼補充說明、上傳參考文件（示範：親子餐廳企劃書.pdf，自動整理出【參考文件內容】）、甚至<b>上傳產品照片</b>讓 AI 識別特徵生成 SWOT 建議。</li>
+    <li><b>實戰示範</b>：主題「ASUS ROG Zephyrus G16」＋貼 PChome 商品頁網址→SWOT；再到「競爭對手」貼另一台 MSI Katana 15 的網址→<b>雷達圖雙形疊圖對決</b>、綜合評分 59.2/100、優劣勢卡附星等、<b>情境模擬</b>（最佳 0.3／最壞 0.2／最可能 0.5 各附行動）、<b>趨勢預測時間軸</b>（未來 6 個月）。<span class="ts">[163:20]</span></li>
+    <li><b>故障也照播</b>：分析失敗「Request too large for llama-3.1-8b-instant，TPM 限 6000、要求 25688」→現場解法：換 70b／減量／升級 Dev Tier；接著直接把整個 HTML 丟給 claude.ai 說「幫我修」——爆錯訊息連工具帶檔案一起給 AI，是最快的除錯法。<span class="ts">[130:40]</span></li>
+    <li>學員 XIONG 問「股票可以做 SWOT PK 嗎？」→講師秀出自己的 taiwan-stock-analyzer v63（市場熱力圖／台股排行／ETF20／個人庫存分析）：可以，而且該用專門工具。<span class="ts">[175:20]</span></li>
+  </ul>
+</section>
+
+<!-- ====== 9 Codex Skill ====== -->
+<section class="chapter" id="s9">
+  <span class="chip" style="background:var(--amber)">9 · 技能化</span>
+  <h2 class="ct">壓軸：把 HTML 工具變成 Codex 全域 Skill <span class="ts">[133:20–141:20]</span></h2>
+  <p class="cd">整堂課的收束點：工具的下一站不是更多按鈕，而是「一句話」。</p>
+  <figure class="shot"><img src="s3e1-img/18-codex-skill.jpg" alt="Codex 建立 pdf-split-tool skill" loading="lazy"><figcaption>ChatGPT Codex 專案「PDF拆分工具」：附 PDF拆分工具-v9.html＋一句需求，Codex 自己列計畫、查重、寫檔、踩坑、驗證，全程可讀。</figcaption></figure>
+  <div class="code">講師的完整 prompt（一字不改）：
+請將上傳的程式 改為 PDF拆分工具.skill
+可以根據提供的PDF檔 幫我做章節的切割並提供切割後的每個PDF檔給我，
+切割後的PDF需要列外製作一個資料夾，這個skill 為全域</div>
+  <ol class="st">
+    <li><b>先查重</b>：Codex 發現本機已有 ebook-chapter-splitter skill→「精準更新，不重複製造兩個功能相同的 skill」→決定另建觸發更直覺的 <b>pdf-split-tool</b>。</li>
+    <li><b>關鍵取捨</b>：「HTML 前端本身不能在 Codex skill 裡穩定批次產出 PDF 檔」→把核心能力<b>改寫成 Python 腳本</b>，保留自動偵測章節／手動章節範圍／另建資料夾／產出 manifest。</li>
+    <li><b>踩坑實錄</b>：short_description 要 25–64 字元（中文描述太短被驗證器打回）；Windows cp950 讀 UTF-8 中文解碼失敗→改 UTF-8 重跑；中文路徑干擾→改放系統暫存目錄。</li>
+    <li><b>輸出後驗證</b>：切完逐一讀回 PDF 驗證頁數，「避免只『看起來有產生』」。</li>
+    <li><b>成果三檔</b>：skills/pdf-split-tool/SKILL.md（+100）、agents/openai.yaml（+7）、scripts/split_pdf_chapters.py（+361）→重啟 Codex→輸入 <b>/pdf</b> 出現「PDF Split Tool」；用法：「使用 $pdf-split-tool，幫我把這份 PDF 依章節切割」。</li>
+    <li><b>開源收尾</b>：整個 skill 推上 GitHub（yangchunyi0814/<b>Split_PDF_Chapters</b>），README 列五種切割模式（自動偵測／書籤／目錄頁／頁首標題／manual 人工章節表 chapters.json/CSV——書籤壞掉的 PDF 就靠它）。<span class="ts">[180:00]</span></li>
+  </ol>
+  <div class="note gold">💬 聊天室的總結比誰都快——羅州：「<b>而且程式不消耗 token</b>」「<b>skill &gt;&gt; 程式</b>」；安裝別人的 skill 前？「可以請 AI 說明 repo 功能、跟檢查安全性」。</div>
+  <h3>加映：Skill 配對器——213 個技能怎麼挑</h3>
+  <figure class="shot"><img src="s3e1-img/10-skill-matcher.jpg" alt="Skill 智能配對器" loading="lazy"><figcaption>「Claude/Codex Skill 智能配對器 v3」：彙整 crossaitools 46＋Anthropic 113＋agent37 34＋skillstore 20 共 213 個技能；描述需求＋領域偏好＋經驗程度→配對分數排名＋為何推薦＋安裝指引＋SKILL.md 原文下載。</figcaption></figure>
+</section>
+
+<!-- ====== 10 檢核 ====== -->
+<section class="chapter" id="s10">
+  <span class="chip" style="background:var(--ink)">10 · 檢核</span>
+  <h2 class="ct">課後自我檢核</h2>
+  <ol class="st">
+    <li>我能說出 TTS益值玩的四個語音引擎，以及各自「免費／要金鑰／能不能輸出 MP3」的差別嗎？</li>
+    <li>我知道台語合成為什麼要「逐句」送（意傳每 IP 每分鐘 3 句），以及「寧可改寫句構、不可保留華語詞」在解決什麼問題嗎？</li>
+    <li>我會用風格擷取師產出 style_record.md，並把它連同一個 HTML 丟進 ChatGPT 專案生成宣傳圖嗎？</li>
+    <li>我能在 Gemini 建一個跟 ChatGPT 專案等價的 Gem（同指令＋同資料來源）嗎？</li>
+    <li>我理解「反向工程→提示詞→跨模型重建」為什麼是工具的保險嗎？拿一個自己的 HTML 實際拆一次。</li>
+    <li>我會用意境壓縮器把一份 10 頁 PDF 壓到三成 token，並用「數字／專名稽核」確認沒漏關鍵數字嗎？</li>
+    <li>我能貼兩個商品網址，用 SWOT 工具跑出一張雷達對決圖嗎？遇到 TPM 爆掉知道三條路（換模型／減量／升級）嗎？</li>
+    <li>我能把一個自己的 HTML 工具丟給 Codex，講一句話讓它變成全域 skill，並在安裝前請 AI 檢查安全性嗎？</li>
+  </ol>
+</section>
+
+<!-- ====== 11 金句 ====== -->
+<section class="chapter" id="s11">
+  <span class="chip" style="background:var(--pink)">11 · 金句與 QA</span>
+  <h2 class="ct">金句與課堂 QA</h2>
+  <div class="golden"><div class="q">「skill ＞＞ 程式。而且程式不消耗 token。」</div><div class="a">— 學員羅州在壓軸段的聊天室總結：同樣功能，技能化之後呼叫更簡單、又不用每次重生程式碼</div></div>
+  <div class="golden"><div class="q">「寧可改寫句構、不可保留華語詞。」</div><div class="a">— 台語道地性的 prompt 鐵則：「咱一起去」要變「咱做伙去」，翻譯不是換字是換句</div></div>
+  <div class="golden"><div class="q">「壓縮可以壓到剩二、三十趴——你省了七十趴，為什麼不用？」</div><div class="a">— 長文先過意境壓縮器再餵 AI 的成本學</div></div>
+  <div class="golden"><div class="q">「無菜單，但都是最新的技術!!」</div><div class="a">— 學員張賺基形容這堂課：沒有固定菜單的私廚料理</div></div>
+  <div class="twrap"><table>
+    <tr><th>課堂 QA</th><th>答案</th></tr>
+    <tr><td>英文老師：考卷要黑白，生圖下「黑白日漫風」嗎？</td><td>可以，風格詞彙就是控制語言；把「黑白、線稿、日漫」寫進提示詞即可</td></tr>
+    <tr><td>圖片可以復刻，影像（影片）可以復刻嗎？</td><td>概念相同：先拆規格再重建；影片工作流本季後續課程會展開</td></tr>
+    <tr><td>股票可以做 SWOT PK 嗎？</td><td>可以，但更推薦專門工具（講師示範 taiwan-stock-analyzer v63：熱力圖／排行／ETF20／庫存分析）</td></tr>
+    <tr><td>裝別人的 skill 怕不安全？</td><td>「可以請 AI 說明 repo 功能、跟檢查安全性」——安裝前先讓 AI 審一輪</td></tr>
+  </table></div>
+</section>
+
+<!-- ====== 12 來源 ====== -->
+<section class="chapter" id="s12">
+  <span class="chip" style="background:var(--ink3)">12 · 來源</span>
+  <h2 class="ct">資料來源與整理說明</h2>
+  <ul class="pt">
+    <li><b>錄影逐幀</b>：課程錄影 3:12:01，依密度分級（&gt;150 分）每 40 秒抽 1 格、共 288 格，逐格人工閱讀記錄；文中時間戳 <span class="ts">[mm:ss]</span> 為錄影時間（19:55 開錄）。</li>
+    <li><b>逐字稿</b>：faster-whisper（small/int8）全程轉寫，金句與講解口吻依逐字稿校對。</li>
+    <li><b>工具細節</b>：直接讀取 Drive「第一堂」資料夾 12 個 HTML 原始檔交叉核對（功能清單、模型名、參數皆出自原始碼）。</li>
+    <li><b>截圖</b>：全部為錄影實際畫面（已裁去與會者側欄）。</li>
+    <li>「系列課程脈絡補充」僅見於第 11 節影片復刻一問的答覆；其餘內容均對得到畫面、逐字稿或原始碼。</li>
+  </ul>
+  <p style="margin-top:10px">原始教材：<a href="https://drive.google.com/drive/folders/1c6AoFjqyugptDw0nX7RKiOxn7XnWFQdN" target="_blank" rel="noopener">Drive「第一堂」資料夾</a> · 開源成果：<a href="https://github.com/yangchunyi0814/Split_PDF_Chapters" target="_blank" rel="noopener">Split_PDF_Chapters</a> · 相關網站：<a href="https://ithuan.tw" target="_blank" rel="noopener">意傳科技</a>、<a href="https://arena.ai" target="_blank" rel="noopener">LMArena</a>、<a href="https://github.com/microsoft/markitdown" target="_blank" rel="noopener">MarkItDown</a></p>
+</section>
+
+</article>
+</div>
+
+<footer>
+  🍀Learn AI with Tarshar · 訂閱制第三季第一堂逐幀筆記<br>
+  <a href="../radio/#ecf">回課程筆記館（訂閱制課程）</a> · <a href="s3e1-ai-skills.html">互動技能地圖</a>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Node-RED 研習營 (I)｜互動式學習地圖</title>
+<meta name="description" content="2026/7/19 Node-RED 研習營 (I)（益師傅）互動式學習地圖：Node-RED 的本質與節點觀念、介面與第一條 inject→debug 流程、inject 排程、flow JSON 匯入匯出、串接 Groq 與 OpenRouter、環境部 AQI 實戰與 find is not a function 除錯。多層次可點擊、可打勾記憶進度。">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269;
+  --green:#3f8560; --orange:#bf6a1e; --red:#c0453f; --teal:#0d8f80; --amber:#9c7b23;
+  --feat:#b5372f; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(28px,4.6vw,46px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--txt);background:none;-webkit-text-fill-color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:680px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:9px}
+.steps li{list-style:none;counter-increment:st;display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--txt2);line-height:1.7}
+.steps li::before{content:counter(st);flex:none;width:25px;height:25px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:var(--c,var(--feat));margin-top:1px}
+.steps li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+.prompt,.promptbox{background:#1d1d1f;border:1px solid #2c2c31;border-radius:10px;padding:13px 15px;margin-top:6px;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt b,.promptbox b{color:#fff}
+figure.shot{margin:10px 0 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12px;color:var(--txt3);padding:8px 12px;border-top:1px solid var(--line);background:var(--bg2);line-height:1.6}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <div class="brand">
+    <span class="dot"></span>
+    <div>
+      <h1>Node-RED 研習營 (I)</h1>
+      <p>互動式學習地圖 · 益師傅</p>
+    </div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋技能關鍵字：節點、inject、payload、部署、排程、匯入、Groq、OpenRouter、AQI、find…" autocomplete="off">
+  </div>
+  <a class="navlink" href="nodered1-notes.html">📝 課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">訂閱制課程 · Node-RED 研習營 (I) · 2026/07/19</span>
+  <h1>從第一條流程<br>到串接 AI API</h1>
+  <p class="sub">Node-RED 把「跟各種平台串接」封裝成一顆一顆<b>節點</b>，你用拖拉的方式接起來就好。這場從<b>介面認識</b>、<b>第一條 inject→debug</b> 一路做到<b>串 AI API</b> 與<b>抓真實開放資料</b>，連中途踩到的錯誤都完整重現。<br>點進每一章，逐層展開<b>本場實際教到</b>的觀念與操作，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🧩 Node-RED 研習營系列</span>
+    <span>👤 益師傅（楊俊益・ECF）</span>
+    <span>🔰 小白友善</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>5</b><span>大主題</span></div>
+  <div class="stat"><b>15</b><span>實戰技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 15 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--red)" onclick="showChapter('why')">
+        <div class="glowline"></div><span class="emoji">🧩</span>
+        <h3><em>CHAPTER 01</em>Node-RED 是什麼、為什麼是它</h3>
+        <p>物聯網的老問題、節點＝Library 的概念、它為什麼不只是 IoT，以及跟 n8n 的差別。</p>
+        <div class="foot"><div class="mini"><i data-mini="why"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--orange)" onclick="showChapter('basic')">
+        <div class="glowline"></div><span class="emoji">🛠️</span>
+        <h3><em>CHAPTER 02</em>介面與第一條流程</h3>
+        <p>安裝與四大區塊、inject→debug 第一條流程、msg 與 payload、把 inject 當排程器用。</p>
+        <div class="foot"><div class="mini"><i data-mini="basic"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--purple)" onclick="showChapter('flowjson')">
+        <div class="glowline"></div><span class="emoji">📦</span>
+        <h3><em>CHAPTER 03</em>flow JSON：匯入與匯出</h3>
+        <p>三條線選單匯入別人的 flow、匯出前一定要先取消選取，以及這場用到的四個 JSON。</p>
+        <div class="foot"><div class="mini"><i data-mini="flowjson"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--blue)" onclick="showChapter('api')">
+        <div class="glowline"></div><span class="emoji">🤖</span>
+        <h3><em>CHAPTER 04</em>串 AI API：Groq 與 OpenRouter</h3>
+        <p>串任何 AI API 的通用四段式、Groq 與 OpenRouter 實作，以及看不懂 API 文件時怎麼問 AI。</p>
+        <div class="foot"><div class="mini"><i data-mini="api"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--teal)" onclick="showChapter('aqi')">
+        <div class="glowline"></div><span class="emoji">🌤️</span>
+        <h3><em>CHAPTER 05</em>實戰：AQI 與除錯全紀錄</h3>
+        <p>抓環境部空氣品質資料、用 find() 取出指定測站，以及 find is not a function 的完整除錯過程。</p>
+        <div class="foot"><div class="mini"><i data-mini="aqi"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+
+    <div class="resources">
+      <h3>📦 <span>課程原始資料</span></h3>
+      <div class="res-grid">
+        <a href="nodered1-notes.html"><span class="ic">📝</span><span><b>課堂筆記</b>逐幀整理＋錄影內嵌</span></a>
+        <a href="nodered2-notes.html"><span class="ic">🧱</span><span><b>研習營 (II)</b>把自己的程式變成一顆節點</span></a>
+        <a href="https://drive.google.com/drive/folders/1mxF4eKWWE-pQm_riuJN25Y5mc6W-zYbZ" target="_blank"><span class="ic">🗂️</span><span><b>課程資料夾</b>錄影＋四個 flow JSON</span></a>
+        <a href="../radio/#subscription"><span class="ic">📦</span><span><b>訂閱制課程</b>回系列總覽</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-why" class="view" style="--c:var(--red)"></section>
+  <section id="view-basic" class="view" style="--c:var(--orange)"></section>
+  <section id="view-flowjson" class="view" style="--c:var(--purple)"></section>
+  <section id="view-api" class="view" style="--c:var(--blue)"></section>
+  <section id="view-aqi" class="view" style="--c:var(--teal)"></section>
+</main>
+
+<footer>
+  本頁為 Node-RED 研習營 (I)「從第一條流程到串接 AI API」課後整理・介面沿用本站互動式學習地圖版型<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2026｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+const DATA = {
+ "why": {
+  "key": "why",
+  "color": "var(--red)",
+  "emoji": "🧩",
+  "code": "CHAPTER 01",
+  "title": "Node-RED 是什麼、為什麼是它",
+  "intro": "開場 40 分鐘老師幾乎沒碰程式，全在講這件事的來龍去脈。搞懂這一章，後面每一個操作才知道自己在幹嘛。",
+  "topics": [
+   {
+    "t": "從物聯網的老問題說起",
+    "s": "每個平台都有自己的串接方式｜錄影 03:33",
+    "blocks": [
+     {
+      "h": "以前的痛點",
+      "ul": [
+       "玩 Arduino、ESP32 想顯示溫濕度，得寫在那塊小小的顯示器上",
+       "想送到網頁、手機、資料庫，<b>每個平台都有不同的串接方式</b>",
+       "每加一個平台，就多一份要維護的程式"
+      ]
+     },
+     {
+      "h": "Node-RED 的解法",
+      "p": "把「跟某個平台串接」這件事<b>簡化成一顆節點</b>。老師的原話：<b>你就把節點想成一個 Library 的概念一樣。</b>"
+     },
+     {
+      "h": "規模感",
+      "ul": [
+       "現成節點有幾十顆",
+       "常在用的人，Library 裡可能有好幾百顆節點"
+      ]
+     },
+     {
+      "h": "看課堂筆記",
+      "p": "👉 <a href=\"nodered1-notes.html#sec-why\" style=\"color:var(--red)\">筆記 2：Node-RED 是什麼、為什麼是它</a>"
+     }
+    ]
+   },
+   {
+    "t": "它不只是物聯網",
+    "s": "資料庫、機器學習、排程、AI 都能串｜錄影 08:30",
+    "blocks": [
+     {
+      "h": "能串什麼",
+      "ul": [
+       "MySQL 等<b>資料庫</b>",
+       "TensorFlow 這類<b>機器學習</b>的東西",
+       "MQTT、HTTP API、AI 模型",
+       "<b>內建排程</b>：不用另外寫 cron"
+      ]
+     },
+     {
+      "h": "老師的定義",
+      "tip": "「Node-RED 最大的好處，是可以把<b>兩個不同的功能串接起來</b>，變成一個很強大的功能。」［錄影 01:41:30］"
+     },
+     {
+      "h": "跟 n8n 的差別",
+      "table": {
+       "head": [
+        "",
+        "n8n",
+        "Node-RED"
+       ],
+       "rows": [
+        [
+         "上手",
+         "更快",
+         "稍微難一點點"
+        ],
+        [
+         "彈性",
+         "看官方支援的整合",
+         "<b>可以自己做節點</b>"
+        ],
+        [
+         "老師的建議",
+         "入門很好用",
+         "想長期自己擴充選這個"
+        ]
+       ]
+      }
+     },
+     {
+      "h": "看課堂筆記",
+      "p": "👉 <a href=\"nodered1-notes.html#sec-why\" style=\"color:var(--red)\">筆記 2：它不只是物聯網</a>"
+     }
+    ]
+   },
+   {
+    "t": "他為什麼要推這件事",
+    "s": "四五年前決定主動推｜錄影 09:21",
+    "blocks": [
+     {
+      "h": "起心動念",
+      "p": "「這樣一個那麼棒的平台，為什麼大家不去推它？」——這就是他四、五年前開始推 Node-RED 的原因。"
+     },
+     {
+      "h": "課程規劃",
+      "p": "這不是單堂課，而是<b>一系列研習營</b>，會從基礎一路往上疊（第二場就進到「自己做節點」）。"
+     },
+     {
+      "h": "看課堂筆記",
+      "p": "👉 <a href=\"nodered1-notes.html#sec-why\" style=\"color:var(--red)\">筆記 2：他為什麼要推這件事</a>"
+     }
+    ]
+   }
+  ]
+ },
+ "basic": {
+  "key": "basic",
+  "color": "var(--orange)",
+  "emoji": "🛠️",
+  "code": "CHAPTER 02",
+  "title": "介面與第一條流程",
+  "intro": "裝好、打開、認得畫面、拉出一條會跑的流程。這一章全部都是動手做，做完你就有了 Node-RED 的肌肉記憶。",
+  "topics": [
+   {
+    "t": "安裝與打開編輯器",
+    "s": "先裝 Node.js，再開 127.0.0.1:1880｜錄影 17:25",
+    "blocks": [
+     {
+      "h": "三步驟",
+      "steps": [
+       "<b>先裝 Node.js</b>：Node-RED 跑在它上面",
+       "在瀏覽器輸入 <code>127.0.0.1:1880</code>（老師的環境改成 18800，所以錄影裡網址不一樣是正常的）",
+       "Chrome、Edge 都可以，它就是一個網頁介面"
+      ]
+     },
+     {
+      "h": "畫面上的四塊",
+      "table": {
+       "head": [
+        "區塊",
+        "位置",
+        "做什麼"
+       ],
+       "rows": [
+        [
+         "節點面板",
+         "左側",
+         "所有可用節點，有搜尋框可過濾"
+        ],
+        [
+         "工作區",
+         "中間",
+         "拖節點、拉線的地方"
+        ],
+        [
+         "標籤頁",
+         "上方",
+         "一個標籤頁＝一個流程"
+        ],
+        [
+         "右側面板",
+         "右側",
+         "資訊／說明／<b>除錯窗口</b>（小蟲圖示）"
+        ]
+       ]
+      }
+     },
+     {
+      "h": "看課堂筆記",
+      "p": "👉 <a href=\"nodered1-notes.html#sec-ui\" style=\"color:var(--red)\">筆記 3：安裝與介面</a>"
+     }
+    ]
+   },
+   {
+    "t": "inject → debug：第一條流程",
+    "s": "兩顆節點講完核心觀念｜錄影 01:11:31",
+    "blocks": [
+     {
+      "h": "五個動作",
+      "steps": [
+       "拖一顆 <b>inject</b>（老師形容它「有點像一個開關」，是觸發者）",
+       "拖一顆 <b>debug</b>",
+       "把 inject 右邊小圓點<b>拉線</b>接到 debug 左邊小圓點",
+       "按右上角<b>部署</b>——這代表程式已經完成、開始運作",
+       "點 inject 左邊方形按鈕觸發，除錯窗口就會跳出結果"
+      ]
+     },
+     {
+      "h": "一定要記得",
+      "warn": "<b>改完一定要按部署。</b>工作區改了東西，部署鈕會變紅，按下去才算真的生效，否則你觸發的還是舊的程式。"
+     },
+     {
+      "h": "實機畫面",
+      "shot": {
+       "img": "nodered1-img/01-basic-aqi-flow.jpg",
+       "cap": "編輯器全貌：左側節點面板、中間流程、右側除錯窗口。"
+      }
+     },
+     {
+      "h": "看課堂筆記",
+      "p": "👉 <a href=\"nodered1-notes.html#sec-first\" style=\"color:var(--red)\">筆記 4：第一條流程</a>"
+     }
+    ]
+   },
+   {
+    "t": "msg 與 payload：訊息長什麼樣",
+    "s": "payload 是這則訊息真正的內容｜錄影 01:15:06",
+    "blocks": [
+     {
+      "h": "觀念",
+      "ul": [
+       "節點之間傳的東西叫 <code>msg</code>，是一個 JSON 物件",
+       "最重要的欄位是 <code>msg.payload</code>——<b>這則訊息真正的內容</b>",
+       "還有 <code>msg.topic</code>（主題，串 MQTT 時會用到）"
+      ]
+     },
+     {
+      "h": "inject 預設送什麼",
+      "p": "預設是<b>時間戳</b>：一長串數字，Unix 時間、以千分之一秒為單位。台灣是 UTC+8。"
+     },
+     {
+      "h": "改成別的",
+      "prompt": "// inject 節點的 payload 可以改成字串／數字／布林值\n// 老師示範改成字串：\nHello World\n// 觸發後除錯窗口就印出 Hello World"
+     },
+     {
+      "h": "看課堂筆記",
+      "p": "👉 <a href=\"nodered1-notes.html#sec-first\" style=\"color:var(--red)\">筆記 4：那個跳出來的數字是什麼</a>"
+     }
+    ]
+   },
+   {
+    "t": "把 inject 變成排程器",
+    "s": "以前要寫程式的事，現在是下拉選單｜錄影 01:21:41",
+    "blocks": [
+     {
+      "h": "三種設定",
+      "table": {
+       "head": [
+        "設定",
+        "意思",
+        "典型用途"
+       ],
+       "rows": [
+        [
+         "間隔重複",
+         "每隔 N 秒／分自動觸發",
+         "每 5 分鐘抓一次感測值"
+        ],
+        [
+         "指定時間",
+         "幾點幾分做什麼，可挑星期幾",
+         "每天早上九點送一則 LINE 訊息"
+        ],
+        [
+         "部署後立即執行",
+         "Node-RED 一啟動就先跑一次",
+         "開機自動初始化"
+        ]
+       ]
+      }
+     },
+     {
+      "h": "為什麼這很重要",
+      "tip": "「這個我們以前要寫成程式。」尤其在 MQTT、物聯網的場景，排程原本要另外寫一支程式或設 cron，在這裡就是一個下拉選單。"
+     },
+     {
+      "h": "看課堂筆記",
+      "p": "👉 <a href=\"nodered1-notes.html#sec-first\" style=\"color:var(--red)\">筆記 4：把 inject 變成排程器</a>"
+     }
+    ]
+   }
+  ]
+ },
+ "flowjson": {
+  "key": "flowjson",
+  "color": "var(--purple)",
+  "emoji": "📦",
+  "code": "CHAPTER 03",
+  "title": "flow JSON：匯入與匯出",
+  "intro": "整場課「請大家匯入這個檔案」出現至少五次。這是 Node-RED 分享程式的標準方式，一定要熟。",
+  "topics": [
+   {
+    "t": "匯入別人給你的 flow",
+    "s": "三條線 → 匯入 → 選檔案｜錄影 01:25:32",
+    "blocks": [
+     {
+      "h": "五個步驟",
+      "steps": [
+       "點右上角<b>三條線</b>選單",
+       "選<b>匯入（Import）</b>",
+       "選「匯入所選擇的檔案」，挑 <code>.json</code> 檔，按開啟",
+       "選要匯入到<b>目前流程</b>還是<b>新流程</b>——老師建議選新流程（導入副本）",
+       "看右下角有沒有錯誤訊息，沒有就成功"
+      ]
+     },
+     {
+      "h": "這場用到的四個檔",
+      "table": {
+       "head": [
+        "檔案",
+        "在做什麼"
+       ],
+       "rows": [
+        [
+         "BasicAQI.json",
+         "抓環境部空氣品質開放資料"
+        ],
+        [
+         "Flow與Global.json",
+         "三層變數示範（F1～F6）"
+        ],
+        [
+         "Groq_API.json",
+         "串 Groq 的完整四段式流程"
+        ],
+        [
+         "OpenRouter.json",
+         "串 OpenRouter 的 DeepSeek R1"
+        ]
+       ]
+      }
+     },
+     {
+      "h": "看課堂筆記",
+      "p": "👉 <a href=\"nodered1-notes.html#sec-json\" style=\"color:var(--red)\">筆記 5：匯入與匯出</a>"
+     }
+    ]
+   },
+   {
+    "t": "匯出給別人：先取消選取",
+    "s": "最容易踩的小坑｜錄影 01:45:41",
+    "blocks": [
+     {
+      "h": "常見錯誤",
+      "warn": "如果匯出前剛好<b>點到某一顆節點</b>，匯出的就只有那一顆。老師的做法是<b>先在空白處點一下取消選取</b>，再匯出整個流程。"
+     },
+     {
+      "h": "另一個提醒",
+      "tip": "<b>JSON 不能亂丟。</b>Node-RED 的 flow JSON 有固定結構（每個節點有 id／type／wires），把隨便一個 JSON 丟進來匯入就會出錯。"
+     },
+     {
+      "h": "看課堂筆記",
+      "p": "👉 <a href=\"nodered1-notes.html#sec-json\" style=\"color:var(--red)\">筆記 5：把自己的 flow 匯出給別人</a>"
+     }
+    ]
+   }
+  ]
+ },
+ "api": {
+  "key": "api",
+  "color": "var(--blue)",
+  "emoji": "🤖",
+  "code": "CHAPTER 04",
+  "title": "串 AI API：Groq 與 OpenRouter",
+  "intro": "本場第一個高潮：讓 Node-RED 直接去問 AI。兩家都有免費額度，流程長得幾乎一樣。",
+  "topics": [
+   {
+    "t": "通用的四段式結構",
+    "s": "看懂這個，換任何一家 API 都會接",
+    "blocks": [
+     {
+      "h": "四段",
+      "steps": [
+       "<b>inject</b>：把你的問題放在 payload",
+       "<b>function</b>：組 headers＋payload",
+       "<b>http request</b>：POST 到 API 網址",
+       "<b>function → debug</b>：把回應挖出想要的那一段"
+      ]
+     },
+     {
+      "h": "三個一定要給對的東西",
+      "ul": [
+       "<code>Authorization</code> 帶 API Key",
+       "<code>Content-Type: application/json</code>",
+       "指定 <code>model</code> 名稱"
+      ]
+     },
+     {
+      "h": "看課堂筆記",
+      "p": "👉 <a href=\"nodered1-notes.html#sec-api\" style=\"color:var(--red)\">筆記 6：串 AI API</a>"
+     }
+    ]
+   },
+   {
+    "t": "Groq 實作",
+    "s": "申請 key → 組請求 → 一層層展開回應｜錄影 01:29:37",
+    "blocks": [
+     {
+      "h": "function 節點的內容",
+      "prompt": "const apiKey = \"<你的 Groq API Key>\";\n\nmsg.headers = {\n  \"Content-Type\": \"application/json\",\n  \"Authorization\": \"Bearer \" + apiKey\n};\nmsg.payload = {\n  model: \"llama-3.3-70b-versatile\",\n  messages: [{ role: \"user\", content: msg.payload }]\n};\nreturn msg;"
+     },
+     {
+      "h": "怎麼看回應",
+      "p": "在除錯窗口<b>一層一層展開</b>：<code>payload → choices → 陣列第 0 筆 → message → content</code>。"
+     },
+     {
+      "h": "申請時注意",
+      "warn": "申請金鑰時<b>要設到期日</b>；金鑰不要寫死後直接分享檔案給別人（老師課堂上也提醒過會被鎖住的風險）。"
+     },
+     {
+      "h": "看課堂筆記",
+      "p": "👉 <a href=\"nodered1-notes.html#sec-api\" style=\"color:var(--red)\">筆記 6：Groq</a>"
+     }
+    ]
+   },
+   {
+    "t": "OpenRouter（DeepSeek R1）",
+    "s": "一把 key 串很多家平台｜錄影 01:44:04",
+    "blocks": [
+     {
+      "h": "function 節點的內容",
+      "prompt": "msg.headers = {\n  'Content-Type': 'application/json',\n  'Authorization': 'Bearer <你的 OpenRouter API Key>'\n};\nmsg.payload = {\n  \"model\": \"deepseek/deepseek-r1:free\",\n  \"messages\": [{ \"role\": \"user\", \"content\": \"你的問題\" }]\n};\nreturn msg;"
+     },
+     {
+      "h": "哪一個比較好用",
+      "tip": "老師的態度是<b>兩個都試</b>——反正都有免費額度。但要有心理準備：免費服務<b>太多人同時用會變慢或沒回應</b>，課堂上就真的遇到了。"
+     },
+     {
+      "h": "看不懂 API 文件怎麼辦",
+      "p": "API 官網的範例通常是 curl 或 Python。老師的實際做法：<b>把那段範例丟給 AI，請它改寫成 Node-RED function 節點的寫法</b>，再移植過來。他說自己串接時也是層層卡關，靠問 AI 一關一關過。"
+     },
+     {
+      "h": "看課堂筆記",
+      "p": "👉 <a href=\"nodered1-notes.html#sec-api\" style=\"color:var(--red)\">筆記 6：OpenRouter</a>"
+     }
+    ]
+   }
+  ]
+ },
+ "aqi": {
+  "key": "aqi",
+  "color": "var(--teal)",
+  "emoji": "🌤️",
+  "code": "CHAPTER 05",
+  "title": "實戰：AQI 與除錯全紀錄",
+  "intro": "最後一小時的主軸。這一章最值得看的不是成功，而是老師當場卡住、當場除錯的完整過程。",
+  "topics": [
+   {
+    "t": "抓環境部空氣品質開放資料",
+    "s": "四顆節點就抓得到全台 84 個測站｜錄影 01:41:05",
+    "blocks": [
+     {
+      "h": "流程",
+      "prompt": "inject（時間戳） → http request（GET） → json → debug"
+     },
+     {
+      "h": "API 網址",
+      "prompt": "GET https://data.moenv.gov.tw/api/v2/aqx_p_432\n      ?api_key=<你的 API Key>\n      &limit=1000\n      &sort=ImportDate%20desc\n      &format=json"
+     },
+     {
+      "h": "各節點怎麼設",
+      "ul": [
+       "<b>http request</b>：請求方式 GET，「返回」選 <b>UTF-8 字串</b>",
+       "<b>json</b>：把回來的字串轉成 JavaScript 物件",
+       "<b>debug</b>：會看到 <code>array[84]</code>，每筆是一個測站（sitename／county／aqi／status／pm2.5…）"
+      ]
+     },
+     {
+      "h": "怎麼申請 key",
+      "shot": {
+       "img": "nodered1-img/03-moenv-apply.jpg",
+       "cap": "搜尋「環境部 aqi api key」→ 進「API 使用說明」→ 註冊會員後平台寄給你一把 key（有效期一年）。"
+      }
+     },
+     {
+      "h": "看課堂筆記",
+      "p": "👉 <a href=\"nodered1-notes.html#sec-aqi\" style=\"color:var(--red)\">筆記 7：實戰 AQI</a>"
+     }
+    ]
+   },
+   {
+    "t": "只要其中一個測站：find()",
+    "s": "不會寫就連資料一起問 AI｜錄影 02:05:44",
+    "blocks": [
+     {
+      "h": "老師實際問 ChatGPT 的話",
+      "prompt": "若我需要找出 sitename = \"基隆\"，JavaScript 該如何寫\n\n（然後追加關鍵的第二句）\n若在 Node-RED 中？"
+     },
+     {
+      "h": "為什麼第二句是關鍵",
+      "tip": "同樣的邏輯，在 function 節點裡要用 <code>msg.payload</code> 並且 <code>return msg;</code>——這是初學者最常漏掉的一步。"
+     },
+     {
+      "h": "寫出來的樣子",
+      "prompt": "const result = msg.payload.find(item => item.sitename === \"基隆\");\n\nmsg.payload = result ? result.aqi : \"找不到基隆測站\";\nreturn msg;"
+     },
+     {
+      "h": "實機畫面",
+      "shot": {
+       "img": "nodered1-img/05-chatgpt-find-debug.jpg",
+       "cap": "ChatGPT 針對「在 Node-RED 中」給出的 function 節點寫法。"
+      }
+     },
+     {
+      "h": "看課堂筆記",
+      "p": "👉 <a href=\"nodered1-notes.html#sec-aqi\" style=\"color:var(--red)\">筆記 7：我只要基隆那一筆</a>"
+     }
+    ]
+   },
+   {
+    "t": "🐛 find is not a function",
+    "s": "整場最值錢的一段｜錄影 02:16:00",
+    "blocks": [
+     {
+      "h": "錯誤訊息",
+      "warn": "<code>TypeError: msg.payload.find is not a function</code>（同場還出現過 <code>Cannot read properties of undefined</code>）"
+     },
+     {
+      "h": "原因",
+      "p": "<code>.find()</code> 是<b>陣列</b>才有的方法。如果 <code>msg.payload</code> 這時候還是<b>字串</b>、或外面還包了一層物件，就沒有 find 可以用。<b>你以為的資料形狀，跟實際拿到的不一樣。</b>"
+     },
+     {
+      "h": "兩層解法",
+      "steps": [
+       "<b>檢查 json 節點</b>：把動作設成「永遠轉換為 JavaScript 物件」，確保進 function 之前已經是物件／陣列",
+       "<b>先驗證資料形狀再處理</b>：在 function 裡加一行檢查，把答案印在除錯窗口"
+      ]
+     },
+     {
+      "h": "驗證用的兩行",
+      "prompt": "node.warn(Array.isArray(msg.payload));   // true 才能用 .find()\nnode.warn(typeof msg.payload);"
+     },
+     {
+      "h": "實機畫面",
+      "shot": {
+       "img": "nodered1-img/06-debug-typeerror.jpg",
+       "cap": "除錯窗口裡紅色的 TypeError。整堂課出現了好幾次，都是同一類問題。"
+      }
+     },
+     {
+      "h": "帶得走的方法論",
+      "tip": "① 先用 debug 看清楚<b>資料實際長什麼樣</b>　② 不會寫就<b>連同資料範例一起問 AI</b>，並講明「在 Node-RED 的 function 節點裡」　③ 報錯就<b>把錯誤訊息整段貼回去</b>。老師自己的說法：熟 AI 的人，卡關的時間會短很多。"
+     },
+     {
+      "h": "看課堂筆記",
+      "p": "👉 <a href=\"nodered1-notes.html#sec-aqi\" style=\"color:var(--red)\">筆記 7：除錯全紀錄</a>"
+     }
+    ]
+   }
+  ]
+ }
+};
+const ORDER = ["why", "basic", "flowjson", "api", "aqi"];
+const $ = s=>document.querySelector(s);
+function renderChapter(ch){
+  const d=DATA[ch];const next=ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];const prev=ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html=`<div class="chapter-head"><span class="emoji">${d.emoji}</span><div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div></div>`;
+  d.topics.forEach((tp,i)=>{const id=`${ch}-${i}`;
+    html+=`<div class="topic" id="topic-${id}"><div class="topic-head" onclick="toggleTopic('${id}')"><span class="num">${i+1}</span><h4>${tp.t}<small>${tp.s}</small></h4><input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)"><span class="chev">▶</span></div><div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{html+=`<div class="block"><h5>${b.h}</h5>`;
+      if(b.p)html+=`<p>${b.p}</p>`;
+      if(b.ul)html+=`<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps)html+=`<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.table)html+=`<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.prompt)html+=`<div class="promptbox">${b.prompt}</div>`;
+      if(b.shot)html+=`<figure class="shot"><img src="${b.shot.img}" alt="" loading="lazy"><figcaption>${b.shot.cap}</figcaption></figure>`;
+      if(b.tip)html+=`<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn)html+=`<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html+=`</div>`;});
+    html+=`</div></div></div>`;});
+  html+=`<div class="chapnav"><a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a><a onclick="showHome()" style="text-align:center">回總覽<b>🏠 5 大主題</b></a><a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a></div>`;
+  $('#view-'+ch).innerHTML=html;
+}
+ORDER.forEach(renderChapter);
+function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('#view-'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function showHome(){switchView('home');$('#crumbs').style.display='none';clearSearch();}
+function showChapter(ch){switchView(ch);$('#crumbs').style.display='flex';$('#crumbHere').textContent=`${DATA[ch].emoji} ${DATA[ch].title}`;clearSearch();syncChecks();}
+function toggleTopic(id){$('#topic-'+id).classList.toggle('open');}
+function openTopic(ch,i){showChapter(ch);const el=$('#topic-'+ch+'-'+i);el.classList.add('open');setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+const KEY='nodered1-skills-v1';
+const store=()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){const s=store();if(val)s[id]=1;else delete s[id];localStorage.setItem(KEY,JSON.stringify(s));updateProgress();}
+const TOTAL=ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){const done=Object.keys(store()).length;const pct=Math.round(done/TOTAL*100);$('#progFill').style.width=pct+'%';$('#progText').textContent=`${done} / ${TOTAL} 項技能已掌握`;$('#statDone').textContent=done;$('#statPct').textContent=pct+'%';ORDER.forEach(ch=>{const sub=DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;const el=document.querySelector(`[data-mini="${ch}"]`);if(el)el.style.width=Math.round(sub/DATA[ch].topics.length*100)+'%';});}
+function syncChecks(){const s=store();document.querySelectorAll('input[data-skill]').forEach(cb=>{cb.checked=!!s[cb.dataset.skill];});}
+function resetProgress(){if(confirm('確定要清空所有打勾進度嗎？')){localStorage.removeItem(KEY);syncChecks();updateProgress();}}
+function stripTags(s){return s.replace(/<[^>]+>/g,'');}
+const INDEX=[];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{let body=tp.s+' ';tp.blocks.forEach(b=>{if(b.p)body+=stripTags(b.p)+' ';if(b.ul)body+=b.ul.map(stripTags).join(' ')+' ';if(b.steps)body+=b.steps.map(stripTags).join(' ')+' ';if(b.tip)body+=stripTags(b.tip)+' ';if(b.warn)body+=stripTags(b.warn)+' ';if(b.prompt)body+=stripTags(b.prompt)+' ';if(b.table)body+=b.table.rows.flat().map(stripTags).join(' ')+' ';});INDEX.push({ch,i,title:tp.t,body});}));
+$('#searchInput').addEventListener('input',e=>{const q=e.target.value.trim();const box=$('#searchResults');if(!q){box.classList.remove('show');box.innerHTML='';return;}const hits=INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));box.classList.add('show');if(!hits.length){box.innerHTML=`<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：節點、payload、部署、排程、Groq、AQI、find）</div>`;return;}const hl=s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);box.innerHTML=hits.map(x=>{const pos=x.body.toLowerCase().indexOf(q.toLowerCase());const snip=x.body.substr(Math.max(0,pos-20),90);return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})"><div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div><h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;}).join('');});
+function clearSearch(){$('#searchInput').value='';$('#searchResults').classList.remove('show');$('#searchResults').innerHTML='';}
+syncChecks();updateProgress();
+</script>
+</body>
+</html>

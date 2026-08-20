@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Node-RED 研習營 (II)｜互動式學習地圖</title>
+<meta name="description" content="2026/7/25 Node-RED 研習營 (II)（益師傅）互動式學習地圖：CAST 提示詞產生器與 ElevenLabs V3、context／flow／global 三層變數、用 Codex 把 HTML 程式與 SKILL.md 轉成 Node-RED 自訂節點、PDF_Split 實戰、節點安裝與 file inject 踩坑。多層次可點擊、可打勾記憶進度。">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269;
+  --green:#3f8560; --orange:#bf6a1e; --red:#c0453f; --teal:#0d8f80; --amber:#9c7b23;
+  --feat:#0d7a8f; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(28px,4.6vw,46px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--txt);background:none;-webkit-text-fill-color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:680px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:9px}
+.steps li{list-style:none;counter-increment:st;display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--txt2);line-height:1.7}
+.steps li::before{content:counter(st);flex:none;width:25px;height:25px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:var(--c,var(--feat));margin-top:1px}
+.steps li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+.prompt,.promptbox{background:#1d1d1f;border:1px solid #2c2c31;border-radius:10px;padding:13px 15px;margin-top:6px;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt b,.promptbox b{color:#fff}
+figure.shot{margin:10px 0 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12px;color:var(--txt3);padding:8px 12px;border-top:1px solid var(--line);background:var(--bg2);line-height:1.6}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <div class="brand">
+    <span class="dot"></span>
+    <div>
+      <h1>Node-RED 研習營 (II)</h1>
+      <p>互動式學習地圖 · 益師傅</p>
+    </div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋技能關鍵字：CAST、ElevenLabs、變數、flow、global、Codex、節點、PDF_Split、安裝、file inject…" autocomplete="off">
+  </div>
+  <a class="navlink" href="nodered2-notes.html">📝 課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">訂閱制課程 · Node-RED 研習營 (II) · 2026/07/25</span>
+  <h1>把自己的程式<br>變成一顆節點</h1>
+  <p class="sub">第一場學會拉流程、串 API，這場處理更關鍵的一步：<b>當現成節點不夠用怎麼辦？</b>答案是自己做一顆。老師當場用 <b>Codex</b> 把一支 HTML 程式變成 <b>OCR 節點</b>、把一份 <code>SKILL.md</code> 變成 <b>PDF_Split 節點</b>，真的把 389 頁的書切成 25 份。<br>點進每一章，逐層展開<b>本場實際教到</b>的觀念與操作，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🧩 Node-RED 研習營系列</span>
+    <span>👤 益師傅（楊俊益・ECF）</span>
+    <span>🔰 小白友善</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>5</b><span>大主題</span></div>
+  <div class="stat"><b>15</b><span>實戰技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 15 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--purple)" onclick="showChapter('cast')">
+        <div class="glowline"></div><span class="emoji">🎧</span>
+        <h3><em>CHAPTER 01</em>CAST 提示詞產生器與 ElevenLabs</h3>
+        <p>CAST v13.6 八步驟提示詞產生器、主持人與情緒曲線設定，以及 ElevenLabs V3 申請與接上。</p>
+        <div class="foot"><div class="mini"><i data-mini="cast"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--orange)" onclick="showChapter('vars')">
+        <div class="glowline"></div><span class="emoji">📦</span>
+        <h3><em>CHAPTER 02</em>三層變數：context／flow／global</h3>
+        <p>變數＝貼標籤的盒子、context／flow／global 三層範圍差別，以及 F1～F6 的實作觀察。</p>
+        <div class="foot"><div class="mini"><i data-mini="vars"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--accent)" onclick="showChapter('tonode')">
+        <div class="glowline"></div><span class="emoji">🧱</span>
+        <h3><em>CHAPTER 03</em>核心：把程式變成一顆節點</h3>
+        <p>為什麼要做成節點、一句話讓 Codex 轉換 HTML 程式，以及把 SKILL.md 變成節點的完整路徑。</p>
+        <div class="foot"><div class="mini"><i data-mini="tonode"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--green)" onclick="showChapter('pdfsplit')">
+        <div class="glowline"></div><span class="emoji">✂️</span>
+        <h3><em>CHAPTER 04</em>實戰：PDF_Split 節點</h3>
+        <p>PDF_Split 的輸入模式與兩個輸出、實際切出的驗證結果，以及 MQTT 圖像解析與 IoT 儀表板延伸。</p>
+        <div class="foot"><div class="mini"><i data-mini="pdfsplit"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--red)" onclick="showChapter('install')">
+        <div class="glowline"></div><span class="emoji">🐛</span>
+        <h3><em>CHAPTER 05</em>節點安裝與 file inject 踩坑</h3>
+        <p>palette 與 npm 兩種安裝方式、file inject 只給檔名導致分割失敗的除錯，以及官方論壇。</p>
+        <div class="foot"><div class="mini"><i data-mini="install"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+
+    <div class="resources">
+      <h3>📦 <span>課程原始資料</span></h3>
+      <div class="res-grid">
+        <a href="nodered2-notes.html"><span class="ic">📝</span><span><b>課堂筆記</b>逐幀整理＋錄影內嵌</span></a>
+        <a href="nodered1-notes.html"><span class="ic">🧩</span><span><b>研習營 (I)</b>從第一條流程到串接 AI API</span></a>
+        <a href="https://drive.google.com/drive/folders/1fUmTT0tSZ1KHBK0wYvFllYDI3BFF1obF" target="_blank"><span class="ic">🗂️</span><span><b>課程資料夾</b>錄影＋PDF_Split 節點專案</span></a>
+        <a href="../radio/#subscription"><span class="ic">📦</span><span><b>訂閱制課程</b>回系列總覽</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-cast" class="view" style="--c:var(--purple)"></section>
+  <section id="view-vars" class="view" style="--c:var(--orange)"></section>
+  <section id="view-tonode" class="view" style="--c:var(--accent)"></section>
+  <section id="view-pdfsplit" class="view" style="--c:var(--green)"></section>
+  <section id="view-install" class="view" style="--c:var(--red)"></section>
+</main>
+
+<footer>
+  本頁為 Node-RED 研習營 (II)「把自己的程式變成一顆節點」課後整理・介面沿用本站互動式學習地圖版型<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2026｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+const DATA = {
+ "cast": {
+  "key": "cast",
+  "color": "var(--purple)",
+  "emoji": "🎧",
+  "code": "CHAPTER 01",
+  "title": "CAST 提示詞產生器與 ElevenLabs",
+  "intro": "開場 40 分鐘介紹他自己迭代到 13.6 版的單檔 HTML 工具：把「一集語音節目該設定的東西」拆成八步驟表單，填完一鍵產生提示詞，還能直接生成音檔。",
+  "topics": [
+   {
+    "t": "CAST 在解決什麼問題",
+    "s": "NotebookLM 給你一張白紙，這裡給你八個欄位｜錄影 16:44",
+    "blocks": [
+     {
+      "h": "問題",
+      "p": "NotebookLM 這類工具給你的是「一張白紙」，你得自己想怎麼寫提示詞——<b>坦白講不容易</b>。"
+     },
+     {
+      "h": "CAST 的做法",
+      "ul": [
+       "把節目設定拆成 <b>8 個步驟的表單</b>",
+       "填完一鍵產生完整提示詞，可直接貼進 NotebookLM／Claude／ChatGPT",
+       "左邊「貼上文章自動填表」可丟純文字、網址或 .txt／.md／.pdf／.docx，由 AI 解析後自動填欄位"
+      ]
+     },
+     {
+      "h": "實機畫面",
+      "shot": {
+       "img": "nodered2-img/01-cast-prompt-builder.jpg",
+       "cap": "CAST v13.6 主畫面：上方 8 步驟進度條，左邊自動填表區。"
+      }
+     },
+     {
+      "h": "看課堂筆記",
+      "p": "👉 <a href=\"nodered2-notes.html#sec-cast\" style=\"color:var(--accent)\">筆記 2：CAST 語音摘要提示詞產生器</a>"
+     }
+    ]
+   },
+   {
+    "t": "八個步驟填什麼",
+    "s": "主題→聽眾→情緒曲線→主持人→節目設定→關鍵字→禁提→額外要求",
+    "blocks": [
+     {
+      "h": "逐項對照",
+      "table": {
+       "head": [
+        "步驟",
+        "內容",
+        "課堂示範值"
+       ],
+       "rows": [
+        [
+         "01 分析主題",
+         "主題名稱",
+         "提示詞工程於製造業的落地運用"
+        ],
+        [
+         "02 目標聽眾",
+         "影響術語密度與解釋深度",
+         "一般大眾"
+        ],
+        [
+         "03 情緒節奏曲線",
+         "W 型／漸強／先高後穩／雲霄飛車",
+         "先高後穩（嚴肅知識型）"
+        ],
+        [
+         "04 主持人設定",
+         "兩位、一正一反，各有語氣與人設",
+         "益師傅（正方・穩重）／小美人（反方・好奇）"
+        ],
+        [
+         "05 節目設定",
+         "長度 3-5／8-12／15-20 分",
+         "15-20 分"
+        ],
+        [
+         "06 焦點關鍵字",
+         "一定要提到的詞",
+         "AI、Agent"
+        ],
+        [
+         "07 禁止提及",
+         "不得出現的詞",
+         "競品名稱"
+        ],
+        [
+         "08 額外要求",
+         "繁中／口語化／金句／Hook…",
+         "繁中＋口語化"
+        ]
+       ]
+      }
+     },
+     {
+      "h": "實機畫面",
+      "shot": {
+       "img": "nodered2-img/02-cast-hosts.jpg",
+       "cap": "主持人設定畫面。右側還有特殊領域模板（八字命理、姓名學、股市解盤）與一般模板。"
+      }
+     },
+     {
+      "h": "看課堂筆記",
+      "p": "👉 <a href=\"nodered2-notes.html#sec-cast\" style=\"color:var(--accent)\">筆記 2：八個步驟填什麼</a>"
+     }
+    ]
+   },
+   {
+    "t": "ElevenLabs V3：申請與接上",
+    "s": "金鑰只顯示一次、記得選 V3｜錄影 26:32",
+    "blocks": [
+     {
+      "h": "六個步驟",
+      "steps": [
+       "到 <code>elevenlabs.io</code> 註冊（可用 Google 帳號）",
+       "免費方案可克隆自己的聲音，音色庫可存 10 個",
+       "左側<b>開發者 → API 金鑰 → 建立密鑰</b>",
+       "<b>一定要設到期時間</b>，而且金鑰<b>只顯示這一次</b>，先複製",
+       "貼回 CAST 的 ELEVENLABS API KEY 欄位，語音引擎<b>選 ElevenLabs V3</b>",
+       "設定 A／B 兩位主持人的聲音（A 可填自己克隆的 Voice ID）"
+      ]
+     },
+     {
+      "h": "實機畫面",
+      "shot": {
+       "img": "nodered2-img/03-elevenlabs-voices.jpg",
+       "cap": "ElevenLabs 音色庫：每個音色標了適用情境，可直接試聽。"
+      }
+     },
+     {
+      "h": "生出來會怎樣",
+      "tip": "CAST 會請 AI 寫出<b>帶情緒標籤</b>的雙主持人逐句對話（<code>[excited]</code>、<code>[curious]</code>、<code>[thoughtful]</code>），再合成 WAV 與黑底字幕 MP4。老師當場生成自己的聲音，語氣「很開心、很 High」——<b>情緒標籤會明顯影響結果</b>。另外工具有一萬字限制，長文要先切段。"
+     },
+     {
+      "h": "看課堂筆記",
+      "p": "👉 <a href=\"nodered2-notes.html#sec-eleven\" style=\"color:var(--accent)\">筆記 3：ElevenLabs V3</a>"
+     }
+    ]
+   }
+  ]
+ },
+ "vars": {
+  "key": "vars",
+  "color": "var(--orange)",
+  "emoji": "📦",
+  "code": "CHAPTER 02",
+  "title": "三層變數：context／flow／global",
+  "intro": "本場最扎實的基本功。老師用教材裡的 F1～F6 六個 function 一格一格示範，看完就懂了。",
+  "topics": [
+   {
+    "t": "變數是什麼：一個貼標籤的盒子",
+    "s": "老師的比喻｜錄影 48:15",
+    "blocks": [
+     {
+      "h": "比喻",
+      "p": "變數像個<b>盒子</b>：盒子裡的東西是什麼，端視你放了什麼進去，放進去的也可以改變。<b>為變數命名，就像為一個空盒子貼上標籤。</b>相對的，<b>常數</b>就是固定不變的那種。"
+     },
+     {
+      "h": "在 Node-RED 裡的特別之處",
+      "p": "因為流程是拖拉出來的、可以有很多條並行，所以「這個變數<b>誰看得到</b>」變成一個要特別學的觀念。"
+     },
+     {
+      "h": "看課堂筆記",
+      "p": "👉 <a href=\"nodered2-notes.html#sec-vars\" style=\"color:var(--accent)\">筆記 4：三層變數</a>"
+     }
+    ]
+   },
+   {
+    "t": "三層的範圍差別",
+    "s": "context 一顆節點／flow 一個標籤頁／global 整個 Node-RED",
+    "blocks": [
+     {
+      "h": "對照表",
+      "table": {
+       "head": [
+        "層級",
+        "寫法",
+        "看得到的範圍",
+        "什麼時候用"
+       ],
+       "rows": [
+        [
+         "context",
+         "<code>context.get/set()</code>",
+         "只有<b>這一顆節點</b>",
+         "節點內部計數、暫存"
+        ],
+        [
+         "flow",
+         "<code>flow.get/set()</code>",
+         "同一個<b>標籤頁</b>的所有節點",
+         "一條流程裡多個節點共用"
+        ],
+        [
+         "global",
+         "<code>global.get/set()</code>",
+         "<b>整個 Node-RED</b>，跨標籤頁",
+         "設定值、跨流程共用狀態"
+        ]
+       ]
+      }
+     },
+     {
+      "h": "包含關係",
+      "p": "三層是<b>包含關係</b>：context 最小、flow 中間、global 最大。"
+     },
+     {
+      "h": "選哪一層",
+      "warn": "<b>變數名稱在同一個標籤頁會打架。</b>如果兩個不相干的功能都取名 <code>counter</code>，flow 變數就會互相覆蓋。判斷原則：<b>能用小的就不要用大的</b>。"
+     },
+     {
+      "h": "看課堂筆記",
+      "p": "👉 <a href=\"nodered2-notes.html#sec-vars\" style=\"color:var(--accent)\">筆記 4：三層的差別</a>"
+     }
+    ]
+   },
+   {
+    "t": "F1～F6 實作與觀察",
+    "s": "跑一遍就懂了｜錄影 59:45 起",
+    "blocks": [
+     {
+      "h": "程式碼",
+      "prompt": "// F1／F2：context（只有自己看得到）\nvar counter = context.get('contextValue') || 0;\ncounter += 1;\nmsg.payload = \"F1 \" + msg.payload + \" \" + counter;\ncontext.set('contextValue', counter);\nreturn msg;\n\n// F3／F4：flow（同一個標籤頁共用）\nvar counter = flow.get('flowValue') || 0;\ncounter += 1;                       // F4 這裡是 += 2\nflow.set('flowValue', counter);\nreturn msg;"
+     },
+     {
+      "h": "|| 0 是在做什麼",
+      "tip": "第一次跑的時候 <code>context.get()</code> 拿到的是 <code>undefined</code>，用 <code>|| 0</code> 給它一個初始值，不然後面 +1 會壞掉。"
+     },
+     {
+      "h": "四個觀察重點",
+      "ul": [
+       "F1 按一次變 1、再按變 2——context 會<b>記住上一次</b>",
+       "F1 跟 F2 <b>各數各的</b>，互不影響",
+       "F3 加 1、F4 加 2 動的是<b>同一個</b> flowValue，交替按會累加",
+       "切到另一個標籤頁的 F6，<b>仍讀得到</b> globalValue"
+      ]
+     },
+     {
+      "h": "實機畫面",
+      "shot": {
+       "img": "nodered2-img/05-flow-global-flows.jpg",
+       "cap": "「flow 與 global 變數」標籤頁的五條流程：一般變數 ×2、With Flow +1、With Flow +2、With Global +3。"
+      }
+     },
+     {
+      "h": "看課堂筆記",
+      "p": "👉 <a href=\"nodered2-notes.html#sec-vars\" style=\"color:var(--accent)\">筆記 4：課堂上實際跑的程式碼</a>"
+     }
+    ]
+   }
+  ]
+ },
+ "tonode": {
+  "key": "tonode",
+  "color": "var(--accent)",
+  "emoji": "🧱",
+  "code": "CHAPTER 03",
+  "title": "核心：把程式變成一顆節點",
+  "intro": "這是整場的重點，也是第一場埋下的伏筆——當現成節點不夠用，就自己做一顆。",
+  "topics": [
+   {
+    "t": "為什麼要做成節點",
+    "s": "為了進到排程與流程管理｜錄影 01:27:09",
+    "blocks": [
+     {
+      "h": "老師的理由",
+      "p": "如果只是一支網頁程式，你<b>每次都得另外打開它、手動操作</b>。做成節點之後它就進到 Node-RED 裡：可以被排程觸發、可以跟其他節點串接、可以納入流程管理。"
+     },
+     {
+      "h": "原話",
+      "tip": "「我以後都只要在 Node-RED 裡頭去執行這個程式，全部都放在 Node-RED 裡頭來，所謂的<b>排程管理</b>的概念。」"
+     },
+     {
+      "h": "看課堂筆記",
+      "p": "👉 <a href=\"nodered2-notes.html#sec-tonode\" style=\"color:var(--accent)\">筆記 5：為什麼要做成節點</a>"
+     }
+    ]
+   },
+   {
+    "t": "案例一：HTML 程式 → OCR 節點",
+    "s": "一句話包含轉換、命名、安裝、範例、置入｜錄影 01:25:14",
+    "blocks": [
+     {
+      "h": "素材",
+      "p": "他之前寫的一支網頁程式「全能辨識系統 v3.html」。"
+     },
+     {
+      "h": "丟給 Codex 的指令（值得原句抄下來）",
+      "prompt": "將這程式 轉換成 Node-RED 節點運用，名稱為 OCR，\n可以支援 Groq API 運用，也將這個節點進行安裝，\n並提供 Node-RED 程式案例 置入於 Node-RED 環境中"
+     },
+     {
+      "h": "這句話的結構",
+      "ul": [
+       "<b>轉換</b>成什麼",
+       "<b>命名</b>叫什麼",
+       "<b>指定要支援</b>什麼（Groq API）",
+       "順便<b>安裝</b>",
+       "順便<b>給範例</b>",
+       "順便<b>放進環境</b>"
+      ]
+     },
+     {
+      "h": "Codex 產出了什麼",
+      "table": {
+       "head": [
+        "檔案",
+        "作用"
+       ],
+       "rows": [
+        [
+         "<code>package.json</code>",
+         "節點套件定義檔（Node-RED 靠它認得）"
+        ],
+        [
+         "<code>ocr.js</code>",
+         "節點的後端邏輯（呼叫 Groq 視覺模型）"
+        ],
+        [
+         "<code>ocr.html</code>",
+         "節點在編輯器裡的<b>設定畫面</b>與說明"
+        ],
+        [
+         "<code>README.md</code>",
+         "使用說明"
+        ],
+        [
+         "<code>examples/…flow.json</code>",
+         "可直接匯入的範例流程"
+        ]
+       ]
+      }
+     },
+     {
+      "h": "實機畫面",
+      "shot": {
+       "img": "nodered2-img/06-ocr-node-config.jpg",
+       "cap": "做出來的 OCR 節點設定畫面：Vision Model 用 qwen/qwen3.6-27b、摘要 Model 用 llama-3.3-70b-versatile。左上角面板已出現 ECF › OCR。"
+      }
+     },
+     {
+      "h": "AI 自己講出的限制",
+      "warn": "Codex 主動說明：原本 HTML 版靠瀏覽器的 PDF.js 先把 PDF 轉圖片，改成節點後<b>先支援圖片</b>（Buffer、base64、data URL、圖片 URL、本機路徑）。<b>會被 AI 講明的限制，比默默略過的好</b>——這正是驗收 AI 產出時要看的地方。"
+     },
+     {
+      "h": "看課堂筆記",
+      "p": "👉 <a href=\"nodered2-notes.html#sec-tonode\" style=\"color:var(--accent)\">筆記 5：案例一 OCR 節點</a>"
+     }
+    ]
+   },
+   {
+    "t": "案例二：SKILL.md → PDF_Split 節點",
+    "s": "素材不是程式，是一份規格文件｜錄影 01:14:16",
+    "blocks": [
+     {
+      "h": "兩段式",
+      "steps": [
+       "先把 <code>Split_PDF_Chapters_SKILL.md</code> 變成 Codex 的 Skill：<b>「請將上傳的檔案 製作成一個 PDF切割.skill 為全域運用」</b>",
+       "做好後「下次只要輸入一個斜線」就能叫用（<code>/PDF切割</code>）",
+       "再進一步：把這個 Skill <b>變成 Node-RED 節點</b>"
+      ]
+     },
+     {
+      "h": "這條路徑的意義",
+      "tip": "你手上的「工作方法」只要能寫成一份規格文件（做什麼、依什麼順序、成功標準、什麼情況要拒絕），就能一路變成 Skill、再變成節點。"
+     },
+     {
+      "h": "SKILL.md 裡最有價值的是「不要做什麼」",
+      "ul": [
+       "封面、版權、目錄、前言、附錄、索引<b>預設都不切</b>成章節",
+       "<b>不允許</b>重疊的頁碼範圍、零頁的範圍",
+       "<b>不可以</b>默默接受可疑的範圍",
+       "掃描檔或文字抽取不佳時，<b>不可宣稱</b>自動偵測可靠"
+      ]
+     },
+     {
+      "h": "看課堂筆記",
+      "p": "👉 <a href=\"nodered2-notes.html#sec-tonode\" style=\"color:var(--accent)\">筆記 5：案例二 SKILL.md</a>"
+     }
+    ]
+   }
+  ]
+ },
+ "pdfsplit": {
+  "key": "pdfsplit",
+  "color": "var(--green)",
+  "emoji": "✂️",
+  "code": "CHAPTER 04",
+  "title": "實戰：PDF_Split 節點",
+  "intro": "教材資料夾裡有完整的節點專案與練習 flow。這一章把它拆開來看，並看實際切出來的結果。",
+  "topics": [
+   {
+    "t": "節點規格：輸入、模式、兩個輸出",
+    "s": "看懂這張表就會用",
+    "blocks": [
+     {
+      "h": "規格表",
+      "table": {
+       "head": [
+        "項目",
+        "內容"
+       ],
+       "rows": [
+        [
+         "輸入",
+         "<code>msg.pdfPath</code>、<code>msg.filename</code>、<code>msg.payload</code>（路徑字串或 PDF Buffer）"
+        ],
+        [
+         "可覆蓋設定",
+         "<code>msg.splitMode</code>、<code>msg.outputParent</code>、<code>msg.tocPage</code>、<code>msg.offset</code>、<code>msg.chapters</code>、<code>msg.dryRun</code>、<code>msg.overwrite</code>"
+        ],
+        [
+         "分割模式",
+         "<b>auto</b>（書籤／目錄／標題自動偵測）、<b>toc</b>、<b>headings</b>、<b>manual</b>（手動頁碼）"
+        ],
+        [
+         "第一個輸出",
+         "<code>msg.payload</code> 是 <b>manifest</b>：完整分割結果與驗證資訊"
+        ],
+        [
+         "第二個輸出",
+         "每個分割後的 PDF 各送一則訊息，<code>msg.filename</code> 是輸出路徑"
+        ],
+        [
+         "底層",
+         "包裝本機 <code>split_pdf_chapters.py</code>，需要 Python 與 <code>pypdf</code>"
+        ]
+       ]
+      }
+     },
+     {
+      "h": "實機畫面",
+      "shot": {
+       "img": "nodered2-img/08-pdf-split-node.jpg",
+       "cap": "PDF_Split 範例流程：兩種輸入（inject 放路徑／file inject 選檔）→ PDF_Split → manifest 與分割後 PDF 兩個 debug。"
+      }
+     },
+     {
+      "h": "看課堂筆記",
+      "p": "👉 <a href=\"nodered2-notes.html#sec-pdfsplit\" style=\"color:var(--accent)\">筆記 6：PDF_Split 節點</a>"
+     }
+    ]
+   },
+   {
+    "t": "實際切出來的結果",
+    "s": "一本書切成 8 章，每一份都驗證過｜錄影 01:17:30",
+    "blocks": [
+     {
+      "h": "Codex 端的輸出",
+      "p": "一本 Tableau 的書依書籤分割完成，共 <b>8 個章節檔案</b>，每項標了頁碼範圍與頁數（例：「01_1._AI_in_the_Tableau_Platform.pdf：第 20–43 頁，共 24 頁」），並產生 <code>manifest.json</code>。"
+     },
+     {
+      "h": "最後那一句驗證最重要",
+      "tip": "「<b>8 個 PDF 均可正常讀取，實際頁數全部符合章節範圍；原始 PDF 未被修改。</b>」這正是 SKILL.md 裡寫的成功標準之一——產生的檔案要<b>讀回來驗證過</b>才算完成。"
+     },
+     {
+      "h": "實機畫面",
+      "shot": {
+       "img": "nodered2-img/07-codex-pdf-split-result.jpg",
+       "cap": "Codex 的分割結果清單與驗證訊息。課堂後段又切了一本 389 頁的書，一口氣切出 25 份。"
+      }
+     },
+     {
+      "h": "Node-RED 端的實測",
+      "p": "學員貼出成功畫面：節點下方顯示 <code>Split 3 files</code>，除錯窗口印出 <code>count: 3, files: array[3], manifest: object</code> 與自訂警告「成功分割產出 3 個章節 PDF 檔案！」，下游還接一顆 function 解析 manifest。"
+     },
+     {
+      "h": "看課堂筆記",
+      "p": "👉 <a href=\"nodered2-notes.html#sec-pdfsplit\" style=\"color:var(--accent)\">筆記 6：實際切出來的結果</a>"
+     }
+    ]
+   },
+   {
+    "t": "延伸：MQTT 圖像解析與 IoT 儀表板",
+    "s": "節點做出來以後可以怎麼用｜錄影 01:34:00 · 02:15:00",
+    "blocks": [
+     {
+      "h": "IoT MQTT 儀表板",
+      "p": "<b>每 3 秒產生一組 IoT 模擬數值</b> → 發布到 MQTT public broker（溫度、濕度、CO2、照度、氣壓、震動、電壓、電流、功率、電池、水位共 11 個主題）→ mqtt in 訂閱回來 → 分流到 Dashboard 的 Gauge／Chart。Codex 回報：新增節點 29 顆、Dashboard HTTP 回應 200、使用 node-red-dashboard 3.6.5。"
+     },
+     {
+      "h": "實機畫面",
+      "shot": {
+       "img": "nodered2-img/09-iot-mqtt-dashboard.jpg",
+       "cap": "IoT MQTT Dashboard 流程：左側每 3 秒產生模擬值，右側 11 個發布主題。"
+      }
+     },
+     {
+      "h": "MQTT 圖像解析＋免費網頁 TTS",
+      "prompt": "將圖像解析運用改成 Groq API，並將原本 Gemini 語音運用\n改為免費的網頁 TTS 語音播放，並將這個新程式放入 Node-RED 中"
+     },
+     {
+      "h": "Codex 實際改了什麼",
+      "ul": [
+       "Gemini Vision API → <b>Groq 圖像解析</b>（模型 <code>meta-llama/llama-4-scout-17b-16e-instruct</code>）",
+       "<b>移除</b> Gemini TTS 與音訊轉 WAV、存檔流程",
+       "改用 Dashboard 內<b>瀏覽器內建的免費 TTS</b>（<code>speechSynthesis</code>）",
+       "順手修正原流程中 HTTP 回應沒接到解析節點的問題"
+      ]
+     },
+     {
+      "h": "帶得走的思路",
+      "tip": "<b>成本替換</b>：要花錢的雲端 TTS，在「只是要唸出來」的場景可以換成瀏覽器內建的語音合成，效果夠用而且不用錢。"
+     },
+     {
+      "h": "看課堂筆記",
+      "p": "👉 <a href=\"nodered2-notes.html#sec-more\" style=\"color:var(--accent)\">筆記 8：延伸應用</a>"
+     }
+    ]
+   }
+  ]
+ },
+ "install": {
+  "key": "install",
+  "color": "var(--red)",
+  "emoji": "🐛",
+  "code": "CHAPTER 05",
+  "title": "節點安裝與 file inject 踩坑",
+  "intro": "節點做好了不代表能用。這一章是安裝的兩種方式，以及那次「選了檔案卻分割失敗」的完整除錯。",
+  "topics": [
+   {
+    "t": "安裝節點的兩種方式",
+    "s": "palette 安裝／npm 本機路徑安裝｜錄影 01:32:40",
+    "blocks": [
+     {
+      "h": "① 從 palette 安裝（找得到現成的）",
+      "steps": [
+       "右上角三條線 → <b>設定</b> → <b>控制板／Palette</b>",
+       "切到「<b>安裝</b>」分頁，搜尋節點名稱，按安裝",
+       "「節點」分頁可看已安裝的模組，也能移除或停用"
+      ]
+     },
+     {
+      "h": "② 用 npm 裝本機做好的節點",
+      "prompt": "cd C:\\Users\\User\\.node-red\nnpm.cmd install \"E:\\Codex\\Node-RED OCR 節點\\node-red-contrib-pdf-split\" --save"
+     },
+     {
+      "h": "四個必記事項",
+      "ul": [
+       "<b>要切到 <code>.node-red</code> 目錄底下</b>再裝",
+       "裝完<b>一定要重啟 Node-RED</b>，節點才會出現",
+       "你做出來的節點<b>名稱可能跟老師的不一樣</b>（各自 AI 生成的），路徑要換成自己的",
+       "要用 file inject 選檔案，得先裝 <code>node-red-contrib-browser-utils</code>"
+      ]
+     },
+     {
+      "h": "看課堂筆記",
+      "p": "👉 <a href=\"nodered2-notes.html#sec-install\" style=\"color:var(--accent)\">筆記 7：節點安裝</a>"
+     }
+    ]
+   },
+   {
+    "t": "🐛 選了檔案卻「分割失敗」",
+    "s": "file inject 只給檔名、不給路徑｜錄影 01:59:53",
+    "blocks": [
+     {
+      "h": "現象",
+      "warn": "用畫面上的 file inject 選一個 PDF，接到 PDF_Split，結果顯示<b>分割失敗</b>。"
+     },
+     {
+      "h": "原因",
+      "p": "file inject 送出的 <code>msg.filename</code> <b>只有檔名</b>（例如 <code>OceanofPDF.com_Learning_AI_Tools_in_Tableau_-_Ann_Jackson.pdf</code>），<b>不是完整路徑</b>。舊版節點拿到就直接當路徑去找，當然找不到。"
+     },
+     {
+      "h": "老師怎麼修",
+      "p": "跟第一場一模一樣：<b>把現象講給 Codex 聽</b>——「能否根據自己所選的 PDF 檔？」"
+     },
+     {
+      "h": "Codex 改寫後的判斷邏輯",
+      "steps": [
+       "如果 <code>msg.pdfPath</code> / <code>msg.filename</code> / <code>msg.payload</code> 是<b>實際存在的 PDF 路徑</b>，才當路徑使用",
+       "如果不是完整路徑，但 <code>msg.payload</code> 是選取的 PDF 內容，就<b>先存成暫存 PDF</b> 再分割",
+       "同時支援 <code>Buffer</code>、<code>Uint8Array</code>、陣列、<code>payload.data</code> 等常見格式"
+      ]
+     },
+     {
+      "h": "結果",
+      "tip": "改完重新安裝、重啟 Node-RED，新版節點載入成功，再選檔案就正常切了。老師的評語：「<b>代表他絕對不是一次成功。</b>」"
+     },
+     {
+      "h": "看課堂筆記",
+      "p": "👉 <a href=\"nodered2-notes.html#sec-install\" style=\"color:var(--accent)\">筆記 7：file inject 踩坑</a>"
+     }
+    ]
+   },
+   {
+    "t": "另一個坑與求助管道",
+    "s": "輸出資料夾疊在一起、官方論壇｜錄影 01:57:35 · 02:07:43",
+    "blocks": [
+     {
+      "h": "輸出資料夾的坑",
+      "warn": "第一次用的時候，切出來的檔案<b>全部疊在同一層</b>。老師的要求是：<b>每一本書必須獨立給它一個資料夾</b>，才不會一本一本混在一起。這也是回頭跟 AI 講一句話就改掉的事。"
+     },
+     {
+      "h": "官方論壇",
+      "p": "<a href=\"https://discourse.nodered.org/\" target=\"_blank\" style=\"color:var(--accent)\">discourse.nodered.org</a>——不用登入就能看，裡面有大量 Dashboard 2.0 遷移、節點問題的討論串。老師建議<b>讓學生自己去看是最好的</b>。"
+     },
+     {
+      "h": "整場的心法",
+      "tip": "「這些一定要<b>動手做</b>，你才有辦法去駕馭這個 Node-RED 的節點。」／「你要會有這些想法，<b>都是別人的技能</b>，你的能力就一直往上提升。」"
+     },
+     {
+      "h": "看課堂筆記",
+      "p": "👉 <a href=\"nodered2-notes.html#sec-install\" style=\"color:var(--accent)\">筆記 7：另一個相關的坑</a>"
+     }
+    ]
+   }
+  ]
+ }
+};
+const ORDER = ["cast", "vars", "tonode", "pdfsplit", "install"];
+const $ = s=>document.querySelector(s);
+function renderChapter(ch){
+  const d=DATA[ch];const next=ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];const prev=ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html=`<div class="chapter-head"><span class="emoji">${d.emoji}</span><div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div></div>`;
+  d.topics.forEach((tp,i)=>{const id=`${ch}-${i}`;
+    html+=`<div class="topic" id="topic-${id}"><div class="topic-head" onclick="toggleTopic('${id}')"><span class="num">${i+1}</span><h4>${tp.t}<small>${tp.s}</small></h4><input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)"><span class="chev">▶</span></div><div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{html+=`<div class="block"><h5>${b.h}</h5>`;
+      if(b.p)html+=`<p>${b.p}</p>`;
+      if(b.ul)html+=`<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps)html+=`<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.table)html+=`<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.prompt)html+=`<div class="promptbox">${b.prompt}</div>`;
+      if(b.shot)html+=`<figure class="shot"><img src="${b.shot.img}" alt="" loading="lazy"><figcaption>${b.shot.cap}</figcaption></figure>`;
+      if(b.tip)html+=`<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn)html+=`<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html+=`</div>`;});
+    html+=`</div></div></div>`;});
+  html+=`<div class="chapnav"><a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a><a onclick="showHome()" style="text-align:center">回總覽<b>🏠 5 大主題</b></a><a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a></div>`;
+  $('#view-'+ch).innerHTML=html;
+}
+ORDER.forEach(renderChapter);
+function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('#view-'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function showHome(){switchView('home');$('#crumbs').style.display='none';clearSearch();}
+function showChapter(ch){switchView(ch);$('#crumbs').style.display='flex';$('#crumbHere').textContent=`${DATA[ch].emoji} ${DATA[ch].title}`;clearSearch();syncChecks();}
+function toggleTopic(id){$('#topic-'+id).classList.toggle('open');}
+function openTopic(ch,i){showChapter(ch);const el=$('#topic-'+ch+'-'+i);el.classList.add('open');setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+const KEY='nodered2-skills-v1';
+const store=()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){const s=store();if(val)s[id]=1;else delete s[id];localStorage.setItem(KEY,JSON.stringify(s));updateProgress();}
+const TOTAL=ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){const done=Object.keys(store()).length;const pct=Math.round(done/TOTAL*100);$('#progFill').style.width=pct+'%';$('#progText').textContent=`${done} / ${TOTAL} 項技能已掌握`;$('#statDone').textContent=done;$('#statPct').textContent=pct+'%';ORDER.forEach(ch=>{const sub=DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;const el=document.querySelector(`[data-mini="${ch}"]`);if(el)el.style.width=Math.round(sub/DATA[ch].topics.length*100)+'%';});}
+function syncChecks(){const s=store();document.querySelectorAll('input[data-skill]').forEach(cb=>{cb.checked=!!s[cb.dataset.skill];});}
+function resetProgress(){if(confirm('確定要清空所有打勾進度嗎？')){localStorage.removeItem(KEY);syncChecks();updateProgress();}}
+function stripTags(s){return s.replace(/<[^>]+>/g,'');}
+const INDEX=[];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{let body=tp.s+' ';tp.blocks.forEach(b=>{if(b.p)body+=stripTags(b.p)+' ';if(b.ul)body+=b.ul.map(stripTags).join(' ')+' ';if(b.steps)body+=b.steps.map(stripTags).join(' ')+' ';if(b.tip)body+=stripTags(b.tip)+' ';if(b.warn)body+=stripTags(b.warn)+' ';if(b.prompt)body+=stripTags(b.prompt)+' ';if(b.table)body+=b.table.rows.flat().map(stripTags).join(' ')+' ';});INDEX.push({ch,i,title:tp.t,body});}));
+$('#searchInput').addEventListener('input',e=>{const q=e.target.value.trim();const box=$('#searchResults');if(!q){box.classList.remove('show');box.innerHTML='';return;}const hits=INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));box.classList.add('show');if(!hits.length){box.innerHTML=`<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：CAST、變數、global、Codex、節點、PDF_Split、安裝）</div>`;return;}const hl=s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);box.innerHTML=hits.map(x=>{const pos=x.body.toLowerCase().indexOf(q.toLowerCase());const snip=x.body.substr(Math.max(0,pos-20),90);return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})"><div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div><h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;}).join('');});
+function clearSearch(){$('#searchInput').value='';$('#searchResults').classList.remove('show');$('#searchResults').innerHTML='';}
+syncChecks();updateProgress();
+</script>
+</body>
+</html>

@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S3E3 課堂筆記｜聲音復刻 × 貼課通：把單檔 AI 工具送上雲端</title>
+<meta name="description" content="訂閱制第三季第三堂（益師傅／楊俊益）逐幀課堂筆記：兩大自製工具——「聲刻 Voice Foundry」本機聲音克隆（含 ElevenLabs 雲端 TTS 對照、CAST Podcast 多角色工作室、CUDA/CPU fallback、倫理聲明）與「貼課通」課堂即時牆（教師版／學生版全功能巡禮）；核心一課是把純前端單檔工具用 CAST-STUDIO.exe 本機小伺服器與 Google Sites 嵌入＋發布，變成任何人可用的雲端 App。依錄影逐幀（每15秒、共585格）＋逐字稿整理。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#7a4bd0; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:760px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px;max-height:calc(100vh - 90px);overflow-y:auto}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:7px;border-left:none;font-size:13px}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.code{position:relative;background:var(--code);border:1px solid var(--line2);border-radius:10px;padding:13px 15px;margin:10px 0;font-size:13px;line-height:1.75;color:var(--ink);white-space:pre-wrap;font-family:"Cascadia Code",Consolas,monospace;overflow-x:auto}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.iframe-wrap{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000;margin:14px 0}
+.iframe-wrap iframe{display:block;width:100%;height:460px;border:0}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static;max-height:none} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} .iframe-wrap iframe{height:320px} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/#ecf" style="border-color:#c3aee8" onclick="if(history.length>1){history.back();return false}">← 回上一頁</a>
+  <b>📝 S3E3 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="s3e3-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 訂閱制第三季第三堂</span>
+  <h1>聲音復刻 × 貼課通：把<span>單檔 AI 工具</span>送上雲端</h1>
+  <p class="lead">這一堂益師傅一次示範<b>兩套自己用 AI 打造的工具</b>：一是<b>「聲刻 Voice Foundry」</b>——放一段 10～30 秒的乾淨人聲，就能在自己電腦上用相同音色把任何文字唸出來，還能拆成<b>多角色 Podcast（含台語）</b>；二是<b>「貼課通」課堂即時牆</b>——開一間房，全班連進來貼文字／圖片／影音，配上舉手、匿名提問、理解度紅綠燈、搶答、評分、協作白板等一整排互動功能。<br>但真正的重點是最後那一課：這些都是<b>「純前端單檔 HTML」</b>，可以用 <b>CAST-STUDIO.exe 本機小伺服器</b>雙擊即用，也能<b>嵌進 Google Sites 一鍵發布成公開網址</b>，任何人打開就能用。本頁依<b>兩段錄影逐幀（每 15 秒一格、共 585 格）＋全程逐字稿</b>整理，重點段落附影片時間戳。</p>
+  <div class="meta">
+    <span>📅 2026/08/14（四）20:00 直播</span>
+    <span>👤 講師：益師傅（楊俊益・ECF）</span>
+    <span>🗂️ 教材：2 段錄影＋4 個工具檔</span>
+    <span>🎙️ 主題：聲音克隆 × 課堂即時牆 × 工具上雲</span>
+    <span>🔰 小白友善</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-overview">1. 一張圖看懂本集</a>
+  <a href="#sec-opening">2. 開場：災難復原與專案搬遷</a>
+  <a href="#sec-shengke">3. 主角一：聲刻 Voice Foundry</a>
+  <a href="#sec-eleven">4. 對照組：ElevenLabs 雲端 TTS</a>
+  <a href="#sec-clone">5. 聲音克隆 SOP 與倫理聲明</a>
+  <a href="#sec-cast">6. CAST：Podcast 多角色工作室</a>
+  <a href="#sec-caststudio">7. 主角二：CAST STUDIO 獨立版</a>
+  <a href="#sec-tiketong">8. 主角三：貼課通課堂即時牆</a>
+  <a href="#sec-features">9. 貼課通功能巡禮</a>
+  <a href="#sec-cloud">10. 關鍵一課：單檔工具上雲</a>
+  <a href="#sec-aidev">11. 用 Codex／Claude 打造與除錯</a>
+  <a href="#sec-check">12. 課後自我檢核表</a>
+  <a href="#sec-quotes">13. 老師金句</a>
+  <a href="#sec-src">14. 資料來源與整理說明</a>
+</nav>
+
+<article>
+
+<!-- 0 -->
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--blue))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>生成式 AI 應用電台・訂閱制第三季 第三堂</td></tr>
+    <tr><th>直播日期</th><td>2026/08/14（四）晚間 20:00 開始，全長約 2 小時 26 分（分兩段錄影）</td></tr>
+    <tr><th>講師</th><td>益師傅（楊俊益，暱稱 ECF；智慧立方有限公司）</td></tr>
+    <tr><th>參與人數</th><td>約 80 位學員（Teams 線上直播，錄影中最多 83 人在線）</td></tr>
+    <tr><th>本堂主題</th><td>兩套自製工具：<b>聲刻 Voice Foundry</b>（本機聲音克隆＋Podcast）與<b>貼課通</b>（課堂即時牆）；核心觀念是「純前端單檔工具怎麼上雲」</td></tr>
+    <tr><th>課程教材</th><td>Drive 資料夾「第三堂」：課程錄影×2、聲刻-可攜版.zip、CAST-STUDIO-win.exe、貼課通-教師專業版.html、貼課通-學生專業版.html、BMC 商業模式畫布生成器.html</td></tr>
+  </table></div>
+
+  <h3>📁 課程資料夾（Google Drive）</h3>
+  <p>完整教材在這個共享資料夾，滑進去可看到兩段錄影與四個工具檔：</p>
+  <p style="margin-top:8px"><a href="https://drive.google.com/drive/folders/1GZoJFQsthck9M7hn3F3__lUx6WBjTFVv" target="_blank">🔗 開啟「第三堂」課程資料夾 ›</a></p>
+
+  <h3>🎬 課堂錄影（可直接在頁面播放）</h3>
+  <p class="cd">第一段（約 60 分）：聲刻聲音克隆＋ElevenLabs＋CAST Podcast。第二段（約 86 分）：CAST STUDIO 獨立版＋貼課通全功能＋上雲發布。</p>
+  <div class="iframe-wrap"><iframe src="https://drive.google.com/file/d/1ZXYOKR8vyv1ozn38b-goagUP9s7o0ads/preview" allow="autoplay" allowfullscreen></iframe></div>
+  <div class="iframe-wrap"><iframe src="https://drive.google.com/file/d/1dPR4EWqipqyqhnA_6mtiLvTBf5C9G772/preview" allow="autoplay" allowfullscreen></iframe></div>
+  <div class="note steel">🔧 <div>錄影為老師分享，若內嵌播放需先登入你自己的 Google 帳號（此資料夾已分享給你）。若頁面顯示載入中或權限提示，改從上面的「課程資料夾」連結進去即可。</div></div>
+
+  <h3>🧰 四個工具檔（都放在同一個資料夾）</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:170px">工具</th><th>檔案</th><th>一句話</th></tr>
+    <tr><td>聲刻 Voice Foundry</td><td>聲刻-可攜版.zip（約 7 GB，內含模型）</td><td>本機聲音克隆＋Podcast 生成，雙擊 <code>聲刻.exe</code> 啟動</td></tr>
+    <tr><td>CAST STUDIO</td><td>CAST-STUDIO-win.exe（約 15 MB）</td><td>聲刻 Podcast 工作室的獨立打包版</td></tr>
+    <tr><td>貼課通（教師版）</td><td>貼課通-教師專業版.html（單檔）</td><td>開房、管理、全互動功能的課堂即時牆</td></tr>
+    <tr><td>貼課通（學生版）</td><td>貼課通-學生專業版.html（單檔 271 KB）</td><td>輸入房號加入課堂，同源但關閉房主功能</td></tr>
+    <tr><td>BMC 生成器</td><td>BMC商業模式畫布生成器.html（單檔）</td><td>上傳資料→AI 拆解九宮格商業模式畫布（延伸工具）</td></tr>
+  </table></div>
+</section>
+
+<!-- 1 -->
+<section class="chapter" id="sec-overview">
+  <span class="chip" style="background:linear-gradient(90deg,var(--blue),var(--cyan))">BIG PICTURE</span>
+  <h2 class="ct">1. 一張圖看懂本集</h2>
+  <p class="cd">這堂課表面在示範兩個工具，骨子裡在講同一件事：<b>AI 幫你把「一件事做到底」的小工具做出來，再用免費管道送上雲端給大家用。</b></p>
+  <div class="svgwrap">
+  <svg viewBox="0 0 960 470" xmlns="http://www.w3.org/2000/svg" font-family="'PingFang TC','Noto Sans TC',sans-serif">
+    <defs>
+      <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7a4bd0"/><stop offset="1" stop-color="#5645D4"/></linearGradient>
+      <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2f7d92"/><stop offset="1" stop-color="#3b6bb0"/></linearGradient>
+      <linearGradient id="g3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#bf6a1e"/><stop offset="1" stop-color="#9c7b23"/></linearGradient>
+    </defs>
+    <rect width="960" height="470" fill="#fff"/>
+    <text x="480" y="40" text-anchor="middle" font-size="20" font-weight="800" fill="#191919">S3E3 · 兩個工具，一個心法</text>
+    <text x="480" y="64" text-anchor="middle" font-size="13" fill="#5f5f5f">用 AI 打造單檔小工具 → 本機直接用 → 免費上雲給全班用</text>
+
+    <!-- Tool A -->
+    <rect x="40" y="92" width="415" height="150" rx="14" fill="#faf7ff" stroke="#d9c9f2"/>
+    <text x="60" y="120" font-size="15" font-weight="800" fill="#5645D4">🎙️ 工具一：聲刻 Voice Foundry</text>
+    <text x="60" y="146" font-size="12.5" fill="#444">放 10–30 秒人聲 → 用你的音色唸任何文字</text>
+    <text x="60" y="168" font-size="12.5" fill="#444">本機跑（不用把聲音上傳雲端）</text>
+    <text x="60" y="190" font-size="12.5" fill="#444">CAST 分頁：拆成多角色 Podcast（含台語）</text>
+    <text x="60" y="216" font-size="12" fill="#7a4bd0">對照：ElevenLabs 雲端 TTS（要 API Key、要花錢）</text>
+
+    <!-- Tool B -->
+    <rect x="505" y="92" width="415" height="150" rx="14" fill="#eef6f8" stroke="#c3dde4"/>
+    <text x="525" y="120" font-size="15" font-weight="800" fill="#2f7d92">🧑‍🏫 工具二：貼課通課堂即時牆</text>
+    <text x="525" y="146" font-size="12.5" fill="#444">開一間房 → 全班貼文字／圖片／影音／PDF</text>
+    <text x="525" y="168" font-size="12.5" fill="#444">舉手・匿名提問・理解度紅綠燈・搶答・評分</text>
+    <text x="525" y="190" font-size="12.5" fill="#444">畫布・協作白板・看板分組・簡報播放・點名</text>
+    <text x="525" y="216" font-size="12" fill="#2f7d92">教師版建房／學生版加入（同源，關房主功能）</text>
+
+    <!-- Common heart -->
+    <rect x="180" y="270" width="600" height="70" rx="14" fill="url(#g1)"/>
+    <text x="480" y="300" text-anchor="middle" font-size="15" font-weight="800" fill="#fff">共同心法：它們都是「純前端單檔 HTML」</text>
+    <text x="480" y="324" text-anchor="middle" font-size="12.5" fill="#eee">即時連線用 WebRTC(P2P)、暫存用瀏覽器 IndexedDB／LocalStorage</text>
+
+    <!-- Deploy paths -->
+    <rect x="40" y="368" width="280" height="80" rx="12" fill="#fff" stroke="#d9c9f2"/>
+    <text x="180" y="394" text-anchor="middle" font-size="13" font-weight="700" fill="#5645D4">① 本機雙擊即用</text>
+    <text x="180" y="416" text-anchor="middle" font-size="11.5" fill="#555">CAST-STUDIO.exe 內建小伺服器</text>
+    <text x="180" y="434" text-anchor="middle" font-size="11.5" fill="#555">只監聽 127.0.0.1、天然無 CORS</text>
+
+    <rect x="340" y="368" width="280" height="80" rx="12" fill="#fff" stroke="#c3dde4"/>
+    <text x="480" y="394" text-anchor="middle" font-size="13" font-weight="700" fill="#2f7d92">② 嵌進 Google Sites</text>
+    <text x="480" y="416" text-anchor="middle" font-size="11.5" fill="#555">用「內嵌程式碼」貼一頁</text>
+    <text x="480" y="434" text-anchor="middle" font-size="11.5" fill="#555">一鍵發布成公開網址</text>
+
+    <rect x="640" y="368" width="280" height="80" rx="12" fill="#fff" stroke="#e6cfa8"/>
+    <text x="780" y="394" text-anchor="middle" font-size="13" font-weight="700" fill="#bf6a1e">③ 自架／GAS</text>
+    <text x="780" y="416" text-anchor="middle" font-size="11.5" fill="#555">用 Google Apps Script</text>
+    <text x="780" y="434" text-anchor="middle" font-size="11.5" fill="#555">HtmlService 免費託管＋HTTPS</text>
+  </svg>
+  <div class="cap">全景圖：兩個工具（聲刻／貼課通）共用「純前端單檔」本質，因此有三條免費上雲路徑。這正是本堂的核心觀念。</div>
+  </div>
+</section>
+
+<!-- 2 -->
+<section class="chapter" id="sec-opening">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--purple))">OPENING</span>
+  <h2 class="ct">2. 開場：災難復原與 Codex 專案搬遷 <span style="font-size:12px;color:var(--ink3)">[00:00–06:00]</span></h2>
+  <p>老師先接續上一集的觀念收尾：<b>你的專案不要只放在本機。</b>盡量放到隨身碟、記憶卡或雲端，這樣萬一電腦掛了還能救回來。</p>
+  <ul class="pt">
+    <li><b>災難復原示範：</b>老師打開另一台電腦的 <b>ChatGPT Codex 桌面版</b>，只要跟它講一句「幫我檢查之前的紀錄」，它就會回去把所有對話紀錄 keep 住，後面再問就能延續脈絡，等於把上一台電腦的 Codex 工作接回來。</li>
+    <li><b>目前的限制：</b>Codex <b>沒辦法一次把整個母目錄的所有專案都復原</b>，只能一個資料夾一個資料夾加進來。老師建議把專案資料夾放在隨身碟或雲端備份。</li>
+    <li><b>Codex 桌面版能力：</b>畫面上可見它能<b>排程</b>（例：已排程「平日早晨簡報」）、接 <b>Google Drive／Linear 連接器</b>，並列出一整排老師的專案（台股資料抓取、零用金收支表、PDF 拆分工具、Gmail 信件檢查、聲音 Clone…）——這些就是本堂與延伸內容的來源。</li>
+  </ul>
+  <figure class="shot"><img src="s3e3-img/07-codex-shengke.jpg" alt="Codex 聲音Clone 專案對話"><figcaption>ChatGPT Codex 桌面版：老師的「聲音 Clone」專案對話，Codex 說明聲刻的效能（CPU 模式 177 字約 3 分 8 秒），並提示 RTX 5090 尚未啟用對應 CUDA 版本、暫時走 CPU。［約 05:00］</figcaption></figure>
+  <div class="note blue">💡 <div>本堂兩個主角（聲刻、貼課通）都是老師用 <b>Codex／Claude</b> 一步步「vibe coding」出來的。開場這段先埋下伏筆：<b>工具是 AI 幫你做的，資料要自己備份。</b></div></div>
+</section>
+
+<!-- 3 -->
+<section class="chapter" id="sec-shengke">
+  <span class="chip" style="background:linear-gradient(90deg,var(--purple),var(--accent))">TOOL A</span>
+  <h2 class="ct">3. 主角一：聲刻 Voice Foundry（本機聲音克隆） <span style="font-size:12px;color:var(--ink3)">[17:45 起]</span></h2>
+  <p>雙擊 <code>聲刻.exe</code>，瀏覽器打開 <code>127.0.0.1:7860</code>，就是<b>「聲刻 VOICE FOUNDRY」</b>——標語「留住聲線，重新說話」（OPEN-SOURCE VOICE CLONING · LOCAL FIRST）。</p>
+  <figure class="shot"><img src="s3e3-img/01-shengke-home.jpg" alt="聲刻 Voice Foundry 首頁"><figcaption>聲刻首頁：左欄「放入參考聲音」（上傳 MP3／WAV，系統解析並轉 24 kHz 單聲道，建議 10–30 秒），右欄「輸入要說的話」（選語言、擬演情緒、進階聲音控制與輸出格式）。右上顯示「NVIDIA GeForce RTX 5090 Laptop GPU · 模型已就緒」。［約 17:45］</figcaption></figure>
+
+  <h3>聲刻是什麼、為什麼要「可攜版」</h3>
+  <ul class="pt">
+    <li><b>本質：</b>一個跑在你電腦上的<b>本機 web app</b>（Python 服務 + 瀏覽器介面，port 7860）。放一段乾淨人聲＋輸入新文字，它就用相同音色產生全新 MP3。</li>
+    <li><b>可攜版打包：</b>老師把它打包成「聲刻-可攜版」——內含免安裝的內嵌 Python（python-3.12.10-embed）＋模型快取＋<code>聲刻.exe</code> 啟動器，整包約 7 GB，換電腦解壓即用。</li>
+    <li><b>啟動提醒：</b>看到「<b>模型已就緒</b>」再按生成；啟動後超過 3 分鐘仍無畫面＝啟動失敗。</li>
+  </ul>
+
+  <h3>算力：GPU 快、CPU 慢（但都能跑）</h3>
+  <div class="twrap"><table>
+    <tr><th>情境</th><th>速度</th></tr>
+    <tr><td>啟動與模型載入</td><td>約 5～30 秒</td></tr>
+    <tr><td>150 字（一般段落）</td><td>約 2～4 分鐘（CPU 模式）</td></tr>
+    <tr><td>500 字</td><td>約 6～8 分鐘</td></tr>
+    <tr><td>Podcast 多段內容</td><td>可能 10～30 分鐘以上</td></tr>
+  </table></div>
+  <figure class="shot"><img src="s3e3-img/05-shengke-diagnostics.jpg" alt="聲刻系統診斷與 Voice ID 管理"><figcaption>頁面下方「聲音管理與工作紀錄」：系統診斷顯示運算裝置 RTX 5090、運算模式 CPU fallback（橘字）、FFmpeg／FFprobe 可用、SoX 未安裝、磁碟可用 594 GB；下方是已儲存的 Voice ID（含品質分、使用次數、日期）與每一次的生成歷史，可重播、匯出。［約 27:30］</figcaption></figure>
+  <div class="note gold">⚠️ <div><b>RTX 50 系列（5060／5090…）常見 CUDA 錯誤：</b>「CUDA error: no kernel image is available for execution on the device」。原因是內建的 PyTorch/CUDA 版本不支援這張新顯卡的架構，<b>不是聲音檔壞掉</b>。聲刻會自動退回 <b>CPU fallback</b>（能跑，只是慢）。修法見第 11 節。</div></div>
+</section>
+
+<!-- 4 -->
+<section class="chapter" id="sec-eleven">
+  <span class="chip" style="background:linear-gradient(90deg,var(--cyan),var(--teal))">CONTRAST</span>
+  <h2 class="ct">4. 對照組：ElevenLabs 雲端 TTS <span style="font-size:12px;color:var(--ink3)">[06:45–17:00]</span></h2>
+  <p>在示範本機聲刻之前，老師先帶大家看雲端的對照組 <b>ElevenLabs</b>（elevenlabs.io），讓大家理解「雲端 TTS」與「本機克隆」的差別。</p>
+
+  <h3>三個模型、怎麼選</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:170px">模型</th><th>特色</th></tr>
+    <tr><td>Eleven v3</td><td>最具表現力，支援 70+ 語言，可用 <code>[laughing]</code>／<code>[whispers]</code> 等 audio 標籤控制語氣，也能生成多講者對話</td></tr>
+    <tr><td>Eleven Multilingual v2</td><td>Studio 級品質、最自然、情感最豐富，支援 29 語言，適合旁白／有聲書</td></tr>
+    <tr><td>Eleven Flash v2.5</td><td>便宜 50%、延遲最低，支援 32 語言，適合對話式即時應用</td></tr>
+  </table></div>
+
+  <h3>音色庫、我的音色、音色設計</h3>
+  <div class="shotgrid">
+    <figure class="shot"><img src="s3e3-img/02-elevenlabs-myvoices.jpg" alt="ElevenLabs 我的音色"><figcaption>「我的音色」：老師自建的音色清單（New_ECF 沉穩專業講師、中年大叔、低沉溫暖的人…）。右鍵可複製聲音 ID、編輯、查看歷史。［約 14:00］</figcaption></figure>
+    <figure class="shot"><img src="s3e3-img/03-elevenlabs-voicedesign.jpg" alt="ElevenLabs 音色設計"><figcaption>「音色設計」：<b>用一段文字描述就能生出新音色</b>（例：Evil Ogre、Southern Woman…）。生成一次約 350 點數。［約 14:15］</figcaption></figure>
+  </div>
+  <div class="note green">✅ <div><b>老師的小技巧：</b>要寫音色描述時，先請 AI 幫你寫一段形容詞（例：「請給我一段描述台灣中年男子、嘮叨但精神奕奕的聲音形容詞，用 50 個字」），再把那段話貼進 ElevenLabs 的音色設計，音色就更到位。</div></div>
+
+  <h3>API Key：一個工具開一把「受限金鑰」</h3>
+  <p>如果你要在別的工具（例如聲刻的 CAST、或自己的程式）串接 ElevenLabs，就要到<b>「開發者 → API 密鑰」</b>建立一把 key。老師示範建立時的重點：</p>
+  <ul class="pt">
+    <li>開啟<b>「限制密鑰」</b>，把用不到的權限關掉（Endpoints 逐項可設「無存取權限／存取」）。</li>
+    <li>可設<b>到期時間、用量限制（點數）</b>。</li>
+    <li>ElevenLabs 有<b>「若外洩則自動停用」</b>：偵測到金鑰被公開（例如上傳到 GitHub）會自動停用，是很貼心的防呆。</li>
+    <li>金鑰產生後<b>只顯示一次</b>，關掉對話框前務必複製。</li>
+  </ul>
+  <div class="note gold">🔑 <div><b>金鑰＝帳號密碼，不可分享。</b>一個工具開一把受限金鑰，出事只影響那一把。ElevenLabs 音色化（克隆）與音色設計會<b>消耗點數（花錢）</b>；聲刻則是本機跑、不花這筆錢。</div></div>
+</section>
+
+<!-- 5 -->
+<section class="chapter" id="sec-clone">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--rose))">HOW-TO</span>
+  <h2 class="ct">5. 聲音克隆 SOP 與倫理聲明 <span style="font-size:12px;color:var(--ink3)">[23:30–33:00]</span></h2>
+  <p>回到本機聲刻，示範<b>「語音克隆」</b>分頁的完整操作。老師課前就在 LINE 群請大家「準備自己的聲音，待會就能復刻」。</p>
+  <div class="svgwrap">
+  <svg viewBox="0 0 960 250" xmlns="http://www.w3.org/2000/svg" font-family="'PingFang TC','Noto Sans TC',sans-serif">
+    <rect width="960" height="250" fill="#fff"/>
+    <text x="480" y="34" text-anchor="middle" font-size="16" font-weight="800" fill="#191919">聲刻・語音克隆 6 步驟</text>
+    <g font-size="12" fill="#333">
+      <rect x="24" y="60" width="140" height="120" rx="12" fill="#faf7ff" stroke="#d9c9f2"/><text x="94" y="90" text-anchor="middle" font-weight="700" fill="#5645D4">① 放參考聲音</text><text x="94" y="118" text-anchor="middle">拖入 MP3／WAV</text><text x="94" y="138" text-anchor="middle">10–30 秒乾淨人聲</text><text x="94" y="158" text-anchor="middle">≤ 25 MB</text>
+      <rect x="180" y="60" width="140" height="120" rx="12" fill="#faf7ff" stroke="#d9c9f2"/><text x="250" y="90" text-anchor="middle" font-weight="700" fill="#5645D4">② 填逐字稿</text><text x="250" y="118" text-anchor="middle">寫下這段聲音</text><text x="250" y="138" text-anchor="middle">實際說的內容</text><text x="250" y="158" text-anchor="middle">音色與節奏更準</text>
+      <rect x="336" y="60" width="140" height="120" rx="12" fill="#faf7ff" stroke="#d9c9f2"/><text x="406" y="90" text-anchor="middle" font-weight="700" fill="#5645D4">③ 解析＋存</text><text x="406" y="118" text-anchor="middle">「解析聲音」</text><text x="406" y="138" text-anchor="middle">命名（如 益師傅）</text><text x="406" y="158" text-anchor="middle">儲存 Voice ID</text>
+      <rect x="492" y="60" width="140" height="120" rx="12" fill="#fdf3f6" stroke="#eecdd8"/><text x="562" y="90" text-anchor="middle" font-weight="700" fill="#b5476a">④ 倫理勾選</text><text x="562" y="116" text-anchor="middle">確認聲音屬於我</text><text x="562" y="136" text-anchor="middle">或已取得授權</text><text x="562" y="156" text-anchor="middle">不冒充／不詐騙</text>
+      <rect x="648" y="60" width="140" height="120" rx="12" fill="#faf7ff" stroke="#d9c9f2"/><text x="718" y="90" text-anchor="middle" font-weight="700" fill="#5645D4">⑤ 輸入新文字</text><text x="718" y="118" text-anchor="middle">貼要唸的內容</text><text x="718" y="138" text-anchor="middle">選語言／情緒</text><text x="718" y="158" text-anchor="middle">≤ 10000 字</text>
+      <rect x="804" y="60" width="132" height="120" rx="12" fill="#eef7f1" stroke="#cbe6d5"/><text x="870" y="90" text-anchor="middle" font-weight="700" fill="#166a4c">⑥ 生成語音</text><text x="870" y="118" text-anchor="middle">產出 MP3</text><text x="870" y="138" text-anchor="middle">留在生成歷史</text><text x="870" y="158" text-anchor="middle">可重播／下載</text>
+    </g>
+    <text x="480" y="220" text-anchor="middle" font-size="12" fill="#7a4bd0">首次生成需下載數 GB 模型，之後用本機快取；生成中請勿關視窗。</text>
+  </svg>
+  <div class="cap">聲刻語音克隆的六個步驟。第 4 步「倫理聲明」是必勾項，體現負責任的 AI 使用。</div>
+  </div>
+
+  <h3>實測：用自己的聲音唸新聞</h3>
+  <p>老師到 Yahoo 財經反白複製一段 ETF 新聞（178 字），貼進聲刻、勾好倫理聲明、按生成。CPU 模式跑了一分多鐘後——</p>
+  <figure class="shot"><img src="s3e3-img/04-shengke-generated.jpg" alt="聲刻生成完成"><figcaption>「GENERATED TAKE 這是你的新聲音」——用老師 19 秒的參考聲音唸出整段 ETF 新聞，附波形與「下載 MP3」。播放後全班在聊天室一致認證：「有，超像」「很像」😍。［約 32:00］</figcaption></figure>
+  <div class="golden">
+    <div class="q">「玩期貨心臟要夠大」的姐妹句——聲刻版：留住聲線，重新說話。</div>
+    <div class="a">一段 10–30 秒的聲音，就能讓 AI 用你的音色，把任何文字唸出來。這就是「聲音復刻」。</div>
+  </div>
+  <div class="note steel">🧑‍🎓 <div>當天有兩位以上學員（093、Jason You…）在自己電腦實測成功，貼出「這是你的新聲音」截圖。遇到 RTX 50 CUDA 錯誤的同學，老師現場用 AI 給了修復步驟（見第 11 節）。</div></div>
+</section>
+
+<!-- 6 -->
+<section class="chapter" id="sec-cast">
+  <span class="chip" style="background:linear-gradient(90deg,var(--purple),var(--blue))">CAST</span>
+  <h2 class="ct">6. CAST：Podcast 多角色工作室 <span style="font-size:12px;color:var(--ink3)">[19:00 起 · 44:00 生成]</span></h2>
+  <p>聲刻的第二個分頁是 <b>CAST（AI PODCAST 語音生成工作室）</b>：貼上一份素材，AI 直接寫出完整訪談文案，再在本頁合成語音，輸出 MP3 與字幕 MP4。</p>
+
+  <h3>8 步驟精靈</h3>
+  <ol class="st">
+    <li><b>貼上文章自動填表：</b>上傳 txt／md／pdf／html，AI 解析後自動填好下面各欄（需 Groq API Key）。</li>
+    <li><b>分析主題：</b>例「親子餐廳企劃分析」（快速標籤：AI 趨勢／創業／股市解盤／STEAM 教育…）。</li>
+    <li><b>目標聽眾：</b>初學者／一般大眾／專業人士／主管／投資人——影響術語密度與解釋深度。</li>
+    <li><b>情緒節奏曲線：</b>W 型起伏（最受歡迎）／漸強式／先高後穩／雲霄飛車（辯論激烈型）。</li>
+    <li><b>主持人設定：</b>1 人獨白／2 人對談／3 人圓桌；每位主持人可設姓名、語言、性別、語氣風格、人設專長。</li>
+    <li><b>焦點關鍵字：</b>節目中必須提及的詞彙或數據。</li>
+    <li><b>禁止提及：</b>不得出現的主題或詞彙。</li>
+    <li><b>節目設定：</b>自我介紹、節目長度（短／中 8–12 分／長）、互動風格。</li>
+  </ol>
+
+  <h3>兩個亮點：台語主持人＋聲音混搭</h3>
+  <ul class="pt">
+    <li><b>台語（意傳）：</b>主持人語言可選「台語（意傳）」，由<b>意傳科技「嘀聲」</b>合成（免 Key、免費展示限流 3 句/分鐘）；可選台語聲線 1／2／3 以變調區分講者。教材使用要標示「語音來源 意傳科技」。</li>
+    <li><b>聲音可混搭：</b>主持人 A 可用<b>聲刻本機 Clone Voice</b>（你自己的聲音）、主持人 B 用 <b>ElevenLabs</b>（George、Sarah…）或台語——本機與雲端聲音同表選用。</li>
+    <li><b>試聽引擎：</b>可切「ElevenLabs V3（高品質，需 API Key）」或「聲刻本機 Clone Voice（免 ElevenLabs Key）」。</li>
+  </ul>
+  <figure class="shot"><img src="s3e3-img/06-cast-script.jpg" alt="CAST 生成的對談腳本"><figcaption>AI 產生的完整對談文案：共 94 句、4121 字。每一句是一張卡片，可改情緒標籤（laughs／curious／thoughtful…）、切換講者、重錄試聽、插入或刪除。輸出可選 16:9／9:16、封面標題卡、BGM（由 Pollinations.ai 自動生成意境圖）、SRT 字幕與 Show Notes。［約 46:00］</figcaption></figure>
+  <div class="note blue">💡 <div>快速模板很豐富：產業分析、職涯諮詢、技術解讀、正反辯論、新聞快報、教學課程、人物訪談、故事說書，加上特殊領域（八字命理、姓名學、股市解盤）。選一個就自動帶入主持人設定與節奏。</div></div>
+</section>
+
+<!-- 7 -->
+<section class="chapter" id="sec-caststudio">
+  <span class="chip" style="background:linear-gradient(90deg,var(--blue),var(--purple))">TOOL A+</span>
+  <h2 class="ct">7. 主角二：CAST STUDIO 獨立版 <span style="font-size:12px;color:var(--ink3)">[第二段 02:00 起]</span></h2>
+  <p>下半場老師先秀 <b>CAST-STUDIO-win.exe</b>——就是把上面 CAST Podcast 工作室<b>單獨打包成一個 Windows 執行檔</b>（約 15 MB），雙擊後自己開瀏覽器，跑在 <code>127.0.0.1:59767</code>。</p>
+  <figure class="shot"><img src="s3e3-img/09-cast-studio.jpg" alt="CAST STUDIO 8 步驟介面"><figcaption>CAST STUDIO 獨立版介面：同一套 8 步驟（分析主題、目標聽眾、情緒節奏曲線、主持人設定…），右側 AI 設定貼 Groq／ElevenLabs API Key，語音可選 ElevenLabs V3 或聲刻 Clone。［第二段 03:00］</figcaption></figure>
+
+  <h3>技術揭密：為什麼要「本機小伺服器」</h3>
+  <p>老師打開 Claude 對話（帳號「益師傅・Max」）秀出這個工具的設計原理，這段很值得懂：</p>
+  <div class="code">運作方式（Codex/Claude 幫忙設計）：
+① 雙擊 CAST-STUDIO-win.exe → 啟動本機小伺服器（僅監聽 127.0.0.1）→ 自動開瀏覽器載入介面
+② 內嵌 /p 免 CORS 代理：台語標音/合成、TWSE、TPEx 都由 exe 伺服器端抓
+   → 不再需要 Cloudflare Worker（伺服器端發請求，所以「天然無 CORS」）
+③ 自動偵測執行環境：localhost 走本機代理；開網頁版 HTML 則退回 Worker（同一份介面兩用）
+④ ElevenLabs / Groq / Pollinations / ffmpeg 等原本就開 CORS 的服務照舊直連</div>
+  <div class="note steel">🧩 <div><b>白話：</b>瀏覽器有個安全限制叫 <b>CORS</b>（跨來源請求會被擋）。把工具包成一個「本機小伺服器」，請求改由伺服器端發，就繞過了這個限制——這就是為什麼要做成 <code>.exe</code> 而不是純網頁。老師還提到已在沙盒實測：HTML 內嵌成功、白名單外網域正確回 403、代理轉發鏈路正常。</div></div>
+</section>
+
+<!-- 8 -->
+<section class="chapter" id="sec-tiketong">
+  <span class="chip" style="background:linear-gradient(90deg,var(--cyan),var(--blue))">TOOL B</span>
+  <h2 class="ct">8. 主角三：貼課通課堂即時牆 <span style="font-size:12px;color:var(--ink3)">[第二段 07:30 起]</span></h2>
+  <p>第三個工具是 <b>貼課通</b>（課堂即時牆・專業版）：老師用 Edge 打開本機的 <code>貼課通-教師專業版.html</code>，開一間房，全班連進來一起貼。</p>
+  <ul class="pt">
+    <li><b>教師版建房：</b>填教室名稱（「第三季第三堂」）、房間密碼（選填）、人數上限、背景顏色 → 建立房間，得到<b>房號（如 UNPJ56）</b>。</li>
+    <li><b>學生版加入：</b>另一個檔 <code>貼課通-學生專業版.html</code>，填暱稱＋房號即可加入（學生版<b>不能建房、不能匯出</b>，其餘同步）。</li>
+    <li><b>連線技術：</b>即時同步走 <b>WebRTC（PeerJS P2P）</b>，學校/公司網路連不上時可在「連線設定」填 <b>TURN 中繼</b>或勾「強制走中繼」。</li>
+  </ul>
+  <figure class="shot"><img src="s3e3-img/10-tiketong-room.jpg" alt="貼課通教師版建房後的工具列與牆面"><figcaption>建房完成：頂部房號 UNPJ56，工具列一整排功能（舉手／提問／理解度／搶答／退場券／抽座號／評分總計｜畫布／協作白板／看板／簡報／搜尋／分享／錄製／教師／計時／教材庫／專案／匯出／匯出圖／主題）。學員陸續加入，牆上出現貼文卡片。［第二段 10:00］</figcaption></figure>
+  <div class="note steel">🏗️ <div><b>學生版＝教師版同源。</b>老師用記事本打開學生版原始碼（單檔 2839 行、271 KB），可見房主功能（建房／教材庫／錄製…）都被一個 <code>_block</code> 函式擋掉，並提示「學生版無法建立或主持房間，請輸入老師提供的代碼加入課堂」。<b>一份程式，兩種角色。</b></div></div>
+</section>
+
+<!-- 9 -->
+<section class="chapter" id="sec-features">
+  <span class="chip" style="background:linear-gradient(90deg,var(--teal),var(--cyan))">FEATURES</span>
+  <h2 class="ct">9. 貼課通功能巡禮 <span style="font-size:12px;color:var(--ink3)">[第二段 全程]</span></h2>
+  <p class="cd">老師一個一個示範，全班同時實測。這裡把功能整理成一張表，對照 Padlet／Kahoot 就很好懂。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:130px">功能</th><th>作用</th><th>對標</th></tr>
+    <tr><td>張貼到牆上</td><td>貼文字／圖片／檔案 PDF／拍照／錄音／語音輸入，卡片可選顏色、@提及、加表情</td><td>Padlet</td></tr>
+    <tr><td>舉手</td><td>學生按舉手，老師收到通知橫幅「XX 舉手了」</td><td>—</td></tr>
+    <tr><td>匿名提問</td><td>不顯示姓名，大家可按讚、讚多的排前面；老師可「聚焦」把某題放大投影</td><td>Slido</td></tr>
+    <tr><td>理解度紅綠燈</td><td>學生匿名選 🟢跟得上／🟡有點快／🔴聽不懂，老師看即時長條圖調整節奏</td><td>—</td></tr>
+    <tr><td>搶答</td><td>搶答鈴，依先後排名 🥇🥈🥉</td><td>Kahoot</td></tr>
+    <tr><td>評分總計</td><td>依貼文收到的反應累計到作者（👍1／⭐2／❤️3／🎉5 分），即時排行榜</td><td>Kahoot</td></tr>
+    <tr><td>抽座號／抽人</td><td>大轉盤隨機點人</td><td>—</td></tr>
+    <tr><td>退場券</td><td>下課前收集每位學生的回饋／心得</td><td>Exit Ticket</td></tr>
+    <tr><td>畫布／協作白板</td><td>老師在圖上標註；協作白板全班可同時塗鴉（有人玩井字遊戲）</td><td>Jamboard</td></tr>
+    <tr><td>看板分組</td><td>切成第一～四組欄位，每張卡片可指定組別</td><td>Trello</td></tr>
+    <tr><td>簡報播放</td><td>把牆上貼文變投影片逐張播，含雷射筆／標註</td><td>—</td></tr>
+    <tr><td>點名／出席</td><td>「發起簽到」請學員點「我在」，統計在線／已簽到、貼文數、得分</td><td>—</td></tr>
+    <tr><td>即時投票／問答</td><td>單選／複選/是非/簡答，最多 8 個選項</td><td>Mentimeter</td></tr>
+    <tr><td>計時器</td><td>倒數計時，結束可自動鎖定發文</td><td>—</td></tr>
+    <tr><td>匯出</td><td>完整紀錄 zip、簽到 csv、個人成績單、整間 json、逐張 PNG、PPTX、列印 PDF、輪播影片、整牆匯出成一張長圖</td><td>—</td></tr>
+    <tr><td>分享（螢幕）</td><td>把某個視窗畫面即時推送進牆（需 https 或 localhost）</td><td>—</td></tr>
+  </table></div>
+  <div class="shotgrid">
+    <figure class="shot"><img src="s3e3-img/11-tiketong-scoreboard.jpg" alt="貼課通評分總計排行榜"><figcaption>評分總計：依每則貼文收到的反應累計到作者，即時排行榜（🥇ECF 22 分、🥈耀州 21 分…）。遊戲化積分讓課堂互動更熱絡。［第二段 16:00］</figcaption></figure>
+    <figure class="shot"><img src="s3e3-img/12-tiketong-comprehension.jpg" alt="貼課通理解度紅綠燈"><figcaption>理解度紅綠燈：學生匿名回報，老師只看到統計長條圖（例 23 人，48% 跟得上、52% 有點快、0% 聽不懂），講解中可隨時請大家更新。［第二段 30:00］</figcaption></figure>
+  </div>
+</section>
+
+<!-- 10 -->
+<section class="chapter" id="sec-cloud">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--orange))">KEY LESSON</span>
+  <h2 class="ct">10. 關鍵一課：把單檔工具送上雲端 <span style="font-size:12px;color:var(--ink3)">[第二段 17:00 · 33:00–39:00]</span></h2>
+  <p>這是本堂最重要的觀念。學員耀州先主動用 AI 拆解貼課通的原理，問 Codex「這個程式可改成 GAS 嗎？變成雲端服務」，得到關鍵答案：</p>
+  <figure class="shot"><img src="s3e3-img/13-codex-gas.jpg" alt="Codex 回答貼課通可改成 GAS"><figcaption>Codex 回覆：「這支程式完全可以改成 Google Apps Script (GAS) 部署為雲端服務！因為『貼課通』本質上是一支完整的<b>純前端單頁應用（SPA）</b>，即時連線用 WebRTC(P2P)、暫存用瀏覽器 IndexedDB／LocalStorage。透過 GAS 的 HtmlService 可直接託管並發布成 Web App 網頁，免費、無須架設伺服器，還自帶 Google 的 HTTPS 憑證（剛好滿足相機拍照、麥克風錄音與螢幕分享所需的安全連線）。」［第二段 17:00］</figcaption></figure>
+
+  <h3>老師走通的路：嵌進 Google Sites → 一鍵發布</h3>
+  <ol class="st">
+    <li>開 Google Sites 新網站，新增一頁。</li>
+    <li>用<b>「內嵌 ＜＞」→ 自訂內嵌（貼程式碼）</b>，把貼課通學生版整頁嵌進去。</li>
+    <li>右上「發布」，網址填 <code>ecf-class</code> → 得到公開網址 <code>sites.google.com/view/ecf-class</code>。</li>
+    <li>誰可以查看：所有人 → 發布 → 「您的協作平台已成功發布」。</li>
+    <li>用無痕視窗開這個公開網址，貼課通學生版<b>正常載入、能加入房間、能貼文</b>——完全走通。</li>
+  </ol>
+  <figure class="shot"><img src="s3e3-img/15-sites-published.jpg" alt="貼課通發布到公開網址"><figcaption>公開網址實測：無痕視窗開 <code>sites.google.com/view/ecf-class</code>，貼課通學生版登入畫面正常顯示（左上「自訂內嵌」）。填暱稱＋房號就能加入——本機單檔工具，變成任何人可用的雲端 App。［第二段 37:30］</figcaption></figure>
+  <div class="note green">✅ <div><b>當堂最有感的一幕：</b>發布後，全班學員紛紛複製老師做法，把貼課通嵌進自己的 Google Sites、發布成自己的網址，再把成果截圖貼回牆上互相展示。一堂課下來，<b>全班都學會「把單檔工具掛上雲」</b>。</div></div>
+  <div class="note gold">⚠️ <div><b>資料保存提醒：</b>有學員問「離開頁面資料就不在，我可以安裝在自己的雲端伺服器嗎？」——可以。純前端工具的資料存在瀏覽器（IndexedDB／LocalStorage），關掉就清掉；要長期保存就自己部署（GAS／Google Sites／自架伺服器），並善用貼課通的「匯出／專案庫」把牆面存下來。</div></div>
+</section>
+
+<!-- 11 -->
+<section class="chapter" id="sec-aidev">
+  <span class="chip" style="background:linear-gradient(90deg,var(--purple),var(--pink))">AI DEV</span>
+  <h2 class="ct">11. 用 Codex／Claude 打造與除錯 <span style="font-size:12px;color:var(--ink3)">[貫穿全堂]</span></h2>
+  <p>整堂課其實也是一場「AI 協作開發」的示範：這些工具是老師用 <b>ChatGPT Codex／Claude</b> 一步步做出來、又現場繼續改的。</p>
+  <ul class="pt">
+    <li><b>現場除錯：</b>學員的 RTX 50 顯卡跳 CUDA 錯誤，老師直接把錯誤截圖貼進 Codex，Codex 30 秒內判斷「是 PyTorch/CUDA 版本不支援該顯卡架構，不是聲音檔壞掉」，並給出修復步驟。</li>
+    <li><b>現場改功能：</b>老師把貼課通學生版 HTML 上傳 Claude（Opus 5·High），要求「新的貼文都產生在最上方」——用 AI 迭代自己的工具。</li>
+    <li><b>老師的工具軍火庫：</b>下載資料夾裡滿滿都是 AI 做的工具（debate_arena×5、ollama_studio×10、AI-Agent-Codex、TaiwanStockCollector、BMC 生成器…）。</li>
+  </ul>
+  <figure class="shot"><img src="s3e3-img/08-codex-cuda.jpg" alt="Codex 提供 RTX 50 CUDA 修復步驟"><figcaption>Codex 的 CUDA 修復方案：① 用 nvidia-smi／torch.cuda 檢查 ② RTX 50 系列改裝 torch 2.7.1+cu128（PyTorch 官方建議 CUDA 12.8，約下載 10 GB）③ 不需 GPU 的臨時方案：改裝 CPU 版 torch。老師把整份步驟貼回 Teams 給學員。［約 40:00］</figcaption></figure>
+  <div class="code"># RTX 50 系列（5060/5090…）CUDA 修復（在可攜版資料夾開 PowerShell）
+.\runtime\python\python.exe -m pip uninstall -y torch torchaudio
+.\runtime\python\python.exe -m pip install torch==2.7.1+cu128 torchaudio==2.7.1+cu128 --index-url https://download.pytorch.org/whl/cu128
+# 驗證：應看到 2.7.1+cu128 / True / 你的顯示卡名稱
+.\runtime\python\python.exe -c "import torch; print(torch.__version__); print(torch.cuda.is_available())"
+
+# 臨時方案（不用 GPU，改 CPU 版，較慢但一定能跑）
+.\runtime\python\python.exe -m pip install torch==2.7.1 torchaudio==2.7.1 --index-url https://download.pytorch.org/whl/cpu</div>
+  <div class="note steel">🛠️ <div>這段的教學價值不在指令本身，而在示範<b>「遇到報錯→把錯誤丟給 AI→拿到步驟→貼回去給大家」</b>的工作流。這也是整個訂閱制課程的主軸：用 AI 當你的工程師。</div></div>
+  <figure class="shot"><img src="s3e3-img/14-tools-arsenal.jpg" alt="老師下載資料夾的工具軍火庫"><figcaption>老師下載資料夾一隅：CAST-STUDIO.zip、貼課通教師/學生版、BMC 生成器、AI-Agent-Codex、debate_arena、ollama_studio…——全是用 AI 做出來的單檔工具。［第二段 34:15］</figcaption></figure>
+</section>
+
+<!-- 12 -->
+<section class="chapter" id="sec-check">
+  <span class="chip" style="background:linear-gradient(90deg,var(--green),var(--teal))">CHECKLIST</span>
+  <h2 class="ct">12. 課後自我檢核表</h2>
+  <p class="cd">看完這堂，用這張表確認自己有沒有真的懂。</p>
+  <ul class="pt">
+    <li>我能說出<b>「本機聲刻」與「雲端 ElevenLabs」</b>的差別（誰花錢、資料在哪、快慢）。</li>
+    <li>我知道聲音克隆的<b>六個步驟</b>，尤其記得第 4 步要勾<b>倫理聲明</b>。</li>
+    <li>我知道 RTX 50 系列跳 CUDA 錯誤時<b>不是檔案壞掉</b>，會自動 CPU fallback，也知道怎麼把錯誤丟給 AI 求解。</li>
+    <li>我理解 CAST 能把一份素材變成<b>多角色 Podcast</b>，還能混搭本機／雲端／台語聲音。</li>
+    <li>我懂為什麼 CAST STUDIO 要做成 <b>.exe 本機小伺服器</b>（繞過 CORS）。</li>
+    <li>我會用貼課通<b>開房／加入</b>，也知道教師版與學生版是<b>同一份程式</b>。</li>
+    <li>我能講出貼課通至少 <b>5 個互動功能</b>並對照 Padlet／Kahoot／Slido。</li>
+    <li>★ 最重要：我理解這些工具都是<b>純前端單檔 HTML</b>，可以用 <b>Google Sites 嵌入＋發布</b>變成公開網址給別人用。</li>
+    <li>我知道純前端工具的資料存在瀏覽器，<b>要長期保存就得自己部署／匯出</b>。</li>
+  </ul>
+</section>
+
+<!-- 13 -->
+<section class="chapter" id="sec-quotes">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--amber))">GOLDEN LINE</span>
+  <h2 class="ct">13. 老師金句</h2>
+  <div class="golden"><div class="q">「聲音復刻的重點：放一段乾淨人聲，就能用相同音色重新說話。」</div><div class="a">本機、不用把聲音上傳雲端，這是聲刻與 ElevenLabs 最大的差別。</div></div>
+  <div class="golden"><div class="q">「它本質上就是一支純前端單頁應用，所以可以直接掛上雲端。」</div><div class="a">看懂工具的本質，就看懂它能怎麼部署。</div></div>
+  <div class="golden"><div class="q">「遇到報錯不要慌，把錯誤截圖丟給 AI，它會告訴你怎麼修。」</div><div class="a">AI 協作開發的核心工作流。</div></div>
+</section>
+
+<!-- 14 -->
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,var(--ink3),var(--ink2))">SOURCE</span>
+  <h2 class="ct">14. 資料來源與整理說明</h2>
+  <ul class="pt">
+    <li><b>原始教材：</b>Google Drive 資料夾「第三堂」——課堂錄影兩段（第一段 59 分 49 秒＝聲刻／ElevenLabs／CAST；第二段 1 小時 26 分 24 秒＝CAST STUDIO／貼課通／上雲），加上四個工具檔（聲刻可攜版、CAST-STUDIO.exe、貼課通教師/學生版、BMC 生成器）。</li>
+    <li><b>整理方法：</b>兩段錄影用 ffmpeg <b>每 15 秒抽一格</b>（第一段 239 格＋第二段 346 格＝共 <b>585 格</b>），逐格用眼睛看過並記錄每個畫面；同時用 faster-whisper 產出<b>全程逐字稿</b>（第一段 695 段、第二段 2400 段），兩者交叉比對。</li>
+    <li><b>可信度標註：</b>本頁畫面截圖與功能名稱皆為<b>錄影實錄</b>；速度數字、API 說明取自畫面上 Codex／工具本身的文字；操作步驟為逐幀還原。少數聊天室暱稱為 OCR 辨識，可能有小誤差。</li>
+    <li><b>螢幕截圖：</b>取自錄影抽格（每 15 秒一格），非簡報原圖——這堂課沒有傳統簡報檔，「投影片」就是老師的實機操作畫面。</li>
+    <li><b>本堂沒有課後作業</b>（訂閱制實作課，重點在跟著動手做出自己的工具與雲端頁面）。</li>
+  </ul>
+  <div class="note steel">📌 <div>這一堂在課程館獨立歸在<b>「📦 訂閱制課程」</b>子系列，編號 <b>S3E3</b>（訂閱制第三季第三堂）。它與晨學講堂 EP 系列同一位講師（益師傅）、不同軌道，因此另開子系列、不併入直播電台的 EP 編號。</div></div>
+</section>
+
+</article>
+</div>
+
+<footer>
+  <p>📝 S3E3 逐幀課堂筆記 · 生成式AI應用電台・訂閱制第三季第三堂（益師傅）</p>
+  <p>依錄影逐幀（每 15 秒／共 585 格）＋全程逐字稿整理 · <a href="s3e3-ai-skills.html">🗺️ 互動技能地圖</a> · <a href="../radio/#ecf">🏠 回筆記館入口</a></p>
+</footer>
+
+</body>
+</html>
