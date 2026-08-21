@@ -36,7 +36,16 @@ const lead =
             {p.date && <div class="date">{p.date}</div>}
           </div>
           <div class="links">
-            {p.links.map((l) => <a href={`${base}notes/${l.href}`}>{l.label}</a>)}
+            {p.links.map((l) => {
+              const external = l.href.startsWith('http');
+              return (
+                <a
+                  href={external ? l.href : `${base}notes/${l.href}`}
+                  target={external ? '_blank' : undefined}
+                  rel={external ? 'noopener' : undefined}
+                >{l.label}</a>
+              );
+            })}
           </div>
         </div>
       ))}
