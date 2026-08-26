@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 充沛經濟研究彙整｜四位論者、六種思維鏈，與我的論文站的位置</title>
+<meta name="description" content="把科斯拉、哈薩比斯、Musk、Dan Koe 四場訪談，用六種思維鏈拆解，接回隱性知識外化（SECI Externalization）的研究主軸。">
+<style>
+  :root{
+    --ink:#2b2a26;--soft:#6b6760;--faint:#8e897f;--line:#e7e2d8;--paper:#faf7f0;--card:#fffdf8;
+    --clover:#5b8c5a;--clover-soft:#eef4ec;--accent:#c98a3a;--accent-soft:#f7eddb;
+    --plum:#8a5a7a;--plum-soft:#f4ecf2;--slate:#4a6b8a;--slate-soft:#eaf0f6;--rust:#a85a42;--rust-soft:#f8ece8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"PingFang TC","Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.85;-webkit-font-smoothing:antialiased;padding:0 0 90px}
+  .wrap{max-width:820px;margin:0 auto;padding:0 20px}
+
+  .band{background:linear-gradient(135deg,#4a6b8a,#8a5a7a);color:#fff;padding:40px 0 34px;margin-bottom:26px}
+  .band .wrap{display:flex;flex-direction:column;gap:11px}
+  .kicker{font-size:.78rem;letter-spacing:2.5px;opacity:.95;display:flex;align-items:center;gap:8px}
+  .kicker .dot{width:6px;height:6px;background:#fff;border-radius:50%;opacity:.8}
+  .band h1{font-size:1.55rem;line-height:1.5;font-weight:800}
+  .band .sub{font-size:.98rem;opacity:.95;line-height:1.7}
+  .meta-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+  .chip{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);padding:4px 12px;border-radius:999px;font-size:.82rem}
+
+  section{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px 22px 22px;margin-bottom:18px;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+  h2{font-size:1.16rem;color:var(--clover);font-weight:800;margin-bottom:14px;display:flex;align-items:flex-start;gap:9px;line-height:1.5}
+  h2 .em{font-size:1.2rem;flex:0 0 auto}
+  h3{font-size:1.02rem;font-weight:800;color:var(--ink);margin:20px 0 8px;padding-left:11px;border-left:3px solid var(--accent)}
+  h3:first-of-type{margin-top:6px}
+  section p{margin:0 0 12px;font-size:1rem}
+  section p:last-child{margin-bottom:0}
+  .lead p{font-size:1.05rem}
+  .muted{color:var(--soft);font-size:.94rem}
+
+  .pull{border-left:4px solid var(--clover);background:var(--clover-soft);padding:13px 16px;border-radius:0 12px 12px 0;margin:15px 0;font-weight:700}
+  .cite{border-left:4px solid var(--accent);background:var(--accent-soft);padding:13px 16px;border-radius:0 12px 12px 0;margin:13px 0}
+  .cite .q{font-style:italic;margin-bottom:6px}
+  .cite .src{display:block;font-size:.85rem;color:var(--soft)}
+  .cite .src a{color:var(--accent);font-weight:700;text-decoration:none;border-bottom:1px solid rgba(201,138,58,.4)}
+  .cite .resp{margin-top:9px;font-weight:700;color:var(--ink)}
+  .theory{border-left:4px solid var(--slate);background:var(--slate-soft);padding:13px 16px;border-radius:0 12px 12px 0;margin:13px 0}
+  .theory b{color:var(--slate)}
+  .warn{border-left:4px solid var(--rust);background:var(--rust-soft);padding:13px 16px;border-radius:0 12px 12px 0;margin:13px 0}
+  .warn b{color:var(--rust)}
+
+  .tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:10px 0 4px;border:1px solid var(--line);border-radius:12px}
+  table{border-collapse:collapse;width:100%;min-width:560px;font-size:.94rem;background:#fbf9f3}
+  th,td{text-align:left;padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.65}
+  th{background:#f3eee4;font-weight:800;color:var(--ink);font-size:.9rem;white-space:nowrap}
+  tr:last-child td{border-bottom:none}
+  td b{color:var(--accent)}
+
+  .fig{margin:14px 0 6px}
+  .fig-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:14px;background:#fbf9f3;padding:8px}
+  .fig svg{display:block;min-width:640px;width:100%;height:auto}
+  .fig-cap{font-size:.88rem;color:var(--soft);margin-top:8px;line-height:1.65}
+
+  .chain{border:1px solid var(--line);border-radius:14px;padding:15px 16px;margin:11px 0;background:#fbf9f3}
+  .chain .tag{display:inline-block;font-size:.76rem;font-weight:800;letter-spacing:.5px;padding:3px 10px;border-radius:999px;background:var(--plum-soft);color:var(--plum);margin-bottom:7px}
+  .chain h4{font-size:1rem;font-weight:800;margin-bottom:4px}
+  .chain h4 .en{font-weight:600;color:var(--faint);font-size:.86rem;margin-left:4px}
+  .chain .use{font-size:.95rem;color:var(--soft);margin:6px 0}
+  .chain .out{font-size:.96rem;background:#fff;border:1px dashed var(--line);border-radius:10px;padding:9px 12px;margin-top:8px}
+  .chain .out b{color:var(--clover)}
+  .chain .map{font-size:.88rem;color:var(--slate);margin-top:8px;font-weight:700}
+
+  ul.flow{list-style:none;display:flex;flex-direction:column;gap:10px;margin:8px 0 4px}
+  ul.flow li{background:#fbf9f3;border:1px solid var(--line);border-radius:12px;padding:11px 14px;font-size:.97rem;line-height:1.7}
+  ul.flow li .lead-emoji{font-size:1.05rem;margin-right:6px}
+  ol.num{margin:8px 0 4px 0;padding-left:0;list-style:none;counter-reset:n;display:flex;flex-direction:column;gap:11px}
+  ol.num li{counter-increment:n;position:relative;padding-left:38px;font-size:.97rem;line-height:1.75}
+  ol.num li::before{content:counter(n);position:absolute;left:0;top:1px;width:26px;height:26px;border-radius:50%;background:var(--clover);color:#fff;font-weight:800;font-size:.86rem;display:flex;align-items:center;justify-content:center}
+
+  .cats{display:grid;grid-template-columns:repeat(2,1fr);gap:11px;margin:8px 0}
+  .cat{border:1px solid var(--line);border-radius:12px;padding:13px 15px;background:#fbf9f3}
+  .cat b{display:block;color:var(--accent);font-size:.93rem;margin-bottom:4px}
+  .cat span{font-size:.95rem;color:var(--soft);line-height:1.7}
+
+  .ref{font-size:.92rem;color:var(--soft);line-height:1.9;padding-left:20px}
+  .ref li{margin-bottom:7px}
+  .ref a{color:var(--slate);text-decoration:none;border-bottom:1px solid rgba(74,107,138,.35)}
+  .about{font-size:.96rem;color:var(--soft)}
+  footer{text-align:center;color:var(--soft);font-size:.82rem;margin-top:26px;line-height:1.8}
+  .home-fab{position:fixed;left:14px;top:14px;z-index:50;background:rgba(255,255,255,.94);color:var(--slate);text-decoration:none;font-weight:800;font-size:.9rem;padding:9px 15px;border-radius:999px;box-shadow:0 8px 22px -8px rgba(60,50,30,.5);border:1px solid rgba(255,255,255,.7)}
+  @media(max-width:800px){.band{padding-top:64px}}
+  @media(max-width:460px){.cats{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+  <div class="band"><div class="wrap">
+    <div class="kicker"><span class="dot"></span>研究彙整・非公開課程頁<span class="dot"></span></div>
+    <h1>AI 充沛經濟研究彙整<br>四位論者、六種思維鏈，與我的論文站的位置</h1>
+    <p class="sub">把科斯拉、哈薩比斯、Musk、Dan Koe 四場訪談重新拆解，接回「隱性知識外化」的研究主軸。<br>2026.08.05</p>
+    <div class="meta-row"><span class="chip">SECI・Externalization</span><span class="chip">六種思維鏈</span><span class="chip">三角驗證</span><span class="chip">研究定位</span></div>
+  </div></div>
+
+  <div class="wrap">
+
+    <section class="lead">
+      <h2><span class="em">🎯</span>一句話先講：這場辯論的核心，就是我論文的研究問題</h2>
+      <p>電子報 006、007 我是以讀者身分在拆這四場訪談。這份彙整換一個身分：以研究生的角度，把它們當成論述資料來處理。</p>
+      <p>換了身分之後，第一件事就變得很清楚——</p>
+      <div class="pull">科斯拉說「2030 年 80% 的工作 AI 都做得了」，這句話表面上是經濟預測，本質上是一個<strong>知識論斷言</strong>：他在賭人類的工作知識幾乎都可以被外化（externalized）成機器讀得懂的形式。<br><br>而「外化的極限在哪裡」，正好就是我論文在做的題目。</div>
+      <p>換句話說，這四個人吵的不是經濟學，是<strong>知識能不能被說出來</strong>。這件事在知識管理領域已經吵了六十年，只是他們沒有用這個詞。</p>
+      <p class="muted">以下所有引用都經過查證，來源連結列在最後一節。凡是我的推論而非引述，都會標明。</p>
+    </section>
+
+    <section>
+      <h2><span class="em">🧱</span>第一層：四位論者的完整重整（強化版）</h2>
+      <p>電子報版本為了讀起來順，把數字都拿掉了。研究用的版本要把硬資料補回來，尤其是可被檢驗的具體斷言。</p>
+
+      <div class="tbl-scroll">
+      <table>
+        <tr><th>論者</th><th>身分與利益位置</th><th>可檢驗的具體斷言</th><th>論述策略</th></tr>
+        <tr>
+          <td><b>Vinod Khosla</b><br>科斯拉</td>
+          <td>昇陽電腦共同創辦人；Khosla Ventures 創辦人；OpenAI 早期投資人。<span class="muted">＝資本方，AI 生產力果實的直接受益者。</span></td>
+          <td>2030 年 80% 工作將可由 AI 執行；美國 GDP 中 15 兆美元屬勞動報酬，「大部分會消失」；主張資本利得稅與所得稅拉齊，2030 起年收 10 萬美元以下免所得稅，可讓 1.25 億人退出稅籍；以 UBI 避免「經濟反烏托邦」。</td>
+          <td>先給終局願景（radical abundance），再補機制。用「農業機械化」歷史類比降低威脅感。</td>
+        </tr>
+        <tr>
+          <td><b>Demis Hassabis</b><br>哈薩比斯</td>
+          <td>Google DeepMind 執行長；2024 諾貝爾化學獎（AlphaFold）。<span class="muted">＝實驗室方，同時是加速者與煞車呼籲者。</span></td>
+          <td>AGI 約在 2 到 5 年內；生物與核能風險可能在 2-3 年內落到管不住的開源模型裡；呼籲成立美國主導、有權在發布前審查前沿模型的監管機構；主張純文字模型不是 AGI 上限，必須理解物理世界。</td>
+          <td>風險與樂觀並置（「奇點的山腳下」）。用科學公益形象（AlphaFold 免費開放）建立可信度。</td>
+        </tr>
+        <tr>
+          <td><b>Elon Musk</b></td>
+          <td>xAI／Tesla／SpaceX。<span class="muted">＝競賽參與者，同時是規則提案者。</span></td>
+          <td>AI 進展是「超音速海嘯」，AGI 可能在 2026 年底前出現，五年內 AI 智慧總和超越全人類；提議各大實驗室每幾週開會互審前沿模型，業界自律失敗才由政府介入；近期改口稱 Anthropic 為「當前業界領導者」。</td>
+          <td>先承認風險（10-20% 災難機率）以取得發言正當性，再把治理權留在業界內部。</td>
+        </tr>
+        <tr>
+          <td><b>Dan Koe</b></td>
+          <td>作家／內容創作者，經營電子報 Future/Proof。<span class="muted">＝受眾即創作者，結論與讀者利益一致。</span></td>
+          <td>AI 自動化執行型工作，但人的獨特視角不可取代；提出五項技能棧：能動性、品味、視角、說服力、技術能力；經濟形態由工資制轉向創作者經濟；2027 年才行動就來不及。</td>
+          <td>不談總體經濟，只回答「我現在該做什麼」，因此最容易被個人採納，也最難被否證。</td>
+        </tr>
+      </table>
+      </div>
+
+      <div class="warn">
+        <b>研究上要注意的偏誤來源：</b>四位都不是中立觀察者，四位都有明確的利益位置，而且四位都在用「訪談」這個高影響力管道。這不是要否定他們的說法，而是提醒：<strong>他們的斷言要當「論述資料」處理，不能當「證據」引用</strong>。要引用進論文，得回頭找同儕審查過的來源。
+      </div>
+    </section>
+
+    <section>
+      <h2><span class="em">🧠</span>第二層：六種思維鏈，各自能問出什麼</h2>
+      <p>思維鏈不是只有一種。同一批材料換一種推理結構，問出來的東西完全不一樣。以下六種都實際套用在這四場訪談上，並標出它在研究方法學裡對應的正式名稱。</p>
+
+      <div class="chain">
+        <span class="tag">CHAIN 01</span>
+        <h4>線性思維鏈<span class="en">Chain of Thought · Wei et al., 2022</span></h4>
+        <p class="use">一條龍推到底：前提 → 中間推論 → 結論。<strong>四位論者自己用的都是這種。</strong></p>
+        <p class="use">例（科斯拉）：AI 能力持續成長 → 專業服務邊際成本趨近零 → 產出暴增、價格暴跌 → 物質充沛 → 人不必為生存工作。</p>
+        <div class="out"><b>問出來的東西：</b>每個人的推論在哪一步最脆弱。科斯拉這條鏈的第三步到第四步之間，藏了一個沒說出口的前提——「產出增加會自動變成人人有份」。<b>斷點就在那裡。</b></div>
+        <div class="map">🎓 對應方法：論證重構（argument reconstruction）、隱含前提辨識</div>
+      </div>
+
+      <div class="chain">
+        <span class="tag">CHAIN 02</span>
+        <h4>自我一致性<span class="en">Self-Consistency · Wang et al., 2022</span></h4>
+        <p class="use">跑多條獨立的鏈，看哪些結論會收斂。收斂的可信度高，只有一條鏈說的要打折。</p>
+        <div class="tbl-scroll">
+        <table>
+          <tr><th>斷言</th><th>幾人同意</th><th>可信度</th></tr>
+          <tr><td>AI 能力未來數年大幅提升</td><td>4／4</td><td><b>高</b>（四條獨立鏈皆收斂）</td></tr>
+          <tr><td>大量既有工作會被重構或取代</td><td>4／4</td><td><b>高</b></td></tr>
+          <tr><td>治理／監管目前明顯落後</td><td>3／4</td><td><b>中高</b></td></tr>
+          <tr><td>重分配機制可行且會被執行</td><td>1／4</td><td><b>低</b>（僅科斯拉，且他是受益方）</td></tr>
+          <tr><td>創意工作是安全區</td><td>1／4</td><td><b>低</b>（僅 Dan Koe，且與其讀者利益一致）</td></tr>
+        </table>
+        </div>
+        <div class="out"><b>問出來的東西：</b>這張表本身就是一個可以放進論文的成果——<b>「AI 會很強」是共識，「所以我們會沒事」不是共識</b>。聳動標題通常掛在低可信度的那兩列上。</div>
+        <div class="map">🎓 對應方法：Denzin 資料三角驗證（data triangulation）</div>
+      </div>
+
+      <div class="chain">
+        <span class="tag">CHAIN 03</span>
+        <h4>思維樹<span class="en">Tree of Thoughts · Yao et al., 2023</span></h4>
+        <p class="use">不推單一結論，改成分支探索：讓關鍵變數取不同值，看各自導向什麼未來。</p>
+        <p class="use">這裡的關鍵變數，我設定為<strong>「外化的極限」</strong>——也就是人類工作知識中，究竟有多少比例能被轉成機器可處理的形式。</p>
+        <ul class="flow">
+          <li><span class="lead-emoji">🌳</span><b>分支 A・外化極限很高（&gt;80%）</b>：科斯拉的劇本成立，衝擊集中在三到五年內，重分配變成唯一活路，政治風險極高。</li>
+          <li><span class="lead-emoji">🌳</span><b>分支 B・外化極限中等（40-70%）</b>：人機混合長期化，職務重組而非消滅，關鍵能力變成「知道哪些該交給 AI、哪些不能」。<span class="muted">← 我目前認為最可能</span></li>
+          <li><span class="lead-emoji">🌳</span><b>分支 C・外化極限偏低（&lt;40%）</b>：Polanyi 天花板提早撞上，AI 停在輔助層，衝擊主要落在「已經文件化」的工作，而非「靠手感」的工作。</li>
+        </ul>
+        <div class="out"><b>問出來的東西：</b>三個分支不是三種猜測，是<b>三個可被研究檢驗的假設</b>。而檢驗它們的方法，正好就是量測外化在真實場域能走到多遠——這就是論文能做的事。</div>
+        <div class="map">🎓 對應方法：情境規劃（scenario planning）、命題發展</div>
+      </div>
+
+      <div class="chain">
+        <span class="tag">CHAIN 04</span>
+        <h4>思維圖<span class="en">Graph of Thoughts · Besta et al., 2023</span></h4>
+        <p class="use">節點之間可以互相連結、聚合、回饋，不是平行四條線。<strong>這就是我在電子報 007 用的「交叉照射法」——只是那時候我不知道它有名字。</strong></p>
+        <ol class="num">
+          <li><b>哈薩比斯 → 照出科斯拉</b>：科斯拉的重分配靠稅制，哈薩比斯說連監管機構都還沒蓋起來。連監管都建不了，更龐大的稅制重分配憑什麼？</li>
+          <li><b>Musk → 照出 Musk 自己</b>：一邊說「超音速海嘯、AGI 年底可能到」，一邊說「先讓業界自己開會」。急迫性與治理主張互相矛盾。</li>
+          <li><b>Polanyi → 照出 Dan Koe</b>：他說的護城河（視角、品味）其實是 1966 年就被命名過的隱性知識。他重述了一個舊命題卻沒有引用它，也就沒有繼承它的邊界條件。</li>
+          <li><b>Dan Koe → 照出科斯拉</b>：如果 80% 工作可被 AI 執行，創意工作憑什麼是例外？兩人不能同時全對。</li>
+        </ol>
+        <div class="out"><b>問出來的東西：</b>洞不是靠某個人補上的，是靠<b>另一個人的視角照出來的</b>。四條平行鏈永遠拼不出地圖，交叉之後才會。</div>
+        <div class="map">🎓 對應方法：理論三角驗證（theory triangulation）、恆常比較法</div>
+      </div>
+
+      <div class="chain">
+        <span class="tag">CHAIN 05</span>
+        <h4>反思鏈<span class="en">Reflexion · Shinn et al., 2023</span></h4>
+        <p class="use">推完之後回頭問：<strong>是誰在推？他的位置怎麼汙染了這條鏈？</strong>而且這一問要包括自己。</p>
+        <ul class="flow">
+          <li><span class="lead-emoji">🪞</span>科斯拉主張課稅重分配，但他自己是資本利得的最大受益方之一——這讓他的主張<b>更可信</b>（反自身利益）還是<b>更可疑</b>（先喊口號、實際遊說另一套）？我認為要看他有沒有真的推動立法，而不是看他講得多誠懇。</li>
+          <li><span class="lead-emoji">🪞</span>Dan Koe 的讀者是創作者，「創意不可取代」是他們最想聽的話。結論與受眾利益一致時，要提高證據門檻。</li>
+          <li><span class="lead-emoji">🪞</span><b>而我自己呢？</b>我是 AI 課程講師，也是非工程師背景的研究生。「AI 需要人來引導、需要領域知識」對我最有利。我對分支 B 的偏好，有多少是證據，有多少是我希望它成立？</li>
+        </ul>
+        <div class="out"><b>問出來的東西：</b>這一段如果寫進論文，就是<b>研究者立場性聲明（positionality statement）</b>。它不是弱點自曝，是質性研究嚴謹度的一部分。</div>
+        <div class="map">🎓 對應方法：立場性與反身性（positionality &amp; reflexivity）</div>
+      </div>
+
+      <div class="chain">
+        <span class="tag">CHAIN 06</span>
+        <h4>反面思維鏈<span class="en">魔鬼代言人／否證取向</span></h4>
+        <p class="use">刻意站到自己的對立面：<strong>假設科斯拉完全正確，我的研究會怎樣？</strong></p>
+        <p class="use">如果外化極限真的高到 80%，那麼「用 AI 把職人知識外化並可檢索」這件事，就不只是提升效率的工具，而是<strong>加速取代職人的工具</strong>。我的研究會從「知識傳承」變成「知識萃取後淘汰載體」。</p>
+        <div class="out"><b>問出來的東西：</b>這是我目前為止最不舒服、但也最有價值的一個問題。它逼出了一個研究倫理層面的提問：<b>外化的目的是傳承，還是替代？誰決定？被外化的人有沒有話語權？</b>這個提問本身就可以成為論文討論章節的一節。</div>
+        <div class="map">🎓 對應方法：否證思維（Popper）、負面個案分析</div>
+      </div>
+    </section>
+
+    <section>
+      <h2><span class="em">🗺️</span>第三層：思維導圖</h2>
+      <p>把四位論者、三個理論根基、與中央研究問題的關係畫成一張圖。中間那個問題是樞紐——上面四位都在對它下注，下面三個理論都在為它設界。</p>
+
+      <div class="fig">
+        <div class="fig-scroll">
+        <svg viewBox="0 0 900 620" role="img" aria-label="AI 充沛經濟與隱性知識外化的關係圖：上層四位論者、中央研究問題、下層三個理論根基">
+          <defs>
+            <marker id="ar" markerWidth="9" markerHeight="9" refX="7.5" refY="3.2" orient="auto">
+              <path d="M0,0 L0,6.4 L7.5,3.2 z" fill="#8e897f"/>
+            </marker>
+            <marker id="arR" markerWidth="9" markerHeight="9" refX="7.5" refY="3.2" orient="auto">
+              <path d="M0,0 L0,6.4 L7.5,3.2 z" fill="#a85a42"/>
+            </marker>
+          </defs>
+
+          <!-- 上層標題 -->
+          <text x="620" y="26" text-anchor="middle" font-size="13" font-weight="700" fill="#8e897f" letter-spacing="2">論 者 層 ・ 誰 在 對 這 個 問 題 下 注</text>
+
+          <!-- 交叉照射：哈薩比斯 → 科斯拉（跨過兩個框的上方） -->
+          <path d="M300,64 C280,26 160,24 130,60" stroke="#a85a42" stroke-width="1.6" fill="none" stroke-dasharray="5 4" marker-end="url(#arR)"/>
+          <text x="212" y="22" text-anchor="middle" font-size="11" fill="#a85a42" font-weight="700">照出落差</text>
+
+          <!-- 四位論者 -->
+          <g>
+            <rect x="18" y="66" width="196" height="78" rx="12" fill="#f7eddb" stroke="#c98a3a" stroke-width="1.5"/>
+            <text x="116" y="90" text-anchor="middle" font-size="15" font-weight="800" fill="#8a5a20">科斯拉</text>
+            <text x="116" y="110" text-anchor="middle" font-size="12.5" fill="#6b6760">賭外化極限很高</text>
+            <text x="116" y="129" text-anchor="middle" font-size="12.5" fill="#6b6760">80% 工作・15 兆 GDP</text>
+          </g>
+          <g>
+            <rect x="234" y="66" width="196" height="78" rx="12" fill="#f7eddb" stroke="#c98a3a" stroke-width="1.5"/>
+            <text x="332" y="90" text-anchor="middle" font-size="15" font-weight="800" fill="#8a5a20">哈薩比斯</text>
+            <text x="332" y="110" text-anchor="middle" font-size="12.5" fill="#6b6760">賭能力會到，治理跟不上</text>
+            <text x="332" y="129" text-anchor="middle" font-size="12.5" fill="#6b6760">AGI 2-5 年・需監管</text>
+          </g>
+          <g>
+            <rect x="450" y="66" width="196" height="78" rx="12" fill="#f7eddb" stroke="#c98a3a" stroke-width="1.5"/>
+            <text x="548" y="90" text-anchor="middle" font-size="15" font-weight="800" fill="#8a5a20">Musk</text>
+            <text x="548" y="110" text-anchor="middle" font-size="12.5" fill="#6b6760">賭速度，治理留業界</text>
+            <text x="548" y="129" text-anchor="middle" font-size="12.5" fill="#6b6760">超音速海嘯・同儕審查</text>
+          </g>
+          <g>
+            <rect x="666" y="66" width="216" height="78" rx="12" fill="#f7eddb" stroke="#c98a3a" stroke-width="1.5"/>
+            <text x="774" y="90" text-anchor="middle" font-size="15" font-weight="800" fill="#8a5a20">Dan Koe</text>
+            <text x="774" y="110" text-anchor="middle" font-size="12.5" fill="#6b6760">賭外化極限低</text>
+            <text x="774" y="129" text-anchor="middle" font-size="12.5" fill="#6b6760">視角・品味・能動性</text>
+          </g>
+
+          <!-- 連線到中央 -->
+          <path d="M116,144 L116,190 L360,190 L400,236" stroke="#8e897f" stroke-width="1.6" fill="none" marker-end="url(#ar)"/>
+          <path d="M332,144 L332,206 L420,236" stroke="#8e897f" stroke-width="1.6" fill="none" marker-end="url(#ar)"/>
+          <path d="M548,144 L548,206 L480,236" stroke="#8e897f" stroke-width="1.6" fill="none" marker-end="url(#ar)"/>
+          <path d="M774,144 L774,190 L540,190 L500,236" stroke="#8e897f" stroke-width="1.6" fill="none" marker-end="url(#ar)"/>
+
+          <!-- 中央研究問題 -->
+          <g>
+            <rect x="212" y="240" width="476" height="104" rx="16" fill="#eaf0f6" stroke="#4a6b8a" stroke-width="2.5"/>
+            <text x="450" y="270" text-anchor="middle" font-size="12" font-weight="700" fill="#4a6b8a" letter-spacing="1.5">中 央 研 究 問 題</text>
+            <text x="450" y="299" text-anchor="middle" font-size="18" font-weight="800" fill="#2b2a26">外化的極限在哪裡？</text>
+            <text x="450" y="324" text-anchor="middle" font-size="13" fill="#4a6b8a">隱性知識能被轉成機器讀得懂的形式，到什麼程度為止</text>
+          </g>
+
+          <!-- 我的論文位置 -->
+          <path d="M450,344 L450,384" stroke="#5b8c5a" stroke-width="2.2" fill="none" marker-end="url(#ar)"/>
+          <g>
+            <rect x="246" y="388" width="408" height="66" rx="13" fill="#eef4ec" stroke="#5b8c5a" stroke-width="2"/>
+            <text x="450" y="412" text-anchor="middle" font-size="13" font-weight="800" fill="#5b8c5a">我的論文站在這裡</text>
+            <text x="450" y="435" text-anchor="middle" font-size="12.5" fill="#2b2a26">外化之後的斷點：GenAI ＋ 語意向量庫 ＋ 語意檢索</text>
+          </g>
+
+          <!-- 下層標題 -->
+          <text x="450" y="486" text-anchor="middle" font-size="13" font-weight="700" fill="#8e897f" letter-spacing="2">理 論 層 ・ 誰 在 為 這 個 問 題 設 界</text>
+
+          <!-- 三個理論 -->
+          <g>
+            <rect x="18" y="500" width="272" height="96" rx="12" fill="#eaf0f6" stroke="#4a6b8a" stroke-width="1.5"/>
+            <text x="154" y="524" text-anchor="middle" font-size="14" font-weight="800" fill="#4a6b8a">Polanyi 1966</text>
+            <text x="154" y="545" text-anchor="middle" font-size="12.5" fill="#6b6760">隱性維度・我們知道的</text>
+            <text x="154" y="563" text-anchor="middle" font-size="12.5" fill="#6b6760">比能說出來的多</text>
+            <text x="154" y="584" text-anchor="middle" font-size="11.5" fill="#a85a42" font-weight="700">→ 頂住科斯拉與 Dan Koe</text>
+          </g>
+          <g>
+            <rect x="310" y="500" width="280" height="96" rx="12" fill="#eaf0f6" stroke="#4a6b8a" stroke-width="1.5"/>
+            <text x="450" y="524" text-anchor="middle" font-size="14" font-weight="800" fill="#4a6b8a">Nonaka 1995・SECI</text>
+            <text x="450" y="545" text-anchor="middle" font-size="12.5" fill="#6b6760">外化 Externalization</text>
+            <text x="450" y="563" text-anchor="middle" font-size="12.5" fill="#6b6760">隱性 → 顯性的那一段</text>
+            <text x="450" y="584" text-anchor="middle" font-size="11.5" fill="#5b8c5a" font-weight="700">→ 我的主戰場</text>
+          </g>
+          <g>
+            <rect x="610" y="500" width="272" height="96" rx="12" fill="#eaf0f6" stroke="#4a6b8a" stroke-width="1.5"/>
+            <text x="746" y="524" text-anchor="middle" font-size="14" font-weight="800" fill="#4a6b8a">Harnad 1990</text>
+            <text x="746" y="545" text-anchor="middle" font-size="12.5" fill="#6b6760">符號落地 symbol</text>
+            <text x="746" y="563" text-anchor="middle" font-size="12.5" fill="#6b6760">grounding problem</text>
+            <text x="746" y="584" text-anchor="middle" font-size="11.5" fill="#a85a42" font-weight="700">→ 頂住哈薩比斯</text>
+          </g>
+
+          <!-- 理論到中央的連線 -->
+          <path d="M154,500 L154,460 L212,300" stroke="#4a6b8a" stroke-width="1.4" fill="none" stroke-dasharray="5 4" marker-end="url(#ar)"/>
+          <path d="M746,500 L746,460 L688,300" stroke="#4a6b8a" stroke-width="1.4" fill="none" stroke-dasharray="5 4" marker-end="url(#ar)"/>
+        </svg>
+        </div>
+        <p class="fig-cap">圖一｜上層是四位論者對「外化極限」下的注（實線），下層是三個為它設界的理論（虛線）。中央問題是樞紐，我的論文位置在中央問題正下方——處理的是外化之後、知識還是找不到的那個斷點。紅色「照出」線代表交叉觀察：哈薩比斯的治理現況照出科斯拉重分配主張的落差。</p>
+      </div>
+
+      <h3>第二張圖：三層知識分類，切開這場辯論</h3>
+      <p>四位論者最大的問題，是把「知識」當成一整塊在談。用我論文的三層分類切開之後，會發現他們其實各自只說對了一層。</p>
+
+      <div class="fig">
+        <div class="fig-scroll">
+        <svg viewBox="0 0 900 340" role="img" aria-label="三層知識分類與四位論者主張的對應：顯性知識層、半顯性知識層、隱性知識層">
+          <text x="450" y="24" text-anchor="middle" font-size="13" font-weight="700" fill="#8e897f" letter-spacing="2">三 層 知 識 分 類 ・ 誰 在 哪 一 層 說 對 了</text>
+
+          <g>
+            <rect x="30" y="42" width="840" height="80" rx="12" fill="#f8ece8" stroke="#a85a42" stroke-width="1.6"/>
+            <text x="52" y="70" font-size="15" font-weight="800" fill="#a85a42">顯性知識層</text>
+            <text x="52" y="92" font-size="12.5" fill="#6b6760">已文件化：法規查詢、標準作業、報表、範本、程式碼</text>
+            <text x="52" y="111" font-size="12.5" fill="#2b2a26" font-weight="700">→ 科斯拉是對的。這一層 AI 幾乎全拿，而且已經在發生。</text>
+            <text x="838" y="76" text-anchor="end" font-size="30" font-weight="800" fill="#a85a42" opacity="0.35">L1</text>
+          </g>
+
+          <g>
+            <rect x="30" y="132" width="840" height="94" rx="12" fill="#eef4ec" stroke="#5b8c5a" stroke-width="2.4"/>
+            <text x="52" y="160" font-size="15" font-weight="800" fill="#5b8c5a">半顯性知識層（Latent Knowledge）</text>
+            <text x="52" y="182" font-size="12.5" fill="#6b6760">可片段表達但散落各處：會議紀錄裡的一句判斷、老師傅隨口講的訣竅、交接文件的註解</text>
+            <text x="52" y="201" font-size="12.5" fill="#2b2a26" font-weight="700">→ 四個人都沒講到這一層。這裡不是「能不能說出來」，是「說出來了卻找不到」。</text>
+            <text x="52" y="219" font-size="12.5" fill="#5b8c5a" font-weight="800">→ 這就是我的研究缺口：數位片段知識 ＋ 語意檢索 ＋ 符號落地</text>
+            <text x="838" y="168" text-anchor="end" font-size="30" font-weight="800" fill="#5b8c5a" opacity="0.35">L2</text>
+          </g>
+
+          <g>
+            <rect x="30" y="236" width="840" height="80" rx="12" fill="#eaf0f6" stroke="#4a6b8a" stroke-width="1.6"/>
+            <text x="52" y="264" font-size="15" font-weight="800" fill="#4a6b8a">隱性知識層</text>
+            <text x="52" y="286" font-size="12.5" fill="#6b6760">說不出來的手感：官能檢測、臨場判斷、五官經驗（Polanyi 天花板）</text>
+            <text x="52" y="305" font-size="12.5" fill="#2b2a26" font-weight="700">→ Dan Koe 是對的，但他不知道這叫隱性知識，也沒說這層有多薄。</text>
+            <text x="838" y="272" text-anchor="end" font-size="30" font-weight="800" fill="#4a6b8a" opacity="0.35">L3</text>
+          </g>
+        </svg>
+        </div>
+        <p class="fig-cap">圖二｜把知識切成三層之後，科斯拉與 Dan Koe 的爭論就消解了——他們在講不同層。真正沒有人在講的是中間那層：已經被說出來、卻找不到也用不上的半顯性知識。那正是我的論文要處理的位置。</p>
+      </div>
+
+      <div class="pull">這張圖是這份彙整最有價值的產出：<strong>四位論者的分歧，其實是把三層知識當成一層在吵。分層之後，我的研究缺口自己浮出來了。</strong></div>
+    </section>
+
+    <section>
+      <h2><span class="em">🔬</span>第四層：這跟我的論文到底怎麼接</h2>
+
+      <h3>接點一：科斯拉的 80%，本質是一個外化率斷言</h3>
+      <p>「80% 的工作 AI 都做得了」要成立，前提是這些工作的知識可以被外化到機器能處理的程度。這在知識管理裡不是新問題，是 SECI 模型裡 T→E 那一段的老問題。</p>
+      <div class="theory">
+        <b>Polanyi (1966)：</b>「We can know more than we can tell.」——我們知道的比我們能說出來的多。這後來被稱為 <b>Polanyi 悖論</b>：有很多任務我們直覺上會做，卻無法把規則講清楚。<br><br>
+        <b>研究上的意義：</b>科斯拉的樂觀論有一個理論天花板，而這個天花板 1966 年就被命名了。我的論文如果引用 Polanyi 來對照當代 AI 樂觀論，這是一個現成且紮實的論述位置。
+      </div>
+      <p><strong>我自己的一手案例正好可以檢驗它。</strong>三得利參訪時我看到兩種命運：アロマリッチ製法花十年把老師傅的手感外化成標準製法，成功了；但官能檢測到現在還是要靠人的五官判斷，外化不了。<span class="muted">（記在〈三得利參訪學習日誌〉第 06 章）</span></p>
+      <div class="pull">同一個場域、同一批職人，一項外化成功、一項外化失敗。<strong>那條界線在哪裡，就是我要研究的東西。</strong>科斯拉直接假設界線很遠，我手上有反例。</div>
+
+      <h3>接點二：哈薩比斯的「純文字不是上限」＝ 符號落地問題</h3>
+      <p>他說 AGI 必須理解物理世界、要能支援機器人與智慧眼鏡，純文字模型不是天花板。這在認知科學裡有一個更早的名字。</p>
+      <div class="theory">
+        <b>Harnad (1990)，符號落地問題（The Symbol Grounding Problem）：</b>符號系統如何讓符號的意義內生於系統本身，而不是靠外部賦予？也就是文字符號要怎麼跟真實世界的物件與經驗接上。<br><br>
+        <b>研究上的意義：</b>「符號落地」正好是我術語表裡釘死譯法的詞。哈薩比斯講的是同一個問題，只是換成產業語言。<b>這給了我一條把 1990 年的理論接到 2026 年前沿實務的橋。</b>
+      </div>
+      <p>對我的研究來說這很關鍵：職人知識外化之後變成文件（符號），但文件裡的「稍微再悶一下」「顏色差不多了」如果沒有跟現場的感官經驗接上，語意檢索找得到那句話，使用者還是不知道那是什麼意思。<strong>找得到 ≠ 用得上，中間卡的就是符號落地。</strong></p>
+
+      <h3>接點三：Dan Koe 的護城河，其實是隱性知識的另一種說法</h3>
+      <p>他說人類最後剩下視角、品味、能動性、說服力。這四樣的共同特徵是——<strong>都很難被明確表述成規則</strong>。那就是隱性知識的定義。</p>
+      <div class="warn">
+        <b>但他因此漏掉了兩件事：</b><br>
+        1. 他沒繼承 Polanyi 命題的邊界條件——隱性知識<b>難以</b>外化，不等於<b>不能</b>外化。三得利花十年就把一部分手感外化了。<br>
+        2. 他把隱性知識當成一道固定的牆，但外化技術本身在進步。牆會被推移，只是速度未知。<b>而牆現在在哪裡、被推得多快，就是研究題目。</b>
+      </div>
+
+      <h3>接點四：可以直接放進論文的三個位置</h3>
+      <ol class="num">
+        <li><b>第一章・研究背景與動機</b>：用四位論者的公開斷言，佐證「AI 對知識工作的衝擊已成產業層級議題」，但同時指出他們的論述都停在總體層次，缺乏對知識類型的分層討論——這就是研究缺口的入口。<span class="muted">注意：訪談只能當背景，不能當理論依據。</span></li>
+        <li><b>第二章・文獻探討</b>：Polanyi (1966) → Nonaka &amp; Takeuchi (1995) → Harnad (1990) 這條線可以撐起「外化的理論極限」一節，再接到當代 GenAI 與語意檢索文獻，形成「理論極限 vs 技術新解」的對話。</li>
+        <li><b>第五章・討論／研究倫理</b>：CHAIN 06 逼出來的那個提問——外化的目的是傳承還是替代、被外化的人有沒有話語權——可以獨立成一節。這種提問在知識管理論文裡不常見，反而是亮點。</li>
+      </ol>
+
+      <h3>接點五：口試時可能被問到的三題，我先想過</h3>
+      <div class="cats">
+        <div class="cat"><b>Q：為什麼是半顯性知識？</b><span>因為顯性層 AI 已解決、隱性層短期無解，只有中間這層是「投入努力就能改善、而且改善幅度最大」的位置。這是務實的研究選擇，不是逃避難題。</span></div>
+        <div class="cat"><b>Q：語意檢索不是現成技術嗎，你的貢獻在哪？</b><span>技術是現成的，但把它接到 SECI 的外化缺口、並在真實職人場域驗證「找得到」與「用得上」的落差，這是管理研究而非技術研究的貢獻。</span></div>
+        <div class="cat"><b>Q：你怎麼證明外化有極限？</b><span>不需要證明極限存在（Polanyi 已論證），需要的是在特定場域量出它現在的位置。三得利那組成功／失敗對照就是方法原型。</span></div>
+        <div class="cat"><b>Q：這些訪談算不算資料？</b><span>算論述資料（discourse data），不算實證證據。要進論文須明確標示其性質與利益位置，並以同儕審查文獻支撐核心論點。</span></div>
+      </div>
+    </section>
+
+    <section>
+      <h2><span class="em">🪞</span>第五層：對我個人的三個觸動面向</h2>
+
+      <h3>學業上：我無意間做了一次三角驗證</h3>
+      <p>我在電子報 007 用的方法，我當時只覺得是「把四個人擺在一起看」。但那件事在研究方法學裡有正式名稱——</p>
+      <div class="theory">
+        <b>Denzin 的四種三角驗證：</b>資料三角驗證（不同來源）、研究者三角驗證（不同研究者）、理論三角驗證（不同理論視角）、方法三角驗證（不同方法）。Denzin 主張研究者必然帶著個人信念與社會政治影響，不可能做到完全價值中立，三角驗證正是用來控制這種偏誤、提高可信度的手段。<br><br>
+        我做的是<b>資料三角驗證＋理論三角驗證</b>的組合，加上一段自發的<b>反身性檢查</b>。
+      </div>
+      <div class="pull">這件事的意義不是「我很厲害」，而是：<strong>我已經在用研究方法思考了，只是還沒有把它命名。</strong>命名之後，它就可以被寫進論文的方法章，也可以被複製到下一批文獻上。</div>
+      <p>實務上的下一步：把這套「交叉照射法」固定成我讀文獻的流程——每讀完三到四篇同主題文獻，就強迫自己做一次交叉照射，找出彼此照出的洞，而不是各自摘要完就結束。這會比逐篇摘要更快長出研究缺口。</p>
+
+      <h3>工作上：教學內容要換一個層次</h3>
+      <ul class="flow">
+        <li><span class="lead-emoji">🎓</span><b>停止賣「AI 好強」，改賣「哪一層 AI 拿得走」。</b>企業學員真正焦慮的不是 AI 會不會變強，是「我這份工作在哪一層」。三層知識分類圖可以直接變成課堂上的一張投影片，讓學員自己把工作內容分層——這比任何工具教學都更打中人。</li>
+        <li><span class="lead-emoji">🏭</span><b>製造業客戶特別吃這一套。</b>他們最痛的就是老師傅要退休、經驗帶不走。用「顯性／半顯性／隱性」三層講給廠長聽，比講 RAG 架構有效十倍，而且直接連到我論文的專業。</li>
+        <li><span class="lead-emoji">🔍</span><b>我的差異化不是會用工具，是知道工具在知識鏈上的位置。</b>會用 AI 工具的講師很多，能講清楚「為什麼你的文件寫了卻沒人用」的很少。這是研究生身分給我的獨有槓桿。</li>
+      </ul>
+
+      <h3>生活上：對孩子與家人的那一題，我的答案變了</h3>
+      <p>影片標題是「未來孩子不需要為了生存而工作」。看完四個人之後，我不會再把這句話當成安慰。</p>
+      <p>四人共識只到「AI 會很強、工作會被重構」，「所以我們會沒事」只有一個人說，而且他是最大受益者。<strong>把小孩的未來押在一條只有一個人走過、而且那個人有利益關係的推論上，不是樂觀，是不做功課。</strong></p>
+      <p>但也不必焦慮到另一個極端。三層分類給了具體可做的事：不要把時間投在純顯性層的能力（背標準流程、記規則），要投在能跨層的能力——判斷、提問、把說不清楚的事講清楚。<strong>最後這項尤其重要，因為「把隱性變成半顯性」的能力，正好是 AI 目前最需要人來做的那一段。</strong></p>
+      <div class="pull">我自己的結論：與其焦慮工作會不會被取代，不如問「我的工作在哪一層、我能不能往上一層走」。這個問題比預言可靠，因為它現在就能回答，也現在就能行動。</div>
+    </section>
+
+    <section>
+      <h2><span class="em">📌</span>誠實留白：這份彙整還缺什麼</h2>
+      <ul class="flow">
+        <li><span class="lead-emoji">⬜</span><b>四位論者的原始長訪談我還沒逐字看完。</b>目前依據的是報導與摘要，引用強度只到「二手可查證」。要進論文必須回到一手影音或逐字稿。</li>
+        <li><span class="lead-emoji">⬜</span><b>缺同儕審查文獻的支撐。</b>Polanyi、Nonaka、Harnad 是理論根基，但「GenAI 對知識工作衝擊」的實證研究我還沒系統性讀過，這是文獻探討必補的一塊。</li>
+        <li><span class="lead-emoji">⬜</span><b>外化極限沒有量測方法。</b>三層分類目前是概念架構，還不是可操作化的變數。要能做研究，得先想清楚怎麼判定一則知識屬於哪一層。</li>
+        <li><span class="lead-emoji">⬜</span><b>UBI 實驗的實證資料還沒查。</b>電子報 006 就列了這一項，到現在還沒做。</li>
+      </ul>
+      <p class="muted">留白比假裝拼滿有價值。這四格就是下一輪要做的事。</p>
+    </section>
+
+    <section>
+      <h2><span class="em">📚</span>參考來源</h2>
+      <h3>理論文獻</h3>
+      <ul class="ref">
+        <li>Polanyi, M. (1966). <i>The Tacit Dimension</i>. University of Chicago Press.（「We can know more than we can tell」；Polanyi 悖論）</li>
+        <li>Nonaka, I., &amp; Takeuchi, H. (1995). <i>The Knowledge-Creating Company</i>. Oxford University Press.（SECI 模型；Externalization）</li>
+        <li>Harnad, S. (1990). The symbol grounding problem. <i>Physica D: Nonlinear Phenomena, 42</i>(1-3), 335-346.</li>
+        <li>Denzin, N. K. 四種三角驗證：資料／研究者／理論／方法。參見 <a href="https://pubmed.ncbi.nlm.nih.gov/25158659/" target="_blank" rel="noopener">The use of triangulation in qualitative research</a></li>
+        <li>立場性與反身性：<a href="https://oercollective.caul.edu.au/qualitative-research/chapter/27/" target="_blank" rel="noopener">Researcher positionality（Qualitative Research 實務指引第 27 章）</a></li>
+      </ul>
+      <h3>思維鏈方法</h3>
+      <ul class="ref">
+        <li><a href="https://www.promptingguide.ai/techniques/cot" target="_blank" rel="noopener">Chain-of-Thought Prompting（Wei et al., 2022）</a></li>
+        <li><a href="https://www.promptingguide.ai/techniques/tot" target="_blank" rel="noopener">Tree of Thoughts（Yao et al., 2023）</a>／<a href="https://proceedings.neurips.cc/paper_files/paper/2023/file/271db9922b8d1f4dd7aaef84ed5ac703-Paper-Conference.pdf" target="_blank" rel="noopener">NeurIPS 原文</a></li>
+        <li><a href="https://ojs.aaai.org/index.php/AAAI/article/view/29720/31236" target="_blank" rel="noopener">Graph of Thoughts（Besta et al., AAAI）</a>／<a href="https://arxiv.org/html/2401.14295v3" target="_blank" rel="noopener">Chains, Trees, Graphs of Thoughts 綜述</a></li>
+      </ul>
+      <h3>四位論者的公開發言</h3>
+      <ul class="ref">
+        <li>科斯拉：<a href="https://fortune.com/2026/03/06/vinod-khosla-predicts-80-percent-of-jobs-done-by-ai-15-trillion-of-gdp-going-away/" target="_blank" rel="noopener">Fortune 專訪，80% 工作與 15 兆 GDP（2026.03.06）</a>／<a href="https://www.benzinga.com/markets/tech/26/07/60271802/vinod-khosla-says-we-need-to-tilt-the-seesaw-toward-labor-urges-higher-capital-gains-taxes" target="_blank" rel="noopener">主張提高資本利得稅（2026.07）</a></li>
+        <li>哈薩比斯：<a href="https://www.axios.com/2026/07/14/demis-hassabis-ai-regulation-google-deepmind" target="_blank" rel="noopener">Axios：呼籲美國主導的 AI 監管機構（2026.07.14）</a>／<a href="https://www.gsb.stanford.edu/insights/demis-hassabis-thinks-were-foothills-singularity" target="_blank" rel="noopener">Stanford GSB：奇點的山腳下（2026.06.18）</a></li>
+        <li>Musk：<a href="https://www.bnnbloomberg.ca/business/2026/07/23/musk-proposes-peer-review-for-frontier-ai-models-in-economist-interview/" target="_blank" rel="noopener">《經濟學人》專訪：前沿模型同儕審查（2026.07.23）</a></li>
+        <li>Dan Koe：<a href="https://letters.thedankoe.com/p/the-future-of-work-when-work-is-meaningless" target="_blank" rel="noopener">The future of work when work is meaningless</a></li>
+      </ul>
+      <h3>我自己的前期紀錄</h3>
+      <ul class="ref">
+        <li><a href="suntory-visit-report.html">三得利參訪學習日誌</a>——第 06 章「隱性知識外顯化的兩種命運」，本研究的一手觀察來源</li>
+        <li><a href="edm-006.html">電子報 006</a>——第一次提出「中間過程去哪了」的疑問</li>
+        <li><a href="edm-007.html">電子報 007</a>——第一次做交叉照射，本彙整的方法原型</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2><span class="em">🍀</span>關於這份文件</h2>
+      <p class="about">Tarshar（羅靜娟），淡江 EMBA 資管研究生，AI 課程講師。這份彙整是為了自己的論文研究而做，不是課程教材。內容包含公開查證資料、理論文獻，以及我個人的判斷與推論——凡屬推論處均已標明，未經同儕審查，引用請自行查證原始出處。</p>
+    </section>
+
+    <footer>
+      🔬 AI 充沛經濟研究彙整 · 2026.08.05<br>
+      🍀Learn AI with Tarshar
+    </footer>
+  </div>
+  <a class="home-fab" href="lessons.html#life">🏠 回筆記館入口</a>
+</body>
+</html>
