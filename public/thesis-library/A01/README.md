@@ -12,7 +12,7 @@
 
 | 檔案 | 說明 |
 |------|------|
-| [`A01原文_GenAI_SECI_Uchihira2025.pdf`](A01原文_GenAI_SECI_Uchihira2025.pdf) | 論文原文 PDF（10 頁） |
+| [`A01原文_GenAI_SECI_Uchihira2026.pdf`](A01原文_GenAI_SECI_Uchihira2026.pdf) | 論文原文 PDF（10 頁） |
 | [`A01_中英對照.pdf`](A01_中英對照.pdf) | 全文逐段中英對照（修正版 v2，含術語對照說明） |
 | [`A01_研讀筆記.pdf`](A01_研讀筆記.pdf) | 研讀心得（小D 口吻，含問題意識、帶走重點、切入點與註釋對照，6 頁） |
 
