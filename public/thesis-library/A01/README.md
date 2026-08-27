@@ -1,6 +1,8 @@
 # A01｜GenAI SECI 模型（承接 Meeting One 的理論起點）
 
-**Uchihira, N. (2025).** *Tacit Knowledge Management with Generative AI: Proposal of the GenAI SECI Model.* Japan Advanced Institute of Science and Technology (JAIST).
+**Uchihira, N. (2026).** *Tacit Knowledge Management with Generative AI: Proposal of the GenAI SECI Model.* AHFE 2026 International Conference（The Human Side of Service Engineering），AHFE Open Access. DOI: 10.54941/ahfe1007727｜arXiv: 2603.21866（v1 2026-03-23）.
+
+> ⚠️ 書目更正：Meeting One 曾誤記為 2025，正確年份為 **2026**；本篇為同儕審查之研討會論文（AHFE），內容仍為概念提案。
 
 - 運用生成式 AI 進行隱性知識管理，提出 **GenAI SECI 模型**，把生成式 AI 定位為輔助人類知識創造的工具，而不是新的知識主體。
 - 核心新概念 **Digital Fragmented Knowledge（數位片段知識）**：不完整、零碎但已數位化的工作經驗，也可被累積、整理與利用。
