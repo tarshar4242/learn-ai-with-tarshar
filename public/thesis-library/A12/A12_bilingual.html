@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A12 中英對照｜Semantic Search Evaluation</title>
+<style>
+:root{--ink:#26332c;--muted:#718078;--green:#39775b;--deep:#264f3c;--paper:#f4f3ed;--card:#fffefa;--line:#dce3dc;--blue:#3d6a8a}
+*{box-sizing:border-box}
+body{margin:0;color:var(--ink);background:var(--paper);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","Microsoft JhengHei",sans-serif}
+.top{position:sticky;top:0;z-index:10;background:var(--deep);color:#fff;padding:10px clamp(10px,3vw,30px);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.top a{padding:6px 9px;border:1px solid #ffffff44;border-radius:8px;color:#fff;text-decoration:none;font-size:11px;font-weight:900}
+.top b{margin-right:auto;font-size:13px}
+.wrap{max-width:760px;margin:auto;padding:20px 14px 60px}
+h1{font-family:Georgia,"Noto Serif TC",serif;font-size:22px;text-align:center;margin:10px 0 2px;color:var(--deep)}
+h1.cn{font-size:19px;color:var(--green);margin:0 0 6px}
+.cite{text-align:center;font-size:11.5px;color:var(--muted);margin-bottom:14px}
+.note{border-left:5px solid var(--blue);background:#eef3f7;border-radius:0 12px 12px 0;padding:12px 14px;font-size:12.5px;line-height:1.8;color:#2f5771;margin-bottom:20px}
+.note b{color:#2f5771}
+h2.banner{background:var(--deep);color:#fff;font-size:14px;padding:9px 14px;border-radius:8px;margin:24px 0 10px}
+.en{font-family:Georgia,"Times New Roman",serif;font-size:14px;line-height:1.7;color:#22221f;white-space:pre-line;margin:0 0 6px}
+.cn{border-left:4px solid var(--blue);background:#eaf2f7;border-radius:0 10px 10px 0;padding:10px 13px;font-size:14px;line-height:1.85;color:var(--deep);white-space:pre-line;margin:0 0 16px}
+.cn b{color:var(--blue);font-weight:900;font-size:12px}
+footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;line-height:1.8;border-top:1px solid var(--line);margin-top:20px}
+</style>
+</head>
+<body>
+<header class="top"><a href="../meeting0828.html#a12">← 回 8/28 報告單 A12</a><b>A12 中英對照</b><a href="../index.html">研讀庫</a></header>
+<div class="wrap">
+<h1>Semantic Search Evaluation</h1>
+<h1 class="cn">語意搜尋評估</h1>
+<div class="cite">Zheng, Wang, Zhang, Kishore &amp; Singh · arXiv:2410.21549v1 [cs.IR]（2024-10-28）</div>
+<div class="note"><b>▶ 閱讀說明　</b>英文原文段落後緊接藍框中文譯文；本文為 arXiv 預印本，未經同儕審查，PDF 本文未載明任何期刊或會議名稱。正式引用請回查原文頁碼（見 <code>A12原文_Semantic_Search_Evaluation_Zheng2024.pdf</code>）。羅靜娟｜論文研讀庫 A12</div>
+
+<h2 class="banner">ABSTRACT｜摘要</h2>
+<p class="en">We propose a novel method for evaluating the performance of a content search system that measures the semantic match between a query and the results returned by the search system. We introduce a metric called "on-topic rate" to measure the percentage of results that are relevant to the query. To achieve this, we design a pipeline that defines a golden query set, retrieves the top K results for each query, and sends calls to GPT 3.5 with formulated prompts. Our semantic evaluation pipeline helps identify common failure patterns and goals against the metric for relevance improvements.</p>
+<div class="cn"><b>▶ 中文譯文　</b>我們提出一種評估內容搜尋系統表現的新方法，用來衡量查詢與系統回傳結果之間的語意匹配程度。我們提出一項名為「切題率（on-topic rate）」的指標，用來衡量結果中有多少比例與查詢相關。為達成此目的，我們設計了一套管線：定義黃金查詢集、為每個查詢取回前 K 筆結果，並以設計好的提示詞呼叫 GPT-3.5。我們的語意評估管線有助於找出常見的失敗型態，並依此指標設定相關性改善的目標。</div>
+<p class="en">KEYWORDS: Semantic Relevance, Search System Evaluation, Content Search, Information Retrieval, Generative AI</p>
+<div class="cn"><b>▶ 中文譯文　</b>關鍵詞：語意相關性、搜尋系統評估、內容搜尋、資訊檢索、生成式 AI</div>
+
+<h2 class="banner">1 INTRODUCTION｜前言</h2>
+<p class="en">LinkedIn search has made significant progress over the years by incorporating semantic matching capabilities. Semantic matching capability helps members find knowledge more easily by delivering results that are conceptually related to their search query, even if they do not contain the exact keywords used in the query. As we continue to improve our system, we strive to overcome the complex quality challenges that arise:</p>
+<div class="cn"><b>▶ 中文譯文　</b>LinkedIn 搜尋多年來透過導入語意匹配能力，已有顯著進展。語意匹配能力能讓會員更容易找到知識：即使結果沒有包含查詢裡使用的確切關鍵字，只要在概念上與查詢相關，系統依然能夠回傳。在持續改進系統的過程中，我們致力於克服以下複雜的品質挑戰：</div>
+<p class="en">• Indirect measurement: While we have existing engagement metrics from online experiments, they do not necessarily capture the quality of our search results. When member feedback comes in, there is an added overhead in determining if the system is operating as expected.
+• Not operationalized: Search patterns and expectations change over time, so we need an automated way to continuously measure quality.</p>
+<div class="cn"><b>▶ 中文譯文　</b>．間接量測：雖然我們已有來自線上實驗的互動指標，但這些指標未必能真正反映搜尋結果的品質。當會員回饋出現時，還要額外花力氣判斷系統是否如預期運作。
+．未被操作化：搜尋型態與期望會隨時間改變，因此我們需要一套自動化的方法來持續衡量品質。</div>
+<p class="en">To address these gaps, we present a semantic evaluation pipeline that leverages Generative AI (GAI) to evaluate quality. Our main contributions and business impacts are:</p>
+<div class="cn"><b>▶ 中文譯文　</b>為了補上這些缺口，我們提出一套借助生成式 AI（GAI）來評估品質的語意評估管線。我們的主要貢獻與商業影響如下：</div>
+<p class="en">• We propose the metric "on-topic rate" to measure the percentage of content search results that are relevant to the intended topic. This metric serves as a tool for evaluating the performance of the content search model, and can also help identify common failure patterns. By setting goals based on this metric, we can work towards improving the relevance of search results.</p>
+<div class="cn"><b>▶ 中文譯文　</b>．我們提出「切題率」指標，用來衡量內容搜尋結果中，有多少比例確實與使用者意圖主題相關。此指標可作為評估內容搜尋模型表現的工具，也有助於找出常見的失敗型態。以此指標設定目標，我們就能朝改善搜尋結果相關性的方向努力。</div>
+<p class="en">• We present a novel semantic evaluation pipeline for search engine offline evaluation. This framework helps translate user problems into technical patterns that can be operationalized and plays a critical role for search engine offline evaluation.</p>
+<div class="cn"><b>▶ 中文譯文　</b>．我們提出一套用於搜尋引擎離線評估的新語意評估管線。此框架有助於把使用者的問題轉譯成可操作化的技術型態，在搜尋引擎的離線評估中扮演關鍵角色。</div>
+<p class="en">• We present two approaches to evaluate the Generative AI evaluation output, including conducting human evaluation and preparing a validation set to ensure the quality.</p>
+<div class="cn"><b>▶ 中文譯文　</b>．我們提出兩種評估生成式 AI 輸出結果的做法，包括進行人工評估，以及建立驗證集以確保品質。</div>
+
+<h2 class="banner">2 RELATED WORK｜相關研究</h2>
+<p class="en">Assessing the quality of search engine results has become a challenging task, particularly in determining which ranking models perform best under specific business metrics [2, 8]. The most reliable method for evaluating model performance is through online A/B testing, but this approach has limitations [5, 7]. Firstly, due to the high cost of traffic, only a limited number of models can be compared within a given timeframe, as it requires a significant amount of user feedback to draw statistically significant conclusions. Secondly, there is a risk of negatively impacting the user search experience if the model performs poorly. Consequently, offline evaluation is commonly used to select candidates for online experiments.</p>
+<div class="cn"><b>▶ 中文譯文　</b>評估搜尋引擎結果的品質已成為一項具有挑戰性的任務，尤其是在判斷哪個排序模型在特定商業指標下表現最好時 [2, 8]。評估模型表現最可靠的方法是線上 A/B 測試，但這種做法有其限制 [5, 7]。第一，由於流量成本高昂，在特定時間內只能比較有限數量的模型，因為要得出統計上顯著的結論，需要大量的使用者回饋。第二，若模型表現不佳，可能對使用者的搜尋體驗造成負面影響。因此，離線評估通常被用來為線上實驗篩選候選模型。</div>
+<p class="en">Existing work has proposed a variety of techniques for search engine offline evaluation, including relevance, reliability, timeliness, diversity and fairness [3]. Commonly we evaluate the quality of search by using the evaluation metrics focused on relevance, such as Mean Average Precision (MAP) and normalized Discounted cumulative gain (nDCG). These types of metrics simulate how users interact with the search engine result page (SERP) [4, 14]. Nonetheless, a prevalent drawback of offline evaluation lies in its dependence on historical data, and these metrics may not directly measure the quality of search engine, which can result in imperfect correlations with users' search experiences [1, 6, 10, 16].</p>
+<div class="cn"><b>▶ 中文譯文　</b>既有研究已針對搜尋引擎的離線評估提出多種技術，涵蓋相關性、可靠性、時效性、多樣性與公平性 [3]。我們通常以聚焦於相關性的評估指標來衡量搜尋品質，例如平均精確率均值（MAP）與正規化折扣累積增益（nDCG）。這類指標模擬的是使用者與搜尋結果頁（SERP）互動的方式 [4, 14]。然而，離線評估普遍的缺點在於依賴歷史資料，這些指標未必能直接衡量搜尋引擎的品質，因此可能與使用者實際的搜尋體驗產生不完全吻合的相關性 [1, 6, 10, 16]。</div>
+<p class="en">Recent advancements in semantic search and generative AI have significantly transformed the landscape of search systems, particularly with the integration of large language models (LLMs) in ranking and recommendation tasks [9, 15, 17]. LLMs are also explored for relevance judgments and evaluation in information retrieval [12]. The literature has shown that LLMs can closely replicate human judgements through prompt strategies [13] and highlights the growing role of LLMs in automated evaluations [11].</p>
+<div class="cn"><b>▶ 中文譯文　</b>語意搜尋與生成式 AI 近來的進展，已大幅改變了搜尋系統的樣貌，尤其是大型語言模型（LLM）被整合進排序與推薦任務之後 [9, 15, 17]。LLM 也被探索用於資訊檢索中的相關性判斷與評估 [12]。文獻顯示，透過提示詞策略，LLM 能相當貼近地複製人類的判斷結果 [13]，也凸顯 LLM 在自動化評估中日益吃重的角色 [11]。</div>
+
+<h2 class="banner">3 ON-TOPIC RATE｜切題率</h2>
+<p class="en">In this section, we formulate our task and introduce our proposed metric - On-Topic Rate (OTR). This metric is proposed as the direct measurement to evaluate if the retrieved document is primarily about the query.</p>
+<div class="cn"><b>▶ 中文譯文　</b>在本節中，我們將問題形式化，並介紹我們提出的指標——切題率（On-Topic Rate, OTR）。此指標被提出作為直接衡量「回傳文件是否主要與查詢有關」的方法。</div>
+<p class="en">3.1 Task Formulation. Given a member query q as input, the search engine returns a list of documents D = (d1, d2, ..., dn). Since we focus on content search, here each document corresponds to a post or article on LinkedIn.</p>
+<div class="cn"><b>▶ 中文譯文　</b>3.1 任務形式化 給定會員查詢 q 作為輸入，搜尋引擎回傳一份文件清單 D = (d1, d2, ..., dn)。由於我們聚焦於內容搜尋，此處每份文件對應到 LinkedIn 上的一則貼文或一篇文章。</div>
+<p class="en">3.2 Computation. On-topic rate is a metric that measures the relevance of search results to the user's query. A high on-topic rate indicates that content search is performing well, while a low on-topic rate suggests that improvements may be needed. We define OTR for &lt;query, doc&gt; pair as the following:
+OnTopicRate(q, di) = 1 if the pair is relevant, otherwise 0   (1)</p>
+<div class="cn"><b>▶ 中文譯文　</b>3.2 計算方式 切題率是衡量搜尋結果與使用者查詢相關程度的指標。切題率高，代表內容搜尋表現良好；切題率低，則顯示可能需要改善對使用者搜尋意圖的理解。我們將 &lt;query, doc&gt; 配對的 OTR 定義如下：
+切題率(q, di) ＝ 若配對相關則為 1，否則為 0 （式 1）</div>
+<p class="en">3.2.1 OTR@K. We define OTR@K as the total number of query-document pairs that are relevant divided by the total number of returned documents.
+OTR@K = (Σ OTR(q, di), i=1 to K) / K   (2)</p>
+<div class="cn"><b>▶ 中文譯文　</b>3.2.1 OTR@K 我們將 OTR@K 定義為：相關的查詢—文件配對總數，除以回傳文件總數（式 2）。</div>
+
+<h2 class="banner">4 SEMANTIC EVALUATION SETUP｜語意評估架設</h2>
+<p class="en">Within this section, we detail the process of establishing semantic evaluation and harnessing Generative AI (GAI) to discern the relevance between queries and documents. Figure 1 has illustrated the overall pipeline: our methodology begins with the creation of a test query set, followed by the formulation of prompts provided to the Large Language Model (LLM) and subsequent calculation of OTR based on the GAI-generated outputs.</p>
+<div class="cn"><b>▶ 中文譯文　</b>在本節中，我們詳述建立語意評估、並運用生成式 AI（GAI）判斷查詢與文件相關性的流程。圖 1 呈現了整體管線：我們的方法始於建立測試查詢集，接著擬定要提供給大型語言模型（LLM）的提示詞，最後根據 GAI 產出的結果計算 OTR。</div>
+<p class="en">4.1.1 Golden Set. The golden set serves as a stable and uniform standard for assessing and benchmarking queries. It includes:
+• Top queries: common queries, the most popular and indicative keywords members search for.
+• Topical queries: search inquiries pertaining to specific subjects, posing a greater evaluation challenge, often being lengthier and more intricate in intent.</p>
+<div class="cn"><b>▶ 中文譯文　</b>4.1.1 黃金集 黃金集作為評估與衡量查詢表現的穩定、一致標準。其中包含：
+．熱門查詢：常見查詢，會員搜尋時最熱門、最具代表性的關鍵字。
+．主題查詢：與特定主題相關的搜尋詢問，評估挑戰較大，通常語句較長、意圖也較複雜。</div>
+<p class="en">4.1.2 Open Set. A dynamically changing set: trending/newsy queries from production, plus some random queries to add diversity.</p>
+<div class="cn"><b>▶ 中文譯文　</b>4.1.2 開放集 動態變動的查詢集合：來自線上正式環境的熱門時事查詢，加上部分隨機查詢以增加多樣性。</div>
+<p class="en">Table 1 examples — Top queries: covid-19, resume, microsoft excel, we're hiring, work from home. Topical queries: how to create a personal brand, how to stand out in a competitive job market, how do I negatiate [sic, negotiate] my salary.</p>
+<div class="cn"><b>▶ 中文譯文　</b>表 1 範例 — 熱門查詢：covid-19、resume（履歷）、microsoft excel、we're hiring（我們正在招募）、work from home（在家工作）。主題查詢：如何打造個人品牌、如何在競爭激烈的就業市場中脫穎而出、我該如何談薪水（原文誤植 negatiate，應為 negotiate）。</div>
+<p class="en">4.2 Get search results for query set. Gather top K=10 documents from production per query, plus post text and any mentioned article info.</p>
+<div class="cn"><b>▶ 中文譯文　</b>4.2 取得查詢集的搜尋結果 針對每個查詢蒐集線上正式環境中排名前 K=10 筆文件，連同貼文文字內容與任何被提及文章的資訊。</div>
+<p class="en">4.3 Formulate the prompt. The prompt encompasses: (1) definition of On-Topic rate, (2) detailed guidance for decision making, (3) query, (4) post (all text, incl. commentary and re-shared posts/articles).</p>
+<div class="cn"><b>▶ 中文譯文　</b>4.3 擬定提示詞 提示詞涵蓋（原文標題寫「三個面向」但列點為四項）：（1）切題率的定義（2）供決策判斷的詳細指引（3）查詢（4）貼文（含留言與轉發貼文／文章的所有文字資訊）。</div>
+<p class="en">4.3.1 Metric Definition. Prompt A: "Given the post below, is the post strongly relevant to the query?" Prompt B: "Given the post below, is the post primarily about query or strongly relevant to the query?" Prompt B outperforms Prompt A significantly by reducing false positives from keyword matching.</p>
+<div class="cn"><b>▶ 中文譯文　</b>4.3.1 指標定義 Prompt A：「此貼文是否與查詢高度相關？」Prompt B：「此貼文主要是在講查詢的主題，或與查詢高度相關？」Prompt B 表現明顯優於 Prompt A，因為它把注意力導向主要主題，降低了關鍵字比對造成的偽陽性。</div>
+<p class="en">We discover that incorporating well-detailed examples alongside the reasons behind the decision can enhance performance. With no examples in the prompt the results did not align with human judgment.</p>
+<div class="cn"><b>▶ 中文譯文　</b>我們發現，在提示詞中加入詳盡的範例並附上判斷理由，能提升表現。沒有範例時，結果與人類判斷不一致。</div>
+<p class="en">4.3.2 Guidance example for OTR: (1) The on-topic decision should not only consider keyword match — it should reflect semantic matching between query intention and post details. (2) The post information is primarily relevant to the user query.</p>
+<div class="cn"><b>▶ 中文譯文　</b>4.3.2 指引範例：（1）切題判斷不應只看關鍵字是否吻合，而應反映查詢意圖與貼文內容的語意匹配。（2）貼文資訊主要與使用者查詢相關。</div>
+<p class="en">4.4 Compute OTR Metrics — three outputs: Binary decision, Relevance score (0–1), Decision reason (not used for OTR calc, but crucial for prompt iteration).</p>
+<div class="cn"><b>▶ 中文譯文　</b>4.4 計算 OTR 指標 三種輸出：二元判定、相關性分數（0–1）、判斷理由（不用於計算 OTR，但對調整提示詞非常重要）。</div>
+<div class="cn" style="border-left-color:#c49240;background:#fdf6e6"><b>▶ Table 3 範例｜教科書級例證　</b>查詢：「promotion tips」（升遷技巧）｜貼文：「這裡有 13 個技巧幫你跨過那個心理障礙。#開口說 #技巧 #領導力」｜二元判定：0（離題）｜相關性分數：0.4｜判斷理由：這則貼文談的是自我推銷與個人品牌經營的技巧，並未直接回應「升遷技巧」這個查詢；主題標籤中出現的「tips」不夠具體，不足以與查詢建立強烈的關聯。<br><b>意義：</b>關鍵字命中（tips）但語意不合，被系統正確判定離題——這正是本研究要示範的「關鍵字檢索會漏接語意」情境。</div>
+<p class="en">Our approach considers (query, document) as on-topic only if binary decision is 1 and relevance score exceeds 0.5 (threshold used in production).</p>
+<div class="cn"><b>▶ 中文譯文　</b>唯有二元判定為 1、且相關性分數超過 0.5（線上正式環境門檻）才視為切題。</div>
+
+<h2 class="banner">5 EXPERIMENT｜實驗</h2>
+<p class="en">5.1 Human Evaluation: 10-colleague team, rigorous qualification process, each annotator labels 50 pairs. Comparing pipeline output with human evaluation: 81.72% consistency with the GAI decision.</p>
+<div class="cn"><b>▶ 中文譯文　</b>5.1 人工評估：10 人團隊，經嚴謹資格審核，每人標註 50 組。管線輸出與人工評估比較：與 GAI 判定一致率 81.72%。</div>
+<p class="en">5.2 Performance on Validation Set: 60 queries × 10 posts = 600 query-post pairs, confirmed by ≥3 team members. Current production prompt achieves 94.5% accuracy on the validation set.</p>
+<div class="cn"><b>▶ 中文譯文　</b>5.2 驗證集表現：60 題 × 10 篇貼文 ＝ 600 組配對，至少 3 人共識標註。目前線上正式環境所用提示詞在驗證集上達到 94.5% 準確率。</div>
+
+<h2 class="banner">6–7 應用與結論</h2>
+<p class="en">The pipeline is adopted as offline benchmark, with weekly update of open query set. Conclusion: on-topic rate measures relevance of search results to user query; human evaluation and pipeline output show high consistency.</p>
+<div class="cn"><b>▶ 中文譯文　</b>此管線已被採用為離線基準，開放查詢集每週更新。結論：切題率衡量搜尋結果與使用者查詢的相關程度；人工評估與管線輸出展現高度一致性。</div>
+
+<h2 class="banner">APPENDIX A｜Prompt A vs B 案例</h2>
+<div class="cn" style="border-left-color:#c49240;background:#fdf6e6"><b>▶ Table 4 摘要（三案例，完整全文見原文 PDF p.6）　</b>
+（1）查詢「react native」——貼文只是順帶提到 React Native → Prompt A：切題／Prompt B：離題。
+（2）查詢「manager」——貼文談永續轉型訪談，僅邊緣涉及經理人 → Prompt A：切題／Prompt B：離題。
+（3）查詢「best practices for managing remote teams」——貼文確實深入談大型團隊管理 → Prompt A：離題／Prompt B：切題。</div>
+
+</div>
+<footer>🍀 論文研讀庫 A12 中英對照｜羅靜娟<br>本頁為 arXiv 預印本全文重建版，正式引用請回查 <code>A12原文_Semantic_Search_Evaluation_Zheng2024.pdf</code> 原始頁碼。</footer>
+</body>
+</html>

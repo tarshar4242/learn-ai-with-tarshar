@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A12 研讀摘要｜Semantic Search Evaluation</title>
+<style>
+:root{--ink:#26332c;--muted:#718078;--green:#39775b;--deep:#264f3c;--paper:#f4f3ed;--card:#fffefa;--line:#dce3dc;--gold:#c49240}
+*{box-sizing:border-box}
+body{margin:0;color:var(--ink);background:var(--paper);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","Microsoft JhengHei",sans-serif}
+.top{position:sticky;top:0;z-index:10;background:var(--deep);color:#fff;padding:10px clamp(10px,3vw,30px);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.top a{padding:6px 9px;border:1px solid #ffffff44;border-radius:8px;color:#fff;text-decoration:none;font-size:11px;font-weight:900}
+.top b{margin-right:auto;font-size:13px}
+.wrap{max-width:720px;margin:auto;padding:20px 14px 60px}
+h1{font-family:Georgia,"Noto Serif TC",serif;font-size:21px;text-align:center;margin:10px 0 2px;color:var(--deep)}
+h1.cn{font-size:18px;color:var(--green);margin:0 0 6px}
+.cite{text-align:center;font-size:11.5px;color:var(--muted);margin-bottom:14px}
+.note{border-left:5px solid var(--green);background:#eef5ee;border-radius:0 12px 12px 0;padding:12px 14px;font-size:12.5px;line-height:1.8;color:#2c6647;margin-bottom:20px}
+h2.banner{background:var(--deep);color:#fff;font-size:14px;padding:9px 14px;border-radius:8px;margin:22px 0 10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:6px}
+ul{margin:0;padding-left:20px;font-size:14px;line-height:1.9;color:#3f4a44}
+ul li{margin-bottom:7px}
+p.lead{font-size:14.5px;line-height:1.9;color:#333d37}
+footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;line-height:1.8;border-top:1px solid var(--line);margin-top:20px}
+</style>
+</head>
+<body>
+<header class="top"><a href="../meeting0828.html#a12">← 回 8/28 報告單 A12</a><b>A12 研讀摘要</b><a href="../index.html">研讀庫</a></header>
+<div class="wrap">
+<h1>Semantic Search Evaluation</h1>
+<h1 class="cn">語意搜尋評估</h1>
+<div class="cite">Zheng, Wang, Zhang, Kishore &amp; Singh · arXiv:2410.21549v1 [cs.IR]（2024-10-28）</div>
+<div class="note">▶ 閱讀說明　口語研讀摘要：用「為什麼值得看、提出什麼、證據是什麼、和我的研究有何關係、還要核對什麼」的順序整理，格式比照 A13 研讀摘要。羅靜娟｜論文研讀庫 A12</div>
+
+<h2 class="banner">先講結論</h2>
+<div class="card"><p class="lead">這篇論文的價值不在學術嚴謹度——它是 arXiv 預印本，未經同儕審查，PDF 本文完全沒有寫任何期刊或會議名稱——而在提供一份「LinkedIn 真實生產環境如何做語意相關性評估」的實務範本：定義黃金查詢集、跑 LLM 判斷切題與否、算出 on-topic rate，並用人工標註與驗證集雙軌驗證。它最有價值的貢獻是一個現成的教科書級例證：查詢「promotion tips」配到一篇談自我推銷的貼文，關鍵字命中但語意不合，被判定離題——這正好示範「關鍵字檢索會漏接語意」的失敗模式。</p></div>
+
+<h2 class="banner">這篇為什麼值得看</h2>
+<div class="card"><ul>
+<li>它是少數公開、可讀到完整 prompt 設計邏輯的工業界語意評估案例（LinkedIn 內容搜尋團隊）。</li>
+<li>on-topic rate 指標設計簡單、可操作，可直接對照本研究「答案正確率」指標的操作型定義。</li>
+<li>Table 3、Table 4 提供「關鍵字比對 vs 語意判斷」給出不同答案的具體案例，是本研究核心論點的現成佐證。</li>
+</ul></div>
+
+<h2 class="banner">它到底提出什麼</h2>
+<div class="card"><ul>
+<li>提出 on-topic rate（切題率）：衡量 &lt;query, doc&gt; 配對是否語意相關的二元指標，取前 K 筆結果平均即 OTR@K。</li>
+<li>提出四步驟管線：建查詢集（黃金集＋開放集）→ 取每題前 K=10 筆結果 → 組 prompt 呼叫 GPT-3.5 → 依二元判定與相關性分數（門檻 0.5）算 OTR。</li>
+<li>兩版 prompt 對照實驗：Prompt B（問「是否主要在講這個主題」）顯著優於 Prompt A（只問「是否強相關」），因為前者能排除關鍵字命中但主題不合的偽陽性。</li>
+</ul></div>
+
+<h2 class="banner">證據與方法</h2>
+<div class="card"><ul>
+<li>人工評估：10 人團隊，每人標 50 組（共 500 組），另有嚴謹資格審核流程；與 GAI 判定一致率 81.72%。</li>
+<li>驗證集：60 題×10 篇貼文＝600 組配對，至少 3 人共識標註；目前線上 prompt 準確率 94.5%。</li>
+<li>黃金查詢集分兩型：短關鍵字題（covid-19、resume…）與長句意圖題（how do I negotiate my salary…），原文明講長句題評估挑戰較大。</li>
+</ul></div>
+
+<h2 class="banner">和 Tarshar 的知識管理／語意搜尋研究有什麼關係</h2>
+<div class="card"><ul>
+<li>on-topic rate 的判定邏輯（語意匹配優於關鍵字比對）直接支持本研究「語意向量檢索優於關鍵字搜尋」的核心假設。</li>
+<li>它的黃金查詢集（短關鍵字＋長句意圖兩型）設計邏輯，是本研究 30 題題庫「事實題／語意改寫題」分類的參考依據。</li>
+<li>Table 3 的教科書級例證，可直接借用來說明「關鍵字命中但答非所問」這個情境。</li>
+</ul></div>
+
+<h2 class="banner">這篇的三個硬傷（主動指出，代表讀得夠細）</h2>
+<div class="card"><ul>
+<li>沒有 Limitations 章節——從結論直接跳到參考文獻，全文沒有任何自我設限。</li>
+<li>沒有任何統計——無檢定、無信賴區間、無 inter-rater 係數（只有一句「a high degree of agreement」，沒有 kappa、沒說樣本幾組）。</li>
+<li>兩處文字瑕疵：p.2 說 prompt 涵蓋「three perspectives」卻列了四項；p.3–4 說標註是「three-step」卻只列出兩步。</li>
+</ul></div>
+
+<h2 class="banner">限制與不能過度推論的地方</h2>
+<div class="card"><ul>
+<li>arXiv 預印本，PDF 本文未載明任何期刊或會議名稱；CIKM 2024 workshop 這件事只出現在 arXiv 摘要頁 Comments 欄（作者自填），審查強度遠低於主軌，是 workshop 而非主軌論文。</li>
+<li>樣本規模不大：驗證集僅 600 組配對、人工評估僅 500 組（10 人 × 50 組），遠小於學術論文常見樣本數。</li>
+<li>未載明黃金查詢集題數與抽樣方法——本研究的「30 題」在這裡找不到規模依據，需另找文獻或自行說明理由。</li>
+<li>僅一句「高度一致」而無信度係數，不能拿來當「單人評分沒關係」的擋箭牌——本研究仍需第二位評分者並報告 Cohen's kappa。</li>
+</ul></div>
+
+<h2 class="banner">引用前要回原文核對</h2>
+<div class="card"><ul>
+<li>81.72%、94.5% 這兩個數字：回到 §5.1、§5.2 原文脈絡，注意樣本規模（10 人 50 組、600 組配對）。</li>
+<li>Prompt A/B 案例：回到 Table 4（p.6）與附錄 A，三組案例的查詢與貼文全文。</li>
+<li>「CIKM 2024 workshop」：只在 arXiv 摘要頁 Comments 欄出現，PDF 正文完全沒有寫明，引用時要交代這個限定，不可寫成「發表於 CIKM 2024」。</li>
+</ul></div>
+
+<h2 class="banner">建議放進自己論文的位置</h2>
+<div class="card"><ul>
+<li>第二章｜文獻回顧：作為「語意相關性評估在工業界怎麼做」的實務案例，與 A09（學術系統性回顧）互補。</li>
+<li>第三章｜評估設計：on-topic rate 的判定邏輯是本研究六項指標中「答案正確率」的直接參照；黃金查詢集分型邏輯可轉用為 30 題題庫設計依據。</li>
+<li>討論章｜方法學反思：借它的評估流程，不引它的結論當證據（因為未經同儕審查）；用「有 kappa」超越它「僅一句高度一致」的方法學弱點。</li>
+</ul></div>
+
+<h2 class="banner">正式書目</h2>
+<div class="card"><p class="lead" style="font-size:12.5px;color:var(--muted)">Zheng, C., Wang, J., Zhang, S. A., Kishore, A., &amp; Singh, S. (2024). Semantic search evaluation. arXiv preprint arXiv:2410.21549.</p></div>
+
+</div>
+<footer>🍀 論文研讀庫 A12 研讀摘要｜羅靜娟</footer>
+</body>
+</html>
