@@ -92,7 +92,7 @@
 | `A13_bilingual.docx` | 依既有研讀庫版型重建：英文原文後緊接藍框中文譯文、雙語章節帶、重點螢光標示與統一術語表 |
 | `A13_bilingual.pdf` | 手機與網站閱讀用中英對照 PDF（A4，16 頁） |
 | `A13_reading_summary.docx` | 口語研讀摘要 Word |
-| `A13_reading_summary.pdf` | 口語研讀摘要 PDF（4 頁） |
+| `A13_reading_summary.pdf` | 研讀心得（六格深讀版，2026-08-28 升級）：依陳智揚老師建議的 introduction → 研究方法 → 結論 → 我的評讀（優缺點／可改進）→ 怎麼用進我論文結構撰寫，與 A01、A09 格式一致 |
 
 ## ✅ 翻譯與驗收狀態
 
