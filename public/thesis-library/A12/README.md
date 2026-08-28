@@ -24,10 +24,11 @@
 | 檔案 | 說明 |
 |------|------|
 | `A12原文_Semantic_Search_Evaluation_Zheng2024.pdf` | 論文原文 PDF |
-| [`A12_bilingual.html`](A12_bilingual.html) | 中英對照全文（線上可直接點閱，內容與下方 docx 相同） |
+| [`A12中英對照.pdf`](A12中英對照.pdf) | 中英對照全文（PDF，與 A09／A13 格式一致；2026-08-28 補） |
 | `A12_bilingual.docx` | 中英對照全文（Word 版，供離線編修） |
-| [`A12_reading_summary.html`](A12_reading_summary.html) | 研讀摘要（線上可直接點閱，內容與下方 docx 相同） |
-| `A12_reading_summary.docx` | 研讀摘要（Word 版，供離線編修） |
+| [`A12研讀筆記.pdf`](A12研讀筆記.pdf) | 研讀筆記（PDF；2026-08-28 補） |
+| `A12_reading_summary.docx` | 研讀筆記（Word 版，供離線編修） |
+| `A12_bilingual.html`／`A12_reading_summary.html` | 舊版 HTML（保留） |
 
 > ✅ 2026-08-27 已補齊中英對照與研讀摘要（本環境 LibreOffice 無法轉出 PDF，故以 HTML 作為線上可點閱版本，docx 供離線使用）。
 
