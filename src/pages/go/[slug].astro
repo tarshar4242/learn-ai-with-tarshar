@@ -1,0 +1,101 @@
+---
+/* 短網址轉址頁。
+   對外只發 /learn-ai-with-tarshar/go/<slug>/，這一頁負責把人帶到真正的內容。
+   對照表在 src/data/redirects.json，Tarshar 自己改那一份就好，這支不用動。
+
+   兩個重點：
+   1. 會把網址上的 ?k=（分眾身分）跟 #錨點一起帶過去，換頁不會掉身分。
+   2. noindex：轉址頁本身不要被 Google 收錄，搜尋結果只該出現真正的內容頁。 */
+import redirects from '../../data/redirects.json';
+
+export function getStaticPaths() {
+  return redirects.links.map((link) => ({
+    params: { slug: link.slug },
+    props: { to: link.to, note: link.note ?? '' },
+  }));
+}
+
+const { to, note } = Astro.props;
+const base = import.meta.env.BASE_URL;
+
+// 站內路徑補上 base；外部網址原樣使用
+const target = /^https?:\/\//.test(to) ? to : base + String(to).replace(/^\/+/, '');
+const canonical = new URL(target, Astro.site).toString();
+---
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>前往中…｜Learn AI with Tarshar</title>
+    <link rel="canonical" href={canonical} />
+    {/* 沒有 JavaScript 也能轉，只是不會帶 ?k= */}
+    <meta http-equiv="refresh" content={`0; url=${target}`} />
+    <link rel="icon" href={`${base}favicon.svg`} type="image/svg+xml" />
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background: #fbfaf6;
+        color: #26302a;
+        line-height: 1.8;
+        font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans TC', 'PingFang TC',
+          'Microsoft JhengHei', sans-serif;
+      }
+      main {
+        max-width: 520px;
+        padding: 40px 24px;
+        text-align: center;
+      }
+      .mark {
+        font-size: 40px;
+        margin-bottom: 16px;
+      }
+      p {
+        color: #5c685f;
+        margin: 0 0 20px;
+      }
+      a {
+        display: inline-block;
+        padding: 11px 18px;
+        border-radius: 999px;
+        background: #1f6b45;
+        color: #fff;
+        text-decoration: none;
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="mark">🍀</div>
+      <p>正在帶你前往{note ? `「${note}」` : '目的地'}……</p>
+      <a id="go" href={target}>沒有自動跳轉？點這裡</a>
+    </main>
+
+    <script is:inline define:vars={{ target }}>
+      (function () {
+        var dest = target;
+        try {
+          var url = new URL(dest, window.location.origin);
+          // 把來源網址上的參數（尤其是 ?k= 分眾身分）帶過去，目標本身已有的參數優先
+          new URLSearchParams(window.location.search).forEach(function (value, key) {
+            if (!url.searchParams.has(key)) url.searchParams.set(key, value);
+          });
+          if (!url.hash && window.location.hash) url.hash = window.location.hash;
+          dest = url.toString();
+          var link = document.getElementById('go');
+          if (link) link.setAttribute('href', dest);
+        } catch (e) {
+          /* 解析失敗就用原本的目標，至少還是會轉 */
+        }
+        // replace 而不是 assign：按上一頁不會卡在轉址頁彈來彈去
+        window.location.replace(dest);
+      })();
+    </script>
+  </body>
+</html>
