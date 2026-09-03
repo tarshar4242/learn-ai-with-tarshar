@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP50 課堂筆記｜AI 公務人才認定指引的解說</title>
+<meta name="description" content="晨學講堂 EP50 課堂筆記：解讀 AI 公務人才認定指引，整理公部門 AI 導入限制、人才分類、iPAS 與國際職能框架、行政應用場景、履約驗收、Try AI 與公務機關可用工具。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#c2620c; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:720px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px;max-height:calc(100vh - 90px);overflow-y:auto}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:7px;border-left:none;font-size:13px}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.code{position:relative;background:var(--code);border:1px solid var(--line2);border-radius:10px;padding:13px 15px;margin:10px 0;font-size:13px;line-height:1.75;color:var(--ink);white-space:pre-wrap;font-family:"Cascadia Code",Consolas,monospace;overflow-x:auto}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static;max-height:none} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#e6b98a" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+  <b>📝 EP50 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="ep50-ai-skills.html">🗺️ 互動技能地圖</a>
+    <a class="btn" href="ep50-full/">完整逐幀版</a>
+    <a class="btn" href="ep50-full/mobile.pdf">手機 PDF</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 晨學講堂 · EP50</span>
+  <h1><span>AI 公務人才認定指引</span><br>公部門導入 AI 的能力地圖</h1>
+  <p class="lead">EP50 解讀數位發展部與行政院 AI 辦公室發布的 <b>AI 公務人才認定指引</b>：為什麼公部門不能只學工具、未來可能如何把 AI 能力放進人才認定，以及一般職員、主管、資訊人員與研究開發角色各自要補什麼能力。本頁依錄影與逐幀畫面整理為正式課堂筆記，頁末保留完整逐幀時間軸與手機 PDF。</p>
+  <div class="meta">
+    <span>📅 2026/08/28 直播</span>
+    <span>🗂️ 教材：課程簡報＋錄影回放</span>
+    <span>🏛️ 主題：公部門 AI</span>
+    <span>📚 補充：完整逐幀版 116 格</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-map">1. 一張圖看懂本集</a>
+  <a href="#sec-why">2. 為什麼需要認定指引</a>
+  <a href="#sec-roles">3. 四類 AI 公務人才</a>
+  <a href="#sec-limits">4. 公部門導入限制</a>
+  <a href="#sec-train">5. 訓練與認證路徑</a>
+  <a href="#sec-usecases">6. 行政場景怎麼落地</a>
+  <a href="#sec-tryai">7. Try AI 與工具補充</a>
+  <a href="#sec-check">8. 課後檢核</a>
+  <a href="#sec-src">9. 資料來源與整理說明</a>
+</nav>
+<article>
+
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--amber))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:120px">課程名稱</th><td>AI 公務人才認定指引的解說</td></tr>
+    <tr><th>頻道</th><td>生成式 AI 應用電台・晨學講堂</td></tr>
+    <tr><th>核心問題</th><td>公部門要如何把 AI 從「工具體驗」推進到「人才能力、制度設計與業務落地」？</td></tr>
+    <tr><th>閱讀方式</th><td>先看本頁章節整理；需要找特定畫面時，再開完整逐幀版或手機 PDF。</td></tr>
+  </table></div>
+  <figure class="shot"><img src="ep50-full/frames/frame-0001.jpg" alt="EP50 開場畫面" loading="lazy"><figcaption>課程開場｜主題聚焦 AI 公務人才認定指引，先從公部門 AI 訓練與制度脈絡切入。</figcaption></figure>
+</section>
+
+<section class="chapter" id="sec-map">
+  <span class="chip" style="background:linear-gradient(90deg,#3f8560,#0d8f80)">OVERVIEW</span>
+  <h2 class="ct">1. 一張圖看懂本集</h2>
+  <div class="twrap"><table>
+    <tr><th>主線</th><th>這段在解決什麼</th><th>學完要能判斷什麼</th></tr>
+    <tr><td><b>制度</b></td><td>AI 公務人才認定指引不是單堂課，而是公部門能力建置的框架。</td><td>未來 AI 能力可能進入認證、升遷、人資紀錄或專案角色配置。</td></tr>
+    <tr><td><b>限制</b></td><td>公部門使用 AI 受到資安、資料保護、採購與治理責任限制。</td><td>不是每個民間 AI 工具都能直接搬進機關使用。</td></tr>
+    <tr><td><b>人才</b></td><td>不同角色需要不同深度：應用、規劃、開發、研究。</td><td>一般職員、主管、資訊人員不該上同一套課就結束。</td></tr>
+    <tr><td><b>落地</b></td><td>行政文書、履約驗收、監理、資料查核與報告撰寫是高頻入口。</td><td>AI 導入要從業務流程與風險點設計，而不是只列工具清單。</td></tr>
+  </table></div>
+  <div class="note green">重點不是「公務員也要學 AI」這句話，而是公部門開始把 AI 能力變成可被辨識、培訓與治理的職能。</div>
+</section>
+
+<section class="chapter" id="sec-why">
+  <span class="chip" style="background:linear-gradient(90deg,#2f7d92,#3b6bb0)">CHAPTER 01</span>
+  <h2 class="ct">2. 為什麼需要認定指引</h2>
+  <p class="cd">老師先提醒：如果你在公部門或教育單位，AI 工具的推動方式會跟一般民間組織不同，因為限制更多、責任也更重。</p>
+  <ul class="pt">
+    <li><b>公部門需要共同語言</b>：不能每個機關各自定義「會用 AI」是什麼。</li>
+    <li><b>能力需要可被記錄</b>：未來若有認證或人資系統標記，會影響人才調度與任務分工。</li>
+    <li><b>訓練不能只靠工具秀</b>：真正要補的是業務流程、法規責任、資料治理與查核能力。</li>
+  </ul>
+  <figure class="shot"><img src="ep50-full/frames/frame-0011.jpg" alt="AI 公務人才指引畫面" loading="lazy"><figcaption>課堂畫面｜指引的重點在制度與能力分類，不是單一工具教學。</figcaption></figure>
+</section>
+
+<section class="chapter" id="sec-roles">
+  <span class="chip" style="background:linear-gradient(90deg,#5645D4,#3b6bb0)">CHAPTER 02</span>
+  <h2 class="ct">3. 四類 AI 公務人才</h2>
+  <div class="twrap"><table>
+    <tr><th>類型</th><th>核心能力</th><th>適合對象</th></tr>
+    <tr><td><b>應用人才</b></td><td>用 AI 協助文書、資料整理、簡報、客服、查核與日常行政。</td><td>多數第一線業務與行政同仁。</td></tr>
+    <tr><td><b>規劃人才</b></td><td>判斷哪些業務可導入 AI、如何設計流程、如何控管風險與成效。</td><td>主管、承辦專案者、業務規劃者。</td></tr>
+    <tr><td><b>開發人才</b></td><td>能寫程式、串 API、做自動化、調整模型或建置內部工具。</td><td>資訊人員、數位轉型推動者。</td></tr>
+    <tr><td><b>研究人才</b></td><td>研究模型、治理、制度、政策與跨機關應用的長期議題。</td><td>研究單位、幕僚、政策規劃角色。</td></tr>
+  </table></div>
+  <div class="note blue">課堂判斷：目前公部門多數訓練還停在應用層；規劃、開發與研究會在接下來幾年逐步被補上。</div>
+</section>
+
+<section class="chapter" id="sec-limits">
+  <span class="chip" style="background:linear-gradient(90deg,#b5476a,#bf6a1e)">CHAPTER 03</span>
+  <h2 class="ct">4. 公部門導入限制</h2>
+  <ol class="st">
+    <li><b>資安限制</b>：資料不能任意丟到外部模型，工具選擇必須看資料流向與平台承諾。</li>
+    <li><b>行政責任</b>：AI 可以輔助產出，但最後仍需要人做查核、採認與負責。</li>
+    <li><b>採購與制度限制</b>：工具訂閱、模型部署、雲端環境與跨機關共用都會牽涉制度設計。</li>
+    <li><b>組織保守性</b>：導入速度不能只看技術可不可行，還要看主管、同仁與法規能不能接受。</li>
+  </ol>
+</section>
+
+<section class="chapter" id="sec-train">
+  <span class="chip" style="background:linear-gradient(90deg,#9c7b23,#3f8560)">CHAPTER 04</span>
+  <h2 class="ct">5. 訓練與認證路徑</h2>
+  <p class="cd">課堂提到 iPAS 與國際職能框架，是因為公務人才認定不會從零開始，而會參考既有的產業人才與國際能力模型。</p>
+  <ul class="pt">
+    <li>基礎層：AI 素養、提示詞、工具操作、資料安全觀念。</li>
+    <li>應用層：行政文書、簡報、資料彙整、會議紀錄、報告檢查。</li>
+    <li>治理層：流程設計、風險評估、查核機制、履約驗收。</li>
+    <li>技術層：API、自動化、內部系統串接、模型與資料管理。</li>
+  </ul>
+  <figure class="shot"><img src="ep50-full/frames/frame-0066.jpg" alt="iPAS 與能力框架討論" loading="lazy"><figcaption>課堂畫面｜從 iPAS 與職能框架回看 AI 公務人才的能力分層。</figcaption></figure>
+</section>
+
+<section class="chapter" id="sec-usecases">
+  <span class="chip" style="background:linear-gradient(90deg,#0d8f80,#2f7d92)">CHAPTER 05</span>
+  <h2 class="ct">6. 行政場景怎麼落地</h2>
+  <div class="twrap"><table>
+    <tr><th>場景</th><th>AI 可以協助</th><th>人要保留的工作</th></tr>
+    <tr><td>文書與新聞稿</td><td>草稿、改寫、摘要、格式化、不同受眾版本。</td><td>事實查核、政策口徑、法規與長官意圖確認。</td></tr>
+    <tr><td>履約驗收</td><td>比對契約、檢查報告、整理缺漏、建立查核清單。</td><td>採認、裁量、證據保存與責任判斷。</td></tr>
+    <tr><td>資料分析</td><td>彙整表格、找異常、產生初步圖表與解讀。</td><td>資料來源確認、結論合理性與對外說法。</td></tr>
+    <tr><td>監理與客服</td><td>分類案件、整理問答、建立回覆草稿。</td><td>敏感個案處理、正式函覆與裁處判斷。</td></tr>
+  </table></div>
+</section>
+
+<section class="chapter" id="sec-tryai">
+  <span class="chip" style="background:linear-gradient(90deg,#3f8560,#9c7b23)">CHAPTER 06</span>
+  <h2 class="ct">7. Try AI 與工具補充</h2>
+  <p class="cd">課末補充 Try AI：這類公務機關可申請或試用的環境，重點是讓機關在較符合資安要求的條件下練習 AI 應用。</p>
+  <div class="note gold">對公部門來說，工具不是「能不能用」而已，而是資料會去哪裡、是否能被稽核、是否符合機關規範。</div>
+  <figure class="shot"><img src="ep50-full/frames/frame-0113.jpg" alt="Try AI 補充畫面" loading="lazy"><figcaption>課末補充｜Try AI 與公務機關試用環境。</figcaption></figure>
+</section>
+
+<section class="chapter" id="sec-check">
+  <span class="chip" style="background:linear-gradient(90deg,#c2620c,#b5476a)">CHECKLIST</span>
+  <h2 class="ct">8. 課後檢核</h2>
+  <ol class="st">
+    <li>我能說出「應用、規劃、開發、研究」四類 AI 公務人才的差別。</li>
+    <li>我知道公部門使用 AI 時，資安與資料流向要先被檢查。</li>
+    <li>我能把一個行政場景拆成：輸入資料、處理流程、AI 可協助處、人類查核點。</li>
+    <li>我知道 iPAS、國際職能框架與公務人才認定之間的關聯。</li>
+  </ol>
+  <div class="note blue">延伸閱讀：需要查畫面或逐字稿時，請使用頁首的「完整逐幀版」與「手機 PDF」。</div>
+</section>
+
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,#697067,#3f8560)">SOURCE</span>
+  <h2 class="ct">資料來源與整理說明</h2>
+  <ul class="pt">
+    <li>本頁依課堂錄影逐幀筆記、畫面截圖與機器逐字稿交叉整理；已修正明顯工具名與專有名詞辨識錯誤。</li>
+    <li>逐字稿仍屬機器產生，若要對外引用、做講義或寫文章，請回到原始影片時間點再確認一次。</li>
+    <li>完整每 15 秒一格的原始時間軸另存於「完整逐幀版」，適合回放查找畫面；本頁是網站正式閱讀版。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+<footer>Learn AI with Tarshar｜整理：知臨｜2026</footer>
+</body>
+</html>
