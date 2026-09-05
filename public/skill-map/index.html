@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>我的 Skill 節點地圖｜Learn AI with Tarshar</title>
+<meta name="description" content="123 個 skill 的關聯地圖：實線是實際呼叫關係，淡線是同用途分類。可拖拉、縮放、搜尋、依分類篩選。">
+<style>
+:root{
+  --paper:#f4f2ee; --card:#fffdfa; --ink:#33302b; --ink2:#6f6a61; --ink3:#8d887d;
+  --line:#ddd7cc; --accent:#6a5acf; --accent2:#a79ce0;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+     background:var(--paper);color:var(--ink);line-height:1.75;overflow:hidden}
+.topbar{position:fixed;top:0;left:0;right:0;z-index:40;background:rgba(244,242,238,.94);
+        backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
+        padding:9px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;white-space:nowrap}
+.topbar .stat{font-size:12px;color:var(--ink3);white-space:nowrap}
+.topbar .right{margin-left:auto;display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+input#q{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:9px;
+        padding:6px 11px;width:150px;background:#fff;color:var(--ink)}
+input#q:focus{outline:none;border-color:var(--accent)}
+.tgl{font-size:12px;color:var(--ink2);display:inline-flex;align-items:center;gap:5px;
+     border:1px solid var(--line);border-radius:9px;padding:6px 10px;background:#fff;cursor:pointer;white-space:nowrap}
+.tgl input{margin:0;cursor:pointer}
+a.btn{font-size:12.5px;text-decoration:none;border:1px solid var(--line);border-radius:9px;
+      padding:6px 12px;color:var(--ink2);background:#fff;white-space:nowrap}
+a.btn:hover{border-color:var(--accent);color:var(--accent)}
+#stage{position:fixed;inset:0;top:0}
+canvas{display:block;touch-action:none;cursor:grab}
+canvas.dragging{cursor:grabbing}
+.legend{position:fixed;left:12px;bottom:12px;z-index:30;background:rgba(255,253,250,.95);
+        border:1px solid var(--line);border-radius:13px;padding:11px 13px;font-size:12px;
+        max-width:210px;backdrop-filter:blur(6px)}
+.legend .t{font-size:11px;letter-spacing:1.5px;color:var(--ink3);margin-bottom:7px}
+.legend .row{display:flex;align-items:center;gap:7px;padding:2.5px 0;cursor:pointer;border-radius:6px}
+.legend .row:hover{background:#efecfb}
+.legend .row.off{opacity:.34}
+.legend .dot{width:10px;height:10px;border-radius:50%;flex:0 0 10px}
+.legend .n{margin-left:auto;color:var(--ink3);font-size:11px}
+#panel{position:fixed;right:12px;top:60px;z-index:35;width:290px;max-height:calc(100vh - 84px);
+       overflow-y:auto;background:var(--card);border:1px solid var(--line);border-radius:15px;
+       padding:16px 18px;display:none;box-shadow:0 8px 30px rgba(0,0,0,.10)}
+#panel.on{display:block}
+#panel .cat{display:inline-block;font-size:11px;color:#fff;border-radius:999px;padding:2px 10px;margin-bottom:7px}
+#panel h3{font-size:16px;font-weight:800;word-break:break-all;line-height:1.4}
+#panel .d{font-size:12.8px;color:var(--ink2);margin:9px 0 13px;line-height:1.8}
+#panel h4{font-size:11.5px;letter-spacing:1.2px;color:var(--ink3);margin:13px 0 6px}
+#panel .lk{display:block;font-size:12.6px;color:var(--accent);text-decoration:none;
+           padding:3px 8px;border-radius:6px;word-break:break-all}
+#panel .lk:hover{background:#efecfb}
+#panel .none{font-size:12.3px;color:var(--ink3);padding:2px 8px}
+#panel .x{position:absolute;right:13px;top:12px;border:none;background:none;font-size:19px;
+          color:var(--ink3);cursor:pointer;line-height:1}
+.hint{position:fixed;left:50%;transform:translateX(-50%);bottom:14px;z-index:25;
+      font-size:11.5px;color:var(--ink3);background:rgba(255,253,250,.9);
+      border:1px solid var(--line);border-radius:999px;padding:5px 15px;pointer-events:none}
+@media (max-width:820px){
+  .topbar{padding:6px 9px;gap:6px;flex-wrap:nowrap;overflow-x:auto}
+  .topbar b{font-size:12.5px}
+  .topbar .stat{display:none}
+  .topbar .right{gap:5px}
+  input#q{width:96px;padding:5px 8px;font-size:12px}
+  .tgl{padding:5px 8px;font-size:11.5px}
+  a.btn{padding:5px 9px;font-size:11.5px}
+  a.btn .lbl{display:none}
+  .legend{left:6px;right:6px;bottom:6px;max-width:none;padding:8px 10px;font-size:11px}
+  .legend .t{margin-bottom:5px;display:flex;align-items:center}
+  .legend .t .fold{margin-left:auto;font-size:14px;color:var(--ink2);cursor:pointer;letter-spacing:0}
+  .legend .rows{display:grid;grid-template-columns:1fr 1fr;gap:0 8px}
+  .legend.min .rows{display:none}
+  .legend .row{padding:1px 0}
+  #panel{right:6px;left:6px;width:auto;top:auto;bottom:6px;max-height:46vh}
+  .hint{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <b>🕸️ 我的 Skill 節點地圖</b>
+  <span class="stat">123 個 skill · 72 條呼叫關係 · 更新於 2026-09-05</span>
+  <div class="right">
+    <input id="q" type="search" placeholder="搜尋 skill…" autocomplete="off">
+    <label class="tgl"><input type="checkbox" id="onlyReal"> 只看實際呼叫</label>
+    <button class="tgl" id="fitBtn" type="button">⤢ 全圖</button>
+    <a class="btn" href="../">🍀<span class="lbl"> 回首頁</span></a>
+  </div>
+</div>
+
+<div id="stage"><canvas id="cv"></canvas></div>
+
+<div class="legend" id="legend"><div class="t">用 途 分 類<span class="fold" id="fold">▾</span></div><div class="rows" id="legendRows"></div></div>
+
+<div id="panel">
+  <button class="x" id="closePanel" aria-label="關閉">&times;</button>
+  <span class="cat" id="pCat"></span>
+  <h3 id="pName"></h3>
+  <div class="d" id="pDesc"></div>
+  <h4>它會呼叫</h4><div id="pCalls"></div>
+  <h4>誰會呼叫它</h4><div id="pBy"></div>
+</div>
+
+<div class="hint">滾輪縮放 · 拖曳移動 · 點節點看細節</div>
+
+<script>
+const NODES = [{"id": "ad", "cat": "品牌行銷", "colour": "#d1477a", "desc": "一鍵生廣告文案。當學員輸入 /ad，或說「快速廣告」「生廣告文案」時觸發。這是快速捷徑——直接交給 Jack（廣告投放手）產出廣告 Hook + 完整文案。預設繁體中文，回應跟隨使用者語言（學員用英文就用英文）。", "calls": ["jack-ads"], "calledBy": []}, {"id": "ai-coevolution-journal", "cat": "記錄記憶", "colour": "#3f8560", "desc": "Complete real work while preserving the user's ideas, decision context, corrections, and reusable learning. Use when the user starts or opens a project, designs a platform or workflow, plans research, collaborates with ChatGPT/Claude/Codex, writes VBA/Python code, creates a skill, or explores a task", "calls": [], "calledBy": ["create-ai-collaboration-journal"]}, {"id": "anthropic-skill-creator", "cat": "系統維運", "colour": "#6b7280", "desc": "Create new skills, modify and improve existing skills, and measure skill performance. Use when users want to create a skill from scratch, edit, or optimize an existing skill, run evals to test a skill, benchmark skill performance with variance analysis, or optimize a skill's description for better t", "calls": [], "calledBy": ["monthly-review"]}, {"id": "auto-luhmann-numberer", "cat": "圖卡視覺", "colour": "#8b5cf6", "desc": "Assign, validate, normalize, and explain Luhmann/Zettelkasten-style project-note codes for Chinese book manuscripts, Obsidian Markdown folders, Mandala-Grid section files, HyperCard Markdown stacks, and project-note JSON to EPUB workflows. Use when Codex needs to scan folders for 部/章/節/項/目 numbering", "calls": [], "calledBy": []}, {"id": "bb-browser", "cat": "系統維運", "colour": "#6b7280", "desc": "强大的信息获取与浏览器自动化工具。通过浏览器 + 用户登录态，获取公域和私域信息。可访问任意网页、内部系统、登录后页面，执行表单填写、信息提取、页面操作。支持 site 系统（36 平台 103 命令一键调用）、带登录态的 fetch、网络请求拦截与 mock、操作录制等高级功能。", "calls": [], "calledBy": []}, {"id": "beginner-interactive-course", "cat": "教學教案", "colour": "#e8833a", "desc": "Turn notes, email digests, research summaries, study materials, or rough outlines into beginner-friendly teaching scripts and interactive review webpages. Use when the user asks to explain material for complete beginners, teach step by step with analogies and checkpoints, create self-study lessons, ", "calls": [], "calledBy": ["build-tarshar-course-three-pack"]}, {"id": "blog-title-generator", "cat": "品牌行銷", "colour": "#d1477a", "desc": "部落格標題產生器，專為「Learn AI with Tarshar」個人品牌打造。當使用者說「幫我取標題」，並貼上文章內容時，立刻觸發此技能，產出 4 個知識型部落格風格的繁體中文標題選項。即使使用者只說「標題」「取個標題」「幫我想標題」也應觸發。請務必在使用者貼出任何文章內容並要求標題時主動使用此技能。", "calls": [], "calledBy": []}, {"id": "brainstorm", "cat": "工作流程", "colour": "#b45309", "desc": "動手前先想清楚 — 用引導式問答把模糊想法變成具體計劃書。", "calls": [], "calledBy": []}, {"id": "brand-check", "cat": "品牌行銷", "colour": "#d1477a", "desc": "品牌資料驗收。檢查目前啟用品牌的核心資料與產業知識是否完整，並顯示內容讓用戶確認；支援多品牌選擇。輸入 /brand-check 啟動。預設繁體中文，回應跟隨使用者語言。", "calls": ["brand-setup"], "calledBy": []}, {"id": "brand-setup", "cat": "品牌行銷", "colour": "#d1477a", "desc": "品牌建置精靈。第一次使用時，引導用戶逐一回答品牌問題，自動建立 4 份品牌核心檔案。輸入 /brand-setup 啟動。預設繁體中文，回應跟隨使用者語言（學員用英文就用英文）。", "calls": ["industry-research"], "calledBy": ["brand-check", "deck", "hello-nora", "industry-research", "iris-seo", "jack-ads", "leon-design", "maya-social", "report", "setup"]}, {"id": "build-dashboard", "cat": "工作流程", "colour": "#b45309", "desc": "Build an interactive HTML dashboard with charts, filters, and tables. Use when creating an executive overview with KPI cards, turning query results into a shareable self-contained report, building a team monitoring snapshot, or needing multiple charts with filters in one browser-openable file.", "calls": [], "calledBy": []}, {"id": "build-tarshar-course-three-pack", "cat": "教學教案", "colour": "#e8833a", "desc": "Build or revise Tarshar's coordinated three-part teaching package: facilitator guide, learner handbook, and teaching presentation. Use when the user says「教材三件包」「教案＋講義＋簡報」「教師教案、學員手冊與PPT」「照AI協作日誌風格做教材」「沿用我的教學風格」「零基礎陪跑班教材」or asks to turn one lesson into aligned teacher, learner, and presentation artifa", "calls": ["beginner-interactive-course", "create-xiaod-manual", "html-ppt", "tarshar-brand-director"], "calledBy": []}, {"id": "capture-knowledge-card", "cat": "圖卡視覺", "colour": "#8b5cf6", "desc": "Turn pasted text or attached PDF, DOCX, PPTX, spreadsheet, Markdown, text, image, or scan files into polished phone-readable Traditional Chinese knowledge-card images. Read the source, choose from three favorite house styles or ten specialized layouts, generate the actual image, verify text and comp", "calls": [], "calledBy": ["knowledge-to-skill-inbox"]}, {"id": "cards", "cat": "圖卡視覺", "colour": "#8b5cf6", "desc": "社群圖卡產生器 — 把文章、筆記或任何文字內容轉成品牌風格 IG 圖卡。ray 環境預設讀取 DESIGN.md，使用 Learn AI with Tarshar 形象 A／B／C；老師原版藍黑系／橘白系模板完整保留。支援 4:5 或 1:1、AI 自動拆卡、預覽與匯出 2x PNG。觸發時機：(1) 學員說「做圖卡」「/cards」「幫我做 IG 圖」「社群圖卡」「把這篇做成圖卡」, (2) 學員丟一段文字、檔案路徑、或文章網址要轉成社群圖, (3) 想為 IG / Threads / X 產出品牌風格統一的圖卡。", "calls": [], "calledBy": ["knowledge-to-skill-inbox"]}, {"id": "causal-chain-assumption-audit", "cat": "論文研究", "colour": "#5b8def", "desc": "Causal-chain and implicit-assumption audit for an article or academic paper's argumentation — surfaces where the author's own reasoning jumps (a missing or unstated Warrant between Grounds and Claim) and lists the implicit premises that need spelling out. Use when asked to analyze a text for logical", "calls": [], "calledBy": []}, {"id": "chat-checkpoint", "cat": "記錄記憶", "colour": "#3f8560", "desc": "對話進度檢查點產生器。當對話即將滿載、要換新對話、或學生想保存目前進度時觸發。從當前對話中提煉完整的工作進度、討論脈絡、學生的提問與思考過程、待辦事項，產出一份可直接丟進 Project 知識庫的「接力棒文件」，讓新對話的 Claude 能無縫接上。觸發條件：「幫我整理進度」「存檔」「接力」「保存進度」「checkpoint」「換對話前幫我記錄」「快滿了」「幫我做接力棒」「收工」「先到這裡」「暫停一下」「我要開新對話了」。即使學生只說「先這樣」「到這邊」也應主動詢問是否要產出檢查點。本技能與 thesis-journal 不同：thesis-journal 是每日學習摘要（給教授看），本技能是", "calls": [], "calledBy": ["monthly-review", "speech-coach"]}, {"id": "cloudflare-deploy", "cat": "部署網站", "colour": "#2563a5", "desc": "Deploy applications and infrastructure to Cloudflare using Workers, Pages, and related platform services. Use when the user asks to deploy, host, publish, or set up a project on Cloudflare.", "calls": [], "calledBy": []}, {"id": "comfy-h3-video-batch", "cat": "影音處理", "colour": "#0ea5a4", "desc": "用 Codex 或 Claude 經由本機 Comfy MCP，自動規劃並執行 MiniMax H3 多圖參考影片批次。只要使用者提到 ComfyUI 自動生影片、MiniMax H3、兩張主角參考照、三段 10 秒影片、Ref2VA、多圖參考工作流、批次排隊或生成後收檔，就應使用本 Skill；也適用於只想先做提示詞、工作流程檢查或新手教學的情況。", "calls": ["h3-prompt-writing"], "calledBy": []}, {"id": "convert-youtube-to-pptx", "cat": "圖卡視覺", "colour": "#8b5cf6", "desc": "Convert a YouTube or Bilibili video into a fact-checked, editable PowerPoint deck by obtaining and validating captions or audio transcription, cleaning and segmenting the transcript, designing a coherent slide narrative, generating a .pptx file, and visually inspecting every slide. Use when a user p", "calls": ["transcribe"], "calledBy": []}, {"id": "course-notice-mail", "cat": "教學教案", "colour": "#e8833a", "desc": "課前提醒信與課後跟進信。先讀完這堂課的真實教材（教案、逐幀筆記、簡報、課程頁），再從課程內容長出「學員上課前要準備什麼、要裝哪個軟體、要註冊哪個帳號、當天要打開什麼、課後練習做什麼」，寫成兩封白話信件，落成 Gmail 草稿等 Tarshar 過目。當她說「寫課前通知」「行前信」「課前提醒」「課後跟進信」「幫學員寫提醒」「課程通知」，或給出教案／課程資料夾並說要寄給學員時使用。即使她只說「下週那堂課要提醒學員」也應觸發。", "calls": [], "calledBy": []}, {"id": "create-ai-collaboration-journal", "cat": "記錄記憶", "colour": "#3f8560", "desc": "Create a complete Traditional Chinese AI collaboration journal that preserves the user's original thinking, AI interpretations, corrections, decisions, co-created ideas, professional learning keywords, research or thesis connections, evidence status, outputs, unresolved issues, and next action, then", "calls": ["ai-coevolution-journal", "create-xiaod-manual"], "calledBy": ["monthly-review"]}, {"id": "create-good-skills", "cat": "系統維運", "colour": "#6b7280", "desc": "- 用繁體中文訪談使用者，把自己、身邊高手、團隊 SOP 或公開專家的工作方法， 建成輕量、可測試、可個人化的 Skill。當使用者說「幫我建 Skill」、 「把這套做法留下來」、「萃取工作流」、「整理成 SOP」、 「研究一位專家來幫我工作」，或只描述一個想重複交給 AI 的工作問題時使用。 若只是一次性回答、不會重複使用，直接完成任務，不必硬建 Skill。", "calls": ["personal-style-loop"], "calledBy": ["knowledge-to-skill-inbox", "personal-style-loop"]}, {"id": "create-xiaod-manual", "cat": "文件轉檔", "colour": "#a16207", "desc": "Create a branded Traditional Chinese A4 interactive handbook with a clickable table of contents, concise main reading path, related-handbook cards, and validated PDF links. Use when the user says「小D版手冊」「做成小D版」「用小D版手冊整理」「做成互動手冊」「新增延伸閱讀手冊」or asks to turn notes, Q&A, course material, research, procedur", "calls": [], "calledBy": ["build-tarshar-course-three-pack", "create-ai-collaboration-journal"]}, {"id": "dashi-ppt", "cat": "圖卡視覺", "colour": "#8b5cf6", "desc": "制作 PPT、演示文稿、幻灯片、汇报材料时使用。Dashi PPT 基于预置视觉主题组合页面,生成可离线打开、可在浏览器编辑的 HTML 演示,支持导出 PPTX / PDF 文件。", "calls": [], "calledBy": []}, {"id": "deck", "cat": "圖卡視覺", "colour": "#8b5cf6", "desc": "把行銷成效彙整成「給客戶／老闆看」的簡報檔（HTML 投影片，可一鍵存 PDF；要可編輯的 PPT 需另裝工具、版面需微調）。當學員輸入 /deck，或說「做成簡報」「客戶簡報」「報告轉簡報」「月報簡報」「成效簡報」「給客戶看的報告」時觸發。會抓廣告數據與戰情記錄，產出品牌風格的成效簡報。預設繁體中文，回應跟隨使用者語言（學員用英文就用英文）。", "calls": ["brand-setup", "report"], "calledBy": ["hello-nora"]}, {"id": "define-goal", "cat": "工作流程", "colour": "#b45309", "desc": "Help the user define a concrete, measurable goal before starting work, especially when they ask to use the goal tool, create a goal, set an objective, clarify success criteria, or turn a fuzzy intention into a quantitative outcome. Use this skill for goal creation and goal refinement only; it does n", "calls": [], "calledBy": []}, {"id": "delivery-gate", "cat": "系統維運", "colour": "#6b7280", "desc": "交付前自檢閘門。在對 Tarshar 說「做好了」「已放進圖書館」「已上線」「已完成」之前，固定跑完這份清單再開口。觸發語「交付前自檢」「跑收官」「收官檢查」「這樣算完成了嗎」「跑閘門」；沒有觸發語時，只要即將宣稱任何交付完成，也一律先跑。適用每一次交付，不限大專案結案。", "calls": [], "calledBy": []}, {"id": "digital-employee-case-cards", "cat": "圖卡視覺", "colour": "#8b5cf6", "desc": "Build focused case-study lesson cards for the user's digital employees, agents, workflows, and teaching examples. Use when the user says「整理圖卡」and means案例型知識整理圖卡 rather than summary cards, posters, or promo graphics; when the request mentions數位員工成功案例, 數位員工履歷風, 案例拆解教學風, 主封面 + A版/B版, 自動工作循環, 任務交辦, 增量同步", "calls": [], "calledBy": []}, {"id": "epub-hypercard-obsidian", "cat": "圖卡視覺", "colour": "#8b5cf6", "desc": "Convert EPUB card books into Obsidian-ready HyperCard Markdown folders and portable zip files. Use when Codex needs to turn an EPUB with XHTML chapters, table-of-contents cards, keyword index cards, backlinks, Luhmann/Zettelkasten numbers, or cross-links into one Markdown file per card with verified", "calls": [], "calledBy": []}, {"id": "fb-deck-post", "cat": "圖卡視覺", "colour": "#8b5cf6", "desc": "Tarshar 陪跑教練視角的「簡報 + 心情 → FB 貼文 + 16:9 拆頁圖」一鍵打包技能。當 Tarshar 上傳一份簡報檔（.pptx / .pdf）並給一段心情文字或口述脈絡時立刻觸發。同時產出兩件交付物：(1) 以「陪跑教練觀察者視角」撰寫的 FB 貼文（不是交作業口吻，而是四人輔導小隊的觀察與洞見），(2) 將簡報每一頁拆成 1920×1080 的 16:9 JPG 圖檔並打包 zip 給 Tarshar 上傳 FB。觸發語包含：「丟一份簡報幫我做成 FB 貼文」「這份簡報 + 心情」「簡報拆頁加貼文」「一份簡報一段心情兩件事」「觀察者角度的貼文」。即使 Tarshar 只說", "calls": ["fb-post-tarshar"], "calledBy": []}, {"id": "fb-post-tarshar", "cat": "品牌行銷", "colour": "#d1477a", "desc": "Tarshar 個人風格 FB 貼文生成器。當 Tarshar 提到「幫我寫 FB 貼文」「做成 FB 貼文」「發 FB」「生成貼文」「發文」「po 文」「社群貼文」「貼文文案」時立刻觸發此技能，也包括提到特定調性如「修仙版」「修仙風」「武俠風」「動漫風」時。技能會根據主題（可來自使用者口述、上傳的 Word/簡報/報告檔案、或對話脈絡）產出符合 Tarshar 個人風格的 FB 貼文：口語、短、有梗、有自嘲、企圖心藏在「選擇走原理」的語句裡，AI 當成時間軸的下一步而不是志向宣言，絕不用破折號，用台灣繁體中文。預設產出單一版本精準擊中風格，使用者明確說「三選一」「三版」「給我幾個版本」時才產", "calls": [], "calledBy": ["fb-deck-post", "master-notes"]}, {"id": "fire-analysis-card", "cat": "圖卡視覺", "colour": "#8b5cf6", "desc": "Analyze Chinese articles around 1000 characters with the FIRE principle: Fact, Index, Relation, and Encyclopedia. Use when Codex needs to turn an essay, reflection, transcript excerpt, research note, product note, or Obsidian/LLM knowledge material into a compact Chinese FIRE analysis card, encyclop", "calls": [], "calledBy": ["fire-card-to-epub"]}, {"id": "fire-card-to-epub", "cat": "圖卡視覺", "colour": "#8b5cf6", "desc": "Convert FIRE analysis cards, Chinese knowledge notes, or project-note JSON into validated EPUB books with directory cards, chapter cards, keyword index cards, backlinks, and GitHub-shareable ebook assets. Use when Codex needs to teach or automate the path from `fire-analysis-card` outputs to `projec", "calls": ["fire-analysis-card", "project-note-json-to-epub"], "calledBy": []}, {"id": "general-reader-simulator", "cat": "論文研究", "colour": "#5b8def", "desc": "- 模擬一位沒有作者完整背景知識的普通讀者，依文章順序外顯其理解內容、推論路徑、疑問、可能誤解與理解斷點；可在讀者模擬完成後，使用作者意圖卡產生作者意圖—讀者理解對齊報告。Use when Codex needs to test whether a non-expert can understand an article, argument, policy explanation, research prose, or public-facing content, identify hidden assumptions or reasoning jumps, or diagnose gaps ", "calls": [], "calledBy": []}, {"id": "gh-fix-ci", "cat": "部署網站", "colour": "#2563a5", "desc": "Use when a user asks to debug or fix failing GitHub PR checks that run in GitHub Actions; use `gh` to inspect checks and logs, summarize failure context, draft a fix plan, and implement only after explicit approval. Treat external providers (for example Buildkite) as out of scope and report only the", "calls": [], "calledBy": []}, {"id": "github-deploy", "cat": "部署網站", "colour": "#2563a5", "desc": "把本地檔案（HTML、README.md、論文包等）推送到 GitHub repo 並部署到 GitHub Pages，最後回傳可點擊的網址。 當使用者說「幫我部署」「push 到 GitHub」「上傳到 GitHub」「丟到 GitHub」「推上去」「給我網址」「放到 GitHub」， 或是丟了一個 HTML 檔案、論文包、ZIP 檔並要求放上 GitHub 時，立刻觸發此 skill。 不需要等使用者確認，直接執行整個流程直到給出網址才算完成。", "calls": [], "calledBy": []}, {"id": "gov-agency-lesson-generator", "cat": "教學教案", "colour": "#e8833a", "desc": "Tarshar 機關單位／公部門版 AI 教案生成器，專為「AI 開機日．兩小時跟上 AI 那班車」工作坊設計。當 Tarshar 提到「幫我做機關單位的教案」「公部門 AI 教案」「監理所工作坊教案」「行政人員痛點教案」「投案要做 AI 教案」「兩小時體驗工作坊教案」「AI 開機日教案」「機關版小白教案」「再做一份教案」「給公務員的 AI 教案」這些關鍵詞時，立刻觸發此技能。技能以李宏毅教授風格的生活化比喻為核心，產出可直接交給投案單位與學員的雙版本 A4 直式 MD 教案（教學體＋學員卡片體），每份教案涵蓋開場故事、AI 工具選擇、提示語範本、Before/After 對照、失敗範例、學員", "calls": [], "calledBy": ["master-notes"]}, {"id": "gov-sign-doc", "cat": "文件轉檔", "colour": "#a16207", "desc": "機關公文「簽」產生器。依使用者提供的來源文件（會議紀錄、來函、勘查紀錄等）撰寫符合文書處理手冊格式的簽，每次固定產出詳細版與重點摘要版兩份 Word 檔。鐵則：來源文件沒寫的一律不可自行編寫，只能以紅字提醒；動手前必先問齊六項必要資訊。觸發語：「幫我寫簽」「這份做成簽」「簽陳」「請購文件」「變更設計的簽」「把會議紀錄寫成簽」。", "calls": [], "calledBy": []}, {"id": "h3-prompt-writing", "cat": "影音處理", "colour": "#0ea5a4", "desc": "Write MiniMax H3 video generation prompts for T2VA, I2VA, FL2VA, L2VA, and Ref2VA. Use when rewriting multimodal requests into H3 prompt structures, composing integrated_multimodal_description, overall_soundscape, and non_diegetic_music, aligning keyframes, or defining reference labels for images, v", "calls": [], "calledBy": ["comfy-h3-video-batch"]}, {"id": "hatch-pet", "cat": "工作流程", "colour": "#b45309", "desc": "Create, repair, validate, visually QA, and package Codex-compatible v2 animated pets from character art, generated images, company or prospect brand cues, or visual references. Use for any new Codex pet, custom mascot, non-pixel pet style, brand-inspired pet, existing-pet repair, or 8x11 spritesheet", "calls": [], "calledBy": []}, {"id": "health-check", "cat": "系統維運", "colour": "#6b7280", "desc": "設定健康檢查。檢查本機平台設定是否齊全，不連外、不讀出完整憑證。當用戶輸入 /health-check，或說「檢查設定」「設定還正常嗎」「token 還能用嗎」「東西壞了」「發不出去」時觸發。預設繁體中文，回應跟隨使用者語言（學員用英文就用英文）。", "calls": ["setup"], "calledBy": ["hello-nora"]}, {"id": "hello-nora", "cat": "品牌行銷", "colour": "#d1477a", "desc": "Nora · 營運長（Chief of Staff）。整個 AI 行銷團隊的入口，負責任務派發、進度追蹤、跨角色協作。當用戶說「我要推新課」「排這週貼文」「看廣告數據」「寫週報」「找關鍵字」等任何行銷相關任務，立即啟動。當用戶說「更新團隊」「更新到最新版」「check 更新」「team update」時，執行團隊更新流程。當用戶說「策略分析」「給我策略建議」「我接下來該做什麼」「行銷健診」「這季怎麼打」或輸入 /report 時，執行策略分析流程（彙整全團隊資料＋廣告數據給出方向）。也是用戶輸入 /hello-nora 時的觸發目標。預設使用繁體中文，並跟隨使用者語言（學員改用英文或要求切換，", "calls": ["brand-setup", "deck", "health-check", "industry-research", "iris-seo", "jack-ads", "leon-design", "maya-social", "setup"], "calledBy": []}, {"id": "herdr", "cat": "系統維運", "colour": "#6b7280", "desc": "Control Herdr, a terminal multiplexer for coding agents. Use only when the user explicitly mentions Herdr or asks to use Herdr to inspect or control panes, tabs, workspaces, commands, or another agent. Do not use merely because a task could benefit from a background terminal, delegation, or parallel", "calls": [], "calledBy": []}, {"id": "html-ppt", "cat": "圖卡視覺", "colour": "#8b5cf6", "desc": "HTML PPT Studio — author professional static HTML presentations in many styles, layouts, and animations, all driven by templates. Use when the user asks for a presentation, PPT, slides, keynote, deck, slideshow, \"幻灯片\", \"演讲稿\", \"做一份 PPT\", \"做一份 slides\", a reveal-style HTML deck, a 小红书 图文, or any kind o", "calls": [], "calledBy": ["build-tarshar-course-three-pack"]}, {"id": "hyperframes", "cat": "圖卡視覺", "colour": "#8b5cf6", "desc": "Mandatory entry point: read this first for any request to make, create, edit, animate, or render a video, animation, or motion graphic, including a promo, explainer, captioned clip, title card, overlay, slideshow or interactive deck, Remotion port, or any HyperFrames HTML composition. Also use it to", "calls": [], "calledBy": ["video-spec-builder"]}, {"id": "i-have-adhd", "cat": "工作流程", "colour": "#b45309", "desc": "ADHD 友善輸出模式：答案與下一步行動放第一行、多步驟工作編號列出、每次回覆重述目前進度（第幾步／共幾步）、壓抑岔題、給具體時間估計、讓完成的成果被看見。當使用者說「ADHD模式」「開ADHD模式」時觸發，之後整個 session 持續生效，直到使用者說「停止ADHD模式」「一般模式」或 \"stop adhd mode\" 才關閉。", "calls": [], "calledBy": ["monthly-review"]}, {"id": "image-to-editable-ppt", "cat": "圖卡視覺", "colour": "#8b5cf6", "desc": "Rebuild slide images, image-based or scanned PPT/PPTX files, and PDF decks into object-level editable PowerPoint (.pptx). Use whenever the user provides any visual slide source and wants slides they can edit — \"make this PPT editable\", \"把图片/截图转成可编辑 PPT\", \"this PDF is a scanned deck, restore it\", rec", "calls": [], "calledBy": []}, {"id": "imandalart", "cat": "圖卡視覺", "colour": "#8b5cf6", "desc": "Design iMandalArt and iMandala 3x3 square index cards. Default output is iMandala 1.0: no visible borders, no vertical dividers, no Markdown table, exactly five counted characters per visible cell row, and an ◎ center. Use when the user asks for iMandalArt, iMandala, I MandalArt, 五字定格, 無框九宮, ◎中心, 手機", "calls": [], "calledBy": []}, {"id": "imessage-nine-grid-hypercard", "cat": "圖卡視覺", "colour": "#8b5cf6", "desc": "Create narrow iMessage/PTT Border-Light HyperCard style nine-grid cards in Chinese or mixed Chinese-English. Use when the user says \"iMessage 九宮 HyperCard\", \"iMessage 九宮\", \"做成 iMessage 九宮\", \"用 iMessage 九宮 HyperCard 整理\", asks for a phone-readable short card with Context below, or wants Mandala/九宮/Hyp", "calls": [], "calledBy": []}, {"id": "industry-research", "cat": "論文研究", "colour": "#5b8def", "desc": "補齊品牌所屬產業的可用知識，研究市場結構、客群語言、購買決策、常見迷思、專業術語、競品訴求與合規限制，並寫成團隊共用的 industry-knowledge.md。建立新品牌、進入陌生產業、文案需要深度領域知識，或用戶說「產業研究」「Deep Research」「補齊產業知識」時使用。預設繁體中文並跟隨使用者語言。", "calls": ["brand-setup"], "calledBy": ["brand-setup", "hello-nora", "iris-seo", "jack-ads", "maya-social"]}, {"id": "interactive-learning-template", "cat": "圖卡視覺", "colour": "#8b5cf6", "desc": "互動式視覺學習模板產生器。當使用者在任何問題或主題後面加上「互動學習模板」「學習地圖」「互動圖解」「視覺化學習」「畫成圖」「互動式」這些關鍵詞時，立刻觸發此技能。產出一張可點擊的互動式 SVG 學習地圖，每個節點都能點擊深入探索。適用於任何需要結構化理解的主題：論文流程、技術概念、制度規則、學習路徑、決策架構等。務必在使用者貼出主題並要求「互動學習模板」或類似用詞時主動使用此技能，即使使用者只說「畫成圖」「做成互動的」也應觸發。", "calls": [], "calledBy": []}, {"id": "investment-journal", "cat": "記錄記憶", "colour": "#3f8560", "desc": "Tarshar 投資決策日誌記錄員。Tarshar 操作元大、群益、第一三家證券，每 2-3 天會做一次投資紀錄。當她說「幫我寫今天的投資日誌」「這筆存到投資日誌」「股票結算」「績效回顧」「月底了幫我做月度回顧」「本週投資日誌」「這週的投資回顧」「記到日誌」時立刻觸發。觸發後自動以三區塊結構（重點摘要 / 顧問觀點 / 執行明細）整理當期投資，並寫入 Notion 投資日誌資料庫。顧問觀點一律條列式，名詞自動附白話說明，執行明細採分帳戶總結。即使 Tarshar 只說「幫我記一下」「這個存起來」並附上交易資訊也應觸發。", "calls": [], "calledBy": []}, {"id": "ipas-exam-coach", "cat": "教學教案", "colour": "#e8833a", "desc": "iPAS AI 應用規劃師（初級）考試陪跑助教。當使用者提到「IPAS」「AI應用規劃師」「刷題」「模擬試卷」「考試練習」或上傳 iPAS 相關講義時，立刻觸發此技能。能生成試卷藍圖、出題刷題，並在使用者說「請說明第X題」或貼上題目截圖時，切換為李宏毅教授風格的解說模式，用生活比喻把觀念講到懂為止。", "calls": [], "calledBy": []}, {"id": "iris-seo", "cat": "品牌行銷", "colour": "#d1477a", "desc": "Iris · 內容 SEO 策略師。負責關鍵字研究、競品拆解、SEO 文章撰寫（網站版 + 臉書版）、AI 收錄優化。當用戶說「找關鍵字」「SEO」「寫文章」「拆競品」「內容策略」「沒有網站也能做 SEO」「讓 AI 找到我」時觸發。", "calls": ["brand-setup", "industry-research"], "calledBy": ["hello-nora"]}, {"id": "jack-ads", "cat": "品牌行銷", "colour": "#d1477a", "desc": "Jack · 廣告投放手。負責 Meta 廣告策略、廣告文案、Hook 撰寫、預算分配、數據診斷、CAPI 追蹤。當用戶說「寫廣告」「Meta 數據」「廣告 hook」「預算分配」「廣告優化」「CAPI」「ROAS」時觸發。", "calls": ["brand-setup", "industry-research", "setup"], "calledBy": ["ad", "hello-nora", "setup"]}, {"id": "journal", "cat": "記錄記憶", "colour": "#3f8560", "desc": "學習日記 — 用 5 個問題引導學員回顧 AI 協作、工作與個人成長，並從當天對話提出經使用者確認的「AI 協作觀察」，自動生成 Markdown 日記及追蹤待辦。當學員說「寫日記」「今天結束了」「學習紀錄」「記錄一下今天」「journal」，希望反思、盤點或規劃明天，或隔天需要提醒昨日待辦時使用。", "calls": [], "calledBy": ["knowledge-to-skill-inbox", "lesson-pack", "monthly-review"]}, {"id": "kline-analyst", "cat": "教學教案", "colour": "#e8833a", "desc": "元大強棒投資資深顧問，專門協助學員運用鄭元成老師課堂所教的 K 線技術分析理論， 針對日K線截圖進行型態識別、邏輯推演與漲跌預測，並在下一個交易日後驗證預測結果。 當使用者上傳股票日K線截圖，並說出以下任何一種情境時，請立即啟用此技能： - 「幫我分析這張K線圖」 - 「預測明天漲還是跌」 - 「這根K線是什麼型態」 - 「幫我寫K線作業」 - 「驗證我的預測」 - 「上傳日K」「截圖分析」「作業分析」 - 貼上任何股票K線圖並詢問後續走勢 本技能以鄭老師投影片講義為主要規則基準，並補入課堂口語說明的細節。 輸出必須像一位資深顧問在陪跑學員：有邏輯、有溫度、有信心度標示，不瞎猜。", "calls": [], "calledBy": []}, {"id": "knowledge-to-skill-inbox", "cat": "系統維運", "colour": "#6b7280", "desc": "Turn a phone-pasted note, voice memo transcript, article excerpt, book insight, research idea, SOP fragment, or AI collaboration observation into a compact Traditional Chinese Skill seed card that can later be folded into a formal Codex/Claude Skill. Use when the user says「知識收件箱」「這個可以變成 Skill 嗎」「把這段", "calls": ["capture-knowledge-card", "cards", "create-good-skills", "journal", "lesson-pack", "write-facebook-post"], "calledBy": []}, {"id": "landing", "cat": "品牌行銷", "colour": "#d1477a", "desc": "引導式銷售頁生成 — 問完 17 題（A 產品定位 4 題、B 內容填入 10 題、C 倒數與 CTA 3-4 題）後產出完整 HTML + Tailwind + 可選倒數計時，覆蓋活動／線上課／數位產品三種銷售頁。整合 UI UX Pro Max (UUPM) 產業級設計系統；UUPM 未裝時 fallback 成 Claude 直接生成。觸發時機：(1) 學員說「做銷售頁」「/landing」「幫我做 landing page」「sales page」, (2) 學員要為新產品／課程／活動產出銷售頁, (3) 需要改版既有頁面（可讀 answers.json 不從頭答）。", "calls": [], "calledBy": []}, {"id": "leon-design", "cat": "圖卡視覺", "colour": "#8b5cf6", "desc": "Leon · 設計總監。負責廣告素材生成（使用 Codex imagegen / 內建生圖能力）、Landing Page、Sales Page、IG 九宮格的視覺方向與完整文案內容。當用戶說「做 LP」「設計 SP」「廣告圖」「IG 九宮格」「視覺方向」「品牌套用」「幫我出圖」「做廣告素材」時觸發。", "calls": ["brand-setup"], "calledBy": ["hello-nora"]}, {"id": "lesson-card-organizer", "cat": "圖卡視覺", "colour": "#8b5cf6", "desc": "Creates, reviews, names, organizes, and archives teaching knowledge cards from initial brief through local and Google Drive delivery. Use when the user says「整理圖卡」, asks for a 教案整理助理 Agent, wants knowledge-card series or execution-manual cards, or needs cards checked, versioned, grouped by case and s", "calls": [], "calledBy": []}, {"id": "lesson-pack", "cat": "教學教案", "colour": "#e8833a", "desc": "把一份原始素材（課程大綱、逐字稿、投影片、筆記、論文段落、講義草稿）整理成一整套可以直接拿去上課的教案，一次產出簡報大綱、學員講義、教師手冊、AI 協作手冊與學習日誌素材。當 Tarshar 說「做教案」「這份做成教案」「幫我準備上課用的」「整理成講義」「這個要拿去教」「教案一源多用」「lesson-pack」，或丟出任何課程素材並表示要用來授課、開工作坊、做教學簡報時，立刻使用這個 skill。即使她只說「這份幫我整理成上課可以用的」「我下週要教這個」也應該觸發。若她只要其中一種產出（例如只要講義、只要簡報），一樣用這個 skill，只是少渲染幾份。", "calls": ["journal"], "calledBy": ["knowledge-to-skill-inbox"]}, {"id": "mac-notes", "cat": "記錄記憶", "colour": "#3f8560", "desc": "讀取、搜尋、整理與新增 Apple 備忘錄（Mac 備忘錄），並從筆記中盤點尚未完成的文字待辦。只要使用者提到「備忘錄」「Apple Notes」「幫我看最近的筆記」「找某則筆記」「備忘錄還有哪些事沒做」「把這段記到備忘錄」，即使沒有說 skill 名稱，也應使用本 Skill。", "calls": [], "calledBy": []}, {"id": "marcus-aurelius-stoic", "cat": "記錄記憶", "colour": "#3f8560", "desc": "馬可・奧理略（斯多葛）復盤 skill——從公版《沉思錄》蒸餾出 7 個心智模型、8 條決策啟發式與自誡體表達 DNA，內建夜間復盤、晨間預演、情緒急救三模式，並支援週復盤與年度反思。觸發：夜間復盤、幫我復盤今天、寫復盤日記、晨間預演、開工前定調、被氣到、焦慮到不行、情緒急救、週復盤、年度反思、用斯多葛想想、奧理略會怎麼看。", "calls": [], "calledBy": []}, {"id": "markdown-nine-grid-clipboard", "cat": "文件轉檔", "colour": "#a16207", "desc": "Convert Chinese or mixed-language text, iMandalArt cards, Obsidian 九宮, 表格, Mandala notes, or eight-domain outlines into a Markdown 3x3 nine-grid table with an ◎ center, then copy, save, append, or hand it to apps that render Markdown tables such as Obsidian and AIDA. Use when the user asks for Markd", "calls": [], "calledBy": []}, {"id": "master-notes", "cat": "記錄記憶", "colour": "#3f8560", "desc": "大師筆記手冊產生器。把任何一份長內容（線上課程、書、長影片、論文、研討會、講座、自己的學習筆記）壓縮成一份 10 到 16 頁、可帶走可執行的專業知識手冊，結構完全比照《AI 高手養成筆記》那種等級。當 Tarshar 說「大師筆記」「做成筆記手冊」「幫我把這門課整理成手冊」「這本書做成筆記」「這支影片拆成筆記」「做成像羅達那種筆記」「知識手冊」「學習手冊」時立刻觸發。即使她只說「把這個整理成一份完整的筆記」並附上課程連結、PDF、逐字稿或講義，也應觸發。產出為 A4 直式 Markdown（可再轉 PDF），含封面、OVERVIEW、三篇章內容頁、RECAP 自檢清單。", "calls": ["fb-post-tarshar", "gov-agency-lesson-generator", "tarshar-card-prompt-studio"], "calledBy": []}, {"id": "maya-social", "cat": "品牌行銷", "colour": "#d1477a", "desc": "Maya · 社群小編。負責 FB / IG / Threads / 小紅書 貼文撰寫、電子報 / EDM、排程、改寫。當用戶說「想 hook」「排這週貼文」「改寫這篇」「IG 發什麼」「Threads 開頭」「短影音腳本」「Reels 腳本」「小紅書」「電子報」「EDM」「喚醒舊客」「寄信給名單」時觸發。", "calls": ["brand-setup", "industry-research", "setup"], "calledBy": ["hello-nora", "post", "sales"]}, {"id": "meeting-prep", "cat": "論文研究", "colour": "#5b8def", "desc": "羅靜娟（小D）論文指導教授 meeting 準備標準流程。當她說「準備meeting資料」「meeting文件」「論文進度」「準備跟教授開會」，或上傳一篇新文獻並表示要為與指導教授的 meeting 做準備時，立刻觸發此技能。本技能把「先理解、再內化、最後才排版」的正確順序固化下來，依序產出五份交付物：(1)研究計畫進度（含研究時程、文獻在研究方法的定位、請教授拍板的問題）；(2)閱讀文獻心得（四塊結構、標註1註2、小D 口吻、全形標點）；(3)兩版心智圖（第一版：論文大綱＋對她論文主題的相關處；第二版：討論後加上她的想法與切入點）；(4)文獻中英對照翻譯排版（最後才做、帶著已定好的註、與心得", "calls": [], "calledBy": ["paper-study-pack"]}, {"id": "memory-health-check", "cat": "系統維運", "colour": "#6b7280", "desc": "替使用者的 AI Agent 做 L1 / L2 / L3 記憶系統健檢，找出過度膨脹、缺少 Skill、缺少時序紀錄與重複犯錯未沉澱的問題，產出下一週進化建議。", "calls": [], "calledBy": []}, {"id": "monthly-review", "cat": "記錄記憶", "colour": "#3f8560", "desc": "月復盤（訪談式）— 把 Tarshar 一整個月散落在日記、Session Log、協作日誌、專案資料夾、git 紀錄與行事曆裡的紀錄找回來，先由 AI 做完「事實底稿」，再一題一題訪問她本人，最後產出一篇月復盤存進 300_Journal。當她說「月復盤」「這個月回顧」「月結」「月報」「這個月我做了什麼」「幫我復盤這個月」，或月底、月初想盤點上個月時使用。即使她只說「這個月好像什麼都沒做」也應觸發。", "calls": ["anthropic-skill-creator", "chat-checkpoint", "create-ai-collaboration-journal", "i-have-adhd", "journal", "thesis-journal"], "calledBy": []}, {"id": "morning-brief", "cat": "圖卡視覺", "colour": "#8b5cf6", "desc": "Tarshar 的早安簡報。一次查完 Gmail 重要信件、Google 日曆今日行程、Notion 任務總帳進行中任務，彙整成一份手機可讀的繁體中文簡報。當 Tarshar 說「早安簡報」「早安」「今天有什麼」「幫我看一下今天」「今天要幹嘛」「morning」，或在早上時段要求盤點信件行程任務時，立刻使用此 skill。即使她只說「簡報一下」「今天的狀況」也應觸發。", "calls": [], "calledBy": []}, {"id": "newsletter", "cat": "品牌行銷", "colour": "#d1477a", "desc": "主題式電子報產生器 — 把「剛完成的一件事」或一篇素材，寫成 Learn AI with Tarshar「主題式電子報」系列的新一期，發佈到課程筆記館（大水池 kt-sweet-journey）。第一人稱幕後信口吻（怎麼做的、為什麼這樣選、中間卡在哪），圖文並茂、看內容決定圖片量，自動接系列卡片與網站地圖、發佈前先讓 Tarshar 過目、推上線後實抓驗證、回傳可點網址。觸發時機：Tarshar 說「做成電子報」「這個做一封電子報」「發一期電子報」「把今天做的事寫成電子報」「電子報」「edm」，或做完一件事後想把過程寫成一封主題信時。即使她只說「這個寫成電子報」也應觸發。", "calls": [], "calledBy": []}, {"id": "nlm-studio-generator", "cat": "圖卡視覺", "colour": "#8b5cf6", "desc": "NotebookLM 工作室輸出客製化產生器（完整版）。當使用者需要為 NotebookLM 工作室（Studio）客製化任何輸出時使用。涵蓋全部 NLM Studio 輸出類型：語音摘要（深度探索/摘要/評論/辯論）、影片摘要（8種視覺風格）、簡報投影片（詳細版/簡報者版，含 YAML 風格設計規格）、資訊圖表、心智圖、報告（4種格式）、學習卡、測驗、資料表格類（論文萃取/行程/財務）。觸發條件：(1) 說「NLM 工作室」「NotebookLM 輸出」「幫我做 NLM 設定」「語音摘要指令」「簡報提示詞」；(2) 需要為 NLM Studio 任何功能生成客製化提示；(3) 詢問如何讓 N", "calls": [], "calledBy": []}, {"id": "notion-knowledge-capture", "cat": "記錄記憶", "colour": "#3f8560", "desc": "Capture conversations and decisions into structured Notion pages; use when turning chats/notes into wiki entries, how-tos, decisions, or FAQs with proper linking.", "calls": [], "calledBy": []}, {"id": "notion-research-documentation", "cat": "記錄記憶", "colour": "#3f8560", "desc": "Research across Notion and synthesize into structured documentation; use when gathering info from multiple Notion sources to produce briefs, comparisons, or reports with citations.", "calls": [], "calledBy": []}, {"id": "obsidian-graph-view", "cat": "記錄記憶", "colour": "#3f8560", "desc": "Render Obsidian-style weighted graph views from book JSON, keyword indexes, TOCs, card data, or node-link data. Use when the user asks for Obsidian graph view, graph view png, weighted graph, keyword graph, directory-keyword graph, spherical graph visualization, or high-weight nodes centered with cl", "calls": [], "calledBy": []}, {"id": "obsidian-notes-creator", "cat": "記錄記憶", "colour": "#3f8560", "desc": "Create high-quality Obsidian study notes with rich analogies, diagrams, and structured explanations. Handles both single notes and multi-file topic sets. Use when creating study notes, summarising lecture content, building a knowledge base, or organising any learning material into Obsidian markdown.", "calls": [], "calledBy": []}, {"id": "one-page-report", "cat": "文件轉檔", "colour": "#a16207", "desc": "一頁式查核報告版型。把「多項目＋有結論＋有評級」的內容做成單頁報告：開場三行卡 → 目錄 → 總覽表 → 只展開嚴重項 → 對照表 → 修正清單 → 折疊範本 → 行動 N 步 → 來源清單 → 觀點章。觸發語：「做成一頁式報告」「套一頁式報告版型」「一頁式查核報告」「用查核報告的架構」。輸出可以是 Notion 頁、Markdown 或單檔 HTML。", "calls": [], "calledBy": []}, {"id": "openai-docs", "cat": "論文研究", "colour": "#5b8def", "desc": "Use when the user asks how to build with OpenAI products or APIs, asks about Codex itself or choosing Codex surfaces, needs up-to-date official documentation with citations, help choosing the latest model for a use case, or model upgrade and prompt-upgrade guidance; use OpenAI docs MCP tools for non", "calls": [], "calledBy": []}, {"id": "paper-active-reading", "cat": "論文研究", "colour": "#5b8def", "desc": "將英文論文、既有中英對照翻譯或研讀摘要改成「先自己回答，再由 AI 追問與回饋」的主動研讀流程。當使用者說「這篇論文不要直接告訴我答案」「考考我」「陪我讀論文」「我想先自己理解再請你評論」「把翻譯改成互動研讀」時使用；這是 paper-bilingual-notes 的獨立搭配模式，不覆蓋原本的中英對照翻譯與研讀產出。", "calls": ["paper-bilingual-notes"], "calledBy": ["paper-bilingual-notes", "say-then-refine"]}, {"id": "paper-bilingual-notes", "cat": "論文研究", "colour": "#5b8def", "desc": "將英文學術論文 PDF 轉為保留原文版面與圖表的中英對照 Word，以及口語化研讀摘要 Word，兩份交付物，不做簡報。當使用者說「翻譯這篇論文」「中英對照」「論文翻譯」「做成對照版」「符合原文版面」「保留圖片」「讀書筆記」時使用。這是 Tarshar 的原始論文翻譯流程；只處理翻譯與摘要，不改成主動問答模式。分流：如果她要的是「研讀包」「研讀簡報」「照那一套做」，或這篇要上台報告、要給教授看、需要 Google Drive 連結回填，改用 `paper-study-pack`（簡報＋段落中英對照＋Drive 連結三件套）。只有「幫我整理這篇論文」這種沒指定產出的說法，先問她要不要簡報，再決定", "calls": ["paper-active-reading", "paper-study-pack", "say-then-refine"], "calledBy": ["paper-active-reading", "paper-study-pack", "say-then-refine"]}, {"id": "paper-study-pack", "cat": "論文研究", "colour": "#5b8def", "desc": "小D論文研讀產出包：一篇論文一次產出研讀簡報、段落中英對照翻譯、並把翻譯的Google Drive連結放進簡報這套三件套。當她說「幫我做這篇的研讀包」「論文研讀包」「這篇照那一套做」，或上傳論文PDF要做研讀簡報加中英對照時觸發。", "calls": ["meeting-prep", "paper-bilingual-notes"], "calledBy": ["paper-bilingual-notes"]}, {"id": "pdca", "cat": "工作流程", "colour": "#b45309", "desc": "Create Chinese monospaced compass-style PDCA or CAPD problem-solving cards using East-West-South-North-Center layout, full-width and half-width spaces, diagonal Unicode arrows, and strict Chinese character limits. Use when Codex needs to turn a problem, incident, decision tradeoff, root-cause analys", "calls": [], "calledBy": []}, {"id": "pdf", "cat": "文件轉檔", "colour": "#a16207", "desc": "Use when tasks involve reading, creating, or reviewing PDF files where rendering and layout matter; prefer visual checks by rendering pages (Poppler) and use Python tools such as `reportlab`, `pdfplumber`, and `pypdf` for generation and extraction.", "calls": [], "calledBy": []}, {"id": "pdf-to-video", "cat": "影音處理", "colour": "#0ea5a4", "desc": "把簡報 PDF 做成有配音與同步字幕的教學影片（台灣中文語音，逐句字幕，1080p MP4）。當使用者上傳簡報 PDF 並說「做成影片」「簡報變影片」「配音影片」「加字幕跟語音做成影片」「PDF 轉影片」時觸發。流程：讀懂每頁內容寫口播稿 → edge-tts 合成語音 → 逐句字幕 → ffmpeg 組裝。大於 20 頁的簡報先做前幾頁示範給使用者確認風格再跑完整版。", "calls": [], "calledBy": []}, {"id": "personal-athlete-81-grid", "cat": "圖卡視覺", "colour": "#8b5cf6", "desc": "Create a personal athlete 81-cell MandalArt grid from an Ohtani Shohei-style 64+8+1 model. Use when the user asks for 大谷翔平 81 宮格, 個人運動員81宮格, sports skill maps, athlete training Mandala charts, badminton 81 grids, or editable JSON/SVG/PNG-ready athlete development templates with Ohtani-style colors.", "calls": [], "calledBy": []}, {"id": "personal-style-loop", "cat": "品牌行銷", "colour": "#d1477a", "desc": "帶使用者用 2～3 篇完整代表作、Style Harness 與 Feedback Loop，逐步校準成可驗證的個人寫作 Skill；適用於社群貼文、文章、電子報與教學文稿。用於建立或更新長期個人風格，不用於一次性潤稿、一般代寫、品牌定位或模仿特定創作者。", "calls": ["create-good-skills"], "calledBy": ["create-good-skills"]}, {"id": "playwright", "cat": "系統維運", "colour": "#6b7280", "desc": "Use when the task requires automating a real browser from the terminal (navigation, form filling, snapshots, screenshots, data extraction, UI-flow debugging) via `playwright-cli` or the bundled wrapper script.", "calls": [], "calledBy": []}, {"id": "post", "cat": "品牌行銷", "colour": "#d1477a", "desc": "一鍵生社群貼文。當學員輸入 /post，或說「快速貼文」「生社群貼文」時觸發。這是快速捷徑——直接交給 Maya（社群小編）產出貼文。預設繁體中文，回應跟隨使用者語言（學員用英文就用英文）。", "calls": ["maya-social"], "calledBy": []}, {"id": "project-handover-doc", "cat": "記錄記憶", "colour": "#3f8560", "desc": "Tarshar 專用「專案交接說明文件」產生器，專為在 Claude Code 或 Claude 完成一個多步驟任務後使用。 當使用者在任務完成後說「幫我寫交接文件」「專案交接說明」「工作交接」「幫我寫工作日誌記錄你做了什麼」 「整理成給小白看的說明」「把這次做的事寫成文件讓我之後能接手」時，立刻觸發此技能。 技能會回顧整段任務實際做過的事，以給完全不懂技術的人（小白）看的口吻，產出一份包含 「這次目標、做了哪些事、為什麼這樣做、檔案清單、之後怎麼用、注意事項」六段結構的交接說明文件。 內容只記錄真實發生過的事，絕不杜撰。即使使用者只說「幫我交接」「寫個說明給我之後看」也應觸發。", "calls": [], "calledBy": []}, {"id": "project-note-json-to-epub", "cat": "文件轉檔", "colour": "#a16207", "desc": "Convert structured project-note JSON manuscripts into validated EPUB and optional Kindle-clickable PDF files. Use when the user asks to turn project notes, book-system JSON, FIRE-indexed notes, Luhmann/Zettelkasten numbered chunks, table-of-contents cards, index cards, cross-linked project notes, or", "calls": [], "calledBy": ["fire-card-to-epub"]}, {"id": "report", "cat": "教學教案", "colour": "#e8833a", "desc": "行銷策略彙整報告。當學員輸入 /report，或說「給我報告」「彙整一下」「現在狀況如何」「我接下來該做什麼」「策略建議」時觸發。Nora 會讀取全團隊的互動記錄、Jack 的廣告數據、學員的公司與商品現況，一次彙整成策略報告。預設繁體中文，回應跟隨使用者語言（學員用英文就用英文）。", "calls": ["brand-setup"], "calledBy": ["deck"]}, {"id": "research-digest", "cat": "論文研究", "colour": "#5b8def", "desc": "把多場訪談／演講／文章交叉拆解成「研究彙整頁」＋「對外電子報」。當使用者說「訪談彙整」「研究彙整」「演講彙整」「交叉拆解」，或丟出兩位以上人物的訪談連結／截圖並要求整理觀點時使用。產出含四層結構（論者重整→六種思維鏈→思維導圖→接回論文主軸）、SVG 圖解、個人觸動面向與純文字校對檔。", "calls": [], "calledBy": []}, {"id": "safety-setup", "cat": "系統維運", "colour": "#6b7280", "desc": "檢查並說明 Codex 的安全防護與核准機制，協助用戶降低危險檔案或 shell 操作風險。當用戶說「設定安全防護」「不想每次都按允許」「自動允許」「白名單」「黑名單」或輸入 /safety-setup 時啟動。預設繁體中文並跟隨使用者語言。", "calls": [], "calledBy": []}, {"id": "sales", "cat": "品牌行銷", "colour": "#d1477a", "desc": "一鍵生銷售信。當學員輸入 /sales，或說「快速銷售信」「寫銷售信」「寫一封推銷信」時觸發。這是快速捷徑——直接交給 Maya（負責電子報／EDM／名單推播）產出完整銷售信。預設繁體中文，回應跟隨使用者語言（學員用英文就用英文）。", "calls": ["maya-social"], "calledBy": []}, {"id": "say-then-refine", "cat": "論文研究", "colour": "#5b8def", "desc": "「先說再煉」口述回答教練：從使用者指定的資料庫、題庫、文件或筆記一次出一題，等使用者用打字或語音轉文字回答後，再依考試、面試、會議、簡報或論文情境校準成更精確、專業且說得出口的版本。當使用者說「先說再煉」「考我」「陪我口述練習」「不要先給答案」「幫我把回答講得更專業」「用資料庫出題」時使用。", "calls": ["paper-active-reading", "paper-bilingual-notes"], "calledBy": ["paper-bilingual-notes"]}, {"id": "screenshot", "cat": "其他", "colour": "#9ca3af", "desc": "Use when the user explicitly asks for a desktop or system screenshot (full screen, specific app or window, or a pixel region), or when tool-specific capture capabilities are unavailable and an OS-level capture is needed.", "calls": [], "calledBy": []}, {"id": "security-best-practices", "cat": "系統維運", "colour": "#6b7280", "desc": "Perform language and framework specific security best-practice reviews and suggest improvements. Trigger only when the user explicitly requests security best practices guidance, a security review/report, or secure-by-default coding help. Trigger only for supported languages (python, javascript/types", "calls": [], "calledBy": []}, {"id": "setup", "cat": "教學教案", "colour": "#e8833a", "desc": "設定精靈。帶學員一步步把 FB、IG、LINE、Meta 廣告等平台接到 AI 行銷團隊，以本機安全工具的 PASS／FAIL 驗收、卡關看安全截圖帶路、報錯自動診斷。當學員輸入 /setup，或說「幫我設定」「怎麼接 FB」「連接帳號」「設定平台」「token 怎麼拿」「接 API」時觸發。也在學員表達「想用 Meta」「想自動發文」「想接 FB/IG」「想排程到粉專」「想投 Meta 廣告」「想自動拉廣告數據」「想串 LINE」等意願時，立刻啟動帶他串接（不要只回答可不可以）。預設繁體中文，回應跟隨使用者語言（學員用英文就用英文）。", "calls": ["brand-setup", "jack-ads"], "calledBy": ["health-check", "hello-nora", "jack-ads", "maya-social"]}, {"id": "speak-human-tw", "cat": "品牌行銷", "colour": "#d1477a", "desc": "「說人話」：繁體中文的去 AI 味改寫 skill。審查與改寫文字，去除 AI 味道、校正中國用語與半形標點，讓文字讀起來像真人寫的。 觸發時機：用戶說「去 AI 味」「說人話」「這段好 AI」「改自然一點」「幫我潤稿去掉 AI 感」「校對一下再發」，或要求檢查電子報、社群貼文、銷售頁、課程文案、客服回信、簡報、公告、Email 等對外文字的語感。 不要觸發：逐字翻譯、模仿特定品牌 voice、事實查核（非風格問題）、程式碼／log／設定檔、要求「潤成雷蒙的語氣」（那是 content-writing skill 的事，本 skill 只去 AI 味、不加個人風格）。", "calls": [], "calledBy": ["tarshar-proposal-writing"]}, {"id": "speech", "cat": "影音處理", "colour": "#0ea5a4", "desc": "Use when the user asks for text-to-speech narration or voiceover, accessibility reads, audio prompts, or batch speech generation via the OpenAI Audio API; run the bundled CLI (`scripts/text_to_speech.py`) with built-in voices and require `OPENAI_API_KEY` for live calls. Custom voice creation is out ", "calls": [], "calledBy": []}, {"id": "speech-coach", "cat": "教學教案", "colour": "#e8833a", "desc": "Tarshar 專屬口條陪跑教練。當 Tarshar 在對話中說「口條陪跑」「幫我提煉今天的口條」「列出今天的關鍵字」「我今天哪裡可以講得更專業」「金句提煉」「口條提煉」「整理口條」這些關鍵詞時，立刻觸發此技能。技能會從當前對話中找出 Tarshar 表達混亂、繞圈、不夠專業的段落，以「改寫＋專業關鍵字（含白話定義）」兩層結構提煉成可帶走的口條訓練紀錄，並同步推進到 Notion 的「TAR_口條陪跑資料庫」。即使 Tarshar 只說「幫我提煉一下今天」「給我今天的金句」也應觸發。", "calls": ["chat-checkpoint", "thesis-journal"], "calledBy": []}, {"id": "spreadsheet-processor", "cat": "品牌行銷", "colour": "#d1477a", "desc": "Process and manipulate spreadsheet documents. Creates, edits, analyzes, and transforms Excel files with formula and formatting support.", "calls": [], "calledBy": []}, {"id": "stock-signal-reader", "cat": "其他", "colour": "#9ca3af", "desc": "Tarshar 專用股票技術訊號解讀助手。當使用者上傳任何股票K線圖截圖， 並說出以下任何情境時，請立即啟用此技能： - 「幫我分析這張圖」「現在可以進場嗎」「該出場嗎」「訊號怎麼樣」 - 「幫我看一下」「這樣是買還是賣」「KD怎麼樣」「MACD呢」 - 貼上任何K線截圖並問後續走勢、進出場建議 即使使用者只說「看一下」「分析」「怎麼樣」也應觸發。 本技能以老師課堂所教的 KD、MACD、RSI 指標為分析基準， 輸出必須像一位陪跑學習夥伴：有邏輯、有溫度、有信心評分， 讓小白也能看懂為什麼這樣判斷。", "calls": [], "calledBy": []}, {"id": "submission-piece-generator", "cat": "部署網站", "colour": "#2563a5", "desc": "Tarshar 作品投稿產生器。當她說「幫我寫投稿」「這個拿去投稿」「投稿文案」「作品牆投稿」「照這個範本我也想投」，或貼出一個投稿範本網址並表示想投時觸發。把她的一個現有成品，照參考範本的結構、用她本人的口吻，寫成可投稿的文案；產出「純文字 .md ＋ 可視化 .html」兩份交付物，作品連結只留單頁，並在 Notion 任務總帳留底。即使她只說「這個做成投稿」也應觸發。", "calls": [], "calledBy": []}, {"id": "tar-lesson-card-manager", "cat": "圖卡視覺", "colour": "#8b5cf6", "desc": "Creates, reviews, names, organizes, and archives teaching knowledge cards from initial brief through local and Google Drive delivery. Use when the user says「整理圖卡」, asks for TAR 教案圖卡總管, wants knowledge-card series or execution-manual cards, or needs cards checked, versioned, grouped by case and style", "calls": [], "calledBy": []}, {"id": "tarshar-brand-director", "cat": "品牌行銷", "colour": "#d1477a", "desc": "Turn Chinese course notes, articles, teaching ideas, and rough briefs into a consistent Tarshar brand visual system. Use when Codex needs to create or plan course covers, knowledge-card series, social graphics, landing-page sections, visual prompts, Brand DNA, or an inspiration shortlist for Learn A", "calls": [], "calledBy": ["build-tarshar-course-three-pack"]}, {"id": "tarshar-card-prompt-studio", "cat": "圖卡視覺", "colour": "#8b5cf6", "desc": "Tarshar 個人品牌圖卡 ChatGPT prompt 自動產生器（v2 升級版・情感豐富版）。當 Tarshar 提出「幫我做圖卡」「我要 5 種風格」「圖卡 prompt」「生圖文案」「LearnAIwithTarshar 圖卡」「FB 圖卡」「Threads 圖卡」「IG 圖卡」「給我 ChatGPT 提示詞」「tar 圖卡」這些關鍵詞時立刻觸發此技能。技能會根據使用者提供的主題或內容（可能來自上傳的接力棒文件、Notion 紀錄、簡報、心情文字、貼文草稿、報告、論文段落），自動產出 5 份完整的 ChatGPT GPT-4o 圖像生成 prompt，每一份對應一種預設風格（A 莫蘭", "calls": [], "calledBy": ["master-notes"]}, {"id": "tarshar-learning-series-manager", "cat": "論文研究", "colour": "#5b8def", "desc": "Design, extend, and publish flexible Tarshar learning series from any repeatable source type, including an author's article collection, a teacher's multi-lesson course, videos, podcasts, papers, books, cases, projects, trips, or future formats. Use when turning one or many related items into detaile", "calls": [], "calledBy": []}, {"id": "tarshar-proposal-writing", "cat": "品牌行銷", "colour": "#d1477a", "desc": "- 用 Tarshar（羅靜娟）本人的風格，寫職場提案、建言書、課程提案這類「要說服對方採取行動」的正式文件。 觸發時機：她說「寫一份提案」「幫我寫建言」「這個要提給主管／機關／客戶」「用我的風格寫」「寫課程提案」， 或丟出一個要說服某個單位做某件事的需求。 不要觸發：FB 貼文與社群短文、電子報與行銷文案、論文與學術寫作、一般潤稿、 單純的去 AI 味校對（那是 speak-human-tw 的事）、翻譯、會議紀錄整理。", "calls": ["speak-human-tw"], "calledBy": []}, {"id": "thesis-homework-format", "cat": "論文研究", "colour": "#5b8def", "desc": "Tarshar 專用論文大綱與作業 Word 檔格式化技能。當 Tarshar 請 Claude 整理論文大綱、章節規劃、課堂作業、研究計畫說明等學術類 Word 檔案時，立刻觸發此技能，自動套用她慣用的完整格式（A4、中文微軟正黑體＋英文 Arial、正文 1.5 倍行距、目錄 2 倍行距、章節自動分頁、封面獨立頁、深藍章節下線、淺色表格樣式）。觸發條件：(1) 主動語句如「幫我整理論文大綱」「這份作業整理成 Word」「用我的論文格式」「套我的格式」「照那份論文計劃說明」「整理成學術格式」；(2) 被動觸發：Tarshar 丟出任何學術／研究／作業類內容並要求產出 Word 檔時，預設自動", "calls": [], "calledBy": []}, {"id": "thesis-journal", "cat": "記錄記憶", "colour": "#3f8560", "desc": "研究生學習日誌記錄員。在當天論文相關對話即將結束時觸發，從今天整段對話中自動提煉學習軌跡，以學術日誌格式寫入 Notion 研究日誌資料庫。觸發時機：「幫我寫今天的日誌」「今天的日誌」「記錄今天」「寫日誌」「今天學了什麼」「整理今天」「日誌時間」「收工前記錄」。本技能不需要學生整理或轉貼任何素材，直接從當天的對話視窗提煉，完成後自動推進 Notion，並輸出純文字版本供學生上傳至 Claude Project 知識庫。", "calls": [], "calledBy": ["monthly-review", "speech-coach"]}, {"id": "thesis-writing-coach", "cat": "論文研究", "colour": "#5b8def", "desc": "研究生論文寫作陪跑教練，把王啟樺《研究生日課》與《馭文獻之鋒：四種良品筆記法》的方法論變成可操作的陪跑流程。當研究生需要任何論文相關協助時觸發：找不到題目、研究問題太大或太空、文獻讀不完或讀完留不下東西、筆記越記越亂、不知道怎麼開始寫、卡在某一章、跟教授開會沒方向、想建立 Obsidian 研究筆記系統、想用 AI 輔助讀 paper 與寫作。觸發語包含「幫我想論文題目」「我的研究問題」「這篇 paper 怎麼讀」「文獻回顧怎麼寫」「論文卡住了」「怎麼做研究筆記」「四色筆記」「論文大綱」「我不知道從哪裡開始」「跟教授 meeting」「論文寫不出來」。即使學生只說「我在寫論文」「幫我看一下我的", "calls": [], "calledBy": []}, {"id": "todays-daily-plan", "cat": "工作流程", "colour": "#b45309", "desc": "Write spoken daily planning notes into an Obsidian Mandala Grid day-plan Markdown file. Use when the user says 今日的日計畫, 今日的日計劃, 日計畫, 日計劃, 青蛙, frog, 🐸, 九宮, 曼陀羅, Mandala Grid, 時段, time block, 日記, or asks to place spoken tasks/events/reflections into today's Obsidian daily plan sections.", "calls": [], "calledBy": []}, {"id": "transcribe", "cat": "影音處理", "colour": "#0ea5a4", "desc": "Transcribe audio files to text with optional diarization and known-speaker hints. Use when a user asks to transcribe speech from audio/video, extract text from recordings, or label speakers in interviews or meetings.", "calls": [], "calledBy": ["convert-youtube-to-pptx", "video-frame-notes"]}, {"id": "vercel-deploy", "cat": "部署網站", "colour": "#2563a5", "desc": "Deploy applications and websites to Vercel. Use when the user requests deployment actions like \"deploy my app\", \"deploy and give me the link\", \"push this live\", or \"create a preview deployment\".", "calls": [], "calledBy": []}, {"id": "vibe-01-interview-guide", "cat": "其他", "colour": "#9ca3af", "desc": "一對一痛點訪談引導產生器，專為 MIS 訪談前使用。當 MIS 同仁準備進行工作痛點一對一訪談，將調查表欄位貼入後，立刻觸發此技能，自動輸出這場訪談專屬的問題清單與引導策略。觸發條件：「幫我準備訪談問題」「我要去訪談了」「訪談前準備」「幫我看這張調查表」「我要去找他談」「這個人的表怎麼問」，或貼入包含姓名、部門、工作項目、麻煩程度等調查表欄位時，請主動使用此技能。即使使用者只說「我待會要去談了」也應觸發。", "calls": [], "calledBy": []}, {"id": "vibe-02-spec-generator", "cat": "記錄記憶", "colour": "#3f8560", "desc": "AI 工具開發規格書產生器，專為 MIS 訪談後使用。當 MIS 同仁完成一對一痛點訪談後，將訪談筆記、語音轉文字草稿、或調查表欄位貼入，立刻觸發此技能，自動輸出一份標準化的「AI 工具開發規格書」。觸發條件：「幫我整理訪談記錄」「轉成規格書」「幫我寫開發規格」「整理這次訪談」「把需求整理好」「訪談完了幫我整理」，或貼入包含工作痛點、希望工具做什麼等內容的訪談文字時，請主動使用此技能，即使輸入格式零散、口語也應觸發。", "calls": [], "calledBy": []}, {"id": "vibe-03-task-breakdown", "cat": "工作流程", "colour": "#b45309", "desc": "AI 工具開發任務拆解器，專為 MIS 在取得規格書後使用。當 MIS 同仁完成 VIBE-02 規格書，需要把 MVP 範圍切成可逐步執行、可驗收的開發里程碑時，立刻觸發此技能。觸發條件：「幫我拆任務」「這個規格怎麼分階段做」「幫我切里程碑」「這個要怎麼開始做」「先做哪個」「分階段」，或貼入 VIBE-02 規格書內容後說「接下來呢」「怎麼開始」時，請主動使用此技能。即使使用者只說「好，那接下來要怎麼做？」也應觸發。", "calls": [], "calledBy": []}, {"id": "video-frame-notes", "cat": "影音處理", "colour": "#0ea5a4", "desc": "把影片（線上課程、講座、教學錄影）整批做成「逐幀擷取筆記」——自動抓關鍵畫面、把字卡上的文字 OCR 出來、產生逐字稿，合成圖文對照的 HTML／Markdown／純文字三種格式。全程本機處理，不用 API 金鑰、不用上傳影片。如果課程還有 Notion 文稿，可另外把兩份合成「三合一整合頁面」（教學文稿＋畫面時間軸＋完整逐字稿）。當 Tarshar 說「逐幀擷取筆記」「把影片做成筆記」「這些課程影片幫我整理」「影片重點截圖」「把影片變成圖文筆記」「影片轉逐字稿」「把 Notion 文稿整合進逐幀筆記」「整合筆記」，或丟一個裝著影片的資料夾要求整理時觸發。", "calls": ["transcribe"], "calledBy": []}, {"id": "video-spec-builder", "cat": "影音處理", "colour": "#0ea5a4", "desc": "当用户说想做一个视频、宣传片、产品演示、动画短片、抖音/YouTube 内容，或者说要改分镜、调节奏、换镜头、调字幕、加配音、改转场时使用。通过苏格拉底式追问收集视频需求，主动激发渲染层的全部能力（TTS / 字幕 / 3D / shader / 音频反应等），输出标准化的 video-spec.md 用于渲染。", "calls": ["hyperframes"], "calledBy": []}, {"id": "write-facebook-post", "cat": "品牌行銷", "colour": "#d1477a", "desc": "依 Tarshar 的真實口吻與當次指定範本撰寫、改寫或潤飾繁體中文 Facebook 貼文。當使用者提供排程主題、生活故事、旅行紀錄、親情文化經驗、AI 學習素材、專業事件分析、既有草稿或參考版本，希望產出可直接複製的 Facebook 貼文時使用；也適用於要求「寫 FB 貼文」「改成我的語氣」「照這個版本寫」「把素材整理成貼文」或檢查貼文是否太像 AI、公關稿或說教文。", "calls": [], "calledBy": ["knowledge-to-skill-inbox"]}, {"id": "yeet", "cat": "部署網站", "colour": "#2563a5", "desc": "Use only when the user explicitly asks to stage, commit, push, and open a GitHub pull request in one flow using the GitHub CLI (`gh`).", "calls": [], "calledBy": []}];
+const LINKS = [{"s": "ad", "t": "jack-ads"}, {"s": "brand-check", "t": "brand-setup"}, {"s": "brand-setup", "t": "industry-research"}, {"s": "build-tarshar-course-three-pack", "t": "beginner-interactive-course"}, {"s": "build-tarshar-course-three-pack", "t": "create-xiaod-manual"}, {"s": "build-tarshar-course-three-pack", "t": "html-ppt"}, {"s": "build-tarshar-course-three-pack", "t": "tarshar-brand-director"}, {"s": "comfy-h3-video-batch", "t": "h3-prompt-writing"}, {"s": "convert-youtube-to-pptx", "t": "transcribe"}, {"s": "create-ai-collaboration-journal", "t": "ai-coevolution-journal"}, {"s": "create-ai-collaboration-journal", "t": "create-xiaod-manual"}, {"s": "create-good-skills", "t": "personal-style-loop"}, {"s": "deck", "t": "brand-setup"}, {"s": "deck", "t": "report"}, {"s": "fb-deck-post", "t": "fb-post-tarshar"}, {"s": "fire-card-to-epub", "t": "fire-analysis-card"}, {"s": "fire-card-to-epub", "t": "project-note-json-to-epub"}, {"s": "health-check", "t": "setup"}, {"s": "hello-nora", "t": "brand-setup"}, {"s": "hello-nora", "t": "deck"}, {"s": "hello-nora", "t": "health-check"}, {"s": "hello-nora", "t": "industry-research"}, {"s": "hello-nora", "t": "iris-seo"}, {"s": "hello-nora", "t": "jack-ads"}, {"s": "hello-nora", "t": "leon-design"}, {"s": "hello-nora", "t": "maya-social"}, {"s": "hello-nora", "t": "setup"}, {"s": "industry-research", "t": "brand-setup"}, {"s": "iris-seo", "t": "brand-setup"}, {"s": "iris-seo", "t": "industry-research"}, {"s": "jack-ads", "t": "brand-setup"}, {"s": "jack-ads", "t": "industry-research"}, {"s": "jack-ads", "t": "setup"}, {"s": "knowledge-to-skill-inbox", "t": "capture-knowledge-card"}, {"s": "knowledge-to-skill-inbox", "t": "cards"}, {"s": "knowledge-to-skill-inbox", "t": "create-good-skills"}, {"s": "knowledge-to-skill-inbox", "t": "journal"}, {"s": "knowledge-to-skill-inbox", "t": "lesson-pack"}, {"s": "knowledge-to-skill-inbox", "t": "write-facebook-post"}, {"s": "leon-design", "t": "brand-setup"}, {"s": "lesson-pack", "t": "journal"}, {"s": "master-notes", "t": "fb-post-tarshar"}, {"s": "master-notes", "t": "gov-agency-lesson-generator"}, {"s": "master-notes", "t": "tarshar-card-prompt-studio"}, {"s": "maya-social", "t": "brand-setup"}, {"s": "maya-social", "t": "industry-research"}, {"s": "maya-social", "t": "setup"}, {"s": "monthly-review", "t": "anthropic-skill-creator"}, {"s": "monthly-review", "t": "chat-checkpoint"}, {"s": "monthly-review", "t": "create-ai-collaboration-journal"}, {"s": "monthly-review", "t": "i-have-adhd"}, {"s": "monthly-review", "t": "journal"}, {"s": "monthly-review", "t": "thesis-journal"}, {"s": "paper-active-reading", "t": "paper-bilingual-notes"}, {"s": "paper-bilingual-notes", "t": "paper-active-reading"}, {"s": "paper-bilingual-notes", "t": "paper-study-pack"}, {"s": "paper-bilingual-notes", "t": "say-then-refine"}, {"s": "paper-study-pack", "t": "meeting-prep"}, {"s": "paper-study-pack", "t": "paper-bilingual-notes"}, {"s": "personal-style-loop", "t": "create-good-skills"}, {"s": "post", "t": "maya-social"}, {"s": "report", "t": "brand-setup"}, {"s": "sales", "t": "maya-social"}, {"s": "say-then-refine", "t": "paper-active-reading"}, {"s": "say-then-refine", "t": "paper-bilingual-notes"}, {"s": "setup", "t": "brand-setup"}, {"s": "setup", "t": "jack-ads"}, {"s": "speech-coach", "t": "chat-checkpoint"}, {"s": "speech-coach", "t": "thesis-journal"}, {"s": "tarshar-proposal-writing", "t": "speak-human-tw"}, {"s": "video-frame-notes", "t": "transcribe"}, {"s": "video-spec-builder", "t": "hyperframes"}];
+const CATS  = [["論文研究", "#5b8def"], ["教學教案", "#e8833a"], ["品牌行銷", "#d1477a"], ["圖卡視覺", "#8b5cf6"], ["影音處理", "#0ea5a4"], ["文件轉檔", "#a16207"], ["部署網站", "#2563a5"], ["記錄記憶", "#3f8560"], ["系統維運", "#6b7280"], ["工作流程", "#b45309"], ["其他", "#9ca3af"]];
+</script>
+<script>
+
+// ── DOM 參照全部集中在最前面，避免「宣告前使用」的暫時性死區錯誤 ──
+const cv = document.getElementById('cv'), ctx = cv.getContext('2d');
+const panel = document.getElementById('panel');
+const legend = document.getElementById('legend');
+const legendRows = document.getElementById('legendRows');
+const qInput = document.getElementById('q');
+const topbarEl = document.querySelector('.topbar');
+let W = 0, H = 0, DPR = Math.min(window.devicePixelRatio || 1, 2);
+
+// ── 節點初始位置：依分類分散成環，避免一開始全部擠在中心 ──
+const catList = CATS.map(c => c[0]);
+NODES.forEach((n, i) => {
+  const ci = Math.max(0, catList.indexOf(n.cat));
+  const a = (ci / catList.length) * Math.PI * 2 + (i % 7) * 0.13;
+  const r = 150 + (i % 11) * 16;
+  n.x = Math.cos(a) * r; n.y = Math.sin(a) * r; n.vx = 0; n.vy = 0;
+  n.deg = n.calls.length + n.calledBy.length;
+  n.r = 4.5 + Math.min(9, n.calledBy.length * 1.5);
+});
+const byId = Object.fromEntries(NODES.map(n => [n.id, n]));
+
+// ── 同分類的淡連線（B 方案）：每類串成一圈，不是全連，避免糊成一團 ──
+const catLinks = [];
+const groups = {};
+NODES.forEach(n => (groups[n.cat] ||= []).push(n));
+Object.values(groups).forEach(g => {
+  for (let i = 0; i < g.length; i++) {
+    catLinks.push({ s: g[i].id, t: g[(i + 1) % g.length].id });
+  }
+});
+
+const realLinks = LINKS.filter(l => byId[l.s] && byId[l.t]);
+let showCatLinks = true;
+const hidden = new Set();          // 被關掉的分類
+let query = '';
+let selected = null;
+
+// ── 視角 ──
+let scale = 1, ox = 0, oy = 0;
+function resize() {
+  W = window.innerWidth; H = window.innerHeight;
+  cv.width = W * DPR; cv.height = H * DPR;
+  cv.style.width = W + 'px'; cv.style.height = H + 'px';
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+}
+window.addEventListener('resize', () => { resize(); fitView(); }); resize();
+
+// 自動縮放並置中，把所有可見節點框進畫面
+function fitView(pad = 70) {
+  const act = NODES.filter(visible);
+  if (!act.length) return;
+  const xs = act.map(n => n.x), ys = act.map(n => n.y);
+  const minX = Math.min(...xs), maxX = Math.max(...xs);
+  const minY = Math.min(...ys), maxY = Math.max(...ys);
+  const w = Math.max(1, maxX - minX), h = Math.max(1, maxY - minY);
+  const topPad = (topbarEl?.offsetHeight || 46) + 14;
+  const botPad = (window.innerWidth <= 820 ? (legend?.offsetHeight || 90) : 0) + 20;
+  const availH = Math.max(120, H - topPad - botPad);
+  scale = Math.min(3.2, Math.max(0.2, Math.min((W - pad * 2) / w, (availH - pad) / h)));
+  ox = W / 2 - ((minX + maxX) / 2) * scale;
+  oy = topPad + availH / 2 - ((minY + maxY) / 2) * scale;
+}
+
+const visible = n => !hidden.has(n.cat);
+const matches = n => query && (n.id.toLowerCase().includes(query) || (n.desc || '').toLowerCase().includes(query));
+
+// ── 力導向模擬 ──
+let alpha = 1;
+let dragNode = null, panning = false, lx = 0, ly = 0;
+function step() {
+  if (alpha < 0.005) return;
+  const act = NODES.filter(visible);
+  // 斥力（節點數少，O(n²) 足夠）
+  for (let i = 0; i < act.length; i++) {
+    const a = act[i];
+    for (let j = i + 1; j < act.length; j++) {
+      const b = act[j];
+      let dx = b.x - a.x, dy = b.y - a.y;
+      let d2 = dx * dx + dy * dy;
+      if (d2 < 1) { dx = (Math.random() - .5); dy = (Math.random() - .5); d2 = 1; }
+      if (d2 > 90000) continue;
+      const f = 620 / d2, d = Math.sqrt(d2);
+      const fx = (dx / d) * f, fy = (dy / d) * f;
+      a.vx -= fx; a.vy -= fy; b.vx += fx; b.vy += fy;
+    }
+  }
+  // 引力：實際呼叫拉得緊，同分類拉得鬆
+  const pull = (arr, k, len) => arr.forEach(l => {
+    const a = byId[l.s], b = byId[l.t];
+    if (!a || !b || !visible(a) || !visible(b)) return;
+    const dx = b.x - a.x, dy = b.y - a.y;
+    const d = Math.hypot(dx, dy) || 1;
+    const f = (d - len) * k;
+    const fx = (dx / d) * f, fy = (dy / d) * f;
+    a.vx += fx; a.vy += fy; b.vx -= fx; b.vy -= fy;
+  });
+  pull(realLinks, 0.020, 78);
+  if (showCatLinks) pull(catLinks, 0.006, 130);
+  // 回到中心 + 阻尼
+  act.forEach(n => {
+    if (n === dragNode) return;
+    n.vx -= n.x * 0.0016; n.vy -= n.y * 0.0016;
+    n.vx *= 0.86; n.vy *= 0.86;
+    n.x += n.vx * alpha; n.y += n.vy * alpha;
+  });
+  alpha *= 0.994;
+}
+
+// ── 繪圖 ──
+const sx = n => n.x * scale + ox, sy = n => n.y * scale + oy;
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+  const dim = query !== '' || selected;
+  const near = new Set();
+  if (selected) { near.add(selected.id); selected.calls.forEach(x => near.add(x)); selected.calledBy.forEach(x => near.add(x)); }
+
+  if (showCatLinks) {
+    ctx.strokeStyle = 'rgba(150,142,168,.16)'; ctx.lineWidth = 1;
+    ctx.setLineDash([3, 4]); ctx.beginPath();
+    catLinks.forEach(l => {
+      const a = byId[l.s], b = byId[l.t];
+      if (!visible(a) || !visible(b)) return;
+      ctx.moveTo(sx(a), sy(a)); ctx.lineTo(sx(b), sy(b));
+    });
+    ctx.stroke(); ctx.setLineDash([]);
+  }
+
+  realLinks.forEach(l => {
+    const a = byId[l.s], b = byId[l.t];
+    if (!visible(a) || !visible(b)) return;
+    const hot = selected && (near.has(a.id) && near.has(b.id));
+    ctx.strokeStyle = hot ? 'rgba(106,90,207,.85)' : (dim ? 'rgba(120,112,140,.15)' : 'rgba(120,112,140,.42)');
+    ctx.lineWidth = hot ? 2 : 1.15;
+    ctx.beginPath(); ctx.moveTo(sx(a), sy(a)); ctx.lineTo(sx(b), sy(b)); ctx.stroke();
+  });
+
+  NODES.forEach(n => {
+    if (!visible(n)) return;
+    const hot = (selected && near.has(n.id)) || (query && matches(n));
+    const faded = dim && !hot;
+    ctx.globalAlpha = faded ? 0.2 : 1;
+    ctx.beginPath(); ctx.arc(sx(n), sy(n), n.r * Math.min(scale, 1.6), 0, 7);
+    ctx.fillStyle = n.colour; ctx.fill();
+    if (selected && n.id === selected.id) {
+      ctx.lineWidth = 2.5; ctx.strokeStyle = '#33302b'; ctx.stroke();
+    }
+    if (scale > 0.95 || hot || n.deg >= 2) {
+      ctx.globalAlpha = faded ? 0.22 : 1;
+      ctx.fillStyle = '#33302b';
+      ctx.font = (hot ? '700 ' : '') + Math.max(9.5, 11 * Math.min(scale, 1.25)) + 'px system-ui,sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(n.id, sx(n), sy(n) - n.r * Math.min(scale, 1.6) - 4);
+    }
+    ctx.globalAlpha = 1;
+  });
+}
+let fitted = false, fitStage = 0;
+const FIT_AT = [0.30, 0.10, 0.03];   // 分三階段框，最後一次是真正穩定後
+function loop() {
+  step(); draw();
+  if (!fitted && fitStage < FIT_AT.length && alpha < FIT_AT[fitStage]) {
+    fitView();
+    fitStage++;
+    if (fitStage >= FIT_AT.length) fitted = true;
+  }
+  requestAnimationFrame(loop);
+}
+fitView();
+loop();
+
+// ── 互動 ──
+const pick = (px, py) => NODES.filter(visible).find(n =>
+  Math.hypot(sx(n) - px, sy(n) - py) < Math.max(10, n.r * scale + 6));
+
+function down(px, py) {
+  const n = pick(px, py);
+  if (n) { dragNode = n; select(n); } else { panning = true; }
+  lx = px; ly = py; cv.classList.add('dragging');
+}
+function move(px, py) {
+  if (dragNode) { dragNode.x = (px - ox) / scale; dragNode.y = (py - oy) / scale; alpha = Math.max(alpha, .35); }
+  else if (panning) { ox += px - lx; oy += py - ly; }
+  lx = px; ly = py;
+}
+function up() { dragNode = null; panning = false; cv.classList.remove('dragging'); }
+
+cv.addEventListener('mousedown', e => down(e.clientX, e.clientY));
+window.addEventListener('mousemove', e => move(e.clientX, e.clientY));
+window.addEventListener('mouseup', up);
+cv.addEventListener('touchstart', e => { const t = e.touches[0]; down(t.clientX, t.clientY); }, { passive: true });
+cv.addEventListener('touchmove', e => { if (e.touches.length === 1) { const t = e.touches[0]; move(t.clientX, t.clientY); e.preventDefault(); } }, { passive: false });
+cv.addEventListener('touchend', up);
+cv.addEventListener('wheel', e => {
+  e.preventDefault();
+  const k = e.deltaY < 0 ? 1.12 : 1 / 1.12;
+  const ns = Math.min(3.2, Math.max(0.28, scale * k));
+  ox = e.clientX - (e.clientX - ox) * (ns / scale);
+  oy = e.clientY - (e.clientY - oy) * (ns / scale);
+  scale = ns;
+}, { passive: false });
+
+// 手機雙指縮放
+let pinch = 0;
+cv.addEventListener('touchstart', e => {
+  if (e.touches.length === 2) pinch = Math.hypot(
+    e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+}, { passive: true });
+cv.addEventListener('touchmove', e => {
+  if (e.touches.length === 2 && pinch) {
+    const d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX,
+                         e.touches[0].clientY - e.touches[1].clientY);
+    const cx = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+    const cy = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+    const ns = Math.min(3.2, Math.max(0.28, scale * (d / pinch)));
+    ox = cx - (cx - ox) * (ns / scale); oy = cy - (cy - oy) * (ns / scale);
+    scale = ns; pinch = d; e.preventDefault();
+  }
+}, { passive: false });
+cv.addEventListener('touchend', () => { pinch = 0; });
+
+// ── 側欄 ──
+function select(n) {
+  selected = n;
+  document.getElementById('pName').textContent = n.id;
+  const c = document.getElementById('pCat');
+  c.textContent = n.cat; c.style.background = n.colour;
+  document.getElementById('pDesc').textContent = n.desc || '（這個 skill 沒有寫描述）';
+  const fill = (el, arr) => {
+    el.innerHTML = '';
+    if (!arr.length) { el.innerHTML = '<div class="none">沒有</div>'; return; }
+    arr.forEach(id => {
+      const a = document.createElement('a');
+      a.className = 'lk'; a.href = '#'; a.textContent = '→ ' + id;
+      a.onclick = ev => { ev.preventDefault(); if (byId[id]) { select(byId[id]); focusOn(byId[id]); } };
+      el.appendChild(a);
+    });
+  };
+  fill(document.getElementById('pCalls'), n.calls);
+  fill(document.getElementById('pBy'), n.calledBy);
+  panel.classList.add('on');
+}
+function focusOn(n) { ox = W / 2 - n.x * scale; oy = H / 2 - n.y * scale; }
+document.getElementById('closePanel').onclick = () => { panel.classList.remove('on'); selected = null; };
+
+// ── 圖例（可點擊篩選）──
+const counts = {};
+NODES.forEach(n => counts[n.cat] = (counts[n.cat] || 0) + 1);
+CATS.forEach(([label, colour]) => {
+  if (!counts[label]) return;
+  const row = document.createElement('div');
+  row.className = 'row';
+  row.innerHTML = '<span class="dot" style="background:' + colour + '"></span><span>' +
+                  label + '</span><span class="n">' + counts[label] + '</span>';
+  row.onclick = () => {
+    hidden.has(label) ? hidden.delete(label) : hidden.add(label);
+    row.classList.toggle('off'); alpha = Math.max(alpha, .5); fitted = false; fitStage = 0;
+  };
+  legendRows.appendChild(row);
+});
+
+// ── 搜尋與開關 ──
+qInput.addEventListener('input', e => {
+  query = e.target.value.trim().toLowerCase();
+  if (query) {
+    const hit = NODES.filter(n => visible(n) && matches(n));
+    if (hit.length === 1) { select(hit[0]); focusOn(hit[0]); }
+  }
+});
+document.getElementById('onlyReal').addEventListener('change', e => {
+  showCatLinks = !e.target.checked; alpha = Math.max(alpha, .6); fitted = false; fitStage = 0;
+});
+document.getElementById('fitBtn').addEventListener('click', () => fitView());
+document.getElementById('fold').addEventListener('click', e => {
+  e.stopPropagation();
+  legend.classList.toggle('min');
+  e.target.textContent = legend.classList.contains('min') ? '▸' : '▾';
+});
+
+</script>
+</body>
+</html>
