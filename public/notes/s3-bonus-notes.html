@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>釣魚選股補充課 課堂筆記｜把台股漲幅排行變成一片會游的魚</title>
+<meta name="description" content="生成式AI應用電台・訂閱制第三季 釣魚選股補充課（益師傅／楊俊益）逐幀課堂筆記：用 Instant Data Scraper 把 Yahoo 股市台股漲幅排行抓成 CSV，匯入自製單檔工具「股王釣魚選股攻略 v12」，接上免費的 Groq API（GPT-OSS 120B），釣起一檔就跑一次 AI 個股分析；含篩選條件與成交量下限、K 線交叉查證、供應鏈星脈圖、一鍵研究報告 PDF 與 AI 釣魚教練。依 2 小時 15 分錄影逐幀 93 張關鍵畫面＋全程逐字稿整理。非投資建議。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#8a5e1a; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:760px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px;max-height:calc(100vh - 90px);overflow-y:auto}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:7px;border-left:none;font-size:13px}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.code{position:relative;background:var(--code);border:1px solid var(--line2);border-radius:10px;padding:13px 15px;margin:10px 0;font-size:13px;line-height:1.75;color:var(--ink);white-space:pre-wrap;font-family:"Cascadia Code",Consolas,monospace;overflow-x:auto}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.iframe-wrap{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000;margin:14px 0}
+.iframe-wrap iframe{display:block;width:100%;height:460px;border:0}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static;max-height:none} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} .iframe-wrap iframe{height:320px} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/#ecf" style="border-color:#e3cda3" onclick="if(history.length>1){history.back();return false}">← 回上一頁</a>
+  <b>📝 ECF 補充課 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="s3-bonus-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 訂閱制第三季 · 釣魚選股補充課</span>
+  <h1>把台股漲幅排行變成<span>一片會游的魚</span>：AI 個股分析實作</h1>
+  <p class="lead">這是第三季的<b>補充課</b>，益師傅從頭帶做一支他自己寫的工具<b>「股王釣魚選股攻略 v12」</b>：把當天台股的漲幅排行榜抓下來，變成一片海裡游的魚，<b>拋竿釣起哪一隻，就對哪一檔股票跑一次 AI 分析</b>，看的是技術面、基本面、消息面、短線壓力與支撐、供應鏈上下游關聯，最後還能一鍵產出一份 PDF 研究報告。<br>但整堂課真正的骨架是<b>一條完整的資料流</b>：<b>公開網頁 → 用瀏覽器擴充功能把表格抓成 CSV → 匯入自製工具 → 接上免費的 Groq API 讓 AI 讀它 → 產出可讀的分析</b>。這條路換成任何領域的排行榜、標案清單、書籍排行都一樣走得通，這才是這堂課最能帶走的東西。本頁依<b>錄影逐幀關鍵畫面（共擷取 93 格）＋全程逐字稿</b>整理，重點段落附影片時間戳。</p>
+  <div class="meta">
+    <span>📅 2026/09/04（四）直播</span>
+    <span>👤 講師：益師傅（楊俊益・ECF）</span>
+    <span>⏱️ 全長 2 小時 15 分（單段錄影）</span>
+    <span>🎣 主題：資料抓取 × AI 個股分析 × 供應鏈關聯</span>
+    <span>🔰 小白友善</span>
+    <span>⚠️ 非投資建議</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-overview">1. 一張圖看懂這堂</a>
+  <a href="#sec-v12">2. V12 改了什麼</a>
+  <a href="#sec-scraper">3. 第一步：把排行榜抓成 CSV</a>
+  <a href="#sec-columns">4. 第二步：欄位對應（最容易錯）</a>
+  <a href="#sec-import">5. 第三步：匯入與篩選條件</a>
+  <a href="#sec-groq">6. 第四步：申請 Groq API 金鑰</a>
+  <a href="#sec-fishing">7. 第五步：釣魚，看 AI 個股分析</a>
+  <a href="#sec-verify">8. 交叉查證：回頭看 Yahoo 與 K 線</a>
+  <a href="#sec-chain">9. 產業關聯與供應鏈星系圖</a>
+  <a href="#sec-report">10. 一鍵研究報告 PDF</a>
+  <a href="#sec-menu">11. 全功能地圖</a>
+  <a href="#sec-coach">12. AI 釣魚教練</a>
+  <a href="#sec-risk">13. 老師的提醒與風險界線</a>
+  <a href="#sec-quotes">14. 老師金句</a>
+  <a href="#sec-src">15. 資料來源與整理說明</a>
+</nav>
+
+<article>
+
+<!-- 0 -->
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--orange))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>生成式 AI 應用電台・訂閱制第三季　<b>釣魚選股補充課程</b></td></tr>
+    <tr><th>直播日期</th><td>2026/09/04（四），本段錄影全長 <b>2 小時 15 分 06 秒</b></td></tr>
+    <tr><th>講師</th><td>益師傅（楊俊益，暱稱 ECF；智慧立方有限公司）</td></tr>
+    <tr><th>參與人數</th><td>約 90 位學員（Teams 線上直播，錄影中最多 91 人在線）</td></tr>
+    <tr><th>本堂主題</th><td>從公開排行榜抓資料、匯入自製工具、接上免費 AI API，做出一份可讀的個股分析；並示範產業關聯、供應鏈與一鍵研究報告</td></tr>
+    <tr><th>課程教材</th><td>Drive 資料夾「釣魚選股補充課程」：課堂錄影 ×1、<code>釣魚選股_v12.html</code>（單檔工具，約 1.3 MB）</td></tr>
+    <tr><th>要先準備</th><td>Chrome 瀏覽器、<b>Instant Data Scraper</b> 擴充功能、一個 Google 帳號（用來註冊 Groq）</td></tr>
+  </table></div>
+
+  <h3>📁 課程資料夾（Google Drive）</h3>
+  <p>錄影與工具檔都在這個共享資料夾：</p>
+  <p style="margin-top:8px"><a href="https://drive.google.com/drive/folders/1msogBMkDHLQ6UhfCd81TcvuR975EZ-Xb" target="_blank">🔗 開啟「釣魚選股補充課程」資料夾 ›</a></p>
+
+  <h3>🎬 課堂錄影（可直接在頁面播放）</h3>
+  <p class="cd">單段錄影，2 小時 15 分。前 30 分鐘是資料抓取與環境設定（跟著做的部分），30 分鐘後開始是工具的各項分析功能巡禮。</p>
+  <div class="iframe-wrap"><iframe src="https://drive.google.com/file/d/1exzEcOMQOlOVZqin3TrZ5tD_z6WTsXvP/preview" allow="autoplay" allowfullscreen></iframe></div>
+  <div class="note steel">🔧 <div>錄影為老師分享，內嵌播放需先登入你自己的 Google 帳號（此資料夾已分享給你）。若顯示載入中或權限提示，改從上面的「課程資料夾」連結進去即可。</div></div>
+
+  <div class="note gold">🔒 <div><b>工具檔與工具網址不放在這一頁。</b>老師在課堂上直接給了一個共用連結，讓大家用手機、平板、無痕視窗都能開；那個連結要不要對外流通是老師的決定，所以本頁只寫做法、不貼網址。工具檔 <code>釣魚選股_v12.html</code> 請到上面的 Drive 資料夾自行取用。</div></div>
+</section>
+
+<!-- 1 -->
+<section class="chapter" id="sec-overview">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--teal))">OVERVIEW</span>
+  <h2 class="ct">1. 一張圖看懂這堂</h2>
+  <p class="cd">整堂課就是一條資料流。把這五步看懂，工具換成什麼都一樣。</p>
+
+  <div class="twrap"><table>
+    <tr><th style="width:52px">步驟</th><th style="width:180px">在哪裡做</th><th>做什麼</th><th style="width:110px">時間碼</th></tr>
+    <tr><td><b>1</b></td><td>Yahoo 股市<br>台股漲跌幅排行</td><td>打開當天的漲幅排行榜，決定要抓上市、上櫃還是合併</td><td>02:00 起</td></tr>
+    <tr><td><b>2</b></td><td>Instant Data Scraper<br>（Chrome 擴充功能）</td><td>把網頁表格抓下來，<b>逐欄改成中文欄位名</b>，下載成 CSV</td><td>04:44 起</td></tr>
+    <tr><td><b>3</b></td><td>釣魚選股 v12</td><td>CSV 匯入，設定篩選條件（全部／只要漲停／強勢股／成交量下限），魚就進池了</td><td>17:44 起</td></tr>
+    <tr><td><b>4</b></td><td>Groq 平台</td><td>Google 登入拿一把免費 API Key，貼進工具的「AI 設定」</td><td>22:46 起</td></tr>
+    <tr><td><b>5</b></td><td>釣魚選股 v12</td><td>拋竿 → 等魚上鉤 → 收線，對釣到的那一檔跑 AI 分析</td><td>28:00 起</td></tr>
+  </table></div>
+
+  <div class="note blue">💡 <div><b>為什麼要繞這一圈？</b>因為 Yahoo 不允許程式直接去抓它的排行榜，會被攔截；證交所則是有時給抓有時不給。老師的解法不是硬闖，而是<b>「換一條合法又穩定的路」</b>：用瀏覽器擴充功能，以人正常瀏覽的方式把畫面上的表格取下來。這個判斷本身就是一堂課。</div></div>
+</section>
+
+<!-- 2 -->
+<section class="chapter" id="sec-v12">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--purple))">WHAT'S NEW</span>
+  <h2 class="ct">2. V12 改了什麼［01:09］</h2>
+  <p>老師開場先講版本差異，因為這會影響你能不能跑得動。</p>
+  <ul class="pt">
+    <li><b>介面整個換掉</b>，功能比 V11 多很多；魚的動畫也做得更活潑，尾巴會擺、擺幅更大。</li>
+    <li><b>釣魚的方式沒有改</b>，核心操作跟舊版一樣，不用重學。</li>
+    <li><b>新增產業關聯與供應鏈的概念</b>：星系圖、產業移動、族群輪動這一整組。</li>
+    <li><b>新增只抓漲停的篩選</b>，以及成交量下限。</li>
+    <li><b>舊版 V10、V11 已經不能用了</b>。原因不在程式，在於 Groq 平台上的 AI 模型一直在換，舊版接的模型已經下架。<b>一定要用 V12。</b></li>
+  </ul>
+
+  <div class="note green">🏷️ <div><b>一個學員提的好建議，老師當場採用了。</b>有夥伴建議別再用「股市」這個字眼，改叫<b>「AI 產業分析」「AI 產業趨勢分析」</b>。老師說這個名稱不錯，當天在交通部授課就直接用了，反應很好。同一套技術，換個框架講，能進得去的場合就完全不同。</div></div>
+</section>
+
+<!-- 3 -->
+<section class="chapter" id="sec-scraper">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--blue))">STEP 1</span>
+  <h2 class="ct">3. 第一步：把排行榜抓成 CSV［02:00–17:40］</h2>
+
+  <h3>先想清楚：為什麼不直接用程式抓</h3>
+  <p>這是老師特別停下來解釋的一段，因為學員都會問。</p>
+  <div class="note gold">⚠️ <div>「其實他是沒有辦法允許你直接透過程式方式來抓，他會直接把你攔截掉。包含我去抓台灣證券交易所的狀況，有時候可以抓，有時候不給抓。」<br>所以老師的做法是：<b>不跟網站對抗，改用擴充功能，以正常瀏覽的方式把畫面上已經呈現的表格取下來。</b></div></div>
+
+  <h3>要裝的東西：Instant Data Scraper</h3>
+  <ol class="st">
+    <li>到 Chrome 線上應用程式商店，搜尋 <b>Instant Data Scraper</b>，加到 Chrome</li>
+    <li>裝好之後，點瀏覽器右上角的<b>擴充功能</b>圖示</li>
+    <li>找到 Instant Data Scraper，<b>把大頭針按下去</b>，讓它固定顯示在工具列上</li>
+  </ol>
+  <div class="note blue">🧰 <div><b>這個工具不只能抓股票。</b>老師特別提到：書籍排行榜、政府標案清單，凡是「網頁上看得到、但沒有下載按鈕、要一筆一筆抄」的表格，都可以用它整批抓下來。這才是這個擴充功能真正的價值。</div></div>
+
+  <h3>打開排行榜</h3>
+  <p>到 Yahoo 股市 → 台股行情 → <b>漲跌幅排行</b>，選<b>漲幅排行</b>。上市、上櫃、合併三種可選，每種都是前 100 名。</p>
+  <figure class="shot"><img src="s3-bonus-img/03-yahoo-rank-scraper.jpg" alt="Yahoo 股市上市漲幅排行搭配 Instant Data Scraper 抓取面板" loading="lazy">
+    <figcaption>Yahoo 股市「上市漲幅排行」，右側是 Instant Data Scraper 抓到的表格，已收集 100 列。［10:29］</figcaption></figure>
+</section>
+
+<!-- 4 -->
+<section class="chapter" id="sec-columns">
+  <span class="chip" style="background:linear-gradient(90deg,var(--orange),var(--rose))">STEP 2 · 最容易錯</span>
+  <h2 class="ct">4. 第二步：欄位對應［10:00–17:40］</h2>
+  <p class="cd">老師在這一步花了最久，因為錯在這裡，後面全部白做。</p>
+
+  <h3>操作順序</h3>
+  <ol class="st">
+    <li>在漲幅排行的頁面上，點一下工具列那顆<b>圓形圖示（老師叫它「寶可夢球」）</b>打開抓取面板</li>
+    <li>面板會鎖定畫面正中央的那張表格，並抓出一堆預設欄位，欄位名稱多半不是中文</li>
+    <li>按 <b>Reset columns</b> 讓它回到原始狀態，再開始一欄一欄改</li>
+    <li>用不到的欄位（例如「連結」）直接按 ✕ 刪掉</li>
+    <li>把留下來的欄位，改成<b>跟網頁上那一欄的名稱一模一樣</b></li>
+    <li>確認無誤後按 <b>下載 CSV</b>，檔案會存進「下載」資料夾</li>
+  </ol>
+
+  <h3>要對應的欄位</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:120px">欄位</th><th>說明</th></tr>
+    <tr><td>排名</td><td>名次</td></tr>
+    <tr><td>股名</td><td>公司名稱</td></tr>
+    <tr><td>股號</td><td>股票代號</td></tr>
+    <tr><td>股價</td><td>成交價</td></tr>
+    <tr><td>漲跌</td><td>漲跌金額</td></tr>
+    <tr><td>漲跌幅</td><td>漲跌百分比</td></tr>
+    <tr><td>最高 / 最低 / 價差</td><td>當日高低與價差</td></tr>
+    <tr><td>成交量 / 成交金額</td><td>後面設篩選條件會用到</td></tr>
+  </table></div>
+
+  <div class="note gold">⚠️ <div><b>名稱寫錯的後果，老師講得很白：</b>「你不要寫錯囉，因為上次就有人寫錯，這個數字沒有對應到它，所以它抓到資料錯了，填進去分析，當然就是不行用。」<br>錯的欄位不會報錯，只會安靜地產出錯的分析，這是最難察覺的那種錯。</div></div>
+
+  <h3>兩個會卡住的地方</h3>
+  <div class="note steel">🪟 <div><b>抓取面板不見了。</b>它不是永遠浮在最上層，你點到別的地方它就滑到後面去。按 <b>Alt + Tab</b> 切回來即可，<b>不要再按一次那顆圓形圖示</b>。</div></div>
+  <div class="note steel">⚔️ <div><b>只能開一個。</b>老師強調同時開兩個抓取視窗「會打架，資料會錯誤」。切換用 Alt + Tab，不要重複開啟。</div></div>
+</section>
+
+<!-- 5 -->
+<section class="chapter" id="sec-import">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--green))">STEP 3</span>
+  <h2 class="ct">5. 第三步：CSV 匯入與篩選條件［17:44–21:30］</h2>
+
+  <p>回到釣魚選股 v12，點 <b>CSV 匯入</b>，選剛剛下載的檔案，開啟。這時候會出現篩選條件，這一步決定你的池子裡有幾隻魚。</p>
+
+  <figure class="shot"><img src="s3-bonus-img/04-fish-main.jpg" alt="股王釣魚選股攻略 v12 主畫面，海裡游著代表個股的魚" loading="lazy">
+    <figcaption>匯入後的主畫面：每一隻魚是一檔股票，身上標著股名、股號、股價與漲跌幅。右上角的釣客就是你。［18:07］</figcaption></figure>
+
+  <h3>四種選法，對應四種操作風格</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">選法</th><th>當天實際隻數</th><th>適合誰</th></tr>
+    <tr><td><b>全部</b></td><td>符合條件 78 檔（原始抓到 96 檔）</td><td>想看整體盤面</td></tr>
+    <tr><td><b>只要漲停</b></td><td>13 檔</td><td>老師說「你野心比較大」，只要最強的</td></tr>
+    <tr><td><b>強勢股（漲幅 &gt; 5%）</b></td><td>74 檔</td><td>當天實際採用的設定，範圍合理</td></tr>
+    <tr><td><b>溫和型</b></td><td>依設定</td><td>不追漲停，找尾盤收斂、看隔日表現的人</td></tr>
+  </table></div>
+
+  <h3>成交量下限：這條是保命用的</h3>
+  <div class="note gold">🚨 <div>老師特別要大家設<b>成交量下限</b>，理由講得很直接：<br>「交易張數太少的你不要，因為這個有時候是炒作。有些股票才一、二十塊，但是它買的量就只有幾百張，這個就不要碰。」<br>「<b>你買得到，不代表你賣得掉。</b>它漲上來之後你想要脫手，你脫不了。」<br>還補了一句：「不要見獵心喜，聽到第四台名嘴在報那種只有幾十塊的，最要小心。」</div></div>
+
+  <div class="note blue">🎣 <div><b>「溫和」不是保守，是一種策略。</b>老師解釋：有人專門不追漲停，因為覺得漲停太高了，寧可找當天走勢溫和、尾盤出現收斂的標的，賭隔日的表現。工具把這個選項做進去，是因為它對應到一種真實存在的操作模式。</div></div>
+</section>
+
+<!-- 6 -->
+<section class="chapter" id="sec-groq">
+  <span class="chip" style="background:linear-gradient(90deg,var(--blue),var(--purple))">STEP 4</span>
+  <h2 class="ct">6. 第四步：申請 Groq API 金鑰［22:46–25:00］</h2>
+
+  <h3>先搞懂 API 是什麼</h3>
+  <p>老師用一句話帶過：「<b>API 就是程式跟程式之間的串接。</b>我自己寫了一個程式，想要藉由 AI 的能力，就要去串接一個提供 AI 模型的平台。」</p>
+  <p>這個平台叫 <b>Groq</b>，上面有很多 AI 模型可以用，而且<b>免費</b>。</p>
+
+  <h3>怎麼申請</h3>
+  <ol class="st">
+    <li>Google 搜尋 <b>groq api</b>，進到 Groq 的開發者平台</li>
+    <li>用 <b>Google 帳號註冊登入</b>（老師現場給大家 30 秒）</li>
+    <li>建立一把 API Key，複製起來（格式是 <code>gsk_</code> 開頭）</li>
+    <li>回到釣魚選股 v12，點左上角 <b>AI 設定</b></li>
+    <li>把 Key 貼進去，分析模型選 <b>GPT-OSS 120B（推薦・文字主力）</b></li>
+    <li>可以順手填「暱名學分析」的名字，按<b>儲存設定</b></li>
+  </ol>
+
+  <div class="shotgrid">
+    <figure class="shot"><img src="s3-bonus-img/02-google-groq.jpg" alt="老師在 Google 搜尋 groq api" loading="lazy">
+      <figcaption>老師直接在 Google 搜尋 <code>groq api</code> 帶大家進平台。［04:56］</figcaption></figure>
+    <figure class="shot"><img src="s3-bonus-img/05-groq-setting.jpg" alt="釣魚選股 v12 的 Groq API 設定面板" loading="lazy">
+    <figcaption>AI 設定面板：貼上 <code>gsk_</code> 開頭的 API Key，選 GPT-OSS 120B，儲存。旁邊就有「免費取得 →」的連結。［23:01］</figcaption></figure>
+  </div>
+
+  <div class="note gold">⚠️ <div><b>這就是舊版不能用的原因。</b>Groq 上的模型一直在汰換，V10、V11 接的模型已經下架，所以那些版本現在打不開分析。老師說「一定要用 V12 這個版本」。<br>這也是所有串接第三方 AI 平台的工具都會遇到的事：<b>模型會退役，工具要跟著改。</b></div></div>
+</section>
+
+<!-- 7 -->
+<section class="chapter" id="sec-fishing">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--amber))">STEP 5</span>
+  <h2 class="ct">7. 第五步：釣魚，看 AI 個股分析［28:00 起］</h2>
+
+  <p>操作只有一句話，畫面下方就寫著：<b>「點擊海面拋竿 → 等魚上鉤 → 再點一次收線！」</b>釣到哪一隻，就對那一檔跑一次 AI 分析。</p>
+
+  <h3>分析面板裡有什麼</h3>
+  <figure class="shot"><img src="s3-bonus-img/06-stock-panel.jpg" alt="釣魚選股個股分析面板，含技術指標、短線預測與價位建議" loading="lazy">
+    <figcaption>個股分析面板：上排技術指標標籤，中間是短線預測與三個價位，下面接基本面指標、消息面分數與相關新聞。［36:01］</figcaption></figure>
+
+  <ul class="pt">
+    <li><b>技術指標標籤</b>：MA 多頭排列、量能、MACD、KD、布林通道位置，一眼掃過去就知道這檔現在什麼狀態</li>
+    <li><b>短線預測</b>：一段白話文，例如「預計未來 5–10 日若持續站上壓力位，股價有望測試 380 元；若回檔則可能在 350 元附近盤整」</li>
+    <li><b>三個價位卡</b>：壓力、停損、停利</li>
+    <li><b>風險提醒</b>：條列這檔目前的風險，例如 KD 進入超買、外資賣超、布林上軌乘載過熱</li>
+    <li><b>基本面指標</b>：本益比、殖利率、EPS、股價淨值比</li>
+    <li><b>消息面分數</b>：以 100 分為滿分的量化分數，附一句話說明</li>
+    <li><b>相關新聞</b>：抓當期的產業與個股新聞標題</li>
+  </ul>
+
+  <div class="note gold">⚠️ <div><b>這些數字是 AI 生成的，不是券商研究報告。</b>它會給出具體的進場價、停損價與目標價，看起來很像投資建議，但它的本質是「AI 讀完手上這幾欄資料之後的推論」。<b>當成一份幫你快速掃描的整理，不要當成決策依據。</b>詳見第 13 節。</div></div>
+</section>
+
+<!-- 8 -->
+<section class="chapter" id="sec-verify">
+  <span class="chip" style="background:linear-gradient(90deg,var(--cyan),var(--blue))">CROSS CHECK</span>
+  <h2 class="ct">8. 交叉查證：回頭看 Yahoo 與 K 線［39:00 起］</h2>
+
+  <p>老師沒有停在工具裡面。整堂課他反覆做同一件事：<b>工具給了結論，就回去原始網站看一眼對不對。</b></p>
+
+  <div class="shotgrid">
+    <figure class="shot"><img src="s3-bonus-img/07-yahoo-2049-tech.jpg" alt="Yahoo 股市上銀 2049 技術分析頁面" loading="lazy">
+      <figcaption>回 Yahoo 股市看上銀（2049）的技術分析：K 線、均線、成交量。［39:01］</figcaption></figure>
+    <figure class="shot"><img src="s3-bonus-img/08-kline-macd-kd.jpg" alt="釣魚選股工具內建的 K 線圖，含布林通道、MACD 與 KD" loading="lazy">
+      <figcaption>工具內建的 K 線圖：布林通道、MACD 柱狀圖與 KD 三段疊在一起看。［44:01］</figcaption></figure>
+  </div>
+
+  <div class="shotgrid">
+    <figure class="shot"><img src="s3-bonus-img/13-yahoo-6933.jpg" alt="Yahoo 股市 AMAX-KY 6933 個股頁面" loading="lazy">
+      <figcaption>另一檔的查證：AMAX-KY（6933），看即時行情、內外盤與成交量能。［78:01］</figcaption></figure>
+    <figure class="shot"><img src="s3-bonus-img/09-kline-tools.jpg" alt="工具內建 K 線圖上的指標切換與外資排行、AI 回測按鈕" loading="lazy">
+      <figcaption>K 線圖上排的切換鍵：MA5／MA10／MA20／布林／RSI，右邊還有評分、行事曆、外資排行、AI 回測。［55:01］</figcaption></figure>
+  </div>
+
+  <ul class="pt">
+    <li>工具裡每一檔都有 <b>K 線圖</b> 按鈕，直接叫出布林通道、MACD、KD</li>
+    <li>下方會標<b>重大事實</b>，並註明資料日期溯至證交所官網</li>
+    <li>回 Yahoo 股市看同一檔的走勢圖、技術分析、籌碼與基本面</li>
+    <li>老師也開了 <b>FinMind</b>（finmindtrade.com）當作另一個查證來源</li>
+  </ul>
+
+  <div class="note blue">🔍 <div><b>這是整堂課最值得學的習慣。</b>AI 給的分析永遠要有第二個來源對照。工具的價值在於「幫你從 100 檔裡快速篩到 3 檔」，不在於「幫你決定買哪一檔」。</div></div>
+</section>
+
+<!-- 9 -->
+<section class="chapter" id="sec-chain">
+  <span class="chip" style="background:linear-gradient(90deg,var(--teal),var(--green))">V12 新功能</span>
+  <h2 class="ct">9. 產業關聯與供應鏈星系圖［57:00 起］</h2>
+
+  <p>這是 V12 最有意思的新東西。釣到一檔股票之後，工具會把它放回<b>產業鏈的位置</b>上。</p>
+
+  <figure class="shot"><img src="s3-bonus-img/10-supply-chain.jpg" alt="供應鏈星脈圖，顯示光學鏡頭產業的上中下游關聯" loading="lazy">
+    <figcaption>供應鏈星脈圖：以光學鏡頭為例，把上游玻璃／鍍膜、中游鏡頭／模組、下游機殼／組裝串起來，紅色是當天上漲的。［57:21］</figcaption></figure>
+
+  <ul class="pt">
+    <li><b>供應鏈星脈圖</b>：把個股放到上游、中游、下游的位置，看它在鏈上的哪一段</li>
+    <li><b>產業關聯星圖</b>：以該檔為中心，畫出同族群相關個股與各自的漲跌</li>
+    <li><b>各層今日平均漲幅</b>：直接比較上中下游哪一段在動</li>
+    <li><b>此鏈同池的魚</b>：告訴你今天池子裡還有哪幾隻是同一條鏈上的</li>
+  </ul>
+
+  <div class="note green">🧠 <div><b>為什麼這個比單看一檔有用？</b>因為個股會騙人，但一整條鏈一起動就不容易是偶然。看到上游、中游、下游同時翻紅，那是族群輪動；只有一檔在漲，那可能只是它自己的事。這就是老師講的「產業移動」概念。</div></div>
+</section>
+
+<!-- 10 -->
+<section class="chapter" id="sec-report">
+  <span class="chip" style="background:linear-gradient(90deg,var(--orange),var(--amber))">一鍵產出</span>
+  <h2 class="ct">10. 一鍵研究報告 PDF［66:30 起］</h2>
+
+  <p>把上面所有東西打包成一份可以存檔、可以傳給別人的 PDF。</p>
+
+  <figure class="shot"><img src="s3-bonus-img/11-research-report.jpg" alt="工具產出的個股研究報告 PDF，含目標價、波動度、鏈上位置與新聞風向" loading="lazy">
+    <figcaption>研究報告 PDF：頂端六個指標卡（目標價、近 60 日漲跌、年化波動、期間最大回撤、鏈上位置、新聞風向），下面接產業關聯星圖與供應鏈星脈圖。［66:36］</figcaption></figure>
+
+  <ul class="pt">
+    <li>檔名格式是 <code>研究報告_股號_日期.pdf</code>，直接下載到本機</li>
+    <li>六個指標卡：<b>目標價、近 60 日漲跌、年化波動、期間最大回撤、鏈上位置、新聞風向</b></li>
+    <li>「期間最大回撤」這欄很重要，它告訴你這檔過去最慘掉過多少</li>
+  </ul>
+</section>
+
+<!-- 11 -->
+<section class="chapter" id="sec-menu">
+  <span class="chip" style="background:linear-gradient(90deg,var(--purple),var(--pink))">FULL MAP</span>
+  <h2 class="ct">11. 全功能地圖［70:00 起］</h2>
+
+  <p class="cd">工具裡的功能遠比課堂上跑完的多。這張是完整選單，課後可以自己一個一個試。</p>
+
+  <figure class="shot"><img src="s3-bonus-img/12-full-menu.jpg" alt="釣魚選股 v12 完整功能選單" loading="lazy">
+    <figcaption>完整功能選單，分成個股分析、產業關聯、選股工具、預測與警示四組。［70:05］</figcaption></figure>
+
+  <div class="twrap"><table>
+    <tr><th style="width:120px">分組</th><th>功能</th></tr>
+    <tr><td><b>個股分析</b></td><td>個股健診、進階分析、市營比、估值海平面、散戶魚群、潮汐預測、AI 教練</td></tr>
+    <tr><td><b>產業關聯</b></td><td>產業關聯星圖、供應鏈星脈圖、產業新聞牆、族群輪動、族群動力圖</td></tr>
+    <tr><td><b>選股工具</b></td><td>全市場排行、條件篩選器、多股比較、釣魚績效、一鍵研究報告、今日 CSV 再篩選</td></tr>
+    <tr><td><b>預測與警示</b></td><td>預測看漲榜、預測成敗、預言記錄、警示中心、魚標警報</td></tr>
+    <tr><td><b>其他</b></td><td>近 30 日、自選、分享漁獲卡</td></tr>
+  </table></div>
+
+  <div class="note blue">📌 <div>頂端還有四個資料來源模式：<b>台股漲幅、熱門 ETF、雲端上傳、手動匯入</b>。想看 ETF 的人不用自己抓 CSV，直接切到「熱門 ETF」就有。</div></div>
+
+  <h3>延伸：老師自己的一整櫃 AI 工具［96:00］</h3>
+  <p>課程後段老師打開自己的資料夾，裡面還有好幾支同樣是單檔做出來的分析工具。這一段沒有展開教學，但看得出他的工作方式：<b>一個需求就做一支單檔工具，做完留著，越攢越多。</b></p>
+  <figure class="shot"><img src="s3-bonus-img/14-other-ai-tools.jpg" alt="老師電腦裡的其他 AI 分析工具檔案清單" loading="lazy">
+    <figcaption>同一個資料夾裡的其他工具：長期投資分析、社群留言分析、個股 RSI 分析等，都是單檔 HTML。［96:01］</figcaption></figure>
+</section>
+
+<!-- 12 -->
+<section class="chapter" id="sec-coach">
+  <span class="chip" style="background:linear-gradient(90deg,var(--green),var(--teal))">AI 教練</span>
+  <h2 class="ct">12. AI 釣魚教練［124:00 起］</h2>
+
+  <p>釣到一檔之後可以直接跟 AI 對話，它已經把那檔的資料讀進去了。</p>
+
+  <figure class="shot"><img src="s3-bonus-img/15-ai-coach.jpg" alt="AI 釣魚教練對話視窗" loading="lazy">
+    <figcaption>AI 釣魚教練：已載入天二科技（6834）的資料，下方是六個常問問題的快捷鍵。［124:58］</figcaption></figure>
+
+  <ul class="pt">
+    <li>六個快捷問題：<b>現在能買嗎、目標價、最大風險、停損設哪、法人動向、技術訊號</b></li>
+    <li>也可以直接打字問，它會用釣魚的比喻回答</li>
+    <li>回答會給出具體數字，例如進場價、停損價、目標價與觸發條件</li>
+  </ul>
+
+  <div class="note gold">⚠️ <div>這一段最需要提醒：<b>對話介面會讓 AI 的輸出聽起來像一個懂行的人在給你建議，但它仍然只是模型根據手上資料生成的文字。</b>它不知道你的資金部位、不知道你的風險承受度、也不會為結果負責。</div></div>
+</section>
+
+<!-- 13 -->
+<section class="chapter" id="sec-risk">
+  <span class="chip" style="background:linear-gradient(90deg,var(--rose),var(--orange))">RISK</span>
+  <h2 class="ct">13. 老師的提醒與風險界線</h2>
+
+  <p>這堂課有一段老師講得非常誠實，值得完整留下來。</p>
+
+  <div class="note gold">💬 <div>「坦白講，我要坦白，<b>我股票現在目前是賠錢的</b>。如果你賠錢還敢教人家？或者告訴你說，這就是一個錯誤的示範，也是一個好的案例，對不對。就告訴你<b>不要貪心</b>。假如按照正常的操作方式，不會這樣的狀況。像益師傅之前貪心，真的貪心挖了一個很大的坑自己跳下去，慢慢要回來了。<b>真的不要貪心。</b>」</div></div>
+
+  <ul class="pt">
+    <li>老師說他自己確實有買釣到的股票，<b>但不是每一檔都買</b>，也不可能 all in</li>
+    <li>他把這件事定位成<b>「閒錢投資」</b>：閒錢放著，也許會有一筆額外的收穫</li>
+    <li>反覆強調成交量太小的不要碰、名嘴報的低價股最要小心</li>
+  </ul>
+
+  <div class="note steel">📋 <div><b>本頁的立場：</b>這是一份課堂內容整理，記錄老師在課堂上示範了什麼工具、怎麼操作。<b>頁面裡出現的任何價位、分析、預測，都是課堂上 AI 工具當下產生的示範輸出，不是投資建議，也不構成任何買賣要約。</b>投資有風險，盈虧自負，做決定前請自行查證並評估自身狀況。</div></div>
+</section>
+
+<!-- 14 -->
+<section class="chapter" id="sec-quotes">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--amber))">GOLDEN LINE</span>
+  <h2 class="ct">14. 老師金句</h2>
+  <div class="golden"><div class="q">「你買得到，不代表你賣得掉。」</div><div class="a">為什麼一定要設成交量下限。流動性不是細節，是能不能離場的問題。</div></div>
+  <div class="golden"><div class="q">「他不允許你直接透過程式抓，會把你攔截掉。那我把這些資料填進來不就好了嗎。」</div><div class="a">遇到限制不是硬闖，是換一條路。整堂課的資料流就是從這個念頭長出來的。</div></div>
+  <div class="golden"><div class="q">「這個數字沒有對應到它，它抓到資料錯了，填進去分析，當然就是不行用。」</div><div class="a">欄位對應錯了不會報錯，只會安靜地產出錯的答案。這是最危險的一種錯。</div></div>
+  <div class="golden"><div class="q">「我股票現在目前是賠錢的。這就是一個錯誤的示範，也是一個好的案例。」</div><div class="a">教工具的人願意講自己的虧損，這比任何一張漂亮的績效圖都可信。</div></div>
+</section>
+
+<!-- 15 -->
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,var(--ink3),var(--ink2))">SOURCE</span>
+  <h2 class="ct">15. 資料來源與整理說明</h2>
+  <ul class="pt">
+    <li><b>原始教材：</b>Google Drive 資料夾「釣魚選股補充課程」，內含課堂錄影一段（2 小時 15 分 06 秒、1920×1080），加上單檔工具 <code>釣魚選股_v12.html</code>。</li>
+    <li><b>整理方法：</b>錄影用 ffmpeg 做場景偵測（偵測到 332 處切換）＋每 60 秒固定補抓，經去重後保留 <b>93 張關鍵畫面</b>；同時用 faster-whisper large-v3-turbo 產出<b>全程逐字稿</b>（切 120 秒一段辨識，標點率偏低的段落自動切 60 秒重跑），兩者交叉比對後撰寫。</li>
+    <li><b>可信度標註：</b>本頁畫面截圖與功能名稱皆為<b>錄影實錄</b>；操作步驟為逐幀還原；引號內的老師發言取自逐字稿，已修正可確定的辨識錯字（人名、工具名），不確定的一律保留原樣。</li>
+    <li><b>隱私處理：</b>所有截圖已裁掉錄影右側的 Teams 參與者名單；露出學員姓名的畫面另行裁切，整頁皆為學員頭像與聊天內容的畫面不採用。</li>
+    <li><b>未收錄：</b>逐字稿全文與工具檔本身不放在公開頁面；老師課堂上提供的工具共用網址亦未刊出，要不要對外流通由老師決定。</li>
+    <li><b>本堂沒有課後作業</b>，重點在跟著把整條資料流走一遍。</li>
+  </ul>
+  <div class="note steel">📌 <div>這一堂歸在<b>「🧭 ECF 系列」</b>，定位是<b>第三季的補充課</b>，不佔正式堂數編號（第三季第一堂到第四堂另有其課）。</div></div>
+</section>
+
+</article>
+</div>
+
+<footer>
+  <p>📝 釣魚選股補充課 逐幀課堂筆記 · 生成式AI應用電台・訂閱制第三季（益師傅）</p>
+  <p>依錄影逐幀關鍵畫面＋全程逐字稿整理 · <a href="s3-bonus-ai-skills.html">🗺️ 互動技能地圖</a> · <a href="../radio/#ecf">🏠 回筆記館入口</a></p>
+</footer>
+
+</body>
+</html>
