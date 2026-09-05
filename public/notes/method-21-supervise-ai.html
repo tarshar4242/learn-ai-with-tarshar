@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 說它做不到，但我記得它做過｜Tarshar 教案集</title>
+<meta name="description" content="Tarshar 教案集：不會寫程式，也能監督 AI。從一整天真實協作中拆出 AI 的四種偏航模式、三句非技術者也能用的糾錯話術，以及一張人機分工界線表。所有案例都是真的發生過，含 AI 說「做不到」但其實它做過的完整經過。">
+<style>
+:root{
+  --paper:#f2f0f7; --card:#fdfcff; --card2:#f8f6fd; --ink:#332f3d; --ink2:#6d6880; --ink3:#847f96;
+  --line:#d5d0e2; --accent:#6a5acf; --accent2:#a79ce0;
+  --code:#fdfcff;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.9}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(242,240,247,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:10px 20px;display:flex;align-items:center;gap:14px}
+.topbar b{font-size:15px}
+.topbar .right{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.topbar a.btn{font-size:12.5px;text-decoration:none;border:1px solid var(--line);border-radius:9px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap}
+.topbar a.btn:hover{border-color:var(--accent);color:var(--accent)}
+.hero{max-width:900px;margin:0 auto;padding:52px 22px 10px;text-align:center}
+.hero .ep{display:inline-block;font-size:12.5px;letter-spacing:3px;color:var(--accent);border:1px solid var(--accent2);border-radius:999px;padding:5px 16px;background:#efecfb;margin-bottom:18px}
+.hero h1{font-size:clamp(24px,4.4vw,40px);font-weight:900;line-height:1.4;color:var(--ink)}
+.hero .lead{margin-top:14px;font-size:14.5px;color:var(--ink2)}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:18px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.showcase{max-width:900px;margin:26px auto 0;padding:0 22px}
+.showcase-box{background:linear-gradient(120deg,#efecfb,#f8f6fd);border:1px solid var(--accent2);border-radius:18px;padding:24px 26px;text-align:center}
+.showcase-box .kicker{font-size:12.5px;color:var(--accent);font-weight:800;letter-spacing:1px;margin-bottom:8px}
+.showcase-box p{font-size:14px;color:var(--ink2);margin:6px 0 16px}
+.showcase-box .ctarow{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.showcase-box a.cta{display:inline-flex;align-items:center;gap:8px;text-decoration:none;background:var(--accent);color:#fff;font-weight:800;font-size:14.5px;padding:12px 22px;border-radius:999px;box-shadow:0 6px 18px rgba(106,90,207,.26)}
+.showcase-box a.cta:hover{background:#5748b3}
+.showcase-box a.cta.alt{background:#fff;color:var(--accent);border:1px solid var(--accent2);box-shadow:none}
+.showcase-box a.cta.alt:hover{background:#efecfb}
+.layout{max-width:1120px;margin:30px auto 0;padding:0 22px;display:grid;grid-template-columns:236px 1fr;gap:34px;align-items:start}
+nav.toc{position:sticky;top:66px;border:1px solid var(--line);border-radius:14px;background:var(--card);padding:16px 14px;font-size:13.5px}
+nav.toc .t{font-size:12px;letter-spacing:2px;color:var(--ink3);margin-bottom:10px}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:8px;border-left:3px solid transparent}
+nav.toc a:hover{background:#efecfb;color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:30px 32px;margin-bottom:26px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:2px;font-weight:700;color:#fff;border-radius:999px;padding:5px 14px;margin-bottom:12px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+h2.ct{font-size:22px;font-weight:900;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:16.5px;font-weight:800;margin:24px 0 10px;padding-left:12px;border-left:4px solid var(--accent2);color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink)}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 24px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"◆";position:absolute;left:4px;font-size:9px;top:12px;color:var(--accent2)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:8px;width:23px;height:23px;border-radius:7px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:800;display:grid;place-items:center}
+.codebox{background:var(--code);border:1px solid var(--line);border-left:4px solid var(--accent2);border-radius:10px;padding:14px 16px;font-family:"Cascadia Code",Consolas,monospace;font-size:12.6px;color:#332f3d;white-space:pre-wrap;line-height:1.8;margin:12px 0;overflow-x:auto}
+.note{display:flex;gap:10px;border-radius:12px;padding:14px 16px;font-size:14px;margin:14px 0;line-height:1.85}
+.note.green{background:#efecfb;border:1px solid var(--accent2);color:var(--accent)}
+.note.gold{background:#fdf6e7;border:1px solid #eeddb4;color:#7a5b12}
+.golden{background:linear-gradient(120deg,#efecfb,#f8f6fd);border:1px solid var(--accent2);border-radius:14px;padding:16px 20px;margin:16px 0;text-align:center}
+.golden .q{font-size:17px;font-weight:900;color:var(--accent)}
+.golden .a{font-size:12.5px;color:var(--ink3);margin-top:6px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+@media (max-width:560px){ .grid2{grid-template-columns:1fr} }
+.mini{border:1px solid var(--line);border-radius:14px;padding:14px 16px;background:#fff}
+.mini .n{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:8px;background:var(--accent2);color:#fff;font-weight:800;font-size:12.5px;margin-bottom:6px}
+.mini h5{font-size:14px;font-weight:800;margin-bottom:4px;color:var(--ink)}
+.mini p{font-size:12.8px;color:var(--ink2)}
+.stage{display:inline-block;font-weight:800;font-size:11.5px;color:#fff;background:var(--accent);border-radius:6px;padding:2px 9px;margin-right:7px;letter-spacing:1px;vertical-align:middle}
+.action{border:1px solid var(--accent2);border-radius:16px;padding:18px 20px;background:#fff;margin:14px 0}
+.action .n{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:10px;background:var(--accent);color:#fff;font-weight:900;font-size:15px;margin-bottom:8px}
+.action h4{font-size:15.5px;font-weight:800;color:var(--ink);margin-bottom:4px}
+.action p{font-size:13.5px}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:#efecfb;padding:9px 12px;text-align:left;font-size:12.8px;border:1px solid var(--line);color:var(--ink)}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.backhome{position:fixed;left:14px;bottom:14px;z-index:9999;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;text-decoration:none;color:#fff;background:var(--accent);border:1px solid #5748b3;border-radius:999px;padding:9px 16px;box-shadow:0 4px 18px rgba(0,0,0,.18)}
+.backhome:hover{background:#5748b3}
+footer{max-width:1120px;margin:20px auto 0;padding:30px 22px 70px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:2}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} }
+@media print{ .topbar,nav.toc,.backhome{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<a href="../plans/" class="backhome" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+
+<div class="topbar">
+  <b>📚 Tarshar 教案集</b>
+  <div class="right">
+    <a class="btn" href="../plans/">📚 教案集系列</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">Tarshar 教案集 · 方法教學 #21</span>
+  <h1>AI 說它做不到，<br>但我記得它做過</h1>
+  <p class="lead">那天 AI 跟我說「你要的做法行不通」，還跟我道歉。我不會寫程式，沒辦法驗證它說得對不對——但我<b>記得它半小時前做過同一件事</b>。我把這句話說出口，它回頭查自己的紀錄，發現真的是它錯了。這篇不教工具，只講一件事：<b>看不懂技術的人，怎麼監督 AI</b>。四種偏航、三句話、一張界線表。</p>
+  <div class="meta">
+    <span>🧭 所有 AI 使用者</span>
+    <span>🎓 零程式基礎</span>
+    <span>⏱️ 讀完約 12 分鐘</span>
+    <span>📅 2026/09</span>
+  </div>
+</header>
+
+<div class="showcase">
+  <div class="showcase-box">
+    <div class="kicker">先給你結論，剩下的都是解釋</div>
+    <p>你不需要看懂 AI 做了什麼，只需要看懂這兩件事：</p>
+    <div class="ctarow">
+      <a class="cta" href="#c2">① 它答的是我問的嗎？ →</a>
+      <a class="cta alt" href="#c6">② 這件事錯了誰收拾？ →</a>
+    </div>
+  </div>
+</div>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#c0">0. 這篇的來歷</a>
+  <a href="#c1">1. 監督不需要看懂技術</a>
+  <a href="#c2">2. 偏航一：照字面辦事</a>
+  <a href="#c3">3. 偏航二：省略前提</a>
+  <a href="#c4">4. 偏航三：過度修正</a>
+  <a href="#c5">5. 偏航四：沒驗證就交付</a>
+  <a href="#c6">6. 你的三句糾錯話術</a>
+  <a href="#c7">7. 界線表：誰做什麼</a>
+  <a href="#c8">8. 我的規則擋下了 AI</a>
+  <a href="#c9">9. 這週可以做的三件事</a>
+</nav>
+<article>
+
+<section class="chapter" id="c0">
+  <span class="chip">來歷</span>
+  <h2 class="ct">0. 這篇不是理論，是一整天的實錄</h2>
+  <p class="cd">所有案例都真的發生過，包括 AI 出錯的那幾次。</p>
+
+  <p>那天我本來只想請 AI 幫我做一件小事：檢查一下我的工具設定。做到一半變成「我好幾個對話都連不到電腦」，最後變成「我人在外面，要怎麼開新對話做事」。<b>三個問題其實是同一個問題的三張臉，但我一開始不知道，AI 也不知道。</b></p>
+
+  <p>那一整天，AI 出錯四次。有一次我用一句話就把它拉回來了，而<b>那句話不需要任何技術能力</b>。這篇就是把那天的東西整理出來。</p>
+
+  <div class="note green">🌱 <b>先說清楚：</b>這篇不是要你不信任 AI。剛好相反——<b>知道它會在哪裡走偏，你才敢把更多事情交給它。</b>最怕的是全信或全不信，兩種都會讓你用不好。</div>
+</section>
+
+<section class="chapter" id="c1">
+  <span class="chip">觀念</span>
+  <h2 class="ct">1. 監督 AI，不需要看懂它做了什麼</h2>
+  <p class="cd">這是最多人卡住的地方：「我又看不懂程式，怎麼知道它做對沒有？」</p>
+
+  <p>你確實看不懂它在技術上做了什麼。但那不是你要判斷的東西。</p>
+
+  <div class="grid2">
+    <div class="mini"><span class="n">✗</span><h5>你不需要判斷的</h5><p>它寫的程式對不對、它用的方法是不是最好、它的技術判斷有沒有問題。這些你判斷不了，也不用判斷。</p></div>
+    <div class="mini"><span class="n">✓</span><h5>你完全判斷得了的</h5><p><b>它答的是不是我問的？</b>我要的東西有沒有出現？它說「好了」的時候，我打開來能不能用？這些不需要技術能力。</p></div>
+  </div>
+
+  <p>這個分工很重要。<b>技術正確性交給 AI，意圖正確性留給你。</b>而實際上出錯的，通常是後者——它做了一件技術上完全正確、但不是你要的事。</p>
+
+  <div class="golden"><div class="q">「我看不懂技術，但我看得懂『這個答案有沒有回答我的問題』，而那就夠了。」</div><div class="a">這是那天我學到最重要的一件事</div></div>
+</section>
+
+<section class="chapter" id="c2">
+  <span class="chip">偏航 1</span>
+  <h2 class="ct">2. 照字面辦事：它查了你問的，漏掉真正的問題</h2>
+  <p class="cd">最安靜的一種偏航。因為它「做完了」，而且做得很正確。</p>
+
+  <h3>那天發生什麼</h3>
+  <p>我請它「找出所有壞掉的連結，直接修好」。我心裡想的是：一定有些捷徑指到不存在的地方了。</p>
+  <p>它照字面查，結果是——<b>一個壞掉的都沒有。</b></p>
+  <p>如果它到這裡回報「檢查完畢，很健康」，這件事就白做了。因為真正的問題不是「連結壞了」，是<b>「有 26 個東西根本沒有連結」</b>。沒有連結不會報錯、不會有紅字，它就是安靜地不見了。</p>
+
+  <div class="note gold">⚠️ <b>差別在哪：</b>「壞掉」是你有一把鑰匙但打不開門；「沒接上」是你根本沒有那把鑰匙。前者會報錯，後者不會——所以後者更難發現。</div>
+
+  <h3>為什麼會這樣</h3>
+  <p>因為<b>你描述的是「症狀看起來的樣子」，不是「故障的機制」</b>。你只能用你知道的詞去講，而那個詞可能不精準。AI 忠實地執行了你的字面意思，這本身沒有錯——但不夠。</p>
+
+  <h3>你可以怎麼防</h3>
+  <ol class="st">
+    <li>它回報「沒問題」的時候，<b>不要馬上放心</b>。多問一句：「有沒有同一類、但長得不一樣的問題？」</li>
+    <li>把你的<b>目的</b>講出來，不只講動作。「找出壞掉的連結」是動作，「我想確認每個工具都叫得動」是目的。有目的它才有辦法自己延伸。</li>
+    <li>如果結果是「全部正常」，特別要警覺——<b>你會請人來檢查，通常就是因為你感覺不對。</b></li>
+  </ol>
+
+  <div class="golden"><div class="q">「檢查完全正常」通常不是好消息，是換個角度再看一次的訊號。</div><div class="a">尤其當你本來就覺得哪裡怪怪的</div></div>
+</section>
+
+<section class="chapter" id="c3">
+  <span class="chip">偏航 2</span>
+  <h2 class="ct">3. 省略前提：它預設你知道的事，你其實不知道</h2>
+  <p class="cd">這種最傷人，因為出錯的時候你會覺得是自己笨。</p>
+
+  <h3>那天發生什麼</h3>
+  <p>AI 一路給我指令，叫我照著打。我打了，失敗；再打，又失敗。我看到一長串英文錯誤訊息，完全不知道怎麼辦。那一刻我打了一句話給它：</p>
+  <div class="codebox">我現在已經完全都亂掉了。</div>
+  <p>問題在哪？<b>它從來沒說過那些指令要打在哪個視窗。</b>而在我眼裡，兩種視窗長得一模一樣——都是黑底白字。我把「跟電腦下指令的地方」和「跟 AI 講話的地方」搞混了，連續錯兩次。</p>
+
+  <div class="note green">💡 它後來用一個比喻讓我懂了：<b>「就像一個房間裡站著一個人。你對著人講話，跟對著房間講話，是兩回事。」</b>——我當下就懂了。前面那些技術解釋，一句都沒進到我腦袋。</div>
+
+  <h3>為什麼會這樣</h3>
+  <p>因為那個前提對 AI 來說「太理所當然，不值得說」。這叫<b>隱性知識</b>——內行人習以為常、所以從來不會特地講出來的東西。而外行人卡住的，往往就是這些沒被講出來的部分。</p>
+  <p>更麻煩的是：<b>你不知道你不知道。</b>所以你也問不出來。你只會覺得「怎麼我照做還是不行，是不是我太笨」。</p>
+
+  <h3>你可以怎麼防</h3>
+  <ul class="pt">
+    <li>拿到任何操作步驟，先問一句：<b>「這要在哪裡做？我要先打開什麼？」</b></li>
+    <li>失敗第二次就停下來，<b>不要試第三次</b>。同樣的方法失敗兩次，通常是前提錯了，不是你手滑。</li>
+    <li>直接說「<b>我現在亂掉了</b>」。這不是示弱，是最有效的煞車——好的 AI 會停下來收斂，而不是繼續丟更多說明給你。</li>
+  </ul>
+
+  <div class="golden"><div class="q">「照做還是不行」，多半不是你笨，是有一個沒人告訴你的前提。</div><div class="a">那個前提，你有權利要求它講出來</div></div>
+</section>
+
+<section class="chapter" id="c4">
+  <span class="chip">偏航 3</span>
+  <h2 class="ct">4. 過度修正：它推翻了自己做對的事</h2>
+  <p class="cd">那天最嚴重的一次。而且救回來的方法，完全不需要技術能力。</p>
+
+  <h3>那天發生什麼</h3>
+  <p>我問它一個做法可不可行。它回答得非常肯定：</p>
+  <div class="codebox">不是。你講的那個做法行不通。
+
+我建了一套流程，前提是「叫一個對話幫你開新對話」，
+這個前提我沒驗證就給你了，而它是錯的。對不起。</div>
+  <p>它道歉、反省、解釋得頭頭是道。<b>如果我是別人，我就信了。</b></p>
+  <p>但我沒信。因為<b>我記得它半小時前做過同一件事</b>。我不會寫程式，沒辦法驗證它說得對不對——我只有記憶。我把記憶說出口：</p>
+  <div class="codebox">你還是沒有搞懂我的需求嗎？我以為你已經很清楚了。
+
+假設我今天人在外面、用手機想要做 5 件事，我就直接跟它說
+「幫我開 5 個對話」，它開完以後，我每個對話做一件事。
+這不是我們剛才討論做得到的嗎？</div>
+  <p>它回頭去翻自己的執行紀錄，然後說：<b>「你是對的，我上一則講錯了。我明明在這個對話裡成功開過兩次，卻跟你說做不到。」</b></p>
+  <p>真相是：有另一個失敗的案例，它拿那次失敗推翻了自己成功的兩次。差別只在一個小設定，但它沒去比對。</p>
+
+  <h3>為什麼會這樣</h3>
+  <p>AI 被指出錯誤之後，有時候會<b>修正過頭</b>——為了避免再犯，連原本做對的也一起否定。這種「認錯認太多」看起來很誠懇，殺傷力卻很大：<b>它會讓你對自己正確的直覺失去信心。</b></p>
+
+  <div class="note gold">⚠️ 這比它單純犯錯更危險。單純犯錯你還會懷疑；它一邊道歉一邊否定，你反而會覺得「連它都說不行了，那應該是我搞錯」。</div>
+
+  <h3>你可以怎麼防</h3>
+  <ol class="st">
+    <li><b>相信你的記憶。</b>你不會 code，但你記得剛剛發生過什麼。記憶也是證據。</li>
+    <li>它說「做不到」時，回一句：<b>「你剛剛不是做過嗎？去查一下你自己的紀錄。」</b></li>
+    <li>特別警覺<b>過度道歉</b>。一直說對不起、一直自我否定的回應，正確率不一定比較高。</li>
+  </ol>
+
+  <div class="golden"><div class="q">「一個失敗的例子，不能推翻你自己成功做過的事。」</div><div class="a">這句話對 AI 適用，對人也適用</div></div>
+</section>
+
+<section class="chapter" id="c5">
+  <span class="chip">偏航 4</span>
+  <h2 class="ct">5. 沒驗證就交付：文件寫得再美，前提錯了就是白費</h2>
+  <p class="cd">這種偏航會浪費你最多時間，因為它的成品看起來很完整。</p>
+
+  <h3>那天發生什麼</h3>
+  <p>AI 幫我建了一整套東西：腳本、說明文件、快速指令，還存進了備份。<b>看起來非常完整。</b></p>
+  <p>然後我照著做——失敗。再試——又失敗。我跟它說：</p>
+  <div class="codebox">你連帶下面做的這些腳本，我都不知道它應該要怎麼樣銜接連貫。</div>
+  <p>因為整套東西建立在一個<b>它自己也沒實際跑過一次</b>的前提上。文件寫得再清楚，地基是空的。</p>
+
+  <h3>它後來怎麼改</h3>
+  <p>它把檢查點往前搬。後來有一次它要跑一個大工作，<b>在還沒開始之前</b>就先驗證輸出位置對不對——結果真的抓到路徑錯了，當場修掉，省下一小時白工。它自己說：</p>
+  <div class="note green">🔍 <b>「今天我出了兩次同類的錯，共同點都是沒先確認就往下做。所以這次我把檢查點提前到『還沒開始跑就先驗』，而不是等跑完才發現。」</b></div>
+
+  <h3>你可以怎麼防</h3>
+  <ul class="pt">
+    <li>它交給你一套流程時，問：<b>「這個你自己完整跑過一次了嗎？」</b></li>
+    <li>不要一次接受一大包。<b>先要最小可用的那一步</b>，你自己走通了，再要下一步。</li>
+    <li>它說「應該可以」「理論上沒問題」——這是<b>沒驗證</b>的意思。請它去驗。</li>
+  </ul>
+
+  <div class="golden"><div class="q">「你自己跑過一次了嗎？」——這句話可以省下你半天。</div><div class="a">而且問這句話不需要懂任何技術</div></div>
+</section>
+
+<section class="chapter" id="c6">
+  <span class="chip">工具</span>
+  <h2 class="ct">6. 你的三句糾錯話術</h2>
+  <p class="cd">那天我說過最有用的三句話。一句技術詞都沒有。</p>
+
+  <div class="action"><span class="n">1</span><h4>「我現在亂掉了」</h4><p>用在<b>資訊太多、你跟不上</b>的時候。這句話會讓 AI 停下來收斂、減少選項，而不是繼續補充說明。<b>不要撐。</b>撐下去只會越來越亂，而且你會開始怪自己。</p></div>
+
+  <div class="action"><span class="n">2</span><h4>「我還是不懂」</h4><p>用在<b>它解釋了但你沒接住</b>的時候。這句話會逼它換一個講法——通常第二次、第三次的版本會白話很多。那天我說了兩次，每一次都拿到更能用的答案。<b>不懂是它沒講好，不是你不夠格。</b></p></div>
+
+  <div class="action"><span class="n">3</span><h4>「你還是沒有搞懂我的需求嗎？」</h4><p>用在<b>它答得很流暢，但沒答到你要的</b>的時候。這是最強的一句，因為它會讓 AI 回頭重新理解問題，而不是繼續優化一個錯的答案。那天就是這句話讓它去翻自己的紀錄，找出它錯誤的自我否定。</p></div>
+
+  <div class="note green">🌱 這三句的共同點：<b>都在描述「我的狀態」，不是在指導「它該怎麼做」。</b>你不用知道正確答案是什麼，只要誠實說出你現在的感受，方向就會被修正。</div>
+</section>
+
+<section class="chapter" id="c7">
+  <span class="chip">界線</span>
+  <h2 class="ct">7. 界線表：什麼讓 AI 做，什麼自己來</h2>
+  <p class="cd">判準只有一個字：<b>逆</b>。</p>
+
+  <p>不要用「難不難」或「重不重要」來分工，那會分不出來。用<b>「錯了能不能救回來」</b>來分，界線立刻清楚。</p>
+
+  <div class="twrap">
+  <table>
+    <tr><th style="width:22%">類型</th><th style="width:39%">交給 AI 做</th><th style="width:39%">你自己來</th></tr>
+    <tr><td><b>檔案</b></td><td>新增、修改（有備份或版本紀錄）</td><td><b>永久刪除、清空垃圾桶</b></td></tr>
+    <tr><td><b>對外</b></td><td>寫草稿、改文字、整理格式</td><td><b>按下發送、發布、公開</b></td></tr>
+    <tr><td><b>錢</b></td><td>比價、算總額、整理報表</td><td><b>付款、轉帳、下單</b></td></tr>
+    <tr><td><b>帳號</b></td><td>說明設定在哪、有什麼影響</td><td><b>輸入密碼、改權限、同意條款</b></td></tr>
+    <tr><td><b>判斷</b></td><td>整理選項、列出優缺點</td><td><b>做決定</b>（尤其牽涉你的專業與立場）</td></tr>
+  </table>
+  </div>
+
+  <h3>一句話判斷法</h3>
+  <div class="golden"><div class="q">「這件事做錯了，是我按幾下就能救回來，還是要打電話求救？」</div><div class="a">前者交給 AI，後者自己來</div></div>
+
+  <p>這張表不是要綁手綁腳。<b>剛好相反</b>——把不可逆的那幾格守住之後，其他所有事情你都可以放心讓 AI 全速去做，不用每一步都提心吊膽。</p>
+</section>
+
+<section class="chapter" id="c8">
+  <span class="chip">實例</span>
+  <h2 class="ct">8. 我設的規則，那天真的擋下了 AI</h2>
+  <p class="cd">界線不能只放在心裡。放進系統裡，它才會真的作用。</p>
+
+  <h3>發生什麼</h3>
+  <p>那天 AI 要清掉一個 3.5 GB 的資料夾，用的是一個<b>刪掉就救不回來</b>的指令。結果它被擋下來了——被我自己幾個月前設的一條規則：</p>
+  <div class="codebox">安全攔截：這是一執行就可能救不回來的指令。
+請改用可還原、可預覽或先備份的做法。</div>
+  <p>AI 接受了攔截，<b>沒有嘗試繞過</b>，改成把資料夾「移到垃圾桶」——一樣收回空間，但我隨時能還原。</p>
+
+  <h3>我學到什麼</h3>
+  <p>我當初設那條規則，是為了防我自己手殘。那天它防到的是 AI。</p>
+  <div class="golden"><div class="q">「規則不分對象才有用。」</div><div class="a">為自己設的防護，會在你想不到的時候保護你</div></div>
+
+  <p>更重要的是後面那件事：那個 87 GB 的垃圾桶，<b>AI 沒有代我清空</b>。它把清單和判斷依據列給我，然後說：「倒垃圾桶這件事我不能幫你做，那是真的救不回來，必須你自己確認。」</p>
+  <p>這就是界線在運作的樣子——<b>不是 AI 什麼都不能做，是不可逆的那一下，手要在你身上。</b></p>
+
+  <div class="note gold">⚠️ <b>怎麼開始：</b>你不用馬上去研究怎麼設技術性的攔截。先從最簡單的做起——在你跟 AI 的協作規則裡寫一句：「刪除、發送、付款這三件事，一律先問我。」光是寫下來、講出來，就已經有效。</div>
+</section>
+
+<section class="chapter" id="c9">
+  <span class="chip">行動</span>
+  <h2 class="ct">9. 這週可以做的三件事</h2>
+  <p class="cd">不用改工具，不用學指令。三件事都是改習慣。</p>
+
+  <div class="action"><span class="n">1</span><h4>今天就用：把三句話存進手機備忘錄</h4><p><b>「我現在亂掉了」「我還是不懂」「你還是沒有搞懂我的需求嗎」</b>。下次卡住的時候直接複製貼上。你會發現這三句比你努力把問題描述得更精確有效得多——因為<b>問題出在它沒接住，不是你沒講清楚。</b></p></div>
+
+  <div class="action"><span class="n">2</span><h4>這週：畫出你自己的界線表</h4><p>拿一張紙，把你最近會交給 AI 做的事列出來，每一件問一句：<b>「錯了我救得回來嗎？」</b>救得回來的畫勾，救不回來的畫叉。畫叉的那幾件，以後最後一步自己按。<b>十分鐘就能做完，但它會改變你之後一整年的用法。</b></p></div>
+
+  <div class="action"><span class="n">3</span><h4>建立習慣：它說「好了」的時候，多問一句</h4><p>不要聽到「完成了」就放心。問：<b>「你自己實際打開來看過了嗎？」</b>那天 AI 有一次跟我說某件事做完了，我打開一看根本不能用——它只看了檔案結構，沒看內容。<b>多問這一句，花你三秒鐘。</b></p></div>
+
+  <div class="note green">🌱 <b>最後一句真心話：</b>我不會寫程式，一輩子大概也不會。但那天我用三句話把 AI 拉回正確方向兩次，其中一次還推翻了它自己的判斷。<b>監督 AI 需要的不是技術能力，是願意說出「我不懂」的誠實，和相信自己記憶的底氣。</b>這兩樣你本來就有。</div>
+
+  <div class="note gold">⚠️ <b>誠實補充：</b>這篇裡的四種偏航，是從我一整天的協作中整理出來的，屬於<b>單一使用者的現場經驗</b>，不是研究結論。你的 AI、你的工作場景可能會出現不一樣的模式。這張清單當起點用就好，真正有用的是你自己記下來的那幾次——<b>被同一種方式坑過兩次，就值得寫下來。</b></div>
+</section>
+
+</article>
+</div>
+
+<footer>
+  方法教案 #21・AI 說它做不到，但我記得它做過・Tarshar 教案集・2026/09<br>
+  🍀 Learn AI with Tarshar｜把複雜的事變成一般人做得到的事
+</footer>
+
+</body>
+</html>
