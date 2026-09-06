@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>交得出去才叫成果｜資策會生成式AI辦公室應用能力認證解析 互動式學習地圖</title>
+<meta name="description" content="ECF 訂閱制課程（益師傅／楊俊益，2026/06/04）互動式學習地圖：五大主題 20 項實戰技能，涵蓋這張證照該不該考的門票論、認證光譜與五大核心場景、術科 8 題 90 分鐘與學科 40 題 30 分鐘的分工、考前十分鐘的帳號登入與 Gem 提示詞預備、NotebookLM 自訂簡報與 Gemini Canvas 生成十頁簡報、「說好的簡報呢」救援句、十一頁改成十頁的兩種解法、交件規格五條檢查表，以及八大企業情境題的拆題方式。學會一項打一個勾，進度存在自己的瀏覽器。">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269;
+  --green:#3f8560; --orange:#bf6a1e; --red:#c0453f; --teal:#0d8f80; --amber:#9c7b23; --rose:#b5476a;
+  --feat:#1f6f78; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(28px,4.6vw,46px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--txt);background:none;-webkit-text-fill-color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:680px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:9px}
+.steps li{list-style:none;counter-increment:st;display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--txt2);line-height:1.7}
+.steps li::before{content:counter(st);flex:none;width:25px;height:25px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:var(--c,var(--feat));margin-top:1px}
+.steps li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+.prompt,.promptbox{background:#1d1d1f;border:1px solid #2c2c31;border-radius:10px;padding:13px 15px;margin-top:6px;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt b,.promptbox b{color:#fff}
+figure.shot{margin:10px 0 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12px;color:var(--txt3);padding:8px 12px;border-top:1px solid var(--line);background:var(--bg2);line-height:1.6}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <a class="navlink" href="../radio/#ecf" style="border-color:#bcd8db" onclick="if(history.length>1){history.back();return false}">← 回上一頁</a>
+  <div class="logo">
+    <div class="dot">🎫</div>
+    <div>生成式AI辦公室認證 地圖<small>ECF SUBSCRIPTION · CERTIFICATION</small></div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋技能關鍵字：門票、認證光譜、限制條件、術科、學科、Gem、同步、Canvas、NotebookLM、說好的簡報呢、十頁、10MB、檔名、情境題…" autocomplete="off">
+  </div>
+  <a class="navlink" href="ecf-genai-cert-notes.html">📝 課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">ECF 訂閱制 · 認證解析場 · 2026/06/04</span>
+  <h1>交得出去<br>才叫成果</h1>
+  <p class="sub">益師傅把自己考過資策會「生成式 AI 辦公室應用能力認證」的經驗攤開來講一次。他很誠實：「<b>我到現在還是覺得那張證照沒有辦法驗證任何的事情</b>」——但下一句立刻補上「<b>可是他就是一張門票</b>」。<br>整堂 43 分鐘只在拆一件事：這張證照考的不是你懂多少，是<b>在 90 分鐘、10 頁、10MB 的限制裡，你交不交得出去</b>。所以準備的重點不在知識，在把工具、帳號、提示詞、檔案格式全部在進考場之前排好。<br>點進每一章，逐層展開<b>本堂實際教到</b>的觀念、示範與操作，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🎙️ 生成式AI應用電台・ECF 訂閱制</span>
+    <span>👤 益師傅（楊俊益・ECF）</span>
+    <span>⏱️ 全長 43 分 4 秒</span>
+    <span>🔰 小白友善</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>5</b><span>大主題</span></div>
+  <div class="stat"><b>21</b><span>實戰技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 21 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--blue)" onclick="showChapter('decide')">
+        <div class="glowline"></div><span class="emoji">🎫</span>
+        <h3><em>CHAPTER 01</em>這張證照該不該考</h3>
+        <p>他自己都說證明不了能力，卻仍然勸你考——因為公文上的資格條文改不了。誰真的被要求考，以及為什麼它像在考國文。</p>
+        <div class="foot"><div class="mini"><i data-mini="decide"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--teal)" onclick="showChapter('scope')">
+        <div class="glowline"></div><span class="emoji">🎯</span>
+        <h3><em>CHAPTER 02</em>它到底在考什麼</h3>
+        <p>官網怎麼定義、認證光譜站在哪一格、「限制條件下產出成果」那條公式，以及術科與學科的題數配分與出題套路。</p>
+        <div class="foot"><div class="mini"><i data-mini="scope"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--purple)" onclick="showChapter('prep')">
+        <div class="glowline"></div><span class="emoji">🧳</span>
+        <h3><em>CHAPTER 03</em>考前十分鐘的備戰</h3>
+        <p>考場不提供任何 AI 工具、考前十分鐘可以拿手機驗證、Chrome 一定要啟用同步，以及把提示詞先藏進 Gem。</p>
+        <div class="foot"><div class="mini"><i data-mini="prep"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--amber)" onclick="showChapter('slides')">
+        <div class="glowline"></div><span class="emoji">🖼️</span>
+        <h3><em>CHAPTER 04</em>十頁簡報怎麼生</h3>
+        <p>Canvas 主攻、NotebookLM 併跑備援、自訂簡報只要兩行設定，以及卡住時的三種救法與模型怎麼選。</p>
+        <div class="foot"><div class="mini"><i data-mini="slides"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--rose)" onclick="showChapter('deliver')">
+        <div class="glowline"></div><span class="emoji">📦</span>
+        <h3><em>CHAPTER 05</em>交得出去才叫成果</h3>
+        <p>十一頁變十頁的兩種解法、交件規格五條檢查表、八大情境題的共同解法，以及「每一種產出都要有第二條路」。</p>
+        <div class="foot"><div class="mini"><i data-mini="deliver"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+
+    <div class="resources">
+      <h3>📦 <span>延伸閱讀</span></h3>
+      <div class="res-grid">
+        <a href="ecf-genai-cert-notes.html"><span class="ic">📝</span><span><b>課堂筆記</b>十二章完整整理＋時間戳</span></a>
+        <a href="../radio/#ecf"><span class="ic">📻</span><span><b>直播電台系列</b>回系列總覽，一集一卡</span></a>
+        <a href="https://www.iiedu.org.tw/certifications/exam/11" target="_blank" rel="noopener"><span class="ic">🏛️</span><span><b>資策會 iEDU 官網</b>考試簡介與報名資訊</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-decide" class="view" style="--c:var(--blue)"></section>
+  <section id="view-scope" class="view" style="--c:var(--teal)"></section>
+  <section id="view-prep" class="view" style="--c:var(--purple)"></section>
+  <section id="view-slides" class="view" style="--c:var(--amber)"></section>
+  <section id="view-deliver" class="view" style="--c:var(--rose)"></section>
+</main>
+
+<footer>
+  本頁為 ECF 訂閱制「資策會生成式 AI 辦公室應用能力認證解析」課後整理・介面沿用本站互動式學習地圖版型<br>
+  原始錄影與講者簡報未公開，本頁為重新書寫的學習整理・整理：竹貞<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2026｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+const DATA = {
+  decide: {
+    key:'decide', color:'var(--blue)', emoji:'🎫', code:'CHAPTER 01', title:'這張證照該不該考',
+    intro:'開場六分鐘沒有任何操作，全部在講一件事：益師傅自己都說這張證照證明不了能力，可是他仍然勸你去考。理由不在能力，在資格條文。',
+    topics:[
+      {t:'它證明不了能力，但它是一張門票', s:'全堂對證照最誠實的定位｜錄影 02:00–04:00', blocks:[
+        {h:'他怎麼講',p:'「我真的到現在，我還是覺得那張證照，沒有辦法驗證任何的事情。」——然後下一句立刻接：「<b>但是他就是一張門票，你有這張門票，你才有資格可以進去。</b>」'},
+        {h:'為什麼還是要考',p:'在公部門、財團法人與執行單位，<b>承辦人就算認識你、也肯定你的能力，他改不了公文上的資格條文</b>。條文寫要有這張證照，你沒有，他想找你也沒辦法。'},
+        {h:'類比',tip:'跟求職時對方要求乙級、甲級技術士一樣：功夫再好，沒有那張紙連面談的機會都沒有。<b>把它當門票，你就不會對它有不切實際的期待。</b>'},
+        {h:'看課堂筆記',p:'👉 <a href="ecf-genai-cert-notes.html#sec-why" style="color:var(--blue)">筆記 2：他自己都說證明不了能力，為什麼還是要考</a>'}]},
+
+      {t:'誰真的會被要求考這張', s:'不是所有人都需要｜錄影 06:00 前後', blocks:[
+        {h:'三種人',table:{head:['對象','狀況'],rows:[
+          ['<b>科技大學（尤其私立）教師</b>','以前是鼓勵，今年變成要求；暑假還得為這件事準備'],
+          ['<b>要承接政府／法人標案的人</b>','資格條文寫死了就是寫死了'],
+          ['<b>不需要的人</b>','已經有穩定邀約、不接標案的講師，他明說「其實可以不用考」']]}},
+        {h:'他的態度',warn:'他為被要求的老師抱不平：「老師平常忙的事情超多的，現在還要為了這樣證照的部分，要再煩惱。」本頁照原話保留他的評價，沒有替他修飾成正面說法。'},
+        {h:'看課堂筆記',p:'👉 <a href="ecf-genai-cert-notes.html#sec-why" style="color:var(--blue)">筆記 2：誰會被要求考</a>'}]},
+
+      {t:'它像在考國文：讀得懂語意才答得對', s:'他考完的第一個感想｜錄影 04:14', blocks:[
+        {h:'原話',p:'「這張有點像在考國文。<b>語意要很清楚。</b>」'},
+        {h:'意思是什麼',p:'題目是一段情境敘述，你要讀懂用詞與含義，才知道答案在哪一個選項。所以準備方向不是背模型原理，是<b>練習把情境讀清楚</b>。'},
+        {h:'配套的一句勸',warn:'「千萬不要裸考，我沒有騙你，真的不要裸考。」他自己考 95 分，還是這樣勸。［09:56］資策會另外有販售線上刷題服務（約 390 元、幾百題，用 email 登入無限次刷）。金額請以官網為準。'},
+        {h:'看課堂筆記',p:'👉 <a href="ecf-genai-cert-notes.html#sec-why" style="color:var(--blue)">筆記 2：像在考國文</a>'}]}
+    ]
+  },
+
+  scope: {
+    key:'scope', color:'var(--teal)', emoji:'🎯', code:'CHAPTER 02', title:'它到底在考什麼',
+    intro:'6 到 14 分鐘他開官網對照原文，再用自製的解析簡報把「這張證照在量什麼」講一次。這一章是整堂的理論基礎。',
+    topics:[
+      {t:'先開官網，看官方怎麼定義', s:'報名與查規則的正式入口｜錄影 06:40', blocks:[
+        {h:'官方寫的應用範疇',p:'資策會 iEDU 官網的「考試簡介」寫得很明白：<b>文本撰寫、文案創作、圖像創作、簡報製作</b>，強調「在真實情境中有效分析需求、評估生成內容並加以應用」。'},
+        {h:'核心能力指標三條',p:'文本處理應用／視覺創意製作／簡報內容策略與優化——<b>與後面術科八題完全對得起來</b>。'},
+        {h:'實機畫面',shot:{img:'ecf-genai-cert-img/01-iiedu-exam-page.jpg',cap:'資策會 iEDU 官網的考試資訊頁，考試簡介與核心能力指標都在這一頁。［06:40］'}},
+        {h:'看課堂筆記',p:'👉 <a href="ecf-genai-cert-notes.html#sec-what" style="color:var(--teal)">筆記 3：這張證照在考什麼</a>'}]},
+
+      {t:'認證光譜：辦公室商業 × 實務應用', s:'它站在哪一格｜錄影 11:16', blocks:[
+        {h:'兩個軸',p:'橫軸是「工程開發 ↔ 實務應用」，縱軸是「理論知識 ↔ 辦公室商業」。傳統 IT 證照落在工程開發那一側，<b>資策會這張落在辦公室商業 × 實務應用的角落</b>。'},
+        {h:'他寫在圖上的話',tip:'<b>「這不是工程師的考卷，而是真實辦公室的生存測試。」</b>知道它站在哪一格，你就知道該練什麼、不用練什麼。'},
+        {h:'看課堂筆記',p:'👉 <a href="ecf-genai-cert-notes.html#sec-what" style="color:var(--teal)">筆記 3：認證光譜</a>'}]},
+
+      {t:'考試的唯一目的：在限制條件下產出成果', s:'整堂觀念密度最高的一張｜錄影 11:36', blocks:[
+        {h:'他寫成一條公式',p:'角色與目的 ＋ 目標受眾 ＋ 格式限制 <b>×</b> 時間壓力 ＝ 真實的 AI 實戰力。注意<b>「格式限制」與「時間壓力」是相乘不是相加</b>。'},
+        {h:'為什麼是相乘',tip:'格式再清楚，時間不夠也是零；時間再多，格式錯了照樣不算。<b>前兩項決定內容，後兩項決定你交不交得出來。</b>'},
+        {h:'投影片下方那一行',p:'「測驗重點不在於背誦模型原理，而在於<b>「隨插即用」的即戰力</b>。」'},
+        {h:'看課堂筆記',p:'👉 <a href="ecf-genai-cert-notes.html#sec-what" style="color:var(--teal)">筆記 3：考試的唯一目的</a>'}]},
+
+      {t:'五大核心場景與八題的對應', s:'題目都是從這五格長出來的｜錄影 11:59', blocks:[
+        {h:'五大場景',table:{head:['場景','術科會怎麼考'],rows:[
+          ['文字溝通與文件產出','客訴回覆郵件、獲獎感言撰寫'],
+          ['跨部門協作整合','把甲部門的文案交給乙部門做成簡報'],
+          ['簡報與視覺內容','<b>考最多題的一塊，八題裡佔三題</b>'],
+          ['對內對外溝通','公司活動簡報、客訴處理'],
+          ['行銷與品牌素材','產品 Logo、菜單視覺圖、行銷標語']]}},
+        {h:'看課堂筆記',p:'👉 <a href="ecf-genai-cert-notes.html#sec-what" style="color:var(--teal)">筆記 3：涵蓋哪些場景</a>'}]},
+
+      {t:'出題方式與作答策略', s:'1000 題抽 40、下列何者不是｜錄影 08:00–09:00', blocks:[
+        {h:'它怎麼出題',table:{head:['特徵','對你的意義'],rows:[
+          ['題庫約 1000 題，隨機抽 40 題','鄰座的題目跟你不一樣，看別人沒有用'],
+          ['不考複選，但選項很接近','常見句型是「下列何者<b>不是</b>」，看漏一個字就錯'],
+          ['情境式敘述，答案藏在題幹','要讀懂語意與用詞'],
+          ['多位老師出題，關聯性難審核','<b>前後題常會互相透露答案</b>']]}},
+        {h:'他的作答策略',p:'「所以<b>不熟的部分先做標記</b>。待會再回過頭來的時候，也許你會的，因為其他的題目裡頭就提到這個事情。」［08:31］'},
+        {h:'看課堂筆記',p:'👉 <a href="ecf-genai-cert-notes.html#sec-what" style="color:var(--teal)">筆記 3：它怎麼出題</a>'}]},
+
+      {t:'術科 8 題 90 分鐘 vs 學科 40 題 30 分鐘', s:'先測做事，再測觀念｜錄影 13:01 · 32:57', blocks:[
+        {h:'兩張圖的比例',table:{head:['','術科（實作）','學科（選擇題）'],rows:[
+          ['題數／時間','8 題完整情境題／90 分鐘','40 題／30 分鐘'],
+          ['核心要求','<b>實際產出 AI 生成的成果並上傳</b>','常識、觀念、流程、風險與應用理解'],
+          ['能力配比','執行力 100%、理論 0%','執行力 0%、理論 100%']]}},
+        {h:'為什麼他 80% 的時間都在講術科',tip:'<b>學科靠背，術科靠準備。</b>背的部分沒有捷徑可教，但準備的部分有一整套流程可以照做——那就是後面三章。'},
+        {h:'一個不確定的地方',warn:'考試順序他自己也記不清：先說「你應該是先考學科吧」，講到一半又說「有點忘記了」。<b>〔待確認〕請以准考證與官網公告為準。</b>他唯一確定的是要早點到，因為考前有一段登入帳號的時間。'},
+        {h:'看課堂筆記',p:'👉 <a href="ecf-genai-cert-notes.html#sec-tracks" style="color:var(--teal)">筆記 4：術科與學科怎麼分工</a>'}]}
+    ]
+  },
+
+  prep: {
+    key:'prep', color:'var(--purple)', emoji:'🧳', code:'CHAPTER 03', title:'考前十分鐘的備戰',
+    intro:'他花在這一段的時間，比講任何一個工具都久——這個比重本身就是答案。這四項在考場上做都來不及，全部要在進場前完成。',
+    topics:[
+      {t:'考場不提供任何 AI 工具', s:'關鍵設定｜錄影 33:01', blocks:[
+        {h:'規則',warn:'他在投影片上寫了一行關鍵設定：<b>考場「不提供」任何 AI 工具，考生必須使用自己平常慣用的網頁版 AI 工具、自行登入帳號完成產出。</b>'},
+        {h:'意思是什麼',p:'工具是你自己的，帳號是你自己的，<b>登不進去就等於沒工具</b>。這是後面三項準備動作的前提。'},
+        {h:'看課堂筆記',p:'👉 <a href="ecf-genai-cert-notes.html#sec-prep" style="color:var(--purple)">筆記 5：考前十分鐘決勝負</a>'}]},
+
+      {t:'考前十分鐘可以拿手機做驗證', s:'很多人不知道的一段時間｜錄影 14:27', blocks:[
+        {h:'監考允許的動作',p:'考前 <b>10 分鐘</b>允許你做登入動作，包含<b>拿手機出來收驗證碼</b>——很多平台的登入必須手機二次驗證。'},
+        {h:'該做的準備',steps:[
+          '<b>提早到考場</b>，不要卡著時間進場',
+          '把要用的平台<b>寫成一張清單</b>再去，不要現場才想',
+          '逐一登入，全部開成分頁掛著',
+          '他建議的清單：<b>Gemini、NotebookLM、ChatGPT、Perplexity、Canva</b>']},
+        {h:'為什麼要多開幾個',tip:'考場上換工具的時間成本很高。「<b>領可一開始的時候，好幾個軟體都開起來</b>」——多開幾個備著，卡住才有得換。'},
+        {h:'看課堂筆記',p:'👉 <a href="ecf-genai-cert-notes.html#sec-prep" style="color:var(--purple)">筆記 5：考前十分鐘可以做的事</a>'}]},
+
+      {t:'Chrome 一定要啟用同步', s:'回答學員的提問｜錄影 18:43–19:08', blocks:[
+        {h:'為什麼',warn:'不同步的話，你以前存的<b>快捷指令、書籤連結全部不見</b>。考場那台不是你的電腦，臨場找不到會很慌。'},
+        {h:'什麼時候設',p:'第一次在新電腦登入 Chrome 時，它會問你要不要啟用同步——<b>就把它啟用</b>。他強調了三次。'},
+        {h:'看課堂筆記',p:'👉 <a href="ecf-genai-cert-notes.html#sec-prep" style="color:var(--purple)">筆記 5：Chrome 同步</a>'}]},
+
+      {t:'把提示詞先藏進 Gemini 的 Gem', s:'CP 值最高的一個準備動作｜錄影 17:34–18:00', blocks:[
+        {h:'他怎麼講',p:'「你在考前把一些可能會用到的<b>圖像提示詞、文案整理的提示詞，還有簡報的提示詞</b>，都把它藏在券裡頭。」'},
+        {h:'「券」是什麼',tip:'是逐字稿把 <b>Gem</b>（Gemini 的自訂 AI 助理）聽成的音。ChatGPT 的 <b>Project</b> 也可以做同一件事，但他個人覺得 Gem 比較快。'},
+        {h:'這不是作弊',warn:'他隨即補一句「這不是叫你們作弊」——<b>工具與帳號本來就是考生自備的</b>，事先整理自己的提示詞庫，跟事先整理筆記是同一件事。但每個考場的規則細節可能不同，請以准考證與試場規則為準。'},
+        {h:'看課堂筆記',p:'👉 <a href="ecf-genai-cert-notes.html#sec-prep" style="color:var(--purple)">筆記 5：提示詞先藏進 Gem</a>'}]}
+    ]
+  },
+
+  slides: {
+    key:'slides', color:'var(--amber)', emoji:'🖼️', code:'CHAPTER 04', title:'十頁簡報怎麼生',
+    intro:'術科八題裡簡報佔三題，所以這一章是全堂密度最高的實作段。他現場開了三條路做比較，並示範卡住時怎麼救。',
+    topics:[
+      {t:'三條路的取捨：Canvas 主攻、NotebookLM 備援', s:'兩邊併跑的打法｜錄影 20:00–24:00', blocks:[
+        {h:'他的排序',table:{head:['工具','評價與用法'],rows:[
+          ['<b>Gemini 的 Canvas</b>','<b>主攻。</b>速度快、可以直接用描述生成不一定要上傳檔案，模型選 Flash 就好。畫面出現左右分割就代表它在跑簡報'],
+          ['<b>NotebookLM 自訂簡報</b>','<b>備援，先讓它跑著。</b>品質好但慢，十幾分鐘跑不出來是常態，而且需要來源檔案'],
+          ['<b>Canva</b>','可用但要自己評估。好處是產出後可以改字；他認為提示詞下得夠精準的話其實不用改']]}},
+        {h:'實際打法',tip:'<b>兩邊併跑。</b>先把題目素材丟進 NotebookLM 讓它慢慢生，馬上切到 Gemini Canvas 做同一件事，哪邊先出來就用哪邊。'},
+        {h:'實機畫面',shot:{img:'ecf-genai-cert-img/02-gemini-canvas-menu.jpg',cap:'Gemini 輸入框左邊按「＋」，選單裡把 Canvas 勾起來；輸入框左下角出現灰色 Canvas 標籤才算選中。［23:32］'}},
+        {h:'看課堂筆記',p:'👉 <a href="ecf-genai-cert-notes.html#sec-slides" style="color:var(--amber)">筆記 6：三條路的排序</a>'}]},
+
+      {t:'自訂簡報只要兩行', s:'頁數與風格｜錄影 22:03', blocks:[
+        {h:'他逐字打的兩行',p:'在 NotebookLM 的「自訂簡報」說明欄裡，他只輸入<b>頁數 10 頁</b>與<b>風格 插圖式圖表</b>兩行，冒號後面記得空一格。格式選右邊的「簡報投影片」，語言切「中文（繁體）」。'},
+        {h:'為什麼永遠是 10 頁',tip:'因為 <b>Canva 免費版就只有 10 頁</b>，超過要付費，所以題目不會出 11 頁以上。'},
+        {h:'為什麼永遠是插圖式圖表',warn:'這是他實測下來最不容易跑版、<b>字最不會亂掉</b>的風格。考試不要挑 3D、皮克斯風那種花俏樣式。'},
+        {h:'實機畫面',shot:{img:'ecf-genai-cert-img/03-notebooklm-slide-settings.jpg',cap:'NotebookLM 自訂簡報視窗：格式選簡報投影片、語言中文繁體，說明欄只有頁數與風格兩行。［22:03］'}},
+        {h:'看課堂筆記',p:'👉 <a href="ecf-genai-cert-notes.html#sec-slides" style="color:var(--amber)">筆記 6：自訂簡報怎麼設定</a>'}]},
+
+      {t:'卡住的三種救法', s:'全堂最實用的咒語｜錄影 22:00–27:00', blocks:[
+        {h:'三種狀況',table:{head:['狀況','救法'],rows:[
+          ['NotebookLM 轉十幾分鐘都沒出來','按 <b>F5 重新整理</b>，很多時候它其實已經做好了，只是頁面沒更新'],
+          ['它跑出互動式網頁而不是簡報','加一句 <b>「說好的簡報呢？」</b>它會把網頁改回簡報，速度很快'],
+          ['該畫圖卻不畫','同一招換成 <b>「說好的圖呢？」</b>']]}},
+        {h:'為什麼是「說好的⋯呢」',tip:'直接講「給我簡報／請畫圖」，AI 會當成你要做一份<b>全新的</b>；「說好的⋯呢」才會讓它回頭執行原本那件事。'},
+        {h:'還是不行的話',p:'改用 <b>ChatGPT 的影像生成</b>，或回到 <b>NotebookLM 的「資訊圖表」</b>——把題目給的文案加進來源，再用題目裡那段提示詞自訂產生圖表或海報。'},
+        {h:'看課堂筆記',p:'👉 <a href="ecf-genai-cert-notes.html#sec-slides" style="color:var(--amber)">筆記 6：三個現場最常卡住的狀況</a>'}]},
+
+      {t:'模型選 Flash 不選 Pro', s:'考試就是要爭取時間｜錄影 24:23', blocks:[
+        {h:'原話',p:'「這邊選 3.5 Flash，不要用 Pro，Pro 速度比較慢，<b>考試就是要爭取時間</b>，他不會看你做的是不是非常非常的漂亮。」'},
+        {h:'算術很簡單',tip:'<b>做不漂亮頂多扣一兩分，做不完是零分。</b>為了漂亮而超時，吃虧的絕對是自己。'},
+        {h:'字會不會跑掉',warn:'AI 生圖常常把中文字寫壞，你不知道評分會不會扣這一項。因應方式是<b>文字盡量寫精簡、不要太多明細</b>，字越少越不容易出錯。'},
+        {h:'看課堂筆記',p:'👉 <a href="ecf-genai-cert-notes.html#sec-slides" style="color:var(--amber)">筆記 6：模型怎麼選</a>'}]}
+    ]
+  },
+
+  deliver: {
+    key:'deliver', color:'var(--rose)', emoji:'📦', code:'CHAPTER 05', title:'交得出去才叫成果',
+    intro:'簡報生出來只是一半。這一章講他認為最容易被忽略、卻真的會扣分的那一半——以及八大情境題的共同解法。',
+    topics:[
+      {t:'十一頁變十頁的兩種解法', s:'AI 自己多加了一頁｜錄影 28:04–31:39', blocks:[
+        {h:'問題長什麼樣',p:'你要 10 頁，Gemini Canvas 給了 11 頁。多出來的是最後一頁「Image Sources」——所有引用圖片的來源網址清單，AI 自己補的。'},
+        {h:'兩種解法',steps:[
+          '<b>走 Google Slides：</b>在 Gemini 的匯出選單按「開啟簡報」，它會跟 Google Slides 串在一起，把最後一頁刪掉，再另存成 PDF',
+          '<b>走列印（他自己的習慣）：</b>先下載成 PDF，用 <b>Edge</b> 開啟，按列印，頁面範圍填 <b>1 到 10</b>，儲存成新的 PDF']},
+        {h:'為什麼他偏好第二種',tip:'Edge 的列印介面比 Chrome 單純，臨場比較不會出錯。「串得越多，中間出了問題怎麼辦？」'},
+        {h:'實機畫面',shot:{img:'ecf-genai-cert-img/04-gemini-canvas-11-slides.jpg',cap:'左上角那行小字「Slide 1 of 11」就是問題所在——你要的是 10 頁。［28:04］'}},
+        {h:'看課堂筆記',p:'👉 <a href="ecf-genai-cert-notes.html#sec-delivery" style="color:var(--rose)">筆記 7：兩種把十一頁變十頁的解法</a>'}]},
+
+      {t:'交件規格五條檢查表', s:'規格即現實｜錄影 33:31', blocks:[
+        {h:'五條',table:{head:['交件項目','規格'],rows:[
+          ['文字與簡報','必須列印／轉存成 <b>PDF</b>'],
+          ['圖像與海報','必須存成 <b>JPG 或 PNG</b>'],
+          ['檔案大小','單一檔案 <b>10MB 以下</b>，嚴格限制'],
+          ['檔名','依<b>題號</b>精準命名（例如第二題就是 2.pdf）'],
+          ['最後一步','回到系統確認<b>「成功上傳」</b>，沒上傳成功等於沒做']]}},
+        {h:'他寫在旁邊的話',tip:'<b>在辦公室裡，最好的 AI 產出，是老闆和客戶「打得開」的檔案。</b>'},
+        {h:'不用做的事',p:'不用加封面、不用加公司 Logo、不用寫報告格式。<b>交上去的就是內容本身</b>，不要浪費時間美化不會加分的東西。'},
+        {h:'看課堂筆記',p:'👉 <a href="ecf-genai-cert-notes.html#sec-delivery" style="color:var(--rose)">筆記 7：交件規格檢查表</a>'}]},
+
+      {t:'八大情境題的共同解法', s:'提示詞就寫在題目裡｜錄影 33:30–40:00', blocks:[
+        {h:'共同解法',p:'「<b>他的提示詞就在那個題目裡頭，很簡單，你一定會用。他只是在考你會不會用這些平臺。</b>」［12:33］每一題都綁定明確的「角色」「目的」「受眾」與「輸出格式」——公式的四個變數，題目已經幫你填好了。'},
+        {h:'逐題怎麼配工具',table:{head:['情境題','建議做法'],rows:[
+          ['業務會議簡報生成','題目給會議紀錄 PDF → Gemini Canvas 或 NotebookLM 自訂簡報'],
+          ['公司活動簡報／季度營運策略跨部門簡報','只有文字敘述沒有檔案時，<b>用 Gemini Canvas</b>（NotebookLM 沒有來源會很麻煩）'],
+          ['產品 Logo／咖啡廳菜單視覺圖','題目描述位置與色調，那整段就是提示詞 → Nano Banana 或 ChatGPT 生圖'],
+          ['客訴處理回覆郵件','先請 AI 把提示詞改寫成信件回覆的形式，再貼客訴內容'],
+          ['獲獎感言撰寫','題目會指定語氣，記得在提示詞裡明講'],
+          ['3 個新產品行銷標語','<b>說三個就給三個</b>，不多也不少']]}},
+        {h:'一個容易漏的細節',warn:'<b>海報與圖像一定要指定版型比例。</b>題目有時候會寫、有時候不會。他的習慣是自己補一行「版型：16:9」，其他常見的是 9:16、4:3、3:4。'},
+        {h:'看課堂筆記',p:'👉 <a href="ecf-genai-cert-notes.html#sec-scenarios" style="color:var(--rose)">筆記 8：八大情境題怎麼拆</a>'}]},
+
+      {t:'每一種產出都要有第二條路', s:'這堂真正在教的心法｜貫穿全課', blocks:[
+        {h:'他示範的所有備援',table:{head:['卡在哪','第二條路'],rows:[
+          ['NotebookLM 沒反應','按 F5'],
+          ['跑成互動網頁','「說好的簡報呢？」'],
+          ['圖畫不出來','ChatGPT 生圖，或 NotebookLM 資訊圖表'],
+          ['多了一頁','Google Slides 刪頁，或 Edge 列印 1–10 頁']]}},
+        {h:'工具會停用',warn:'他說自己以前考試是用 Arena 做圖像生成，但 <b>Arena 現在已經不能用 Nano Banana 與 Image Tool 了</b>。他的重點不是推薦某個工具，而是永遠準備好備援。'},
+        {h:'為什麼重要',tip:'「考試他不會聽你那麼多藉口，你剛才講網路有問題什麼有問題，<b>那個都不是問題，他是你的問題</b>。」'},
+        {h:'看課堂筆記',p:'👉 <a href="ecf-genai-cert-notes.html#sec-real" style="color:var(--rose)">筆記 9：這堂課真正在教的事</a>'}]}
+    ]
+  }
+}
+;
+
+
+const ORDER = ['decide','scope','prep','slides','deliver'];
+const $ = s=>document.querySelector(s);
+function renderChapter(ch){
+  const d=DATA[ch];const next=ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];const prev=ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html=`<div class="chapter-head"><span class="emoji">${d.emoji}</span><div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div></div>`;
+  d.topics.forEach((tp,i)=>{const id=`${ch}-${i}`;
+    html+=`<div class="topic" id="topic-${id}"><div class="topic-head" onclick="toggleTopic('${id}')"><span class="num">${i+1}</span><h4>${tp.t}<small>${tp.s}</small></h4><input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)"><span class="chev">▶</span></div><div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{html+=`<div class="block"><h5>${b.h}</h5>`;
+      if(b.p)html+=`<p>${b.p}</p>`;
+      if(b.ul)html+=`<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps)html+=`<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.table)html+=`<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.prompt)html+=`<div class="promptbox">${b.prompt}</div>`;
+      if(b.shot)html+=`<figure class="shot"><img src="${b.shot.img}" alt="" loading="lazy"><figcaption>${b.shot.cap}</figcaption></figure>`;
+      if(b.tip)html+=`<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn)html+=`<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html+=`</div>`;});
+    html+=`</div></div></div>`;});
+  html+=`<div class="chapnav"><a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a><a onclick="showHome()" style="text-align:center">回總覽<b>🏠 五大主題</b></a><a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a></div>`;
+  $('#view-'+ch).innerHTML=html;
+}
+ORDER.forEach(renderChapter);
+function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('#view-'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function showHome(){switchView('home');$('#crumbs').style.display='none';clearSearch();}
+function showChapter(ch){switchView(ch);$('#crumbs').style.display='flex';$('#crumbHere').textContent=`${DATA[ch].emoji} ${DATA[ch].title}`;clearSearch();syncChecks();}
+function toggleTopic(id){$('#topic-'+id).classList.toggle('open');}
+function openTopic(ch,i){showChapter(ch);const el=$('#topic-'+ch+'-'+i);el.classList.add('open');setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+const KEY='ecf-genai-cert-skills-v1';
+const store=()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){const s=store();if(val)s[id]=1;else delete s[id];localStorage.setItem(KEY,JSON.stringify(s));updateProgress();}
+const TOTAL=ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){const done=Object.keys(store()).length;const pct=Math.round(done/TOTAL*100);$('#progFill').style.width=pct+'%';$('#progText').textContent=`${done} / ${TOTAL} 項技能已掌握`;$('#statDone').textContent=done;$('#statPct').textContent=pct+'%';ORDER.forEach(ch=>{const sub=DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;const el=document.querySelector(`[data-mini="${ch}"]`);if(el)el.style.width=Math.round(sub/DATA[ch].topics.length*100)+'%';});}
+function syncChecks(){const s=store();document.querySelectorAll('input[data-skill]').forEach(cb=>{cb.checked=!!s[cb.dataset.skill];});}
+function resetProgress(){if(confirm('確定要清空所有打勾進度嗎？')){localStorage.removeItem(KEY);syncChecks();updateProgress();}}
+function stripTags(s){return s.replace(/<[^>]+>/g,'');}
+const INDEX=[];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{let body=tp.s+' ';tp.blocks.forEach(b=>{if(b.p)body+=stripTags(b.p)+' ';if(b.ul)body+=b.ul.map(stripTags).join(' ')+' ';if(b.steps)body+=b.steps.map(stripTags).join(' ')+' ';if(b.tip)body+=stripTags(b.tip)+' ';if(b.warn)body+=stripTags(b.warn)+' ';if(b.prompt)body+=stripTags(b.prompt)+' ';if(b.table)body+=b.table.rows.flat().map(stripTags).join(' ')+' ';});INDEX.push({ch,i,title:tp.t,body});}));
+$('#searchInput').addEventListener('input',e=>{const q=e.target.value.trim();const box=$('#searchResults');if(!q){box.classList.remove('show');box.innerHTML='';return;}const hits=INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));box.classList.add('show');if(!hits.length){box.innerHTML=`<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：門票、光譜、術科、Gem、同步、Canvas、十頁、10MB、情境題）</div>`;return;}const hl=s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);box.innerHTML=hits.map(x=>{const pos=x.body.toLowerCase().indexOf(q.toLowerCase());const snip=x.body.substr(Math.max(0,pos-20),90);return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})"><div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div><h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;}).join('');});
+function clearSearch(){$('#searchInput').value='';$('#searchResults').classList.remove('show');$('#searchResults').innerHTML='';}
+syncChecks();updateProgress();
+
+</script>
+</body>
+</html>

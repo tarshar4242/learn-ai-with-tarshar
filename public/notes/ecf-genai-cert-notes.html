@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>資策會生成式AI辦公室應用能力認證解析 課堂筆記｜這張證照考的是交得出去，不是懂不懂</title>
+<meta name="description" content="ECF 訂閱制課程，益師傅（楊俊益）2026/06/04 直播：資策會「生成式 AI 辦公室應用能力認證」深度解析。內容包含為什麼要考這張證照、認證光譜與五大核心場景、術科 8 題 90 分鐘與學科 40 題 30 分鐘的分工、考前十分鐘的帳號登入與 Gem 提示詞預備、NotebookLM 自訂簡報與 Gemini Canvas 生成十頁簡報的兩條路、十一頁改成十頁的兩種解法，以及八大企業情境題的拆題方式。依 43 分 4 秒錄影 47 張關鍵畫面＋415 段逐字稿整理。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#1f6f78; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:760px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px;max-height:calc(100vh - 90px);overflow-y:auto}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:7px;border-left:none;font-size:13px}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.code{position:relative;background:var(--code);border:1px solid var(--line2);border-radius:10px;padding:13px 15px;margin:10px 0;font-size:13px;line-height:1.75;color:var(--ink);white-space:pre-wrap;font-family:"Cascadia Code",Consolas,monospace;overflow-x:auto}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.iframe-wrap{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000;margin:14px 0}
+.iframe-wrap iframe{display:block;width:100%;height:460px;border:0}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static;max-height:none} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} .iframe-wrap iframe{height:320px} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/#ecf" style="border-color:#bcd8db" onclick="if(history.length>1){history.back();return false}">← 回上一頁</a>
+  <b>📝 資策會生成式AI辦公室應用能力認證解析 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="ecf-genai-cert-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · ECF 訂閱制 · 認證解析場</span>
+  <h1>這張證照考的不是你懂多少，是<span>你交不交得出去</span></h1>
+  <p class="lead">益師傅把自己考過資策會「生成式 AI 辦公室應用能力認證」的經驗，攤開來講一次：這張證照能不能證明能力、實際考什麼、以及考場上怎麼在時間壓力下把檔案交出去。<br>主線是「限制條件下的產出」：認證光譜與五大核心場景 → 術科 8 題 90 分鐘與學科 40 題 30 分鐘的分工 → 考前十分鐘的帳號登入與 Gem 提示詞預備 → NotebookLM 與 Gemini Canvas 兩條生簡報的路 → 十一頁改成十頁的兩種解法 → 八大企業情境題怎麼拆。<br>本頁依<b>錄影 47 張關鍵畫面＋全程逐字稿 415 段</b>整理，重點段落附影片時間戳。</p>
+  <div class="meta">
+    <span>📅 2026/06/04（四）直播</span>
+    <span>👤 講師：益師傅（楊俊益・ECF）</span>
+    <span>⏱️ 全長 43 分 4 秒（單段錄影）</span>
+    <span>🧩 主題：證照解析 × 考前備戰 × 交件規格</span>
+    <span>🔰 小白友善</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-overview">1. 一張圖看懂這堂</a>
+  <a href="#sec-why">2. 他自己都說證明不了能力，為什麼還是要考</a>
+  <a href="#sec-what">3. 這張證照在考什麼：辦公室的實戰力，不是工程師的考卷</a>
+  <a href="#sec-tracks">4. 術科與學科怎麼分工：先測做事，再測觀念</a>
+  <a href="#sec-prep">5. 考前十分鐘決勝負：帳號登好、提示詞先藏進 Gem</a>
+  <a href="#sec-slides">6. 術科主戰場：十頁簡報要用哪一套生</a>
+  <a href="#sec-delivery">7. 十一頁不能交：規格即現實</a>
+  <a href="#sec-scenarios">8. 八大情境題怎麼拆：提示詞就寫在題目裡</a>
+  <a href="#sec-real">9. 這堂課真正在教的事</a>
+  <a href="#sec-quotes">10. 老師金句</a>
+  <a href="#sec-src">11. 資料來源與整理說明</a>
+</nav>
+
+<article>
+
+<!-- ══════════ 0 ══════════ -->
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--cyan))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>重新定義企業 AI 實戰力——資策會「生成式 AI 辦公室應用能力認證」深度解析</td></tr>
+    <tr><th>直播日期</th><td>2026/06/04（四）晚間，本段錄影全長 <b>43 分 4 秒</b></td></tr>
+    <tr><th>講師</th><td>益師傅（楊俊益・ECF 生成式AI應用電台）</td></tr>
+    <tr><th>本堂主題</th><td>這張證照值不值得考、實際考什麼、考前要準備什麼、考場上怎麼把成果交出去</td></tr>
+    <tr><th>課程定位</th><td>ECF 訂閱制的證照解析場，不是工具教學場。工具怎麼用在別堂講過，這堂講的是「考試這個限制條件」怎麼應付</td></tr>
+    <tr><th>要先準備</th><td>Gemini、NotebookLM、ChatGPT、Perplexity、Canva 的帳號（考場不提供任何 AI 工具，全部要自備、自行登入）</td></tr>
+  </table></div>
+
+  <h3>📁 課堂錄影與教材</h3>
+  <p>本堂是 ECF 訂閱制的付費課程，<b>原始錄影與老師自製的解析簡報都沒有公開</b>，這一頁只是課堂內容的文字整理。要看原片請從 ECF 訂閱制的課程資料夾進去。</p>
+
+  <div class="twrap"><table>
+    <tr><th style="width:230px">課堂上用到的東西</th><th>課堂上拿來做什麼</th></tr>
+    <tr><td>資策會 iEDU 人才驗證服務官網</td><td>對照「考試簡介」與「核心能力指標」原文，說明這張證照的官方定義（公開網站，本頁有截圖）</td></tr>
+    <tr><td>老師自製解析簡報（PDF）</td><td>認證光譜、五大核心場景、術科／學科配分、交件規格檢查表、八大情境題（<b>未公開，本頁不放原圖</b>，內容改寫成表格與手繪示意圖）</td></tr>
+    <tr><td><code>Google Workspace with Gemini Prompting Guide.pdf</code></td><td>現場示範用的素材檔，拿它去 NotebookLM 與 Gemini Canvas 各生一份十頁簡報</td></tr>
+  </table></div>
+
+  <h3>🎬 這 43 分鐘怎麼走</h3>
+  <p class="cd">單段錄影，43 分 4 秒。前 6 分鐘是「要不要考」的心路歷程，6–14 分是考什麼與怎麼配分，14–20 分是考前準備，20–33 分是簡報實作與交件，33–42 分是八大情境題與報名資訊。本頁的章節就照這個順序排。</p>
+
+  <div class="note gold">🔒 <div><b>這一頁只放兩種截圖：公開網站，以及 AI 工具本身的操作畫面。</b>老師自製的解析簡報屬於付費課程教材，本頁一張原圖都沒有用，簡報上的資訊全部改寫成表格與手繪示意圖。原始錄影是線上會議的畫面分享，含與會者資訊與個人桌面元素，整理時先把影片裁成只剩分享內容區才開始做筆記，逐字稿裡的人名也一併隱去。整幀是會議介面、視窗切換清單、個人檔案清單的畫面，一張都沒有選用。</div></div>
+</section>
+
+<!-- ══════════ 1 ══════════ -->
+<section class="chapter" id="sec-overview">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--purple))">OVERVIEW</span>
+  <h2 class="ct">1. 一張圖看懂這堂</h2>
+  <p class="cd">整堂的主線只有一條：這張證照從頭到尾都在測「限制條件下的產出」。所以準備的方式不是背知識，是把工具、帳號、提示詞、交件格式全部在考前先排好。</p>
+
+  <div class="svgwrap">
+  <svg viewBox="0 0 980 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="從為什麼考、考什麼、考前十分鐘、考場上生簡報到交件規格的五個階段流程圖">
+    <defs>
+      <marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+        <path d="M0,0 L9,4.5 L0,9 z" fill="#9B9B9B"/>
+      </marker>
+    </defs>
+
+    <text x="14" y="46" font-size="13" font-weight="700" fill="#191919">這張證照的五個關卡</text>
+    <text x="14" y="68" font-size="12.5" fill="#5f5f5f">前兩格決定你要不要考，後三格決定你考不考得過</text>
+
+    <rect x="14" y="90" width="176" height="112" rx="12" fill="#EEF2F5" stroke="#D2DFE7"/>
+    <text x="102" y="122" text-anchor="middle" font-size="15" font-weight="700" fill="#255066">為什麼要考</text>
+    <text x="102" y="146" text-anchor="middle" font-size="12.5" fill="#5f5f5f">它證明不了能力</text>
+    <text x="102" y="164" text-anchor="middle" font-size="12.5" fill="#5f5f5f">但公文寫死了資格</text>
+    <text x="102" y="184" text-anchor="middle" font-size="12.5" fill="#5f5f5f">＝一張門票</text>
+
+    <rect x="208" y="90" width="176" height="112" rx="12" fill="#EEF4FB" stroke="#CFE0F1"/>
+    <text x="296" y="122" text-anchor="middle" font-size="15" font-weight="700" fill="#1d5e8f">考什麼</text>
+    <text x="296" y="146" text-anchor="middle" font-size="12.5" fill="#5f5f5f">不是工程師的考卷</text>
+    <text x="296" y="164" text-anchor="middle" font-size="12.5" fill="#5f5f5f">辦公室五大場景</text>
+    <text x="296" y="184" text-anchor="middle" font-size="12.5" fill="#5f5f5f">術科 8 題＋學科 40 題</text>
+
+    <rect x="402" y="90" width="176" height="112" rx="12" fill="#FBF7EC" stroke="#EFE3C4"/>
+    <text x="490" y="122" text-anchor="middle" font-size="15" font-weight="700" fill="#7a5b12">考前十分鐘</text>
+    <text x="490" y="146" text-anchor="middle" font-size="12.5" fill="#5f5f5f">手機驗證、登入帳號</text>
+    <text x="490" y="164" text-anchor="middle" font-size="12.5" fill="#5f5f5f">Chrome 開同步</text>
+    <text x="490" y="184" text-anchor="middle" font-size="12.5" fill="#5f5f5f">提示詞先藏進 Gem</text>
+
+    <rect x="596" y="90" width="176" height="112" rx="12" fill="#EDF7F1" stroke="#CBE6D5"/>
+    <text x="684" y="122" text-anchor="middle" font-size="15" font-weight="700" fill="#166a4c">考場上</text>
+    <text x="684" y="146" text-anchor="middle" font-size="12.5" fill="#5f5f5f">題目自帶提示詞</text>
+    <text x="684" y="164" text-anchor="middle" font-size="12.5" fill="#5f5f5f">Canvas 主攻</text>
+    <text x="684" y="184" text-anchor="middle" font-size="12.5" fill="#5f5f5f">NotebookLM 併跑備援</text>
+
+    <rect x="790" y="90" width="176" height="112" rx="12" fill="#F4F3F0" stroke="#DBD9D5"/>
+    <text x="878" y="122" text-anchor="middle" font-size="15" font-weight="700" fill="#1f6f78">交件</text>
+    <text x="878" y="146" text-anchor="middle" font-size="12.5" fill="#5f5f5f">十頁就是十頁</text>
+    <text x="878" y="164" text-anchor="middle" font-size="12.5" fill="#5f5f5f">PDF／JPG、10MB 內</text>
+    <text x="878" y="184" text-anchor="middle" font-size="12.5" fill="#5f5f5f">檔名依題號</text>
+
+    <line x1="190" y1="146" x2="206" y2="146" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+    <line x1="384" y1="146" x2="400" y2="146" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+    <line x1="578" y1="146" x2="594" y2="146" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+    <line x1="772" y1="146" x2="788" y2="146" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+
+    <rect x="14" y="230" width="952" height="52" rx="12" fill="#F4F3F0" stroke="#DBD9D5"/>
+    <text x="490" y="252" text-anchor="middle" font-size="14.5" font-weight="700" fill="#1f6f78">整堂的一句話：這張證照考的不是「你懂不懂 AI」，是「在 90 分鐘、10MB、10 頁的限制裡，你交不交得出去」。</text>
+    <text x="490" y="272" text-anchor="middle" font-size="12.5" fill="#5f5f5f">所以準備的重點不在知識，在把工具、帳號、提示詞、檔案格式全部在進考場之前排好。</text>
+  </svg>
+  <figcaption>五個關卡由左而右：先決定要不要考（門票論），再看清楚它考的是辦公室情境而不是工程；接著把考前十分鐘的帳號與提示詞備妥，考場上用 Gemini Canvas 為主、NotebookLM 為備援生出簡報，最後照規格把檔案交出去。整堂 43 分鐘的內容，全部掛在這條線上；他自己把這條線講成一條公式的地方在［11:36］。</figcaption>
+  </div>
+
+  <div class="note blue">💡 <div>如果只記得一句話，記這句：<b>他的提示詞就在那個題目裡頭，他只是在考你會不會用這些平臺。</b>［12:33］</div></div>
+</section>
+
+<!-- ══════════ 2 ══════════ -->
+<section class="chapter" id="sec-why">
+  <span class="chip" style="background:linear-gradient(90deg,var(--blue),var(--cyan))">00:00–06:00</span>
+  <h2 class="ct">2. 他自己都說證明不了能力，為什麼還是要考</h2>
+  <p class="cd">開場前六分鐘全部在講這件事。這一段沒有任何操作示範，但它決定你要不要看完後面。</p>
+
+  <p>他很直接地承認，自己以前對這類證照的態度是<b>「不屑」</b>：平常天天在用的東西，為什麼還需要一張紙來驗證。改變他想法的是同業的一句提醒——經濟部 iPAS 那張證照對承接政府案子有幫助。他先去考了 iPAS AI 應用規劃師初級，才回頭考資策會這張辦公室應用能力認證。</p>
+
+  <h3>真正的理由不是能力，是資格條文</h3>
+  <p>他把最現實的一段講得很清楚：在很多公部門、財團法人、執行單位，<b>承辦人就算認識你、也肯定你的能力，他改不了公文上的資格條文</b>。條文寫要有這張證照，你沒有，他想找你也沒辦法找。就像求職時對方要求乙級、甲級技術士，你功夫再好，沒有那張紙連面談的機會都沒有。</p>
+
+  <div class="golden">
+    <div class="q">「但是他就是一張門票，你有這張門票，你才有資格可以進去。」</div>
+    <div class="a">［03:41］他前一句才說「我到現在還是覺得那張證照沒有辦法驗證任何的事情」，後一句立刻補上這句——這是整堂對證照最誠實的定位。</div>
+  </div>
+
+  <h3>誰會被要求考</h3>
+  <ul class="pt">
+    <li><b>科技大學（尤其私立）教師</b>——他說以前是「鼓勵」，今年變成「要求」，暑假還得為這件事準備，他自己最近也要去幾間大學做教師研習談這張證照。</li>
+    <li><b>要承接政府／法人標案的人</b>——資格條文寫死了就是寫死了。</li>
+    <li><b>不需要的人</b>——已經有穩定邀約、不接標案的講師，他明說「其實可以不用考」。</li>
+  </ul>
+
+  <div class="note steel">🔧 <div><b>誠實補述：</b>老師全場都保留了「這張證照沒辦法驗證任何事情」這個評價，本頁照原話保留，沒有替他修飾成正面說法。他推薦去考的理由是資格條件，不是能力認定。</div></div>
+
+  <div class="golden">
+    <div class="q">「這張有點像在考國文。語意要很清楚。」</div>
+    <div class="a">［04:14］他考完的第一個感想。後面「學科怎麼準備」整段都建立在這個判斷上——它考的是讀懂情境敘述，不是背模型原理。</div>
+  </div>
+</section>
+
+<!-- ══════════ 3 ══════════ -->
+<section class="chapter" id="sec-what">
+  <span class="chip" style="background:linear-gradient(90deg,var(--teal),var(--green))">06:00–12:00</span>
+  <h2 class="ct">3. 這張證照在考什麼：辦公室的實戰力，不是工程師的考卷</h2>
+  <p class="cd">他先開官網對照原文，再用自己做的解析簡報把「這張證照想解決什麼問題」講一次。</p>
+
+  <figure class="shot">
+    <img src="ecf-genai-cert-img/01-iiedu-exam-page.jpg" alt="資策會 iEDU 官網上的生成式 AI 辦公室應用能力認證考試簡介頁" loading="lazy">
+    <figcaption>資策會 iEDU 人才驗證服務官網的「考試資訊」頁，這是報名與查規則的正式入口。看「考試簡介」那一段：官方定義的應用範疇是<b>文本撰寫、文案創作、圖像創作、簡報製作</b>，強調「在真實情境中有效分析需求、評估生成內容並加以應用」。下方「核心能力指標」列的三條（文本處理應用／視覺創意製作／簡報內容策略與優化）與後面術科八題完全對得起來，先看懂這頁，後面就知道他為什麼一直強調產出而不是理論。［06:40］</figcaption>
+  </figure>
+
+  <h3>他用三欄講清楚這張證照要解決什麼</h3>
+  <p>他自製的第一張投影片叫「一張正在成形的『企業 AI 實務能力』衡量尺」，用痛點／定位／核心三欄定位這張證照。以下是三欄的內容：</p>
+
+  <div class="twrap"><table>
+    <tr><th style="width:90px">欄位</th><th>他寫的內容</th></tr>
+    <tr><td><b>痛點</b></td><td>市場充斥大量「會用 AI」的課程，但企業缺乏衡量員工真實上線執行的標準</td></tr>
+    <tr><td><b>定位</b></td><td>非工程與學術導向，完全聚焦於辦公室情境的實務應用</td></tr>
+    <tr><td><b>核心</b></td><td>測試在真實辦公室的限制條件下，將 AI 轉化為可靠生產工具的能力</td></tr>
+  </table></div>
+
+  <p>看中間那一欄就夠了：<b>它量的不是你會不會用 AI，是你能不能在辦公室的限制裡把 AI 當成可靠的生產工具。</b>這也是他建議「要考就先搞懂它在量什麼」的理由。［06:59］</p>
+
+  <h3>認證光譜：它站在哪一格</h3>
+  <p>他用一張二維光譜圖說明這張證照的位置。橫軸是「工程開發 ↔ 實務應用」，縱軸是「理論知識 ↔ 辦公室商業」。傳統 IT 證照落在工程開發那一側，資策會這張落在<b>辦公室商業 × 實務應用</b>的角落。他在圖上直接寫了一句話：<b>「這不是工程師的考卷，而是真實辦公室的生存測試。」</b></p>
+
+  <div class="svgwrap">
+  <svg viewBox="0 0 980 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="認證光譜四象限圖，資策會生成式 AI 辦公室應用能力認證落在辦公室商業與實務應用的象限">
+    <rect x="150" y="30" width="700" height="250" rx="10" fill="#FCFCFB" stroke="#DBD9D5"/>
+    <line x1="500" y1="30" x2="500" y2="280" stroke="#E7E6E3" stroke-width="1.4"/>
+    <line x1="150" y1="155" x2="850" y2="155" stroke="#E7E6E3" stroke-width="1.4"/>
+
+    <text x="500" y="20" text-anchor="middle" font-size="12.5" fill="#5f5f5f">辦公室商業</text>
+    <text x="500" y="300" text-anchor="middle" font-size="12.5" fill="#5f5f5f">理論知識</text>
+    <text x="140" y="159" text-anchor="end" font-size="12.5" fill="#5f5f5f">工程開發</text>
+    <text x="860" y="159" text-anchor="start" font-size="12.5" fill="#5f5f5f">實務應用</text>
+
+    <rect x="530" y="52" width="290" height="80" rx="10" fill="#EDF7F1" stroke="#CBE6D5"/>
+    <text x="675" y="80" text-anchor="middle" font-size="14.5" font-weight="700" fill="#166a4c">資策會 生成式 AI</text>
+    <text x="675" y="100" text-anchor="middle" font-size="14.5" font-weight="700" fill="#166a4c">辦公室應用能力認證</text>
+    <text x="675" y="120" text-anchor="middle" font-size="12.5" fill="#5f5f5f">會用工具，而且交得出成果</text>
+
+    <rect x="180" y="178" width="290" height="80" rx="10" fill="#EEF2F5" stroke="#D2DFE7"/>
+    <text x="325" y="206" text-anchor="middle" font-size="14.5" font-weight="700" fill="#255066">傳統 IT 證照</text>
+    <text x="325" y="228" text-anchor="middle" font-size="12.5" fill="#5f5f5f">考架構、原理、程式</text>
+    <text x="325" y="246" text-anchor="middle" font-size="12.5" fill="#5f5f5f">與辦公室情境無關</text>
+
+    <rect x="180" y="52" width="290" height="80" rx="10" fill="#F4F3F0" stroke="#DBD9D5"/>
+    <text x="325" y="86" text-anchor="middle" font-size="14.5" font-weight="700" fill="#191919">基礎 AI 素養課程</text>
+    <text x="325" y="108" text-anchor="middle" font-size="12.5" fill="#5f5f5f">知道有這些工具，但不驗收產出</text>
+
+    <rect x="14" y="306" width="952" height="30" rx="8" fill="#FBF7EC" stroke="#EFE3C4"/>
+    <text x="490" y="326" text-anchor="middle" font-size="13" font-weight="700" fill="#7a5b12">他寫在圖上的話：這不是工程師的考卷，而是真實辦公室的生存測試。</text>
+  </svg>
+  <figcaption>依老師課堂上的解析簡報重繪。右上角那一格就是這張證照的位置：<b>辦公室商業 × 實務應用</b>——它不問你模型怎麼運作，只問你能不能在辦公室情境下做出東西。左下角是傳統 IT 證照，左上角是一般的 AI 素養課程（知道有這些工具，但不驗收你的產出）。［11:16］</figcaption>
+  </div>
+
+  <h3>考試的唯一目的：在限制條件下產出成果</h3>
+  <p>整堂觀念密度最高的一張投影片，他把這張證照要量的東西寫成一條公式。注意<b>「格式限制」與「時間壓力」是相乘不是相加</b>——這兩項一起放大，才是辦公室的真實狀況。</p>
+
+  <div class="svgwrap">
+  <svg viewBox="0 0 980 210" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="公式圖：角色與目的加目標受眾加格式限制乘以時間壓力等於真實的 AI 實戰力">
+    <rect x="14" y="40" width="150" height="86" rx="12" fill="#EEF4FB" stroke="#CFE0F1"/>
+    <text x="89" y="78" text-anchor="middle" font-size="14.5" font-weight="700" fill="#1d5e8f">角色與目的</text>
+    <text x="89" y="100" text-anchor="middle" font-size="12.5" fill="#5f5f5f">你替誰做這件事</text>
+    <text x="182" y="90" text-anchor="middle" font-size="22" font-weight="700" fill="#9B9B9B">＋</text>
+
+    <rect x="200" y="40" width="150" height="86" rx="12" fill="#EEF4FB" stroke="#CFE0F1"/>
+    <text x="275" y="78" text-anchor="middle" font-size="14.5" font-weight="700" fill="#1d5e8f">目標受眾</text>
+    <text x="275" y="100" text-anchor="middle" font-size="12.5" fill="#5f5f5f">給老闆還是給客戶</text>
+    <text x="368" y="90" text-anchor="middle" font-size="22" font-weight="700" fill="#9B9B9B">＋</text>
+
+    <rect x="386" y="40" width="150" height="86" rx="12" fill="#FBF7EC" stroke="#EFE3C4"/>
+    <text x="461" y="78" text-anchor="middle" font-size="14.5" font-weight="700" fill="#7a5b12">格式限制</text>
+    <text x="461" y="100" text-anchor="middle" font-size="12.5" fill="#5f5f5f">10 頁、PDF、10MB</text>
+    <text x="554" y="90" text-anchor="middle" font-size="22" font-weight="700" fill="#b25269">×</text>
+
+    <rect x="572" y="40" width="150" height="86" rx="12" fill="#FBF7EC" stroke="#EFE3C4"/>
+    <text x="647" y="78" text-anchor="middle" font-size="14.5" font-weight="700" fill="#7a5b12">時間壓力</text>
+    <text x="647" y="100" text-anchor="middle" font-size="12.5" fill="#5f5f5f">8 題 90 分鐘</text>
+    <text x="740" y="90" text-anchor="middle" font-size="22" font-weight="700" fill="#9B9B9B">＝</text>
+
+    <rect x="758" y="40" width="208" height="86" rx="12" fill="#EDF7F1" stroke="#CBE6D5"/>
+    <text x="862" y="78" text-anchor="middle" font-size="15" font-weight="700" fill="#166a4c">真實的 AI 實戰力</text>
+    <text x="862" y="100" text-anchor="middle" font-size="12.5" fill="#5f5f5f">交得出去的那一份檔案</text>
+
+    <rect x="14" y="150" width="952" height="46" rx="10" fill="#F4F3F0" stroke="#DBD9D5"/>
+    <text x="490" y="171" text-anchor="middle" font-size="13.5" font-weight="700" fill="#1f6f78">測驗重點不在於背誦模型原理，而在於「隨插即用」的即戰力。</text>
+    <text x="490" y="189" text-anchor="middle" font-size="12.5" fill="#5f5f5f">本頁第 7 章整章在講的十頁、10MB、檔名規則，全部是這條公式裡「格式限制」那一項。</text>
+  </svg>
+  <figcaption>依老師課堂上的解析簡報重繪。這條公式是整堂的理論基礎：<b>前兩項決定內容，後兩項決定你交不交得出來</b>，而後兩項是相乘關係——格式再清楚，時間不夠也是零；時間再多，格式錯了照樣不算。［11:36］</figcaption>
+  </div>
+
+  <h3>涵蓋哪些場景</h3>
+  <p>他列了企業每天都在發生的五大核心場景，術科八題就是從這五格裡長出來的：</p>
+  <ul class="pt">
+    <li><b>文字溝通與文件產出</b>——信件、公告、紀錄。</li>
+    <li><b>跨部門協作整合</b>——把甲部門做的文案，交給乙部門做成視覺或簡報。</li>
+    <li><b>簡報與視覺內容</b>——考最多題的一塊。</li>
+    <li><b>對內對外溝通</b>——客訴回覆、活動說明。</li>
+    <li><b>行銷與品牌素材</b>——Logo、標語、菜單視覺。</li>
+  </ul>
+
+  <h3>它怎麼出題</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:130px">出題特徵</th><th>對你的意義</th></tr>
+    <tr><td>題庫約 1000 題，隨機抽 40 題</td><td>鄰座的題目跟你不一樣，看別人沒有用</td></tr>
+    <tr><td>不考複選，但選項很接近</td><td>常見句型是「下列何者<b>不是</b>」，看漏一個字就錯</td></tr>
+    <tr><td>情境式敘述，答案藏在題幹</td><td>要讀懂語意與用詞，這就是他說的「像在考國文」</td></tr>
+    <tr><td>多位老師出題，關聯性難審核</td><td>不會的先做標記，後面的題目常常會把答案講出來</td></tr>
+  </table></div>
+
+  <div class="golden">
+    <div class="q">「他的提示詞就在那個題目裡頭，很簡單，你一定會用。他只是在考你會不會用這些平臺。」</div>
+    <div class="a">［12:33］這句是整堂的骨幹。他反覆強調：不要在考場上自己重寫提示詞，題目裡給你的那一段就是答案，複製過去用就好。</div>
+  </div>
+
+  <div class="golden">
+    <div class="q">「千萬不要裸考，我沒有騙你，真的不要裸考。」</div>
+    <div class="a">［09:56］他自己考了 95 分，一度想申請複查，但仍然這樣勸。緊接著他提到資策會另外有販售線上刷題服務（約 390 元、幾百題，用 email 帳號登入無限次刷）。</div>
+  </div>
+
+  <div class="note blue">💡 <div><b>刷題服務的金額請以官網為準。</b>錄影中他一度說「好像幾百塊我忘記了，五百塊還怎麼樣」，後面才確認是 390。這種價格資訊會變動，報名前自己再查一次。</div></div>
+</section>
+
+<!-- ══════════ 4 ══════════ -->
+<section class="chapter" id="sec-tracks">
+  <span class="chip" style="background:linear-gradient(90deg,var(--orange),var(--amber))">12:00–14:00 · 32:30–33:30</span>
+  <h2 class="ct">4. 術科與學科怎麼分工：先測做事，再測觀念</h2>
+  <p class="cd">這一章把兩張同一主題的投影片併在一起看（他在 12 分與 32 分各講了一次）。</p>
+
+  <p>他在投影片上把兩者畫成兩個對照的圓：<b>術科是執行力 100%、理論 0%；學科剛好倒過來。</b>這張圖說明了為什麼他整堂 80% 的時間都在講術科——學科靠背，術科靠準備。［13:01］</p>
+
+  <div class="twrap"><table>
+    <tr><th style="width:90px"></th><th>術科（實作）</th><th>學科（選擇題）</th></tr>
+    <tr><td>題數／時間</td><td>8 題完整情境題／90 分鐘</td><td>40 題／30 分鐘</td></tr>
+    <tr><td>核心要求</td><td>實際產出 AI 生成的成果並上傳</td><td>常識、觀念、流程、風險與應用理解</td></tr>
+    <tr><td>能力配比</td><td>執行力 100%、理論 0%</td><td>執行力 0%、理論 100%</td></tr>
+    <tr><td>他的建議</td><td>照本頁第 5–8 章準備，一定要事先演練過一輪</td><td>刷題就好，題目本身不難，重點是讀懂語意</td></tr>
+  </table></div>
+
+  <div class="note steel">🔧 <div><b>考試順序他自己也不確定。</b>錄影中他先說「你應該是先考學科吧」，講到一半又說「有點忘記了，你們再看一下」。〔待確認〕請以准考證與官網公告為準；他唯一確定的是<b>要早點到</b>，因為考前有一段登入帳號的時間。</div></div>
+</section>
+
+<!-- ══════════ 5 ══════════ -->
+<section class="chapter" id="sec-prep">
+  <span class="chip" style="background:linear-gradient(90deg,var(--purple),var(--blue))">14:00–20:00</span>
+  <h2 class="ct">5. 考前十分鐘決勝負：帳號登好、提示詞先藏進 Gem</h2>
+  <p class="cd">這一段沒有畫面可看，但他自己說「這個很重要」的次數最多。整章都是可以照著做的準備動作。</p>
+
+  <p>他在解析簡報上寫了一行關鍵設定：<b>考場「不提供」任何 AI 工具，考生必須使用自己平常慣用的網頁版 AI 工具、自行登入帳號完成產出。</b>也就是說，工具是你自己的，帳號是你自己的，登不進去就等於沒工具。</p>
+
+  <h3>考前十分鐘可以做的事</h3>
+  <ol class="st">
+    <li>提早到考場。考前 <b>10 分鐘</b>監考允許你做登入動作，包含<b>拿手機出來做驗證</b>——很多平台的登入必須手機收驗證碼。</li>
+    <li>把你要用的平台<b>寫成一張清單</b>再去，不要到現場才想。他建議的清單是 Gemini、NotebookLM、ChatGPT、Perplexity、Canva。</li>
+    <li>逐一登入，全部開成分頁掛著。他的原則是「多開幾個備著」，因為考場上換工具的時間成本很高。</li>
+    <li>Chrome <b>一定要啟用同步</b>。不同步的話，你以前存的快捷指令、書籤連結全部不見，臨場找不到會很慌。</li>
+    <li>把常用的提示詞事先放進 <b>Gemini 的 Gem</b>（ChatGPT 的 Project 也可以）：圖像生成的、文案整理的、簡報生成的各準備一份。</li>
+  </ol>
+
+  <div class="golden">
+    <div class="q">「你在考前把一些可能會用到的圖像提示詞、文案整理的提示詞，還有簡報的提示詞，都把它藏在券裡頭。」</div>
+    <div class="a">［18:00］「券」是逐字稿把 Gem 聽成的音。他隨即補一句「這不是叫你們作弊」——工具與帳號本來就是考生自備的，事先整理自己的提示詞庫屬於準備工作。</div>
+  </div>
+
+  <div class="note steel">🔧 <div><b>術語校正：</b>逐字稿裡的「券」「卷」「圈」都是 Gemini 的 <b>Gem</b>（自訂 AI 助理）。本頁在正文改寫成 Gem，但金句仍照原話保留，讓你對照錄影時聽得懂。同樣被聽錯的還有「卻 GBT／缺 GPT／Chain GPT」＝ ChatGPT、「深層思愛」＝ 生成式 AI、「Clone」＝ Chrome、「Nano Blana」＝ Nano Banana。</div></div>
+
+  <div class="note gold">⚠️ <div><b>不要把準備誤會成作弊。</b>考場規則是「工具自備、帳號自行登入」，所以事先把自己的提示詞整理好，跟事先整理筆記是同一件事。但每個考場的規則細節可能不同，報名後請以准考證與試場規則為準。</div></div>
+</section>
+
+<!-- ══════════ 6 ══════════ -->
+<section class="chapter" id="sec-slides">
+  <span class="chip" style="background:linear-gradient(90deg,var(--green),var(--teal))">20:00–28:00</span>
+  <h2 class="ct">6. 術科主戰場：十頁簡報要用哪一套生</h2>
+  <p class="cd">術科八題裡簡報佔最多題，所以這一章是全堂密度最高的實作段。他現場開了三條路做比較。</p>
+
+  <h3>三條路，他的排序</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">工具</th><th>他的評價與用法</th></tr>
+    <tr><td><b>Gemini 的 Canvas</b></td><td><b>主攻。</b>速度快、可以直接用描述生成不一定要上傳檔案，模型選 Flash 就好。畫面出現左右分割就代表它在跑簡報。</td></tr>
+    <tr><td><b>NotebookLM 自訂簡報</b></td><td><b>備援，先讓它跑著。</b>品質好但慢，十幾分鐘跑不出來是常態，而且需要來源檔案。</td></tr>
+    <tr><td><b>Canva</b></td><td>可用但要自己評估。好處是產出後可以改字；他認為提示詞下得夠精準的話其實不用改。</td></tr>
+  </table></div>
+
+  <p>他的實際打法是<b>兩邊併跑</b>：先把題目素材丟進 NotebookLM 讓它慢慢生，馬上切到 Gemini Canvas 做同一件事，哪邊先出來就用哪邊。</p>
+
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="ecf-genai-cert-img/02-gemini-canvas-menu.jpg" alt="Gemini 輸入框旁的加號選單展開，Canvas 已被勾選" loading="lazy">
+      <figcaption>第一條路的起手式：在 Gemini 輸入框左邊按「＋」，選單裡把 <b>Canvas 勾起來</b>（右邊的提示寫著「撰文、寫程式或製作簡報」）。<b>看輸入框左下角</b>，出現灰色的 Canvas 標籤才算選中——他強調沒選就做不出簡報。右下角的模型選單這裡是 Flash。［23:32］</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="ecf-genai-cert-img/03-notebooklm-slide-settings.jpg" alt="NotebookLM 自訂簡報對話框，格式選簡報投影片、語言中文繁體，說明欄輸入頁數與風格" loading="lazy">
+      <figcaption>第二條路：NotebookLM 的「自訂簡報」視窗。<b>格式選右邊的「簡報投影片」</b>（不是左邊的詳細簡報），語言切「中文（繁體）」，下面的說明欄只打兩行——頁數 10 頁、風格插圖式圖表。設定就這麼少，剩下的交給它跑。［22:03］</figcaption>
+    </figure>
+  </div>
+
+  <p>他在設定框裡逐字打的就是這兩行，格式很固定，冒號後面記得空一格：</p>
+  <div class="code">頁數: 10頁
+風格: 插圖式圖表</div>
+
+  <div class="note blue">💡 <div><b>為什麼永遠是 10 頁、永遠是插圖式圖表。</b>10 頁是因為 Canva 免費版就只有 10 頁，超過要付費，所以題目不會出 11 頁以上；插圖式圖表則是他實測下來最不容易跑版、字最不會亂掉的風格。他特別交代：考試不要挑 3D、皮克斯風那種花俏樣式。</div></div>
+
+  <h3>三個現場最常卡住的狀況</h3>
+  <ul class="pt">
+    <li><b>NotebookLM 轉十幾分鐘都沒出來</b>——按 <b>F5 重新整理</b>，很多時候它其實已經做好了，只是頁面沒更新。</li>
+    <li><b>它跑出互動式網頁（HTML）而不是簡報</b>——這個交不出去。加一句：<b>「說好的簡報呢？」</b>它會把網頁改回簡報，速度很快。</li>
+    <li><b>該畫圖卻不畫</b>——同一招換成<b>「說好的圖呢？」</b>。他說這句話他用很久了，因為直接講「給我簡報／請畫圖」，AI 會當成要做一份全新的，「說好的⋯呢」才會讓它回頭執行原本那件事。</li>
+  </ul>
+
+  <div class="golden">
+    <div class="q">「說好的簡報呢，這句話，把它記下來，跟說好圖意思一樣。」</div>
+    <div class="a">［25:47］這是全堂最實用的一句咒語。用在 AI 答非所問、或把簡報做成網頁的時候。</div>
+  </div>
+
+  <p>圖真的還是跑不出來時，他給了兩條替代路線：改用 <b>ChatGPT 的影像生成</b>，或回到 <b>NotebookLM 的「資訊圖表」</b>——把題目給的文案加進來源，再用題目裡那段提示詞自訂產生圖表或海報。</p>
+
+  <div class="note gold">⚠️ <div><b>字會不會跑掉，是會被扣分的細節。</b>他反覆提醒：AI 生圖常常把中文字寫壞，你不知道評分會不會扣這一項。因應方式是<b>文字盡量寫精簡、不要太多明細</b>，字越少越不容易出錯。Gemini 圖像不穩時，付費版 ChatGPT 是比較穩的選擇（免費版一天只有三次生圖機會）。</div></div>
+
+  <div class="golden">
+    <div class="q">「考試就是要爭取時間，他不會看你做的是不是非常非常的漂亮。」</div>
+    <div class="a">［24:23］他解釋為什麼模型選 Flash 不選 Pro：做不漂亮頂多扣一兩分，做不完是零分。</div>
+  </div>
+</section>
+
+<!-- ══════════ 7 ══════════ -->
+<section class="chapter" id="sec-delivery">
+  <span class="chip" style="background:linear-gradient(90deg,var(--pink),var(--rose))">28:00–33:30</span>
+  <h2 class="ct">7. 十一頁不能交：規格即現實</h2>
+  <p class="cd">簡報生出來只是一半。這一章講的是他認為最容易被忽略、卻真的會扣分的那一半。</p>
+
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="ecf-genai-cert-img/04-gemini-canvas-11-slides.jpg" alt="Gemini Canvas 生成簡報的畫面，左上顯示 Slide 1 of 11" loading="lazy">
+      <figcaption>Gemini Canvas 依「簡報頁數 10 頁、風格插圖式圖表」生出來的結果。<b>看左上角那行小字「Slide 1 of 11」</b>——你要的是 10 頁，它給了 11 頁。多出來的是最後一頁「Image Sources」，AI 自己補上的圖片來源清單。這一格就是整章要解決的問題。［28:04］</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="ecf-genai-cert-img/05-google-slides-delete-page.jpg" alt="AI 生成的簡報在 Google Slides 中開啟，左側縮圖列可刪除多餘頁面" loading="lazy">
+      <figcaption>解法一：從 Gemini 按「開啟簡報」把它丟進 Google Slides。<b>看左側的縮圖列</b>，最後一頁被選起來，直接刪掉就變回 10 頁；接下來從「檔案」選單匯出成 PDF 再上傳。［31:03］</figcaption>
+    </figure>
+  </div>
+
+  <h3>兩種把十一頁變成十頁的解法</h3>
+  <ol class="st">
+    <li><b>走 Google Slides：</b>在 Gemini 的匯出選單按「開啟簡報」，它會跟 Google Slides 串在一起，把最後一頁（圖像來源頁）刪掉，再另存成 PDF 交出去。</li>
+    <li><b>走列印（他自己的習慣）：</b>先把簡報下載成 PDF，在檔案上按滑鼠右鍵選「開啟檔案」用 <b>Edge</b> 開，按列印，頁面範圍填 <b>1 到 10</b>，儲存成新的 PDF。他說 Edge 的列印介面比 Chrome 單純，臨場比較不會出錯。</li>
+  </ol>
+
+  <div class="note gold">⚠️ <div><b>他不確定多一頁會不會被扣分，但堅持不要冒險。</b>原話是「考試有時候就不通人情，明明我告訴你十頁」——規則寫十頁，你就給十頁，不要留任何被扣分的機會。同理，產出跑成簡體字或英文時，直接在提示詞加一句<b>「請用繁體中文」</b>。</div></div>
+
+  <h3>交件規格檢查表</h3>
+  <p>他在投影片上把交件規格整理成一張「Corporate Reality Checklist」，並寫了一句話當註解：<b>在辦公室裡，最好的 AI 產出，是老闆和客戶「打得開」的檔案。</b>以下是那張表的內容。［33:31］</p>
+
+  <div class="twrap"><table>
+    <tr><th style="width:150px">交件項目</th><th>規格</th></tr>
+    <tr><td>文字與簡報</td><td>必須列印／轉存成 <b>PDF</b></td></tr>
+    <tr><td>圖像與海報</td><td>必須存成 <b>JPG 或 PNG</b></td></tr>
+    <tr><td>檔案大小</td><td>單一檔案 <b>10MB 以下</b>，嚴格限制</td></tr>
+    <tr><td>檔名</td><td>依<b>題號</b>精準命名（例如第二題就是 <code>2.pdf</code>）</td></tr>
+    <tr><td>最後一步</td><td>回到系統確認<b>「成功上傳」</b>，沒上傳成功等於沒做</td></tr>
+  </table></div>
+
+  <div class="note blue">💡 <div><b>不用加封面、不用加公司 Logo、不用寫報告格式。</b>他特別澄清：交上去的就是內容本身，評分要的是那份產出，不要浪費時間美化不會加分的東西。</div></div>
+
+  <div class="golden">
+    <div class="q">「因為他考你 10 頁啦，千萬不要給 11 頁。」</div>
+    <div class="a">［30:47］他在這裡停下來要大家回覆「理解請幫我按個 6」，是全堂唯一一次要求學員即時確認的地方。</div>
+  </div>
+
+  <div class="golden">
+    <div class="q">「交得出去才叫做成果，一定要交得出去。」</div>
+    <div class="a">［33:34］對照他投影片上的「規格即現實」。這句話同時是他對辦公室 AI 的看法：能被打開的檔案，才算數。</div>
+  </div>
+</section>
+
+<!-- ══════════ 8 ══════════ -->
+<section class="chapter" id="sec-scenarios">
+  <span class="chip" style="background:linear-gradient(90deg,var(--amber),var(--orange))">33:30–42:00</span>
+  <h2 class="ct">8. 八大情境題怎麼拆：提示詞就寫在題目裡</h2>
+  <p class="cd">最後一段他把術科八題逐題過一次，講的都是同一件事：題目已經把提示詞寫好了，你的工作是選對工具、把它貼進去。</p>
+
+  <div class="svgwrap">
+  <svg viewBox="0 0 980 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="八大企業情境題的八格清單示意圖">
+    <text x="14" y="24" font-size="13" font-weight="700" fill="#191919">術科八題：全部來自真實辦公室情境</text>
+
+    <rect x="14" y="40" width="228" height="62" rx="10" fill="#EEF4FB" stroke="#CFE0F1"/>
+    <text x="128" y="66" text-anchor="middle" font-size="13.5" font-weight="700" fill="#1d5e8f">業務會議簡報生成</text>
+    <text x="128" y="86" text-anchor="middle" font-size="12.5" fill="#5f5f5f">給會議紀錄，產出簡報</text>
+
+    <rect x="256" y="40" width="228" height="62" rx="10" fill="#FBF7EC" stroke="#EFE3C4"/>
+    <text x="370" y="66" text-anchor="middle" font-size="13.5" font-weight="700" fill="#7a5b12">產品 Logo 設計與生成</text>
+    <text x="370" y="86" text-anchor="middle" font-size="12.5" fill="#5f5f5f">題目描述位置與色調</text>
+
+    <rect x="498" y="40" width="228" height="62" rx="10" fill="#EDF7F1" stroke="#CBE6D5"/>
+    <text x="612" y="66" text-anchor="middle" font-size="13.5" font-weight="700" fill="#166a4c">客訴處理回覆郵件</text>
+    <text x="612" y="86" text-anchor="middle" font-size="12.5" fill="#5f5f5f">改寫成信件，存檔上傳</text>
+
+    <rect x="740" y="40" width="226" height="62" rx="10" fill="#EEF4FB" stroke="#CFE0F1"/>
+    <text x="853" y="66" text-anchor="middle" font-size="13.5" font-weight="700" fill="#1d5e8f">公司活動簡報</text>
+    <text x="853" y="86" text-anchor="middle" font-size="12.5" fill="#5f5f5f">只有文字敘述，沒有檔案</text>
+
+    <rect x="14" y="112" width="228" height="62" rx="10" fill="#EEF2F5" stroke="#D2DFE7"/>
+    <text x="128" y="138" text-anchor="middle" font-size="13.5" font-weight="700" fill="#255066">獲獎感言撰寫</text>
+    <text x="128" y="158" text-anchor="middle" font-size="12.5" fill="#5f5f5f">題目會指定語氣</text>
+
+    <rect x="256" y="112" width="228" height="62" rx="10" fill="#FBF7EC" stroke="#EFE3C4"/>
+    <text x="370" y="138" text-anchor="middle" font-size="13.5" font-weight="700" fill="#7a5b12">咖啡廳春季菜單視覺圖</text>
+    <text x="370" y="158" text-anchor="middle" font-size="12.5" fill="#5f5f5f">記得指定版型比例</text>
+
+    <rect x="498" y="112" width="228" height="62" rx="10" fill="#EEF4FB" stroke="#CFE0F1"/>
+    <text x="612" y="138" text-anchor="middle" font-size="13.5" font-weight="700" fill="#1d5e8f">季度營運策略跨部門簡報</text>
+    <text x="612" y="158" text-anchor="middle" font-size="12.5" fill="#5f5f5f">跨部門整合的典型題</text>
+
+    <rect x="740" y="112" width="226" height="62" rx="10" fill="#EEF2F5" stroke="#D2DFE7"/>
+    <text x="853" y="138" text-anchor="middle" font-size="13.5" font-weight="700" fill="#255066">3 個新產品行銷標語</text>
+    <text x="853" y="158" text-anchor="middle" font-size="12.5" fill="#5f5f5f">說三個就給三個</text>
+
+    <rect x="14" y="190" width="952" height="46" rx="10" fill="#F4F3F0" stroke="#DBD9D5"/>
+    <text x="490" y="211" text-anchor="middle" font-size="13.5" font-weight="700" fill="#1f6f78">每一題都綁定明確的「角色」「目的」「受眾」與「輸出格式」。</text>
+    <text x="490" y="229" text-anchor="middle" font-size="12.5" fill="#5f5f5f">也就是說，第 3 章那條公式的四個變數，題目已經幫你填好了——你要做的是選對工具，把它貼進去。</text>
+  </svg>
+  <figcaption>依老師課堂上的解析簡報重繪。八題涵蓋簡報、圖像、文案三大類，其中<b>簡報類就佔了三題</b>，這也是他把整堂 8 分鐘花在簡報生成的原因。［34:05］</figcaption>
+  </div>
+
+  <div class="twrap"><table>
+    <tr><th style="width:170px">情境題</th><th>他建議的做法</th></tr>
+    <tr><td>業務會議簡報生成</td><td>題目會給一份會議紀錄摘要 PDF。用 Gemini Canvas 或 NotebookLM 自訂簡報，提示詞直接抄題目的</td></tr>
+    <tr><td>公司活動簡報<br>季度營運策略跨部門簡報</td><td>如果題目只給文字敘述、沒有檔案，NotebookLM 會很麻煩（沒有來源）；<b>用 Gemini Canvas</b>，它可以純靠描述生成</td></tr>
+    <tr><td>產品 Logo 設計與生成<br>咖啡廳春季發表菜單視覺圖</td><td>題目會描述位置、色調、產品類型，那整段就是提示詞。用 Gemini 的 Nano Banana 圖像生成或 ChatGPT 生圖</td></tr>
+    <tr><td>客訴處理回覆郵件</td><td>先請 AI 把題目的提示詞改寫成信件回覆的形式，再把客訴內容貼進去；最後存成文字檔或 PDF 上傳</td></tr>
+    <tr><td>獲獎感言撰寫</td><td>題目會指定語氣，記得在提示詞裡明講「請用什麼樣的語氣」，其餘照抄題目</td></tr>
+    <tr><td>3 個新產品行銷標語生成</td><td>它說三個就給三個。他強調不要多也不要少</td></tr>
+  </table></div>
+
+  <h3>客訴回覆信的固定句型</h3>
+  <p>他示範的寫法是先下這一句，再用 <b>Shift＋Enter</b> 換行，把題目給的客訴內容整段貼在後面：</p>
+  <div class="code">請幫我將以下的提示詞，改為信件回覆的部分，
+他必須要符合以下規則⋯⋯
+（Shift＋Enter 換行後，貼上題目給的客訴內容）</div>
+
+  <div class="note gold">⚠️ <div><b>海報與圖像一定要指定版型比例。</b>題目有時候會寫、有時候不會。他的習慣是自己補一行「版型：16:9」，其他常見的是 9:16、4:3、3:4。沒指定就等於讓 AI 隨機決定，交出去可能不符要求。</div></div>
+
+  <div class="note steel">🔧 <div><b>備援工具的現況已經變了。</b>他說自己以前考試時是用 Arena 做圖像生成（因為當時還沒有 ChatGPT 的 Image Tool），但<b>Arena 現在已經不能用 Nano Banana 與 Image Tool 了</b>。他的重點不是推薦某個工具，而是「每一種產出都要有第二條路」。</div></div>
+
+  <div class="note blue">💡 <div><b>報名資訊：</b>他在結尾提到有報名優惠與課後提問的管道，也說錄影會提供給大家。細節請洽 ECF 課程公告。［41:36］</div></div>
+</section>
+
+<!-- ══════════ 9 ══════════ -->
+<section class="chapter" id="sec-real">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--purple))">TAKEAWAYS</span>
+  <h2 class="ct">9. 這堂課真正在教的事</h2>
+
+  <h3>一、證照的價值是資格，不是能力</h3>
+  <p>他從頭到尾沒有說這張證照能證明你的 AI 實力——他說的是相反的話。但他仍然建議去考，因為在公部門與法人的世界裡，資格條文改不了，承辦人再怎麼認識你也沒用。把它當門票看，你就不會對它有不切實際的期待，也不會因為「這沒用」而錯過機會。</p>
+
+  <h3>二、考的是限制，不是知識</h3>
+  <p>90 分鐘 8 題、10 頁、10MB、指定副檔名、指定檔名。這些數字加起來才是這張證照真正在量的東西：在真實辦公室的限制條件下，你能不能穩定地把成果交出去。這也解釋了為什麼他整堂只花了兩分鐘講學科，其餘全部在講怎麼把檔案生出來、改成規格、上傳成功。</p>
+
+  <h3>三、準備動作決定了考場上的九成</h3>
+  <p>帳號有沒有登入、Chrome 有沒有同步、提示詞有沒有先放進 Gem、常用平台有沒有全部開著——這些事在考場上做都來不及。他花了整整六分鐘講考前十分鐘要做什麼，比講任何一個工具都久，這個比重本身就是答案。</p>
+
+  <h3>四、每一種產出都要有第二條路</h3>
+  <p>NotebookLM 卡住有 F5，簡報跑成網頁有「說好的簡報呢」，Gemini 生圖不穩有 ChatGPT 和資訊圖表，Arena 停用了就換工具。他真正在教的不是某個平台怎麼按，而是<b>永遠準備好備援</b>——因為考試不會聽你解釋網路有問題。</p>
+</section>
+
+<!-- ══════════ 10 ══════════ -->
+<section class="chapter" id="sec-quotes">
+  <span class="chip" style="background:linear-gradient(90deg,var(--amber),var(--rose))">QUOTES</span>
+  <h2 class="ct">10. 老師金句</h2>
+
+  <div class="golden"><div class="q">「但是他就是一張門票，你有這張門票，你才有資格可以進去。」</div><div class="a">［03:41］講完「這張證照沒辦法驗證任何事情」之後，緊接著的一句。整堂對證照的定位就在這裡。</div></div>
+
+  <div class="golden"><div class="q">「這張有點像在考國文。語意要很清楚。」</div><div class="a">［04:14］他考完的第一感想，也是他建議學科怎麼準備的依據。</div></div>
+
+  <div class="golden"><div class="q">「不熟的部分先做標記，待會再回過頭來，也許你會的，因為其他的題目裡頭就提到這個事情。」</div><div class="a">［08:31］因為題目由多位老師出、關聯性難審核，所以前後題常會互相透露答案。</div></div>
+
+  <div class="golden"><div class="q">「千萬不要裸考，我沒有騙你，真的不要裸考。」</div><div class="a">［09:56］他自己考 95 分，還是這樣勸。緊接著介紹資策會的線上刷題服務。</div></div>
+
+  <div class="golden"><div class="q">「他的提示詞就在那個題目裡頭，很簡單，你一定會用。他只是在考你會不會用這些平臺。」</div><div class="a">［12:33］全堂的骨幹句。不要在考場上自己重寫提示詞。</div></div>
+
+  <div class="golden"><div class="q">「你在考前把一些可能會用到的圖像提示詞、文案整理的提示詞，還有簡報的提示詞，都把它藏在券裡頭。」</div><div class="a">［18:00］「券」是逐字稿把 Gem 聽成的音。這是他認為 CP 值最高的考前準備動作。</div></div>
+
+  <div class="golden"><div class="q">「一定要啟用同步，瞭解哈。」</div><div class="a">［19:08］回答學員在聊天室問的問題。不同步的話，快捷指令與書籤在考場那台電腦上全部找不到。</div></div>
+
+  <div class="golden"><div class="q">「考試就是要爭取時間，他不會看你做的是不是非常非常的漂亮。」</div><div class="a">［24:23］解釋為什麼模型選 Flash 不選 Pro——做不漂亮扣一兩分，做不完是零分。</div></div>
+
+  <div class="golden"><div class="q">「說好的簡報呢，這句話，把它記下來，跟說好圖意思一樣。」</div><div class="a">［25:47］AI 把簡報做成互動網頁、或該畫圖卻不畫時的固定救援句。</div></div>
+
+  <div class="golden"><div class="q">「因為他考你 10 頁啦，千萬不要給 11 頁。」</div><div class="a">［30:47］他在這裡要大家在聊天室按 6 表示理解，是全堂唯一一次要求即時回應。</div></div>
+
+  <div class="golden"><div class="q">「交得出去才叫做成果，一定要交得出去。」</div><div class="a">［33:34］對照投影片上的「規格即現實」。這句話收束了整堂：能被打開的檔案，才算成果。</div></div>
+</section>
+
+<!-- ══════════ 11 ══════════ -->
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,var(--ink3),var(--ink2))">SOURCE</span>
+  <h2 class="ct">11. 資料來源與整理說明</h2>
+
+  <div class="twrap"><table>
+    <tr><th style="width:130px">來源</th><td>2026/06/04 ECF 訂閱制課堂錄影單段，全長 43 分 4 秒；本堂沒有另外發放教材檔</td></tr>
+    <tr><th>整理方式</th><td>全程本機處理：先把 Teams 錄影裁成只剩畫面分享的內容區，再擷取 47 張關鍵畫面、產生 415 段逐字稿，最後依逐字稿手寫章節目錄。本頁只用了其中 5 張截圖，其餘資訊改寫成表格、步驟與手繪示意圖</td></tr>
+    <tr><th>時間戳</th><td>章節標題與引文後方的［mm:ss］對應錄影播放器時間</td></tr>
+    <tr><th>整理</th><td>竹貞（Tarshar 的逐幀筆記專員）</td></tr>
+  </table></div>
+
+  <h3>已知限制，請先看過再引用</h3>
+  <ul class="pt">
+    <li><b>逐字稿是機器產生的</b>，人名與工具名會聽錯。可確定的錯字（「iPath」→ iPAS、「伊師傅／易師傅／義師傅／醫師傅」→ 益師傅、「情報將」→ 請幫我將⋯⋯共 6 類、40 餘處）已修正；<b>不確定的一律保留原樣，沒有猜測補詞</b>。</li>
+    <li>老師口中的「券／卷／圈」是 Gemini 的 <b>Gem</b>，「卻 GBT／缺 GPT／Chain GPT」是 <b>ChatGPT</b>，「深層思愛」是<b>生成式 AI</b>，「Nano Blana」是 <b>Nano Banana</b>。本頁正文改寫成正確寫法，金句照原話保留，方便你對照錄影。</li>
+    <li>錄影末段有語音辨識產生的重複幻覺（靜音時段被辨識成無意義音節），整理時已整段捨棄，不會出現在本頁。</li>
+    <li>逐字稿中出現的學員暱稱、姓名與提問者稱呼，本頁與逐幀素材一律隱去，改成「學員」。</li>
+    <li><b>課堂截圖只有兩種：公開網站，以及 AI 工具本身的操作畫面。</b>老師自製的解析簡報屬於付費課程教材，本頁一張原圖都沒有用，簡報上的資訊全部改寫成表格與手繪示意圖。原始錄影是線上會議的畫面分享，含與會者資訊與個人桌面元素；本頁的每一張圖都已先裁成只剩分享內容區。整幀是會議介面、視窗切換清單、個人檔案清單或個人化推薦的畫面，一張都沒有選用。</li>
+    <li>考試題數、時間、費用、報名優惠與考試順序都以<b>資策會官網與准考證公告為準</b>；本頁只是課堂內容的整理，錄影中他自己也有幾處說「有點忘記了」。</li>
+    <li>引用到作業、貼文或簡報之前，請對照錄影原始段落再確認一次。</li>
+  </ul>
+
+  <div class="note gold">🔒 <div><b>原始錄影與講者簡報未公開。</b>本頁是 Tarshar 依 ECF 訂閱制課程錄影整理的學習筆記，內容為重新書寫的整理與心得，不含課程錄影、不含老師的教材原始檔，也沒有使用任何一張他的簡報頁原圖。想上課請循 ECF 訂閱制的正式管道。</div></div>
+</section>
+
+</article>
+</div>
+
+<footer>
+  <p>📝 資策會生成式AI辦公室應用能力認證解析 課堂筆記 · 生成式AI應用電台・ECF 訂閱制（益師傅）</p>
+  <p>依錄影關鍵畫面＋全程逐字稿整理 · <a href="ecf-genai-cert-ai-skills.html">🗺️ 互動技能地圖</a> · <a href="../radio/#ecf">🏠 回筆記館入口</a></p>
+</footer>
+
+</body>
+</html>
