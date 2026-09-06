@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>直播電台 EP52 課堂筆記｜把每一次的手工整理，變成可以重複跑的工具</title>
+<meta name="description" content="生成式AI應用電台 EP52（2026/09/04 直播，全長 50 分 32 秒）課堂筆記。用同一份中秋烤肉採購資料跑完三個練習：Excel 錄製巨集、用 ChatGPT 把巨集改寫成可重複執行的 VBA、包成一鍵按鈕、再另存 .xlam 增益集帶著走；Power Query 建立可重跑的清理流程（移除空白與重複、取代值、修剪空白、自訂資料行、合併查詢）；最後接上 ChatGPT 的 Power BI Desktop 外掛，用四行提示詞生出含 DAX 指標的 Dashboard.pbip 專案並實際打開檢查。依錄影 86 張關鍵畫面＋364 段逐字稿整理。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#8C5A16; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:760px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px;max-height:calc(100vh - 90px);overflow-y:auto}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:7px;border-left:none;font-size:13px}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.code{position:relative;background:var(--code);border:1px solid var(--line2);border-radius:10px;padding:13px 15px;margin:10px 0;font-size:13px;line-height:1.75;color:var(--ink);white-space:pre-wrap;font-family:"Cascadia Code",Consolas,monospace;overflow-x:auto}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.iframe-wrap{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000;margin:14px 0}
+.iframe-wrap iframe{display:block;width:100%;height:460px;border:0}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static;max-height:none} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} .iframe-wrap iframe{height:320px} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#e3d2b6" onclick="if(history.length>1){history.back();return false}">← 回上一頁</a>
+  <b>📝 直播電台 EP52 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="ep52-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 直播電台 · EP52</span>
+  <h1>把每一次的手工整理，<span>變成可以重複跑的工具</span></h1>
+  <p class="lead">「今天的課程會聚焦在 Power BI，但是我 Power BI 的部分會講稍微少一點。」——老師一開場就把重點挪開了：<b>DAX 和 .pbip 現在都能交給 GPT 寫，真正卡住你的是進 Power BI 之前那一份沒清乾淨的資料</b>。<br>全堂用同一份<b>中秋烤肉採購資料</b>跑完三個練習：<b>巨集 → VBA → 增益集</b>（把折扣欄裡 5%、0.05、9折、92折、無、0 六種寫法統一成標準折扣率）、<b>Power Query</b>（把清理動作變成可重跑的「套用的步驟」）、<b>ChatGPT 的 Power BI Desktop 外掛</b>（四行提示詞生出含 11 個 DAX 指標的 Dashboard.pbip 專案）。<br>本頁依<b>錄影 86 張關鍵畫面＋全程逐字稿 364 段</b>整理，重點段落附影片時間戳。</p>
+  <div class="meta">
+    <span>📅 2026/09/04（五）19:00–19:50 直播</span>
+    <span>⏱️ 全長 50 分 32 秒（單段錄影）</span>
+    <span>🧩 主題：Excel 自動化 × Power Query 清理 × AI 生 Power BI</span>
+    <span>🔰 小白友善</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-overview">1. 一張圖看懂這堂</a>
+  <a href="#sec-open">2. 為什麼一堂 Power BI 課，要從 Excel 講起</a>
+  <a href="#sec-macro">3. 巨集：把你剛剛點過的每一步錄下來</a>
+  <a href="#sec-vba">4. VBA：讓 AI 把錄下來的碼改成能重複跑的程式</a>
+  <a href="#sec-addin">5. 增益集：把工具帶出這個檔案，別人也能用</a>
+  <a href="#sec-chatgpt">6. 把 Power BI 交給 ChatGPT：外掛、假資料、四行提示詞</a>
+  <a href="#sec-pq">7. Power Query：整理一次，以後只要按「重新整理」</a>
+  <a href="#sec-pbip">8. 打開 AI 生出來的專案：能用，但不是按一下就完成</a>
+  <a href="#sec-dataset">9. 教材資料集拆解：七張工作表各自對應哪個練習</a>
+  <a href="#sec-real">10. 這堂課真正在教的事</a>
+  <a href="#sec-quotes">11. 老師金句</a>
+  <a href="#sec-src">12. 資料來源與整理說明</a>
+</nav>
+
+<article>
+
+<!-- ══════════ 0. 課程資訊與教材 ══════════ -->
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--cyan))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>生成式AI應用電台 EP52｜如何讓 AI 協助完成 Power BI（視覺化）</td></tr>
+    <tr><th>直播日期</th><td>2026/09/04（五）19:00–19:50，本段錄影全長 <b>50 分 32 秒</b></td></tr>
+    <tr><th>本堂主題</th><td>用一份中秋烤肉採購資料，把「手工整理」一路變成巨集、VBA、增益集、Power Query 流程，最後交給 ChatGPT 生成 Power BI 儀表板專案</td></tr>
+    <tr><th>課程節奏</th><td>老師自己說「大概區分成 15 分鐘一個練習」，全堂三段：Excel 自動化（04:00–24:00）、ChatGPT × Power BI（24:00–30:40）、Power Query（30:40–44:00），最後 6 分鐘回頭驗收 AI 生出來的專案</td></tr>
+    <tr><th>要先準備</th><td>Excel（要能開啟「開發人員」頁籤）、ChatGPT 帳號（安裝 Power BI Desktop 外掛程式，免付費即可裝）、Power BI Desktop（要支援 .pbip 專案格式）</td></tr>
+  </table></div>
+
+  <h3>📁 課堂用到的兩份教材</h3>
+  <p>錄影、簡報與練習用的 Excel 由電台在課程資料夾中提供給報名學員，本頁不轉載。以下說明兩份檔案各自的內容，方便你對照筆記閱讀。</p>
+
+  <div class="twrap"><table>
+    <tr><th style="width:230px">教材檔案</th><th>課堂上拿來做什麼</th></tr>
+    <tr><td><code>EP52_如何讓AI協助完成PowerBI(視覺化).pptx</code></td><td>18 頁課程簡報。第 2 頁列出今晚三個練習，第 4–12 頁是巨集／VBA／增益集的圖解步驟，第 13–17 頁是 Power Query 五步驟，第 18 頁是「ChatGPT 接上 Power BI 後可以做什麼」的功能對照表</td></tr>
+    <tr><td><code>實作data_中秋節烤肉食材_Excel_VBA_PowerQuery_PowerBI_DAX教學資料.xlsx</code></td><td>七張工作表的練習資料集。<code>中秋烤肉_採購資料</code> 是 96 筆乾淨交易資料，<code>PQ練習_髒資料</code> 是刻意做壞的 16 筆（空白、重複列、NT$220／240元／8盒 混用），<code>Dim_品項</code> 與 <code>Dim_活動</code> 用來在 Power BI 建一對多關聯。逐表拆解見第 9 章</td></tr>
+  </table></div>
+
+  <h3>🎬 課堂錄影</h3>
+  <p class="cd">單段錄影，全長 50 分 32 秒，涵蓋全部三個練習與最後的 Power BI 專案驗收。</p>
+  <div class="note steel">🔧 <div>錄影由電台提供給報名學員，本頁不轉載也不提供連結。本頁是依錄影整理的圖文筆記，沒看過錄影一樣讀得懂。</div></div>
+
+  <div class="note gold">🔒 <div><b>本頁截圖都經過去識別化處理。</b>原始錄影是 Google Meet 畫面分享，右側 480 像素會出現參與者頭像與姓名，整欄裁除（只保留左側 1440×810 的分享畫面）；畫面中若出現操作者的瀏覽器側邊欄、書籤列或帳號名稱，一併裁掉；逐字稿裡出現的學員稱呼也隱去。</div></div>
+</section>
+
+<!-- ══════════ 1. 一張圖看懂這堂 ══════════ -->
+<section class="chapter" id="sec-overview">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--purple))">OVERVIEW</span>
+  <h2 class="ct">1. 一張圖看懂這堂</h2>
+  <p class="cd">整堂只有一條主線：同一份髒資料，被四種不同層級的「自動化」處理過一次。每往右一格，這件事就變得更可重複、更能給別人用。</p>
+
+  <div class="svgwrap">
+  <svg viewBox="0 0 980 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="從髒資料到 Power BI 儀表板的四段自動化流程圖">
+    <defs>
+      <marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+        <path d="M0,0 L9,4.5 L0,9 z" fill="#9B9B9B"/>
+      </marker>
+    </defs>
+
+    <text x="490" y="30" text-anchor="middle" font-size="13" fill="#9B9B9B">同一份「中秋烤肉採購資料」，走過四段自動化</text>
+
+    <rect x="14" y="70" width="160" height="112" rx="12" fill="#EEF2F5" stroke="#D2DFE7"/>
+    <text x="94" y="100" text-anchor="middle" font-size="15" font-weight="700" fill="#255066">髒資料</text>
+    <text x="94" y="124" text-anchor="middle" font-size="12.5" fill="#5f5f5f">折扣欄六種寫法</text>
+    <text x="94" y="142" text-anchor="middle" font-size="12.5" fill="#5f5f5f">單價混文字、日期</text>
+    <text x="94" y="160" text-anchor="middle" font-size="12.5" fill="#5f5f5f">四種格式、有空白列</text>
+
+    <rect x="212" y="70" width="160" height="112" rx="12" fill="#FBF7EC" stroke="#EFE3C4"/>
+    <text x="292" y="100" text-anchor="middle" font-size="15" font-weight="700" fill="#7a5b12">巨集 → VBA</text>
+    <text x="292" y="124" text-anchor="middle" font-size="12.5" fill="#5f5f5f">錄下你點過的每一步</text>
+    <text x="292" y="142" text-anchor="middle" font-size="12.5" fill="#5f5f5f">丟給 AI 改寫成</text>
+    <text x="292" y="160" text-anchor="middle" font-size="12.5" fill="#5f5f5f">能重複跑的程式</text>
+
+    <rect x="410" y="70" width="160" height="112" rx="12" fill="#EDF7F1" stroke="#CBE6D5"/>
+    <text x="490" y="100" text-anchor="middle" font-size="15" font-weight="700" fill="#166a4c">增益集 .xlam</text>
+    <text x="490" y="124" text-anchor="middle" font-size="12.5" fill="#5f5f5f">從「只有這個檔能用」</text>
+    <text x="490" y="142" text-anchor="middle" font-size="12.5" fill="#5f5f5f">變成「每個檔都能用」</text>
+    <text x="490" y="160" text-anchor="middle" font-size="12.5" fill="#5f5f5f">也能傳給別人裝</text>
+
+    <rect x="608" y="70" width="160" height="112" rx="12" fill="#EEF4FB" stroke="#CFE0F1"/>
+    <text x="688" y="100" text-anchor="middle" font-size="15" font-weight="700" fill="#1d5e8f">Power Query</text>
+    <text x="688" y="124" text-anchor="middle" font-size="12.5" fill="#5f5f5f">清理動作變成</text>
+    <text x="688" y="142" text-anchor="middle" font-size="12.5" fill="#5f5f5f">「套用的步驟」清單</text>
+    <text x="688" y="160" text-anchor="middle" font-size="12.5" fill="#5f5f5f">換資料只要重新整理</text>
+
+    <rect x="806" y="70" width="160" height="112" rx="12" fill="#F4F3F0" stroke="#DBD9D5"/>
+    <text x="886" y="100" text-anchor="middle" font-size="15" font-weight="700" fill="#8C5A16">ChatGPT × Power BI</text>
+    <text x="886" y="124" text-anchor="middle" font-size="12.5" fill="#5f5f5f">四行提示詞</text>
+    <text x="886" y="142" text-anchor="middle" font-size="12.5" fill="#5f5f5f">生出 .pbip 專案</text>
+    <text x="886" y="160" text-anchor="middle" font-size="12.5" fill="#5f5f5f">含 11 個 DAX 指標</text>
+
+    <line x1="174" y1="126" x2="206" y2="126" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+    <line x1="372" y1="126" x2="404" y2="126" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+    <line x1="570" y1="126" x2="602" y2="126" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+    <line x1="768" y1="126" x2="800" y2="126" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+
+    <rect x="212" y="212" width="556" height="66" rx="10" fill="#FFFFFF" stroke="#DBD9D5" stroke-dasharray="4 3"/>
+    <text x="490" y="238" text-anchor="middle" font-size="13.5" font-weight="700" fill="#191919">中間這三段，AI 都只負責同一件事：把你的動作翻譯成程式碼</text>
+    <text x="490" y="260" text-anchor="middle" font-size="12.5" fill="#5f5f5f">VBA 由它改寫、M 語言由它寫、DAX 由它建——你負責的是講清楚要什麼</text>
+
+    <line x1="292" y1="182" x2="292" y2="208" stroke="#9B9B9B" stroke-width="1.2" stroke-dasharray="3 3"/>
+    <line x1="490" y1="182" x2="490" y2="208" stroke="#9B9B9B" stroke-width="1.2" stroke-dasharray="3 3"/>
+    <line x1="688" y1="182" x2="688" y2="208" stroke="#9B9B9B" stroke-width="1.2" stroke-dasharray="3 3"/>
+
+    <rect x="806" y="212" width="160" height="66" rx="10" fill="#F4F3F0" stroke="#DBD9D5"/>
+    <text x="886" y="238" text-anchor="middle" font-size="13.5" font-weight="700" fill="#191919">最後一段要你自己收尾</text>
+    <text x="886" y="258" text-anchor="middle" font-size="12.5" fill="#5f5f5f">關聯要手動重新整理</text>
+
+    <line x1="886" y1="182" x2="886" y2="208" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+  </svg>
+  <figcaption>四個格子的差別不是「用哪個工具」，是「這件事能被重複幾次」：巨集只能在這個檔跑、增益集能在每個檔跑、Power Query 換資料按一下就重跑、Power BI 專案則是連圖表都幫你生好——而每一段的程式碼，老師都是交給 AI 寫的。</figcaption>
+  </div>
+
+  <div class="note blue">💡 <div>如果只記得一句話，記這句：<b>「我如果以一般來說要進入到 Power BI 之前，通常都要先把資料清乾淨。」</b>［31:19］</div></div>
+</section>
+
+<!-- ══════════ 2. 為什麼一堂 Power BI 課，要從 Excel 講起 ══════════ -->
+<section class="chapter" id="sec-open">
+  <span class="chip" style="background:linear-gradient(90deg,var(--blue),var(--cyan))">00:00–04:00</span>
+  <h2 class="ct">2. 為什麼一堂 Power BI 課，要從 Excel 講起</h2>
+  <p class="cd">開場四分鐘，老師做了一件不太常見的事：把自己這堂課的主角往後挪。</p>
+
+  <p>課名叫「如何讓 AI 協助完成 Power BI」，但他一開口就先把期待值調整掉——Power BI 這一段現在很短，因為<b>寫 DAX、生 .pbip 檔這些事，AI 已經能做完</b>。真正會讓你卡住的，是在那之前。</p>
+
+  <div class="golden">
+    <div class="q">「今天的課程會聚焦在 Power BI。但是我 Power BI 的部分會講稍微少一點，因為其實現在交給 GPT 幫你寫好，DAX 幫你寫好」</div>
+    <div class="a">［00:30］開場第一句。整堂的結構就是從這句話長出來的：前 40 分鐘都在講「進 Power BI 之前」，最後 10 分鐘才真的碰到 Power BI。</div>
+  </div>
+
+  <h3>三個練習，各約 15 分鐘</h3>
+  <p>他自己說「我大概區分成 15 分鐘一個練習」。三段的關係不是並列，是遞進——每一段都在回答同一個問題的不同層次：<b>這件事我下次還要再做一遍嗎？</b></p>
+  <ul class="pt">
+    <li><b>練習一　巨集、VBA、增益集</b>——「最近很常有人問我說老師什麼時候要用巨集，什麼時候用 VBA，什麼時候用增益集。」這一段就是在回答這個分工問題。</li>
+    <li><b>練習二　Power Query</b>——不寫函數、不寫程式，把清理動作變成一份可以重跑的步驟清單。</li>
+    <li><b>練習三　用 ChatGPT 操作 Power BI</b>——視覺化與 DAX 函數，交給外掛程式生成。</li>
+  </ul>
+
+  <h3>為什麼要拿「中秋烤肉」當練習資料</h3>
+  <p>他準備的不是乾淨的示範檔，是<b>刻意做壞的資料</b>。理由很實際：真實世界的報表就長這樣，而髒資料會直接讓後面整條路走不通。</p>
+  <div class="note steel">🔧 <div>老師這段口述提到「他的髒資料不是說他 key 錯了還是他寫錯了」，意思是：這些不一致<b>不是打錯字</b>，而是不同人、不同時間、不同習慣填進來的合理寫法——所以你沒辦法靠校對解決，只能靠規則統一。</div></div>
+</section>
+
+<!-- ══════════ 3. 巨集 ══════════ -->
+<section class="chapter" id="sec-macro">
+  <span class="chip" style="background:linear-gradient(90deg,var(--amber),var(--orange))">04:00–13:00</span>
+  <h2 class="ct">3. 巨集：把你剛剛點過的每一步錄下來</h2>
+  <p class="cd">這一段的目標只有一個欄位：把折扣欄的六種寫法，統一成一個能拿去算的百分比。</p>
+
+  <figure class="shot">
+    <img src="ep52-img/01-dirty-data.jpg" alt="Excel 的 PQ練習_髒資料 工作表，折扣欄與單價欄格式不一致" loading="lazy">
+    <figcaption>這是整堂課要對付的東西：<code>PQ練習_髒資料</code> 工作表的 16 筆採購紀錄。看 H 欄「折扣」——同一欄裡混著 <b>5%、0.05、9折、92折、無、0</b> 六種寫法；再看 F 欄「單價」——<b>NT$220、240元、$320、75 元、NT$ 360、180</b> 也全不一樣。第 16 列還是整列空白。這些值在 Excel 眼裡有的是數字、有的是文字，直接加總會得到錯的答案，這就是為什麼不能跳過清理直接進 Power BI。［05:31］</figcaption>
+  </figure>
+
+  <h3>第一步不是錄製，是另存檔案</h3>
+  <p>巨集寫在檔案裡，而一般的 <code>.xlsx</code> 不保存程式碼——你錄完關檔，隔天打開就沒了。所以順序是：先轉檔，再錄製。</p>
+  <div class="note gold">⚠️ <div><b>一定要先另存成 <code>.xlsm</code>（啟用巨集的活頁簿）。</b>老師的原話是「你一定要把你的 Excel 檔先做一個轉檔的動作，通常要 XLSM 檔它比較適合巨集的方式」。路徑是<b>檔案 → 另存新檔 → 檔案類型選「Excel 啟用巨集的活頁簿」</b>。他順手把檔名改成 <code>data_0904</code>，後面整堂都用這個檔。</div></div>
+  <div class="note blue">💡 <div>找不到「開發人員」頁籤是最常見的第一個卡點。開法：<b>檔案 → 選項 → 自訂功能區 → 右側勾選「開發人員」</b>。勾完頁籤才會出現，錄製巨集、Visual Basic、增益集三個按鈕都在那裡。</div></div>
+
+  <h3>錄製巨集的六個動作</h3>
+  <ol class="st">
+    <li>到<b>開發人員</b>頁籤，按<b>錄製巨集</b>。</li>
+    <li>給巨集一個<b>名稱</b>（老師取「統一折扣率」），並在描述欄寫清楚它做什麼——他寫的是「將混合的折扣格式改成標準格式」。<b>儲存在「這個活頁簿」</b>。</li>
+    <li>按確定，Excel 開始錄。<b>從這一刻起你點的每一下都會被記成程式碼</b>，所以不要亂點。</li>
+    <li>在資料右側插入一個新欄位，欄名輸入<b>「標準折扣率」</b>。</li>
+    <li>在第一格輸入轉換公式，<b>向下填滿</b>，再把整欄設成<b>百分比格式、小數位數 0 位</b>。</li>
+    <li>回到開發人員，按<b>停止錄製</b>。</li>
+  </ol>
+
+  <h3>轉換規則：六種寫法怎麼變成一個數字</h3>
+  <p>這張對照表是從課堂畫面上實際跑出來的結果讀出來的（見第 5 章的截圖），也和簡報第 10 頁的「轉換規則範例」一致。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">原始「折扣」欄</th><th style="width:150px">轉成「標準折扣率」</th><th>規則</th></tr>
+    <tr><td><code>5%</code>、<code>10%</code>、<code>0%</code></td><td>5%、10%、0%</td><td>本來就是百分比，原樣保留</td></tr>
+    <tr><td><code>0.05</code>、<code>0.1</code>、<code>0.08</code></td><td>5%、10%、8%</td><td>小數就是比率，乘 100 顯示成百分比</td></tr>
+    <tr><td><code>9折</code></td><td>10%</td><td>「幾折」講的是付幾成，折扣率＝1－0.9</td></tr>
+    <tr><td><code>92折</code></td><td>8%</td><td>同上，1－0.92</td></tr>
+    <tr><td><code>無</code>、<code>0</code>、空白</td><td>0%</td><td>沒有折扣一律歸零，不留空值</td></tr>
+  </table></div>
+
+  <div class="note steel">🔧 <div>這一步的公式老師沒有自己寫，是<b>丟給 AI 寫</b>的：「這時候其實就可以請 AI 出來了，你就不用浪費時間。比如說我到底要怎麼去統一我的格式，你就貼上這一段。」<b>本頁沒有收錄那段公式的原文</b>——他在課堂上是直接貼進儲存格、沒有把提示詞念出來，逐字稿裡也沒有完整內容，這裡不猜測補寫。</div></div>
+</section>
+
+<!-- ══════════ 4. VBA ══════════ -->
+<section class="chapter" id="sec-vba">
+  <span class="chip" style="background:linear-gradient(90deg,var(--purple),var(--blue))">13:00–18:00</span>
+  <h2 class="ct">4. VBA：讓 AI 把錄下來的碼改成能重複跑的程式</h2>
+  <p class="cd">錄製出來的巨集能跑，但很笨。這一章是全堂 AI 用得最直接的一段：複製、貼上、要它改寫。</p>
+
+  <p>錄製巨集的問題在於它<b>記的是「你點了哪裡」而不是「你想做什麼」</b>。你多點了一下、資料多了兩列，它就會出錯。老師的處理方式很簡單：把碼整段複製，丟給 ChatGPT，要它改成穩定版本。</p>
+
+  <ol class="st">
+    <li>按 <b>ALT ＋ F11</b> 直接進 VBA 編輯器（或從開發人員頁籤點 Visual Basic）。</li>
+    <li>從左側找到剛才錄的那支巨集（工具 → 巨集 → 選「統一折扣率」→ 編輯），把整段程式碼<b>全選複製</b>。</li>
+    <li>貼給 ChatGPT，請它<b>修正並改寫成更完整、更周延的版本</b>。老師的說法是「就是點的，跟你實際執行的，他可能會有一些問題，所以他會幫你做統一的整理、統一的修正」。</li>
+    <li>把 AI 回傳的碼<b>貼回 VBA 編輯器</b>，存檔，按執行。</li>
+  </ol>
+
+  <figure class="shot">
+    <img src="ep52-img/02-vba-rewritten.jpg" alt="VBA 編輯器裡 AI 改寫後的統一折扣率程式碼" loading="lazy">
+    <figcaption>AI 改寫後貼回來的版本。標題列可以看到檔名已經是 <code>中秋烤肉資料整理工具.xlam</code>——這時候已經在做第 5 章的增益集了。重點看兩處中文註解：<b>「找出 H 欄最後一筆資料」</b>（用 <code>End(xlUp).Row</code> 自動抓最後一列，不寫死筆數）和<b>「找找看是否已經有『標準折扣率』」</b>（用 <code>Find</code> 判斷欄位存不存在）。這兩件事錄製巨集不會幫你做，卻正是「按第二次不會壞掉」的關鍵。［15:06］</figcaption>
+  </figure>
+
+  <p>畫面上讀得到的關鍵段落如下（只抄畫面清楚可見的部分，右側被裁掉或看不清的行不補寫）：</p>
+  <div class="code">Sub 統一折扣率()
+
+    Dim ws As Worksheet
+    Dim lastRow As Long
+    Dim targetCol As Long
+    Dim foundCell As Range
+
+    Set ws = ActiveSheet
+
+    '找出 H 欄最後一筆資料
+    lastRow = ws.Cells(ws.Rows.Count, "H").End(xlUp).Row
+
+    '找找看是否已經有「標準折扣率」
+    Set foundCell = ws.Rows(1).Find(What:="標準折扣率", LookAt:=xlWhole)
+
+    If foundCell Is Nothing Then
+        '如果沒有，就在 H 欄右邊新增 I 欄
+        ws.Columns("I:I").Insert Shift:=xlToRight
+        targetCol = 9
+        ws.Cells(1, targetCol).Value = "標準折扣率"
+    Else
+        '如果已經存在，就直接使用原本的欄位
+        targetCol = foundCell.Column
+        '清除舊結果
+        ws.Range(ws.Cells(2, targetCol), _
+                 ws.Cells(ws.Rows.Count, targetCol)).ClearContents
+    End If</div>
+
+  <div class="note blue">💡 <div>這段 <code>If foundCell Is Nothing Then … Else …</code> 就是簡報第 11 頁講的<b>「重複按下時，不再重複新增欄位，而是重新整理結果」</b>。判斷欄位在不在、在的話清空重算——差別只在這幾行，但它決定了這支工具能不能給別人用。</div></div>
+
+  <p>執行後 Excel 會跳出提示：<b>「折扣率整理完成，共處理 16 筆資料。」</b>老師接著把剛才手動錄的結果整欄刪掉，再按一次 AI 版本，證明它能重跑出一樣的結果。</p>
+
+  <h3>最後一步：把程式碼藏起來，換成一顆按鈕</h3>
+  <p>他的理由很白話：「我們可能不會想常常看到這個碼。你會說，我常常在這邊會看到這個碼，覺得有點害怕。」所以把它包成按鈕。</p>
+  <ol class="st">
+    <li>開發人員 → <b>插入 → 表單控制項的「按鈕」</b>，在工作表上畫出來。</li>
+    <li>Excel 會問要指定哪一支巨集，<b>選「統一折扣率」</b>，按確定。</li>
+    <li>把按鈕文字改成看得懂的名字——老師取的是<b>「一鍵整理折扣率」</b>。</li>
+  </ol>
+
+  <figure class="shot">
+    <img src="ep52-img/03-macro-button.jpg" alt="Excel 工作表上新增一顆名為「一鍵整理折扣率」的表單按鈕" loading="lazy">
+    <figcaption>按鈕做好的樣子。上方 ribbon 停在<b>開發人員 → 插入</b>（滑鼠正指著那裡），下方工作表第 19–24 列的位置放著一顆<b>「一鍵整理折扣率」</b>。到這裡，一個原本要開 VBA 編輯器才能跑的功能，變成任何人打開這個檔都會按的東西——但它<b>還是只在這一個檔案裡有效</b>，這正是下一章要解決的問題。［17:31］</figcaption>
+  </figure>
+
+  <div class="note gold">⚠️ <div>剛插入的按鈕如果沒有指定巨集，<b>怎麼點都不會有反應</b>。老師課堂上就遇到一次，他的說法是「你沒有給他功能，他怎麼點都沒有用」。要補指定：<b>在按鈕上按右鍵 → 指定巨集</b>。</div></div>
+</section>
+
+<!-- ══════════ 5. 增益集 ══════════ -->
+<section class="chapter" id="sec-addin">
+  <span class="chip" style="background:linear-gradient(90deg,var(--green),var(--teal))">18:00–24:00</span>
+  <h2 class="ct">5. 增益集：把工具帶出這個檔案，別人也能用</h2>
+  <p class="cd">前面兩章做出來的東西有一個共同限制：換一個檔案就沒了。這一章就是在拆掉那道牆。</p>
+
+  <p>老師用一個大家都看過的例子解釋什麼是增益集：Excel「資料」頁籤裡的<b>「資料分析」</b>——那個能一鍵做描述統計的功能，本來就不是 Excel 內建的，而是<b>別人寫好、你安裝上去的增益集</b>。「那如果我想要自己寫，比如說像這樣寫出自己的統計分析，我只要把我的檔案傳給別人，別人就可以去做使用。」</p>
+
+  <h3>三種副檔名，決定這個工具能走多遠</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">副檔名</th><th style="width:150px">是什麼</th><th>能做到什麼</th></tr>
+    <tr><td><code>.xlsx</code></td><td>一般活頁簿</td><td>只有資料。<b>存不了巨集</b>，錄完關檔就消失</td></tr>
+    <tr><td><code>.xlsm</code></td><td>啟用巨集的活頁簿</td><td>能存巨集與 VBA，但<b>只有這個檔自己能用</b>。檔案一換、另開一個 Excel，功能就不在</td></tr>
+    <tr><td><code>.xlam</code></td><td>Excel 增益集</td><td>裝上去之後<b>每個 Excel 檔都能用</b>，也能傳給別人裝。這才是「工具」</td></tr>
+  </table></div>
+
+  <h3>怎麼轉成 .xlam，以及裝在哪裡</h3>
+  <p>老師示範了兩條路：一條是檔案 → 另存新檔 → 檔案類型選 Excel 增益集；另一條更乾脆——<b>既然 AI 會寫程式，那就叫它寫一段把自己另存成 .xlam 的碼</b>，直接在 VBA 編輯器裡執行。他選了第二條，「有時候如果你找不到的話，不要灰心，從哪邊改就好了。我們既然可以讓他寫程式，我們直接用程式來改」。</p>
+  <ol class="st">
+    <li>存成 <code>.xlam</code>，並把檔案<b>放進 Excel 的增益集固定資料夾</b>：<code>C:\Users\<你的帳號>\AppData\Roaming\Microsoft\AddIns</code>。</li>
+    <li><b>檔案 → 選項 → 增益集 → 管理「Excel 增益集」→ 執行</b>，在清單裡勾選你的工具（老師的是「中秋烤肉資料整理工具」）。清單裡沒有就按<b>瀏覽</b>手動指過去。</li>
+    <li>要讓它出現在 ribbon 上：<b>檔案 → 選項 → 自訂功能區 → 新增索引標籤</b>，老師建了一個叫「折扣率計算」的頁籤。</li>
+    <li>在新頁籤裡<b>新增群組</b>，從左側命令清單改選「巨集」，找到<b>「統一折扣率」</b>加進去，按確定。</li>
+  </ol>
+
+  <div class="note gold">⚠️ <div><b>增益集檔案放對位置很重要。</b>老師特別停下來講這件事：「如果你移動了或刪除了，他就不能動。」所以他建議<b>複製一份到 <code>Microsoft\AddIns</code> 資料夾</b>再安裝，而不是直接指向桌面或下載資料夾裡那一份——那些地方的檔案你哪天順手清掉，工具就壞了。要傳給同事時，也是請對方放到同一個位置。</div></div>
+
+  <figure class="shot">
+    <img src="ep52-img/04-addin-ribbon.jpg" alt="Excel ribbon 出現自訂的「折扣率計算」頁籤，工作表已產生標準折扣率欄" loading="lazy">
+    <figcaption>這一章的成果，兩件事同時發生在這張畫面上。左上角 ribbon 多了一個<b>自訂頁籤「折扣率計算」</b>，裡面是「統一折扣率」按鈕——它現在不屬於任何一個檔案，而是屬於這台電腦的 Excel。右邊 I 欄則是跑出來的結果：對照 H 欄的 <code>5%／0.05／9折／0.1／無／0／0.08／92折</code>，I 欄全部變成乾淨的 <b>5%、5%、10%、0%、10%、10%、0%、0%、8%、8%</b>。［23:28］</figcaption>
+  </figure>
+
+  <div class="golden">
+    <div class="q">「所以這個為什麼要變成增益集，是有利於後續。你可能你的檔案格式是非常非常的固定，你每個月都要做相同的事情，你每張報表都是同樣的格式，只是因為數字有差。」</div>
+    <div class="a">［23:35］他用這句話總結整個練習一。判斷要不要做成增益集的標準不是「難不難」，是「這件事你一個月會做幾次」。</div>
+  </div>
+
+  <div class="note steel">🔧 <div>逐字稿在這一段把「增益集」聽成了「爭議集」「正義集」「登義集」，「巨集」聽成「聚集」「劇集」，「VBA」聽成「BBA」。本頁引文都已依上下文與畫面校正回正確用詞，但<b>沒有更動老師的說法本身</b>——例如他把 <code>.xlam</code> 講成「增益集的檔案格式」，本頁照樣保留。</div></div>
+</section>
+
+<!-- ══════════ 6. ChatGPT × Power BI ══════════ -->
+<section class="chapter" id="sec-chatgpt">
+  <span class="chip" style="background:linear-gradient(90deg,var(--pink),var(--rose))">24:00–30:40</span>
+  <h2 class="ct">6. 把 Power BI 交給 ChatGPT：外掛、假資料、四行提示詞</h2>
+  <p class="cd">課程走到一半，老師先按下暫停：「剛剛 AI 在哪邊幫助我們，那跟今天的主題的 Power BI 有什麼關係呢？」接下來六分鐘，是這堂課的轉折點。</p>
+
+  <h3>先裝外掛：ChatGPT 的 Power BI Desktop 外掛程式</h3>
+  <p>他提到 ChatGPT 大約半年前更新了外掛程式（Apps／Connectors）機制，Power BI 是其中一個。安裝過程比想像中簡單——<b>不用登入 Power BI 帳號、不用付費、按「立即使用」就能開始用</b>。</p>
+  <ol class="st">
+    <li>ChatGPT 左側選單點<b>「外掛程式」</b>。</li>
+    <li>搜尋 <b>Power BI</b>，找到 <code>Power BI Desktop</code>。</li>
+    <li>按<b>安裝外掛程式</b>，再按<b>立即使用</b>。</li>
+    <li>之後在對話框按 <b>@</b>（老師講「小老鼠」）就能叫出它。</li>
+  </ol>
+
+  <figure class="shot">
+    <img src="ep52-img/05-chatgpt-powerbi-plugin.jpg" alt="ChatGPT 外掛程式頁面顯示已安裝 Power BI Desktop 外掛" loading="lazy">
+    <figcaption>裝好之後的外掛頁面。上方橫幅寫著<b>「已安裝 Power BI Desktop 外掛程式」</b>與「立即試用」。中段的 Skills 清單看得到 <code>powerbi-desktop</code>、<code>Causal Forecasting</code>、<code>Autonomous Forecast Agents</code> 等十多項；下方「功能」欄的英文說明才是重點——<b>Local model review、KPI trust and executive briefs、DAX and Power Query analysis、PBIP/TMDL safe drafts</b>。翻成白話：它能讀你的語意模型、幫你寫 DAX 與 Power Query、產出 .pbip 專案草稿。［26:10］</figcaption>
+  </figure>
+
+  <p>對照簡報第 18 頁，這個外掛能做的事被整理成四類：</p>
+  <div class="twrap"><table>
+    <tr><th style="width:130px">功能</th><th style="width:230px">ChatGPT 可以做什麼</th><th>實際例子</th></tr>
+    <tr><td>讀模型</td><td>看 Tables、Columns、Measures、Relationships</td><td>「這個模型有哪些資料表？」</td></tr>
+    <tr><td>寫 DAX</td><td>根據自然語言產生 DAX Query</td><td>「幫我算今年與去年營收成長率」</td></tr>
+    <tr><td>查資料</td><td>真的向 Power BI 模型查詢資料</td><td>「找出營收最高的前 10 個科別」</td></tr>
+    <tr><td>看報表</td><td>查看頁面、圖表、欄位、篩選器</td><td>「這份報表目前有哪些視覺化？」</td></tr>
+  </table></div>
+
+  <h3>上傳資料之前，先想一件事</h3>
+  <p>老師在這裡插進整堂最值得記下來的一段提醒。他沒有把它包裝成「資安宣導」，就是很順的一句實務建議：</p>
+
+  <div class="golden">
+    <div class="q">「如果你的 Power BI 的內容，你的 data 是不能上雲端的，你的做法就是給他假資料。好，給他假資料。然後你再換成你的真資料。你只是需要他的架構而已。」</div>
+    <div class="a">［26:46］這句話解決了大部分公司內部資料不能外傳的困境。AI 生成的是欄位結構、DAX 公式與版面配置，跟資料內容無關——所以拿一份欄位一樣、數字亂填的假資料餵它就夠了，拿回架構之後在本機換成真資料。</div>
+  </div>
+
+  <h3>四行提示詞，就是全部</h3>
+  <p>他把練習用的 Excel 上傳，用 <b>@</b> 帶出 Power BI Desktop 外掛，然後只打了四行。</p>
+
+  <figure class="shot">
+    <img src="ep52-img/06-dashboard-prompt.jpg" alt="ChatGPT 對話框中附加 Excel 檔並輸入四行 Power BI 儀表板需求" loading="lazy">
+    <figcaption>放大之後的對話框。上方是附加的檔案 <code>實作data_中秋節烤肉食材_Excel_VBA…</code>（標示為「試算表」），下方藍色訊息框開頭是 <b>Power BI Desktop</b> 外掛標籤，接著就是那四行需求。注意他<b>沒有描述任何圖表長相</b>——沒說要幾張卡片、什麼顏色、放哪裡，只講了「要什麼檔案格式」和「要達成什麼目的」。［29:39］</figcaption>
+  </figure>
+
+  <div class="code">需要一個儀表板(Dashboard.pbip)
+快速掌握食材的銷售情形
+請使用DAX函數建立關鍵指標
+請給我一個zip 及HTML</div>
+
+  <p>四行各有各的任務，老師在口述裡都交代了理由：</p>
+  <ul class="pt">
+    <li><b>指定 <code>.pbip</code>　</b>——這是 Power BI 的「專案」格式，跟平常看到的 <code>.pbix</code> 不一樣。<code>.pbix</code> 是打包好的二進位檔，<code>.pbip</code> 是拆開成資料夾的專案，AI 才有辦法寫進去、你也才看得懂它寫了什麼。</li>
+    <li><b>講目的不講畫面　</b>——「快速掌握食材的銷售情形」是一句業務需求。他要的是讓 AI 自己判斷該放哪些指標。</li>
+    <li><b>點名要 DAX　</b>——不指定的話 AI 可能只給你圖表，不會建立可重用的量值（Measure）。</li>
+    <li><b>同時要 zip 和 HTML　</b>——這是老師的小技巧。他的說法是「我需要先看看模式長怎麼樣，就是 HTML 檔，先看看他長怎麼樣」。<b>HTML 可以直接用瀏覽器開，先確認方向對不對，再花時間開 Power BI Desktop。</b></li>
+  </ul>
+
+  <div class="note blue">💡 <div>先要一份 HTML 預覽，是這堂課裡最實用的一個習慣。Power BI Desktop 開檔、載入模型、重整關聯都要時間；用瀏覽器點開 <code>Dashboard.html</code> 只要一秒，方向錯了可以馬上重講一次需求，不用等它跑完。</div></div>
+
+  <div class="note gold">⚠️ <div>老師順帶提到 Power BI 裡的 <b>Copilot 需要付費版</b>才能用，「你必須要付費版的 Copilot 才有辦法去做相對應的處理」。這一段逐字稿把 Copilot 聽成了「KPI 人」，本頁依上下文校正。另外他提到這是「大概 8 月上旬 Microsoft 發布」的功能，<b>這個時間點沒有在畫面上出現、也沒有第二來源佐證，引用前請自行查證〔待確認〕</b>。</div></div>
+
+  <div class="golden">
+    <div class="q">「當然他也可以手把手的教你。比如說你打開 Power BI 跟他說 step by step 的教我怎麼建，他會一步一步的教你建。所以你等於說你在這個 MCP 裡面你也獲得了一個可以手把手來教你建 Power BI 的工具。」</div>
+    <div class="a">［30:00］他提醒外掛不是只能「幫你做完」。如果你想學會自己拉，可以叫它改成教學模式——同一個工具，兩種用法。</div>
+  </div>
+
+  <div class="note steel">🔧 <div>老師在這段口述裡把「外掛程式／連接器」和「MCP」混著講。兩者在概念上相近（都是讓 AI 連到外部工具的機制），但<b>不是同一個東西</b>：ChatGPT 這個是官方外掛程式，MCP 是另一套開放協定。本頁照原話保留他的用詞，這裡另註說明。</div></div>
+</section>
+
+<!-- ══════════ 7. Power Query ══════════ -->
+<section class="chapter" id="sec-pq">
+  <span class="chip" style="background:linear-gradient(90deg,var(--teal),var(--cyan))">30:40–44:00</span>
+  <h2 class="ct">7. Power Query：整理一次，以後只要按「重新整理」</h2>
+  <p class="cd">趁 AI 在背景生成儀表板的空檔，老師回頭補上被跳過的那一段：資料是怎麼清乾淨的。</p>
+
+  <div class="golden">
+    <div class="q">「我如果以一般來說要進入到 Power BI 之前，通常都要先把資料清乾淨。先把資料清乾淨。」</div>
+    <div class="a">［31:19］整堂主線就是這一句，他還講了兩遍。前面的巨集與 VBA 是「用程式清」，這一章是「不寫程式也能清」。</div>
+  </div>
+
+  <p>他形容 Power Query 是<b>「輕量版的 Power BI」</b>：介面幾乎一樣，但它只做一件事——把資料整理成可以分析的樣子。最大的賣點是「不用寫函數，不用寫相關的內容」。</p>
+
+  <h3>怎麼打開</h3>
+  <ol class="st">
+    <li>Excel 的<b>「資料」頁籤 → 取得資料</b>。</li>
+    <li>選<b>「啟動 Power Query 編輯器」</b>（或「從檔案」匯入外部檔案）。</li>
+    <li>匯入時勾選<b>「選取多重項目」</b>，可以一次挑好幾張工作表。老師先匯入 <code>PQ練習_髒資料</code>。</li>
+    <li>在右側查詢清單<b>點兩下</b>，資料就進到編輯畫面。</li>
+  </ol>
+
+  <h3>五個清理動作，全部靠點選</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:130px">要解決的問題</th><th style="width:190px">在哪裡點</th><th>做完會發生什麼</th></tr>
+    <tr><td>整列空白</td><td>常用 → 移除資料列 → <b>移除空白資料列</b></td><td>第 16 列那種空殼直接消失</td></tr>
+    <tr><td>整列重複</td><td>常用 → 移除資料列 → <b>移除重複的項目</b></td><td>老師示範的是 9/12 桃園場那兩筆一模一樣的無糖茶</td></tr>
+    <tr><td>「臺灣」與「台灣」混用</td><td>轉換 → <b>取代值</b></td><td>整欄套用規則，不是改一個儲存格</td></tr>
+    <tr><td>看不見的前後空白</td><td>轉換 → 格式 → <b>修剪</b></td><td>「臺灣 」和「臺灣」在報表上長得一樣，實際是兩筆資料——修剪之後才會合併</td></tr>
+    <tr><td>單價混著「NT$」「元」「盒」</td><td>新增資料行 → <b>自訂資料行</b></td><td>建一個乾淨的「標準單價」新欄，再把型態改成整數</td></tr>
+  </table></div>
+
+  <div class="note blue">💡 <div>老師介紹取代值時說「就跟我們平常用搜尋的時候一模一樣的概念」，但兩者其實差一個關鍵。簡報第 15 頁把這個差別寫得更準：<b>「不是改一個儲存格，而是對整個欄位建立轉換規則。」</b>（此句取自簡報畫面文字，不是課堂口述）Excel 的尋找取代改的是這一次的資料；Power Query 的取代值改的是<b>規則</b>——下次資料換了，同一條規則會自動再跑一次。</div></div>
+
+  <p>比較複雜的欄位（數量的「8盒」、折扣的「9折」、是否冷藏的 Y／是／TRUE 混用），他一樣的處理方式：<b>新增自訂資料行，公式請 AI 寫</b>。「這時候公式請 AI 幫你寫，把所有的單價的公式寫好，用 Power Query 的方式。」寫完貼進去按確定，整欄一次算完。</p>
+
+  <h3>右邊那份「套用的步驟」，才是真正的成品</h3>
+  <p>Power Query 的價值不在某一次清乾淨，而在它把你做過的每一步<b>記成一份清單</b>。下個月拿到新資料，把檔案換掉、按「全部重新整理」，這份清單會從頭再跑一次。</p>
+
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="ep52-img/07-pq-steps-early.jpg" alt="Power Query 編輯器右側套用的步驟清單，此時有六個步驟" loading="lazy">
+      <figcaption>清理開始沒多久。右側「套用的步驟」只有六項：來源、導覽、已將標頭升階、已變更類型、移除空白資料列、<b>已移除重複項目</b>（反白中）。上方公式列同步顯示 <code>= Table.Distinct(移除空白資料列)</code>——你點的每個按鈕，它都翻成一行 M 語言。左下狀態列：10 個資料行、14 個資料列。［35:30］</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="ep52-img/08-pq-steps-merged.jpg" alt="Power Query 編輯器套用的步驟已累積十五項，左側查詢清單多出 Dim_品項" loading="lazy">
+      <figcaption>八分鐘後的同一個地方。步驟清單長到<b>十五項</b>——已取代值、已修剪文字、已新增自訂、已展開 標準化、已插入進位……左上角查詢清單也從 1 個變成 2 個（多了 <code>Dim_品項</code>，準備做合併查詢）。資料行從 10 個變成 <b>16 個</b>。<b>這份清單就是可以交給別人、也可以明年再跑一次的東西。</b>［43:14］</figcaption>
+    </figure>
+  </div>
+
+  <h3>合併查詢：把兩張表接起來</h3>
+  <p>最後一段他做了 <code>PQ練習_髒資料</code> 與 <code>Dim_品項</code> 的合併，順便把 Power BI 的核心觀念先講了。</p>
+  <ol class="st">
+    <li>把 <code>Dim_品項</code> 也匯入 Power Query。</li>
+    <li>常用 → <b>合併查詢</b>。上面選主資料表、下面選要接上來的那張。</li>
+    <li>兩張表<b>各點一次「品項編號」欄</b>當作連接點（下面那張要按住 Ctrl 選）。</li>
+    <li>聯結種類選<b>「左方外部（第一個資料表的所有列，第二個資料表相符的列）」</b>。</li>
+    <li>合併後點欄位標題旁的<b>雙箭頭</b>，勾選要展開的欄位（老師選了單位重量_公斤、分類、標準產地、單位）。</li>
+  </ol>
+
+  <div class="note blue">💡 <div><b>「兩張資料表要有一個連接點」</b>——老師特別說「這個用在 Power BI 也是同樣的概念」。這就是簡報裡講的星狀模型：一張交易大表（採購資料）＋幾張小的維度表（品項、活動），靠共同欄位建一對多關聯。在 Power Query 叫合併查詢，在 Power BI 叫關聯性，是同一件事。</div></div>
+
+  <p>做完之後<b>關閉並載入</b>，整理好的資料就回到 Excel 工作表，可以直接交給 Power BI。老師的提醒是「你是不是很怕它東西不見？你就按儲存」——Power Query 的步驟是存在活頁簿裡的，關掉編輯器不會弄丟。</p>
+</section>
+
+<!-- ══════════ 8. 打開 AI 生出來的專案 ══════════ -->
+<section class="chapter" id="sec-pbip">
+  <span class="chip" style="background:linear-gradient(90deg,var(--orange),var(--amber))">44:00–50:00</span>
+  <h2 class="ct">8. 打開 AI 生出來的專案：能用，但不是按一下就完成</h2>
+  <p class="cd">最後六分鐘回頭驗收。這一段值得看，因為它沒有剪掉不順的部分。</p>
+
+  <p>ChatGPT 交回來的是一個 zip，解開之後有三樣東西：一份 <code>Dashboard.html</code>（瀏覽器直接開的預覽）、一個 <code>Dashboard.pbip</code> 專案（含 <code>Dashboard.Report</code> 資料夾），還有一份 README。老師先開 HTML 確認方向對了——可以按地區、分類、活動場次篩選，數字會跟著動——才去開 Power BI Desktop。</p>
+
+  <p>README 的內容（畫面上讀得到的部分，行尾被視窗切掉的地方以 <code>…</code> 標示）：</p>
+  <div class="code">Dashboard Power BI 教學專案
+==========================
+資料筆數：96
+品項數：24
+活動場次：6
+
+使用方式
+1. 解壓縮 ZIP。
+2. 使用支援 PBIP 的 Power BI Deskt…
+3. 模型資料已內嵌，不需要重新指定…
+4. Dashboard.html 可直接以瀏覽器開…
+   篩選。
+
+主要 DAX 指標
+- 總採購金額      - 總採購數量
+- 採購筆數        - 總重量_公斤
+- 品項數          - 折扣節省金額
+- 平均每筆成本    - 肉類採購金額
+- 平均單價        - 預算總額
+                  - 預算差異</div>
+
+  <div class="note green">✅ <div>這 11 個 DAX 指標，和教材 Excel <code>教學任務與DAX</code> 工作表裡預先設計好的量值幾乎完全對得上（總採購金額、採購筆數、品項數、平均每筆成本、平均單價、預算差異、預算執行率…）。也就是說 <b>AI 光看欄位就推出了跟老師教案一樣的指標設計</b>——這是這堂課裡 AI 表現最好的一段。</div></div>
+
+  <h3>但打開 Power BI Desktop 之後，還有事要做</h3>
+  <figure class="shot">
+    <img src="ep52-img/09-powerbi-model.jpg" alt="Power BI Desktop 的模型檢視，上方出現兩則關聯性與資料不完整的警告" loading="lazy">
+    <figcaption>AI 生出來的專案在 Power BI Desktop 裡打開的樣子。三張表（<code>中秋烤肉_採購資料</code>、<code>Dim_品項</code>、<code>Dim_活動</code>）都在，欄位也都對——但<b>上方兩條紅／灰色警告條才是重點</b>：「一或多個關聯性已修改，且需要手動重新整理。」「部分資料表資料不完整或沒有資料。」右側資料窗格的三張表旁邊也都掛著驚嘆號。<b>這不是失敗，是正常的收尾工作</b>：AI 給的是架構，資料連線要你自己按一次重新整理。［47:47］</figcaption>
+  </figure>
+
+  <div class="note steel">🔧 <div><b>這一段本頁照實記錄，沒有跳過。</b>老師現場等了將近兩分鐘資料才連上，中間他說「我有一批資料他一直點不上」「驚嘆號代表他沒有立馬連上，你的資料可能在不同的地方」。他也直接講了原因：Power BI 專案需要旁邊那份 Excel 才能連動，「他畢竟旁邊要載入你的 Excel 檔，他才有辦法做連動」。<b>所以檔案位置不要在生成後搬動。</b></div></div>
+
+  <div class="note gold">⚠️ <div>老師特別交代：<b>下載回來的 zip 要整包解開、整包留著</b>，「我們需要的這整個都要抓下來，他才有辦法做正常的運作」。只挑 <code>.pbip</code> 一個檔出來是打不開的——專案格式是一整個資料夾結構。</div></div>
+
+  <p>課堂上有人問這跟 Vibe Coding 有什麼不同（逐字稿誤聽成「Fiver Coding」）。老師的回答很直接：<b>HTML 那份確實就是 Vibe Coding 生出來的網頁，但真正的成果是它背後那個 Power BI 專案</b>——「我們為的是他的背後的 Power BI 的專案，所以大家你可以看一下 Power BI 你就不用重新再建」。</p>
+
+  <div class="golden">
+    <div class="q">「這時候你就可以大幅度的降低你原本在那邊拉來拉去的動作。你在前面把你的需求寫得越清楚，寫得越完整的時候，他就會越有效的去做打開的動作。」</div>
+    <div class="a">［46:30］回應「為什麼四行提示詞就夠」。省下來的不是打字的時間，是在 Power BI 裡反覆拖拉欄位試版面的那一兩個小時。</div>
+  </div>
+</section>
+
+<!-- ══════════ 9. 教材資料集拆解 ══════════ -->
+<section class="chapter" id="sec-dataset">
+  <span class="chip" style="background:linear-gradient(90deg,var(--blue),var(--purple))">DATASET</span>
+  <h2 class="ct">9. 教材資料集拆解：七張工作表各自對應哪個練習</h2>
+  <p class="cd">課堂上老師只切到其中兩三張表，其餘沒展開。這一章把整份練習檔攤開，讓你知道自己手上這份 Excel 每張表是幹嘛的。</p>
+
+  <div class="note steel">🔧 <div><b>這一章不是課堂口述的整理，是直接讀教材檔本身。</b>來源是課程資料夾裡的 <code>實作data_中秋節烤肉食材_Excel_VBA_PowerQuery_PowerBI_DAX教學資料.xlsx</code> 與 18 頁簡報，不是錄影內容——所以沒有時間戳。放進來的理由是：你跟著錄影做的時候，畫面上的欄位名稱一閃而過，對照這張表比較不會迷路。</div></div>
+
+  <h3>七張工作表</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:170px">工作表</th><th style="width:80px">筆數</th><th>拿來練什麼</th></tr>
+    <tr><td><code>使用說明</code></td><td>—</td><td>整份資料集的導覽，含資料性質聲明（教學模擬資料，非實際報價）</td></tr>
+    <tr><td><code>中秋烤肉_採購資料</code></td><td>96 筆</td><td><b>主力資料表</b>，25 個欄位。可直接載入 Excel、Power Query 與 Power BI。第 6、7、8 章用的都是它</td></tr>
+    <tr><td><code>PQ練習_髒資料</code></td><td>16 筆</td><td><b>刻意做壞的版本</b>：前後空白、文字型金額（NT$220／240元）、四種日期格式、Y／是／TRUE 混用、空值與重複列。第 3、7 章的練習對象</td></tr>
+    <tr><td><code>Dim_品項</code></td><td>24 筆</td><td>品項主檔：編號、標準名稱、分類、標準產地、單位、單位重量、參考單價、保存方式、是否冷藏。用來做合併查詢與星狀模型</td></tr>
+    <tr><td><code>Dim_活動</code></td><td>6 筆</td><td>活動場次主檔：代碼、場次、地區、日期、預估人數、預算、主辦單位。「預算差異」那個 DAX 指標就是靠它算的</td></tr>
+    <tr><td><code>Excel_快速摘要</code></td><td>—</td><td>已算好的 KPI 與分類成本，可以拿來核對自己算得對不對</td></tr>
+    <tr><td><code>教學任務與DAX</code></td><td>12 列</td><td><b>老師的教案本體</b>：每個工具該練什麼、用哪些欄位、對應哪一條 DAX 公式</td></tr>
+  </table></div>
+
+  <h3>拿來對答案的一組數字</h3>
+  <p><code>Excel_快速摘要</code> 這張表已經把答案算好了。你自己跑完 Power Query 或 Power BI 之後，用這幾個數字檢查有沒有算錯：</p>
+  <ul class="pt">
+    <li><b>總採購成本　</b>NT$ 104,061.2　／　<b>採購筆數　</b>96 筆　／　<b>平均單價　</b>NT$ 195.52　／　<b>總重量　</b>596 公斤</li>
+    <li><b>分類成本</b>：海鮮 31,375.3　＞　肉類 28,744　＞　飲料 14,592.6　＞　加工品 11,957.35　＞　主食 7,158　＞　蔬菜 6,504.35　＞　醬料 3,729.6</li>
+  </ul>
+
+  <h3>教材裡預先寫好的 DAX 公式</h3>
+  <p>如果你不想等 AI 生，或想確認 AI 生出來的對不對，<code>教學任務與DAX</code> 這張表把八條量值的完整公式都寫好了：</p>
+  <div class="code">總採購金額 = SUM('中秋烤肉_採購資料'[總成本_NT$])
+平均單價   = AVERAGE('中秋烤肉_採購資料'[單價_NT$])
+採購筆數   = COUNTROWS('中秋烤肉_採購資料')
+品項數     = DISTINCTCOUNT('中秋烤肉_採購資料'[品項編號])
+平均每筆成本 = DIVIDE([總採購金額],[採購筆數],0)
+肉類採購金額 = CALCULATE([總採購金額],'中秋烤肉_採購資料'[分類] = "肉類")
+預算差異   = SUM('Dim_活動'[預算_NT$]) - [總採購金額]
+預算執行率 = DIVIDE([總採購金額],SUM('Dim_活動'[預算_NT$]),0)</div>
+
+  <div class="note blue">💡 <div>這八條的排列是有教學順序的：<b>SUM → AVERAGE → COUNTROWS → DISTINCTCOUNT</b> 是基礎聚合，<b>DIVIDE</b> 是「避免除以 0」的安全寫法，<b>CALCULATE</b> 是 DAX 真正的分水嶺（加條件的聚合），最後兩條則是<b>跨資料表</b>計算——必須先建好 <code>Dim_活動</code> 的關聯才算得出來。照這個順序練，比隨機查函數有效率得多。</div></div>
+
+  <h3>簡報裡的四張圖，值得回頭看</h3>
+  <ul class="pt">
+    <li><b>第 7 頁</b>——巨集／VBA／增益集三者的「用途 × 適合任務」對照，是第 3–5 章最好的複習表。順帶提醒：Office Scripts 與 VBA 不同，本堂以 VBA 為主。</li>
+    <li><b>第 9 頁</b>——錄製巨集寫法 vs. 手寫 VBA 的並排比較，左邊滿是 <code>.Select</code> 與 <code>ActiveCell</code>，右邊是 <code>Dim ws As Worksheet</code> 直接指定範圍。第 4 章那段 AI 改寫，改的就是這件事。</li>
+    <li><b>第 13–17 頁</b>——Power Query 的五步驟圖解（載入 → 選欄位 → 清理取代 → 確認型態 → 關閉並載入 → 重新整理），跟第 7 章一一對應。</li>
+    <li><b>第 18 頁</b>——ChatGPT 接上 Power BI 的四類功能對照，就是第 6 章那張表的出處。</li>
+  </ul>
+</section>
+
+<!-- ══════════ 10. 這堂課真正在教的事 ══════════ -->
+<section class="chapter" id="sec-real">
+  <span class="chip" style="background:linear-gradient(90deg,var(--green),var(--cyan))">TAKEAWAYS</span>
+  <h2 class="ct">10. 這堂課真正在教的事</h2>
+  <p class="cd">把 50 分鐘濃縮成四件事。這四件都不是操作步驟，是判斷。</p>
+
+  <h3>一、決定用哪個工具，看的不是難度，是「這件事你會做幾次」</h3>
+  <p>「什麼時候用巨集、什麼時候用 VBA、什麼時候用增益集」是老師開場說最多人問他的問題，而他給的答案不在功能表裡。<b>做一次就好 → 手動；每週都要做 → 錄成巨集；要穩定重複跑 → 讓 AI 改成 VBA；每個檔案都要用、還要給同事 → 轉成 <code>.xlam</code> 增益集。</b>同一件事在四個層級各有各的成本，選錯不是做不出來，是浪費。</p>
+
+  <h3>二、AI 在這堂課只負責一件事：把你的動作翻譯成程式碼</h3>
+  <p>整堂 AI 出場四次，做的都是同一件事——VBA 由它改寫、Power Query 的自訂資料行公式由它寫、DAX 量值由它建、儀表板版面由它排。<b>它沒有替你決定「折扣率該怎麼定義」「哪些指標重要」，那些一直是你的工作。</b>看懂這個分工，才不會誤以為把檔案丟給 AI 就會有答案。</p>
+
+  <h3>三、資料不能上雲端，不代表不能用 AI</h3>
+  <p>「給他假資料，然後你再換成你的真資料，你只是需要他的架構而已」——這句話的價值遠超過它在課堂上佔的 15 秒。<b>AI 生成的是欄位結構、公式與版面，跟資料內容無關</b>；準備一份欄位相同、數字亂填的樣本，拿回架構後在本機換上真資料，公司的資料一筆都沒有離開過。這是很多人以為自己「不能用 AI」時，其實可以走的路。</p>
+
+  <h3>四、AI 給的是架構，最後一哩路還是你的</h3>
+  <p>這堂課最誠實的一段在最後六分鐘：AI 生出來的 Power BI 專案打開時，跳出兩條警告，關聯要手動重新整理，老師現場等了將近兩分鐘。<b>他沒有跳過，也沒有假裝一次成功。</b>結論不是「AI 不好用」——四行提示詞換來一個含 11 個 DAX 指標的完整專案，這已經省掉一兩個小時；結論是<b>要預期最後有一段收尾要自己做</b>，並且知道那段是什麼（檔案位置別動、按重新整理、看驚嘆號在哪張表）。</p>
+</section>
+
+<!-- ══════════ 11. 老師金句 ══════════ -->
+<section class="chapter" id="sec-quotes">
+  <span class="chip" style="background:linear-gradient(90deg,var(--amber),var(--rose))">QUOTES</span>
+  <h2 class="ct">11. 老師金句</h2>
+
+  <div class="golden"><div class="q">「今天的課程會聚焦在 Power BI。但是我 Power BI 的部分會講稍微少一點，因為其實現在交給 GPT 幫你寫好，DAX 幫你寫好」</div><div class="a">［00:30］開場第一句就把重點挪走。整堂 50 分鐘，只有最後 10 分鐘真的碰 Power BI。</div></div>
+
+  <div class="golden"><div class="q">「再來他也可以轉成增益集，你就可以帶著走。」</div><div class="a">［04:16］開場預告三個工具的關係時說的。「帶著走」三個字是增益集存在的全部理由。</div></div>
+
+  <div class="golden"><div class="q">「如果你希望別人也可以用的話，就是要轉成增益集的檔案格式。」</div><div class="a">［04:30］巨集與 VBA 是自己用，增益集是給別人用——這是那個常見問題最短的答案。</div></div>
+
+  <div class="golden"><div class="q">「你一定要把你的 Excel 檔先做一個轉檔的動作，通常要 XLSM 檔它比較適合巨集的方式。」</div><div class="a">［06:00］錄製巨集之前最容易漏掉的一步。忘了轉檔，錄再久關檔就沒了。</div></div>
+
+  <div class="golden"><div class="q">「你就不用浪費時間。比如說我到底要怎麼去統一我的格式。」</div><div class="a">［09:20］全堂第一次把工作交給 AI。他要的是折扣格式的轉換公式，而不是自己翻函數說明。</div></div>
+
+  <div class="golden"><div class="q">「所以這個為什麼要變成增益集，是有利於後續。你可能你的檔案格式是非常非常的固定，你每個月都要做相同的事情，你每張報表都是同樣的格式，只是因為數字有差。」</div><div class="a">［23:35］判斷要不要把工具做出來的標準：頻率，不是難度。</div></div>
+
+  <div class="golden"><div class="q">「如果你的 Power BI 的內容，你的 data 是不能上雲端的，你的做法就是給他假資料。好，給他假資料。然後你再換成你的真資料。你只是需要他的架構而已。」</div><div class="a">［26:46］全堂最值得抄下來的一句。解決的是「公司資料不能外傳所以我不能用 AI」這個誤解。</div></div>
+
+  <div class="golden"><div class="q">「當然他也可以手把手的教你。比如說你打開 Power BI 跟他說 step by step 的教我怎麼建，他會一步一步的教你建。」</div><div class="a">［30:00］同一個外掛的兩種用法：幫你做完，或是教你自己做。取決於你想學會什麼。</div></div>
+
+  <div class="golden"><div class="q">「我如果以一般來說要進入到 Power BI 之前，通常都要先把資料清乾淨。先把資料清乾淨。」</div><div class="a">［31:19］講了兩遍。這是整堂課的主線，也是為什麼前 40 分鐘都在講 Excel。</div></div>
+
+  <div class="golden"><div class="q">「這邊有一個取代值。就跟我們平常用搜尋的時候，一模一樣的概念。」</div><div class="a">［35:45］他用大家熟悉的尋找取代來破冰。差別在於：Excel 改的是這一次的資料，Power Query 改的是會一直重跑的規則。</div></div>
+
+  <div class="golden"><div class="q">「這時候你就可以大幅度的降低你原本在那邊拉來拉去的動作。你在前面把你的需求寫得越清楚，寫得越完整的時候，他就會越有效的去做打開的動作。」</div><div class="a">［46:30］回答「為什麼四行提示詞就夠」。省的不是打字時間，是在 Power BI 裡試版面的那一兩個小時。</div></div>
+
+  <div class="golden"><div class="q">「驚嘆號代表他沒有立馬連上。你的資料可能在不同的地方。」</div><div class="a">［47:49］現場等關聯重整時說的。他把卡住的原因當場講清楚，而不是重開一次假裝沒事。</div></div>
+
+  <div class="golden"><div class="q">「所以基本上以前 Power BI 要搞很久，現在他快速的可以去幫你做一些整體性的處理。」</div><div class="a">［48:59］收尾。也是他建議的練習順序：先玩巨集與增益集，再玩 Power Query，最後才請 AI 生 Power BI。</div></div>
+</section>
+
+<!-- ══════════ 12. 資料來源與整理說明 ══════════ -->
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,var(--ink3),var(--ink2))">SOURCE</span>
+  <h2 class="ct">12. 資料來源與整理說明</h2>
+
+  <div class="twrap"><table>
+    <tr><th style="width:130px">來源</th><td>2026/09/04 課堂錄影單段，全長 50 分 32 秒；課程資料夾兩份教材（18 頁簡報＋7 張工作表的練習用 Excel）</td></tr>
+    <tr><th>整理方式</th><td>全程本機處理：以場景偵測擷取 86 張關鍵畫面、產生 364 段逐字稿，再依逐字稿手寫章節目錄。第 9 章另外讀取簡報與 Excel 教材檔本身</td></tr>
+    <tr><th>時間戳</th><td>章節標題與引文後方的［mm:ss］對應錄影播放器時間</td></tr>
+    <tr><th>整理</th><td>竹貞（Tarshar 的逐幀筆記專員）</td></tr>
+  </table></div>
+
+  <h3>已知限制，請先看過再引用</h3>
+  <ul class="pt">
+    <li><b>逐字稿是機器產生的</b>，人名與工具名會聽錯。本頁修正了可以由畫面或上下文確認的錯字（增益集被聽成「爭議集／正義集／登義集」、巨集被聽成「聚集／劇集」、VBA 被聽成「BBA／GBA」、另存新檔被聽成「命存新檔」、Copilot 被聽成「KPI 人」、Vibe Coding 被聽成「Fiver Coding」、驚嘆號被聽成「驚探號」、README 被聽成「Readmeet」、DAX 被聽成「DS／DX」，共 12 類、逾 40 處）；<b>不確定的一律保留原樣，沒有猜測補詞</b>。</li>
+    <li>老師提到「大概 8 月上旬 Microsoft 發布 Power BI 的 Copilot 功能」，這個時間點<b>沒有在畫面上出現、也沒有第二來源可佐證，本頁標為〔待確認〕</b>，引用前請自行查證。</li>
+    <li>老師口述中把「ChatGPT 外掛程式／連接器」與「MCP」混著講，本頁<b>照原話保留他的用詞</b>，另在第 6 章加註兩者不是同一個東西。</li>
+    <li>第 3 章那段「請 AI 寫的折扣轉換公式」<b>沒有收錄原文</b>——老師是直接貼進儲存格、沒有把提示詞念出來，逐字稿裡也沒有完整內容，這裡不補寫。</li>
+    <li><b>可信度分級</b>：金句章 13 則全部是錄影實錄（僅校正上述聽錯的工具名）；第 4、6、8 章的 <code>.code</code> 區塊是從畫面逐字抄下來的，行尾被視窗切掉的地方已用 <code>…</code> 標示，<b>可能有 OCR 誤差</b>；第 9 章全部取自教材檔本身，不是課堂內容。</li>
+    <li>逐字稿中出現的學員稱呼、提問者暱稱，本頁一律隱去。</li>
+    <li>課堂截圖已裁掉線上教室右側的與會者欄位（原始畫面 1920×1080，只保留左側 1440×810 的螢幕分享區）。本頁 9 張截圖平均約每 5 分鐘一張，比一般每 10 分鐘一張略密——這堂是全程螢幕操作的實作課，少一張就會漏掉一個看不懂的步驟。</li>
+    <li>引用到作業、貼文或簡報之前，請對照錄影原始段落再確認一次。</li>
+  </ul>
+
+  <div class="note gold">🔒 <div><b>教材檔（簡報與練習用 Excel）不放在這一頁。</b>兩份都是訂閱制夥伴的課程教材，請從第 0 章的課程資料夾連結自行下載。老師在課堂上也是這樣說的：「如果你是訂閱制夥伴，就請你自行去下載簡報跟相關的練習檔。」</div></div>
+</section>
+
+</article>
+</div>
+
+<footer>
+  <p>📝 直播電台 EP52 課堂筆記 · 生成式AI應用電台</p>
+  <p>依錄影 86 張關鍵畫面＋全程逐字稿 364 段整理 · <a href="ep52-ai-skills.html">🗺️ 互動技能地圖</a> · <a href="../radio/">🏠 回筆記館入口</a></p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>把每一次的手工整理變成可以重複跑的工具｜直播電台 EP52 互動式學習地圖</title>
+<meta name="description" content="生成式AI應用電台 EP52（2026/09/04）互動式學習地圖：五大主題 17 項實戰技能，涵蓋 Excel 巨集錄製與 .xlsm 轉檔、用 ChatGPT 把錄製巨集改寫成可重複執行的 VBA、包成一鍵按鈕再轉 .xlam 增益集、Power Query 的五個清理動作與套用的步驟、合併查詢與星狀模型、安裝 ChatGPT 的 Power BI Desktop 外掛、資料不能上雲端就先給假資料、四行提示詞生出含 DAX 指標的 Dashboard.pbip 專案，以及教材資料集的七張工作表與八條 DAX 公式。學會一項打一個勾，進度存在自己的瀏覽器。">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269;
+  --green:#3f8560; --orange:#bf6a1e; --red:#c0453f; --teal:#0d8f80; --amber:#9c7b23;
+  --feat:#8C5A16; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(28px,4.6vw,46px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--txt);background:none;-webkit-text-fill-color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:680px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:9px}
+.steps li{list-style:none;counter-increment:st;display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--txt2);line-height:1.7}
+.steps li::before{content:counter(st);flex:none;width:25px;height:25px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:var(--c,var(--feat));margin-top:1px}
+.steps li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+.prompt,.promptbox{background:#1d1d1f;border:1px solid #2c2c31;border-radius:10px;padding:13px 15px;margin-top:6px;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt b,.promptbox b{color:#fff}
+figure.shot{margin:10px 0 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12px;color:var(--txt3);padding:8px 12px;border-top:1px solid var(--line);background:var(--bg2);line-height:1.6}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <a class="navlink" href="../radio/" style="border-color:#e3d2b6" onclick="if(history.length>1){history.back();return false}">← 回上一頁</a>
+  <div class="logo">
+    <div class="dot">📊</div>
+    <div>Excel × Power BI 地圖<small>生成式AI應用電台 · EP52</small></div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋技能關鍵字：巨集、VBA、增益集、xlam、Power Query、取代值、合併查詢、DAX、pbip、假資料…" autocomplete="off">
+  </div>
+  <a class="navlink" href="ep52-notes.html">📝 課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">生成式AI應用電台 · 直播電台 EP52 · 2026/09/04</span>
+  <h1>把每一次的手工整理<br>變成可以重複跑的工具</h1>
+  <p class="sub">課名叫「如何讓 AI 協助完成 Power BI」，但老師一開場就把重點挪開了：<b>DAX 和 .pbip 現在都能交給 GPT 寫，真正卡住你的是進 Power BI 之前那一份沒清乾淨的資料</b>。<br>整堂用同一份<b>中秋烤肉採購資料</b>走過四段自動化——巨集、VBA、增益集、Power Query——最後才用<b>四行提示詞</b>讓 ChatGPT 生出含 11 個 DAX 指標的儀表板專案。每往前一格，這件事就變得更可重複、更能給別人用。<br>點進每一章，逐層展開<b>本堂實際教到</b>的觀念、示範與操作，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🎙️ 生成式AI應用電台・直播電台</span>
+    <span>⏱️ 全長 50 分 32 秒</span>
+    <span>🔰 小白友善</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>5</b><span>大主題</span></div>
+  <div class="stat"><b>17</b><span>實戰技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 17 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--purple)" onclick="showChapter('automate')">
+        <div class="glowline"></div><span class="emoji">🔁</span>
+        <h3><em>CHAPTER 01</em>巨集、VBA、增益集：三個層級的自動化</h3>
+        <p>先存成 .xlsm 才留得住巨集、錄下你點過的每一步、讓 AI 把錄製的碼改成能重複跑的 VBA，最後包成按鈕與 .xlam 帶著走。</p>
+        <div class="foot"><div class="mini"><i data-mini="automate"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--teal)" onclick="showChapter('clean')">
+        <div class="glowline"></div><span class="emoji">🧹</span>
+        <h3><em>CHAPTER 02</em>Power Query：整理一次就好</h3>
+        <p>不寫函數的五個清理動作、「套用的步驟」為什麼才是真正的成品，以及合併查詢背後的星狀模型觀念。</p>
+        <div class="foot"><div class="mini"><i data-mini="clean"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--blue)" onclick="showChapter('aipowerbi')">
+        <div class="glowline"></div><span class="emoji">📊</span>
+        <h3><em>CHAPTER 03</em>把 Power BI 交給 ChatGPT</h3>
+        <p>安裝 Power BI Desktop 外掛、資料不能上雲端就先給假資料、四行提示詞生出 .pbip 專案，以及打開之後還要做什麼。</p>
+        <div class="foot"><div class="mini"><i data-mini="aipowerbi"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--amber)" onclick="showChapter('dataset')">
+        <div class="glowline"></div><span class="emoji">🗂️</span>
+        <h3><em>CHAPTER 04</em>教材資料集與 DAX 指標</h3>
+        <p>七張工作表各自對應哪個練習、教材裡預先寫好的八條 DAX 公式與該練的順序，還有拿來對答案的一組數字。</p>
+        <div class="foot"><div class="mini"><i data-mini="dataset"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--orange)" onclick="showChapter('mindset')">
+        <div class="glowline"></div><span class="emoji">🧠</span>
+        <h3><em>CHAPTER 05</em>判斷與心法</h3>
+        <p>決定用哪個工具的真正標準、AI 在這堂課只負責的那一件事，以及為什麼最後一哩路一定是你自己走。</p>
+        <div class="foot"><div class="mini"><i data-mini="mindset"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+
+    <div class="resources">
+      <h3>📦 <span>課程原始資料</span></h3>
+      <div class="res-grid">
+        <a href="ep52-notes.html"><span class="ic">📝</span><span><b>課堂筆記</b>13 章＋9 張關鍵畫面，完整操作步驟</span></a>
+        <a href="../radio/"><span class="ic">📻</span><span><b>直播電台系列</b>回系列總覽，一集一卡</span></a>
+        <a href="ep51-notes.html"><span class="ic">🎨</span><span><b>相關 EP51</b>工作流如何圖像化？Figma 及 Napkin</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-automate" class="view" style="--c:var(--purple)"></section>
+  <section id="view-clean" class="view" style="--c:var(--teal)"></section>
+  <section id="view-aipowerbi" class="view" style="--c:var(--blue)"></section>
+  <section id="view-dataset" class="view" style="--c:var(--amber)"></section>
+  <section id="view-mindset" class="view" style="--c:var(--orange)"></section>
+</main>
+
+<footer>
+  本頁為直播電台 EP52「如何讓 AI 協助完成 Power BI（視覺化）」課後整理・介面沿用本站互動式學習地圖版型<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2026｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+const DATA = {
+  automate: {
+    key:'automate', color:'var(--purple)', emoji:'🔁', code:'CHAPTER 01', title:'巨集、VBA、增益集：三個層級的自動化',
+    intro:'老師說最近很多人問他「什麼時候用巨集、什麼時候用 VBA、什麼時候用增益集」。這一章就是答案，而且答案不在功能表裡——判斷標準是「這件事你會做幾次」。全章只處理一個欄位：把折扣欄的六種寫法統一成一個能拿去算的百分比。',
+    topics:[
+      {t:'先另存成 .xlsm，不然巨集留不下來', s:'最容易漏掉的第一步｜錄影 04:00–06:00', blocks:[
+        {h:'為什麼要先轉檔',p:'巨集是寫在檔案裡的，而一般的 <b>.xlsx 不保存程式碼</b>。你錄完關檔、隔天打開就沒了。所以正確順序是：<b>先轉檔，再錄製</b>。'},
+        {h:'老師的原話',p:'「你一定要把你的 Excel 檔先做一個轉檔的動作，通常要 XLSM 檔它比較適合巨集的方式。」［06:00］'},
+        {h:'怎麼做',steps:[
+          '<b>檔案 → 另存新檔</b>',
+          '檔案類型選<b>「Excel 啟用巨集的活頁簿」</b>（.xlsm）',
+          '順手把檔名改短一點，老師改成 <b>data_0904</b>']},
+        {h:'找不到「開發人員」頁籤？',warn:'這是第二個常見卡點。開法是 <b>檔案 → 選項 → 自訂功能區 → 右側勾選「開發人員」</b>。錄製巨集、Visual Basic、增益集三顆按鈕全部都在那個頁籤裡，沒開就什麼都看不到。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep52-notes.html#sec-macro" style="color:var(--purple)">筆記 3：巨集，把你剛剛點過的每一步錄下來</a>'}]},
+
+      {t:'錄製巨集：把你點過的每一步錄下來', s:'學 VBA 最容易的入口｜錄影 06:00–13:00', blocks:[
+        {h:'六個動作',steps:[
+          '開發人員 → <b>錄製巨集</b>',
+          '取名（老師取「統一折扣率」），描述欄寫清楚它做什麼，<b>儲存在「這個活頁簿」</b>',
+          '按確定開始錄——<b>從這一刻起你點的每一下都會被記成程式碼</b>，不要亂點',
+          '在資料右側插入新欄位，欄名輸入<b>「標準折扣率」</b>',
+          '在第一格輸入轉換公式，<b>向下填滿</b>，整欄設成<b>百分比、小數 0 位</b>',
+          '回到開發人員按<b>停止錄製</b>']},
+        {h:'要對付的六種寫法',table:{head:['原始「折扣」欄','轉成「標準折扣率」','規則'],rows:[
+          ['5%、10%、0%','5%、10%、0%','本來就是百分比，原樣保留'],
+          ['0.05、0.1、0.08','5%、10%、8%','小數就是比率，乘 100'],
+          ['9折','10%','「幾折」講的是付幾成，折扣率＝1－0.9'],
+          ['92折','8%','同上，1－0.92'],
+          ['無、0、空白','0%','沒有折扣一律歸零，不留空值']]}},
+        {h:'連公式他都沒自己寫',tip:'轉換公式老師是<b>丟給 AI 寫</b>的：「你就不用浪費時間。比如說我到底要怎麼去統一我的格式。」［09:20］錄製巨集只負責記錄動作，動作裡要填什麼，交給 AI。'},
+        {h:'實機畫面',shot:{img:'ep52-img/01-dirty-data.jpg',cap:'要對付的髒資料：H 欄折扣混著 5%、0.05、9折、92折、無、0 六種寫法，F 欄單價混著 NT$220、240元、$320。［05:31］'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep52-notes.html#sec-macro" style="color:var(--purple)">筆記 3：轉換規則對照表</a>'}]},
+
+      {t:'讓 AI 把錄下來的碼改成能重複跑的程式', s:'全堂 AI 用得最直接的一段｜錄影 13:00–16:00', blocks:[
+        {h:'錄製巨集的毛病',warn:'它記的是<b>「你點了哪裡」而不是「你想做什麼」</b>。你多點一下、資料多兩列，它就出錯。簡報第 9 頁把這件事講得很清楚：錄製出來的碼滿是 <b>.Select</b>、<b>Selection</b>、<b>ActiveCell</b>，冗長又容易受選取狀態影響。'},
+        {h:'四個步驟',steps:[
+          '按 <b>ALT ＋ F11</b> 進 VBA 編輯器',
+          '工具 → 巨集 → 選「統一折扣率」→ 編輯，把整段程式碼<b>全選複製</b>',
+          '貼給 ChatGPT，請它<b>修正並改寫成更完整、更周延的版本</b>',
+          '把回傳的碼<b>貼回編輯器</b>，存檔，執行']},
+        {h:'AI 到底改了什麼',p:'看畫面上那兩行中文註解就懂了：<b>「找出 H 欄最後一筆資料」</b>（用 <code>End(xlUp).Row</code> 自動抓最後一列，不寫死筆數）、<b>「找找看是否已經有『標準折扣率』」</b>（用 <code>Find</code> 判斷欄位存不存在）。這兩件事錄製巨集不會做，卻正是「按第二次不會壞掉」的關鍵。'},
+        {h:'關鍵那幾行',prompt:'lastRow = ws.Cells(ws.Rows.Count, "H").End(xlUp).Row<br>Set foundCell = ws.Rows(1).Find(What:="標準折扣率", LookAt:=xlWhole)<br>If foundCell Is Nothing Then … Else targetCol = foundCell.Column'},
+        {h:'實機畫面',shot:{img:'ep52-img/02-vba-rewritten.jpg',cap:'AI 改寫後貼回 VBA 編輯器的樣子。標題列已經是 中秋烤肉資料整理工具.xlam。［15:06］'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep52-notes.html#sec-vba" style="color:var(--purple)">筆記 4：VBA，讓 AI 改寫成能重複跑的程式</a>'}]},
+
+      {t:'包成按鈕，再轉成 .xlam 增益集帶著走', s:'從「這個檔能用」到「每個檔都能用」｜錄影 16:00–24:00', blocks:[
+        {h:'先包成按鈕',steps:[
+          '開發人員 → <b>插入 → 表單控制項的「按鈕」</b>，在工作表上畫出來',
+          'Excel 問要指定哪支巨集，<b>選「統一折扣率」</b>',
+          '把按鈕文字改成看得懂的名字，老師取<b>「一鍵整理折扣率」</b>']},
+        {h:'按鈕沒反應？',warn:'剛插入的按鈕如果沒指定巨集，<b>怎麼點都不會有反應</b>。老師課堂上就遇到一次：「你沒有給他功能，他怎麼點都沒有用。」補救：在按鈕上按<b>右鍵 → 指定巨集</b>。'},
+        {h:'三種副檔名決定這個工具能走多遠',table:{head:['副檔名','是什麼','能做到什麼'],rows:[
+          ['.xlsx','一般活頁簿','只有資料，<b>存不了巨集</b>'],
+          ['.xlsm','啟用巨集的活頁簿','能存巨集，但<b>只有這個檔自己能用</b>'],
+          ['.xlam','Excel 增益集','裝上去之後<b>每個 Excel 檔都能用</b>，也能傳給別人']]}},
+        {h:'怎麼裝',steps:[
+          '存成 <b>.xlam</b>，放進 <b>C:\\Users\\你的帳號\\AppData\\Roaming\\Microsoft\\AddIns</b>',
+          '<b>檔案 → 選項 → 增益集 → 管理「Excel 增益集」→ 執行</b>，勾選你的工具',
+          '<b>檔案 → 選項 → 自訂功能區 → 新增索引標籤</b>，建一個頁籤（老師建「折扣率計算」）',
+          '在新頁籤<b>新增群組</b>，命令清單改選「巨集」，把「統一折扣率」加進去']},
+        {h:'檔案位置別亂動',warn:'老師特別停下來講：<b>「如果你移動了或刪除了，他就不能動。」</b>所以要<b>複製一份到 Microsoft\\AddIns 資料夾</b>再安裝，不要指向桌面或下載資料夾裡那一份——那些地方你哪天順手清掉，工具就壞了。'},
+        {h:'判斷要不要做成增益集的標準',tip:'「你可能你的檔案格式是非常非常的固定，你每個月都要做相同的事情，你每張報表都是同樣的格式，<b>只是因為數字有差</b>。」［23:35］標準是<b>頻率</b>，不是難度。'},
+        {h:'實機畫面',shot:{img:'ep52-img/04-addin-ribbon.jpg',cap:'左上 ribbon 多出自訂頁籤「折扣率計算」，右邊 I 欄是跑出來的乾淨結果。這顆按鈕現在屬於這台電腦的 Excel，不屬於任何一個檔案。［23:28］'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep52-notes.html#sec-addin" style="color:var(--purple)">筆記 5：增益集，把工具帶出這個檔案</a>'}]}
+    ]
+  },
+
+  clean: {
+    key:'clean', color:'var(--teal)', emoji:'🧹', code:'CHAPTER 02', title:'Power Query：整理一次就好',
+    intro:'趁 AI 在背景生成儀表板的空檔，老師回頭補上被跳過的那一段。他形容 Power Query 是「輕量版的 Power BI」，最大的賣點是「不用寫函數，不用寫相關的內容」——而它真正的成品不是清乾淨的資料，是右邊那份可以一直重跑的步驟清單。',
+    topics:[
+      {t:'進 Power Query 與五個清理動作', s:'全部靠點選，不寫程式｜錄影 31:19–41:00', blocks:[
+        {h:'整堂的主線就在這句',tip:'「我如果以一般來說要進入到 Power BI 之前，通常都要先把資料清乾淨。<b>先把資料清乾淨。</b>」［31:19］他講了兩遍。這也是為什麼一堂 Power BI 課，前 40 分鐘都在講 Excel。'},
+        {h:'怎麼打開',steps:[
+          'Excel 的<b>「資料」頁籤 → 取得資料</b>',
+          '選<b>「啟動 Power Query 編輯器」</b>，或「從檔案」匯入外部檔',
+          '匯入時勾<b>「選取多重項目」</b>，可以一次挑好幾張工作表',
+          '在右側查詢清單<b>點兩下</b>，資料就進到編輯畫面']},
+        {h:'五個動作各解決什麼',table:{head:['要解決的問題','在哪裡點','做完會怎樣'],rows:[
+          ['整列空白','常用 → 移除資料列 → <b>移除空白資料列</b>','空殼列直接消失'],
+          ['整列重複','常用 → 移除資料列 → <b>移除重複的項目</b>','老師示範的是 9/12 桃園場那兩筆一樣的無糖茶'],
+          ['「臺灣」與「台灣」混用','轉換 → <b>取代值</b>','整欄套用規則'],
+          ['看不見的前後空白','轉換 → 格式 → <b>修剪</b>','「臺灣 」和「臺灣」看起來一樣，修剪後才會合併'],
+          ['單價混著 NT$、元、盒','新增資料行 → <b>自訂資料行</b>','建乾淨的新欄，再把型態改成整數']]}},
+        {h:'複雜欄位一樣交給 AI',p:'數量的「8盒」、折扣的「9折」、是否冷藏的 Y／是／TRUE 混用，老師的處理方式都一樣：<b>新增自訂資料行，公式請 AI 寫</b>。「這時候公式請 AI 幫你寫，把所有的單價的公式寫好，用 Power Query 的方式。」貼進去按確定，整欄一次算完。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep52-notes.html#sec-pq" style="color:var(--teal)">筆記 7：Power Query，整理一次以後只要按重新整理</a>'}]},
+
+      {t:'取代值改的是規則，不是儲存格', s:'這一章最重要的觀念差異｜錄影 35:45', blocks:[
+        {h:'老師怎麼破冰',p:'「這邊有一個取代值。就跟我們平常用搜尋的時候，<b>一模一樣的概念</b>。」［35:45］他用大家熟悉的尋找取代切入。'},
+        {h:'但兩者差一個關鍵',warn:'簡報第 15 頁把差別寫得更準：<b>「不是改一個儲存格，而是對整個欄位建立轉換規則。」</b>（此句取自簡報畫面文字，不是課堂口述）'},
+        {h:'差在哪',table:{head:['','Excel 尋找取代','Power Query 取代值'],rows:[
+          ['改的是','這一次的<b>資料</b>','會一直重跑的<b>規則</b>'],
+          ['下個月新資料','要重做一次','按「重新整理」自動再跑'],
+          ['留下紀錄','沒有','在「套用的步驟」裡看得到']]}},
+        {h:'右邊那份清單才是成品',tip:'Power Query 的價值不在某一次清乾淨，而在它把你做過的每一步<b>記成一份清單</b>。下個月拿到新資料，把檔案換掉、按「全部重新整理」，這份清單會從頭再跑一次。<b>這份清單就是可以交給別人、也可以明年再跑一次的東西。</b>'},
+        {h:'看得見的成長',shot:{img:'ep52-img/08-pq-steps-merged.jpg',cap:'八分鐘後的「套用的步驟」已經長到十五項，查詢也從 1 個變 2 個，資料行從 10 個變 16 個。［43:14］'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep52-notes.html#sec-pq" style="color:var(--teal)">筆記 7：套用的步驟才是真正的成品</a>'}]},
+
+      {t:'合併查詢：兩張表要有一個連接點', s:'星狀模型的前哨站｜錄影 41:25–44:00', blocks:[
+        {h:'五個步驟',steps:[
+          '把 <b>Dim_品項</b> 也匯入 Power Query',
+          '常用 → <b>合併查詢</b>。上面選主資料表，下面選要接上來的那張',
+          '兩張表<b>各點一次「品項編號」欄</b>當連接點（下面那張要按住 Ctrl）',
+          '聯結種類選<b>「左方外部」</b>（第一個資料表的所有列，第二個相符的列）',
+          '合併後點欄位標題旁的<b>雙箭頭</b>，勾選要展開的欄位']},
+        {h:'這個觀念會一路用到 Power BI',tip:'老師特別說「<b>這個用在 Power BI 也是同樣的概念</b>」。在 Power Query 叫合併查詢，在 Power BI 叫關聯性，其實是同一件事：一張交易大表（採購資料）＋幾張小的維度表（品項、活動），靠共同欄位建一對多關聯——這就是<b>星狀模型</b>。'},
+        {h:'怕東西不見？',p:'「你是不是很怕它東西不見？你就按儲存。」Power Query 的步驟是<b>存在活頁簿裡</b>的，關掉編輯器不會弄丟。做完按<b>關閉並載入</b>，整理好的資料就回到 Excel 工作表。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep52-notes.html#sec-pq" style="color:var(--teal)">筆記 7：合併查詢</a>'}]}
+    ]
+  },
+
+  aipowerbi: {
+    key:'aipowerbi', color:'var(--blue)', emoji:'📊', code:'CHAPTER 03', title:'把 Power BI 交給 ChatGPT',
+    intro:'課程走到一半，老師按下暫停：「剛剛 AI 在哪邊幫助我們，那跟今天的主題的 Power BI 有什麼關係呢？」接下來六分鐘是整堂的轉折點——他只打了四行字，就換回一個含 11 個 DAX 指標的完整 Power BI 專案。',
+    topics:[
+      {t:'安裝 ChatGPT 的 Power BI Desktop 外掛', s:'不用登入、不用付費｜錄影 25:37–26:19', blocks:[
+        {h:'四步驟',steps:[
+          'ChatGPT 左側選單點<b>「外掛程式」</b>',
+          '搜尋 <b>Power BI</b>，找到 <b>Power BI Desktop</b>',
+          '按<b>安裝外掛程式</b>，再按<b>立即使用</b>',
+          '之後在對話框按 <b>@</b>（老師講「小老鼠」）就能叫出它']},
+        {h:'老師強調有多簡單',p:'「你都不用任何的登錄什麼帳號，你就按立即使用，<b>立馬就可以用</b>。」［26:00］'},
+        {h:'它能做的四類事',table:{head:['功能','ChatGPT 可以做什麼','實際例子'],rows:[
+          ['讀模型','看 Tables、Columns、Measures、Relationships','「這個模型有哪些資料表？」'],
+          ['寫 DAX','根據自然語言產生 DAX Query','「幫我算今年與去年營收成長率」'],
+          ['查資料','真的向 Power BI 模型查詢資料','「找出營收最高的前 10 個科別」'],
+          ['看報表','查看頁面、圖表、欄位、篩選器','「這份報表目前有哪些視覺化？」']]}},
+        {h:'一個名詞上的提醒',warn:'老師口述中把「ChatGPT 外掛程式／連接器」和「<b>MCP</b>」混著講。兩者概念相近（都是讓 AI 連到外部工具），但<b>不是同一個東西</b>——ChatGPT 這個是官方外掛程式，MCP 是另一套開放協定。'},
+        {h:'實機畫面',shot:{img:'ep52-img/05-chatgpt-powerbi-plugin.jpg',cap:'裝好後的外掛頁面。下方「功能」欄寫著 Local model review、DAX and Power Query analysis、PBIP/TMDL safe drafts。［26:10］'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep52-notes.html#sec-chatgpt" style="color:var(--blue)">筆記 6：把 Power BI 交給 ChatGPT</a>'}]},
+
+      {t:'資料不能上雲端？先給它假資料', s:'全堂最值得抄下來的一句｜錄影 26:46', blocks:[
+        {h:'原話',p:'「如果你的 Power BI 的內容，你的 data 是不能上雲端的，<b>你的做法就是給他假資料。好，給他假資料。然後你再換成你的真資料。你只是需要他的架構而已。</b>」［26:46］'},
+        {h:'為什麼成立',tip:'AI 生成的是<b>欄位結構、DAX 公式與版面配置</b>，跟資料內容無關。所以拿一份欄位一樣、數字亂填的假資料餵它就夠了，拿回架構之後在本機換成真資料——<b>公司的資料一筆都沒有離開過</b>。'},
+        {h:'這解決了什麼',warn:'很多人以為「公司資料不能外傳，所以我不能用 AI」。這句話直接拆掉那個前提。他只用了 15 秒帶過，但這可能是整堂最能立刻改變你做法的一句。'},
+        {h:'做法',steps:[
+          '把真實表格的<b>欄位名稱與型態</b>保留',
+          '數值、客戶名、金額<b>全部替換成亂填的示範值</b>',
+          '把假資料交給 AI，要它產出架構、公式與版面',
+          '在本機把資料來源<b>換回真檔案</b>，按重新整理']},
+        {h:'看課堂筆記',p:'👉 <a href="ep52-notes.html#sec-chatgpt" style="color:var(--blue)">筆記 6：上傳資料之前，先想一件事</a>'}]},
+
+      {t:'四行提示詞就生出一個 .pbip 專案', s:'他沒有描述任何圖表長相｜錄影 27:20–29:39', blocks:[
+        {h:'全部就這四行',prompt:'需要一個儀表板(Dashboard.pbip)<br>快速掌握食材的銷售情形<br>請使用DAX函數建立關鍵指標<br>請給我一個zip 及HTML'},
+        {h:'四行各有各的任務',table:{head:['那一行','在做什麼'],rows:[
+          ['指定 <b>.pbip</b>','這是 Power BI 的「專案」格式，跟 .pbix 不一樣。.pbix 是打包好的二進位檔，.pbip 是拆開成資料夾的專案，AI 才有辦法寫進去'],
+          ['講目的不講畫面','「快速掌握食材的銷售情形」是一句業務需求，讓 AI 自己判斷該放哪些指標'],
+          ['點名要 DAX','不指定的話 AI 可能只給圖表，不會建立可重用的量值（Measure）'],
+          ['同時要 zip 和 HTML','<b>先要一份 HTML 預覽</b>，用瀏覽器一秒打開確認方向，再花時間開 Power BI Desktop']]}},
+        {h:'先看 HTML 這招值得學起來',tip:'老師的說法是「我需要先看看模式長怎麼樣，就是 HTML 檔，先看看他長怎麼樣」。Power BI Desktop 開檔、載入模型、重整關聯都要時間；<b>瀏覽器點開只要一秒，方向錯了可以馬上重講一次需求</b>。'},
+        {h:'注意他沒說什麼',p:'沒說要幾張卡片、什麼顏色、放哪裡、用什麼圖表類型。<b>只講了「要什麼檔案格式」和「要達成什麼目的」。</b>'},
+        {h:'實機畫面',shot:{img:'ep52-img/06-dashboard-prompt.jpg',cap:'附加 Excel 檔，用 @ 帶出 Power BI Desktop 外掛，然後就這四行。［29:39］'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep52-notes.html#sec-chatgpt" style="color:var(--blue)">筆記 6：四行提示詞，就是全部</a>'}]},
+
+      {t:'打開 AI 生的專案：關聯要自己重整', s:'他沒有把不順的部分剪掉｜錄影 44:00–50:00', blocks:[
+        {h:'zip 裡有什麼',ul:[
+          '<b>Dashboard.html</b>——瀏覽器直接開的預覽，可按地區／分類／活動場次篩選',
+          '<b>Dashboard.pbip</b> 專案（含 Dashboard.Report 資料夾）',
+          '<b>README</b>——寫明資料筆數 96、品項數 24、活動場次 6，以及 11 個 DAX 指標清單']},
+        {h:'AI 推出來的指標，跟老師教案幾乎一樣',tip:'README 列的 11 個指標（總採購金額、採購筆數、品項數、平均每筆成本、平均單價、總採購數量、總重量_公斤、折扣節省金額、肉類採購金額、預算總額、預算差異），和教材 Excel「教學任務與DAX」工作表裡預先設計好的量值幾乎完全對得上——<b>AI 光看欄位就推出了跟老師教案一樣的指標設計</b>。'},
+        {h:'但打開之後還有事要做',warn:'Power BI Desktop 一開就跳出兩條警告：<b>「一或多個關聯性已修改，且需要手動重新整理。」「部分資料表資料不完整或沒有資料。」</b>右側三張表旁邊都掛著驚嘆號。老師現場等了將近兩分鐘資料才連上。'},
+        {h:'他當場講清楚原因',p:'「<b>驚嘆號代表他沒有立馬連上。你的資料可能在不同的地方。</b>」［47:49］Power BI 專案需要旁邊那份 Excel 才能連動——「他畢竟旁邊要載入你的 Excel 檔，他才有辦法做連動」。<b>所以檔案位置不要在生成後搬動。</b>'},
+        {h:'整包留著，不要只挑一個檔',warn:'「我們需要的這整個都要抓下來，他才有辦法做正常的運作。」<b>zip 要整包解開、整包留著</b>——只挑 .pbip 一個檔出來是打不開的，專案格式是一整個資料夾結構。'},
+        {h:'實機畫面',shot:{img:'ep52-img/09-powerbi-model.jpg',cap:'AI 生的專案在 Power BI Desktop 裡打開：三張表都在、欄位都對，但上方兩條警告條才是重點。這不是失敗，是正常的收尾工作。［47:47］'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep52-notes.html#sec-pbip" style="color:var(--blue)">筆記 8：打開 AI 生出來的專案</a>'}]}
+    ]
+  },
+
+  dataset: {
+    key:'dataset', color:'var(--amber)', emoji:'🗂️', code:'CHAPTER 04', title:'教材資料集與 DAX 指標',
+    intro:'課堂上老師只切到其中兩三張表，其餘沒展開。這一章直接讀教材檔本身，把整份練習用 Excel 攤開——你跟著錄影做的時候，畫面上的欄位名稱一閃而過，對照這裡比較不會迷路。這一章的內容來自教材檔，不是課堂口述，所以沒有時間戳。',
+    topics:[
+      {t:'七張工作表各自對應哪個練習', s:'先搞清楚手上這份 Excel｜取自教材檔', blocks:[
+        {h:'逐表用途',table:{head:['工作表','筆數','拿來練什麼'],rows:[
+          ['<b>使用說明</b>','—','資料集導覽，含「教學模擬資料，非實際報價」聲明'],
+          ['<b>中秋烤肉_採購資料</b>','96 筆','主力資料表，25 個欄位。可直接載入 Excel、Power Query 與 Power BI'],
+          ['<b>PQ練習_髒資料</b>','16 筆','刻意做壞的版本：前後空白、文字型金額、四種日期格式、Y／是／TRUE 混用、空值與重複列'],
+          ['<b>Dim_品項</b>','24 筆','品項主檔，用來做合併查詢與星狀模型'],
+          ['<b>Dim_活動</b>','6 筆','活動場次主檔，「預算差異」那個 DAX 指標靠它算'],
+          ['<b>Excel_快速摘要</b>','—','已算好的 KPI 與分類成本，拿來核對'],
+          ['<b>教學任務與DAX</b>','12 列','老師的教案本體：每個工具該練什麼、對應哪條 DAX 公式']]}},
+        {h:'哪一章用哪張表',ul:[
+          '<b>第 3–5 章（巨集／VBA／增益集）</b> → PQ練習_髒資料 的折扣欄',
+          '<b>第 7 章（Power Query）</b> → PQ練習_髒資料 ＋ Dim_品項',
+          '<b>第 6、8 章（Power BI）</b> → 中秋烤肉_採購資料 ＋ 兩張 Dim 表']},
+        {h:'看課堂筆記',p:'👉 <a href="ep52-notes.html#sec-dataset" style="color:var(--amber)">筆記 9：教材資料集拆解</a>'}]},
+
+      {t:'教材裡預先寫好的八條 DAX 公式', s:'不想等 AI 生就自己抄｜取自教材檔', blocks:[
+        {h:'八條完整公式',prompt:'總採購金額 = SUM(\'中秋烤肉_採購資料\'[總成本_NT$])<br>平均單價   = AVERAGE(\'中秋烤肉_採購資料\'[單價_NT$])<br>採購筆數   = COUNTROWS(\'中秋烤肉_採購資料\')<br>品項數     = DISTINCTCOUNT(\'中秋烤肉_採購資料\'[品項編號])<br>平均每筆成本 = DIVIDE([總採購金額],[採購筆數],0)<br>肉類採購金額 = CALCULATE([總採購金額],\'中秋烤肉_採購資料\'[分類] = "肉類")<br>預算差異   = SUM(\'Dim_活動\'[預算_NT$]) - [總採購金額]<br>預算執行率 = DIVIDE([總採購金額],SUM(\'Dim_活動\'[預算_NT$]),0)'},
+        {h:'這個排列是有教學順序的',tip:'<b>SUM → AVERAGE → COUNTROWS → DISTINCTCOUNT</b> 是基礎聚合；<b>DIVIDE</b> 是「避免除以 0」的安全寫法；<b>CALCULATE</b> 是 DAX 真正的分水嶺（加條件的聚合）；最後兩條是<b>跨資料表</b>計算——必須先建好 Dim_活動 的關聯才算得出來。照這個順序練，比隨機查函數有效率得多。'},
+        {h:'每個工具該練什麼',table:{head:['工具','練習主題','學習重點'],rows:[
+          ['Excel','表格與篩選','排序、篩選、條件格式'],
+          ['Excel 增益集','描述統計','分析工具庫／平均數、標準差、最大最小'],
+          ['VBA','自動格式化、異常清單、分類彙總','Range、Format、If、For、AutoFilter'],
+          ['Power Query','清理、型別轉換、標準化、合併、群組','Trim、Replace Values、Merge Queries、Group By'],
+          ['Power BI','資料模型、視覺化','星狀模型、關聯方向、Card／Bar／Slicer']]}},
+        {h:'看課堂筆記',p:'👉 <a href="ep52-notes.html#sec-dataset" style="color:var(--amber)">筆記 9：教材裡預先寫好的 DAX 公式</a>'}]},
+
+      {t:'拿來對答案的一組數字', s:'算完自己檢查｜取自教材檔', blocks:[
+        {h:'四個總計',ul:[
+          '<b>總採購成本</b>　NT$ 104,061.2',
+          '<b>採購筆數</b>　96 筆',
+          '<b>平均單價</b>　NT$ 195.52',
+          '<b>總重量</b>　596 公斤']},
+        {h:'分類成本（由大到小）',table:{head:['分類','採購成本'],rows:[
+          ['海鮮','31,375.3'],['肉類','28,744'],['飲料','14,592.6'],['加工品','11,957.35'],
+          ['主食','7,158'],['蔬菜','6,504.35'],['醬料','3,729.6']]}},
+        {h:'怎麼用',tip:'跑完 Power Query 或 Power BI 之後，先比對<b>總採購成本</b>和<b>採購筆數</b>這兩個數字。對得上，代表你的清理沒有把資料弄丟或重複計算；對不上，多半是空白列沒移除或重複列還在。'},
+        {h:'簡報裡值得回頭看的四張圖',ul:[
+          '<b>第 7 頁</b>——巨集／VBA／增益集的「用途 × 適合任務」對照',
+          '<b>第 9 頁</b>——錄製巨集寫法 vs. 手寫 VBA 的並排比較',
+          '<b>第 13–17 頁</b>——Power Query 五步驟圖解',
+          '<b>第 18 頁</b>——ChatGPT 接上 Power BI 的四類功能對照']},
+        {h:'看課堂筆記',p:'👉 <a href="ep52-notes.html#sec-dataset" style="color:var(--amber)">筆記 9：拿來對答案的一組數字</a>'}]}
+    ]
+  },
+
+  mindset: {
+    key:'mindset', color:'var(--orange)', emoji:'🧠', code:'CHAPTER 05', title:'判斷與心法',
+    intro:'把 50 分鐘濃縮成三個判斷。這三個都不是操作步驟——操作在前面四章，這一章是你什麼時候該用它們。',
+    topics:[
+      {t:'用哪個工具，看這件事你會做幾次', s:'老師說最多人問他的問題｜貫穿全堂', blocks:[
+        {h:'答案不在功能表裡',p:'「什麼時候用巨集、什麼時候用 VBA、什麼時候用增益集」是老師開場說最多人問他的問題。他給的答案跟功能無關，跟<b>頻率</b>有關。'},
+        {h:'四個層級對應四種情況',table:{head:['這件事你會做幾次','用什麼','成本'],rows:[
+          ['就這一次','<b>手動</b>','最低'],
+          ['每週都要做','<b>錄成巨集</b>','錄一次，5 分鐘'],
+          ['要穩定重複跑、資料筆數會變','<b>讓 AI 改成 VBA</b>','多一次對話'],
+          ['每個檔案都要用、還要給同事','<b>轉成 .xlam 增益集</b>','多幾個安裝步驟']]}},
+        {h:'原話',tip:'「你每個月都要做相同的事情，你每張報表都是同樣的格式，<b>只是因為數字有差</b>，你想要快速的整理跟匯整。」［23:35］'},
+        {h:'選錯會怎樣',warn:'選錯不是做不出來，是<b>浪費</b>。只做一次的事包成增益集是白工；每個月都做的事一直手動則是每個月都在付一次成本。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep52-notes.html#sec-real" style="color:var(--orange)">筆記 10：這堂課真正在教的事</a>'}]},
+
+      {t:'AI 只負責把你的動作翻譯成程式碼', s:'看懂這個分工才不會誤解｜貫穿全堂', blocks:[
+        {h:'AI 在這堂出場四次，做的都是同一件事',ul:[
+          '把錄製巨集的碼<b>改寫成穩定的 VBA</b>',
+          '寫 Power Query 的<b>自訂資料行公式</b>',
+          '建 Power BI 的 <b>DAX 量值</b>',
+          '排儀表板的<b>版面配置</b>']},
+        {h:'它沒有做的事',warn:'它沒有替你決定<b>「折扣率該怎麼定義」「哪些指標重要」「這份報表要給誰看」</b>。那些一直是你的工作。'},
+        {h:'為什麼這件事要講清楚',tip:'看懂這個分工，才不會誤以為<b>把檔案丟給 AI 就會有答案</b>。老師四行提示詞之所以夠，是因為他已經知道自己要什麼——「快速掌握食材的銷售情形」這句業務需求，是他下的，不是 AI 想的。'},
+        {h:'反過來說也成立',p:'如果你連自己要什麼都講不清楚，工具再強也生不出對的東西。所以「<b>你在前面把你的需求寫得越清楚，寫得越完整的時候，他就會越有效</b>」［46:30］。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep52-notes.html#sec-real" style="color:var(--orange)">筆記 10：AI 只負責一件事</a>'}]},
+
+      {t:'AI 給架構，最後一哩路是你的', s:'最後六分鐘最誠實的一段｜錄影 44:00–50:00', blocks:[
+        {h:'實況',p:'AI 生出來的 Power BI 專案打開時跳出兩條警告，關聯要手動重新整理，老師現場等了將近兩分鐘。<b>他沒有跳過，也沒有假裝一次成功。</b>'},
+        {h:'但結論不是「AI 不好用」',tip:'四行提示詞換來一個含 11 個 DAX 指標的完整專案，這已經省掉一兩個小時的拖拉試版面。結論是<b>要預期最後有一段收尾要自己做</b>，並且知道那段是什麼。'},
+        {h:'那段收尾具體是什麼',steps:[
+          'zip <b>整包解開、整包留著</b>，不要只挑 .pbip 出來',
+          '檔案位置<b>生成後不要搬動</b>——專案要靠旁邊那份 Excel 連動',
+          '打開後按<b>「立即重新整理」</b>，等關聯連上',
+          '看<b>驚嘆號在哪張表</b>，那張就是沒連上的']},
+        {h:'老師的收尾建議',p:'「你可以在最近幾天，試試看所謂的巨集、增益集、還有 VBA 之間的效果。再來，如果你有興趣可以進來 Power Query 這邊玩一玩。那整理完之後，你可以試著玩玩 Power BI。<b>現在你可以請他先初步生成一個，接下來就交給你自己去做修正。</b>」［48:29］'},
+        {h:'最後一句',tip:'「所以基本上<b>以前 Power BI 要搞很久，現在他快速的可以去幫你做一些整體性的處理</b>。」［48:59］省下來的時間，是拿去做 AI 做不了的那部分。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep52-notes.html#sec-pbip" style="color:var(--orange)">筆記 8：能用，但不是按一下就完成</a>'}]}
+    ]
+  }
+}
+;
+
+
+const ORDER = ['automate','clean','aipowerbi','dataset','mindset'];
+const $ = s=>document.querySelector(s);
+function renderChapter(ch){
+  const d=DATA[ch];const next=ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];const prev=ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html=`<div class="chapter-head"><span class="emoji">${d.emoji}</span><div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div></div>`;
+  d.topics.forEach((tp,i)=>{const id=`${ch}-${i}`;
+    html+=`<div class="topic" id="topic-${id}"><div class="topic-head" onclick="toggleTopic('${id}')"><span class="num">${i+1}</span><h4>${tp.t}<small>${tp.s}</small></h4><input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)"><span class="chev">▶</span></div><div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{html+=`<div class="block"><h5>${b.h}</h5>`;
+      if(b.p)html+=`<p>${b.p}</p>`;
+      if(b.ul)html+=`<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps)html+=`<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.table)html+=`<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.prompt)html+=`<div class="promptbox">${b.prompt}</div>`;
+      if(b.shot)html+=`<figure class="shot"><img src="${b.shot.img}" alt="" loading="lazy"><figcaption>${b.shot.cap}</figcaption></figure>`;
+      if(b.tip)html+=`<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn)html+=`<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html+=`</div>`;});
+    html+=`</div></div></div>`;});
+  html+=`<div class="chapnav"><a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a><a onclick="showHome()" style="text-align:center">回總覽<b>🏠 五大主題</b></a><a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a></div>`;
+  $('#view-'+ch).innerHTML=html;
+}
+ORDER.forEach(renderChapter);
+function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('#view-'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function showHome(){switchView('home');$('#crumbs').style.display='none';clearSearch();}
+function showChapter(ch){switchView(ch);$('#crumbs').style.display='flex';$('#crumbHere').textContent=`${DATA[ch].emoji} ${DATA[ch].title}`;clearSearch();syncChecks();}
+function toggleTopic(id){$('#topic-'+id).classList.toggle('open');}
+function openTopic(ch,i){showChapter(ch);const el=$('#topic-'+ch+'-'+i);el.classList.add('open');setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+const KEY='ep52-skills-v1';
+const store=()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){const s=store();if(val)s[id]=1;else delete s[id];localStorage.setItem(KEY,JSON.stringify(s));updateProgress();}
+const TOTAL=ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){const done=Object.keys(store()).length;const pct=Math.round(done/TOTAL*100);$('#progFill').style.width=pct+'%';$('#progText').textContent=`${done} / ${TOTAL} 項技能已掌握`;$('#statDone').textContent=done;$('#statPct').textContent=pct+'%';ORDER.forEach(ch=>{const sub=DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;const el=document.querySelector(`[data-mini="${ch}"]`);if(el)el.style.width=Math.round(sub/DATA[ch].topics.length*100)+'%';});}
+function syncChecks(){const s=store();document.querySelectorAll('input[data-skill]').forEach(cb=>{cb.checked=!!s[cb.dataset.skill];});}
+function resetProgress(){if(confirm('確定要清空所有打勾進度嗎？')){localStorage.removeItem(KEY);syncChecks();updateProgress();}}
+function stripTags(s){return s.replace(/<[^>]+>/g,'');}
+const INDEX=[];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{let body=tp.s+' ';tp.blocks.forEach(b=>{if(b.p)body+=stripTags(b.p)+' ';if(b.ul)body+=b.ul.map(stripTags).join(' ')+' ';if(b.steps)body+=b.steps.map(stripTags).join(' ')+' ';if(b.tip)body+=stripTags(b.tip)+' ';if(b.warn)body+=stripTags(b.warn)+' ';if(b.prompt)body+=stripTags(b.prompt)+' ';if(b.table)body+=b.table.rows.flat().map(stripTags).join(' ')+' ';});INDEX.push({ch,i,title:tp.t,body});}));
+$('#searchInput').addEventListener('input',e=>{const q=e.target.value.trim();const box=$('#searchResults');if(!q){box.classList.remove('show');box.innerHTML='';return;}const hits=INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));box.classList.add('show');if(!hits.length){box.innerHTML=`<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：巨集、xlam、Power Query、取代值、DAX、pbip、假資料）</div>`;return;}const hl=s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);box.innerHTML=hits.map(x=>{const pos=x.body.toLowerCase().indexOf(q.toLowerCase());const snip=x.body.substr(Math.max(0,pos-20),90);return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})"><div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div><h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;}).join('');});
+function clearSearch(){$('#searchInput').value='';$('#searchResults').classList.remove('show');$('#searchResults').innerHTML='';}
+syncChecks();updateProgress();
+</script>
+</body>
+</html>
