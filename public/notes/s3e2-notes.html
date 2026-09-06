@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ECF S3E2 課堂筆記｜把做過一次的事變成隨時能叫出來的 Skill</title>
+<meta name="description" content="生成式AI應用電台・訂閱制第三季第二堂（益師傅／楊俊益，2026/07/24）逐幀課堂筆記。主線是把一次性流程封裝成可重複呼叫、而且參數化的 Skill：先用 Codex 讓 AI 學會一份 PowerPoint 版型並復刻 20 頁，再回頭請 AI 把整段流程寫成 Skill 檔，搬到 ChatGPT、Claude 都能跑。另含 Node-RED 流程模擬器、物聯網 3D 爆炸圖與電路工作平台、七種風格圖像生成、Podcast 提示詞產生器，以及 AI Agent 與聊天寫程式的差別。"/>
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#2f7a63; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:760px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px;max-height:calc(100vh - 90px);overflow-y:auto}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:7px;border-left:none;font-size:13px}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.code{position:relative;background:var(--code);border:1px solid var(--line2);border-radius:10px;padding:13px 15px;margin:10px 0;font-size:13px;line-height:1.75;color:var(--ink);white-space:pre-wrap;font-family:"Cascadia Code",Consolas,monospace;overflow-x:auto}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.iframe-wrap{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000;margin:14px 0}
+.iframe-wrap iframe{display:block;width:100%;height:460px;border:0}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static;max-height:none} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} .iframe-wrap iframe{height:320px} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style><style>
+nav.toc .tocgroup{font-size:11px;letter-spacing:.1em;color:var(--ink3);font-weight:700;margin:12px 0 4px;padding-left:10px;border-top:1px solid var(--line);padding-top:10px}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/#ecf" style="border-color:#a8cbc0" onclick="if(history.length>1){history.back();return false}">← 回上一頁</a>
+  <b>📝 ECF S3E2 課堂筆記</b>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 訂閱制第三季第二堂 · 2026/07/24</span>
+  <h1>把做過一次的事<span>變成隨時能叫出來的 Skill</span></h1>
+  <p class="lead">這一堂表面上是四個工具的巡禮：<b>Node-RED 流程模擬器、物聯網 3D 爆炸圖、簡報復刻、Podcast 提示詞產生器</b>。但真正的主線只有一條：<b>當你用 AI 做成了一件事，怎麼讓它下次不用再做一次。</b><br>老師示範得非常具體。他先用 Codex 讓 AI 學會一份 PowerPoint 的版型並復刻出 20 頁，成功之後沒有停在那裡，而是回頭跟 AI 說「把剛剛的動作做成一個 Skill」，再追加一句關鍵的話：<b>「你一定要變成參數。」</b>從此那份能力不再綁死在那一個檔案上，換任何版型、任何資料都能用，而且可以搬到 ChatGPT、Claude 上跑。<br>本頁依<b>兩段錄影的逐幀素材（共 487 張畫面）＋全程逐字稿（1497 段）</b>整理，重點段落附影片時間戳。</p>
+  <div class="meta">
+    <span>📅 2026/07/24（四）20:00 直播</span>
+    <span>👤 講師：益師傅（楊俊益・ECF）</span>
+    <span>⏱️ 兩段錄影，共 2 小時 1 分</span>
+    <span>🧩 Skill 化 × 簡報復刻 × 物聯網</span>
+    <span>🔰 小白友善</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-overview">1. 一張圖看懂這堂</a>
+  <div class="tocgroup">第一段・工具與物聯網</div>
+  <a href="#sec-nodered">2. Node-RED 流程模擬器</a>
+  <a href="#sec-explode">3. 物聯網 3D 爆炸圖</a>
+  <a href="#sec-circuit">4. 把想法接上電</a>
+  <a href="#sec-howmade">5. 那張 3D 圖是怎麼做出來的</a>
+  <div class="tocgroup">第一段・這堂的主線</div>
+  <a href="#sec-deck">6. 簡報復刻：讓 AI 學會你的版型</a>
+  <a href="#sec-skill">7. 把流程變成參數化的 Skill</a>
+  <div class="tocgroup">第二段・驗證與延伸</div>
+  <a href="#sec-crossplatform">8. 跨平台實測</a>
+  <a href="#sec-model">9. 模型選擇的經濟學</a>
+  <a href="#sec-usingskill">10. Skill 實戰：拆書與爆炸圖</a>
+  <a href="#sec-agent">11. Agent 跟聊天寫程式差在哪</a>
+  <a href="#sec-image">12. 七種風格：怎麼讓它真的畫圖</a>
+  <a href="#sec-podcast">13. Podcast 提示詞產生器</a>
+  <div class="tocgroup">收尾</div>
+  <a href="#sec-real">14. 現場的真實</a>
+  <a href="#sec-quotes">15. 老師金句</a>
+  <a href="#sec-src">16. 資料來源與整理說明</a>
+</nav>
+
+<article>
+
+<!-- 0 -->
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--blue))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>生成式 AI 應用電台・訂閱制第三季　<b>第二堂</b></td></tr>
+    <tr><th>直播日期</th><td>2026/07/24（四）20:00，分兩段錄影，共約 <b>2 小時 1 分</b></td></tr>
+    <tr><th>講師</th><td>益師傅（楊俊益，暱稱 ECF；智慧立方有限公司）</td></tr>
+    <tr><th>本堂主題</th><td>Node-RED 流程模擬、物聯網 3D 教學工具、簡報版型復刻，以及把整段流程封裝成可重複呼叫的 Skill</td></tr>
+    <tr><th>課程教材</th><td>Drive 資料夾「第二堂」：課堂錄影 ×2、<code>Node-RED_Flow_Simulator_v4.html</code>、<code>Podcast-prompt_v13.4.html</code>、兩份 Skill 檔（<code>exploded-view-SKILL.md</code>、<code>Split_PDF_Chapters_SKILL.md</code>）、簡報復刻說明與人物七種風格提示詞、PowerPoint 版型包</td></tr>
+    <tr><th>要先準備</th><td>Codex 或 ChatGPT 訂閱（老師建議先訂一個月試），Groq API Key；想生圖再另外準備 Gemini API Key（付費）</td></tr>
+  </table></div>
+
+  <div class="note gold">⚖️ <div><b>那批 PowerPoint 版型包不隨這一頁散布。</b>老師在課堂上送給訂閱制學員時特別交代：「那你不要散布喔，這是益師傅花錢在網路上買。但不是我說花錢你不能散布，而是<b>買的人也沒有說我可以散布</b>⋯⋯但我們尊重原本（的作者）。」<br>所以本頁只寫怎麼用，版型檔請到課程資料夾自行取用，不要再轉發出去。</div></div>
+</section>
+
+<!-- 1 -->
+<section class="chapter" id="sec-overview">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--teal))">OVERVIEW</span>
+  <h2 class="ct">1. 一張圖看懂這堂</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:96px">時間</th><th style="width:160px">段落</th><th>在講什麼</th></tr>
+    <tr><td>一段 01:02</td><td>Node-RED 模擬器</td><td>可以真的拉節點、寫程式、單步執行的流程模擬器，還能讓 AI 解析整條流程</td></tr>
+    <tr><td>一段 08:15</td><td>PowerPoint 版型包</td><td>送版型，並預告等一下要教怎麼把自己的資料套進去</td></tr>
+    <tr><td>一段 13:09</td><td>物聯網 3D 爆炸圖</td><td>50 個感測元件與晶片，逐層拆解、可旋轉、附接腳圖與規格</td></tr>
+    <tr><td>一段 17:27</td><td>電路工作平台</td><td>一句話描述需求，直接生出接線圖、程式、教學包，還能雲端燒錄</td></tr>
+    <tr><td>一段 27:05</td><td>3D 圖的由來</td><td>他怎麼從別人的一張圖，逆推出自己的一整套產線</td></tr>
+    <tr><td>一段 33:36</td><td><b>簡報復刻</b></td><td>用 Codex 讓 AI 學會一份 PPT 的版型，把另一份資料復刻成同樣風格的 20 頁</td></tr>
+    <tr><td>一段 53:13</td><td><b>做成 Skill</b></td><td>成功之後回頭把整段流程封裝成 Skill，並且參數化</td></tr>
+    <tr><td>二段 01:29</td><td>跨平台驗證</td><td>同一個 Skill 搬到 ChatGPT 可以，搬到 Gemini 風格對不上</td></tr>
+    <tr><td>二段 03:00</td><td>Skill 實戰</td><td>用斜線呼叫，720 頁的書拆成 10 章</td></tr>
+    <tr><td>二段 08:16</td><td>七種風格圖像</td><td>怎麼下指令才會真的畫圖，而不是回你一堆提示詞</td></tr>
+    <tr><td>二段 24:44</td><td>Podcast 提示詞產生器</td><td>把 NotebookLM 的語音摘要，從「隨便講講」變成可控的節目設定</td></tr>
+  </table></div>
+
+  <div class="note green">🧭 <div><b>如果只能記一件事，記這個。</b>老師做完簡報復刻之後說了一句話，是整堂課的重點：<br>「你可以把這個東西做成一個 Skill⋯⋯<b>它就變成都是參數了，而不是固定就只能用哪一個檔案。你一定要變成參數。</b>」<br>做成一次是成果，變成參數才是能力。</div></div>
+</section>
+
+<!-- 2 -->
+<section class="chapter" id="sec-nodered">
+  <span class="chip" style="background:linear-gradient(90deg,var(--teal),var(--green))">工具一</span>
+  <h2 class="ct">2. Node-RED 流程模擬器 v4［一段 01:02–08:00］</h2>
+
+  <figure class="shot"><img src="s3e2-img/01-nodered-sim.jpg" loading="lazy" alt="Node-RED 流程模擬器執行畫面">
+    <figcaption>把 Node-RED 程式拉進來，按觸發就會逐步跑，每個節點做了什麼都列在旁邊。［一段 03:20］</figcaption></figure>
+
+  <ul class="pt">
+    <li><b>不是只有模擬。</b>可以真的拉 inject、function、debug 節點，可以拉線，<b>可以在裡面寫程式</b>，然後觸發、單步執行、隨時停在某一步</li>
+    <li>可以匯入你自己的 Node-RED 流程，老師當場拉了一個 AQI 空品的流程進來，跑出真實資料</li>
+    <li>可以<b>安裝新節點</b>，包含他自己開發的節點，之後 AI 解析也能認得</li>
+    <li>AI 解析要接 API Key：<b>Groq 負責文字解析，Gemini 負責畫圖</b>。Gemini 是付費的，他當時查到約一個月 420 元</li>
+  </ul>
+
+  <figure class="shot"><img src="s3e2-img/02-nodered-ai.jpg" loading="lazy" alt="Node-RED 模擬器產生的 AI 流程示意圖">
+    <figcaption>AI 解析整條流程之後畫出來的示意圖。［一段 04:43］</figcaption></figure>
+
+  <div class="note blue">💡 <div><b>他當場冒出的一個念頭，值得學。</b>畫示意圖要付費，他馬上想到替代方案：「所以益師傅打算說，在這個地方是不是能夠產生一個示意圖的 <b>Markdown 的 Mermaid</b>？你可以在 Mermaid 裡頭畫圖就不用錢了。我再改一下⋯⋯到時候你們就不用在上面畫，就浪費錢。」<br>看到成本就想替代路徑，這是做工具的人跟只會用工具的人的差別。</div></div>
+
+  <div class="note gold">🎯 <div><b>為什麼一堂 AI 課要教 Node-RED？</b>老師講得很清楚：<br>「學這個你會覺得有點辛苦對不對？但是問題是<b>當你會這些東西之後，你內心裡有一些流程的概念</b>，你未來在學 Codex、或是 Claude Code、或是 N8N 這種 AI Agent 的部分，基本上你都可以克服了。因為 Node-RED 都懂了，基本上這些沒有所不懂的道理。」<br>換句話說：Node-RED 是<b>流程思維的前置訓練</b>。先在看得見的節點與連線上把流程想清楚，之後面對 Agent 就不會卡在觀念上。</div></div>
+</section>
+
+<!-- 3 -->
+<section class="chapter" id="sec-explode">
+  <span class="chip" style="background:linear-gradient(90deg,var(--blue),var(--cyan))">工具二</span>
+  <h2 class="ct">3. 物聯網 3D 爆炸圖：50 個元件［一段 13:09–17:10］</h2>
+
+  <figure class="shot"><img src="s3e2-img/04-explode-layers.jpg" loading="lazy" alt="物聯網實作工坊的 ESP32 DevKit V1 3D 爆炸圖">
+    <figcaption>「物聯網實作工坊 IoT Forge Lab」：左邊是元件圖鑑，中間是 3D 爆炸圖（可拉透明度滑桿逐層看），右邊是規格與實體照片。［一段 14:23］</figcaption></figure>
+
+  <ul class="pt">
+    <li>目前收了 <b>50 個</b>感測元件與晶片：ESP32、UNO R3、Nano、Pro Mini、ESP32-CAM、AMEB2-MINI、DHT11、DHT22、SHT31、HC-SR04 超音波測距、LCD1602 等</li>
+    <li>每個元件都給：<b>逐層結構、原始示意圖、電氣特性、接腳圖</b></li>
+    <li>可 360 度旋轉、拉大層間距，做成 <b>3D 爆炸圖</b>動態展示</li>
+    <li>做了<b>英文版</b>可切換。老師的說法是「益師傅的企圖心很大，要送給國際的友人」</li>
+    <li>後續規劃：擴到上百個元件、加樹莓派、加 AI 提問功能，然後開放給更多人用</li>
+  </ul>
+
+  <div class="note steel">📦 <div><b>這個工具的來歷有點感性。</b>他說那天在整理自己的零件庫，「哇，裡頭好多好多的這種感測元件，我之前很愛買，裡頭我覺得應該幾十萬有吧」。因為後來沒在做這塊，他打算陸續把實體零件捐給學校，而這套 3D 圖就是把那段經歷留下來的方式：「假如至少代表益師傅曾經走過物聯網，對不對？」</div></div>
+</section>
+
+<!-- 4 -->
+<section class="chapter" id="sec-circuit">
+  <span class="chip" style="background:linear-gradient(90deg,var(--cyan),var(--teal))">工具三</span>
+  <h2 class="ct">4. 把想法接上電：電路工作平台［一段 17:27–32:10］</h2>
+
+  <figure class="shot"><img src="s3e2-img/05-circuit-gen.jpg" loading="lazy" alt="電路工作平台，一句話生成接線圖與程式">
+    <figcaption>標語就是「把想法接上電」。左邊打一句話描述需求，中間出現麵包板接線圖，右邊直接生出 <code>main.cpp</code>、<code>platformio.ini</code>、<code>config.h</code>。［一段 18:08］</figcaption></figure>
+
+  <p>當天的示範需求是一句話：<b>ESP32 + DHT11 + OLED + 按鈕，透過 WiFi 使用 MQTT 傳送溫濕度與按鈕狀態</b>。按下生成之後，接線、程式、宣告檔、定義檔一次到位。</p>
+
+  <h3>它比積木程式多了什麼</h3>
+  <p>有學員問這跟積木程式像不像，老師的回答是關鍵：「<b>最大的差別就是它有教學的成分。</b>」</p>
+  <div class="twrap"><table>
+    <tr><th style="width:120px">功能</th><th>說明</th></tr>
+    <tr><td>接線教學</td><td>一步一步告訴你第一條線接哪、第二條線接哪</td></tr>
+    <tr><td>腳位檢查</td><td>接錯會報錯，並<b>建議你換到哪一個腳位</b>。「因為每個晶片的腳位都有它的特性在，有的可以接什麼，有的不能」</td></tr>
+    <tr><td>換腳位重生程式</td><td>換了腳位，程式會跟著改。老師建議老師們可以拿這個來出題</td></tr>
+    <tr><td>耗電量估算</td><td>算出總耗電，例如 200 mAh 大約可以撐一天多（沒開 WiFi 的情況）</td></tr>
+    <tr><td>模擬器</td><td>顯示器輸入數值會跟著變、開關 on/off、蜂鳴器開關</td></tr>
+    <tr><td>MQTT 測試</td><td>接收測試與配網設定</td></tr>
+    <tr><td>故障偵測</td><td>偵測目前接法的問題</td></tr>
+    <tr><td>規格與 datasheet</td><td>每個元件的詳細規格，附原廠資料連結</td></tr>
+    <tr><td>雲端燒錄</td><td>透過 PlatformIO 在瀏覽器上編譯燒入，內建 <b>13 個現成案例</b>可直接燒</td></tr>
+    <tr><td>序列埠監聽</td><td>反向監聽晶片回傳的訊息，不是做假的</td></tr>
+    <tr><td>專案打包</td><td>可匯出 zip 給 Wokwi 吃進去做模擬，也可以把 Wokwi 的封裝包拉進來</td></tr>
+  </table></div>
+
+  <div class="shotgrid">
+    <figure class="shot"><img src="s3e2-img/06-wiring-steps.jpg" loading="lazy" alt="一步一步的接線教學畫面">
+      <figcaption>接線教學：一條一條告訴你怎麼接。［一段 20:36］</figcaption></figure>
+    <figure class="shot"><img src="s3e2-img/07-teach-pack.jpg" loading="lazy" alt="產出的教學包 PDF">
+      <figcaption>教學包可下載成 PDF 或 Word：教學目的、元件清單、接線、AI 修正建議。［一段 21:49］</figcaption></figure>
+  </div>
+
+  <figure class="shot"><img src="s3e2-img/08-pinout.jpg" loading="lazy" alt="元件的接腳圖">
+    <figcaption>接腳圖可以放大看，之後會把更多晶片的腳位圖加進來。［一段 26:00］</figcaption></figure>
+
+  <div class="note blue">📊 <div><b>他還打算加一個匿名人數統計。</b>「總共有多少人進來，我就會知道了⋯⋯一種小小的，看有沒有很多人用這個程式，我只是想要知道而已。」而且他說之後會教大家怎麼在 Codex 裡面幫自己上網的工具加這個。<br>做完工具還想知道有沒有人用，這個念頭本身就值得學。</div></div>
+
+  <div class="note gold">🎪 <div>他也很清楚自己在做什麼：「<b>我不喜歡炫技，但是我喜歡講落地應用。炫技不是我的本事，我也沒那個本事。我有的就是想辦法把它變成一個落地應用。</b>」</div></div>
+</section>
+
+<!-- 5 -->
+<section class="chapter" id="sec-howmade">
+  <span class="chip" style="background:linear-gradient(90deg,var(--purple),var(--pink))">方法拆解</span>
+  <h2 class="ct">5. 那張 3D 圖是怎麼做出來的［一段 27:05–28:41］</h2>
+
+  <p class="cd">有學員問他 3D 爆炸圖到底怎麼做的，他把整個過程講了一遍。這段是這堂課最值得抄下來的方法論之一。</p>
+
+  <ol class="st">
+    <li><b>先看到別人的成果。</b>他在網路上看到有人用 ChatGPT 的繪圖模型，把晶片封裝一層一層用 3D 做出來，測試 CoWoS 那種堆疊結構的正確性。「一次就成功了，我看到那個東西我就很驚豔」</li>
+    <li><b>把提示詞收起來。</b>「他有一個提示詞，我就給他收起來。」</li>
+    <li><b>自己先試一次。</b>拿那個提示詞在自己的帳號上跑，「發現真的可以畫出那個圖」</li>
+    <li><b>不滿意就講出哪裡不滿意。</b>「但是我就覺得那個圖黑黑的醜醜的，就覺得我不喜歡」</li>
+    <li><b>換成自己的題目，失敗了。</b>「我就跟他講說，好吧，我想改成 ESP32 的結構圖。結果他畫出來不對」</li>
+    <li><b>給它參考物。</b>「我說你可不可以參考我給他看我那個爆炸圖的 Mermaid？給了他，他就幫我畫出來囉」</li>
+    <li><b>再加上風格要求。</b>「我說我要 3D 的高質感、淺色系的。哇，他畫出來有光質感喔」</li>
+    <li><b>找到訣竅就量產。</b>「從那時候我就開始一系列的就這樣做下去了。我把所有的這些元件的 datasheet 給他看。」有些它會弄錯，有些它會自己上網找，就這樣堆疊到 50 組</li>
+  </ol>
+
+  <div class="note gold">🔑 <div><b>這八步可以套到任何你想學的 AI 產出。</b>看到好東西不是收藏就算了，而是：收下提示詞 → 自己跑一次 → 說出不滿意的地方 → 換成自己的題目 → 失敗就給它參考物 → 加上風格描述 → 成功後量產。<br>整個過程沒有一步需要你會畫圖。</div></div>
+</section>
+
+<!-- 6 -->
+<section class="chapter" id="sec-deck">
+  <span class="chip" style="background:linear-gradient(90deg,var(--orange),var(--rose))">主線一</span>
+  <h2 class="ct">6. 簡報復刻：讓 AI 學會你的版型［一段 33:36–52:00］</h2>
+
+  <p>這件事的起點是一個真實提問。老師說：「我上禮拜五在幫一個研習，一個老闆提到說，<b>假如這樣子，會不會我給他一個簡報讓他去學習</b>？」他回去驗證，答案是可以。</p>
+
+  <figure class="shot"><img src="s3e2-img/03-ppt-template.jpg" loading="lazy" alt="PowerPoint 版型包裡的資訊圖表版型">
+    <figcaption>版型包裡的一份資料分析資訊圖表，每個檔案有 20 頁。老師建議「不是 20 頁都拿來用」，挑幾頁套自己的資料就好。［一段 11:20］</figcaption></figure>
+
+  <h3>用 Codex 做的完整步驟</h3>
+  <figure class="shot"><img src="s3e2-img/09-codex-project.jpg" loading="lazy" alt="在 Codex 建立專案並指定資料夾">
+    <figcaption>建立專案時<b>一定要指定資料夾</b>，不要從零開始。［一段 44:16］</figcaption></figure>
+  <ol class="st">
+    <li>專案 → 按加 → 命名（例如「簡報版型風格複製」）</li>
+    <li><b>指定資料夾</b>，選一個你固定放東西的位置。老師當場示範了反例：他第一次沒指定，加上名字重複，結果整個錯亂，只好全部刪掉重來</li>
+    <li>到<b>設定 → 一般 → 打開「完整存取權」</b>。不打開的話它每做一個動作都會回來問你，「停下來你也去忙別的事情，你就沒有注意到你要按下一步」</li>
+    <li>把要當範本的 PowerPoint <b>複製到那個資料夾</b></li>
+    <li>開新對話，貼上提示詞，<b>把裡面的檔名改成你自己資料夾裡的檔名</b>（它會去資料夾裡找這個檔案）</li>
+    <li>送出，等它跑</li>
+  </ol>
+
+  <figure class="shot"><img src="s3e2-img/10-prompt.jpg" loading="lazy" alt="簡報復刻的提示詞">
+    <figcaption>他提供的提示詞，關鍵是指名範本檔案，並補一句「如果使用到圖像，請使用 image generation 繪圖」。［一段 45:35］</figcaption></figure>
+
+  <div class="note gold">⚠️ <div><b>一個很容易踩的坑：跳出來的風格建議，一個都不要選。</b><br>「當它出現這個風格的時候，你都不要選。你都不要選喔，真的，<b>你只要選了之後，它會以它的風格為主</b>。你就千萬不要選，你就不要管它。」<br>因為你要的是「學會你給的版型」，不是「用它推薦的漂亮版型」。</div></div>
+
+  <h3>結果：花 16 分 27 秒，做出 20 頁</h3>
+  <figure class="shot"><img src="s3e2-img/11-compare.jpg" loading="lazy" alt="復刻結果與原始版型並排比對">
+    <figcaption>左邊是 AI 復刻出來的 20 頁，右邊是原始版型。老師把兩份都切成格狀縮圖並排比對。［一段 51:11］</figcaption></figure>
+  <p>他驗證的方式很實在：<b>把原始版型跟產出並排、都切成格狀縮圖，一頁一頁對</b>。字體、大字體、版面結構、曲線圖位置都對得上。</p>
+
+  <figure class="shot"><img src="s3e2-img/14-parameterize.jpg" loading="lazy" alt="Codex 完成簡報復刻的回報，含忠實度檢查與 deviation log">
+    <figcaption>完成回報：沿用原範本版型與配色、整理 12 章核心內容、每頁附來源頁碼、<b>通過 20 頁渲染、溢位與版型忠實度檢查</b>，並產出一份 <code>deviation-log.txt</code>。［一段 64:57］</figcaption></figure>
+
+  <div class="note blue">🔍 <div>注意那份回報裡的兩個細節：它自己做了<b>溢位與版型忠實度檢查</b>，還留下一份<b>偏差紀錄檔</b>，並主動說明「未使用 imagegen，因原範本圖像元素已足夠」。<br>這就是下一章要講的，Agent 跟聊天最大的差別：<b>它會回頭檢查自己做得對不對。</b></div></div>
+
+  <div class="note steel">📌 <div><b>可以套什麼資料？</b>老師舉的例子很生活：你公司之前用的匯報簡報、會議紀錄的簡報，甚至把會議紀錄的 MP3 餵給它。「他會去學這 20 頁的風格」，再用簡報功能做出來。</div></div>
+</section>
+
+<!-- 7 -->
+<section class="chapter" id="sec-skill">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--amber))">主線二 · 這堂的核心</span>
+  <h2 class="ct">7. 把流程變成參數化的 Skill［一段 53:13–65:50］</h2>
+
+  <p class="cd">做成功了，然後呢？大部分人到這裡就結束了。老師沒有。</p>
+
+  <h3>第一步：請 AI 把剛剛做的事寫成 Skill</h3>
+  <p>他的動機很實際：「並不是每一個人都會去用 Codex。那假如在 ChatGPT 你有付費、但是你沒有用 Codex 的人，一樣可以做，那不是很好嗎？」</p>
+  <div class="note gold">💬 <div>他對 AI 說的話大意是：「<b>請你幫我生成一個 Skill，幫我把剛剛的動作做成一個 Skill，並且提供一個 Markdown 的語法讓我下載。</b>」<br>結果拿到一份很長的提示詞檔。他自己笑說：「你會發現這個提示詞一看就知道不是我寫的。」</div></div>
+
+  <figure class="shot"><img src="s3e2-img/12-skill-file.jpg" loading="lazy" alt="AI 產生的 Skill 檔內容">
+    <figcaption>AI 產生出來的 Skill 檔。［一段 55:01］</figcaption></figure>
+
+  <h3>第二步：Skill 不是綁在一個平台上的</h3>
+  <div class="note blue">🔓 <div>「有這個 Skill 檔，你可以放在你的 <b>Claude</b> 裡頭用，或是 <b>Perplexity</b> 一樣可以把 Skill 加進來。」<br>那 ChatGPT 呢？「當然是可以的。」<br>他接著講了一段很到位的話：「<b>因為沒有人告訴你不能這樣子用啊。大家好像就是覺得 Skill 就是 Skill，不能用在別的地方。沒有這道理啦。任何地方都可以用。畢竟它只是一個提示詞，它只是一個 prompt。</b>」<br>唯一的例外他也講清楚了：「除非裡頭有提到串接的運用⋯⋯串接就沒辦法。只是單純它只是一個描述、去取出它的特色來講的話，你當提示詞都可以用。」</div></div>
+
+  <figure class="shot"><img src="s3e2-img/13-gpt-project.jpg" loading="lazy" alt="把 Skill 貼進 ChatGPT 專案的指令欄">
+    <figcaption>ChatGPT 專案：把 Skill 內容貼進「指令」欄，版型檔上傳到「資料來源」。［一段 57:48］</figcaption></figure>
+  <ol class="st">
+    <li>ChatGPT 專案 → 加 → 命名 → 建立</li>
+    <li>點中央（或右上三個點）進到<b>指令</b>，把整份 Skill 內容貼進去，儲存</li>
+    <li>到<b>資料來源</b>，上傳你要它學的版型檔。<b>可以放很多份</b>：風格一、風格二、風格三，或是對 A 廠商、B 廠商、C 廠商的不同簡報</li>
+  </ol>
+  <div class="note steel">⚠️ <div>ChatGPT 這條路有個限制老師講得很白：沒訂閱的話「你要畫圖它最多又只 13 張就不太畫了，而且它最後會把所有的圖片都集中在一頁裡頭，<b>這就不是你要的</b>」。所以這條路比較適合有訂閱的人。</div></div>
+
+  <h3>第三步：最關鍵的一句話</h3>
+  <div class="golden"><div class="q">「請將上面所有完成的事項做成一個 Skill，但是這個 Skill 能夠根據使用者提供的任何的版型資料⋯⋯來幫我完成上傳資料的復刻運用。<br><br>它就變成都是參數了，而不是固定就只能用哪一個檔案。<b>你一定要變成參數。</b>」</div><div class="a">［一段 64:25–65:02］做出來的 Skill 從此吃「版型.pptx」這個參數，換任何版型、任何資料都能跑。</div></div>
+
+  <div class="note green">🧩 <div><b>為什麼這一步這麼重要？</b><br>沒參數化的 Skill：只能復刻那一個檔案，換一份版型就要重寫。<br>參數化之後：它變成一個<b>能力</b>，你給它任何版型加任何資料，它都照做。<br>老師最後說：「所以你知道為什麼益師傅那個 Skill 嗎？就是我這樣講，它幫我做出來的。」<b>他自己的 Skill 庫，就是這樣一個一個長出來的。</b></div></div>
+</section>
+
+<!-- 8 -->
+<section class="chapter" id="sec-crossplatform">
+  <span class="chip" style="background:linear-gradient(90deg,var(--rose),var(--purple))">驗證</span>
+  <h2 class="ct">8. 跨平台實測：哪個行、哪個不行［二段 01:29–15:45］</h2>
+
+  <p>他沒有只講「應該可以」，而是當場帶全班一起測。</p>
+
+  <figure class="shot"><img src="s3e2-img/15-gemini-fail.jpg" loading="lazy" alt="Gemini 產出的簡報風格與範本不同">
+    <figcaption>Gemini 的結果：東西是做出來了，但風格跟範本完全不同。［二段 01:33］</figcaption></figure>
+
+  <div class="twrap"><table>
+    <tr><th style="width:130px">平台</th><th>結果</th></tr>
+    <tr><td><b>Codex</b></td><td>✅ 成功。老師的主力做法</td></tr>
+    <tr><td><b>ChatGPT 專案</b></td><td>✅ 成功。適合有訂閱但不熟 Codex 的人，做好還能分享給別人用</td></tr>
+    <tr><td><b>Claude Code</b></td><td>✅ 學員當場測成功</td></tr>
+    <tr><td><b>Gemini Anti-gravity</b></td><td>✅ 學員當場測成功</td></tr>
+    <tr><td><b>Gemini（聊天）</b></td><td>❌ 風格對不上。「它雖然都做出來了，但這個跟我要的風格完全都不同。<b>雖然也很標準，但是這個不符合我的需求</b>」</td></tr>
+  </table></div>
+
+  <div class="note green">✅ <div>學員回報成功之後，老師的反應是：「<b>還好你幫我試，這樣就代表 OK⋯⋯所以代表這個概念是成功的，代表這個概念是可行的。</b>」<br>他也公開道謝：「感謝剛剛的分享，模型選對了就沒有問題。」<br>把驗證分散給全班做，是一種很聰明的教學方式：既確認了方法通用，也讓每個人真的動手。</div></div>
+</section>
+
+<!-- 9 -->
+<section class="chapter" id="sec-model">
+  <span class="chip" style="background:linear-gradient(90deg,var(--amber),var(--orange))">成本</span>
+  <h2 class="ct">9. 模型選擇的經濟學［二段 00:00–01:14 · 13:38–15:20］</h2>
+
+  <p>他一開始用「超高」推理跑，結果跑完之後做了一件事：<b>降一級再跑一次，看結果一不一樣。</b></p>
+  <div class="note gold">💰 <div>「我現在這次改成高，剛剛是超高嘛。<b>假如高可以達到一樣的效果，那就不要花那麼多錢。</b>」<br>驗證結果：「<b>高就可以了，不用寫到超高。</b>」<br>學員之前用「中」也成功過。所以實際結論是：這個任務用中到高就夠，超高是浪費。</div></div>
+  <div class="note blue">🧪 <div>這是一個很少人做但很值得養成的習慣：<b>成功之後往下降一級再試一次</b>，找出「剛好夠用」的那一檔。做一次的差別不大，做一百次就是明顯的成本差距。</div></div>
+</section>
+
+<!-- 10 -->
+<section class="chapter" id="sec-usingskill">
+  <span class="chip" style="background:linear-gradient(90deg,var(--green),var(--teal))">實戰</span>
+  <h2 class="ct">10. Skill 實戰：拆書與爆炸圖［二段 01:45–08:10］</h2>
+
+  <figure class="shot"><img src="s3e2-img/16-skill-call.jpg" loading="lazy" alt="用斜線呼叫已安裝的 Skill">
+    <figcaption>用「／」呼叫已安裝的 Skill，清單裡有 pdf 拆分等項目。［二段 02:59］</figcaption></figure>
+
+  <ul class="pt">
+    <li>安裝好之後，打 <b>斜線</b> 就會跳出可用的 Skill 清單</li>
+    <li>選 <b>PDF 拆分</b>，然後<b>什麼都不用說</b>，直接把 PDF 丟進去送出</li>
+    <li>爆炸圖那支他做成<b>全域</b>的，「在任何專案裡頭都可以做這樣的運用」，以後只要把圖丟進來就能直接呼叫</li>
+  </ul>
+
+  <figure class="shot"><img src="s3e2-img/17-pdf-split.jpg" loading="lazy" alt="720 頁的 PDF 被拆成 10 個章節">
+    <figcaption>實測：720 頁的書拆成 10 個章節，逐章預覽驗證第二、七、八、九章都正確。［二段 05:05］</figcaption></figure>
+
+  <div class="note gold">⚖️ <div><b>他很誠實地講了 Skill 版的缺點。</b>同一件事他先前已經寫過一支網頁工具：<br>「<b>但是我給你那個程式更快，對不對？還不用耗點數。</b>」<br>Skill 版要扣 AI 的點數，網頁版免費而且更快。他建議「你自己評估在哪邊做會比較方便」。<br>那 Skill 版的優勢在哪？<b>在於它可以接下一步</b>：拆完可以直接寄 Mail 給你，或串到 NotebookLM 做成 Podcast。單機工具做不到這件事。</div></div>
+</section>
+
+<!-- 11 -->
+<section class="chapter" id="sec-agent">
+  <span class="chip" style="background:linear-gradient(90deg,var(--purple),var(--blue))">觀念</span>
+  <h2 class="ct">11. Agent 跟聊天寫程式差在哪［二段 06:07–07:00］</h2>
+
+  <p>有人問他，在 Claude 或 Gemini 的聊天視窗寫程式，跟用 AI Agent 寫，差別到底在哪。他的答案很具體。</p>
+
+  <div class="note gold">🔁 <div>「同樣的提示詞，我上次不是有試給大家看，同樣一個彈珠台，在 Claude 裡頭 chat、就是聊天的方式，他去寫，他寫出來的效果<b>還不錯</b>。」<br>所以簡單的東西，聊天就夠了。差別出現在複雜的時候：<br>「假如你今天是屬於程序上比較複雜的，你用 AI Agent 來做有一個好處，<b>他會去檢視自己，他會去檢視自己到底哪一段有問題。</b>」<br>他舉的例子很好懂：「我說請他幫我順便上架，<b>他會去檢查說他的上架結果，他自己預覽效果好不好</b>。可是我們自己開發程式卻不會有這樣的一個狀況。可是 AI Agent 他卻可以幫你做這個事情。」</div></div>
+
+  <div class="note blue">🔗 <div>把這段跟第 6 章那份完成回報放在一起看就懂了：那句「<b>通過 20 頁渲染、溢位與版型忠實度檢查</b>」跟那份 <code>deviation-log.txt</code>，就是「它會去檢視自己」的具體長相。<br>你不用相信它做對了，因為它自己會回頭看，而且把看的結果留下來給你查。</div></div>
+</section>
+
+<!-- 12 -->
+<section class="chapter" id="sec-image">
+  <span class="chip" style="background:linear-gradient(90deg,var(--pink),var(--rose))">圖像</span>
+  <h2 class="ct">12. 七種風格：怎麼讓它真的畫圖［二段 08:11–23:30］</h2>
+
+  <figure class="shot"><img src="s3e2-img/18-seven-styles.jpg" loading="lazy" alt="人物七種風格的圖像產出">
+    <figcaption>一張人像丟進去，產出七種不同風格。［二段 09:40］</figcaption></figure>
+
+  <h3>三個讓它乖乖畫圖的訣竅</h3>
+  <ol class="st">
+    <li><b>一次講完要幾張。</b>「跟他講說 1 到 7 請個別畫出圖像，<b>不然他會問你</b>，他會問你說你到底要什麼，很浪費時間」</li>
+    <li><b>指定編號時要補「請畫出圖像」。</b>「你要 3 的話，你不要只有輸入 3。我發現在 Gemini 或 ChatGPT，<b>他會寫出一大堆提示詞，他就是不畫</b>，你要跟他講『再畫出圖像』，又浪費一次」</li>
+    <li><b>專案設定裡務必勾「創作圖像」。</b>老師連講三次「務必」，不勾它就不會畫</li>
+  </ol>
+
+  <div class="note green">👀 <div><b>一個很好的順手學習示範。</b>他說 AI 在過程中「無意中給我他的程式的語法，Python 的程式的語法，怎麼樣去控制他的位置」，他的反應是：「<b>哦，好，那我又學起來了。就把這個東西給學起來了。</b>」<br>AI 吐出來的中間過程往往比最終答案更有料，看到就收下來。</div></div>
+
+  <figure class="shot"><img src="s3e2-img/19-nano-banana.jpg" loading="lazy" alt="名人合照等圖像生成功能">
+    <figcaption>Groq 解析文字 + Gemini 生成圖像的雙 API 工具：名人合照、並排、分隔、Q版、換衣、六格漫畫。［二段 22:00］</figcaption></figure>
+  <ul class="pt">
+    <li>用 <b>Gemini 3.1 Flash Lite Image</b>，十幾秒一張，一張約 1 元</li>
+    <li>解析度最高 1024×1024。老師的評估：「就一般的教學，或是所謂的一些社群文案貼圖的部分，<b>你當都是夠</b>」</li>
+    <li>要生圖就是要付費，他講得直接：「你說可是這個東西不是就是要花錢嗎？<b>答案是的</b>」</li>
+  </ul>
+</section>
+
+<!-- 13 -->
+<section class="chapter" id="sec-podcast">
+  <span class="chip" style="background:linear-gradient(90deg,var(--teal),var(--cyan))">工具四</span>
+  <h2 class="ct">13. Podcast 提示詞產生器［二段 24:44–50:30］</h2>
+
+  <p>這支不產生 Podcast，它產生的是<b>給 NotebookLM 用的提示詞</b>。老師解釋差別：「這邊比較快，這邊可以生成你要的提示詞能用。」</p>
+
+  <figure class="shot"><img src="s3e2-img/21-debate.jpg" loading="lazy" alt="Podcast 提示詞產生器的節目設定">
+    <figcaption>節目設定：聽眾對象、敘事節奏、主持人設定（可以自己命名、選性別與風格）。［二段 29:36］</figcaption></figure>
+
+  <h3>可以設定什麼</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:120px">項目</th><th>選項</th></tr>
+    <tr><td>聽眾對象</td><td>初學者、一般大眾、專業人士、主管或投資人</td></tr>
+    <tr><td>敘事節奏</td><td>漸進式、先高後穩、上上下下</td></tr>
+    <tr><td>主持人</td><td>自己命名（他當場設「益師傅」跟「小美人」）、選性別、寫風格</td></tr>
+    <tr><td>要不要自我介紹</td><td>要的話它會講自己是做什麼的</td></tr>
+    <tr><td>時間長度</td><td>20 分或更長</td></tr>
+    <tr><td><b>對談風格</b></td><td>輕鬆對談、<b>辯論交鋒</b>等四種</td></tr>
+    <tr><td>必提關鍵字</td><td>一定要提到的東西，「他還是會提到關鍵字」</td></tr>
+    <tr><td>禁止提及</td><td>不得出現的主題，例如品牌名稱、政治立場</td></tr>
+    <tr><td>額外要求</td><td>繁體中文、口語化、幽默、引用數據、預告下集、<b>互動提問</b></td></tr>
+  </table></div>
+
+  <figure class="shot"><img src="s3e2-img/20-podcast-prompt.jpg" loading="lazy" alt="提示詞產生器的禁止提及與額外要求設定">
+    <figcaption>下半部的設定與使用說明，右下角可切換要產給 NotebookLM、Claude 還是 ChatGPT。［二段 35:30］</figcaption></figure>
+
+  <div class="note gold">⚔️ <div><b>「辯論交鋒」這個選項，老師特別推薦，理由很值得記。</b><br>「假如你要探索一個主題，我都建議選辯論。假如你想要探索一個文案、你自己寫的資料，你不確定到底好或不好⋯⋯麻煩你做一份叫做辯論，<b>另外一個會站在反對方來看你相關文件的資料</b>。<br>這樣很好啊。有時候因為 <b>LLM 被我們訓練，他訓練出來都是講好話</b>。你可以勾選辯論，讓他站在不同的觀點來看這件事情。」<br>用機制對抗 AI 的討好傾向，這比提醒自己「要保持懷疑」有效得多。</div></div>
+
+  <div class="note blue">🎧 <div><b>互動提問是什麼？</b>他解釋了那個你可能聽過但沒注意的細節：NotebookLM 的語音摘要「最後是不是會留待幾個問題跟你們探索互動⋯⋯他就會出幾個問題」。那個效果就是從這個設定來的。</div></div>
+
+  <h3>一個順手的小技巧：把圖片塞進單檔工具</h3>
+  <div class="note steel">🖼️ <div>老師問大家有沒有發現頁面上那張圖在上下輕微飄動。做法是：<br>「你就丟一張圖跟他講，<b>你要去背，並且把這個圖透過 base64 直接給塞進去</b>，他就幫你做好囉，他就幫你做在你的程式裡頭。」<br>「所以你的程式都永遠不用擔心只能用那些 emoji 的小圖，<b>你也可以做一些漂亮的圖放在裡頭</b>。」<br>他的完整流程是：網路上找圖 → 用 ChatGPT 轉成向量圖 → 改顏色 → 做成最終圖 → 丟給 AI 說「幫我去背、放右上角、要有微微飄動的感覺」。<br>然後他下了一句結論：「<b>全部都用講的。全部都腦袋有想法，你用講的把它講出來，他自然就可以幫你做。</b>」</div></div>
+</section>
+
+<!-- 14 -->
+<section class="chapter" id="sec-real">
+  <span class="chip" style="background:linear-gradient(90deg,var(--ink3),var(--rose))">現場</span>
+  <h2 class="ct">14. 現場的真實</h2>
+
+  <h3>他做到一半發現自己想太多</h3>
+  <div class="note steel">🕳️ <div>講 Podcast 工具時，他一路加功能：試聽、換聲音、下載字幕、下載 MP4。講到後面自己停下來：<br>「我乾脆講，連那個聲音都不用 copy，然後下拉，他自己內定拿幾種聲音可以選擇，這樣不更棒⋯⋯<b>你看，層次就是這樣一直改過。改一改，我幹嘛挖一個坑給自己跳？</b>」<br>後來他還問全班：「你們覺得要這樣做嗎？有需要這樣做嗎？」沒人回應，他就說「那就先不做吧，你們就直接用到 NotebookLM 裡頭來做就好了」。<br><b>知道什麼不該做，跟知道什麼該做一樣重要。</b>他最後也講了那個技術上的真正原因：NotebookLM 可以用很少的資料生成一二十分鐘的內容，「它內容會直接去填充、去把它給強化」，自己重做這段反而更麻煩。</div></div>
+
+  <h3>他也會找不到自己的檔案</h3>
+  <p>示範圖像工具時，他連續給錯版本，翻了好幾次日期才確認：「不好意思，我這個再整理一下給大家好不好⋯⋯我搞錯了，我是要給你們另外一個程式。」跟他在其他堂課遇到的狀況一樣，<b>同時開很多專案、每支又改很多版，版本管理本身就是個問題。</b></p>
+
+  <h3>他反覆測到有把握才敢講</h3>
+  <div class="note gold">🧪 <div>「我就一直反覆測這個東西了。<b>確定到這個提示詞是 OK 的、沒有問題，才敢跟大家分享。</b>」<br>這句話值得放在心上：他給學員的每一段提示詞，背後都有一輪自己先撞過的牆。</div></div>
+</section>
+
+<!-- 15 -->
+<section class="chapter" id="sec-quotes">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--amber))">GOLDEN LINE</span>
+  <h2 class="ct">15. 老師金句</h2>
+  <div class="golden"><div class="q">「它就變成都是參數了，而不是固定就只能用哪一個檔案。你一定要變成參數。」</div><div class="a">整堂課的核心。做成一次是成果，變成參數才是能力。［一段 65:02］</div></div>
+  <div class="golden"><div class="q">「沒有人告訴你不能這樣子用啊。大家好像就是覺得 Skill 就是 Skill，不能用在別的地方。沒有這道理啦。畢竟它只是一個提示詞。」</div><div class="a">Skill 的本質是提示詞，所以它可以跨平台走。除非裡面有串接。［一段 57:03］</div></div>
+  <div class="golden"><div class="q">「你用 AI Agent 來做有一個好處，他會去檢視自己，他會去檢視自己到底哪一段有問題。」</div><div class="a">簡單的事聊天就夠，複雜的事要用會自我檢查的。［二段 06:36］</div></div>
+  <div class="golden"><div class="q">「因為 LLM 被我們訓練，他訓練出來都是講好話。你可以勾選辯論，讓他站在不同的觀點來看這件事情。」</div><div class="a">用機制對抗討好傾向，比提醒自己保持懷疑有效。［二段 30:44］</div></div>
+  <div class="golden"><div class="q">「全部都用講的。全部都腦袋有想法，你用講的把它講出來，他自然就可以幫你做。」</div><div class="a">在講怎麼把一張去背的圖塞進單檔程式裡。門檻不在技術，在你有沒有想法。［二段 26:50］</div></div>
+  <div class="golden"><div class="q">「假如高可以達到一樣的效果，那就不要花那麼多錢。」</div><div class="a">成功之後往下降一級再測一次，找出剛好夠用的那一檔。［二段 01:00］</div></div>
+  <div class="golden"><div class="q">「我不喜歡炫技，但是我喜歡講落地應用。炫技不是我的本事，我也沒那個本事。」</div><div class="a">整場兩小時，他示範的每一個東西都能當天拿去用。［一段 24:07］</div></div>
+  <div class="golden"><div class="q">「學這個你會覺得有點辛苦，但是當你會這些東西之後，你內心裡有一些流程的概念，你未來在學 Codex 或 AI Agent 基本上都可以克服了。」</div><div class="a">為什麼一堂 AI 課要先教 Node-RED。［一段 06:06］</div></div>
+</section>
+
+<!-- 16 -->
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,var(--ink3),var(--ink2))">SOURCE</span>
+  <h2 class="ct">16. 資料來源與整理說明</h2>
+  <ul class="pt">
+    <li><b>原始教材：</b>Google Drive 資料夾「第二堂」，課堂錄影兩段，加上 Node-RED 模擬器、Podcast 提示詞工具、兩份 Skill 檔、簡報復刻說明與 PowerPoint 版型包。</li>
+    <li><b>整理方法：</b>本頁依據該資料夾內既有的「完整逐幀筆記」素材撰寫：第一段 264 張畫面、790 段逐字稿；第二段 223 張畫面、707 段逐字稿，每 15 秒保留一張實際畫面並附 OCR 與同期口述。從中挑出 21 張關鍵畫面重新整理成本頁。</li>
+    <li><b>錄影的一個狀況：</b>第一段 MP4 的容器標示 69 分 34 秒，但 <b>65 分 55 秒之後已經沒有可解碼的畫面與音訊</b>，是原始檔本身的問題。本頁依實際可讀內容整理，第二段 55 分 34 秒正常。（此點以兩種獨立方式量測，結果一致。）</li>
+    <li><b>引號內的發言</b>取自逐字稿，僅去除口語重複與語助詞，並修正<b>可確定的</b>辨識錯字（講師姓名、Codex、Claude、Gemini、NotebookLM、Groq、MQTT、Mermaid、Wokwi 等工具名）。不確定的一律不改也不寫進來。</li>
+    <li><b>刻意未收錄：</b>老師購買的 PowerPoint 版型包不隨本頁散布；取得電子書的操作步驟與相關網站名稱不寫成教學；課堂閒聊與個股討論不列入整理。</li>
+    <li><b>隱私處理：</b>所有截圖已裁掉錄影右側的線上參與者名單，其中一張另外裁掉了含第三方檔名的區域。</li>
+    <li><b>本堂沒有課後作業。</b>老師的建議是拿簡報復刻多練幾次，並特別說「你故意拿有曲線圖跟圖檔的部分，可以試試看」。</li>
+  </ul>
+</section>
+
+</article>
+</div>
+
+<footer>
+  <p>📝 ECF S3E2 逐幀課堂筆記 · 生成式AI應用電台・訂閱制第三季第二堂（益師傅）</p>
+  <p>2026/07/24 直播 · <a href="../radio/#ecf">🏠 回筆記館入口</a></p>
+</footer>
+
+</body>
+</html>
