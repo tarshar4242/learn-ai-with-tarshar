@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>把提示詞變成一條公式｜ECF 提示詞工程補充課 互動式學習地圖</title>
+<meta name="description" content="ECF 提示詞工程補充課（益師傅／楊俊益，2026/09/05）互動式學習地圖：五大主題 20 項實戰技能，涵蓋提示詞參數化與 (A＋B)² 公式思維、One-shot 與錨定原理的分界、一句話把行銷4P改成合約書比對、去電商網站找結構範本、NotebookLM 用版型檔把錄音變成公司格式會議紀錄、指向符號只摘要某一章、中央對話框產生可編輯 PPTX、資訊圖表失敗後改用 PlantUML 語法救回，以及把提示詞收成 ChatGPT 專案。學會一項打一個勾，進度存在自己的瀏覽器。">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269;
+  --green:#3f8560; --orange:#bf6a1e; --red:#c0453f; --teal:#0d8f80; --amber:#9c7b23;
+  --feat:#8a5e1a; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(28px,4.6vw,46px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--txt);background:none;-webkit-text-fill-color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:680px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:9px}
+.steps li{list-style:none;counter-increment:st;display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--txt2);line-height:1.7}
+.steps li::before{content:counter(st);flex:none;width:25px;height:25px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:var(--c,var(--feat));margin-top:1px}
+.steps li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+.prompt,.promptbox{background:#1d1d1f;border:1px solid #2c2c31;border-radius:10px;padding:13px 15px;margin-top:6px;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt b,.promptbox b{color:#fff}
+figure.shot{margin:10px 0 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12px;color:var(--txt3);padding:8px 12px;border-top:1px solid var(--line);background:var(--bg2);line-height:1.6}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <a class="navlink" href="../radio/#ecf" style="border-color:#c7d6e4" onclick="if(history.length>1){history.back();return false}">← 回上一頁</a>
+  <div class="logo">
+    <div class="dot">🧩</div>
+    <div>提示詞工程 地圖<small>SUBSCRIPTION S3 · BONUS 2</small></div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋技能關鍵字：參數、大括號、One-shot、錨定、任務編號、結構轉換、NotebookLM、會議紀錄、指向符號、PPTX、PlantUML、語音摘要…" autocomplete="off">
+  </div>
+  <a class="navlink" href="s3-bonus2-notes.html">📝 課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">ECF 補充課 · 訂閱制第三季 · 2026/09/05</span>
+  <h1>把提示詞<br>變成一條公式</h1>
+  <p class="sub">益師傅開場的順口溜是「<b>提示詞學得好，AI 生成沒煩惱</b>」，但整堂三小時只在拆一件事：多數人把提示詞當成用完就丟的句子，所以換一個題目就要重寫一次。<br>他要你改成把它當成 <b>(A＋B)² 那樣的公式</b>——結構不動，代入的內容變，結果就變。於是同一份提示詞能從行銷 4P 一句話改成合約書比對，同一支程式能從資訊設備管理改成圖書館管理，同一套簡報指令能套到任何資料上。<br>點進每一章，逐層展開<b>本堂實際教到</b>的觀念、示範與操作，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🎙️ 生成式AI應用電台・訂閱制第三季</span>
+    <span>👤 益師傅（楊俊益・ECF）</span>
+    <span>⏱️ 全長 3 小時 1 分</span>
+    <span>🔰 小白友善</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>5</b><span>大主題</span></div>
+  <div class="stat"><b>20</b><span>實戰技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 20 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--blue)" onclick="showChapter('formula')">
+        <div class="glowline"></div><span class="emoji">🧩</span>
+        <h3><em>CHAPTER 01</em>提示詞是一條公式</h3>
+        <p>大括號就是參數、One-shot 與錨定原理怎麼分、任務編號的真正用途，以及給外部連結時最容易漏掉的那一步。</p>
+        <div class="foot"><div class="mini"><i data-mini="formula"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--teal)" onclick="showChapter('transform')">
+        <div class="glowline"></div><span class="emoji">🔁</span>
+        <h3><em>CHAPTER 02</em>一句話換題目：結構轉換</h3>
+        <p>行銷 4P 改成合約書比對、去電商網站找資料結構、整支程式換成圖書管理系統，以及三次對話十二分鐘做出一支工具。</p>
+        <div class="foot"><div class="mini"><i data-mini="transform"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--purple)" onclick="showChapter('notebooklm')">
+        <div class="glowline"></div><span class="emoji">📓</span>
+        <h3><em>CHAPTER 03</em>NotebookLM：錄音變公司格式</h3>
+        <p>內容來源與版型來源怎麼分、自訂報告那兩句缺一不可的提示詞、指向符號只讀某一章，以及去個資。</p>
+        <div class="foot"><div class="mini"><i data-mini="notebooklm"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--amber)" onclick="showChapter('visual')">
+        <div class="glowline"></div><span class="emoji">🎨</span>
+        <h3><em>CHAPTER 04</em>可編輯簡報與專業圖表</h3>
+        <p>在中央對話框產生可編輯的 PPTX、逐頁指定每頁畫什麼圖、資訊圖表四次越改越糟的實況，以及用 UML 語法救回來。</p>
+        <div class="foot"><div class="mini"><i data-mini="visual"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--rose)" onclick="showChapter('method')">
+        <div class="glowline"></div><span class="emoji">🧠</span>
+        <h3><em>CHAPTER 05</em>收納與心法</h3>
+        <p>把提示詞收成 ChatGPT 專案、抄別人的要 renew 不是 clone、語音摘要的實戰用法，以及平台會變但人要檢核。</p>
+        <div class="foot"><div class="mini"><i data-mini="method"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    
+const DATA = {
+  formula: {
+    key:'formula', color:'var(--blue)', emoji:'🧩', code:'CHAPTER 01', title:'提示詞是一條公式',
+    intro:'整堂課的地基。多數人把提示詞當成用完就丟的句子，所以換一個題目就要重寫一次。益師傅要你改成把它當成 (A＋B)² 那樣的公式：結構固定，會變的挖成參數，這份提示詞就變成可以一直用的資產。',
+    topics:[
+      {t:'大括號就是參數', s:'品牌美譽度分析.txt 裡的 {連結}｜錄影 18:00–24:00', blocks:[
+        {h:'他怎麼講',p:'打開教材裡的提示詞，指著 <b>{連結}</b> 說：這個左右大括號就是參數。然後問現場學員一個國中數學題——「(A＋B) 的平方等於什麼？」'},
+        {h:'意思是什麼',p:'公式永遠不變，代入的 A、B 不同，答案就不同。<b>提示詞也一樣：結構固定，把會變的東西挖成括號。</b>'},
+        {h:'實際長這樣',p:'「請根據 <b>{連結}</b> 所提供資訊，輸出該品牌的創立時間、發展歷程、核心理念、產品或服務特色、市場定位與目標客群的詳細說明。」'},
+        {h:'怎麼用在自己身上',tip:'以後看到別人寫的提示詞裡有 {連結}、{股票代號}、{品牌名}，那不是裝飾，是<b>參數插槽</b>——代表那份提示詞是設計成可以重複使用的。你自己寫的時候也該這樣挖。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-bonus2-notes.html#sec-formula" style="color:var(--blue)">筆記 2：提示詞是一條公式</a>'}]},
+
+      {t:'One-shot、Little-shot、錨定原理', s:'全課被糾正最多次的地方｜錄影 24:00–29:00 · 72:00–83:00', blocks:[
+        {h:'三個詞的分工',table:{head:['名稱','給 AI 的是','例子'],rows:[
+          ['Little-shot','什麼都不給，直接請 AI 扮演專家生成一份','「我不會寫會議紀錄，請你列出應該包含哪些項目並說明為什麼」'],
+          ['One-shot','一份<b>不太會變</b>的範本，讓它學結構','員工守則、會議紀錄版型檔、PlantUML 語法樣板'],
+          ['錨定 Anchor','一個<b>一直在變</b>的來源，讓它去參照','證交所即時股價、PChome 商品分類頁']]}},
+        {h:'他當場糾正的那一題',warn:'學員以為「直接問 AI 台積電今天的股價」是 One-shot。<b>錯，那是錨定。</b>要問股價就該指向台灣證券交易所的資料介面，而且一定要一併抓三大法人買賣超——「法人都跑了你還在幫人抬轎，那才危險」。'},
+        {h:'記住這條分界就好',tip:'<b>拿得回來、不太會變的 → One-shot；資料一直在變、只能參照的 → 錨定。</b>實務上兩者合併使用效果最好。'},
+        {h:'一個誠實的註記',p:'益師傅全場使用「Little-shot」與「Full Shot」兩個詞，學術上對應的標準術語通常是 zero-shot 與 few-shot。這裡照講師原話保留，沒有替換。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-bonus2-notes.html#sec-shot" style="color:var(--blue)">筆記 3：One-shot 與錨定原理</a>'}]},
+
+      {t:'任務一、任務二是標記，不是順序', s:'很多人照抄卻不知道為什麼｜錄影 76:00 前後', blocks:[
+        {h:'先破除誤解',warn:'很多人以為「任務一、任務二、任務三」是在排執行順序。<b>不是。</b>提示詞一律由上往下執行，你寫任務四它也不會跳著做。'},
+        {h:'真正的用途：可以指名重做',p:'哪一段做不好，你可以直接說「請針對<b>任務二</b>，加上近三個月法人持股變化這一欄」「請針對<b>任務三</b>，把輸出格式改成 CSV」，<b>不必重新描述整段需求</b>。'},
+        {h:'用步驟一、步驟二也可以',p:'重點不是叫什麼，是<b>給每一塊一個可以指名的編號</b>。'},
+        {h:'實機畫面',shot:{img:'s3-bonus2-img/05-stock-prompt.jpg',cap:'台股個股分析提示詞：資料來源指向證交所，下面分成任務一、任務二、任務三。［81:32］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-bonus2-notes.html#sec-stock" style="color:var(--blue)">筆記 8：任務編號到底在做什麼</a>'}]},
+
+      {t:'給外部連結時，要一起給主標題', s:'不然 AI 會抓到旁邊的廣告｜錄影 43:48', blocks:[
+        {h:'一個很小但會壞事的細節',p:'把網址丟給 AI 之後，<b>空一格，把那一頁的主標題名稱也一起給它</b>。'},
+        {h:'不做會怎樣',warn:'AI 會抓到旁邊的<b>廣告版位、信用卡優惠</b>而失焦，你以為它在讀商品分類，其實它在讀橫幅廣告。這個細節老師強調了兩次。'},
+        {h:'為什麼叫錨定',tip:'像漁船靠儀器知道魚群在哪裡才下錨，捕到魚的機率才高。給連結沒給標題，等於知道有魚但錨下錯地方。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-bonus2-notes.html#sec-structure" style="color:var(--blue)">筆記 5：最難寫的是結構</a>'}]}
+    ]
+  },
+
+  transform: {
+    key:'transform', color:'var(--teal)', emoji:'🔁', code:'CHAPTER 02', title:'一句話換題目：結構轉換',
+    intro:'公式化之後，最大的紅利就是「換題目不用重寫」。這一章的四個示範用的是同一個句型，只是換掉對象——從提示詞、到系統、到整支程式。',
+    topics:[
+      {t:'行銷 4P 一句話改成合約書比對', s:'全課第一個現場實作｜錄影 29:00–37:00', blocks:[
+        {h:'原始素材',p:'一份行銷 4P 分析的提示詞，結構是「請根據上傳的資料 → 任務一（四象限矩陣圖表）→ 任務二（交叉分析與建議）→ 任務三（FB／IG 行銷詞語）」。'},
+        {h:'學員的答案 vs 正解',table:{head:['做法','老師的評語'],rows:[
+          ['參照 4P 的檔案重寫一份','方向對，但太辛苦'],
+          ['把「行銷」逐字改成「風險管理」','太辛苦'],
+          ['<b>一句話請 AI 幫你改</b>','正解']]}},
+        {h:'正確操作只有三步',steps:[
+          '打上「<b>請幫我將以下提示詞改為合約書的比對及風險管理的運用</b>」',
+          '按 <b>Shift ＋ Enter</b> 換行（直接按 Enter 會送出）',
+          '把原本那整份提示詞貼在下面，送出']},
+        {h:'結果',p:'AI 把「請根據上傳的行銷企劃案」改成「請根據上傳的合約書資料」，而<b>四象限矩陣圖表、交叉分析、三個任務的骨架全部保留</b>。'},
+        {h:'實機畫面',shot:{img:'s3-bonus2-img/02-marketing-4p-prompt.jpg',cap:'被改造的原始提示詞。老師說這跟你用 Pro 還是 Flash 模型無關。［32:31］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-bonus2-notes.html#sec-4p" style="color:var(--teal)">筆記 4：實作一 一句話換題目</a>'}]},
+
+      {t:'最難寫的不是介面，是資料結構', s:'去電商網站找 One-shot｜錄影 37:00–48:00', blocks:[
+        {h:'他問學員：寫一套系統最難的是哪一塊',table:{head:['學員的答案','老師怎麼否掉'],rows:[
+          ['使用者介面','截圖給 AI 它就會做'],
+          ['權限與資料庫','還好，不是最難'],
+          ['URS 使用者需求規格','行不通——使用者自己也講不清楚，常常做到一半才想起漏了一層']]}},
+        {h:'他的答案',p:'<b>資料的結構與導入最難。</b>光是資訊設備要分幾類、記憶體有哪些規格，你就寫不完整。'},
+        {h:'解法不是叫 AI 給範本',warn:'AI 給的是「通識學」等級的範本，<b>不夠細</b>。'},
+        {h:'正解：去找一個別人花大錢做好的結構',ul:[
+          '<b>3C 設備</b> → PChome、原價屋的商品分類階層',
+          '<b>圖書</b> → 博客來的分類階層',
+          '把連結給 AI，請它參照這個結構往下拆到第二層、第三層',
+          '再要它補上台灣常用的五百個以上品牌']},
+        {h:'實機畫面',shot:{img:'s3-bonus2-img/03-equipment-system.jpg',cap:'他實際做出來的資訊設備管理系統。難的不是畫面。［47:07］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-bonus2-notes.html#sec-structure" style="color:var(--teal)">筆記 5：去電商網站找 One-shot</a>'}]},
+
+      {t:'資訊設備系統改成圖書管理系統', s:'連整支程式都能一句話搬家｜錄影 48:00–55:00', blocks:[
+        {h:'還是那一句話',p:'「<b>請將上傳的程式幫我改成學校圖書館管理系統，並且可以用 ISBN 來做查詢或輸入。</b>」三層四層的分類架構照搬，只換掉領域內容。'},
+        {h:'ISBN 自動帶資料',p:'輸入書碼就自動帶回書名、作者、簡介，不用一本一本手打。串接的是 <b>Google Books API</b>。'},
+        {h:'比示範更重要的方法論',tip:'你不知道怎麼做到的地方，就<b>直接問 AI「有什麼方法可以做到」</b>。AI 會告訴你有哪個 API 可以串，你再回頭跟寫程式的 AI 說「請幫我串這個」。'},
+        {h:'這次示範失敗了，他照實說',p:'現場因為網路連線問題沒有查詢成功。老師當場說明「之前是 OK 的，可能設定跑掉了」，沒有跳過也沒有假裝成功。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-bonus2-notes.html#sec-book" style="color:var(--teal)">筆記 6：實作二 換成圖書管理系統</a>'}]},
+
+      {t:'三次對話、十二分鐘做出一支工具', s:'他把開發過程全部攤開｜錄影 55:00–61:00', blocks:[
+        {h:'成品是什麼',p:'<b>企業提示詞工程產生器</b>：選一個企業情境（行銷分析、合約書比對、風險管理、績效評估、招募、財務分析、競品分析⋯），上傳一份參考素材，就動態產生一份能用的提示詞，可下載成 MD、TXT、JSON。'},
+        {h:'三次對話分別講了什麼',steps:[
+          '<b>第一次（一段話講完全部）</b>：用 Prompt Engineering 技巧設計一個企業用提示詞產生器，要能做 1 到 20 種情境；要能吃上傳檔案／貼上文字／圖像解析／外部連結／括號化參數；串 Groq API；版型風格要像上傳的截圖；要能下載 JSON 或 MD',
+          '<b>第二次</b>：每個區域要提供畫面折疊功能',
+          '<b>第三次</b>：AI 只做了標題折疊，他截兩張圖說明要的是<b>整個區域</b>折疊']},
+        {h:'他的結論',p:'「<b>不是我厲害，是 AI 厲害。</b>」重點在提示詞下得夠精準：要什麼、做什麼、輸出什麼、介面長什麼樣，一次講清楚。'},
+        {h:'設計上真正值得抄的地方',tip:'他把提示詞<b>先解構、再結構起來</b>——角色設定、資料型態、提示詞技巧、輸出格式全部拆成可勾選的欄位。這就是「公式化」在介面上長出來的樣子。'},
+        {h:'實機畫面',shot:{img:'s3-bonus2-img/01-prompt-generator.jpg',cap:'開發過程全公開：一般人只給成果不給過程。［61:05］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-bonus2-notes.html#sec-secret" style="color:var(--teal)">筆記 7：大解密 三次對話十二分鐘</a>'}]}
+    ]
+  },
+
+  notebooklm: {
+    key:'notebooklm', color:'var(--purple)', emoji:'📓', code:'CHAPTER 03', title:'NotebookLM 實戰：錄音變公司格式',
+    intro:'後半堂的主戲，也是最容易直接搬去上班用的一段。任務很具體：把一段會議錄音，產出成公司既有格式的會議紀錄。',
+    topics:[
+      {t:'上傳兩份來源：內容一份、版型一份', s:'版型檔就是那個 One-shot｜錄影 94:00–106:00', blocks:[
+        {h:'兩份來源各自的角色',table:{head:['檔案','角色'],rows:[
+          ['學校會議.mp3','<b>內容來源</b>——要被摘要的東西'],
+          ['會議記錄.pdf','<b>版型來源</b>——要被學走的結構，也就是 One-shot']]}},
+        {h:'版型檔一定要是 PDF',warn:'Word 檔請用「<b>列印成 PDF</b>」轉檔。<b>不要存成 TXT</b>——TXT 會把大小標題的層級結構整個丟掉，AI 就學不到版型。'},
+        {h:'檔名越短越乾淨越好',p:'因為提示詞要指名檔名，名字太長容易打錯、也容易被 AI 認錯。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-bonus2-notes.html#sec-minutes" style="color:var(--purple)">筆記 10：NotebookLM 實戰</a>'}]},
+
+      {t:'自訂報告：兩句提示詞，缺一句就失敗', s:'這一段是全課含金量最高的｜錄影 106:00–110:00', blocks:[
+        {h:'到「報告」功能選「自訂報告」',shot:{img:'s3-bonus2-img/09-notebooklm-custom-report.jpg',cap:'建立報告的選單。［106:44］'}},
+        {h:'提示詞只有兩句',p:'<b>資料來源：</b>學校會議.mp3<br><b>摘要格式：</b>必須完全與 會議記錄.pdf 的摘要項目、順序、條列一致'},
+        {h:'第一個關鍵：措辭要強烈',warn:'「<b>必須完全一致</b>」這種強烈措辭是必要的。只寫「摘要格式參考某某檔案」<b>力道不夠</b>，AI 會自由發揮。'},
+        {h:'第二個關鍵：資料來源那一行',warn:'不寫的話，AI 會把版型範本檔<b>裡面的內容</b>也當成素材一起做摘要，<b>兩份資料就混在一起錯亂了</b>。這是最多人踩的坑。'},
+        {h:'成果',shot:{img:'s3-bonus2-img/10-meeting-minutes-result.jpg',cap:'出席人數、時間、地點、請假、主席報告、確認議程、校務工作報告——項目與順序全部跟版型檔一致，內容卻全部來自那支主題完全不相干的錄音檔。［107:31］'}},
+        {h:'一句話總結',tip:'這就是 One-shot——<b>讓它學結構，不是學標題。</b>同一招換成公司的專案報告、訪談紀錄、客訴處理單，都成立。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-bonus2-notes.html#sec-minutes" style="color:var(--purple)">筆記 10：自訂報告的兩句關鍵</a>'}]},
+
+      {t:'指向符號：只摘要一本書的某一章', s:'本堂最實用的小技巧｜錄影 113:00', blocks:[
+        {h:'怎麼寫',p:'在提示詞裡用<b>一個減號加一個大於符號</b>指定父子關係：「請摘要 Google Prompt.pdf <b>-&gt;</b> Chapter 1」。'},
+        {h:'省掉什麼',p:'AI 就只處理第一章，<b>不用先把 PDF 拆成好幾個檔</b>。'},
+        {h:'為什麼不用小數點',tip:'老師特別解釋：點容易跟提示詞裡的句號混淆，AI 會判斷錯。所以用箭頭不用點。'},
+        {h:'哪裡可以用',p:'語音摘要、資訊圖表、報告等<b>所有欄位</b>都能用。搭配原文電子書，就能直接針對某一章做研讀。'},
+        {h:'實機畫面',shot:{img:'s3-bonus2-img/11-chapter-pointer.jpg',cap:'用指向符號指定只摘要某一章。［113:03］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-bonus2-notes.html#sec-pointer" style="color:var(--purple)">筆記 11：指向符號</a>'}]},
+
+      {t:'去個資：全課他唯一要學員答應的事', s:'拿公司真實文件去試之前｜錄影 111:15', blocks:[
+        {h:'三個動作',steps:[
+          '檔名<b>不要</b>寫「年月日＋某某公司第幾次會議」',
+          '主題名稱也稍微改過',
+          '產出結果之後，再改回自己要的標題']},
+        {h:'他的態度',p:'雖然平台聲稱不會拿你的資料訓練，他還是要求學員<b>答應他一定做到</b>。這是整堂課他唯一要求學員承諾的一件事。'},
+        {h:'為什麼值得記住',tip:'AI 工具的風險通常不在「它會不會偷資料」，而在「你有沒有隨手把不該上傳的東西上傳」。去個資是你自己就能做到的那一半。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-bonus2-notes.html#sec-pointer" style="color:var(--purple)">筆記 11：去個資</a>'}]}
+    ]
+  },
+
+  visual: {
+    key:'visual', color:'var(--amber)', emoji:'🎨', code:'CHAPTER 04', title:'產出：可編輯簡報與專業圖表',
+    intro:'他自己稱為「大絕」的一章，也包含全課最誠實的一段——資訊圖表連改四次越改越糟，他沒有把失敗剪掉。',
+    topics:[
+      {t:'大絕：在中央對話框產生可編輯的 PPTX', s:'位置決定成敗｜錄影 117:00–121:00', blocks:[
+        {h:'同樣是做簡報，位置不同結果差很多',table:{head:['在哪裡下指令','產出'],rows:[
+          ['右側 Studio 按「簡報」','<b>不能編輯</b>的圖像格式'],
+          ['<b>中央對話框</b>下指令','下載後在 PowerPoint 裡<b>文字可以改</b>，而且 AI 會自己畫圖']]}},
+        {h:'指令長這樣',p:'「<b>請將資料整理成 10 頁可編輯的 PPTX</b>」'},
+        {h:'成果',shot:{img:'s3-bonus2-img/13-editable-pptx.jpg',cap:'下載後在 PowerPoint 裡打開，標題與內文都能直接改字。［119:27］'}},
+        {h:'他的心得',tip:'以前中央對話框和右側 Studio 像是各自獨立，現在中央可以<b>透過提示詞操控右側的產出</b>，兩邊是貫穿的——也就是說，你以前累積的提示詞資產現在全部可以拿出來用。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-bonus2-notes.html#sec-pptx" style="color:var(--amber)">筆記 12：可編輯的 PPTX</a>'}]},
+
+      {t:'逐頁控制：每一頁要畫什麼圖都能指定', s:'教材那份控制提示詞在做什麼｜錄影 121:00–128:00', blocks:[
+        {h:'把整份控制提示詞貼進中央對話框',shot:{img:'s3-bonus2-img/12-pptx-command.jpg',cap:'逐頁指定的簡報控制指令。［121:24］'}},
+        {h:'十頁分別指定了什麼',table:{head:['頁次','呈現方式'],rows:[
+          ['1','階梯圖'],['2','花瓣圖'],['3','分類清單圖'],
+          ['4','台北市一週天氣預報（附搜尋連結）＋每天提示詞練習規劃'],
+          ['5','手繪風格'],['6','循環圖・3D 皮克斯風'],
+          ['7','Q 版插畫＋指定歌曲風格'],['8','CoT 與錨定原理・色鉛筆風格'],
+          ['9','提示詞工程的 SWOT 分析圖'],['10','感謝聆聽（純文字、不要圖）']]}},
+        {h:'AI 全部照做',p:'連第四頁的<b>天氣資料都上網抓回來</b>。'},
+        {h:'這件事的意義',tip:'簡報不再是「AI 隨便配圖你只能接受」，而是你可以像下規格一樣指定每一頁。這份控制提示詞本身就是一個可重複使用的公式。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-bonus2-notes.html#sec-pptx" style="color:var(--amber)">筆記 12：逐頁控制</a>'}]},
+
+      {t:'誠實的一段：資訊圖表四次越改越糟', s:'他沒有把失敗剪掉｜錄影 128:00–137:00', blocks:[
+        {h:'目標',p:'用 NotebookLM 的資訊圖表功能，畫一張<b>四條泳道</b>的流程圖。'},
+        {h:'四次的過程',table:{head:['第幾次','加了什麼','結果'],rows:[
+          ['1','資料來源＋「版型風格樣式必須完全與 圖表.png 一致」','還不錯'],
+          ['2','只加了「背景要純白色」','整張跑掉，還從直的變成橫的'],
+          ['3','要求改回垂直','好一點，但只畫出三條泳道'],
+          ['4','再要求補齊','更糟，泳道還在但流程整個不見']]}},
+        {h:'他的結論',warn:'在 NotebookLM 畫資訊圖表<b>時好時壞</b>。這是他自己說的實話，不是我的評語。'},
+        {h:'為什麼這段最有說服力',tip:'因為它示範的不是「AI 很強」，而是<b>AI 做不好的時候你怎麼辦</b>。答案在下一項。'},
+        {h:'實機畫面',shot:{img:'s3-bonus2-img/14-infographic-swimlane.jpg',cap:'用圖表.png 當版型參考做資訊圖表。［130:53］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-bonus2-notes.html#sec-fail" style="color:var(--amber)">筆記 13：圖表四次失敗</a>'}]},
+
+      {t:'救回來的方法：給它一套標準語法', s:'PlantUML 與 Mermaid｜錄影 137:00–146:00', blocks:[
+        {h:'換思路',p:'不要求 AI「畫得像」，改成<b>給它一份標準語法當 One-shot</b>。到 PlantUML 網站複製一段心智圖的標準語法，連同「彩色版、每個階層獨立顏色、左右分隔」的要求一起貼給 AI。'},
+        {h:'結果',shot:{img:'s3-bonus2-img/15-plantuml-mindmap.jpg',cap:'圖立刻變專業。［140:57］'}},
+        {h:'換圖種也是同一招',shot:{img:'s3-bonus2-img/16-plantuml-sequence.jpg',cap:'時序圖：只要把 PlantUML 上對應圖種的範例語法整段換掉，其他不動。［138:54］'}},
+        {h:'Mermaid 也可以',p:'前一週在高雄某企業研習，現場工程人員用的就是 <b>Mermaid</b>，解法一樣——丟一段標準語法樣板給 AI，不必自己手刻。'},
+        {h:'順帶一個配色提醒',tip:'粉色系看起來不專業，<b>換灰階就好</b>。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-bonus2-notes.html#sec-fail" style="color:var(--amber)">筆記 13：用 UML 語法救回</a>'}]}
+    ]
+  },
+
+  method: {
+    key:'method', color:'var(--rose)', emoji:'🧠', code:'CHAPTER 05', title:'收納與心法',
+    intro:'公式寫好了要收起來，不然下次還是找不到。這一章是提示詞的資產化，加上他整堂課反覆講的幾條紀律。',
+    topics:[
+      {t:'把提示詞收成 ChatGPT 專案', s:'解決「提示詞散落各處」的痛點｜錄影 83:00–94:00', blocks:[
+        {h:'操作順序',steps:[
+          '左側找到「<b>專案</b>」，按加號建立，命名（例：台股個股分析）',
+          '點進去找到「<b>指令</b>」欄位——電腦端點標題或右上三個點都可以，手機端要按三個點',
+          '把整段提示詞全選複製貼進去，儲存']},
+        {h:'做完會怎樣',p:'跟手機端<b>自動同步</b>。之後直接丟一個股票代號進去就跑出完整分析，不用再貼一次提示詞。'},
+        {h:'跟 Gemini 的 Gem 差在哪',warn:'兩者是同類機制，但<b>提示詞放的位置不一樣</b>——ChatGPT 放在專案的「指令」欄，很多人第一次會找不到。'},
+        {h:'建議各建一個',p:'合約書比對、圖像生成、姓名學、八字論命⋯⋯一個情境一個專案。'},
+        {h:'實機畫面',shot:{img:'s3-bonus2-img/06-chatgpt-project-list.jpg',cap:'左側的專案清單。［94:01］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-bonus2-notes.html#sec-project" style="color:var(--rose)">筆記 9：收成 ChatGPT 專案</a>'}]},
+
+      {t:'寫不出提示詞？抄，但要 renew', s:'他給這個動作一個名字｜錄影 87:22', blocks:[
+        {h:'學員問：就是寫不出來怎麼辦',p:'他的答案很直白：<b>抄別人的。</b>'},
+        {h:'但要加工',p:'「<b>請將以下提示詞幫我再加上○○功能，並用最白話的方式解析。</b>」'},
+        {h:'他的說法',tip:'「這叫做別人的 One-shot⋯⋯<b>我們不是 clone，我們叫 renew。</b>」抄回來的是別人的結構，加工過才變成你自己的。'},
+        {h:'實機畫面',shot:{img:'s3-bonus2-img/08-chatgpt-project-setting.jpg',cap:'提示詞貼在專案的「指令」欄位，不是放在對話裡。［149:31］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-bonus2-notes.html#sec-project" style="color:var(--rose)">筆記 9：renew 不是 clone</a>'}]},
+
+      {t:'秘密武器：語音摘要（Podcast）', s:'他怎麼在去企業講課前學會行話｜錄影 166:00–176:00', blocks:[
+        {h:'做法',steps:[
+          '把那家公司的<b>公開資料</b>拉進 NotebookLM 當來源',
+          '開「語音摘要」，探討主題欄位寫上「<b>站在這家公司的角度，談中高階主管的決策分析運用</b>」',
+          '產出兩個人對話的 Podcast，在高鐵上聽完，到現場就講得出行話']},
+        {h:'他坦承這是抽盲盒',p:'他對那家公司內部並不了解，但<b>盲盒總比自己憑空瞎掰好</b>，抽到的至少符合幾個合理條件。'},
+        {h:'跟中央提問差在哪',warn:'中央提問<b>只根據左側勾選的來源</b>回答；語音摘要的「深入探索」會<b>額外上網找資料</b>，講得比文字多，是客觀的大數據視角，不是同溫層思考。'},
+        {h:'個人版用法',tip:'把自己的<b>履歷</b>丟進去做 SWOT 分析，請 AI 說出你的弱點與下一步規劃。他說去年十月做的一次語音摘要，造就了今年的業績。'},
+        {h:'實機畫面',shot:{img:'s3-bonus2-img/17-audio-overview.jpg',cap:'他最愛的用法：把一篇論文或一本書的某章做成語音摘要，通勤時用聽的。［168:47］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-bonus2-notes.html#sec-audio" style="color:var(--rose)">筆記 15：語音摘要</a>'}]},
+
+      {t:'兩條紀律：平台會變，人要檢核', s:'貫穿全課的態度｜錄影 71:13 · 82:54', blocks:[
+        {h:'紀律一：平台會變，基本功不會',p:'「平台會一直變，但是在你腦袋裡的基礎功，穩扎穩打，平台再怎麼變，你只是有沒有去接觸它。」這也是他不建議追平台、只建議練結構的原因。'},
+        {h:'紀律二：AI 產出之後，人是最後一道關卡',warn:'「身為專業的你，你一定要做<b>人為的檢核</b>。你不做檢核，他做出來錯了你也不曉得，你就直接交出去，<b>這是不 OK 的</b>。」'},
+        {h:'兩條路怎麼選',table:{head:['你要的是','走哪一條'],rows:[
+          ['精緻、細節度高的圖表','<b>ChatGPT</b>'],
+          ['可編輯的簡報（PPTX）','<b>NotebookLM</b>'],
+          ['UML 類專業圖（心智圖、時序圖、泳道圖）','<b>NotebookLM</b>＋PlantUML／Mermaid 語法']]}},
+        {h:'他的收尾',tip:'「把你的專業抽走，你還剩什麼？<b>你剩的是家人，有空多陪陪家人。</b>」他說前面都可以當開玩笑，這句不開玩笑。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-bonus2-notes.html#sec-choose" style="color:var(--rose)">筆記 14：兩條路怎麼選</a>'}]}
+    ]
+  }
+}
+;
+
+
+const ORDER = ['formula','transform','notebooklm','visual','method'];
+const $ = s=>document.querySelector(s);
+function renderChapter(ch){
+  const d=DATA[ch];const next=ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];const prev=ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html=`<div class="chapter-head"><span class="emoji">${d.emoji}</span><div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div></div>`;
+  d.topics.forEach((tp,i)=>{const id=`${ch}-${i}`;
+    html+=`<div class="topic" id="topic-${id}"><div class="topic-head" onclick="toggleTopic('${id}')"><span class="num">${i+1}</span><h4>${tp.t}<small>${tp.s}</small></h4><input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)"><span class="chev">▶</span></div><div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{html+=`<div class="block"><h5>${b.h}</h5>`;
+      if(b.p)html+=`<p>${b.p}</p>`;
+      if(b.ul)html+=`<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps)html+=`<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.table)html+=`<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.prompt)html+=`<div class="promptbox">${b.prompt}</div>`;
+      if(b.shot)html+=`<figure class="shot"><img src="${b.shot.img}" alt="" loading="lazy"><figcaption>${b.shot.cap}</figcaption></figure>`;
+      if(b.tip)html+=`<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn)html+=`<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html+=`</div>`;});
+    html+=`</div></div></div>`;});
+  html+=`<div class="chapnav"><a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a><a onclick="showHome()" style="text-align:center">回總覽<b>🏠 五大主題</b></a><a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a></div>`;
+  $('#view-'+ch).innerHTML=html;
+}
+ORDER.forEach(renderChapter);
+function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('#view-'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function showHome(){switchView('home');$('#crumbs').style.display='none';clearSearch();}
+function showChapter(ch){switchView(ch);$('#crumbs').style.display='flex';$('#crumbHere').textContent=`${DATA[ch].emoji} ${DATA[ch].title}`;clearSearch();syncChecks();}
+function toggleTopic(id){$('#topic-'+id).classList.toggle('open');}
+function openTopic(ch,i){showChapter(ch);const el=$('#topic-'+ch+'-'+i);el.classList.add('open');setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+const KEY='ecf-prompt-skills-v1';
+const store=()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){const s=store();if(val)s[id]=1;else delete s[id];localStorage.setItem(KEY,JSON.stringify(s));updateProgress();}
+const TOTAL=ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){const done=Object.keys(store()).length;const pct=Math.round(done/TOTAL*100);$('#progFill').style.width=pct+'%';$('#progText').textContent=`${done} / ${TOTAL} 項技能已掌握`;$('#statDone').textContent=done;$('#statPct').textContent=pct+'%';ORDER.forEach(ch=>{const sub=DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;const el=document.querySelector(`[data-mini="${ch}"]`);if(el)el.style.width=Math.round(sub/DATA[ch].topics.length*100)+'%';});}
+function syncChecks(){const s=store();document.querySelectorAll('input[data-skill]').forEach(cb=>{cb.checked=!!s[cb.dataset.skill];});}
+function resetProgress(){if(confirm('確定要清空所有打勾進度嗎？')){localStorage.removeItem(KEY);syncChecks();updateProgress();}}
+function stripTags(s){return s.replace(/<[^>]+>/g,'');}
+const INDEX=[];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{let body=tp.s+' ';tp.blocks.forEach(b=>{if(b.p)body+=stripTags(b.p)+' ';if(b.ul)body+=b.ul.map(stripTags).join(' ')+' ';if(b.steps)body+=b.steps.map(stripTags).join(' ')+' ';if(b.tip)body+=stripTags(b.tip)+' ';if(b.warn)body+=stripTags(b.warn)+' ';if(b.prompt)body+=stripTags(b.prompt)+' ';if(b.table)body+=b.table.rows.flat().map(stripTags).join(' ')+' ';});INDEX.push({ch,i,title:tp.t,body});}));
+$('#searchInput').addEventListener('input',e=>{const q=e.target.value.trim();const box=$('#searchResults');if(!q){box.classList.remove('show');box.innerHTML='';return;}const hits=INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));box.classList.add('show');if(!hits.length){box.innerHTML=`<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：聲刻、CUDA、CAST、理解度、CORS、Google Sites）</div>`;return;}const hl=s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);box.innerHTML=hits.map(x=>{const pos=x.body.toLowerCase().indexOf(q.toLowerCase());const snip=x.body.substr(Math.max(0,pos-20),90);return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})"><div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div><h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;}).join('');});
+function clearSearch(){$('#searchInput').value='';$('#searchResults').classList.remove('show');$('#searchResults').innerHTML='';}
+syncChecks();updateProgress();
+
+</script>
+</body>
+</html>

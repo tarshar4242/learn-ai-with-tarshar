@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>提示詞工程補充課 課堂筆記｜把提示詞從句子變成公式</title>
+<meta name="description" content="生成式AI應用電台・訂閱制第三季 提示詞工程補充課（益師傅／楊俊益，2026/09/05）課堂筆記：把提示詞當成可代入參數的公式，學結構不學內容。含一句話把行銷4P提示詞改成合約書比對、去電商網站找 One-shot 的錨定原理、企業提示詞產生器三次對話十二分鐘的完整拆解、ChatGPT 專案收納、NotebookLM 用版型檔把錄音變成公司格式會議紀錄、指向符號只摘要某一章、在中央對話框產生可編輯 PPTX、資訊圖表失敗四次改用 PlantUML 語法救回，以及語音摘要的實戰用法。依 3 小時 1 分錄影 129 張關鍵畫面＋1969 段逐字稿整理。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#35618C; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:760px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px;max-height:calc(100vh - 90px);overflow-y:auto}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:7px;border-left:none;font-size:13px}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.code{position:relative;background:var(--code);border:1px solid var(--line2);border-radius:10px;padding:13px 15px;margin:10px 0;font-size:13px;line-height:1.75;color:var(--ink);white-space:pre-wrap;font-family:"Cascadia Code",Consolas,monospace;overflow-x:auto}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.iframe-wrap{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000;margin:14px 0}
+.iframe-wrap iframe{display:block;width:100%;height:460px;border:0}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static;max-height:none} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} .iframe-wrap iframe{height:320px} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/#ecf" style="border-color:#c7d6e4" onclick="if(history.length>1){history.back();return false}">← 回上一頁</a>
+  <b>📝 ECF 提示詞工程補充課 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="s3-bonus2-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 訂閱制第三季 · 提示詞工程補充課</span>
+  <h1>把提示詞從一句話，變成<span>一條可以代入參數的公式</span></h1>
+  <p class="lead">益師傅開場先講了一句順口溜：<b>提示詞學得好，AI 生成沒煩惱；提示詞要學得好，朋友一定交得少。</b>後半句是玩笑，前半句是這三個小時的全部。<br>這堂課從頭到尾在拆同一件事：多數人把提示詞當成用完就丟的句子，所以換一個題目就要重寫一次。他要你改成把它當成 <b>(A＋B)² 那樣的公式</b>——公式不動，代入的內容變，結果就變。於是同一份提示詞可以從行銷 4P 一句話改成合約書比對，同一支程式可以從資訊設備管理改成圖書館管理，同一套簡報控制指令可以套到任何一份資料上。<br>後半堂進 NotebookLM 實戰：用一份版型檔把一段錄音變成學校既有格式的會議紀錄、用指向符號只摘要一本書的某一章、在中央對話框產生<b>可以編輯</b>的 PowerPoint。他也把自己失敗的過程全部攤開——資訊圖表連改四次越改越糟，最後靠 PlantUML 的標準語法才救回來。<br>本頁依<b>錄影 129 張關鍵畫面＋全程逐字稿 1969 段</b>整理，重點段落附影片時間戳。</p>
+  <div class="meta">
+    <span>📅 2026/09/05（五）直播</span>
+    <span>👤 講師：益師傅（楊俊益・ECF）</span>
+    <span>⏱️ 全長 3 小時 1 分（單段錄影）</span>
+    <span>🧩 主題：提示詞公式化 × 結構轉換 × NotebookLM 實戰</span>
+    <span>🔰 小白友善</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-overview">1. 一張圖看懂這堂</a>
+  <a href="#sec-formula">2. 提示詞是一條公式</a>
+  <a href="#sec-shot">3. One-shot 與錨定原理</a>
+  <a href="#sec-4p">4. 實作一：一句話換題目</a>
+  <a href="#sec-structure">5. 最難寫的是結構</a>
+  <a href="#sec-book">6. 實作二：換成圖書管理系統</a>
+  <a href="#sec-secret">7. 大解密：三次對話十二分鐘</a>
+  <a href="#sec-stock">8. 台股個股分析與任務編號</a>
+  <a href="#sec-project">9. 把提示詞收成 ChatGPT 專案</a>
+  <a href="#sec-minutes">10. NotebookLM：錄音變會議紀錄</a>
+  <a href="#sec-pointer">11. 去個資與指向符號</a>
+  <a href="#sec-pptx">12. 大絕：可編輯的 PPTX</a>
+  <a href="#sec-fail">13. 誠實的一段：圖表四次失敗</a>
+  <a href="#sec-choose">14. 兩條路怎麼選</a>
+  <a href="#sec-audio">15. 秘密武器：語音摘要</a>
+  <a href="#sec-real">16. 這堂課真正在教的事</a>
+  <a href="#sec-quotes">17. 老師金句</a>
+  <a href="#sec-src">18. 資料來源與整理說明</a>
+</nav>
+
+<article>
+
+<!-- 0 -->
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--cyan))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>生成式 AI 應用電台・訂閱制第三季　<b>提示詞工程補充課</b></td></tr>
+    <tr><th>直播日期</th><td>2026/09/05（五）晚間，本段錄影全長 <b>3 小時 1 分</b></td></tr>
+    <tr><th>講師</th><td>益師傅（楊俊益，暱稱 ECF；智慧立方有限公司）</td></tr>
+    <tr><th>本堂主題</th><td>把提示詞從「一次性的句子」升級成「可代入參數的公式」：學結構不學內容，讓同一份提示詞、同一支程式、同一套簡報指令都能靠一句話換題目重複使用</td></tr>
+    <tr><th>兩個半場</th><td>前半場講觀念與提示詞改寫（公式化、One-shot、錨定原理、結構轉換），後半場進 NotebookLM 與 ChatGPT 實戰（會議紀錄、可編輯簡報、UML 圖表、語音摘要）</td></tr>
+    <tr><th>要先準備</th><td>ChatGPT 帳號（免訂閱也有「專案」功能）、NotebookLM（Google 帳號即可）。課堂示範的自製工具需要一組免費的 Groq API 金鑰</td></tr>
+    <tr><th>課程定位</th><td>這堂不教特定平台的按鈕位置。老師自己說得很白：<b>平台會一直變，腦袋裡的基本功不會變</b>，所以整堂在練的是提示詞的結構思維</td></tr>
+  </table></div>
+
+  <h3>📁 課程資料夾（Google Drive）</h3>
+  <p>錄影與九份教材都在這個共享資料夾：</p>
+  <p style="margin-top:8px"><a href="https://drive.google.com/drive/folders/1-kxP6P4t4BaUf3N35WcG-ePs0mLRr4XA" target="_blank" rel="noopener">🔗 開啟「Prompt Engineering」課程資料夾 ›</a></p>
+
+  <div class="twrap"><table>
+    <tr><th style="width:230px">教材檔案</th><th>課堂上拿來做什麼</th></tr>
+    <tr><td><code>企業提示詞工程產生器.html</code></td><td>益師傅前一晚寫的單檔網頁工具，選情境＋給素材就動態產生企業用提示詞（第 7 章完整拆解它怎麼寫出來）</td></tr>
+    <tr><td><code>品牌美譽度分析.txt</code></td><td>示範「大括號就是參數」的第一份提示詞範例</td></tr>
+    <tr><td><code>台股個股分析.txt</code></td><td>示範錨定原理與「任務一／任務二」編號用途</td></tr>
+    <tr><td><code>學校會議主持與管理.mp3</code></td><td>會議紀錄實戰的錄音素材</td></tr>
+    <tr><td><code>學校會議記錄樣式.doc</code></td><td>會議紀錄實戰的<b>版型檔</b>，也就是那個 One-shot</td></tr>
+    <tr><td><code>NotebookLM簡報 10頁-控制.txt</code></td><td>逐頁指定每一頁要畫什麼圖的簡報控制提示詞</td></tr>
+    <tr><td><code>Google Prompt.pdf</code></td><td>Google 官方提示詞指南，當作摘要與簡報的素材來源</td></tr>
+    <tr><td><code>文獻主題-NotebookLM.txt</code></td><td>用來在 NotebookLM 搜尋論文來源的條件設定</td></tr>
+    <tr><td><code>八字命理大師與視覺化流年生成指令.txt</code></td><td>示範「一個情境建一個專案」的另一個例子</td></tr>
+  </table></div>
+
+  <h3>🎬 課堂錄影（可直接在頁面播放）</h3>
+  <p class="cd">單段錄影，3 小時 1 分。0 到 60 分鐘是觀念與提示詞改寫，60 到 94 分鐘是案例與 ChatGPT 專案，94 分鐘之後全部是 NotebookLM 實戰。</p>
+  <div class="iframe-wrap"><iframe src="https://drive.google.com/file/d/1NJdHEMUse0V2-u1zgcUx8vl5fl8_OICH/preview" allow="autoplay" allowfullscreen></iframe></div>
+  <div class="note steel">🔧 <div>錄影為老師分享，內嵌播放需先登入你自己的 Google 帳號（此資料夾已分享給你）。若顯示載入中或權限提示，改從上面的「課程資料夾」連結進去即可。</div></div>
+
+  <div class="note gold">🔒 <div><b>本頁的截圖已裁掉線上教室的與會者名單。</b>原始錄影是 Teams 畫面分享，右側會出現學員頭像與姓名；整理成公開頁面時一律裁除，逐字稿裡出現的學員暱稱也一併隱去。</div></div>
+</section>
+
+<!-- 1 -->
+<section class="chapter" id="sec-overview">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--purple))">OVERVIEW</span>
+  <h2 class="ct">1. 一張圖看懂這堂</h2>
+  <p class="cd">整堂課其實只有一條主線，中間所有示範都是它的變形。</p>
+
+  <div class="svgwrap">
+  <svg viewBox="0 0 980 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="提示詞公式化流程圖">
+    <defs>
+      <marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+        <path d="M0,0 L9,4.5 L0,9 z" fill="#9B9B9B"/>
+      </marker>
+    </defs>
+    <rect x="14" y="96" width="164" height="94" rx="12" fill="#EEF4FB" stroke="#CFE0F1"/>
+    <text x="96" y="128" text-anchor="middle" font-size="15" font-weight="700" fill="#1d5e8f">① 你要做的事</text>
+    <text x="96" y="152" text-anchor="middle" font-size="12.5" fill="#5f5f5f">會議紀錄、合約比對</text>
+    <text x="96" y="170" text-anchor="middle" font-size="12.5" fill="#5f5f5f">個股分析、簡報、圖表</text>
+
+    <rect x="208" y="60" width="176" height="80" rx="12" fill="#EDF7F1" stroke="#CBE6D5"/>
+    <text x="296" y="88" text-anchor="middle" font-size="14.5" font-weight="700" fill="#166a4c">② One-shot</text>
+    <text x="296" y="110" text-anchor="middle" font-size="12.5" fill="#5f5f5f">給一份不太會變的範本</text>
+    <text x="296" y="127" text-anchor="middle" font-size="12.5" fill="#5f5f5f">讓 AI 學「結構」</text>
+
+    <rect x="208" y="152" width="176" height="80" rx="12" fill="#FBF7EC" stroke="#EFE3C4"/>
+    <text x="296" y="180" text-anchor="middle" font-size="14.5" font-weight="700" fill="#7a5b12">② 錨定 Anchor</text>
+    <text x="296" y="202" text-anchor="middle" font-size="12.5" fill="#5f5f5f">指向一直在變的來源</text>
+    <text x="296" y="219" text-anchor="middle" font-size="12.5" fill="#5f5f5f">交易所、電商分類頁</text>
+
+    <rect x="414" y="96" width="180" height="94" rx="12" fill="#F4F3F0" stroke="#DBD9D5"/>
+    <text x="504" y="126" text-anchor="middle" font-size="15" font-weight="700" fill="#35618C">③ 寫成公式</text>
+    <text x="504" y="150" text-anchor="middle" font-size="12.5" fill="#5f5f5f">角色＋任務一二三</text>
+    <text x="504" y="168" text-anchor="middle" font-size="12.5" fill="#5f5f5f">＋｛參數｝＋輸出格式</text>
+
+    <rect x="624" y="96" width="164" height="94" rx="12" fill="#fff" stroke="#DBD9D5"/>
+    <text x="706" y="126" text-anchor="middle" font-size="15" font-weight="700" fill="#191919">④ 換題目</text>
+    <text x="706" y="150" text-anchor="middle" font-size="12.5" fill="#5f5f5f">「請幫我將以下提示詞</text>
+    <text x="706" y="168" text-anchor="middle" font-size="12.5" fill="#5f5f5f">改為○○的運用」</text>
+
+    <rect x="818" y="96" width="148" height="94" rx="12" fill="#EEF2F5" stroke="#D2DFE7"/>
+    <text x="892" y="126" text-anchor="middle" font-size="15" font-weight="700" fill="#255066">⑤ 收起來</text>
+    <text x="892" y="150" text-anchor="middle" font-size="12.5" fill="#5f5f5f">存成 ChatGPT 專案</text>
+    <text x="892" y="168" text-anchor="middle" font-size="12.5" fill="#5f5f5f">下次直接叫用</text>
+
+    <line x1="178" y1="128" x2="204" y2="100" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+    <line x1="178" y1="158" x2="204" y2="186" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+    <line x1="384" y1="100" x2="410" y2="128" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+    <line x1="384" y1="186" x2="410" y2="158" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+    <line x1="594" y1="143" x2="620" y2="143" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+    <line x1="788" y1="143" x2="814" y2="143" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+    <path d="M706,190 C706,250 504,250 504,196" fill="none" stroke="#B9B9B9" stroke-width="1.4" stroke-dasharray="5 4" marker-end="url(#ar)"/>
+    <text x="605" y="268" text-anchor="middle" font-size="12" fill="#9B9B9B">換一個題目，回到同一條公式，骨架不動</text>
+  </svg>
+  <figcaption>整堂課的主線：先決定要做什麼，再判斷該給範本（One-shot）還是該指向來源（錨定），把它寫成有參數的公式，之後換題目只要一句話，最後把公式收成專案重複使用。</figcaption>
+  </div>
+
+  <div class="note blue">💡 <div>如果只記得一句話，記這句：<b>學的是結構的轉換，不是學內容。</b>［36:23］這句話在後面每一個示範都會再出現一次。</div></div>
+</section>
+
+<!-- 2 -->
+<section class="chapter" id="sec-formula">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--blue))">18:00–24:00</span>
+  <h2 class="ct">2. 提示詞是一條公式：大括號就是參數</h2>
+  <p class="cd">整堂課的觀念地基。教材裡的<code>品牌美譽度分析.txt</code>就是範例。</p>
+
+  <p>益師傅打開那份提示詞，指著裡面的 <code>{連結}</code> 說：這個左右大括號就是<b>參數</b>。然後他問了現場一位學員一個國中數學題：「(A＋B) 的平方等於什麼？」</p>
+
+  <div class="code">請根據 {連結} 所提供資訊，輸出該品牌的創立時間、發展歷程、
+核心理念、產品或服務特色、市場定位與目標客群的詳細說明。</div>
+
+  <p>用意很清楚：<b>(A＋B)² 這條公式永遠不變，代入的 A、B 不同，答案就不同。</b>提示詞也一樣——結構固定，把會變的東西挖成括號，剩下的就是一個可以一直用的資產。</p>
+
+  <h3>為什麼這件事重要</h3>
+  <p>因為多數人的習慣是「用完就丟」：這次要萬聖節的繪圖提示詞，寫一份；下次要聖誕節，再從頭寫一份。益師傅的做法是——不要重寫，跟 AI 說一句話就好：</p>
+  <div class="code">請幫我將以下提示詞改為聖誕節的氛圍及物品，並且把人物改成○○。
+（換行後貼上原本那份提示詞）</div>
+  <p>整體結構不動，變的只有對應內容。他把這個動作反覆示範了四次，從提示詞、到程式、到簡報、到圖表，用的都是同一句型。</p>
+
+  <div class="note gold">📌 <div>看到別人寫的提示詞裡有 <code>{連結}</code>、<code>{股票代號}</code>、<code>{品牌名}</code> 這種大括號，那不是裝飾，是<b>參數插槽</b>——那份提示詞是設計成可以重複使用的。</div></div>
+</section>
+
+<!-- 3 -->
+<section class="chapter" id="sec-shot">
+  <span class="chip" style="background:linear-gradient(90deg,var(--green),var(--amber))">24:00–29:00 · 72:00–83:00</span>
+  <h2 class="ct">3. One-shot 與錨定原理：最容易搞混的兩件事</h2>
+  <p class="cd">這兩個詞整堂課出現最多次，也是他當場糾正學員最多次的地方。</p>
+
+  <div class="twrap"><table>
+    <tr><th style="width:110px"></th><th>One-shot</th><th>錨定（Anchor）</th></tr>
+    <tr><th>給的是什麼</th><td>一份<b>不太會變</b>的範本，讓 AI 學結構</td><td>一個<b>一直在變</b>的來源，讓 AI 去參照學習</td></tr>
+    <tr><th>例子</th><td>公司員工守則、工作執掌、會議紀錄版型檔、PlantUML 語法樣板</td><td>證交所的即時股價、PChome 的商品分類頁、原價屋的規格表</td></tr>
+    <tr><th>目的</th><td>讓輸出長成你要的格式</td><td>讓內容有真實、最新的依據</td></tr>
+    <tr><th>常見誤用</th><td>把版型檔的<b>內容</b>也當成素材（第 10 章有解法）</td><td>以為問「台積電今天股價」是 One-shot——那是錨定</td></tr>
+  </table></div>
+
+  <p>他當場考學員：「直接問 AI『台積電今天的股價和漲跌幅』，這樣好不好？」學員答 One-shot，他直接糾正：<b>這是錨定原理，不是 One-shot。</b>要問股價，就該指向台灣證券交易所的資料介面，而且一定要一併抓三大法人買賣超——「法人都跑了你還在幫人抬轎，那才危險」。</p>
+
+  <h3>還有一個 Little-shot</h3>
+  <p>當你連自己要什麼都說不清楚（不會寫會議紀錄、不會寫行銷企劃案），他的解法是：<b>你不會，AI 會</b>。請 AI 扮演該領域的專家，要它列出應該包含哪些項目、並說明為什麼，AI 就會給你一個公式。</p>
+  <ul class="pt">
+    <li><b>Little-shot</b>：手上完全沒範本，直接請 AI 生成一份。</li>
+    <li><b>One-shot</b>：把 AI 給的結果貼到記事本，依你的職場需求改到滿意，那個定版框架就是你自己的 One-shot。</li>
+  </ul>
+  <div class="note steel">📖 <div>逐字稿裡益師傅全場使用「Little-shot」與「Full Shot」兩個詞。學術上對應的標準術語通常是 zero-shot 與 few-shot；<b>本頁照講師原話保留</b>，不替換成標準術語，這一點提供給要對照教科書的人參考。</div></div>
+
+  <div class="note blue">🎯 <div>兩者的分界只有一句：<b>拿得回來、不太會變的 → One-shot；資料一直在變、只能參照的 → 錨定。</b>實務上兩者合併使用效果最好。</div></div>
+</section>
+
+<!-- 4 -->
+<section class="chapter" id="sec-4p">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--teal))">29:00–37:00</span>
+  <h2 class="ct">4. 實作一：一句話把行銷 4P 改成合約書比對</h2>
+  <p class="cd">全課第一個現場實作，也是整堂最值得練的一招。</p>
+
+  <figure class="shot">
+    <img src="s3-bonus2-img/02-marketing-4p-prompt.jpg" alt="行銷 4P 分析的原始提示詞，含任務一、任務二、任務三" loading="lazy">
+    <figcaption>原始素材：一份行銷 4P 分析的提示詞，結構是「請根據上傳的資料 → 任務一（四象限矩陣圖表）→ 任務二（交叉分析與建議）→ 任務三（FB／IG 行銷詞語）」。［32:31］</figcaption>
+  </figure>
+
+  <p>他問學員：要把這份改成<b>合約書比對與風險管理</b>，該怎麼做？有人答「參照 4P 的檔案」，有人答「把行銷改成風險管理」。他說方向對，但太辛苦了。</p>
+
+  <h3>正解只有一個動作</h3>
+  <ol class="st">
+    <li>在對話框打上一句：<b>「請幫我將以下提示詞改為合約書的比對及風險管理的運用」</b></li>
+    <li>按 <b>Shift ＋ Enter</b> 換行（直接按 Enter 會送出）</li>
+    <li>把原本那整份提示詞貼在下面，送出</li>
+  </ol>
+
+  <p>AI 立刻把「請根據上傳的行銷企劃案」改成「請根據上傳的合約書資料」，而<b>四象限矩陣圖表、交叉分析、三個任務的骨架全部保留</b>，只換掉領域內容。</p>
+
+  <div class="golden">
+    <div class="q">「學的是結構的轉換，而不是學的是內容。」</div>
+    <div class="a">［36:23］他補一句：這跟你用 Pro 還是 Flash 模型無關，模型不影響這件事成不成立。</div>
+  </div>
+</section>
+
+<!-- 5 -->
+<section class="chapter" id="sec-structure">
+  <span class="chip" style="background:linear-gradient(90deg,var(--amber),var(--orange))">37:00–48:00</span>
+  <h2 class="ct">5. 最難寫的是結構：去電商網站找 One-shot</h2>
+  <p class="cd">這段是整堂課最反直覺、也最實用的一節。</p>
+
+  <p>他拿「資訊設備管理系統」當題目，問學員：寫這種系統，最難的是哪一塊？現場答案有使用者介面、有權限與資料庫、有人搬出 URS（使用者需求規格）。他一一否掉：</p>
+  <ul class="pt">
+    <li><b>介面</b>——截圖給 AI 它就會做。</li>
+    <li><b>權限與資料庫</b>——還好，不是最難。</li>
+    <li><b>URS</b>——在這個題目上行不通，因為使用者自己也講不清楚，常常做到一半才想起漏了一層。</li>
+  </ul>
+
+  <figure class="shot">
+    <img src="s3-bonus2-img/03-equipment-system.jpg" alt="資訊設備管理系統的畫面" loading="lazy">
+    <figcaption>他實際做出來的資訊設備管理系統。難的不是畫面，是「設備要分幾類、記憶體有哪些規格」這種你寫不完整的資料結構。［47:07］</figcaption>
+  </figure>
+
+  <h3>他的答案：資料的結構與導入最難</h3>
+  <p>而解法不是叫 AI 給你一份範本——AI 給的是「通識學」等級的範本，不夠細。正解是<b>去找一個已經有人花大錢做好的結構</b>：</p>
+  <ul class="pt">
+    <li><b>3C 設備</b> → PChome、原價屋的商品分類階層</li>
+    <li><b>圖書</b> → 博客來的分類階層</li>
+  </ul>
+  <p>把連結給 AI，請它參照這個結構往下拆到第二層、第三層，再要它補上台灣常用的五百個以上品牌。他把這個動作正式命名為<b>錨定原理（Anchor）</b>：像漁船靠儀器知道魚群在哪裡才下錨，捕到魚的機率才高。</p>
+
+  <div class="note gold">⚠️ <div><b>給外部連結時的關鍵細節：</b>連結後面空一格，把<b>那一頁的主標題名稱也一起給它</b>。不然 AI 會抓到旁邊的廣告版位、信用卡優惠而失焦。這個小動作他特別強調了兩次。</div></div>
+</section>
+
+<!-- 6 -->
+<section class="chapter" id="sec-book">
+  <span class="chip" style="background:linear-gradient(90deg,var(--teal),var(--green))">48:00–55:00</span>
+  <h2 class="ct">6. 實作二：資訊設備管理系統改成圖書管理系統</h2>
+  <p class="cd">同一招再用一次，這次換的是整支程式。</p>
+
+  <p>既然資訊設備的分類結構已經學到手，要改成學校圖書館管理系統，還是那一句話：</p>
+  <div class="code">請將上傳的程式幫我改成學校圖書館管理系統，
+並且可以用 ISBN 來做查詢或輸入。</div>
+  <p>三層四層的分類架構照搬，只換掉領域內容。</p>
+
+  <h3>ISBN 自動帶資料：不會的就問 AI 有什麼方法</h3>
+  <p>他現場打開自己去年做的個人圖書管理系統示範：輸入 ISBN 條碼，自動帶回書名、作者、簡介，不用一本一本手打。串接的是 <b>Google Books API</b>。</p>
+  <p>這段的方法論比示範本身重要：<b>你不知道怎麼做到的地方，就直接問 AI「有什麼方法可以做到」</b>，AI 會告訴你有哪個 API 可以串，你再回頭跟寫程式的 AI 說「請幫我串這個」。</p>
+
+  <div class="note steel">🔧 <div>這次現場示範因為網路連線問題沒有查詢成功。老師當場說明「之前是 OK 的，可能設定跑掉了」，沒有跳過也沒有假裝成功——這一段本頁照實記錄。</div></div>
+</section>
+
+<!-- 7 -->
+<section class="chapter" id="sec-secret">
+  <span class="chip" style="background:linear-gradient(90deg,var(--purple),var(--accent))">55:00–61:00</span>
+  <h2 class="ct">7. 大解密：那支產生器只用三次對話、十二分鐘</h2>
+  <p class="cd">課程開頭他先秀成品，這一節回頭把它怎麼寫出來的全部攤開。</p>
+
+  <p>成品是<code>企業提示詞工程產生器.html</code>：使用者選一個企業情境（行銷分析、合約書比對、風險管理、流程結構、績效評估、招募、財務分析、競品分析⋯），再上傳一份參考素材，程式就動態產生一份能直接用的提示詞，並可下載成 MD、TXT 或 JSON。</p>
+
+  <figure class="shot">
+    <img src="s3-bonus2-img/01-prompt-generator.jpg" alt="企業提示詞工程產生器的開發對話" loading="lazy">
+    <figcaption>他把整個開發過程攤開：一般人只給成果不給過程，他把三次對話全部秀出來。［61:05］</figcaption>
+  </figure>
+
+  <h3>三次對話分別講了什麼</h3>
+  <ol class="st">
+    <li><b>第一次（一段話講完全部）</b>：運用 Prompt Engineering 的技巧，根據上傳檔案設計一個企業用的提示詞產生器，要能做行銷分析、合約書比對、風險管理、流程結構、進出貨等 1 到 20 種情境；要能吃上傳檔案／貼上文字／圖像解析／外部連結／括號化參數；串 Groq API；版型風格要像上傳的截圖；要能下載 JSON 或 MD。</li>
+    <li><b>第二次</b>：每個區域要提供畫面折疊功能。</li>
+    <li><b>第三次</b>：AI 只做了標題折疊，他截兩張圖說明要的是<b>整個區域</b>折疊。</li>
+  </ol>
+  <p>總共十二分鐘完成。</p>
+
+  <div class="golden">
+    <div class="q">「不是我厲害，是 AI 厲害。」</div>
+    <div class="a">重點在提示詞下得夠精準：要什麼、做什麼、輸出什麼、介面長什麼樣，一次講清楚。［60:00 前後］</div>
+  </div>
+
+  <div class="note blue">💡 <div>這支工具的設計重點值得單獨記：他把提示詞<b>先解構、再結構起來</b>——角色設定、資料型態（上傳文件／貼上文字／圖像）、提示詞技巧、輸出格式（Markdown、JSON、條列、Excel、簡報大綱、Email 草稿）全部拆成可勾選的欄位。這就是「公式化」在介面上長出來的樣子。</div></div>
+</section>
+
+<!-- 8 -->
+<section class="chapter" id="sec-stock">
+  <span class="chip" style="background:linear-gradient(90deg,var(--orange),var(--rose))">72:00–83:00</span>
+  <h2 class="ct">8. 台股個股分析：任務編號到底在做什麼</h2>
+  <p class="cd">教材<code>台股個股分析.txt</code>。除了錨定原理（見第 3 章），這一節還解決一個很多人照抄卻不知道為什麼的細節。</p>
+
+  <figure class="shot">
+    <img src="s3-bonus2-img/05-stock-prompt.jpg" alt="台股個股分析提示詞，含任務一到任務三與資料來源" loading="lazy">
+    <figcaption>提示詞裡明確指向證交所的資料介面，並要求一併取得三大法人買賣超。［81:32］</figcaption>
+  </figure>
+
+  <h3>為什麼要寫「任務一、任務二、任務三」</h3>
+  <p>很多人以為那是在排執行順序。<b>不是。</b>提示詞一律由上往下執行，你寫任務四它也不會跳著做。</p>
+  <p>真正的用途是<b>標記</b>：哪一段做不好，你可以直接說——</p>
+  <div class="code">請針對任務二，加上「近三個月法人持股變化」這一欄。
+請針對任務三，把輸出格式改成 CSV。</div>
+  <p>不必重新描述整段需求。用「步驟一、步驟二」也可以，重點是給每一塊一個可以指名的編號。</p>
+
+  <div class="note gold">⚠️ <div>本頁所有股票相關內容皆為課堂示範的提示詞寫法，<b>不是投資建議</b>。</div></div>
+</section>
+
+<!-- 9 -->
+<section class="chapter" id="sec-project">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--cyan))">83:00–94:00</span>
+  <h2 class="ct">9. 把提示詞收成 ChatGPT 專案</h2>
+  <p class="cd">課程一開始講的痛點——提示詞散在對話紀錄與記事本裡，每次都要翻——這一節解決它。</p>
+
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="s3-bonus2-img/06-chatgpt-project-list.jpg" alt="ChatGPT 左側的專案清單" loading="lazy">
+      <figcaption>左側「專案」區，一個情境一個專案。［94:01］</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="s3-bonus2-img/08-chatgpt-project-setting.jpg" alt="ChatGPT 專案設定視窗" loading="lazy">
+      <figcaption>提示詞放在專案的「指令」欄位，不是放在對話裡。［149:31］</figcaption>
+    </figure>
+  </div>
+
+  <h3>操作順序</h3>
+  <ol class="st">
+    <li>左側找到「專案」，按加號建立，命名（例：台股個股分析）。</li>
+    <li>點進去找到<b>「指令」欄位</b>——電腦端點標題或右上三個點都可以，手機端要按三個點。</li>
+    <li>把整段提示詞全選複製貼進去，儲存。</li>
+  </ol>
+  <p>做完就會跟手機端同步。他建議常用情境各建一個：合約書比對、圖像生成、姓名學、八字論命。</p>
+
+  <div class="note blue">💡 <div>ChatGPT 的「專案」和 Gemini 的「Gem」是同類機制，但提示詞放的位置不一樣——ChatGPT 放在專案的指令欄，這點很多人第一次會找不到。</div></div>
+
+  <h3>如果就是寫不出提示詞怎麼辦</h3>
+  <p>有學員這樣問，他的答案很直白：<b>抄別人的。</b>但要加工：</p>
+  <div class="code">請將以下提示詞幫我再加上○○功能，並用最白話的方式解析。</div>
+  <div class="golden">
+    <div class="q">「我們不是 clone，我們叫 renew。」</div>
+    <div class="a">［87:22］抄回來的是別人的 One-shot，加工過才變成你自己的。</div>
+  </div>
+
+  <figure class="shot">
+    <img src="s3-bonus2-img/07-chatgpt-stock-output.jpg" alt="ChatGPT 專案跑出的個股分析結果" loading="lazy">
+    <figcaption>專案建好之後，直接丟一個股票代號進去就跑出完整分析，不用再貼一次提示詞。［90:04］</figcaption>
+  </figure>
+</section>
+
+<!-- 10 -->
+<section class="chapter" id="sec-minutes">
+  <span class="chip" style="background:linear-gradient(90deg,var(--green),var(--teal))">94:00–110:00</span>
+  <h2 class="ct">10. NotebookLM 實戰：把一段錄音變成公司格式的會議紀錄</h2>
+  <p class="cd">這是全課示範得最完整的一段，也是最容易直接搬去上班用的一段。</p>
+
+  <p><b>任務：</b>把一段學校會議的錄音檔，產出成學校既有格式的會議紀錄。</p>
+
+  <h3>第一步：上傳兩份來源</h3>
+  <ul class="pt">
+    <li><b>內容來源</b>：會議錄音 <code>學校會議.mp3</code></li>
+    <li><b>版型來源</b>：會議紀錄的版型檔 <code>會議記錄.pdf</code>——這一份就是 One-shot</li>
+  </ul>
+  <div class="note gold">📄 <div><b>版型檔要用 PDF，不要存成 TXT。</b>Word 檔請用「列印成 PDF」轉檔。存成 TXT 會把大小標題的層級結構整個丟掉，AI 就學不到版型。另外檔名<b>改得越短越乾淨越好</b>，因為提示詞要指名檔名。</div></div>
+
+  <h3>第二步：用「自訂報告」，提示詞只有兩句</h3>
+  <figure class="shot">
+    <img src="s3-bonus2-img/09-notebooklm-custom-report.jpg" alt="NotebookLM 建立報告的選項，選自訂報告" loading="lazy">
+    <figcaption>到「報告」功能選「自訂報告」。［106:44］</figcaption>
+  </figure>
+  <div class="code">資料來源：學校會議.mp3
+摘要格式：必須完全與 會議記錄.pdf 的摘要項目、順序、條列一致</div>
+
+  <p>兩句話裡有兩個關鍵，缺一個就失敗：</p>
+  <ol class="st">
+    <li><b>「必須完全一致」這種強烈措辭是必要的。</b>只寫「摘要格式參考某某檔案」力道不夠，AI 會自由發揮。</li>
+    <li><b>「資料來源」那一行更關鍵。</b>不寫的話，AI 會把版型範本檔<b>裡面的內容</b>也當成素材一起做摘要，兩份資料就混在一起錯亂了。</li>
+  </ol>
+
+  <h3>成果驗收</h3>
+  <figure class="shot">
+    <img src="s3-bonus2-img/10-meeting-minutes-result.jpg" alt="產出的會議紀錄，項目與順序與版型檔一致" loading="lazy">
+    <figcaption>出席人數、時間、地點、出席情況、請假、主席報告、確認議程、校務工作報告——項目與順序全部跟版型檔一致，但內容全部來自那支主題完全不相干的錄音檔。［107:31］</figcaption>
+  </figure>
+
+  <div class="golden">
+    <div class="q">「這就是 One-shot——讓它學結構，不是學標題。」</div>
+    <div class="a">［107:31 前後］同一招換成公司的專案報告、訪談紀錄、客訴處理單，都成立。</div>
+  </div>
+</section>
+
+<!-- 11 -->
+<section class="chapter" id="sec-pointer">
+  <span class="chip" style="background:linear-gradient(90deg,var(--rose),var(--amber))">110:00–117:00</span>
+  <h2 class="ct">11. 去個資，以及指向符號「-&gt;」</h2>
+
+  <h3>先講安全的事：去個資</h3>
+  <p>拿公司真實會議紀錄去試之前，益師傅要求學員一定先<b>去個資</b>：</p>
+  <ul class="pt">
+    <li>檔名不要寫「年月日＋某某公司第幾次會議」。</li>
+    <li>主題名稱也稍微改過。</li>
+    <li>處理完、產出結果之後，再改回自己要的標題。</li>
+  </ul>
+  <p>他說雖然平台聲稱不會拿你的資料訓練，他還是要求學員答應一定做到。</p>
+
+  <div class="golden">
+    <div class="q">「你要記得去個資的概念。」</div>
+    <div class="a">［111:15］這是全課他唯一要求學員「答應他」的一件事。</div>
+  </div>
+
+  <h3>本堂最實用的小技巧：只摘要某一章</h3>
+  <p>在提示詞裡用<b>一個減號加一個大於符號</b>來指定父子關係：</p>
+  <div class="code">請摘要 Google Prompt.pdf -&gt; Chapter 1</div>
+  <p>AI 就只處理第一章，<b>不用先把 PDF 拆成好幾個檔</b>。</p>
+
+  <figure class="shot">
+    <img src="s3-bonus2-img/11-chapter-pointer.jpg" alt="用指向符號指定只摘要某一章" loading="lazy">
+    <figcaption>指向符號在語音摘要、資訊圖表、報告等所有欄位都能用。［113:03］</figcaption>
+  </figure>
+
+  <div class="note steel">🔧 <div>他特別說明<b>為什麼不用小數點</b>（例如「PDF.1」）：點容易跟提示詞裡的句號混淆，AI 會判斷錯。搭配原文電子書使用，就能直接針對某一章做研讀。</div></div>
+</section>
+
+<!-- 12 -->
+<section class="chapter" id="sec-pptx">
+  <span class="chip" style="background:linear-gradient(90deg,var(--purple),var(--pink))">117:00–128:00</span>
+  <h2 class="ct">12. 大絕：在中央對話框產生「可以編輯」的 PPTX</h2>
+  <p class="cd">他自己稱這一段是「大絕」，也確實是全課最多人不知道的一招。</p>
+
+  <div class="note blue">🔑 <div><b>位置決定成敗。</b>在 NotebookLM <b>右側 Studio</b> 直接按「簡報」，出來的是<b>不能編輯</b>的圖像格式；改在<b>中央對話框</b>下指令，產出的檔案下載後在 PowerPoint 裡文字是可以改的，而且 AI 會自己畫圖。</div></div>
+
+  <div class="code">請將資料整理成 10 頁可編輯的 PPTX</div>
+
+  <figure class="shot">
+    <img src="s3-bonus2-img/12-pptx-command.jpg" alt="在中央對話框下達簡報控制指令" loading="lazy">
+    <figcaption>更進一步：把事先寫好的簡報控制提示詞整份貼進中央對話框，逐頁指定每一頁要畫什麼圖。［121:24］</figcaption>
+  </figure>
+
+  <h3>逐頁控制：教材那份提示詞在做什麼</h3>
+  <p>教材<code>NotebookLM簡報 10頁-控制.txt</code>把十頁全部指定好：</p>
+  <div class="twrap"><table>
+    <tr><th style="width:70px">頁次</th><th>指定的呈現方式</th></tr>
+    <tr><td>第 1 頁</td><td>階梯圖</td></tr>
+    <tr><td>第 2 頁</td><td>花瓣圖</td></tr>
+    <tr><td>第 3 頁</td><td>分類清單圖</td></tr>
+    <tr><td>第 4 頁</td><td>台北市一週天氣預報（附 Google 搜尋連結）＋每天提示詞練習規劃</td></tr>
+    <tr><td>第 5 頁</td><td>手繪風格</td></tr>
+    <tr><td>第 6 頁</td><td>循環圖・3D 皮克斯風</td></tr>
+    <tr><td>第 7 頁</td><td>Q 版插畫＋指定歌曲風格</td></tr>
+    <tr><td>第 8 頁</td><td>CoT 與錨定原理・色鉛筆風格</td></tr>
+    <tr><td>第 9 頁</td><td>提示詞工程的 SWOT 分析圖</td></tr>
+    <tr><td>第 10 頁</td><td>感謝聆聽（純文字、不要圖）</td></tr>
+  </table></div>
+  <p>AI 全部照做，<b>連第四頁的天氣資料都上網抓回來</b>。</p>
+
+  <figure class="shot">
+    <img src="s3-bonus2-img/13-editable-pptx.jpg" alt="下載後在 PowerPoint 中開啟，文字可編輯" loading="lazy">
+    <figcaption>下載後在 PowerPoint 裡打開，標題與內文都能直接改字。［119:27］</figcaption>
+  </figure>
+
+  <div class="note green">✅ <div>他的心得：以前中央對話框和右側 Studio 像是各自獨立，現在中央可以<b>透過提示詞操控右側的產出</b>，兩邊是貫穿的。也就是說，你以前累積的提示詞資產現在全部可以拿出來用。</div></div>
+</section>
+
+<!-- 13 -->
+<section class="chapter" id="sec-fail">
+  <span class="chip" style="background:linear-gradient(90deg,var(--rose),var(--orange))">128:00–146:00</span>
+  <h2 class="ct">13. 誠實的一段：資訊圖表四次越改越糟，最後用 UML 語法救回</h2>
+  <p class="cd">這是全課最有說服力的一段，因為他沒有把失敗剪掉。</p>
+
+  <p>目標：用 NotebookLM 的資訊圖表功能，畫一張四條泳道的流程圖。</p>
+
+  <div class="twrap"><table>
+    <tr><th style="width:70px">第幾次</th><th>他加了什麼</th><th>結果</th></tr>
+    <tr><td>第 1 次</td><td>資料來源＋「版型風格樣式必須完全與 圖表.png 一致」</td><td>還不錯</td></tr>
+    <tr><td>第 2 次</td><td>只加了「背景要純白色」</td><td>整張跑掉，還從直的變成橫的</td></tr>
+    <tr><td>第 3 次</td><td>要求改回垂直</td><td>好一點，但只畫出三條泳道</td></tr>
+    <tr><td>第 4 次</td><td>再要求補齊</td><td>更糟，泳道還在但流程整個不見</td></tr>
+  </table></div>
+
+  <figure class="shot">
+    <img src="s3-bonus2-img/14-infographic-swimlane.jpg" alt="用圖表.png 當版型參考做資訊圖表" loading="lazy">
+    <figcaption>他直說：在 NotebookLM 畫資訊圖表<b>時好時壞</b>，這是實話。［130:53］</figcaption>
+  </figure>
+
+  <h3>轉折：既然圖畫不好，就改給它一套標準語法</h3>
+  <p>他換了思路——不要求 AI「畫得像」，改成給它一份<b>標準語法當 One-shot</b>。到 PlantUML 網站複製一段心智圖的標準語法，連同要求一起貼給 AI：</p>
+  <div class="code">（貼上 PlantUML 心智圖的標準語法範例）
+請用彩色版、每個階層獨立顏色、左右分隔。</div>
+
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="s3-bonus2-img/15-plantuml-mindmap.jpg" alt="用 PlantUML 語法產出的彩色心智圖" loading="lazy">
+      <figcaption>圖立刻變專業。［140:57］</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="s3-bonus2-img/16-plantuml-sequence.jpg" alt="同一招換成時序圖" loading="lazy">
+      <figcaption>同一招換成時序圖：只要把 PlantUML 上對應圖種的範例語法整段換掉，其他不動。［138:54］</figcaption>
+    </figure>
+  </div>
+
+  <p>他也提到 <b>Mermaid</b> 同樣可行——前一週在高雄某企業研習時，現場工程人員用的就是 Mermaid，解法一樣是丟一段標準語法樣板給 AI，不必自己手刻。</p>
+
+  <div class="note gold">🎨 <div>順帶一個配色的實務提醒：<b>粉色系看起來不專業，換灰階就好。</b></div></div>
+
+  <div class="golden">
+    <div class="q">「與其要由你檢核，你為什麼不一開始的時候把事情、把你的做法講清楚呢？」</div>
+    <div class="a">［141:24］這句話總結了他整堂課的態度：AI 做不好是常態，但補救要有系統，不是重問一次碰運氣。</div>
+  </div>
+</section>
+
+<!-- 14 -->
+<section class="chapter" id="sec-choose">
+  <span class="chip" style="background:linear-gradient(90deg,var(--blue),var(--accent))">146:00–166:00</span>
+  <h2 class="ct">14. 兩條路怎麼選：ChatGPT 還是 NotebookLM</h2>
+
+  <p>他把同一件事在另一個平台再做一次：回到 ChatGPT 專案，給一張版型參考圖，提示詞只寫——</p>
+  <div class="code">資料來源請根據上傳的檔案；
+版型、風格、樣式、顏色務必與資料來源中的檔案一樣。</div>
+  <p>丟一份論文進去，就復刻出一張同風格的流程圖。</p>
+
+  <div class="twrap"><table>
+    <tr><th style="width:150px">你要的是</th><th>建議走哪一條</th></tr>
+    <tr><td>精緻、細節度高的圖表</td><td><b>ChatGPT</b></td></tr>
+    <tr><td>可編輯的簡報（PPTX）</td><td><b>NotebookLM</b></td></tr>
+    <tr><td>UML 類的專業圖（心智圖、時序圖、泳道圖）</td><td><b>NotebookLM</b>＋PlantUML／Mermaid 語法</td></tr>
+  </table></div>
+
+  <div class="golden">
+    <div class="q">「平台會一直變，但是在你腦袋裡的基礎功，穩扎穩打，平台再怎麼變，你只是有沒有去接觸它。」</div>
+    <div class="a">［82:54］這也是他不建議追平台、只建議練結構的原因。</div>
+  </div>
+
+  <div class="note steel">🔧 <div>Q&amp;A 中他給講師同行一段建議：<b>對研發人員就講研發的術語，對出貨人員就講出貨的話</b>，這叫講行話。企業找你不是要聽基本操作，是要你當場解掉他們的問題。</div></div>
+</section>
+
+<!-- 15 -->
+<section class="chapter" id="sec-audio">
+  <span class="chip" style="background:linear-gradient(90deg,var(--teal),var(--cyan))">166:00–176:00</span>
+  <h2 class="ct">15. 秘密武器：語音摘要（Podcast）</h2>
+  <p class="cd">有學員問他怎麼在去企業講課前快速學會那個產業的行話。他把方法全講了。</p>
+
+  <h3>做法</h3>
+  <ol class="st">
+    <li>把那家公司的<b>公開資料</b>拉進 NotebookLM 當來源。</li>
+    <li>開「語音摘要」，在探討主題欄位寫上：<b>站在這家公司的角度，談中高階主管的決策分析運用。</b></li>
+    <li>產出兩個人對話的 Podcast，在高鐵上聽完，到現場就講得出行話。</li>
+  </ol>
+
+  <figure class="shot">
+    <img src="s3-bonus2-img/17-audio-overview.jpg" alt="NotebookLM 的語音摘要與章節摘要" loading="lazy">
+    <figcaption>他最愛的用法：把一篇論文或一本書的某個章節做成語音摘要，通勤時用聽的，聽兩次再回頭看本文。［168:47］</figcaption>
+  </figure>
+
+  <h3>他坦承這是「AI 抽盲盒」</h3>
+  <p>他對那家公司內部並不了解，但<b>盲盒總比自己憑空瞎掰好</b>，抽到的至少符合幾個合理條件。他也給了個人版用法：把自己的履歷丟進去做 SWOT 分析，請 AI 說出你的弱點與下一步規劃。</p>
+
+  <div class="note blue">💡 <div><b>語音摘要跟中央提問差在哪：</b>中央提問只根據左側勾選的來源回答；語音摘要的「深入探索」會<b>額外上網找資料</b>，講得比文字多，是客觀的大數據視角，不是同溫層思考。</div></div>
+
+  <div class="golden">
+    <div class="q">「要下提示詞。沒有提示詞就像抽盲盒。」</div>
+    <div class="a">［142:00］</div>
+  </div>
+</section>
+
+<!-- 16 -->
+<section class="chapter" id="sec-real">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--purple))">TAKEAWAYS</span>
+  <h2 class="ct">16. 這堂課真正在教的事</h2>
+
+  <h3>一、提示詞不是拋棄式的句子，是一條可以代入參數的公式</h3>
+  <p>(A＋B)² 的公式不變，代入不同的 A、B 就得到不同結果。理解這件事之後，「換一個題目就要重寫一份提示詞」的辛苦就消失了。</p>
+
+  <h3>二、學結構，不要學內容</h3>
+  <p>不管是把行銷 4P 改成合約書比對、把資訊設備管理系統改成圖書管理系統、把萬聖節圖改成聖誕節圖，動作都一樣：一句「請幫我將以下提示詞改為○○」加上原本那份東西。骨架完整保留，換掉的只有領域內容。這是全課復用次數最多的一招。</p>
+
+  <h3>三、One-shot 和錨定是兩件事，分清楚才不會用錯</h3>
+  <p>One-shot 是給一份不太會變的範本讓 AI 學結構；錨定是指向一個一直在變動、只能參照學習的來源。實務上兩者常合併使用，但誤把「查即時資料」當成 One-shot、或誤把「給範本」當成錨定，做法就會錯。</p>
+
+  <h3>四、你不會的東西，範本要去現實世界找，不要只跟 AI 要</h3>
+  <p>當結構複雜到你自己講不清楚，AI 生成的通識級範本會不夠細。正解是去找一個已經有人花大錢設計好的現成結構——電商的商品分類、書店的圖書分類——讓 AI 去學那個結構。</p>
+
+  <h3>五、AI 做不好是常態，補救要有系統</h3>
+  <p>他示範了三種補救動作：</p>
+  <ul class="pt">
+    <li>在提示詞裡編上<b>任務編號</b>當標記，哪一段爛就精準指到那一段重做。</li>
+    <li>把措辭下得<b>強烈</b>（「必須完全一致」而不是「參考」）。</li>
+    <li>當某個功能就是不穩，<b>換路</b>——給它標準語法當 One-shot，或整個換到另一個平台做。</li>
+  </ul>
+  <p>他把泳道圖四次越改越糟的過程全部攤開，反而是這堂課最有說服力的示範。</p>
+</section>
+
+<!-- 17 -->
+<section class="chapter" id="sec-quotes">
+  <span class="chip" style="background:linear-gradient(90deg,var(--amber),var(--rose))">QUOTES</span>
+  <h2 class="ct">17. 老師金句</h2>
+
+  <div class="golden"><div class="q">「提示詞學得好，AI 生成沒煩惱。提示詞如果要學得好，朋友一定交得少。」</div><div class="a">［00:05］開場第一句。後半句是玩笑，但他接著解釋了為什麼——見下一則。</div></div>
+
+  <div class="golden"><div class="q">「因為你對 AI 你有所求，你不甘願問了五次才得到答案，你希望問一次就可以快速得到你的答案。」</div><div class="a">［01:34］人跟熟朋友聊天不會刻意改變說話方式；一旦有所求，問法就會自動調整。這種不甘願會逼你的提示詞能力進步。</div></div>
+
+  <div class="golden"><div class="q">「關鍵是在什麼？腦袋裡的藍圖。」</div><div class="a">［12:38］秀完自製工具之後講的。工具不是重點，畫得出藍圖才是。</div></div>
+
+  <div class="golden"><div class="q">「學的是結構的轉換，而不是學的是內容。」</div><div class="a">［36:23］全課核心句。</div></div>
+
+  <div class="golden"><div class="q">「這在提示詞工程裡頭叫做錨定原理，下那個錨。」</div><div class="a">［43:48］像漁船下錨要先知道魚群在哪裡。</div></div>
+
+  <div class="golden"><div class="q">「程式可以複製，提示詞可以複製，腦袋裡的想法是沒有辦法複製的。」</div><div class="a">［60:40］回應學員問他不怕技巧被學走。</div></div>
+
+  <div class="golden"><div class="q">「身為專業的你，你一定要做人為的檢核。你不做檢核，他做出來錯了你也不曉得，你就直接交出去，這是不 OK 的。」</div><div class="a">［71:13］AI 產出之後的最後一道關卡是人。</div></div>
+
+  <div class="golden"><div class="q">「這叫做別人的 One-shot⋯⋯我們不是 clone，我們叫 renew。」</div><div class="a">［87:22］抄別人的提示詞可以，但要加工。</div></div>
+
+  <div class="golden"><div class="q">「資料來源一定要寫清楚是根據哪個來源。你不寫的話，他會連同你那個版型範本裡頭的資料，一併拿進來做摘要。」</div><div class="a">［109:11］會議紀錄實戰最關鍵的一句。</div></div>
+
+  <div class="golden"><div class="q">「你要記得去個資的概念。」</div><div class="a">［111:15］</div></div>
+
+  <div class="golden"><div class="q">「我不是真的每一次就完成了，我也是試了很多次，最後才有那個結果，知道提示詞要怎麼下，純粹就是不甘願。」</div><div class="a">［164:48］</div></div>
+
+  <div class="golden"><div class="q">「我寧可走對的路，而不是只有把事情做對。」</div><div class="a">［174:10］</div></div>
+
+  <div class="golden"><div class="q">「把你的專業抽走，你還剩什麼？你剩的是家人，有空多陪陪家人。」</div><div class="a">［177:25］收尾。他說前面都可以當開玩笑，這句不開玩笑：跟家人互動得到的創意，比一個人窩在電腦前多。</div></div>
+</section>
+
+<!-- 18 -->
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,var(--ink3),var(--ink2))">SOURCE</span>
+  <h2 class="ct">18. 資料來源與整理說明</h2>
+
+  <div class="twrap"><table>
+    <tr><th style="width:130px">來源</th><td>2026/09/05 課堂錄影單段，全長 3 小時 1 分；教材資料夾九份檔案</td></tr>
+    <tr><th>整理方式</th><td>全程本機處理：擷取 129 張關鍵畫面、產生 1969 段逐字稿，再依逐字稿手寫章節目錄</td></tr>
+    <tr><th>時間戳</th><td>章節標題與引文後方的［mm:ss］對應錄影播放器時間</td></tr>
+    <tr><th>整理</th><td>知臨（Tarshar 的 AI 分身特助）</td></tr>
+  </table></div>
+
+  <h3>已知限制，請先看過再引用</h3>
+  <ul class="pt">
+    <li><b>逐字稿是機器產生的</b>，人名與工具名會聽錯。可確定的錯字（益師傅、錨定原理、Groq、PlantUML、NotebookLM、泳道圖、SWOT⋯共 44 類、170 處）已修正；<b>不確定的一律保留原樣，沒有猜測補詞</b>。</li>
+    <li>錄影中有數段語音辨識產生的重複幻覺（例如靜音時段被辨識成字幕署名），整理時已整段捨棄，不會出現在本頁。</li>
+    <li>老師全場使用「Little-shot」與「Full Shot」兩個詞，本頁照原話保留，未替換成 zero-shot／few-shot 等標準術語。</li>
+    <li>逐字稿中出現的學員暱稱、提問者稱呼，本頁一律隱去。</li>
+    <li>課堂截圖已裁掉線上教室右側的與會者名單。</li>
+    <li>引用到作業、貼文或簡報之前，請對照錄影原始段落再確認一次。</li>
+  </ul>
+
+  <div class="note gold">🔒 <div><b>工具檔與工具網址不放在這一頁。</b><code>企業提示詞工程產生器.html</code> 請到課程 Drive 資料夾自行取用。老師課末提到產生器的模型設定要修正，修好後會重新提供。</div></div>
+</section>
+
+</article>
+</div>
+
+<footer>
+  <p>📝 提示詞工程補充課 課堂筆記 · 生成式AI應用電台・訂閱制第三季（益師傅）</p>
+  <p>依錄影關鍵畫面＋全程逐字稿整理 · <a href="s3-bonus2-ai-skills.html">🗺️ 互動技能地圖</a> · <a href="../radio/#ecf">🏠 回筆記館入口</a></p>
+</footer>
+
+</body>
+</html>
