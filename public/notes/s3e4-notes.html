@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ECF S3E4 課堂筆記｜把你會的東西變成帶得走的專業</title>
+<meta name="description" content="生成式AI應用電台・訂閱制第三季第四堂（2026/08/28）私人逐幀課堂筆記。前半為客座講師邱奕霖「用一張圖找到你不可取代的價值」：學習焦慮的三個卡點與三個解法、九宮格系統化專業、問題與達人與書籍三份清單、萬用圖解筆記框架、圖轉文、40 萬字 AI 日記系統。後半為益師傅四支自製單檔工具：PDF 自動切割 v9、消費族群分析儀、星脈圖譜 v38、本地端 Ollama 介面，含三次現場出錯的處理過程。本堂老師要求不得外流，僅供個人研習回顧。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#3b6b8f; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:760px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px;max-height:calc(100vh - 90px);overflow-y:auto}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:7px;border-left:none;font-size:13px}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.code{position:relative;background:var(--code);border:1px solid var(--line2);border-radius:10px;padding:13px 15px;margin:10px 0;font-size:13px;line-height:1.75;color:var(--ink);white-space:pre-wrap;font-family:"Cascadia Code",Consolas,monospace;overflow-x:auto}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.iframe-wrap{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000;margin:14px 0}
+.iframe-wrap iframe{display:block;width:100%;height:460px;border:0}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static;max-height:none} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} .iframe-wrap iframe{height:320px} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+<style>
+.topbar .lockchip{font-size:12px;border:1px solid #e0c9a0;background:#fdf6e8;color:#8a6a2b;border-radius:8px;padding:6px 12px;font-weight:600;white-space:nowrap}
+.hero .lockbanner{display:flex;gap:10px;max-width:760px;margin:22px auto 0;text-align:left;border-radius:12px;padding:14px 17px;font-size:13.5px;line-height:1.85;border:1px solid #e6d3ab;background:#fdf7ea;color:#7a5b12}
+nav.toc .tocgroup{font-size:11px;letter-spacing:.1em;color:var(--ink3);font-weight:700;margin:12px 0 4px;padding-left:10px;border-top:1px solid var(--line);padding-top:10px}
+.qgroup{font-size:13px;font-weight:700;color:var(--accent);letter-spacing:.06em;margin:22px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+.qgroup:first-of-type{margin-top:8px}
+</style>
+
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/#ecf" style="border-color:#b9cddd" onclick="if(history.length>1){history.back();return false}">← 回上一頁</a>
+  <b>📝 ECF S3E4 課堂筆記</b>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 訂閱制第三季第四堂 · 2026/08/28</span>
+  <h1>把你會的東西<span>變成帶得走的專業</span>：一堂課，兩位老師，兩種答案</h1>
+  <p class="lead">這一堂分成很不一樣的兩半。前半段是客座講師<b>邱奕霖（圖解力教練）</b>的「用一張圖找到你不可取代的價值」，講的是<b>怎麼把腦袋裡的經驗變成別人看得見、你自己帶得走的專業</b>；後半段是<b>益師傅</b>四支自製工具的實作，講的是<b>怎麼把想法變成真的跑得動的東西</b>。<br>兩個人其實在回答同一個問題：<b>AI 讓所有人的產出都變得很像，那你剩下什麼？</b>邱奕霖的答案是「你的故事、你的案例、你的視覺辨識度」；益師傅的答案是「持續交付，而且交付得出來」。<br>本頁依<b>錄影逐幀關鍵畫面（共擷取 148 格）＋全程逐字稿（1059 段）</b>整理，重點段落附影片時間戳。</p>
+  <div class="meta">
+    <span>📅 2026/08/28（四）直播</span>
+    <span>👤 益師傅（楊俊益・ECF）</span>
+    <span>🎤 客座：邱奕霖（圖解力教練）</span>
+    <span>⏱️ 全長 2 小時 34 分 46 秒</span>
+    <span>🎨 圖解 × AI 工具實作</span>
+  </div>
+  <div class="lockbanner">
+    🔒 <div><b>這一堂老師明確要求不得外流，而且要學員宣誓。</b>開場第一分鐘：「因為是有邀約講師，所以不得外流，只限於自己的研習運用」「跟我宣誓，絕對不亂外流所有的課程的相關資料」。72 分鐘處講到電子書時又要大家宣誓一次「下載了絕不散布」。<br><b>所以這份筆記只給妳自己看，沒有放到公開網站上，也沒有進公開的 repo。</b>網站上只掛一張標示 🔒 的索引卡片，不揭露內文。</div>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-overview">1. 一張圖看懂這堂</a>
+  <div class="tocgroup">第一部・邱奕霖</div>
+  <a href="#sec-guest">2. 客座講師與講題</a>
+  <a href="#sec-anxiety">3. 學習焦慮的三個卡點與三個解法</a>
+  <a href="#sec-coach">4. 立即反饋：把 AI 當教練</a>
+  <a href="#sec-formula">5. 黃金公式</a>
+  <a href="#sec-grid">6. 專業：九宮格</a>
+  <a href="#sec-lists">7. 對外分享：故事與三份清單</a>
+  <a href="#sec-interest">8. 興趣：讓專業有記憶點</a>
+  <a href="#sec-visual">9. 圖解：萬用筆記框架與圖轉文</a>
+  <a href="#sec-you">10. 你自己：標籤、配色與日記系統</a>
+  <div class="tocgroup">第二部・益師傅</div>
+  <a href="#sec-output">11. 持續與輸出</a>
+  <a href="#sec-pdf">12. PDF 自動切割工具 v9</a>
+  <a href="#sec-consumer">13. 消費族群分析儀</a>
+  <a href="#sec-atlas">14. 星脈圖譜 v38</a>
+  <a href="#sec-local">15. 本地端工具與進行中的專案</a>
+  <a href="#sec-dev">16. AI 開發現場：三次出錯</a>
+  <div class="tocgroup">收尾</div>
+  <a href="#sec-quotes">17. 兩位老師的金句</a>
+  <a href="#sec-src">18. 資料來源與整理說明</a>
+</nav>
+
+<article>
+
+<!-- 0 -->
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--blue))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>生成式 AI 應用電台・訂閱制第三季　<b>第四堂</b></td></tr>
+    <tr><th>直播日期</th><td>2026/08/28（四），錄影全長 <b>2 小時 34 分 46 秒</b></td></tr>
+    <tr><th>主講</th><td>益師傅（楊俊益，暱稱 ECF；智慧立方有限公司）</td></tr>
+    <tr><th>客座講師</th><td><b>邱奕霖</b>，圖解力教練、圖解力學院創辦人。講題「用一張圖找到你不可取代的價值」，時間約 01:22 至 59:36</td></tr>
+    <tr><th>本堂主題</th><td>前半：把經驗系統化成帶得走的專業（九宮格、清單、圖解筆記、AI 日記）。後半：四支自製單檔工具的實作與改版</td></tr>
+    <tr><th>課程教材</th><td>Drive 資料夾「第四堂」：課堂錄影 ×1，加上四個單檔 HTML 工具</td></tr>
+    <tr><th>流通限制</th><td><b>老師明確要求不得外流</b>，並要學員在鏡頭前宣誓（開場 00:01–01:02、以及 72:00–72:23 各一次）</td></tr>
+  </table></div>
+
+  <h3>🧰 四個工具檔</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:170px">工具</th><th>檔案</th><th>一句話</th></tr>
+    <tr><td>📚 PDF 自動切割工具 v9</td><td><code>PDF拆分工具-v9.3.html</code>（357 KB）</td><td>把整本 PDF 依章節自動拆開，附單頁摘要、大綱與心智圖、OCR、去歪斜等一整排工具</td></tr>
+    <tr><td>📊 消費族群分析儀 v17</td><td><code>消費族群分析儀_Groq版_v17.html</code>（395 KB）</td><td>丟產品圖或資料進去，產出 17 個分析頁籤，可匯出 PPT／PDF／Word／Excel</td></tr>
+    <tr><td>🌌 星脈圖譜 v38</td><td><code>nexus_atlas-new.html</code>（583 KB）</td><td>把任何主題畫成關聯星圖，八種圖譜類型，資料可來自文字、檔案、網址、論文或台股</td></tr>
+    <tr><td>🍳 AI 料理王</td><td><code>AI料理王_Groq_Gemini3_5.html</code>（79 KB）</td><td>選食材與風格產生菜單，再用 Gemini 生一張擬真菜色照，可下載 PDF 食譜</td></tr>
+  </table></div>
+  <div class="note blue">🔑 <div>四支工具<b>全部都串 Groq API</b>，AI 料理王另外用 Gemini 負責生圖，星脈圖譜多支援一個 OpenRouter 上的模型。跟上一堂「釣魚選股 v12」是同一套骨架：<b>單檔 HTML ＋ 免費 AI API ＋ 自然語言操控</b>。</div></div>
+</section>
+
+<!-- 1 -->
+<section class="chapter" id="sec-overview">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--teal))">OVERVIEW</span>
+  <h2 class="ct">1. 一張圖看懂這堂</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:92px">時間</th><th style="width:150px">段落</th><th>在講什麼</th></tr>
+    <tr><td>00:01–01:20</td><td>開場與宣誓</td><td>因為有邀約講師，要求不得外流，學員在留言區宣誓</td></tr>
+    <tr><td>01:22–16:30</td><td><b>邱奕霖</b>：焦慮與解法</td><td>AI 時代學習焦慮的三個卡點，以及輸出 100 次、收集問題、建立社群三個解法</td></tr>
+    <tr><td>16:30–35:50</td><td>專業怎麼累積</td><td>黃金公式；用九宮格把「只在腦袋裡的經驗」變成帶得走的專業；以出書為終點回推</td></tr>
+    <tr><td>35:50–48:55</td><td>興趣與圖解</td><td>用興趣製造記憶點；萬用圖解筆記三元素；手繪轉數位、圖轉文</td></tr>
+    <tr><td>48:55–59:36</td><td>你自己</td><td>視覺標籤、固定配色，以及累積到 40 萬字的 AI 日記系統</td></tr>
+    <tr><td>59:47–69:39</td><td><b>益師傅</b>：持續與輸出</td><td>回應邱老師，講自己的創作動力來源與數字</td></tr>
+    <tr><td>69:39–85:20</td><td>PDF 自動切割工具</td><td>修好因模型停用而壞掉的 AI 摘要，示範章節拆解（含一個失敗案例）</td></tr>
+    <tr><td>85:37–121:20</td><td>消費族群分析儀</td><td>新增 BMC 商業模式圖；現場跑出 Groq 額度錯誤，當場貼給 Claude 改</td></tr>
+    <tr><td>121:20–139:10</td><td>星脈圖譜 v38</td><td>論文引用驗證、台股族群關聯、多種佈局圖，改了四五十次才到這版</td></tr>
+    <tr><td>139:18–147:20</td><td>本地端工具</td><td>自製 Ollama 介面：專案、MCP、提示詞版型、四模型同時比對</td></tr>
+    <tr><td>147:20–154:40</td><td>收尾</td><td>下次邀 AI Agent 講師；中秋節想教做鳳梨酥</td></tr>
+  </table></div>
+
+  <div class="note green">🧭 <div><b>兩位老師其實在回答同一個問題。</b>AI 讓每個人的產出都變得很像，那差異在哪？<br>邱奕霖說：差異在你的<b>案例與經驗</b>，因為 AI 找得到知識理論、態度原則、方法論，唯獨找不到你的故事。<br>益師傅說：差異在<b>你有沒有真的交付出來</b>。「很多的想法，你我都有想法。少了做法，少了成果，那就是空談了。」</div></div>
+</section>
+
+<!-- 2 -->
+<section class="chapter" id="sec-guest">
+  <span class="chip" style="background:linear-gradient(90deg,var(--amber),var(--orange))">GUEST · 邱奕霖</span>
+  <h2 class="ct">2. 客座講師與講題［01:22 起］</h2>
+  <ul class="pt">
+    <li><b>邱奕霖</b>，圖解力教練，創辦台灣最大的圖解教育平台</li>
+    <li>圖解教育的定義：<b>用畫圖來解決問題</b>。工具包含心智圖、九宮格、火柴人</li>
+    <li>工作內容：到學校教老師與學生用畫圖做筆記、做教學；到企業帶同仁用畫圖做邏輯思考；教主管用圖像跟同仁建立共識</li>
+    <li>今年出版第三本書，把 2020 年一人公司創業到現在快六年的歷程整理成一套系統</li>
+  </ul>
+  <div class="note steel">💬 <div>他開場就先鬆綁大家的心理負擔：「大家可能想說是不是要畫圖、好像要畫得很漂亮或很精美。但我覺得現在<b>在 AI 時代下畫圖的技術其實已經大幅的降低了</b>⋯⋯但如果能夠<b>主動的運用畫圖這個工具</b>來創造更多價值，我相信會帶給大家很多的幫助。」</div></div>
+</section>
+
+<!-- 3 -->
+<section class="chapter" id="sec-anxiety">
+  <span class="chip" style="background:linear-gradient(90deg,var(--amber),var(--rose))">焦慮與解法</span>
+  <h2 class="ct">3. 學習焦慮的三個卡點與三個解法［03:10–13:50］</h2>
+
+  <p>他先在聊天區做了一個投票：AI 時代你的學習焦慮是變多還是變少？當天 Y 明顯比較多。</p>
+
+  <h3>三個卡點</h3>
+  <ol class="st">
+    <li><b>拼命輸入，沒有輸出</b>。或者把輸出直接外包給 AI，「你幫我來做心得，你來幫我做我的專欄的內容。但過程中是<b>完全沒有思考</b>的」</li>
+    <li><b>知道很多，但沒有實作</b>。「願意花時間去把這些知識實作、應用在真實場景中，真的來解決自己的問題或是解決別人的問題，這個其實比例非常非常低」</li>
+    <li><b>沒有立即反饋</b>。玩遊戲有經驗值有等級，「但是在學習的路上它是無形的，是看不見的」，所以容易覺得停滯不前</li>
+  </ol>
+  <div class="note gold">🔁 <div>三個卡點會滾成惡性循環：因為焦慮所以買更多課、看更多書、聽更多分享，「就一直輸入一直輸入，但反而會更加焦慮」。</div></div>
+
+  <h3>解法一：挑戰輸出 100 次</h3>
+  <p>他 2016 年才知道有「<b>視覺紀錄師</b>」這個職業（歐美常見，在演講或會議現場邊聽邊用圖文把內容畫出來），知道之後很開心但更焦慮，拼命看書。</p>
+  <p>直到 2019 年他決定：<b>挑戰一年看 100 本書、畫 100 張圖解筆記</b>。大約兩三天一本，年底畫了 100 多張。</p>
+  <ul class="pt">
+    <li>「我發現我<b>不太焦慮了</b>，因為我就給自己一個任務⋯⋯我其實根本沒有時間在焦慮」，注意力從焦慮轉成「怎麼找下一本書、快速完成」</li>
+    <li>能力因為<b>應用了 100 次</b>而快速成長</li>
+    <li>對外的效果：「當你完成這件事情之後，對一般人來說，他會覺得<b>有一個專業的門檻</b>」</li>
+    <li>形式不限：短影音、文章、圖卡、筆記都可以，重點是<b>鎖定一個主題輸出 100 次</b></li>
+  </ul>
+
+  <h3>解法二：收集問題，然後回答</h3>
+  <p>2020 年他建了一個 Google 表單，收集大家對圖解應用的問題。</p>
+  <ul class="pt">
+    <li>「當我收集了大家的問題，<b>我不可能全都會</b>。為了要回答大家問題的時候，我就要主動去找答案。這時候我也沒有時間焦慮」</li>
+    <li>成果：收集了 200 多個問題，回答其中 60 個，用電子報寫成 60 篇文章，<b>累積約 8 萬字</b></li>
+    <li>後來出版社私訊問他有沒有出書打算，他敢答應，是因為「<b>我已經累積了 8 萬字了</b>」</li>
+  </ul>
+  <div class="note blue">💡 <div>他把這件事講得很實際：「如果我沒有累積這些回答問題的素材，今天就算出版社問我有沒有出書的計畫，<b>我其實也不太敢答應</b>，因為完全是零、一個字都沒有，要無中生有，這挑戰其實蠻大的。」</div></div>
+
+  <h3>解法三：建立社群</h3>
+  <ul class="pt">
+    <li>2019 年畫 100 張筆記的同時就創了社群，持續在裡面分享</li>
+    <li>好處一：留言、按讚、互動變成回饋來源，解決「獨自學很孤單」的問題</li>
+    <li>好處二：有了社群才能發表單收問題，形成循環</li>
+    <li>好處三：<b>你永遠不知道誰在裡面潛水</b>。「我永遠也不知道有這麼多出版社的總編輯加入到這社群裡面，然後平常都潛水，都不會留言，也不會互動。但某一天它就會私訊你說有一些合作的機會。」企業人資主管、學校老師主任也在裡面</li>
+    <li>關鍵是「持續的分享、持續的回答大家的問題」，建立足夠的<b>信任資本</b>之後，「後續的合作是自然而然發生的」</li>
+  </ul>
+</section>
+
+<!-- 4 -->
+<section class="chapter" id="sec-coach">
+  <span class="chip" style="background:linear-gradient(90deg,var(--green),var(--teal))">AI 當教練</span>
+  <h2 class="ct">4. 立即反饋：把 AI 當教練［13:50–16:00］</h2>
+  <p>這是他自己的案例，用來解決第三個卡點。</p>
+  <ul class="pt">
+    <li>2018 年跑過半馬 21 公里，之後就沒再跑。2025 年決定挑戰全馬 42 公里，比賽在 11 月，他 <b>8 月 1 號</b>重新開始</li>
+    <li>這次跟以前不一樣的地方：他在 <b>Gemini 開了一個專案，叫「健身挑戰每日運動」</b></li>
+    <li>每天跑完就<b>語音輸入</b>心得，貼上 App 的里程數與配速，AI <b>以教練的身份</b>回饋這次跑得如何、給建議</li>
+  </ul>
+  <div class="note green">🏃 <div>他解釋為什麼這件事有用：「當我跑完，如果我沒有加入什麼教練群或跑友群，<b>就算加入這個群組，教練也不可能 24 小時立即回饋給我</b>。那我可能就沒有回饋，我就懶惰就放棄了。但是有 AI 之後，我做任何事情他可以立刻給我回饋。」<br>回饋的種類他分得很清楚：<b>情緒價值的、實質建設的、專業建議的、策略調整的</b>。<br>結果：「從去年 8 月到現在，不敢說每天都跑，但這個跑步習慣就很神奇的<b>沒有中斷過</b>。」</div></div>
+</section>
+
+<!-- 5 -->
+<section class="chapter" id="sec-formula">
+  <span class="chip" style="background:linear-gradient(90deg,var(--amber),var(--purple))">黃金公式</span>
+  <h2 class="ct">5. 黃金公式［16:29 起］</h2>
+  <figure class="shot"><img src="s3e4-img/01-formula.jpg" loading="lazy" alt="投影片：送給你一個黃金公式，你 x 專業 x 興趣 x 圖解 x AI">
+    <figcaption>他總結的公式：<b>你 × 專業 × 興趣 × 圖解 × AI</b>。［16:32］</figcaption></figure>
+  <div class="note gold">🔑 <div>「前面四個很重要，因為 AI 大家都有嘛⋯⋯<b>當我們只有最後一步驟 AI，其實大家是大同小異的</b>。他看不出來你的文章，或沒辦法有效的認識你這個人跟別人有什麼樣的差別。」<br>接下來的整場演講，就是逐一拆解前面四個怎麼操作。</div></div>
+</section>
+
+<!-- 6 -->
+<section class="chapter" id="sec-grid">
+  <span class="chip" style="background:linear-gradient(90deg,var(--blue),var(--cyan))">專業</span>
+  <h2 class="ct">6. 專業：用九宮格把經驗變成帶得走的能力［17:04–25:30］</h2>
+
+  <h3>先聽他的痛點故事</h3>
+  <p>創業前他做政府標案與寒暑假營隊，辦過幾十個營隊，自認有一定的專業累積，但從來沒整理過，「就一直靠我的大腦的直覺或是靠我的記憶去做任何的判斷跟決定」。三件事讓他發現有問題：</p>
+  <ol class="st">
+    <li>主管要他教新人怎麼辦營隊，他約了個下午喝咖啡講一兩個小時。一週後又來一個新人，他再講一次，「<b>我就發現一件很吊詭的事情，就是這禮拜我講的內容好像跟上禮拜不太一樣</b>」，因為全靠大腦回想，不穩定</li>
+    <li>新人聽完「其實根本一頭霧水」，反覆回來問，那個下午等於白花</li>
+    <li>最震撼的一次：離職後到新單位，主管問他辦營隊有哪些面向要注意，<b>他答不出來</b>。「我可以跟他說很多我辦營隊很精彩的故事⋯⋯但是我發現我沒辦法有系統化的跟他說辦營隊到底有哪些面向。」</li>
+  </ol>
+  <div class="note gold">😶 <div>「別人看你是有七八年的年資，所以他會以你是專業的來看待你自己。<b>但是我自己內在是覺得其實蠻空虛的</b>，因為那七八年我其實沒有系統化的把我的專業累積出來。」</div></div>
+
+  <h3>解法：一張九宮格</h3>
+  <figure class="shot"><img src="s3e4-img/02-grid-inner.jpg" loading="lazy" alt="投影片：專業帶不走是因為沒有視覺化，營隊九宮格八個面向">
+    <figcaption>以辦營隊為例的九宮格：主題企劃、行銷策略、行政庶務、財務管理、人員培訓、器材管理、品牌經營、課程設計，中心是「營隊」。［23:01］</figcaption></figure>
+
+  <p>每一格底下都還有細節，例如主題企劃包含營隊名稱與主題怎麼定；行銷包含通路與廣告怎麼下；行政庶務包含場地、餐飲住宿、配合單位；人員培訓包含來源、培訓方式、制服規範；課程設計包含配合講師與亮點課程；品牌經營包含 IP、主視覺、配色。</p>
+
+  <h3>三個好處</h3>
+  <ol class="st">
+    <li><b>可以有系統地講給別人聽</b>：辦好一個營隊有這八個面向</li>
+    <li><b>可以累積與迭代</b>：「我這次在行銷活動好像做得不錯，我就可以把它加進來⋯⋯我辦 10 個營隊，這個九宮格它會越來越完整。」沒有九宮格的話，辦 100 個營隊腦袋裡也只會留下幾個比較有印象的故事，「到底做對了什麼或是哪些是做錯的，你完全不記得」</li>
+    <li><b>可以教別人、開課、出書</b></li>
+  </ol>
+  <div class="note blue">🗺️ <div>兩個實務補充：<br>一、格子太小不是問題，「主題企劃可能又可以再拆成八格」，<b>這是一個地圖的概念</b>，細節他會搭配 Google 文件串連。<br>二、跟主管談案子時不用做簡報，「<b>我用一個九宮格就可以快速讓他知道我們營隊的詳細內容</b>，然後他會覺得你超專業」。</div></div>
+</section>
+
+<!-- 7 -->
+<section class="chapter" id="sec-lists">
+  <span class="chip" style="background:linear-gradient(90deg,var(--rose),var(--orange))">對外分享</span>
+  <h2 class="ct">7. 對外分享：一個故事與三份清單［25:28–35:50］</h2>
+
+  <figure class="shot"><img src="s3e4-img/03-grid-outer.jpg" loading="lazy" alt="投影片：專業從建立知識體系開始，讓人看見你有料">
+    <figcaption>對外的九宮格：左欄是知識體系的四層 <b>E 案例／經驗、S 方法論、A 態度原則、K 知識理論</b>，右欄是三份清單，中間是你的主題與那個核心故事。［33:01］</figcaption></figure>
+
+  <h3>核心：拯救你人生的故事</h3>
+  <div class="note gold">❤️ <div>他很喜歡的一句話：「<b>用拯救過你生命的事情來幫助更多人。</b>」<br>他自己的故事：以前在職場上抽象思考時腦袋空白、不善於溝通，很難跟主管或客戶建立共識，「又容易內耗，心裡面在想主管在想什麼、客戶在想什麼，然後就很累」。接觸圖解後，他在一張紙上把提案大綱畫出來給主管確認，「<b>我就不用猜他到底在想什麼</b>」；也用一張圖讓客戶知道提案重點，不一樣就直接改，改完再變成 PPT 或 Word，通過率就高了，「<b>因為大家彼此腦袋中有相同畫面</b>」。<br>為什麼要一直講：「我 AI 上網打任何資訊，要找圖解所有訊息都可以，什麼知識、理論、方法全都可以找到，一下子幾秒鐘就出來了，<b>但為什麼要聽邱奕霖分享？因為圖解拯救過邱奕霖的人生故事。</b>」</div></div>
+
+  <h3>三份清單</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">清單</th><th>怎麼做、為什麼有效</th></tr>
+    <tr><td><b>問題清單</b></td><td>收集這個主題的 100 個問題並回答。「你能夠回答這 100 個問題，其實你就大幅的進步跟成長了。」他建議<b>從這份開始</b></td></tr>
+    <tr><td><b>達人清單</b></td><td>整理這個領域的達人，不一定要 100 個。他整理了圖解領域的 30 位。效果：「別人在看到你分享的時候，他也會覺得<b>你就是這達人的其中之一</b>。」越冷門越專業的領域效果越好</td></tr>
+    <tr><td><b>書籍清單</b></td><td>把知識分成四類：知識理論、態度原則、方法、<b>案例</b></td></tr>
+  </table></div>
+
+  <div class="note steel">🎯 <div><b>四類知識裡，只有一類 AI 找不到。</b>「AI 可以找到這個（知識理論），也可以找到這個（態度原則），方法論其實也都 OK，<b>但這個（案例）是最難找到的。而且這個才是最有說服力的。</b>」<br>所以他的建議是：把時間花在累積案例與經驗，不管是自己的，還是你幫助別人解決問題的故事。「這個我覺得是在現在 AI 時代下最大的亮點。」</div></div>
+
+  <div class="note blue">📚 <div>他也提醒達人清單有個前提：「當然我可以直接 AI 快速整理 30 位圖解達人，但是因為我在這個領域持續的分享，我分享出來的才更有說服力。今天隨便一個人說我可以整理 30 位光學設計達人，但他沒有相關的背景跟領域，突然分享出來，<b>那個說服力其實是不足的</b>。」</div></div>
+
+  <h3>以出書為終點回推</h3>
+  <figure class="shot"><img src="s3e4-img/04-books.jpg" loading="lazy" alt="投影片：專業的累積，從出書為終點回推最有效，展示三本著作">
+    <figcaption>「專業的累積，從出書為終點回推最有效」。畫面上是他的三本著作。［35:10］</figcaption></figure>
+  <p>做法很具體：在 Google 文件裡先開好書的目錄架構，「雖然還沒有出版社找我出書，但我就先跟 AI 協作，我先把我的目錄先寫一下」。之後每寫一篇文章就歸到對應的單元。</p>
+  <div class="note gold">📖 <div>「所以我在職場企業的圖解應用上就會一直累積很多文章，<b>但它不會是破碎的，它都在這個書的架構裡面</b>。今天如果真的有出版社要找我出書，我就直接快速的可以完成。」<br>反過來說：沒有這個架構的話，要回頭把散落的文章找出來、排列、篩選，「這時間太漫長，難度也太高了。<b>而且難度太高就不會做</b>」，結果就是「我們分享一大堆的文章，他可能就像放煙火一樣就不見了」。</div></div>
+</section>
+
+<!-- 8 -->
+<section class="chapter" id="sec-interest">
+  <span class="chip" style="background:linear-gradient(90deg,var(--teal),var(--green))">興趣</span>
+  <h2 class="ct">8. 興趣：讓專業有記憶點［36:30–39:34］</h2>
+  <p>他有一套自己的圖解筆記方法論叫 <b>DRAW</b>，但他很誠實：「真的，我在 AI 我可以問他說『你幫我整理一個圖解筆記的方法論』，他幾秒鐘就跑出來了。每個人其實都可以有自己的方法。」</p>
+  <p>差異來自把專業<b>乘上你的興趣</b>：</p>
+  <ul class="pt">
+    <li>興趣是旅行，就用旅行談圖解筆記；興趣是料理，就用料理談圖解筆記</li>
+    <li>他自己的案例：喜歡打球，就把過往網路上跟籃球有關的文章挑出來，<b>請 NotebookLM 精選</b>，整理成跟創業有關的反思，做成一份簡報</li>
+    <li>「有一個人用籃球去談創業⋯⋯會比單純跟人家談創業的心法、思維來得<b>更有記憶點</b>」</li>
+  </ul>
+  <div class="note green">🏀 <div>他點出這招對素人特別重要：「我們是一般素人，不太可能橫空出世可以立刻跟這些在這個領域很資深、經營多年的前輩相比。<b>那我要怎麼快速讓人家留下印象呢？我覺得興趣的搭配是一個很好的切入點。</b>」<br>而且還有一個附帶好處：「我自己分享的過程中也比較開心，因為<b>這本來就是我的興趣</b>。」</div></div>
+</section>
+
+<!-- 9 -->
+<section class="chapter" id="sec-visual">
+  <span class="chip" style="background:linear-gradient(90deg,var(--purple),var(--pink))">圖解</span>
+  <h2 class="ct">9. 圖解：萬用筆記框架與圖轉文［39:34–48:55］</h2>
+
+  <h3>先講一個陷阱：不要照單全收 AI 生的圖</h3>
+  <div class="note gold">⚠️ <div>「大部分的 AI 生圖其實比較<b>沒有辨別度</b>，就是沒辦法看出來一看就是誰的筆記、一看就知道是誰的成果。<b>我把名字遮住，換成邱奕霖，好像也沒有違和。</b>那這樣子你累積了一百篇、一千張其實也沒有太大的效果，因為它沒辦法留下一個視覺的辨別度。」<br>他的結論是：門檻消失了沒錯，但<b>「要能夠主動的應用這些圖，我覺得會是關鍵」</b>，而不是下個指令請 AI 把文章變成圖然後照單全收。</div></div>
+
+  <h3>圖解分兩種，是比重不是對錯</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:80px">類型</th><th>工具</th><th>用在哪</th></tr>
+    <tr><td><b>理性</b></td><td>交集圖、矩陣圖、流程圖</td><td>大家比較熟悉的那一類</td></tr>
+    <tr><td><b>感性</b></td><td>漫畫情境、火柴人</td><td>要呈現案例的時候，建議適時搭配一點</td></tr>
+  </table></div>
+
+  <h3>跳棋人：一個字就能畫出所有角色</h3>
+  <figure class="shot"><img src="s3e4-img/05-stickman.jpg" loading="lazy" alt="投影片：跳棋人畫法示範">
+    <figcaption>頭上寫字就能圖解任何角色；進階把字寫在身體、加表情，再加對話框，就能畫出任何情境。［42:01］</figcaption></figure>
+  <div class="note blue">✍️ <div>為什麼推薦這種極簡畫法而不是 AI 生圖：「AI 可以生成很多圖，但生成的圖有時候會變成<b>一種雜訊</b>，因為那個角色就是彩色的，然後他穿什麼服裝、長相⋯⋯會變成太多的干擾。五顏六色的，反而這種精簡的會更有效」，讓人清楚知道角色是誰、有什麼情緒、說什麼話。<br>第二個理由更實際：學會之後，你可以在一張紙、白板或黑板上<b>邊說邊畫</b>做即時溝通。</div></div>
+
+  <h3>萬用圖解筆記：三個元素</h3>
+  <figure class="shot"><img src="s3e4-img/06-note-frame.jpg" loading="lazy" alt="投影片：萬用的圖解筆記架構，一個標題、一個架構、一個結論">
+    <figcaption>「萬用的圖解筆記架構送給你！」一個標題、一個架構、一個結論。［45:01］</figcaption></figure>
+  <ol class="st">
+    <li><b>一個標題</b>：左上角畫一個跳棋人加對話框，寫講者名字與講座主題</li>
+    <li><b>一個架構</b>：中間三個圓圈，寫下三個印象深刻的收穫關鍵字，細節用括號補充在旁邊</li>
+    <li><b>一個結論</b>：右下角畫你自己，寫上名字、表情，用對話框寫今天的心得收穫</li>
+  </ol>
+  <div class="note green">🎁 <div>他建議的用法很妙：聽演講時當場畫完，<b>把圖送給講者</b>。「對講者來說一定印象很深刻，也會非常開心」，而且講者很可能把你的圖 PO 在他自己的社群，等於讓更多人認識你。<br>「所以我常常說<b>分享學習心得是一個日行多善的事情</b>」，對講者、對出版社、對你的社群成員都有好處。<br>他自己也用這個架構讀書：「我大概 30 分鐘內就可以快速看完一本書的重點，然後表達出來。不需要從頭看到尾⋯⋯<b>站在知識分享的立場，就是把我自己覺得最有共鳴的分享出來就好。</b>」</div></div>
+
+  <h3>手繪轉數位，然後圖轉文</h3>
+  <p>他以前的困擾：手繪筆記應用範圍狹隘，掃描放進 PPT 會有陰影，要變成文章還得重新打字。「那這轉換其實是蠻麻煩的。<b>轉換一旦麻煩，你其實就不會做</b>，不會做呢，你就會累積一大堆筆記，但那些筆記沒有其他用途。」</p>
+  <figure class="shot"><img src="s3e4-img/07-atomic-habits.jpg" loading="lazy" alt="投影片：搭配 Gemini 後的原子習慣圖解筆記">
+    <figcaption>手繪草稿丟給 AI 之後的成果，可以變成各種風格。他強調「重點是有沒有自己的想法、有沒有這樣的一個架構」。［47:15］</figcaption></figure>
+  <p>現在的流程是兩段：</p>
+  <ol class="st">
+    <li><b>圖轉圖</b>：畫得不工整沒關係，拍照丟給 ChatGPT，變成想要的風格</li>
+    <li><b>圖轉文</b>：畫完之後打開 ChatGPT，<b>用語音輸入</b>講心得。「畢竟這是我畫的，我總是能說出一些心得」，語音轉成文字，這張筆記就變成文字，再變成專欄文章</li>
+  </ol>
+  <div class="note gold">🔑 <div>「文字有了之後，你要變簡報、要變成圖卡、要變成影片，我想現在來說難度其實都大幅的降低了。<b>但關鍵是你有那張圖，因為那張圖是我們自己思考的想法、我們自己的觀點、我們自己的見解，而不是全部都丟給他外包。因為你全部丟給他外包，那其實大家都長得一樣。</b>」</div></div>
+</section>
+
+<!-- 10 -->
+<section class="chapter" id="sec-you">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--amber))">你自己</span>
+  <h2 class="ct">10. 你自己：視覺標籤、配色與日記系統［48:55–59:27］</h2>
+
+  <h3>視覺標籤與配色</h3>
+  <ul class="pt">
+    <li>讓自己的 <b>IP 角色</b>出現在所有筆記裡。「IP 角色他的商業價值其實是沒有限制的、沒有天花板的，<b>但關鍵是要累積</b>，不然人家根本不認識這是誰」</li>
+    <li>透過這個角色說你自己的故事，以及為什麼要推廣這件事的使命</li>
+    <li><b>固定配色</b>：他自己所有產出都用黃黑配色。「當所有的產出都是黃黑配色的時候，大家看久了，看到這個黃黑配色就會知道是我們圖解力學院的產出」</li>
+    <li>建議：選兩種顏色當主色，加一個 IP 圖，<b>然後要持續</b>。「不要一下變來變去的，那其實沒辦法累積」</li>
+  </ul>
+
+  <h3>日記：他說這是 AI 時代的創作分水嶺</h3>
+  <p>他從國中就開始手寫日記，但發現三個問題：寫得慢、想很多但寫兩件就懶了、沒辦法數位化。「那當它沒數位化的時候，其實你寫了 10 年 20 年⋯⋯<b>它沒辦法再利用</b>。」</p>
+
+  <div class="note blue">📔 <div><b>他的日記寫四個面向：事實、感受、發現、行動。</b><br>「如果只有寫事實就很容易變流水帳。但是如果你有寫到一些感受，我覺得會更加個人化。那你自己有沒有什麼樣困擾、發現、觀點？這個我覺得很重要。以及你有做什麼樣的行動。」</div></div>
+
+  <p>2025 年 3 月 1 號開始改用 AI 寫日記：開一個專案，<b>語音輸入</b>，並給 AI 一些規則，讓它重新編排、給清楚的日期與標題，把凌亂的內容寫成比較好讀的形式。他特別說明「<b>以我的為主，他不會自己亂掰</b>」。</p>
+  <p>累積到這堂課當天，大約 <b>40 萬字</b>。</p>
+
+  <figure class="shot"><img src="s3e4-img/08-notebooklm-diary.jpg" loading="lazy" alt="NotebookLM 畫面：圖解力創業日記，AI 依據日記擬定書的大綱">
+    <figcaption>把日記丟進 NotebookLM 之後：左邊是來源清單，中間是 AI 依據他的日記擬出的書籍大綱，右邊是可生成的各種格式。［54:52］</figcaption></figure>
+
+  <div class="note gold">💎 <div><b>這 40 萬字的用法才是重點。</b>他把雲端連結丟進 NotebookLM：<br>「我只要問他任何問題，我就有滿滿的案例了。比如說我要問親子教養的，他就可以把我從去年 3 月 1 號到現在跟孩子溝通的一些問題、案例⋯⋯<b>我早就忘記可能發生什麼事了</b>，我要他找幾件就找幾件出來。那我要寫文章的時候，是有滿滿的我個人的案例跟故事。」<br>再進一步：「如果我們今天要寫自己的寶典怎麼辦？你要回想一下你曾經講過哪些話，哇這難度很高。我直接丟給 NotebookLM 去搜尋我寫過的所有日記，他可以快速幫我分類我曾經講過哪些話，<b>每一句話後面都有案例跟故事</b>。」<br>成本：「你只要每天花個五分鐘，就把它語音輸入一下。」</div></div>
+
+  <div class="note green">🔮 <div><b>未來日記。</b>他在日記系統裡另外設計了一個功能：每天會有<b>一個十年後的我</b>出現，分享十年後的他在做什麼，並針對今天的困擾，站在十年後的角度給建議與鼓勵。</div></div>
+
+  <div class="note steel">📌 <div>結尾他把公式再收一次：AI 大家都有，關鍵是前面四個。<b>你自己的故事與日記是保障</b>；個人 IP 與視覺標示；用九宮格系統化你的專業，再用三份清單讓人知道你有料；用興趣切入製造記憶點；最後用圖解呈現。<br>「大部分的專業領域的內容都是文字，特別是越專業的主題，基本上都是文字，沒有圖解。<b>所以當你能夠用圖解把你這個領域的知識、專業呈現出來，你就是這個領域的第一人。</b>」他說他的目標是幫助 100 個產業或領域的夥伴做到這件事。</div></div>
+</section>
+
+<!-- 11 -->
+<section class="chapter" id="sec-output">
+  <span class="chip" style="background:linear-gradient(90deg,var(--blue),var(--purple))">益師傅接手</span>
+  <h2 class="ct">11. 持續與輸出［59:47–69:39］</h2>
+
+  <p>益師傅接回主持後，先講他聽完的感想：「你會發現其實這些神人或是大神們都有一個特色，就是<b>持續的力量</b>。」他也提到自己創社團時同樣寫了 100 篇技術文章，「你會發現好像每個人都以這個當一個目標」。</p>
+
+  <h3>但他跟邱老師有一點不同意見</h3>
+  <div class="note gold">🎯 <div>他先問學員：「認真做自己、經歷過了就好，是不是這樣？」大家都按 1。<br>「<b>但是益師傅不覺得這樣。我的觀點不一樣，我覺得認真過了就一定要有一個結果。假如沒有這個結果，這麼認真，目的是為什麼？慢慢慢慢你會失去那個動能。</b>」<br>他接著把這件事跟邱老師的說法接起來：邱老師的 100 本書就是一個目標，「所以他要有一個產出」。</div></div>
+
+  <h3>他自己的創作動力來源</h3>
+  <p>他問學員猜猜看為什麼他有創作的動力，然後自己揭曉：</p>
+  <div class="note blue">📦 <div>「<b>因為我訂閱制要交付給大家</b>，而且我寫出來的東西絕對不能很爛，所以我就會很努力的去要求自己把這些東西給做出來。<b>一個想法，我一定要有最後的輸出。假如沒有這個輸出，想法只是在腦袋裡。</b>」<br>「很多的想法，你我都有想法。<b>少了做法，少了成果，那就是空談了嘛，沒有意義。</b>常常都聽到有些人講『我早就想到這樣，我早就想這樣做』。與其這樣，還不如把它給做出來。」</div></div>
+
+  <h3>他的數字與作息</h3>
+  <ul class="pt">
+    <li>累積的提示詞大約 <b>600 多個</b>，程式大約 <b>380 幾支</b></li>
+    <li>「這不算什麼，比起有些人高產出的。<b>但是重點是我一直持續，我沒有中斷。</b>」</li>
+    <li>作息：「我大部分每天夜深人靜的時候，等家人睡覺可能 10 點多，<b>一直研究要一兩點</b>。每天都是這樣的過程，<b>包含出去玩也是這樣子</b>。」</li>
+    <li>他對自己的評價：「因為我的學習能力比較慢，所以我就必須要<b>不斷不斷的一直試</b>。」</li>
+  </ul>
+</section>
+
+<!-- 12 -->
+<section class="chapter" id="sec-pdf">
+  <span class="chip" style="background:linear-gradient(90deg,var(--green),var(--teal))">工具一</span>
+  <h2 class="ct">12. PDF 自動切割工具 v9［69:39–85:20］</h2>
+
+  <div class="note gold">⚖️ <div><b>先說這一段的一個界線問題。</b>老師示範時，是到一個叫 OceanofPDF 的網站找電子書當素材。他自己在課堂上把界線講得很清楚：「其實不應該這樣子做，但是老師們在做研究的時候，我們總是會去學習」「<b>你不能去散布，比如說這些書籍你不能去散布，你散布了就有問題了</b>」「這個可以罰很重」，並用刀子比喻：「我教你使用刀⋯⋯但是你絕對不能拿來做為非作歹的事情。」他也要求學員宣誓「下載了絕不散布」。<br><b>本頁如實記錄這段課程內容，但不寫操作步驟。</b>那類網站散布的電子書多半未取得授權，用自己買的書、公司自有文件或公開授權來源來測試這支工具，效果一樣，也不必承擔風險。</div></div>
+
+  <h3>為什麼要拆章節</h3>
+  <p>老師先問學員：「你們在學習的過程裡頭，是一個章節一個章節學習比較好，還是整本書學習比較好？」答案是<b>一個章節一個章節</b>。工具的定位就是：把電子書或期刊雜誌拆成章節，再一章一章丟進 NotebookLM 研讀，或做成語音 Podcast。</p>
+
+  <h3>這一版修好了什麼</h3>
+  <div class="note blue">🔧 <div>舊版在 <b>8 月 16 日</b>因為它接的模型停用，AI 摘要功能整個不能用。這一版換掉模型修好了。<br>老師的處理原則值得記下來：「<b>假若有模型被停用的狀況下，你一定得告訴益師傅，我可以改一下這個版本。</b>」<br>這跟上一堂釣魚選股 V10、V11 失效是同一個問題：<b>串第三方 AI 平台的工具，模型退役就會壞，工具必須跟著改版。</b></div></div>
+
+  <h3>操作</h3>
+  <ol class="st">
+    <li>確認版本是 <b>V9</b></li>
+    <li>打開 AI 功能，勾選 Groq API，貼上你的 API Key</li>
+    <li>按<b>測試連線</b>。失敗代表 Key 有問題，或那個模型又被停用了</li>
+    <li>上傳 PDF（最大 50 MB），它會自動依章節拆解</li>
+    <li>按<b>預覽</b>逐章確認拆得準不準</li>
+  </ol>
+
+  <figure class="shot"><img src="s3e4-img/09-pdf-tool.jpg" loading="lazy" alt="PDF 自動切割工具 v9 操作畫面">
+    <figcaption>PDF 自動切割工具 v9 的操作介面。［77:14］</figcaption></figure>
+
+  <h3>他當場示範了一個失敗案例</h3>
+  <div class="note steel">❌ <div>第一本書拆不了。老師直接把原因講出來：那本書「<b>字小小的、灰灰的</b>」，而且<b>沒有目次頁碼</b>，「以至於沒有辦法做切割⋯⋯那這本書就不太適合，坦白講，這本就不太適合。那怎麼辦呢？<b>你只能手動切。</b>」<br>換第二本就順利拆成六個章節，他按預覽驗證第五、第六章，位置都對。<br>這是很好的教學示範：<b>先讓你看到工具的邊界，再示範它能做什麼。</b></div></div>
+
+  <figure class="shot"><img src="s3e4-img/10-pdf-split.jpg" loading="lazy" alt="PDF 章節自動拆解結果預覽">
+    <figcaption>換一本適合的書之後，自動拆成多個章節，可逐章預覽驗證。［78:49］</figcaption></figure>
+
+  <h3>還有一整排功能</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:130px">功能</th><th>說明</th></tr>
+    <tr><td>目錄頁次指定</td><td>告訴它目錄在第幾頁，它會依那頁的關聯來切割</td></tr>
+    <tr><td>單頁摘要</td><td>看到某一頁想知道在講什麼，按摘要</td></tr>
+    <tr><td>大綱與心智圖</td><td>產生三層結構大綱，還能畫成 <b>Mermaid 心智圖</b></td></tr>
+    <tr><td>逐頁拆成 JPG</td><td>一頁一圖打包下載，適合處理 NotebookLM 產出的簡報 PDF</td></tr>
+    <tr><td>OCR</td><td><b>掃描書</b>可以逐頁把文字抓出來再摘要</td></tr>
+    <tr><td>影像處理</td><td>亮度對比、背景去雜訊、<b>歪斜扭正</b>（翻拍進來字是歪的，扭正後 OCR 效果比較好）</td></tr>
+    <tr><td>頁面管理</td><td>指定頁數重新匯出、合併、旋轉、加密解密、壓縮、自動建立書籤</td></tr>
+    <tr><td>其他</td><td>批次作業、兩份 PDF 前後比對、簽名與圖像疊加、畫線標記</td></tr>
+  </table></div>
+
+  <div class="note green">🏠 <div><b>未來要接本地端模型。</b>「未來益師傅這些所有的工具都有考慮去接 Ollama、本地端的模型。」理由就是資料外流的疑慮。這件事他在課程最後真的做出雛形了，見第 15 節。</div></div>
+</section>
+
+<!-- 13 -->
+<section class="chapter" id="sec-consumer">
+  <span class="chip" style="background:linear-gradient(90deg,var(--orange),var(--rose))">工具二</span>
+  <h2 class="ct">13. 消費族群分析儀［85:37–121:20］</h2>
+
+  <p>老師自己給的評價很直接：「臭屁的講，我覺得它叫做<b>強大</b>。」給它一個連結、或你們公司的產品資料，它就能做出一整份消費族群分析。</p>
+
+  <figure class="shot"><img src="s3e4-img/11-consumer-start.jpg" loading="lazy" alt="消費族群分析儀初始畫面，Groq API Key 與步驟一二三">
+    <figcaption>起始畫面：填 Groq API Key，然後步驟一選業種、步驟二上傳檔案、步驟三貼上文字（選填）。［86:37］</figcaption></figure>
+
+  <h3>這一版新增了什麼</h3>
+  <ul class="pt">
+    <li><b>BMC 商業模式圖</b>。「我把 BMC 的部分加在消費族群裡頭分析，那更加的貼切。」（BMC 是兩週前那堂課的主題）</li>
+    <li><b>進來就有一張流程圖</b>，六個步驟告訴你怎麼做。老師說這是他往後寫程式的新習慣：「我以後寫程式一開始進來的時候，我會想說設計一個類似像一個 <b>rundown</b> 的過程，那你就清楚說原來我要做什麼步驟，一步一步下來。」有點像 help 的概念</li>
+    <li>換掉停用的模型。「之前的版本其實 Llama 70B 基本上現在是不能用的。」</li>
+  </ul>
+
+  <h3>資料可以怎麼餵</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">來源</th><th>說明</th></tr>
+    <tr><td>外部連結</td><td>老師說<b>這個最好</b>：「它會透過外部連結直接去讀取裡頭的資料」</td></tr>
+    <tr><td>截圖</td><td>支援 <b>Ctrl+V 直接貼上</b>，但要給它完整的圖</td></tr>
+    <tr><td>PDF／CSV／圖像</td><td>都可以</td></tr>
+    <tr><td>補充文字</td><td>「假如你怕它辨識會有錯誤，麻煩你給它這個品牌的資料」</td></tr>
+  </table></div>
+  <p>他當天示範用的是一台華碩 ROG 電競筆電的產品頁截圖，加上型號文字。</p>
+
+  <h3>產出</h3>
+  <figure class="shot"><img src="s3e4-img/13-funnel.jpg" loading="lazy" alt="消費族群分析結果頁，購買轉化漏斗分析">
+    <figcaption>分析結果頁：上排是匯出按鈕，下面是十幾個分析頁籤，畫面上是購買轉化漏斗。［114:15］</figcaption></figure>
+  <ul class="pt">
+    <li><b>分析頁籤</b>：總結評語、SWOT、AI 對話、Top 10 接受度、五大象限評分與雷達、價格 vs 品牌、轉化漏斗、客群熱力圖、趨勢預測、行銷文案、競品對比、定價通路、族群深挖、營收試算、商業模式圖</li>
+    <li><b>競品比較</b>：可以把競品網址全部貼上，「它會自動去抓相關的競爭對象的資料」，例如找微星或技嘉來比</li>
+    <li><b>匯出格式</b>：PowerPoint、PDF、Word、Excel、單檔 HTML、JSON</li>
+    <li>PowerPoint 是逐頁生成的，「你知道它為什麼跳動跳動嗎？它在生成每一頁的資料⋯⋯現在目前它自己在截圖」</li>
+  </ul>
+
+  <figure class="shot"><img src="s3e4-img/14-bmc.jpg" loading="lazy" alt="產出的商業模式圖 BMC">
+    <figcaption>新加入的 BMC 商業模式圖，右側對應成本結構與獲利。［119:01］</figcaption></figure>
+
+  <div class="note blue">💡 <div>老師也提醒這支工具的另一種用法：「這是分析別人的，<b>但是假如是你們家的產品呢？</b>你可以做一個分析的部分。」<br>他自己也順口列了想改的地方：深色配色印出來不理想，想改淺色；某些灰字看不清楚，應該用黑色。</div></div>
+</section>
+
+<!-- 14 -->
+<section class="chapter" id="sec-atlas">
+  <span class="chip" style="background:linear-gradient(90deg,var(--purple),var(--cyan))">工具三</span>
+  <h2 class="ct">14. 星脈圖譜 v38［121:20–139:10］</h2>
+
+  <p>把任何主題畫成關聯星圖。老師特別感謝一位清華的老師持續給他論文功能的建議。</p>
+
+  <h3>五種資料來源，用途不能混</h3>
+  <p>課堂上有學員反映結果很奇怪，老師一看就發現是<b>用錯模式</b>了，這段解釋很值得記：</p>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">模式</th><th>適合什麼</th></tr>
+    <tr><td><b>主題生成</b></td><td>研究一個主題，例如半導體、LLM 演進、MQTT、物聯網。它會去把相關關聯資料挖出來。<b>可以指定年份區間</b>，例如只看 2025 到 2026 年的技術演進</td></tr>
+    <tr><td><b>貼上文字</b></td><td>給一段文字，找出其中的關聯</td></tr>
+    <tr><td><b>上傳檔案</b></td><td>例如公司產品資料，找出產品之間的關聯性</td></tr>
+    <tr><td><b>網址</b></td><td>丟一個產品頁或產品列表頁</td></tr>
+    <tr><td><b>論文</b></td><td>用 <b>DOI</b> 或論文主題，可驗證是否真的有這筆引用</td></tr>
+    <tr><td><b>台股關聯</b></td><td>選族群或個股，做產業關聯分析</td></tr>
+  </table></div>
+  <div class="note gold">🔀 <div>學員把台股代號打進「主題生成」，結果當然不對。老師的解釋：「你給他一個台股金居，他怎麼知道？他不是談股票狀況下，他根本不曉得要做如何的關聯。<b>這幾個用途不一樣，所以要切到合適的去做提問。</b>」<br>他也說明為什麼要分開而不是用一個關鍵字框搞定：「<b>因為太廣義了，沒有辦法，因為怕會失焦，所以我才會一個一個把它分開。</b>」<br>這是很好的產品設計說明：<b>限制輸入的形狀，是為了讓輸出可靠。</b></div></div>
+
+  <h3>八種圖譜類型</h3>
+  <p>論文引用、技術演進脈絡、因果與影響鏈、產業生態與角色、學術理論與流派、歷史事件時序、問題→解方→風險、關鍵人物與組織，另外還可以讓 AI 自己判斷。</p>
+
+  <h3>多種佈局</h3>
+  <ul class="pt">
+    <li><b>時間軸圖</b>：分前期、中期、近期。老師說「這個蠻重要的⋯⋯你的一個論文的研究，它也有分這樣」</li>
+    <li><b>階層圖</b>：上下游或關聯層級</li>
+    <li><b>心智圖</b>：後來改版加的，可彩色、可收合。老師忍不住說：「這個還比 NotebookLM 漂亮吧？這個花好久時間改的。」</li>
+    <li>時間軸蛇形圖、表格、力導向圖、環形圖；可針對全部或只針對標記的節點產生 AI 論點</li>
+    <li>可以把關聯圖<b>變成一段播放動畫</b>，一個節點一個節點畫出來並附說明</li>
+  </ul>
+
+  <figure class="shot"><img src="s3e4-img/16-atlas-timeline.jpg" loading="lazy" alt="星脈圖譜的時間軸佈局">
+    <figcaption>時間軸佈局，分前期、中期、近期。［126:01］</figcaption></figure>
+
+  <h3>台股關聯與 K 線</h3>
+  <figure class="shot"><img src="s3e4-img/15-atlas-kline.jpg" loading="lazy" alt="星脈圖譜內的個股 K 線圖，含布林通道 MACD KD">
+    <figcaption>個股 K 線：布林通道、MACD、KD、RSI、支撐壓力，下方有技術訊號與連動個股。［123:22］</figcaption></figure>
+  <p>選一個族群（例如 PCB 載板列出八檔）產生關聯圖，可以看到彼此有沒有關聯，也能點進個股看 K 線。老師示範時講到載板三雄，並強調這個功能的定位：</p>
+  <div class="note blue">📈 <div>「我不要說直接看數據面，這是所謂的<b>趨勢</b>，看的是<b>關聯</b>，看的是<b>產業研究</b>。」<br>「有時候我們研究一檔股票，不是只是它為了漲而怎樣，你順便可以用產業的研究。」<br>他也在這裡帶到一句布林通道的口訣：「<b>中線不破，不必操作。</b>」<br>（工具本身也有標註「指標僅供參考，不構成投資建議」。）</div></div>
+
+  <h3>那個「隱藏模型」</h3>
+  <div class="note steel">🐂 <div>有學員（老師稱為「命券大哥」）指名要一個 OpenRouter 上的隱藏模型，老師稱它「公牛」。他說「網路上很多人都在探索它，並沒有很完整公開的資料」，他自己是「<b>把網路上搜尋的文章資料給我的 Claude 去好好研究</b>」才串起來的。<br>吸引他的點是 <b>context window 非常大</b>：「我可以丟整個 PDF 檔下去做，效果會比較好，<b>我不用透過所謂的瘦身計畫再把東西丟上去</b>，而是直接餵給它，它比較不會出錯。」<br>要用的話得去 OpenRouter 註冊拿 API Key，「他也不跟你廢話那麼多，就直接取得 API 的 key」，流量限制比較寬鬆。</div></div>
+
+  <div class="note gold">🔐 <div><b>課堂上出現一段資安討論，值得原樣記下來。</b>有學員擔心資料會不會被送到境外平台。老師的回答是：「一般模型串接，我只是用它的模型。資料會不會送過去，是本身在於這個平台會不會把這個資料丟過去，因為它只是去串接這個模型的運用。」但他也很誠實：「<b>我不曉得哪一種理論是對的啦。</b>」<br>他給的實際建議是：「<b>假如有疑慮的人還是可以用 Groq。</b>」<br>這件事沒有標準答案，但老師沒有硬掰，而是給了一個可以自己選的退路，這個處理方式本身就值得學。</div></div>
+
+  <h3>V38 的意思</h3>
+  <div class="note green">🔢 <div>「其實這個版本我改了，我不曉得改了不下數十次。<b>所以你看到 V38，反正你看到我這個代號，真的就是跑了 38 次。</b>然後有些相同的也會歸在同一次，所以理論上應該跑了<b>四五十次以上</b>才有最後這個版本。」<br>對照上一堂釣魚選股從 V1 一路到 V12，這是同一件事的第二個證據：<b>這些看起來很完整的工具，都是幾十次迭代堆出來的。</b></div></div>
+</section>
+
+<!-- 15 -->
+<section class="chapter" id="sec-local">
+  <span class="chip" style="background:linear-gradient(90deg,var(--cyan),var(--blue))">工具四與進行中</span>
+  <h2 class="ct">15. 本地端工具與進行中的專案［139:18–147:20］</h2>
+
+  <p>這是他當天最新、還沒定名的東西：一個<b>跑在自己電腦上的 AI 對話介面</b>，接本機 Ollama。</p>
+
+  <figure class="shot"><img src="s3e4-img/17-local-ollama.jpg" loading="lazy" alt="自製本地端 Ollama 對話介面的設定畫面">
+    <figcaption>本地端工具的設定：Ollama 路徑、介面、溫度、預設系統提示詞、思考模型切換。［140:01］</figcaption></figure>
+
+  <div class="twrap"><table>
+    <tr><th style="width:130px">功能</th><th>說明</th></tr>
+    <tr><td>專案</td><td>可以新增專案、切換專案，「就是 ChatGPT 的專案概念是一樣」</td></tr>
+    <tr><td>模型設定</td><td>指定 Ollama 路徑、選介面、調溫度、預設系統提示詞（角色扮演）、思考模型自動切換</td></tr>
+    <tr><td><b>MCP 串接</b></td><td>已經串了幾個，也可以額外新增伺服器</td></tr>
+    <tr><td>網路搜尋</td><td>可從維基百科查，或直接提問</td></tr>
+    <tr><td><b>提示詞版型</b></td><td>摘要、翻譯、音譯、出考題、挑錯、簡化、表格。<b>按「／」就能叫出來</b></td></tr>
+    <tr><td>外部連結優化</td><td>特別針對抓外部連結做了處理</td></tr>
+    <tr><td>語音與附檔</td><td>麥克風輸入、附加檔案、朗讀</td></tr>
+  </table></div>
+
+  <div class="note gold">⌨️ <div><b>他自己說出了這個設計的下一步，而且用的是 Skill 這個詞：</b>「所以這概念有點像是在做 Skill。之後我想把這個東西做成一個 Skill，統一大家的做法：<b>斜線就是所謂呼叫 Skill，@ 是呼叫 MCP。</b>」<br>另外他也解釋為什麼要做成執行檔而不是純網頁：「<b>這樣我就可以避開 CORS 的問題</b>⋯⋯而且我之後假如改成所謂的 AI Agent 的版本，可能會更適合。」</div></div>
+
+  <h3>四個模型同場比對</h3>
+  <figure class="shot"><img src="s3e4-img/18-model-compare.jpg" loading="lazy" alt="同時用多個本地模型回答同一個問題的比對畫面">
+    <figcaption>同時選三個模型問同一個問題，「有點像 chathub 的概念」。［143:41］</figcaption></figure>
+  <p>他昨天讓三個模型同時寫俄羅斯方塊，「這三個寫出來的效果真的有點差別」。他的規劃是再往前一步：</p>
+  <div class="note blue">📊 <div>「我想做一個模型比對之後，後續還可以<b>做評分</b>⋯⋯你可以給這次哪一個效果比較好，想把它做成一個<b>資料庫</b>。後續在引用的時候，什麼樣的主題哪一個模型效果比較好，可以做一個評分表。未來再提供你本地端在使用這些模型的時候，會有一個<b>參考的經驗值</b>。」<br>這是很成熟的想法：把「哪個模型比較好」從感覺變成可累積的資料。<br>目前的問題是效能不如預期，他還在找是哪一端的瓶頸。</div></div>
+
+  <h3>順帶提到的其他專案</h3>
+  <ul class="pt">
+    <li><b>政府監控影像串接</b>：去年做過，現在改成 10 秒更新一次，想把影像辨識加上去。目前針對台北與新北，未來想全部加上，「你以後在上面可以查詢你的車況」</li>
+    <li><b>多專案並行</b>：「因為現在這種 Vibe Coding 很方便，其實我們可以同時進行好多個專案同時在開發。比如說<b>我有些在 Claude 寫，有些在 Codex 裡頭做，有些在別的平台來試</b>，而且我又可以同時間來做烘焙的部分，還是做備課的部分。」</li>
+    <li>學員因此起鬨要他開<b>時間管理</b>的課</li>
+  </ul>
+</section>
+
+<!-- 16 -->
+<section class="chapter" id="sec-dev">
+  <span class="chip" style="background:linear-gradient(90deg,var(--rose),var(--purple))">AI 開發現場</span>
+  <h2 class="ct">16. AI 開發現場：三次出錯［貫穿後半堂］</h2>
+
+  <p class="cd">這堂課後半段最值得看的，其實不是四支工具有多完整，而是它們出錯的時候老師怎麼處理。三次都被錄下來了。</p>
+
+  <h3>第一次：拆不了的那本 PDF［79:03］</h3>
+  <p>他沒有換一本裝作沒事，而是停下來解釋為什麼這本不行（字太小太淡、沒有目次頁碼），並直說「你只能手動切」。<b>讓學員看見工具的邊界，比只看見成功案例有用。</b></p>
+
+  <h3>第二次：他自己找不到最新版［87:44–91:32］</h3>
+  <div class="note steel">😅 <div>示範消費族群分析儀時，他連續開錯兩次版本，一直找不到有流程圖的那一版。「這個好像不是最新版本耶，等我一下」「為什麼原本流程圖那個不見了？」最後才找到，當場把舊檔刪掉、重新上傳新版給學員下載。<br>對做工具的人來說這很真實：<b>當你同時開好幾個專案、每支又改了幾十版，版本管理本身就是一個問題。</b></div></div>
+
+  <h3>第三次：Groq 額度不夠，當場貼給 Claude 修［94:12–95:18］</h3>
+  <figure class="shot"><img src="s3e4-img/12-claude-dev.jpg" loading="lazy" alt="Claude 對話畫面，右側是消費族群分析儀的 Artifact，訊息顯示 Groq token 上限錯誤">
+    <figcaption>他的 Claude 開發對話：右邊是工具本體，左邊是那則錯誤訊息。左側清單可以看到他同時開著十幾個專案對話。［100:49］</figcaption></figure>
+  <p>分析跑到一半跳出錯誤。工具自己吐出的訊息寫得很完整，值得學：</p>
+  <div class="note gold">🚦 <div>錯誤訊息大意是：輸入內容超過 Groq 帳號的<b>每分鐘 token 上限（413）</b>，已自動精簡四次仍失敗；限制 8000 TPM、這次要求 8042。<br>然後它給了四個可行建議：<b>減少上傳檔案數量或改用較短的 PDF／CSV、圖片改上傳一張、等一分鐘讓額度回補後再試、或到 Groq Console 升級方案。</b><br>一個好的錯誤訊息應該長這樣：說明發生什麼事、它已經自己試過什麼、以及使用者現在可以做什麼。</div></div>
+  <p>老師的反應是直接把過程攤開來給大家看：</p>
+  <div class="note blue">🔁 <div>「我順便給大家看一下益師傅怎麼改這個程式。<b>這很簡單⋯⋯我就很簡單的把這個錯誤訊息 copy 給他，貼到 Claude 貼給他，讓他跑。所以待會大家就可以拿到新版的。</b>」<br>他也不掩飾尷尬：「不好意思，漏氣。其實原本他是可以用，那天你有看到我在 FB 分享他是 OK 的。然後我也不曉得今天怎麼了。」<br>後來改完他補了一句跟上一堂一致的判斷：「改了之後 Claude 比較敢改。真的啦，我不敢用 Gemini 或其他的，<b>我發現 Claude 比較聽話</b>。」</div></div>
+
+  <div class="note green">🧩 <div><b>把三次串起來看，就是一套完整的工作方法：</b>出錯不遮掩 → 當場說明原因或直接把錯誤訊息交給 AI → 改好後立刻重新發布給使用者 → 並且告訴使用者「以後遇到模型停用就來找我改」。<br>老師自己的總結也很坦白：「<b>我不敢說我程式寫得很好，但是我只是說我真的很用心吧。</b>」</div></div>
+</section>
+
+<!-- 17 -->
+<section class="chapter" id="sec-quotes">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--amber))">GOLDEN LINE</span>
+  <h2 class="ct">17. 兩位老師的金句</h2>
+
+  <div class="qgroup">邱奕霖</div>
+  <div class="golden"><div class="q">「用拯救過你生命的事情來幫助更多人。」</div><div class="a">為什麼是你來講這個主題，答案不在知識裡，在你的故事裡。［28:21］</div></div>
+  <div class="golden"><div class="q">「AI 可以找到知識理論，也可以找到態度原則，方法論其實也都 OK，但案例是最難找到的。而且這個才是最有說服力的。」</div><div class="a">所以時間要花在累積案例與經驗，那是唯一 AI 補不上的一格。［33:00］</div></div>
+  <div class="golden"><div class="q">「我把名字遮住，換成邱奕霖，好像也沒有違和。」</div><div class="a">在講 AI 生成的圖沒有辨識度。累積一千張沒有辨識度的圖，等於沒有累積。［40:00］</div></div>
+  <div class="golden"><div class="q">「關鍵是你有那張圖。因為那張圖是我們自己思考的想法、我們自己的觀點，而不是全部都丟給他外包。因為你全部丟給他外包，那其實大家都長得一樣。」</div><div class="a">圖轉文的順序不能顛倒：先自己想過，再讓 AI 放大。［48:30］</div></div>
+  <div class="golden"><div class="q">「別人看你是有七八年的年資，所以他會以你是專業的來看待你自己。但是我自己內在是覺得其實蠻空虛的。」</div><div class="a">年資不等於專業。沒有系統化的經驗，換一個地方就帶不走。［19:36］</div></div>
+  <div class="golden"><div class="q">「轉換一旦麻煩，你其實就不會做。」</div><div class="a">在講手繪筆記數位化。這句話可以套用到所有你「知道該做但一直沒做」的事。［46:30］</div></div>
+
+  <div class="qgroup">益師傅</div>
+  <div class="golden"><div class="q">「很多的想法，你我都有想法。少了做法，少了成果，那就是空談了。」</div><div class="a">接著補刀：「常常聽到有些人講『我早就想到這樣』。與其這樣，還不如把它給做出來。」［68:00］</div></div>
+  <div class="golden"><div class="q">「我覺得認真過了就一定要有一個結果。假如沒有這個結果，這麼認真，目的是為什麼？」</div><div class="a">全場學員都投「經歷過就好」，只有他投反對票。［67:00］</div></div>
+  <div class="golden"><div class="q">「因為我的學習能力比較慢，所以我就必須要不斷不斷的一直試。」</div><div class="a">一個有 600 多個提示詞、380 多支程式的人，這樣講自己。［69:09］</div></div>
+  <div class="golden"><div class="q">「你看到 V38，真的就是跑了 38 次。理論上應該跑了四五十次以上才有最後這個版本。」</div><div class="a">你看到的完整工具，是幾十次迭代堆出來的。［138:29］</div></div>
+  <div class="golden"><div class="q">「我不敢說我程式寫得很好，但是我只是說我真的很用心吧。」</div><div class="a">在展示改了好久的心智圖佈局時說的。［127:42］</div></div>
+</section>
+
+<!-- 18 -->
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,var(--ink3),var(--ink2))">SOURCE</span>
+  <h2 class="ct">18. 資料來源與整理說明</h2>
+  <ul class="pt">
+    <li><b>原始教材：</b>Google Drive 資料夾「第四堂」，課堂錄影一段（2 小時 34 分 46 秒、1920×1080）與四個單檔 HTML 工具。</li>
+    <li><b>整理方法：</b>錄影用 ffmpeg 做場景偵測＋每 60 秒固定補抓，去重後保留 <b>148 張關鍵畫面</b>；同時用 faster-whisper large-v3-turbo 產出<b>全程逐字稿</b>（切 120 秒一段辨識，標點率偏低的段落自動切 60 秒重跑，最終 <b>1059 段、標點率 94%</b>），兩者交叉比對後撰寫。四個工具檔另外開啟讀取介面文字，用來核對功能名稱。</li>
+    <li><b>引號內的發言</b>取自逐字稿，僅去除口語重複與語助詞，並修正<b>可確定的</b>辨識錯字（兩位講師姓名、Groq、Claude、Gemini、NotebookLM、Ollama、OpenRouter、MCP、BMC 等）。不確定的一律不改也不寫進來。</li>
+    <li><b>刻意未收錄：</b>取得電子書的操作步驟與該網站名稱不寫成教學；課堂閒聊、個股買賣討論與訂閱制方案內容不列入整理。</li>
+    <li><b>隱私處理：</b>截圖已裁掉錄影右側的 Teams 參與者名單。</li>
+    <li><b>本堂沒有課後作業。</b>老師預告下一次課程會邀請一位 AI Agent 業界講師，並說中秋節前想教大家結合 AI 做鳳梨酥。</li>
+  </ul>
+
+  <div class="note gold">🔒 <div><b>這份筆記的流通限制。</b>老師在課堂上兩次要求不得外流，本頁因此<b>只做成私人頁面</b>，沒有放上公開網站，也沒有進公開的 repo。公開的直播筆記頁只掛一張標示 🔒 的索引卡片，寫明這是有邀約講師的受保護課程、不揭露內文。<br>邱奕霖老師的投影片與圖解作品版權屬於他本人與圖解力學院，本頁引用僅供妳個人研習回顧使用。</div></div>
+</section>
+
+</article>
+</div>
+
+<footer>
+  <p>📝 ECF S3E4 逐幀課堂筆記 · 生成式AI應用電台・訂閱制第三季第四堂</p>
+  <p>主講：益師傅（楊俊益）｜客座：邱奕霖（圖解力教練）｜2026/08/28</p>
+  <p><a href="../radio/#ecf">🏠 回筆記館入口</a></p>
+</footer>
+
+</body>
+</html>
