@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>夜市小霸王 Codex 教學 (II) 課堂筆記｜辦公室的重複雜事，帶 AI 走過一次就存成技能</title>
+<meta name="description" content="生成式AI應用電台・訂閱制第三季客座講師「夜市小霸王」第二場 Codex 教學（2026/07/05，全長 3 小時 29 分）：連課程大綱與簡報都請 Codex 規劃、當場放棄的 LINE 進 Codex 題目、Ctrl＋1 全機聽寫、五個人交五種格式的核銷彙整、開專案先加一句「先討論」、思考強度選「中」、互動儀錶板、抓疑似重複報支、把走過一次的流程存成 SKILL.md 技能、口述記帳與口述報價單、會議逐字稿轉進度追蹤表，以及讓 Codex 每小時自己去看一次 Gmail。依錄影 243 張關鍵畫面＋逐字稿 2045 段整理。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#1f6b73; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:760px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px;max-height:calc(100vh - 90px);overflow-y:auto}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:7px;border-left:none;font-size:13px}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.code{position:relative;background:var(--code);border:1px solid var(--line2);border-radius:10px;padding:13px 15px;margin:10px 0;font-size:13px;line-height:1.75;color:var(--ink);white-space:pre-wrap;font-family:"Cascadia Code",Consolas,monospace;overflow-x:auto}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.iframe-wrap{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000;margin:14px 0}
+.iframe-wrap iframe{display:block;width:100%;height:460px;border:0}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static;max-height:none} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} .iframe-wrap iframe{height:320px} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/#ecf" style="border-color:#b9d7db" onclick="if(history.length>1){history.back();return false}">← 回上一頁</a>
+  <b>📝 夜市小霸王 Codex 教學 (II) 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="s3-codex2-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 訂閱制第三季 · 夜市小霸王 Codex 教學 (II)</span>
+  <h1>辦公室的重複雜事，<span>帶 AI 走過一次就存成技能</span></h1>
+  <p class="lead">這是客座講師「夜市小霸王」的第二場 Codex 教學。他說第一場偏物聯網與程式開發，這場改講<b>辦公室應用</b>——而且連這堂課要教哪些主題、範例資料、簡報，全都是先請 Codex 規劃出來的。<br>整堂走同一條線：<b>混亂輸入 → 整理 → 產出 → 人工檢查 → 交付</b>。五個專題全部套這條線：多檔核銷彙整、口述記帳、口述報價單、會議逐字稿轉進度追蹤表、排程檢查 Gmail。中間還有一段他當場放棄的題目（LINE 訊息進不了 Codex），本頁照實記錄。<br>本頁依<b>錄影 243 張關鍵畫面＋全程逐字稿 2045 段</b>整理，重點段落附影片時間戳。</p>
+  <div class="meta">
+    <span>📅 2026/07/05（日）14:00 直播</span>
+    <span>👤 講師：夜市小霸王（客座）</span>
+    <span>⏱️ 全長 3 小時 29 分（單段錄影）</span>
+    <span>🧩 主題：辦公室自動化 × 口述輸入 × 自建技能</span>
+    <span>🔰 小白友善</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-overview">1. 一張圖看懂這堂</a>
+  <a href="#sec-codex-planned">2. 起點：連課程大綱和簡報都是 Codex 想的</a>
+  <a href="#sec-line-fail">3. 誠實的一段：LINE 進不了 Codex，這題他當場停掉</a>
+  <a href="#sec-backbone">4. 五個專題共用一條骨架：混亂輸入到可審核成果</a>
+  <a href="#sec-youtube">5. 他每天真的在用的自動化：叫 Codex 把錄影上傳 YouTube</a>
+  <a href="#sec-dictation">6. 先打開這個開關：Ctrl＋1 讓聽寫在整台電腦都能用</a>
+  <a href="#sec-five-formats">7. 專題一開場：五個人交五種格式，先讓 AI 讀懂再說</a>
+  <a href="#sec-two-habits">8. 開專案的兩個習慣：加一句「先討論」、思考強度選「中」</a>
+  <a href="#sec-dashboard">9. 專題一收成：一張明細表加一個互動儀錶板</a>
+  <a href="#sec-no-prompt">10. 他不教提示詞，他教「邊用邊累積」</a>
+  <a href="#sec-duplicate">11. 讓 AI 抓重複報支：它比對的不是發票號碼</a>
+  <a href="#sec-skill">12. 最值錢的一招：把走過一次的流程存成技能</a>
+  <a href="#sec-ledger">13. 專題二：唸一句話就記帳，專案資料夾放雲端</a>
+  <a href="#sec-quote">14. 專題三：口述報價單，從一句話到可以傳出去的檔案</a>
+  <a href="#sec-meeting">15. 專題四：會議逐字稿變成有名字、有期限的追蹤表</a>
+  <a href="#sec-schedule">16. 專題五：讓 Codex 每小時自己去看一次 Gmail</a>
+  <a href="#sec-real">17. 這堂課真正在教的事</a>
+  <a href="#sec-quotes">18. 老師金句</a>
+  <a href="#sec-src">19. 資料來源與整理說明</a>
+</nav>
+
+<article>
+
+<!-- ══════════ 0 ══════════ -->
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--cyan))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>夜市小霸王 Codex 教學 (II)｜用 Codex 做辦公室自動化（3 小時實作課）</td></tr>
+    <tr><th>直播日期</th><td>2026/07/05（日）14:00，本段錄影全長 <b>3 小時 29 分</b>（單段）</td></tr>
+    <tr><th>講師</th><td>夜市小霸王（生成式AI應用電台訂閱制客座講師，本職是系統與程式開發）</td></tr>
+    <tr><th>本堂主題</th><td>五個辦公室專題：多檔核銷彙整、口述消費記帳、口述開立報價單、會議紀錄轉任務、排程檢查郵件</td></tr>
+    <tr><th>與前一堂的關係</th><td>這是他的第二場。第一場偏物聯網與程式開發，這場刻意改成辦公室場景［10:19］</td></tr>
+    <tr><th>開場前 10 分鐘</th><td>電台主持人先示範自己做的 Node-RED 台語語音節點（透過意傳科技的台語 API 產生台語 MP3），與本堂主題無關，本頁只收兩則金句</td></tr>
+    <tr><th>要先準備</th><td>桌機版 Codex（Windows 或 macOS 都可）、一個 Google 雲端硬碟資料夾、手機上的 ChatGPT App（要用 Remote 遠端操作電腦）</td></tr>
+  </table></div>
+
+  <h3>🧰 這堂用到的五份範例材料</h3>
+  <p class="cd">五個專題的範例資料全部是他先請 Codex 生出來的，上課時再現場下載操作。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:230px">範例材料</th><th>課堂上拿來做什麼</th></tr>
+    <tr><td><code>input/</code> 五份核銷檔<br>（<code>.xlsx</code> ×2、<code>.docx</code> ×2、<code>.csv</code> ×1）</td><td>專題一：故意做成五種格式、五種欄位，讓 Codex 讀懂後彙整成一張明細表＋互動儀錶板</td></tr>
+    <tr><td><code>rules/reimbursement-policy.md</code></td><td>專題一：核銷規則，讓 Codex 判斷什麼算異常</td></tr>
+    <tr><td>（無範例，自己開資料夾）</td><td>專題二：口述記帳，從零開始跟 Codex 討論 Excel 欄位</td></tr>
+    <tr><td>公司報價單 <code>.xlsx</code> 範本</td><td>專題三：口述報價單，要求 Codex 只填既有儲存格、不破壞版型</td></tr>
+    <tr><td><code>samples/</code> 三份會議逐字稿 <code>.txt</code></td><td>專題四：轉成會議紀錄 Word 檔＋進度追蹤表</td></tr>
+  </table></div>
+
+  <div class="note gold">🔒 <div><b>本頁的截圖全部經過去識別化，錄影本身沒有。</b>原始錄影是線上教室（Teams）的畫面分享，右側整欄是七十多位學員的頭像與真實姓名，底部工作列與左側清單則會露出講師的私人專案與帳號；示範用的核銷、報價、會議資料裡也有完整的人名、發票號碼與客戶單位。本頁的每一張截圖都已裁掉這些區域，內容區裡的人名改成「員工Ａ／Ｂ／Ｃ／Ｄ」、發票號碼改成 <code>INV-XXX-0000</code>、客戶單位改成「某客戶」、真實報價金額遮蔽。<b>錄影本體沒有做這些處理，所以不放在這一頁，也請不要另行轉發</b>；要看回放請從你自己的訂閱制課程資料夾進去。</div></div>
+
+  <div class="note steel">🔧 <div>逐字稿與逐幀畫面的完整版（243 張畫面、2045 段口述）留在整理者本機與 Tarshar 自己的雲端硬碟，未經去識別化，不上網站、不對外提供。</div></div>
+
+  <div class="note steel">©️ <div><b>版權與撤下管道。</b>本堂的課程內容、示範材料與畫面，版權均屬原講師與課程主辦方所有。本頁是 Tarshar 自己整理的學習筆記，<b>不代表原作者已同意公開，也未取得轉載其教材的授權</b>。若原講師或主辦方不同意本頁公開，請由<a href="../contact/">本站聯絡頁</a>告知，我會立即撤下。</div></div>
+</section>
+
+<!-- ══════════ 1 ══════════ -->
+<section class="chapter" id="sec-overview">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--purple))">OVERVIEW</span>
+  <h2 class="ct">1. 一張圖看懂這堂</h2>
+  <p class="cd">這堂表面上在教五個辦公室專題，實際上五次都在重複同一套動作。看懂這五格，五個專題就都會了。</p>
+
+  <div class="svgwrap">
+  <svg viewBox="0 0 980 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="從混亂輸入到存成技能的五個步驟流程圖">
+    <defs>
+      <marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+        <path d="M0,0 L9,4.5 L0,9 z" fill="#9B9B9B"/>
+      </marker>
+    </defs>
+    <text x="14" y="46" font-size="13" font-weight="700" fill="#1f6b73">這堂五個專題，每一次都走同一條線</text>
+    <text x="14" y="70" font-size="12.5" fill="#5f5f5f">差別只在輸入是核銷檔、一句話、一份報價範本，還是一份會議逐字稿。</text>
+
+    <rect x="14" y="110" width="160" height="106" rx="12" fill="#EEF2F5" stroke="#D2DFE7"/>
+    <text x="94" y="142" text-anchor="middle" font-size="15" font-weight="700" fill="#255066">混亂的輸入</text>
+    <text x="94" y="166" text-anchor="middle" font-size="12.5" fill="#5f5f5f">五種格式的核銷檔、</text>
+    <text x="94" y="184" text-anchor="middle" font-size="12.5" fill="#5f5f5f">一句口述、會議逐字稿</text>
+    <line x1="174" y1="163" x2="204" y2="163" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+
+    <rect x="212" y="110" width="160" height="106" rx="12" fill="#EEF4FB" stroke="#CFE0F1"/>
+    <text x="292" y="142" text-anchor="middle" font-size="15" font-weight="700" fill="#1d5e8f">先討論一次</text>
+    <text x="292" y="166" text-anchor="middle" font-size="12.5" fill="#5f5f5f">在指令最後加一句</text>
+    <text x="292" y="184" text-anchor="middle" font-size="12.5" fill="#5f5f5f">「先討論」，別讓他直接做</text>
+    <line x1="372" y1="163" x2="402" y2="163" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+
+    <rect x="410" y="110" width="160" height="106" rx="12" fill="#FBF7EC" stroke="#EFE3C4"/>
+    <text x="490" y="142" text-anchor="middle" font-size="15" font-weight="700" fill="#7a5b12">邊看邊改</text>
+    <text x="490" y="166" text-anchor="middle" font-size="12.5" fill="#5f5f5f">圓餅圖顏色不對就</text>
+    <text x="490" y="184" text-anchor="middle" font-size="12.5" fill="#5f5f5f">截圖給他，當場說</text>
+    <line x1="570" y1="163" x2="600" y2="163" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+
+    <rect x="608" y="110" width="160" height="106" rx="12" fill="#EDF7F1" stroke="#CBE6D5"/>
+    <text x="688" y="142" text-anchor="middle" font-size="15" font-weight="700" fill="#166a4c">存成技能</text>
+    <text x="688" y="166" text-anchor="middle" font-size="12.5" fill="#5f5f5f">一句「上述過程建立一</text>
+    <text x="688" y="184" text-anchor="middle" font-size="12.5" fill="#5f5f5f">個技能」，寫成 SKILL.md</text>
+    <line x1="768" y1="163" x2="798" y2="163" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+
+    <rect x="806" y="110" width="160" height="106" rx="12" fill="#F4F3F0" stroke="#DBD9D5"/>
+    <text x="886" y="142" text-anchor="middle" font-size="15" font-weight="700" fill="#1f6b73">下次一句話</text>
+    <text x="886" y="166" text-anchor="middle" font-size="12.5" fill="#5f5f5f">換月份、換客戶都能用</text>
+    <text x="886" y="184" text-anchor="middle" font-size="12.5" fill="#5f5f5f">人只做最後那一次檢查</text>
+
+    <rect x="14" y="240" width="952" height="46" rx="10" fill="#F4F3F0" stroke="#DBD9D5"/>
+    <text x="34" y="269" font-size="12.5" fill="#5f5f5f">關鍵在第 2 格和第 4 格：<tspan font-weight="700" fill="#191919">「先討論」讓你來得及攔住他</tspan>，<tspan font-weight="700" fill="#191919">「存成技能」讓下次不用重講一遍</tspan>。中間那格是心態——錯了就改，不用一次寫對。</text>
+  </svg>
+  <figcaption>整堂的主線：把每天重複發生的雜事，先跟 AI 討論清楚一次、看著他做出來、把這一次的做法固定成技能，之後就只剩人工檢查那一步。</figcaption>
+  </div>
+
+  <div class="note blue">💡 <div>如果只記得一句話，記這句：<b>不要一次把提示詞寫到完美，要帶著 AI 把流程走過一次，然後把那一次存下來。</b>［89:31］</div></div>
+</section>
+
+<!-- ══════════ 2 ══════════ -->
+<section class="chapter" id="sec-codex-planned">
+  <span class="chip" style="background:linear-gradient(90deg,var(--blue),var(--cyan))">10:00–14:00</span>
+  <h2 class="ct">2. 起點：連課程大綱和簡報都是 Codex 想的</h2>
+  <p class="cd">開場他就承認一件很多講師不會說的事——今天的主題、範例、簡報，是先請 Codex 規劃的。</p>
+
+  <p>他的做法是丟一段需求給 Codex，內容大概是：我明天要上一堂三小時的課，主題是<b>辦公室應用</b>，你幫我想要介紹哪些主題；除了主題之外還要幫我做範例，範例放在專案資料夾底下；做完再順便產一份簡報，讓我上課可以講。</p>
+
+  <p>Codex 先回了六個候選議題。他看過之後不滿意，於是再叫它<b>上網搜尋別人的辦公室應用案例</b>列進候選，又多了六個（會議紀錄、跨部門知識、工作流程、AI 治理之類）。最後他自己從裡面挑、自己加，才定案成五個專題。</p>
+
+  <ul class="pt">
+    <li><b>他要的不只是主題，是「可操作的範例資料」</b>——沒有樣本檔，上課沒辦法帶學員一起動手。</li>
+    <li><b>簡報也是同一份對話生出來的</b>：Codex 寫了一支 Python 腳本去產 <code>.pptx</code>，不是逐頁手做。</li>
+    <li><b>AI 治理那類題目他直接砍掉</b>，理由很直白：「離我太遠了。」［14:00］</li>
+  </ul>
+
+  <figure class="shot">
+    <img src="s3-codex2-img/01-course-title-slide.jpg" alt="Codex 生成的課程封面投影片" loading="lazy">
+    <figcaption>這就是 Codex 產出的簡報封面。看下面那個灰框，它自己寫了本堂的教學原則：「上課重點不是介紹 AI 名詞，而是讓學員看到一個辦公室流程如何被拆成可執行步驟」，並註明每個專題都有樣本資料可直接貼給 Codex 操作。這句話後來真的貫穿整堂三小時半。［10:42］</figcaption>
+  </figure>
+
+  <div class="note blue">💡 <div>這一段的價值不在「AI 會做簡報」，而在他示範了<b>怎麼用 AI 當前期規劃的對手</b>：先要它給候選、再要它去找外部案例、最後由人挑。三個回合都在他手上。</div></div>
+
+  <div class="golden">
+    <div class="q">「我都不管，我都邊開車邊跟 AI 聊天，請他幫我做投影片，然後打開看一下內容，跟他講第幾要改、第幾要改。」</div>
+    <div class="a">［101:00］他講到以前最怕出門講課前投影片沒做好，現在改成路上口述、到場前看一次。</div>
+  </div>
+</section>
+
+<!-- ══════════ 3 ══════════ -->
+<section class="chapter" id="sec-line-fail">
+  <span class="chip" style="background:linear-gradient(90deg,var(--rose),var(--orange))">14:00–22:00</span>
+  <h2 class="ct">3. 誠實的一段：LINE 進不了 Codex，這題他當場停掉</h2>
+  <p class="cd">這八分鐘沒有任何成果，但它是整堂最有教學價值的一段——因為它示範了「問到底」長什麼樣。</p>
+
+  <p>他原本最想做的題目是：<b>客戶直接在 LINE 裡說要買什麼，系統就自動產生報價單</b>，他只負責檢查後轉傳。他把這個想法丟給 Codex 討論了一陣子，然後得到一個結論：做不到。</p>
+
+  <h3>卡在哪裡</h3>
+  <ul class="pt">
+    <li><b>LINE 訊息是不定時的</b>，不像排程可以每天九點觸發。</li>
+    <li><b>Codex 沒辦法被外部觸發</b>——這是他反覆強調的那一句。LINE 的 Webhook 打不進 Codex。［18:53］</li>
+    <li><b>呼叫 API 不等於呼叫 Codex</b>：API 只能打到 OpenAI，網頁版的 GPT 確實能產出一張報價 Excel，但檔案留在網頁上還得下載；他要的是<b>檔案直接落在自己電腦</b>，這樣才能遠端叫電腦把它轉傳出去。</li>
+    <li><b>唯一的路是 Codex CLI 遠端呼叫</b>，但缺點是那次執行<b>不會留在對話紀錄裡</b>。他要長期看得到「我什麼時候報了什麼價」，所以這條也不合格。</li>
+  </ul>
+
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="s3-codex2-img/02-line-to-codex-ask.jpg" alt="Codex 對話中提出 LINE 到報價系統的需求" loading="lazy">
+      <figcaption>他提問的原句就在畫面中間：「我想做一個 LINE 訊息，客戶的 LINE 訊息到我自己的報價，模擬系統……這個部分最難的可能是怎麼串接 LINE 到 Codex 這一段。」注意他不是問「可不可以」，而是先自己指出最難的點在哪。（畫面中被遮住的一行是他電腦上的雲端硬碟完整路徑）［17:31］</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="s3-codex2-img/03-line-to-codex-limit.jpg" alt="Codex 回覆分兩層說明 LINE 與 Codex 的對接方式" loading="lazy">
+      <figcaption>Codex 的回答分兩層：LINE 端要靠 webhook 後端用 <code>line_user_id</code> 記住這位客戶目前在哪張報價單；Codex 端則只有 <code>codex exec resume &lt;SESSION_ID&gt;</code> 這條路。看這張就懂為什麼他放棄——技術上通，但要自己架一台 webhook server。［20:31］</figcaption>
+    </figure>
+  </div>
+
+  <div class="note steel">🔧 <div><b>這一段沒有成功，本頁照實記錄。</b>他最後說「我本來是想要請他做一個 MVP……做到一半就給他終止掉」［22:10］，把時間留給真的做得出來的五個專題。整堂三小時半只有這一題是失敗的，而它剛好講清楚了 Codex 目前的邊界。</div></div>
+
+  <div class="golden">
+    <div class="q">「這個就好像我手邊有一個非常厲害的工程師，然後我想到一個什麼系統，我就跟他討論……你會發現這個現在這種 AI 系統，他不會不耐煩，他總是願意幫你完成你的想法。」</div>
+    <div class="a">［21:10–21:46］他把老闆與員工的比喻講完：積極的員工會去查資料，混的員工只會說「這個不行，老闆你不要每天想東想西」。AI 屬於前者。</div>
+  </div>
+</section>
+
+<!-- ══════════ 4 ══════════ -->
+<section class="chapter" id="sec-backbone">
+  <span class="chip" style="background:linear-gradient(90deg,var(--teal),var(--green))">22:00–26:00 · 39:00–40:00</span>
+  <h2 class="ct">4. 五個專題共用一條骨架：混亂輸入到可審核成果</h2>
+  <p class="cd">先看完這兩張投影片，後面兩個半小時就只是同一件事做五次。</p>
+
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="s3-codex2-img/04-five-topics-slide.jpg" alt="五個專題覆蓋常見辦公室場景的投影片" loading="lazy">
+      <figcaption>五個專題一次看完，每張卡片下面那行小字就是輸入與輸出：01 多檔核銷彙整（Excel／Word／CSV → 總表與互動報表）、02 口述消費記帳、03 口述開立報價單、04 會議紀錄轉任務、05 排程檢查郵件。這五個都是「每天都會發生、每次都要重打一遍」的事。［25:04］</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="s3-codex2-img/05-course-backbone-slide.jpg" alt="課程主線是把混亂輸入變成可審核成果的流程圖" loading="lazy">
+      <figcaption>這張是整堂的骨架：<b>輸入 → 整理 → 產出 → 檢查 → 交付</b>。看第四格「檢查」寫的是「人工確認異常與待補」——不是自動送出。下面那句「學員會學到如何要求 Codex 保留可查核資料，而不是只產生一段摘要」，是這堂跟一般 AI 課最大的差別。［40:01］</figcaption>
+    </figure>
+  </div>
+
+  <h3>五個專題的輸入與輸出</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">專題</th><th>輸入</th><th>輸出</th></tr>
+    <tr><td>01 多檔核銷彙整</td><td>五位同事交來的 Excel、Word、CSV、記事本，格式與欄位都不一樣</td><td>一張明細 Excel＋一頁互動 HTML 儀錶板＋疑似重複報支清單</td></tr>
+    <tr><td>02 口述消費記帳</td><td>一句話：「我在 7-11 買了一個春之茶二十塊」</td><td>雲端 Excel，欄位自動對齊，保留原始口述可追溯</td></tr>
+    <tr><td>03 口述開立報價單</td><td>一句話報客戶、品項、單價、數量，加一份公司報價單範本</td><td>照範本填好的 <code>.xlsx</code>，自動命名、自動分客戶資料夾</td></tr>
+    <tr><td>04 會議紀錄轉任務</td><td>三份會議逐字稿 <code>.txt</code></td><td>會議紀錄 Word 檔＋進度追蹤表（負責人／項目／期限／是否完成）</td></tr>
+    <tr><td>05 排程檢查郵件</td><td>一句話設定：每小時、上班時間、只挑要人工回覆的</td><td>定時執行的排程任務，列出待回信件，還能直接代回</td></tr>
+  </table></div>
+
+  <div class="note blue">💡 <div>他挑題目的判準只有一個：<b>這件事我每天／每週都要做，而且每次都要重新打字。</b>不是「AI 能做什麼」，是「我哪裡在重複」。這也是他留給學員的作業：挑一個自己辦公室每天都會發生的流程，做成第六個專題。</div></div>
+</section>
+
+<!-- ══════════ 5 ══════════ -->
+<section class="chapter" id="sec-youtube">
+  <span class="chip" style="background:linear-gradient(90deg,var(--orange),var(--amber))">26:00–30:00</span>
+  <h2 class="ct">5. 他每天真的在用的自動化：叫 Codex 把錄影上傳 YouTube</h2>
+  <p class="cd">在進入練習之前，他先秀了一個不是為上課做的、他每天在用的例子。</p>
+
+  <p>他每上完一堂課都會把錄影上傳 YouTube 給學員回放。以前要自己找檔案、上傳、改標題、選播放清單。現在整段交給 Codex：</p>
+
+  <ol class="st">
+    <li>問它「去檢查我雲端硬碟的會議紀錄裡面有沒有新影片」——它花兩分鐘掃完，回報找到兩支，附修改時間與檔案大小。</li>
+    <li>下一句只說「把列表的 1、2 傳到 YouTube」，並補一個關鍵條件：<b>不要下載影片，直接開 Chrome 上傳</b>，省掉下載再上傳那一輪。</li>
+    <li>再補一句「我有建立一個播放清單，放到這個播放清單」，它就自己登入、上傳、回傳連結。</li>
+    <li>之後每天只要說一句「今天又有新的了，你繼續上傳」，它連<b>檔名的命名風格</b>都會照他改過的規則走。</li>
+  </ol>
+
+  <figure class="shot">
+    <img src="s3-codex2-img/06-youtube-upload.jpg" alt="Codex 掃描雲端硬碟找出新錄影並準備上傳" loading="lazy">
+    <figcaption>看 Codex 的回報有多具體：它列出<code>我的雲端硬碟/Meet Recordings</code>底下最新兩支、檔頭確認是 MP4、修改時間與約 1.22 GB／0.98 GB 的大小，最後還交代「再上一個錄影是 6/5，所以 6/29 這兩個就是目前看到的新影片」。這種<b>把判斷依據講出來</b>的回報，才是他敢放手讓它上傳的原因。（會議代碼已遮蔽）［28:01］</figcaption>
+  </figure>
+
+  <div class="golden">
+    <div class="q">「而是好像有一個專屬秘書，不停的在幫你工作。只要你教他一次，他就認識了，他就知道怎麼做。」</div>
+    <div class="a">［30:50］他刻意修正自己前一句「人有 AI 之後會變懶」的說法，改成這個比喻。這句也預告了後面「存成技能」那一章。</div>
+  </div>
+</section>
+
+<!-- ══════════ 6 ══════════ -->
+<section class="chapter" id="sec-dictation">
+  <span class="chip" style="background:linear-gradient(90deg,var(--purple),var(--blue))">30:00–39:00</span>
+  <h2 class="ct">6. 先打開這個開關：Ctrl＋1 讓聽寫在整台電腦都能用</h2>
+  <p class="cd">這是全堂最容易被低估、但門檻最低的一招。後面三個專題全靠它才不用打字。</p>
+
+  <p>Codex 內建語音聽寫，但重點不是「Codex 裡面可以講話」——而是設定完之後，<b>那支麥克風會常駐在整台電腦</b>，任何視窗、任何輸入框都能按一下就開始聽寫，連 Codex 關掉了都還在。</p>
+
+  <h3>設定方式（一次設好，永久有效）</h3>
+  <ol class="st">
+    <li>Codex 左下角點自己的名字 → <b>設定</b>。</li>
+    <li>找到<b>一般</b>裡面往下的<b>聽寫</b>區塊。</li>
+    <li>把「按住聽寫快速鍵」改成一個沒人在用的組合。他用 <b>Ctrl＋1</b>，並提醒不要選 Ctrl＋C／V／A／Z／Y。</li>
+    <li>把下面的<b>保持顯示聽寫列</b>打開（預設是開的，被關掉就補開）——這一步才是讓麥克風常駐的關鍵。</li>
+  </ol>
+
+  <figure class="shot">
+    <img src="s3-codex2-img/07-dictation-setting.jpg" alt="Codex 設定中的聽寫區塊" loading="lazy">
+    <figcaption>設定畫面。「按住聽寫快速鍵」下面那行說明就是重點：「按住桌面上的任何位置，即可在游標位置開始聽寫」。再往下的<b>保持顯示聽寫列</b>要打開。最底下的「聽寫字典」會列出你講過的句子，可以直接複製。［34:01］</figcaption>
+  </figure>
+
+  <h3>他當場示範的三件事</h3>
+  <ul class="pt">
+    <li><b>在 Google 搜尋框講話</b>：唸「幫我查一下最近那個世足賽最新的戰況紀錄，今天的好了」，字直接進搜尋框。</li>
+    <li><b>在 Word 裡講話</b>：唸「今天呢，很開心能在這邊跟大家分享 Codex 的各種應用」，整句連 <code>Codex</code> 都拼對。他說用 Google 的語音輸入通常會聽成同音字。</li>
+    <li><b>中英夾雜</b>：他認為 Codex 的聽寫在中英混講時比 Google 準，而且講錯的同音字它會自己修掉。</li>
+  </ul>
+
+  <div class="note blue">💡 <div>這一招跟 Codex 本身沒有綁定。設好之後，你在 Excel、Line、Notion、任何欄位都能口述。<b>如果整堂只想帶走一件今天就能做的事，就是這個。</b></div></div>
+</section>
+
+<!-- ══════════ 7 ══════════ -->
+<section class="chapter" id="sec-five-formats">
+  <span class="chip" style="background:linear-gradient(90deg,var(--green),var(--teal))">40:00–48:00</span>
+  <h2 class="ct">7. 專題一開場：五個人交五種格式，先讓 AI 讀懂再說</h2>
+  <p class="cd">他刻意把範例資料做成一團亂，因為現實就是這樣。</p>
+
+  <figure class="shot">
+    <img src="s3-codex2-img/08-topic01-slide.jpg" alt="專題一核銷彙整的投影片" loading="lazy">
+    <figcaption>專題一的規格頁。左邊「上課示範重點」寫得很清楚：輸入是 5 位同事的 Excel／Word／CSV；任務是合併欄位、找重複餐會、標記異常；輸出是彙整總表、異常清單、互動式 HTML 報表。最後一行「上課講法：先讓學員看到資料亂，再示範 Codex 如何建立一致格式」——他真的照這個順序上。（範例檔的雲端連結已遮蔽）［41:31］</figcaption>
+  </figure>
+
+  <h3>五個檔案亂在哪</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:120px">檔案</th><th>格式</th><th>亂在哪</th></tr>
+    <tr><td>員工Ａ（業務部）</td><td><code>.xlsx</code></td><td>最乖：有核銷人、部門、日期、類型、用途、金額、付款方式、發票號碼</td></tr>
+    <tr><td>員工Ｂ（資訊部）</td><td><code>.docx</code></td><td>沒有表格，整份用分號串成條列句</td></tr>
+    <tr><td>員工Ｃ（人資部）</td><td><code>.docx</code></td><td>沒寫自己是誰，只有日期與事項</td></tr>
+    <tr><td>員工Ｄ（行政部）</td><td><code>.xlsx</code></td><td>欄位順序與Ａ不同</td></tr>
+    <tr><td>員工Ｅ</td><td><code>.csv</code></td><td>純逗號分隔，沒有標題列</td></tr>
+  </table></div>
+
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="s3-codex2-img/09-structured-input.jpg" alt="結構化的核銷 Excel 範例" loading="lazy">
+      <figcaption>最乖的那一份：Excel 表格，核銷人／部門／支出日期／費用類型／用途說明／金額／付款方式／發票號碼一應俱全。他說這種「其實已經算是很結構化的」。（姓名已代稱化、發票號碼與客戶名已遮蔽）［44:54］</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="s3-codex2-img/10-unstructured-input.jpg" alt="用條列句記錄的 Word 核銷檔" loading="lazy">
+      <figcaption>同一件事的另一種交法：Word 檔，一行一筆用分號串起來。檔案裡自己寫著「本檔案刻意使用條列格式，模擬同事未依標準表格提交的情況」。他的論點是——這才是人真正會寫的樣子。（姓名已代稱化、發票號碼已遮蔽）［46:01］</figcaption>
+    </figure>
+  </div>
+
+  <h3>他為什麼不發統一的 Excel 表就好</h3>
+  <p>這是這一章真正在講的事。他說如果要大家格式一致，發一個 Excel 給大家填就好了——但問題是<b>每個人都得先把資料收集好、回辦公室打開 Excel、把欄位一格一格對好</b>。大部分人在外面消費完，只會隨手記在手機記事本上，回去再填一次正式文件。</p>
+
+  <div class="golden">
+    <div class="q">「那你不是做兩次工嗎？對不對？我們是做兩次工。」</div>
+    <div class="a">［46:00 前後］他用這句推翻「發統一表格」這個直覺解法，也順勢帶出專題二的口述記帳。</div>
+  </div>
+
+  <div class="note blue">💡 <div>整章的邏輯是：既然 AI 看得懂各種格式，就<b>不要把整理成本推給填表的人</b>，讓每個人用最省力的方式交，整理那一步交給 AI。</div></div>
+</section>
+
+<!-- ══════════ 8 ══════════ -->
+<section class="chapter" id="sec-two-habits">
+  <span class="chip" style="background:linear-gradient(90deg,var(--amber),var(--orange))">48:00–60:00</span>
+  <h2 class="ct">8. 開專案的兩個習慣：加一句「先討論」、思考強度選「中」</h2>
+  <p class="cd">這兩個小動作看起來很小，但它們決定了你是不是來得及攔住 AI。</p>
+
+  <h3>習慣一：指令最後加一句「先討論」</h3>
+  <p>他建立專案後的第一句話是這樣送出去的（<b>注意最後一行</b>）：</p>
+  <div class="code">本專案負責核銷同事的費用，我們要彙整成 excel，並產生互動圖表
+先討論</div>
+
+  <figure class="shot">
+    <img src="s3-codex2-img/11-discuss-first.jpg" alt="Codex 專案第一句指令加上先討論" loading="lazy">
+    <figcaption>畫面正中央就是這句指令。上面那行「我們該在 核銷練習？ 做什麼」是 Codex 開新專案時的提示。「先討論」兩個字單獨一行——他說有這一句，Codex 就不會馬上動手做檔案。［52:01］</figcaption>
+  </figure>
+
+  <p>有學員問是不是要選<b>規劃模式</b>。他的回答很實際：Codex 把這條界線畫得有點模糊，規劃模式並不是只能規劃不能操作，規劃到一定程度它還是會開始做。除了大型專案，他<b>幾乎不開規劃模式</b>，就是在指令後面加「先討論」。</p>
+
+  <div class="golden">
+    <div class="q">「後來我發現你只要跟他講先討論，他就不會馬上做。」</div>
+    <div class="a">［114:20］他是拿另一套 AI 工具的經驗來對照：話還沒講完，旁邊那欄程式就開始跑了，只好用這一句把它按住。</div>
+  </div>
+
+  <h3>Codex 討論回來的東西長什麼樣</h3>
+  <p>它先去資料夾看有哪些檔案、什麼格式（兩個 Excel、兩個 Word、一個 CSV），檢查電腦上有沒有能讀 Word／Excel 的工具（<code>openpyxl</code>、<code>python-docx</code>、<code>pandas</code>），沒有會自己安裝。然後才提出欄位設計。</p>
+
+  <figure class="shot">
+    <img src="s3-codex2-img/12-column-schema.jpg" alt="Codex 提出的統一欄位設計" loading="lazy">
+    <figcaption>它提的欄位表，右欄是處理規則，比欄位名稱本身更有價值：支出日期「統一轉成日期格式」、用途說明保留「原始說明」、發票號碼「空白或『無』視為未附發票」、來源檔案「方便追溯」。<b>保留原始說明與來源檔案這兩欄，就是投影片說的「可查核資料」。</b>下面它建議做兩個檔案：一份乾淨明細 <code>.xlsx</code> 給財務，一份互動 <code>.html</code> 給人看。［56:31］</figcaption>
+  </figure>
+
+  <h3>習慣二：思考強度選「中」就好</h3>
+  <figure class="shot">
+    <img src="s3-codex2-img/13-reasoning-effort.jpg" alt="Codex 的推理強度選單，選中" loading="lazy">
+    <figcaption>送出前他點開右下角的推理選單：低／中／高／超高，他固定選<b>中</b>。同一個選單下面還能切模型與速度。［61:01］</figcaption>
+  </figure>
+
+  <div class="golden">
+    <div class="q">「我一般都選擇中就可以……選高有時候他想太多，他三思而後行，他可能十思而後行，他想很多，然後問我很多問題，我就覺得很煩。」</div>
+    <div class="a">［60:00］他補一句：中大概就等同於人類的智慧了，日常工作不需要到高或超高。〔原話中的「三思的後行」為口語，本頁依上下文寫成「三思而後行」〕</div>
+  </div>
+
+  <h3>還有兩個小細節值得抄</h3>
+  <ul class="pt">
+    <li><b>指定輸出資料夾</b>：他多補一句「相關檔案都放到專案資料夾底下 <code>output</code>」，並說「他其實不會亂放，但我想說還是跟他提醒一下」。</li>
+    <li><b>給完整存取權</b>：要讓它自己建資料夾、開檔案，權限要開到完整，不然它會卡在每一步問你。</li>
+  </ul>
+
+  <div class="note steel">🔧 <div>他自己還有一個個人化技能叫「Web Service UI UX」，會讓 Codex 產出的網頁自動套他偏好的深色底樣式。他明說<b>學員沒有這個技能，所以做出來會是白底的</b>——這是很誠實的一句，避免學員以為自己做錯了。［56:00］</div></div>
+</section>
+
+<!-- ══════════ 9 ══════════ -->
+<section class="chapter" id="sec-dashboard">
+  <span class="chip" style="background:linear-gradient(90deg,var(--cyan),var(--blue))">60:00–70:00</span>
+  <h2 class="ct">9. 專題一收成：一張明細表加一個互動儀錶板</h2>
+  <p class="cd">五個亂七八糟的檔案，變成兩個能直接拿去開會的東西。</p>
+
+  <p>Excel 那份是給財務的：部門、日期、費用類型、用途、金額、發票號碼、來源檔案，一列一筆。真正好看的是另一份——一個<b>不用登入、不用後端、雙擊就打得開的 HTML 儀錶板</b>。</p>
+
+  <figure class="shot">
+    <img src="s3-codex2-img/14-dashboard.jpg" alt="Codex 產出的核銷互動儀錶板" loading="lazy">
+    <figcaption>儀錶板最上面四個數字是先給結論：總核銷金額、筆數、平均單筆、<b>缺發票筆數 7</b>（用紅字標）。中間一整排是篩選器（月份／部門／核銷人／費用類型／付款方式），下面是部門分布圓餅圖與費用類型長條圖。點圓餅上任一個部門，上方篩選器與下方明細會同步切換。這頁的設計原則是 Codex 自己寫的：「會偏財務核銷工作台，不是花俏簡報頁——第一眼看到總額與異常，下面才是圖表。」［72:18］</figcaption>
+  </figure>
+
+  <div class="note green">✅ <div>這一段最實用的一句話是 Codex 講的：互動圖表<b>不放在 Excel 裡</b>，改做網頁版。他同意這個判斷——Excel 裡做互動圖表太花時間，網頁版讓 Codex 做反而快。</div></div>
+
+  <div class="note gold">⚠️ <div>他也示範了資料本身的坑：儀錶板一開始的月份趨勢圖多了一筆 <code>2026-07-01</code>，那是六月資料裡混進來的異常日期。Codex 在回報時主動提醒了這一筆——<b>它有講，只是很容易被跳過。</b></div></div>
+</section>
+
+<!-- ══════════ 10 ══════════ -->
+<section class="chapter" id="sec-no-prompt">
+  <span class="chip" style="background:linear-gradient(90deg,var(--pink),var(--rose))">70:00–74:00</span>
+  <h2 class="ct">10. 他不教提示詞，他教「邊用邊累積」</h2>
+  <p class="cd">儀錶板做完，學員開始要提示詞。他的回答跟市面上的 AI 課完全相反，本頁照原話保留。</p>
+
+  <div class="golden">
+    <div class="q">「有些人說老師老師，你那個提示詞要給我啊。其實不用耶，我覺得……我沒有去下載別人的什麼 Skill，我也沒有去特別去記別人的提示詞。有沒有要注意什麼東西？我都沒有。我就是邊用，邊累積我的跟 AI 對話的經驗。」</div>
+    <div class="a">［70:53–71:02］他的理由是 AI 已經夠聰明、會理解你的思考方式，所以「你不必特別還要去學怎麼跟 AI 對話」。〔原話「去寄別人的提示詞」依上下文寫成「去記」〕</div>
+  </div>
+
+  <div class="note steel">🔧 <div><b>這是他的觀點，不是本站的結論，也跟本系列另一堂「提示詞工程補充課」的主張相反。</b>兩邊放在一起看反而比較有用：他做的是自己領域內、每天重複的任務，情境熟、能立刻判斷對錯，所以邊做邊修最快；提示詞公式化解的是另一種題——把一次性的、不熟的任務交出去，需要把結構先講清楚。<b>差別在你熟不熟這件事、有沒有本錢當場驗收。</b></div></div>
+
+  <h3>那他怎麼修？截圖給他看</h3>
+  <p>儀錶板第一版的圓餅圖顏色跟部門顏色對不上，而且切片數量看起來比實際的五個部門多很多。他沒有重寫提示詞，做法是：<b>截圖，貼給 Codex，講一句話。</b></p>
+
+  <figure class="shot">
+    <img src="s3-codex2-img/15-screenshot-feedback.jpg" alt="Codex 修好圓餅圖後回報，下方輸入框是一句話指令" loading="lazy">
+    <figcaption>最下面輸入框裡就是他打的全部內容：「圓餅的顏色跟部門顏色不一致」。上面是 Codex 修完的回報——它不只說改好了，還說<b>自己實際點過圓餅測試</b>：點其中一個部門後明細從全部 25 筆切成該部門 5 筆，指標也同步更新，前端沒有錯誤。［73:19］</figcaption>
+  </figure>
+
+  <div class="note blue">💡 <div>「錯了就截圖給他」比「一次寫對」更好複製。他全堂用了三次：圓餅圖顏色、Excel 星期欄跑出 <code>aaa</code>、Word 產出變成問號亂碼——三次都是截圖＋一句話解決。</div></div>
+</section>
+
+<!-- ══════════ 11 ══════════ -->
+<section class="chapter" id="sec-duplicate">
+  <span class="chip" style="background:linear-gradient(90deg,var(--blue),var(--purple))">76:00–92:00 · 112:00–118:00</span>
+  <h2 class="ct">11. 讓 AI 抓重複報支：它比對的不是發票號碼</h2>
+  <p class="cd">他在範例資料裡故意埋了兩組重複核銷，然後發現一件事：不特別講，Codex 不會主動抓。</p>
+
+  <p>第一版的彙整結果他看過覺得沒問題，但其實裡面有兩個人報了同一筆。他說「我發現沒有特別講，他沒有抓」——所以要明確下指令。而且第一次還下錯了：他說「忽略沒有發票的」，Codex 理解成「只看有發票的」，得補一句釐清。</p>
+
+  <div class="code">缺發票的屬於正常現象，你只需要看重複核銷的</div>
+
+  <figure class="shot">
+    <img src="s3-codex2-img/16-duplicate-found.jpg" alt="Codex 回報兩組疑似重複核銷與判斷理由" loading="lazy">
+    <figcaption>這張是全章重點，請看它的<b>判斷理由</b>而不是結果：「沒有發現『同發票號碼』重複，也沒有完全相同的日期、金額、用途、類型重複。不過有 2 組需要人工確認的疑似重複核銷。」每一組下面都寫明依據——「同日、同金額、同類型，用途高度相近。可能是同一場餐會被兩人分別申報，也可能是各自不同發票，需確認」。它沒有下結論，只標記待確認。（人名已代稱化、發票號碼已遮蔽）［82:01］</figcaption>
+  </figure>
+
+  <h3>兩組疑似重複長什麼樣</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">組</th><th>兩筆的共同點</th><th>不一樣的地方</th></tr>
+    <tr><td>第一組（餐費）</td><td>同一天、同金額、同類型，用途都是同一家客戶的餐會</td><td>兩個人分屬不同部門，發票號碼不同</td></tr>
+    <tr><td>第二組（住宿）</td><td>同一天、同金額、同類型，一個寫「內訓住宿」、一個寫「教育訓練住宿」</td><td>用字不同、發票號碼不同</td></tr>
+  </table></div>
+
+  <div class="note gold">⚠️ <div><b>這一章最容易誤會的地方：它靠的不是發票號碼。</b>他當場就有學員猜是不是發票號碼一樣，他回「其實不一樣」——兩筆的號碼不同，Codex 是<b>透過品項與用途的內容</b>找到問題。所以連文字寫法不同（內訓／教育訓練）也抓得出來。反過來說，這也意味著<b>它會誤報</b>，所以輸出寫的是「需確認」而不是「重複」。</div></div>
+
+  <div class="note steel">🔧 <div>它另外輸出一份 <code>duplicate_reimbursement_check.xlsx</code> 比對報告，欄位是英文的。Codex 自己說明理由：中文欄位名有時候會出問題，所以用英文。這是它在 Windows 上反覆遇到的中文編碼問題，本堂出現了三次。</div></div>
+</section>
+
+<!-- ══════════ 12 ══════════ -->
+<section class="chapter" id="sec-skill">
+  <span class="chip" style="background:linear-gradient(90deg,var(--green),var(--cyan))">88:00–108:00</span>
+  <h2 class="ct">12. 最值錢的一招：把走過一次的流程存成技能</h2>
+  <p class="cd">如果整堂只能帶走一件事，是這一章，不是任何一個專題。</p>
+
+  <p>六月份的核銷做完之後，他沒有直接叫 Codex 做七月。他先請它把<b>剛才走過的整段流程</b>寫成一個技能檔。指令短到不像重點：</p>
+
+  <figure class="shot">
+    <img src="s3-codex2-img/17-make-it-a-skill.jpg" alt="輸入框裡只有一句上述核銷過程建立一個技能" loading="lazy">
+    <figcaption>輸入框裡就這一句：「上述核銷過程，建立一個技能」。不用重述欄位、不用重述異常規則、不用重述圖表要長什麼樣——因為那些都在上面的對話裡。［89:31］</figcaption>
+  </figure>
+
+  <p>Codex 產出一份 <code>SKILL.md</code>，把這次專案裡的產生器整理成技能內可重複使用的腳本。之後他只要說「使用費用核銷技能，處理七月這個資料夾內的檔案」，同樣的明細表、儀錶板、重複比對就全部再跑一次。</p>
+
+  <h3>他為什麼堅持自己做技能，不用別人的</h3>
+  <div class="golden">
+    <div class="q">「我覺得不合適的原因不是說別人的技能不好，而是你根本不知道別人的技能裡面在搞什麼鬼。所以你不是好不好問題，是合不合適的問題。你自己帶 AI 做過一次，然後你再叫 AI 來做一樣的事情，是不是你就心裡面很有底、你很有把握他做得對。」</div>
+    <div class="a">［89:13–89:38］他補一句關鍵：因為剛剛的練習你是<b>看著他一步一步完成</b>的，所以這個技能保證符合你的需求。</div>
+  </div>
+
+  <h3>技能跟對話差在哪：一個會忘，一個不會</h3>
+  <p>有學員問：換月份的資料要不要重新教技能？他的回答把兩者的分工講清楚了。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">維度</th><th>對話</th><th>技能</th></tr>
+    <tr><td>作用範圍</td><td>只在這個對話裡記得，其他地方不記得</td><td>全域，任何對話、任何專案都找得到</td></tr>
+    <tr><td>會不會忘</td><td>會。對話越長越前面的越容易忘</td><td>不會，永遠記得</td></tr>
+    <tr><td>效率</td><td>資料量越大效率越低</td><td>不受對話長度影響</td></tr>
+    <tr><td>什麼時候用</td><td>同一個對話裡繼續做下個月，不用技能也行</td><td>要跨對話、跨專案重複使用時</td></tr>
+  </table></div>
+
+  <p>他順手翻出實測數字：核銷這個對話已經用掉 <b>102K</b> 個 token（他說約十萬字），上限 258K，也就是已經用掉 40%。「你如果這邊越做越多，越前面他就會忘記。」</p>
+
+  <figure class="shot">
+    <img src="s3-codex2-img/18-skill-cross-chat.jpg" alt="在全新對話裡詢問技能，Codex 完整說出技能用途" loading="lazy">
+    <figcaption>這是驗證的關鍵一張：他<b>開了一個全新的對話</b>，問「你查看技能裡面有沒有費用核銷技能，如果有的話簡略說明」。它完整答出：支援 Excel／CSV／Word 混合格式、把不同來源欄位統一成一張明細表、產出財務可用的彙整工作簿、需要時產生互動 HTML 儀錶板、可檢查疑似重複報支（發票號碼重複／日期金額類別說明完全相同／金額相同日期接近說明相似），並說明特別偏向台灣繁體中文的報支情境。最後一行還誠實補了一句：技能檔裡有些中文欄位名出現亂碼，應該是編碼問題，但用途和流程本身是清楚的。［107:31］</figcaption>
+  </figure>
+
+  <div class="golden">
+    <div class="q">「你用技能的優勢就是說，他不會忘記，他會永遠記得。技能是放全域的，他任何地方他都可以找得到。你的對話是單獨立的。」</div>
+    <div class="a">［106:52–107:04］後來學員補了一句「要跨專案就放全域」，他回「對，沒有錯」［108:00］。〔語音辨識把「全域」聽成「痊癒」，本頁依上下文與學員回應更正〕</div>
+  </div>
+
+  <div class="note green">✅ <div>做完技能之後，七月份的核銷只花一句話：「使用費用核銷技能，處理七月這個資料夾內的檔案。」明細表、儀錶板、重複比對全部重跑一次，還抓到七月同樣兩組疑似重複。<b>這就是把一次的工變成往後每個月的零工。</b></div></div>
+</section>
+
+<!-- ══════════ 13 ══════════ -->
+<section class="chapter" id="sec-ledger">
+  <span class="chip" style="background:linear-gradient(90deg,var(--orange),var(--pink))">109:00–134:00</span>
+  <h2 class="ct">13. 專題二：唸一句話就記帳，專案資料夾放雲端</h2>
+  <p class="cd">這一題沒有範例檔，從零開始跟 Codex 討論欄位——也是「先討論」用得最漂亮的一次。</p>
+
+  <h3>先立一個習慣：專案資料夾指向 Google 雲端</h3>
+  <p>他在建專案之前先做一件事：在 Google 雲端硬碟開一個資料夾，然後把 Codex 專案的路徑<b>指到雲端資料夾</b>而不是本機桌面。理由他重複講了三次：</p>
+  <ul class="pt">
+    <li><b>手機隨時看得到成果</b>——不用回到電腦前才知道 AI 做完了什麼。</li>
+    <li><b>換電腦也看得到</b>——他上課那台是遠端電腦，另一台照樣同步。</li>
+    <li>記帳這種事本來就是<b>在外面發生、在手機上查</b>，資料放雲端才對得上使用情境。</li>
+  </ul>
+
+  <h3>討論的成果：三層結構與可追溯的原始口述</h3>
+  <p>他的第一句同樣是「先討論」。Codex 回來的設計比他自己想的多：</p>
+  <ol class="st">
+    <li><b>第一層每日明細</b>：日期、星期、時段、店家／地點、品項、分類、金額、幣別、付款方式、是否必要、情境、備註。</li>
+    <li><b>第二層月份統計</b>。</li>
+    <li><b>第三層原始口述</b>——這一欄是重點，語音辨識聽錯時可以追回原話。</li>
+  </ol>
+  <p>它還反問三件事，他只挑要緊的答：個人還是報帳用（個人）、口述通常完整還是很短（很短）、Excel 要簡單好填還是完整方便分析（完整，反正不是人在填）。分類則直接交給它自己判斷，他不指定。</p>
+
+  <figure class="shot">
+    <img src="s3-codex2-img/19-ledger-field-map.jpg" alt="Codex 用一個口述例子示範欄位怎麼對應" loading="lazy">
+    <figcaption>Codex 討論時最貼心的一段：它自己舉例。上面是「今天早上在 7-11 買早餐 85 元，用 Line Pay」，下面直接排成表格——日期 2026/07/05、時段 早上、店家 7-11、品項 早餐、分類 餐飲、金額 85、付款方式 Line Pay。<b>用一個例子讓你在動手前就知道成果長什麼樣</b>，比看欄位清單清楚太多。［116:31］</figcaption>
+  </figure>
+
+  <h3>實測：講錯話也沒關係</h3>
+  <p>他當場口述：「我現在在 7-11 買了一個春之茶十五塊，講錯了是二十塊，還有一個麵包菠蘿麵包三十五塊。」——句子裡有一個當場更正。</p>
+
+  <figure class="shot">
+    <img src="s3-codex2-img/20-ledger-selfcorrect.jpg" alt="手機上的 Codex 回覆處理了口述中的即時更正" loading="lazy">
+    <figcaption>他把手機拿起來拍給大家看。Codex 的回覆是：「收到，這句裡有一個即時更正：『十五塊』改成『二十塊』。我會記成兩筆 7-11 消費，並把完整原始口述也存進 <code>原始口述</code> 方便追溯。」下面那段是它自己遇到的技術問題：PowerShell 管線又把中文路徑轉成問號，這次改用暫時腳本檔處理。［125:31］</figcaption>
+  </figure>
+
+  <figure class="shot">
+    <img src="s3-codex2-img/21-ledger-excel.jpg" alt="雲端 Excel 裡的口述消費記錄" loading="lazy">
+    <figcaption>雲端 Excel 的成果：三筆消費、欄位全對，最右邊<b>原始口述</b>那欄真的把整句話留著。備註欄還自己寫了「口述中金額由 15 更正為 20」。左邊星期欄跑出 <code>aaa</code> 是個小 bug，他截圖給 Codex 就修好了——這種瑕疵本頁不修掉，因為它才是真實使用的樣子。［128:59］</figcaption>
+  </figure>
+
+  <h3>他自己說的唯一缺點</h3>
+  <div class="note gold">⚠️ <div><b>麻煩的是你得先找到那個對話紀錄才能開始講。</b>他試過想把單一對話拉到手機桌面變成一個 icon，目前做不到，只能釘選在最上面。手機端的流程是：開 ChatGPT App → 點 <b>Remote</b> → 選到你這台電腦 → 找釘選的聊天 → 才能開始口述。他說「這個地方麻煩，以後再來思考」。</div></div>
+
+  <div class="note blue">💡 <div>他順手把這個做法延伸出去：同一個資料夾也可以記運動、體重、血壓。以前量血壓要靠藍牙傳到特定 App 才看得到趨勢，現在唸給 AI 聽、進 Excel、再叫它畫圖就好。</div></div>
+
+  <div class="golden">
+    <div class="q">「軟體 App 的需求量其實是快速的在減少中。以前我們需要使用一個功能的時候，要去下載那個 App、訂閱、付款買這個應用。現在我們都不需要，現在就是有 AI，AI 幫我們處理就可以了。」</div>
+    <div class="a">［122:28］他接著補了另一半：軟體的供給同時在大增，因為大家忽然都會寫程式了——但「是不是這麼多人需要你的應用呢？我覺得沒有」。</div>
+  </div>
+</section>
+
+<!-- ══════════ 14 ══════════ -->
+<section class="chapter" id="sec-quote">
+  <span class="chip" style="background:linear-gradient(90deg,var(--teal),var(--blue))">134:00–164:00</span>
+  <h2 class="ct">14. 專題三：口述報價單，從一句話到可以傳出去的檔案</h2>
+  <p class="cd">這一題他準備最久，因為報價單是有版型的——不能讓 AI 自由發揮。</p>
+
+  <h3>他事前想清楚的三件事</h3>
+  <p>他說這一段是刻意講給學員聽的，平常他會邊口述邊想。三件事是：</p>
+  <ol class="st">
+    <li><b>口述要包含什麼</b>：客戶、品名、單價、數量，有備註再加。</li>
+    <li><b>檔名格式</b>：日期＋報價，副檔名 <code>.xlsx</code>。</li>
+    <li><b>要自動建資料夾放</b>——不同客戶分開放。</li>
+  </ol>
+  <p>然後把這三件事丟給 Codex，最後照慣例加「先討論」。他還特別補了一句提醒，因為怕它自作聰明重做一份：</p>
+  <div class="code">檔案格式要使用我提供的那個檔案報價格式</div>
+
+  <figure class="shot">
+    <img src="s3-codex2-img/22-quote-template-rows.jpg" alt="Codex 讀完報價單範本後列出各項目在第幾列" loading="lazy">
+    <figcaption>這張是「不要破壞版型」怎麼落實的證據。Codex 讀完範本後把版型逐列講出來：品項標題列在第 10 列、品項內容從第 11 列開始、稅金第 18 列、總計第 19 列、備註第 20 列。下面那段是它的自我約束：「第一版我會盡量不破壞格式，只填既有儲存格。品項如果超過 7 項，再討論要不要自動插入列；先以目前範本的 7 列品項為上限最穩。」［148:01］</figcaption>
+  </figure>
+
+  <p>它也主動反問了幾件事，他一一裁掉：要不要建客戶清單（要）、同一天同客戶多張怎麼辦（照它的建議）、客戶資料從哪來（口述，缺的他自己補）、要不要產品價格表（先不用）、要不要順便產 PDF（先不用，他要看過再產）。</p>
+
+  <figure class="shot">
+    <img src="s3-codex2-img/23-quote-result.jpg" alt="Codex 依口述產生的報價單與解析結果" loading="lazy">
+    <figcaption>成果。上面那行「已經用你提供的報價單格式產生測試檔」，檔名是<b>它自己按規則命名</b>的（日期＿客戶＿報價.xlsx），並自動開了以客戶命名的資料夾。下面「解析結果」把口述拆成品名／數量／單價／小計四欄讓他核對——先讓人看解析對不對，再看檔案。（客戶名稱與報價金額已遮蔽）［155:04］</figcaption>
+  </figure>
+
+  <h3>從產出到寄給客戶</h3>
+  <p>他實際跑完的完整動線是這樣，全程沒有打字：</p>
+  <ol class="st">
+    <li>手機打開 Codex 對話，口述客戶、品項、單價、數量。</li>
+    <li>它產出 <code>.xlsx</code>，放進以客戶命名的資料夾。</li>
+    <li>他從<b>手機的雲端硬碟 App</b> 打開那個檔案看一眼。</li>
+    <li>要改就再講一句（客戶說預算不足，數量從 4 改成 3，它重算總價）。</li>
+    <li>沒問題就用手機的<b>共用 → 傳送副本 → PDF</b>，直接傳到 LINE 給對方。</li>
+  </ol>
+
+  <div class="note gold">⚠️ <div>他報價時把客戶名稱唸錯、AI 也聽錯過一次，他的反應是「名字錯了沒關係，等下再做修改，這個名字也很常聽錯，這正常」。<b>人名與專有名詞是語音辨識最容易錯的地方，這一步的檢查不能省。</b>另外他也提醒 Windows 上中文路徑經常出問題，「我每天都遇到，他跟你講說中文出問題了，然後他會再送修正」。</div></div>
+
+  <div class="note blue">💡 <div>他把這一題延伸到餐廳點餐：現在流行掃 QR Code 點餐，但「老會（長輩）會看菜單，也會講話」，所以也許可以做成<b>看實體菜單、口述點餐</b>，系統產生訂單再由店員確認。這個發想跟報價單是同一個結構：非結構化的語言 → 結構化的正式文件。</div></div>
+
+  <div class="golden">
+    <div class="q">「以前呢，你得請一個會計，或請一個同事，在公司接電話然後產生報價。現在呢，你只要念給他聽，然後他就會產生報價的大概的這個內容，然後細節你可以點進去再修改。」</div>
+    <div class="a">［149:31］他下一句是「現在這個人就可以不用請了，你可以一人公司，叫 AI 幫你產生」。</div>
+  </div>
+</section>
+
+<!-- ══════════ 15 ══════════ -->
+<section class="chapter" id="sec-meeting">
+  <span class="chip" style="background:linear-gradient(90deg,var(--purple),var(--rose))">164:00–186:00</span>
+  <h2 class="ct">15. 專題四：會議逐字稿變成有名字、有期限的追蹤表</h2>
+  <p class="cd">這一題他要的不是會議紀錄，是「誰在什麼時候前要做完什麼」。</p>
+
+  <p>輸入是三份會議逐字稿 <code>.txt</code>（專案會議、客戶需求訪談、行政採購）。他的第一步照慣例：先叫它「摘要資料夾內容」，確認它真的讀到了那三份檔案，再開始交辦。</p>
+
+  <p>然後他把任務定義成兩個交付物，並把追蹤表的欄位講清楚。Codex 一開始問要不要做成本機命令列工具或網頁介面，他直接否掉——這一段很值得看他怎麼想：</p>
+
+  <div class="note steel">🔧 <div><b>他的判斷是「不用做工具，用對話做就好」。</b>原話大意：這件事「應該是一個套裝軟體，或者有一個 UI 介面，你把逐字稿文字檔丟進去他就產生」，聽起來很厲害，但「我不能直接用對話來做嗎？我對話也可以做啊，消耗 token 而已」。所以他只要 Word 檔輸出，不要 UI、不要命令列、不要網頁介面。<b>這是一個很容易做錯的決定——很多人會被 AI 帶著去做一個沒人用的工具。</b></div></div>
+
+  <h3>他指定的追蹤表四個欄位</h3>
+  <ul class="pt">
+    <li><b>負責人</b>——他強調這一欄是整張表的價值所在。</li>
+    <li><b>項目</b>（要做什麼）</li>
+    <li><b>期限</b></li>
+    <li><b>是否完成</b>（加上待確認事項）</li>
+  </ul>
+
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="s3-codex2-img/24-meeting-minutes.jpg" alt="Codex 產出的會議紀錄 Word 檔" loading="lazy">
+      <figcaption>會議紀錄 Word 檔。標題下面那行小字是他要的可追溯性：「依據逐字稿 <code>meeting_transcript_01_project.txt</code> 整理」。基本資訊表格下就是會議摘要，把網路點位、設備採購、教育訓練、施工串接與驗收準備都收斂成一段。（與會者欄位已遮蔽）［185:25］</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="s3-codex2-img/25-task-tracker.jpg" alt="Codex 產出的進度追蹤表" loading="lazy">
+      <figcaption>進度追蹤表才是他要的東西：一列一件事，負責人、項目、期限（含星期）、待確認事項、是否完成。注意期限精確到「2026-07-06（一）17:00 前」，而「是否完成」欄全部預設「否」，等人來勾。（人名已代稱化）［187:01］</figcaption>
+    </figure>
+  </div>
+
+  <div class="note gold">⚠️ <div><b>中文亂碼在這一題又出現一次。</b>第一版產出的 Word 檔整份變成問號。他的處理方式一樣：截圖給 Codex，它重寫一次就正常了。他說「這很正常啊，這個中文它有時候就這樣子，要修一下就好了」——如果你遇到，不是你做錯。</div></div>
+
+  <div class="golden">
+    <div class="q">「你的名字一旦被獨立出來寫在表格裡面，你就會專心看你到底要做什麼。」</div>
+    <div class="a">［187:01］他解釋為什麼進度追蹤表比會議摘要有效：看摘要的時候大家心不在焉，看到自己名字後面跟著日期就會動起來。</div>
+  </div>
+
+  <div class="note steel">🔧 <div>他自己吐槽了一句：這次的會議紀錄比逐字稿還長，因為範例逐字稿太短了。他說下次要請 AI 產生「多一點贅字、多一點無關緊要的討論」的逐字稿，才像真的會議。</div></div>
+</section>
+
+<!-- ══════════ 16 ══════════ -->
+<section class="chapter" id="sec-schedule">
+  <span class="chip" style="background:linear-gradient(90deg,var(--amber),var(--green))">186:00–201:00</span>
+  <h2 class="ct">16. 專題五：讓 Codex 每小時自己去看一次 Gmail</h2>
+  <p class="cd">最後一題是唯一「不用你開口它也會動」的一題——也是他前面 LINE 那題的替代路線。</p>
+
+  <h3>建排程不用進「已排程」，用口語講就好</h3>
+  <p>左上角有一個<b>已排程</b>可以建任務，但他刻意不從那裡建。他開一個普通新對話，直接用一段話交辦，建完之後它自己會跑到「已排程」裡面去。</p>
+  <div class="code">這是一個自動化的專案，每一個小時，每天早上九點到下午五點之間，
+每一個小時就進我的 Gmail，查看有沒有重要的郵件需要我回覆、需要人工來回覆的。
+如果都是一些廣告信、通知信，那個就不需要；
+如果有需要我回覆的，就把那個信件列表給我。</div>
+
+  <figure class="shot">
+    <img src="s3-codex2-img/26-scheduled-task.jpg" alt="Codex 依口述建立好的 Gmail 定時檢查排程" loading="lazy">
+    <figcaption>它把口語直接翻成排程設定：「排程是每天 09:00 到 18:00，每個整點檢查一次 Gmail。它會排除廣告、通知、電子報、收據、驗證碼等不需要回覆的信；如果有需要人工回覆的重要郵件，會列出寄件者、主旨、收到時間、判斷理由和優先順序。」<b>「判斷理由」這一欄是關鍵</b>——它要交代為什麼認為這封要回。［193:01］</figcaption>
+  </figure>
+
+  <div class="note blue">💡 <div>他拿 Windows 內建的「工作排程器」對照：那個要你自己指定幾月幾號幾點幾分、每隔多久。AI 的差別是<b>它聽得懂「每天上班時間每小時一次」這種人話</b>，自己換算成排程參數。</div></div>
+
+  <h3>踩到的坑：時區差 8 小時</h3>
+  <p>建好之後他發現「下次執行」寫的是明天下午五點，不合理。他直接問它為什麼，答案是<b>時區問題</b>——設定的是 09:00 UTC，台灣加八小時就變成下午五點。他請它改，它自己修正了。</p>
+
+  <div class="note gold">⚠️ <div><b>排程建完一定要看一次「下次執行時間」。</b>時區錯了它照樣會跑，只是跑在你不想要的時間。他為了現場測試，還把起始時間往前調並手動按執行。</div></div>
+
+  <h3>他很喜歡的一個改版：排程有自己的對話紀錄</h3>
+  <p>他說以前每個排程執行一次就產生一個對話紀錄，一堆重複的對話堆在列表裡。現在排程有獨立的紀錄區，<b>所有次數的執行都掛在同一個對話下</b>，進「已排程」就能看到每次執行的結果。</p>
+
+  <figure class="shot">
+    <img src="s3-codex2-img/27-gmail-triage.jpg" alt="排程執行後找出待回信件並代為回覆" loading="lazy">
+    <figcaption>執行結果。他先寄一封測試信給自己（主旨是明天下午的緊急會議、請回覆是否出席），排程跑完抓出兩封要人工回覆的。然後他只說一句「幫我回復 1，說可以」，它就回了「可以，我會出席，謝謝」，並回報「已送出，並已更新自動化記憶，下一次檢查不會再把這封列為待回覆」。上下那幾個 <code>memory.md</code> 就是它的自動化記憶檔。（收件人已遮蔽）［208:36］</figcaption>
+  </figure>
+
+  <div class="note green">✅ <div><b>「自動化記憶」這個設計解掉了排程最煩的問題</b>——同一封信不會被重複提醒。它把處理過的信記在 <code>memory.md</code>，下次檢查會先讀這個檔。這也是他前面 LINE 那題的替代路線：LINE 訊息轉存到 Email，再讓排程每小時去撈一次。</div></div>
+</section>
+
+<!-- ══════════ 17 ══════════ -->
+<section class="chapter" id="sec-real">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--purple))">TAKEAWAYS</span>
+  <h2 class="ct">17. 這堂課真正在教的事</h2>
+  <p class="cd">五個專題只是載具。把它們拿掉之後，剩下這五件事。</p>
+
+  <h3>一、先讓他討論，你才來得及攔住他</h3>
+  <p>整堂最常出現的四個字是「先討論」。它換來的不是禮貌，是<b>一次修正的機會</b>：Codex 會先講它要怎麼做、欄位怎麼設、產出幾個檔案，你在那個時候說不對，成本是零；等它做完再說不對，前面全部重來。這比任何提示詞技巧都便宜。</p>
+
+  <h3>二、把「一次的工」變成「往後每個月的零工」</h3>
+  <p>做完六月核銷的下一句不是「做七月」，而是「上述核銷過程，建立一個技能」。這一句把三十分鐘的來回濃縮成一個 <code>SKILL.md</code>，之後換月份、換資料夾都只要一句話。<b>而且因為是你帶著它走過一次才存下來的，你知道它裡面在做什麼</b>——這是他不用別人技能的理由。</p>
+
+  <h3>三、不要把流程做成全自動送出</h3>
+  <p>他自己的收尾投影片就寫著這一句。五個專題的最後一步全都是人：核銷的重複報支是「需確認」不是「重複」、報價單要自己打開看過才轉 PDF、會議追蹤表的「是否完成」全部預設「否」等人勾。他要 Codex 交出的是<b>草稿、摘要、表格與待確認清單</b>，不是替他做決定。</p>
+
+  <h3>四、輸入要讓人最省力，整理成本丟給 AI</h3>
+  <p>他拒絕「發一份統一的 Excel 給大家填」，因為那是把成本推給填表的五個人，而且大家還會做兩次工。同樣的邏輯貫穿記帳（唸一句就好）與報價（唸客戶品項數量）。<b>判斷一個自動化值不值得做，看的是「輸入端有沒有變輕」。</b></p>
+
+  <h3>五、出錯是常態，處理方式要簡單到你願意做</h3>
+  <p>這堂三小時半裡，圓餅圖顏色錯過、Excel 星期欄跑出 <code>aaa</code>、Word 產出變成問號、中文路徑在 PowerShell 裡壞掉、排程時區差八小時、最想做的 LINE 那題直接放棄。他的處理一律是<b>截圖＋一句話</b>，或者換條路。沒有一次是回去重寫提示詞。</p>
+
+  <figure class="shot">
+    <img src="s3-codex2-img/28-closing-slide.jpg" alt="講師的三句話收尾投影片" loading="lazy">
+    <figcaption>他自己的收尾頁，三句話值得抄下來：「AI 在辦公室最實用的地方，是把每天重複發生的資料整理工作變成可檢查流程」、「不要把流程設計成全自動送出，先做到草稿、摘要、表格與待確認清單」、「只要有範例資料與固定輸出格式，Codex 就可以成為文件、表格和排程任務的協作者」。下面橘字是作業：挑一個自己辦公室每天都會發生的流程，改造成第六個專題。［202:01］</figcaption>
+  </figure>
+
+  <div class="note blue">💡 <div>三句話裡最容易被跳過的是第三句的前半段：<b>「只要有範例資料與固定輸出格式」</b>。這堂五個專題之所以都成功，是因為每一題他都給了範例（五個核銷檔、報價單範本、三份逐字稿）或先討論出固定格式（記帳欄位、追蹤表欄位）。沒有這兩樣，Codex 只能自由發揮。</div></div>
+</section>
+
+<!-- ══════════ 18 ══════════ -->
+<section class="chapter" id="sec-quotes">
+  <span class="chip" style="background:linear-gradient(90deg,var(--amber),var(--rose))">QUOTES</span>
+  <h2 class="ct">18. 老師金句</h2>
+  <p class="cd">依影片時間先後排。前兩則是電台主持人的開場，其餘是本堂講師。</p>
+
+  <div class="golden"><div class="q">「學習東西只有比較早知道、晚知道跟不知道。所以不用給自己太大的壓力，晚知道又如何呢？」</div><div class="a">［04:51］主持人回應學員擔心跟不上訂閱制的進度。〔語音辨識把「比較早」聽成「本早」，本頁依上下文更正〕</div></div>
+
+  <div class="golden"><div class="q">「現在你不用擔心寫程式的問題……你說我不會 JS，就是所謂 JavaScript，不用擔心啦，反正 Codex 就可以幫你處理。」</div><div class="a">［03:50］主持人在示範自己做的 Node-RED 台語語音節點時說的，後面順勢把場交給本堂講師。</div></div>
+
+  <div class="golden"><div class="q">「這個就好像我手邊有一個非常厲害的工程師……你會發現這個現在這種 AI 系統，他不會不耐煩，他總是願意幫你完成你的想法。」</div><div class="a">［21:10–21:46］講在 LINE 那題卡住的時候。他對比的是會說「老闆你不要每天想東想西」的員工。</div></div>
+
+  <div class="golden"><div class="q">「所以我後來想想，先把他終止掉。」</div><div class="a">［22:10］他放棄 LINE 進 Codex 這題的那一刻。整堂唯一的失敗，他沒有剪掉。</div></div>
+
+  <div class="golden"><div class="q">「而是好像有一個專屬秘書，不停的在幫你工作。只要你教他一次，他就認識了。」</div><div class="a">［30:50］示範完 Codex 自動上傳 YouTube 之後。</div></div>
+
+  <div class="golden"><div class="q">「那你不是做兩次工嗎？」</div><div class="a">［46:00 前後］他用這句推翻「發統一 Excel 表格給大家填」這個直覺解法。</div></div>
+
+  <div class="golden"><div class="q">「我一般都選擇中就可以……選高有時候他想太多，他想很多，然後問我很多問題，我就覺得很煩。」</div><div class="a">［60:00］講思考強度。他說中大概等同人類的智慧，日常不需要更高。</div></div>
+
+  <div class="golden"><div class="q">「有些人說老師，你那個提示詞要給我啊。其實不用耶……我就是邊用，邊累積我的跟 AI 對話的經驗。」</div><div class="a">［70:53］這是他的立場，跟本系列「提示詞工程補充課」相反，本頁兩邊都保留（見第 10 章的說明）。</div></div>
+
+  <div class="golden"><div class="q">「你何必跟去學什麼提示詞工程啊？對我來講，你想要什麼你就跟他對話，然後在對話的過程去累積你的經驗。」</div><div class="a">［71:45］同一段的下半。他的前提是「AI 本身就很聰明了，他了解你的思考方式」。</div></div>
+
+  <div class="golden"><div class="q">「我覺得不合適的原因不是說別人的技能不好，而是你根本不知道別人的技能裡面在搞什麼鬼。所以你不是好不好問題，是合不合適的問題。」</div><div class="a">［89:18–89:28］他為什麼堅持自己做技能。下一句是「你自己帶 AI 做過一次……你就心裡面很有底」。</div></div>
+
+  <div class="golden"><div class="q">「我都不管，我都邊開車邊跟 AI 聊天，請他幫我做投影片。」</div><div class="a">［101:00］講到以前最怕出門講課前投影片沒做好。</div></div>
+
+  <div class="golden"><div class="q">「你用技能的優勢就是說，他不會忘記，他會永遠記得。技能是放全域的，你的對話是單獨立的。」</div><div class="a">［106:52］回答學員「換月份要不要重新教技能」。〔語音辨識把「全域」聽成「痊癒」，本頁依上下文更正〕</div></div>
+
+  <div class="golden"><div class="q">「後來我發現你只要跟他講先討論，他就不會馬上做。」</div><div class="a">［114:20］「先討論」這個習慣的由來。</div></div>
+
+  <div class="golden"><div class="q">「軟體 App 的需求量其實是快速的在減少中……現在就是有 AI，AI 幫我們處理就可以了。」</div><div class="a">［122:28］他同時指出供給在大增，但「是不是這麼多人需要你的應用呢？我覺得沒有」。</div></div>
+
+  <div class="golden"><div class="q">「以前呢，你得請一個會計，或請一個同事在公司接電話然後產生報價。現在呢，你只要念給他聽。」</div><div class="a">［149:31］口述報價單跑通之後。他下一句是「你可以一人公司」。</div></div>
+
+  <div class="golden"><div class="q">「你的名字一旦被獨立出來寫在表格裡面，你就會專心看你到底要做什麼。」</div><div class="a">［187:01］解釋為什麼進度追蹤表比會議摘要有效。</div></div>
+
+  <div class="golden"><div class="q">「所以 Codex 現在是你的員工。不要小看 Codex，過幾天他就變成你的老闆了。」</div><div class="a">［202:13］收尾投影片的最後一句話。半開玩笑，但也是他整堂的態度。</div></div>
+
+  <div class="golden"><div class="q">「而不是只是給你一句話、給你一個東西，然後最後看你產出的結果，而是把整個實作過程裡頭讓你了解——一步一步碰到問題的時候，該如何去解決。」</div><div class="a">［205:29］主持人的結語，也是這堂課最準確的一句評語。〔原話「使作過程」為口語，本頁寫成「實作過程」〕</div></div>
+</section>
+
+<!-- ══════════ 19 ══════════ -->
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,var(--ink3),var(--ink2))">SOURCE</span>
+  <h2 class="ct">19. 資料來源與整理說明</h2>
+
+  <div class="twrap"><table>
+    <tr><th style="width:130px">來源</th><td>2026/07/05 課堂錄影單段，全長 3 小時 29 分（12,548 秒，1920×1080）</td></tr>
+    <tr><th>整理方式</th><td>全程本機處理：以場景偵測擷取 243 張關鍵畫面、產生 2045 段逐字稿，再依逐字稿手寫章節目錄；本頁 28 張截圖從原片以 1920×1080 重新擷取後裁切與遮蔽</td></tr>
+    <tr><th>時間戳</th><td>章節標題與引文後方的［mm:ss］對應錄影播放器時間</td></tr>
+    <tr><th>整理</th><td>竹貞（Tarshar 的逐幀筆記專員）</td></tr>
+  </table></div>
+
+  <h3>去識別化做了什麼</h3>
+  <ul class="pt">
+    <li><b>整片裁掉四個區域</b>：右側線上教室與會者欄（十六個真實姓名頭像與「＋52」）、底部工作列（視窗標題含人名與本機路徑）、左側專案與通知清單（講師的私人專案名稱）、左下角的帳號與方案。</li>
+    <li><b>內容區裡的個資逐張處理</b>：示範資料的人名改成「員工Ａ／Ｂ／Ｃ／Ｄ」，發票號碼改成 <code>INV-XXX-0000</code>，客戶單位改成「某客戶」，第三方學校與教授姓名遮蔽，真實報價金額遮蔽，講師的雲端硬碟完整路徑、電子郵件、主機名稱、會議代碼、Drive 分享連結全部遮蔽。</li>
+    <li><b>整幀都是線上教室介面、沒有課程內容的畫面一張都不選。</b></li>
+    <li><b>講師本人只用他的公開教學代號「夜市小霸王」稱呼</b>，不寫出真實姓名或帳號；電台主持人一律寫「主持人」。</li>
+    <li><b>逐字稿裡的學員暱稱、提問者稱呼、被念出來的客戶與教授姓名，本頁一律隱去或改成代稱。</b></li>
+    <li><b>成品圖逐張目視＋逐張 OCR 掃過個資關鍵字清單，零命中才交出。</b></li>
+  </ul>
+
+  <h3>已知限制，請先看過再引用</h3>
+  <ul class="pt">
+    <li><b>逐字稿是機器產生的</b>，人名與工具名會聽錯。可確定的錯字（「痊癒」→「全域」、「使作過程」→「實作過程」、「三思的後行」→「三思而後行」、「去寄別人的提示詞」→「去記」、「本早知道」→「比較早知道」共 5 類、6 處）已在引文後以〔〕註明修正；<b>不確定的一律保留原樣，沒有猜測補詞</b>。</li>
+    <li>錄影中有數段靜音時段被語音辨識產生重複幻覺（例如被辨識成影片頻道的贊助字幕或歌曲創作者署名，共約 10 處），整理時已整段捨棄，不會出現在本頁。</li>
+    <li>講師全場把 Codex 的技能稱作「技能」，把思考強度稱作「思考模式」，本頁照原話保留，未替換成官方英文術語。</li>
+    <li><b>示範資料全部是 AI 生成的假資料</b>（五份核銷檔、三份會議逐字稿都是他請 Codex 產的）。人名與發票號碼雖是虛構，本頁仍一律代稱化；核銷金額與日期為虛構資料，予以保留，因為「同日同金額」正是那一章的教學重點。<b>報價單那一題的客戶與金額是真實的，已全部遮蔽。</b></li>
+    <li>畫面文字以 OCR 輔助判讀，圖說均為人工看懂畫面後重寫，未直接貼上 OCR 結果；小字與特殊字型仍可能有誤。</li>
+    <li>引用到作業、貼文或簡報之前，請對照錄影原始段落再確認一次。</li>
+  </ul>
+
+  <div class="note gold">🔒 <div><b>課堂錄影與範例檔不放在這一頁。</b>錄影本體未經去識別化（含與會者姓名、示範資料中的人名、講師的私人專案與帳號），範例檔的雲端連結也已從截圖中遮蔽。要取得回放與範例，請從你自己的訂閱制課程資料夾進去。</div></div>
+</section>
+
+</article>
+</div>
+
+<footer>
+  <p>📝 夜市小霸王 Codex 教學 (II) 課堂筆記 · 生成式AI應用電台・訂閱制第三季（客座講師）</p>
+  <p>依錄影關鍵畫面＋全程逐字稿整理，截圖已去識別化 · <a href="s3-codex2-ai-skills.html">🗺️ 互動技能地圖</a> · <a href="../radio/#ecf">🏠 回筆記館入口</a></p>
+</footer>
+
+</body>
+</html>

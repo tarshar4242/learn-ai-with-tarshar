@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>辦公室的重複雜事，帶 AI 走過一次就存成技能｜夜市小霸王 Codex 教學 (II) 互動式學習地圖</title>
+<meta name="description" content="生成式AI應用電台・訂閱制第三季客座講師「夜市小霸王」第二場 Codex 教學互動式學習地圖：全機聽寫 Ctrl＋1、開專案的「先討論」與思考強度、多檔核銷彙整與互動儀錶板、抓疑似重複報支、把流程存成 SKILL.md 技能、口述記帳、口述報價單、會議逐字稿轉進度追蹤表、排程檢查 Gmail。多層次可點擊、可打勾記憶進度。">
+<style>
+
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269;
+  --green:#3f8560; --orange:#bf6a1e; --red:#c0453f; --teal:#0d8f80; --amber:#9c7b23;
+  --feat:#1f6b73; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(28px,4.6vw,46px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--txt);background:none;-webkit-text-fill-color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:680px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:9px}
+.steps li{list-style:none;counter-increment:st;display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--txt2);line-height:1.7}
+.steps li::before{content:counter(st);flex:none;width:25px;height:25px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:var(--c,var(--feat));margin-top:1px}
+.steps li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+.prompt,.promptbox{background:#1d1d1f;border:1px solid #2c2c31;border-radius:10px;padding:13px 15px;margin-top:6px;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt b,.promptbox b{color:#fff}
+figure.shot{margin:10px 0 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12px;color:var(--txt3);padding:8px 12px;border-top:1px solid var(--line);background:var(--bg2);line-height:1.6}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+</head>
+
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <a class="navlink" href="../radio/#ecf" style="border-color:#b9d7db" onclick="if(history.length>1){history.back();return false}">← 回上一頁</a>
+  <div class="logo">
+    <div class="dot">🗂️</div>
+    <div>Codex 辦公室自動化地圖<small>SUBSCRIPTION S3 · CODEX II</small></div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋技能關鍵字：先討論、思考強度、聽寫、Ctrl 1、技能、SKILL.md、儀錶板、重複報支、口述記帳、報價單、追蹤表、排程、時區…" autocomplete="off">
+  </div>
+  <a class="navlink" href="s3-codex2-notes.html">📝 課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">夜市小霸王 Codex 教學 (II) · 訂閱制第三季 · 2026/07/05</span>
+  <h1>辦公室的重複雜事<br>帶 AI 走過一次就存成技能</h1>
+  <p class="sub">客座講師「夜市小霸王」一次跑完五個辦公室專題：<b>多檔核銷彙整、口述記帳、口述報價單、會議逐字稿轉追蹤表、排程檢查 Gmail</b>。但真正的重點不是專題，是他每一次都重複的同一套動作——<b>先討論一次 → 邊看邊改 → 把走過的流程存成技能</b>，之後換月份、換客戶都只要一句話。<br>點進每一章，逐層展開<b>本堂實際教到</b>的觀念、示範與操作，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🎙️ 生成式AI應用電台・訂閱制第三季</span>
+    <span>👤 客座講師：夜市小霸王</span>
+    <span>⏱️ 全長 3 小時 29 分</span>
+    <span>🔰 小白友善</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>6</b><span>大主題</span></div>
+  <div class="stat"><b>26</b><span>實戰技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 26 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--teal)" onclick="showChapter('habits')">
+        <div class="glowline"></div><span class="emoji">🧭</span>
+        <h3><em>CHAPTER 01</em>三個開場習慣</h3>
+        <p>指令最後加一句「先討論」、思考強度固定選「中」、專案資料夾指到 Google 雲端。三個小動作，決定你是不是來得及攔住 AI。</p>
+        <div class="foot"><div class="mini"><i data-mini="habits"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--purple)" onclick="showChapter('dictation')">
+        <div class="glowline"></div><span class="emoji">🎤</span>
+        <h3><em>CHAPTER 02</em>Ctrl＋1 全機聽寫</h3>
+        <p>把 Codex 的聽寫變成整台電腦都能用的麥克風：怎麼設、為什麼要打開「保持顯示聽寫列」、在 Word 與搜尋框實測。</p>
+        <div class="foot"><div class="mini"><i data-mini="dictation"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--green)" onclick="showChapter('reimburse')">
+        <div class="glowline"></div><span class="emoji">📊</span>
+        <h3><em>CHAPTER 03</em>專題一：多檔核銷彙整</h3>
+        <p>五個人交五種格式怎麼變成一張明細表＋一頁互動儀錶板，以及讓 AI 抓疑似重複報支——它比對的不是發票號碼。</p>
+        <div class="foot"><div class="mini"><i data-mini="reimburse"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--cyan)" onclick="showChapter('skill')">
+        <div class="glowline"></div><span class="emoji">🧩</span>
+        <h3><em>CHAPTER 04</em>核心一課：存成技能</h3>
+        <p>一句「上述過程，建立一個技能」換來一個 SKILL.md。技能與對話差在哪、為什麼他不用別人的技能、對話會滿是怎麼回事。</p>
+        <div class="foot"><div class="mini"><i data-mini="skill"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--orange)" onclick="showChapter('speak')">
+        <div class="glowline"></div><span class="emoji">🗣️</span>
+        <h3><em>CHAPTER 05</em>專題二、三：口述變文件</h3>
+        <p>唸一句話就記帳（連講錯更正都處理），唸客戶品項數量就產出照版型填好的報價單，手機直接轉 PDF 傳出去。</p>
+        <div class="foot"><div class="mini"><i data-mini="speak"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--rose)" onclick="showChapter('auto')">
+        <div class="glowline"></div><span class="emoji">⏰</span>
+        <h3><em>CHAPTER 06</em>專題四、五：任務與排程</h3>
+        <p>會議逐字稿變成有名字有期限的追蹤表，讓 Codex 每小時自己去看一次 Gmail，以及他當場放棄的 LINE 那一題。</p>
+        <div class="foot"><div class="mini"><i data-mini="auto"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+
+    <div class="resources">
+      <h3>📦 <span>延伸與相關</span></h3>
+      <div class="res-grid">
+        <a href="s3-codex2-notes.html"><span class="ic">📝</span><span><b>課堂筆記</b>20 章、28 張去識別化截圖</span></a>
+        <a href="../radio/#ecf"><span class="ic">📻</span><span><b>直播電台系列</b>回系列總覽，一集一卡</span></a>
+        <a href="s3-bonus2-notes.html"><span class="ic">🧪</span><span><b>提示詞工程補充課</b>跟本堂第 10 章立場相反，值得對照</span></a>
+        <a href="s3e3-notes.html"><span class="ic">🚀</span><span><b>S3E3 單檔工具上雲</b>同系列的 Codex 實作課</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-habits" class="view" style="--c:var(--teal)"></section>
+  <section id="view-dictation" class="view" style="--c:var(--purple)"></section>
+  <section id="view-reimburse" class="view" style="--c:var(--green)"></section>
+  <section id="view-skill" class="view" style="--c:var(--cyan)"></section>
+  <section id="view-speak" class="view" style="--c:var(--orange)"></section>
+  <section id="view-auto" class="view" style="--c:var(--rose)"></section>
+</main>
+
+<footer>
+  本頁為「夜市小霸王 Codex 教學 (II)：辦公室的重複雜事，帶 AI 走過一次就存成技能」課後整理・介面沿用本站互動式學習地圖版型<br>
+  截圖已去識別化（裁掉線上教室與會者欄與工作列，人名代稱化）・整理：竹貞<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2026｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+const DATA = {
+  habits: {
+    key:'habits', color:'var(--teal)', emoji:'🧭', code:'CHAPTER 01', title:'三個開場習慣',
+    intro:'這三件事在每個專題開頭都會重複一次。它們不是技巧，是讓你「來得及攔住 AI」的保險。',
+    topics:[
+      {t:'指令最後加一句「先討論」', s:'兩個字換來一次免費的修正機會｜錄影 52:01 · 114:20', blocks:[
+        {h:'他實際送出的第一句話',prompt:'本專案負責核銷同事的費用，我們要彙整成 excel，並產生互動圖表\n先討論'},
+        {h:'為什麼有效',ul:['Codex 會<b>先講它要怎麼做</b>：去看資料夾有哪些檔案、什麼格式、缺什麼工具，然後提出欄位設計與交付檔案','你在這個時候說「不對」，成本是零；等它做完再說不對，前面全部重來','他的原話：「後來我發現你只要跟他講先討論，他就不會馬上做。」']},
+        {h:'那要不要開「規劃模式」？',tip:'他說 Codex 把這條界線畫得有點模糊——規劃模式不是只能規劃不能操作，規劃到一定程度它還是會開始做。除了大型專案，他幾乎不開，就是在指令後面加「先討論」。'},
+        {h:'實機畫面',shot:{img:'s3-codex2-img/11-discuss-first.jpg',cap:'「先討論」兩個字單獨一行，就在指令最後面。［52:01］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-codex2-notes.html#sec-two-habits" style="color:var(--teal)">筆記 8：開專案的兩個習慣</a>'}]},
+      {t:'思考強度固定選「中」', s:'低／中／高／超高，他只用中｜錄影 60:00', blocks:[
+        {h:'他的理由',p:'「我一般都選擇中就可以。因為我發現我日常生活中常用的東西，我選這個就夠聰明了。<b>選高有時候他想太多</b>，他三思而後行，他可能十思而後行，他想很多，然後問我很多問題，我就覺得很煩。」'},
+        {h:'一句換算',tip:'他說「中」大概就等同於人類的智慧了，日常工作不需要到高或超高。同一個選單裡也能切模型與速度。'},
+        {h:'實機畫面',shot:{img:'s3-codex2-img/13-reasoning-effort.jpg',cap:'送出前點開右下角的推理選單，勾在「中」。［61:01］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-codex2-notes.html#sec-two-habits" style="color:var(--teal)">筆記 8：開專案的兩個習慣</a>'}]},
+      {t:'專案資料夾指到 Google 雲端', s:'手機隨時看得到成果，換電腦也看得到｜錄影 109:00–112:00', blocks:[
+        {h:'做法',steps:['先在 Google 雲端硬碟開一個資料夾（例如 <code>temp/口述報價系統</code>）','Codex 建新專案時選「使用現有資料夾」，路徑指到那個<b>雲端同步資料夾</b>，不要指本機桌面','之後 Codex 產出的檔案會自動同步到雲端']},
+        {h:'三個好處（他重複講了三次）',ul:['<b>手機隨時看得到</b>：不用回到電腦前才知道 AI 做完了什麼','<b>換電腦也看得到</b>：他上課用的是遠端電腦，另一台照樣同步','記帳、報價這種事本來就<b>在外面發生、在手機上查</b>，資料放雲端才對得上情境']},
+        {h:'看課堂筆記',p:'👉 <a href="s3-codex2-notes.html#sec-ledger" style="color:var(--teal)">筆記 13：專題二 口述記帳</a>'}]},
+      {t:'給完整存取權、指定 output 資料夾', s:'不然它會卡在每一步問你｜錄影 58:00', blocks:[
+        {h:'兩個小補充',ul:['要讓它自己<b>建資料夾、開檔案</b>，權限要開到「完整存取權」','多補一句<b>「相關檔案都放到專案資料夾底下 output」</b>——他說「他其實不會亂放，但我想說還是跟他提醒一下」']},
+        {h:'誠實補述',warn:'他自己另有一個個人化技能會讓 Codex 產出的網頁自動套深色底樣式。他明說學員沒有這個技能，所以做出來會是白底的——不是你做錯了。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-codex2-notes.html#sec-two-habits" style="color:var(--teal)">筆記 8：開專案的兩個習慣</a>'}]}
+    ]
+  },
+  dictation: {
+    key:'dictation', color:'var(--purple)', emoji:'🎤', code:'CHAPTER 02', title:'Ctrl＋1 全機聽寫',
+    intro:'全堂門檻最低、今天就能做的一招。設定完之後，那支麥克風會常駐在整台電腦，連 Codex 關掉了都還在。',
+    topics:[
+      {t:'四步設定，一次設好永久有效', s:'重點是最後那個「保持顯示聽寫列」｜錄影 34:00–37:00', blocks:[
+        {h:'四個步驟',steps:['Codex 左下角點自己的名字 → <b>設定</b>','找到「一般」裡面往下的 <b>聽寫</b> 區塊','把「按住聽寫快速鍵」改成一個沒人用的組合，他用 <b>Ctrl＋1</b>','把下面的 <b>保持顯示聽寫列</b> 打開（預設是開的，被關掉就補開）']},
+        {h:'為什麼是 Ctrl＋1',tip:'他提醒不要選 Ctrl＋C／V／A／Z／Y，那些都是常用鍵。Ctrl＋1 好像沒有人在用。'},
+        {h:'關鍵的那一步',warn:'「保持顯示聽寫列」才是讓麥克風常駐的開關。設定說明寫著「按住桌面上的任何位置，即可在游標位置開始聽寫」——意思是任何視窗、任何輸入框都能用。'},
+        {h:'實機畫面',shot:{img:'s3-codex2-img/07-dictation-setting.jpg',cap:'聽寫設定區。最下面的「聽寫字典」會留下你講過的句子，可直接複製。［34:01］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-codex2-notes.html#sec-dictation" style="color:var(--purple)">筆記 6：Ctrl＋1 全機聽寫</a>'}]},
+      {t:'他當場示範的三個地方', s:'Google 搜尋框、Word、中英夾雜｜錄影 32:00–36:00', blocks:[
+        {h:'三次實測',ul:['<b>Google 搜尋框</b>：唸「幫我查一下最近那個世足賽最新的戰況紀錄，今天的好了」，字直接進搜尋框','<b>Word 文件</b>：唸「今天呢，很開心能在這邊跟大家分享 Codex 的各種應用」，連 <code>Codex</code> 都拼對','<b>中英夾雜</b>：他認為比 Google 的語音輸入準，講錯的同音字它會自己修掉']},
+        {h:'為什麼這一招重要',tip:'後面三個專題（記帳、報價、排程）全部靠口述輸入。沒有這個開關，那三題都得打字，就失去意義了。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-codex2-notes.html#sec-dictation" style="color:var(--purple)">筆記 6：Ctrl＋1 全機聽寫</a>'}]},
+      {t:'手機也能用：Remote 遠端操作你的電腦', s:'掃 QR Code 綁定，Windows 也支援｜錄影 132:00', blocks:[
+        {h:'綁定與使用',steps:['電腦版 Codex 點自己姓名旁邊的手機圖示，會出現 QR Code','用手機掃描綁定','手機打開 ChatGPT App → 點 <b>Remote</b> → 選到你這台電腦 → 找到釘選的聊天 → 開始口述']},
+        {h:'平台',tip:'他說以前只支援 Mac，大約一個月前已經新增 Windows。他上課用的就是 Windows。'},
+        {h:'目前的麻煩',warn:'單一對話沒辦法拉到手機桌面變成一個 icon，只能「釘選」在最上面。所以每次要用都得走「開 App → Remote → 選電腦 → 找釘選的聊天」四步。他說「這個地方麻煩，以後再來思考」。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-codex2-notes.html#sec-ledger" style="color:var(--purple)">筆記 13：專題二 口述記帳</a>'}]}
+    ]
+  },
+  reimburse: {
+    key:'reimburse', color:'var(--green)', emoji:'📊', code:'CHAPTER 03', title:'專題一：多檔核銷彙整',
+    intro:'五個同事交來五種格式的核銷資料，變成一張財務能用的明細表、一頁雙擊就開的互動儀錶板，再加一份疑似重複報支清單。',
+    topics:[
+      {t:'先讓學員看到資料有多亂', s:'Excel、Word、CSV、記事本，欄位全都不一樣｜錄影 44:00–48:00', blocks:[
+        {h:'五個檔案亂在哪',table:{head:['檔案','格式','亂在哪'],rows:[['員工Ａ（業務部）','.xlsx','最乖：核銷人、部門、日期、類型、用途、金額、付款方式、發票號碼都有'],['員工Ｂ（資訊部）','.docx','沒有表格，整份用分號串成條列句'],['員工Ｃ（人資部）','.docx','沒寫自己是誰，只有日期與事項'],['員工Ｄ（行政部）','.xlsx','欄位順序跟Ａ不同'],['員工Ｅ','.csv','純逗號分隔，沒有標題列']]}},
+        {h:'他為什麼不發統一的 Excel 表',p:'因為那是把整理成本推給填表的五個人。大部分人在外面消費完只會隨手記在手機記事本，回辦公室再填一次正式文件——<b>「那你不是做兩次工嗎？」</b>既然 AI 看得懂各種格式，就讓每個人用最省力的方式交。'},
+        {h:'實機畫面',shot:{img:'s3-codex2-img/10-unstructured-input.jpg',cap:'Word 檔裡自己寫著「本檔案刻意使用條列格式，模擬同事未依標準表格提交的情況」。（姓名已代稱化）［46:01］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-codex2-notes.html#sec-five-formats" style="color:var(--green)">筆記 7：五個人交五種格式</a>'}]},
+      {t:'Codex 提的欄位設計：重點在處理規則', s:'原始說明與來源檔案這兩欄不能省｜錄影 56:31', blocks:[
+        {h:'它提的欄位與規則',table:{head:['欄位','處理規則'],rows:[['支出日期','統一轉成日期格式'],['費用類型','歸成交通／餐費／文具／住宿／雜支／課程'],['用途說明','保留<b>原始說明</b>'],['金額','TWD'],['付款方式','現金／公司卡'],['發票號碼','空白或「無」視為未附發票'],['來源檔案','方便追溯']]}},
+        {h:'為什麼這兩欄是關鍵',tip:'「原始說明」與「來源檔案」就是投影片說的「可查核資料」。有了它們，你才能回頭確認 AI 為什麼這樣分類——這是這堂跟一般 AI 課最大的差別。'},
+        {h:'它建議做兩個檔案',ul:['<code>核銷彙整.xlsx</code>：乾淨明細表，方便財務保存、篩選、後續加工','<code>核銷互動儀表板.html</code>：不需要登入、不需要後端，直接打開就能看']},
+        {h:'實機畫面',shot:{img:'s3-codex2-img/12-column-schema.jpg',cap:'欄位表右欄的處理規則比欄位名稱本身更有價值。［56:31］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-codex2-notes.html#sec-two-habits" style="color:var(--green)">筆記 8：Codex 討論回來的東西</a>'}]},
+      {t:'互動儀錶板：先給結論，再給圖表', s:'不是花俏簡報頁，是財務核銷工作台｜錄影 72:18', blocks:[
+        {h:'版面設計原則（Codex 自己寫的）',p:'「會偏『財務核銷工作台』，不是花俏簡報頁：<b>第一眼看到總額與異常，下面才是圖表</b>。」'},
+        {h:'頁面上有什麼',ul:['最上面四個數字：總核銷金額、筆數、平均單筆、<b>缺發票筆數（紅字）</b>','一整排篩選器：月份／部門／核銷人／費用類型／付款方式','部門分布圓餅圖＋費用類型長條圖，點圓餅任一部門，上方篩選器與下方明細同步切換']},
+        {h:'為什麼不放在 Excel 裡',tip:'Codex 建議做網頁版，理由是 Excel 裡做互動圖表太複雜。他同意——讓 Codex 做網頁版反而快。'},
+        {h:'實機畫面',shot:{img:'s3-codex2-img/14-dashboard.jpg',cap:'儀錶板全貌：缺發票 7 筆用紅字標出來。［72:18］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-codex2-notes.html#sec-dashboard" style="color:var(--green)">筆記 9：明細表加互動儀錶板</a>'}]},
+      {t:'抓疑似重複報支：它比對的不是發票號碼', s:'不特別講它不會抓，而且它會誤報｜錄影 76:00–92:00', blocks:[
+        {h:'先講的兩件事',ul:['<b>不特別下指令，它不會主動抓。</b>他在資料裡埋了兩組重複，第一版彙整沒有抓出來','第一次指令還下錯了：他說「忽略沒有發票的」，Codex 理解成「只看有發票的」，得補一句釐清']},
+        {h:'釐清後的指令',prompt:'缺發票的屬於正常現象，你只需要看重複核銷的'},
+        {h:'它回報的判斷依據',p:'「沒有發現『同發票號碼』重複，也沒有完全相同的日期、金額、用途、類型重複。不過有 <b>2 組需要人工確認</b>的疑似重複核銷。」每一組下面都寫明理由：<b>同日、同金額、同類型，用途高度相近</b>。'},
+        {h:'最容易誤會的地方',warn:'它靠的<b>不是發票號碼</b>。當場有學員猜是不是號碼一樣，他回「其實不一樣」——兩筆號碼不同，它是透過品項與用途的內容找到的。所以連「內訓住宿」與「教育訓練住宿」這種寫法不同也抓得出來。反過來說，這也意味著<b>它會誤報</b>，所以輸出寫的是「需確認」不是「重複」。'},
+        {h:'實機畫面',shot:{img:'s3-codex2-img/16-duplicate-found.jpg',cap:'請看它的判斷理由，不是結果。（人名已代稱化、發票號碼已遮蔽）［82:01］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-codex2-notes.html#sec-duplicate" style="color:var(--green)">筆記 11：讓 AI 抓重複報支</a>'}]},
+      {t:'錯了就截圖給他看', s:'全堂用了三次，每次都是截圖＋一句話｜錄影 73:19', blocks:[
+        {h:'三次都一樣的處理方式',table:{head:['出了什麼錯','他做了什麼'],rows:[['儀錶板圓餅圖顏色跟部門顏色不一致，切片數比實際部門多','截圖＋一句「圓餅的顏色跟部門顏色不一致」'],['記帳 Excel 的星期欄跑出 <code>aaa</code>','截圖給它，它重寫'],['會議紀錄 Word 檔整份變成問號亂碼','截圖給它，它重寫']]}},
+        {h:'它修完的回報值得看',p:'它不只說改好了，還說<b>自己實際點過圓餅測試</b>：點其中一個部門後明細從全部 25 筆切成該部門 5 筆，指標同步更新，前端沒有錯誤。'},
+        {h:'為什麼這比重寫提示詞好',tip:'「錯了就截圖給他」比「一次寫對」更容易複製。你不需要學怎麼描述問題，直接把畫面給它看就好。'},
+        {h:'實機畫面',shot:{img:'s3-codex2-img/15-screenshot-feedback.jpg',cap:'輸入框裡就這一句話：「圓餅的顏色跟部門顏色不一致」。［73:19］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-codex2-notes.html#sec-no-prompt" style="color:var(--green)">筆記 10：他不教提示詞</a>'}]}
+    ]
+  },
+  skill: {
+    key:'skill', color:'var(--cyan)', emoji:'🧩', code:'CHAPTER 04', title:'核心一課：存成技能',
+    intro:'如果整堂只能帶走一件事，是這一章。六月核銷做完之後，他沒有直接做七月——他先把剛才走過的整段流程存成技能。',
+    topics:[
+      {t:'一句話把流程存下來', s:'不用重述欄位、不用重述規則｜錄影 89:31', blocks:[
+        {h:'他打的全部內容',prompt:'上述核銷過程，建立一個技能'},
+        {h:'為什麼這麼短就夠',p:'因為欄位設計、異常判斷規則、儀錶板要長什麼樣，<b>全部都在上面的對話裡</b>。Codex 產出一份 <code>SKILL.md</code>，把這次專案的產生器整理成技能內可重複使用的腳本。'},
+        {h:'之後怎麼用',prompt:'使用費用核銷技能，處理七月這個資料夾內的檔案'},
+        {h:'實機畫面',shot:{img:'s3-codex2-img/17-make-it-a-skill.jpg',cap:'輸入框裡就這一句。［89:31］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-codex2-notes.html#sec-skill" style="color:var(--cyan)">筆記 12：把流程存成技能</a>'}]},
+      {t:'為什麼他不用別人的技能', s:'不是好不好的問題，是合不合適｜錄影 89:13', blocks:[
+        {h:'他的原話',p:'「我覺得不合適的原因不是說別人的技能不好，<b>而是你根本不知道別人的技能裡面在搞什麼鬼</b>。所以你不是好不好問題，是合不合適的問題。你自己帶 AI 做過一次，然後你再叫 AI 來做一樣的事情，是不是你就心裡面很有底、你很有把握他做得對。」'},
+        {h:'關鍵在哪',tip:'因為剛剛的練習你是<b>看著它一步一步完成</b>的，所以這個技能保證符合你的需求。這也是為什麼「先帶 AI 走一次」比「找一個現成的技能」重要。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-codex2-notes.html#sec-skill" style="color:var(--cyan)">筆記 12：把流程存成技能</a>'}]},
+      {t:'技能與對話的分工：一個會忘，一個不會', s:'對話會滿，102K／258K 的實測數字｜錄影 106:00–108:00', blocks:[
+        {h:'四個維度比一比',table:{head:['維度','對話','技能'],rows:[['作用範圍','只在這個對話裡記得','<b>全域</b>，任何對話、任何專案都找得到'],['會不會忘','會，對話越長越前面越容易忘','不會，永遠記得'],['效率','資料量越大效率越低','不受對話長度影響'],['什麼時候用','同一個對話裡繼續做下個月，不用技能也行','要跨對話、跨專案重複使用時']]}},
+        {h:'實測數字',p:'核銷這個對話已經用掉 <b>102K</b> token（他說約十萬字），上限 258K，也就是已經用掉 40%。「你如果這邊越做越多，越前面他就會忘記。」'},
+        {h:'學員補的一句',tip:'「要跨專案就放全域。」他回「對，沒有錯」。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-codex2-notes.html#sec-skill" style="color:var(--cyan)">筆記 12：技能與對話的分工</a>'}]},
+      {t:'怎麼驗證技能真的存下來了', s:'開一個全新對話問它｜錄影 107:31', blocks:[
+        {h:'驗證方式',steps:['開一個<b>全新的對話</b>（不是原來那個）','問它「你查看技能裡面有沒有費用核銷技能，如果有的話簡略說明用途與功能」','看它答不答得出來']},
+        {h:'它完整答出來的內容',ul:['支援 Excel／CSV／Word 混合格式的員工費用報支資料','把不同來源的欄位統一成一張明細表','產出財務可用的彙整 Excel 工作簿','需要時產生互動式 HTML 儀錶板','可檢查疑似重複報支（發票號碼重複／日期金額類別說明完全相同／金額相同日期接近說明相似）','特別偏向台灣繁體中文的費用報支情境']},
+        {h:'它自己補的誠實話',warn:'最後一行它說：技能檔裡有些中文欄位名出現亂碼，應該是編碼問題，但技能用途和流程本身是清楚的。這種主動說明限制的回報，比只說「好了」有用得多。'},
+        {h:'實機畫面',shot:{img:'s3-codex2-img/18-skill-cross-chat.jpg',cap:'全新對話裡，它完整說出技能的用途與功能。［107:31］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-codex2-notes.html#sec-skill" style="color:var(--cyan)">筆記 12：把流程存成技能</a>'}]}
+    ]
+  },
+  speak: {
+    key:'speak', color:'var(--orange)', emoji:'🗣️', code:'CHAPTER 05', title:'專題二、三：口述變文件',
+    intro:'兩題都是同一件事：把非結構化的語言，變成結構化的正式文件。差別在一題從零開始討論欄位，一題要照既有版型填。',
+    topics:[
+      {t:'口述記帳：三層結構與可追溯的原始口述', s:'從零開始跟 Codex 討論欄位｜錄影 112:00–120:00', blocks:[
+        {h:'它設計的三層',steps:['<b>第一層每日明細</b>：日期、星期、時段、店家／地點、品項、分類、金額、幣別、付款方式、是否必要、情境、備註','<b>第二層月份統計</b>','<b>第三層原始口述</b>——語音辨識聽錯時可以追回原話']},
+        {h:'它反問的三件事（他只挑要緊的答）',ul:['個人生活記帳還是報帳／公司用途？→ 個人','口述通常很完整還是很短？→ 很短','Excel 要偏簡單好填還是偏完整方便分析？→ 完整（反正不是人在填）']},
+        {h:'分類交給它自己判斷',tip:'他刻意不指定分類，讓 Codex 自己判斷。他的話是「分類你幫我分，我不想要指引你」。'},
+        {h:'它主動舉的例子',shot:{img:'s3-codex2-img/19-ledger-field-map.jpg',cap:'它自己舉例：「今天早上在 7-11 買早餐 85 元，用 Line Pay」→ 直接排成表格。用一個例子讓你在動手前就知道成果長什麼樣。［116:31］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-codex2-notes.html#sec-ledger" style="color:var(--orange)">筆記 13：專題二 口述記帳</a>'}]},
+      {t:'講錯話也沒關係：即時更正它聽得懂', s:'一句話裡自己改口，它拆成兩筆｜錄影 125:31', blocks:[
+        {h:'他當場口述的句子',p:'「我現在在 7-11 買了一個春之茶<b>十五塊，講錯了是二十塊</b>，還有一個麵包菠蘿麵包三十五塊。」'},
+        {h:'它的回覆',p:'「收到，這句裡有一個<b>即時更正</b>：『十五塊』改成『二十塊』。我會記成兩筆 7-11 消費，並把完整原始口述也存進 <code>原始口述</code> 方便追溯。」'},
+        {h:'順手暴露的技術坑',warn:'同一段它自己說：PowerShell 管線又把中文路徑轉成問號，這次改用暫時腳本檔處理。他說 Windows 上中文路徑的問題「我每天都遇到」。'},
+        {h:'實機畫面',shot:{img:'s3-codex2-img/20-ledger-selfcorrect.jpg',cap:'他把手機拿起來拍給大家看。［125:31］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-codex2-notes.html#sec-ledger" style="color:var(--orange)">筆記 13：實測講錯話</a>'}]},
+      {t:'口述報價單：先想清楚三件事再開口', s:'口述內容、檔名格式、自動建資料夾｜錄影 142:00–148:00', blocks:[
+        {h:'他事前想清楚的三件事',steps:['<b>口述要包含什麼</b>：客戶、品名、單價、數量，有備註再加','<b>檔名格式</b>：日期＋報價，副檔名 <code>.xlsx</code>','<b>要自動建資料夾放</b>，不同客戶分開']},
+        {h:'防止它自作聰明重做一份的那一句',prompt:'檔案格式要使用我提供的那個檔案報價格式'},
+        {h:'它反問的，他一一裁掉',table:{head:['它問','他答'],rows:[['要不要建客戶清單','要'],['同一天同客戶多張怎麼辦','照你的建議'],['客戶資料從哪來','口述，缺的我自己補'],['要不要建產品價格表','先不用'],['要不要順便產 PDF','先不用，我看過再產']]}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-codex2-notes.html#sec-quote" style="color:var(--orange)">筆記 14：專題三 口述報價單</a>'}]},
+      {t:'不要破壞版型：只填既有儲存格', s:'它把範本逐列講出來｜錄影 148:01', blocks:[
+        {h:'它讀完範本後的回報',ul:['品項標題列在<b>第 10 列</b>','品項內容從<b>第 11 列</b>開始','稅金<b>第 18 列</b>、總計<b>第 19 列</b>、備註<b>第 20 列</b>']},
+        {h:'它的自我約束',p:'「第一版我會盡量<b>不破壞格式，只填既有儲存格</b>。品項如果超過 7 項，再討論要不要自動插入列；先以目前範本的 7 列品項為上限最穩。」'},
+        {h:'為什麼這一段值得抄',tip:'給版型檔不夠，還要讓它<b>先把版型講回來給你聽</b>。它講得出第幾列是什麼，你才知道它真的讀懂了。'},
+        {h:'實機畫面',shot:{img:'s3-codex2-img/22-quote-template-rows.jpg',cap:'它把範本的列位逐項講出來。［148:01］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-codex2-notes.html#sec-quote" style="color:var(--orange)">筆記 14：不要破壞版型</a>'}]},
+      {t:'從一句話到傳給客戶：全程不打字', s:'手機口述、手機看檔、手機傳 PDF｜錄影 155:00–164:00', blocks:[
+        {h:'完整動線',steps:['手機打開 Codex 對話，口述客戶、品項、單價、數量','它產出 <code>.xlsx</code>，自動命名（日期＿客戶＿報價.xlsx）並開好以客戶命名的資料夾','從<b>手機的雲端硬碟 App</b> 打開檔案看一眼','要改就再講一句（客戶說預算不足，數量從 4 改成 3，它重算總價）','沒問題就用手機的<b>共用 → 傳送副本 → PDF</b>，直接傳到 LINE']},
+        {h:'它先給解析結果讓你核對',p:'產出檔案之前，它會把口述拆成品名／數量／單價／小計四欄列出來——<b>先讓人看解析對不對，再看檔案</b>。'},
+        {h:'一定要檢查的地方',warn:'他報價時把客戶名稱唸錯、AI 也聽錯過一次。他的反應是「名字錯了沒關係，等下再做修改，這個名字也很常聽錯，這正常」。<b>人名與專有名詞是語音辨識最容易錯的地方，這一步的檢查不能省。</b>'},
+        {h:'實機畫面',shot:{img:'s3-codex2-img/23-quote-result.jpg',cap:'解析結果先給你核對。（客戶名稱與金額已遮蔽）［155:04］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-codex2-notes.html#sec-quote" style="color:var(--orange)">筆記 14：從產出到寄給客戶</a>'}]}
+    ]
+  },
+  auto: {
+    key:'auto', color:'var(--rose)', emoji:'⏰', code:'CHAPTER 06', title:'專題四、五：任務與排程',
+    intro:'最後兩題：把會議逐字稿變成有名字有期限的追蹤表，以及讓 Codex 不用你開口也會動。附帶他當場放棄的那一題。',
+    topics:[
+      {t:'會議逐字稿轉進度追蹤表', s:'他要的不是會議紀錄，是誰在什麼時候前要做完什麼｜錄影 170:00–186:00', blocks:[
+        {h:'流程',steps:['把三份會議逐字稿 <code>.txt</code> 放進專案資料夾','先叫它「摘要資料夾內容」，確認它真的讀到那三份檔案','再交辦兩個交付物：<b>會議紀錄 Word 檔</b>＋<b>進度追蹤表</b>','照慣例加「先討論」']},
+        {h:'追蹤表的四個欄位',ul:['<b>負責人</b>——他強調這一欄是整張表的價值所在','項目（要做什麼）','期限（精確到「2026-07-06（一）17:00 前」）','是否完成（全部預設「否」，等人來勾）＋待確認事項']},
+        {h:'為什麼追蹤表比會議摘要有效',p:'他的原話：「<b>你的名字一旦被獨立出來寫在表格裡面，你就會專心看你到底要做什麼。</b>」看摘要的時候大家心不在焉，看到自己名字後面跟著日期就會動起來。'},
+        {h:'實機畫面',shot:{img:'s3-codex2-img/25-task-tracker.jpg',cap:'一列一件事，負責人、項目、期限、待確認、是否完成。（人名已代稱化）［187:01］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-codex2-notes.html#sec-meeting" style="color:var(--rose)">筆記 15：專題四 會議逐字稿轉追蹤表</a>'}]},
+      {t:'一個很容易做錯的決定：不要做工具', s:'用對話做就好，消耗 token 而已｜錄影 178:00', blocks:[
+        {h:'Codex 一開始問的',p:'要做成<b>本機命令列工具</b>還是<b>網頁介面</b>？「你把逐字稿文字檔丟進去他就產生」——聽起來很專業。'},
+        {h:'他直接否掉',p:'「我不能直接用對話來做嗎？我對話也可以做啊，<b>消耗 token 而已</b>。所以我不用產生 UI，也不用產生本機命令，也不用網頁介面，我就是使用這個對話直接產生。」'},
+        {h:'為什麼這值得單獨列一項',warn:'很多人會被 AI 帶著去做一個沒人用的工具。判準很簡單：<b>這件事只有你一個人做，就用對話；要給很多人用，才做介面。</b>'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-codex2-notes.html#sec-meeting" style="color:var(--rose)">筆記 15：他的判斷</a>'}]},
+      {t:'用口語建排程，不用進「已排程」', s:'它自己換算成排程參數｜錄影 188:00–193:00', blocks:[
+        {h:'他實際講的一段話',prompt:'這是一個自動化的專案，每一個小時，每天早上九點到下午五點之間，\n每一個小時就進我的 Gmail，查看有沒有重要的郵件需要我回覆、需要人工來回覆的。\n如果都是一些廣告信、通知信，那個就不需要；\n如果有需要我回覆的，就把那個信件列表給我。'},
+        {h:'它翻出來的設定',p:'「排程是每天 09:00 到 18:00，每個整點檢查一次 Gmail。它會排除廣告、通知、電子報、收據、驗證碼等不需要回覆的信；如果有需要人工回覆的重要郵件，會列出寄件者、主旨、收到時間、<b>判斷理由</b>和優先順序。」'},
+        {h:'跟 Windows 工作排程器的差別',tip:'那個要你自己指定幾月幾號幾點幾分、每隔多久。AI 的差別是<b>它聽得懂「每天上班時間每小時一次」這種人話</b>，自己換算成參數。'},
+        {h:'不用從「已排程」進去建',ul:['左上角有「已排程」可以建任務，但他刻意開一個普通新對話直接交辦','建完之後它自己會跑到「已排程」裡面','他很喜歡的一個改版：<b>排程有自己獨立的對話紀錄</b>，所有次數的執行都掛在同一個對話下，不會像以前每次執行都生一個新對話']},
+        {h:'實機畫面',shot:{img:'s3-codex2-img/26-scheduled-task.jpg',cap:'它把口語直接翻成排程設定，還交代會列出「判斷理由」。［193:01］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-codex2-notes.html#sec-schedule" style="color:var(--rose)">筆記 16：專題五 排程檢查 Gmail</a>'}]},
+      {t:'排程的坑與「自動化記憶」', s:'時區差 8 小時、同一封信不會重複提醒｜錄影 194:00–208:00', blocks:[
+        {h:'時區這個坑',warn:'建好之後「下次執行」寫的是<b>明天下午五點</b>。他直接問它為什麼，答案是時區——設定的是 09:00 UTC，台灣加八小時就變下午五點。<b>排程建完一定要看一次「下次執行時間」</b>，時區錯了它照樣會跑，只是跑在你不想要的時間。'},
+        {h:'自動化記憶解掉的問題',p:'排程最煩的是同一封信被重複提醒。它把處理過的信記在 <code>memory.md</code>，下次檢查會先讀這個檔。他回完信之後它回報：「已送出，並已更新自動化記憶，<b>下一次檢查不會再把這封列為待回覆</b>。」'},
+        {h:'它還能直接代回',ul:['他只說一句「幫我回復 1，說可以」','它就回了「可以，我會出席，謝謝」並送出','兩封待回信件裡，一封是他自己寄來的測試信，一封是真的']},
+        {h:'實機畫面',shot:{img:'s3-codex2-img/27-gmail-triage.jpg',cap:'代回信件並更新自動化記憶。（收件人已遮蔽）［208:36］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-codex2-notes.html#sec-schedule" style="color:var(--rose)">筆記 16：時區與自動化記憶</a>'}]},
+      {t:'他當場放棄的那一題：LINE 進不了 Codex', s:'整堂唯一的失敗，沒有剪掉｜錄影 14:00–22:00', blocks:[
+        {h:'他原本想做的',p:'客戶直接在 LINE 裡說要買什麼，系統就自動產生報價單，他只負責檢查後轉傳。'},
+        {h:'卡在哪',ul:['<b>LINE 訊息是不定時的</b>，不像排程可以固定時間觸發','<b>Codex 沒辦法被外部觸發</b>，LINE 的 Webhook 打不進來','<b>呼叫 API 不等於呼叫 Codex</b>：API 只能打到 OpenAI，網頁版能產出 Excel 但檔案留在網頁上；他要的是檔案直接落在自己電腦','唯一的路是 <code>codex exec resume</code> 遠端呼叫，但那次執行<b>不會留在對話紀錄裡</b>，他要長期看得到報價歷史，所以不合格']},
+        {h:'他最後怎麼做',warn:'「所以我後來想想，先把他終止掉。」他把時間留給真的做得出來的五個專題。<b>整堂三小時半只有這一題失敗，而它剛好講清楚了 Codex 目前的邊界。</b>'},
+        {h:'替代路線在專題五',tip:'把 LINE 訊息固定轉存到 Email，再讓排程每小時去撈一次——就是專題五做的事。只是會有半小時到一小時的延遲。'},
+        {h:'實機畫面',shot:{img:'s3-codex2-img/03-line-to-codex-limit.jpg',cap:'Codex 的回答分兩層，技術上通但要自己架 webhook server。［20:31］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-codex2-notes.html#sec-line-fail" style="color:var(--rose)">筆記 3：誠實的一段</a>'}]}
+    ]
+  }
+};
+
+const ORDER = ['habits','dictation','reimburse','skill','speak','auto'];
+const $ = s=>document.querySelector(s);
+function renderChapter(ch){
+  const d=DATA[ch];const next=ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];const prev=ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html=`<div class="chapter-head"><span class="emoji">${d.emoji}</span><div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div></div>`;
+  d.topics.forEach((tp,i)=>{const id=`${ch}-${i}`;
+    html+=`<div class="topic" id="topic-${id}"><div class="topic-head" onclick="toggleTopic('${id}')"><span class="num">${i+1}</span><h4>${tp.t}<small>${tp.s}</small></h4><input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)"><span class="chev">▶</span></div><div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{html+=`<div class="block"><h5>${b.h}</h5>`;
+      if(b.p)html+=`<p>${b.p}</p>`;
+      if(b.ul)html+=`<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps)html+=`<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.table)html+=`<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.prompt)html+=`<div class="promptbox">${b.prompt}</div>`;
+      if(b.shot)html+=`<figure class="shot"><img src="${b.shot.img}" alt="" loading="lazy"><figcaption>${b.shot.cap}</figcaption></figure>`;
+      if(b.tip)html+=`<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn)html+=`<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html+=`</div>`;});
+    html+=`</div></div></div>`;});
+  html+=`<div class="chapnav"><a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a><a onclick="showHome()" style="text-align:center">回總覽<b>🏠 五大主題</b></a><a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a></div>`;
+  $('#view-'+ch).innerHTML=html;
+}
+ORDER.forEach(renderChapter);
+function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('#view-'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function showHome(){switchView('home');$('#crumbs').style.display='none';clearSearch();}
+function showChapter(ch){switchView(ch);$('#crumbs').style.display='flex';$('#crumbHere').textContent=`${DATA[ch].emoji} ${DATA[ch].title}`;clearSearch();syncChecks();}
+function toggleTopic(id){$('#topic-'+id).classList.toggle('open');}
+function openTopic(ch,i){showChapter(ch);const el=$('#topic-'+ch+'-'+i);el.classList.add('open');setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+const KEY='s3-codex2-skills-v1';
+const store=()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){const s=store();if(val)s[id]=1;else delete s[id];localStorage.setItem(KEY,JSON.stringify(s));updateProgress();}
+const TOTAL=ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){const done=Object.keys(store()).length;const pct=Math.round(done/TOTAL*100);$('#progFill').style.width=pct+'%';$('#progText').textContent=`${done} / ${TOTAL} 項技能已掌握`;$('#statDone').textContent=done;$('#statPct').textContent=pct+'%';ORDER.forEach(ch=>{const sub=DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;const el=document.querySelector(`[data-mini="${ch}"]`);if(el)el.style.width=Math.round(sub/DATA[ch].topics.length*100)+'%';});}
+function syncChecks(){const s=store();document.querySelectorAll('input[data-skill]').forEach(cb=>{cb.checked=!!s[cb.dataset.skill];});}
+function resetProgress(){if(confirm('確定要清空所有打勾進度嗎？')){localStorage.removeItem(KEY);syncChecks();updateProgress();}}
+function stripTags(s){return s.replace(/<[^>]+>/g,'');}
+const INDEX=[];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{let body=tp.s+' ';tp.blocks.forEach(b=>{if(b.p)body+=stripTags(b.p)+' ';if(b.ul)body+=b.ul.map(stripTags).join(' ')+' ';if(b.steps)body+=b.steps.map(stripTags).join(' ')+' ';if(b.tip)body+=stripTags(b.tip)+' ';if(b.warn)body+=stripTags(b.warn)+' ';if(b.prompt)body+=stripTags(b.prompt)+' ';if(b.table)body+=b.table.rows.flat().map(stripTags).join(' ')+' ';});INDEX.push({ch,i,title:tp.t,body});}));
+$('#searchInput').addEventListener('input',e=>{const q=e.target.value.trim();const box=$('#searchResults');if(!q){box.classList.remove('show');box.innerHTML='';return;}const hits=INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));box.classList.add('show');if(!hits.length){box.innerHTML=`<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：先討論、聽寫、技能、儀錶板、重複報支、報價單、排程）</div>`;return;}const hl=s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);box.innerHTML=hits.map(x=>{const pos=x.body.toLowerCase().indexOf(q.toLowerCase());const snip=x.body.substr(Math.max(0,pos-20),90);return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})"><div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div><h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;}).join('');});
+function clearSearch(){$('#searchInput').value='';$('#searchResults').classList.remove('show');$('#searchResults').innerHTML='';}
+syncChecks();updateProgress();
+
+</script>
+</body>
+</html>
