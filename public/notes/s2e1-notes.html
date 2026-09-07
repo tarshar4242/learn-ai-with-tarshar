@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第二季第一堂 課堂筆記｜工具一直換，能解決你手上問題的才叫好工具</title>
+<meta name="description" content="生成式AI應用電台・訂閱制第二季第一堂（益師傅，2026/04/10 直播，全長 2 小時 47 分）課堂筆記：NotebookLM 外掛把網頁與影片直接送進 Project、來源分門別類、Canva Magic Layers 修中文亂碼實測失敗、紅框加提示詞的「錨定原理」、自寫 ECF PDF/IMG Editor 的偵測與框選三種改法、把提示詞改寫成 Claude Skill、Perplexity 的 Create Skill、從 Google Opal 流程轉成簡報產生器 Skill、台股分析提示詞做成 Gem（FinMind 版與證交所 CORS 的差別）、Ollama 搭 Gemma 4 的記憶體門檻與 Page Assist、自製 OmniMind 三模型辯論與離線 TTS，以及 Mirage Studio 串 Pollinations 的生圖、去背、裁切與風格融合。依錄影 304 張關鍵畫面＋2378 段逐字稿整理。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#1d7a70; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:760px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px;max-height:calc(100vh - 90px);overflow-y:auto}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:7px;border-left:none;font-size:13px}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.code{position:relative;background:var(--code);border:1px solid var(--line2);border-radius:10px;padding:13px 15px;margin:10px 0;font-size:13px;line-height:1.75;color:var(--ink);white-space:pre-wrap;font-family:"Cascadia Code",Consolas,monospace;overflow-x:auto}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.iframe-wrap{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000;margin:14px 0}
+.iframe-wrap iframe{display:block;width:100%;height:460px;border:0}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static;max-height:none} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} .iframe-wrap iframe{height:320px} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/#ecf" style="border-color:#b9dcd7" onclick="if(history.length>1){history.back();return false}">← 回上一頁</a>
+  <b>📝 第二季第一堂 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="s2e1-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 訂閱制第二季 · 第一堂</span>
+  <h1>工具一直換，<span>能解決你手上問題的才叫好工具</span></h1>
+  <p class="lead">「今天我們要講的主題非常非常的多。」他開場第一句就這樣說，然後 2 小時 47 分沒有中場休息，從一個瀏覽器外掛講到本地端的模型。<br>主線是一條由淺到深的階梯：先把 NotebookLM 的<b>入口</b>打通，再用<b>錨定</b>讓 AI 只改該改的那一塊，接著把提示詞升級成隨口就能叫用的 <b>Claude Skill</b>，最後才是<b>本地模型</b>與自己寫的生圖工具；中間他花了整整 15 分鐘勸大家<b>不要盲目追 AI Agent</b>。<br>本頁依<b>錄影 304 張關鍵畫面＋全程逐字稿 2378 段</b>整理，重點段落附影片時間戳。</p>
+  <div class="meta">
+    <span>📅 2026/04/10（五）20:00 直播</span>
+    <span>👤 講師：益師傅（楊俊益・ECF）</span>
+    <span>⏱️ 全長 2 小時 47 分（單段錄影）</span>
+    <span>🧩 主題：外掛串流程 × 提示詞變技能 × 本地模型</span>
+    <span>🔰 小白友善</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-overview">1. 一張圖看懂這堂</a>
+  <a href="#sec-nblm">2. 先把入口打通：讓資料自己走進 NotebookLM</a>
+  <a href="#sec-canva">3. 誠實的一段：Magic Layers 把對的字也改壞了</a>
+  <a href="#sec-anchor">4. 錨定原理：畫一個紅框，AI 就只改那一塊</a>
+  <a href="#sec-editor">5. 他寧可自己寫工具：偵測、框選、圖選三種改法</a>
+  <a href="#sec-skill">6. 把提示詞升級成技能：Skill 不必進到某個機器人裡</a>
+  <a href="#sec-opal">7. 從 Opal 流程到 Skill：講一句話就自動叫用</a>
+  <a href="#sec-stock">8. 同一份台股提示詞，換掉資料來源就活了</a>
+  <a href="#sec-ollama">9. 本地模型不是給每個人的：先看你的記憶體</a>
+  <a href="#sec-omnimind">10. 一個本地端 UI 長什麼樣：三個模型自己辯論</a>
+  <a href="#sec-lesson">11. 全場最重要的一段：不要追，先問你要解決什麼</a>
+  <a href="#sec-mirage">12. Mirage Studio：不用錢的生圖、去背與裁切</a>
+  <a href="#sec-real">13. 這堂課真正在教的事</a>
+  <a href="#sec-quotes">14. 老師金句</a>
+  <a href="#sec-src">15. 資料來源與整理說明</a>
+</nav>
+
+<article>
+
+<!-- ══════════ 0 ══════════ -->
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--cyan))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>生成式AI應用電台・訂閱制第二季，第一堂</td></tr>
+    <tr><th>直播日期</th><td>2026/04/10（五）20:00，本段錄影全長 <b>2 小時 47 分 16 秒</b>（單段、中間沒有休息）</td></tr>
+    <tr><th>講師</th><td>益師傅（楊俊益・ECF）</td></tr>
+    <tr><th>本堂主題</th><td>瀏覽器外掛串 NotebookLM、圖上中文字的修法、提示詞改寫成 Claude Skill、台股分析 Gem、Ollama 本地模型、自寫生圖工具</td></tr>
+    <tr><th>課程定位</th><td><b>實作課，沒有簡報。</b>全程是他本人的螢幕操作，邊做邊講、失敗也直播</td></tr>
+    <tr><th>要先準備</th><td>Chrome、Google 帳號（NotebookLM／Gemini）、免費的 Groq API Key；想跟著跑本地模型的另外裝 Ollama</td></tr>
+  </table></div>
+
+  <h3>🧰 課堂上用到的工具檔</h3>
+  <p class="cd">這五份是他當堂發到課程資料夾、要大家一起打開跟著做的檔案。檔案本身與下載連結不放在這一頁（見最後一章的說明）。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:250px">工具檔</th><th>課堂上拿來做什麼</th></tr>
+    <tr><td><code>ECF_PDFIMG_Editor v3.6</code></td><td>他自己寫的圖片／PDF 文字重繪工具，三萬多行。第 5 章的偵測、框選、圖選、旋轉重新辨識都在這支上示範</td></tr>
+    <tr><td><code>Mirage_Studio_v2.html</code></td><td>串 Pollinations 的生圖工具，附中文提示詞翻英、去背、裁切、風格融合。第 12 章</td></tr>
+    <tr><td><code>AI辯論大亂鬥-多模式版 v2.html</code></td><td>他取名 OmniMind 的本地端介面，同時串 Ollama、Gemini、Groq 三個模型。第 10 章</td></tr>
+    <tr><td><code>台股深度分析系統（FinMind 版）</code></td><td>台股分析提示詞，課堂上貼進 Gemini 做成 Gem。第 8 章</td></tr>
+    <tr><td><code>簡報產生器</code>（純文字檔）</td><td>從 Google Opal 匯出的流程腳本，課堂上請 Claude 把它改寫成 Skill。第 7 章</td></tr>
+  </table></div>
+
+  <div class="note steel">🔧 <div><b>本頁沒有內嵌錄影。</b>這堂的錄影與工具檔是老師分享給訂閱學員的，取得方式請走原本的課程資料夾與 Line 群記事本；本頁只整理課堂內容與可公開描述的操作方法。</div></div>
+
+  <div class="note gold">🔒 <div><b>本頁的截圖都經過去識別化處理。</b>原始錄影是講師本人整個桌面的螢幕分享，畫面上會出現他的分頁列、網址、擴充功能與帳號名稱。整理成公開頁面時，<b>每一張截圖都裁掉了畫面頂端的瀏覽器外框</b>，另外裁掉側邊欄、檔案清單與帳號區；仍會露出私人項目名稱、API Key 或聯絡電話的地方都加了遮蔽框。線上教室的與會者九宮格畫面一張都沒有採用，逐字稿裡出現的學員暱稱也一律隱去。</div></div>
+</section>
+
+<!-- ══════════ 1 ══════════ -->
+<section class="chapter" id="sec-overview">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--purple))">OVERVIEW</span>
+  <h2 class="ct">1. 一張圖看懂這堂</h2>
+  <p class="cd">這堂表面上是十幾個工具的操作教學，實際上是一條「由淺到深」的階梯，而最後一階不是技術，是判準。</p>
+
+  <div class="svgwrap">
+  <svg viewBox="0 0 980 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="四個階段：打通入口、只改該改的那一塊、提示詞升級成技能、要不要自己養一套；最後收在一個判準：能解決你現在的問題才叫好工具">
+    <defs>
+      <marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+        <path d="M0,0 L9,4.5 L0,9 z" fill="#9B9B9B"/>
+      </marker>
+    </defs>
+
+    <text x="16" y="30" font-size="15" font-weight="700" fill="#1d7a70">這堂的四階階梯</text>
+    <text x="16" y="50" font-size="12.5" fill="#5f5f5f">從「別人的工具幫你省事」一路走到「你要不要自己養一套」，最後停在一個問題上。</text>
+
+    <rect x="16" y="64" width="222" height="104" rx="12" fill="#EEF4FB" stroke="#CFE0F1"/>
+    <text x="127" y="92" text-anchor="middle" font-size="14.5" font-weight="700" fill="#1d5e8f">① 打通入口</text>
+    <text x="127" y="116" text-anchor="middle" font-size="12.5" fill="#5f5f5f">Gemini 直接叫用</text>
+    <text x="127" y="134" text-anchor="middle" font-size="12.5" fill="#5f5f5f">NotebookLM 的 Project</text>
+    <text x="127" y="152" text-anchor="middle" font-size="12.5" fill="#5f5f5f">外掛右鍵就把資料丟進去</text>
+
+    <rect x="258" y="64" width="222" height="104" rx="12" fill="#FBF7EC" stroke="#EFE3C4"/>
+    <text x="369" y="92" text-anchor="middle" font-size="14.5" font-weight="700" fill="#7a5b12">② 只改該改的那一塊</text>
+    <text x="369" y="116" text-anchor="middle" font-size="12.5" fill="#5f5f5f">畫一個紅框，講清楚</text>
+    <text x="369" y="134" text-anchor="middle" font-size="12.5" fill="#5f5f5f">要改哪裡、改成什麼</text>
+    <text x="369" y="152" text-anchor="middle" font-size="12.5" fill="#5f5f5f">整張丟給 AI 只會越改越糟</text>
+
+    <rect x="500" y="64" width="222" height="104" rx="12" fill="#EEF2F5" stroke="#D2DFE7"/>
+    <text x="611" y="92" text-anchor="middle" font-size="14.5" font-weight="700" fill="#255066">③ 提示詞升級成技能</text>
+    <text x="611" y="116" text-anchor="middle" font-size="12.5" fill="#5f5f5f">同一段提示詞改寫成</text>
+    <text x="611" y="134" text-anchor="middle" font-size="12.5" fill="#5f5f5f">Claude Skill 或 Gemini Gem</text>
+    <text x="611" y="152" text-anchor="middle" font-size="12.5" fill="#5f5f5f">講到關鍵字就自動叫用</text>
+
+    <rect x="742" y="64" width="222" height="104" rx="12" fill="#EDF7F1" stroke="#CBE6D5"/>
+    <text x="853" y="92" text-anchor="middle" font-size="14.5" font-weight="700" fill="#166a4c">④ 要不要自己養一套</text>
+    <text x="853" y="116" text-anchor="middle" font-size="12.5" fill="#5f5f5f">Ollama＋Gemma 4 本地模型</text>
+    <text x="853" y="134" text-anchor="middle" font-size="12.5" fill="#5f5f5f">自寫的生圖與去背工具</text>
+    <text x="853" y="152" text-anchor="middle" font-size="12.5" fill="#5f5f5f">先看記憶體，也先看需求</text>
+
+    <line x1="238" y1="116" x2="256" y2="116" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+    <line x1="480" y1="116" x2="498" y2="116" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+    <line x1="722" y1="116" x2="740" y2="116" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+
+    <line x1="490" y1="168" x2="490" y2="200" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+
+    <rect x="16" y="204" width="948" height="80" rx="12" fill="#F4F3F0" stroke="#DBD9D5"/>
+    <text x="490" y="234" text-anchor="middle" font-size="15" font-weight="700" fill="#1d7a70">⑤ 判準：這個工具能不能解決你職場上「現在」的問題？</text>
+    <text x="490" y="258" text-anchor="middle" font-size="12.5" fill="#5f5f5f">不能，就先不要追。先不要談 Create，先談 Renew——把你腦袋裡已有的流程講出來，讓 AI 幫你重做一次。</text>
+    <text x="490" y="276" text-anchor="middle" font-size="12.5" fill="#9B9B9B">全場最花時間的一段（120:00–135:00）講的就是這一格。</text>
+  </svg>
+  <figcaption>四個技術階段都只是手段，最後那一格才是他真正想留給學員的東西：工具會一直換，判準不會。</figcaption>
+  </div>
+
+  <div class="note blue">💡 <div>如果只記得一句話，記這句：<b>「針對你的工作職場上面，會用到什麼功能，能夠解決你現在目前的問題，它就是一個好的工具。」</b>［120:45］</div></div>
+</section>
+
+<!-- ══════════ 2 ══════════ -->
+<section class="chapter" id="sec-nblm">
+  <span class="chip" style="background:linear-gradient(90deg,var(--blue),var(--cyan))">00:00–10:30</span>
+  <h2 class="ct">2. 先把入口打通：讓資料自己走進 NotebookLM</h2>
+  <p class="cd">他從「最簡單的」開始，而這個最簡單的其實解掉一個很煩的日常：找到資料 → 存成檔案 → 再上傳到 NotebookLM 這一串三步動作。</p>
+
+  <h3>一、Gemini 現在可以直接把 NotebookLM 當來源</h3>
+  <p>他先示範 Gemini 的工具選單裡多出來的 NotebookLM 選項：不用再把檔案重新上傳一次，可以<b>直接指定你既有的 NotebookLM Project</b>，讓 Gemini 從那個 Project 的來源裡回答。</p>
+  <p>但他當場也講了保留意見：<b>「這都是理想中的狀態。」</b>平常給檔案都會產生幻覺，說串上 NotebookLM 就不會幻覺，他不確定。這個功能是分批開放的，有人有、有人沒有，他當場請大家回報 1 或 2 清點。</p>
+
+  <figure class="shot">
+    <img src="s2e1-img/01-nblm-import.jpg" alt="Import to NotebookLM 面板，列出可選的 Notebook" loading="lazy">
+    <figcaption>這是外掛的「Import to NotebookLM」面板：搜尋框、一顆 Create New Notebook，下面直接列出你所有的 Notebook 讓你挑一個丟進去。看它的位置——這個面板是<b>從網頁上按右鍵</b>叫出來的，不用先切到 NotebookLM。清單下半段是與課程無關的私人 Notebook，整理時已裁掉。［07:00］</figcaption>
+  </figure>
+
+  <h3>二、真正好用的是那個外掛：右鍵就把東西送進 Project</h3>
+  <p>他重點推的是一個 NotebookLM 專用的 Chrome 外掛 <b>Kortex</b>（Chrome 線上應用程式商店上的標題是「KORTEX: Your Power Toolkit for Google NotebookLM」，十萬名使用者）。裝完之後要做一個很多人會漏掉的動作：</p>
+  <ol class="st">
+    <li>裝好外掛，<b>把 Chrome 完全關掉再重開</b>（不然授權不會生效、圖示不會出現）。</li>
+    <li>點擴充功能圖示，找到它，<b>把大頭針壓下去</b>，讓它固定在工具列上。</li>
+    <li>之後在任何網頁上<b>選取文字 → 按右鍵</b>，選單裡就會出現「送到 NotebookLM」，接著挑要放進哪一個 Project。</li>
+    <li>YouTube 影片頁上有一顆 <code>Import to NotebookLM</code>，一鍵把整支影片加成來源。</li>
+  </ol>
+  <p>他當場示範把一段網頁文字丟進 Project，再切到 NotebookLM 確認那段話真的進去了。<b>「不然你以前要存成檔案，存成檔案之後再到 NotebookLM 裡頭把它 Input 進來。」</b></p>
+
+  <h3>三、來源多了以後，用分門別類來管</h3>
+  <p>加得快，就會亂。他接著指出來源面板上那排篩選鈕——這是這一章最實用、最容易被忽略的一格。</p>
+
+  <figure class="shot">
+    <img src="s2e1-img/02-nblm-source-filter.jpg" alt="NotebookLM 來源面板的分類篩選鈕" loading="lazy">
+    <figcaption>NotebookLM 的來源面板。看中間那兩排鈕：<code>All／PDFs／GDocs／Web／Text／YouTube</code>，再加一顆 <code>Save View</code>。它會自動按來源型態分類，你有一百份資料但只想看 PDF，點一下就好，還能把這個檢視存起來。重要之處在於：<b>外掛負責「加得快」，這排鈕負責「加了不亂」</b>，兩件要一起用。［10:20］</figcaption>
+  </figure>
+
+  <div class="note gold">⚠️ <div><b>這個外掛有每日次數限制。</b>他自己也不確定一天幾次：「網路上都有提到說有次數，但次數是幾次我不曉得。反正不能用隔天再用就好了。」用它做批次匯入之前先有心理準備。</div></div>
+
+  <div class="note steel">🔧 <div><b>外掛拼法的說明。</b>語音辨識把這個外掛聽成「Cortex」，正確拼法是 <b>Kortex</b>——依據是錄影第 4 分 11 秒他打開的 Chrome 線上應用程式商店頁面（標題「KORTEX: Your Power Toolkit for Google NotebookLM」）。本頁採用畫面上的官方寫法。</div></div>
+</section>
+
+<!-- ══════════ 3 ══════════ -->
+<section class="chapter" id="sec-canva">
+  <span class="chip" style="background:linear-gradient(90deg,var(--orange),var(--amber))">10:30–18:00</span>
+  <h2 class="ct">3. 誠實的一段：Magic Layers 把對的字也改壞了</h2>
+  <p class="cd">這一段他本來是要示範一個好用功能，結果現場實測的結論是「不值得用」——而他照實講完，沒有跳過。</p>
+
+  <h3>問題是什麼：AI 生的圖，中文字會爛掉</h3>
+  <p>他先給大家看一張自己在教師研習做出來的圖表，畫面漂亮、字也對。他說這是因為提示詞裡把三件事寫清楚了：</p>
+  <ul class="pt">
+    <li><b>主題</b>——寫「頁面主題」而不是只寫「主題」，不然 AI 會直接去抓來源檔的標題，做出你不要的標。</li>
+    <li><b>風格</b>——他固定寫「麥肯錫專業商業圖表風」，出來的版面才有商業感。</li>
+    <li><b>版型</b>——「五大功能區塊，每個區塊五個條列」，把結構直接規定死。</li>
+  </ul>
+  <p>另外一個很實用的細節：<b>怕它配色亂就直接指定白色背景</b>。理由不是好看，是為了後面好修——<b>「越單純的背景，其實要去改字、改圖比較容易；越絢麗的背景很難改。」</b>［13:30］</p>
+
+  <div class="golden">
+    <div class="q">「用 AI 來改 AI 才是解決的方案。」</div>
+    <div class="a">［13:45］講到絢麗背景的圖幾乎沒辦法手工修，只能再叫另一個 AI 去改。這句是後面第 4 章整套做法的前提。</div>
+  </div>
+
+  <h3>他試的方法：把圖丟進 Canva，用 Magic Layers 掃一遍</h3>
+  <p>操作本身很短，但有一個前置條件不做就找不到功能：</p>
+  <ol class="st">
+    <li>Canva 左下角 → <b>Settings → 語言改成 English (US)</b>。這個功能在中文介面下不會出現。</li>
+    <li>把圖拖進畫布，<b>點選圖片 → 按 Edit</b>。</li>
+    <li>在 <code>Magic Studio</code> 區塊裡選 <b>Magic Layers</b>，它會開始掃描整張圖。</li>
+  </ol>
+
+  <figure class="shot">
+    <img src="s2e1-img/03-canva-magic-layers.jpg" alt="Canva 的 Edit image 面板，Magic Studio 區塊有 Magic Layers、BG Remover、BG Generator" loading="lazy">
+    <figcaption>Canva 點選圖片按 Edit 之後的側邊面板。看 <code>Magic Studio</code> 那一排：<b>Magic Layers／BG Remover／BG Generator</b>——他用的是第一顆。上面 <code>Select area</code> 的 All／Click／Brush 是選範圍，但 Magic Layers 這一顆不吃選區，按下去就是整張一起處理。這正是後面出事的原因。［16:40］</figcaption>
+  </figure>
+
+  <h3>結果：原本對的字全部被改壞</h3>
+  <p>掃完之後畫面確實把圖上的字都變成可編輯的文字方塊了——問題是<b>它連原本正確的字也一起重寫</b>。他把兩張放在一起比對，落差很明顯。</p>
+
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="s2e1-img/04-canva-layers-broken.jpg" alt="Magic Layers 掃描後版面散掉、文字被改錯" loading="lazy">
+      <figcaption>掃完之後：「跨境」變成「跨城」、「全方位資源整合平台」變成「全压位角資整合平台」（連簡體字都跑出來了）、「企業人才」變成「企業財才」、「團建與商機媒合」變成「團建與商機合伙」。<b>看每一塊字外面那個框</b>——它把每段話都轉成獨立文字方塊，位置與行數也一起跑掉了。［17:40］</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="s2e1-img/07-fixed-result.jpg" alt="用錨定法修好之後的高解析結果" loading="lazy">
+      <figcaption>對照組：這是他用第 4 章的紅框錨定法修完、下載後放大 255% 的樣子。「B2B 跨境電商實戰培訓／專注 SEO 搜尋引擎優化、AI 行銷／工具應用及獨立站運營策略」——原本糊掉的字變清楚，<b>而沒被框起來的地方一個字都沒動</b>。［27:40］</figcaption>
+    </figure>
+  </div>
+
+  <div class="note steel">🔧 <div><b>這次示範沒有成功，本頁照實記錄。</b>他的原話是：「我發現它一開始出來的第一天、第二天都還好用，我不曉得最近為什麼突然就全部都會亂掉，而且就不值得用。」他也給了一個「什麼情況才合理」的條件：<b>假如它可以選定哪個範圍做修改，就還合理；現在是整張下去改，原本對的變成不對。</b></div></div>
+
+  <div class="note blue">💡 <div>這一段的價值不在「Canva 不好」，在於它示範了一個判準：<b>一個 AI 修圖功能能不能用，看的不是它會不會辨識，是它能不能只動你指定的範圍。</b>接下來兩章都在講怎麼把範圍指定清楚。</div></div>
+</section>
+
+<!-- ══════════ 4 ══════════ -->
+<section class="chapter" id="sec-anchor">
+  <span class="chip" style="background:linear-gradient(90deg,var(--purple),var(--pink))">18:00–28:00</span>
+  <h2 class="ct">4. 錨定原理：畫一個紅框，AI 就只改那一塊</h2>
+  <p class="cd">這是全場最可以馬上拿去用的一招，也是他自己說「網路上很少人這樣做」的差異化做法。方法笨到不可思議，但有效。</p>
+
+  <h3>第一步：在圖上把有問題的地方框起來</h3>
+  <p>用任何一個畫圖工具（他直接用 Windows 內建的），選紅色線框工具，把糊掉、寫錯的字圈起來。可以圈多個。<b>不要整張圈起來</b>——整張圈等於又回到「全部改」，前一章的問題會原封不動搬過來。</p>
+  <p>框完存成 PNG，檔名寫得看得懂就好，例如 <code>待修改.png</code>。</p>
+
+  <figure class="shot">
+    <img src="s2e1-img/05-red-box-marked.jpg" alt="在圖上用紅色線框把要修的兩處字圈起來" loading="lazy">
+    <figcaption>框好的樣子。<b>只看那兩個紅色細框</b>：一個框住「提供商機媒合與團層人脈」，一個框住「提供獨特商機媒合與團層人脈」——都是原圖上糊掉、AI 生成時寫壞的字。旁邊沒框的區塊他一律不碰。這一步花不到 30 秒，卻決定了後面 AI 動哪裡。［21:30］</figcaption>
+  </figure>
+
+  <div class="note gold">⚠️ <div><b>框線顏色要看圖挑。</b>他用紅色是因為多數圖是白底，紅框最好認；<b>如果整張圖是暖色調、大量紅色，就換藍色或綠色</b>，不然 AI 分不出哪一條是你畫的框。</div></div>
+
+  <h3>第二步：貼那段提示詞，用 Pro 模型改</h3>
+  <p>他強調這段提示詞是自己一個字一個字磨出來的，不是叫 AI 幫他寫的：「我看到網路上很多的提示詞拿來用，我發現都改的不是很好，我就自己去做，一直改一直改。」</p>
+
+  <div class="note steel">📌 <div><b>這段提示詞的原文不放在這裡。</b>那是講師自己磨出來的東西，本頁只公開我整理的學習筆記，不代為公開他的教材原文。原文在課程資料夾與我自己留存的逐幀素材裡，要用請回課程資料夾取。<b>下面這張表把它每一句在防什麼都拆開了，照著自己寫一段也一樣有效。</b></div></div>
+
+  <p>它其實只在講四件事，每一件都對應一種常見翻車：</p>
+  <div class="twrap"><table>
+    <tr><th style="width:190px">提示詞裡那一句</th><th>它在防什麼</th></tr>
+    <tr><td>先進行辨識、儘可能用原字義</td><td>防 AI 自己重寫內容。看不懂才准依上下文推敲，不准自由創作</td></tr>
+    <tr><td>不能超過紅色框線的範圍</td><td>防它順手改到旁邊沒問題的字——第 3 章 Canva 就是敗在這裡</td></tr>
+    <tr><td>字體大小要一樣</td><td>防它改完字型跳掉。他特別提醒<b>「這段話很重要，不然他會變字體」</b>［24:30］</td></tr>
+    <tr><td>重新生成文字後並把紅色框去除</td><td>你畫的框是給 AI 看的記號，不是給讀者看的。這句讓它自己收尾</td></tr>
+  </table></div>
+
+  <figure class="shot">
+    <img src="s2e1-img/06-gemini-anchor-prompt.jpg" alt="Gemini 對話中貼上提示詞並附上框好的圖，正在產生新圖" loading="lazy">
+    <figcaption>Gemini 這一側的操作。<b>看兩個地方</b>：上面灰色泡泡是整段提示詞逐字貼進去，下面附的就是框好紅框的那張圖；產完之後按下方那顆<b>「編輯影像」</b>可以繼續微調。模型選單要選 <b>Pro</b>——他說快捷跟思考模式雖然也能寫出中文字，但要修圖建議用 Pro 比較不會出問題。圖裡的姓名與電話已遮蔽。［26:40］</figcaption>
+  </figure>
+
+  <h3>第三步：不要看預覽，一定要下載</h3>
+  <p>這是最容易白忙一場的地方。改完在對話框裡看，會覺得沒變好；<b>下載下來看，解析度才會加強</b>，原本霧掉的字會變清楚。</p>
+
+  <div class="golden">
+    <div class="q">「你改好之後千萬不要在上面看，預覽不準，一定要下載。」</div>
+    <div class="a">［26:00］有人回報說看起來沒差，他立刻補這一句。這不是技巧，是會害你以為方法沒用的陷阱。</div>
+  </div>
+
+  <h3>同一招還能拿來改內容，不只是修錯字</h3>
+  <p>有學員問能不能連內容一起改。可以，而且是同一套框：框起來 → 告訴它「請把紅色框裡頭的字改為某某」→ 加上「框內字體要一樣」→ 加上「改完把紅色框去除」。他的說法是<b>「雖然很笨，但是一定改得通」</b>。</p>
+
+  <div class="golden">
+    <div class="q">「我不能說我是獨創，我只能說，我叫做差異化。我明確的告訴他，我要做什麼，在哪裡做什麼，在哪一個標的幫我改成什麼。」</div>
+    <div class="a">［23:45］他把這招取名「錨定原理」（Anchor）——下一個錨，指定位置。這句話同時解釋了為什麼「請你用最高清的方式幫我解決」這種提示詞沒用：AI 不知道要解決哪裡。</div>
+  </div>
+
+  <div class="note blue">💡 <div>他把這一招接回自己的老本行做類比：做工廠自動化講的是<b>異常管理</b>——正確的數據照收，但要反應的只有異常那幾筆。改圖同理，<b>標記出錯的字、告訴它怎麼改</b>，比整張丟過去有效。</div></div>
+
+  <div class="note steel">🔧 <div>課堂上還提到一個去除 Gemini 生圖浮水印的 Chrome 外掛，裝法跟第 2 章一樣要重開 Chrome。<b>外掛名稱在逐字稿裡有兩種聽法（Voyager／Moyoyo），本頁不猜拼法，也不放連結。</b></div></div>
+</section>
+
+<!-- ══════════ 5 ══════════ -->
+<section class="chapter" id="sec-editor">
+  <span class="chip" style="background:linear-gradient(90deg,var(--teal),var(--green))">28:00–42:00</span>
+  <h2 class="ct">5. 他寧可自己寫工具：偵測、框選、圖選三種改法</h2>
+  <p class="cd">同一件事（改圖上的中文字），他自己寫了一支三萬多行的桌面工具。這一章值得看的不是工具，是他為什麼要多寫這一支，以及他自己最常用哪一種模式。</p>
+
+  <h3>三種改法，用途完全不同</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">模式</th><th>怎麼運作</th><th>他自己怎麼用</th></tr>
+    <tr><td><b>偵測</b></td><td>按一下，AI 把整張圖上的文字全部找出來、逐條編號列在面板上，你自己勾要改哪幾條</td><td>示範用。<b>「全面很雜很亂，因為太多東西要編輯了。」</b>圖太細它還會一直跑不停</td></tr>
+    <tr><td><b>框選</b></td><td>自己拉一個框，只辨識框裡的字，可以吸底色、可以調旋轉角度後重新辨識</td><td><b>他大部分都用這個。</b>跟第 4 章紅框是同一個思路——先把範圍講清楚</td></tr>
+    <tr><td><b>圖選</b></td><td>選一塊像素直接刪掉，或整塊搬到別的位置（會變透明）</td><td>要「移掉」或「搬走」東西時用，不是拿來改字的</td></tr>
+  </table></div>
+
+  <p>偵測那顆按鈕背後是接 Groq 的視覺 API：它會描述這張圖裡有什麼、再辨識裡面的字。要用就得自己去 Groq 申請一組免費 Key 貼進工具裡。</p>
+
+  <figure class="shot">
+    <img src="s2e1-img/08-ecf-smart-bg.jpg" alt="ECF PDF/IMG Editor 的編輯面板，包含智慧背景替換與編輯文字欄" loading="lazy">
+    <figcaption>他自己寫的 <code>ECF PDF/IMG Editor v3.6</code>。<b>看右側編輯面板的順序</b>：先「清除用背景色」吸一次底色 → 再「智慧背景替換（保留物件）」把容差調到 50 → 最下面「編輯文字」直接打新字，字型選 <code>jf open 粉圓</code>、大小 26、粗細 Bold。左邊那個浮動工具箱是選取、圖選、框選、魔棒、裁切等工具。<b>為什麼重要：這一整條流程就是把第 4 章的「只改該改的一塊」做成按鈕</b>，不必每次重寫提示詞。［40:00］</figcaption>
+  </figure>
+
+  <h3>框選模式裡最值錢的一顆鈕：重新辨識</h3>
+  <p>他花最久寫、也最得意的是斜體字的處理：階層圖、心智圖上的字常常是斜的，斜又糊，一般 OCR 直接放棄。做法是——</p>
+  <ol class="st">
+    <li><b>框選</b>要改的區域，範圍記得<b>要蓋過整段斜字</b>。</li>
+    <li>把框上的<b>旋轉角度</b>轉到跟那段字一樣斜。</li>
+    <li>按<b>「重新辨識」</b>，它會依這個角度重跑一次，出來的字也是斜的。</li>
+  </ol>
+  <p>他也照實說了缺點：辨識完的字級不會自動配好，還要手動再調一次。</p>
+
+  <div class="note gold">⚠️ <div><b>課堂上他自己拿錯版本，示範翻車了。</b>他放在下載資料夾裡的是舊版，改出來的字不夠接近，當場說「這個做的不好，漏氣了」，然後花了幾分鐘找新版沒找到，決定改版後再補給大家。他順帶自嘲：<b>「我以前寫程式版本控管很嚴謹，但我現在都越來越隨便了。」</b>本頁照實記錄，是因為這一段正好說明：<b>拿到工具檔要先確認版本</b>。</div></div>
+
+  <div class="golden">
+    <div class="q">「我們針對有錯的字去標記起來，跟他講要怎麼改，會比起你整篇丟給他，他無所適從。」</div>
+    <div class="a">［28:00］這句是第 3、4、5 三章共同的結論，他在把話題從別人的工具轉到自己的工具時講的。</div>
+  </div>
+</section>
+
+<!-- ══════════ 6 ══════════ -->
+<section class="chapter" id="sec-skill">
+  <span class="chip" style="background:linear-gradient(90deg,var(--pink),var(--rose))">42:00–60:00</span>
+  <h2 class="ct">6. 把提示詞升級成技能：Skill 不必進到某個機器人裡</h2>
+  <p class="cd">課程走到一半，有學員問能不能把第 4 章那段紅框提示詞做成一個「券」（Gem）。他順著這個問題，把 Skill 與 Gem 的差別講清楚——這是整堂在觀念上最重要的一段。</p>
+
+  <h3>做法本身只有一句話</h3>
+  <p>不需要什麼特別語法，就是直接跟 AI 說：</p>
+  <div class="code">請將以下提示詞改為 Skill
+（按 Shift＋Enter 換行，再把整段提示詞貼上來）</div>
+  <p>它會回一份寫成 Skill 格式的文件，含觸發關鍵字與執行步驟。他先在 Perplexity 試，因為<b>Perplexity 的技能功能不用另外付費</b>。</p>
+
+  <figure class="shot">
+    <img src="s2e1-img/09-perplexity-skill.jpg" alt="Perplexity 把提示詞改寫成 Skill 的輸出" loading="lazy">
+    <figcaption>Perplexity 改寫出來的結果。<b>看它自己長出來的結構</b>：先給 Skill 名稱「紅色框線文字辨識與重製」，再拆成「1. 文字辨識範圍」「2. 字義與內容還原」兩節，每節底下是條列規則。原本是一大段沒有斷句的提示詞，改完變成有層次、可以被引用的規格文件。<b>為什麼重要：這一步不是換工具，是把一段話升級成一份規格</b>。［50:10］</figcaption>
+  </figure>
+
+  <div class="note gold">⚠️ <div><b>免費版存不進去。</b>他當場儲存失敗兩次，改走 <code>更多 → 技能 → Create Skill</code> 這條路，結果被要求升級付費。他還特別去問過 AI「Skill 要不要錢」，得到的答案是不用，實際操作卻被擋。<b>他當場請學員回報：能用的按 8、不能用的按 4，全班都是不能用。</b>如果你也卡在這裡，不是你操作錯。</div></div>
+
+  <h3>Skill 與 Gem 到底差在哪</h3>
+  <p>這是這一章真正的重點。他的比較很直接：</p>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">比較的維度</th><th>Gemini 的 Gem（他口中的「券」）</th><th>Claude 的 Skill</th></tr>
+    <tr><td>怎麼啟用</td><td><b>非得進到那個 Gem 裡面</b>才能用</td><td>在<b>一般對話裡</b>提到相關字眼就會被叫用</td></tr>
+    <tr><td>能不能互相叫用</td><td>目前不行</td><td>可以，一次叫 A 也可以再叫 B</td></tr>
+    <tr><td>能不能排程</td><td>可以（Gemini 的排程功能）</td><td>要走 Cowork 那條，要付費</td></tr>
+    <tr><td>能不能分享</td><td>比較麻煩</td><td><b>可以下載，別人按「＋ upload」就能用</b></td></tr>
+  </table></div>
+  <p>他還補了一個歷史對照：兩年前 ChatGPT 的 GPTs 也是一開始不能互相叫用，後來才能用 <code>@</code> 在任何對話裡把某個 GPTs 叫進來。他推測 Gemini 的 Gem 遲早也會走到這一步。</p>
+
+  <figure class="shot">
+    <img src="s2e1-img/10-claude-skill-md.jpg" alt="Claude 產生的 red-box-image-editor SKILL.md" loading="lazy">
+    <figcaption>換到 Claude 做出來的成品，右邊那份就是 <code>red-box-image-editor / SKILL.md</code>。<b>看「觸發情境」那一段</b>——它自己列出一整排會啟動這個技能的說法：「紅色框線」「框起來的地方」「幫我把紅框內的文字改成…」「替換紅框的內容」「把這個框裡的字換掉」。這就是 Skill 跟 Gem 最大的差別：<b>你不用記工具在哪，講人話它就自己出來</b>。右上角那顆 <code>Save skill</code> 按下去才會真的存進技能庫。［61:00］</figcaption>
+  </figure>
+
+  <div class="note steel">🔧 <div><b>命名這件事他自己也還沒解。</b>他直說「Skill 坦白講不是那麼熟」，卡在同一件事有好幾個 Skill 版本時，要怎麼命名才能精準叫到想要的那一支——目前只能下很完整的名稱。這一段本頁照實保留，沒有替他補一個答案。</div></div>
+
+  <div class="golden">
+    <div class="q">「難不是難在做不出來，一定做得出來；難是難在使用者很難去用它。」</div>
+    <div class="a">［74:45］回答學員「能不能把整個工具的全功能做成一個 Gem」。他說寫得出來，但參數多到使用者記不住、又沒有介面可以點，反而比程式難用。這是很少人會說出口的誠實答案。</div>
+  </div>
+</section>
+
+<!-- ══════════ 7 ══════════ -->
+<section class="chapter" id="sec-opal">
+  <span class="chip" style="background:linear-gradient(90deg,var(--blue),var(--purple))">60:00–78:00</span>
+  <h2 class="ct">7. 從 Opal 流程到 Skill：講一句話就自動叫用</h2>
+  <p class="cd">上一章是「把提示詞變成 Skill」，這一章更進一步：把一整套<b>節點流程</b>變成 Skill。這是全場技術含量最高、也最漂亮的一段示範。</p>
+
+  <h3>做法：把流程當純文字丟過去就好</h3>
+  <ol class="st">
+    <li>在 Google Opal 裡打開你做好的流程，<b>Ctrl＋A、Ctrl＋C</b> 整份複製。</li>
+    <li>開一個記事本貼上——你會發現它其實就是一段純文字腳本。</li>
+    <li>丟給 Claude，跟它說「<b>請將以下的 Opal 腳本轉換成 Skill</b>」，順手給它一個名字。</li>
+  </ol>
+  <p>他說 Node-RED 的 JSON 也一樣可以：「因為在 Claude 裡頭他都懂，但是你一定要去符合所有的流程。」</p>
+
+  <figure class="shot">
+    <img src="s2e1-img/11-opal-to-skill.jpg" alt="Claude 把 Opal 腳本轉成 Skill，並列出兩者的差異" loading="lazy">
+    <figcaption>轉換完的對照。<b>左邊是它自己整理的「主要差異（Opal → Claude Skill）」</b>：天氣 API 改用免費的 Open-Meteo（不用 Key）、圖表生成保留 Python matplotlib、插圖改用 Pollinations.ai 免費 API、輸出改成 HTML 簡報＋<code>python-pptx</code> 產 .pptx。<b>右邊是產出的 SKILL.md 與工作流程總覽</b>，步驟 1 分析文件產 10 頁文字，步驟 2a–2f 平行做封面圖、花瓣圖、分類清單圖、SWOT 圖、四張 AI 插圖、抓台北天氣。<b>為什麼重要：AI 不是照抄流程，是把付費節點換成免費做法後再重組</b>。［65:00］</figcaption>
+  </figure>
+
+  <h3>存起來之後，叫用它不用打指令</h3>
+  <p>存進技能庫之後，他丟一份 PDF 進去，只講了一句人話：</p>
+  <div class="code">請根據上傳的檔案 製作成 10 頁簡報，並提供 PPTX 下載</div>
+  <p>Claude 自己去技能庫裡找到那支簡報產生器，然後照流程一步一步跑。</p>
+
+  <figure class="shot">
+    <img src="s2e1-img/12-skill-autocall.jpg" alt="Claude 依關鍵字自動叫用簡報 Skill 並逐步執行" loading="lazy">
+    <figcaption>自動叫用的過程。<b>看它自己宣告的順序</b>：「開始製作 10 頁簡報，依序執行：圖表生成 → AI 插圖 → 天氣資料 → 組裝 HTML + PPTX」，接著逐條跑 <code>Install python-pptx and check fonts</code>、<code>Generate all 4 Python charts</code>、<code>Fetch Taipei weather</code>。<b>使用者只講了一句話，中間沒有任何指令</b>——這就是上一章「不用進到機器人裡」的實際效果。［70:50］</figcaption>
+  </figure>
+
+  <div class="note blue">💡 <div><b>想指定用哪一支 Skill 也可以。</b>他提醒技能庫裡可能有好幾支簡報功能，怕它挑錯就直接寫「請根據某某 Skill 來製作簡報」。另外 Skill 跑起來比較慢，是正常的。</div></div>
+
+  <div class="note steel">🔧 <div><b>產出的風格改不掉這件事他也照講。</b>做出來的簡報「就是 Google 的風格，他顏色就是這樣子，也沒有說不好」——要換風格得回到 Skill 設計時就把每一頁的風格寫進去，不是產完再改。</div></div>
+</section>
+
+<!-- ══════════ 8 ══════════ -->
+<section class="chapter" id="sec-stock">
+  <span class="chip" style="background:linear-gradient(90deg,var(--amber),var(--orange))">78:00–92:00</span>
+  <h2 class="ct">8. 同一份台股提示詞，換掉資料來源就活了</h2>
+  <p class="cd">這一章表面在講股票，實際在講一個很多人踩過的坑：程式沒錯、提示詞沒錯，但資料抓不到，整套就廢了。</p>
+
+  <h3>兩個版本的差別，只在資料從哪來</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">版本</th><th>資料來源</th><th>會遇到什麼</th></tr>
+    <tr><td>舊版</td><td>直接抓台灣證券交易所</td><td><b>CORS 會被阻擋</b>，抓不到就變成錯誤資料，整份分析跟著錯</td></tr>
+    <tr><td>新版（他這次發的）</td><td>改走 FinMind</td><td>只要<b>一分鐘內讀取次數不要過多</b>就抓得到；他實測資料算正確</td></tr>
+  </table></div>
+  <p>做法很單純：把提示詞整段複製，到 Gemini 新增一個 Gem 貼進去、存檔，之後輸入股票代號就會跑。他建議<b>直接給中文名稱最好</b>，代號有時候對不上。</p>
+
+  <figure class="shot">
+    <img src="s2e1-img/13-stock-chart.jpg" alt="Gemini Gem 產出的股價與移動平均線互動式圖表" loading="lazy">
+    <figcaption>Gem 跑出來的互動式網頁圖表。<b>看下面那三顆開關</b>：顯示 MA5／MA10／MA20 可以各自開關，上面是股價與移動平均線、下面是 KD 指標（含超買、超賣區的水平線）。<b>為什麼重要：這不是一張圖，是一頁可以互動的網頁</b>——同一份提示詞，Gemini 直接在對話裡把圖畫出來，Claude 則會給你一份可下載的程式再自己執行。［91:20］</figcaption>
+  </figure>
+
+  <div class="note gold">⚠️ <div><b>這一段不是投資建議。</b>他自己在課堂上講得很清楚：「我不是要叫大家投資，我只是拿他來測試給大家看」、「那個不一定都是 100% 正確的」。本頁不列他提到的個股代號與價位，只保留方法與工具的部分。要用這類分析請自行判斷並自負風險。</div></div>
+
+  <div class="note blue">💡 <div><b>一定要選 Pro 模型。</b>他強調「這樣的運用一定要用 Pro，不然資料會是錯誤的」。抓數字、算指標這種工作，模型等級會直接影響對錯，不是風格差異。</div></div>
+</section>
+
+<!-- ══════════ 9 ══════════ -->
+<section class="chapter" id="sec-ollama">
+  <span class="chip" style="background:linear-gradient(90deg,var(--green),var(--teal))">92:00–104:00</span>
+  <h2 class="ct">9. 本地模型不是給每個人的：先看你的記憶體</h2>
+  <p class="cd">從這裡開始進入「要不要自己養一套」。他先把門檻講清楚，而不是先講怎麼裝——這個順序很重要。</p>
+
+  <h3>Ollama 是圖書館管理員，不是書</h3>
+  <div class="golden">
+    <div class="q">「他是一個有點像是一個圖書館的管理員。」</div>
+    <div class="a">［95:15］講 Ollama 裝完之後右下角出現羊駝圖示的那一刻。管理員本身不會回答你問題，你還要進書（下載模型），而且要另外找一個介面才能借書。</div>
+  </div>
+
+  <h3>硬體門檻：他直接把數字講出來</h3>
+  <ul class="pt">
+    <li><b>沒有獨立顯卡也能跑</b>，但它會吃你的系統記憶體。</li>
+    <li>記憶體只有 <b>8GB 一定跑不動</b>，整台會癱掉；<b>16GB 以上勉強可用</b>。</li>
+    <li>他自己的獨顯是 8GB，所以裝的模型都控制在 8GB 以內。</li>
+    <li>顯卡夠力才考慮大版本；他提到還有 31B 的版本，佔用約 20GB。</li>
+  </ul>
+
+  <figure class="shot">
+    <img src="s2e1-img/14-ollama-gemma4.jpg" alt="Ollama 上 Gemma 4 的模型頁，含尺寸標籤與各版本容量表" loading="lazy">
+    <figcaption>Ollama 上的 Gemma 4 模型頁。<b>看兩個地方</b>：上面那排標籤 <code>vision／tools／thinking／audio／cloud</code> 加上尺寸 <code>e2b／e4b／26b／31b</code>，說明它是多模態、能看圖也能聽音檔；下面 Models 表列出每個版本的實際大小（<code>gemma4:latest</code> 9.6GB、<code>gemma4:e2b</code> 7.2GB，都是 128K 上下文）。<b>為什麼重要：要挑哪一版不是看名字，是拿這張表的容量去對你的記憶體</b>。［95:50］</figcaption>
+  </figure>
+
+  <p>下載就是複製這一行貼進 PowerShell：</p>
+  <div class="code">ollama run gemma4</div>
+
+  <h3>要有介面才用得起來，他推 Page Assist</h3>
+  <p>Ollama 本身沒有好用的對話介面。他試過網路上的 Ollama UI 外掛，評語是<b>「不好用，因為它沒有附加文件的功能」</b>——只能純問答，不能丟檔案。他建議改用 <b>Page Assist</b>，同樣是 Chrome 外掛，可以附文件。</p>
+
+  <figure class="shot">
+    <img src="s2e1-img/15-pageassist-fail.jpg" alt="Page Assist 顯示無法連上 Ollama 的錯誤與 Retry 按鈕" loading="lazy">
+    <figcaption>課堂上真實發生的狀況：Page Assist 上方已經選好 <code>gemma4:e2b</code>，中間卻跳出 <b>Unable to connect to Ollama</b> 與那串 <code>http://127.0.0.1:11434</code>。<b>為什麼放這張</b>：這是照實記錄——當天不只他，學員也一直連線失敗，這一格比「連上了」的畫面有用。［98:20］</figcaption>
+  </figure>
+
+  <div class="note gold">⚠️ <div><b>連線失敗的排除法（他當場摸出來的）：</b>右下角羊駝圖示按右鍵 → Quit 完全離開 → 再開 PowerShell 貼上 <code>ollama run gemma4</code> 強制執行一次。另外先<b>用 Page Assist 的模型下拉選單確認模型真的在</b>，不要拿他的工具去驗；模型沒下載成功就不可能連得上。</div></div>
+</section>
+
+<!-- ══════════ 10 ══════════ -->
+<section class="chapter" id="sec-omnimind">
+  <span class="chip" style="background:linear-gradient(90deg,var(--cyan),var(--blue))">104:00–120:00</span>
+  <h2 class="ct">10. 一個本地端 UI 長什麼樣：三個模型自己辯論</h2>
+  <p class="cd">他自己寫了一支網頁，把 Ollama、Gemini、Groq 三個模型接在同一個介面裡。這一章看的是「本地端工具可以做到什麼程度」，以及它真正的價值在哪。</p>
+
+  <h3>四種模式，一個介面</h3>
+  <ul class="pt">
+    <li><b>人機對話</b>——單一模型，就當成離線版的 Gemini 在用。</li>
+    <li><b>2 模型辯論</b>／<b>3 模型辯論</b>——給一個題目、給每個模型一個立場，設定輪數，讓它們互相打。</li>
+    <li><b>2 模型深析</b>／<b>3 模型深析</b>——不對打，改成分工分析同一件事。</li>
+  </ul>
+
+  <figure class="shot">
+    <img src="s2e1-img/16-debate-arena.jpg" alt="三模型辯論大賽介面，含立場設定與連線紀錄" loading="lazy">
+    <figcaption>三模型辯論的設定畫面。<b>看右側那一欄</b>：辯論主題填「AI 是否會取代人類的工作」，Ollama 立場「支持方 - AI 會取代部分工作」、Gemini「反對方 - AI 不會完全取代人類」、Groq「中立方 - AI 與人類需要共存」，輪數 5 輪。<b>看中間的連線紀錄</b>：Ollama 連線成功找到 14 個模型、Gemini 測到 <code>gemini-2.0-flash</code>、Groq 也通了。左邊是 TTS 引擎選擇（瀏覽器／ElevenLabs／Gemini TTS）。<b>為什麼重要：這說明「本地」不等於「只能用本地模型」——它是本地介面，串誰由你決定</b>。［105:00］</figcaption>
+  </figure>
+
+  <h3>語音那一段：他解釋了為什麼要保留瀏覽器 TTS</h3>
+  <p>Gemini 的 Flash TTS 聲音明顯自然得多，但要付費的 API Key。瀏覽器內建的 TTS 聲音「有點傻傻的」，他還是留著——理由是<b>「萬一你哪一天不用這兩個，只單純用 Ollama 本地端，你可以選擇離線的語音」</b>。這是自己寫工具才做得到的設計取捨。</p>
+
+  <figure class="shot">
+    <img src="s2e1-img/17-omnimind-chat.jpg" alt="OmniMind 人機對話模式，附加 PDF 並使用內建提示詞庫" loading="lazy">
+    <figcaption>人機對話模式，他丟一份 PDF 進去請它分析。<b>看右邊那個「Gem 提示詞庫」</b>：文章潤稿、程式助手、摘要整理、辯論教練——他刻意去學 Gemini 的 Gem，把指令集藏在裡面，選一個就直接套用。<b>看中間的執行進度</b>：讀取附件文字（8K 字元）→ 傳送至 Ollama（gemma4:e2b）→ 等待回應。<b>為什麼重要：能附檔案、能存提示詞，這支才算是可以拿來工作的介面，而不是玩具</b>。［111:40］</figcaption>
+  </figure>
+
+  <div class="note green">✅ <div><b>7B 的小模型做摘要是夠用的。</b>有學員問只有 7B 用得動嗎，他實測後的答案是「還好，可以」——摘要幾個段落、幾個章節都做得到，只是<b>細節度沒那麼好</b>，而且他有在提示詞裡限制「控制在 300 字以內」，因為模型不夠大。</div></div>
+
+  <div class="note blue">💡 <div><b>本地端真正的賣點是資料不出門。</b>他的說法：「假如你離線端的模型夠大的話，你就可以拿他來辦公室端的使用，你就不用聯網，你就不用擔心你的資料可能會有外洩的問題。」對本地部署有需求的企業，他建議直接看 Gemma 4 的 31B 版。</div></div>
+
+  <div class="note steel">🔧 <div><b>他也直接說了限制：這個小版本不能畫圖。</b>圖像解析、音檔解析、文字整理都可以（多模態），生成圖片不行。另外課堂上有一段 TTS 試聽因為沒有分享系統音訊，學員聽不到聲音，他重試了一次——這一段本頁照實記錄。</div></div>
+</section>
+
+<!-- ══════════ 11 ══════════ -->
+<section class="chapter" id="sec-lesson">
+  <span class="chip" style="background:linear-gradient(90deg,var(--rose),var(--pink))">120:00–135:00</span>
+  <h2 class="ct">11. 全場最重要的一段：不要追，先問你要解決什麼</h2>
+  <p class="cd">講完本地模型，他停下所有示範，講了 15 分鐘沒有任何畫面的話。他自己說是「打一個安心的針」。如果這堂只看一章，看這一章。</p>
+
+  <h3>他觀察到的現象：上完課，回去不知道要做什麼</h3>
+  <p>他說每次 AI Agent 的課上完，最多的疑問是「我帶回去到底要做什麼」——只能照著老師的範例跑，做不出自己的東西。他認為原因不在工具難，在於<b>學的人本來就不知道 AI Agent 能幫自己做什麼</b>，全部都是別人給的東西照著做。</p>
+
+  <div class="golden">
+    <div class="q">「先不要談 Create，先談 Renew 的部分。」</div>
+    <div class="a">［120:00］他給的順序：先別想創造新流程，先看你腦袋裡<b>已經有的</b>那套工作方式，用描述的方式講給 AI 聽，讓它幫你重做一次。做得出來、而且真的解掉問題，才算數。</div>
+  </div>
+
+  <div class="golden">
+    <div class="q">「你會做，但是你沒有想法。」</div>
+    <div class="a">［121:30］他用學 Python 類比：你把每個指令都背下來了，叫你寫一個程式還是寫不出來，因為腦袋裡沒有那個想法。裝環境跟解問題是兩件事。</div>
+  </div>
+
+  <h3>他為什麼說「不用一直跟」</h3>
+  <ul class="pt">
+    <li><b>換得太快</b>——「每隔兩三個禮拜又換一個新的做法」，永遠學不完。他建議回頭看兩個月前你熬夜學會的東西，現在還在用嗎？</li>
+    <li><b>權限不在你手上</b>——想串別的部門的系統，對方不一定給你串。「你們公司的 IT 在主導，不是嗎？」</li>
+    <li><b>企業要的不是安裝教學</b>——他跑企業演講的實際經驗：對方要談的是「你目前的解決方案是什麼」，然後派 IT 或 MIS 人員來學，不是全公司一起來學怎麼裝工具。</li>
+    <li><b>少了稽核點就不能上線</b>——他做過 ERP、Workflow、e-Form，一句話點出關鍵：「你的稽核點是什麼？你安全性的驗證在哪裡？」一鍵自動化在五人公司可以，大公司不行。</li>
+  </ul>
+
+  <div class="golden">
+    <div class="q">「術業有專攻，還是分工來得好，不要硬要去做不是你本分做的事情。」</div>
+    <div class="a">［129:15］他的結論不是叫大家別學，是要把力氣放在自己的專家能力上，把實作交給 IT、MIS 或 RD，會同把東西做完——「這才是一個好的系統」。</div>
+  </div>
+
+  <div class="golden">
+    <div class="q">「我不說不要去跟著學，而是要找適合的時機。」</div>
+    <div class="a">［119:15］這句在示範還沒結束時就先講了一次，是整段觀點的入口。他補了一句判準：「你現在目前會用到什麼功能再去學這方面的運用就好，而不用別人用什麼，你就去追什麼。」</div>
+  </div>
+
+  <div class="note steel">🔧 <div><b>他一再強調這是個人觀點。</b>「我個人的觀點，不代表是正確」在這一段講了三次。他也承認自己也在跟、也很急，只是要求自己想清楚再跟。另外他把自己的例子放進來當對照：他比較早跨進生成式 AI 領域，所以能教課、能接專案，同時用 AI 幫自己做投資——他的說法是「善用我的工具去做我想要做的事情」，不是叫大家都去做同一件事。</div></div>
+
+  <div class="note gold">⚠️ <div>這一段中間有幾分鐘轉到投資話題（他提到自己近期的操作績效與「你理財，財會理你」）。<b>那不是投資建議，本頁也不轉述具體標的與數字。</b>放這則說明是因為聽錄影會遇到，先講清楚界線。</div></div>
+</section>
+
+<!-- ══════════ 12 ══════════ -->
+<section class="chapter" id="sec-mirage">
+  <span class="chip" style="background:linear-gradient(90deg,var(--purple),var(--blue))">135:00–160:00</span>
+  <h2 class="ct">12. Mirage Studio：不用錢的生圖、去背與裁切</h2>
+  <p class="cd">最後一段回到工具。這支是他自己寫的生圖介面，重點不是生圖能力，是那兩個「他找很久才找到、而且不用錢」的附加功能。</p>
+
+  <h3>它其實是三個免費服務接起來的</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:130px">用到哪個服務</th><th>負責什麼</th><th>要準備什麼</th></tr>
+    <tr><td>Pollinations</td><td>生圖本體</td><td>免費 API Key。<b>每一組 Key 只能生 10 張</b>，用完手動切下一組</td></tr>
+    <tr><td>Groq</td><td>把中文提示詞翻成英文、解析上傳圖片、生成融合提示詞</td><td>免費 API Key</td></tr>
+    <tr><td>Remove Background API</td><td>去背</td><td>免費 API Key，一天有次數限制</td></tr>
+  </table></div>
+  <p>他解釋為什麼要中間插一層翻譯：<b>Pollinations 本身不吃中文</b>，所以打中文的時候會先送去 Groq 翻成英文，再丟給 Pollinations 生圖。有人問為什麼不用 Gemini 翻——因為 Gemini 的 API 要錢，他還在考慮要不要做成兩用。</p>
+
+  <figure class="shot">
+    <img src="s2e1-img/18-mirage-prompt.jpg" alt="Mirage Studio 的提示詞設定與歷史紀錄" loading="lazy">
+    <figcaption>主畫面。<b>看左欄的順序</b>：先填 Groq API Key（標著「中文翻譯」，說明它只負責翻譯，已遮蔽）→ 圖像描述打中文「一個可愛小女孩走在鄉間小路上」，右邊自動亮起<b>「偵測到中文」</b>→ 下面「翻譯後英文提示詞（實際送出）」會顯示真正丟出去的那一句。<b>為什麼重要：這個欄位讓你看得到 AI 拿到的到底是什麼，中文提示詞出來不對時第一個要看這裡</b>。右邊是歷史紀錄，每張都標了模型（flux／zimage）與時間。［154:40］</figcaption>
+  </figure>
+
+  <h3>他自己最推的功能：去背</h3>
+  <p>去背原本寫在生圖流程裡，後來他獨立出來，因為<b>「有時候你只是單純想圖像去背」</b>——不用生圖，直接拖一張進去按「去除背景」就好。他實測連漸層背景都吃得掉，難一點的圖也還可以。</p>
+
+  <div class="golden">
+    <div class="q">「不用錢的最香。」</div>
+    <div class="a">［148:15］講完去背效果之後。他說這個功能「我真的找好久好久，好幾個，然後一直試到後面發現這一個版本是最好的效果」——這句輕鬆話後面是實際比較過好幾個服務的功。</div>
+  </div>
+
+  <div class="note blue">💡 <div><b>怕撞 Key 就自己申請一組。</b>他把自己的四組 Key 直接開放給學員練習，理由是 Pollinations 註冊要綁 GitHub、步驟有點麻煩。但他也提醒：線上教學時很多人同時用會擠在一起，<b>要穩就自己去註冊</b>，去背那個服務也一樣可以自己申請免費 Key。本頁不放任何 Key。</div></div>
+
+  <h3>另外兩個他熬夜寫出來的功能</h3>
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="s2e1-img/19-mirage-crop.jpg" alt="圖像裁切對話框，使用自由繪製圈選多個區域" loading="lazy">
+      <figcaption><b>圖像裁切</b>。上面有兩種模式，他用的是<b>「自由繪製」</b>——不是拖拉固定格線，而是自己在圖上拉出任意範圍，可以一次圈多塊，再按「匯出全部區域」一次切成好幾張。<b>看提示那一行</b>：「在圖像上拖拉繪製矩形裁切區域，可定義多個區域」。他說網路上很多人做裁切，但可以自訂範圍的少。［150:50］</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="s2e1-img/20-mirage-blend.jpg" alt="圖像風格融合對話框，A 主體 B 風格與融合比例滑桿" loading="lazy">
+      <figcaption><b>圖像風格融合</b>。左邊放<b>圖像 A（主體／內容）</b>、右邊放<b>圖像 B（風格／色調）</b>，中間那條滑桿調融合比例（畫面上是 A 58%／B 42%），按下去由 <b>Groq 分析並生成融合提示詞</b>。它不是把兩張圖疊起來，是<b>讀懂兩張圖之後寫出一段新的提示詞</b>再生成——所以出來的一定不會跟原圖一樣。［158:40］</figcaption>
+      </figure>
+  </div>
+
+  <div class="note gold">⚠️ <div><b>他自己先講了期望管理：</b>「它解析的再棒，畫出來的圖，絕對不會跟原本的一模一樣，所以它只會接近而已。」另外裁切對話框的邊緣點選有時候會跑掉，他的建議是<b>盡量不要點到邊邊</b>。</div></div>
+
+  <div class="note steel">🔧 <div><b>風格選單當場被學員問出一個缺口。</b>有人問「不想用它預設的風格、想完全照自己的提示詞生成」，他試了之後承認選單裡沒有「以提示詞為主」這個選項，不選就會一直畫成日本動漫風——他當場認了：<b>「這算是 BUG 啦」</b>，答應改一版。暫時的解法是把風格寫在提示詞後面（例如「水墨畫風格」）來壓過去。</div></div>
+</section>
+
+<!-- ══════════ 13 ══════════ -->
+<section class="chapter" id="sec-real">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--amber))">TAKEAWAYS</span>
+  <h2 class="ct">13. 這堂課真正在教的事</h2>
+
+  <h3>一、AI 修東西的成敗，取決於你有沒有把範圍講清楚</h3>
+  <p>第 3、4、5 三章講的是同一件事。Canva 的 Magic Layers 失敗，不是因為它辨識不準，是因為它<b>整張一起改</b>；紅框錨定成功，不是因為提示詞高明，是因為<b>它把「動哪裡」變成畫面上看得見的記號</b>。同樣的邏輯搬到他自己的工具裡，就是「框選」比「偵測」好用。要記的不是那段提示詞，是「先指定範圍」這個動作。</p>
+
+  <h3>二、提示詞的下一站不是更長的提示詞，是變成可以被叫用的技能</h3>
+  <p>一段好提示詞留在對話紀錄裡，隔一週就找不到了。第 6、7 章示範的是把它<b>升級成一份規格</b>：Skill 有名字、有觸發關鍵字、有執行步驟，可以下載、可以給別人、可以在任何一句話裡被自動叫起來。Gem 與 Skill 的差別不是哪個強，是<b>要不要先走進某個房間才能用它</b>。</p>
+
+  <h3>三、判斷一個工具要不要學，看它解不解得掉你「現在」的問題</h3>
+  <p>這是他花最久講的一件事，也是他自己說「個人觀點」講最多次的一件事。他不反對學新工具，反對的是<b>照著別人的清單追</b>。判準只有一個：你職場上現在卡在哪裡，那個工具能不能解掉。解不掉，先放著；等你需要它的那天，它可能已經變得比現在簡單十倍了——就像當年要熬夜自己架的東西，現在都變成一顆按鈕。</p>
+
+  <h3>四、失敗要照實講，這件事本身就是教材</h3>
+  <p>這堂有三處當場沒做成：Canva 越改越亂、Perplexity 的 Create Skill 被要求付費、他自己拿錯舊版工具導致效果變差。他一次都沒有跳過或帶過，反而把「為什麼失敗」講成方法。對學員來說，<b>知道哪裡會卡</b>比看到一路順利的示範有用得多。</p>
+
+  <h3>五、免費不等於將就，但要接受它的邊界</h3>
+  <p>整堂他刻意只用不用錢的方案：Open-Meteo 換掉付費天氣 API、Pollinations 換掉付費生圖、Groq 換掉付費翻譯、Ollama 讓模型跑在自己電腦上。代價很清楚——每組 Key 只能生 10 張、去背有每日次數、7B 模型細節度差一點、免費版存不了 Skill。<b>他的做法是把邊界講明白，然後在邊界內把事情做完</b>，而不是假裝沒有邊界。</p>
+</section>
+
+<!-- ══════════ 14 ══════════ -->
+<section class="chapter" id="sec-quotes">
+  <span class="chip" style="background:linear-gradient(90deg,var(--amber),var(--rose))">QUOTES</span>
+  <h2 class="ct">14. 老師金句</h2>
+  <p class="cd">依影片時間先後排。每一則都回錄影核對過原話。</p>
+
+  <div class="golden"><div class="q">「我帶一點簡單的，有時候帶一點難的，好不好？來，我們就從最簡單的開始囉！」</div><div class="a">［00:45］開場。有學員說每次講程式覺得很困擾、可不可以講簡單一點，他的回應是這句——這堂的難易安排就是照這個原則走的。</div></div>
+
+  <div class="golden"><div class="q">「越單純的背景，其實要去改字、改圖比較容易。」</div><div class="a">［13:30］講生成簡報圖時為什麼要直接指定白色背景。判準不是好看，是<b>後面好不好修</b>。</div></div>
+
+  <div class="golden"><div class="q">「用 AI 來改 AI 才是解決的方案。」</div><div class="a">［13:45］絢麗背景的圖幾乎沒辦法手工修，只能請另一個 AI 去改。這句是整堂修圖方法的前提。</div></div>
+
+  <div class="golden"><div class="q">「我不能說我是獨創，我只能說，我叫做差異化。」</div><div class="a">［23:45］講他的「錨定原理」。差異化的內容就是下一句：明確告訴 AI 要做什麼、在哪裡做、在哪一個標的改成什麼。</div></div>
+
+  <div class="golden"><div class="q">「你改好之後千萬不要在上面看，預覽不準，一定要下載。」</div><div class="a">［26:00］會害你誤判方法沒用的陷阱。下載後解析度才會加強。</div></div>
+
+  <div class="golden"><div class="q">「我們針對有錯的字去標記起來，跟他講要怎麼改，會比起你整篇丟給他，他無所適從。」</div><div class="a">［28:00］他用做工廠自動化的「異常管理」類比：正確數據照收，要反應的只有異常那幾筆。</div></div>
+
+  <div class="golden"><div class="q">「我一直告訴自己，我一定不要讓你們覺得我們都輸了一年。」</div><div class="a">［30:45］他說看到班上有老師、講師、業界先進玩得比他厲害，很怕學員後悔繳了年訂閱，所以壓力非常大。這句解釋了他為什麼一直在寫新工具。</div></div>
+
+  <div class="golden"><div class="q">「難不是難在做不出來，一定做得出來；難是難在使用者很難去用它。」</div><div class="a">［74:45］回答「能不能把整支工具的全功能做成一個 Gem」。寫得出來，但參數多到沒人記得住、又沒有介面可點。</div></div>
+
+  <div class="golden"><div class="q">「現在在 Claude 你不用刻意去叫用它，你只要打到相關的字眼。」</div><div class="a">［69:45］對照兩年前 ChatGPT 的 GPTs 要用 <code>@</code> 才叫得出來。這是 Skill 與 Gem 最實際的差別。</div></div>
+
+  <div class="golden"><div class="q">「他是一個有點像是一個圖書館的管理員。」</div><div class="a">［95:15］講 Ollama。管理員不回答問題，你還要進書（下載模型），還要找一個借書的介面。</div></div>
+
+  <div class="golden"><div class="q">「我不說不要去跟著學，而是要找適合的時機。」</div><div class="a">［119:15］整段觀點的入口。判準是「你現在目前會用到什麼功能再去學」。</div></div>
+
+  <div class="golden"><div class="q">「先不要談 Create，先談 Renew 的部分。」</div><div class="a">［120:00］先別想創造新流程，先把你腦袋裡已有的那套講給 AI 聽，讓它幫你重做一次。</div></div>
+
+  <div class="golden"><div class="q">「針對你的工作職場上面，會用到什麼功能，能夠解決你現在目前的問題，它就是一個好的工具。」</div><div class="a">［120:45］全堂的核心判準。工具會換，這一句不會。</div></div>
+
+  <div class="golden"><div class="q">「你會做，但是你沒有想法。」</div><div class="a">［121:30］用學 Python 類比：指令全背下來還是寫不出程式，因為腦袋裡沒有那個想法。裝環境跟解問題是兩件事。</div></div>
+
+  <div class="golden"><div class="q">「術業有專攻，還是分工來得好，不要硬要去做不是你本分做的事情。」</div><div class="a">［129:15］他的結論不是別學，是把力氣放在自己的專家能力上，實作會同 IT、MIS 或 RD 一起完成。</div></div>
+
+  <div class="golden"><div class="q">「不用錢的最香。」</div><div class="a">［148:15］講完免費去背服務的效果。輕鬆話後面是他實際比較過好幾個服務。</div></div>
+
+  <div class="golden"><div class="q">「我喜歡交流，我有好的想法、好的資訊，我們可以互相交流，而不是你只是受眾。」</div><div class="a">［166:00］收尾。他對訂閱制的定位講得很清楚：不是他講、大家聽，是一起研習。</div></div>
+</section>
+
+<!-- ══════════ 15 ══════════ -->
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,var(--ink3),var(--ink2))">SOURCE</span>
+  <h2 class="ct">15. 資料來源與整理說明</h2>
+
+  <div class="twrap"><table>
+    <tr><th style="width:130px">來源</th><td>2026/04/10 課堂錄影單段，全長 2 小時 47 分 16 秒；課程資料夾五份工具檔</td></tr>
+    <tr><th>整理方式</th><td>全程本機處理：場景偵測擷取 304 張關鍵畫面、產生 2378 段逐字稿，再依逐字稿手寫章節目錄</td></tr>
+    <tr><th>時間戳</th><td>章節標題與引文後方的［mm:ss］對應錄影播放器時間（超過一小時的部分以總分鐘數表示，例如［120:45］＝2 小時 45 秒）</td></tr>
+    <tr><th>整理</th><td>竹貞（Tarshar 的逐幀筆記專員）</td></tr>
+  </table></div>
+
+  <h3>已知限制，請先看過再引用</h3>
+  <ul class="pt">
+    <li><b>逐字稿是機器產生的</b>，人名與工具名會聽錯。有畫面或上下文可佐證的錯字（Canva 被聽成「KEMA」、Groq 被聽成「Glock」、Claude 被聽成「Cloud」、Perplexity、FinMind、Opal、Gemma 4、Node-RED、錨定原理⋯共 30 類、1,131 處）已修正；<b>不確定的一律保留原樣，沒有猜測補詞</b>。</li>
+    <li>錄影中有數段語音辨識產生的重複幻覺（靜音時段被辨識成無意義的英文字串），整理時已整段捨棄共 120 處，不會出現在本頁。</li>
+    <li><b>兩個名稱本頁標為待確認</b>，沒有替講師決定寫法：去浮水印的 Chrome 外掛（逐字稿有 Voyager／Moyoyo 兩種聽法，畫面上沒有出現商店頁可以佐證），以及他口中的「龍蝦」（依上下文是一套要自己架設的流程自動化工具，但他全場都用這個暱稱，本頁不代為對應到任何產品）。NotebookLM 那個外掛原本也在待確認清單上，後來在錄影第 4 分 11 秒的 Chrome 商店頁面確認是 <b>Kortex</b>，已據畫面更正。</li>
+    <li>老師全場把 Gemini 的 Gem 稱作「券」、把 Claude 的 Skill 有時稱作「技能」，本頁在第一次出現時對照說明，之後照原話保留，未替換成官方名稱。</li>
+    <li>逐字稿中出現的學員暱稱、提問者稱呼，本頁一律隱去，改寫成「有學員」「有人問」。</li>
+    <li><b>課堂截圖已全面去識別化。</b>原始錄影是講師整個桌面的螢幕分享：每一張輸出畫面都裁掉頂端的瀏覽器外框（分頁列、網址列、擴充功能列），另外裁掉側邊欄、檔案總管清單與帳號區；私人項目名稱、API Key、示範圖裡的聯絡電話都加了遮蔽框。線上教室的與會者九宮格畫面一張都沒有採用。</li>
+    <li>可信度分級：金句與操作步驟取自錄影實錄；截圖圖說是看懂畫面後改寫的，沒有直接貼 OCR；各版本容量、模型名稱等數字取自畫面文字，可能有辨識誤差，關鍵處請對照原錄影。</li>
+    <li>涉及個股的段落本頁只保留方法，<b>不列代號、價位與績效數字</b>。那不是投資建議。</li>
+    <li>引用到作業、貼文或簡報之前，請對照錄影原始段落再確認一次。</li>
+  </ul>
+
+  <div class="note gold">🔒 <div><b>工具檔、工具網址與課程錄影不放在這一頁。</b>那五份工具檔與錄影是老師分享給訂閱學員的教材，取得方式請走原本的課程資料夾與 Line 群記事本。本頁只整理課堂內容與可公開描述的操作方法。</div></div>
+</section>
+
+</article>
+</div>
+
+<footer>
+  <p>📝 第二季第一堂 課堂筆記 · 生成式AI應用電台・訂閱制第二季（益師傅）</p>
+  <p>依錄影 304 張關鍵畫面＋全程逐字稿 2378 段整理 · <a href="s2e1-ai-skills.html">🗺️ 互動技能地圖</a> · <a href="../radio/#ecf">🏠 回筆記館入口</a></p>
+</footer>
+
+</body>
+</html>
