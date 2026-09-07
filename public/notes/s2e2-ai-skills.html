@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>給它一個範本，它每次做出來才會一樣｜第二季第二堂 互動式學習地圖</title>
+<meta name="description" content="生成式AI應用電台・訂閱制第二季第二堂（益師傅／楊俊益，2026/04/24，全長 2 小時 33 分）互動式學習地圖：五大主題 20 項實戰技能，涵蓋用 One-shot 範本鎖住 AI 輸出的一致性、Gemini Gem 的使用說明與相關資訊兩格怎麼填、「版型及風格需以相關資訊中的檔案一致」那句關鍵指令、預設工具鎖成建立圖像、外部連結為什麼抓錯內容、提示詞頭尾強度與「注意：」收尾、AI 不畫圖時的兩句救援話術、把 68 頁白皮書改寫成創業企劃書、NotebookLM 自訂報告的內容／格式／來源三行寫法與簡報頁面定位、簡報提示詞產生器與 PPTX 輸出規則、Claude Project 拿 PDF 當版型樣板、五平台簡報比較與「能改才是王道」，以及把圖像提示詞寫成可代參數的公式。學會一項打一個勾，進度存在自己的瀏覽器。">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269;
+  --green:#3f8560; --orange:#bf6a1e; --red:#c0453f; --teal:#0d8f80; --amber:#9c7b23; --rose:#b5476a;
+  --feat:#8C4F6D; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(28px,4.6vw,46px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--txt);background:none;-webkit-text-fill-color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:680px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:9px}
+.steps li{list-style:none;counter-increment:st;display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--txt2);line-height:1.7}
+.steps li::before{content:counter(st);flex:none;width:25px;height:25px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:var(--c,var(--feat));margin-top:1px}
+.steps li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+.prompt,.promptbox{background:#1d1d1f;border:1px solid #2c2c31;border-radius:10px;padding:13px 15px;margin-top:6px;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt b,.promptbox b{color:#fff}
+figure.shot{margin:10px 0 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12px;color:var(--txt3);padding:8px 12px;border-top:1px solid var(--line);background:var(--bg2);line-height:1.6}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <a class="navlink" href="../radio/#ecf" style="border-color:#d3b9c4" onclick="if(history.length>1){history.back();return false}">← 回上一頁</a>
+  <div class="logo">
+    <div class="dot">🧭</div>
+    <div>第二季第二堂 地圖<small>SUBSCRIPTION S2 · EP02</small></div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋技能關鍵字：一致性、One-shot、Gem、相關資訊、預設工具、外部連結、說好的圖呢、企劃案、NotebookLM、自訂報告、PPTX、Claude Project、能改、Skill、變數…" autocomplete="off">
+  </div>
+  <a class="navlink" href="s2e2-notes.html">📝 課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">訂閱制第二季 · 第二堂 · 2026/04/24</span>
+  <h1>提示詞寫再長<br>不如給它一份範本</h1>
+  <p class="sub">益師傅開場十分鐘就把題目講完了：「<b>今天我要跟大家談的就是一致性的部分</b>」——不是教你多會下指令，是教你怎麼讓 AI <b>這次做的跟上次一樣</b>。<br>整堂只有一招：<b>準備範本 → 放進參考區 → 在提示詞裡明講要照著參考</b>。這一招他換了六個場景演一遍：Gemini Gem、NotebookLM 自訂報告、Claude Project、ChatGPT 專案、Perplexity Space、Felo 主題集。中間他把一本 68 頁的白皮書改寫成創業企劃書，最後用五個平台做同一份簡報，選出他真正在用的那一個——<b>理由不是漂亮，是能改</b>。<br>點進每一章，逐層展開<b>本堂實際教到</b>的觀念、示範與操作，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🎙️ 生成式AI應用電台・訂閱制第二季</span>
+    <span>👤 益師傅（楊俊益・ECF）</span>
+    <span>⏱️ 全長 2 小時 33 分</span>
+    <span>🔰 小白友善</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>5</b><span>大主題</span></div>
+  <div class="stat"><b>20</b><span>實戰技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 20 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--blue)" onclick="showChapter('why')">
+        <div class="glowline"></div><span class="emoji">🎯</span>
+        <h3><em>CHAPTER 01</em>先搞懂題目：一致性</h3>
+        <p>為什麼「這次跟上次一樣」是職場問題不是美感問題、形容詞和 YAML 為什麼鎖不住，以及這一招的三個動作長什麼樣。</p>
+        <div class="foot"><div class="mini"><i data-mini="why"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--purple)" onclick="showChapter('gem')">
+        <div class="glowline"></div><span class="emoji">🧩</span>
+        <h3><em>CHAPTER 02</em>在 Gemini 做出第一個 Gem</h3>
+        <p>四個欄位怎麼填、那句「需以相關資訊中的檔案一致」為什麼不能省、預設工具要鎖死，還有外部連結為什麼常常抓錯東西。</p>
+        <div class="foot"><div class="mini"><i data-mini="gem"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--teal)" onclick="showChapter('text')">
+        <div class="glowline"></div><span class="emoji">📄</span>
+        <h3><em>CHAPTER 03</em>換到文件：企劃書與 NotebookLM</h3>
+        <p>把一本 68 頁白皮書改寫成創業企劃書、NotebookLM 自訂報告的三行寫法、簡報第幾頁左右放什麼，以及 AI 不畫圖時的兩句救援話術。</p>
+        <div class="foot"><div class="mini"><i data-mini="text"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--amber)" onclick="showChapter('deck')">
+        <div class="glowline"></div><span class="emoji">🖼️</span>
+        <h3><em>CHAPTER 04</em>簡報：從產生器到 Claude Project</h3>
+        <p>把版面選項變成一段提示詞、Claude 一定要指定 PPTX、最小字級 14px、用 PDF 當版型樣板，以及五個平台實測後他選了誰。</p>
+        <div class="foot"><div class="mini"><i data-mini="deck"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--rose)" onclick="showChapter('image')">
+        <div class="glowline"></div><span class="emoji">🎨</span>
+        <h3><em>CHAPTER 05</em>把圖像提示詞寫成公式</h3>
+        <p>用大括號當變數、加一句「等待用戶輸入」變成必填欄位、自己定義參數語法，以及 Gem／Project／Space／Skill 的分界線。</p>
+        <div class="foot"><div class="mini"><i data-mini="image"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+
+    <div class="resources">
+      <h3>📦 <span>延伸閱讀</span></h3>
+      <div class="res-grid">
+        <a href="s2e2-notes.html"><span class="ic">📝</span><span><b>課堂筆記</b>17 章、20 張課堂截圖、20 則金句</span></a>
+        <a href="s2e2-notes.html#sec-info"><span class="ic">📚</span><span><b>三份課程教材</b>Google 兩本官方指南＋一份版型範例</span></a>
+        <a href="../radio/#ecf"><span class="ic">📻</span><span><b>直播電台系列</b>回系列總覽，一集一卡</span></a>
+      </div>
+      <p style="font-size:12.5px;color:var(--txt3);margin-top:12px;line-height:1.8">🔒 課程錄影、簡報提示詞產生器與各支提示詞檔不放在本站——那是老師分享給訂閱學員的教材，請走原本的課程資料夾與 Line 群記事本。課堂中段 11 分鐘的長期投資試算工具內容本站不轉述，該段不是投資建議。</p>
+    </div>
+  </section>
+
+  <section id="view-why" class="view" style="--c:var(--blue)"></section>
+  <section id="view-gem" class="view" style="--c:var(--purple)"></section>
+  <section id="view-text" class="view" style="--c:var(--teal)"></section>
+  <section id="view-deck" class="view" style="--c:var(--amber)"></section>
+  <section id="view-image" class="view" style="--c:var(--rose)"></section>
+</main>
+
+<footer>
+  本頁為訂閱制第二季 第二堂課後整理・介面沿用本站互動式學習地圖版型・整理：竹貞<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2026｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+const DATA = {
+  why: {
+    key:'why', color:'var(--blue)', emoji:'🎯', code:'CHAPTER 01', title:'先搞懂題目：一致性',
+    intro:'開場十分鐘他沒碰任何工具，先把題目講清楚。這一章不學操作，學的是「為什麼要這樣做」——後面兩個半小時所有示範的意義都掛在這三項上。',
+    topics:[
+      {t:'一致性是交付問題，不是美感問題', s:'他一連舉了三個職場例子｜錄影 04:00–10:00', blocks:[
+        {h:'他的開場證據',p:'他打開自己的粉專，一系列資訊圖貼文按讚數異常高：學習的本質、機車保養、線性代數。<b>主題完全不同，版型、配色、人物角色卻一模一樣。</b>他說「你要發現，圖都差不多一樣，對不對？但是內容不一樣」。'},
+        {h:'為什麼這是硬需求',ul:[
+          '<b>會議紀錄</b>——「我不能這一次做的跟上次的會議紀錄不一樣吧？」格式跳來跳去，收件的人會先懷疑是不是換人做了',
+          '<b>月報與簡報</b>——這個月的圖不能跟上個月不一樣，否則整份年度資料像拼貼',
+          '<b>企劃書與規格書</b>——章節順序與標題層級是被審查的對象，不是可以自由發揮的地方']},
+        {h:'實機畫面',shot:{img:'s2e2-img/01-fanpage-consistency.jpg',cap:'他回看自己的粉專貼文「學習的本質：極致的重複」。左邊 AI 自己說明「我保留了您上傳圖片中的小男孩角色造型，並根據不同的學習重點設計了對應的情境與表情」——角色固定、內容替換的證據。［07:18］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s2e2-notes.html#sec-why" style="color:var(--blue)">筆記 2：他先問一個職場問題</a>'}]},
+
+      {t:'為什麼形容詞和 YAML 鎖不住', s:'他先承認一般解法的極限｜錄影 07:45', blocks:[
+        {h:'他的原話',warn:'「其實我們透過描述詞、透過 YAML 的方式去定位，做出風格，他就可以一致。<b>但是那是我們想像中的，有時候還是會有點偏差。</b>」'},
+        {h:'差別在哪',p:'形容詞（「乾淨的」「專業的」「日系清新」）是<b>由 AI 去解釋</b>的；範本檔案是<b>可以被直接比對</b>的。前者每次解釋都會漂一點，後者不會。'},
+        {h:'白皮書怎麼說',tip:'Google 的《Prompt Engineering》白皮書把「提供範例」列為實務守則的<b>第一條</b>，理由是範例給模型一個可以瞄準的參考點，能同時改善輸出的<b>準確度、風格與語氣</b>〔p.54〕。老師做的是把它從「寫在提示詞裡的文字範例」升級成「掛在參考區的整份檔案」。'},
+        {h:'看課堂筆記',p:'👉 <a href="s2e2-notes.html#sec-why" style="color:var(--blue)">筆記 2：為什麼一致性是職場問題</a>'}]},
+
+      {t:'這一招只有三個動作', s:'整堂的骨架，六個平台通用', blocks:[
+        {h:'三個動作',steps:[
+          '<b>準備範本</b>——一張「長這樣就對了」的圖，或一份格式對的 PDF。重點是格式，不是內容',
+          '<b>放進參考區</b>——Gem 叫「相關資訊」、Claude 叫「Files」、NotebookLM 就叫「來源」',
+          '<b>補那一句話</b>——在提示詞裡明講「版型與風格需以相關資訊中的檔案一致」']},
+        {h:'為什麼第 3 步不能省',warn:'參考區跟指令區是<b>兩格</b>，AI 不會自己把它們連起來。檔案放進去卻沒在指令裡指名，它只會照著提示詞裡的文字描述自己發揮——這是最多人踩的坑。'},
+        {h:'同一件事，六個名字',table:{head:['平台','它叫什麼','指令欄','參考檔案欄'],rows:[
+          ['Gemini','<b>Gem</b>','使用說明','相關資訊'],
+          ['Claude','<b>Project</b>','Instructions','Files'],
+          ['NotebookLM','<b>自訂報告</b>','報告指令','來源'],
+          ['ChatGPT','<b>專案</b>','指令','（改版後他當場找不到）'],
+          ['Perplexity','<b>Space</b>','Instruction（上限 8000 字）','檔案＋外部連結'],
+          ['Felo','<b>主題集</b>','自訂提示詞','檔案＋外部連結']]}},
+        {h:'看課堂筆記',p:'👉 <a href="s2e2-notes.html#sec-overview" style="color:var(--blue)">筆記 1：一張圖看懂這堂</a>'}]}
+    ]
+  },
+
+  gem: {
+    key:'gem', color:'var(--purple)', emoji:'🧩', code:'CHAPTER 02', title:'在 Gemini 做出第一個 Gem',
+    intro:'第一個示範，用「七分格資訊圖」當題目。四個技能裡，第二個是全堂樞紐，第三、四個是他一邊踩雷一邊補上去的。',
+    topics:[
+      {t:'Gem 的四個欄位怎麼填', s:'名稱／說明／使用說明／相關資訊｜錄影 16:00–20:00', blocks:[
+        {h:'五個步驟',steps:[
+          '進 Gemini，左側找到 <b>Gem</b> → <b>新增 Gem</b>',
+          '<b>名稱</b>寫這個機器人要做的事，例如「七分格圖像製作」',
+          '<b>說明</b>是給別人看的，會顯示在使用者進來時的下方',
+          '<b>使用說明</b>貼上提示詞——這一格才是本體',
+          '捲到下面的 <b>相關資訊</b>，按「＋」把範本檔案加進去']},
+        {h:'提示詞的開頭這樣寫',prompt:'請根據 上傳的檔案資料 / 提供的連結 (一定要等待用戶提供檔案或連結 ) 重新整理出7格圖像資料 及 人物圖像 / {人物特徵} , 重新整理出7個重點'},
+        {h:'兩個他特別解釋的細節',ul:[
+          '<b>斜線就是「或」</b>——「你寫一個斜線他看得懂」，不用寫「或者」',
+          '<b>「一定要等待用戶提供」是防呆</b>——沒有這句，你一進去它就拿提示詞裡的示範內容直接畫一張給你']},
+        {h:'實機畫面',shot:{img:'s2e2-img/02-gem-create.jpg',cap:'Gem 的編輯畫面只有四格。注意中段：「預設工具」現在是「沒有預設工具」、「相關資訊」還是空的，這兩格等一下都要動。右邊是別人拿到時看到的預覽。［19:01］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s2e2-notes.html#sec-gem" style="color:var(--purple)">筆記 3：實作一，把七分格做成 Gem</a>'}]},
+
+      {t:'★ 全堂樞紐：那一句「需以相關資訊中的檔案一致」', s:'放進去不等於它會用｜錄影 20:26–21:16', blocks:[
+        {h:'要加的那一句',prompt:'圖像的版型及風格需以 相關資訊中的檔案一致'},
+        {h:'為什麼非加不可',warn:'他把一張畫好的七分格圖丟進「相關資訊」之後停下來強調：<b>檔案放進去，提示詞裡沒有指名要參考，AI 就只會照著文字描述自己發揮。</b>他連問兩次「理解嗎」，還請大家在聊天室按數字回覆——整堂最像考試的地方就是這裡。'},
+        {h:'換個場景再講一次：會議紀錄',p:'為了讓沒在畫圖的人也接得住，他當場把場景換掉——把你平常寫的會議紀錄存成 PDF 丟進相關資訊，然後在提示詞裡寫：'},
+        {h:'會議紀錄版',prompt:'所有的會議記錄的摘要與格式，請參考相關資訊的 會議記錄.pdf'},
+        {h:'他先講清楚期待值',tip:'「<b>沒有辦法說格式一模一樣，但是它的區塊、摘要、主題它是一樣</b>，就可以節省你很多時間囉。」'},
+        {h:'實機畫面',shot:{img:'s2e2-img/03-gem-instruction.jpg',cap:'提示詞貼進「使用說明」之後的樣子。讀得到它在描述最終圖像的整體風格與角色設定，而且人物是寫成大括號的變數，不是寫死的。［23:28］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s2e2-notes.html#sec-gem" style="color:var(--purple)">筆記 3：關鍵在最後，相關資訊放了還要明講</a>'}]},
+
+      {t:'預設工具要鎖死，而且要一次給齊參數', s:'他做到一半按編輯回頭補｜錄影 24:00–30:00', blocks:[
+        {h:'鎖預設工具',p:'「這個機器人是要做什麼？畫圖，對不對？所以麻煩你在這個<b>預設工具</b>的地方，你幫我選擇<b>建立圖像</b>。」不鎖的話，你丟檔案進去它可能回你一大篇文字分析，白等一輪。'},
+        {h:'這個 Gem 其實吃兩個參數',ul:[
+          '<b>參數一：內容素材</b>——上傳的檔案或外部連結',
+          '<b>參數二：人物頭像</b>——決定七格裡的主角長什麼樣']},
+        {h:'一開始就給齊',tip:'他先示範了錯誤版本：只丟檔案不給人物，角色變成一個不相干的小女生，後面補傳照片還得再跑一輪。<b>「所以我們一開始的時候把檔案丟上去，並貼這個人物的圖像給了他。」</b>'},
+        {h:'實機畫面',shot:{img:'s2e2-img/04-gem-default-tool.jpg',cap:'補完之後兩個關鍵欄位都到位：「預設工具」已改成「建立圖像」，下面的「相關資訊」也放進一張七分格縮圖當範本。標題旁顯示「正在儲存 Gem…」。［25:01］'}},
+        {h:'再一張',shot:{img:'s2e2-img/05-seven-grid-result.jpg',cap:'只丟一份 PDF、什麼指令都沒下，Gem 直接吐出的成品。版型、字級、插畫風格跟粉專那張完全同一套，只有內容換了。［27:39］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s2e2-notes.html#sec-detail" style="color:var(--purple)">筆記 4：讓它每次都準的四件事</a>'}]},
+
+      {t:'外部連結為什麼常常抓錯，以及頭尾強度', s:'他當場失敗，然後給了結構性解法｜錄影 31:00–36:00', blocks:[
+        {h:'他實測的結論',p:'「Gem 對外部連結其實效果有時候會<b>一半一半</b>啦。假若你今天是<b>丟檔案</b>給他，他來幫你做七分格的圖像比較沒有問題。」'},
+        {h:'為什麼會歪',warn:'「以網頁的結構，它有分上版、左版、右版、中版，還有下版的部分。有時候它幫你分析到——<b>萬一是這個刷卡的資料呢？萬一是旁邊的電風扇呢？萬一是它的特價商品，而不是本身的東西怎麼辦呢？</b>」'},
+        {h:'補救法',steps:[
+          '連結照給',
+          '<b>另外把商品／主題的文字也複製一份貼給它</b>',
+          '中文詞之間<b>記得空一格</b>——「這是 Token 的一個特性，字跟字中間用一個空白隔開」']},
+        {h:'結構性解法：結尾再壓一次',prompt:'注意：\n圖像內容需以提供的連結或上傳檔案的內容一致'},
+        {h:'為什麼放最後',tip:'「<b>提示詞的結構，開頭強度會很強，還有最後強度也會很厲害。</b>」［35:38］所以開頭指定版型、結尾再壓一次內容，兩頭包夾。這條白皮書裡沒有，是他自己測出來的。'},
+        {h:'白皮書怎麼說',p:'「注意：⋯需一致」這種寫法剛好踩在白皮書一條建議上——<b>Use Instructions over Constraints</b>：正向指令比一長串「不要做什麼」有效，因為指令直接說出你要的結果，限制卻讓模型自己猜什麼才算被允許，多條限制之間還會打架〔p.56–57〕。'},
+        {h:'實機畫面',shot:{img:'s2e2-img/06-link-persona-result.jpg',cap:'換上人物參數之後的同一個 Gem，主標題是「為什麼不應免費分享你的創造力？」。看主角——綠髮、墨鏡、灰西裝，六格裡都是同一個人。［35:02］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s2e2-notes.html#sec-detail" style="color:var(--purple)">筆記 4：提示詞的頭跟尾最有力</a>'}]}
+    ]
+  },
+
+  text: {
+    key:'text', color:'var(--teal)', emoji:'📄', code:'CHAPTER 03', title:'換到文件：企劃書與 NotebookLM',
+    intro:'同一招換到純文字場景。這一章最能說服「我又不畫圖」的人，也包含全場最多人抄筆記的兩句救援話術。',
+    topics:[
+      {t:'兩句救援話術：它就是不畫圖的時候', s:'全場最多人抄的八分鐘｜錄影 42:00–44:00', blocks:[
+        {h:'第一句',tip:'AI 只吐了一堆文字、七格內容都寫好了就是不生圖時——<b>「你要跟他講：說好的圖呢？」</b>他強調試過很多次：「你以後用這招，他一定會生圖。」'},
+        {h:'同一招換場景',p:'簡報跑成程式碼的時候就問<b>「說好的簡報格式呢？」</b>——「他馬上就會轉變囉，都開始跑，變成簡報給你啦。」'},
+        {h:'第二句：它開始自稱語言模型就別耗了',steps:[
+          '把它<b>最後產出的那段七格文字內容</b>複製起來（它其實已經幫你把提示詞寫好了）',
+          '開一個<b>全新的對話</b>',
+          '丟過去，跟它說：<b>請畫出這個提示詞的圖像</b>']},
+        {h:'背後的判斷',p:'兩招是同一個念頭：<b>對話是有狀態的，狀態壞掉就換一個。</b>與其在同一串對話裡反覆道歉、拜託、重述，不如把「已經生出來的中間產物」搬到乾淨的對話重跑。'},
+        {h:'看課堂筆記',p:'👉 <a href="s2e2-notes.html#sec-rescue" style="color:var(--teal)">筆記 5：兩句救援話術</a>'}]},
+
+      {t:'把一本 68 頁白皮書改寫成創業企劃書', s:'One-shot 的威力｜錄影 44:00–58:00', blocks:[
+        {h:'做法跟第一個 Gem 一模一樣',ul:[
+          '<b>使用說明</b>＝一段格式改寫指令',
+          '<b>相關資訊</b>＝一份格式對的企劃書當樣本（他用屏東大學企管系學生的「咕美食」百貨美食街創業營運計劃書）',
+          '<b>丟進去的素材</b>＝Google 的提示詞工程白皮書']},
+        {h:'那段提示詞（依畫面＋口述整理）',prompt:'請將上傳檔案的內容，再根據相關資訊的企劃案格式來重新整理、摘要上傳的內容，\n產生企劃案的摘要；主題為上傳檔案內容的主題，或使用者指定的主題。\n相關資訊的檔案為整體格式與結構，需詳細將上傳內容重構成相關資訊的檔案格式與結構。\n所有完成的資料必須至少 8000 字。\n若用戶需要針對哪個結構做更詳盡的說明，只要輸入該單元的項目名稱即可。'},
+        {h:'結果',p:'一本講提示詞工程的白皮書，被重構成「第一章專案機會與構想／第二章服務內容與執行／第三章市場與環境分析／第四章行銷策略」，連 5W1H、行銷 4P／7P、損益預估都照著樣本的位置長出來。他的評語：<b>「明明是一個提示詞工程的事情，他卻來談創業的構想。」</b>'},
+        {h:'他當場失敗了一次',warn:'第一次跑出來整個錯亂——他丟白皮書，AI 卻還在寫咕美食。他沒剪掉，直接說「好，它又錯亂了⋯它是整個錯亂的」。兩個處理方式：<b>不要用「快捷」，最起碼用思考型或 Pro</b>；再不行就<b>換平台</b>——「這些事情，其實在 Claude 都不太會有這個狀況」。'},
+        {h:'8000 字是理想值不是承諾',tip:'實際大概兩三千字就滿了。正確用法是<b>寫完框架之後逐節點名要它展開</b>——「請針對第二節創業構想做詳細的描述」。想一次拿長文的話他建議搬到 Google AI Studio，「吐出來的字真的會比較多」。'},
+        {h:'實機畫面',shot:{img:'s2e2-img/07-plan-gem.jpg',cap:'「企劃案撰寫」Gem 的入口。下方「近期」三筆是同一個 Gem 產出的、主題完全不同的企劃書。［49:01］'}},
+        {h:'再一張',shot:{img:'s2e2-img/08-plan-output.jpg',cap:'產出的內文已經長成標準企劃書的樣子：「二、產品服務與核心功能」底下再分四項，下一節接「商業模式與財務計畫」。這個結構是從樣本檔學來的。［52:01］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s2e2-notes.html#sec-plan" style="color:var(--teal)">筆記 6：一本 68 頁白皮書被改寫成企劃書</a>'}]},
+
+      {t:'NotebookLM 自訂報告的三行寫法', s:'指定哪一份是內容、哪一份是格式｜錄影 60:00–66:00', blocks:[
+        {h:'三個步驟',steps:[
+          '建一個筆記本，<b>把兩份 PDF 都加進來</b>：一份是要改寫的素材，一份是格式範本',
+          '<b>把檔名改短</b>——他當場改成 <code>企劃書.pdf</code> 與 <code>來源.pdf</code>，因為等一下要在指令裡直接叫檔名',
+          '右側點<b>「報告」→「自訂報告」</b>，寫三行指令']},
+        {h:'那三行',prompt:'內容： 根據 來源.pdf\n格式與摘要： 根據 企劃書.pdf\n字數至少 5000 字'},
+        {h:'兩個細節',ul:[
+          '<b>冒號後面要空一格</b>——跟前面「Token 空白」是同一個習慣',
+          '<b>字數那行他自己說沒用</b>——「它不會理你啦，那我們就寫開心的」']},
+        {h:'這次示範失敗了',warn:'報告跑出來沒有依照 <code>企劃書.pdf</code> 的章節結構，他當場說「<b>好，它這個失敗了⋯這是失敗的，你知道為什麼嗎？</b>」，也坦承「理論上 NotebookLM 應該會比較聽話啦」。他的處理是承諾補一份寫好的報告提示詞，而不是硬拗成功。'},
+        {h:'實機畫面',shot:{img:'s2e2-img/09-nblm-custom-report.jpg',cap:'「建立報告」對話框，四種格式並排。要按的是最左邊「自訂報告——製作符合自身需求的報告，可指定架構、風格、語氣等細節」。左下角看得到兩份已改名的來源。［62:26］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s2e2-notes.html#sec-nblm" style="color:var(--teal)">筆記 7：自訂報告的三行寫法</a>'}]},
+
+      {t:'NotebookLM 的簡報是可以下指令的', s:'第幾頁、左邊放什麼、右邊放什麼｜錄影 64:00–68:00', blocks:[
+        {h:'做法',p:'把要用的圖也一起加進來源，然後在提示詞裡<b>直接叫檔名並指定位置</b>。'},
+        {h:'寫法',prompt:'第二頁：左側 dog.jpg，右側 swot.pdf\n第三頁：圖表 A.png 在右側'},
+        {h:'他當場驗證',tip:'他翻出上週做好的簡報：第三頁那隻狗確實在右邊、第二頁的 Q 版人物確實在左邊。結論是——<b>「其實 NotebookLM 是可控的。有人用 YAML 來做控制，那我用自然語言來做控管。自然語言其實很容易，但是它可能它的細節度沒有 YAML 來得好，但至少人人都可以控制它。」</b>'},
+        {h:'實機畫面',shot:{img:'s2e2-img/10-nblm-slides.jpg',cap:'把課程教材 Google Prompt.pdf 建成筆記本之後，右側工作室產出的簡報縮圖——第二張正是「完美提示詞的 4 大核心架構：Persona／Task⋯」，也就是教材第 5 頁那個公式被畫成圖。［66:55］'}},
+        {h:'順帶學到的四要素公式',table:{head:['四要素','簡報怎麼定義','這堂課對應到哪裡'],rows:[
+          ['<b>Persona</b>','你希望 AI 站在誰的位置回答','Gem 的名稱與說明'],
+          ['<b>Task</b>','一定要有動詞——摘要、改寫、產生、比較','「請將上傳檔案的內容⋯重新整理、摘要」'],
+          ['<b>Context</b>','相關背景與素材，可用 <code>@檔名</code> 標自己的檔案','<b>相關資訊那一格</b>'],
+          ['<b>Format</b>','要條列、要表格、要幾頁、要多長','「重構成相關資訊的檔案格式與結構」']]}},
+        {h:'看課堂筆記',p:'👉 <a href="s2e2-notes.html#sec-nblm" style="color:var(--teal)">筆記 7：NotebookLM 的簡報其實可以下指令</a>'}]}
+    ]
+  },
+
+  deck: {
+    key:'deck', color:'var(--amber)', emoji:'🖼️', code:'CHAPTER 04', title:'簡報：從產生器到 Claude Project',
+    intro:'下半場全部給簡報。他先發一支自己寫的網頁工具，再把第 2 章那一招原封不動搬到 Claude，最後五個平台實測。',
+    topics:[
+      {t:'簡報提示詞產生器：把版面選項變成提示詞', s:'單檔 HTML，本機開就能用｜錄影 70:00–78:00', blocks:[
+        {h:'它做的不是簡報',p:'它是<b>把「幾頁、什麼風格、什麼配色、每頁放什麼圖表」這些選擇，翻譯成一段可以貼到任何平台的提示詞</b>。介面上有風格包、色彩主題包、逐頁設定（背景色、圖表、風格覆蓋、參考連結、頁面描述），以及讀入 PDF／PPTX 與匯出 JSON／Markdown。'},
+        {h:'為什麼要分平台',warn:'<b>Gemini 跟 NotebookLM 拿到提示詞會直接做簡報，Claude 卻會做成互動式網頁。</b>所以工具偵測到目標平台是 Claude 時，會自動在提示詞開頭加上硬性要求。'},
+        {h:'實機畫面',shot:{img:'s2e2-img/11-slides-prompt-generator.jpg',cap:'工具主畫面，標題下寫著「Claude・Gemini・NotebookLM 三平台通用」，中間三顆是目標平台切換鈕。左欄風格包與色彩主題包，右欄逐頁設定。［77:31］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s2e2-notes.html#sec-slides" style="color:var(--amber)">筆記 8：簡報提示詞產生器</a>'}]},
+
+      {t:'Claude 一定要指定 PPTX，還要壓最小字級', s:'不寫就變成互動網頁｜錄影 79:00–81:00', blocks:[
+        {h:'工具自動加上的開頭',prompt:'🎯 目標平台: Claude\n⚠️【輸出格式: PPTX】⚠️\n! 重要: 請務必產出「.pptx」PowerPoint 檔案供下載\n! 請使用 python-pptx 套件依照以下規格建立完整可下載的 .pptx 簡報檔\n! 每一頁對應一張 slide，最終以 present_files 工具提供下載連結\n! 不要只回覆文字說明，必須實際產出 PPTX 檔案'},
+        {h:'新版才加的字級規定',prompt:'🚫【不可違反法｜字體大小最小值規定｜所有簡報一律適用】🚫\n【絕對禁止】所有內文（body text）字級大小最小 14px，嚴禁使用小於 14px 的文字\n本規定適用於所有平台產出的所有簡報，無論 Claude / Gemini / NotebookLM 皆須 100% 遵守'},
+        {h:'為什麼補這條',warn:'他被舊版燙到過：「原本那個程式，它可能到 11，或有時候出現 10。<b>這個在正式的簡報裡頭去做報告不太適合。</b>」'},
+        {h:'白皮書怎麼說',tip:'這種寫法對應白皮書兩條守則：<b>Be specific about the output</b>（把要的輸出講清楚，示範是「產生三段式部落格文章⋯語氣要口語」對比「產生一篇文章」）〔p.56〕，以及 <b>Experiment with output formats</b>（指定結構化輸出，<b>要求結構本身就會逼模型收斂、減少幻覺</b>）〔p.60〕。'},
+        {h:'實機畫面',shot:{img:'s2e2-img/12-pptx-output-rule.jpg',cap:'按下「產生提示詞」跳出來的內容：開頭四行是給 Claude 的硬性要求，下半段是最小字級規定。右下角還有精簡版／詳細版、中文／English 切換。［79:52］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s2e2-notes.html#sec-slides" style="color:var(--amber)">筆記 8：Claude 不特別講就不會給 PPTX</a>'}]},
+
+      {t:'做簡報請用淺色底', s:'整段語氣最重的一次拜託｜錄影 77:50', blocks:[
+        {h:'他的原話',tip:'<b>「簡報要落地應用，一定要記得一件事情：用淺色，用淺色會比較 OK。所以不用去用花俏的底色，那些沒有用。」</b>'},
+        {h:'理由不是美感',p:'是後續維護——<b>「只要提到要改字、提到要加什麼東西上去，你有底色就很難處理。」</b>他建議非得用白色，「白色在做字的修改或是做一些編輯會比較好處理」。'},
+        {h:'看得到的證據',p:'三份課程教材裡那份成品範本（Recursive_Mastery_Framework.pdf）用的就是米色底，五頁都是。'},
+        {h:'看課堂筆記',p:'👉 <a href="s2e2-notes.html#sec-slides" style="color:var(--amber)">筆記 8：做簡報請用淺色底</a>'}]},
+
+      {t:'Claude Project：把一份 PDF 當版型樣板', s:'Gem 那兩格換成 Instructions 與 Files｜錄影 86:00–92:00', blocks:[
+        {h:'四個步驟',steps:[
+          'Claude 左側點 <b>Projects</b> → 右上 <b>New Project</b>（<b>不用付費就能建</b>）',
+          '給名稱，例如「簡報版型學習製作」',
+          '<b>Instructions</b> 按「＋」貼上工具產生的提示詞，按 Save Instructions　<b>＝ Gem 的使用說明</b>',
+          '<b>Files</b> 按「＋」上傳版型範本　<b>＝ Gem 的相關資訊</b>']},
+        {h:'放進 Files 的不是資料，是版型',tip:'他的原話：「這個可以讓它去學⋯<b>不是學內容，學它的版型</b>，它會畫出來跟它很像。這個圖不會那麼漂亮，但是裡頭的風格跟用色會很接近。」'},
+        {h:'兩個平台的欄位對照',table:{head:['做的事','Gemini 的 Gem','Claude 的 Project'],rows:[
+          ['固定的指令','使用說明','Instructions'],
+          ['範本／參考檔案','相關資訊','Files'],
+          ['限制它只做一件事','預設工具（例：建立圖像）','寫進 Instructions（例：輸出格式 PPTX）'],
+          ['怎麼叫用','要先點進那個 Gem','要先點進那個 Project']]}},
+        {h:'免費版會卡額度',warn:'「他就是故意讓你等 5 個小時⋯讓你等了一兩次之後，你就不甘願，就想說刷下去好了。我覺得他這個行銷策略太強了。」他自己從一月起每月付 100 美元。<b>但 Project 這個功能本身不用付費就能建。</b>'},
+        {h:'實機畫面',shot:{img:'s2e2-img/13-claude-project.jpg',cap:'建好的 Project「簡報版型學習製作」。右欄由上而下：Memory、Instructions（開頭看得到「目標平台：Claude／【輸出格式：PPTX】」）、Files（那張縮圖就是課程教材 Recursive_Mastery_Framework.pdf 的第一頁）。［91:35］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s2e2-notes.html#sec-project" style="color:var(--amber)">筆記 9：Claude Project</a>'}]},
+
+      {t:'★ 五個平台實測，他選 Claude，理由是「能改」', s:'同一段提示詞同時丟兩個平台跑｜錄影 73:00 · 94:00–108:00', blocks:[
+        {h:'先講結論',tip:'<b>「其實出乎你意料之外，是 Claude 做出來的簡報最漂亮。」</b>［73:35］理由：「Claude 本來就是寫文案的高手，只是很多人不曉得而已⋯在外面寫手專門在做文案撰寫，這是用 Claude。」代價是最慢。'},
+        {h:'五個平台的心得',table:{head:['平台','他的評語','速度'],rows:[
+          ['<b>Claude</b>','版面、內容、表格最漂亮，細節度最好；<b>會給可下載的 PPTX，而且可以再叫它修</b>','最慢'],
+          ['<b>Gemini（Canvas）</b>','用提示詞要求可以做得不錯，穩紮穩打，<b>內容可以改</b>；不下功夫就是「一邊圖一邊文字，醜醜的」','中間'],
+          ['<b>NotebookLM</b>','最花俏、圖最好看，<b>但產出是圖，字不能改</b>——企業場景不適用','—'],
+          ['<b>Perplexity</b>','做簡報「蠻醜的，直接講用醜來形容」，但<b>寫課綱細節度最好</b>','最快'],
+          ['<b>Gamma</b>','「最近做出來的簡報就比較符合商業的標準⋯讓你看不出它是 Gamma 做的」','所有工具裡最快']]}},
+        {h:'Gemini 這邊有一個容易漏掉的步驟',warn:'在 Gemini 裡要做簡報，<b>工具那格一定要選 Canvas</b>——「不是 Canva 啦，是 Canvas 畫布的意思」，模型再選 Pro 或思考型。'},
+        {h:'一個好用但有代價的技巧',p:'付費版可以點選任一頁 →「繪圖」→「資訊圖表」，跟它說「改成 Google 專業圖表風」，它會把整頁重畫成一張漂亮的圖。代價是——<b>「它是畫成圖喔⋯裡頭的字就變成不能改了。」</b>正確順序是先把文字全部改定，最後才美化。'},
+        {h:'他為什麼把標準訂在能不能改',tip:'<b>「我們要的不是圖漂亮，而是可以修改。有漂亮的圖表，又可以修改，這才是我們要的簡報。你再漂亮沒有辦法修改，你再花俏沒辦法落地，都沒有用。」</b>［94:00］然後是那個所有上班族都懂的場景：早上改一次、下午改一次、最後說「我要第一個版本」——<b>「所以能夠改是王道。」</b>［107:09］'},
+        {h:'但他自己補了但書',p:'「假如是老師們就不一樣。老師的目標受眾有時候是中學生、小學生，他們要的就是漂亮的圖表、能夠吸引他的目光。<b>看你的目標受眾是誰，做出適合他的簡報，這才會有他的價值。</b>」判準要跟著受眾走，不是跟著工具排行榜走。'},
+        {h:'實機畫面',shot:{img:'s2e2-img/14-gemini-canvas-slides.jpg',cap:'Gemini Canvas 的成品匯出成 Google 簡報。米色底、深藍主色、襯線大標，都是從版型樣板學來的。右側打開的是「幫我繪圖」面板。［98:31］'}},
+        {h:'再一張',shot:{img:'s2e2-img/15-claude-fix-pptx.jpg',cap:'Claude 產出 PPTX 之後的追加對話：他用英文指出兩個版面問題，Claude 逐項修正，下面顯示「Edited 2 files, viewed 2 files, ran a command」。右上角是可直接下載的 PPTX。這一整段就是「能改」的實況。［100:01］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s2e2-notes.html#sec-compare" style="color:var(--amber)">筆記 10：五個平台做同一份簡報</a>'}]}
+    ]
+  },
+
+  image: {
+    key:'image', color:'var(--rose)', emoji:'🎨', code:'CHAPTER 05', title:'把圖像提示詞寫成公式',
+    intro:'最後十八分鐘他打開自己兩三年份的提示詞資料夾一支一支翻。看起來像閒聊，其實是同一招的另一種寫法——把一次性的描述，寫成可以重複呼叫的介面。',
+    topics:[
+      {t:'用大括號當變數，再加一句「等待用戶輸入」', s:'他所有圖像提示詞的共同開頭｜錄影 140:00–144:00', blocks:[
+        {h:'蛋糕師傅那支的開頭（逐字照抄自課程教材檔）',prompt:'任務一:\n等待用戶輸入 {品項}  以便創作造型蛋糕與意境想法一樣的圖像\n\n任務二:\n根據用戶輸入的 {品項}  將以下題詞中的 紅色法拉利換成 {品項} 以便創作造型蛋糕與意境想法一樣的圖像, 而創作的題詞請參考如下:'},
+        {h:'後面接什麼',p:'一整段幾百字的完整場景描述當範例。<b>使用者只要打兩個字，它就會把那段長描述裡的關鍵詞抽換掉再生成。</b>'},
+        {h:'同一個模子的另一支',prompt:'請等待用戶輸入遠古 青銅器 仿製品 {物品} , 再根據 {物品} 的外觀特徵, 色調只能符遠古青銅用色來重製 遠古青銅器提示詞'},
+        {h:'白皮書怎麼說',tip:'白皮書有一條就在講這個，叫 <b>Use variables in prompts</b>：與其把值寫死，不如改成變數，這樣同一個提示詞可以重複使用、也方便嵌進自己的應用。示範是 <code>{city} = "Amsterdam"</code>〔p.58〕。<b>老師多做了一步——加上「一定要等待用戶提供」，把變數從「填空」變成「必填欄位」</b>，這一步白皮書沒有寫。'},
+        {h:'看課堂筆記',p:'👉 <a href="s2e2-notes.html#sec-image" style="color:var(--rose)">筆記 12：讓它先停下來等你填空</a>'}]},
+
+      {t:'自己定義一套參數語法', s:'他寫的提示詞長得像 API 文件｜錄影 137:35', blocks:[
+        {h:'結構',ul:[
+          '<b>宣告角色與版本</b>——<code>#{Character}=Pic editor v0.1</code>、<code>author:ECF</code>',
+          '<b>{Task}</b>——依我的需求與參數設定產生圖像',
+          '<b>{Definition}</b>——提示詞代表我輸入的內容，你要嚴格執行我的 Task／Instruction／Parameter',
+          '<b>{Instruction}</b>——<code>U1-4</code> 放大指定編號的圖、<code>V1-4</code> 依指定編號重生四個微調版本',
+          '<b>{Parameter}</b>——<code>--ar</code> 比例、<code>--s</code> 風格化程度（0–1000，越小越寫實）、<code>--no</code> 排除元素、<code>--3D</code>、<code>--niji</code>、<code>--photo</code>']},
+        {h:'這是什麼',p:'看得出來是<b>把 Midjourney 那套參數語法，用自然語言在一般聊天機器人裡重建一次</b>。重點不是這些參數本身，是他把「一次性的描述」寫成了「可以重複呼叫的介面」——跟前面四章把 Gem 做成機器人，是同一個念頭。'},
+        {h:'實機畫面',shot:{img:'s2e2-img/18-pic-editor-prompt.jpg',cap:'他自己寫的圖像編輯提示詞，結構整齊得像一份 API 文件：角色宣告、Task、Definition、Instruction、Parameter 五段，最下面還列了一整排可選畫風。［137:35］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s2e2-notes.html#sec-image" style="color:var(--rose)">筆記 12：他的提示詞長成一份規格書</a>'}]},
+
+      {t:'把它做成 Gem，別人打兩個字就能用', s:'登機證那支｜錄影 148:49', blocks:[
+        {h:'成品規格',p:'名稱就叫「登機證」。使用說明裡寫死了版面：<b>頂部橫幅「MQTT 航空 BOARDING PASS」，主要區域的背景「根據用戶提供的目的地畫出該地的代表場景」</b>，上面疊「始發地 / FROM {您的出發地}」、中間一個機頭朝右的飛機圖標、右側「目的地 / TO {您的目的地}」，下面還有乘客、日期、航班編號與條碼。'},
+        {h:'使用者只要輸入兩個值',tip:'出發地與目的地。<b>這就是「參數化提示詞 ＋ Gem」合起來的完成形</b>：範本鎖在使用說明裡，變數留給使用者填。'},
+        {h:'他怎麼想到的',p:'「我那時候剛好看到一個機票⋯我想說，那機票假如我可以設定自己看要出發到目的哪裡，我想要到北極到哪裡，可以自己輸入，他幫我把那個票給做出來。這樣不是很酷嗎？」'},
+        {h:'實機畫面',shot:{img:'s2e2-img/19-boarding-pass-gem.jpg',cap:'登機證 Gem 的使用說明內容，讀得到完整的版面規格與兩個大括號變數。右邊是別人拿到時的入口預覽。［148:49］'}},
+        {h:'再一張：一致性的成果長什麼樣',shot:{img:'s2e2-img/20-consistency-output.jpg',cap:'課堂上用第 2 章那套七格版型做出來的另一份作品，主題是「4 個讓你付出更多的日常陷阱」。版型、粗黑輪廓線、對話泡泡、標題的中英並列全部沒變，只有主角換了。（作品出自課堂學員，姓名已隱去。）［150:27］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s2e2-notes.html#sec-image" style="color:var(--rose)">筆記 12：另一種寫法</a>'}]},
+
+      {t:'Gem／Project／Space 的天花板，與 Skill 是什麼', s:'課堂尾聲最有價值的一段｜錄影 126:00–135:00', blocks:[
+        {h:'差別只有一個',tip:'<b>Gem 與 Project 是房間，你得先走進去才叫得動；Skill 是隨身技能，講到關鍵字它自己跳出來。</b>他的原話：「Skill 最大的好處就是說，我在任何一個地方只要產生一個新的對話，我只要用到製作簡報⋯他就直接會呼叫它來使用。」［131:49］'},
+        {h:'所以 Skill 可以串起來',p:'「請幫我抓取臺灣證券交易所的資料，並且幫我將資料做成簡報」——它會先叫抓資料的 Skill，再叫做簡報的 Skill；如果 Connector 串了 Gmail，還能接著把成品寄出去。'},
+        {h:'怎麼把現有的 Project 變成 Skill',prompt:'請將上述的功能幫我轉換成一個簡報學習製作的 Skill'},
+        {h:'收費界線他也講清楚了',warn:'串 Gmail 把簡報寄出去屬於 Connector；<b>「每天早上 9 點自動執行」這種排程要用到 Claude Code，是要付費的</b>。不過他評估「像這樣的一些功能串接，基本上都還算是小事啦，耗不了多少錢」。'},
+        {h:'他對 AI Agent 的建議：先不要追',tip:'「AI Agent 很棒，但是我覺得大家比較不熟的人，<b>可以再觀望看看</b>，因為你們公司的人都會幫你做好，你不用急⋯<b>你只要在你的領域上面，好好的把 Gem 發揮</b>，好好的去把一些圖像的做法、簡報製作，可以貼近你的需求，我覺得初期可以先這樣就好了。」［133:56］'},
+        {h:'同一段他也講了為什麼不要硬撐',p:'他公開承認自己在圖像與語音比較弱，被邀約時會直接推薦別人——<b>「為什麼要去朝 Weakness 硬要去撞呢？」「術業有專攻，交給厲害的人來處理。」</b>'},
+        {h:'實機畫面',shot:{img:'s2e2-img/16-chatgpt-project.jpg',cap:'ChatGPT 的「專案設定」三格：專案名稱、指令、記憶。他當場發現改版後找不到以前可以預先掛檔案的位置。左側原本列著他個人的 GPT 清單，整理時已裁除。［127:01］'}},
+        {h:'再一張',shot:{img:'s2e2-img/17-claude-connectors.jpg',cap:'Claude 的 Customize 頁，左側兩項就是下一階：Skills 與 Connectors。右邊展開的是 Canva 的權限明細，各自可以設「Always allow」。［134:31］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s2e2-notes.html#sec-same" style="color:var(--rose)">筆記 11：Skill 是下一階</a>｜<a href="s2e2-notes.html#sec-real" style="color:var(--rose)">筆記 14：這堂課真正在教的事</a>'}]}
+    ]
+  }
+}
+;
+
+const ORDER = ['why','gem','text','deck','image'];
+const $ = s=>document.querySelector(s);
+function renderChapter(ch){
+  const d=DATA[ch];const next=ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];const prev=ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html=`<div class="chapter-head"><span class="emoji">${d.emoji}</span><div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div></div>`;
+  d.topics.forEach((tp,i)=>{const id=`${ch}-${i}`;
+    html+=`<div class="topic" id="topic-${id}"><div class="topic-head" onclick="toggleTopic('${id}')"><span class="num">${i+1}</span><h4>${tp.t}<small>${tp.s}</small></h4><input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)"><span class="chev">▶</span></div><div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{html+=`<div class="block"><h5>${b.h}</h5>`;
+      if(b.p)html+=`<p>${b.p}</p>`;
+      if(b.ul)html+=`<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps)html+=`<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.table)html+=`<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.prompt)html+=`<div class="promptbox">${b.prompt}</div>`;
+      if(b.shot)html+=`<figure class="shot"><img src="${b.shot.img}" alt="" loading="lazy"><figcaption>${b.shot.cap}</figcaption></figure>`;
+      if(b.tip)html+=`<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn)html+=`<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html+=`</div>`;});
+    html+=`</div></div></div>`;});
+  html+=`<div class="chapnav"><a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a><a onclick="showHome()" style="text-align:center">回總覽<b>🏠 五大主題</b></a><a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a></div>`;
+  $('#view-'+ch).innerHTML=html;
+}
+ORDER.forEach(renderChapter);
+function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('#view-'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function showHome(){switchView('home');$('#crumbs').style.display='none';clearSearch();}
+function showChapter(ch){switchView(ch);$('#crumbs').style.display='flex';$('#crumbHere').textContent=`${DATA[ch].emoji} ${DATA[ch].title}`;clearSearch();syncChecks();}
+function toggleTopic(id){$('#topic-'+id).classList.toggle('open');}
+function openTopic(ch,i){showChapter(ch);const el=$('#topic-'+ch+'-'+i);el.classList.add('open');setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+const KEY='ecf-s2e2-skills-v1';
+const store=()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){const s=store();if(val)s[id]=1;else delete s[id];localStorage.setItem(KEY,JSON.stringify(s));updateProgress();}
+const TOTAL=ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){const done=Object.keys(store()).length;const pct=Math.round(done/TOTAL*100);$('#progFill').style.width=pct+'%';$('#progText').textContent=`${done} / ${TOTAL} 項技能已掌握`;$('#statDone').textContent=done;$('#statPct').textContent=pct+'%';ORDER.forEach(ch=>{const sub=DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;const el=document.querySelector(`[data-mini="${ch}"]`);if(el)el.style.width=Math.round(sub/DATA[ch].topics.length*100)+'%';});}
+function syncChecks(){const s=store();document.querySelectorAll('input[data-skill]').forEach(cb=>{cb.checked=!!s[cb.dataset.skill];});}
+function resetProgress(){if(confirm('確定要清空所有打勾進度嗎？')){localStorage.removeItem(KEY);syncChecks();updateProgress();}}
+function stripTags(s){return s.replace(/<[^>]+>/g,'');}
+const INDEX=[];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{let body=tp.s+' ';tp.blocks.forEach(b=>{if(b.p)body+=stripTags(b.p)+' ';if(b.ul)body+=b.ul.map(stripTags).join(' ')+' ';if(b.steps)body+=b.steps.map(stripTags).join(' ')+' ';if(b.tip)body+=stripTags(b.tip)+' ';if(b.warn)body+=stripTags(b.warn)+' ';if(b.prompt)body+=stripTags(b.prompt)+' ';if(b.table)body+=b.table.rows.flat().map(stripTags).join(' ')+' ';});INDEX.push({ch,i,title:tp.t,body});}));
+$('#searchInput').addEventListener('input',e=>{const q=e.target.value.trim();const box=$('#searchResults');if(!q){box.classList.remove('show');box.innerHTML='';return;}const hits=INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));box.classList.add('show');if(!hits.length){box.innerHTML=`<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：一致性、範本、相關資訊、預設工具、說好的圖、企劃案、自訂報告、PPTX、能改、Skill、變數）</div>`;return;}const hl=s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);box.innerHTML=hits.map(x=>{const pos=x.body.toLowerCase().indexOf(q.toLowerCase());const snip=x.body.substr(Math.max(0,pos-20),90);return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})"><div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div><h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;}).join('');});
+function clearSearch(){$('#searchInput').value='';$('#searchResults').classList.remove('show');$('#searchResults').innerHTML='';}
+syncChecks();updateProgress();
+
+</script>
+</body>
+</html>

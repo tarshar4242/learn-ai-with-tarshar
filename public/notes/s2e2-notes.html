@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第二季第二堂 課堂筆記｜給它一個範本，它每次做出來才會一樣</title>
+<meta name="description" content="生成式AI應用電台・訂閱制第二季第二堂（益師傅，2026/04/24 直播，全長 2 小時 33 分）課堂筆記：用 One-shot 範本讓 AI 產出一致，把七分格資訊圖做成 Gemini Gem、在「相關資訊」放參考圖並補一句「版型與風格需以相關資訊中的檔案一致」、預設工具鎖成建立圖像、外部連結為什麼會抓錯內容、提示詞頭尾強度與「注意：」收尾、AI 不畫圖時的兩句救援話術、把 68 頁提示詞工程白皮書改寫成創業企劃書、NotebookLM 自訂報告的內容／格式／來源三行寫法、簡報提示詞產生器與 PPTX 輸出規則、Claude Project 拿 PDF 當版型樣板、五個平台做同一份簡報的比較與「能改才是王道」，以及把圖像提示詞寫成可代參數的公式。全文另併入三份課程教材（Google《Prompt Engineering》白皮書、Google Workspace《Prompt Guide 101》、Recursive Mastery Framework 五頁成品）對照。依錄影 265 張關鍵畫面＋1941 段逐字稿整理。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#8C4F6D; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:760px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px;max-height:calc(100vh - 90px);overflow-y:auto}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:7px;border-left:none;font-size:13px}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.code{position:relative;background:var(--code);border:1px solid var(--line2);border-radius:10px;padding:13px 15px;margin:10px 0;font-size:13px;line-height:1.75;color:var(--ink);white-space:pre-wrap;font-family:"Cascadia Code",Consolas,monospace;overflow-x:auto}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.iframe-wrap{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000;margin:14px 0}
+.iframe-wrap iframe{display:block;width:100%;height:460px;border:0}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static;max-height:none} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} .iframe-wrap iframe{height:320px} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/#ecf" style="border-color:#d3b9c4" onclick="if(history.length>1){history.back();return false}">← 回上一頁</a>
+  <b>📝 第二季第二堂 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="s2e2-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 訂閱制第二季 · 第二堂</span>
+  <h1>AI 每次做出來都不一樣？<span>先給它一個範本，再叫它照著參考</span></h1>
+  <p class="lead">「我只要把這個 Gem 做起來之後，以後我只要給他任何的文案資料，他都可以幫我做成像這樣一致性。」開場十分鐘他就把整堂的題目講完了：不是教你多會下指令，是教你怎麼讓 AI <b>這次做的跟上次一樣</b>。<br>主線只有一招，但換了六個場景：先在 Gemini 的 Gem 把七分格資訊圖固定下來，再把同一招搬到 <b>NotebookLM 自訂報告</b>、<b>Claude Project</b>、ChatGPT 專案、Perplexity Space 與 Felo 主題集；中間他把一本 <b>68 頁的提示詞工程白皮書改寫成一份創業企劃書</b>，最後用五個平台做同一份簡報，選出他真正在用的那一個——理由不是漂亮，是<b>能改</b>。<br>本頁依<b>錄影 265 張關鍵畫面＋全程逐字稿 1941 段</b>整理，並併入三份課程教材對照，重點段落附影片時間戳。</p>
+  <div class="meta">
+    <span>📅 2026/04/24（五）20:00 直播</span>
+    <span>👤 講師：益師傅（楊俊益・ECF）</span>
+    <span>⏱️ 全長 2 小時 33 分（單段錄影）</span>
+    <span>🧩 主題：One-shot 範本 × 一致性輸出 × 簡報落地</span>
+    <span>🔰 小白友善</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-overview">1. 一張圖看懂這堂</a>
+  <a href="#sec-why">2. 他先問一個職場問題：你能保證這次跟上次一樣嗎</a>
+  <a href="#sec-gem">3. 實作一：把「七分格資訊圖」做成一個叫得動的 Gem</a>
+  <a href="#sec-detail">4. 讓它每次都準的四件事</a>
+  <a href="#sec-rescue">5. 它就是不畫圖的時候：兩句救援話術</a>
+  <a href="#sec-plan">6. 實作二：一本 68 頁白皮書，被改寫成一份創業企劃書</a>
+  <a href="#sec-nblm">7. 同一招搬到 NotebookLM：自訂報告的三行寫法</a>
+  <a href="#sec-slides">8. 簡報提示詞產生器：把版面選項變成一段提示詞</a>
+  <a href="#sec-project">9. Claude Project：把一份 PDF 當版型樣板餵進去</a>
+  <a href="#sec-compare">10. 五個平台做同一份簡報，他選 Claude，理由不是漂亮</a>
+  <a href="#sec-same">11. Gem、專案、Space、主題集是同一件事，Skill 是下一階</a>
+  <a href="#sec-image">12. 回到老本行：把圖像提示詞寫成可以代參數的公式</a>
+  <a href="#sec-deck">13. 簡報有、課堂沒細講的部分</a>
+  <a href="#sec-real">14. 這堂課真正在教的事</a>
+  <a href="#sec-quotes">15. 老師金句</a>
+  <a href="#sec-src">16. 資料來源與整理說明</a>
+</nav>
+
+<article>
+
+<!-- ══════════ 0 ══════════ -->
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--cyan))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>生成式AI應用電台・訂閱制第二季，第二堂</td></tr>
+    <tr><th>直播日期</th><td>2026/04/24（五）20:00，本段錄影全長 <b>2 小時 33 分 35 秒</b>（單段、中間沒有休息）</td></tr>
+    <tr><th>講師</th><td>益師傅（楊俊益・ECF）</td></tr>
+    <tr><th>本堂主題</th><td>用 One-shot 範本控制 AI 的輸出一致性：Gemini Gem、NotebookLM 自訂報告、Claude Project、簡報提示詞產生器、圖像提示詞參數化</td></tr>
+    <tr><th>課程定位</th><td><b>實作課，沒有簡報投影。</b>全程是他本人的螢幕操作，邊做邊講，示範失敗也照播</td></tr>
+    <tr><th>要先準備</th><td>Google 帳號（Gemini／NotebookLM）、Claude 帳號（免費即可，Project 不用付費）；想跟著做圖的另外準備一張人物照片</td></tr>
+  </table></div>
+
+  <h3>📚 這堂課的教材（可直接下載）</h3>
+  <p class="cd">三份都是老師當堂發到課程資料夾、要大家一起打開跟著做的檔案，本頁已徵得同意公開。前兩份是 Google 官方教材，第三份是他自己用課堂上教的提示詞產出的成品。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:230px">教材檔案</th><th>這是什麼</th><th style="width:200px">課堂上拿來做什麼</th></tr>
+    <tr>
+      <td><a href="s2e2-files/22365_3_Prompt-Engineering_v7-1.pdf" target="_blank" rel="noopener">📄 22365_3_Prompt-Engineering_v7-1.pdf</a></td>
+      <td>Google 的《Prompt Engineering》白皮書（作者 Lee Boonstra，2025 年 2 月版，68 頁）。從 LLM 的輸出參數講到 zero-shot／few-shot、System／Role／Contextual、Step-back、CoT、ReAct，最後是十幾條實務守則</td>
+      <td>第 6 章當成「被改寫的素材」丟進企劃案 Gem；第 9 章當成 Claude Project 的簡報素材</td>
+    </tr>
+    <tr>
+      <td><a href="s2e2-files/Google%20Prompt.pdf" target="_blank" rel="noopener">📄 Google Prompt.pdf</a></td>
+      <td>Google Workspace 的《Prompt Guide 101》（71 頁）。核心是一個四要素公式與六個小技巧，後面依職務別（行政、公關、客服、主管、人資、行銷、專案、業務）各給一疊可直接抄的提示詞</td>
+      <td>第 7 章在 NotebookLM 建成「Google Workspace Gemini 提示詞入門指南」筆記本，並生成心智圖與簡報</td>
+    </tr>
+    <tr>
+      <td><a href="s2e2-files/Recursive_Mastery_Framework.pdf" target="_blank" rel="noopener">📄 Recursive_Mastery_Framework.pdf</a></td>
+      <td>五頁的成品，不是教科書。老師用「淺色簡報 5 頁」那段提示詞、以自己的經歷當素材，在 NotebookLM 產出的策略顧問風格簡報（金字塔圖／矩陣圖／長條圖／SWOT／比較圖各一頁）</td>
+      <td>第 9 章當作 Claude Project 的<b>版型樣板</b>——重點不是內容，是讓 AI 學它的配色與版面</td>
+    </tr>
+  </table></div>
+
+  <div class="note steel">🔧 <div><b>本頁沒有內嵌錄影。</b>這堂的錄影是老師分享給訂閱學員的教材，取得方式請走原本的課程資料夾與 Line 群記事本；本頁只整理課堂內容、可公開的操作方法，以及上面這三份老師同意公開的教材。</div></div>
+
+  <div class="note gold">🔒 <div><b>本頁的截圖都經過去識別化處理。</b>原始錄影是講師本人整個桌面的螢幕分享，畫面上會出現他的分頁列、網址列、帳號頭像與作業系統選單，右側還有線上教室（Microsoft Teams）的與會者名單與聊天。整理成公開頁面時，<b>每一張截圖都裁掉了畫面頂端的瀏覽器外框與底部的錄影程式浮動列</b>，另外遮蔽了各平台右上角的帳號頭像與側邊欄的個人清單；<b>線上教室畫面、分享視窗選取器、課堂共用看板一張都沒有採用</b>，逐字稿裡出現的學員暱稱也一律隱去。</div></div>
+</section>
+
+<!-- ══════════ 1 ══════════ -->
+<section class="chapter" id="sec-overview">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--purple))">OVERVIEW</span>
+  <h2 class="ct">1. 一張圖看懂這堂</h2>
+  <p class="cd">這堂表面上是六個平台的操作教學，實際上從頭到尾只有一招，而且這一招只有三個動作。</p>
+
+  <div class="svgwrap">
+  <svg viewBox="0 0 980 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="三個動作：準備一份長對的範本、把範本放進工具的參考區、在提示詞最後補一句請以參考區的檔案為準；換素材時版型不變。下方列出六個平台的參考區各叫什麼名字。">
+    <defs>
+      <marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+        <path d="M0,0 L9,4.5 L0,9 z" fill="#9B9B9B"/>
+      </marker>
+    </defs>
+
+    <text x="16" y="28" font-size="15" font-weight="700" fill="#8C4F6D">一致性只有三個動作</text>
+    <text x="16" y="48" font-size="12.5" fill="#5f5f5f">工具的名字每半年就換一次，這三個動作沒換過。</text>
+
+    <rect x="16" y="66" width="212" height="104" rx="12" fill="#EEF4FB" stroke="#CFE0F1"/>
+    <text x="122" y="96" text-anchor="middle" font-size="14.5" font-weight="700" fill="#1d5e8f">① 準備範本</text>
+    <text x="122" y="120" text-anchor="middle" font-size="12.5" fill="#5f5f5f">一張「長這樣就對了」的圖，</text>
+    <text x="122" y="138" text-anchor="middle" font-size="12.5" fill="#5f5f5f">或一份格式對的 PDF。</text>
+    <text x="122" y="156" text-anchor="middle" font-size="12.5" fill="#5f5f5f">重點是格式，不是內容。</text>
+
+    <rect x="256" y="66" width="212" height="104" rx="12" fill="#FBF7EC" stroke="#EFE3C4"/>
+    <text x="362" y="96" text-anchor="middle" font-size="14.5" font-weight="700" fill="#7a5b12">② 放進參考區</text>
+    <text x="362" y="120" text-anchor="middle" font-size="12.5" fill="#5f5f5f">Gem 叫「相關資訊」，</text>
+    <text x="362" y="138" text-anchor="middle" font-size="12.5" fill="#5f5f5f">Claude 叫「Files」，</text>
+    <text x="362" y="156" text-anchor="middle" font-size="12.5" fill="#5f5f5f">NotebookLM 就叫「來源」。</text>
+
+    <rect x="496" y="66" width="212" height="104" rx="12" fill="#EEF2F5" stroke="#D2DFE7"/>
+    <text x="602" y="96" text-anchor="middle" font-size="14.5" font-weight="700" fill="#255066">③ 補那一句話</text>
+    <text x="602" y="120" text-anchor="middle" font-size="12.5" fill="#5f5f5f">在提示詞裡明講：</text>
+    <text x="602" y="138" text-anchor="middle" font-size="12.5" fill="#5f5f5f">「版型與風格需以</text>
+    <text x="602" y="156" text-anchor="middle" font-size="12.5" fill="#5f5f5f">相關資訊中的檔案一致」。</text>
+
+    <rect x="736" y="66" width="228" height="104" rx="12" fill="#EDF7F1" stroke="#CBE6D5"/>
+    <text x="850" y="96" text-anchor="middle" font-size="14.5" font-weight="700" fill="#166a4c">結果：換素材，版型不變</text>
+    <text x="850" y="120" text-anchor="middle" font-size="12.5" fill="#5f5f5f">同一個機器人，這個月丟</text>
+    <text x="850" y="138" text-anchor="middle" font-size="12.5" fill="#5f5f5f">A 檔、下個月丟 B 檔，</text>
+    <text x="850" y="156" text-anchor="middle" font-size="12.5" fill="#5f5f5f">出來的長得一模一樣。</text>
+
+    <line x1="228" y1="118" x2="252" y2="118" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+    <line x1="468" y1="118" x2="492" y2="118" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+    <line x1="708" y1="118" x2="732" y2="118" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+
+    <rect x="16" y="200" width="948" height="72" rx="12" fill="#F4F3F0" stroke="#DBD9D5"/>
+    <text x="34" y="226" font-size="13.5" font-weight="700" fill="#191919">同一件事，六個名字</text>
+    <text x="34" y="248" font-size="12.5" fill="#5f5f5f">Gemini 的 Gem ｜ NotebookLM 的自訂報告 ｜ Claude 的 Project ｜ ChatGPT 的專案 ｜ Perplexity 的 Space ｜ Felo 的主題集</text>
+    <text x="34" y="264" font-size="12.5" fill="#5f5f5f">每一個都是「指令 ＋ 參考檔案」兩格。學會一個，其他五個只是換介面。</text>
+
+    <text x="16" y="304" font-size="13.5" font-weight="700" fill="#8C4F6D">下一階：Skill</text>
+    <text x="118" y="304" font-size="12.5" fill="#5f5f5f">Gem／Project 要先進到那個房間才叫得動；Skill 是在任何一段對話裡，講到關鍵字它自己跳出來。</text>
+  </svg>
+  <figcaption>整堂的主線：準備範本 → 放進參考區 → 在提示詞裡明講要照著參考。三個動作做完，同一個機器人就能一直產出同一種版型；六個平台差的只是那兩格欄位叫什麼名字。</figcaption>
+  </div>
+
+  <div class="note blue">💡 <div>如果只記得一句話，記這句：<b>AI 產出不穩，多半不是提示詞寫得不夠長，是你沒有給它一份「長這樣就對了」的樣本，也沒有明講要照著它做。</b>［20:54］</div></div>
+</section>
+
+<!-- ══════════ 2 ══════════ -->
+<section class="chapter" id="sec-why">
+  <span class="chip" style="background:linear-gradient(90deg,var(--blue),var(--teal))">04:00–10:00</span>
+  <h2 class="ct">2. 他先問一個職場問題：你能保證這次跟上次一樣嗎</h2>
+  <p class="cd">開場十分鐘沒有講任何工具，他先把題目講清楚。這一段決定了後面兩個半小時所有示範的意義。</p>
+
+  <p>他從自己的粉絲專頁講起：最近有一系列資訊圖貼文按讚數異常高，內容各不相同——學習的本質、機車保養、線性代數——<b>但每一張的版型、配色、人物角色都一模一樣</b>。他說這件事看起來沒什麼，卻是職場上最實際的需求。</p>
+
+  <figure class="shot">
+    <img src="s2e2-img/01-fanpage-consistency.jpg" alt="七格資訊圖成品：學習的本質，極致的重複" loading="lazy">
+    <figcaption>他當場打開自己的粉專貼文回看：這張「學習的本質：極致的重複」是七格 Q 版資訊圖，頂端一個大標、下面六格各一個小主題。看左邊 AI 的回話——它自己說明「我保留了您上傳圖片中的小男孩角色造型，並根據不同的學習重點設計了對應的情境與表情」，這正是<b>角色固定、內容替換</b>的證據。這一系列有二十幾張，每張主題不同、長相相同，就是這堂課要拆解的東西。［07:18］</figcaption>
+  </figure>
+
+  <h3>為什麼一致性是職場問題，不是美感問題</h3>
+  <p>他一連舉了三個例子，每一個都不是「好不好看」，而是「交得出去嗎」：</p>
+  <ul class="pt">
+    <li><b>會議紀錄</b>——「我不能這一次做的跟上次的會議紀錄不一樣吧？」同一個單位、同一種會，格式每次跳來跳去，收件的人會先問你是不是換人做了。</li>
+    <li><b>月報與簡報</b>——這個月做的圖不能跟上個月不一樣，否則整份年度資料放在一起會像拼貼。</li>
+    <li><b>企劃書與規格書</b>——章節順序、標題層級是被審查的對象，不是可以自由發揮的地方。</li>
+  </ul>
+  <p>他也先承認一般人的做法為什麼不夠用：<b>「其實我們透過描述詞、透過 YAML 的方式去定位，做出風格，他就可以一致。但是那是我們想像中的，有時候還是會有點偏差。」</b>——形容詞寫得再細，AI 也只是在猜；要真的鎖住，得給它看實體。</p>
+
+  <div class="golden">
+    <div class="q">「今天我要跟大家談的就是一致性的部分。」</div>
+    <div class="a">［07:03］他把整堂的題目壓成一句。前面九十秒他都在秀成品，這一句之後才開始動手。</div>
+  </div>
+
+  <h3>📘 簡報上怎麼寫</h3>
+  <p>Google 的白皮書把這件事放在最前面的實務守則第一條：<b>「最重要的一條，是在提示詞裡提供範例（one-shot／few-shot）。」</b>理由寫得很直白——範例是一種強力的教學工具，它給模型一個可以瞄準的參考點，能同時改善輸出的<b>準確度、風格與語氣</b>〔簡報 22365_3 p.54〕。老師整堂在做的，就是把這條守則從「寫在提示詞裡的文字範例」升級成「掛在參考區的整份檔案」。</p>
+</section>
+
+<!-- ══════════ 3 ══════════ -->
+<section class="chapter" id="sec-gem">
+  <span class="chip" style="background:linear-gradient(90deg,var(--purple),var(--pink))">10:00–24:00</span>
+  <h2 class="ct">3. 實作一：把「七分格資訊圖」做成一個叫得動的 Gem</h2>
+  <p class="cd">第一個示範。整段的價值不在「怎麼建 Gem」，而在最後那一句被很多人漏掉的話。</p>
+
+  <h3>五個步驟</h3>
+  <ol class="st">
+    <li>進 Gemini，左側找到 <b>Gem</b> → <b>新增 Gem</b>。</li>
+    <li><b>名稱</b>寫這個機器人要做的事，例如「七分格圖像製作」。</li>
+    <li><b>說明</b>是給別人看的：你自己知道怎麼用，分享出去別人不知道，說明會顯示在下方。</li>
+    <li><b>使用說明</b>貼上提示詞——這一格才是本體。</li>
+    <li>捲到下面的 <b>相關資訊</b>，按「＋」把<b>範本檔案</b>加進去。</li>
+  </ol>
+
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="s2e2-img/02-gem-create.jpg" alt="Gemini 新增 Gem 的編輯畫面" loading="lazy">
+      <figcaption>Gem 的編輯畫面只有四格：名稱、說明、使用說明（就是上方那塊大文字框）、相關資訊。看畫面中段——<b>「預設工具」現在顯示「沒有預設工具」、「相關資訊」還是空的「加入檔案供 Gem 參考」</b>，這兩格等一下都要動。右邊是即時預覽，別人拿到的就是這個入口。［19:01］</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="s2e2-img/03-gem-instruction.jpg" alt="使用說明欄位裡貼上的七分格提示詞內容" loading="lazy">
+      <figcaption>提示詞貼進「使用說明」之後的樣子。可以讀到它在描述最終圖像：<b>「一張包含頂部主標題區與下方六格漫畫的資訊圖表，採用乾淨、可愛的 Q 版卡通風格，具有粗黑色的輪廓線和鮮明、平坦的色彩，背景為米黃色或淺色調。每一格都出現同一位｛身穿灰色連帽上衣、深藍色褲子的小男孩｝的 Q 版角色」</b>——注意人物是寫成大括號的變數，不是寫死的。這是第 12 章要展開的寫法。［23:28］</figcaption>
+    </figure>
+  </div>
+
+  <h3>提示詞開頭那一句，決定它會不會亂動</h3>
+  <p>七分格提示詞的第一段是這樣起手的（逐字照抄自課程教材檔）：</p>
+  <div class="code">請根據 上傳的檔案資料 / 提供的連結 (一定要等待用戶提供檔案或連結 ) 重新整理出7格圖像資料 及 人物圖像 / {人物特徵} , 重新整理出7個重點, 而圖像 {人物特徵} 的表示必須依據整理出的摘要重點表示意境</div>
+  <p>他特別解釋了兩個細節：<b>那個斜線就是「或」</b>（「你寫一個斜線他看得懂」），以及<b>「一定要等待用戶提供」這句是為了擋住它自作主張</b>——沒有這句，你一進去它就會拿提示詞裡的示範內容直接畫一張給你。</p>
+
+  <h3>關鍵在最後：相關資訊放了，還要明講</h3>
+  <p>他把一張已經畫好的七分格圖丟進「相關資訊」，然後停下來強調：<b>檔案放進去不等於它會用</b>。提示詞裡如果沒有指名要參考，AI 只會照著提示詞裡的文字描述自己發揮。所以要補上這一句：</p>
+  <div class="code">圖像的版型及風格需以 相關資訊中的檔案一致</div>
+  <p>他一連問了兩次「理解嗎」，還請大家在聊天室按數字回覆——整堂最像考試的地方就是這裡。</p>
+
+  <div class="golden">
+    <div class="q">「但是我有特別跟他講，圖像的版型及風格需以相關資訊中的檔案一致。檔案一致是哪一個檔案？就是剛剛這裡的檔案。」</div>
+    <div class="a">［20:54］這句是整堂的樞紐。後面 NotebookLM、Claude Project、ChatGPT 專案的做法，全部是這句話換一個欄位名稱重寫一次。</div>
+  </div>
+
+  <h3>他順手把同一招換成「會議紀錄」再講一次</h3>
+  <p>為了讓沒在畫圖的人也接得住，他當場把場景換掉：把你平常在寫的會議紀錄存成 PDF，丟進 Gem 的相關資訊，然後在提示詞裡寫——</p>
+  <div class="code">所有的會議記錄的摘要與格式，請參考相關資訊的 會議記錄.pdf</div>
+  <p>「沒有辦法說格式一模一樣，但是它的區塊、摘要、主題它是一樣，就可以節省你很多時間囉。」他自己先把期待值講清楚了。</p>
+
+  <div class="note steel">🔧 <div>逐字稿在這一段把「一致」聽成「一字」（「檔案一字」）。對照他在［35:50］重講同一件事時說的「需以提供的連結或上傳檔案的內容<b>一致</b>」，可以確定是同一個詞，本頁已更正。</div></div>
+
+  <h3>📘 簡報上怎麼寫</h3>
+  <p>白皮書把「給模型背景資料」獨立成一種技巧，叫 <b>Contextual prompting（脈絡提示）</b>：提供與當前任務相關的具體細節或背景資訊，幫助模型理解語境並據此調整回應〔簡報 22365_3 p.18〕。它跟 System prompting（定義模型整體任務）、Role prompting（指定角色口吻）是三件不同的事，可以疊在一起用。</p>
+  <p>用這組定義回頭看 Gem 的四格，對應得很乾淨：<b>「使用說明」＝ System＋Role，「相關資訊」＝ Contextual</b>。老師沒有用這些名詞，但他把兩者分開放的做法，正好就是白皮書建議的「分開設計、彈性組合」。</p>
+</section>
+
+<!-- ══════════ 4 ══════════ -->
+<section class="chapter" id="sec-detail">
+  <span class="chip" style="background:linear-gradient(90deg,var(--orange),var(--amber))">24:00–36:00</span>
+  <h2 class="ct">4. 讓它每次都準的四件事</h2>
+  <p class="cd">Gem 建好只是及格。這一章是他一邊踩雷一邊補上去的四個設定，每一個都對應一次現場失敗。</p>
+
+  <h3>一、預設工具要鎖死</h3>
+  <p>他做到一半按了編輯回頭補：<b>「這個機器人是要做什麼？畫圖，對不對？所以麻煩你在這個預設工具的地方，你幫我選擇建立圖像。」</b>理由很實際——不鎖的話，你丟檔案進去它可能回你一大篇文字分析，等於白等一輪。</p>
+
+  <figure class="shot">
+    <img src="s2e2-img/04-gem-default-tool.jpg" alt="Gem 設定中預設工具改為建立圖像，相關資訊已放入範本圖" loading="lazy">
+    <figcaption>補完之後的樣子，兩個關鍵欄位都到位了：<b>「預設工具」從「沒有預設工具」改成了「建立圖像」</b>，下面的「相關資訊」也已經放進一張七分格的縮圖當範本。右上角標題旁顯示「正在儲存 Gem…」。這兩格是這一章的全部重點。［25:01］</figcaption>
+  </figure>
+
+  <h3>二、丟檔案比丟連結準</h3>
+  <p>他實測的心得是：<b>「Gem 對外部連結其實效果有時候會一半一半啦。假若你今天是丟檔案給他，他來幫你做七分格的圖像比較沒有問題。」</b>而外部連結會歪掉的原因他也講得很白話——網頁有上版、左版、右版、中版、下版，AI 不知道你要哪一塊：</p>
+  <div class="note gold">⚠️ <div><b>「萬一是這個刷卡的資料呢？萬一是旁邊的電風扇呢？萬一是它的特價商品，而不是本身的東西怎麼辦呢？」</b>［32:20］他的補救法是：連結照給，但<b>另外把商品／主題的文字也複製一份貼給它</b>，並且「記得空一格，這是 Token 的一個特性，字跟字中間用一個空白隔開」。</div></div>
+
+  <h3>三、人物照當第二個參數，而且要一開始就給</h3>
+  <p>他先示範了錯誤版本：只丟檔案不給人物，出來的角色變成一個不相干的小女生；後面才補上傳人物照，結果得再跑一輪。他的結論是<b>「所以我們一開始的時候把檔案丟上去，並貼這個人物的圖像給了他」</b>——這個 Gem 其實吃兩個參數，一次給齊就不用來回問。</p>
+
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="s2e2-img/05-seven-grid-result.jpg" alt="Gem 產出的七格資訊圖：Gemini 1.5 Pro 與 Flash" loading="lazy">
+      <figcaption>只丟一份 PDF、什麼指令都沒下，Gem 直接吐出的成品：頂端主標「Gemini 1.5 Pro &amp; Flash：AI 應用的飛躍」，下面六格分別是超大上下文窗口、深度文檔分析、多模態理解、高效代碼分析、速度與效率、開發者工具與部署。<b>版型、字級、插畫風格跟第 2 章那張粉專圖完全同一套</b>，只有內容換了——這就是「相關資訊那一句話」在起作用。［27:39］</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="s2e2-img/06-link-persona-result.jpg" alt="換上指定人物之後產出的七格資訊圖" loading="lazy">
+      <figcaption>換人物參數之後的同一個 Gem。主標題是「為什麼不應免費分享你的創造力？一分鐘看懂『價值保護』」，六格談貶低品牌價值、才能與影響力是資產、難以在合作中合理定價、吸引利用與不尊重、真正的策略。<b>看主角——綠髮、墨鏡、灰西裝，六格裡都是同一個人</b>，這是把人物照當參數餵進去的結果。［35:02］</figcaption>
+    </figure>
+  </div>
+
+  <h3>四、提示詞的頭跟尾最有力，所以結尾要再壓一次</h3>
+  <p>連結示範出來的圖「有人物、有筆電，但內容不是那個品牌」，他沒有跳過，而是把原因講出來，並且給了一個結構性的解法：</p>
+  <div class="code">注意：
+圖像內容需以提供的連結或上傳檔案的內容一致</div>
+  <p>這段要加在<b>使用說明的最後面</b>。他的理由是提示詞的頭尾強度最強，中間最弱——所以開頭指定版型、結尾再壓一次內容，兩頭包夾。</p>
+
+  <div class="golden">
+    <div class="q">「提示詞的結構，開頭強度會很強，還有最後強度也會很厲害。」</div>
+    <div class="a">［35:38］他沒有把改好的版本直接發給大家，而是要大家自己動手加一次——「因為提示詞在前面跟後面的強度是比較強的」。</div>
+  </div>
+
+  <h3>📘 簡報上怎麼寫</h3>
+  <p>「注意：⋯需一致」這種寫法，在白皮書裡剛好踩在一條建議上：<b>Use Instructions over Constraints（用指令，不要用限制）</b>。白皮書說，越來越多研究顯示正向指令比一長串「不要做什麼」有效，因為指令直接說出你要的結果，限制卻讓模型自己猜什麼才算被允許，而且多條限制彼此還會打架〔簡報 22365_3 p.56–57〕。</p>
+  <ul class="pt">
+    <li>老師寫的是「內容需以⋯一致」——這是<b>指令</b>，不是「不要亂加內容」。</li>
+    <li>白皮書給的操作順序也一樣：<b>先寫指令，只有在安全、格式硬性要求時才補限制。</b></li>
+    <li>至於「頭尾強度比較強」這一條，<b>白皮書裡沒有</b>，是他自己反覆測出來的經驗，本頁照原話保留。</li>
+  </ul>
+</section>
+
+<!-- ══════════ 5 ══════════ -->
+<section class="chapter" id="sec-rescue">
+  <span class="chip" style="background:linear-gradient(90deg,var(--rose),var(--orange))">36:00–44:00</span>
+  <h2 class="ct">5. 它就是不畫圖的時候：兩句救援話術</h2>
+  <p class="cd">全場最多人抄筆記的八分鐘。沒有截圖，因為這一段的重點是兩句話。</p>
+
+  <p>他先問大家：AI 只吐了一大堆文字、七格的內容都寫好了，就是不生圖，你會怎麼辦？有人答「請重新畫圖」，他說很棒，然後給了他自己的版本。</p>
+
+  <div class="golden">
+    <div class="q">「你要跟他講，說好的圖呢？」</div>
+    <div class="a">［42:39］他強調這招試過很多次：「你以後用這招，他一定會生圖。」同理，簡報跑成程式碼的時候就問「說好的簡報格式呢？」——「他馬上就會轉變囉。」</div>
+  </div>
+
+  <h3>第二句：它開始自稱語言模型，就別耗了</h3>
+  <p>如果連「說好的圖呢」都沒用，它回你「我只是一個語言模型」，他的判斷很果斷——這一輪已經壞掉了，<b>不要再在同一個對話裡拗</b>。做法是：</p>
+  <ol class="st">
+    <li>把它<b>最後產出的那段七格文字內容</b>複製起來（它其實已經幫你把提示詞寫好了）。</li>
+    <li>開一個<b>全新的對話</b>。</li>
+    <li>丟過去，跟它說：<b>請畫出這個提示詞的圖像。</b></li>
+  </ol>
+  <p>他的理由是省時間：「你就不要跟他耗，也不用重新再讓他去生成那些東西，因為他已經幫你把提示詞給做出來。」</p>
+
+  <div class="note blue">💡 <div>這兩招背後是同一個判斷：<b>對話是有狀態的，狀態壞掉就換一個。</b>與其在同一串對話裡反覆道歉、拜託、重述，不如把「已經生出來的中間產物」搬到乾淨的對話重跑一次。</div></div>
+
+  <h3>他順手把課堂變成作品牆</h3>
+  <p>這一段中間他臨時起意開了一面 <b>Padlet</b> 電子牆（「2026 第二季第二堂課作品」），教大家用 <code>視窗鍵＋Shift＋S</code> 截圖、<code>Ctrl＋V</code> 貼上發布，把當堂做出來的圖貼上去互相觀摩，最後會匯出成 PDF 放回課程資料夾。</p>
+  <div class="note gold">🔒 <div><b>作品牆的畫面本頁一張都沒有採用。</b>Padlet 的看板上每張作品都掛著學員的帳號名稱與署名，整理成公開頁面時整幀移除，逐字稿裡出現的學員暱稱也一併隱去。</div></div>
+</section>
+
+<!-- ══════════ 6 ══════════ -->
+<section class="chapter" id="sec-plan">
+  <span class="chip" style="background:linear-gradient(90deg,var(--green),var(--cyan))">44:00–58:00</span>
+  <h2 class="ct">6. 實作二：一本 68 頁白皮書，被改寫成一份創業企劃書</h2>
+  <p class="cd">同一招換到純文字場景。這一章最能說服「我又不畫圖」的人。</p>
+
+  <p>他建了第二個 Gem 叫「企劃案撰寫」，做法跟第 3 章一模一樣，只是兩格內容換了：<b>使用說明</b>寫成一段格式改寫指令，<b>相關資訊</b>放一份格式對的企劃書當樣本（他用的是屏東大學企管系學生的「咕美食」百貨美食街創業營運計劃書）。</p>
+
+  <div class="code">請將上傳檔案的內容，再根據相關資訊的企劃案格式來重新整理、摘要上傳的內容，
+產生企劃案的摘要；主題為上傳檔案內容的主題，或使用者指定的主題。
+相關資訊的檔案為整體格式與結構，需詳細將上傳內容重構成相關資訊的檔案格式與結構。
+所有完成的資料必須至少 8000 字。
+若用戶需要針對哪個結構做更詳盡的說明，只要輸入該單元的項目名稱即可。</div>
+  <div class="note steel">🔧 <div>這段提示詞是<b>依畫面上讀得到的前兩行加上他逐句唸出的內容整理</b>的，不是完整逐字複製——當時捲軸只露出前面兩行。他自己也說「不要小看這段話，我花了好久時間改的」。</div></div>
+
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="s2e2-img/07-plan-gem.jpg" alt="Gemini 的企劃案撰寫 Gem 首頁" loading="lazy">
+      <figcaption>建好的「企劃案撰寫」Gem 入口。看下方的「近期」三筆——Gemini 提示詞助手 APP 企劃、企劃摘要：Google Workspace 提升方案、LLM 創業計畫書架構——<b>全都是同一個 Gem 產出的、主題完全不同的企劃書</b>。左側欄同時看得到第 3 章建的「七分格圖像製作」，兩個 Gem 各管一件事。［49:01］</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="s2e2-img/08-plan-output.jpg" alt="產出的哈美食創業企劃重構摘要內文" loading="lazy">
+      <figcaption>產出的內文。標題是「哈美食創業企劃重構摘要」，正文已經長成標準企劃書的樣子：<b>「二、產品服務與核心功能」底下再分完整點餐流程、店家與餐點資訊、排行榜與評價系統、實用輔助功能</b>，下一節接著是「商業模式與財務計畫」。這個結構是從樣本檔學來的，不是他寫的。［52:01］</figcaption>
+    </figure>
+  </div>
+
+  <h3>他當場示範失敗，然後把原因講出來</h3>
+  <p>第一次跑出來的東西整個錯亂——他丟的是 Google 的提示詞工程白皮書，AI 卻還在寫咕美食的內容。他沒有剪掉，直接說：<b>「好，它又錯亂了⋯它是整個錯亂的，它沒有辦法根據我給它的。」</b>接著給了兩個處理方式：</p>
+  <ul class="pt">
+    <li><b>不要用「快捷」</b>——「我覺得快捷根本就是沒有用⋯這種細節處理的部分，你最起碼用思考型。」他改成 Pro 重跑。</li>
+    <li><b>換平台</b>——「這些事情，其實在 Claude 都不太會有這個狀況」，這句話直接鋪成了第 9 章。</li>
+  </ul>
+  <p>改用 Pro 之後成功了：一本講提示詞工程的白皮書，被重構成「第一章專案機會與構想／第二章服務內容與執行／第三章市場與環境分析／第四章行銷策略」的創業企劃書，連 5W1H 分析、行銷 4P／7P、損益預估都照著樣本的位置長了出來。他的評語是：<b>「明明是一個提示詞工程的事情，他卻來談創業的構想。這有點像是，我們給他一個方向透過大數據的解析，來告訴你說，怎麼樣去做一個創業的思維。」</b></p>
+
+  <div class="golden">
+    <div class="q">「我們稱這個叫做 one shot，這個很重要。我們要給他一個範本，給他一個樣本來參考，他會去學習這個樣本，他就有辦法幫我做囉。」</div>
+    <div class="a">［54:29］整堂唯一一次他把技巧叫出學名。他在［57:13］又重複了一次「所以這個叫做 one shot，很重要」。</div>
+  </div>
+
+  <div class="note blue">💡 <div><b>「8000 字」是理想值，不是承諾。</b>他自己說實際大概兩三千字就滿了，正確的用法是<b>寫完框架之後，逐節點名要它展開</b>——「請針對第二節創業構想做詳細的描述」。這也是他在提示詞最後那句「輸入該單元的項目名稱即可」的用途。想一次拿到長文的話，他建議把同一套搬到 Google AI Studio，「吐出來的字真的會比較多」。</div></div>
+
+  <div class="note gold">⚠️ <div>他也先擋掉一個過度期待：拿論文、企業 SOP 來套<b>可以</b>，但「你不要太貪心，一次給他很多⋯<b>框架大綱他可以幫你做，但是細節你可能要自己調整</b>」。</div></div>
+
+  <h3>📘 簡報上怎麼寫</h3>
+  <p>Google Workspace 的《Prompt Guide 101》把一個好提示詞拆成四個要素，並且說<b>不必四個都用，但用到幾個就會有幫助</b>〔簡報 Google Prompt p.5〕：</p>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">四要素</th><th>簡報怎麼定義</th><th>這堂課對應到哪裡</th></tr>
+    <tr><td><b>Persona</b>（角色）</td><td>你希望 AI 站在誰的位置回答</td><td>Gem 的名稱與說明（「企劃案撰寫」）</td></tr>
+    <tr><td><b>Task</b>（任務）</td><td>一定要有動詞——摘要、改寫、產生、比較</td><td>「請將上傳檔案的內容⋯重新整理、摘要」</td></tr>
+    <tr><td><b>Context</b>（脈絡）</td><td>相關背景與素材，可以用 <code>@檔名</code> 標你自己的檔案</td><td><b>相關資訊那一格</b>，也就是這堂的主角</td></tr>
+    <tr><td><b>Format</b>（格式）</td><td>要條列、要表格、要幾頁、要多長</td><td>「重構成相關資訊的檔案格式與結構」「至少 8000 字」</td></tr>
+  </table></div>
+  <p>簡報同時提醒「Task 裡的動詞是整個提示詞最重要的部分」，並列出六個小技巧：<b>用自然語言、具體並反覆修正、簡潔不繞、把它當成對話、用你自己的文件、讓 Gemini 當你的提示詞助手</b>〔簡報 Google Prompt p.5〕。老師整堂的操作幾乎是這六條的實況版，尤其是「用你自己的文件」。</p>
+</section>
+
+<!-- ══════════ 7 ══════════ -->
+<section class="chapter" id="sec-nblm">
+  <span class="chip" style="background:linear-gradient(90deg,var(--teal),var(--blue))">58:00–70:00</span>
+  <h2 class="ct">7. 同一招搬到 NotebookLM：自訂報告的三行寫法</h2>
+  <p class="cd">Gem 那格叫「相關資訊」，NotebookLM 這邊叫「來源」。他要處理的是同一個問題：怎麼指定「哪一份是內容、哪一份是格式」。</p>
+
+  <h3>做法：兩份來源，一份當內容一份當格式</h3>
+  <ol class="st">
+    <li>建一個筆記本，<b>把兩份 PDF 都加進來</b>：一份是你要改寫的素材，一份是格式範本。</li>
+    <li><b>把檔名改短</b>——他當場把長檔名改成 <code>企劃書.pdf</code> 與 <code>來源.pdf</code>，理由是等一下要在提示詞裡直接叫檔名。</li>
+    <li>右側點<b>「報告」→「自訂報告」</b>，在裡面寫三行指令。</li>
+  </ol>
+  <div class="code">內容： 根據 來源.pdf
+格式與摘要： 根據 企劃書.pdf
+字數至少 5000 字</div>
+  <p>他強調冒號後面<b>要空一格</b>（跟第 4 章那個 Token 空白是同一個習慣），也坦白說字數那行「它不會理你啦，那我們就寫開心的」。</p>
+
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="s2e2-img/09-nblm-custom-report.jpg" alt="NotebookLM 建立報告的四種格式選單" loading="lazy">
+      <figcaption>「建立報告」的對話框，四種格式並排：<b>自訂報告、簡介文件、研讀指南、網誌文章</b>。要做的是最左邊那顆「自訂報告——製作符合自身需求的報告，可指定架構、風格、語氣等細節」。左下角看得到兩份來源已經被改名成 <code>企劃書.pdf</code> 與 <code>來源.pdf</code>，右側工作室則列著簡報、心智圖、學習卡、資訊圖表等輸出選項。［62:26］</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="s2e2-img/10-nblm-slides.jpg" alt="以 Google Prompt Guide 建立的 NotebookLM 筆記本與生成的簡報" loading="lazy">
+      <figcaption>另一個示範筆記本：把課程教材 <code>Google Prompt.pdf</code> 加進來，取名「Google Workspace Gemini 提示詞入門指南」。<b>看右側工作室產出的簡報縮圖——第二張正是「完美提示詞的 4 大核心架構：Persona（角色設定）／Task（任務指令）⋯」</b>，那就是教材第 5 頁那個四要素公式被畫成圖的樣子。［66:55］</figcaption>
+    </figure>
+  </div>
+
+  <div class="note steel">🔧 <div><b>這次示範沒有成功，本頁照實記錄。</b>報告跑出來沒有依照 <code>企劃書.pdf</code> 的章節結構，他當場說「好，它這個失敗了⋯這是失敗的，你知道為什麼嗎？」，也坦承「理論上 NotebookLM 應該會比較聽話啦」。他最後的處理是承諾補一份寫好的報告提示詞給大家，而不是硬拗成功。</div></div>
+
+  <h3>但 NotebookLM 的簡報其實是可以下指令的</h3>
+  <p>失敗歸失敗，他接著證明了一件更有用的事：<b>NotebookLM 的簡報可以精細到「第幾頁、左邊放什麼、右邊放什麼」</b>。做法是把要用的圖也一起加進來源，然後在提示詞裡直接叫檔名：</p>
+  <div class="code">第二頁：左側 dog.jpg，右側 swot.pdf
+第三頁：圖表 A.png 在右側</div>
+  <p>他當場翻出上週做好的簡報驗證：第三頁那隻狗確實出現在右邊，第二頁的 Q 版人物確實在左邊。他的結論是——<b>「其實 NotebookLM 是可控的。有人用 YAML 來做控制，那我用自然語言來做控管。自然語言其實很容易，但是它可能它的細節度沒有 YAML 來得好，但至少人人都可以控制它。」</b></p>
+
+  <h3>📘 簡報上怎麼寫</h3>
+  <p>白皮書有一條直接對應「檔名要短、冒號後空一格」這種怪癖：<b>Experiment with input formats and writing styles（換句話說再試一次）</b>。它的說明是，不同模型、不同措辭、把同一件事寫成問句／敘述句／指令句，結果會不一樣，所以提示詞的用字與結構本身就是要拿來實驗的〔簡報 22365_3 p.59〕。老師的「空一格是 Token 的特性」屬於這個範疇的個人心得，白皮書沒有這條規則。</p>
+</section>
+
+<!-- ══════════ 8 ══════════ -->
+<section class="chapter" id="sec-slides">
+  <span class="chip" style="background:linear-gradient(90deg,var(--amber),var(--green))">70:00–84:00</span>
+  <h2 class="ct">8. 簡報提示詞產生器：把版面選項變成一段提示詞</h2>
+  <p class="cd">下半場的主題轉成簡報。他先發了一支自己寫的網頁小工具，因為接下來三章都要用它產出的提示詞。</p>
+
+  <p>這是一支單檔 HTML，本機瀏覽器打開就能用，不用連線。它的角色不是做簡報，是<b>把「幾頁、什麼風格、什麼配色、每頁放什麼圖表」這些選擇，翻譯成一段可以貼到任何平台的提示詞</b>。</p>
+
+  <figure class="shot">
+    <img src="s2e2-img/11-slides-prompt-generator.jpg" alt="簡報提示詞產生器的操作介面" loading="lazy">
+    <figcaption>工具主畫面。標題下方寫著「Claude・Gemini・NotebookLM 三平台通用」，中間三顆是<b>目標平台切換鈕</b>；左欄是風格包（醫療藥廠、政府智庫、科技流程圖、金屬工業風、暖調中性風⋯）與色彩主題包（莫蘭迪、賽博龐克、日系清新、商務藍、暖陽金、森林綠、玫瑰金）；右欄是逐頁設定——頁面背景色、圖表、<b>風格覆蓋（例：3D 皮克斯風）</b>、參考連結 URL、頁面描述。上排還有「讀入 PDF／PPTX」與「匯出 JSON／Markdown」。［77:31］</figcaption>
+  </figure>
+
+  <h3>為什麼要分平台：Claude 不特別講就不會給你 PPTX</h3>
+  <p>他解釋工具裡那三顆平台鈕的用途：<b>Gemini 跟 NotebookLM 拿到提示詞會直接做簡報，Claude 卻會做成互動式網頁</b>。所以工具在偵測到目標平台是 Claude 時，會自動在輸出的提示詞開頭加上一段硬性要求。</p>
+
+  <figure class="shot">
+    <img src="s2e2-img/12-pptx-output-rule.jpg" alt="工具產生的提示詞，含 PPTX 輸出格式與最小字級規定" loading="lazy">
+    <figcaption>按下「產生提示詞」跳出來的內容。開頭四行是給 Claude 的硬性要求：<b>「目標平台：Claude／【輸出格式：PPTX】／請務必產出『.pptx』PowerPoint 檔案供下載／請使用 python-pptx 套件⋯不要只回覆文字說明，必須實際產出 PPTX 檔案」</b>；下半段是他新版才加的字級規定——<b>「【絕對禁止】所有內文（body text）字級大小最小 14px，嚴禁使用小於 14px 的文字」，並註明無論 Claude／Gemini／NotebookLM 皆須 100% 遵守</b>。右下角還有精簡版／詳細版、中文／English 的切換。［79:52］</figcaption>
+  </figure>
+
+  <div class="note gold">⚠️ <div><b>字級這條是他被舊版燙到才補的。</b>他的原話：「這個程式新的版本是最小字體不能小於 14 點⋯至少不會像原本那個程式，它可能到 11，或有時候出現 10。這個在正式的簡報裡頭去做報告不太適合。」</div></div>
+
+  <h3>做簡報請用淺色底</h3>
+  <p>整段裡他語氣最重的一次拜託，跟 AI 沒關係，是版面常識：</p>
+  <div class="golden">
+    <div class="q">「簡報要落地應用，一定要記得一件事情：用淺色，用淺色會比較 OK。所以不用去用花俏的底色，那些沒有用。」</div>
+    <div class="a">［77:50］理由是後續維護——「只要提到要改字、提到要加什麼東西上去，你有底色就很難處理」。這也是為什麼三份教材裡那份成品範本用的是米色底。</div>
+  </div>
+
+  <div class="note steel">🔧 <div><b>工具的新功能當場找不到。</b>他要示範「上傳 PDF 自訂風格」時發現介面上沒有這個選項，直接說「我下載錯了版本嗎⋯好，我是有產生幻覺的嘛」，改用標準流程繼續。過了幾分鐘他自己找到了（按鈕在「讀入 PDF／PPTX」那裡），還自嘲「自己寫寫都忘記了，豬頭⋯待會去罰站」。本頁照實記錄。</div></div>
+
+  <h3>📘 簡報上怎麼寫</h3>
+  <p>「不要只回覆文字說明，必須實際產出 PPTX 檔案」這種寫法，對應白皮書兩條守則：</p>
+  <ul class="pt">
+    <li><b>Be specific about the output（把要的輸出講清楚）</b>——白皮書的示範是「產生三段式部落格文章，主題是前五名遊戲主機，語氣要口語」對比「產生一篇遊戲主機的文章」，差別就在具體〔簡報 22365_3 p.56〕。</li>
+    <li><b>Experiment with output formats（指定輸出格式）</b>——對於抽取、排序、分類這種非創作任務，白皮書建議直接要求 JSON 或 XML 這類結構化格式，因為<b>要求結構本身就會逼模型收斂、減少幻覺</b>〔簡報 22365_3 p.60〕。老師要求 <code>.pptx</code>，是同一個道理換一種檔案格式。</li>
+  </ul>
+</section>
+
+<!-- ══════════ 9 ══════════ -->
+<section class="chapter" id="sec-project">
+  <span class="chip" style="background:linear-gradient(90deg,var(--cyan),var(--purple))">84:00–94:00</span>
+  <h2 class="ct">9. Claude Project：把一份 PDF 當版型樣板餵進去</h2>
+  <p class="cd">同一招的第三次換裝。Gem 的兩格在這裡叫 Instructions 與 Files，做法一字不改。</p>
+
+  <h3>四個步驟</h3>
+  <ol class="st">
+    <li>Claude 左側點 <b>Projects</b> → 右上 <b>New Project</b>（他強調<b>不用付費就能用</b>）。</li>
+    <li>給名稱，例如「簡報版型學習製作」。</li>
+    <li><b>Instructions</b> 按「＋」，貼上第 8 章工具產生的那段提示詞，按 Save Instructions。<b>＝ Gem 的「使用說明」</b></li>
+    <li><b>Files</b> 按「＋」，上傳版型範本。<b>＝ Gem 的「相關資訊」</b></li>
+  </ol>
+
+  <figure class="shot">
+    <img src="s2e2-img/13-claude-project.jpg" alt="Claude Project 的兩格設定：Instructions 與 Files" loading="lazy">
+    <figcaption>建好的 Project「簡報版型學習製作」。右欄由上而下就是這一章的全部：<b>Memory（專案記憶）、Instructions（開頭已經看得到「目標平台：Claude／【輸出格式：PPTX】」那兩行）、Files（下面那張縮圖就是課程教材 Recursive_Mastery_Framework.pdf 的第一頁）</b>。左邊是輸入區，模型選 Opus 4.7 Adaptive。跟第 3 章那張 Gem 設定圖並排看，會發現是同一張表換了英文欄位名。［91:35］</figcaption>
+  </figure>
+
+  <div class="note blue">💡 <div><b>他放進 Files 的不是資料，是版型。</b>原話：「這個可以讓它去學⋯<b>不是學內容，學它的版型</b>，它會畫出來跟它很像。這個圖不會那麼漂亮，但是裡頭的風格跟用色會很接近。」這正是三份教材裡 <code>Recursive_Mastery_Framework.pdf</code> 在這堂課的角色。</div></div>
+
+  <h3>Gem 與 Project，欄位對照</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">做的事</th><th>Gemini 的 Gem</th><th>Claude 的 Project</th></tr>
+    <tr><td>固定的指令</td><td>使用說明</td><td>Instructions</td></tr>
+    <tr><td>範本／參考檔案</td><td>相關資訊</td><td>Files</td></tr>
+    <tr><td>限制它只做一件事</td><td>預設工具（例：建立圖像）</td><td>寫進 Instructions（例：輸出格式 PPTX）</td></tr>
+    <tr><td>給別人用的說明</td><td>說明</td><td>專案描述</td></tr>
+    <tr><td>怎麼叫用</td><td>要先點進那個 Gem</td><td>要先點進那個 Project</td></tr>
+  </table></div>
+
+  <h3>他提前劇透了下一步：Project 可以一句話變成 Skill</h3>
+  <p>在建 Project 的中間他插了一段：<b>「其實這些相關的應用都可以轉成 Skill，你只要跟他講一句話⋯請將上述的功能幫我轉換成一個簡報學習製作的 Skill。光講這些字，它就可以幫你轉換了，而且很快。」</b>差別在哪，他留到第 11 章才講。</p>
+
+  <div class="note gold">⚠️ <div><b>免費版會卡額度。</b>他自己講得很坦白：Claude 用幾次就會叫你升級，「他就是故意讓你等 5 個小時⋯讓你等了一兩次之後，你就不甘願，就想說刷下去好了。我覺得他這個行銷策略太強了」。他自己是從一月起每月付 100 美元。<b>但 Project 這個功能本身不用付費就能建。</b></div></div>
+</section>
+
+<!-- ══════════ 10 ══════════ -->
+<section class="chapter" id="sec-compare">
+  <span class="chip" style="background:linear-gradient(90deg,var(--pink),var(--rose))">94:00–108:00</span>
+  <h2 class="ct">10. 五個平台做同一份簡報，他選 Claude，理由不是漂亮</h2>
+  <p class="cd">同一段提示詞、同一份素材、同一份版型樣板，同時丟進 Gemini Canvas 與 Claude Project 跑。這是整堂最有實驗性質的一段。</p>
+
+  <p>他先問大家猜哪個平台做出來的簡報最好看，然後自己揭曉：</p>
+  <div class="golden">
+    <div class="q">「其實出乎你意料之外，是 Claude 做出來的簡報最漂亮。」</div>
+    <div class="a">［73:35］他補充理由：「Claude 本來就是寫文案的高手，只是很多人不曉得而已⋯在外面寫手專門在做文案撰寫，這是用 Claude，不是用 ChatGPT，也不是用 Gemini。」但他也先講了代價：「它中間的過程要比較久。」</div>
+  </div>
+
+  <h3>Gemini 這邊：要記得把工具切成 Canvas</h3>
+  <p>他點名一個常見的漏做步驟：<b>在 Gemini 裡要做簡報，工具那格一定要選 Canvas</b>——「不是 Canva 啦，是 Canvas 畫布的意思」，模型再選 Pro 或思考型。</p>
+
+  <figure class="shot">
+    <img src="s2e2-img/14-gemini-canvas-slides.jpg" alt="Gemini Canvas 產出的策略顧問分析報告在 Google 簡報中開啟" loading="lazy">
+    <figcaption>Gemini Canvas 的成品匯出成 Google 簡報之後的樣子（檔名「策略顧問分析報告」）。這一頁「BUSINESS IMPACT &amp; GOAL LOCKDOWN」有三欄——里程碑數字卡、成長曲線圖、目標達成率長條圖，底部一整排 CONCLUSION／NOTE／NEXT STEP 標籤。<b>米色底、深藍主色、襯線大標，都是從版型樣板學來的</b>。右側打開的是「幫我繪圖」面板，他正要示範下一段。［98:31］</figcaption>
+  </figure>
+
+  <div class="note blue">💡 <div><b>一個可以再加工、但有代價的技巧。</b>付費版可以點選任一頁 →「繪圖」→「資訊圖表」，跟它說「改成 Google 專業圖表風」，它會把整頁重畫成一張漂亮的圖。但他馬上補上代價：<b>「它是畫成圖喔⋯裡頭的字就變成不能改了。」</b>他的判斷是先把文字全部改定，最後再美化。</div></div>
+
+  <h3>Claude 這邊：它會自己修版面</h3>
+  <figure class="shot">
+    <img src="s2e2-img/15-claude-fix-pptx.jpg" alt="Claude 在對話中修正 PPTX 的版面問題並提供下載" loading="lazy">
+    <figcaption>Claude 產出 PPTX 之後的追加對話。他用英文指出兩個版面問題——<b>「第 1 頁的步驟膠囊太窄導致文字換行，第 4 頁的中央徽章壓到內容而且底部項目被頁尾裁掉」</b>，Claude 逐項回「Fix slide 1: replace the chain pills with a cleaner, wider layout」「Now fix slide 4 — remove the overlapping center badge⋯」，下面顯示 <code>Edited 2 files, viewed 2 files, ran a command</code>。右上角是可以直接下載的 <b>Prompting guide 101 · PPTX</b>。<b>這一整段就是「能改」的實況</b>。［100:01］</figcaption>
+  </figure>
+
+  <h3>他的五平台心得</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:120px">平台</th><th>他的評語</th><th>速度</th></tr>
+    <tr><td><b>Claude</b></td><td>版面、內容、表格最漂亮，細節度最好；<b>會給可下載的 PPTX，而且可以再叫它修</b></td><td>最慢</td></tr>
+    <tr><td><b>Gemini（Canvas）</b></td><td>透過提示詞要求可以做得不錯，穩紮穩打，<b>內容可以改</b>；不下功夫就是「一邊圖一邊文字，醜醜的」</td><td>中間</td></tr>
+    <tr><td><b>NotebookLM</b></td><td>最花俏、圖最好看，<b>但產出是圖，字不能改</b>——企業場景不適用，老師的課比較常用 Gemini Canvas</td><td>—</td></tr>
+    <tr><td><b>Perplexity</b></td><td>做簡報「蠻醜的，直接講用醜來形容」，但<b>寫課綱細節度最好</b></td><td>最快</td></tr>
+    <tr><td><b>Gamma</b></td><td>「最近做出來的簡報就比較符合商業的標準⋯做出來讓你看不出它是 Gamma 做的」</td><td>所有工具裡最快</td></tr>
+  </table></div>
+
+  <h3>為什麼他把標準訂在「能不能改」</h3>
+  <p>這一段是整堂的價值判斷，他講得又快又用力。先是設計原則：</p>
+  <div class="golden">
+    <div class="q">「我們要的不是圖漂亮，而是可以修改。有漂亮的圖表，又可以修改，這才是我們要的簡報。你再漂亮沒有辦法修改，你再花俏沒辦法落地，都沒有用。」</div>
+    <div class="a">［94:00］緊接著他自己補了一個但書——這是<b>他的</b>目標受眾決定的，不是通則。</div>
+  </div>
+  <p>但書是這樣：「假如是老師們就不一樣。老師的目標受眾有時候是中學生、小學生，他們要的就是漂亮的圖表、能夠吸引他的目光，這就是一個好的簡報。<b>看你的目標受眾是誰，做出適合他的簡報，這才會有他的價值。</b>」他自己主要跑企業研習，所以一定要能改。</p>
+  <p>然後他把「能改」翻譯成一個所有上班族都懂的場景：早上改一次、下午改一次、晚上傳訊息叫你再改，最後說「我要第一個版本」。</p>
+  <div class="golden">
+    <div class="q">「所以能夠改是王道。」</div>
+    <div class="a">［107:09］他還舉了一個 AI 目前解不掉的實例：老闆說「這個要擺到右邊、這個擺到左邊」——「改幾個字好解決⋯我要左右對調怎麼辦？你在 NotebookLM 如何去做左右對調？沒辦法。」</div>
+  </div>
+</section>
+
+<!-- ══════════ 11 ══════════ -->
+<section class="chapter" id="sec-same">
+  <span class="chip" style="background:linear-gradient(90deg,var(--blue),var(--purple))">108:00–115:00 · 126:00–135:00</span>
+  <h2 class="ct">11. Gem、專案、Space、主題集是同一件事，Skill 是下一階</h2>
+  <p class="cd">課堂尾聲他把四個平台的同一個功能一次攤開，然後講出它們共同的天花板。</p>
+
+  <h3>四個平台，同一張表</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:130px">平台</th><th>它叫什麼</th><th>指令欄</th><th>參考檔案欄</th><th>他特別提的一點</th></tr>
+    <tr><td>Gemini</td><td><b>Gem</b></td><td>使用說明</td><td>相關資訊</td><td>可以設「預設工具」鎖成只畫圖</td></tr>
+    <tr><td>Claude</td><td><b>Project</b></td><td>Instructions</td><td>Files</td><td>不用付費就能建；可一句話轉成 Skill</td></tr>
+    <tr><td>ChatGPT</td><td><b>專案</b></td><td>指令</td><td>（改版後他當場找不到）</td><td>「其實已經很久很久⋯從 GPTs 的時候它就有這個功能了」</td></tr>
+    <tr><td>Perplexity</td><td><b>Space</b></td><td>Instruction（上限 8000 字）</td><td>檔案＋<b>外部連結</b></td><td>唯一可以掛 URL 當固定參考來源的</td></tr>
+    <tr><td>Felo</td><td><b>主題集</b>（原本叫 Space）</td><td>自訂提示詞</td><td>檔案＋外部連結</td><td>「它是學 Perplexity」</td></tr>
+  </table></div>
+
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="s2e2-img/16-chatgpt-project.jpg" alt="ChatGPT 的專案設定對話框" loading="lazy">
+      <figcaption>ChatGPT 的「專案設定」對話框，三格：<b>專案名稱（他打了「簡報製作」）、指令（提示是「設定上下文並自訂 ChatGPT 在本專案中的回應」）、記憶</b>。他當場發現改版後<b>找不到以前那個可以預先掛檔案的位置</b>——「我記得之前有這個功能，但我不曉得為什麼現在沒看到了」。左側原本列著他個人的 GPT 清單，整理時已裁除。［127:01］</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="s2e2-img/17-claude-connectors.jpg" alt="Claude 的 Connectors 設定畫面，Canva 連接器的權限清單" loading="lazy">
+      <figcaption>Claude 的 Customize 頁，左側兩項就是這一章的下一階：<b>Skills</b> 與 <b>Connectors</b>。中間是可連接的服務（Canva、Gamma、GitHub、Gmail、Google Calendar），右邊展開的是 Canva 的權限明細——generate-design、generate-design-structured、request-outline-review、search-designs 四個互動工具，各自可以設「Always allow」。<b>他講的「抓完資料自動做成簡報再用 mail 寄出」，靠的就是這一頁。</b>［134:31］</figcaption>
+    </figure>
+  </div>
+
+  <h3>Skill 跟前面四個差在哪</h3>
+  <p>差別只有一個，但很關鍵：<b>Gem 與 Project 是房間，你得先走進去才叫得動；Skill 是隨身技能，講到關鍵字它自己跳出來。</b></p>
+  <div class="golden">
+    <div class="q">「Skill 最大的好處就是說，我在任何一個地方只要產生一個新的對話，我只要用到製作簡報⋯他就直接會呼叫它來使用。可是在 Gemini 裡頭的 Gem，你就非得到剛剛我們設計出來的這個 Gem 裡頭，去呼叫它、去運用它。」</div>
+    <div class="a">［131:49］所以 Skill 可以串起來：「請幫我抓取臺灣證券交易所的資料，並且幫我將資料做成簡報」——它會先叫抓資料的 Skill，再叫做簡報的 Skill。</div>
+  </div>
+  <p>再往上一階是 Connectors 與排程，他也把收費的界線講清楚：串 Gmail 把簡報寄出去屬於 Connector，<b>「每天早上 9 點自動執行」這種排程要用到 Claude Code，是要付費的</b>。他的評估是「像這樣的一些功能串接，基本上都還算是小事啦，耗不了多少錢」。</p>
+
+  <div class="note blue">💡 <div><b>他對 AI Agent 的建議是「先不要追」。</b>原話：「AI Agent 很棒，但是我覺得大家比較不熟的人，可以再觀望看看，因為你們公司的人都會幫你做好，你不用急⋯<b>你只要在你的領域上面，好好的把 Gem 發揮，好好的去把一些圖像的做法、簡報製作，可以貼近你的需求</b>，我覺得初期可以先這樣就好了。」［133:56］</div></div>
+
+  <div class="note gold">🔒 <div><b>這一章中間有 11 分鐘（115:00–126:00）本頁沒有整理。</b>那一段他發了一支自己寫的「台股長期投資分析系統」單檔網頁工具，示範輸入本金與日期試算長期報酬，並談了自己的持股經驗。<b>他自己在課堂上就聲明過「我不是分析師」「那不代表是正確」「投資反而就是有風險」——本頁不轉述任何標的、金額與報酬數字，也不採用該段截圖。這一段不是投資建議。</b>對這支工具本身有興趣的，請走原本的課程資料夾。</div></div>
+
+  <h3>📘 簡報上怎麼寫</h3>
+  <p>白皮書沒有談 Gem／Project 這種產品功能，但它在最後一節給了一條制度性的建議，剛好補上老師沒講的部分：<b>Document the various prompt attempts（把每一次嘗試記錄下來）</b>。它建議用一張表固定記下六個欄位——<b>名稱與版本、目標、模型、Temperature／Token Limit／Top-K／Top-P、完整提示詞、輸出結果</b>，再加上「這次結果 OK／NOT OK／有時 OK」與回饋欄〔簡報 22365_3 p.65–66〕。</p>
+  <p>白皮書強調這件事的理由，跟老師整堂在解的其實是同一個問題：<b>同一個提示詞在不同模型、不同版本、不同參數下的輸出會漂移，甚至同一個模型跑兩次也會有差。</b>老師的解法是給範本鎖住輸出；白皮書的解法是把每次嘗試存檔以便回溯。兩件事不衝突，可以一起做。</p>
+</section>
+
+<!-- ══════════ 12 ══════════ -->
+<section class="chapter" id="sec-image">
+  <span class="chip" style="background:linear-gradient(90deg,var(--purple),var(--orange))">135:00–153:00</span>
+  <h2 class="ct">12. 回到老本行：把圖像提示詞寫成可以代參數的公式</h2>
+  <p class="cd">最後十八分鐘他打開自己兩三年份的提示詞資料夾，一支一支翻。這一段看起來像閒聊，實際上是整堂那一招的另一種寫法。</p>
+
+  <h3>他的提示詞長成一份規格書</h3>
+  <p>他翻出一支自己寫的圖像編輯提示詞，開頭是這樣：</p>
+  <figure class="shot">
+    <img src="s2e2-img/18-pic-editor-prompt.jpg" alt="Pic editor 提示詞原文，含 Task、Definition、Instruction、Parameter 四段" loading="lazy">
+    <figcaption>他自己寫的圖像編輯提示詞，結構整齊得像一份 API 文件：<b>最上面宣告角色與作者（#{Character}=Pic editor v0.1／author:ECF），接著是 {Task}、{Definition}、{Instruction}、{Parameter} 四段</b>。Instruction 段定義了兩個指令——<code>U1-4</code> 放大指定編號的圖、<code>V1-4</code> 依指定編號重生四個微調版本；Parameter 段定義了六個參數，包括 <code>--ar</code>（比例）、<code>--s</code>（風格化程度 0–1000，數字越小越寫實）、<code>--no</code>（排除元素）、<code>--3D</code>、<code>--niji</code>、<code>--photo</code>。最下面還列了一整排可選畫風。［137:35］</figcaption>
+  </figure>
+
+  <div class="note blue">💡 <div>看得出來這是<b>把 Midjourney 那套參數語法，用自然語言在一般聊天機器人裡重建一次</b>。重點不是這些參數本身，是他把「一次性的描述」寫成了「可以重複呼叫的介面」——跟前面十一章把 Gem 做成機器人，是同一個念頭。</div></div>
+
+  <h3>另一種寫法：讓它先停下來等你填空</h3>
+  <p>他的圖像提示詞幾乎都用同一個開頭模式——<b>先宣告任務、再宣告一個變數、然後明講「等待用戶輸入」</b>。以蛋糕師傅那支為例（逐字照抄自課程教材檔）：</p>
+  <div class="code">任務一:
+等待用戶輸入 {品項}  以便創作造型蛋糕與意境想法一樣的圖像
+
+任務二:
+根據用戶輸入的 {品項}  將以下題詞中的 紅色法拉利換成 {品項} 以便創作造型蛋糕與意境想法一樣的圖像, 而創作的題詞請參考如下:</div>
+  <p>後面接一整段幾百字的完整場景描述當範例。<b>使用者只要打兩個字，它就會把那段長描述裡的關鍵詞抽換掉再生成。</b>仿古青銅那支也是同一個模子：「請等待用戶輸入遠古青銅器仿製品 {物品}，再根據 {物品} 的外觀特徵，色調只能符合遠古青銅用色來重製⋯」，後面附一整段哆啦A夢青銅器的示範描述。</p>
+
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="s2e2-img/19-boarding-pass-gem.jpg" alt="登機證 Gem 的使用說明內容" loading="lazy">
+      <figcaption>把上面那套寫法做成 Gem 的樣子，名稱就叫「登機證」。使用說明裡讀得到成品規格：<b>頂部橫幅寫「MQTT 航空 BOARDING PASS」，主要區域的背景「根據用戶提供的目的地畫出該地的代表場景」，上面疊「始發地 / FROM {您的出發地}」、中間一個機頭朝右的飛機圖標、右側「目的地 / TO {您的目的地}」</b>，下面還有乘客、日期、航班編號與條碼。使用者只要輸入出發地與目的地兩個值。［148:49］</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="s2e2-img/20-consistency-output.jpg" alt="課堂上用同一套七格版型產出的另一份作品" loading="lazy">
+      <figcaption>課堂上用第 3 章那套七格版型做出來的另一份作品，主題是「4 個讓你付出更多的日常陷阱」，四格分別談沉沒成本、限時優惠、湊免運費、連續簽到，最後一格是「真正的策略：坦然接受」。<b>版型、粗黑輪廓線、對話泡泡、標題的中英並列全部沒變，只有主角換成了機器人</b>——這就是第 2 章那個問題的答案長什麼樣子。（作品出自課堂學員，姓名已隱去。）［150:27］</figcaption>
+    </figure>
+  </div>
+
+  <h3>他對「舊提示詞」的看法</h3>
+  <p>翻資料夾的過程他一直在講一件事：這些是兩三年前的東西，那時候很難做，現在很容易——但這反而是機會。他提到自己 2024 年做的人物一致性、六幅漫畫、LED 電子看板，當時「做出來人家以為是真實的」。</p>
+  <div class="golden">
+    <div class="q">「誰會記得最早？沒有人會記得最早。誰只會記得最活用的那一個人，對不對？」</div>
+    <div class="a">［139:02］他講的是自己——最早做出風格快速轉換的是他，但「最早沒有用，人家現在可以做得發揚光大、做得很棒，那才是厲害」。</div>
+  </div>
+  <p>收尾他把整堂的圖像段落壓成四個字，也順手給了一句可以直接用的建議：<b>「大家都做那樣的，你就用一些古老的⋯先 PO 先贏啦。」</b></p>
+  <div class="golden">
+    <div class="q">「就是腦袋裡想的，叫做所想即所得。」</div>
+    <div class="a">［150:45］指的是他最喜歡的那種「意境圖像」——畫面裡的人頭上有一個思考泡泡，泡泡裡的東西跟他手上做的東西一模一樣。蛋糕師傅、樂高趣、演講台下的想像都是同一個結構。</div>
+  </div>
+
+  <h3>📘 簡報上怎麼寫</h3>
+  <p>白皮書有一條就是在講 <code>{品項}</code> 這種寫法，叫 <b>Use variables in prompts（在提示詞裡用變數）</b>：與其把值寫死，不如改成變數，這樣同一個提示詞可以重複使用、也方便嵌進自己的應用；白皮書的示範是 <code>{city} = "Amsterdam"</code>，然後提示詞寫「You are a travel guide. Tell me a fact about the city: {city}」〔簡報 22365_3 p.58〕。</p>
+  <p>老師的 <code>{品項}</code>、<code>{物品}</code>、<code>{人物特徵}</code>、<code>{您的出發地}</code> 完全是同一件事，而且他多做了一步——<b>加上「一定要等待用戶提供」，把變數從「填空」變成「必填欄位」</b>。這一步白皮書沒有寫，是實際拿去給別人用之後長出來的。</p>
+</section>
+
+<!-- ══════════ 13 ══════════ -->
+<section class="chapter" id="sec-deck">
+  <span class="chip" style="background:linear-gradient(90deg,var(--ink3),var(--teal))">教材補充</span>
+  <h2 class="ct">13. 簡報有、課堂沒細講的部分</h2>
+  <p class="cd">三份教材裡有一大塊內容整堂沒有展開，但它們是這一招的理論底。這一章不是課堂實錄，是<b>教材摘要</b>，看的時候請跟前面十二章分開。</p>
+
+  <h3>一、白皮書把「給範例」分成兩級，老師只用了第一級</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:130px">技巧</th><th>白皮書怎麼定義</th><th>課堂上有沒有出現</th></tr>
+    <tr><td><b>Zero-shot</b></td><td>只給任務描述，不給任何範例。最簡單的一種〔p.13〕</td><td>有——但那正是他說「會歪掉」的那種用法</td></tr>
+    <tr><td><b>One-shot</b></td><td>給一個範例讓模型模仿〔p.15〕</td><td><b>整堂的主角。</b>Gem 的相關資訊、Claude 的 Files 都是給一份</td></tr>
+    <tr><td><b>Few-shot</b></td><td>給多個範例讓模型看出規律。白皮書建議<b>至少 3–5 個</b>，分類任務建議從 6 個開始測〔p.16、p.60〕</td><td><b>沒有講。</b>老師示範的都是一份範本</td></tr>
+  </table></div>
+  <p>白皮書挑範例的三個要求也值得抄下來：<b>相關、多樣、寫得好</b>；而且要涵蓋邊界案例，因為「一個小錯誤就會讓模型搞混」〔p.17〕。</p>
+
+  <h3>二、三種提示詞是分開的，可以疊在一起</h3>
+  <ul class="pt">
+    <li><b>System prompting</b>——定義模型的整體任務與能力範圍，例如「把影評分成正面／中立／負面，只回傳大寫標籤」。白皮書指出它也用來控制輸出格式（要求回 JSON <b>會逼模型建立結構、減少幻覺</b>），以及安全性（加一句「回答時請保持尊重」）〔p.18–21〕。</li>
+    <li><b>Contextual prompting</b>——提供當前任務的具體背景，是動態的、隨任務改變的〔p.18〕。<b>＝這堂課的「相關資訊」。</b></li>
+    <li><b>Role prompting</b>——指定身分與口吻，「像是給模型一張藍圖，告訴它要什麼語氣、風格與專業視角」〔p.21–22〕。</li>
+  </ul>
+
+  <h3>三、整套推理類技巧，這堂完全沒碰</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">技巧</th><th>一句話說明〔簡報 22365_3〕</th></tr>
+    <tr><td><b>Step-back prompting</b></td><td>先問一個比較概括的問題，把答案餵回去再問真正的問題，讓模型先啟動相關背景知識〔p.25〕</td></tr>
+    <tr><td><b>Chain of Thought（CoT）</b></td><td>要求模型寫出中間推理步驟。白皮書用「我 3 歲時伴侶是我年齡的 3 倍，我現在 20 歲，伴侶幾歲」示範：直接問答錯，加一句 <code>Let's think step by step</code> 就答對〔p.29–30〕。它也提醒 <b>CoT 的 temperature 要設 0</b>，而且答案要放在推理之後〔p.64〕</td></tr>
+    <tr><td><b>Self-consistency</b></td><td>同一題跑多次，取多數決〔p.32〕</td></tr>
+    <tr><td><b>Tree of Thoughts / ReAct</b></td><td>讓模型同時展開多條推理路徑，或邊推理邊呼叫外部工具〔p.36–37〕</td></tr>
+    <tr><td><b>LLM 輸出參數</b></td><td>Output length、Temperature、Top-K、Top-P 各自在調什麼，以及參數設太極端會讓模型「卡住」不斷重複〔p.8–13〕</td></tr>
+  </table></div>
+  <div class="note steel">🔧 <div>老師在課堂上講的「思考型／Pro／快捷」，跟白皮書講的 temperature、top-K、top-P <b>不是同一層東西</b>——前者是消費端介面上的模式切換，後者是 API 端的取樣參數。本頁把兩者分開放，沒有互相代換。</div></div>
+
+  <h3>四、Google Workspace 那本，整本都是可以直接抄的提示詞</h3>
+  <p><code>Google Prompt.pdf</code> 除了第 5 頁那個四要素公式，主體是<b>依職務別分成八章</b>的提示詞範例庫：行政支援、公關溝通、客戶服務、經營主管、第一線管理、人力資源、行銷、專案管理、業務〔簡報 Google Prompt 目錄〕。每一段都附使用情境，並示範「第一次問完之後，追問要怎麼寫」的迭代範例。課堂上只把它當成被改寫的素材，沒有翻內容——<b>對想直接找可用提示詞的人，這一本比白皮書實用</b>。</p>
+
+  <h3>五、第三份教材該怎麼看</h3>
+  <p><code>Recursive_Mastery_Framework.pdf</code> 不是教材，是<b>成品</b>。五頁分別是金字塔圖、對照表加趨勢圖加象限圖、能力評級加策略定位、SWOT 四象限、指標卡加折線圖，每頁頂端一段深色的 Executive Summary，底部一列 RISK／ACTION／INSIGHT 或 CONCLUSION／NOTE。看它的方式是<b>看版面不看內容</b>——這正是第 9 章把它丟進 Claude Files 的用途。</p>
+  <div class="note gold">📄 <div>這份的內容是老師本人的經歷與目標數字，由 NotebookLM 依「淺色簡報 5 頁」那段提示詞生成，<b>屬於 AI 產出的敘事，不是查證過的統計</b>。引用時請以「這是一份簡報版型範例」看待。</div></div>
+</section>
+
+<!-- ══════════ 14 ══════════ -->
+<section class="chapter" id="sec-real">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--purple))">TAKEAWAYS</span>
+  <h2 class="ct">14. 這堂課真正在教的事</h2>
+
+  <h3>一、把「寫提示詞」換成「準備範本」</h3>
+  <p>整堂沒有一次是靠把提示詞寫得更長更細來解決問題。每一次卡住，他的動作都是<b>去找一份已經長對的檔案丟進去</b>——一張畫好的七格圖、一份格式對的企劃書、一份五頁的簡報成品。形容詞會被誤讀，實體檔案不會。這是這堂跟一般提示詞課最大的分野。</p>
+
+  <h3>二、光放進去沒有用，要在指令裡指名</h3>
+  <p>他反覆問「理解嗎」的那一句，才是真正的技術含量：<b>「版型及風格需以相關資訊中的檔案一致。」</b>參考區跟指令區是兩格，AI 不會自己把它們連起來。這個道理在 Gem、Claude Project、NotebookLM 自訂報告都一樣成立，只是欄位名字換了。</p>
+
+  <h3>三、選工具的標準是「能不能改」，而不是「好不好看」</h3>
+  <p>NotebookLM 做出來的簡報最漂亮，他卻在企業場合幾乎不用，因為產出是圖、字不能改。這個判準背後是一個很務實的假設：<b>你交出去的東西一定會被要求修改</b>。他甚至補上但書——如果你的受眾是小學生，那漂亮就是對的。<b>判準要跟著受眾走，不是跟著工具排行榜走。</b></p>
+
+  <h3>四、失敗照播，而且講得出原因</h3>
+  <p>這堂有三次示範沒成功：Gemini 快捷模式改寫錯亂、NotebookLM 自訂報告沒照格式、自己寫的工具找不到新功能。三次他都沒有跳過，而是當場說「這是失敗的」並給替代路線（換 Pro、換平台、之後補檔）。<b>從筆記的角度，這三段比成功的示範更有價值——它們標出了這一招目前的邊界在哪。</b></p>
+
+  <h3>五、先把手上這一格做熟，再談自動化</h3>
+  <p>他花了不少篇幅勸大家不要急著追 AI Agent：「你們公司的人都會幫你做好，你不用急。」他自己的排序很清楚——<b>先讓 Gem／Project 穩定產出你要的東西，再談 Skill 自動叫用，最後才是 Connector 串接與排程</b>。同一段他也講了為什麼不要硬撐不擅長的事：「為什麼要去朝 Weakness 硬要去撞呢？」<b>術業有專攻，交給厲害的人來處理。</b></p>
+</section>
+
+<!-- ══════════ 15 ══════════ -->
+<section class="chapter" id="sec-quotes">
+  <span class="chip" style="background:linear-gradient(90deg,var(--amber),var(--rose))">QUOTES</span>
+  <h2 class="ct">15. 老師金句</h2>
+
+  <div class="golden"><div class="q">「我只要把這個 Gem 做起來之後，以後我只要給他任何的文案資料，他都可以幫我做成像這樣一致性。」</div><div class="a">［06:54］開場秀完成品之後的第一句解釋，整堂的目標函數。</div></div>
+
+  <div class="golden"><div class="q">「今天我要跟大家談的就是一致性的部分。」</div><div class="a">［07:03］題目宣告。前面九分鐘都在鋪陳這一句。</div></div>
+
+  <div class="golden"><div class="q">「其實我們透過描述詞、透過 YAML 的方式去定位，做出風格，他就可以一致。但是那是我們想像中的，有時候還是會有點偏差。」</div><div class="a">［07:45］他先承認一般解法的極限，才有後面「給實體範本」的必要性。</div></div>
+
+  <div class="golden"><div class="q">「但是我有特別跟他講，圖像的版型及風格需以相關資訊中的檔案一致。」</div><div class="a">［20:54］全堂樞紐。後面每一個平台的做法，都是這句話換一個欄位名重寫。</div></div>
+
+  <div class="golden"><div class="q">「萬一是這個刷卡的資料呢？萬一是旁邊的電風扇呢？萬一是它的特價商品，而不是本身的東西怎麼辦呢？」</div><div class="a">［32:20］解釋為什麼丟外部連結常常抓錯內容——網頁有上下左右中五塊，AI 不知道你要哪一塊。</div></div>
+
+  <div class="golden"><div class="q">「提示詞的結構，開頭強度會很強，還有最後強度也會很厲害。」</div><div class="a">［35:38］所以他把版型要求放開頭、內容要求放結尾，兩頭包夾。這條是他的經驗，教材裡沒有。</div></div>
+
+  <div class="golden"><div class="q">「你要跟他講，說好的圖呢？」</div><div class="a">［42:39］全場最多人抄的一句。同理可用「說好的簡報格式呢？」。</div></div>
+
+  <div class="golden"><div class="q">「他只是一個語言模型的時候，請務必記得，不要再跟他耗下去了⋯麻煩你產生一個新的對話。」</div><div class="a">［43:06］把它已經寫好的內容搬到乾淨的對話重跑，比在壞掉的對話裡拗有效。</div></div>
+
+  <div class="golden"><div class="q">「我們稱這個叫做 one shot，這個很重要。我們要給他一個範本，給他一個樣本來參考。」</div><div class="a">［54:29］整堂唯一一次把技巧叫出學名，在［57:13］又重複了一次。</div></div>
+
+  <div class="golden"><div class="q">「我就是一直改一直改，發現這樣的效果是比較好。」</div><div class="a">［45:43］講那段企劃案提示詞是怎麼寫出來的。他自己也知道寫得囉唆：「很拗口對不對？」二十秒後又補一次——「這就是經驗，一直改一直改」［46:03］。</div></div>
+
+  <div class="golden"><div class="q">「其實出乎你意料之外，是 Claude 做出來的簡報最漂亮。」</div><div class="a">［73:35］五個平台實測後的結論，代價是最慢。</div></div>
+
+  <div class="golden"><div class="q">「簡報要落地應用，一定要記得一件事情：用淺色。」</div><div class="a">［77:50］理由不是美感，是後續要改字改圖——「你有底色就很難處理」。</div></div>
+
+  <div class="golden"><div class="q">「我們要的不是圖漂亮，而是可以修改。有漂亮的圖表，又可以修改，這才是我們要的簡報。」</div><div class="a">［94:00］他選工具的判準。下一句他馬上補了但書：看你的目標受眾是誰。</div></div>
+
+  <div class="golden"><div class="q">「所以能夠改是王道。」</div><div class="a">［107:09］講完「早上改一次、下午改一次、最後說我要第一個版本」的老闆之後的結論。</div></div>
+
+  <div class="golden"><div class="q">「Skill 最大的好處就是說，我在任何一個地方只要產生一個新的對話⋯他就直接會呼叫它來使用。」</div><div class="a">［131:49］Gem／Project 是房間要走進去，Skill 是隨身技能會自己跳出來。</div></div>
+
+  <div class="golden"><div class="q">「為什麼要去朝 Weakness 硬要去撞呢？」</div><div class="a">［112:53］他公開承認自己在圖像與語音比較弱，被邀約時會直接推薦別人——「術業有專攻，交給厲害的人來處理」。</div></div>
+
+  <div class="golden"><div class="q">「把人家的技巧學起來，轉換成自己，內化成自己的工作上的需求，它就是一個好的運用。」</div><div class="a">［135:51］回答「多做幾個 Gem 吧」時說的，是他對整堂的期待。</div></div>
+
+  <div class="golden"><div class="q">「誰會記得最早？沒有人會記得最早。誰只會記得最活用的那一個人，對不對？」</div><div class="a">［139:02］翻出自己 2024 年的舊提示詞時說的，也是這堂最不像技術課的一句。</div></div>
+
+  <div class="golden"><div class="q">「就是腦袋裡想的，叫做所想即所得。」</div><div class="a">［150:45］他最喜歡的那種意境圖像——人物頭上的思考泡泡跟手上的成品一模一樣。</div></div>
+
+  <div class="golden"><div class="q">「大家都做那樣的，你就用一些古老的⋯先 PO 先贏啦。」</div><div class="a">［153:05］下課前最後一句建議。差異化不一定要靠最新的工具。</div></div>
+</section>
+
+<!-- ══════════ 16 ══════════ -->
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,var(--ink3),var(--ink2))">SOURCE</span>
+  <h2 class="ct">16. 資料來源與整理說明</h2>
+
+  <div class="twrap"><table>
+    <tr><th style="width:130px">來源</th><td>2026/04/24 課堂錄影單段，全長 2 小時 33 分 35 秒；課程資料夾中三份教材（Google《Prompt Engineering》白皮書 68 頁、Google Workspace《Prompt Guide 101》71 頁、Recursive Mastery Framework 5 頁）</td></tr>
+    <tr><th>整理方式</th><td>全程本機處理：以場景偵測擷取 265 張關鍵畫面、產生 1958 段逐字稿並剔除 17 段辨識幻覺、實得 1941 段，再依逐字稿手寫章節目錄；第 13 章與各章「簡報上怎麼寫」小節另行讀完三份教材後對照撰寫</td></tr>
+    <tr><th>時間戳</th><td>章節 chip 與引文後方的［mm:ss］對應錄影播放器時間</td></tr>
+    <tr><th>整理</th><td>竹貞（Tarshar 的逐幀筆記專員）</td></tr>
+  </table></div>
+
+  <h3>哪些是課堂、哪些是教材</h3>
+  <ul class="pt">
+    <li><b>第 2–12 章的正文與所有 <code>.golden</code> 金句</b>：來自錄影逐字稿，是老師當堂講的話。</li>
+    <li><b>各章末的「📘 簡報上怎麼寫」與第 13 章整章</b>：來自三份教材，出處以〔簡報 檔名 p.頁碼〕標示，<b>老師課堂上沒有講到這些內容</b>。</li>
+    <li><b>圖說</b>：由整理者看懂畫面後重寫，不是畫面文字的 OCR 結果。</li>
+    <li><b><code>.code</code> 區塊</b>：標明「逐字照抄自課程教材檔」的兩段（七分格開頭、蛋糕師傅）與教材原檔一字不差；第 6 章企劃案那段是<b>依畫面可讀部分＋口述整理</b>，已於該處標註。</li>
+  </ul>
+
+  <h3>已知限制，請先看過再引用</h3>
+  <ul class="pt">
+    <li><b>逐字稿是機器產生的</b>，人名與工具名會聽錯。可確定的錯字（益師傅被聽成「義師傅／醫師傅／一師傅／伊斯普」、Gem 被聽成「券／卷」、Claude 被聽成「Cloud」、Perplexity 被聽成「Persetting／Propacity」、Canvas 被聽成「Camvas」、Skill 被聽成「Skiller／Skid」、「檔案一致」被聽成「檔案一字」、「術業有專攻」被聽成「樹葉／數月有專攻」——共 11 類、逾 200 處）已在引用時更正；<b>不確定的一律保留原樣，沒有猜測補詞</b>。</li>
+    <li>錄影中有數段語音辨識產生的重複幻覺（靜音時段被辨識成外語殘句或無意義的重複標點），<b>共 17 段已整段刪除</b>，不會出現在本頁，也已從附錄的逐字稿與逐幀素材裡移除。</li>
+    <li>老師全場把 Gemini 的 Gem 唸成「券」、把 Claude 唸成「Cloud」，<b>本頁一律改寫成產品的正式名稱</b>，以免讀者搜尋不到；金句框內的引文同樣以正式名稱呈現，其餘口語（「好不好」「理解嗎」）則已刪除。</li>
+    <li>逐字稿中出現的學員暱稱、提問者稱呼、作品署名，本頁一律隱去；第 5 章的課堂共用看板與第 12 章的學員作品都以匿名方式呈現。</li>
+    <li><b>課堂截圖已裁掉瀏覽器外框、錄影程式浮動列與各平台的帳號頭像</b>；線上教室（Microsoft Teams）畫面、分享視窗選取器、作業系統選單、課堂共用看板一張都沒有採用。</li>
+    <li><b>115:00–126:00 的長期投資段落本頁不轉述</b>：不含標的、金額與報酬數字，也未採用該段截圖。老師當堂已聲明「我不是分析師」「那不代表是正確」，<b>該段不是投資建議</b>。</li>
+    <li>引用到作業、貼文或簡報之前，請對照錄影原始段落再確認一次。</li>
+  </ul>
+
+  <div class="note gold">🔒 <div><b>錄影與工具檔不放在這一頁。</b>課堂錄影、簡報提示詞產生器、台股長期投資分析系統與各支提示詞文字檔，都是老師分享給訂閱學員的教材，取得方式請走原本的課程資料夾與 Line 群記事本。本頁只公開老師同意公開的三份教材（見第 0 章）。</div></div>
+</section>
+
+</article>
+</div>
+
+<footer>
+  <p>📝 第二季第二堂 課堂筆記 · 生成式AI應用電台・訂閱制第二季（益師傅）</p>
+  <p>依錄影 265 張關鍵畫面＋全程逐字稿 1941 段，並併入三份課程教材整理 · <a href="s2e2-ai-skills.html">🗺️ 互動技能地圖</a> · <a href="../radio/#ecf">🏠 回筆記館入口</a></p>
+</footer>
+
+</body>
+</html>
