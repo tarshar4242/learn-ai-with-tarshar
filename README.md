@@ -63,3 +63,23 @@
 - 內容全部來自 `src/data/content.json`，不要把文案寫死在元件裡
 - 分眾邏輯在 `src/scripts/audience.js`，身分完全由網址 `?k=` 決定，不要加切換 UI（見 `content.json` 裡 `audiences` 欄位的注解）
 - 新增內容頁時，若有返回導覽的按鈕，記得用 `history.back()` 寫法，不要用固定網址，否則 `?k=` 身分會在換頁時遺失
+
+## 同仁 AI 開機日（公開實作教材）
+
+- `public/notes/ai-office-startup.html` — 兩小時教案、Spark 行事曆／母版套簡報兩個主實作與 11 組提示。
+- `public/notes/ai-office-startup-slides.html` — 32 頁手帳風課堂簡報。
+- `public/notes/assets/ai-office-startup/cover.png` — 新生成課程封面。
+- `public/notes/materials/ai-office-startup/practice-source.txt` — 虛構練習資料。
+- `public/notes/materials/ai-office-startup/slide-outline.txt` — 五頁簡報練習規格。
+- `output/課程｜同仁AI開機日｜開班檢查.md` — 驗證、待確認事項與後續發布步驟。
+
+- `public/notes/materials/ai-office-startup/practice-contract.pdf` — Spark 行事曆用虛構契約。
+- `public/notes/materials/ai-office-startup/practice-plan.pdf` — 母版套簡報用虛構計畫。
+- `public/notes/materials/ai-office-startup/practice-master.pptx` — 五頁可編輯手帳風練習母版。
+- `public/notes/materials/ai-office-startup/sample-deck.pptx` — 五頁套版完成示例。
+- `public/notes/materials/ai-office-startup/course-slides.pdf` — 32 頁課堂簡報 PDF。
+- `public/notes/materials/ai-office-startup/practice-prompts.txt` — 11 組實作操作提示。
+
+- `public/notes/materials/ai-office-startup/course-materials.zip` — 完整課程 PDF 與可編輯練習教材包。
+- `output/ai-office-build/publish.py` — 正式網站 PDF 連結修正與教材包打包。
+- 公開課程：https://tarshar4242.github.io/learn-ai-with-tarshar/notes/ai-office-startup.html
