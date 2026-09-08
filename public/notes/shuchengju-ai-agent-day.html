@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 開機日．熟成局：讓 AI 幫你做事｜教案</title>
+<meta name="description" content="Tarshar 教案集：AI 開機日．熟成局——給機關承辦人的兩小時 AI 代理人動手做工作坊。從聊天升級到代理人、五級能力自評、三個真實情境實作（契約→日曆、計畫資料→交接表、資料→公版簡報），80% 交給 AI 做、20% 留給自己判斷。">
+<meta property="og:title" content="AI 開機日．熟成局：讓 AI 幫你做事｜Tarshar 教案集">
+<meta property="og:description" content="給機關承辦人的兩小時 AI 代理人動手做工作坊：從聊天升級到代理人，80% 交給 AI 做、20% 留給自己判斷。">
+<meta property="og:image" content="https://tarshar4242.github.io/learn-ai-with-tarshar/notes/shuchengju-ai-agent-day-img/cover.png">
+<style>
+:root{
+  --paper:#f6f8fb; --card:#ffffff; --ink:#16233F; --ink2:#4b5568; --ink3:#8a94a6;
+  --line:#e2e8f0; --accent:#1BB39A; --accent2:#4C9ED9;
+  --navy:#16233F; --blue:#2F6DF6; --teal:#1BB39A; --orange:#E8A87C; --orange2:#c9803f; --green:#2F8F62; --amber:#c98a0a; --pink:#d4508e; --purple:#7a4fd6;
+  --code:#eef7f5;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.9}
+a{color:var(--orange2)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(246,248,251,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:10px 20px;display:flex;align-items:center;gap:14px}
+.topbar b{font-size:15px}
+.topbar .right{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.topbar a.btn{font-size:12.5px;text-decoration:none;border:1px solid var(--line);border-radius:9px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap}
+.topbar a.btn:hover{border-color:var(--accent);color:var(--accent)}
+.hero{max-width:960px;margin:0 auto;padding:44px 22px 10px;text-align:center}
+.hero .ep{display:inline-block;font-size:12.5px;letter-spacing:3px;color:var(--teal);border:1px solid #9edfd2;border-radius:999px;padding:5px 16px;background:#e6f7f3;margin-bottom:18px}
+.hero h1{font-size:clamp(26px,4.6vw,42px);font-weight:900;line-height:1.35}
+.hero h1 span{background:linear-gradient(90deg,var(--teal),var(--blue));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .lead{margin-top:14px;font-size:14.5px;color:var(--ink2);text-align:left}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:18px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.cover{max-width:960px;margin:22px auto 0;padding:0 22px}
+.cover img{display:block;width:100%;height:auto;border-radius:18px;border:1px solid var(--line);box-shadow:0 14px 40px rgba(22,35,63,.18)}
+.cover .cap{font-size:12.5px;color:var(--ink3);text-align:center;margin-top:8px}
+.layout{max-width:1120px;margin:30px auto 0;padding:0 22px;display:grid;grid-template-columns:236px 1fr;gap:34px;align-items:start}
+nav.toc{position:sticky;top:66px;border:1px solid var(--line);border-radius:14px;background:var(--card);padding:16px 14px;font-size:13.5px}
+nav.toc .t{font-size:12px;letter-spacing:2px;color:var(--ink3);margin-bottom:10px}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:8px;border-left:3px solid transparent}
+nav.toc a:hover{background:#e6f7f3;color:var(--teal)}
+nav.toc a.sub{padding-left:24px;font-size:12.8px}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:30px 32px;margin-bottom:26px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:2px;font-weight:700;color:#fff;border-radius:999px;padding:5px 14px;margin-bottom:12px}
+h2.ct{font-size:23px;font-weight:900;margin-bottom:4px}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:18px;font-weight:800;margin:30px 0 10px;padding-left:12px;border-left:4px solid var(--teal)}
+h4{font-size:15.5px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink)}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 24px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"◆";position:absolute;left:4px;font-size:9px;top:12px;color:var(--accent2)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:8px;width:23px;height:23px;border-radius:7px;background:var(--teal);color:#fff;font-size:12.5px;font-weight:800;display:grid;place-items:center}
+.prompt{background:var(--code);border:1px solid #bfe3db;border-left:4px solid var(--teal);border-radius:10px;padding:13px 16px;font-family:"Cascadia Code",Consolas,monospace;font-size:12.6px;color:#14584c;white-space:pre-wrap;line-height:1.8;margin:10px 0;overflow-x:auto}
+.note{display:block;border-radius:12px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.85}
+.note.gold{background:#fdf6e7;border:1px solid #eeddb4;color:#7a5b12}
+.note.blue{background:#eef6fd;border:1px solid #c9e3f7;color:#1d5e8f}
+.note.green{background:#eafaf2;border:1px solid #bfe8d4;color:#166a4c}
+.note.red{background:#fdeeee;border:1px solid #f3c4c4;color:#8f2a2a}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:#e6f7f3;padding:9px 12px;text-align:left;font-size:12.8px;border:1px solid var(--line);color:var(--ink)}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.stage{display:inline-block;font-weight:800;font-size:12px;color:#fff;background:var(--teal);border-radius:6px;padding:2px 9px;margin-right:7px;letter-spacing:1px;vertical-align:middle}
+.poster{background:linear-gradient(120deg,#e6f7f3,#eef3fb);border:1px solid #cfe6e0;border-radius:14px;padding:22px 24px;margin:16px 0;text-align:center}
+.poster .big{font-size:20px;font-weight:900;color:var(--navy);line-height:1.5}
+.poster .sub{font-size:13px;color:var(--ink2);margin-top:6px}
+.grid4{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+@media (max-width:560px){ .grid4{grid-template-columns:1fr} }
+.tip{border:1px solid var(--line);border-radius:14px;padding:16px 18px;background:#fff}
+.tip .n{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:8px;background:var(--teal);color:#fff;font-weight:800;font-size:13px;margin-bottom:8px}
+.tip h5{font-size:15px;font-weight:800;margin-bottom:4px}
+.tip p{font-size:13px;color:var(--ink2)}
+.lv{display:grid;grid-template-columns:64px 1fr;gap:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:8px 0;background:#fff}
+.lv .k{display:grid;place-items:center;font-weight:900;color:#fff;font-size:14px}
+.lv .b{padding:10px 14px;font-size:13.5px;color:var(--ink2)}
+.lv .b b{display:block;color:var(--ink);font-size:14.5px}
+.reslist{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+@media (max-width:560px){ .reslist{grid-template-columns:1fr} }
+.reslist a,.reslist div.pending{display:flex;gap:10px;align-items:center;text-decoration:none;border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:#fff;color:var(--ink2);font-size:13.5px;transition:.2s}
+.reslist a:hover{border-color:var(--teal);color:var(--teal);transform:translateY(-2px)}
+.reslist a b,.reslist div.pending b{display:block;color:var(--ink);font-size:14px}
+.reslist div.pending{border-style:dashed;background:#fafbfc}
+.golden{background:linear-gradient(120deg,#e6f7f3,#fdf3ea);border:1px solid #cfe6e0;border-radius:14px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:800;color:var(--navy)}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+footer{max-width:1120px;margin:20px auto 0;padding:30px 22px 60px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:2}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static} section.chapter{padding:22px 18px} }
+@media print{ .topbar,nav.toc,.clv-home{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+<a href="../plans/" class="clv-home" style="position:fixed;top:14px;left:14px;z-index:99999;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.96);color:#3f6b2e;border:1.5px solid #a8c686;border-radius:999px;padding:8px 15px;font-size:13.5px;font-weight:700;text-decoration:none;box-shadow:0 4px 16px rgba(0,0,0,.22);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);font-family:'Noto Sans TC','PingFang TC',system-ui,sans-serif" onclick="if(history.length&gt;1){history.back();return false}">← 回上一頁</a>
+
+<div class="topbar">
+  <b>📚 Tarshar 教案集</b>
+  <div class="right">
+    <a class="btn" href="../plans/">📚 教案集系列</a>
+    <a class="btn" href="luzhou-ai-startup.html">🏛️ 前一場：蘆洲監理所</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">Tarshar 教案集 · 公部門 AI 工作坊 · 熟成局同仁專場</span>
+  <h1>AI 開機日．熟成局<span>：讓 AI 幫你做事</span></h1>
+  <p class="lead">上一場「兩小時跟上 AI 那班車」帶小白<b>敢用 AI</b>；這一場往前走一步，帶承辦人把 AI 從「一問一答的聊天」升級成<b>會替你做事的代理人</b>：把契約期限排進日曆、把整包計畫資料整理成交接表、把資料直接套進機關公版簡報。全課只有一個原則：<b>80% 的事交給 AI 做，20% 的判斷留給自己</b>。本頁是這場課的<b>完整教案</b>。</p>
+  <div class="meta">
+    <span>🏢 熟成局同仁專場</span>
+    <span>⏱️ 兩小時動手做工作坊</span>
+    <span>🪜 目標：五級自評走到 Lv3～Lv4</span>
+    <span>🗓️ 2026/09</span>
+  </div>
+</header>
+
+<div class="cover">
+  <img src="shuchengju-ai-agent-day-img/cover.png" alt="AI 開機日．熟成局：讓 AI 幫你做事——課程封面，右側為五級 AI 能力階梯與下指令四元素" loading="eager">
+  <div class="cap">課程封面（2026/09 重新生成）：左邊是這堂課的承諾，右邊是五級能力階梯與「來源→動作→產出→判斷」四元素</div>
+</div>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 教案資訊與教材</a>
+  <a href="#sec-map">1. 一頁看懂這堂課</a>
+  <a href="#sec-flow">2. 教學流程（起承轉合）</a>
+  <a class="sub" href="#f-open">起｜為什麼是現在</a>
+  <a class="sub" href="#f-what">承｜從聊天到代理人</a>
+  <a class="sub" href="#f-do">轉｜三個真實情境實作</a>
+  <a class="sub" href="#f-close">合｜真實案例與帶回家</a>
+  <a href="#sec-level">3. 五級 AI 能力自評表</a>
+  <a href="#sec-pain">4. 承辦人四大痛點對照</a>
+  <a href="#sec-prompt">5. 下指令四元素與範本</a>
+  <a href="#sec-safe">6. 資安與邊界</a>
+  <a href="#sec-lines">7. 金句與收尾</a>
+  <a href="#sec-deck">8. 簡報與講義</a>
+</nav>
+
+<article>
+
+<!-- 0 資訊 -->
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--teal),var(--blue))">LESSON INFO</span>
+  <h2 class="ct">0. 教案資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>AI 開機日．熟成局：讓 AI 幫你做事（AI 代理人動手做工作坊）</td></tr>
+    <tr><th>對象</th><td>熟成局各科室承辦人與主管。多數已用過免費版 AI 聊天，少數有付費帳號；不需要任何程式基礎</td></tr>
+    <tr><th>時長／形式</th><td>約兩小時：講述 30 分鐘、示範 30 分鐘、學員動手做 45 分鐘、案例與收尾 15 分鐘。學員自備筆電，中場休息 10 分鐘</td></tr>
+    <tr><th>與前一場的關係</th><td>「AI 開機日．蘆洲監理所」解決<b>敢不敢用</b>；本場解決<b>怎麼讓它替你做</b>。四段骨架沿用起承轉合，內容全部換成代理人</td></tr>
+    <tr><th>設計骨架</th><td><b>起</b>（為什麼是現在＋現場調查＋四大痛點）→ <b>承</b>（從聊天到代理人＋五級自評＋安裝＋資安）→ <b>轉</b>（三個真實情境實作）→ <b>合</b>（真實案例＋80／20＋帶回家）</td></tr>
+    <tr><th>核心工具</th><td>三選一即可：<b>Gemini</b> 代理模式（Google 生態，日曆、雲端硬碟、Gmail 一次打通）、<b>ChatGPT</b> 桌面版（可讀電腦資料夾，產圖漂亮）、<b>Claude</b> 桌面版（Cowork 模式，讀本機資料夾，寫程式最強）。三家結構幾乎一樣，會一個就會三個</td></tr>
+    <tr><th>前置需求</th><td>自備筆電；付費帳號（每月約 20 美元）才有代理功能，沒有的同仁可看隔壁同學或用 Claude 免費額度跑最小範例；機關企業版目前未開放代理功能，請用個人帳號</td></tr>
+    <tr><th>教案來源</th><td>依 2026/09 機關第一場 AI 教育訓練實錄改編。講者身分、長官姓名、機關名稱、計畫名稱與個案細節一律去識別化，只保留教學結構與方法</td></tr>
+  </table></div>
+  <div class="note gold">🎯 設計主張：承辦人不缺「AI 很厲害」的見聞，缺的是<b>把自己每天的工作切成一小塊一小塊交出去</b>的方法。所以整堂課不教指令句型、不背名詞，直接拿契約、計畫、簡報三種每個人桌上都有的東西示範，讓學員回去就能照做。</div>
+</section>
+
+<!-- 1 全景 -->
+<section class="chapter" id="sec-map">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent2),var(--teal))">OVERVIEW</span>
+  <h2 class="ct">1. 一頁看懂這堂課</h2>
+  <p class="cd">一條「從聊天到代理」的路徑：先讓學員承認缺人手是真的（動機）→ 用五級自評看見自己站在哪一階（定位）→ 裝好工具、講清楚資安邊界（安心）→ 三個真實情境親手做一次（能力）→ 看真實案例知道能走多遠，帶著回家任務離開（延續）。</p>
+  <figure style="margin:18px 0;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff">
+    <svg viewBox="0 0 920 300" xmlns="http://www.w3.org/2000/svg" font-family="'Noto Sans TC',sans-serif">
+      <defs>
+        <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E8A87C"/><stop offset="1" stop-color="#c9803f"/></linearGradient>
+        <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4C9ED9"/><stop offset="1" stop-color="#2F6DF6"/></linearGradient>
+        <linearGradient id="g3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1BB39A"/><stop offset="1" stop-color="#2F8F62"/></linearGradient>
+        <linearGradient id="g4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#16233F"/><stop offset="1" stop-color="#2F6DF6"/></linearGradient>
+        <marker id="arw" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#9aa8c0"/></marker>
+      </defs>
+      <rect width="920" height="300" fill="#f9fbfd"/>
+      <text x="460" y="40" text-anchor="middle" font-size="20" font-weight="900" fill="#16233F">起 → 承 → 轉 → 合：從「聊天」到「代理」的兩小時</text>
+      <g>
+        <rect x="34" y="80" width="200" height="150" rx="16" fill="url(#g1)"/>
+        <text x="134" y="116" text-anchor="middle" font-size="17" font-weight="900" fill="#fff">起 · 動機</text>
+        <text x="134" y="144" text-anchor="middle" font-size="11.5" fill="#fff5ec">缺人手是真的</text>
+        <text x="134" y="166" text-anchor="middle" font-size="11.5" fill="#fff5ec">現場調查：誰付費了</text>
+        <text x="134" y="186" text-anchor="middle" font-size="11.5" fill="#fff5ec">承辦人四大痛點</text>
+        <text x="134" y="212" text-anchor="middle" font-size="11.5" fill="#fff5ec">15 分鐘做完的報告</text>
+      </g>
+      <g>
+        <rect x="252" y="80" width="200" height="150" rx="16" fill="url(#g2)"/>
+        <text x="352" y="116" text-anchor="middle" font-size="17" font-weight="900" fill="#fff">承 · 觀念</text>
+        <text x="352" y="144" text-anchor="middle" font-size="11.5" fill="#eaf3ff">聊天 vs 代理人</text>
+        <text x="352" y="166" text-anchor="middle" font-size="11.5" fill="#eaf3ff">五級能力自評</text>
+        <text x="352" y="186" text-anchor="middle" font-size="11.5" fill="#eaf3ff">裝桌面版</text>
+        <text x="352" y="212" text-anchor="middle" font-size="11.5" fill="#eaf3ff">資安三件事</text>
+      </g>
+      <g>
+        <rect x="470" y="80" width="200" height="150" rx="16" fill="url(#g3)"/>
+        <text x="570" y="116" text-anchor="middle" font-size="17" font-weight="900" fill="#fff">轉 · 動手</text>
+        <text x="570" y="144" text-anchor="middle" font-size="11.5" fill="#e8fff5">契約期限 → 日曆</text>
+        <text x="570" y="166" text-anchor="middle" font-size="11.5" fill="#e8fff5">計畫資料 → 交接表</text>
+        <text x="570" y="186" text-anchor="middle" font-size="11.5" fill="#e8fff5">資料 → 公版簡報</text>
+        <text x="570" y="212" text-anchor="middle" font-size="11.5" fill="#e8fff5">來源、動作、產出</text>
+      </g>
+      <g>
+        <rect x="688" y="80" width="200" height="150" rx="16" fill="url(#g4)"/>
+        <text x="788" y="116" text-anchor="middle" font-size="17" font-weight="900" fill="#fff">合 · 帶走</text>
+        <text x="788" y="144" text-anchor="middle" font-size="11.5" fill="#e6ecff">三個真實案例</text>
+        <text x="788" y="166" text-anchor="middle" font-size="11.5" fill="#e6ecff">80% 做事 20% 判斷</text>
+        <text x="788" y="186" text-anchor="middle" font-size="11.5" fill="#e6ecff">系統改造 vs 個人賦能</text>
+        <text x="788" y="212" text-anchor="middle" font-size="11.5" fill="#e6ecff">回家任務三選一</text>
+      </g>
+      <line x1="234" y1="155" x2="252" y2="155" stroke="#9aa8c0" stroke-width="2.5" marker-end="url(#arw)"/>
+      <line x1="452" y1="155" x2="470" y2="155" stroke="#9aa8c0" stroke-width="2.5" marker-end="url(#arw)"/>
+      <line x1="670" y1="155" x2="688" y2="155" stroke="#9aa8c0" stroke-width="2.5" marker-end="url(#arw)"/>
+      <text x="460" y="270" text-anchor="middle" font-size="12.5" fill="#8a94a6">起 15 分 ｜ 承 35 分 ｜ 休息 10 分 ｜ 轉 45 分 ｜ 合 15 分</text>
+    </svg>
+    <figcaption style="font-size:12.5px;color:var(--ink3);padding:10px 16px;border-top:1px dashed var(--line);background:#f9fbfd">圖 1｜教案骨架：起承轉合四段（依 2026/09 實錄整理）</figcaption>
+  </figure>
+  <div class="golden"><div class="q">「80% 的事交給 AI 做，20% 的判斷留給自己。」</div><div class="a">全課定錨金句。AI 是幫我們做事的，但判斷永遠在我們身上</div></div>
+</section>
+
+<!-- 2 流程 -->
+<section class="chapter" id="sec-flow">
+  <span class="chip" style="background:linear-gradient(90deg,#E8A87C,#c9803f)">TEACHING FLOW</span>
+  <h2 class="ct">2. 教學流程（起承轉合）</h2>
+
+  <h3 id="f-open"><span class="stage">起</span>為什麼是現在（15 分鐘）</h3>
+  <ul class="pt">
+    <li><b>長官的期待，一句話講完</b>：每個機關都缺人手、員額又被管控，所以要用 AI 處理日常辦公，讓大家效率更好。這是第一場教育訓練，要有一個好的開始。</li>
+    <li><b>現場調查兩題</b>：「有沒有人沒用過 AI？」（通常沒有）、「有沒有人買過付費版？」（通常很少）。這兩題決定今天誰能動手、誰先看隔壁。</li>
+    <li><b>一個 15 分鐘的故事</b>：長官交辦「比對某個新興產業在人力銀行的職缺，跟我們開的課程有沒有落差」。先跟長官訪談三分鐘確認要什麼，再交給 AI 代理人查職缺、寫分析、產出一張含公司、產業定位、工作內容、薪資參考與資料來源的 Excel。含訪談時間，15 分鐘完成。</li>
+    <li><b>承辦人四大痛點點名</b>：計畫修正與新增、人民陳情回覆、列管會議彙整、履約管理。四個都是今天 AI 做得到的事（見第 4 節）。</li>
+  </ul>
+  <div class="note blue">💡 開場設計：先講「不夠快」而不是「很厲害」。免費版 AI 像一位博士專家，回答很專業，但每次都要你自己複製、貼上、整理成公文，這對承辦人來說不夠快。今天要解決的是「直接幫我做好」。</div>
+
+  <h3 id="f-what"><span class="stage">承</span>從聊天到代理人（35 分鐘）</h3>
+  <h4>觀念一：聊天 vs 代理人</h4>
+  <ul class="pt">
+    <li><b>現在大家的做法</b>：遇到問題跟它聊，聊完把答案複製起來，貼到 Word。</li>
+    <li><b>交給代理人的做法</b>：只跟它討論規劃（要做什麼、怎麼做），討論完說「幫我產出簡報」「幫我產出 Word」，後面的複製貼上全部省掉。</li>
+    <li><b>AI 像一個人</b>：有記憶、會思考、看得懂圖與 PDF 與錄音（多模態）。你不用管檔案格式，PDF、Word、錄音檔都能當來源。</li>
+  </ul>
+  <h4>觀念二：五級能力自評（請學員現場對號入座）</h4>
+  <p>今天大概八成同仁在 Lv1。課程目標是<b>做到 Lv3 或 Lv4</b>，重點是真的動手試。完整表見第 3 節。</p>
+  <h4>觀念三：主流工具結構幾乎一樣</h4>
+  <ul class="pt">
+    <li>ChatGPT、Gemini、Claude 等主流工具，代理人的結構幾乎一模一樣，差別在聰明程度與各自專長：Claude 寫程式最強、ChatGPT 產圖最漂亮、Gemini 跟 Google 日曆與雲端硬碟綁最深。</li>
+    <li>一般行政與業務單位，先挑一家有付費的用；沒付費的同仁看隔壁同學做。付費約每月 20 美元，「找人回來做事總是要付薪水，但這份薪水不貴」。</li>
+    <li>模型有等級之分：一般行政事務用中階即可；複雜研究再用最高階。</li>
+  </ul>
+  <h4>安裝桌面版（邊講邊裝，約 5 分鐘）</h4>
+  <ol class="st">
+    <li><b>ChatGPT</b>：官網下載 Windows 版（會導到 Microsoft Store），登入後左上角可切換 ChatGPT 與 Codex（Codex 是寫程式的代理人）。</li>
+    <li><b>Claude</b>：官網下載桌面版，用 Google 帳號登入。畫面上有 Chat、Cowork、Code 三種模式，今天用 <b>Cowork</b>（代理模式，會讀你指定的資料夾）。</li>
+    <li><b>Gemini</b>：網頁版登入後左上角有「即時通訊」與「代理」兩個入口；代理模式的左側有連接開關，先把 Google Workspace（Gmail、日曆、雲端硬碟）打開，聯絡人可以不開。</li>
+  </ol>
+  <div class="note gold">📌 為什麼一定要裝桌面版：代理人要替你做事，如果能操作你的電腦與資料夾，它會做得更好。桌面版每次要用你的檔案、瀏覽器或 Google 帳號時都會先問你「願不願意」，這是安全機制，不是故障。</div>
+  <h4>觀念四：資安三件事（詳見第 6 節）</h4>
+  <ul class="pt">
+    <li>密件與含個資的東西不要上傳；法規、公開計畫、公告類可以。</li>
+    <li>「把簽丟上去結果鄰居查得到」的真相：不是 AI 外洩，是雲端硬碟的<b>分享設定</b>被打開了。只加指定帳號，不要用「知道連結的任何人」。</li>
+    <li>資料存在哪：Gemini 與 NotebookLM 的來源在 Google 雲端；Claude Cowork、Claude Code、Codex 只在你指定的本機資料夾裡運作，只把必要片段送上雲端溝通，不會整個檔案丟上去。</li>
+  </ul>
+  <h4>觀念五：Skill 與觸發（先記名詞，Lv4 再用）</h4>
+  <ul class="pt">
+    <li><b>Skill</b>：你用自然語言教它一套固定做法，例如「整理我的計畫資料，用機關公版簡報產出介紹」，存起來下次直接叫。可以列很多個。</li>
+    <li><b>時間觸發</b>：把整份契約丟給它，掃出所有履約時間放進日曆，到期前七天提醒你。</li>
+    <li><b>事件觸發</b>：有符合條件的 email 進來，就自動做某件事。</li>
+  </ul>
+
+  <h3 id="f-do"><span class="stage">轉</span>三個真實情境實作（45 分鐘）</h3>
+  <p class="cd">每個實作都用同一個句型：<b>來源 → 動作 → 產出</b>。先示範一次，再讓學員用自己有的帳號做。做不到的同仁看隔壁，或用 Claude 免費額度做第三個最小版本。</p>
+  <ol class="st">
+    <li><b>實作①「契約期限 → 日曆提醒」（履約管理）</b>：把契約書 PDF 拉進代理人，先要它「把所有履約時間列出來」，確認無誤後再要它「加進 Google 日曆，前七天提醒」。看著它讀 PDF、思考、調用日曆、一筆一筆塞進去。Claude 桌面版做同一件事時會先問你要不要授權檔案與 Google 帳號，按同意即可。</li>
+    <li><b>實作②「計畫資料 → 交接重點表」（計畫修正與新增）</b>：把一個計畫的公開文件（計畫本文、身分揭露表、懶人包、適用範圍說明）放進雲端硬碟同一個資料夾，只加自己或科長的帳號共用，把連結給代理人，要它整理成交接用 Excel：每份文件的核心主題定位、適用時機、法規依據第幾點、參訓資格。這張表以前要自己一份一份看，現在下一句話就有。</li>
+    <li><b>實作③「資料 → 機關公版簡報」（做簡報的痛）</b>：把 YouTube 連結或計畫 PDF 加上機關公版簡報模板一起給它，要它「使用這個模板，寫出一份介紹簡報」。以前是免費版產文字、自己複製貼上進母版，搞完一天；現在十幾分鐘。學員現場練習版：從機關公開網站下載一份計畫 PDF，把 PDF 與公版模板放進同一個資料夾，用 Claude Cowork 指到那個資料夾做。</li>
+  </ol>
+  <div class="note blue">💡 實作設計原則：<b>把工作切小塊</b>。不要一次要它「幫我把履約管理做好」，而是先「列出時間」再「排進日曆」。每一小步做完你看一眼，看對了再下一步，這就是 20% 的判斷。</div>
+  <div class="note green">✅ 學員沒有付費帳號時的最小成功路徑：Claude 桌面版免費額度雖少，做一次「PDF＋模板 → 簡報」通常夠用。先讓每個人成功一次，比講完所有功能重要。</div>
+
+  <h3 id="f-close"><span class="stage">合</span>真實案例與帶回家（15 分鐘）</h3>
+  <ul class="pt">
+    <li><b>案例一：跨國系統比較研究</b>。長官出國看了一套就業服務系統，回來要研究報告。承辦人先跟 AI 確認該系統的官方網址與來源，再給它本國系統的公開資料，要它整理差異分析。整份報告出來後逐段檢查，正確度足以直接往上送。</li>
+    <li><b>案例二：國際會議紀錄</b>。全英文會議、簡報只有現場投影。承辦人用手機拍簡報，丟給 AI 讀，要它找出原始文件、只整理跟自己業務有關的部分，含審核時間不到半小時做出會議紀錄。</li>
+    <li><b>案例三：列管事項會辦彙整</b>。發文給七八個單位、回收七八個檔案、一個一個開、貼進同一份、貼完兩小時。改成：把所有檔案給 AI，告訴它「主要檔案是哪一份、其他是各單位回覆」，要它照欄位填進去。</li>
+    <li><b>邊界說清楚</b>：今天教的是 AI 賦能個人能力；要動到機關系統（例如公文系統、業務系統）還是得請廠商改。但你能用 AI 做到的事，理論上廠商把模型加進系統也做得到，可以帶著你的需求去跟資訊單位討論。</li>
+    <li><b>指令不用背</b>：現在的 AI 邏輯不清楚會反問你（要 Excel 還是 Word？要交接欄位有哪些？），問到它覺得可以做才動手。把邏輯講清楚，比背指令句型有用。</li>
+  </ul>
+  <h4>回家任務三選一（小到不會失敗）</h4>
+  <ol class="st">
+    <li>從機關公開網站下載一份計畫 PDF，要 AI 整理成一頁重點表。</li>
+    <li>把一份契約或合約的期限，要 AI 排進你的日曆並加提醒。</li>
+    <li>把自己的<b>私人</b>信箱交給 AI 建立標籤分類（帳單、旅遊、電子報），體驗它一次做完幾百封的感覺。</li>
+  </ol>
+</section>
+
+<!-- 3 五級 -->
+<section class="chapter" id="sec-level">
+  <span class="chip" style="background:linear-gradient(90deg,#4C9ED9,#2F6DF6)">5 LEVELS</span>
+  <h2 class="ct">3. 五級 AI 能力自評表</h2>
+  <p class="cd">請學員現場對號入座，寫在講義第一頁。課程結束前再看一次，看自己往上走了幾階。</p>
+  <div class="lv"><div class="k" style="background:#9aa8c0">Lv1</div><div class="b"><b>提問者</b>每次一個問題、一個答案；上傳一個檔案要它寫一個東西。透過網頁版一問一答。今天八成同仁在這裡</div></div>
+  <div class="lv"><div class="k" style="background:#4C9ED9">Lv2</div><div class="b"><b>知識庫管理者</b>開始把業務資料放進 AI 當「來源」（像 NotebookLM 的來源庫），讓它知道你的業務情境，不再答非所問</div></div>
+  <div class="lv"><div class="k" style="background:#1BB39A">Lv3</div><div class="b"><b>外部連接者</b>會叫它開瀏覽器查資料、去指定網站收集、把做好的東西存進雲端硬碟或日曆、操作你的 Gmail。今天的三個實作都在這一階</div></div>
+  <div class="lv"><div class="k" style="background:#2F8F62">Lv4</div><div class="b"><b>流程化管理者</b>把重複的做法存成 Skill，設定時間觸發與事件觸發，讓它自己跑</div></div>
+  <div class="lv"><div class="k" style="background:#16233F">Lv5</div><div class="b"><b>多 AI 協作者</b>用自然語言做出小工具、小程式；讓 ChatGPT 當審核、Claude 寫文案與程式，多個 AI 互相協作，像一家小公司</div></div>
+  <div class="note gold">🎯 今天的目標是 Lv3 到 Lv4。不求全部聽懂，求真的做過一次。</div>
+</section>
+
+<!-- 4 痛點 -->
+<section class="chapter" id="sec-pain">
+  <span class="chip" style="background:linear-gradient(90deg,#E8A87C,#d4508e)">PAIN POINTS</span>
+  <h2 class="ct">4. 承辦人四大痛點對照</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:120px">痛點</th><th>以前怎麼做</th><th>交給代理人怎麼做</th><th style="width:150px">你留下的 20%</th></tr>
+    <tr><td><b>計畫修正與新增</b></td><td>找類似計畫、翻法規、一份一份對</td><td>把類似計畫與法規當來源，要它給修正建議與對照表</td><td>判斷哪些建議合機關實況</td></tr>
+    <tr><td><b>人民陳情回覆</b></td><td>翻以前的回覆、翻計畫內容、從頭寫</td><td>把過去回覆與計畫內容當來源，要它依陳情內容擬稿</td><td>核對法規與事實，公文系統走正式流程</td></tr>
+    <tr><td><b>列管會議彙整</b></td><td>發給多個單位，五點多收回，一個一個貼</td><td>告訴它主檔是哪份、其他是回覆，要它照欄位填入</td><td>檢查有沒有漏單位、漏欄位</td></tr>
+    <tr><td><b>履約管理</b></td><td>自己翻契約抄日期，靠記性</td><td>整份契約丟給它，列出所有履約時間，排進日曆前七天提醒</td><td>確認日期與條款對應無誤</td></tr>
+  </table></div>
+  <div class="note red">⚠️ 陳情回覆的邊界：AI 擬稿技術上沒問題，但正式回覆仍要走公文系統、經長官核閱。要不要用 AI 直接以 email 回覆民眾，先跟資訊單位確認機關信箱與流程，別自己先做。</div>
+</section>
+
+<!-- 5 指令 -->
+<section class="chapter" id="sec-prompt">
+  <span class="chip" style="background:linear-gradient(90deg,#1BB39A,#2F8F62)">4 ELEMENTS</span>
+  <h2 class="ct">5. 下指令四元素與範本</h2>
+  <p class="cd">以後用 AI 就是這四個動作：<b>觸發</b>（可有可無）、<b>來源</b>（一定要）、<b>動作</b>（一層邏輯）、<b>產出</b>（你要什麼東西）。用什麼方式寫都可以，講清楚就好。</p>
+  <div class="grid4">
+    <div class="tip"><span class="n">1</span><h5>來源：它要看什麼</h5><p>PDF、Word、錄音、YouTube 連結、雲端硬碟資料夾、電腦裡的某個資料夾。</p></div>
+    <div class="tip"><span class="n">2</span><h5>動作：要它做什麼</h5><p>列出、整理、比對、填入、加到日曆、套用模板。一次一小塊。</p></div>
+    <div class="tip"><span class="n">3</span><h5>產出：要什麼格式</h5><p>Excel、Word、簡報、日曆事件、Gmail 標籤。不講它會反問你。</p></div>
+    <div class="tip"><span class="n">4</span><h5>判斷：你自己做</h5><p>每一步做完看一眼，對了再下一步。數字、日期、法規一定人工核對。</p></div>
+  </div>
+  <h4>範本①　契約期限 → 日曆</h4>
+  <div class="prompt">來源：這份契約書 PDF
+動作：請把裡面所有的履約時間全部列出來，含條款位置
+產出：先給我一張表，我確認後再做下一步
+
+（確認後）
+請把上面的履約到期期限加進 Google 日曆，每一筆在前七天設一個提醒，事件名稱寫「履約提醒：〔項目〕」。</div>
+  <h4>範本②　計畫資料 → 交接重點表</h4>
+  <div class="prompt">來源：雲端硬碟這個資料夾裡的計畫文件（連結：……，已共用給你）
+動作：逐份閱讀，整理成交接用的重點表
+產出：Excel，欄位固定為：檔案名稱、核心主題定位、適用時機、法規依據第幾點、參訓資格、民眾常問問題。每格用一到兩句話，不要長篇。</div>
+  <h4>範本③　資料 → 機關公版簡報</h4>
+  <div class="prompt">來源：資料夾裡的「計畫.pdf」與「機關公版模板.pptx」
+動作：讀懂計畫內容，使用公版模板的版面與配色寫出一份介紹簡報
+產出：10 頁以內、對象是新進同仁、每頁只講一件事、文字要是真實可編輯的文字不要圖片。</div>
+  <h4>範本④　會辦資料彙整</h4>
+  <div class="prompt">來源：這個資料夾有 8 個檔案。「彙整表.docx」是主檔，其他 7 個是各單位的回覆
+動作：把每個單位回覆的內容，依欄位填進主檔對應的那一列，不要改主檔格式
+產出：填好的「彙整表_已彙整.docx」，另外列出哪些單位沒有回覆或欄位空白。</div>
+  <div class="note blue">💡 現在的 AI 邏輯不清楚會直接反問你，問到它覺得可以做了才動手。所以不用背指令句型，把來源、動作、產出講清楚就好。</div>
+</section>
+
+<!-- 6 資安 -->
+<section class="chapter" id="sec-safe">
+  <span class="chip" style="background:linear-gradient(90deg,#c98a0a,#E8A87C)">SAFETY</span>
+  <h2 class="ct">6. 資安與邊界</h2>
+  <div class="grid4">
+    <div class="tip"><span class="n" style="background:#c98a0a">1</span><h5>密件與個資不上傳</h5><p>法規、公開計畫、公告、無關個資的資料可以用；密件、含身分證與聯絡資訊的資料不要丟。想清楚再丟，不然上新聞的可能是你。</p></div>
+    <div class="tip"><span class="n" style="background:#c98a0a">2</span><h5>分享設定才是破口</h5><p>「鄰居查到我的簽」多半是雲端硬碟被設成「知道連結的任何人」。業務資料只加指定帳號共用。</p></div>
+    <div class="tip"><span class="n" style="background:#c98a0a">3</span><h5>知道資料存在哪</h5><p>Gemini 與 NotebookLM 的來源在 Google 雲端；Claude Cowork、Claude Code、Codex 只在你指定的本機資料夾運作。</p></div>
+    <div class="tip"><span class="n" style="background:#c98a0a">4</span><h5>正式流程不繞過</h5><p>AI 可以擬稿，但陳情回覆、公文發出仍走公文系統與長官核閱。要動系統找廠商，要接機關信箱先問資訊單位。</p></div>
+  </div>
+</section>
+
+<!-- 7 金句 -->
+<section class="chapter" id="sec-lines">
+  <span class="chip" style="background:linear-gradient(90deg,#16233F,#2F6DF6)">GOLDEN LINES</span>
+  <h2 class="ct">7. 金句與收尾</h2>
+  <div class="poster"><div class="big">「80% 的事交給 AI 做，20% 的判斷留給自己。」</div><div class="sub">全課定錨。AI 幫我們做事，但判斷永遠在我們身上</div></div>
+  <div class="poster"><div class="big">「它很聰明，但不夠快。今天要讓它直接幫你做好。」</div><div class="sub">開場句。從免費版聊天升級到代理人的理由</div></div>
+  <div class="poster"><div class="big">「把工作切成一小塊一小塊交出去。」</div><div class="sub">實作原則。先列出時間，再排進日曆</div></div>
+  <div class="poster"><div class="big">「不用背指令。邏輯講清楚，它會反問你。」</div><div class="sub">收尾句。四元素比句型重要</div></div>
+  <div class="golden"><div class="q">「想清楚再丟上去，不然上新聞的可能是你。」</div><div class="a">資安段最有效的一句話，比任何規定都好記</div></div>
+</section>
+
+<!-- 8 簡報 -->
+<section class="chapter" id="sec-deck">
+  <span class="chip" style="background:linear-gradient(90deg,#8a94a6,#4b5568)">DECK & HANDOUT</span>
+  <h2 class="ct">8. 簡報與講義</h2>
+  <p class="cd">本場簡報與學員講義依本教案製作中，完成後補上連結。講義結構規劃如下。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:90px">頁次</th><th>內容</th></tr>
+    <tr><td>P1</td><td>封面（本頁封面圖）＋五級自評表，請學員先圈自己在哪一階</td></tr>
+    <tr><td>P2–4</td><td>起：缺人手、四大痛點、15 分鐘報告的故事</td></tr>
+    <tr><td>P5–10</td><td>承：聊天 vs 代理人、三家工具怎麼選、桌面版安裝步驟截圖、資安三件事、Skill 與觸發</td></tr>
+    <tr><td>P11–16</td><td>轉：三個實作各兩頁（示範畫面＋可照抄的四元素範本）</td></tr>
+    <tr><td>P17–19</td><td>合：三個真實案例、系統改造 vs 個人賦能、回家任務三選一</td></tr>
+    <tr><td>P20</td><td>四元素索引卡＋QR（掃我拿全部範本）</td></tr>
+  </table></div>
+  <div class="reslist">
+    <div class="pending"><span>📊</span><span><b>簡報（製作中）</b>完成後放 Google 簡報預覽</span></div>
+    <div class="pending"><span>📄</span><span><b>學員講義 A4（製作中）</b>20 頁，含五級自評表與四元素索引卡</span></div>
+    <a href="luzhou-ai-startup.html"><span>🏛️</span><span><b>前一場教案</b>AI 開機日．蘆洲監理所</span></a>
+    <a href="../plans/"><span>📚</span><span><b>回教案集系列</b>看更多 Tarshar 教案</span></a>
+  </div>
+  <div class="note gold">📌 製作備註（給後製自己）：本教案依 2026/09 機關第一場 AI 教育訓練實錄改編，人名、機關名、計畫名、個案細節已去識別化。簡報引用的示範畫面請用自己帳號重跑截圖，不要使用實錄現場畫面。</div>
+</section>
+
+</article>
+</div>
+
+<footer>
+  AI 開機日．熟成局：讓 AI 幫你做事・Tarshar 教案集・2026/09<br>
+  🍀 Learn AI with Tarshar｜公部門 AI 代理人動手做工作坊教案
+</footer>
+
+</body>
+</html>
