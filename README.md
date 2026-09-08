@@ -64,7 +64,7 @@
 - 分眾邏輯在 `src/scripts/audience.js`，身分完全由網址 `?k=` 決定，不要加切換 UI（見 `content.json` 裡 `audiences` 欄位的注解）
 - 新增內容頁時，若有返回導覽的按鈕，記得用 `history.back()` 寫法，不要用固定網址，否則 `?k=` 身分會在換頁時遺失
 
-## 同仁 AI 開機日（公開實作教材）
+## 同仁 AI 開機日（Codex 版・公開實作教材）
 
 - `public/notes/ai-office-startup.html` — 兩小時教案、Spark 行事曆／母版套簡報兩個主實作與 11 組提示。
 - `public/notes/ai-office-startup-slides.html` — 32 頁手帳風課堂簡報。

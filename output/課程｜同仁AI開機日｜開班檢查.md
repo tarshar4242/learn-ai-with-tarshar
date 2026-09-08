@@ -11,3 +11,6 @@
 
 ## 2026-09-09 公開發布
 使用者已確認新版並授權「放上我的網站公開」。正式入口為 learn-ai-with-tarshar 的教案集／ai-office-startup.html，公開名稱採同仁行政實作班。補齊 ZIP、PDF 下載，PDF 內教材連結由 localhost 改為正式網站。保留既有私人 Sites 預覽供回溯，不擴大其權限。Claude 另有舊版 ai-agent-training-course 分支，本次採使用者驗收的 course-ai-office-practice，不合併舊稿。
+
+## Codex 版標示
+依使用者要求，教案集卡片、課程頁、簡報封面與頁尾、下载按鈕標註 Codex 版；下載檔名及 ZIP 內檔名前綴 codex-，與 Claude 另製版本分開。沿用既有公開網址，未更改 Claude 分支或內容。
