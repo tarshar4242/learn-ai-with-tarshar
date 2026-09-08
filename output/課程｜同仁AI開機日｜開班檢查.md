@@ -8,3 +8,6 @@
 未完成：單位正式名稱與場次尚待使用者指定；未發布正式公開課程網站。
 限制：Spark 帳號可用性與實際工具介面以課前帳號檢查為準；PPTX 成果示例為自製示例，不假稱 Spark 現場執行結果。
 下一步：使用者驗收視覺與實作節奏，確認後才安排正式開班發布。
+
+## 2026-09-09 公開發布
+使用者已確認新版並授權「放上我的網站公開」。正式入口為 learn-ai-with-tarshar 的教案集／ai-office-startup.html，公開名稱採同仁行政實作班。補齊 ZIP、PDF 下載，PDF 內教材連結由 localhost 改為正式網站。保留既有私人 Sites 預覽供回溯，不擴大其權限。Claude 另有舊版 ai-agent-training-course 分支，本次採使用者驗收的 course-ai-office-practice，不合併舊稿。

@@ -64,7 +64,7 @@
 - 分眾邏輯在 `src/scripts/audience.js`，身分完全由網址 `?k=` 決定，不要加切換 UI（見 `content.json` 裡 `audiences` 欄位的注解）
 - 新增內容頁時，若有返回導覽的按鈕，記得用 `history.back()` 寫法，不要用固定網址，否則 `?k=` 身分會在換頁時遺失
 
-## 同仁 AI 開機日（本機試教草案，未上線）
+## 同仁 AI 開機日（公開實作教材）
 
 - `public/notes/ai-office-startup.html` — 兩小時教案、Spark 行事曆／母版套簡報兩個主實作與 11 組提示。
 - `public/notes/ai-office-startup-slides.html` — 32 頁手帳風課堂簡報。
@@ -79,3 +79,7 @@
 - `public/notes/materials/ai-office-startup/sample-deck.pptx` — 五頁套版完成示例。
 - `public/notes/materials/ai-office-startup/course-slides.pdf` — 32 頁課堂簡報 PDF。
 - `public/notes/materials/ai-office-startup/practice-prompts.txt` — 11 組實作操作提示。
+
+- `public/notes/materials/ai-office-startup/course-materials.zip` — 完整課程 PDF 與可編輯練習教材包。
+- `output/ai-office-build/publish.py` — 正式網站 PDF 連結修正與教材包打包。
+- 公開課程：https://tarshar4242.github.io/learn-ai-with-tarshar/notes/ai-office-startup.html
