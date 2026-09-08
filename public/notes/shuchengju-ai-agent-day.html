@@ -56,6 +56,15 @@ ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
 ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
 ol.st li::before{content:counter(n);position:absolute;left:0;top:8px;width:23px;height:23px;border-radius:7px;background:var(--teal);color:#fff;font-size:12.5px;font-weight:800;display:grid;place-items:center}
 .prompt{background:var(--code);border:1px solid #bfe3db;border-left:4px solid var(--teal);border-radius:10px;padding:13px 16px;font-family:"Cascadia Code",Consolas,monospace;font-size:12.6px;color:#14584c;white-space:pre-wrap;line-height:1.8;margin:10px 0;overflow-x:auto}
+.pbox{border:1px solid #bfe3db;border-radius:12px;margin:10px 0;overflow:hidden;background:#fff}
+.pbox .ph{display:flex;align-items:center;gap:10px;padding:8px 12px;background:#e6f7f3;border-bottom:1px solid #bfe3db;font-size:13.5px}
+.pbox .ph b{color:var(--ink);flex:1;min-width:0}
+.plv{font-size:11px;font-weight:800;letter-spacing:1px;color:#fff;background:var(--teal);border-radius:6px;padding:1px 7px}
+.copy,.btn2{font-family:inherit;font-size:12.5px;font-weight:700;color:var(--teal);background:#fff;border:1px solid var(--teal);border-radius:8px;padding:4px 11px;cursor:pointer;text-decoration:none;white-space:nowrap}
+.copy:hover,.btn2:hover{background:var(--teal);color:#fff}
+.copy.done{background:var(--green);border-color:var(--green);color:#fff}
+.pbox pre.prompt{border:0;border-radius:0;margin:0}
+.libbar{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 6px}
 .note{display:block;border-radius:12px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.85}
 .note.gold{background:#fdf6e7;border:1px solid #eeddb4;color:#7a5b12}
 .note.blue{background:#eef6fd;border:1px solid #c9e3f7;color:#1d5e8f}
@@ -137,6 +146,7 @@ footer{max-width:1120px;margin:20px auto 0;padding:30px 22px 60px;text-align:cen
   <a href="#sec-safe">6. 資安與邊界</a>
   <a href="#sec-lines">7. 金句與收尾</a>
   <a href="#sec-deck">8. 簡報與講義</a>
+  <a href="#sec-lib">9. Prompt 庫（可單獨拉出）</a>
 </nav>
 
 <article>
@@ -267,11 +277,24 @@ footer{max-width:1120px;margin:20px auto 0;padding:30px 22px 60px;text-align:cen
 
   <h3 id="f-do"><span class="stage">轉</span>三個真實情境實作（45 分鐘）</h3>
   <p class="cd">每個實作都用同一個句型：<b>來源 → 動作 → 產出</b>。先示範一次，再讓學員用自己有的帳號做。做不到的同仁看隔壁，或用 Claude 免費額度做第三個最小版本。</p>
-  <ol class="st">
-    <li><b>實作①「契約期限 → 日曆提醒」（履約管理）</b>：把契約書 PDF 拉進代理人，先要它「把所有履約時間列出來」，確認無誤後再要它「加進 Google 日曆，前七天提醒」。看著它讀 PDF、思考、調用日曆、一筆一筆塞進去。Claude 桌面版做同一件事時會先問你要不要授權檔案與 Google 帳號，按同意即可。</li>
-    <li><b>實作②「計畫資料 → 交接重點表」（計畫修正與新增）</b>：把一個計畫的公開文件（計畫本文、身分揭露表、懶人包、適用範圍說明）放進雲端硬碟同一個資料夾，只加自己或科長的帳號共用，把連結給代理人，要它整理成交接用 Excel：每份文件的核心主題定位、適用時機、法規依據第幾點、參訓資格。這張表以前要自己一份一份看，現在下一句話就有。</li>
-    <li><b>實作③「資料 → 機關公版簡報」（做簡報的痛）</b>：把 YouTube 連結或計畫 PDF 加上機關公版簡報模板一起給它，要它「使用這個模板，寫出一份介紹簡報」。以前是免費版產文字、自己複製貼上進母版，搞完一天；現在十幾分鐘。學員現場練習版：從機關公開網站下載一份計畫 PDF，把 PDF 與公版模板放進同一個資料夾，用 Claude Cowork 指到那個資料夾做。</li>
-  </ol>
+  <h4>實作①「契約期限 → 日曆提醒」（履約管理）</h4>
+  <p>把契約書 PDF 拉進代理人，先要它「把所有履約時間列出來」，確認無誤後再要它「加進 Google 日曆，前七天提醒」。看著它讀 PDF、思考、調用日曆、一筆一筆塞進去。Claude 桌面版做同一件事時會先問你要不要授權檔案與 Google 帳號，按同意即可。</p>
+  <div class="pbox" id="p-a1-do"><div class="ph"><span class="plv">Lv3</span><b>列出契約所有履約時間</b><button class="copy" type="button" data-copy="p-a1-do">複製</button></div><pre class="prompt">來源：這份契約書 PDF
+動作：請把裡面所有的履約時間全部列出來，含條款位置與對應的履約項目
+產出：先給我一張表（項目、期限、條款位置），我確認後再做下一步</pre></div>
+  <div class="pbox" id="p-a2-do"><div class="ph"><span class="plv">Lv3</span><b>把期限排進 Google 日曆</b><button class="copy" type="button" data-copy="p-a2-do">複製</button></div><pre class="prompt">來源：上面確認過的履約期限表
+動作：請把每一筆期限加進我的 Google 日曆，每一筆在前七天各設一個提醒
+產出：事件名稱寫「履約提醒：〔項目〕」，內容附條款位置；做完列出你新增了哪幾筆</pre></div>
+  <h4>實作②「計畫資料 → 交接重點表」（計畫修正與新增）</h4>
+  <p>把一個計畫的公開文件（計畫本文、身分揭露表、懶人包、適用範圍說明）放進雲端硬碟同一個資料夾，只加自己或科長的帳號共用，把連結給代理人，要它整理成交接用 Excel。這張表以前要自己一份一份看，現在下一句話就有。</p>
+  <div class="pbox" id="p-b1-do"><div class="ph"><span class="plv">Lv2</span><b>計畫資料整理成交接重點表</b><button class="copy" type="button" data-copy="p-b1-do">複製</button></div><pre class="prompt">來源：雲端硬碟這個資料夾裡的計畫文件（連結：……，已共用給你）
+動作：逐份閱讀，整理成交接用的重點表
+產出：Excel，欄位固定為：檔案名稱、核心主題定位、適用時機、法規依據第幾點、參訓資格、民眾常問問題。每格一到兩句話，不要長篇</pre></div>
+  <h4>實作③「資料 → 機關公版簡報」（做簡報的痛）</h4>
+  <p>把 YouTube 連結或計畫 PDF 加上機關公版簡報模板一起給它，要它「使用這個模板，寫出一份介紹簡報」。以前是免費版產文字、自己複製貼上進母版，搞完一天；現在十幾分鐘。學員現場練習版：從機關公開網站下載一份計畫 PDF，把 PDF 與公版模板放進同一個資料夾，用 Claude Cowork 指到那個資料夾做。</p>
+  <div class="pbox" id="p-e1-do"><div class="ph"><span class="plv">Lv3</span><b>計畫 PDF 套機關公版簡報</b><button class="copy" type="button" data-copy="p-e1-do">複製</button></div><pre class="prompt">來源：資料夾裡的「計畫.pdf」與「機關公版模板.pptx」
+動作：讀懂計畫內容，使用公版模板的版面與配色寫出一份介紹簡報
+產出：10 頁以內、對象是新進同仁、每頁只講一件事、文字要是真實可編輯的文字不要圖片</pre></div>
   <div class="note blue">💡 實作設計原則：<b>把工作切小塊</b>。不要一次要它「幫我把履約管理做好」，而是先「列出時間」再「排進日曆」。每一小步做完你看一眼，看對了再下一步，這就是 20% 的判斷。</div>
   <div class="note green">✅ 學員沒有付費帳號時的最小成功路徑：Claude 桌面版免費額度雖少，做一次「PDF＋模板 → 簡報」通常夠用。先讓每個人成功一次，比講完所有功能重要。</div>
 
@@ -329,25 +352,7 @@ footer{max-width:1120px;margin:20px auto 0;padding:30px 22px 60px;text-align:cen
     <div class="tip"><span class="n">3</span><h5>產出：要什麼格式</h5><p>Excel、Word、簡報、日曆事件、Gmail 標籤。不講它會反問你。</p></div>
     <div class="tip"><span class="n">4</span><h5>判斷：你自己做</h5><p>每一步做完看一眼，對了再下一步。數字、日期、法規一定人工核對。</p></div>
   </div>
-  <h4>範本①　契約期限 → 日曆</h4>
-  <div class="prompt">來源：這份契約書 PDF
-動作：請把裡面所有的履約時間全部列出來，含條款位置
-產出：先給我一張表，我確認後再做下一步
-
-（確認後）
-請把上面的履約到期期限加進 Google 日曆，每一筆在前七天設一個提醒，事件名稱寫「履約提醒：〔項目〕」。</div>
-  <h4>範本②　計畫資料 → 交接重點表</h4>
-  <div class="prompt">來源：雲端硬碟這個資料夾裡的計畫文件（連結：……，已共用給你）
-動作：逐份閱讀，整理成交接用的重點表
-產出：Excel，欄位固定為：檔案名稱、核心主題定位、適用時機、法規依據第幾點、參訓資格、民眾常問問題。每格用一到兩句話，不要長篇。</div>
-  <h4>範本③　資料 → 機關公版簡報</h4>
-  <div class="prompt">來源：資料夾裡的「計畫.pdf」與「機關公版模板.pptx」
-動作：讀懂計畫內容，使用公版模板的版面與配色寫出一份介紹簡報
-產出：10 頁以內、對象是新進同仁、每頁只講一件事、文字要是真實可編輯的文字不要圖片。</div>
-  <h4>範本④　會辦資料彙整</h4>
-  <div class="prompt">來源：這個資料夾有 8 個檔案。「彙整表.docx」是主檔，其他 7 個是各單位的回覆
-動作：把每個單位回覆的內容，依欄位填進主檔對應的那一列，不要改主檔格式
-產出：填好的「彙整表_已彙整.docx」，另外列出哪些單位沒有回覆或欄位空白。</div>
+  <div class="note green">📚 四元素的完整範本共 16 條，依承辦人痛點分成 A～H 八組，集中在 <a href="#sec-lib">第 9 節 Prompt 庫</a>，每一條都有「複製」鈕。要單獨印給學員或做 QR，用獨立頁：<a href="shuchengju-ai-agent-day-prompts.html">Prompt 庫（獨立頁）</a>。</div>
   <div class="note blue">💡 現在的 AI 邏輯不清楚會直接反問你，問到它覺得可以做了才動手。所以不用背指令句型，把來源、動作、產出講清楚就好。</div>
 </section>
 
@@ -397,6 +402,71 @@ footer{max-width:1120px;margin:20px auto 0;padding:30px 22px 60px;text-align:cen
   <div class="note gold">📌 製作備註（給後製自己）：本教案依 2026/09 機關第一場 AI 教育訓練實錄改編，人名、機關名、計畫名、個案細節已去識別化。簡報引用的示範畫面請用自己帳號重跑截圖，不要使用實錄現場畫面。</div>
 </section>
 
+<!-- 9 Prompt 庫 -->
+<section class="chapter" id="sec-lib">
+  <span class="chip" style="background:linear-gradient(90deg,#2F8F62,#1BB39A)">PROMPT LIBRARY</span>
+  <h2 class="ct">9. Prompt 庫（可單獨拉出）</h2>
+  <p class="cd">16 條範本，全部照「來源 → 動作 → 產出」寫，依承辦人痛點分成 A～H 八組，右上角標的是五級自評裡的哪一階。按「複製」貼進 ChatGPT、Gemini 或 Claude 都能用，把「……」換成你自己的檔案與連結。</p>
+  <div class="libbar"><a class="btn2" href="shuchengju-ai-agent-day-prompts.html" target="_blank" rel="noopener">🔗 開啟獨立頁（給學員、印講義、做 QR）</a><button class="btn2" type="button" id="copyall">📋 一次複製全部 16 條</button></div>
+  <h3>📅 A｜履約管理</h3>
+  <div class="pbox" id="p-a1"><div class="ph"><span class="plv">Lv3</span><b>列出契約所有履約時間</b><button class="copy" type="button" data-copy="p-a1">複製</button></div><pre class="prompt">來源：這份契約書 PDF
+動作：請把裡面所有的履約時間全部列出來，含條款位置與對應的履約項目
+產出：先給我一張表（項目、期限、條款位置），我確認後再做下一步</pre></div>
+  <div class="pbox" id="p-a2"><div class="ph"><span class="plv">Lv3</span><b>把期限排進 Google 日曆</b><button class="copy" type="button" data-copy="p-a2">複製</button></div><pre class="prompt">來源：上面確認過的履約期限表
+動作：請把每一筆期限加進我的 Google 日曆，每一筆在前七天各設一個提醒
+產出：事件名稱寫「履約提醒：〔項目〕」，內容附條款位置；做完列出你新增了哪幾筆</pre></div>
+  <div class="pbox" id="p-a3"><div class="ph"><span class="plv">Lv4</span><b>設定到期前自動提醒（時間觸發）</b><button class="copy" type="button" data-copy="p-a3">複製</button></div><pre class="prompt">來源：我的 Google 日曆裡所有「履約提醒：」開頭的事件
+動作：每個事件到期前七天，幫我整理一封提醒草稿：項目、期限、我該確認的事（廠商是否交付、驗收文件是否備齊）
+產出：Gmail 草稿，主旨「履約提醒｜〔項目〕｜剩 7 天」，只建草稿不寄出</pre></div>
+  <h3>📂 B｜計畫修正與新增</h3>
+  <div class="pbox" id="p-b1"><div class="ph"><span class="plv">Lv2</span><b>計畫資料整理成交接重點表</b><button class="copy" type="button" data-copy="p-b1">複製</button></div><pre class="prompt">來源：雲端硬碟這個資料夾裡的計畫文件（連結：……，已共用給你）
+動作：逐份閱讀，整理成交接用的重點表
+產出：Excel，欄位固定為：檔案名稱、核心主題定位、適用時機、法規依據第幾點、參訓資格、民眾常問問題。每格一到兩句話，不要長篇</pre></div>
+  <div class="pbox" id="p-b2"><div class="ph"><span class="plv">Lv2</span><b>參考類似計畫給修正建議</b><button class="copy" type="button" data-copy="p-b2">複製</button></div><pre class="prompt">來源：A 是我要修正的計畫本文，B 是性質相近的另一項計畫，C 是相關法規
+動作：逐條比對 A 與 B 的差異，標出 A 哪些條文可能需要跟著 B 調整，並註明 C 的依據
+產出：對照表（條文、A 現行寫法、B 寫法、建議、法規依據）；沒有依據的建議請明講「這是推測」</pre></div>
+  <h3>✉️ C｜人民陳情回覆</h3>
+  <div class="pbox" id="p-c1"><div class="ph"><span class="plv">Lv2</span><b>依過去回覆與計畫內容擬稿</b><button class="copy" type="button" data-copy="p-c1">複製</button></div><pre class="prompt">來源：這封陳情內容（已去掉個資）、資料夾裡過去三份類似案件的回覆、計畫本文
+動作：先判斷陳情人真正想問的是什麼，再依計畫規定與過去回覆的口吻擬一份回覆稿
+產出：公文語氣、300 字內、條列民眾接下來可以怎麼做；另外列出你引用了計畫第幾點，讓我核對</pre></div>
+  <h3>🗂️ D｜列管會議彙整</h3>
+  <div class="pbox" id="p-d1"><div class="ph"><span class="plv">Lv3</span><b>各單位回覆彙整進主檔</b><button class="copy" type="button" data-copy="p-d1">複製</button></div><pre class="prompt">來源：這個資料夾有 8 個檔案。「彙整表.docx」是主檔，其他 7 個是各單位的回覆
+動作：把每個單位回覆的內容，依欄位填進主檔對應的那一列，不要改主檔格式
+產出：填好的「彙整表_已彙整.docx」，另外列出哪些單位沒有回覆或欄位空白</pre></div>
+  <div class="pbox" id="p-d2"><div class="ph"><span class="plv">Lv2</span><b>列管事項的回覆稿</b><button class="copy" type="button" data-copy="p-d2">複製</button></div><pre class="prompt">來源：列管表裡本科負責的第 N 項（我貼在下面）、上次的辦理情形、這次新增的進度
+動作：把新進度接在上次辦理情形之後，寫成列管回覆
+產出：兩段以內、先寫已完成再寫預計，日期用民國年</pre></div>
+  <h3>📊 E｜簡報製作</h3>
+  <div class="pbox" id="p-e1"><div class="ph"><span class="plv">Lv3</span><b>計畫 PDF 套機關公版簡報</b><button class="copy" type="button" data-copy="p-e1">複製</button></div><pre class="prompt">來源：資料夾裡的「計畫.pdf」與「機關公版模板.pptx」
+動作：讀懂計畫內容，使用公版模板的版面與配色寫出一份介紹簡報
+產出：10 頁以內、對象是新進同仁、每頁只講一件事、文字要是真實可編輯的文字不要圖片</pre></div>
+  <div class="pbox" id="p-e2"><div class="ph"><span class="plv">Lv3</span><b>影片內容套公版簡報</b><button class="copy" type="button" data-copy="p-e2">複製</button></div><pre class="prompt">來源：這支 YouTube 影片（連結：……）與「機關公版模板.pptx」
+動作：看完影片抓重點，依影片的段落順序整理，套用公版模板
+產出：每段一頁，每頁三個重點，最後一頁列出影片提到但我們機關做不到的事</pre></div>
+  <h3>🔎 F｜研究與交辦</h3>
+  <div class="pbox" id="p-f1"><div class="ph"><span class="plv">Lv3</span><b>長官交辦研究（先訪談再做）</b><button class="copy" type="button" data-copy="p-f1">複製</button></div><pre class="prompt">來源：長官剛剛交辦的題目是「……」
+動作：先不要做。請先問我 5 個問題，弄清楚受眾是誰、要比較什麼、要什麼格式、資料來源要不要限定官方網站、期限。我答完你再開始
+產出：問完後給我一份研究計畫（要查什麼、怎麼查、產出長什麼樣），我同意再執行</pre></div>
+  <div class="pbox" id="p-f2"><div class="ph"><span class="plv">Lv3</span><b>職缺與課程落差分析</b><button class="copy" type="button" data-copy="p-f2">複製</button></div><pre class="prompt">來源：人力銀行上「〔產業〕」相關職缺、我們機關公開的課程大綱（連結：……）
+動作：比對市場要的人才條件與我們課程教的內容，找出落差；受眾是就業弱勢，不要列高階職缺
+產出：Excel（公司、產業定位、工作內容、薪資參考、資料來源網址）＋一頁分析摘要；每一筆都要有真實來源，查不到的寫「查無」</pre></div>
+  <div class="pbox" id="p-f3"><div class="ph"><span class="plv">Lv3</span><b>跨國系統比較</b><button class="copy" type="button" data-copy="p-f3">複製</button></div><pre class="prompt">來源：國外這套系統的官方網站（連結：……）、我們現行系統的公開說明（連結：……）
+動作：先確認來源網址是官方的再開始；比較功能、服務對象、AI 應用的部分
+產出：差異表＋「我們可以優化的三件事」，每一項標出資料來源</pre></div>
+  <h3>📝 G｜會議紀錄</h3>
+  <div class="pbox" id="p-g1"><div class="ph"><span class="plv">Lv3</span><b>手機拍的簡報變會議紀錄</b><button class="copy" type="button" data-copy="p-g1">複製</button></div><pre class="prompt">來源：我用手機拍的 12 張簡報照片、這場會議的議程
+動作：先讀懂每張簡報在講什麼，找出原始文件在哪裡；只整理跟〔我的業務〕有關的部分
+產出：會議紀錄（時間、出席單位、與本科有關的重點、待辦事項）；照片看不清楚的地方標「待確認」</pre></div>
+  <h3>📬 H｜信箱與日常</h3>
+  <div class="pbox" id="p-h1"><div class="ph"><span class="plv">Lv3</span><b>私人信箱自動分類（回家任務）</b><button class="copy" type="button" data-copy="p-h1">複製</button></div><pre class="prompt">來源：我的 Gmail（先從最近 200 封開始）
+動作：依內容幫我建立標籤：帳單、旅遊、電子報、購物、需要回覆；把每封信貼上對應標籤
+產出：做完列出每個標籤各幾封、哪些信你不確定該放哪；不要刪信、不要回信</pre></div>
+  <div class="pbox" id="p-h2"><div class="ph"><span class="plv">Lv4</span><b>把做法存成 Skill（Lv4）</b><button class="copy" type="button" data-copy="p-h2">複製</button></div><pre class="prompt">來源：我們剛剛做的這個流程（把計畫資料整理成交接表）
+動作：把它存成一個可以重複叫的做法，名字叫「交接表」；以後我說「用交接表整理這個資料夾」就照同樣欄位做
+產出：先把你理解的步驟與欄位列給我確認，確認後再存</pre></div>
+  <div class="note gold">📌 用法提醒：一次只丟一小塊；每條做完先看一眼再下一步；數字、日期、法規一定自己核對；含個資與密件的東西不放進來源。</div>
+</section>
+
 </article>
 </div>
 
@@ -405,5 +475,17 @@ footer{max-width:1120px;margin:20px auto 0;padding:30px 22px 60px;text-align:cen
   🍀 Learn AI with Tarshar｜公部門 AI 代理人動手做工作坊教案
 </footer>
 
+<script>
+(function(){
+  function copyText(t,btn){
+    var done=function(){btn.classList.add('done');var o=btn.textContent;btn.textContent='已複製';setTimeout(function(){btn.classList.remove('done');btn.textContent=o;},1500);};
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(done,function(){fallback(t,done);});}else{fallback(t,done);}
+  }
+  function fallback(t,done){var ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');done();}catch(e){}document.body.removeChild(ta);}
+  document.querySelectorAll('button.copy').forEach(function(b){b.addEventListener('click',function(){var box=document.getElementById(b.getAttribute('data-copy'));copyText(box.querySelector('pre').textContent,b);});});
+  var all=document.getElementById('copyall');
+  if(all){all.addEventListener('click',function(){var parts=[];document.querySelectorAll('#sec-lib .pbox').forEach(function(x){parts.push('【'+x.querySelector('.ph b').textContent+'】\n'+x.querySelector('pre').textContent);});copyText(parts.join('\n\n'),all);});}
+})();
+</script>
 </body>
 </html>
