@@ -53,6 +53,14 @@ def split_pdf(path):
                          "text": c, "url": "", "type": "指引", "date": ""})
     return name, docs
 
+# 凍結：sources/frozen_corpus.json 存在時，直接沿用它（正式訪談期間文件集不可變動）；要更新就刪掉這個檔再推
+FROZEN = os.path.join(SRC, "frozen_corpus.json")
+if os.path.exists(FROZEN):
+    import shutil; shutil.copy(FROZEN, os.path.join(BUILD, "corpus.json"))
+    fz = json.load(open(FROZEN, encoding="utf-8"))
+    print(f"文件集已凍結（{fz.get('built')}，{len(fz['docs'])} 段），沿用 sources/frozen_corpus.json，未重抓。要更新請刪除該檔。")
+    sys.exit(0)
+
 docs, report = [], []
 for line in open(os.path.join(SRC, "laws.txt"), encoding="utf-8"):
     line = line.strip()
