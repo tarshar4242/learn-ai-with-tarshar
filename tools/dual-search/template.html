@@ -41,7 +41,8 @@ main{max-width:720px;margin:0 auto;padding:14px 14px 120px}
 .card:active{background:#f7f9fc}
 .card .h{display:flex;align-items:center;gap:8px;margin-bottom:4px}
 .chip{font-size:11px;padding:2px 8px;border-radius:999px;font-weight:600;white-space:nowrap}
-.chip.law{background:var(--kw2);color:var(--navy)}.chip.guide{background:var(--sem2);color:var(--sem)}
+.chip.law{background:var(--kw2);color:var(--navy)}.chip.guide{background:var(--sem2);color:var(--sem)}.chip.faq{background:#fff3d6;color:#8a5a00}.chip.fint{background:#f1e8ff;color:#5b2d9c}
+.scope{font-size:12px;color:var(--mute);margin-top:14px;line-height:1.6;text-align:left;background:#fff;border:1px dashed var(--line);border-radius:10px;padding:8px 10px}
 .card .t{font-weight:700;font-size:15px;color:var(--ink);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .card .sub{font-size:13px;color:var(--mute);margin-bottom:6px}
 .card .snip{font-size:14px;color:#333;line-height:1.5;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
@@ -68,7 +69,7 @@ mark{background:var(--hl);padding:0 1px;border-radius:2px}
 .sheet .find{display:flex;gap:6px;margin-top:8px;align-items:center}
 .sheet .find input{flex:1;font-size:15px;padding:8px 10px;border:1px solid var(--line);border-radius:10px}
 .sheet .find span{font-size:12px;color:var(--mute);white-space:nowrap}
-.sheet .body{flex:1;overflow:auto;padding:14px 16px 30px;white-space:pre-wrap;font-size:16px;line-height:1.8}
+.sheet .body{flex:1;overflow:auto;padding:14px 16px 30px;white-space:pre-wrap;font-size:17px;line-height:1.85}
 .logs{display:none}.logs.on{display:block}
 .logs .tools{display:flex;gap:8px;margin:8px 0 12px;flex-wrap:wrap}
 .logs .tools button{border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px 12px;font-size:14px}
@@ -88,72 +89,81 @@ th,td{border-bottom:1px solid var(--line);padding:6px 5px;text-align:left;vertic
   <div class="meta">文件庫：{{CORPUS_LABEL}}｜更新 {{BUILT}}</div>
   <div class="session" id="sess">
     <label>受訪者代號<input id="pid" placeholder="P01" size="6"></label>
-    <label>任務<select id="task"><option value="">—</option><option>任務1（直接詞）</option><option>任務2（同義改寫）</option><option>任務3（情境描述）</option><option>自由探索</option></select></label>
+    <label>任務<select id="task"><option value="">—</option><option>任務 1</option><option>任務 2</option><option>任務 3</option><option>自由探索</option></select></label>
   </div>
 </header>
 <main>
   <div class="tabs"><button class="on" data-v="search">搜尋</button><button data-v="logs">日誌與筆記</button></div>
   <section id="vSearch">
     <div class="seg" style="margin-top:12px">
-      <button id="mkw" class="on" data-m="kw">🔎 字面比對<small>只找一模一樣的字</small></button>
-      <button id="msem" data-m="sem">💬 語意比對<small>用意思找</small></button>
+      <button id="mkw" class="on" data-m="kw">🔎 關鍵字搜尋<small>比對你打的字</small></button>
+      <button id="msem" data-m="sem">💬 語意搜尋<small>比對你打的意思</small></button>
     </div>
-    <div class="box" id="box"><div class="in"><input id="q" placeholder="輸入要找的東西" autocomplete="off" enterkeyhint="search"><button class="x" id="qx" aria-label="清除">×</button></div><button class="go" id="go">搜尋</button></div>
-    <div class="hint" id="hint">像 Ctrl+F：你打的字要跟文件裡一模一樣才會找到。</div>
+    <div class="box" id="box"><div class="in"><input id="q" placeholder="輸入你要找的" autocomplete="off" enterkeyhint="search"><button class="x" id="qx" aria-label="清除">×</button></div><button class="go" id="go">搜尋</button></div>
+    <div class="hint" id="hint">用字找：比對你打的字和文件裡的字。</div>
     <div class="status" id="status"></div>
     <div class="prog" id="prog"><i id="progi"></i></div>
-    <div id="hits"><div class="empty"><div class="big">🔎</div>輸入要找的東西，按搜尋</div></div>
+    <div id="hits"><div class="empty"><div class="big">🔎</div>輸入你要找的，按搜尋<div class="scope">收錄：中高齡就業專法家族、勞基法、就保法、就服法、發展署指引手冊、45+ 常見問題、勞動部函釋。健保、勞保年金等不在內。<br>本工具僅供研究使用；實際權益問題請洽勞動部 1955 專線。</div></div></div>
   </section>
   <section id="vLogs" class="logs">
     <div class="note">研究者用。日誌只存在這台裝置的瀏覽器裡，不會上傳。每場結束先匯出再清空。</div>
     <textarea id="note" placeholder="觀察筆記：改寫幾次、先看什麼、說了什麼…"></textarea>
     <div class="tools"><button id="notesave">存一則筆記</button><button id="exp">⬇ 匯出 CSV</button><button id="clr">🗑 清空日誌</button><span class="note" id="logcnt"></span></div>
-    <table id="logtbl"><thead><tr><th>時間</th><th>受訪者</th><th>任務</th><th>路徑</th><th>事件</th><th>內容</th><th>#</th></tr></thead><tbody></tbody></table>
+    <table id="logtbl"><thead><tr><th>時間</th><th>受訪者</th><th>任務</th><th>路徑</th><th>事件</th><th>內容</th><th>結果數</th><th>最高分</th><th>結果清單／名次</th></tr></thead><tbody></tbody></table>
   </section>
 </main>
 <div class="judge" id="judge">
-  <div class="lbl"><span>這一輪找到了嗎？</span><span id="modeShow">字面比對</span></div>
+  <div class="lbl"><span>你要找的東西，這次找到了嗎？</span><span id="modeShow">關鍵字搜尋</span></div>
   <div class="btns"><button class="ok" data-j="找到了">✅ 找到了</button><button class="mid" data-j="不確定">🟡 不確定</button><button class="no" data-j="放棄／換方式">❌ 放棄</button></div>
 </div>
 <div class="sheet" id="sheet"><div class="pane">
   <div class="bar"><div class="h"><b id="vtitle"></b><button class="close" id="vclose" aria-label="關閉">×</button></div><div class="src" id="vsrc"></div>
-  <div class="find"><input id="vq" placeholder="在這段裡再找（Ctrl+F）"><span id="vcnt"></span></div></div>
+  <div class="find"><input id="vq" placeholder="在這段文字裡找某個字"><span id="vcnt"></span></div></div>
   <div class="body" id="vbody"></div>
 </div></div>
 <script>
 const DOCS={{DOCS}};const VECS={{VECS}};const MODEL={{MODEL}};const QPREFIX={{QPREFIX}};
 const $=s=>document.querySelector(s);const LKEY='dualConsoleLog';let MODE='kw',embedder=null,loading=false,lastQ='';
-const modeName=()=>MODE==='kw'?'字面比對':'語意比對';
-function log(path,ev,content,n){try{const rows=JSON.parse(localStorage.getItem(LKEY)||'[]');rows.push({t:new Date().toISOString(),pid:$('#pid').value||'',task:$('#task').value||'',path,ev,content:content||'',n:(n==null?'':n)});localStorage.setItem(LKEY,JSON.stringify(rows));renderLog()}catch(e){}}
-function renderLog(){let rows=[];try{rows=JSON.parse(localStorage.getItem(LKEY)||'[]')}catch(e){}$('#logtbl tbody').innerHTML=rows.slice().reverse().map(r=>`<tr><td>${r.t.slice(11,19)}</td><td>${esc(r.pid)}</td><td>${esc(r.task)}</td><td>${esc(r.path)}</td><td>${esc(r.ev)}</td><td>${esc(r.content)}</td><td>${r.n}</td></tr>`).join('');$('#logcnt').textContent=rows.length+' 筆'}
+const SESSION=(()=>{try{let v=sessionStorage.getItem('dualSession');if(!v){v=Math.random().toString(36).slice(2,8);sessionStorage.setItem('dualSession',v)}return v}catch(e){return 'na'}})();
+const localTs=d=>{const p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}.${String(d.getMilliseconds()).padStart(3,'0')}`};
+const norm=s=>s.normalize('NFKC');
+function gate(){const ok=!!$('#pid').value.trim();$('#go').disabled=!ok;$('#q').disabled=!ok;$('#q').placeholder=ok?'輸入你要找的':'請研究者先按右上角設定受訪者代號';}
+const modeName=()=>MODE==='kw'?'關鍵字搜尋':'語意搜尋';
+// 關鍵字搜尋：字元 bigram BM25（有斷詞單位、詞頻與文件長度加權、無語意推論）
+const bigrams=s=>{const t=s.toLowerCase().replace(/[\s，。、；：！？（）()「」『』,.;:!?\-]/g,'');const g=[];for(let i=0;i<t.length-1;i++)g.push(t.slice(i,i+2));return g};
+const DF=new Map();const DL=DOCS.map(d=>{const g=bigrams(d.text);new Set(g).forEach(x=>DF.set(x,(DF.get(x)||0)+1));return g});const AVG=DL.reduce((s,g)=>s+g.length,0)/DL.length;
+function bm25(q){const qg=[...new Set(bigrams(q))];const k1=1.2,b=0.75;return DOCS.map((d,i)=>{const g=DL[i];let s=0,m=0;for(const x of qg){const df=DF.get(x);if(!df)continue;let f=0;for(const y of g)if(y===x)f++;if(!f)continue;m++;const idf=Math.log(1+(DOCS.length-df+0.5)/(df+0.5));s+=idf*(f*(k1+1))/(f+k1*(1-b+b*g.length/AVG))}return{s,m}})}
+function log(path,ev,content,n,score,extra){try{const rows=JSON.parse(localStorage.getItem(LKEY)||'[]');const d=new Date();rows.push({t:d.toISOString(),lt:localTs(d),sid:SESSION,pid:$('#pid').value||'',task:$('#task').value||'',path,ev,content:content||'',n:(n==null?'':n),score:(score==null?'':score),extra:extra||''});localStorage.setItem(LKEY,JSON.stringify(rows));renderLog()}catch(e){}}
+function renderLog(){let rows=[];try{rows=JSON.parse(localStorage.getItem(LKEY)||'[]')}catch(e){}$('#logtbl tbody').innerHTML=rows.slice().reverse().map(r=>`<tr><td>${(r.lt||r.t).slice(11,19)}</td><td>${esc(r.pid)}</td><td>${esc(r.task)}</td><td>${esc(r.path)}</td><td>${esc(r.ev)}</td><td>${esc(r.content)}</td><td>${r.n}</td><td>${r.score??''}</td><td class="small">${esc(r.extra||'')}</td></tr>`).join('');$('#logcnt').textContent=rows.length+' 筆'}
 function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 function hl(s,q){const e=esc(s);if(!q)return e;const eq=esc(q).replace(/[.*+?^${}()|[\]\\]/g,'\\$&');return e.replace(new RegExp(eq,'gi'),m=>`<mark>${m}</mark>`)}
 $('#sessBtn').onclick=()=>$('#sess').classList.toggle('on');
-$('#pid').oninput=()=>$('#pidShow').textContent=$('#pid').value||'未設定';
+$('#pid').oninput=()=>{$('#pidShow').textContent=$('#pid').value||'未設定';try{localStorage.setItem('dualPid',$('#pid').value)}catch(e){}gate()};$('#task').onchange=()=>{try{localStorage.setItem('dualTask',$('#task').value)}catch(e){}};
+try{$('#pid').value=localStorage.getItem('dualPid')||'';$('#task').value=localStorage.getItem('dualTask')||'';$('#pidShow').textContent=$('#pid').value||'未設定'}catch(e){}gate();
 document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('on'));b.classList.add('on');const logs=b.dataset.v==='logs';$('#vLogs').classList.toggle('on',logs);$('#vSearch').style.display=logs?'none':'';$('#judge').style.display=logs?'none':''});
-document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{MODE=b.dataset.m;document.querySelectorAll('.seg button').forEach(x=>x.classList.remove('on','sem'));b.classList.add('on');if(MODE==='sem')b.classList.add('sem');$('#box').classList.toggle('sem',MODE==='sem');$('#modeShow').textContent=modeName();$('#hint').textContent=MODE==='kw'?'像 Ctrl+F：你打的字要跟文件裡一模一樣才會找到。':'用自己的話描述就好，例如「被公司叫回家不用來了，可以拿到什麼」。';log(modeName(),'切換方式','');if(lastQ)search(lastQ)});
-$('#q').oninput=()=>$('#qx').classList.toggle('on',!!$('#q').value);$('#qx').onclick=()=>{$('#q').value='';$('#qx').classList.remove('on');$('#q').focus()};
+document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{MODE=b.dataset.m;document.querySelectorAll('.seg button').forEach(x=>x.classList.remove('on','sem'));b.classList.add('on');if(MODE==='sem')b.classList.add('sem');$('#box').classList.toggle('sem',MODE==='sem');$('#modeShow').textContent=modeName();$('#hint').textContent=MODE==='kw'?'用字找：比對你打的字和文件裡的字。':'用意思找：比對你打的意思和文件的意思。';log(modeName(),'切換方式','');$('#hits').innerHTML='<div class="empty"><div class="big">'+(MODE==='kw'?'🔎':'💬')+'</div>已切換到'+modeName()+'，輸入後按搜尋</div>';$('#status').innerHTML=''});
+$('#q').oninput=()=>$('#qx').classList.toggle('on',!!$('#q').value);$('#qx').onclick=()=>{$('#q').value='';$('#qx').classList.remove('on');$('#q').focus();log(modeName(),'清除輸入','')};
 $('#go').onclick=()=>search();$('#q').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();search()}});
-function card(d,extra,snip){const chip=d.type==='法條'?'<span class="chip law">法條</span>':'<span class="chip guide">指引</span>';return `<div class="card" data-id="${d.id}"><div class="h">${chip}<span class="t">${esc(d.law)}</span></div><div class="sub">${esc(d.no)}${d.chapter?'｜'+esc(d.chapter):''}</div><div class="snip">${snip}</div>${extra}</div>`}
-function bind(q){document.querySelectorAll('.card').forEach(el=>el.onclick=()=>openDoc(el.dataset.id,MODE==='kw'?q:''))}
-function kwSearch(q){const ql=q.toLowerCase(),hits=[];for(const d of DOCS){const lo=d.text.toLowerCase();let n=0,i=-1;while((i=lo.indexOf(ql,i+1))>=0&&n<200)n++;if(n){const i0=lo.indexOf(ql);hits.push({d,n,snip:'…'+hl(d.text.slice(Math.max(0,i0-50),i0+120).replace(/\n+/g,' '),q)+'…'})}}
-hits.sort((a,b)=>b.n-a.n);const tot=hits.reduce((s,h)=>s+h.n,0);
-$('#status').innerHTML=hits.length?`字面比對「<b>${esc(q)}</b>」：<b>${hits.length}</b> 段命中，共 ${tot} 處`:`字面比對「<b>${esc(q)}</b>」：<b>0</b> 段命中`;
-$('#hits').innerHTML=hits.length?hits.slice(0,30).map(h=>card(h.d,`<div class="score"><span class="cnt">${h.n} 處</span></div>`,h.snip)).join(''):'<div class="empty"><div class="big">🙁</div>沒有一模一樣的字。<br>可以換個詞再試，或切到「語意比對」。</div>';
-bind(q);log('字面比對','查詢',q,hits.length)}
-function getEmbedder(){if(embedder)return Promise.resolve(embedder);if(loading)return loading;$('#prog').classList.add('on');$('#status').innerHTML='第一次用語意比對，正在下載語意模型（約 100MB，只有第一次；建議在 Wi-Fi 下）…';loading=(async()=>{try{const m=await import('https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2');m.env.allowLocalModels=false;embedder=await m.pipeline('feature-extraction',MODEL,{quantized:true,progress_callback:p=>{if(p.progress)$('#progi').style.width=Math.round(p.progress)+'%'}});return embedder}catch(e){$('#status').innerHTML='語意模型載入失敗（需要網路）。備案：用 NotebookLM，並在日誌記錄提問。<br><small>'+esc(e.message)+'</small>';log('語意比對','模型載入失敗',String(e.message));return null}finally{loading=null;$('#prog').classList.remove('on')}})();return loading}
+function card(d,extra,snip){const cls={'法條':'law','指引':'guide','問答':'faq','函釋':'fint'}[d.type]||'guide';const chip=`<span class="chip ${cls}">${esc(d.type)}</span>`;return `<div class="card" data-id="${d.id}"><div class="h">${chip}<span class="t">${esc(d.law)}</span></div><div class="sub">${esc(d.no)}${d.chapter?'｜'+esc(d.chapter):''}</div><div class="snip">${snip}</div>${extra}</div>`}
+function bind(q,ids){document.querySelectorAll('.card').forEach((el,i)=>el.onclick=()=>openDoc(el.dataset.id,'',i+1))}
+function kwSearch(q){const sc=bm25(q);const scored=DOCS.map((d,i)=>({d,s:sc[i].s,m:sc[i].m})).filter(x=>x.s>0).sort((a,b)=>b.s-a.s).slice(0,8);
+if(!scored.length){$('#status').innerHTML=`關鍵字搜尋「<b>${esc(q)}</b>」：找到 <b>0</b> 段`;$('#hits').innerHTML='<div class="empty"><div class="big">🙁</div>沒有任何文件含有你打的字。</div>';log('關鍵字搜尋','查詢',q,0,0);return}
+const top=scored[0].s,low=scored[scored.length-1].s;$('#status').innerHTML=`關鍵字搜尋「<b>${esc(q)}</b>」：找到 <b>${scored.length}</b> 段，依接近程度排序。`;
+$('#hits').innerHTML=scored.map((h,i)=>{const w=Math.max(8,Math.round((h.s-low)/(top-low+1e-6)*100));return card(h.d,`<div class="score"><span>第 ${i+1} 接近</span><div class="bar"><i style="width:${w}%;background:var(--navy)"></i></div></div>`,esc(h.d.text.slice(0,180).replace(/\n+/g,' '))+'…')}).join('');
+bind(q,scored.map(h=>h.d.id));log('關鍵字搜尋','查詢',q,scored.length,Math.round(top*100)/100,scored.map((h,i)=>`${i+1}:${h.d.id}:${h.s.toFixed(2)}`).join(' '))}
+function getEmbedder(){if(embedder)return Promise.resolve(embedder);if(loading)return loading;$('#prog').classList.add('on');$('#status').innerHTML='第一次用語意搜尋，正在下載語意模型（約 100MB，只有第一次；建議在 Wi-Fi 下）…';loading=(async()=>{try{const m=await import('https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2'+(window.__retry?'?r='+Date.now():''));m.env.allowLocalModels=false;embedder=await m.pipeline('feature-extraction',MODEL,{quantized:true,progress_callback:p=>{if(p.progress)$('#progi').style.width=Math.round(p.progress)+'%'}});return embedder}catch(e){$('#status').innerHTML='語意模型載入失敗（需要網路）。<button id="retry" class="link">重試</button><br><small>'+esc(e.message)+'</small>';$('#retry').onclick=()=>{window.__retry=true;embedder=null;search(lastQ)};log('語意搜尋','模型載入失敗',String(e.message));return null}finally{loading=null;$('#prog').classList.remove('on')}})();return loading}
 let semSeq=0;async function semSearch(q){const my=++semSeq;const ex=await getEmbedder();if(!ex||my!==semSeq)return;$('#status').innerHTML='計算中…';const r=await ex(QPREFIX+q,{pooling:'mean',normalize:true});const v=Array.from(r.data);if(my!==semSeq)return;
 const scored=DOCS.map((d,i)=>{let s=0;const w=VECS[i];for(let k=0;k<v.length;k++)s+=v[k]*w[k];return{d,s}}).sort((a,b)=>b.s-a.s).slice(0,8);const top=scored[0].s,low=scored[7].s;
-$('#status').innerHTML=`語意比對「<b>${esc(q)}</b>」：最接近的 8 段，依接近程度排序。沒有「命中」，只有遠近；<b>哪一段才是你要的，要自己判斷</b>。`;
+$('#status').innerHTML=`語意搜尋「<b>${esc(q)}</b>」：找到 <b>8</b> 段，依接近程度排序。`;
 $('#hits').innerHTML=scored.map((h,i)=>{const w=Math.max(8,Math.round((h.s-low)/(top-low+1e-6)*100));return card(h.d,`<div class="score"><span>第 ${i+1} 接近</span><div class="bar"><i style="width:${w}%"></i></div></div>`,esc(h.d.text.slice(0,180).replace(/\n+/g,' '))+'…')}).join('');
-bind(q);log('語意比對','查詢',q,Math.round(top*100))}
-function search(q){q=(q??$('#q').value).trim();if(!q)return;lastQ=q;$('#q').value=q;$('#qx').classList.add('on');window.scrollTo({top:0});MODE==='kw'?kwSearch(q):semSearch(q)}
-function openDoc(id,q){const d=DOCS.find(x=>x.id===id);$('#vtitle').textContent=`${d.law}｜${d.no}`;$('#vsrc').innerHTML=(d.chapter?esc(d.chapter)+'｜':'')+(d.url?`出處：<a href="${d.url}" target="_blank" rel="noopener">全國法規資料庫</a>`:'出處：勞動力發展署公開指引手冊')+(d.date?'｜'+esc(d.date):'');$('#vq').value=q||'';renderDoc(d,q);$('#sheet').classList.add('on');log(modeName(),'開啟文件',`${d.law} ${d.no}`);$('#vq').oninput=()=>renderDoc(d,$('#vq').value);$('#vq').onchange=()=>log(modeName(),'文件內再找',$('#vq').value)}
+bind(q,scored.map(h=>h.d.id));log('語意搜尋','查詢',q,8,Math.round(top*100)/100,scored.map((h,i)=>`${i+1}:${h.d.id}:${h.s.toFixed(3)}`).join(' '))}
+function search(q){q=norm((q??$('#q').value).trim());if(!q)return;if(!$('#pid').value.trim()){gate();return}lastQ=q;$('#q').value=q;$('#qx').classList.add('on');window.scrollTo({top:0});MODE==='kw'?kwSearch(q):semSearch(q)}
+function openDoc(id,q,rank){const d=DOCS.find(x=>x.id===id);$('#vtitle').textContent=`${d.law}｜${d.no}`;$('#vsrc').innerHTML=(d.chapter?esc(d.chapter)+'｜':'')+(d.url?`出處：<a href="${d.url}" target="_blank" rel="noopener">全國法規資料庫</a>`:'出處：勞動力發展署公開指引手冊')+(d.date?'｜'+esc(d.date):'');$('#vq').value=q||'';renderDoc(d,q);$('#sheet').classList.add('on');log(modeName(),'開啟文件',`${d.law} ${d.no}`,'','',`第 ${rank||'?'} 名 ${d.id}`);$('#vq').oninput=()=>renderDoc(d,$('#vq').value);$('#vq').onchange=()=>log(modeName(),'文件內再找',$('#vq').value)}
 function renderDoc(d,q){$('#vbody').innerHTML=hl(d.text,q);$('#vcnt').textContent=q?(d.text.toLowerCase().split(q.toLowerCase()).length-1)+' 處':'';const m=$('#vbody mark');if(m)m.scrollIntoView({block:'center'})}
-$('#vclose').onclick=()=>$('#sheet').classList.remove('on');$('#sheet').addEventListener('click',e=>{if(e.target===$('#sheet'))$('#sheet').classList.remove('on')});
+$('#vclose').onclick=()=>{$('#sheet').classList.remove('on');log(modeName(),'關閉文件','')};$('#sheet').addEventListener('click',e=>{if(e.target===$('#sheet'))$('#sheet').classList.remove('on')});
 document.querySelectorAll('.judge .btns button').forEach(b=>b.onclick=()=>{log(modeName(),'判斷',b.dataset.j);b.classList.add('flash');setTimeout(()=>b.classList.remove('flash'),500)});
 $('#notesave').onclick=()=>{const t=$('#note').value.trim();if(!t)return;log('觀察','筆記',t);$('#note').value=''};
-$('#exp').onclick=()=>{let rows=[];try{rows=JSON.parse(localStorage.getItem(LKEY)||'[]')}catch(e){}const csv='﻿時間,受訪者,任務,路徑,事件,內容,結果數\n'+rows.map(r=>[r.t,r.pid,r.task,r.path,r.ev,r.content,r.n].map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='檢索日誌_'+($('#pid').value||'P00')+'_'+new Date().toISOString().slice(0,10)+'.csv';a.click()};
+$('#exp').onclick=()=>{let rows=[];try{rows=JSON.parse(localStorage.getItem(LKEY)||'[]')}catch(e){}const cell=v=>{let x=String(v??'');if(/^[=+\-@]/.test(x))x="'"+x;return '"'+x.replace(/"/g,'""')+'"'};const csv='﻿本地時間,UTC,場次,受訪者,任務,路徑,事件,內容,結果數,最高分,結果清單或名次\n'+rows.map(r=>[r.lt||'',r.t,r.sid||'',r.pid,r.task,r.path,r.ev,r.content,r.n,r.score??'',r.extra||''].map(cell).join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='檢索日誌_'+($('#pid').value||'P00')+'_'+localTs(new Date()).slice(0,10)+'.csv';a.click()};
 $('#clr').onclick=()=>{if(confirm('確定清空？請先匯出。')){localStorage.removeItem(LKEY);renderLog()}};
 renderLog();
 </script>

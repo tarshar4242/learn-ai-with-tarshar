@@ -49,19 +49,20 @@ async function run(model, prefix) {
     const rank = arr => arr.map((s, i) => [s, i]).sort((a, b) => b[0] - a[0]).map(x => docs[x[1]].id);
     for (const [key, r] of [['vec', rank(vs)], ['hyb', rank(hs)]]) {
       const pos = r.findIndex(id => rel.has(id));
+      if (pos >= 0 && pos < 3) res[key].hit3 = (res[key].hit3 || 0) + 1;
       if (pos >= 0 && pos < 5) res[key].hit5++;
       if (pos >= 0) res[key].mrr += 1 / (pos + 1);
       if (key === 'vec') res.detail.push({ q: e.q, rel: rel.size, vecTop: r.slice(0, 3), vecPos: pos, hybPos: rank(hs).findIndex(id => rel.has(id)) });
     }
   }
-  for (const k of ['vec', 'hyb']) { res[k].hit5 = res[k].hit5 / EVAL.length; res[k].mrr = res[k].mrr / EVAL.length; }
+  for (const k of ['vec', 'hyb']) { res[k].hit3 = (res[k].hit3 || 0) / EVAL.length; res[k].hit5 = res[k].hit5 / EVAL.length; res[k].mrr = res[k].mrr / EVAL.length; }
   return res;
 }
 const MODELS = process.argv.slice(2).length ? process.argv.slice(2) : ['Xenova/multilingual-e5-small', 'Xenova/multilingual-e5-base', 'Xenova/paraphrase-multilingual-MiniLM-L12-v2', 'Xenova/text2vec-base-chinese', 'Xenova/bge-m3'];
 const out = [];
 for (const m of MODELS) {
   const prefix = m.includes('e5') ? { q: 'query: ', p: 'passage: ' } : m.includes('bge') && m.includes('zh') ? { q: '為這個句子生成表示以用於檢索相關文章：', p: '' } : { q: '', p: '' };
-  try { const r = await run(m, prefix); out.push(r); console.log(m, 'vec hit@5', r.vec.hit5.toFixed(2), 'mrr', r.vec.mrr.toFixed(2), '| hybrid hit@5', r.hyb.hit5.toFixed(2), 'mrr', r.hyb.mrr.toFixed(2)); }
+  try { const r = await run(m, prefix); out.push(r); console.log(m, 'vec hit@3', r.vec.hit3.toFixed(2), 'hit@5', r.vec.hit5.toFixed(2), 'mrr', r.vec.mrr.toFixed(2), '| hybrid hit@3', r.hyb.hit3.toFixed(2), 'hit@5', r.hyb.hit5.toFixed(2), 'mrr', r.hyb.mrr.toFixed(2)); writeFileSync(new URL(`./build/eval_${m.replace(/[^A-Za-z0-9]+/g,'_')}_${new Date().toISOString().slice(0,10)}.json`, import.meta.url), JSON.stringify(r, null, 1)); }
   catch (e) { console.log(m, '失敗：', e.message.slice(0, 120)); }
 }
 writeFileSync(new URL('./build/eval.json', import.meta.url), JSON.stringify(out, null, 1));
