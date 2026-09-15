@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>雙路徑檢索台</title>
+<style>
+:root{--navy:#1F4E79;--navy2:#153a5b;--ink:#1b1f24;--mute:#6b7480;--line:#dfe5ee;--bg:#f4f6fa;--card:#fff;--hl:#ffe98a;--sem:#1b7f4a;--sem2:#e8f5ec;--kw2:#e9f0f9;--warn:#b7791f;--r:14px}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 -apple-system,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif}
+button{font:inherit}
+.top{background:var(--navy);color:#fff;padding:calc(10px + env(safe-area-inset-top)) 16px 10px;position:sticky;top:0;z-index:5}
+.top .row{display:flex;align-items:center;gap:10px}
+.top h1{font-size:18px;margin:0;flex:1;letter-spacing:.02em}
+.top .meta{font-size:12px;opacity:.85;margin-top:4px}
+.pill{background:rgba(255,255,255,.14);border:0;color:#fff;border-radius:999px;padding:6px 12px;font-size:13px}
+.session{display:none;gap:8px;margin-top:10px;flex-wrap:wrap}.session.on{display:flex}
+.session label{font-size:12px;opacity:.9;display:flex;flex-direction:column;gap:3px}
+.session input,.session select{font-size:15px;padding:7px 9px;border:0;border-radius:8px;min-width:110px}
+main{max-width:720px;margin:0 auto;padding:14px 14px 120px}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:#e3e8f0;border-radius:var(--r);padding:4px;gap:4px}
+.seg button{border:0;background:transparent;border-radius:11px;padding:13px 6px;font-size:16px;font-weight:600;color:var(--mute)}
+.seg button.on{background:#fff;color:var(--navy);box-shadow:0 1px 4px rgba(0,0,0,.12)}
+.seg button.on.sem{color:var(--sem)}
+.seg small{display:block;font-weight:400;font-size:12px;margin-top:2px}
+.box{margin-top:12px;display:flex;gap:8px}
+.box .in{flex:1;position:relative}
+.box input{width:100%;font-size:17px;padding:13px 40px 13px 14px;border:2px solid var(--navy);border-radius:var(--r);background:#fff;outline:0}
+.box.sem input{border-color:var(--sem)}
+.box .x{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:0;background:#e3e8f0;border-radius:50%;width:26px;height:26px;color:#555;display:none}
+.box .x.on{display:block}
+.box .go{border:0;background:var(--navy);color:#fff;border-radius:var(--r);padding:0 18px;font-size:16px;font-weight:600}
+.box.sem .go{background:var(--sem)}
+.hint{font-size:13px;color:var(--mute);margin:10px 2px 0}
+.status{margin:12px 0 6px;font-size:14px;color:var(--mute)}
+.status b{color:var(--ink)}
+.prog{height:6px;background:#e3e8f0;border-radius:3px;overflow:hidden;margin-top:8px;display:none}.prog.on{display:block}
+.prog i{display:block;height:100%;width:0;background:var(--sem);transition:width .3s}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;margin:10px 0;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.card:active{background:#f7f9fc}
+.card .h{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.chip{font-size:11px;padding:2px 8px;border-radius:999px;font-weight:600;white-space:nowrap}
+.chip.law{background:var(--kw2);color:var(--navy)}.chip.guide{background:var(--sem2);color:var(--sem)}
+.card .t{font-weight:700;font-size:15px;color:var(--ink);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.card .sub{font-size:13px;color:var(--mute);margin-bottom:6px}
+.card .snip{font-size:14px;color:#333;line-height:1.5;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.card .score{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--mute);margin-top:8px}
+.card .bar{flex:1;height:5px;background:#e3e8f0;border-radius:3px;overflow:hidden}.card .bar i{display:block;height:100%;background:var(--sem)}
+.card .cnt{font-size:12px;color:var(--navy);background:var(--kw2);padding:2px 8px;border-radius:999px}
+mark{background:var(--hl);padding:0 1px;border-radius:2px}
+.empty{text-align:center;color:var(--mute);padding:30px 10px;font-size:14px}
+.empty .big{font-size:38px;margin-bottom:6px}
+.judge{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:10px 12px calc(10px + env(safe-area-inset-bottom));z-index:5}
+.judge .lbl{font-size:12px;color:var(--mute);margin-bottom:6px;display:flex;justify-content:space-between;align-items:center}
+.judge .btns{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.judge .btns button{border:1px solid var(--line);background:#fff;border-radius:12px;padding:11px 4px;font-size:14px;font-weight:600}
+.judge .ok{background:#e6f4ea;border-color:#b7e1c1}.judge .mid{background:#fff6dc;border-color:#f1dd9a}.judge .no{background:#fdecea;border-color:#f3b8b3}
+.judge .btns button.flash{outline:3px solid var(--navy)}
+.link{border:0;background:transparent;color:var(--navy);font-size:13px;text-decoration:underline;padding:0}
+.sheet{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;z-index:9}.sheet.on{display:block}
+.sheet .pane{position:absolute;left:0;right:0;bottom:0;top:6%;background:#fff;border-radius:18px 18px 0 0;display:flex;flex-direction:column;max-width:760px;margin:0 auto}
+.sheet .bar{padding:12px 14px 8px;border-bottom:1px solid var(--line)}
+.sheet .bar .h{display:flex;align-items:flex-start;gap:8px}
+.sheet .bar .h b{flex:1;font-size:16px;line-height:1.35}
+.sheet .close{border:0;background:#e3e8f0;border-radius:50%;width:32px;height:32px;font-size:18px;flex:none}
+.sheet .src{font-size:12px;color:var(--mute);margin-top:4px}.sheet .src a{color:var(--navy)}
+.sheet .find{display:flex;gap:6px;margin-top:8px;align-items:center}
+.sheet .find input{flex:1;font-size:15px;padding:8px 10px;border:1px solid var(--line);border-radius:10px}
+.sheet .find span{font-size:12px;color:var(--mute);white-space:nowrap}
+.sheet .body{flex:1;overflow:auto;padding:14px 16px 30px;white-space:pre-wrap;font-size:16px;line-height:1.8}
+.logs{display:none}.logs.on{display:block}
+.logs .tools{display:flex;gap:8px;margin:8px 0 12px;flex-wrap:wrap}
+.logs .tools button{border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px 12px;font-size:14px}
+textarea{width:100%;font-size:15px;padding:10px;border:1px solid var(--line);border-radius:12px;min-height:70px;background:#fff}
+table{width:100%;border-collapse:collapse;font-size:12px;background:#fff;border-radius:10px;overflow:hidden}
+th,td{border-bottom:1px solid var(--line);padding:6px 5px;text-align:left;vertical-align:top}th{background:#eef1f6;color:var(--mute);font-weight:600}
+.note{font-size:12px;color:var(--mute);margin-top:10px}
+.tabs{display:flex;gap:6px;margin-top:12px}
+.tabs button{flex:1;border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px;font-size:13px;color:var(--mute)}
+.tabs button.on{background:var(--navy);border-color:var(--navy);color:#fff}
+@media (min-width:720px){.card .snip{-webkit-line-clamp:3}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="row"><h1>雙路徑檢索台</h1><button class="pill" id="sessBtn">受訪者 <span id="pidShow">未設定</span></button></div>
+  <div class="meta">文件庫：{{CORPUS_LABEL}}｜更新 {{BUILT}}</div>
+  <div class="session" id="sess">
+    <label>受訪者代號<input id="pid" placeholder="P01" size="6"></label>
+    <label>任務<select id="task"><option value="">—</option><option>任務1（直接詞）</option><option>任務2（同義改寫）</option><option>任務3（情境描述）</option><option>自由探索</option></select></label>
+  </div>
+</header>
+<main>
+  <div class="tabs"><button class="on" data-v="search">搜尋</button><button data-v="logs">日誌與筆記</button></div>
+  <section id="vSearch">
+    <div class="seg" style="margin-top:12px">
+      <button id="mkw" class="on" data-m="kw">🔎 字面比對<small>只找一模一樣的字</small></button>
+      <button id="msem" data-m="sem">💬 語意比對<small>用意思找</small></button>
+    </div>
+    <div class="box" id="box"><div class="in"><input id="q" placeholder="輸入要找的東西" autocomplete="off" enterkeyhint="search"><button class="x" id="qx" aria-label="清除">×</button></div><button class="go" id="go">搜尋</button></div>
+    <div class="hint" id="hint">像 Ctrl+F：你打的字要跟文件裡一模一樣才會找到。</div>
+    <div class="status" id="status"></div>
+    <div class="prog" id="prog"><i id="progi"></i></div>
+    <div id="hits"><div class="empty"><div class="big">🔎</div>輸入要找的東西，按搜尋</div></div>
+  </section>
+  <section id="vLogs" class="logs">
+    <div class="note">研究者用。日誌只存在這台裝置的瀏覽器裡，不會上傳。每場結束先匯出再清空。</div>
+    <textarea id="note" placeholder="觀察筆記：改寫幾次、先看什麼、說了什麼…"></textarea>
+    <div class="tools"><button id="notesave">存一則筆記</button><button id="exp">⬇ 匯出 CSV</button><button id="clr">🗑 清空日誌</button><span class="note" id="logcnt"></span></div>
+    <table id="logtbl"><thead><tr><th>時間</th><th>受訪者</th><th>任務</th><th>路徑</th><th>事件</th><th>內容</th><th>#</th></tr></thead><tbody></tbody></table>
+  </section>
+</main>
+<div class="judge" id="judge">
+  <div class="lbl"><span>這一輪找到了嗎？</span><span id="modeShow">字面比對</span></div>
+  <div class="btns"><button class="ok" data-j="找到了">✅ 找到了</button><button class="mid" data-j="不確定">🟡 不確定</button><button class="no" data-j="放棄／換方式">❌ 放棄</button></div>
+</div>
+<div class="sheet" id="sheet"><div class="pane">
+  <div class="bar"><div class="h"><b id="vtitle"></b><button class="close" id="vclose" aria-label="關閉">×</button></div><div class="src" id="vsrc"></div>
+  <div class="find"><input id="vq" placeholder="在這段裡再找（Ctrl+F）"><span id="vcnt"></span></div></div>
+  <div class="body" id="vbody"></div>
+</div></div>
+<script>
+const DOCS={{DOCS}};const VECS={{VECS}};const MODEL={{MODEL}};
+const $=s=>document.querySelector(s);const LKEY='dualConsoleLog';let MODE='kw',embedder=null,loading=false,lastQ='';
+const modeName=()=>MODE==='kw'?'字面比對':'語意比對';
+function log(path,ev,content,n){try{const rows=JSON.parse(localStorage.getItem(LKEY)||'[]');rows.push({t:new Date().toISOString(),pid:$('#pid').value||'',task:$('#task').value||'',path,ev,content:content||'',n:(n==null?'':n)});localStorage.setItem(LKEY,JSON.stringify(rows));renderLog()}catch(e){}}
+function renderLog(){let rows=[];try{rows=JSON.parse(localStorage.getItem(LKEY)||'[]')}catch(e){}$('#logtbl tbody').innerHTML=rows.slice().reverse().map(r=>`<tr><td>${r.t.slice(11,19)}</td><td>${esc(r.pid)}</td><td>${esc(r.task)}</td><td>${esc(r.path)}</td><td>${esc(r.ev)}</td><td>${esc(r.content)}</td><td>${r.n}</td></tr>`).join('');$('#logcnt').textContent=rows.length+' 筆'}
+function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function hl(s,q){const e=esc(s);if(!q)return e;const eq=esc(q).replace(/[.*+?^${}()|[\]\\]/g,'\\$&');return e.replace(new RegExp(eq,'gi'),m=>`<mark>${m}</mark>`)}
+$('#sessBtn').onclick=()=>$('#sess').classList.toggle('on');
+$('#pid').oninput=()=>$('#pidShow').textContent=$('#pid').value||'未設定';
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('on'));b.classList.add('on');const logs=b.dataset.v==='logs';$('#vLogs').classList.toggle('on',logs);$('#vSearch').style.display=logs?'none':'';$('#judge').style.display=logs?'none':''});
+document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{MODE=b.dataset.m;document.querySelectorAll('.seg button').forEach(x=>x.classList.remove('on','sem'));b.classList.add('on');if(MODE==='sem')b.classList.add('sem');$('#box').classList.toggle('sem',MODE==='sem');$('#modeShow').textContent=modeName();$('#hint').textContent=MODE==='kw'?'像 Ctrl+F：你打的字要跟文件裡一模一樣才會找到。':'用自己的話描述就好，例如「被公司叫回家不用來了，可以拿到什麼」。';log(modeName(),'切換方式','');if(lastQ)search(lastQ)});
+$('#q').oninput=()=>$('#qx').classList.toggle('on',!!$('#q').value);$('#qx').onclick=()=>{$('#q').value='';$('#qx').classList.remove('on');$('#q').focus()};
+$('#go').onclick=()=>search();$('#q').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();search()}});
+function card(d,extra,snip){const chip=d.type==='法條'?'<span class="chip law">法條</span>':'<span class="chip guide">指引</span>';return `<div class="card" data-id="${d.id}"><div class="h">${chip}<span class="t">${esc(d.law)}</span></div><div class="sub">${esc(d.no)}${d.chapter?'｜'+esc(d.chapter):''}</div><div class="snip">${snip}</div>${extra}</div>`}
+function bind(q){document.querySelectorAll('.card').forEach(el=>el.onclick=()=>openDoc(el.dataset.id,MODE==='kw'?q:''))}
+function kwSearch(q){const ql=q.toLowerCase(),hits=[];for(const d of DOCS){const lo=d.text.toLowerCase();let n=0,i=-1;while((i=lo.indexOf(ql,i+1))>=0&&n<200)n++;if(n){const i0=lo.indexOf(ql);hits.push({d,n,snip:'…'+hl(d.text.slice(Math.max(0,i0-50),i0+120).replace(/\n+/g,' '),q)+'…'})}}
+hits.sort((a,b)=>b.n-a.n);const tot=hits.reduce((s,h)=>s+h.n,0);
+$('#status').innerHTML=hits.length?`字面比對「<b>${esc(q)}</b>」：<b>${hits.length}</b> 段命中，共 ${tot} 處`:`字面比對「<b>${esc(q)}</b>」：<b>0</b> 段命中`;
+$('#hits').innerHTML=hits.length?hits.slice(0,30).map(h=>card(h.d,`<div class="score"><span class="cnt">${h.n} 處</span></div>`,h.snip)).join(''):'<div class="empty"><div class="big">🙁</div>沒有一模一樣的字。<br>可以換個詞再試，或切到「語意比對」。</div>';
+bind(q);log('字面比對','查詢',q,hits.length)}
+function getEmbedder(){if(embedder)return Promise.resolve(embedder);if(loading)return loading;$('#prog').classList.add('on');$('#status').innerHTML='第一次用語意比對，正在下載模型（約 30MB，之後不用再載）…';loading=(async()=>{try{const m=await import('https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2');m.env.allowLocalModels=false;embedder=await m.pipeline('feature-extraction',MODEL,{quantized:true,progress_callback:p=>{if(p.progress)$('#progi').style.width=Math.round(p.progress)+'%'}});return embedder}catch(e){$('#status').innerHTML='語意模型載入失敗（需要網路）。備案：用 NotebookLM，並在日誌記錄提問。<br><small>'+esc(e.message)+'</small>';log('語意比對','模型載入失敗',String(e.message));return null}finally{loading=null;$('#prog').classList.remove('on')}})();return loading}
+let semSeq=0;async function semSearch(q){const my=++semSeq;const ex=await getEmbedder();if(!ex||my!==semSeq)return;$('#status').innerHTML='計算中…';const r=await ex('query: '+q,{pooling:'mean',normalize:true});const v=Array.from(r.data);if(my!==semSeq)return;
+const scored=DOCS.map((d,i)=>{let s=0;const w=VECS[i];for(let k=0;k<v.length;k++)s+=v[k]*w[k];return{d,s}}).sort((a,b)=>b.s-a.s).slice(0,10);const top=scored[0].s,low=scored[9].s;
+$('#status').innerHTML=`語意比對「<b>${esc(q)}</b>」：最接近的 10 段。沒有「命中」，只有遠近；<b>哪一段才是你要的，要自己判斷</b>。`;
+$('#hits').innerHTML=scored.map(h=>{const pct=Math.round(h.s*100),w=Math.max(8,Math.round((h.s-low)/(top-low+1e-6)*100));return card(h.d,`<div class="score"><span>相似 ${pct}%</span><div class="bar"><i style="width:${w}%"></i></div></div>`,esc(h.d.text.slice(0,180).replace(/\n+/g,' '))+'…')}).join('');
+bind(q);log('語意比對','查詢',q,Math.round(top*100))}
+function search(q){q=(q??$('#q').value).trim();if(!q)return;lastQ=q;$('#q').value=q;$('#qx').classList.add('on');window.scrollTo({top:0});MODE==='kw'?kwSearch(q):semSearch(q)}
+function openDoc(id,q){const d=DOCS.find(x=>x.id===id);$('#vtitle').textContent=`${d.law}｜${d.no}`;$('#vsrc').innerHTML=(d.chapter?esc(d.chapter)+'｜':'')+(d.url?`出處：<a href="${d.url}" target="_blank" rel="noopener">全國法規資料庫</a>`:'出處：勞動力發展署公開指引手冊')+(d.date?'｜'+esc(d.date):'');$('#vq').value=q||'';renderDoc(d,q);$('#sheet').classList.add('on');log(modeName(),'開啟文件',`${d.law} ${d.no}`);$('#vq').oninput=()=>renderDoc(d,$('#vq').value);$('#vq').onchange=()=>log(modeName(),'文件內再找',$('#vq').value)}
+function renderDoc(d,q){$('#vbody').innerHTML=hl(d.text,q);$('#vcnt').textContent=q?(d.text.toLowerCase().split(q.toLowerCase()).length-1)+' 處':'';const m=$('#vbody mark');if(m)m.scrollIntoView({block:'center'})}
+$('#vclose').onclick=()=>$('#sheet').classList.remove('on');$('#sheet').addEventListener('click',e=>{if(e.target===$('#sheet'))$('#sheet').classList.remove('on')});
+document.querySelectorAll('.judge .btns button').forEach(b=>b.onclick=()=>{log(modeName(),'判斷',b.dataset.j);b.classList.add('flash');setTimeout(()=>b.classList.remove('flash'),500)});
+$('#notesave').onclick=()=>{const t=$('#note').value.trim();if(!t)return;log('觀察','筆記',t);$('#note').value=''};
+$('#exp').onclick=()=>{let rows=[];try{rows=JSON.parse(localStorage.getItem(LKEY)||'[]')}catch(e){}const csv='﻿時間,受訪者,任務,路徑,事件,內容,結果數\n'+rows.map(r=>[r.t,r.pid,r.task,r.path,r.ev,r.content,r.n].map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='檢索日誌_'+($('#pid').value||'P00')+'_'+new Date().toISOString().slice(0,10)+'.csv';a.click()};
+$('#clr').onclick=()=>{if(confirm('確定清空？請先匯出。')){localStorage.removeItem(LKEY);renderLog()}};
+renderLog();
+</script>
+</body>
+</html>

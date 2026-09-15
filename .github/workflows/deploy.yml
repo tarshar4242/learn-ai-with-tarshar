@@ -24,6 +24,16 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      # 雙路徑檢索台：依 tools/dual-search/sources 重抓法規、切 PDF、算向量、打包成 public/thesis-library/tools/dual-search/index.html
+      # 失敗時不擋整站部署，沿用 repo 裡已有的 index.html
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build dual-search corpus
+        continue-on-error: true
+        run: |
+          pip install pymupdf
+          cd tools/dual-search && npm ci && python3 pipeline.py && node embed_build.mjs
       - run: npm run build
       - uses: actions/upload-pages-artifact@v3
         with:
