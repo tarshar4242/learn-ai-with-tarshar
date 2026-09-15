@@ -47,6 +47,8 @@ def split_pdf(path):
             if chunks: chunks[-1] += "\n" + buf
             else: chunks.append(buf)
         for j, c in enumerate(chunks, 1):
+            digits = len(re.findall(r"[0-9\-（）()：:/.]", c)); urls = c.count("http")
+            if digits / max(len(c), 1) > 0.25 or urls >= 2 or "......" in c: continue  # 地址表、網址堆、目錄頁不進文件集
             docs.append({"id": f"{key}-p{i}-{j}", "law": name, "pcode": key, "chapter": "", "no": f"第 {i} 頁",
                          "text": c, "url": "", "type": "指引", "date": ""})
     return name, docs

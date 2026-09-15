@@ -121,7 +121,7 @@ th,td{border-bottom:1px solid var(--line);padding:6px 5px;text-align:left;vertic
   <div class="body" id="vbody"></div>
 </div></div>
 <script>
-const DOCS={{DOCS}};const VECS={{VECS}};const MODEL={{MODEL}};
+const DOCS={{DOCS}};const VECS={{VECS}};const MODEL={{MODEL}};const QPREFIX={{QPREFIX}};
 const $=s=>document.querySelector(s);const LKEY='dualConsoleLog';let MODE='kw',embedder=null,loading=false,lastQ='';
 const modeName=()=>MODE==='kw'?'字面比對':'語意比對';
 function log(path,ev,content,n){try{const rows=JSON.parse(localStorage.getItem(LKEY)||'[]');rows.push({t:new Date().toISOString(),pid:$('#pid').value||'',task:$('#task').value||'',path,ev,content:content||'',n:(n==null?'':n)});localStorage.setItem(LKEY,JSON.stringify(rows));renderLog()}catch(e){}}
@@ -141,11 +141,11 @@ hits.sort((a,b)=>b.n-a.n);const tot=hits.reduce((s,h)=>s+h.n,0);
 $('#status').innerHTML=hits.length?`字面比對「<b>${esc(q)}</b>」：<b>${hits.length}</b> 段命中，共 ${tot} 處`:`字面比對「<b>${esc(q)}</b>」：<b>0</b> 段命中`;
 $('#hits').innerHTML=hits.length?hits.slice(0,30).map(h=>card(h.d,`<div class="score"><span class="cnt">${h.n} 處</span></div>`,h.snip)).join(''):'<div class="empty"><div class="big">🙁</div>沒有一模一樣的字。<br>可以換個詞再試，或切到「語意比對」。</div>';
 bind(q);log('字面比對','查詢',q,hits.length)}
-function getEmbedder(){if(embedder)return Promise.resolve(embedder);if(loading)return loading;$('#prog').classList.add('on');$('#status').innerHTML='第一次用語意比對，正在下載模型（約 30MB，之後不用再載）…';loading=(async()=>{try{const m=await import('https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2');m.env.allowLocalModels=false;embedder=await m.pipeline('feature-extraction',MODEL,{quantized:true,progress_callback:p=>{if(p.progress)$('#progi').style.width=Math.round(p.progress)+'%'}});return embedder}catch(e){$('#status').innerHTML='語意模型載入失敗（需要網路）。備案：用 NotebookLM，並在日誌記錄提問。<br><small>'+esc(e.message)+'</small>';log('語意比對','模型載入失敗',String(e.message));return null}finally{loading=null;$('#prog').classList.remove('on')}})();return loading}
-let semSeq=0;async function semSearch(q){const my=++semSeq;const ex=await getEmbedder();if(!ex||my!==semSeq)return;$('#status').innerHTML='計算中…';const r=await ex('query: '+q,{pooling:'mean',normalize:true});const v=Array.from(r.data);if(my!==semSeq)return;
-const scored=DOCS.map((d,i)=>{let s=0;const w=VECS[i];for(let k=0;k<v.length;k++)s+=v[k]*w[k];return{d,s}}).sort((a,b)=>b.s-a.s).slice(0,10);const top=scored[0].s,low=scored[9].s;
-$('#status').innerHTML=`語意比對「<b>${esc(q)}</b>」：最接近的 10 段。沒有「命中」，只有遠近；<b>哪一段才是你要的，要自己判斷</b>。`;
-$('#hits').innerHTML=scored.map(h=>{const pct=Math.round(h.s*100),w=Math.max(8,Math.round((h.s-low)/(top-low+1e-6)*100));return card(h.d,`<div class="score"><span>相似 ${pct}%</span><div class="bar"><i style="width:${w}%"></i></div></div>`,esc(h.d.text.slice(0,180).replace(/\n+/g,' '))+'…')}).join('');
+function getEmbedder(){if(embedder)return Promise.resolve(embedder);if(loading)return loading;$('#prog').classList.add('on');$('#status').innerHTML='第一次用語意比對，正在下載語意模型（約 100MB，只有第一次；建議在 Wi-Fi 下）…';loading=(async()=>{try{const m=await import('https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2');m.env.allowLocalModels=false;embedder=await m.pipeline('feature-extraction',MODEL,{quantized:true,progress_callback:p=>{if(p.progress)$('#progi').style.width=Math.round(p.progress)+'%'}});return embedder}catch(e){$('#status').innerHTML='語意模型載入失敗（需要網路）。備案：用 NotebookLM，並在日誌記錄提問。<br><small>'+esc(e.message)+'</small>';log('語意比對','模型載入失敗',String(e.message));return null}finally{loading=null;$('#prog').classList.remove('on')}})();return loading}
+let semSeq=0;async function semSearch(q){const my=++semSeq;const ex=await getEmbedder();if(!ex||my!==semSeq)return;$('#status').innerHTML='計算中…';const r=await ex(QPREFIX+q,{pooling:'mean',normalize:true});const v=Array.from(r.data);if(my!==semSeq)return;
+const scored=DOCS.map((d,i)=>{let s=0;const w=VECS[i];for(let k=0;k<v.length;k++)s+=v[k]*w[k];return{d,s}}).sort((a,b)=>b.s-a.s).slice(0,8);const top=scored[0].s,low=scored[7].s;
+$('#status').innerHTML=`語意比對「<b>${esc(q)}</b>」：最接近的 8 段，依接近程度排序。沒有「命中」，只有遠近；<b>哪一段才是你要的，要自己判斷</b>。`;
+$('#hits').innerHTML=scored.map((h,i)=>{const w=Math.max(8,Math.round((h.s-low)/(top-low+1e-6)*100));return card(h.d,`<div class="score"><span>第 ${i+1} 接近</span><div class="bar"><i style="width:${w}%"></i></div></div>`,esc(h.d.text.slice(0,180).replace(/\n+/g,' '))+'…')}).join('');
 bind(q);log('語意比對','查詢',q,Math.round(top*100))}
 function search(q){q=(q??$('#q').value).trim();if(!q)return;lastQ=q;$('#q').value=q;$('#qx').classList.add('on');window.scrollTo({top:0});MODE==='kw'?kwSearch(q):semSearch(q)}
 function openDoc(id,q){const d=DOCS.find(x=>x.id===id);$('#vtitle').textContent=`${d.law}｜${d.no}`;$('#vsrc').innerHTML=(d.chapter?esc(d.chapter)+'｜':'')+(d.url?`出處：<a href="${d.url}" target="_blank" rel="noopener">全國法規資料庫</a>`:'出處：勞動力發展署公開指引手冊')+(d.date?'｜'+esc(d.date):'');$('#vq').value=q||'';renderDoc(d,q);$('#sheet').classList.add('on');log(modeName(),'開啟文件',`${d.law} ${d.no}`);$('#vq').oninput=()=>renderDoc(d,$('#vq').value);$('#vq').onchange=()=>log(modeName(),'文件內再找',$('#vq').value)}
