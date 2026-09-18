@@ -1,0 +1,3559 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover, user-scalable=no"
+/>
+
+<meta name="theme-color" content="#070A1C" />
+
+<title>星幕之下｜Cosmic Reverie</title>
+
+<style>
+/* =========================================================
+   星幕之下 Cosmic Reverie
+   Mobile First Interactive Cosmic Experience
+   ========================================================= */
+
+:root {
+  --night: #070a1c;
+  --night-2: #0c1230;
+  --indigo: #151936;
+  --violet: #483b73;
+
+  --moon: #e8e7f0;
+  --silver: #9ea7bd;
+  --gold: #c9ae74;
+
+  --panel: rgba(9, 14, 36, 0.78);
+  --panel-strong: rgba(7, 10, 28, 0.92);
+
+  --line: rgba(224, 230, 255, 0.14);
+  --line-soft: rgba(224, 230, 255, 0.08);
+
+  --safe-top: max(16px, env(safe-area-inset-top));
+  --safe-bottom: max(16px, env(safe-area-inset-bottom));
+
+  /* 故事卡片的實際高度，由 JS 量測後寫入，
+     讓提示泡泡與音樂鈕永遠浮在卡片上方，不被蓋住。 */
+  --card-h: 150px;
+}
+
+/* ---------- reset ---------- */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: var(--night);
+  color: var(--moon);
+
+  font-family:
+    "Noto Sans TC",
+    "PingFang TC",
+    "Microsoft JhengHei",
+    system-ui,
+    sans-serif;
+
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+}
+
+body {
+  touch-action: none;
+}
+
+button {
+  font: inherit;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* =========================================================
+   WORLD
+   ========================================================= */
+
+#app {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 48% 22%,
+      rgba(96, 72, 150, 0.28),
+      transparent 31%
+    ),
+    radial-gradient(
+      circle at 76% 66%,
+      rgba(44, 76, 133, 0.13),
+      transparent 29%
+    ),
+    linear-gradient(
+      180deg,
+      #07091b 0%,
+      #0c1230 50%,
+      #050711 100%
+    );
+}
+
+canvas {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  pointer-events: auto;
+}
+
+/* 網格畫布疊在星空畫布上方，只負責畫圖，
+   不能擋住手指，否則底下的星空收不到任何觸控。 */
+#gridCanvas {
+  pointer-events: none;
+}
+
+/* ---------- nebula ---------- */
+
+.nebula {
+  position: absolute;
+  inset: -12%;
+
+  pointer-events: none;
+
+  opacity: 0.86;
+
+  filter: blur(25px);
+
+  background:
+    radial-gradient(
+      circle at 25% 35%,
+      rgba(121, 81, 163, 0.22),
+      transparent 25%
+    ),
+    radial-gradient(
+      circle at 71% 47%,
+      rgba(113, 82, 153, 0.18),
+      transparent 27%
+    ),
+    radial-gradient(
+      circle at 48% 78%,
+      rgba(47, 84, 145, 0.13),
+      transparent 31%
+    );
+
+  animation: nebulaDrift 20s ease-in-out infinite alternate;
+}
+
+@keyframes nebulaDrift {
+  from {
+    transform: scale(1) translate3d(-1%, 1%, 0);
+  }
+
+  to {
+    transform: scale(1.05) translate3d(2%, -1.5%, 0);
+  }
+}
+
+/* =========================================================
+   TOP BAR
+   ========================================================= */
+
+.topbar {
+  position: absolute;
+  z-index: 40;
+
+  left: 14px;
+  right: 14px;
+  top: var(--safe-top);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  pointer-events: none;
+}
+
+.brand {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+
+  color: rgba(224, 225, 239, 0.78);
+
+  text-shadow: 0 2px 15px rgba(0, 0, 0, 0.65);
+}
+
+.icon-button {
+  pointer-events: auto;
+
+  width: 43px;
+  height: 43px;
+
+  border-radius: 999px;
+
+  border: 1px solid rgba(255, 255, 255, 0.13);
+
+  color: white;
+
+  background: rgba(9, 14, 38, 0.56);
+
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+
+  box-shadow:
+    inset 0 0 20px rgba(255, 255, 255, 0.025),
+    0 8px 28px rgba(0, 0, 0, 0.2);
+
+  cursor: pointer;
+}
+
+/* =========================================================
+   OPENING
+   ========================================================= */
+
+.full-overlay {
+  position: absolute;
+  z-index: 100;
+
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding:
+    calc(var(--safe-top) + 28px)
+    28px
+    calc(var(--safe-bottom) + 28px);
+
+  background:
+    radial-gradient(
+      circle at 50% 35%,
+      rgba(47, 40, 81, 0.25),
+      transparent 34%
+    ),
+    rgba(4, 6, 18, 0.72);
+
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+
+  transition:
+    opacity 0.8s ease,
+    visibility 0.8s ease;
+}
+
+.full-overlay.hide {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.opening {
+  width: 100%;
+  max-width: 440px;
+
+  text-align: center;
+}
+
+.eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.28em;
+
+  color: var(--gold);
+
+  margin-bottom: 17px;
+}
+
+.opening h1 {
+  margin: 0;
+
+  font-family:
+    "Noto Serif TC",
+    "PMingLiU",
+    serif;
+
+  font-size: clamp(35px, 11vw, 55px);
+  font-weight: 500;
+
+  letter-spacing: 0.08em;
+}
+
+.opening-copy {
+  margin-top: 23px;
+
+  font-family:
+    "Noto Serif TC",
+    "PMingLiU",
+    serif;
+
+  color: rgba(228, 228, 239, 0.84);
+
+  font-size: 15px;
+  line-height: 2.05;
+}
+
+.start-button {
+  margin-top: 28px;
+
+  padding: 13px 23px;
+
+  border-radius: 999px;
+
+  border: 1px solid rgba(255, 255, 255, 0.18);
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.08),
+      rgba(130, 102, 173, 0.08)
+    );
+
+  box-shadow:
+    0 0 0 0 rgba(201, 174, 116, 0),
+    inset 0 0 18px rgba(255, 255, 255, 0.025);
+
+  color: var(--moon);
+
+  cursor: pointer;
+
+  animation: breatheButton 2.5s ease-in-out infinite;
+}
+
+@keyframes breatheButton {
+  50% {
+    transform: scale(1.035);
+
+    box-shadow:
+      0 0 35px rgba(201, 174, 116, 0.12),
+      inset 0 0 20px rgba(255, 255, 255, 0.035);
+  }
+}
+
+/* =========================================================
+   CHAPTER SPLASH
+   ========================================================= */
+
+.chapter-splash {
+  position: absolute;
+
+  z-index: 95;
+
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 30px;
+
+  text-align: center;
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(68, 52, 103, 0.24),
+      transparent 43%
+    ),
+    rgba(5, 7, 22, 0.91);
+
+  opacity: 0;
+  visibility: hidden;
+
+  transition: 0.7s ease;
+}
+
+.chapter-splash.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.chapter-number {
+  font-size: 11px;
+
+  color: var(--gold);
+
+  letter-spacing: 0.36em;
+}
+
+.chapter-splash h2 {
+  margin: 13px 0 0;
+
+  font-family:
+    "Noto Serif TC",
+    "PMingLiU",
+    serif;
+
+  font-weight: 500;
+
+  font-size: 33px;
+}
+
+.chapter-splash p {
+  margin: 15px 0 0;
+
+  font-family:
+    "Noto Serif TC",
+    "PMingLiU",
+    serif;
+
+  color: rgba(209, 211, 226, 0.75);
+
+  line-height: 1.95;
+}
+
+/* =========================================================
+   POEM
+   ========================================================= */
+
+.poem {
+  position: absolute;
+
+  z-index: 28;
+
+  top: 17%;
+  left: 7%;
+  right: 7%;
+
+  pointer-events: none;
+
+  text-align: center;
+
+  font-family:
+    "Noto Serif TC",
+    "PMingLiU",
+    serif;
+
+  font-size: clamp(18px, 5.3vw, 24px);
+
+  line-height: 1.95;
+  letter-spacing: 0.055em;
+
+  color: rgba(244, 243, 249, 0.95);
+
+  text-shadow:
+    0 4px 28px rgba(0, 0, 0, 0.88),
+    0 0 22px rgba(87, 69, 130, 0.25);
+
+  opacity: 0;
+
+  transform: translateY(8px);
+
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s ease;
+}
+
+.poem.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* =========================================================
+   ACADEMIC RADAR
+   ========================================================= */
+
+.academic-radar {
+  position: absolute;
+
+  z-index: 35;
+
+  top: calc(var(--safe-top) + 56px);
+  left: 14px;
+
+  width: min(68vw, 290px);
+
+  padding: 12px 13px;
+
+  border-radius: 16px;
+
+  border: 1px solid rgba(255, 255, 255, 0.11);
+
+  background: rgba(7, 12, 32, 0.58);
+
+  -webkit-backdrop-filter: blur(15px);
+  backdrop-filter: blur(15px);
+
+  opacity: 0;
+  transform: translateY(-6px);
+
+  pointer-events: none;
+
+  transition: 0.45s ease;
+}
+
+.academic-radar.show {
+  opacity: 1;
+  transform: none;
+}
+
+.radar-eyebrow {
+  font-size: 9px;
+
+  letter-spacing: 0.19em;
+
+  color: var(--gold);
+}
+
+.radar-title {
+  margin-top: 6px;
+
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.radar-copy {
+  margin-top: 5px;
+
+  color: rgba(201, 205, 222, 0.8);
+
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+/* =========================================================
+   VIEW MODE
+   ========================================================= */
+
+.mode-switch {
+  position: absolute;
+
+  z-index: 36;
+
+  top: calc(var(--safe-top) + 57px);
+  right: 14px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 7px;
+
+  opacity: 0;
+  visibility: hidden;
+
+  transition: 0.4s ease;
+}
+
+.mode-switch.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.mode-button {
+  padding: 8px 11px;
+
+  color: rgba(225, 225, 234, 0.75);
+
+  font-size: 10px;
+
+  border-radius: 999px;
+
+  border: 1px solid rgba(255, 255, 255, 0.11);
+
+  background: rgba(8, 13, 34, 0.55);
+
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.mode-button.active {
+  color: #f3dfa9;
+
+  border-color: rgba(201, 174, 116, 0.47);
+
+  background: rgba(79, 58, 103, 0.4);
+}
+
+/* =========================================================
+   HINT
+   ========================================================= */
+
+.hint {
+  position: absolute;
+
+  z-index: 31;
+
+  left: 50%;
+
+  bottom: calc(var(--safe-bottom) + var(--card-h) + 14px);
+
+  transform: translateX(-50%);
+
+  max-width: calc(100vw - 42px);
+
+  white-space: nowrap;
+
+  padding: 8px 13px;
+
+  border-radius: 999px;
+
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  background: rgba(7, 11, 30, 0.58);
+
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+
+  font-size: 11px;
+
+  color: rgba(225, 226, 238, 0.84);
+
+  transition: opacity 0.4s ease;
+}
+
+/* =========================================================
+   STORY PANEL
+   ========================================================= */
+
+.story-card {
+  position: absolute;
+
+  z-index: 38;
+
+  left: 13px;
+  right: 13px;
+
+  bottom: var(--safe-bottom);
+
+  padding: 16px;
+
+  border-radius: 22px;
+
+  border: 1px solid rgba(255, 255, 255, 0.105);
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(13, 18, 43, 0.78),
+      rgba(7, 11, 29, 0.89)
+    );
+
+  -webkit-backdrop-filter: blur(19px);
+  backdrop-filter: blur(19px);
+
+  box-shadow:
+    0 22px 65px rgba(0, 0, 0, 0.36),
+    inset 0 1px rgba(255, 255, 255, 0.025);
+
+  transition:
+    opacity 0.45s ease,
+    transform 0.45s ease;
+}
+
+.story-card.hide {
+  opacity: 0;
+  transform: translateY(18px);
+
+  pointer-events: none;
+}
+
+.card-kicker {
+  color: var(--gold);
+
+  font-size: 10px;
+
+  letter-spacing: 0.18em;
+}
+
+.story-card h2 {
+  margin: 7px 0 0;
+
+  font-family:
+    "Noto Serif TC",
+    "PMingLiU",
+    serif;
+
+  font-weight: 500;
+
+  font-size: 21px;
+  line-height: 1.45;
+}
+
+.story-card p {
+  margin: 9px 0 0;
+
+  color: rgba(214, 216, 230, 0.83);
+
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.actions {
+  display: flex;
+
+  gap: 9px;
+
+  margin-top: 14px;
+}
+
+.action-button {
+  flex: 1;
+
+  min-height: 45px;
+
+  padding: 9px 11px;
+
+  border-radius: 14px;
+
+  border: 1px solid rgba(255, 255, 255, 0.11);
+
+  color: #0e1227;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(211, 182, 117, 0.94),
+      rgba(143, 116, 188, 0.88)
+    );
+
+  font-weight: 700;
+}
+
+.action-button.ghost {
+  color: rgba(237, 237, 244, 0.91);
+
+  font-weight: 400;
+
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* =========================================================
+   CHOICES
+   ========================================================= */
+
+.choice-grid {
+  display: grid;
+
+  gap: 8px;
+
+  margin-top: 13px;
+}
+
+.choice {
+  width: 100%;
+
+  min-height: 49px;
+
+  padding: 12px;
+
+  text-align: left;
+
+  color: rgba(239, 238, 245, 0.92);
+
+  line-height: 1.5;
+
+  border-radius: 14px;
+
+  border: 1px solid rgba(255, 255, 255, 0.105);
+
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.choice:active {
+  transform: scale(0.99);
+}
+
+/* =========================================================
+   JOURNAL
+   ========================================================= */
+
+.journal {
+  position: absolute;
+
+  z-index: 120;
+
+  inset: 0;
+
+  padding:
+    calc(var(--safe-top) + 48px)
+    18px
+    calc(var(--safe-bottom) + 24px);
+
+  overflow-y: auto;
+
+  touch-action: pan-y;
+
+  background:
+    radial-gradient(
+      circle at 25% 10%,
+      rgba(94, 69, 132, 0.15),
+      transparent 30%
+    ),
+    rgba(5, 8, 22, 0.96);
+
+  -webkit-backdrop-filter: blur(22px);
+  backdrop-filter: blur(22px);
+
+  opacity: 0;
+  visibility: hidden;
+
+  transition: 0.45s ease;
+}
+
+.journal.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.close-journal {
+  position: fixed;
+
+  z-index: 125;
+
+  top: var(--safe-top);
+  right: 15px;
+}
+
+.journal h2 {
+  margin: 0;
+
+  font-family:
+    "Noto Serif TC",
+    "PMingLiU",
+    serif;
+
+  font-size: 28px;
+  font-weight: 500;
+}
+
+.journal-sub {
+  color: rgba(182, 187, 207, 0.78);
+
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.journal-note {
+  margin-top: 14px;
+
+  padding: 14px;
+
+  border-radius: 17px;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.note-title {
+  color: #e0c589;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.note-copy {
+  margin-top: 7px;
+
+  color: rgba(224, 224, 233, 0.9);
+
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+/* =========================================================
+   MUSIC CONTROL
+   ========================================================= */
+
+.music-button {
+  position: absolute;
+
+  z-index: 39;
+
+  left: 14px;
+
+  bottom: calc(var(--safe-bottom) + var(--card-h) + 12px);
+
+  width: 38px;
+  height: 38px;
+
+  opacity: 0;
+  visibility: hidden;
+
+  transition: 0.4s ease;
+}
+
+.music-button.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* =========================================================
+   UTILS
+   ========================================================= */
+
+.hidden {
+  display: none !important;
+}
+
+/* =========================================================
+   LARGER PHONES
+   ========================================================= */
+
+@media (min-width: 600px) {
+  .story-card {
+    left: 50%;
+
+    width: min(520px, calc(100vw - 36px));
+
+    transform: translateX(-50%);
+  }
+
+  .story-card.hide {
+    transform: translate(-50%, 18px);
+  }
+}
+
+/* Reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div id="app">
+
+  <div class="nebula"></div>
+
+  <!-- Canvas -->
+  <canvas id="spaceCanvas"></canvas>
+  <canvas id="gridCanvas"></canvas>
+
+  <!-- top -->
+  <header class="topbar">
+
+    <div class="brand">
+      星幕之下 · COSMIC REVERIE
+    </div>
+
+    <button
+      id="journalButton"
+      class="icon-button"
+      aria-label="開啟星夜手札"
+    >
+      ✦
+    </button>
+
+  </header>
+
+  <!-- Academic radar -->
+  <aside
+    id="academicRadar"
+    class="academic-radar"
+  >
+    <div class="radar-eyebrow">
+      學術雷達 · DISCOVERY
+    </div>
+
+    <div
+      id="radarTitle"
+      class="radar-title"
+    ></div>
+
+    <div
+      id="radarCopy"
+      class="radar-copy"
+    ></div>
+  </aside>
+
+  <!-- view mode -->
+  <div
+    id="modeSwitch"
+    class="mode-switch"
+  >
+
+    <button
+      class="mode-button active"
+      data-mode="science"
+    >
+      科學視野
+    </button>
+
+    <button
+      class="mode-button"
+      data-mode="jelly"
+    >
+      果凍視野
+    </button>
+
+  </div>
+
+  <!-- sound -->
+  <button
+    id="musicButton"
+    class="icon-button music-button"
+    aria-label="切換音樂"
+  >
+    ♫
+  </button>
+
+  <!-- poem -->
+  <div
+    id="poem"
+    class="poem"
+  ></div>
+
+  <!-- hint -->
+  <div
+    id="hint"
+    class="hint hidden"
+  ></div>
+
+  <!-- story -->
+  <section
+    id="storyCard"
+    class="story-card hide"
+  >
+
+    <div
+      id="cardKicker"
+      class="card-kicker"
+    ></div>
+
+    <h2 id="cardTitle"></h2>
+
+    <p id="cardText"></p>
+
+    <div
+      id="cardActions"
+      class="actions"
+    ></div>
+
+  </section>
+
+  <!-- opening -->
+  <div
+    id="opening"
+    class="full-overlay"
+  >
+
+    <div class="opening">
+
+      <div class="eyebrow">
+        A COSMIC REVERIE
+      </div>
+
+      <h1>
+        星幕之下
+      </h1>
+
+      <div class="opening-copy">
+        今夜，沒有老師。<br>
+        沒有考試。<br><br>
+
+        只有你，<br>
+        和一個尚未被解釋完的宇宙。
+      </div>
+
+      <button
+        id="startButton"
+        class="start-button"
+      >
+        碰一下夜空
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- chapter splash -->
+  <div
+    id="chapterSplash"
+    class="chapter-splash"
+  >
+
+    <div>
+
+      <div
+        id="chapterNumber"
+        class="chapter-number"
+      >
+        CHAPTER I
+      </div>
+
+      <h2 id="chapterTitle">
+        虛空有重量
+      </h2>
+
+      <p id="chapterCopy">
+        你以為你站在虛空裡。<br>
+        但虛空，也許從來不是空。
+      </p>
+
+    </div>
+
+  </div>
+
+  <!-- journal -->
+  <section
+    id="journal"
+    class="journal"
+  >
+
+    <button
+      id="closeJournal"
+      class="icon-button close-journal"
+    >
+      ×
+    </button>
+
+    <h2>
+      我的星夜手札
+    </h2>
+
+    <p class="journal-sub">
+      你不是在完成關卡。<br>
+      你正在記錄自己如何理解宇宙。
+    </p>
+
+    <div id="journalNotes"></div>
+
+  </section>
+
+</div>
+
+
+<script>
+/* =========================================================
+   星幕之下
+   Cosmic Reverie
+   ========================================================= */
+
+(() => {
+
+"use strict";
+
+/* =========================================================
+   DOM
+   ========================================================= */
+
+const app = document.getElementById("app");
+
+const spaceCanvas =
+  document.getElementById("spaceCanvas");
+
+const gridCanvas =
+  document.getElementById("gridCanvas");
+
+const ctx =
+  spaceCanvas.getContext("2d");
+
+const gridCtx =
+  gridCanvas.getContext("2d");
+
+const opening =
+  document.getElementById("opening");
+
+const startButton =
+  document.getElementById("startButton");
+
+const chapterSplash =
+  document.getElementById("chapterSplash");
+
+const chapterNumber =
+  document.getElementById("chapterNumber");
+
+const chapterTitle =
+  document.getElementById("chapterTitle");
+
+const chapterCopy =
+  document.getElementById("chapterCopy");
+
+const storyCard =
+  document.getElementById("storyCard");
+
+const cardKicker =
+  document.getElementById("cardKicker");
+
+const cardTitle =
+  document.getElementById("cardTitle");
+
+const cardText =
+  document.getElementById("cardText");
+
+const cardActions =
+  document.getElementById("cardActions");
+
+const hint =
+  document.getElementById("hint");
+
+const poem =
+  document.getElementById("poem");
+
+const academicRadar =
+  document.getElementById("academicRadar");
+
+const radarTitle =
+  document.getElementById("radarTitle");
+
+const radarCopy =
+  document.getElementById("radarCopy");
+
+const modeSwitch =
+  document.getElementById("modeSwitch");
+
+const journal =
+  document.getElementById("journal");
+
+const journalButton =
+  document.getElementById("journalButton");
+
+const closeJournal =
+  document.getElementById("closeJournal");
+
+const journalNotes =
+  document.getElementById("journalNotes");
+
+const musicButton =
+  document.getElementById("musicButton");
+
+
+/* =========================================================
+   WORLD STATE
+   ========================================================= */
+
+let width = 0;
+let height = 0;
+
+let dpr =
+  Math.min(window.devicePixelRatio || 1, 2);
+
+let stars = [];
+let ripples = [];
+
+let chapterStage = 0;
+
+let dragRevealCount = 0;
+
+let viewMode = "science";
+
+let mass = null;
+
+let draggingMass = false;
+
+let lightPulse = null;
+
+let lastPointer = {
+  x: 0,
+  y: 0
+};
+
+let musicEnabled = true;
+
+let journalData = [];
+
+
+/* =========================================================
+   STORAGE
+   ========================================================= */
+
+const STORAGE_KEY =
+  "cosmic_reverie_journal_v1";
+
+function loadJournal() {
+
+  try {
+
+    const stored =
+      localStorage.getItem(STORAGE_KEY);
+
+    if (stored) {
+
+      journalData =
+        JSON.parse(stored);
+
+    }
+
+  } catch (error) {
+
+    console.warn(
+      "Could not load journal",
+      error
+    );
+
+  }
+
+  renderJournal();
+
+}
+
+function saveJournal() {
+
+  try {
+
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(journalData)
+    );
+
+  } catch (error) {
+
+    console.warn(
+      "Could not save journal",
+      error
+    );
+
+  }
+
+}
+
+function addJournalEntry(
+  title,
+  copy
+) {
+
+  journalData.push({
+
+    title,
+    copy,
+    timestamp:
+      new Date().toISOString()
+
+  });
+
+  saveJournal();
+
+  renderJournal();
+
+}
+
+function renderJournal() {
+
+  if (
+    journalData.length === 0
+  ) {
+
+    journalNotes.innerHTML = `
+      <div class="journal-note">
+        <div class="note-title">
+          手札尚未寫下任何文字
+        </div>
+
+        <div class="note-copy">
+          等你在宇宙裡留下第一個答案。
+        </div>
+      </div>
+    `;
+
+    return;
+
+  }
+
+  journalNotes.innerHTML =
+    journalData
+      .map(entry => `
+        <article class="journal-note">
+
+          <div class="note-title">
+            ${escapeHTML(entry.title)}
+          </div>
+
+          <div class="note-copy">
+            ${escapeHTML(entry.copy)}
+          </div>
+
+        </article>
+      `)
+      .join("");
+
+}
+
+function escapeHTML(text) {
+
+  return String(text)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+
+}
+
+
+/* =========================================================
+   CANVAS SIZE
+   ========================================================= */
+
+function resizeCanvas() {
+
+  width =
+    window.innerWidth;
+
+  height =
+    window.innerHeight;
+
+  dpr =
+    Math.min(
+      window.devicePixelRatio || 1,
+      2
+    );
+
+  [
+    spaceCanvas,
+    gridCanvas
+  ].forEach(canvas => {
+
+    canvas.width =
+      width * dpr;
+
+    canvas.height =
+      height * dpr;
+
+    canvas.style.width =
+      width + "px";
+
+    canvas.style.height =
+      height + "px";
+
+  });
+
+  ctx.setTransform(
+    dpr,
+    0,
+    0,
+    dpr,
+    0,
+    0
+  );
+
+  gridCtx.setTransform(
+    dpr,
+    0,
+    0,
+    dpr,
+    0,
+    0
+  );
+
+  createStars();
+
+}
+
+window.addEventListener(
+  "resize",
+  resizeCanvas
+);
+
+
+/* =========================================================
+   STARS
+   ========================================================= */
+
+function random(
+  min,
+  max
+) {
+
+  return (
+    min +
+    Math.random() *
+    (max - min)
+  );
+
+}
+
+function createStars() {
+
+  const amount =
+    Math.max(
+      80,
+      Math.floor(
+        width *
+        height /
+        4400
+      )
+    );
+
+  stars =
+    Array.from(
+      { length: amount },
+      () => ({
+
+        x:
+          Math.random() *
+          width,
+
+        y:
+          Math.random() *
+          height,
+
+        radius:
+          random(
+            0.35,
+            1.65
+          ),
+
+        alpha:
+          random(
+            0.2,
+            0.95
+          ),
+
+        phase:
+          random(
+            0,
+            Math.PI * 2
+          ),
+
+        speed:
+          random(
+            0.0005,
+            0.0018
+          )
+
+      })
+    );
+
+}
+
+
+/* =========================================================
+   SPACE DRAW
+   ========================================================= */
+
+function drawSpace(
+  time
+) {
+
+  ctx.clearRect(
+    0,
+    0,
+    width,
+    height
+  );
+
+  drawStars(time);
+
+  drawRipples();
+
+  drawMass();
+
+  drawLight();
+
+  requestAnimationFrame(
+    drawSpace
+  );
+
+}
+
+
+/* ---------- stars ---------- */
+
+function drawStars(
+  time
+) {
+
+  stars.forEach(star => {
+
+    const pulse =
+      Math.sin(
+        time *
+        star.speed +
+        star.phase
+      ) *
+      0.17;
+
+    const alpha =
+      Math.max(
+        0.12,
+        Math.min(
+          1,
+          star.alpha +
+          pulse
+        )
+      );
+
+    ctx.beginPath();
+
+    ctx.fillStyle =
+      `rgba(237,240,255,${alpha})`;
+
+    ctx.arc(
+      star.x,
+      star.y,
+      star.radius,
+      0,
+      Math.PI * 2
+    );
+
+    ctx.fill();
+
+  });
+
+}
+
+
+/* ---------- ripples ---------- */
+
+function drawRipples() {
+
+  for (
+    const ripple
+    of ripples
+  ) {
+
+    ripple.radius += 1.4;
+
+    ripple.alpha *= 0.981;
+
+    ctx.beginPath();
+
+    ctx.strokeStyle =
+      `rgba(208,199,255,${ripple.alpha})`;
+
+    ctx.lineWidth =
+      1;
+
+    ctx.arc(
+      ripple.x,
+      ripple.y,
+      ripple.radius,
+      0,
+      Math.PI * 2
+    );
+
+    ctx.stroke();
+
+  }
+
+  ripples =
+    ripples.filter(
+      ripple =>
+        ripple.alpha >
+        0.02
+    );
+
+}
+
+
+/* ---------- mass/star ---------- */
+
+function drawMass() {
+
+  if (!mass) {
+    return;
+  }
+
+  const glow =
+    ctx.createRadialGradient(
+      mass.x,
+      mass.y,
+      2,
+      mass.x,
+      mass.y,
+      66
+    );
+
+  glow.addColorStop(
+    0,
+    "rgba(255,242,187,0.97)"
+  );
+
+  glow.addColorStop(
+    0.16,
+    "rgba(223,185,103,0.93)"
+  );
+
+  glow.addColorStop(
+    0.43,
+    "rgba(123,88,157,0.27)"
+  );
+
+  glow.addColorStop(
+    1,
+    "rgba(0,0,0,0)"
+  );
+
+  ctx.fillStyle =
+    glow;
+
+  ctx.beginPath();
+
+  ctx.arc(
+    mass.x,
+    mass.y,
+    66,
+    0,
+    Math.PI * 2
+  );
+
+  ctx.fill();
+
+
+  ctx.shadowBlur =
+    22;
+
+  ctx.shadowColor =
+    "#f4d58e";
+
+  ctx.fillStyle =
+    "#f6e0a4";
+
+  ctx.beginPath();
+
+  ctx.arc(
+    mass.x,
+    mass.y,
+    13,
+    0,
+    Math.PI * 2
+  );
+
+  ctx.fill();
+
+  ctx.shadowBlur =
+    0;
+
+}
+
+
+/* =========================================================
+   LIGHT
+   ========================================================= */
+
+function drawLight() {
+
+  if (!lightPulse) {
+    return;
+  }
+
+  lightPulse.x +=
+    2.7;
+
+  const y =
+    calculateLightY(
+      lightPulse.x
+    );
+
+  ctx.shadowBlur =
+    16;
+
+  ctx.shadowColor =
+    "#e7f7ff";
+
+  ctx.fillStyle =
+    "#eefaff";
+
+  ctx.beginPath();
+
+  ctx.arc(
+    lightPulse.x,
+    y,
+    3.2,
+    0,
+    Math.PI * 2
+  );
+
+  ctx.fill();
+
+  ctx.shadowBlur =
+    0;
+
+  if (
+    lightPulse.x >
+    width + 15
+  ) {
+
+    lightPulse =
+      null;
+
+  }
+
+}
+
+
+function calculateLightY(
+  x
+) {
+
+  const baseline =
+    height * 0.43;
+
+  if (!mass) {
+    return baseline;
+  }
+
+  const dx =
+    x - mass.x;
+
+  const influence =
+    Math.exp(
+      -(
+        dx *
+        dx
+      ) /
+      19000
+    );
+
+  const offset =
+    (
+      mass.y -
+      baseline
+    ) *
+    0.3;
+
+  return (
+    baseline +
+    influence *
+    offset
+  );
+
+}
+
+
+/* =========================================================
+   GRID / SPACETIME
+   ========================================================= */
+
+function warpPoint(
+  x,
+  y
+) {
+
+  if (!mass) {
+
+    return {
+      x,
+      y
+    };
+
+  }
+
+  const dx =
+    x - mass.x;
+
+  const dy =
+    y - mass.y;
+
+  const distanceSquared =
+    dx * dx +
+    dy * dy;
+
+  const strength =
+    viewMode === "jelly"
+      ? 8800
+      : 6200;
+
+  const factor =
+    strength /
+    (
+      distanceSquared +
+      15000
+    );
+
+  return {
+
+    x:
+      x -
+      dx *
+      factor *
+      0.19,
+
+    y:
+      y -
+      dy *
+      factor *
+      0.19 +
+      Math.min(
+        31,
+        factor * 8.5
+      )
+
+  };
+
+}
+
+
+function drawGrid() {
+
+  gridCtx.clearRect(
+    0,
+    0,
+    width,
+    height
+  );
+
+  if (
+    chapterStage <
+    1
+  ) {
+
+    requestAnimationFrame(
+      drawGrid
+    );
+
+    return;
+
+  }
+
+  const spacing =
+    32;
+
+  const segment =
+    10;
+
+  gridCtx.lineWidth =
+    1;
+
+  const scienceColor =
+    "rgba(218,228,255,0.12)";
+
+  const jellyColor =
+    "rgba(175,147,217,0.17)";
+
+  const strokeColor =
+    viewMode === "jelly"
+      ? jellyColor
+      : scienceColor;
+
+
+  /* vertical */
+  for (
+    let x = -spacing;
+    x <= width + spacing;
+    x += spacing
+  ) {
+
+    gridCtx.beginPath();
+
+    for (
+      let y = 0;
+      y <= height;
+      y += segment
+    ) {
+
+      const point =
+        warpPoint(
+          x,
+          y
+        );
+
+      if (y === 0) {
+
+        gridCtx.moveTo(
+          point.x,
+          point.y
+        );
+
+      } else {
+
+        gridCtx.lineTo(
+          point.x,
+          point.y
+        );
+
+      }
+
+    }
+
+    gridCtx.strokeStyle =
+      strokeColor;
+
+    gridCtx.stroke();
+
+  }
+
+
+  /* horizontal */
+  for (
+    let y = 0;
+    y <= height + spacing;
+    y += spacing
+  ) {
+
+    gridCtx.beginPath();
+
+    for (
+      let x = 0;
+      x <= width;
+      x += segment
+    ) {
+
+      const point =
+        warpPoint(
+          x,
+          y
+        );
+
+      if (x === 0) {
+
+        gridCtx.moveTo(
+          point.x,
+          point.y
+        );
+
+      } else {
+
+        gridCtx.lineTo(
+          point.x,
+          point.y
+        );
+
+      }
+
+    }
+
+    gridCtx.strokeStyle =
+      strokeColor;
+
+    gridCtx.stroke();
+
+  }
+
+
+  if (
+    viewMode === "jelly"
+  ) {
+
+    const jellyGlow =
+      gridCtx.createRadialGradient(
+        width / 2,
+        height / 2,
+        10,
+        width / 2,
+        height / 2,
+        Math.max(
+          width,
+          height
+        )
+      );
+
+    jellyGlow.addColorStop(
+      0,
+      "rgba(126,91,167,0.09)"
+    );
+
+    jellyGlow.addColorStop(
+      1,
+      "rgba(46,35,83,0.01)"
+    );
+
+    gridCtx.fillStyle =
+      jellyGlow;
+
+    gridCtx.fillRect(
+      0,
+      0,
+      width,
+      height
+    );
+
+  }
+
+  requestAnimationFrame(
+    drawGrid
+  );
+
+}
+
+
+/* =========================================================
+   SOUND
+   ========================================================= */
+
+let audioContext =
+  null;
+
+let masterGain =
+  null;
+
+let ambientGain =
+  null;
+
+let droneGain =
+  null;
+
+
+function startAudio() {
+
+  if (audioContext) {
+    return;
+  }
+
+  const AudioContextClass =
+    window.AudioContext ||
+    window.webkitAudioContext;
+
+  if (!AudioContextClass) {
+    return;
+  }
+
+  audioContext =
+    new AudioContextClass();
+
+  masterGain =
+    audioContext.createGain();
+
+  masterGain.gain.value =
+    0.14;
+
+  masterGain.connect(
+    audioContext.destination
+  );
+
+
+  createDrone();
+
+  createWind();
+
+  createHighAtmosphere();
+
+}
+
+
+function createDrone() {
+
+  const oscA =
+    audioContext.createOscillator();
+
+  const oscB =
+    audioContext.createOscillator();
+
+  droneGain =
+    audioContext.createGain();
+
+  droneGain.gain.value =
+    0.12;
+
+  oscA.type =
+    "sine";
+
+  oscB.type =
+    "triangle";
+
+  oscA.frequency.value =
+    55;
+
+  oscB.frequency.value =
+    82.4;
+
+  const gainA =
+    audioContext.createGain();
+
+  const gainB =
+    audioContext.createGain();
+
+  gainA.gain.value =
+    0.2;
+
+  gainB.gain.value =
+    0.045;
+
+  oscA
+    .connect(gainA)
+    .connect(droneGain);
+
+  oscB
+    .connect(gainB)
+    .connect(droneGain);
+
+  droneGain.connect(
+    masterGain
+  );
+
+  oscA.start();
+  oscB.start();
+
+}
+
+
+function createWind() {
+
+  const length =
+    audioContext.sampleRate *
+    2;
+
+  const buffer =
+    audioContext.createBuffer(
+      1,
+      length,
+      audioContext.sampleRate
+    );
+
+  const data =
+    buffer.getChannelData(0);
+
+  for (
+    let i = 0;
+    i < data.length;
+    i++
+  ) {
+
+    data[i] =
+      (
+        Math.random() *
+        2 -
+        1
+      ) *
+      0.17;
+
+  }
+
+  const noise =
+    audioContext.createBufferSource();
+
+  noise.buffer =
+    buffer;
+
+  noise.loop =
+    true;
+
+  const filter =
+    audioContext.createBiquadFilter();
+
+  filter.type =
+    "lowpass";
+
+  filter.frequency.value =
+    720;
+
+  ambientGain =
+    audioContext.createGain();
+
+  ambientGain.gain.value =
+    0.048;
+
+  noise
+    .connect(filter)
+    .connect(ambientGain)
+    .connect(masterGain);
+
+  noise.start();
+
+}
+
+
+function createHighAtmosphere() {
+
+  const oscillator =
+    audioContext.createOscillator();
+
+  const gain =
+    audioContext.createGain();
+
+  oscillator.type =
+    "sine";
+
+  oscillator.frequency.value =
+    220;
+
+  gain.gain.value =
+    0.008;
+
+  oscillator
+    .connect(gain)
+    .connect(masterGain);
+
+  oscillator.start();
+
+}
+
+
+function playStarChime(
+  normalizedX = 0.5
+) {
+
+  if (
+    !audioContext ||
+    !musicEnabled
+  ) {
+    return;
+  }
+
+  const scale = [
+    523.25,
+    587.33,
+    659.25,
+    783.99,
+    880,
+    987.77
+  ];
+
+  const index =
+    Math.min(
+      scale.length - 1,
+      Math.floor(
+        normalizedX *
+        scale.length
+      )
+    );
+
+  const oscillator =
+    audioContext.createOscillator();
+
+  const gain =
+    audioContext.createGain();
+
+  oscillator.type =
+    "sine";
+
+  oscillator.frequency.value =
+    scale[index];
+
+
+  gain.gain.setValueAtTime(
+    0.0001,
+    audioContext.currentTime
+  );
+
+  gain.gain.exponentialRampToValueAtTime(
+    0.12,
+    audioContext.currentTime +
+    0.015
+  );
+
+  gain.gain.exponentialRampToValueAtTime(
+    0.0001,
+    audioContext.currentTime +
+    1.65
+  );
+
+
+  oscillator
+    .connect(gain)
+    .connect(masterGain);
+
+  oscillator.start();
+
+  oscillator.stop(
+    audioContext.currentTime +
+    1.8
+  );
+
+}
+
+
+function setMusicEnabled(
+  enabled
+) {
+
+  musicEnabled =
+    enabled;
+
+  if (!masterGain) {
+    return;
+  }
+
+  masterGain.gain.setTargetAtTime(
+    enabled
+      ? 0.14
+      : 0.0001,
+
+    audioContext.currentTime,
+
+    0.25
+  );
+
+  musicButton.textContent =
+    enabled
+      ? "♫"
+      : "×";
+
+}
+
+
+/* =========================================================
+   UI HELPERS
+   ========================================================= */
+
+function showPoem(
+  html,
+  duration = 3000
+) {
+
+  poem.innerHTML =
+    html;
+
+  poem.classList.add(
+    "show"
+  );
+
+  window.clearTimeout(
+    showPoem.timeout
+  );
+
+  showPoem.timeout =
+    window.setTimeout(
+      () => {
+
+        poem.classList.remove(
+          "show"
+        );
+
+      },
+      duration
+    );
+
+}
+
+
+function showAcademicRadar(
+  title,
+  copy
+) {
+
+  radarTitle.textContent =
+    title;
+
+  radarCopy.textContent =
+    copy;
+
+  academicRadar.classList.add(
+    "show"
+  );
+
+}
+
+
+function hideAcademicRadar() {
+
+  academicRadar.classList.remove(
+    "show"
+  );
+
+}
+
+
+function setHint(
+  text
+) {
+
+  hint.textContent =
+    text;
+
+  hint.classList.remove(
+    "hidden"
+  );
+
+}
+
+
+function hideHint() {
+
+  hint.classList.add(
+    "hidden"
+  );
+
+}
+
+
+/* =========================================================
+   STORY CARD
+   ========================================================= */
+
+function showStoryCard({
+  kicker,
+  title,
+  text,
+  actions = []
+}) {
+
+  cardKicker.textContent =
+    kicker || "";
+
+  cardTitle.textContent =
+    title || "";
+
+  cardText.textContent =
+    text || "";
+
+  cardActions.innerHTML =
+    "";
+
+  cardActions.className =
+    "actions";
+
+
+  actions.forEach(
+    (
+      action,
+      index
+    ) => {
+
+      const button =
+        document.createElement(
+          "button"
+        );
+
+      button.className =
+        "action-button";
+
+      if (
+        action.ghost ||
+        index > 0
+      ) {
+
+        button.classList.add(
+          "ghost"
+        );
+
+      }
+
+      button.textContent =
+        action.label;
+
+      button.addEventListener(
+        "click",
+        action.onClick
+      );
+
+      cardActions.appendChild(
+        button
+      );
+
+    }
+  );
+
+
+  storyCard.classList.remove(
+    "hide"
+  );
+
+  syncCardHeight();
+
+}
+
+
+function hideStoryCard() {
+
+  storyCard.classList.add(
+    "hide"
+  );
+
+}
+
+
+/* 量測故事卡片高度，寫進 CSS 變數 --card-h，
+   提示泡泡與音樂鈕才不會被卡片蓋住。 */
+function syncCardHeight() {
+
+  const cardHeight =
+    storyCard.offsetHeight || 150;
+
+  document.documentElement.style.setProperty(
+    "--card-h",
+    cardHeight + "px"
+  );
+
+}
+
+if (
+  "ResizeObserver" in window
+) {
+
+  new ResizeObserver(
+    syncCardHeight
+  ).observe(
+    storyCard
+  );
+
+}
+
+
+/* 星星要拖到哪裡才算「離開夜空」：
+   取畫面 77% 高度與卡片上緣之間較高的那條線，
+   星星才不會被拖進卡片底下看不見。 */
+function removeThreshold() {
+
+  const cardTop =
+    storyCard.classList.contains("hide")
+      ? height
+      : storyCard.getBoundingClientRect().top;
+
+  return Math.min(
+    height * 0.77,
+    cardTop - 30
+  );
+
+}
+
+
+/* =========================================================
+   CHAPTER SPLASH
+   ========================================================= */
+
+function showChapterSplash({
+  number,
+  title,
+  copy,
+  duration = 2300
+}) {
+
+  chapterNumber.textContent =
+    number;
+
+  chapterTitle.textContent =
+    title;
+
+  chapterCopy.innerHTML =
+    copy;
+
+  chapterSplash.classList.add(
+    "show"
+  );
+
+  return new Promise(
+    resolve => {
+
+      setTimeout(
+        () => {
+
+          chapterSplash.classList.remove(
+            "show"
+          );
+
+          setTimeout(
+            resolve,
+            550
+          );
+
+        },
+        duration
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   GAME START
+   ========================================================= */
+
+async function startGame() {
+
+  startAudio();
+
+  if (
+    audioContext &&
+    audioContext.state ===
+    "suspended"
+  ) {
+
+    await audioContext.resume();
+
+  }
+
+  musicButton.classList.add(
+    "show"
+  );
+
+  opening.classList.add(
+    "hide"
+  );
+
+  await showChapterSplash({
+
+    number:
+      "CHAPTER I",
+
+    title:
+      "虛空有重量",
+
+    copy:
+      `
+      你以為你站在虛空裡。<br>
+      但虛空，也許從來不是空。
+      `
+
+  });
+
+  beginGridDiscovery();
+
+}
+
+
+/* =========================================================
+   ACT 1
+   ========================================================= */
+
+function beginGridDiscovery() {
+
+  chapterStage =
+    1;
+
+  setHint(
+    "在黑暗中拖曳，讓看不見的網格顯現"
+  );
+
+  showPoem(
+    `
+    看不見，<br>
+    不代表不存在。
+    `,
+    2700
+  );
+
+  showStoryCard({
+
+    kicker:
+      "第一幕",
+
+    title:
+      "看不見，不代表不存在",
+
+    text:
+      "在黑暗中，用手指慢慢拖曳。"
+
+  });
+
+}
+
+
+/* =========================================================
+   ACT 2 MASS
+   ========================================================= */
+
+function unlockStar() {
+
+  showStoryCard({
+
+    kicker:
+      "第二幕",
+
+    title:
+      "讓一顆星落下",
+
+    text:
+      "把一顆星放進這片夜空，看看周圍會發生什麼。",
+
+    actions: [
+
+      {
+
+        label:
+          "召喚一顆星",
+
+        onClick:
+          spawnMass
+
+      }
+
+    ]
+
+  });
+
+}
+
+
+function spawnMass() {
+
+  chapterStage =
+    2;
+
+  mass = {
+
+    x:
+      width * 0.5,
+
+    y:
+      height * 0.41,
+
+    radius:
+      13
+
+  };
+
+  modeSwitch.classList.add(
+    "show"
+  );
+
+  setHint(
+    "拖動星體，觀察時空網格如何回應"
+  );
+
+  showPoem(
+    `
+    它沒有命令別人靠近自己。<br>
+    它只是改變了<br>
+    周圍可以怎麼走。
+    `,
+    3800
+  );
+
+  showAcademicRadar(
+
+    "Spacetime Curvature｜時空曲率",
+
+    "質量與能量會影響時空幾何。這裡的彎曲網格是方便理解的視覺模型。"
+
+  );
+
+  showStoryCard({
+
+    kicker:
+      "第三幕",
+
+    title:
+      "讓一道光經過",
+
+    text:
+      "現在，讓一道光穿過這片彎曲的時空。",
+
+    actions: [
+
+      {
+
+        label:
+          "放一道光",
+
+        onClick:
+          fireLight
+
+      }
+
+    ]
+
+  });
+
+}
+
+
+/* =========================================================
+   LIGHT ACT
+   ========================================================= */
+
+function fireLight() {
+
+  chapterStage =
+    3;
+
+  lightPulse = {
+
+    x:
+      -15
+
+  };
+
+  playStarChime(
+    0.85
+  );
+
+  showPoem(
+    `
+    光沒有被一隻手抓住。<br><br>
+    它只是走在<br>
+    這個世界允許它走的路。
+    `,
+    4300
+  );
+
+  showAcademicRadar(
+
+    "Geodesic｜測地線",
+
+    "在彎曲時空中，自由物體與光的路徑由時空幾何決定。"
+
+  );
+
+
+  showStoryCard({
+
+    kicker:
+      "第四幕",
+
+    title:
+      "果凍視野",
+
+    text:
+      "同一個概念，也可以換成另一種更容易被直覺理解的樣子。",
+
+    actions: [
+
+      {
+
+        label:
+          "切換果凍視野",
+
+        onClick:
+          () => {
+
+            setViewMode(
+              "jelly"
+            );
+
+            setTimeout(
+              beginRemoveStar,
+              1900
+            );
+
+          }
+
+      },
+
+      {
+
+        label:
+          "保留科學視野",
+
+        ghost:
+          true,
+
+        onClick:
+          beginRemoveStar
+
+      }
+
+    ]
+
+  });
+
+}
+
+
+/* =========================================================
+   MODE
+   ========================================================= */
+
+function setViewMode(
+  mode
+) {
+
+  viewMode =
+    mode;
+
+  document
+    .querySelectorAll(
+      ".mode-button"
+    )
+    .forEach(
+      button => {
+
+        button.classList.toggle(
+          "active",
+          button.dataset.mode === mode
+        );
+
+      }
+    );
+
+
+  if (
+    mode === "jelly"
+  ) {
+
+    showPoem(
+      `
+      這不是物理實體示意圖。<br>
+      這是你的思考模式。
+      `,
+      3500
+    );
+
+
+    if (
+      audioContext &&
+      droneGain
+    ) {
+
+      droneGain.gain.setTargetAtTime(
+        0.19,
+        audioContext.currentTime,
+        0.7
+      );
+
+    }
+
+  } else {
+
+    if (
+      audioContext &&
+      droneGain
+    ) {
+
+      droneGain.gain.setTargetAtTime(
+        0.12,
+        audioContext.currentTime,
+        0.7
+      );
+
+    }
+
+  }
+
+}
+
+
+/* =========================================================
+   REMOVE STAR
+   ========================================================= */
+
+function beginRemoveStar() {
+
+  chapterStage =
+    4;
+
+  showStoryCard({
+
+    kicker:
+      "第五幕",
+
+    title:
+      "如果把星拿走呢？",
+
+    text:
+      "把星星拖到畫面最下方，讓它離開這片夜空。"
+
+  });
+
+  setHint(
+    "把星星拖到畫面最下方"
+  );
+
+}
+
+
+function completeRemoveStar() {
+
+  mass =
+    null;
+
+  hideHint();
+
+  hideAcademicRadar();
+
+  modeSwitch.classList.remove(
+    "show"
+  );
+
+  showPoem(
+    `
+    星星不在了。<br>
+    空間還在。<br><br>
+
+    那麼……<br>
+    空間到底是什麼？
+    `,
+    6000
+  );
+
+
+  setTimeout(
+    showMindChoice,
+    4600
+  );
+
+}
+
+
+/* =========================================================
+   MIND CHOICE
+   ========================================================= */
+
+function showMindChoice() {
+
+  showStoryCard({
+
+    kicker:
+      "第一章尾聲",
+
+    title:
+      "記住你現在的答案",
+
+    text:
+      "此刻的你，最接近哪一種想法？"
+
+  });
+
+
+  cardActions.innerHTML =
+    "";
+
+  cardActions.className =
+    "choice-grid";
+
+
+  const choices = [
+
+    "空間是一個容器。",
+
+    "空間本身就是世界的一部分。",
+
+    "我不知道，但我開始覺得「空」並不簡單。"
+
+  ];
+
+
+  choices.forEach(
+    text => {
+
+      const button =
+        document.createElement(
+          "button"
+        );
+
+      button.className =
+        "choice";
+
+      button.textContent =
+        "✦ " + text;
+
+      button.addEventListener(
+        "click",
+        () =>
+          completeChapterOne(
+            text
+          )
+      );
+
+      cardActions.appendChild(
+        button
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   COMPLETE CHAPTER
+   ========================================================= */
+
+function completeChapterOne(
+  answer
+) {
+
+  addJournalEntry(
+
+    "第一夜｜我如何理解「空間」",
+
+    answer
+
+  );
+
+
+  addJournalEntry(
+
+    "第一夜｜我遇見的概念",
+
+    "Spacetime Geometry · Spacetime Curvature · Geodesic · Conceptual Model"
+
+  );
+
+
+  hideStoryCard();
+
+
+  showPoem(
+    `
+    我們習慣把沒有東西的地方，<br>
+    稱作「空」。<br><br>
+
+    可如果「空」本身也具有形狀、<br>
+    距離與變化……<br><br>
+
+    那麼它真的什麼都沒有嗎？
+    `,
+    7000
+  );
+
+
+  setTimeout(
+    showChapterTwoTeaser,
+    6500
+  );
+
+}
+
+
+/* =========================================================
+   CHAPTER II TEASER
+   ========================================================= */
+
+async function showChapterTwoTeaser() {
+
+  await showChapterSplash({
+
+    number:
+      "CHAPTER II",
+
+    title:
+      "慢的那一側",
+
+    copy:
+      `
+      你與遠方的人，<br>
+      真的活在同一個時間裡嗎？
+      `,
+
+    duration:
+      3000
+
+  });
+
+
+  showStoryCard({
+
+    kicker:
+      "第一章完成",
+
+    title:
+      "黑洞正在前方等待",
+
+    text:
+      "下一章將進入 1 區與 2 區，體驗重力時間膨脹與「保鮮式未來旅行」。",
+
+    actions: [
+
+      {
+
+        label:
+          "打開星夜手札",
+
+        onClick:
+          openJournal
+
+      },
+
+      {
+
+        label:
+          "再看一會夜空",
+
+        ghost:
+          true,
+
+        onClick:
+          hideStoryCard
+
+      }
+
+    ]
+
+  });
+
+}
+
+
+/* =========================================================
+   POINTER / TOUCH
+   ========================================================= */
+
+function pointerDown(
+  event
+) {
+
+  const x =
+    event.clientX;
+
+  const y =
+    event.clientY;
+
+
+  lastPointer = {
+    x,
+    y
+  };
+
+
+  if (
+    mass &&
+    Math.hypot(
+      x - mass.x,
+      y - mass.y
+    ) <
+    44
+  ) {
+
+    draggingMass =
+      true;
+
+    /* 鎖住這根手指／滑鼠，拖到卡片或按鈕上方也不會斷掉。 */
+    try {
+
+      spaceCanvas.setPointerCapture(
+        event.pointerId
+      );
+
+    } catch (error) {
+
+      /* 舊瀏覽器不支援就略過 */
+
+    }
+
+    return;
+
+  }
+
+
+  ripples.push({
+
+    x,
+    y,
+
+    radius:
+      3,
+
+    alpha:
+      0.82
+
+  });
+
+
+  playStarChime(
+    x /
+    width
+  );
+
+}
+
+
+function pointerMove(
+  event
+) {
+
+  const x =
+    event.clientX;
+
+  const y =
+    event.clientY;
+
+
+  if (
+    draggingMass &&
+    mass
+  ) {
+
+    mass.x =
+      x;
+
+    mass.y =
+      y;
+
+
+    if (
+      chapterStage === 4 &&
+      mass.y >
+      removeThreshold()
+    ) {
+
+      draggingMass =
+        false;
+
+      completeRemoveStar();
+
+    }
+
+    return;
+
+  }
+
+
+  if (
+    chapterStage === 1 &&
+    event.buttons
+  ) {
+
+    dragRevealCount++;
+
+
+    if (
+      dragRevealCount === 7
+    ) {
+
+      showAcademicRadar(
+
+        "Spacetime Geometry｜時空幾何",
+
+        "現代物理以時空幾何描述距離、時間間隔與重力。果凍是直覺模型，不是已證實的物質。"
+
+      );
+
+    }
+
+
+    if (
+      dragRevealCount === 18
+    ) {
+
+      showPoem(
+        `
+        原來，<br>
+        你一直站在某種結構之中。
+        `,
+        3000
+      );
+
+      unlockStar();
+
+    }
+
+  }
+
+
+  lastPointer = {
+    x,
+    y
+  };
+
+}
+
+
+function pointerUp() {
+
+  draggingMass =
+    false;
+
+}
+
+
+spaceCanvas.addEventListener(
+  "pointerdown",
+  pointerDown
+);
+
+spaceCanvas.addEventListener(
+  "pointermove",
+  pointerMove
+);
+
+window.addEventListener(
+  "pointerup",
+  pointerUp
+);
+
+
+/* =========================================================
+   BUTTON EVENTS
+   ========================================================= */
+
+startButton.addEventListener(
+  "click",
+  startGame
+);
+
+
+modeSwitch.addEventListener(
+  "click",
+  event => {
+
+    const button =
+      event.target.closest(
+        "[data-mode]"
+      );
+
+    if (!button) {
+      return;
+    }
+
+    setViewMode(
+      button.dataset.mode
+    );
+
+  }
+);
+
+
+/* ---------- journal ---------- */
+
+function openJournal() {
+
+  journal.classList.add(
+    "show"
+  );
+
+}
+
+function closeJournalPanel() {
+
+  journal.classList.remove(
+    "show"
+  );
+
+}
+
+
+journalButton.addEventListener(
+  "click",
+  openJournal
+);
+
+closeJournal.addEventListener(
+  "click",
+  closeJournalPanel
+);
+
+
+/* ---------- music ---------- */
+
+musicButton.addEventListener(
+  "click",
+  () => {
+
+    setMusicEnabled(
+      !musicEnabled
+    );
+
+  }
+);
+
+
+/* =========================================================
+   PREVENT MOBILE PAGE GESTURES
+   ========================================================= */
+
+document.addEventListener(
+  "touchmove",
+  event => {
+
+    if (
+      !journal.classList.contains(
+        "show"
+      )
+    ) {
+
+      event.preventDefault();
+
+    }
+
+  },
+  {
+    passive: false
+  }
+);
+
+
+/* =========================================================
+   INIT
+   ========================================================= */
+
+resizeCanvas();
+
+loadJournal();
+
+requestAnimationFrame(
+  drawSpace
+);
+
+requestAnimationFrame(
+  drawGrid
+);
+
+
+})();
+</script>
+
+</body>
+</html>
