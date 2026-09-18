@@ -1243,7 +1243,12 @@ let ripples = [];
 
 let chapterStage = 0;
 
-let dragRevealCount = 0;
+let dragRevealDistance = 0;
+let gridUnlocked = false;
+let radarShown = false;
+
+let pointerIsDown = false;
+let activePointerId = null;
 
 let viewMode = "science";
 
@@ -2641,19 +2646,56 @@ function showChapterSplash({
    GAME START
    ========================================================= */
 
-async function startGame() {
-
-  startAudio();
+/* iOS Safari 的 audioContext.resume() 有時永遠不回應，
+   所以絕對不能讓開場畫面等它；先把畫面往下走，聲音在背景補上。 */
+function resumeAudioSafely() {
 
   if (
-    audioContext &&
-    audioContext.state ===
-    "suspended"
+    !audioContext ||
+    audioContext.state !== "suspended"
   ) {
+    return;
+  }
 
-    await audioContext.resume();
+  try {
+
+    const result =
+      audioContext.resume();
+
+    if (
+      result &&
+      typeof result.catch === "function"
+    ) {
+
+      result.catch(() => {});
+
+    }
+
+  } catch (error) {
+
+    /* 聲音失敗不影響體驗 */
 
   }
+
+}
+
+
+async function startGame() {
+
+  try {
+
+    startAudio();
+
+  } catch (error) {
+
+    console.warn(
+      "Audio unavailable",
+      error
+    );
+
+  }
+
+  resumeAudioSafely();
 
   musicButton.classList.add(
     "show"
@@ -2714,7 +2756,35 @@ function beginGridDiscovery() {
       "看不見，不代表不存在",
 
     text:
-      "在黑暗中，用手指慢慢拖曳。"
+      "在黑暗中，用手指慢慢拖曳。",
+
+    actions: [
+
+      {
+
+        label:
+          "拖不動？讓網格自己現身",
+
+        ghost:
+          true,
+
+        onClick:
+          () => {
+
+            if (gridUnlocked) {
+              return;
+            }
+
+            gridUnlocked =
+              true;
+
+            unlockStar();
+
+          }
+
+      }
+
+    ]
 
   });
 
@@ -3013,7 +3083,35 @@ function beginRemoveStar() {
       "如果把星拿走呢？",
 
     text:
-      "把星星拖到畫面最下方，讓它離開這片夜空。"
+      "把星星拖到畫面最下方，讓它離開這片夜空。",
+
+    actions: [
+
+      {
+
+        label:
+          "拖不動？讓星星自己離開",
+
+        ghost:
+          true,
+
+        onClick:
+          () => {
+
+            if (!mass) {
+              return;
+            }
+
+            draggingMass =
+              false;
+
+            completeRemoveStar();
+
+          }
+
+      }
+
+    ]
 
   });
 
@@ -3267,6 +3365,28 @@ function pointerDown(
     y
   };
 
+  pointerIsDown =
+    true;
+
+  activePointerId =
+    event.pointerId;
+
+  /* iOS 常需要第二次觸碰才真正放行聲音，順手補一次。 */
+  resumeAudioSafely();
+
+  /* 鎖住這根手指／滑鼠：拖到卡片、按鈕或畫面邊緣都不會斷掉。 */
+  try {
+
+    spaceCanvas.setPointerCapture(
+      event.pointerId
+    );
+
+  } catch (error) {
+
+    /* 舊瀏覽器不支援就略過 */
+
+  }
+
 
   if (
     mass &&
@@ -3274,24 +3394,11 @@ function pointerDown(
       x - mass.x,
       y - mass.y
     ) <
-    44
+    56
   ) {
 
     draggingMass =
       true;
-
-    /* 鎖住這根手指／滑鼠，拖到卡片或按鈕上方也不會斷掉。 */
-    try {
-
-      spaceCanvas.setPointerCapture(
-        event.pointerId
-      );
-
-    } catch (error) {
-
-      /* 舊瀏覽器不支援就略過 */
-
-    }
 
     return;
 
@@ -3324,6 +3431,17 @@ function pointerMove(
   event
 ) {
 
+  /* 只理會目前按著的那根手指；沒按著的滑鼠移動一律略過。 */
+  if (
+    !pointerIsDown ||
+    (
+      activePointerId !== null &&
+      event.pointerId !== activePointerId
+    )
+  ) {
+    return;
+  }
+
   const x =
     event.clientX;
 
@@ -3352,6 +3470,9 @@ function pointerMove(
       draggingMass =
         false;
 
+      pointerIsDown =
+        false;
+
       completeRemoveStar();
 
     }
@@ -3361,17 +3482,27 @@ function pointerMove(
   }
 
 
+  /* 第一幕：用「拖曳距離」而不是「事件次數」判定。
+     手機一次滑動可能只送出幾個事件，數次數會讓人以為沒反應。 */
   if (
     chapterStage === 1 &&
-    event.buttons
+    !gridUnlocked
   ) {
 
-    dragRevealCount++;
+    dragRevealDistance +=
+      Math.hypot(
+        x - lastPointer.x,
+        y - lastPointer.y
+      );
 
 
     if (
-      dragRevealCount === 7
+      !radarShown &&
+      dragRevealDistance >= 90
     ) {
+
+      radarShown =
+        true;
 
       showAcademicRadar(
 
@@ -3385,8 +3516,11 @@ function pointerMove(
 
 
     if (
-      dragRevealCount === 18
+      dragRevealDistance >= 260
     ) {
+
+      gridUnlocked =
+        true;
 
       showPoem(
         `
@@ -3413,6 +3547,12 @@ function pointerMove(
 
 function pointerUp() {
 
+  pointerIsDown =
+    false;
+
+  activePointerId =
+    null;
+
   draggingMass =
     false;
 
@@ -3431,6 +3571,17 @@ spaceCanvas.addEventListener(
 
 window.addEventListener(
   "pointerup",
+  pointerUp
+);
+
+/* 系統搶走手勢（例如 iOS 判定成捲動）時也要收尾，否則會卡在拖曳狀態。 */
+window.addEventListener(
+  "pointercancel",
+  pointerUp
+);
+
+spaceCanvas.addEventListener(
+  "lostpointercapture",
   pointerUp
 );
 
