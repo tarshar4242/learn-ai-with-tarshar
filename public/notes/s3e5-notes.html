@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S3E5 課堂筆記｜把企業問題，做成能運作的 AI Workflow</title>
+<meta name="description" content="訂閱制第三季第五堂（益師傅邀請客座講師史大／晟景科技）課堂筆記：AI 轉型成熟度模型 L1 到 L5、知識庫與資料庫的兩隻手、黃仁勳九支 Agent 與職務說明書、1865 紅旗法案、組織流程表單系統四層盤點；下半場實機示範女媧 Skill 的安全審查與安裝、必裝 Skill 清單、GPT-6 Astra 的 Computer Use，以及 2D 平面圖變成可以走進去的 3D 空間。依兩段錄影全程逐字稿與關鍵畫面整理，重點段落附時間碼。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#7A5C3E; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:760px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px;max-height:calc(100vh - 90px);overflow-y:auto}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:7px;border-left:none;font-size:13px}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.code{position:relative;background:var(--code);border:1px solid var(--line2);border-radius:10px;padding:13px 15px;margin:10px 0;font-size:13px;line-height:1.75;color:var(--ink);white-space:pre-wrap;font-family:"Cascadia Code",Consolas,monospace;overflow-x:auto}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.iframe-wrap{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000;margin:14px 0}
+.iframe-wrap iframe{display:block;width:100%;height:460px;border:0}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static;max-height:none} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} .iframe-wrap iframe{height:320px} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/#ecf" style="border-color:#d3c2ac" onclick="if(history.length>1){history.back();return false}">← 回上一頁</a>
+  <b>📝 ECF S3E5 課堂筆記</b>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 訂閱制第三季第五堂</span>
+  <h1>把企業問題，做成<span>能運作的 AI Workflow</span></h1>
+  <p class="lead">這一堂益師傅把麥克風交給客座講師<b>史大（Stanley，晟景科技 Scendia 創辦人兼執行顧問）</b>。上半場史大用一張<b>「AI 轉型成熟度模型 L1 到 L5」</b>幫全班定位：去年很難的 n8n 今年只是樓地板，真正卡住所有人的是沒人在做的 <b>L2 知識庫</b>。他從半導體工程師講到輔導順德工業十年的數位轉型，再用杜拉克的<b>組織、流程、表單、系統</b>四層，解釋台灣企業為什麼「買了新系統就以為轉型成功」。<br>下半場整個進到實機：<b>女媧 Skill</b> 把一個人的判斷蒸餾成可安裝的能力、安裝前先叫 Codex 做安全審查、必裝 Skill 清單與三個月一次的整理習慣、<b>GPT-6 Astra</b> 的 Computer Use 設定巡禮，最後把一張住宅平面圖變成<b>可以用第一人稱走進去的 3D 空間</b>。本頁依<b>兩段錄影全程逐字稿</b>與關鍵畫面整理，重點段落附時間碼。</p>
+  <div class="meta">
+    <span>📅 2026/09/11（五）晚間直播</span>
+    <span>🎤 主持：益師傅（楊俊益・ECF）</span>
+    <span>👤 客座：史大（Stanley・晟景科技）</span>
+    <span>⏱️ 全長約 2 小時 30 分（兩段錄影）</span>
+    <span>🧭 主題：成熟度模型 × Skill × GPT-6</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-overview">1. 一張圖看懂這堂</a>
+  <a href="#sec-opening">2. 開場：天花板變樓地板</a>
+  <a href="#sec-maturity">3. AI 轉型成熟度模型</a>
+  <a href="#sec-speaker">4. 講師自己的路與順德十年</a>
+  <a href="#sec-agent">5. 九支分身與職務說明書</a>
+  <a href="#sec-tool">6. 工具還是同事</a>
+  <a href="#sec-redflag">7. 紅旗法案與三步走</a>
+  <a href="#sec-system">8. 組織・流程・表單・系統</a>
+  <a href="#sec-nuwa">9. 女媧 Skill 實機示範</a>
+  <a href="#sec-skills">10. 必裝 Skill 與整理習慣</a>
+  <a href="#sec-gpt6">11. GPT-6 Astra 設定巡禮</a>
+  <a href="#sec-3d">12. 2D 變 3D：走進去</a>
+  <a href="#sec-qa">13. 現場問答</a>
+  <a href="#sec-ecf">14. 益師傅收尾</a>
+  <a href="#sec-quotes">15. 老師金句</a>
+  <a href="#sec-src">16. 資料來源與整理說明</a>
+</nav>
+
+<article>
+
+<!-- 0 -->
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--amber))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>生成式 AI 應用電台・訂閱制第三季 第五堂</td></tr>
+    <tr><th>直播日期</th><td>2026/09/11（五）晚間，全長約 2 小時 30 分，分成兩段錄影</td></tr>
+    <tr><th>主持</th><td>益師傅（楊俊益，暱稱 ECF）</td></tr>
+    <tr><th>客座講師</th><td>史大（英文名 Stanley，晟景科技 Scendia 創辦人兼執行顧問）。他在課堂上說明，因為叫 Stanley 的人太多，所以 AI 領域的名字就取作「史大」</td></tr>
+    <tr><th>線上人數</th><td>課中他點名統計時提到「線上的 88 個同仁」，下半場結束前仍有 80 幾人在線</td></tr>
+    <tr><th>本堂主題</th><td>上半場是觀念與盤點：AI 轉型成熟度模型、知識庫與資料庫、組織流程表單系統；下半場是實機：Skill 的安裝與整理、GPT-6 Astra 設定、2D 轉 3D</td></tr>
+  </table></div>
+
+  <h3>📁 課程資料夾（Google Drive）</h3>
+  <p>兩段錄影與課程相關檔案都放在這個共享資料夾：</p>
+  <p style="margin-top:8px"><a href="https://drive.google.com/drive/folders/1CAvR_pioOpKFAAv1JS2q7t7CcPqYshUD" target="_blank">🔗 開啟第五堂課程資料夾 ›</a></p>
+
+  <h3>🎬 課堂錄影（可直接在頁面播放）</h3>
+  <p class="cd">A 段（59 分 21 秒）：觀念全場，從紡織機比喻一路講到組織流程表單系統。B 段（90 分 17 秒）：實機示範與現場問答，最後由益師傅收尾。中間因為分享畫面一直斷線，講師換了一台電腦，錄影也就分成兩段。</p>
+  <div class="iframe-wrap"><iframe src="https://drive.google.com/file/d/1MEZgKJLdjpnO_fA8PClGNvG2J7PybVp9/preview" allow="autoplay" allowfullscreen></iframe></div>
+  <div class="iframe-wrap"><iframe src="https://drive.google.com/file/d/1ptXQ8UNh0Km_FB8GU0URJTNuiyZiCd94/preview" allow="autoplay" allowfullscreen></iframe></div>
+  <div class="note steel">🔧 <div>錄影是老師分享的檔案，內嵌播放通常需要先登入你自己的 Google 帳號。如果頁面一直顯示載入中或跳權限提示，改從上面的課程資料夾連結進去就可以。</div></div>
+
+  <figure class="shot"><img src="s3e5-img/01-course-title.jpg" alt="講師簡報封面，標題為把企業問題做成能運作的 AI Workflow"><figcaption>客座講師的簡報封面：「把企業問題，做成能運作的 AI Workflow_20260911」，副標寫著「從選題、SIPOC、Skill 到 n8n 自動化，系列課程完成一條可運作、可驗收、可持續改善的企業流程」。右下角頁碼 01／108，這是整份 108 頁簡報的第一堂。［A 00:11］</figcaption></figure>
+
+  <h3>🧰 課堂提到的教材與資源</h3>
+  <p class="cd">下面這些檔案與連結都留在原本的地方，沒有複製進這個網站。Skill 大禮包是講師自己的 Drive 資料夾，課堂上直接開給大家看。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:190px">資源</th><th>內容</th><th>在哪裡</th></tr>
+    <tr><td>講師簡報</td><td>企業 AI 高效落地實戰班_20260911，第一堂「AI 基礎概論與 2026 能力躍升」，共 108 頁（母檔案投影片編號顯示 192 頁）</td><td>講師本機，課堂上以分享畫面呈現</td></tr>
+    <tr><td>Skill 大禮包</td><td>Drive 資料夾「20260811-Skill 大禮包」，內含 deep-research-explainer.skill、error-screenshot-helper.skill、smart-search.zip、youtube-thumbnail-beautifier.zip、frontend-design-skill.zip、caveman.skill、persona-forge.zip、find-skills.skill、infographic-builder.skill，另有 n8n Workflow 與上課筆記資源</td><td>講師的 Google Drive，課堂上開放給學員抄檔名自行搜尋</td></tr>
+    <tr><td>女媧 Skill</td><td>把一個人的思維方式蒸餾成可安裝的 Skill，另有主題版本</td><td><a href="https://github.com/alchaincyf/nuwa-skill" target="_blank">github.com/alchaincyf/nuwa-skill</a></td></tr>
+    <tr><td>Distilly（原同事 Skill）</td><td>女媧 Skill 的前身，把一個人的經驗、判斷與工作方式做成可重複使用的 Person Profile</td><td><a href="https://github.com/titanwings/distilly" target="_blank">github.com/titanwings/distilly</a></td></tr>
+    <tr><td>YouTube Clipper Skill</td><td>丟一條 YouTube 連結就自動切章節、裁剪、上雙語字幕、產社群文案</td><td><a href="https://github.com/op7418/Youtube-clipper-skill" target="_blank">github.com/op7418/Youtube-clipper-skill</a></td></tr>
+    <tr><td>LLM Wiki</td><td>Karpathy 的 gist，用 LLM 經營個人知識維基的方法論，課堂上搭配 Obsidian 使用</td><td>gist.github.com／karpathy／llm-wiki.md</td></tr>
+    <tr><td>TigerAI n8n Skill Pack</td><td>現成的 n8n workflow Skill 包，講師說他現在很少自己拉節點了</td><td>github.com／MorrisLu-Taipei／TigerAI-A2A-Code2n8n-Skill-Pack</td></tr>
+    <tr><td>教學流程動畫工坊</td><td>益師傅自製的單檔 HTML 工具，把教材轉成教學流程序列圖與動畫。課堂上說當晚或隔天晚上 9 點發給大家</td><td>益師傅課後於社群發送</td></tr>
+  </table></div>
+  <div class="note green">✅ <div>這堂課沒有出現任何整堂不外流或檔案不得轉發的規定。相反的，講師全程把連結貼進聊天室，幾次說「送給大家」；益師傅在收尾時也說當天會盡快把錄影上傳。</div></div>
+</section>
+
+<!-- 1 -->
+<section class="chapter" id="sec-overview">
+  <span class="chip" style="background:linear-gradient(90deg,var(--amber),var(--orange))">BIG PICTURE</span>
+  <h2 class="ct">1. 一張圖看懂這堂</h2>
+  <p class="cd">這堂課的骨架其實很單純：<b>先幫你定位，再告訴你缺的是哪一層，最後現場做給你看。</b>上半場全部在談 L2 知識庫為什麼是所有人的瓶頸，下半場就是把 L2 做出來的實機操作。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:92px">時間碼</th><th style="width:210px">段落</th><th>在講什麼</th></tr>
+    <tr><td>A 00:00</td><td>開場</td><td>去年的 n8n 是天花板，今年變成樓地板；今天會花比較多時間在 n8n 之外的東西</td></tr>
+    <tr><td>A 02:29</td><td>紡織機與流水線</td><td>從手工織布到單台紡織機，再到生產線；AI 現在停在「單台產能」，少數人已經在做流水線</td></tr>
+    <tr><td>A 05:48</td><td>AI 轉型成熟度模型</td><td>L1 個人使用、L2 部門知識輔助、L3 流程串接、L4 專屬助理、L5 團隊自動化</td></tr>
+    <tr><td>A 11:00</td><td>資料庫與知識庫</td><td>左手是資料庫（CRM、ERP、訂單數據），右手是知識庫（有邏輯、有判斷）</td></tr>
+    <tr><td>A 14:17</td><td>現場盤點</td><td>請線上 88 位同仁打 1 到 4 自評，結果大多落在 L1 到 L2 之間</td></tr>
+    <tr><td>A 15:57</td><td>講師自我介紹</td><td>半導體工程師六年、家登精密、ABB 與施耐德、PTC 參數科技、太陽能，最後創業做 AI 顧問</td></tr>
+    <tr><td>A 18:54</td><td>順德工業十年</td><td>從訂書機到特斯拉供應鏈；2015 年開始數位轉型，2024 年打破資訊孤島的最後一哩路</td></tr>
+    <tr><td>A 21:18</td><td>麝香葡萄的故事</td><td>一句「會賠多少錢」要查四個資料庫，沒串起來要三四天，串起來兩小時內</td></tr>
+    <tr><td>A 27:02</td><td>黃仁勳的九支 Agent</td><td>同一個架構給不同 Skill 與知識庫，就長出不同的 Agent</td></tr>
+    <tr><td>A 28:44</td><td>職務說明書</td><td>大公司給 Agent 權限的方法，就是拿 JD 來梳理</td></tr>
+    <tr><td>A 30:50</td><td>台北市政府 CiviClaw</td><td>連政府都在推，最難的其實是內部的知識管理與客服系統</td></tr>
+    <tr><td>A 35:42</td><td>工具還是同事</td><td>現場投票，有人打 1、有人打 2，也有人打 1.5</td></tr>
+    <tr><td>A 39:26</td><td>AI 使用者分布圖</td><td>從 2026 年 2 月到 8 月，成長倍數最高的是 vibe coding 與開發工具那一群</td></tr>
+    <tr><td>A 42:01</td><td>三大 AI 工具地圖</td><td>OpenAI、Google、Anthropic 三條產品主線與四個最容易搞混的地方</td></tr>
+    <tr><td>A 46:23</td><td>1865 紅旗法案</td><td>汽車前面要有人揮紅旗，就像你只用瀏覽器聊天，把 AI 的能力自我受限</td></tr>
+    <tr><td>A 47:48</td><td>成為 AI 高手三步走</td><td>停止使用 Chat、寫好功能向的 Skill、管理好 context</td></tr>
+    <tr><td>A 50:52</td><td>組織流程表單系統</td><td>杜拉克的四層盤點，以及台灣數位轉型為什麼會失敗</td></tr>
+    <tr><td>A 58:52</td><td>中場</td><td>分享畫面一直斷線，休息五分鐘換電腦，錄影分成兩段</td></tr>
+    <tr><td>B 00:48</td><td>下半場開場</td><td>工具一直增加，工作方法卻沒有留下來</td></tr>
+    <tr><td>B 02:32</td><td>女媧 Skill</td><td>同事 Skill 的由來、名人蒸餾與保真度評分</td></tr>
+    <tr><td>B 06:42</td><td>安裝前先審查</td><td>第一句話永遠是「請幫我檢查這個 Skill 的安全性」</td></tr>
+    <tr><td>B 09:36</td><td>好 Skill 的三件事</td><td>知識、流程、檢查；檢查是人類最難被取代的動作</td></tr>
+    <tr><td>B 10:44</td><td>跟納瓦爾聊職場</td><td>同時跑兩個任務，其中一個是問 Naval 自己的職涯</td></tr>
+    <tr><td>B 12:20</td><td>必裝 Skill 清單</td><td>深度研究、錯誤截圖、智慧搜尋、縮圖美化、前端設計、人設、找 Skill、資訊圖表</td></tr>
+    <tr><td>B 15:40</td><td>共用還是專案限定</td><td>斜線呼叫的全域 Skill 與只在專案資料夾內生效的 Skill</td></tr>
+    <tr><td>B 19:29</td><td>YouTube Clipper</td><td>一句話切成十大重點、上字幕、直式短影音；順手改名成 YT 剪輯手</td></tr>
+    <tr><td>B 23:00</td><td>Skill 的整理習慣</td><td>三個月整理一次，把公司 know how 寫回去再傳給同事</td></tr>
+    <tr><td>B 25:42</td><td>GPT-6 Astra</td><td>Computer Use、瀏覽器常駐、外掛程式與 Gmail 多帳號</td></tr>
+    <tr><td>B 38:30</td><td>共用帳號的隱私設定</td><td>公司共用的 GPT 帳號，有兩個開關一定要關掉</td></tr>
+    <tr><td>B 40:26</td><td>三個半小時的小遊戲</td><td>Codex 操作 Godot 做出手勢辨識的魔法遊戲，本來想給女兒玩</td></tr>
+    <tr><td>B 43:00</td><td>GPT-6 的三個能力</td><td>前端網站、寫程式的驗證能力、3D 模組化</td></tr>
+    <tr><td>B 47:20</td><td>2D 變 3D</td><td>住宅平面圖變成可以第一人稱走進去的空間</td></tr>
+    <tr><td>B 50:05</td><td>走進梵谷的畫</td><td>三張梵谷的畫拼成一個連續的 3D 世界</td></tr>
+    <tr><td>B 55:40</td><td>開放問答</td><td>子專案軍團、資料不上雲、雙電腦接力、訂閱方案、Obsidian 與 LLM Wiki</td></tr>
+    <tr><td>B 85:00</td><td>益師傅收尾</td><td>教學流程動畫工坊預告，以及為什麼會再約這位老師</td></tr>
+  </table></div>
+</section>
+
+<!-- 2 -->
+<section class="chapter" id="sec-opening">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--orange))">OPENING</span>
+  <h2 class="ct">2. 開場：天花板變成樓地板 <span style="font-size:12px;color:var(--ink3)">[A 00:00 至 05:30]</span></h2>
+  <p>益師傅把畫面交出去之後，史大第一句話先處理期待值。他說今天是 9 月 11 日，接下來要講的是他這三四個月最常被問到的問題：</p>
+  <div class="golden">
+    <div class="q">「今年 n8n 是大家的樓地板。」</div>
+    <div class="a">去年很多人覺得 n8n 難到像天花板。他的說法是，去年沒學會不會怎麼樣，但如果去年有認真學，今年跨進 Agent 時代會輕鬆很多。［A 00:58］</div>
+  </div>
+  <p>接著他丟出第一張圖，一台老式紡織機。這張圖是整堂課的比喻骨架：</p>
+  <ul class="pt">
+    <li><b>手工織布：</b>就是 2023 年只能聊天的 AI。</li>
+    <li><b>單台紡織機：</b>工業時代把它裝上齒輪輪軸，單台產能大爆發。這是 2026 年多數人現在的位置，手上有一台很強的 AI，但工作方式沒變。</li>
+    <li><b>流水線：</b>真正改變人類生產方式的不是單台機器，是生產線。他說現在已經有一組人默默用流水線的模式在工作，產值跟別人完全不同。</li>
+  </ul>
+  <figure class="shot"><img src="s3e5-img/02-assembly-line.jpg" alt="投影片：工業化生產力躍升，動力革命加上流水線"><figcaption>「工業化生產力躍升」：左邊是動力革命（蒸汽機到馬達），中間是流水線，右邊是大量、穩定、低成本的成果。他的重點是後面那一半，拿到超強的單台 AI 只是動力革命，流水線還沒有人在蓋。［A 04:20］</figcaption></figure>
+  <p>講到這裡他順手做了第一次現場互動，請正在用單機版 AI（Codex 或 Claude Code）的同學打 666。聊天室有反應之後他說了一句蠻真實的觀察：有裝 Codex 的跟沒裝的，有時候聊天就是聊不起來。</p>
+  <div class="note blue">💡 <div>這一段值得留意的是他的定調方式。他沒有先講工具，而是先給一個「你現在在哪裡」的座標，這也是下一章那張成熟度模型的鋪陳。</div></div>
+</section>
+
+<!-- 3 -->
+<section class="chapter" id="sec-maturity">
+  <span class="chip" style="background:linear-gradient(90deg,var(--orange),var(--amber))">FRAMEWORK</span>
+  <h2 class="ct">3. AI 轉型成熟度模型：L1 到 L5 <span style="font-size:12px;color:var(--ink3)">[A 05:48 至 15:30]</span></h2>
+  <p>這是整堂課最核心的一張圖，史大說是他跟一個純 IT 公司的老闆一起討論出來的，用來讓教學和企業輔導雙方快速對焦。</p>
+  <figure class="shot"><img src="s3e5-img/03-maturity-model.jpg" alt="投影片：AI 轉型成熟度模型，從 L1 到 L5"><figcaption>AI 轉型成熟度模型：橫軸是知識沉澱、流程標準化、決策放大、組織自動運轉；每一層都列出層級目標、情境故事、特徵、參考 AI 工具與技術連結重點。紅色虛線框住的是 L1 到 L3，也就是這堂課鎖定的範圍。［A 05:48］</figcaption></figure>
+  <div class="twrap"><table>
+    <tr><th style="width:56px">層級</th><th style="width:150px">名稱</th><th>他在課堂上的說法</th></tr>
+    <tr><td>L1</td><td>個人使用</td><td>2023 年用瀏覽器跟 ChatGPT 聊天，2024 到 2025 年大家在提示詞工程花了非常多時間。現在這只是 L1</td></tr>
+    <tr><td>L2</td><td>部門知識輔助</td><td>知識沉澱與 Skill 化。他說關鍵從來都不是 L1、L3、L4、L5，而是 L2，但幾乎沒有人在做</td></tr>
+    <tr><td>L3</td><td>流程輔助與任務自助化</td><td>n8n、API、資料庫串接。去年的天花板，今年的樓地板。他強調這層不可能消失，因為資料交換本來就需要方法、資安與規範</td></tr>
+    <tr><td>L4</td><td>每位同仁專屬 AI 助理</td><td>他說 2026 年 2 月整個台灣忽然瘋狂買 Mac mini 裝 OpenClaw，三月又想賣掉；如果那時候賣掉現在一定後悔，因為 2 月之後 Agent 架構成熟，世代就不一樣了</td></tr>
+    <tr><td>L5</td><td>AI 團隊自動化作業</td><td>多個 Agent 協作。大型企業對這層既期待又害怕，所以現在都在發展 AI 治理的規範工具</td></tr>
+  </table></div>
+
+  <h3>兩隻手：資料庫與知識庫</h3>
+  <p>他把 2026 年跟 2025 年最大的差別講得很清楚，東西會變成兩隻手：</p>
+  <ul class="pt">
+    <li><b>右手是資料庫：</b>CRM、ERP，可以用 API 訪問，存的是客戶數據、訂單、生產數據。</li>
+    <li><b>左手是知識庫：</b>有邏輯、有判斷、有要生成的目標。要讓 AI 真的懂你、真的好用，關鍵在這一隻。</li>
+  </ul>
+  <p>然後他講了一段很多人會心一笑的話：公司裡的 ISO 是 ISO 的流程，自己的 SOP 是自己的 SOP，每天的工作日報又是另外一套，三個長得都不一樣。你讓 AI 去判斷你的工作是什麼，它早就昏倒了。只給它 ISO 流程，你到時候一定罵它怎麼那麼笨；給它公司的 SOP，你又會說那是 2025 年的判斷，不是 2026 年的。</p>
+  <div class="note gold">⚠️ <div>他形容這是「赤裸裸的痛苦」：我們都沒有在整理知識庫，資料全部放在自己的硬碟或公用槽，全部都是 PowerPoint、全部都是 Excel，偶爾月報周報寫個小結論。這些東西對 AI 來說既燒 Token，又不一定正確。</div></div>
+
+  <h3>現場盤點：88 個人，大多落在 L1 到 L2</h3>
+  <p>講了十幾分鐘之後他直接請全班自評，在聊天室打 1 到 4。結果出來，有人打 1、有人打 1 加 2、有人打 2 加 3 加 4。他看完之後說，今天要分享的其實就是 L2 跟一點點 L3，L1 就當大家都已經很強了。</p>
+  <div class="note blue">💡 <div>他建議大家把這張圖截圖帶回去問老闆「我們現在在哪裡」。理由是這個對焦會影響組織、工作流程、企業投資，甚至整個公司走向。</div></div>
+</section>
+
+<!-- 4 -->
+<section class="chapter" id="sec-speaker">
+  <span class="chip" style="background:linear-gradient(90deg,var(--amber),var(--green))">BACKGROUND</span>
+  <h2 class="ct">4. 講師自己的路與順德的十年 <span style="font-size:12px;color:var(--ink3)">[A 15:57 至 26:30]</span></h2>
+  <p>講完架構他才自我介紹，而且把自我介紹用成論述的一部分。</p>
+  <figure class="shot"><img src="s3e5-img/04-lecturer-profile.jpg" alt="投影片：企業講師履歷簡介，晟景科技創辦人兼執行顧問"><figcaption>講師履歷簡介：晟景科技 Scendia 創辦人兼執行顧問，經歷包含慧景科技 IoT 業務協理、美商參數科技 PTC 業務經理、施耐德與 ABB 的銷售經理、家登精密全球 EUV 光罩盒業務主管、茂德科技 12 吋晶圓半導體研發工程師六年。下方六個圈是他自己歸納的能力軸：工程思維、銷售思維、問題解決、市場經營、消費市場、AI 自動化。［A 15:57］</figcaption></figure>
+  <ul class="pt">
+    <li><b>半導體工程師六年：</b>他說這段訓練讓他對製程的嚴謹度、對數據建立的要求高一點。</li>
+    <li><b>家登精密：</b>傳統 CNC 加塑膠射出的公司，現在是全球 EUV 光罩盒的主要供應商。他自嘲「年少不懂事，不知道要在一個公司撐久一點」，因為他進去的時候股價 30 塊。</li>
+    <li><b>電力系統外商：</b>當時就知道 EUV 很耗電，所以跳到 ABB、西門子、施耐德這條線。這段他特別提到，當年簽的 NDA 很嚴謹，所以簡報上有些客戶名稱他是故意寫的。</li>
+    <li><b>PTC 參數科技：</b>做 CAD 與 PLM 的軟體公司。他說從硬體 IoT 的思維進到純軟體世界之後，整個邏輯完全不同，也剛好接上 AI 時代。</li>
+    <li><b>太陽能產業：</b>擔任 Sales Head，在那裡建立資料底層架構的經驗。後來產業遇到瓶頸就離開，現在專注在 AI。</li>
+  </ul>
+
+  <h3>順德工業：一家訂書機公司的十年</h3>
+  <p>他花了不少時間講順德 SDI，因為這是他手上最完整的案例。順德本來做訂書機、做文具，現在是特斯拉與大立光的供應鏈，股價從個位數來到一兩百塊。</p>
+  <ol class="st">
+    <li><b>2015 年就開始數位轉型。</b>那時候沒有 AI，就是土法煉鋼，把很多資料庫慢慢串起來。</li>
+    <li><b>最大的決策是把核心從 ERP 轉到 PLM。</b>也就是產品生命週期管理，整段產品週期都用同一個資料庫管理，這就是單一資料來源。</li>
+    <li><b>2024 年他接手做最後一哩路。</b>他形容是「打破資訊孤島的最後一哩路」，當時還沒有 AI，非常痛苦，公司一年要花一兩千萬跟原廠合作處理軟體授權與工程開發。</li>
+    <li><b>做完之後真的實現智慧工廠。</b>從生產線設備上的數據，一路到績效管理、HR 甚至評鑑系統全部打通，任何你想像得到的管理報表都能拿到即時數據。</li>
+  </ol>
+
+  <h3>麝香葡萄的故事：一句話要查四個資料庫</h3>
+  <p>為了解釋「即時」到底值多少錢，他講了一個假設的情境。前陣子韓國麝香葡萄價格崩盤，假設你是零售通路的董事長，禮拜一早上八點開早會問一句：我現在會虧多少錢？</p>
+  <div class="twrap"><table>
+    <tr><th style="width:170px">要查的資料來源</th><th>內容</th></tr>
+    <tr><td>倉庫庫存</td><td>公司現在手上有多少</td></tr>
+    <tr><td>在途（載製）</td><td>已經從倉庫出去、正在運輸車上往門市的數量</td></tr>
+    <tr><td>貨架</td><td>現在擺在各門市架上的數量</td></tr>
+    <tr><td>衛星倉</td><td>還沒上架、放在分店倉庫的數量</td></tr>
+  </table></div>
+  <p>他的對比很直接：沒把資料庫串起來，要到禮拜四、花三到四天，才會有一份兩頁的小報告告訴董事長大概會賠幾千萬，要不要批准週末特價促銷。串起來的公司，包含做美工報告在內，兩小時內就能做完決策，而且可以直接模擬打八折、七折、六折各賠多少。</p>
+  <div class="note green">✅ <div>他的結論是，這就是十倍以上的決策速度差距，而且它靠的不是 AI，是 L3 的資料庫串接先做好。這段也解釋了他為什麼堅持 L3 躲不掉。</div></div>
+
+  <h3>為什麼他從 n8n 轉向 Agent</h3>
+  <p>創業之後他持續在 n8n 這條賽道上耕耘，1 月 30 日還在 n8n 台北年會上演講。他說當天台上六位講者講的都是資訊業的應用，只有他很土法煉鋼地講硬體 IoT：怎麼讓警報器響的時候，用最低成本讓 LINE 收得到訊息。以前這件事要找人寫幾百行程式、花幾萬塊，有了 n8n 之後幾乎不用錢，租個十塊錢的伺服器就做完了。</p>
+  <p>2 月 1 日開始他轉去研究 Agent，那段時間他形容得很誠實：右手知道 Agent 超強，客戶卻只要 n8n，像在鬼打牆。後來他想通一件事，L3 是躲不掉的，因為真正做到 AI 轉型之前那一步叫數位轉型，還是得把資料庫打通，或者重新建構 AI 友善的資料庫。</p>
+</section>
+
+<!-- 5 -->
+<section class="chapter" id="sec-agent">
+  <span class="chip" style="background:linear-gradient(90deg,var(--green),var(--teal))">AGENT</span>
+  <h2 class="ct">5. 九支分身與職務說明書 <span style="font-size:12px;color:var(--ink3)">[A 27:02 至 30:30]</span></h2>
+  <p>他放出黃仁勳在台上、身後站著九支 Agent 的那張畫面，先問「認識這個人嗎」，請認識的打 888，然後笑說那也是他的乾爹。</p>
+  <figure class="shot"><img src="s3e5-img/05-nvidia-agents.jpg" alt="NVIDIA 場景，講台上一人，背後是九個 AI Agent 角色"><figcaption>NVIDIA 的那張畫面：真人站在台上，身後九支 Agent 分別是研究助理、虛擬實驗室、軟體資安、影像分析、銷售開發、客服、財務分析、員工支援、廠務營運。他的解讀是同一個架構配不同的 Skill 與知識庫，就長出不同的樣貌。［A 27:01］</figcaption></figure>
+  <p>他舉的例子很白話：正中間那支財務分析 AI，一定跟影像分析 AI 不一樣，如果兩個長一樣那就慘了，做財務的忽然跑去拍電影。那要怎麼做到一套架構可以同時支援這兩種？答案回到 L2 的 Skill，要做很仔細的工作流程梳理。</p>
+  <h3>大公司的做法：拿 JD 來梳理</h3>
+  <p>他說大公司梳理的方法就是拿 Job Description 職務說明書：</p>
+  <ul class="pt">
+    <li>職務說明書被賦予什麼權限，就給 AI Agent 什麼權限。</li>
+    <li>職務說明書寫他需要哪些技能或知識，就把那些東西給它。</li>
+  </ul>
+  <p>接著他講了一個很多人沒想過的成本面向。如果你的工作執掌分得不清楚，AI 每次回答一個問題都要把九大領域全部爬過一遍，Token 消耗就是分開處理的好幾倍。他的說法是，難怪 Token 會不夠用。</p>
+  <div class="note steel">🧩 <div>這一段把「整理知識」從一件道德正確但很煩的事，變成一件會直接反映在帳單上的事。對還在用 20 美金方案的人特別有感。</div></div>
+</section>
+
+<!-- 6 -->
+<section class="chapter" id="sec-tool">
+  <span class="chip" style="background:linear-gradient(90deg,var(--teal),var(--cyan))">TREND</span>
+  <h2 class="ct">6. 工具還是同事：政府、決策者與那張分布圖 <span style="font-size:12px;color:var(--ink3)">[A 30:50 至 45:30]</span></h2>
+
+  <h3>連政府都在做了</h3>
+  <p>他先放出台北市政府的 CiviClaw 畫面，請有看到市長的人打 888。然後強調這張圖很重要，回去可以跟老闆講「連政府都要推了」，而且特別聲明這不是在講政治。</p>
+  <figure class="shot"><img src="s3e5-img/06-civiclaw-taipei.jpg" alt="台北市政府 CiviClaw 簡報畫面，包含跨系統協作與 AI Agent 使用比例目標"><figcaption>台北市政府的 CiviClaw：跨系統協作涵蓋便民服務、政府治理、內部管理，下方列出完成申請、查詢資格、追蹤進度、整合法規與資料、產生決策摘要、偵測風險、稽核、客服、知識管理等項目；右邊是 2027 年 12 月前公務員使用 AI Agent 比例達 100% 的目標，推動路徑從資訊局人員到各機關專責人員再到全府人員。［A 30:50］</figcaption></figure>
+  <p>他說不管藍的綠的，新北、台北、桃園、台中、高雄、台南都已經成立智能體的專案跟團隊，他自己也輔導過部會的黑客松。然後他點出整份規劃裡最難的一塊：</p>
+  <div class="note gold">⚠️ <div>便民服務與政府治理都還好，<b>最難的是內部管理</b>，也就是那兩個格子：知識管理與客服系統。他說這正是所有職場工作最大的困難，我們手上都沒有這兩件事的資料。客服頂多有一份實習版本的 FAQ 一百題，知識管理頂多拿得到 2GB 的 PowerPoint 跟影片，直接餵給 Agent 根本不能用。</div></div>
+  <p>對於時程他也給了自己的判斷：官方說 2027 年 12 月，他認為會更慢，但原因不是 AI 能力不夠，也不是知識不會整理，而是台灣目前在資安管理法規上對 Agent 比較不去碰它。他舉例說銀行業目前不太喜歡 Agent 這種工作模式，但銀行業卻大量使用 n8n 來管控公司的資料流程。</p>
+  <div class="golden">
+    <div class="q">「Skill 其實是一個明碼的，就是人類都看得懂的工作流程。」</div>
+    <div class="a">這句話是他解釋為什麼 L3 不會消失的關鍵：Skill 基本上沒有什麼資安可言，所以很多資料不能直接寫成 Skill，必須靠 L3 去承擔調用的權限管理。［A 34:39］</div>
+  </div>
+
+  <h3>現場投票：它是工具，還是同事</h3>
+  <p>接下來是這堂課最好玩的一次互動。他請大家打 1（工具）或 2（同事），結果有人打 1 加 2，有人打 1.5。他笑說高手都寫 1.5，然後講出自己的答案：內心深處覺得它還是一個超好用的工具，但它已經有同事的友善跟認真負責，所以他現在是讓 Agent 去幫他開發工具。</p>
+  <div class="shotgrid">
+    <figure class="shot"><img src="s3e5-img/07-tool-or-colleague.jpg" alt="投影片：AI 工具都還沒摸透，怎麼又來一個代理人"><figcaption>「AI 工具都還沒摸透，怎麼又來一個代理人？」他的答案是不用每個都學，你只要分得出它是工具還是同事。工具是你問它答、你按它動；代理人是你給目標，它自己決定下一步、自己調用工具把事做完。［A 35:42］</figcaption></figure>
+    <figure class="shot"><img src="s3e5-img/08-roi-first.jpg" alt="投影片：做 AI，不要先談 ROI"><figcaption>「做 AI，不要先談 ROI」，引用鴻海集團總經理楊秋瑾的說法：現在不談 AI 的 ROI，只談兩件事，怎麼做、多快做。下方那行「先跑，再修正。你不做，你根本不會有能力」是這張的收尾。［A 37:24］</figcaption></figure>
+  </div>
+  <p>談到投資，他換了一個說法：這個同事是哈佛大學畢業的，你覺得一個月要投資他多少錢？現場調查下來大多數人還在 20 美金。他接著講了當天他認為最嚴重的消息，GPT-6 已經紅到 200 美金方案不再開放訂閱，他的解讀是它好用到沒辦法再分給更多重度使用者。</p>
+
+  <h3>成長最多的是哪一群人</h3>
+  <figure class="shot"><img src="s3e5-img/09-ai-adoption-dots.jpg" alt="投影片：你看到什麼趨勢，兩張 AI 使用者分布圖對照"><figcaption>「你看到什麼趨勢？」左邊是 2026 年 2 月，右邊是同年現況。每一個點代表約 320 萬人，2500 個點就是 83 億人。灰色是從來沒用過 AI，綠色是免費使用者，黃色是每月付 20 美金，紫色與紅色分別是 vibe coding 與開發工具的使用者。［A 39:26］</figcaption></figure>
+  <p>他現場問大家哪個顏色成長倍數最多。答案是紫色加紅色，也就是真的在用 AI 開發東西的那一小群。他接著點名：</p>
+  <p>「就像益師傅，他不是從去年就一直做工具給大家用嗎？」他說這群人本來是千分之一的一顆紅點，現在是領先全球十倍成長的新時代工作者，而跨進去的關鍵就是 L2 加 L3，沒有跨不過去的坎。</p>
+
+  <h3>三大 AI 工具地圖</h3>
+  <figure class="shot"><img src="s3e5-img/10-three-ai-map.jpg" alt="投影片：三大 AI 工具地圖 2026.08，OpenAI、Google、Anthropic 三欄"><figcaption>三大 AI 工具地圖（2026.08）：OpenAI 的 ChatGPT、ChatGPT Work、Codex；Google 的 Gemini、Gemini Spark、Google AI Studio、Antigravity 2.0 加 CLI；Anthropic 的 Claude Chat、Claude Code、Claude Cowork。他請大家把這張截圖帶走。［A 42:01］</figcaption></figure>
+  <p>他的整理方式是先用三條產品主線分類（對話助理、通用工作 Agent、開發程式 Agent），再記住四個最容易搞混的地方。其中兩個他特別展開：</p>
+  <ul class="pt">
+    <li><b>額度是分開的。</b>他提醒 ChatGPT 的網頁版 Work 額度跟 Codex 額度是分開計算的，很多人沉浸在 Codex，結果 Work 額度就浪費掉了。既然都花那麼多錢，Work 要好好用，它一樣可以調用 Agent，一樣可以接 MCP 跟外掛。</li>
+    <li><b>Gemini Spark 的定位。</b>他認為 Spark 可能會是未來 Agent 治理最成熟的領域，因為它幾乎不用訓練就內建大量工具與 Skill，在 Google 體系的超大型企業市佔率正在提高。不過他也說得很實際：我們沒有那麼有錢、也不在超大公司，所以還是要好好用 Claude Code、Cowork 或 Codex。</li>
+  </ul>
+  <div class="note blue">💡 <div>他對 Antigravity 2.0 的評價是「蠻好用的，整合得蠻好」，優勢是調用模型上不會被綁死。這種帶著個人偏好的評語在這堂課裡很多，他不會把每個工具都講成滿分。</div></div>
+</section>
+
+<!-- 7 -->
+<section class="chapter" id="sec-redflag">
+  <span class="chip" style="background:linear-gradient(90deg,var(--cyan),var(--blue))">KEY LESSON</span>
+  <h2 class="ct">7. 紅旗法案：成為 AI 高手的三步走 <span style="font-size:12px;color:var(--ink3)">[A 46:23 至 50:30]</span></h2>
+  <figure class="shot"><img src="s3e5-img/11-red-flag-1865.jpg" alt="1865 年紅旗法案的插畫，一名人員揮舞紅旗走在自走車輛前方"><figcaption>1865 鐵路機車法，也就是英國的紅旗法案：要求有人手持紅旗或提燈走在自走車輛前方警示。條文還規定至少僱用三名工作人員，其中一名必須在車輛前方不得少於六十碼徒步引導。［A 46:23］</figcaption></figure>
+  <p>他用這段歷史對照現在：汽車進城的時候，因為怕撞到馬車，就規定要有人揮紅旗走在前面。而現在還只用瀏覽器聊天的工作者，處境其實一樣。</p>
+  <div class="golden">
+    <div class="q">「你把 AI 的能力自我受限。」</div>
+    <div class="a">他的建議是把那個紅旗手拿掉，開始使用桌機版的 Claude 或 Codex。理由是 GPT-6 在創造力上大幅提升，能寫程式、能開發遊戲，靠的正是本地端使用 AI。［A 46:55］</div>
+  </div>
+  <figure class="shot"><img src="s3e5-img/12-three-steps.jpg" alt="投影片：成為 AI 高手，三步走"><figcaption>第一階段收斂：停止使用 Chat 開始使用 Agentic、寫好功能向而不是風格向的 Skill、管理好 context。下方那句「這三步的順序不能顛倒：先換工作方式，再累積能力，最後才談怎麼餵資料」是整張的重點。［A 47:48］</figcaption></figure>
+  <ol class="st">
+    <li><b>停止使用 Chat，開始使用 Agentic。</b>從「你問它答、你決定下一步」換成給目標，讓它自己拆任務、調用工具、把事做完。他補充說 Work 或 Cowork 其實也是智能體，至少不要只停在第一行的純聊天。</li>
+    <li><b>寫好 Skill，而且是功能向不是風格向。</b>不是教它用什麼語氣寫，而是把一件事該怎麼做、判斷依據是什麼，寫成可以重複用的能力。他說很多重複性的工作也可以直接跟 AI 講一句「請幫我做成 Skill」就搞定。</li>
+    <li><b>管理好 context。</b>AI 的表現上限取決於你給了它什麼資料、什麼規則、什麼邊界，不是它有多聰明。</li>
+  </ol>
+  <h3>大航海時代的標本</h3>
+  <p>講到上下文管理，他又換了一個比喻。大航海時代英國商船從非洲抓回一隻鸚鵡，路上不小心死掉了，就把牠送去大英博物館做成標本。我們手上那些十幾年的舊資料就像那隻鸚鵡，要讓它變成有用的標本，需要做的事情叫分類。</p>
+  <div class="golden">
+    <div class="q">「現在的 AI 極度聰明，你要讓你的 AI 跟別人不同，不是一次給他一坨的資料夾。」</div>
+    <div class="a">他說的分類就像生物學的界門綱目科屬種，不同分類會有不同的邏輯判斷、使用情境與治理方式。你要告訴它 A 資料夾是什麼工作、B 資料夾是什麼工作。［A 49:49］</div>
+  </div>
+  <div class="note green">✅ <div>他也給了一個很務實的做法：以前分類很難，助理也不會做，現在可以直接叫 Codex 把檔名相近、內容相近的檔案先放在一起，做一次資料大整理。</div></div>
+</section>
+
+<!-- 8 -->
+<section class="chapter" id="sec-system">
+  <span class="chip" style="background:linear-gradient(90deg,var(--blue),var(--purple))">ORG</span>
+  <h2 class="ct">8. 組織、流程、表單、系統：數位轉型為什麼會失敗 <span style="font-size:12px;color:var(--ink3)">[A 50:52 至 58:50]</span></h2>
+  <p>這是上半場的收尾，也是他自己最想留給大家的一頁。他從杜拉克那句話切入：組織的目的，是使平凡的人能做出不平凡的事。</p>
+  <figure class="shot"><img src="s3e5-img/13-four-masters.jpg" alt="投影片：四種核心價值，組織、流程、表單、系統"><figcaption>四種核心價值串成一套企業升級心法：杜拉克對應組織（誰負責、誰決策）、漢默對應流程（工作如何流動）、戴明對應表單（讓改善有證據）、賈伯斯對應系統（讓好方法被採用）。底下那條運作邏輯是「組織定責 → 流程定序 → 表單留據 → 系統複製」。［A 53:18］</figcaption></figure>
+  <p>他一層一層往下推的邏輯是這樣的：</p>
+  <ol class="st">
+    <li><b>先有組織。</b>把手上的資料做分門別類，誰做什麼工作、有什麼權限，都要設計出來，再跟你的檔案與資料庫對上。</li>
+    <li><b>再有流程。</b>有了人之後，為了解決某些問題會產生有目的、有功能、有步驟的東西。他說這跟 SOP 很像，遠古時代還沒有 ISO 概念的時候，就是有一個出貨流程、有一個報價流程。</li>
+    <li><b>然後有表單。</b>流程中間沒有記錄，交接的時候就斷掉了。所以要有表單，有欄位、有填寫規則、有人審核。過去是紙本，進步一點是 ERP 或 Excel。</li>
+    <li><b>最後才有系統。</b>系統裡面才會有功能區分、權限、資料串接與自動化。</li>
+  </ol>
+
+  <h3>台灣的逆向悲劇</h3>
+  <p>他接著講了最刺耳的一段。台灣很多中小企業確實踏踏實實地把組織、流程、表單做出來，也做了一個還不算太龐大的系統。結果因為要走向全球化，老外說 SAP 的 ERP 很好用，公司就買了一套超大系統。</p>
+  <p>新系統下來之後就有新表單，新表單又逼著公司調整流程，最後那些被原本制度訓練出來的資深員工就離開了。他把整條線倒著畫出來：新系統、新表單、新流程，最後人也變新的。</p>
+  <div class="golden">
+    <div class="q">「因為我們以為買了新系統，就可以數位轉型成功，這就是台灣最有趣的地方。」</div>
+    <div class="a">他把這句話當成台灣數位轉型失敗的原因。［A 54:21］</div>
+  </div>
+  <p>然後他當著全班的面稱讚了一次主持人。他說他很喜歡益師傅的做法，因為益師傅真的是從頭思考什麼樣的組織、什麼樣的人、需要做什麼事情的流程，把表單整理好之後直接變成系統工具；社團裡那一堆工具不是天馬行空先有系統再回頭補表單。</p>
+
+  <h3>他對 vibe coding 的實話</h3>
+  <p>他非常推薦大家學 vibe coding 自己做工具、自己做系統，但也直接承認另一面：IT 人員一定會反對，因為這些散亂的系統到時候沒辦法收斂、沒辦法盤點。他的建議是，比較聰明的企業還是鼓勵大家做自己的工具，但要有先決條件，例如資料庫統一選用（AWS、地端或 Google），並且提供沙盒環境。</p>
+  <div class="note steel">🧩 <div>他給的一句話總結是：成功導入 AI 的企業都是從左邊走到右邊，沒有人再去買一個不符合自己公司流程的系統回來重刻。他也提到這幾年國外那些 SaaS 系統企業的股價掉了不少。</div></div>
+  <p>上半場結束前他做了最後一次確認，請聽懂的打 66666。之後因為分享畫面一直斷線，益師傅提議休息五分鐘，兩人決定換一台電腦，錄影也就在這裡切成上下半段。</p>
+</section>
+
+<!-- 9 -->
+<section class="chapter" id="sec-nuwa">
+  <span class="chip" style="background:linear-gradient(90deg,var(--purple),var(--pink))">DEMO</span>
+  <h2 class="ct">9. 女媧 Skill：把一個人的判斷蒸餾下來 <span style="font-size:12px;color:var(--ink3)">[B 00:48 至 12:00]</span></h2>
+  <p>下半場一開始他就把問題講白：這個 AI 時代有點辛苦，工具一直增加，工作方法卻沒有留下來。他舉的例子很日常，有很多同仁很會剪影片，默默地在剪，剪的方法跟你不一樣，而這些方法從來沒有被留下來。</p>
+
+  <h3>同事 Skill 的由來</h3>
+  <figure class="shot"><img src="s3e5-img/14-nuwa-skill.jpg" alt="GitHub 上的 nuwa-skill 專案頁面"><figcaption>女媧 Skill 的 GitHub 頁面：標語是「女媧幫你蒸餾任何人的思維方式」，基於開放的 Agent Skills 協議，可在 Claude Code、Codex、Cursor、OpenClaw、Hermes Agent、Gemini CLI 等 50 多種相容 runtime 中執行。下方的 Star History 曲線一路往上。［B 03:01］</figcaption></figure>
+  <p>他說女媧 Skill 重要的地方不在它多厲害，而在它驗證了一件事。故事是這樣的：某家 AI 公司有位大神要離職，團隊為了把他的 know how 全部留下來，做了一個「同事 Skill」，把他的工作邏輯與知識庫做了非常詳盡的萃取，連方法論都包進去。</p>
+  <p>這個專案後來累積到兩萬顆星（他當場的說法是「全球有兩萬人兩萬顆星，這個你要乘一百」）。驗證成立之後，同一套方法論被拿去萃取名人，就成了女媧 Skill。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">項目</th><th>他在課堂上講的內容</th></tr>
+    <tr><td>萃取的對象</td><td>賈伯斯、川普、馬斯克、查理蒙格等人，素材來自網路上大量的訪談、X 的貼文與對話</td></tr>
+    <tr><td>保真度評分</td><td>全員 85 分以上，賈伯斯與納瓦爾更達到 97 分。他補充說去年那種「假設你是賈伯斯你會怎麼思考」的一句話提示，大概只有 40 分</td></tr>
+    <tr><td>實際用法</td><td>年初有人把川普在 X 上講過的話貼進裝好的 Skill，做股票的對應分析。他的說法是「聽說勝率是蠻高的」</td></tr>
+    <tr><td>他自己的用法</td><td>他很喜歡納瓦爾寶典，所以常常跟納瓦爾聊天</td></tr>
+  </table></div>
+
+  <h3>安裝之前，先叫它自己查自己</h3>
+  <p>示範的時候他強調要有安全意識，所以貼上 GitHub 連結之後的第一句話永遠是同一句：</p>
+  <div class="code">https://github.com/alchaincyf/nuwa-skill
+請幫我檢查這個 skill 的安全性，如果安全請幫我安裝起來</div>
+  <figure class="shot"><img src="s3e5-img/15-skill-security-audit.jpg" alt="Codex 回覆女媧 Skill 的安全性審查結果"><figcaption>Codex 花了 2 分 56 秒做完的安全稽核：它先做靜態安全稽核，看安裝說明、程式碼、依賴、權限、外連、是否會偷寫系統或讀敏感資料，然後鎖定實際 commit 逐檔掃描。結論是核心 Skill 沒看到偷憑證、任意執行、刪檔或外傳資料，但原封不動整包裝下去不夠乾淨，因為某個範例腳本會自行 pip install。它最後採取的做法是保留舊版備份加上官方安裝器鎖定 commit 加上本機安全化。［B 10:01］</figcaption></figure>
+  <p>這一段其實是整堂課最有教學價值的畫面之一。Codex 不只說安全或不安全，它還挑出兩個「不能當沒看到」的點，包括最新版會每 30 天主動連 GitHub 查版本並寫入檔案，以及把某個下載來源列成建議流程。它的評語是「這不等於惡意，但不符合安靜、最小權限」。</p>
+  <div class="golden">
+    <div class="q">「好的 Skill 其實會把知識、流程、檢測方法都寫進去，讓你在用的時候品質可以大幅提升。」</div>
+    <div class="a">他把 AI 品質大幅提升拆成三個面向：知識在資料夾裡面、流程在資料夾裡面，以及最關鍵的檢查。［B 09:20］</div>
+  </div>
+  <div class="golden">
+    <div class="q">「檢查會變成是人類最難被取代的動作。」</div>
+    <div class="a">他說慢慢地 AI 也學會了人類怎麼檢查，所以把知識、流程、檢查三個綁在一起，產出品質就會變得很好。［B 09:37］</div>
+  </div>
+
+  <h3>同時跑很多個圈圈</h3>
+  <p>安裝還在跑的時候，他直接在本地端的 App 開第二件事介入，畫面左下角同時有兩個任務在轉。他說半夜不睡覺的時候可能一次跑五六個。示範的那一題是拿女媧 Skill 去問自己的職涯。</p>
+  <figure class="shot"><img src="s3e5-img/16-naval-career.jpg" alt="Codex 對話畫面，以 Naval 視角回答職涯問題"><figcaption>「請問我可以跟那瓦爾聊聊我的職場生涯嗎？」回覆先聲明「我以 Naval 視角和你聊，基於公開言論推斷，非本人觀點」，然後給出一句判斷：「職涯不是你做過哪些工作，而是你累積了什麼別人難以複製的判斷，以及它能否脫離工時持續創造價值。」接著反問一題：過去三年，什麼事情別人覺得麻煩、痛苦，你做起來卻像在玩，而且成果通常比別人好？［B 16:23］</figcaption></figure>
+  <p>他還分享了一個自己的用法，蠻打動人的。他說他沒有辦法跟益師傅聊天，所以他把益師傅做過的事情丟給這些名人 Skill 幫他分析，結果他看懂了：益師傅這麼佛系地做社群、做教學，背後是有理想性的，所以他才會一直研究投資理財，因為他知道大家會需要。他說這也是他今天會站在這裡的原因。</p>
+</section>
+
+<!-- 10 -->
+<section class="chapter" id="sec-skills">
+  <span class="chip" style="background:linear-gradient(90deg,var(--pink),var(--rose))">SKILLS</span>
+  <h2 class="ct">10. 必裝 Skill 清單與整理習慣 <span style="font-size:12px;color:var(--ink3)">[B 12:20 至 25:00]</span></h2>
+  <p>他把自己上課常請大家裝的 Skill 開出來，並且先講清楚：不用下載他的版本，因為那是為了教學方便怕有些同學不知道去哪裡載；你只要把檔名原封不動 Google 一次，就會找到對應的 GitHub 連結。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:230px">Skill</th><th>他說明的用途</th></tr>
+    <tr><td>deep-research-explainer</td><td>擔心 AI 給的東西沒有來源依據，或是要做論文探討需要深度思考的媒介。他說這個 Skill 的遊戲規則寫得很清楚</td></tr>
+    <tr><td>error-screenshot-helper</td><td>n8n 跑不動、程式不能部署的時候，截圖丟給它，它會一步一步引導你做對。他特別說這個蠻省 Token，因為它不會從頭思考你要做什麼，而是先判斷你現在在哪個畫面、截了什麼圖</td></tr>
+    <tr><td>smart-search</td><td>偏新聞類、接近爬蟲，處理有資料面向的搜尋</td></tr>
+    <tr><td>youtube-thumbnail-beautifier</td><td>YouTube 畫面與縮圖的美化</td></tr>
+    <tr><td>frontend-design-skill</td><td>他說這個一定要裝起來。AI 做出來的工具會越做越漂亮，靠的就是它</td></tr>
+    <tr><td>persona-forge</td><td>行銷方面的人設建構</td></tr>
+    <tr><td>find-skills</td><td>許願說「有沒有什麼 Skill 可以幫我找一下網路上 GitHub 最紅的 Skill」，就是用這個裝起來的</td></tr>
+    <tr><td>infographic-builder</td><td>他自己說這個比較少用到，一樣是美觀類的</td></tr>
+    <tr><td>caveman</td><td>Skill 大禮包裡的另一個檔案</td></tr>
+  </table></div>
+  <div class="note blue">💡 <div>注意他的誠實度：同一份清單裡，他會明講哪一個「一定要裝」、哪一個「比較少用到」。這種自我評價在工具導覽裡很少見，也比較好用。</div></div>
+
+  <h3>共用 Skill 還是專案限定</h3>
+  <p>有同學問：是不是不同專案要裝不同 Skill？他的回答是「原則上是，但可以做成例外」，然後把差別講清楚：</p>
+  <ul class="pt">
+    <li><b>共用 Skill：</b>裝上去之後，按斜線就可以在每一個資料夾呼叫。他自己的課綱、短影音腳本、正式文件那幾個，都是在任何專案資料夾裡都叫得出來。</li>
+    <li><b>專案限定：</b>一個好的工作流程要有知識庫、流程檔案、檢查標準這三樣，如果只想在同一個專案資料夾用，這三個就會包在本地資料夾裡，其他專案看不到。</li>
+    <li><b>預設是全域。</b>他提醒現在的 AI 安裝 Skill 時預設會裝成所有專案都能調用，只有你特別講「這個 Skill 只有這裡用」，它才不會裝上去。不想汙染其他資料夾就要特別交代。</li>
+  </ul>
+
+  <h3>YouTube Clipper 與 YT 剪輯手</h3>
+  <figure class="shot"><img src="s3e5-img/17-youtube-clipper.jpg" alt="GitHub 上的 Youtube-clipper-skill 專案功能說明"><figcaption>Youtube-clipper-skill 的功能列表：AI 語意分析自動切出 2 到 5 分鐘的細緻章節而不是機械式切分、用 FFmpeg 做影格精準裁剪、批次翻譯中英雙語字幕並減少 95% API 呼叫、把雙語字幕硬燒進影片、自動生成社群文案。安裝方式是一行 npx skills add。［B 19:29］</figcaption></figure>
+  <p>示範的時候他先用同一句安全審查提示，只是多加一句：「我第一次使用，請告訴我教學步驟，一步一步教我。」裝好之後他到 YouTube 找一支超過二十分鐘的 GPT-6 影片，然後下的指令是：</p>
+  <div class="code">請幫我切成十大重點，然後上好字幕，格式是直式短影音版本</div>
+  <p>他說接著就不管它了，它會把十段都切好、上完字幕。然後他做了一件很小但很實用的事：把這個本來是英文名字的 Skill 改名叫「YT 剪輯手」。理由是按斜線的時候一堆英文根本看不懂。</p>
+  <div class="code">請幫我列出我現在電腦裡面所有裝的 Skill，
+英文檔名跟中文翻譯的比較，我要做整理</div>
+
+  <h3>三個月整理一次</h3>
+  <p>這一小段是他這堂課的隱藏重點。他說很多人開始用 Codex 之後 Skill 就爆炸了，幾百個 Skill 然後就亂掉，因為 AI 聰明到會自動幫你調用，你根本不知道什麼時候用了哪一個。問題會在某一天爆出來：同事說要你那個自動剪輯 Skill，你傳哪一個？</p>
+  <p>他的做法是每三個月做一次整理。原因是第一次裝完是原作者的版本，你跟它互動一陣子、把公司的 know how 寫進去之後，它已經變成公司自己的 Skill 指示庫加工作流加偏好，這時候傳給同事才有意義。</p>
+  <div class="golden">
+    <div class="q">「我們用 Skill 來養成整理資料正規化的習慣。」</div>
+    <div class="a">他說我們過去很懶得整理硬碟裡的簡報，現在要常常定期清洗。兩個一定要養成的工作習慣是檔名命名與定期整理。［B 24:34］</div>
+  </div>
+</section>
+
+<!-- 11 -->
+<section class="chapter" id="sec-gpt6">
+  <span class="chip" style="background:linear-gradient(90deg,var(--rose),var(--orange))">GPT-6</span>
+  <h2 class="ct">11. GPT-6 Astra 的三件事與設定巡禮 <span style="font-size:12px;color:var(--ink3)">[B 25:42 至 47:00]</span></h2>
+  <p>這一段他自己說「比較偏知識」，所以講得比較快。他認為 GPT-6 最大的差別是 Computer Use。</p>
+  <p>關於訓練方式，他講的是他看到的新聞加上自己的判斷，這點他有講明：他說 OpenAI 買了幾千台到幾萬台的 Mac Studio 或 Mac mini 做特定訓練，訓練的不是 AI 大腦模型，而是使用場景，讓單機去做特定行為、做得好就給高分，再把那些順暢的操作判斷邏輯打包起來。他的形容是「我看到的新聞，然後我覺得可能性相當高」。</p>
+  <div class="note gold">⚠️ <div>這段屬於他的推測與轉述，不是官方說法，看的時候請自己判斷。他自己在課堂上也是這樣標示的。</div></div>
+  <p>他的實際體感是：前幾代的 Computer Use 滑鼠動得像烏龜，現在快到有時候比人類還快。</p>
+
+  <h3>要用 Computer Use，這些要先打開</h3>
+  <figure class="shot"><img src="s3e5-img/18-computer-use.jpg" alt="ChatGPT 桌面版的 Computer use 設定頁"><figcaption>Computer use 設定頁：控制區塊可以開放任何應用程式、Google Chrome（瀏覽器擴充功能已安裝）、Microsoft Excel（使用增益集取得更多控制權），下面還有一個「鎖定使用」，讓 ChatGPT 在 Mac 鎖定時仍能使用它。［B 26:01］</figcaption></figure>
+  <ol class="st">
+    <li><b>裝官方的 Chrome 外掛。</b>他提醒 ChatGPT 太紅，盜版很多，要確認是 OpenAI 公司出的。裝好之後瀏覽器右邊會多一個常駐的 AI 面板。</li>
+    <li><b>打開鎖定使用。</b>他的說法很有畫面：如果你不想讓它下班，電腦休眠了還要讓它繼續工作，就把這個打開，它就不會下班了。</li>
+    <li><b>電腦歷程記錄。</b>他建議可以打開，理由是可以回去看看自己今天幹了哪些蠢事。但他馬上補了但書：如果是公司給的共用帳號，這個就不要開。</li>
+    <li><b>Appshots 已經內建。</b>他說 7 月的時候還要自己安裝才能用，現在直接內建了，這也是很重大的更新。</li>
+  </ol>
+
+  <h3>外掛程式與 Gmail 多帳號</h3>
+  <p>他把 MCP 比喻成 Type-C：iPhone 也 Type-C、三星也 Type-C、華為也 Type-C，所以資料調用就可以共用。現階段他覺得最好用的是 Gmail。</p>
+  <p>然後他花了一小段在解一個大家常問的疑惑：為什麼 Gmail 只能登一個帳號？答案是要在網頁版的設定裡才能加多帳號。他自己的配置是回客戶的信用公司網域那個帳號，做 AI 訓練的時候用另一個 Gmail。他說這個更新讓他整個工作流程變得很順暢，不用再跳來跳去，Google 日曆也可以掛兩個。</p>
+  <p>另外他推薦開發用的幾個外掛：GitHub、Supabase（資料庫免費額度大）、Vercel（沒買網域就用它的免費網域，但有時間與容量限制）。他也提到重度開發者可以接 Linear 當管理工具，不過當天沒時間教。</p>
+
+  <h3>共用帳號一定要關的兩個開關</h3>
+  <div class="note steel">🔐 <div>他特別提醒用公司共用 GPT 帳號的人，有兩個設定要關掉，否則你的東西會被老闆看到。而且這兩個是連鎖的，要先關下面那個才關得掉上面那個。他也建議共用帳號的人不要寫太細的自訂指令，把公司基本資料寫進去就好。</div></div>
+  <p>至於省 Token，他分享了自己的自訂指令做法：可以寫「儘量幫我用最低 Token 的方式做完」，但他自己把那句話刪掉了，因為有時候它會省過頭。他的理由很直接：他要做的事情比較多，不希望為了省而犧牲正確性。</p>
+
+  <h3>三個半小時做出來的遊戲</h3>
+  <p>因為換了電腦，原本的 demo 檔案不在手邊，他乾脆打開自己的臉書給大家看一段遊戲畫面，說那是他花三個半小時做出來的。做法是把 Codex 跟 Godot 放在一起，讓 Codex 去操作 Godot。</p>
+  <ul class="pt">
+    <li>他說大家最常用的是 Blender，可以做很細膩的捏塑動作，但現在這些都不用自己做了，直接叫 Codex 去操作 Blender 或 Godot 把遊戲捏出來。</li>
+    <li>Godot 的好處是輕量化，很舊的電腦也裝得起來，而且免費。</li>
+    <li>角色動作是很重要的模組，每一塊會動的都是分開調教的，所以要叫它做什麼模組就獨立開一個對話去開發。</li>
+    <li>他做了一個過關時學新魔法的機制：開鏡頭辨識手勢，做對了下一關就出現新魔法。</li>
+  </ul>
+  <div class="golden">
+    <div class="q">「沒想到一個晚上做完了。」</div>
+    <div class="a">他說做這個是因為想做給女兒玩，本來抓一個禮拜。這也是後來他說如果要玩 3D，200 美金方案其實超划算的理由。［B 54:08］</div>
+  </div>
+
+  <h3>GPT-6 的三個能力</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">能力</th><th>他的說明</th></tr>
+    <tr><td>前端網站設計</td><td>以前要寫程式碼處理圖片，現在一句「幫我更新網站的底圖，我希望還有動畫可以呈現」就能生成素材並塞進網站的指定位置。他說能精準塞到指定位置，靠的是螢幕截圖判位的能力</td></tr>
+    <tr><td>寫程式碼</td><td>提升在驗證結果。寫完跑完之後它會截圖，再調用另一支 Agent 去驗證前一支到底有沒有寫對。他也老實說「它有時候會偷懶，自問自答到 100 分」，但整體驗證能力確實大幅提升</td></tr>
+    <tr><td>3D 模組化</td><td>變得非常容易，可以做小遊戲、做可互動的 3D 場景</td></tr>
+  </table></div>
+  <p>他舉了一個很有感的例子：現在可以直接說「我想要做一個跟 Salesforce 一模一樣的系統」，它真的做得出來，而且不只是刻皮，會把後面對應的表單也建好。他給的分數是，純 IT 角度的 vibe coding 以前大概 30 分，GPT-6 已經可以做到 70 到 80 分，前台設計、中台資料庫、後台管理都整合在一起。</p>
+</section>
+
+<!-- 12 -->
+<section class="chapter" id="sec-3d">
+  <span class="chip" style="background:linear-gradient(90deg,var(--orange),var(--amber))">3D</span>
+  <h2 class="ct">12. 2D 變 3D：走進房子，也走進梵谷的畫 <span style="font-size:12px;color:var(--ink3)">[B 47:20 至 55:00]</span></h2>
+  <p>這是全場最有記憶點的示範。他丟進一份住宅平面圖 PDF，指令分成兩段下。</p>
+  <div class="code">（第一段）請幫我做成一個日系風格的 3D 圖層圖片
+
+（第二段）我希望我能夠用第一視角走進去這一個立體的房子，
+可以參觀，可以有適合搭配的日系簡約風格的傢俱，
+可以做到讓體驗這個房子能夠符合真實的情境帶入，創造差異化的體驗</div>
+  <p>他特別提醒工作流程的順序很重要：<b>先把 2D 轉成 3D 圖層，再要求第一視角走進去。</b>不能一步到位。</p>
+  <figure class="shot"><img src="s3e5-img/19-plan-to-3d.jpg" alt="左邊是 3D 平面圖與追加指令，右邊是可以進入的空間導覽頁"><figcaption>左邊是生成出來的日系 3D 平面圖，上方還有幾個追加指令（製作另一視角、加強日系感、分開左右戶）；右邊就是產出的導覽頁，標題寫著「不是看格局，是走進生活」，說明是「從玄關開始，用第一視角感受尺度、動線與日系簡約傢俱的真實關係」，底下有玄關、客廳、主臥、和室、餐廚、右側客廳的分頁，以及 WASD 行走、滑鼠環視的操作提示。［B 61:26］</figcaption></figure>
+  <p>接著他放了一段 YouTube 影片，內容是同一套手法的極致版本：把梵谷的三張畫（臥室、夜間露天咖啡座、星月夜）分別從 2D 轉成 3D，再處理一個更難的問題，怎麼讓三個場景形成連續的空間。做法是在俯視圖上建構巷道、街道這類連接通路，讓它們處在同一個場景裡。</p>
+  <div class="note green">✅ <div>他自己歸納的收斂是：前端網站可以一句話生素材直接整合，所以大家可以去更新自己的個人網站或教學網站；寫程式碼變得順暢，所以組織流程表單系統那條路可以自己做出來；3D 可以做小遊戲。他還提到 X 上已經有人做出圖書館、軌道車、恐龍，甚至有人做人體骨骼血管器官的 3D 拆解，而且可以加開關把皮膚、骨頭分別關掉。他說他看那個提示詞可能沒有超過 30 行。</div></div>
+  <p>最後他補了一個很多人不知道的：3D 場景做完之後，可以直接跟它說「請幫我錄製 10 秒 20 秒的影片」就完成了。他當天示範用的結尾片段與字幕都是這樣產出來的，只是會比較燒 Token，因為一次要調用很多模組。</p>
+</section>
+
+<!-- 13 -->
+<section class="chapter" id="sec-qa">
+  <span class="chip" style="background:linear-gradient(90deg,var(--amber),var(--green))">Q &amp; A</span>
+  <h2 class="ct">13. 現場問答 <span style="font-size:12px;color:var(--ink3)">[B 55:40 至 84:00]</span></h2>
+  <p class="cd">問答佔了下半場快一半，而且問題都很實際。這裡挑幾個回答完整的。</p>
+
+  <h3>把大專案拆成子專案軍團</h3>
+  <p>他分享自己的做法：本來在同一個 CRM 視窗一路做下去，上下文拉得很長，AI 開始飄、開始忘記。後來他把它拆成四個子專案，而且這四個子專案跟母專案是有關聯的，可以互相呼叫，等於就是 Agent to Agent 的架構。</p>
+  <p>最實用的一句在後面：子軍團不需要最貴的模型。他說子任務通常很簡單，可能是檢查或寫文章，調成比較低階的模型就好。他的體驗是拆出去之後既可以同步進行，模型費用也變得比較省。他把這件事扣回上半場第一張流水線的圖。</p>
+  <div class="note blue">💡 <div>他還提到一個有趣的觀察：如果你都沒有叫它做這件事，它就不會做；你多跟它講幾次「我想要 AI 軍團」，它自己就會做 AI 軍團了。他半開玩笑地說，因為它的目的是要賺你的 Token 錢。</div></div>
+
+  <h3>機密資料怎麼辦</h3>
+  <ol class="st">
+    <li><b>先關掉訓練授權。</b>GPT 設定裡可以關掉把你上傳的資料作為訓練，這是第一個動作。他說不知道在哪裡關就 Google 一下，這種有 SOP 的東西問 AI 最快。</li>
+    <li><b>盡量不要用網頁版。</b>用網頁版資料就是丟到雲端，根本沒有機會防守。</li>
+    <li><b>用地端的 App。</b>他的理由很具體：地端要進到你的資料，得先穿透 Mac 或 Windows 的登入帳號密碼，再穿透 GPT 的登入帳號密碼，然後才到資料夾授權，等於多了兩三層保護。</li>
+  </ol>
+  <div class="golden">
+    <div class="q">「雲端就拿來聊天就好了。」</div>
+    <div class="a">他要大家不要把資料傳上去，要調用資料就用 Codex。他也用同一套邏輯解釋為什麼 Hermes 最後做成桌機 App 版本。［B 64:54］</div>
+  </div>
+
+  <h3>兩台電腦怎麼接力</h3>
+  <p>有同學問地端能不能兩台電腦接著工作。他說自己的做法比較傳統，因為他認為產品開發需要有版次版別的觀念：在公司做完就上傳 GitHub 做一個當天的工作總結，回家再從 GitHub 拉下來繼續，睡前再把熬夜做的覆蓋上去。</p>
+  <p>他給的理由不是技術問題，而是人的問題：人在不同情境下的專注度跟邏輯不同，常常會衝突，或是事後覺得昨天那版比較好。所以他認為比較安全的做法不是無縫銜接，而是做到哪裡就上傳到哪裡。</p>
+
+  <h3>訂閱方案與省錢的邏輯</h3>
+  <p>他的配置是 GPT-6 一百美金、Claude 一百美金、Gemini 訂一年約十七美金。建議是：如果你不開發工具，20 美金就很好用；但如果要體驗開發 3D 遊戲或很厲害的網站，在學習 AI 的路上值得訂閱一次 100 或 200 美金，玩完再降回 20 美金。</p>
+  <div class="golden">
+    <div class="q">「不要用省錢這個邏輯，你應該是想辦法用 AI 幫你創造賺回來 AI 費用的方法。」</div>
+    <div class="a">他舉的例子就是主持人本人：益師傅做了投資股票的 App，不是單純在練 AI，是為了把每個月六七千塊的 AI 費用賺回來。他說省錢不太容易進步。［B 70:18］</div>
+  </div>
+
+  <h3>做筆記用什麼</h3>
+  <p>有同學問記錄所學的軟體，他推薦 Obsidian，但給了一個前置步驟：裝起來之後第一個動作不是開始記，而是先跟 AI 討論你的工作是什麼、手上有什麼資料、想整理什麼，請它幫你規劃<b>欄位、標頭、標籤</b>。他的比喻是圖書館編號亂編就找不到書。</p>
+  <p>接著他推薦 Karpathy 的 LLM Wiki 方法論，說它把 AI 調用 Obsidian 的邏輯方法跟標籤表頭都整理好了，是 AI 友善的介面，在 Obsidian 裡搜尋優化做得很好。概念上就是把手上的一萬筆資料做成知識圖譜，不用一開始就找到最正確的檔案，先找到地圖上那個點，確定了再進去看。</p>
+  <div class="note gold">⚠️ <div>他也很清楚地講了這套方法<b>不能做什麼</b>：不要拿 Obsidian 加 LLM Wiki 去做公司的 CRM 客戶資料庫。他的實測是超過一萬多筆之後會整個超卡，他自己那台後來把它移除了。CRM 這件事還是用傳統的向量資料庫或關聯式資料庫比較好做。整理個人資料可以，做成 CRM 不行。</div></div>
+  <p>對 Notion 他也給了自己的答案，而且沒有客套：他個人不喜歡用 Notion 整理資料了，因為對 AI 不友善，叫 Codex 去撈 Notion 的資料第一個慢、第二個有些撈不到。他現在做了一個小工具，跑自動化把 Notion 上的資料倒成 Obsidian 的版本。</p>
+  <p>他自己的使用情境蠻具體的：讀完納瓦爾寶典之後，跟 AI 聊、請它問他十個問題，討論完再寫回 Obsidian。隔天早上拿手機看一下，就知道昨天跟納瓦爾講了多少廢話。他說手機只拿來讀，所有編輯與新增都是用 Claude 維護。</p>
+
+  <h3>其他零星問答</h3>
+  <ul class="pt">
+    <li><b>Codex 可以指揮其他 Agent 嗎？</b>他的做法是叫 Codex 做一個工具，再去指揮其他 App。他說 Codex 跟 Claude 本來有互相調用的功能，後來被關掉了，但既然做得到，他就直接許願要一個工具，大概半小時內就做出來了。反過來讓 Hermes 控 Codex 也可以，只是需要做一個中繼的指令轉換，電腦不夠強會跑不動。</li>
+    <li><b>NAS 當中介可以嗎？</b>可以，但他提醒 NAS 不是 AI 友善的介面，所以不同的 AI 第一次進去會在裡面寫一支小程式做檔案翻譯，你會看到一堆奇奇怪怪的資料夾。他的建議是直接叫 Codex 幫你搬。他分享自己剛做完的一次：把雲端硬碟、NAS 跟 iMac 做同步整理，用 5.6 那一版跑了整整三天；前兩天叫 Astra 做類似的事，一天就做完了。他說這就是 Computer Use 優化的幅度。</li>
+    <li><b>Token 剩多少才要換視窗？</b>他說可以裝一個顯示比例的小程式或 Skill，就看得到百分比。他自己通常 85% 就換。他也說 Codex 桌機版現在看不到比例，這個他下堂課再講。</li>
+  </ul>
+</section>
+
+<!-- 14 -->
+<section class="chapter" id="sec-ecf">
+  <span class="chip" style="background:linear-gradient(90deg,var(--green),var(--blue))">ECF</span>
+  <h2 class="ct">14. 益師傅收尾：教學流程動畫工坊 <span style="font-size:12px;color:var(--ink3)">[B 84:00 至 90:00]</span></h2>
+  <p>問答收不住，益師傅幾次出來擋，說要放老師休息一下。他還跟史大說了一段很有畫面的話：千萬不要問這群人累不累，也不要問要不要再加碼，他們可以到十二點還默默地開著機器，「我們這群都瘋瘋的」。</p>
+  <p>然後他講了自己觀察人的方法，說這是為什麼他會持續邀約這位老師：你只要發現某個人動不動就提到家人，基本上都是善良的人。史大在課堂上確實提過好幾次女兒。</p>
+
+  <h3>預告：教學流程動畫工坊</h3>
+  <figure class="shot"><img src="s3e5-img/20-teaching-flow.jpg" alt="教學流程動畫工坊的介面，左邊是教學模式勾選，右邊是序列圖與程序步驟總覽"><figcaption>益師傅自製的「教學流程動畫工坊」：左邊可以勾選教學模式（直接教學一堂課、翻轉教室、專題式學習 PBL、拼圖法 Jigsaw 合作學習、5E 探究式教學、解題四步驟 Polya、形成性評量循環、學習站分站輪動、差異化教學、遊戲化闖關學習、設計思考、課堂討論思辨、自主學習探究計畫、評量與檢核設計）；右邊把一堂 Google Workspace 與 Gemini AI 直接教學課，畫成 12 個步驟、3 個章節的序列圖，還可以播放成動畫。［B 86:01］</figcaption></figure>
+  <ul class="pt">
+    <li>輸入可以是一本書、一份簡報、一個相關文案，或一個外部連結。他當場舉的例子是丟一份 Google 提示詞白皮書進去。</li>
+    <li>輸出除了序列圖，還有狀態圖、活動圖等多種圖型，而且每一個都會動。</li>
+    <li>他說這個工具本來是做企業流程用的，他把它改成也可以做教學動畫。</li>
+    <li>他也解釋了為什麼選 UML 而不是 Mermaid：Mermaid 包容性比較大，UML 只要錯一個字或空白就畫不出來，難度比較高，但介面上會比 Mermaid 漂亮。他說這是他年輕時做系統分析就在用的圖。</li>
+  </ul>
+  <p>他當場承諾隔天線上研習結束後，晚上九點把工具送給大家，沒來的人也一樣會送。最後他說錄影生成比以前慢，當天會盡快上傳，如果不行就晚上再放。</p>
+  <div class="golden">
+    <div class="q">「有時候透過企業講師來講一下，你會發現邏輯是不是很清楚了。」</div>
+    <div class="a">益師傅的收尾。他說史大之前就是做流程概念的專業主管，由他來解釋這套運用，大家會更清楚 Agentic AI 未來應該怎麼執行。他也說會盡快再約，不然等到十月大家就忘光光了。［B 89:46］</div>
+  </div>
+</section>
+
+<!-- 15 -->
+<section class="chapter" id="sec-quotes">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--amber))">GOLDEN LINE</span>
+  <h2 class="ct">15. 老師金句</h2>
+  <p class="cd">以下每一句都對得回逐字稿，只去掉了語助詞與重複字，後面附時間碼。</p>
+  <div class="golden"><div class="q">「今年 n8n 是大家的樓地板。」</div><div class="a">［A 00:58］去年的天花板，今年只是起點。</div></div>
+  <div class="golden"><div class="q">「Skill 其實是一個明碼的，就是人類都看得懂的工作流程。」</div><div class="a">［A 34:39］所以機敏資料不能直接寫成 Skill，權限管理要靠 L3。</div></div>
+  <div class="golden"><div class="q">「你把 AI 的能力自我受限。」</div><div class="a">［A 46:55］紅旗法案的現代版，說的是還只用瀏覽器聊天的人。</div></div>
+  <div class="golden"><div class="q">「現在的 AI 極度聰明，你要讓你的 AI 跟別人不同，不是一次給他一坨的資料夾。」</div><div class="a">［A 49:49］差別在分類，不在模型。</div></div>
+  <div class="golden"><div class="q">「因為我們以為買了新系統，就可以數位轉型成功，這就是台灣最有趣的地方。」</div><div class="a">［A 54:21］整堂課最刺耳也最誠實的一句。</div></div>
+  <div class="golden"><div class="q">「檢查會變成是人類最難被取代的動作。」</div><div class="a">［B 09:37］好的 Skill 會把知識、流程、檢查三件事一起綁進去。</div></div>
+  <div class="golden"><div class="q">「我們用 Skill 來養成整理資料正規化的習慣。」</div><div class="a">［B 24:34］三個月整理一次，檔名命名與定期整理是兩個必備習慣。</div></div>
+  <div class="golden"><div class="q">「雲端就拿來聊天就好了。」</div><div class="a">［B 64:54］要調用資料就用地端的 Codex。</div></div>
+  <div class="golden"><div class="q">「不要用省錢這個邏輯，你應該是想辦法用 AI 幫你創造賺回來 AI 費用的方法。」</div><div class="a">［B 70:18］他說省錢不太容易進步。</div></div>
+  <div class="golden"><div class="q">「有時候透過企業講師來講一下，你會發現邏輯是不是很清楚了。」</div><div class="a">［B 89:46］益師傅收尾時對這堂課的評語。</div></div>
+</section>
+
+<!-- 16 -->
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,var(--ink3),var(--ink2))">SOURCE</span>
+  <h2 class="ct">16. 資料來源與整理說明</h2>
+  <ul class="pt">
+    <li><b>原始素材：</b>Google Drive 上的兩段課堂錄影。A 段 59 分 21 秒，B 段 90 分 17 秒，合計約 2 小時 30 分。</li>
+    <li><b>逐字稿：</b>用 faster-whisper（large-v3-turbo）把兩段音訊接成一軌處理，切成 <b>75 段 120 秒的視窗</b>分別辨識，開啟語音活動偵測以避免重複幻覺，最後得到 <b>3,990 段</b>帶時間碼的逐字稿（A 段 1,539 段、B 段 2,451 段）。辨識完用 OpenCC 的 s2tw 轉成繁體，半形標點轉全形。</li>
+    <li><b>錯字處理：</b>只修可以確定的，例如講師名字被聽成別的字、工具名（Codex、Claude、Gemini、n8n、MCP）。<b>不確定的一律保留原樣，沒有猜。</b>例如辨識成「色香葡萄」的地方，本頁在自己的敘述中寫成麝香葡萄，但沒有把它放進引號。</li>
+    <li><b>引號規則：</b>本頁每一句加引號的發言都能在逐字稿中找到，只去掉語助詞與重複字，不會為了通順而腦補。凡是辨識結果不確定的段落，一律改用描述的方式處理，不加引號。畫面上的文字（例如 Codex 的回覆、簡報標題）以截圖為準。</li>
+    <li><b>畫面來源：</b>用 ffmpeg 場景偵測（門檻 0.12）加上每 60 秒固定補抓，切換點往後偏移 1.2 秒再抓，濾掉過暗與過平的畫面並用 dhash 去重，共得到 <b>137 張候選畫面</b>，最後挑 <b>20 張</b>進入本頁。這堂課沒有傳統意義上的簡報檔可以引用，所有畫面都是錄影中的實機操作與投影片畫面。</li>
+    <li><b>隱私處理：</b>錄影右側整段是 Teams 的參與者名單，會出現學員姓名。<b>所有截圖都把右側約 12.6% 裁掉</b>。另外兩張（Codex 對話畫面）左側側欄會列出講師的客戶專案名稱，也額外裁掉左側。畫面左下角的「史大」與「俊益 楊」是兩位講者本人在課堂上公開使用的稱呼，予以保留。</li>
+    <li><b>流通限制掃描：</b>用外流、不得、宣誓、版權、授權、保密、不能公開、散布等關鍵字掃過完整逐字稿，<b>沒有發現任何整堂不得外流的規定，也沒有針對特定檔案的轉發限制</b>。命中的幾筆都是課程內容本身（講師談前東家的 NDA、軟體授權、資料夾權限）。講師全程主動分享連結並多次說「送給大家」，益師傅在收尾時也明確表示當天會把錄影上傳。</li>
+    <li><b>刻意沒有收錄的部分：</b>
+      <ul class="pt" style="margin-top:4px">
+        <li>講師的個人臉書頁面與貼文畫面（示範遊戲時開過），含個人資料與好友頭像。</li>
+        <li>他的 ChatGPT 個人化設定與已連結帳號畫面，上面有多組電子郵件位址。</li>
+        <li>他的待辦事項清單畫面，內容是他自己的商務行程。</li>
+        <li>示範用的住宅平面圖 PDF 原圖（含尺寸標註與專案名稱），本頁只收 3D 成果與導覽頁。</li>
+        <li>Teams 聊天室的學員發言與參與者名單。</li>
+        <li>講師的 108 頁簡報未逐頁收錄，本頁只取與敘述直接相關的頁面。</li>
+      </ul>
+    </li>
+    <li><b>沒有課後作業。</b>這是一堂觀念加實作的直播課，課後要做的事是講師建議的那兩件：把成熟度模型截圖帶回去跟老闆對焦，以及回家把 Codex 裝起來。</li>
+  </ul>
+  <div class="note steel">📌 <div>這一堂在課程館歸在<b>訂閱制課程</b>子系列，編號 <b>S3E5</b>。它與晨學講堂 EP 系列同一位主持人（益師傅），但屬於不同軌道，因此另開子系列、不併入 EP 編號。</div></div>
+</section>
+
+</article>
+</div>
+
+<footer>
+  <p>📝 ECF S3E5 課堂筆記 · 生成式AI應用電台・訂閱制第三季第五堂</p>
+  <p>主持：益師傅（楊俊益）｜客座：史大（Stanley・晟景科技 Scendia）｜2026/09/11</p>
+  <p>依兩段錄影全程逐字稿（3,990 段）與 20 張關鍵畫面整理 · <a href="../radio/#ecf">🏠 回筆記館入口</a></p>
+</footer>
+
+</body>
+</html>
