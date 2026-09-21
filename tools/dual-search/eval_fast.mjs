@@ -3,8 +3,8 @@
 import { readFileSync } from 'node:fs';
 import { pipeline, env } from '@xenova/transformers';
 env.allowLocalModels = false;
-const corpus = JSON.parse(readFileSync(new URL('./build/corpus.json', import.meta.url), 'utf8'));
-const fz = JSON.parse(readFileSync(new URL('./sources/frozen_vecs.json', import.meta.url), 'utf8'));
+const corpus = JSON.parse(readFileSync(process.env.CORPUS || new URL('./build/corpus.json', import.meta.url), 'utf8'));
+const fz = JSON.parse(readFileSync(process.env.VECS || new URL('./sources/frozen_vecs.json', import.meta.url), 'utf8'));
 const docs = corpus.docs; if (fz.ids.length !== docs.length) throw new Error('向量與文件集不符');
 // 與 embed_build.mjs 相同的 int8 量化，評測的就是線上實際用的向量
 const q8r = v => { const sc = Math.max(...v.map(Math.abs)) / 127 || 1; return v.map(x => Math.round(x / sc) * sc); };
@@ -36,10 +36,11 @@ const EVAL = [
   // 9/21 她自己測的句子
   { q: '我是泰籍人力,公司倒閉我怎麼辦', kw: ['轉換雇主', '關廠、歇業'] },
 ];
+const EVALSET = process.env.SET === 'exam30' ? JSON.parse(readFileSync(new URL('./sources/eval_queries_exam30.json', import.meta.url), 'utf8')) : EVAL;
 const relevant = e => new Set(docs.filter(d => e.kw.some(k => d.text.includes(k))).map(d => d.id));
 const ex = await pipeline('feature-extraction', fz.model, { quantized: true });
 let h3 = 0, h5 = 0, mrr = 0; const rows = [];
-for (const e of EVAL) {
+for (const e of EVALSET) {
   const r = await ex(QPREFIX + e.q, { pooling: 'mean', normalize: true }); const v = Array.from(r.data);
   const top = fz.vectors.map((w, i) => { let s = 0; for (let k = 0; k < v.length; k++) s += v[k] * w[k]; return { i, s }; }).sort((a, b) => b.s - a.s).slice(0, 8);
   const rel = relevant(e); const rank = top.findIndex(t => rel.has(docs[t.i].id)) + 1;
@@ -47,4 +48,4 @@ for (const e of EVAL) {
   rows.push(`${rank ? '第' + rank + '名' : '未命中'}｜${e.q}｜前3：${top.slice(0, 3).map(t => docs[t.i].law.slice(0, 8) + docs[t.i].no).join('／')}`);
 }
 console.log(rows.join('\n'));
-console.log(`\n${EVAL.length} 句：hit@3 ${(h3 / EVAL.length).toFixed(2)}，hit@5 ${(h5 / EVAL.length).toFixed(2)}，MRR ${(mrr / EVAL.length).toFixed(2)}`);
+console.log(`\n${EVALSET.length} 句：hit@3 ${(h3 / EVALSET.length).toFixed(2)}，hit@5 ${(h5 / EVALSET.length).toFixed(2)}，MRR ${(mrr / EVALSET.length).toFixed(2)}`);
