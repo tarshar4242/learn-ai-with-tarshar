@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S3 補充課（第三場）課堂筆記｜把用過就丟的提示詞，變成一直幫你做事的專案</title>
+<meta name="description" content="生成式AI應用電台・訂閱制第三季補充課（2026/09/19）課堂筆記：ChatGPT 專案運用技巧。從「提示詞重複利用」的觀念出發，現場做出會議紀錄套版專案、把同一招搬到 Gemini 寶石，再用 FinMind API 做出台股 18 格儀表板專案；後半段示範 Codex @Sites 與 Google Sites 兩種布網方式、CORS 卡關的實況，以及 WASM 網頁加密 Skill。依全程逐字稿與關鍵畫面整理，重點段落附時間碼。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#2F6B5E; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:760px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px;max-height:calc(100vh - 90px);overflow-y:auto}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:7px;border-left:none;font-size:13px}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.code{position:relative;background:var(--code);border:1px solid var(--line2);border-radius:10px;padding:13px 15px;margin:10px 0;font-size:13px;line-height:1.75;color:var(--ink);white-space:pre-wrap;font-family:"Cascadia Code",Consolas,monospace;overflow-x:auto}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.iframe-wrap{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000;margin:14px 0}
+.iframe-wrap iframe{display:block;width:100%;height:460px;border:0}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static;max-height:none} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} .iframe-wrap iframe{height:320px} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a class="btn" href="../radio/#ecf" style="border-color:#b9cfc8" onclick="if(history.length>1){history.back();return false}">← 回上一頁</a>
+  <b>📝 ECF S3 補充課（第三場）課堂筆記</b>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 訂閱制第三季補充課</span>
+  <h1>把用過就丟的提示詞，<span>變成一直幫你做事的專案</span></h1>
+  <p class="lead">益師傅自己說這堂「都是簡單的運用」，但整堂真正在教的是一個很少人做的動作：<b>把你每次都要重打一遍的長提示詞，固定成一個專案，以後只丟檔案就有結果。</b>上半場用<b>會議紀錄套版</b>把觀念做成肌肉記憶，六個步驟做完一個專案，再把同一招原封不動搬到 <b>Gemini 寶石</b>；中場講一件關鍵事：提示詞要寫到<b>連版型與配色都指定</b>，再用一句「注意：請參考資料來源中的檔案」把範例圖釘死。下半場整個進實機，用 <b>FinMind 的免費 API</b> 做出<b>台股 18 格儀表板專案</b>，並且老實比較<b>專案版與獨立程式版哪個準</b>。最後是三種布網方式、Google Sites 當場被 CORS 擋下來的實況，以及他自製的 <b>WASM 網頁加密 Skill</b>。本頁依<b>全程逐字稿</b>與關鍵畫面整理，重點段落附時間碼。</p>
+  <div class="meta">
+    <span>📅 2026/09/19（五）晚間直播</span>
+    <span>🎤 主講：益師傅（楊俊益・ECF）</span>
+    <span>⏱️ 全長 2 小時 10 分</span>
+    <span>🧭 主題：ChatGPT 專案運用技巧</span>
+    <span>👥 線上約 100 人</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-overview">1. 一張圖看懂這堂</a>
+  <a href="#sec-opening">2. 開場：下週改禮拜四</a>
+  <a href="#sec-why">3. 為什麼要有專案</a>
+  <a href="#sec-vs">4. 專案、GPTs、Codex 專案</a>
+  <a href="#sec-build">5. 實作一：會議紀錄套版</a>
+  <a href="#sec-traps">6. 三個會卡住你的眉角</a>
+  <a href="#sec-verify">7. 驗收：兩相比對</a>
+  <a href="#sec-gem">8. 同一招搬到 Gemini 寶石</a>
+  <a href="#sec-prompt">9. 提示詞要寫到版型與配色</a>
+  <a href="#sec-stock">10. 實作二：台股 18 格儀表板</a>
+  <a href="#sec-howmade">11. 他怎麼一步步磨出來</a>
+  <a href="#sec-compare">12. 專案版 vs 獨立程式版</a>
+  <a href="#sec-deploy">13. 布網三法與 CORS 卡關</a>
+  <a href="#sec-wasm">14. WASM：防君子不防小人</a>
+  <a href="#sec-qa">15. 問答：GPTs 差在哪</a>
+  <a href="#sec-ethics">16. 收尾：參照學習的灰色地帶</a>
+  <a href="#sec-quotes">17. 老師金句</a>
+  <a href="#sec-src">18. 資料來源與整理說明</a>
+</nav>
+
+<article>
+
+<!-- 0 -->
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--teal))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>生成式 AI 應用電台・訂閱制第三季　補充課「ChatGPT 專案運用技巧」</td></tr>
+    <tr><th>直播日期</th><td>2026/09/19（五）晚間，全長 2 小時 10 分，單段錄影</td></tr>
+    <tr><th>主講</th><td>益師傅（楊俊益，暱稱 ECF）</td></tr>
+    <tr><th>線上人數</th><td>Teams 人數顯示在 100 上下（課中 69 分處顯示 103 人，115 分處 101 人）。他中途好幾次說「又有人晚進來了」，然後重貼一次下載連結</td></tr>
+    <tr><th>本堂主題</th><td>把一段長提示詞固定成「專案」，以後只丟檔案就有固定格式的產出。兩個實作：會議紀錄套版、台股 18 格儀表板。加上三種把成果布網的方法。</td></tr>
+    <tr><th>他自己的定位</th><td>他開場就說「今天都是簡單的運用」，還打趣說留下來上課的人比較少。他要教的不是難的功能，是<b>活用</b>。</td></tr>
+  </table></div>
+
+  <h3>📁 課程資料夾（Google Drive）</h3>
+  <p>錄影與這堂課發的所有檔案都在這個共享資料夾：</p>
+  <p style="margin-top:8px"><a href="https://drive.google.com/drive/folders/1PZBsqYXAm1bP0StXIM4W-ucsL6T65WcG" target="_blank">🔗 開啟 ChatGPT 專案運用技巧課程資料夾 ›</a></p>
+
+  <h3>🎬 課堂錄影（可直接在頁面播放）</h3>
+  <p class="cd">整堂 2 小時 10 分，一段到底。前 35 分鐘是會議紀錄套版，35 到 95 分鐘是台股儀表板與布網，95 分鐘之後是問答與收尾。</p>
+  <div class="iframe-wrap"><iframe src="https://drive.google.com/file/d/1_qt6L6plIIh16j9tlF6lul2dqyn9jqhh/preview" allow="autoplay" allowfullscreen></iframe></div>
+  <div class="note steel">🔧 <div>錄影是老師分享的檔案，內嵌播放通常需要先登入你自己的 Google 帳號。如果頁面一直顯示載入中或跳權限提示，改從上面的課程資料夾連結進去就可以。</div></div>
+
+  <h3>🧰 這堂課發的檔案</h3>
+  <p class="cd">他一開場就先把壓縮檔發下去，說「裡頭只有幾個提示詞，但是我一步一步帶大家做」。中途又陸續補了幾樣：儀表板範例圖、Claude 版程式、WASM Skill。下面這些檔案都留在原本的 Drive 資料夾，沒有複製進這個網站。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:210px">檔案</th><th>它是什麼、課堂上怎麼用</th></tr>
+    <tr><td><b>樣式.pdf</b></td><td>一份學校校務會議紀錄的官方格式範本（NotebookLM 的來源指南把它判讀為某國小 111 學年度第一次校務會議的官方格式範本）。整堂第一個實作就是拿它當「版型老師」，讓 AI 照著它的段落順序輸出。</td></tr>
+    <tr><td><b>會議記錄文字.txt</b></td><td>34 KB 的逐字稿，是他先用 Gemini 把一段音檔轉成文字、再請 ChatGPT 濾掉空白之後的結果。實作時就是把這個檔丟進專案。</td></tr>
+    <tr><td><b>學校會議主持與管理.mp3</b></td><td>原始音檔（約 57 MB）。他特地留這個檔，是為了說明一件事：<b>ChatGPT 專案吃不了音檔</b>，所以要先轉文字。</td></tr>
+    <tr><td><b>新個股分析圖表-ChatGPT 專案.txt</b></td><td>第二個實作的主角，4,700 多字的長提示詞。從資料連線設定、TWSE 與 FinMind 的取數順序、技術指標公式，一路寫到 18 格的每一格要放什麼、用哪個色碼。</td></tr>
+    <tr><td><b>策略圖表製作.txt</b></td><td>另一支長提示詞，把任何資料整理成一張 16:9 的「策略發展藍圖」四階段資訊圖表。他課堂上說「我有策略圖表，沒有講啊，待會再提」，最後時間不夠沒展開，但檔案有發。</td></tr>
+    <tr><td><b>ECF_8358_金居_2026-09-18_18格儀表板.png</b></td><td>3344 × 1884 的成品圖。這張是拿來當「版型範例」丟進資料來源的，讓 AI 去學它的配色與排版。</td></tr>
+    <tr><td><b>台股AI分析儀表板.html</b></td><td>102 KB 的單檔程式，Claude 做的版本。他說這一支才是「正常的程式」，另一支 4.8 MB 的是互動式網頁空殼。</td></tr>
+    <tr><td><b>WASM-Skill.md</b></td><td>他自己寫的網頁加密 Skill，課堂最後補發。裝進 Codex 或 Claude Code 之後，可以在布網時順手把程式包一層。</td></tr>
+  </table></div>
+  <div class="note green">✅ <div>這堂課沒有出現整堂不外流或檔案不得轉發的規定。他反覆說「送給大家」、「程式給你們了」。唯一一句接近限制的是談到他部署好的線上工具網址時說的，見下面的說明。</div></div>
+  <div class="note gold">⚠️ <div><b>本頁對他的線上工具網址做了處理。</b>他在課中提到那兩個部署好的網址時說過「盡量不要給人家」，所以本頁所有出現他部署網址的截圖，都把瀏覽器網址列裁掉了。另外，他在示範輸入格式時把自己的 FinMind API Token 整串明碼秀在畫面上，<b>那一張截圖沒有收進本頁</b>。</div></div>
+</section>
+
+<!-- 1 -->
+<section class="chapter" id="sec-overview">
+  <span class="chip" style="background:linear-gradient(90deg,var(--teal),var(--cyan))">BIG PICTURE</span>
+  <h2 class="ct">1. 一張圖看懂這堂</h2>
+  <p class="cd">這堂的結構是<b>一個觀念、兩次實作、三種布網</b>。觀念只有一句話：提示詞不要用完就丟。兩次實作分別是最軟的（會議紀錄）跟最硬的（股票儀表板），刻意讓你看到同一招在兩端都成立。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:82px">時間碼</th><th style="width:200px">段落</th><th>在講什麼</th></tr>
+    <tr><td>00:01</td><td>發檔案與開場</td><td>先發壓縮檔；下週五課程改到禮拜四避開中秋；流程與組織圖要另外獨立開一堂</td></tr>
+    <tr><td>05:36</td><td>核心觀念</td><td>提示詞重複利用。他說 2024 年 10 月就在自己的社團提過這個概念</td></tr>
+    <tr><td>07:04</td><td>哪些平台有</td><td>Perplexity（以前叫 Space）與 Claude 最早，現在 ChatGPT、Claude、Perplexity 都叫專案</td></tr>
+    <tr><td>12:11</td><td>實作一開始</td><td>建立「會議記錄摘要」專案：命名、貼指令、上傳樣式.pdf</td></tr>
+    <tr><td>23:44</td><td>手機平板的坑</td><td>手機平板點標題沒反應，要點三個點；建議用電腦</td></tr>
+    <tr><td>25:03</td><td>音檔轉文字</td><td>ChatGPT 專案吃不了音檔，先用 Gemini／NotebookLM 轉；逐字稿別超過一小時，還要濾空白</td></tr>
+    <tr><td>29:01</td><td>驗收</td><td>送出逐字稿，輸出結果與樣式.pdf 逐項對照，七個段落順序完全一致</td></tr>
+    <tr><td>32:00</td><td>搬到 Gemini 寶石</td><td>同一套做一次，名詞對照：資料來源叫相關資訊，使用說明是給別人看的</td></tr>
+    <tr><td>34:16</td><td>轉場</td><td>「活用才是重點，不是簡不簡單的問題」</td></tr>
+    <tr><td>40:47</td><td>FinMind 註冊</td><td>免費申請 API Token，當 TWSE 抓不到時的備援</td></tr>
+    <tr><td>45:49</td><td>關鍵技巧</td><td>提示詞要寫到版型與配色，再加一句「注意：請參考資料來源中的檔案」</td></tr>
+    <tr><td>49:18</td><td>實作二開始</td><td>建立台股個股分析圖表專案，把 ECF 取代成自己的名字</td></tr>
+    <tr><td>51:06</td><td>輸入格式</td><td>不是丟代號就好，要「代號 空格 名稱」再附自己的 API Key，並且選 GPT-6 Astra</td></tr>
+    <tr><td>58:40</td><td>他怎麼做出來的</td><td>從舊提示詞加一張新版型圖開始，一步步要求串 FinMind、要真資料、加浮水印</td></tr>
+    <tr><td>62:01</td><td>獨立程式版</td><td>ChatGPT 版與 Claude 版兩支程式，輸入代號直接出 18 格，可下載 PNG</td></tr>
+    <tr><td>69:19</td><td>驗數字</td><td>他當場對照下單軟體的三大法人數字，一模一樣</td></tr>
+    <tr><td>75:09</td><td>布網法一</td><td>Codex 加 @Sites，一句話布網並打開全線存取</td></tr>
+    <tr><td>78:34</td><td>布網法二</td><td>Site.new（Google Sites）整頁嵌入</td></tr>
+    <tr><td>86:00</td><td>當場失敗</td><td>Google Sites 發布後被 CORS 擋住，抓不到資料；改用另一支程式才成功</td></tr>
+    <tr><td>96:03</td><td>回頭看專案版</td><td>專案裡也畫出 18 格了，沒程式版漂亮，但「已經算是很誇張」</td></tr>
+    <tr><td>103:04</td><td>問答重頭戲</td><td>GPTs 跟專案到底差在哪：串接精確度 vs MCP 時代的便利</td></tr>
+    <tr><td>113:35</td><td>WASM Skill</td><td>網頁加密，他說是防君子不防小人</td></tr>
+    <tr><td>119:20</td><td>收尾</td><td>參照學習算不算侵權；「盡量自己做，別人抄到就是你舊的資料」</td></tr>
+  </table></div>
+</section>
+
+<!-- 2 -->
+<section class="chapter" id="sec-opening">
+  <span class="chip" style="background:linear-gradient(90deg,var(--cyan),var(--blue))">OPENING</span>
+  <h2 class="ct">2. 開場：下週改禮拜四，流程專題另外開一堂</h2>
+  <p>他一進來先發檔案，說「裡頭只有幾個提示詞，但是我一步一步帶大家做」。然後回應學員一直在等的兩件事。</p>
+  <ul class="pt">
+    <li><b>下週課程改期。</b>原本禮拜五的課改到<b>禮拜四</b>，理由是「不要耽誤大家中秋節的連假」。［02:00］</li>
+    <li><b>流程與組織圖要獨立一堂。</b>他說這個題目「要花一點時間講」、「要獨立來講」，放進今天會講很久，所以不敢排。他預估中秋連假後再找時間。［02:29］</li>
+  </ul>
+  <p>接著是這堂的定調。他很坦白今天的內容不難，但把重點壓在別的地方。</p>
+  <div class="golden">
+    <div class="q">「早知道、晚知道，跟不知道。」</div>
+    <div class="a">他形容 AI 這類東西人人都會用，差別只在這三種狀態。所以他要教的不是功能本身，是活用的時機。［01:26］</div>
+  </div>
+  <p>還有一句貫穿整堂、他自己很得意的順口溜，後面講到有人抓不到資料時又拿出來用了兩次。</p>
+  <div class="golden">
+    <div class="q">「人品好，AI 生成沒煩惱。」</div>
+    <div class="a">下一句是「人品要夠好，人品不夠好的話，AI 生成都困擾」。他還特別強調「有壓尾韻吧」。［05:19］</div>
+  </div>
+  <div class="note blue">💡 <div>他也先講明沒訂閱的人會遇到的限制：<b>要畫出那張 18 格圖表，一定要用 GPT-6 Astra</b>，沒訂閱就畫不出來。他的解法不是要大家去訂閱，而是「益師傅總是要解決這個問題嘛」，直接把程式寫好送給大家，<b>連 FinMind 的 API Key 都是用他自己的</b>，「用不到你們的錢」。［04:04、05:03］</div></div>
+</section>
+
+<!-- 3 -->
+<section class="chapter" id="sec-why">
+  <span class="chip" style="background:linear-gradient(90deg,var(--blue),var(--purple))">CONCEPT</span>
+  <h2 class="ct">3. 為什麼要有專案：提示詞不要用完就丟</h2>
+  <p>這一段是整堂的地基。他問的問題很生活：你在職場上是不是常常有同一套提示詞要一直重打？</p>
+
+  <h3>他說這個概念他 2024 年 10 月就提過</h3>
+  <p>他在課堂上明確講了時間點：<b>2024 年 10 月</b>，在他自己的社團裡提出「提示詞重複利用」的技巧。他說那時候還沒有專案這個功能。</p>
+  <div class="note steel">📌 <div>逐字稿把社團名稱聽成「NQTT 社團」，出現兩次。依他後段自述的物聯網背景（他說「我以前在做物聯網」），這裡幾乎可以確定是 <b>MQTT 社團</b>，但本頁不逕自改字，照實記錄。［06:06、127:52、123:55］</div></div>
+
+  <h3>拋棄式 vs 重複利用</h3>
+  <p>他的說法是：我們絕大多數的提示詞都是用過就丟的拋棄式，那有沒有辦法重複利用？他舉的例子是行銷企劃案分析。</p>
+  <ul class="pt">
+    <li>一份行銷企劃案分析，裡面有行銷 4P、SWOT，這些分析角度<b>都是固定的</b>。</li>
+    <li>但要你白紙黑字把這些提示詞完整寫出來，「不可能的事情，記不住」。</li>
+    <li>既然固定，<b>為什麼不把它做成一個公式</b>？以後只要丟一份 PDF、一篇部落格文章、一本書進去，它就幫你執行同一套分析。</li>
+  </ul>
+  <p>這就是專案在做的事：把那段長提示詞放進<b>指令集</b>，把參考範本放進<b>資料來源</b>，以後只餵材料。</p>
+
+  <h3>哪個平台最早有</h3>
+  <p>他被問到誰最早做出這個功能，回答得很謹慎：</p>
+  <div class="twrap"><table>
+    <tr><th style="width:130px">平台</th><th>他怎麼說</th></tr>
+    <tr><td>Perplexity</td><td>「非常早以前就有這個功能」，以前叫 <b>Space（空間）</b>，現在改叫專案</td></tr>
+    <tr><td>Claude</td><td>跟 Perplexity「差不多同一個時間點」，硬要分先後他覺得分不出來</td></tr>
+    <tr><td>ChatGPT</td><td>後來也有了，就是這堂課的主角</td></tr>
+    <tr><td>Gemini</td><td>叫<b>寶石（Gem）</b>，他個人覺得「好用多了」</td></tr>
+  </table></div>
+  <div class="note gold">⚠️ <div><b>他說 Gemini 的寶石要被停掉。</b>「他 10 月多才不見嘛，最近還可以用」。他對這個決定很有意見，說「我覺得它廢掉這個沒有什麼道理」、「這種東西就是非常的棒，為什麼要把它取消掉？沒道理」。這是他在課堂上的說法與時間點，實際狀態請以平台公告為準。［08:55、09:00、31:41］</div></div>
+</section>
+
+<!-- 4 -->
+<section class="chapter" id="sec-vs">
+  <span class="chip" style="background:linear-gradient(90deg,var(--purple),var(--pink))">DISAMBIGUATION</span>
+  <h2 class="ct">4. 先把三個「專案」分清楚</h2>
+  <p class="cd">這是他一開始就特別停下來釐清的事，因為他線下教 Codex 時，很多人把網頁版跟桌面版的東西搞在一起。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:170px">名稱</th><th>是什麼</th><th>這堂教哪個</th></tr>
+    <tr><td><b>ChatGPT 聊天裡的專案</b></td><td>網頁版 ChatGPT 左側「專案」，把指令與資料來源綁在一起的資料夾</td><td>✅ 這堂全部在講這個</td></tr>
+    <tr><td><b>Codex 裡的專案</b></td><td>工作環境裡的專案，是拿來寫程式、部署的</td><td>後半段布網時才會用到</td></tr>
+    <tr><td><b>GPTs</b></td><td>機器人，可以做 API 串接，但要有訂閱才能用</td><td>❌ 刻意不講，留到問答才回答差異</td></tr>
+  </table></div>
+  <p>他不講 GPTs 的理由講得很直接：大家談 ChatGPT 都在談 GPTs，但那個要訂閱才能用，沒訂閱就沒了。專案則是<b>每個人都可以用到的功能</b>，卻能做到跟 GPTs 概念一樣的事。［05:53、16:00 前後］</p>
+  <div class="note blue">💡 <div>他也提醒：今天全程講<b>網頁版</b>，不是桌面版。這兩個介面不一樣，跟著做的時候不要拿錯。</div></div>
+</section>
+
+<!-- 5 -->
+<section class="chapter" id="sec-build">
+  <span class="chip" style="background:linear-gradient(90deg,var(--pink),var(--rose))">HANDS-ON 1</span>
+  <h2 class="ct">5. 實作一：六個步驟做出「會議紀錄套版」專案</h2>
+  <p class="cd">這是整堂最該帶走的東西。目標：<b>以後每個月的會議逐字稿丟進去，都自動變成你們公司那份會議紀錄的格式。</b></p>
+
+  <figure class="shot"><img src="s3-bonus3-img/01-download-pack.jpg" alt="課程下載資料夾，內含策略圖表製作、新個股分析圖表、會議記錄文字、樣式 PDF 與學校會議主持與管理 MP3 五個檔案"><figcaption>課前先把壓縮檔解開。五個檔案裡，這一段實作只會用到兩個：<b>樣式</b>（PDF，你們公司的會議紀錄範本）與<b>會議記錄文字</b>（TXT，這次要整理的逐字稿）。最下面那個 MP3 是原始音檔，等一下會說明它為什麼不能直接丟。［14:33］</figcaption></figure>
+
+  <h3>步驟一到六</h3>
+  <ol class="st">
+    <li><b>建立專案。</b>ChatGPT 左側「專案」旁邊按加號，給它一個名字，例如「會議記錄摘要」，按建立。</li>
+    <li><b>點標題進設定。</b>建好之後<b>點專案標題</b>，才會叫出「專案設定」這個視窗。</li>
+    <li><b>貼指令。</b>在「指令」欄位貼上你的提示詞，然後儲存。這裡他用的是一句話。</li>
+    <li><b>回主畫面加資料來源。</b>切到「資料來源」分頁，按「新增資料來源」，上傳<b>樣式.pdf</b>。</li>
+    <li><b>丟材料。</b>回到對話框，把這次要整理的<b>會議記錄文字.txt</b> 拉進去，送出。</li>
+    <li><b>之後每次只要重複第五步。</b>指令與範本都留在專案裡，不用再貼一次。</li>
+  </ol>
+
+  <figure class="shot"><img src="s3-bonus3-img/02-new-project.jpg" alt="ChatGPT 中剛建立好的空專案，畫面有對話與工作兩個分頁，下方是聊天與資料來源切換"><figcaption>剛建好的空專案。上面是「對話」與「工作」兩個分頁，輸入框下方有「聊天／資料來源」的切換，模型選的是 <b>GPT-6 Astra</b>。他提醒這個介面跟以前不一樣，但他不教基本操作，「網路上很多教基本操作」。［16:01］</figcaption></figure>
+
+  <figure class="shot"><img src="s3-bonus3-img/03-project-instructions.jpg" alt="ChatGPT 專案設定視窗，指令欄位填入提示詞，下方有記憶與庫存取權設定"><figcaption>整堂課最關鍵的一張。點標題叫出「專案設定」，把提示詞貼進<b>指令</b>欄位：「請將上傳檔案資料 整理並摘要 與 資料來源中 的摘要與段落一致」。下面還有記憶與庫存取權兩個選項。［17:32］</figcaption></figure>
+
+  <div class="note gold">✍️ <div><b>他對自己這句提示詞的自評很有意思。</b>他說「好繞舌喔，這一看就知道是我寫的、人寫的，這絕不是 AI 寫的，AI 寫不會那麼繞舌」，然後補一句：<b>「但是有時候繞舌也不錯啦，我們聽起來覺得不順，但是 AI 他聽得懂。」</b>這句話是在鬆綁很多人的焦慮：提示詞不必寫得漂亮，寫得清楚就好。</div></div>
+
+  <figure class="shot"><img src="s3-bonus3-img/04-add-source.jpg" alt="ChatGPT 專案的資料來源分頁，開啟檔案選擇視窗準備上傳樣式 PDF"><figcaption>第四步：資料來源 → 新增資料來源 → 上傳，選「樣式.pdf」。畫面下方那句「為 ChatGPT 提供更多上下文」就是這個欄位的用途，它也支援連 Google 雲端硬碟與 Slack。［20:59］</figcaption></figure>
+
+  <div class="note blue">💡 <div><b>範本可以是空白的。</b>他說這個「樣式」可以是一份空白的格式表，也可以直接拿上個月的會議紀錄進去，「讓他來學」。重點不是內容，是<b>段落順序與版型</b>。［21:20］</div></div>
+</section>
+
+<!-- 6 -->
+<section class="chapter" id="sec-traps">
+  <span class="chip" style="background:linear-gradient(90deg,var(--rose),var(--orange))">GOTCHAS</span>
+  <h2 class="ct">6. 三個會卡住你的眉角</h2>
+  <p class="cd">這三件事他都是邊做邊踩到才講的，屬於照著步驟做也會卡的地方。</p>
+
+  <h3>一、手機與平板點不到專案設定</h3>
+  <p>他講得很明確：<b>不要用平板、不要用手機</b>。在手機或平板上點專案標題的中央「不能點，沒有反應」，要改成<b>點那三個點</b>，專案設定才會出現。用電腦則是直接點標題就好。他直接建議上課時用電腦跟。［23:44、24:00］</p>
+
+  <h3>二、ChatGPT 專案吃不了音檔</h3>
+  <p>他刻意留了那個 MP3 檔，就是為了示範這件事。</p>
+  <ul class="pt">
+    <li>在 ChatGPT 專案裡直接丟音檔請它摘要，<b>做不到</b>。</li>
+    <li>Gemini 與 NotebookLM 可以吃音檔。所以流程要變成：<b>先用 Gemini 把語音轉文字，再把文字丟進 ChatGPT 專案。</b></li>
+  </ul>
+
+  <figure class="shot"><img src="s3-bonus3-img/08-notebooklm-guide.jpg" alt="NotebookLM 畫面，來源為樣式 PDF，右側產出學校會議主持與管理的標準會議紀錄架構"><figcaption>上游那一段的樣子。他把同一份材料丟進 NotebookLM，右邊直接整理出「標準會議紀錄架構（參考樣式.pdf）」：壹、報告出席人數；貳、主席報告；參、確認議程及上次會議決議執行情形；肆、校務工作報告；伍、提案討論；陸、臨時動議；柒、散會。<b>這份順序就是等一下要驗收的標準答案。</b>［25:31］</figcaption></figure>
+
+  <h3>三、語音轉文字會多出空白，而且別超過一小時</h3>
+  <p>這是他實際被咬到的坑，抱怨得很生動：</p>
+  <ul class="pt">
+    <li><b>逐字稿不要超過一個鐘頭。</b>超過的話「它可能長度，它可以顯現，是會不夠的」。</li>
+    <li><b>字跟字中間會跑出空白。</b>他說這個問題之前修好過，「之前改好它現在怎麼又打回原型了」。</li>
+    <li><b>解法很土但有效：</b>把轉出來的文字複製到 ChatGPT，請它「把中間的空白的字給過濾掉」，就乾淨了。他這次示範用的那份 34 KB 逐字稿就是這樣處理出來的。</li>
+  </ul>
+  <div class="note steel">📌 <div>下載包裡那個檔名叫「已貼上文字_去除空白」的檔案，就是這道工序留下的痕跡。［25:41、25:55、26:00］</div></div>
+</section>
+
+<!-- 7 -->
+<section class="chapter" id="sec-verify">
+  <span class="chip" style="background:linear-gradient(90deg,var(--orange),var(--amber))">VERIFY</span>
+  <h2 class="ct">7. 驗收：把產出跟樣式.pdf 兩相比對</h2>
+  <p>丟進去之後，他沒有直接說「你看，成功了」，而是把原格式開在旁邊<b>逐項對照</b>。這個動作本身就是教學重點。</p>
+
+  <figure class="shot"><img src="s3-bonus3-img/05-run-and-disclose.jpg" alt="ChatGPT 專案執行中，回覆說明會依範本整理，並主動說明文字內容是課程逐字稿而非實際會議紀錄"><figcaption>送出後 AI 先講清楚它要怎麼做：「我會先讀取會議文字與樣式檔，依照範本的段落整理摘要；原文未提供的資訊會標示『待釐清』。」下一句它還主動點出材料的性質：<b>「文字內容是『學校會議主持與管理』課程逐字稿，並非實際會議的發言紀錄。我會依範本整理」</b>。［29:01］</figcaption></figure>
+
+  <div class="note green">✅ <div><b>這裡有一件比技巧更重要的事。</b>他用的音檔其實是一段 YouTube 課程，內容跟會議紀錄格式對不上。他沒有掩飾，反而當成教材講：「因為那個音檔裡頭並沒有這些東西，所以他就沒有辦法，<b>他學的是格式</b>」。決議欄位空著，就是因為音檔裡真的沒有決議。<b>這個示範等於順便教了怎麼讀 AI 的產出：空的地方不是壞掉，是原文沒有。</b>［30:00、30:28］</div></div>
+
+  <figure class="shot"><img src="s3-bonus3-img/06-compare-with-template.jpg" alt="左側為 ChatGPT 產出的會議紀錄摘要，右側開著樣式 PDF，兩邊段落結構對照"><figcaption>兩相比對的實況。左邊是 AI 產出，右邊開著樣式.pdf。可以看到 AI 把提案寫成「案由／說明／決議」三段式，決議寫「原文未載正式決議」；臨時動議、散會也都按範本的位置擺好。他一項一項比過去，最後問全班：「是不是版型格式是一致的呢？」［31:01］</figcaption></figure>
+
+  <p>對完之後他下了這堂第一個結論，語氣有點惋惜：</p>
+  <div class="golden">
+    <div class="q">「一個再簡單不過的技巧，但是卻很少人去用它。我覺得有點可惜啦。」</div>
+    <div class="a">他把這件事定義為「在我們工作職場上面一個復刻的概念」。［31:20］</div>
+  </div>
+</section>
+
+<!-- 8 -->
+<section class="chapter" id="sec-gem">
+  <span class="chip" style="background:linear-gradient(90deg,var(--amber),var(--green))">CROSS-PLATFORM</span>
+  <h2 class="ct">8. 同一招搬到 Gemini 寶石</h2>
+  <p class="cd">他刻意再做一次，不是為了湊時間，是要讓你看到<b>這是一個通用動作，只是每家名詞不同</b>。整個過程他用一分鐘做完。</p>
+
+  <figure class="shot"><img src="s3-bonus3-img/07-gemini-gem.jpg" alt="Gemini 寶石建立畫面，使用說明欄位填入同一句提示詞，相關資訊欄位上傳樣式 PDF"><figcaption>Gemini 這邊叫「寶石」。同一句提示詞貼進<b>使用說明</b>，同一份樣式.pdf 拉進<b>相關資訊</b>，右邊即時預覽。他說這樣「一次就完成了，耶，Bingo」。［33:11］</figcaption></figure>
+
+  <h3>名詞對照表</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">ChatGPT 專案</th><th style="width:150px">Gemini 寶石</th><th>注意</th></tr>
+    <tr><td>指令</td><td>使用說明</td><td>貼的是同一段提示詞</td></tr>
+    <tr><td>資料來源</td><td><b>相關資訊</b></td><td>他特別停下來講：「這裡決門來不叫資料來源，叫什麼呢？叫相關資訊」</td></tr>
+    <tr><td>—</td><td>（另有）說明欄位</td><td>他澄清這個不是給 AI 看的：<b>「說明是指分享給別人的時候，裡頭要描述一下別人才會用」</b></td></tr>
+  </table></div>
+  <div class="note blue">💡 <div>Claude 也有一模一樣的東西，叫 <b>Project</b>。他在收尾時把這件事收成一句：「等於說一個功能，三個平臺都可以用，把它學起來。」［128:34］</div></div>
+</section>
+
+<!-- 9 -->
+<section class="chapter" id="sec-prompt">
+  <span class="chip" style="background:linear-gradient(90deg,var(--green),var(--teal))">KEY TECHNIQUE</span>
+  <h2 class="ct">9. 提示詞要寫到版型與配色，再用一句話把範例釘死</h2>
+  <p class="cd">這一節是整堂技術含量最高的地方，也是前後兩個實作的橋樑。他要回答的問題是：<b>為什麼你照同一段提示詞做，每次跑出來的樣子都不一樣？</b></p>
+
+  <h3>第一層：把細節寫進提示詞</h3>
+  <p>他說最好的方式，是在提示詞裡直接要求它的格式、樣式、版型。</p>
+  <div class="golden">
+    <div class="q">「假如我們在提示詞裡頭要求到配色、要求到版型、要求到裡頭所有的配件，講清楚的話，他做出來就可以盡可能會達到一致。」</div>
+    <div class="a">他形容這叫「提示詞的細節度的要求」。［46:15］</div>
+  </div>
+
+  <figure class="shot"><img src="s3-bonus3-img/10-prompt-colors.jpg" alt="記事本中的提示詞內容，列出頁面背景、儀表板背景、卡片背景等十幾個十六進位色碼"><figcaption>他說的「寫到配色」是真的寫到色碼。頁面背景 #090D13、卡片背景 #101B2B、卡片邊框 #293E57、台股上漲買超 #FF6671、下跌賣超 #53D889。連字體（Noto Sans TC 或 Microsoft JhengHei）、圓角 8 到 12px、編號標籤 01 到 18 都寫死了。整份提示詞 4,725 字。［50:20］</figcaption></figure>
+
+  <h3>第二層：加一句「注意」，把範例圖釘死</h3>
+  <p>光寫字還不夠。他的第二招是在提示詞的最後（或最前面）加一段注意事項，把資料來源裡的那張範例圖變成視覺標準答案。</p>
+  <div class="code">注意
+版型、所有內容及配色請參考資料來源中的檔案</div>
+  <p>他的理由：<b>「我們就不用依賴平臺的能力幫我畫出那樣的圖表，而是根據提醒他的部分，他去學習。」</b>換句話說，不要祈禱模型今天狀態好，而是給它一張圖照抄。他也提到一個小技巧：<b>把範例檔的檔名直接改成「版型」</b>，提示詞就好寫了。［46:33、48:00］</p>
+  <div class="note gold">📍 <div><b>他順帶講了一個提示詞的位置原則：</b>「提示詞裡頭在最後或最上面是最強的」。所以這句注意要放頭或放尾，不要埋在中間。［46:34］</div></div>
+
+  <h3>第三層：連交付標準都寫進去</h3>
+  <figure class="shot"><img src="s3-bonus3-img/11-prompt-delivery.jpg" alt="提示詞的交付要求段落，列出四項產出、下載前驗證清單與回應方式"><figcaption>提示詞的最後兩節。<b>交付要求</b>寫死要實際產生四樣東西（PNG、互動 HTML、CSV、ZIP），還附一張下載前驗證清單：檔案存在、可開啟、中文字正常、資料日期正確、圖例完整、浮水印存在。<b>回應方式</b>則要求先講本次成功、部分成功還是失敗。［46:30］</figcaption></figure>
+  <div class="note green">✅ <div>這份提示詞最值得偷走的其實是最後兩句：<b>「不要只提供程式碼或描述『可以製作』；工具具備且資料足夠時，應完成實際檔案。」「沒有足夠真實資料，就不做看起來像真的分析。」</b>前一句治 AI 的偷懶，後一句治 AI 的幻覺。這兩句不只適用股票，任何要求 AI 產出檔案的提示詞都可以照抄。</div></div>
+  <p>他對整件事下的結論，是這堂課的骨幹之一：</p>
+  <div class="golden">
+    <div class="q">「你的提示詞不變，但是因為平臺的進步而讓你的結果會更加的棒。所以提示詞還是重要的。」</div>
+    <div class="a">同一段話他在 34 分與 108 分各講了一次。意思是：把提示詞寫扎實，平台每升級一次你就白賺一次。［108:08］</div>
+  </div>
+</section>
+
+<!-- 10 -->
+<section class="chapter" id="sec-stock">
+  <span class="chip" style="background:linear-gradient(90deg,var(--teal),var(--cyan))">HANDS-ON 2</span>
+  <h2 class="ct">10. 實作二：台股 18 格儀表板專案</h2>
+  <p class="cd">同一個動作，換一個最硬的題目。這一段他先解決一個前提：<b>資料從哪裡來。</b></p>
+
+  <h3>先去 FinMind 申請免費 API Token</h3>
+  <p>他說明為什麼不直接連台灣證券交易所：「直接去連結給他用臺灣證券交易所抓，有時候抓不到。所以用 FinMind 來做，其實效果會比較好。」</p>
+
+  <figure class="shot"><img src="s3-bonus3-img/09-finmind-api.jpg" alt="FinMind 網站的 API 使用說明頁，列出 dataset、data_id、start_date、end_date 四個參數"><figcaption>FinMind 的 API 使用說明。提示詞裡指定的 dataset 有兩個：價量用 <b>TaiwanStockPrice</b>，法人用 <b>TaiwanStockInstitutionalInvestorsBuySell</b>。左上角「登入／註冊」就是他要大家去按的地方。［42:01］</figcaption></figure>
+
+  <ol class="st">
+    <li>到 FinMind 按登入／註冊，可以用 Google 帳號直接進去。</li>
+    <li>登入後「就會莫名其妙給你一個 Token」，一長串，複製起來。</li>
+    <li><b>存檔留著</b>，他說「以後都用得到」。</li>
+  </ol>
+  <div class="note blue">💰 <div><b>不用錢。</b>他說「這不用收錢的」，額度他口述是「每小時⋯6000 個，基本上還夠」（這句逐字稿辨識為「每小時上千是6000個」，單位不清楚，本頁不替他補）。他另外給了一個很實際的建議：<b>不要一直查。</b>「因為那張表你可能幾個鐘頭才需要畫一次」，被鎖了就過一兩個鐘頭再畫。［41:28、42:15］</div></div>
+
+  <h3>建立專案，順手把 ECF 換成自己的名字</h3>
+  <p>做法跟第一個實作一模一樣：按加號、命名（例如「台股個股分析圖表」）、點標題、把 4,700 字的長提示詞貼進指令。</p>
+
+  <figure class="shot"><img src="s3-bonus3-img/12-replace-ecf.jpg" alt="記事本開啟程式原始碼，使用尋找取代功能，把 ECF 全部換成一定賺"><figcaption>換名字的實際動作。這一幕他開的是<b>程式原始碼</b>（檔案標題「ECF 台股 AI 儀表板｜Claude 設計」，5,052,482 個字元），用記事本的尋找取代把 <b>ECF</b> 換成「一定賺」。貼提示詞之前也要做同一件事，他說「用取代就好了嘛，只要有 ECF 的地方」全部換掉，還自嘲「一定賺分析很好嘛，對不對」。［畫面 82:37；提示詞取代的說明在 50:14］</figcaption></figure>
+
+  <h3>輸入格式不是只丟代號</h3>
+  <p>這是他特別停下來強調的：「抱歉，你這樣 run 一定會有問題的」，因為沒給 Token，它抓到的都是空的，只會畫一張示意圖給你。</p>
+  <div class="code">8358 金居
+FinMind API Key：（貼上你自己的 Token）</div>
+  <ul class="pt">
+    <li><b>代號加空格加名稱</b>，兩個都要給。</li>
+    <li><b>附上你自己的 API Key</b>。他在課堂上強調「貼你的喔，不要用益師傅的」。</li>
+    <li><b>模型一定要選 GPT-6 Astra。</b>他說「你沒有用 GPT-6 的 Astra 跑起來，就是怪怪的」，還建議把推理強度開到最高，因為 18 個區塊要做的事很多。</li>
+  </ul>
+  <div class="note gold">🔒 <div><b>本頁沒有收那一張輸入畫面的截圖。</b>他示範時把自己的 FinMind Token 整串明碼秀在螢幕上，那是憑證，不適合留在網頁上。這裡改用文字示意格式。<b>你自己在用的時候也一樣：Token 貼在對話框裡就好，不要寫進提示詞檔案、不要放進會分享出去的 HTML。</b>這一點他的提示詞第一節其實就寫明了。</div></div>
+
+  <figure class="shot"><img src="s3-bonus3-img/13-dashboard-in-project.jpg" alt="ChatGPT 專案裡產出的 2360 致茂 ECF 儀表板，深色底 18 格版面"><figcaption>專案版跑出來的成果：2360 致茂，18 格全部到齊，中央有半透明 ECF 浮水印。這張是在<b>對話專案裡</b>畫出來的，不是外部程式。他的評語是「沒有 Claude 的漂亮，但是在專案裡頭可以做這樣已經算是很誇張了」。［96:14］</figcaption></figure>
+</section>
+
+<!-- 11 -->
+<section class="chapter" id="sec-howmade">
+  <span class="chip" style="background:linear-gradient(90deg,var(--cyan),var(--blue))">BEHIND THE SCENES</span>
+  <h2 class="ct">11. 他怎麼一步步把這個專案磨出來</h2>
+  <p class="cd">有學員問他「你那數字到底怎麼抓的」，他說「我不相信這樣講一講就懂了啦」，然後把自己的對話紀錄整個打開給大家看。這一段是全堂最有價值的部分：<b>不是成品，是過程。</b></p>
+
+  <h3>他的五個回合</h3>
+  <ol class="st">
+    <li><b>先給舊提示詞。</b>拿以前那支個股分析提示詞，請 AI 先做一次。「他就開始幫我做，然後我給他幾個代號，他幫我做。」</li>
+    <li><b>不滿意，就給一張目標圖。</b>做出來的圖表他不喜歡，於是直接丟一張範例：<b>「我要的是這張圖表」</b>。他說「做這樣就是 Bingo 了，這代表對囉」。</li>
+    <li><b>要真資料，不要 Copy。</b>他發現內容是抄來的、是空的，就一步步跟它確認：「這些都是空的，都不是真的，我就跟他講，我要有實際的資料。日期應該這樣子。」</li>
+    <li><b>要求串接 FinMind。</b>把資料來源定死，讓它去真的取數。</li>
+    <li><b>加上 ECF 浮水印。</b>理由很務實，見下面。</li>
+  </ol>
+  <div class="note steel">🔑 <div><b>關鍵在第二步。</b>他自己點破：「關鍵是我原本用舊的提示詞給了他，但是我又給他一個新的表格，他從這裡頭去幫我做。」<b>舊提示詞負責邏輯，新範例圖負責外觀</b>，兩個分開餵，就不用重寫幾千字。這跟第九節那句「請參考資料來源中的檔案」是同一個道理，只是一個用在對話裡、一個固定進專案。［59:38］</div></div>
+
+  <h3>為什麼要加浮水印</h3>
+  <p>他講得很白：程式會流傳出去，「我也不曉得會流傳到哪裡去」。訂閱制的東西如果別人也能用，對付錢的人不公平，所以上面要寫個 ECF。但他馬上補了一句，把門又打開：</p>
+  <div class="golden">
+    <div class="q">「可是我把程式碼給你們了，換句話說，你就有能力可以改成不要 ECF。」</div>
+    <div class="a">他的邏輯是：我用浮水印擋外流，但給你原始碼讓你換成自己的名字。［60:59］</div>
+  </div>
+</section>
+
+<!-- 12 -->
+<section class="chapter" id="sec-compare">
+  <span class="chip" style="background:linear-gradient(90deg,var(--blue),var(--purple))">COMPARISON</span>
+  <h2 class="ct">12. 專案版 vs 獨立程式版，哪個準</h2>
+  <p class="cd">這是他這堂課給得最誠實的一段。同一件事他做了三個版本，然後直接講哪個好、為什麼。</p>
+
+  <figure class="shot"><img src="s3-bonus3-img/14-dashboard-standalone.jpg" alt="獨立程式版的 18 格台股儀表板，6226 光鼎，含 K 線、決策核心、多維度判讀等格位"><figcaption>獨立程式版（ChatGPT 做的那支）。6226 光鼎，抓到 2026/09/18 的收盤資料。18 格編號清楚，01 主 K 線、02 決策核心、03 多維度判讀、07 MACD、08 三大法人。注意每一格都標了防呆：綜合評分旁寫「規則映射度｜非勝率」、熱區圖寫「非逐筆成交分布」、多空能量條寫「非預測」。<b>這些不是裝飾，是提示詞裡強制要求的。</b>［62:01］</figcaption></figure>
+
+  <figure class="shot"><img src="s3-bonus3-img/15-claude-dashboard.jpg" alt="Claude 版儀表板下半部，含主力追蹤總評判、任務分頁與綜合分析報告文字"><figcaption>Claude 做的那一支。除了上半部的圖表，下面還多了四個任務分頁（綜合分析報告、技術警示報告、KD + MA 圖表、MACD 圖表）與原始資料表。他說「這個層次 Claude 還更強，它有裡頭相關的分析條件也幫你做好」。［71:24］</figcaption></figure>
+
+  <div class="twrap"><table>
+    <tr><th style="width:150px">版本</th><th>優點</th><th>限制</th></tr>
+    <tr><td><b>ChatGPT 專案版</b></td><td>不用寫程式，人人可做；他說在專案裡能畫成這樣「難度就比較高」，算誇張</td><td>沒那麼好看，純文字比較多；只能用基本繪圖能力，叫不動外部工具；<b>常常抓不到資料</b></td></tr>
+    <tr><td><b>ChatGPT 獨立程式版</b></td><td>準確度高、可下載 PNG</td><td>他說它「就是很柔性，對比色不是那麼強烈」；而且當場發現這支不是單一檔案，是 HTML 加 CSS 分開的包覆檔，所以沒直接發</td></tr>
+    <tr><td><b>Claude 獨立程式版</b></td><td>介面漂亮、分析層次多（多了四個任務分頁）、<b>單一檔案好發</b>，只有 101 KB</td><td>他說「Claude 很漂亮」，這支就是最後發給大家的那一支</td></tr>
+  </table></div>
+
+  <p>他的結論講了兩次，立場一致：</p>
+  <div class="golden">
+    <div class="q">「寫成程式的準確性會比你在所謂的 ChatGPT 裡頭專案會來得更加準確。」</div>
+    <div class="a">［54:00］到了問答時間他又說了一次：「我個人認為要精準的話還是要寫成一個獨立的程式會比專案來得好」，但補上程式版的代價：你不在 ChatGPT 平台裡，所有 API 要自己張羅，用 OpenAI 要錢，用免費的 Groq API 又有流量限制。［107:07］</div>
+  </div>
+
+  <h3>他當場驗了數字</h3>
+  <p>他做了一件很多人不會做的事：打開自己的下單軟體，把盤後三大法人的數字跟程式抓的對一遍。</p>
+  <div class="golden">
+    <div class="q">「每個人都會做，但是做出來要數據準才有用啊。」</div>
+    <div class="a">對完之後他說「真的啊，這數字一模一樣啊，我檢查過了，這寫的有夠準的」。［69:19、69:31］</div>
+  </div>
+  <div class="note gold">⚠️ <div><b>他也誠實標出哪個是假的。</b>他另外有一支「互動式網頁」，4.83 MB、4,953 行，看起來很像能用。他主動說破：<b>「這個程式裡頭是空殼，它實際上是不能用的」</b>，只能查 2330，是做來展示用的。［63:43、64:09］</div></div>
+  <div class="note steel">📌 <div>課中有學員的程式跑不出來，他的判斷是「可能太多人在用，我們同時間太多人黏上去用了，因為都用我的 Token」。他給的解法是：把程式丟給 Codex，請它<b>把裡面的 Token 換成你自己的</b>，再重新布網。［74:44］</div></div>
+</section>
+
+<!-- 13 -->
+<section class="chapter" id="sec-deploy">
+  <span class="chip" style="background:linear-gradient(90deg,var(--purple),var(--pink))">DEPLOY</span>
+  <h2 class="ct">13. 布網三法，以及當場被擋下來的那一次</h2>
+  <p class="cd">有學員說「我想要自己做可不可以」，他就把布網也教了。這一段含金量很高，因為包含一次真實的失敗。</p>
+
+  <h3>方法一：Codex 加 @Sites</h3>
+  <p>最省事的做法。把程式檔拉進 Codex，然後叫出 <b>@Sites</b> 這個功能再下指令。</p>
+
+  <figure class="shot"><img src="s3-bonus3-img/16-codex-deploy-prompt.jpg" alt="Codex 對話畫面，下方輸入框輸入布網指令，要求網址必須有 ECF 三個字"><figcaption>他實際下的指令：<b>「請將上傳的檔案幫我做布網的動作並且權限打開。網址必須要有 ECF 這三個字的字眼。」</b>上半部是那份提示詞的「使用方式」與「先確認工具與資料」兩節，可以看到「沒有對應工具時，立即說明限制。不得宣稱已執行未執行的請求、計算、下載或部署」這種防幻覺的寫法。［113:05］</figcaption></figure>
+
+  <ul class="pt">
+    <li><b>一定要指定 @Sites。</b>他提醒「你不用寫這個 Sites 的時候，它會用別的布網的工具」。</li>
+    <li><b>一定要說「全線打開」。</b>不打開存取權的話，「連你自己登錄使用的時候，他都要用 ChatGPT 登錄的方式才可以」。</li>
+    <li><b>網址可以指定關鍵字。</b>他要求網址要有 ECF，所以他的網址才會長出那三個字。他說「因為被你們偷偷學到了」。</li>
+  </ul>
+
+  <h3>方法二：Site.new（Google Sites）整頁嵌入</h3>
+  <p>給沒有 Codex 的人用的路。他說「最簡單就是 Site New」。</p>
+
+  <figure class="shot"><img src="s3-bonus3-img/17-sites-embed.jpg" alt="Google Sites 編輯畫面，右側頁面分頁開啟嵌入全新整頁內容對話框"><figcaption>在網址列直接打 <code>site.new</code> 開新站 → 右側切到<b>頁面</b> → 下方按加號 → 選<b>整頁嵌入</b> → 給個英文名字 → 完成。［82:01］</figcaption></figure>
+
+  <ol class="st">
+    <li>頁面 → 加號 → 整頁嵌入 → 命名（用英文）→ 完成。</li>
+    <li>點「新增整頁嵌入內容」→ 選<b>嵌入程式碼</b>（不是網址）。</li>
+    <li>用<b>記事本</b>開啟你的 HTML（右鍵 → 開啟檔案 → 選記事本），Ctrl + A 全選、Ctrl + C 複製，貼進去。</li>
+    <li><b>看預覽有沒有出來。</b>他強調「這個一定要有。假如這個預覽頁面沒有，這代表你 Copy 出了問題」。</li>
+    <li>按插入，然後<b>把這個頁面拖到首頁上面</b>讓它變首頁，再按發布。</li>
+  </ol>
+
+  <h3>然後它就當場失敗了</h3>
+  <figure class="shot"><img src="s3-bonus3-img/18-sites-cors-fail.jpg" alt="發布後的 Google Sites 頁面顯示無法取得 2360 的真實交易資料，系統錯誤為 Unexpected token"><figcaption>發布成功、網頁打開了，輸入 2360 按分析，卻跳出<b>「無法取得 2360 的真實交易資料」</b>，系統錯誤是 <code>Unexpected token '&lt;', "&lt;!DOCTYPE "... is not valid JSON</code>。他的判斷：「可能是 CORS 的部分把它給攔截掉」、「Google 這邊不允許你做這樣的動作」。［86:00、86:42］</figcaption></figure>
+
+  <div class="note green">✅ <div><b>這一段值得慢慢看。</b>失敗之後他沒有跳過，而是當場除錯：先確認連原本的程式單獨跑也不行，判斷是被攔截；接著換另一支程式（那支 101 KB 的 Claude 版）請大家試，成功了。<b>回頭才找到真正原因</b>：剛剛那支 4.83 MB 的是互動式網頁，不是原本的程式。他的原話是「那個程式才是正常的程式啦」。<br><br>這裡的教學價值不在 Google Sites，在於他示範了一個排錯順序：<b>先確認範圍（是這個平台的問題還是程式的問題）→ 換一個已知可用的版本試 → 回頭找出拿錯檔案。</b>［86:42 到 89:23］</div></div>
+
+  <div class="note blue">💡 <div><b>方法三其實藏在提示詞裡。</b>那份 4,700 字提示詞的第十一節「交付要求」，本來就要求 AI 直接產出可互動 HTML 與 ZIP。也就是說，你可以完全不碰 Codex 與 Sites，讓專案自己把檔案交出來，再自己找地方放。</div></div>
+</section>
+
+<!-- 14 -->
+<section class="chapter" id="sec-wasm">
+  <span class="chip" style="background:linear-gradient(90deg,var(--pink),var(--rose))">SKILL</span>
+  <h2 class="ct">14. WASM Skill：防君子，不防小人</h2>
+  <p>他布網時提到自己的程式有做加密，被學員追問，於是把這支 Skill 也發了。名字是他自己取的。</p>
+  <ul class="pt">
+    <li><b>它做什麼：</b>布網之後，別人把你的網頁原始碼抓下來，會看到裡面的東西是被包覆過的。</li>
+    <li><b>它不做什麼：</b>他講得很清楚，不誇大。</li>
+  </ul>
+  <div class="golden">
+    <div class="q">「它其實是一種防君子的做法，並不是防小人。」</div>
+    <div class="a">下一句：「要直接去解開，不是沒有辦法，還是有辦法，但是需要一點時間。」［114:27］</div>
+  </div>
+  <p><b>怎麼用：</b>把 <code>WASM-Skill.md</code> 上傳給 Codex 或 Claude Code，跟它說「把這個變成我的 Skill」，之後布網時就可以直接說「用 WASM 網頁加密」。他預告<b>下一次課程會專門教網頁的布網與加密</b>，這次時間不夠。［58:40、113:35］</p>
+  <div class="note gold">⚠️ <div><b>這裡補一個他沒講、但妳需要的動作。</b>任何要裝進電腦的 Skill 都是給 AI 照做的指令，可能夾帶把使用紀錄送到外部網址的行為。這支是老師自己寫的、來源明確，風險低，但習慣要養成：<b>裝之前先整包看過一遍，找有沒有連外回傳。</b></div></div>
+</section>
+
+<!-- 15 -->
+<section class="chapter" id="sec-qa">
+  <span class="chip" style="background:linear-gradient(90deg,var(--rose),var(--orange))">Q &amp; A</span>
+  <h2 class="ct">15. 問答：GPTs 跟專案到底差在哪</h2>
+  <p class="cd">這題他說「這個問題問得很好」，然後花了六分鐘回答。答案比想像中有層次。</p>
+
+  <h3>差別在「串接」這件事</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:120px"></th><th>GPTs</th><th>專案</th></tr>
+    <tr><td><b>能不能串 API</b></td><td>可以，裡面能寫 JavaScript 或 Python</td><td>不能，只能用平台自己的能力去抓</td></tr>
+    <tr><td><b>準不準</b></td><td><b>準。</b>因為你明確告訴它去哪裡抓、回傳是什麼格式，「所以我抓到都不會偏差」</td><td>常常抓不到，「就有剛剛一樣抓不到的問題」</td></tr>
+    <tr><td><b>會不會被 CORS 擋</b></td><td>比較不會，它是直接去抓</td><td>會，就是課堂上那一幕</td></tr>
+    <tr><td><b>好不好寫</b></td><td><b>難。</b>要把 request 與 response 的規格「瞭解到透徹」，JSON 在第幾層、要抓哪個欄位都要講死</td><td>容易，用提問的方式就行</td></tr>
+    <tr><td><b>要不要訂閱</b></td><td>要</td><td>不用</td></tr>
+  </table></div>
+
+  <h3>但他認為 GPTs 正在被時代繞過</h3>
+  <p>理由不是 GPTs 不好，是<b>串接這件事本身變簡單了</b>。他的對照很具體：</p>
+  <ul class="pt">
+    <li><b>以前（GPTs 時代）：</b>要串 Yahoo 天氣預報，得把 request 格式、response 的 JSON 第幾層、要抓哪些欄位，全部寫清楚、要一致、要完整。他說自己最早寫 GPTs 時「很辛苦」。</li>
+    <li><b>現在（MCP 時代）：</b>在 Codex 裡「我只要跟他講，我要寄一封 mail、我要串接 Canva、我要串接 Gamma，我只要透過 MCP 的運用，我只要輸入帳號密碼，基本上它幫我串接起來了」。</li>
+  </ul>
+  <div class="note steel">📌 <div>逐字稿把 MCP 聽成「NCP」，依上下文（他在講 Codex 串接外部服務）判斷是 MCP，本頁照上下文說明但不替他改字。</div></div>
+
+  <h3>另一題：能不能排程每天自動存圖</h3>
+  <p>有學員問能不能讓它自動抓資料、存成固定格式的圖檔。他的答案是可以，但<b>不要在對話裡做</b>：</p>
+  <ul class="pt">
+    <li>把原本這支程式丟給 <b>Codex、Antigravity 或 Claude Code</b>。</li>
+    <li>跟它說：把這個程式改成排程，自動抓 2330、2360 這幾檔，<b>每天存成一張 JPG</b>，檔名格式你也可以規範。</li>
+    <li>他說「這絕對是做得到的，這沒有問題」。</li>
+  </ul>
+  <div class="note blue">💡 <div>他還提醒一個資料本質的問題：這個分析抓的是<b>當日即時資料</b>，如果你要存圖，本質上就是在自己建立歷史資料庫，要一天一天累積。</div></div>
+  <p>還有一題他的回答很適合新手：有人問提示詞要怎麼下。</p>
+  <div class="golden">
+    <div class="q">「不用問提示詞怎麼下，你可以問 AI。」</div>
+    <div class="a">他的建議是直接問：我要串 Google Sheet，我必須要提供什麼資料給你、應該怎麼處理。「現在的 AI 已經非常非常進步，我們以前都要自己做。」［109:09］</div>
+  </div>
+</section>
+
+<!-- 16 -->
+<section class="chapter" id="sec-ethics">
+  <span class="chip" style="background:linear-gradient(90deg,var(--orange),var(--amber))">CLOSING</span>
+  <h2 class="ct">16. 收尾：參照學習算不算侵權</h2>
+  <p class="cd">課的最後 10 分鐘，他丟出一個沒有標準答案的問題，還請大家在聊天室留言。這段跟技術無關，但他講得很認真。</p>
+
+  <h3>他問的問題</h3>
+  <p>如果別人的東西不是放在 GitHub 上分享的，而只是一支影片、一篇文章，我們用 NotebookLM 把它做成自己的心得、做成 15 頁簡報、做成語音材料，<b>這算不算侵權？</b></p>
+  <p>他自己先承認：「不 OK，可是我們卻一直在做這個事情，對不對？很難認定吧？」然後他戳破一個常見的說法：</p>
+  <div class="note gold">💬 <div>有人回「沒有商用就沒事」，他當場反駁：<b>「這句話有問題啦。」</b>他舉自己的例子：他放一支 YouTube 上去，別人拿去做參照學習，產出的簡報、標題、Banner 都很像，到底可不可以？他也點出真正的雙標：「我們卻可以允許自己去讀別人資料，但是卻不能允許別人來用我們的資料。」［120:30、121:57］</div></div>
+
+  <h3>他給的實務界線</h3>
+  <div class="golden">
+    <div class="q">「學習可以這麼做啦，你自己學習 OK，但是假如你要發表文章的時候，稍微去留意，稍微去小心一下。」</div>
+    <div class="a">他的分界是<b>自用與發表</b>：自己學怎麼做都行，一旦要對外發表就要留意。能標註來源當然最好。［124:40］</div>
+  </div>
+  <p>他也講了心境上的轉變，這段滿有溫度的。他說一開始看到別人抄他的圖表格式會生氣，後來換個角度想：</p>
+  <div class="golden">
+    <div class="q">「換一個角度想，我的東西還有那個價值，人家願意用。」</div>
+    <div class="a">他還加了一句自我調侃：那些在社群上出現的黑白對比區隔圖，「那一定是抄我的，但是幫你打廣告，換句話講，這樣也算是一個好事吧」。［125:37、125:50］</div>
+  </div>
+
+  <h3>最後他給的解法</h3>
+  <div class="golden">
+    <div class="q">「盡量自己做，別人抄到就是你舊的資料，永遠都是最舊的資料。」</div>
+    <div class="a">他的意思不是鼓勵被抄，是：<b>你走在前端，被拿走的永遠是你的上一版。</b>［125:00］</div>
+  </div>
+  <p>不過他也提醒了一個殘酷的現實，這段是回應學員說「抄的人永遠看到車尾燈」：</p>
+  <div class="note steel">⚖️ <div>他說不一定，<b>要看抄的人是誰</b>。如果抄的人名聲比較大，大家反而會以為原創是他。「人家永遠就認定這個名聲比較大的人，不是嗎？這樣是不公平的啦⋯⋯就是話語權啦，誰說了算。」那怎麼辦？他的回答是：「你覺得不公平，那就搶回來吧。因為人家看不到你，你就想辦法讓人家看得到你吧。」［126:31、127:29］</div></div>
+
+  <p>整堂課的最後一句是這個：</p>
+  <div class="golden">
+    <div class="q">「學到就是自己的，別人帶不走。」</div>
+    <div class="a">前一句是「等於說一個功能，三個平臺都可以用，把它學起來」。他提醒 Gemini 的寶石、Claude 的 Project 做法都一樣，學一次通三家。［128:45］</div>
+  </div>
+</section>
+
+<!-- 17 -->
+<section class="chapter" id="sec-quotes">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--teal))">GOLDEN LINE</span>
+  <h2 class="ct">17. 老師金句</h2>
+  <p class="cd">以下每一句都對得回逐字稿，只去掉了語助詞與重複字，後面附時間碼。</p>
+  <div class="golden"><div class="q">「早知道、晚知道，跟不知道。」</div><div class="a">［01:26］AI 工具人人都會用，差別只在這三種狀態。</div></div>
+  <div class="golden"><div class="q">「人品好，AI 生成沒煩惱。」</div><div class="a">［05:19］整堂重複最多次的順口溜，他很在意有沒有押到尾韻。</div></div>
+  <div class="golden"><div class="q">「一個再簡單不過的技巧，但是卻很少人去用它。我覺得有點可惜啦。」</div><div class="a">［31:20］講的是會議紀錄套版這件事。</div></div>
+  <div class="golden"><div class="q">「活用才是重點，不是簡不簡單的問題啦。」</div><div class="a">［34:00］有學員嫌今天太簡單，他這樣回。</div></div>
+  <div class="golden"><div class="q">「我們出案例要做差異化，行銷要做差異化，服務要做差異化。」</div><div class="a">［43:09］他解釋為什麼有些東西只給訂閱的人。</div></div>
+  <div class="golden"><div class="q">「假如我們在提示詞裡頭要求到配色、要求到版型、要求到裡頭所有的配件，講清楚的話，他做出來就可以盡可能會達到一致。」</div><div class="a">［46:15］這堂的技術核心。</div></div>
+  <div class="golden"><div class="q">「我們就不用依賴平臺的能力幫我畫出那樣的圖表，而是根據提醒他的部分，他去學習。」</div><div class="a">［47:06］給它一張圖照抄，不要祈禱模型今天狀態好。</div></div>
+  <div class="golden"><div class="q">「寫成程式的準確性會比你在所謂的 ChatGPT 裡頭專案會來得更加準確。」</div><div class="a">［54:00］他對自己作品最誠實的評價。</div></div>
+  <div class="golden"><div class="q">「可是我把程式碼給你們了，換句話說，你就有能力可以改成不要 ECF。」</div><div class="a">［60:59］加浮水印的同時也把門打開。</div></div>
+  <div class="golden"><div class="q">「每個人都會做，但是做出來要數據準才有用啊。」</div><div class="a">［69:31］他當場拿下單軟體對三大法人的數字。</div></div>
+  <div class="golden"><div class="q">「它其實是一種防君子的做法，並不是防小人。」</div><div class="a">［114:27］講 WASM 加密，不誇大功能。</div></div>
+  <div class="golden"><div class="q">「你的提示詞不變，但是因為平臺的進步而讓你的結果會更加的棒。」</div><div class="a">［108:08］把提示詞寫扎實，平台每升級一次你就白賺一次。</div></div>
+  <div class="golden"><div class="q">「學習可以這麼做啦，你自己學習 OK，但是假如你要發表文章的時候，稍微去留意。」</div><div class="a">［124:40］參照學習的分界：自用與發表。</div></div>
+  <div class="golden"><div class="q">「盡量自己做，別人抄到就是你舊的資料，永遠都是最舊的資料。」</div><div class="a">［125:00］被抄的解法不是防守，是繼續往前。</div></div>
+  <div class="golden"><div class="q">「學到就是自己的，別人帶不走。」</div><div class="a">［128:45］整堂課的最後一句。</div></div>
+</section>
+
+<!-- 18 -->
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,var(--ink3),var(--ink2))">SOURCE</span>
+  <h2 class="ct">18. 資料來源與整理說明</h2>
+  <ul class="pt">
+    <li><b>原始素材：</b>Google Drive 上的課堂錄影一段，長度 2 小時 09 分 55 秒。</li>
+    <li><b>逐字稿：</b>用 faster-whisper（large-v3-turbo）處理，切成 <b>120 秒的視窗</b>分別辨識，開啟語音活動偵測以避免重複幻覺，最後得到 <b>1,229 段</b>帶時間碼的逐字稿，標點率 85%。辨識完用 OpenCC 的 s2tw 轉成繁體，半形標點轉全形。</li>
+    <li><b>錯字處理：</b>只修可以確定的，例如老師名字被聽成「醫師傅／易師傅」、工具名（Groq API 被聽成 Glock API、Ollama 被聽成歐拉馬）。<b>不確定的一律保留原樣，沒有猜。</b>本頁有三處明講了辨識不確定：社團名稱（NQTT 對 MQTT）、MCP 被聽成 NCP、FinMind 免費額度的單位。</li>
+    <li><b>引號規則：</b>本頁每一句加引號的發言都能在逐字稿中找到，只去掉語助詞與重複字，不會為了通順而腦補，也不會把兩段不同時間的話併成一句。凡是辨識結果不確定的段落，一律改用描述的方式處理，不加引號。畫面上的文字（例如 ChatGPT 的回覆、提示詞內容、錯誤訊息）以截圖為準。</li>
+    <li><b>畫面來源：</b>用 ffmpeg 場景偵測（門檻 0.12）加上每 60 秒固定補抓，切換點往後偏移再抓以避開轉場的糊畫面，濾掉過暗與過平的畫面並用 dhash 去重，共得到 <b>174 張候選畫面</b>，最後挑 <b>18 張</b>進入本頁。</li>
+    <li><b>隱私處理：</b>錄影右側整段是 Teams 的參與者名單，會出現學員姓名。<b>所有截圖都把右側約 13% 裁掉</b>。另外三張（兩張儀表板成品、一張 Google Sites 發布結果）<b>額外裁掉上方的瀏覽器網址列</b>，原因見下一條。畫面左下角的「俊益 楊」是講者本人，予以保留。</li>
+    <li><b>網址處理：</b>他在課中提到自己部署好的那兩個線上工具時說過「盡量不要給人家」。雖然他同時說「給人家我也不擔心會洩漏」（因為有加密），本頁仍照他的意思，<b>不揭露那些網址</b>，相關截圖一律裁掉網址列。</li>
+    <li><b>憑證處理：</b>他在示範輸入格式時，把自己的 FinMind API Token 整串明碼顯示在畫面上。<b>那一張截圖沒有收進本頁</b>，改以文字示意輸入格式。</li>
+    <li><b>流通限制掃描：</b>用外流、不得、宣誓、版權、授權、保密、不能公開、散布等關鍵字掃過完整逐字稿，<b>沒有發現任何整堂不得外流的規定，也沒有針對教材檔案的轉發限制</b>。命中的幾筆都是課程內容本身（API 授權、他在收尾談的著作權灰色地帶）。他全程主動分享連結並多次說「送給大家」、「程式給你們了」。唯一的軟性限制就是上面那條網址。</li>
+    <li><b>刻意沒有收錄的部分：</b>
+      <ul class="pt" style="margin-top:4px">
+        <li>他的 FinMind API Token 明碼畫面。</li>
+        <li>Teams 的參與者九宮格與聊天室內容，上面有學員姓名與發言。</li>
+        <li>Teams 的視窗選擇器畫面，上面有他的公司電子郵件位址。</li>
+        <li>他部署好的線上工具網址（見上）。</li>
+      </ul>
+    </li>
+    <li><b>沒有課後作業。</b>他要大家做的就是跟著把兩個專案建起來，以及「那個圖表可以自己做看看」。</li>
+  </ul>
+  <div class="note steel">📌 <div>這一堂在課程館歸在<b>訂閱制課程</b>子系列，是第三季的<b>補充課第三場</b>（前兩場分別是釣魚選股與提示詞公式）。它與晨學講堂 EP 系列同一位主持人（益師傅），但屬於不同軌道，因此另開子系列、不併入 EP 編號。</div></div>
+</section>
+
+</article>
+</div>
+
+<footer>
+  <p>📝 ECF S3 補充課（第三場）課堂筆記 · 生成式AI應用電台・訂閱制第三季</p>
+  <p>主講：益師傅（楊俊益）｜主題：ChatGPT 專案運用技巧｜2026/09/19</p>
+  <p>依全程逐字稿（1,229 段）與 18 張關鍵畫面整理 · <a href="../radio/#ecf">🏠 回筆記館入口</a></p>
+</footer>
+
+</body>
+</html>
