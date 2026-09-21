@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>把用過就丟的提示詞，變成一直幫你做事的專案｜ECF ChatGPT 專案運用技巧 互動式學習地圖</title>
+<meta name="description" content="ECF 訂閱制第三季補充課第三場（益師傅／楊俊益，2026/09/19）互動式學習地圖：五大主題 22 項實戰技能，涵蓋提示詞從拋棄式變重複利用、六步做出會議紀錄套版專案、手機點不到與音檔轉文字的眉角、把同一招搬到 Gemini 寶石、提示詞寫到色碼並用一句「請參考資料來源中的檔案」釘死範例、FinMind 免費 API 與台股 18 格儀表板、專案版與獨立程式版哪個準、Codex @Sites 與 Google Sites 兩種布網、CORS 被擋的除錯順序，以及 WASM 網頁加密。學會一項打一個勾，進度存在自己的瀏覽器。">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269;
+  --green:#3f8560; --orange:#bf6a1e; --red:#c0453f; --teal:#0d8f80; --amber:#9c7b23; --rose:#b5476a;
+  --feat:#2F6B5E; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(28px,4.6vw,46px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--txt);background:none;-webkit-text-fill-color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:680px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:9px}
+.steps li{list-style:none;counter-increment:st;display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--txt2);line-height:1.7}
+.steps li::before{content:counter(st);flex:none;width:25px;height:25px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:var(--c,var(--feat));margin-top:1px}
+.steps li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+.prompt,.promptbox{background:#1d1d1f;border:1px solid #2c2c31;border-radius:10px;padding:13px 15px;margin-top:6px;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt b,.promptbox b{color:#fff}
+figure.shot{margin:10px 0 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12px;color:var(--txt3);padding:8px 12px;border-top:1px solid var(--line);background:var(--bg2);line-height:1.6}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <a class="navlink" href="../radio/#ecf" style="border-color:#b9cfc8" onclick="if(history.length>1){history.back();return false}">← 回上一頁</a>
+  <div class="logo">
+    <div class="dot">♻️</div>
+    <div>ChatGPT 專案 地圖<small>SUBSCRIPTION S3 · BONUS 3</small></div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋技能關鍵字：專案、指令、資料來源、寶石、GPTs、會議紀錄、音檔、配色、FinMind、GPT-6 Astra、18 格、布網、CORS、WASM…" autocomplete="off">
+  </div>
+  <a class="navlink" href="s3-bonus3-notes.html">📝 課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">ECF 補充課（第三場） · 訂閱制第三季 · 2026/09/19</span>
+  <h1>把用過就丟的提示詞<br>變成一直幫你做事的專案</h1>
+  <p class="sub">益師傅自己說這堂「<b>都是簡單的運用</b>」，還打趣說留下來上課的人比較少。但他真正在教的是一個很少人做的動作：<b>把每次都要重打的長提示詞，固定成一個專案，以後只丟檔案就有結果。</b><br>他用最軟的題目（會議紀錄套版）和最硬的題目（台股 18 格儀表板）各做一次，讓你看到同一招在兩端都成立。中間那句「<b>提示詞要寫到連版型與配色都指定</b>」，是整堂最值得偷走的技術。<br>點進每一章，逐層展開<b>本堂實際教到</b>的觀念、示範與操作，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🎙️ 生成式AI應用電台・訂閱制第三季</span>
+    <span>👤 益師傅（楊俊益・ECF）</span>
+    <span>⏱️ 全長 2 小時 10 分</span>
+    <span>🔰 小白友善</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>5</b><span>大主題</span></div>
+  <div class="stat"><b>22</b><span>實戰技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 22 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--blue)" onclick="showChapter('reuse')">
+        <div class="glowline"></div><span class="emoji">♻️</span>
+        <h3><em>CHAPTER 01</em>提示詞不要用完就丟</h3>
+        <p>拋棄式與可重複利用的差別、四家平台同一個功能怎麼對照，以及專案、GPTs、Codex 專案三者的分界。</p>
+        <div class="foot"><div class="mini"><i data-mini="reuse"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--teal)" onclick="showChapter('build')">
+        <div class="glowline"></div><span class="emoji">📋</span>
+        <h3><em>CHAPTER 02</em>六步做出會議紀錄套版</h3>
+        <p>照著做一次就有肌肉記憶：六個步驟、範本可以是空白的、手機點不到的坑、音檔要先轉文字，以及兩相比對的驗收。</p>
+        <div class="foot"><div class="mini"><i data-mini="build"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--purple)" onclick="showChapter('prompt')">
+        <div class="glowline"></div><span class="emoji">🎨</span>
+        <h3><em>CHAPTER 03</em>提示詞要寫到版型與配色</h3>
+        <p>整堂技術含量最高的一章：寫到色碼、用一句「注意」把範例圖釘死、兩句話治 AI 的偷懶與幻覺。</p>
+        <div class="foot"><div class="mini"><i data-mini="prompt"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--amber)" onclick="showChapter('stock')">
+        <div class="glowline"></div><span class="emoji">📊</span>
+        <h3><em>CHAPTER 04</em>台股 18 格儀表板專案</h3>
+        <p>FinMind 免費 Token、輸入格式的眉角、他怎麼一步步磨出這個專案，以及專案版與程式版哪個準。</p>
+        <div class="foot"><div class="mini"><i data-mini="stock"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--rose)" onclick="showChapter('deploy')">
+        <div class="glowline"></div><span class="emoji">🌐</span>
+        <h3><em>CHAPTER 05</em>布網、除錯與心法</h3>
+        <p>Codex @Sites 與 Site.new 兩種布網、CORS 當場擋下來時他怎麼排錯、WASM 加密，以及參照學習的界線。</p>
+        <div class="foot"><div class="mini"><i data-mini="deploy"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-reuse" class="view" style="--c:var(--blue)"></section>
+  <section id="view-build" class="view" style="--c:var(--teal)"></section>
+  <section id="view-prompt" class="view" style="--c:var(--purple)"></section>
+  <section id="view-stock" class="view" style="--c:var(--amber)"></section>
+  <section id="view-deploy" class="view" style="--c:var(--rose)"></section>
+</main>
+
+<footer>
+  本頁為訂閱制第三季 補充課（第三場）「ChatGPT 專案運用技巧」課後整理・介面沿用本站互動式學習地圖版型<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2026｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+const DATA = {
+  reuse: {
+    key:'reuse', color:'var(--blue)', emoji:'♻️', code:'CHAPTER 01', title:'提示詞不要用完就丟',
+    intro:'整堂的地基只有一句話：多數人的提示詞都是拋棄式的，用過就沒了，下次要用又重打一遍。益師傅說他在 2024 年 10 月就在自己的社團提過「提示詞重複利用」，現在三大平台都把它做成內建功能了，叫做專案。',
+    topics:[
+      {t:'拋棄式，還是可以一直用的公式', s:'整堂的地基｜錄影 05:36–08:45', blocks:[
+        {h:'他問的問題',p:'你在職場上是不是常常有同一套提示詞要一直重打？他的觀察是：<b>我們絕大多數的提示詞，用過就丟了。</b>'},
+        {h:'他舉的例子',p:'一份行銷企劃案分析，裡面有行銷 4P、SWOT，<b>這些分析角度都是固定的</b>。但要你白紙黑字把提示詞完整寫出來，「不可能的事情，記不住」。'},
+        {h:'那就把它做成公式',p:'既然固定，為什麼不做成一個公式？以後只要丟一份 PDF、一篇文章、一個連結進去，它就幫你跑同一套分析。'},
+        {h:'專案在做的就是這件事',tip:'把那段長提示詞放進<b>指令集</b>，把參考範本放進<b>資料來源</b>，以後你只餵材料。這就是整堂課要你養成的動作。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-bonus3-notes.html#sec-why" style="color:var(--blue)">筆記 3：為什麼要有專案</a>'}]},
+
+      {t:'四家平台，同一個功能', s:'學一次通三家｜錄影 07:04 · 128:34', blocks:[
+        {h:'名字不同，做的事一樣',table:{head:['平台','它叫什麼','他怎麼說'],rows:[
+          ['Perplexity','專案（以前叫 <b>Space 空間</b>）','「非常早以前就有這個功能」'],
+          ['Claude','<b>Project</b>','跟 Perplexity「差不多同一個時間點」，分不出先後'],
+          ['ChatGPT','專案','這堂課的主角'],
+          ['Gemini','<b>寶石（Gem）</b>','他個人覺得「好用多了」']]}},
+        {h:'他對 Gemini 寶石的意見',warn:'他說寶石要被停掉，「他 10 月多才不見嘛，最近還可以用」。他很有意見：「我覺得它廢掉這個沒有什麼道理⋯⋯這種東西就是非常的棒，為什麼要把它取消掉？沒道理。」<b>這是他 2026/09/19 在課堂上的說法，實際狀態請以平台公告為準。</b>'},
+        {h:'所以值得學',tip:'「等於說一個功能，三個平臺都可以用，把它學起來。<b>學到就是自己的，別人帶不走。</b>」這是整堂課的最後一句話。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-bonus3-notes.html#sec-gem" style="color:var(--blue)">筆記 8：同一招搬到 Gemini 寶石</a>'}]},
+
+      {t:'專案、GPTs、Codex 專案，先分清楚', s:'他線下教學最常看到的混淆｜錄影 14:56 · 26:30', blocks:[
+        {h:'三個都叫專案，但不是同一件事',table:{head:['名稱','是什麼','這堂教哪個'],rows:[
+          ['<b>ChatGPT 聊天裡的專案</b>','把指令與資料來源綁在一起的資料夾','✅ 全程講這個'],
+          ['<b>Codex 裡的專案</b>','工作環境裡的專案，拿來寫程式與部署','後半段布網才用到'],
+          ['<b>GPTs</b>','機器人，可以串 API，但要訂閱','❌ 刻意不講']]}},
+        {h:'他為什麼不講 GPTs',p:'「大家要嘛就談 ChatGPT 裡頭的 GPTs，但這個要有訂閱才可以用。沒有訂閱不就 GG 了嗎？<b>這裡它是用專案的方式來做到跟 GPTs 概念一樣的事情。</b>」'},
+        {h:'一個提醒',warn:'今天全程講的是<b>網頁版</b>，不是桌面版。這兩個介面不一樣，跟著做的時候不要拿錯。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-bonus3-notes.html#sec-vs" style="color:var(--blue)">筆記 4：先把三個專案分清楚</a>'}]}
+    ]
+  },
+
+  build: {
+    key:'build', color:'var(--teal)', emoji:'📋', code:'CHAPTER 02', title:'六步做出會議紀錄套版',
+    intro:'第一個實作，也是最該帶走的東西。目標很具體：以後每個月的會議逐字稿丟進去，都自動變成你們公司那份會議紀錄的格式。他說這是「在我們工作職場上面一個復刻的概念」。',
+    topics:[
+      {t:'六個步驟，照著做一次', s:'ChatGPT 專案實作｜錄影 12:11–24:30', blocks:[
+        {h:'操作順序',steps:[
+          '左側「<b>專案</b>」旁邊按加號，命名（例：會議記錄摘要），按建立',
+          '建好之後<b>點專案標題</b>，才會叫出「專案設定」視窗',
+          '在「<b>指令</b>」欄位貼上提示詞，儲存',
+          '回主畫面切到「<b>資料來源</b>」，按新增資料來源，上傳你們的<b>格式範本</b>',
+          '回到對話框，把這次要整理的<b>逐字稿</b>拉進去，送出',
+          '之後每次只要重複第五步，指令與範本都留在專案裡']},
+        {h:'他用的那一句指令',prompt:'請將上傳檔案資料 整理並摘要 與 資料來源中 的摘要與段落一致'},
+        {h:'實機畫面',shot:{img:'s3-bonus3-img/03-project-instructions.jpg',cap:'點標題叫出「專案設定」，提示詞貼進「指令」欄位。這是整堂最關鍵的一張。［17:32］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-bonus3-notes.html#sec-build" style="color:var(--teal)">筆記 5：六個步驟做出會議紀錄套版</a>'}]},
+
+      {t:'提示詞不必寫得漂亮，寫得清楚就好', s:'他對自己那句話的自評｜錄影 12:11 前後', blocks:[
+        {h:'他自己先笑了',p:'貼完那句指令，他說：「<b>好繞舌喔，這一看就知道是我寫的、人寫的，這絕不是 AI 寫的，AI 寫不會那麼繞舌。</b>」'},
+        {h:'但下一句才是重點',tip:'「<b>但是有時候繞舌也不錯啦，我們聽起來覺得不順，但是 AI 他聽得懂。</b>」<br>如果妳寫提示詞會卡在「這樣寫是不是不夠專業」，這句話可以直接拿來解套。'},
+        {h:'範本可以是空白的',p:'他說那份「樣式」可以是一份<b>空白的格式表</b>，也可以直接拿上個月的會議紀錄進去，「讓他來學」。重點不是內容，是<b>段落順序與版型</b>。'},
+        {h:'實機畫面',shot:{img:'s3-bonus3-img/04-add-source.jpg',cap:'資料來源 → 新增資料來源 → 上傳，選「樣式.pdf」。這個欄位也支援連 Google 雲端硬碟。［20:59］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-bonus3-notes.html#sec-build" style="color:var(--teal)">筆記 5：範本可以是空白的</a>'}]},
+
+      {t:'手機和平板點不到專案設定', s:'照步驟做也會卡的地方｜錄影 23:44', blocks:[
+        {h:'他講得很明確',warn:'<b>不要用平板、不要用手機。</b>在手機或平板上點專案標題的中央「不能點，沒有反應」。'},
+        {h:'手機的正確做法',p:'要改成<b>點那三個點</b>，專案設定才會出現。用電腦則是直接點標題就好。'},
+        {h:'他的建議',tip:'上課跟著做的時候用電腦。做完之後在手機上用是沒問題的，卡住的只有「設定」這個動作。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-bonus3-notes.html#sec-traps" style="color:var(--teal)">筆記 6：三個會卡住你的眉角</a>'}]},
+
+      {t:'ChatGPT 專案吃不了音檔', s:'他特地留了一個 MP3 來示範｜錄影 25:03–27:19', blocks:[
+        {h:'先講結論',warn:'在 ChatGPT 專案裡直接丟音檔請它摘要，<b>做不到</b>。Gemini 與 NotebookLM 可以。'},
+        {h:'所以流程要多一段',steps:[
+          '先用 <b>Gemini 或 NotebookLM</b> 把語音轉成文字',
+          '把文字複製到 ChatGPT，請它<b>把中間的空白過濾掉</b>',
+          '乾淨的逐字稿才丟進專案']},
+        {h:'兩個實際會咬到你的坑',ul:[
+          '<b>逐字稿不要超過一個鐘頭。</b>超過的話「它可能長度，它可以顯現，是會不夠的」。',
+          '<b>字跟字中間會跑出空白。</b>他很無奈：「之前改好它現在怎麼又打回原型了。」']},
+        {h:'實機畫面',shot:{img:'s3-bonus3-img/08-notebooklm-guide.jpg',cap:'上游那一段的樣子。NotebookLM 直接整理出「標準會議紀錄架構」：報告出席人數、主席報告、確認議程、校務工作報告、提案討論、臨時動議、散會。這份順序就是等一下的標準答案。［25:31］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-bonus3-notes.html#sec-traps" style="color:var(--teal)">筆記 6：音檔與空白的坑</a>'}]},
+
+      {t:'驗收：把產出跟範本兩相比對', s:'這個動作本身就是重點｜錄影 29:01–31:20', blocks:[
+        {h:'他沒有說「你看成功了」',p:'他把原格式開在旁邊，<b>一項一項對過去</b>：時間地點主席出席人員、主席報告、確認議程、校務工作報告、討論提案、臨時動議、散會。'},
+        {h:'比技巧更重要的一件事',tip:'他用的音檔其實是一段課程影片，內容跟會議紀錄對不上。他沒有掩飾，反而當成教材：「因為那個音檔裡頭並沒有這些東西，所以他就沒有辦法，<b>他學的是格式</b>。」<br>決議欄位空著，是因為原文真的沒有。<b>這順便教了怎麼讀 AI 的產出：空的地方不是壞掉，是原文沒有。</b>'},
+        {h:'AI 自己也先說清楚了',p:'送出後它的第一句是：「我會先讀取會議文字與樣式檔，依照範本的段落整理摘要；<b>原文未提供的資訊會標示『待釐清』</b>。」'},
+        {h:'實機畫面',shot:{img:'s3-bonus3-img/06-compare-with-template.jpg',cap:'兩相比對的實況。左邊 AI 產出，右邊開著樣式.pdf。提案寫成「案由／說明／決議」三段式，決議寫「原文未載正式決議」。［31:01］'}},
+        {h:'他的結論',p:'「<b>一個再簡單不過的技巧，但是卻很少人去用它。我覺得有點可惜啦。</b>」'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-bonus3-notes.html#sec-verify" style="color:var(--teal)">筆記 7：驗收，兩相比對</a>'}]}
+    ]
+  },
+
+  prompt: {
+    key:'prompt', color:'var(--purple)', emoji:'🎨', code:'CHAPTER 03', title:'提示詞要寫到版型與配色',
+    intro:'這一章是整堂技術含量最高的地方，也是前後兩個實作的橋樑。它回答一個很多人卡很久的問題：為什麼我照同一段提示詞做，每次跑出來的樣子都不一樣？',
+    topics:[
+      {t:'細節度：寫到色碼那麼細', s:'不是誇飾，是真的寫色碼｜錄影 45:49–46:15', blocks:[
+        {h:'他的說法',p:'「<b>假如我們在提示詞裡頭要求到配色、要求到版型、要求到裡頭所有的配件，講清楚的話，他做出來就可以盡可能會達到一致。</b>」他把這叫做「提示詞的細節度的要求」。'},
+        {h:'他真的寫到這麼細',ul:[
+          '<b>配色：</b>頁面背景 #090D13、卡片背景 #101B2B、卡片邊框 #293E57、上漲買超 #FF6671、下跌賣超 #53D889',
+          '<b>字體：</b>繁體中文採 Noto Sans TC 或 Microsoft JhengHei，數值用等寬數字',
+          '<b>造型：</b>卡片細邊框、約 8 到 12px 圓角，標題左側用藍色編號標籤 01 到 18',
+          '<b>版面：</b>桌面匯出 1672 × 942，PNG 優先輸出 3344 × 1884']},
+        {h:'實機畫面',shot:{img:'s3-bonus3-img/10-prompt-colors.jpg',cap:'記事本裡的提示詞，整段都在指定色碼。整份 4,725 字。［50:20］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-bonus3-notes.html#sec-prompt" style="color:var(--purple)">筆記 9：提示詞要寫到版型與配色</a>'}]},
+
+      {t:'一句「注意」，把範例圖釘死', s:'這招最好偷｜錄影 46:33–48:00', blocks:[
+        {h:'光寫字還不夠',p:'第二招是在提示詞加一段注意事項，把資料來源裡的那張<b>範例圖</b>變成視覺標準答案。'},
+        {h:'那句話長這樣',prompt:'注意<br>版型、所有內容及配色請參考資料來源中的檔案'},
+        {h:'為什麼有效',tip:'他的原話：「<b>我們就不用依賴平臺的能力幫我畫出那樣的圖表，而是根據提醒他的部分，他去學習。</b>」<br>換句話說，<b>不要祈禱模型今天狀態好，給它一張圖照抄。</b>'},
+        {h:'一個小技巧',p:'把範例檔的<b>檔名直接改成「版型」</b>，提示詞就好寫了，直接寫「請參考資料來源中的版型」。'},
+        {h:'位置也有講究',warn:'他順帶講了一條原則：「<b>提示詞裡頭在最後或最上面是最強的。</b>」所以這句注意要放頭或放尾，不要埋在中間。'},
+        {h:'這招不只用在股票',tip:'任何「我要它每次都長一樣」的需求都適用：圖卡、手冊、教案、簽呈、電子報版型。<b>備一份範例檔放資料來源，加這句注意。</b>'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-bonus3-notes.html#sec-prompt" style="color:var(--purple)">筆記 9：把範例釘死</a>'}]},
+
+      {t:'兩句話治 AI 的偷懶與幻覺', s:'交付要求那一節｜提示詞第十一、十二節', blocks:[
+        {h:'第一句：治偷懶',prompt:'不要只提供程式碼或描述「可以製作」；工具具備且資料足夠時，應完成實際檔案。'},
+        {h:'第二句：治幻覺',prompt:'沒有足夠真實資料，就不做看起來像真的分析。'},
+        {h:'還有一張驗收清單',p:'提示詞裡直接寫死了下載前要檢查什麼：<b>檔案存在、可開啟、中文字正常、資料日期正確、圖例完整、浮水印存在。</b>'},
+        {h:'怎麼用在自己身上',tip:'這兩句跟股票一點關係都沒有，<b>任何要 AI 產出檔案的提示詞都可以照抄</b>。第一句讓它別只給你「你可以這樣做」，第二句讓它在資料不夠時老實說，而不是編一份看起來很專業的東西給妳。'},
+        {h:'實機畫面',shot:{img:'s3-bonus3-img/11-prompt-delivery.jpg',cap:'提示詞的最後兩節：交付要求與回應方式。［46:30］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-bonus3-notes.html#sec-prompt" style="color:var(--purple)">筆記 9：連交付標準都寫進去</a>'}]},
+
+      {t:'提示詞不變，平台進步你就白賺', s:'他講了兩次的話｜錄影 34:50 · 108:08', blocks:[
+        {h:'原話',p:'「<b>你的提示詞不變，但是因為平臺的進步而讓你的結果會更加的棒。所以提示詞還是重要的。</b>」'},
+        {h:'他拿什麼佐證',p:'他說同一份提示詞在 GPT-5.5 大概做不出 18 格這種精準度，到了 GPT-6 Astra 就做得出來。<b>提示詞沒改，是平台變強了。</b>'},
+        {h:'這條的實務意義',tip:'不要一直追新工具、追新功能。<b>把提示詞寫扎實，它會隨著平台一起升級。</b>這是把時間投在會複利的地方。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-bonus3-notes.html#sec-prompt" style="color:var(--purple)">筆記 9：平台進步的紅利</a>'}]}
+    ]
+  },
+
+  stock: {
+    key:'stock', color:'var(--amber)', emoji:'📊', code:'CHAPTER 04', title:'台股 18 格儀表板專案',
+    intro:'同一個動作，換一個最硬的題目。這一章有三件事值得看：怎麼弄到免費的真實資料、輸入格式的眉角，以及他怎麼一步步把這個專案磨出來。最後他還誠實比較了專案版與程式版哪個準。',
+    topics:[
+      {t:'先去 FinMind 申請免費 API Token', s:'資料從哪裡來｜錄影 40:47–42:30', blocks:[
+        {h:'為什麼不直接連證交所',p:'「直接去連結給他用臺灣證券交易所抓，有時候抓不到。<b>所以用 FinMind 來做，其實效果會比較好。</b>」提示詞的設計是 TWSE 優先、FinMind 備援。'},
+        {h:'怎麼拿',steps:[
+          '到 FinMind 按登入／註冊，可以用 Google 帳號直接進去',
+          '登入後「就會莫名其妙給你一個 Token」，一長串，複製起來',
+          '<b>存檔留著</b>，他說「以後都用得到」']},
+        {h:'不用錢',p:'他說「這不用收錢的」。免費額度他口述是「每小時⋯6000 個，基本上還夠」（這句辨識不清，單位存疑，照實記錄不補）。'},
+        {h:'一個很實際的建議',tip:'<b>不要一直查。</b>「因為那張表你可能幾個鐘頭才需要畫一次。」被鎖了就過一兩個鐘頭再畫，不要一直按重試。'},
+        {h:'安全提醒',warn:'Token 是憑證。<b>貼在對話框裡就好，不要寫進提示詞檔案、不要放進會分享出去的 HTML。</b>他自己的提示詞第一節就寫明了這件事，但他示範時不小心把整串 Token 秀在螢幕上了。'},
+        {h:'實機畫面',shot:{img:'s3-bonus3-img/09-finmind-api.jpg',cap:'FinMind 的 API 使用說明。價量用 TaiwanStockPrice，法人用 TaiwanStockInstitutionalInvestorsBuySell。［42:01］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-bonus3-notes.html#sec-stock" style="color:var(--amber)">筆記 10：台股 18 格儀表板專案</a>'}]},
+
+      {t:'輸入格式：不是只丟代號', s:'丟錯它會畫一張示意圖騙你｜錄影 51:06–52:30', blocks:[
+        {h:'他先警告',warn:'「<b>抱歉，你這樣 run 一定會有問題的。</b>」沒給 Token，它抓到的都是空的，只會畫一張<b>示意圖</b>給你，看起來像真的。'},
+        {h:'正確的輸入',prompt:'8358 金居<br>FinMind API Key：（貼上你自己的 Token）'},
+        {h:'三個要點',ul:[
+          '<b>代號加空格加名稱</b>，兩個都要給',
+          '<b>附上你自己的 API Key</b>，他強調「貼你的喔，不要用益師傅的」',
+          '<b>模型一定要選 GPT-6 Astra</b>，他說「你沒有用 GPT-6 的 Astra 跑起來，就是怪怪的」，還建議把推理強度開到最高']},
+        {h:'先把 ECF 換成你的名字',p:'貼提示詞之前，用記事本的取代功能把所有 <b>ECF</b> 換掉。他現場示範換成「一定賺」，還自嘲「一定賺分析很好嘛，對不對」。'},
+        {h:'實機畫面',shot:{img:'s3-bonus3-img/12-replace-ecf.jpg',cap:'用記事本的尋找取代把 ECF 換成「一定賺」。這一幕他開的是程式原始碼，貼提示詞之前也要做同一件事。［82:37］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-bonus3-notes.html#sec-stock" style="color:var(--amber)">筆記 10：輸入格式不是只丟代號</a>'}]},
+
+      {t:'他怎麼一步步磨出這個專案', s:'全堂最有價值的一段｜錄影 58:40–61:10', blocks:[
+        {h:'有人問他怎麼做的',p:'他的回答是「我不相信這樣講一講就懂了啦」，然後把自己的對話紀錄整個打開給大家看。<b>這一段看的不是成品，是過程。</b>'},
+        {h:'他的五個回合',steps:[
+          '<b>先給舊提示詞</b>，拿以前那支個股分析請 AI 先做一次',
+          '<b>不滿意就給一張目標圖：</b>「我要的是這張圖表」。他說「做這樣就是 Bingo 了」',
+          '<b>要真資料：</b>發現內容是抄來的、是空的，就一步步確認「我要有實際的資料，日期應該這樣子」',
+          '<b>要求串接 FinMind</b>，把資料來源定死',
+          '<b>加上浮水印</b>']},
+        {h:'關鍵在第二步',tip:'他自己點破：「<b>關鍵是我原本用舊的提示詞給了他，但是我又給他一個新的表格，他從這裡頭去幫我做。</b>」<br><b>舊提示詞負責邏輯，新範例圖負責外觀，兩個分開餵，就不用重寫幾千字。</b>這跟第三章那句「請參考資料來源中的檔案」是同一個道理。'},
+        {h:'為什麼加浮水印',p:'程式會流傳出去，訂閱制的東西如果別人也能用，對付錢的人不公平。但他馬上補一句：「<b>可是我把程式碼給你們了，換句話說，你就有能力可以改成不要 ECF。</b>」'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-bonus3-notes.html#sec-howmade" style="color:var(--amber)">筆記 11：他怎麼一步步磨出來</a>'}]},
+
+      {t:'專案版 vs 獨立程式版，哪個準', s:'他給得最誠實的一段｜錄影 54:00 · 96:03 · 107:07', blocks:[
+        {h:'結論先講',p:'「<b>寫成程式的準確性會比你在所謂的 ChatGPT 裡頭專案會來得更加準確。</b>」同一個意思他在問答時又講了一次。'},
+        {h:'三個版本的差別',table:{head:['版本','優點','限制'],rows:[
+          ['<b>ChatGPT 專案版</b>','不用寫程式，人人可做；在專案裡能畫成這樣他說「算是很誇張」','沒那麼好看；只能用基本繪圖能力；<b>常常抓不到資料</b>'],
+          ['<b>ChatGPT 程式版</b>','準確度高、可下載 PNG','對比色比較柔和；不是單一檔案，是 HTML 加 CSS 的包覆檔'],
+          ['<b>Claude 程式版</b>','介面漂亮、多了四個任務分頁、<b>單一檔案好發</b>，只有 101 KB','這支就是最後發給大家的']]}},
+        {h:'但程式版有代價',warn:'「你不是在 ChatGPT 的平臺裡頭，所以你所有的 API 要用或使用上⋯⋯用 OpenAI 要錢，不用錢用 Groq API 的話，不用錢但是它有流量的限制。」'},
+        {h:'實機畫面',shot:{img:'s3-bonus3-img/13-dashboard-in-project.jpg',cap:'專案版畫出來的 18 格。他說「沒有 Claude 的漂亮，但是在專案裡頭可以做這樣已經算是很誇張了」。［96:14］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-bonus3-notes.html#sec-compare" style="color:var(--amber)">筆記 12：專案版 vs 獨立程式版</a>'}]},
+
+      {t:'他當場驗了數字', s:'很多人不會做的那一步｜錄影 69:19', blocks:[
+        {h:'他做了什麼',p:'打開自己的下單軟體，把盤後<b>三大法人</b>的數字跟程式抓的對一遍。對完說「真的啊，這數字一模一樣啊，我檢查過了，這寫的有夠準的」。'},
+        {h:'他的結論',tip:'「<b>每個人都會做，但是做出來要數據準才有用啊。</b>」'},
+        {h:'他也誠實標出哪個是假的',warn:'他另外有一支 4.83 MB、4,953 行的「互動式網頁」，看起來很像能用。他主動說破：<b>「這個程式裡頭是空殼，它實際上是不能用的。」</b>只能查 2330，是做來展示用的。'},
+        {h:'防呆寫在圖上',p:'成品的每一格都標了界線：綜合評分旁寫「規則映射度｜非勝率」、熱區圖寫「非逐筆成交分布」、多空能量條寫「非預測」。<b>這些不是裝飾，是提示詞裡強制要求的。</b>'},
+        {h:'實機畫面',shot:{img:'s3-bonus3-img/14-dashboard-standalone.jpg',cap:'獨立程式版的 18 格，6226 光鼎，抓到 2026/09/18 收盤。注意每一格的防呆標註。［62:01］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-bonus3-notes.html#sec-compare" style="color:var(--amber)">筆記 12：他當場驗了數字</a>'}]}
+    ]
+  },
+
+  deploy: {
+    key:'deploy', color:'var(--rose)', emoji:'🌐', code:'CHAPTER 05', title:'布網、除錯與心法',
+    intro:'做好的東西要讓人在手機上點得到，才算完成。這一章有兩種布網方式、一次真實的失敗，以及他最後花十分鐘談的那個沒有標準答案的問題。',
+    topics:[
+      {t:'布網法一：Codex 加 @Sites', s:'最省事的做法｜錄影 75:09–77:45', blocks:[
+        {h:'他實際下的指令',prompt:'請將上傳的檔案幫我做布網的動作並且權限打開。<br>網址必須要有 ECF 這三個字的字眼。'},
+        {h:'三個一定要注意的地方',ul:[
+          '<b>一定要指定 @Sites。</b>他提醒「你不用寫這個 Sites 的時候，它會用別的布網的工具」。',
+          '<b>一定要說「全線打開」。</b>不打開存取權的話，「連你自己登錄使用的時候，他都要用 ChatGPT 登錄的方式才可以」。',
+          '<b>網址可以指定關鍵字。</b>他要求網址要有 ECF，所以他的網址才會長出那三個字。']},
+        {h:'實機畫面',shot:{img:'s3-bonus3-img/16-codex-deploy-prompt.jpg',cap:'Codex 裡的布網指令。上半部是提示詞的「先確認工具與資料」一節，裡面寫著「不得宣稱已執行未執行的請求、計算、下載或部署」。［113:05］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-bonus3-notes.html#sec-deploy" style="color:var(--rose)">筆記 13：布網三法</a>'}]},
+
+      {t:'布網法二：Site.new 整頁嵌入', s:'給沒有 Codex 的人｜錄影 78:34–85:00', blocks:[
+        {h:'操作順序',steps:[
+          '網址列直接打 <b>site.new</b> 開一個新的 Google Sites',
+          '右側切到<b>頁面</b> → 下方按加號 → 選<b>整頁嵌入</b> → 給個英文名字 → 完成',
+          '點「新增整頁嵌入內容」→ 選<b>嵌入程式碼</b>（不是網址）',
+          '用<b>記事本</b>開啟你的 HTML，Ctrl + A 全選、Ctrl + C 複製，貼進去',
+          '<b>確認預覽有出來</b>，再按插入',
+          '把這個頁面<b>拖到首頁上面</b>讓它變首頁，然後按發布']},
+        {h:'第五步是檢查點',warn:'他特別強調預覽這一步：「<b>這個一定要有。假如這個預覽頁面沒有，這代表你 Copy 出了問題。</b>」'},
+        {h:'實機畫面',shot:{img:'s3-bonus3-img/17-sites-embed.jpg',cap:'Google Sites 的「嵌入全新整頁內容」對話框。［82:01］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-bonus3-notes.html#sec-deploy" style="color:var(--rose)">筆記 13：Site.new 整頁嵌入</a>'}]},
+
+      {t:'它當場失敗了，然後他示範怎麼除錯', s:'這一段最值得慢慢看｜錄影 86:00–89:23', blocks:[
+        {h:'發生什麼事',p:'發布成功、網頁打開了，輸入 2360 按分析，卻跳出<b>「無法取得 2360 的真實交易資料」</b>，錯誤是 <code>Unexpected token \'&lt;\'</code>。他的判斷：「可能是 CORS 的部分把它給攔截掉」、「Google 這邊不允許你做這樣的動作」。'},
+        {h:'他的除錯順序',steps:[
+          '<b>先確認範圍：</b>連原本的程式單獨跑也不行，所以不是 Sites 獨有的問題',
+          '<b>換一個已知可用的版本試：</b>拿出那支 101 KB 的 Claude 版請大家試，成功了',
+          '<b>回頭找真正原因：</b>剛剛那支 4.83 MB 的是互動式網頁，不是原本的程式']},
+        {h:'教學價值在這裡',tip:'重點不是 Google Sites，是這個<b>排錯順序</b>：先確認範圍，再換一個已知可用的版本，最後回頭找出自己拿錯檔案。<br>他的原話是「<b>那個程式才是正常的程式啦</b>」。'},
+        {h:'實機畫面',shot:{img:'s3-bonus3-img/18-sites-cors-fail.jpg',cap:'發布後抓不到資料的實況。畫面上還能看到系統誠實列出「依系統規範，本次不產生任何模擬股價、模擬法人數字」。［86:22］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-bonus3-notes.html#sec-deploy" style="color:var(--rose)">筆記 13：當場被擋下來的那一次</a>'}]},
+
+      {t:'WASM Skill：防君子，不防小人', s:'他自己取的名字｜錄影 113:35–115:18', blocks:[
+        {h:'它做什麼',p:'布網之後，別人把你的網頁原始碼抓下來，會看到裡面的東西是<b>被包覆過的</b>。'},
+        {h:'它不做什麼',tip:'他講得很清楚，沒有誇大：「<b>它其實是一種防君子的做法，並不是防小人。</b>」下一句是「要直接去解開，不是沒有辦法，還是有辦法，但是需要一點時間」。'},
+        {h:'怎麼用',p:'把 <code>WASM-Skill.md</code> 上傳給 Codex 或 Claude Code，跟它說「把這個變成我的 Skill」，之後布網時直接說「用 WASM 網頁加密」。'},
+        {h:'他預告了下一堂',p:'「<b>下次的課程我會教大家如何做網頁的布網跟加密的部分。</b>」這次時間不夠。'},
+        {h:'裝之前先做一件事',warn:'任何要裝進電腦的 Skill 都是給 AI 照做的指令，可能夾帶把使用紀錄送到外部網址的行為。這支是老師自己寫的、來源明確，風險低，但習慣要養成：<b>裝之前先整包看過一遍，找有沒有連外回傳。</b>'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-bonus3-notes.html#sec-wasm" style="color:var(--rose)">筆記 14：WASM Skill</a>'}]},
+
+      {t:'參照學習到底算不算侵權', s:'他沒有給標準答案｜錄影 119:20–128:00', blocks:[
+        {h:'他丟出的問題',p:'如果別人的東西不是放在 GitHub 上分享的，只是一支影片、一篇文章，我們用 NotebookLM 把它做成自己的心得、做成 15 頁簡報，<b>這算不算侵權？</b>他自己先承認：「不 OK，可是我們卻一直在做這個事情，對不對？很難認定吧？」'},
+        {h:'他戳破一個常見說法',warn:'有人回「沒有商用就沒事」，他當場反駁：<b>「這句話有問題啦。」</b>他也點出真正的雙標：「我們卻可以允許自己去讀別人資料，但是卻不能允許別人來用我們的資料。」'},
+        {h:'他給的實務界線',tip:'「<b>學習可以這麼做啦，你自己學習 OK，但是假如你要發表文章的時候，稍微去留意，稍微去小心一下。</b>」<br>分界是<b>自用與發表</b>。能標註來源當然最好。'},
+        {h:'一個殘酷的提醒',p:'有人說「抄的人永遠看到車尾燈」，他說不一定，<b>要看抄的人是誰</b>。如果抄的人名聲比較大，大家反而會以為原創是他。「就是話語權啦，誰說了算。」那怎麼辦？「你覺得不公平，那就搶回來吧。因為人家看不到你，你就想辦法讓人家看得到你吧。」'},
+        {h:'他最後給的解法',p:'「<b>盡量自己做，別人抄到就是你舊的資料，永遠都是最舊的資料。</b>」不是鼓勵被抄，是你走在前端，被拿走的永遠是上一版。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-bonus3-notes.html#sec-ethics" style="color:var(--rose)">筆記 16：參照學習的灰色地帶</a>'}]}
+    ]
+  }
+}
+;
+
+
+const ORDER = ['reuse', 'build', 'prompt', 'stock', 'deploy'];
+const $ = s=>document.querySelector(s);
+function renderChapter(ch){
+  const d=DATA[ch];const next=ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];const prev=ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html=`<div class="chapter-head"><span class="emoji">${d.emoji}</span><div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div></div>`;
+  d.topics.forEach((tp,i)=>{const id=`${ch}-${i}`;
+    html+=`<div class="topic" id="topic-${id}"><div class="topic-head" onclick="toggleTopic('${id}')"><span class="num">${i+1}</span><h4>${tp.t}<small>${tp.s}</small></h4><input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)"><span class="chev">▶</span></div><div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{html+=`<div class="block"><h5>${b.h}</h5>`;
+      if(b.p)html+=`<p>${b.p}</p>`;
+      if(b.ul)html+=`<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps)html+=`<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.table)html+=`<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.prompt)html+=`<div class="promptbox">${b.prompt}</div>`;
+      if(b.shot)html+=`<figure class="shot"><img src="${b.shot.img}" alt="" loading="lazy"><figcaption>${b.shot.cap}</figcaption></figure>`;
+      if(b.tip)html+=`<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn)html+=`<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html+=`</div>`;});
+    html+=`</div></div></div>`;});
+  html+=`<div class="chapnav"><a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a><a onclick="showHome()" style="text-align:center">回總覽<b>🏠 五大主題</b></a><a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a></div>`;
+  $('#view-'+ch).innerHTML=html;
+}
+ORDER.forEach(renderChapter);
+function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('#view-'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function showHome(){switchView('home');$('#crumbs').style.display='none';clearSearch();}
+function showChapter(ch){switchView(ch);$('#crumbs').style.display='flex';$('#crumbHere').textContent=`${DATA[ch].emoji} ${DATA[ch].title}`;clearSearch();syncChecks();}
+function toggleTopic(id){$('#topic-'+id).classList.toggle('open');}
+function openTopic(ch,i){showChapter(ch);const el=$('#topic-'+ch+'-'+i);el.classList.add('open');setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+const KEY='ecf-s3bonus3-skills-v1';
+const store=()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){const s=store();if(val)s[id]=1;else delete s[id];localStorage.setItem(KEY,JSON.stringify(s));updateProgress();}
+const TOTAL=ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){const done=Object.keys(store()).length;const pct=Math.round(done/TOTAL*100);$('#progFill').style.width=pct+'%';$('#progText').textContent=`${done} / ${TOTAL} 項技能已掌握`;$('#statDone').textContent=done;$('#statPct').textContent=pct+'%';ORDER.forEach(ch=>{const sub=DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;const el=document.querySelector(`[data-mini="${ch}"]`);if(el)el.style.width=Math.round(sub/DATA[ch].topics.length*100)+'%';});}
+function syncChecks(){const s=store();document.querySelectorAll('input[data-skill]').forEach(cb=>{cb.checked=!!s[cb.dataset.skill];});}
+function resetProgress(){if(confirm('確定要清空所有打勾進度嗎？')){localStorage.removeItem(KEY);syncChecks();updateProgress();}}
+function stripTags(s){return s.replace(/<[^>]+>/g,'');}
+const INDEX=[];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{let body=tp.s+' ';tp.blocks.forEach(b=>{if(b.p)body+=stripTags(b.p)+' ';if(b.ul)body+=b.ul.map(stripTags).join(' ')+' ';if(b.steps)body+=b.steps.map(stripTags).join(' ')+' ';if(b.tip)body+=stripTags(b.tip)+' ';if(b.warn)body+=stripTags(b.warn)+' ';if(b.prompt)body+=stripTags(b.prompt)+' ';if(b.table)body+=b.table.rows.flat().map(stripTags).join(' ')+' ';});INDEX.push({ch,i,title:tp.t,body});}));
+$('#searchInput').addEventListener('input',e=>{const q=e.target.value.trim();const box=$('#searchResults');if(!q){box.classList.remove('show');box.innerHTML='';return;}const hits=INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));box.classList.add('show');if(!hits.length){box.innerHTML=`<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：專案、寶石、注意、FinMind、布網、CORS、WASM、浮水印）</div>`;return;}const hl=s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);box.innerHTML=hits.map(x=>{const pos=x.body.toLowerCase().indexOf(q.toLowerCase());const snip=x.body.substr(Math.max(0,pos-20),90);return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})"><div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div><h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;}).join('');});
+function clearSearch(){$('#searchInput').value='';$('#searchResults').classList.remove('show');$('#searchResults').innerHTML='';}
+syncChecks();updateProgress();
+
+</script>
+</body>
+</html>
+
+</body>
+</html>

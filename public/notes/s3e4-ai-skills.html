@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>把你會的東西，變成帶得走的專業｜ECF 第三季第四堂 互動式學習地圖</title>
+<meta name="description" content="ECF 訂閱制第三季第四堂（益師傅＋客座講師邱奕霖，2026/08/28）互動式學習地圖：五大主題 21 項實戰技能，涵蓋學習焦慮的三個卡點與三個解法、把 AI 當 24 小時教練、用九宮格把只在腦袋裡的經驗變成帶得走的專業、問題與達人與書籍三份清單、以出書為終點回推、不要照單全收 AI 生圖的辨識度問題、萬用圖解筆記框架與圖轉文、40 萬字 AI 日記系統與 NotebookLM 案例庫，以及益師傅四支自製工具與三次現場出錯的處理方法。學會一項打一個勾，進度存在自己的瀏覽器。">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269;
+  --green:#3f8560; --orange:#bf6a1e; --red:#c0453f; --teal:#0d8f80; --amber:#9c7b23; --rose:#b5476a;
+  --feat:#3B6B8F; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(28px,4.6vw,46px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--txt);background:none;-webkit-text-fill-color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:680px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:9px}
+.steps li{list-style:none;counter-increment:st;display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--txt2);line-height:1.7}
+.steps li::before{content:counter(st);flex:none;width:25px;height:25px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:var(--c,var(--feat));margin-top:1px}
+.steps li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+.prompt,.promptbox{background:#1d1d1f;border:1px solid #2c2c31;border-radius:10px;padding:13px 15px;margin-top:6px;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt b,.promptbox b{color:#fff}
+figure.shot{margin:10px 0 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12px;color:var(--txt3);padding:8px 12px;border-top:1px solid var(--line);background:var(--bg2);line-height:1.6}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <a class="navlink" href="../radio/#ecf" style="border-color:#c1d3e0" onclick="if(history.length>1){history.back();return false}">← 回上一頁</a>
+  <div class="logo">
+    <div class="dot">🎨</div>
+    <div>帶得走的專業 地圖<small>SUBSCRIPTION S3 · EP4</small></div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋技能關鍵字：學習焦慮、輸出100次、問題清單、九宮格、案例、出書回推、火柴人、萬用筆記、圖轉文、日記、NotebookLM、PDF切割、星脈圖譜、Ollama、出錯…" autocomplete="off">
+  </div>
+  <a class="navlink" href="s3e4-notes.html">📝 課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">ECF 第三季第四堂 · 訂閱制 · 2026/08/28</span>
+  <h1>把你會的東西<br>變成帶得走的專業</h1>
+  <p class="sub">這一堂分成很不一樣的兩半。前半是客座講師<b>邱奕霖（圖解力教練）</b>，講<b>怎麼把腦袋裡的經驗變成別人看得見、你自己帶得走的專業</b>；後半是<b>益師傅</b>四支自製工具的實作，講<b>怎麼把想法變成真的跑得動的東西</b>。<br>兩個人其實在回答同一個問題：<b>AI 讓所有人的產出都變得很像，那你剩下什麼？</b>邱奕霖的答案是「你的故事、你的案例、你的視覺辨識度」；益師傅的答案是「持續交付，而且交付得出來」。<br><b>🔒 這一堂因為有邀約講師，老師在課堂上兩次要求不得外流並請學員宣誓。這頁的網址請不要轉給別人，內容也不要複製到公開平台。</b><br>點進每一章，逐層展開<b>本堂實際教到</b>的觀念與操作，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🎙️ 生成式AI應用電台・訂閱制第三季</span>
+    <span>👤 益師傅（楊俊益・ECF）</span>
+    <span>🎤 客座：邱奕霖（圖解力教練）</span>
+    <span>⏱️ 全長 2 小時 34 分</span>
+    <span>🔒 受保護課程・請勿轉發</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>5</b><span>大主題</span></div>
+  <div class="stat"><b>21</b><span>實戰技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 21 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--purple)" onclick="showChapter('anxiety')">
+        <div class="glowline"></div><span class="emoji">🎯</span>
+        <h3><em>CHAPTER 01</em>焦慮的三個卡點與三個解法</h3>
+        <p>為什麼越學越焦慮、鎖定一個主題輸出 100 次、收集問題然後回答，以及把 AI 當 24 小時教練。</p>
+        <div class="foot"><div class="mini"><i data-mini="anxiety"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--blue)" onclick="showChapter('grid')">
+        <div class="glowline"></div><span class="emoji">🗂️</span>
+        <h3><em>CHAPTER 02</em>九宮格：把經驗變成專業</h3>
+        <p>年資不等於專業的痛點故事、一張九宮格拆八個面向、三份清單與唯一 AI 補不上的那一格，以及以出書為終點回推。</p>
+        <div class="foot"><div class="mini"><i data-mini="grid"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--amber)" onclick="showChapter('visual')">
+        <div class="glowline"></div><span class="emoji">🎨</span>
+        <h3><em>CHAPTER 03</em>辨識度：圖解、興趣與標籤</h3>
+        <p>不要照單全收 AI 生的圖、火柴人為什麼比 AI 生圖有效、萬用筆記三元素、圖轉文的順序，以及固定配色與 IP。</p>
+        <div class="foot"><div class="mini"><i data-mini="visual"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--rose)" onclick="showChapter('diary')">
+        <div class="glowline"></div><span class="emoji">📔</span>
+        <h3><em>CHAPTER 04</em>40 萬字的 AI 日記系統</h3>
+        <p>日記要寫的四個面向、每天五分鐘語音輸入的做法、把 40 萬字丟進 NotebookLM 變成案例庫，以及未來日記。</p>
+        <div class="foot"><div class="mini"><i data-mini="diary"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--teal)" onclick="showChapter('tools')">
+        <div class="glowline"></div><span class="emoji">🛠️</span>
+        <h3><em>CHAPTER 05</em>益師傅：四支工具與開發現場</h3>
+        <p>他對「經歷過就好」的不同意見、PDF 切割的邊界、消費族群分析儀、星脈圖譜為什麼要分六種模式，以及三次出錯怎麼處理。</p>
+        <div class="foot"><div class="mini"><i data-mini="tools"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-anxiety" class="view" style="--c:var(--purple)"></section>
+  <section id="view-grid" class="view" style="--c:var(--blue)"></section>
+  <section id="view-visual" class="view" style="--c:var(--amber)"></section>
+  <section id="view-diary" class="view" style="--c:var(--rose)"></section>
+  <section id="view-tools" class="view" style="--c:var(--teal)"></section>
+</main>
+
+<footer>
+  本頁為訂閱制第三季 第四堂「把你會的東西變成帶得走的專業」課後整理・🔒 受保護課程，僅供個人研習回顧，請勿轉發・介面沿用本站互動式學習地圖版型<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2026｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+const DATA = {
+  anxiety: {
+    key:'anxiety', color:'var(--purple)', emoji:'🎯', code:'CHAPTER 01', title:'焦慮的三個卡點與三個解法',
+    intro:'邱奕霖開場先做了一個投票：AI 時代你的學習焦慮是變多還是變少？當天答「變多」的明顯比較多。他沒有安慰大家，而是直接拆出三個卡點，再給三個他自己走過的解法。這三個解法都有一個共同點：用一個具體任務把注意力從焦慮上移開。',
+    topics:[
+      {t:'三個卡點，會滾成惡性循環', s:'先看清楚自己卡在哪｜03:10–13:50', blocks:[
+        {h:'卡點一：拼命輸入，沒有輸出',p:'或者把輸出直接外包給 AI，「你幫我來做心得，你來幫我做我的專欄的內容。<b>但過程中是完全沒有思考的</b>」。'},
+        {h:'卡點二：知道很多，但沒有實作',p:'「願意花時間去把這些知識實作、應用在真實場景中，真的來解決自己的問題或是解決別人的問題，<b>這個其實比例非常非常低</b>。」'},
+        {h:'卡點三：沒有立即反饋',p:'玩遊戲有經驗值有等級，「但是在學習的路上它是<b>無形的，是看不見的</b>」，所以容易覺得停滯不前。'},
+        {h:'為什麼會越學越焦慮',warn:'三個卡點會滾成惡性循環：因為焦慮所以買更多課、看更多書、聽更多分享，「<b>就一直輸入一直輸入，但反而會更加焦慮</b>」。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3e4-notes.html#sec-anxiety" style="color:var(--purple)">筆記 3：學習焦慮的三個卡點</a>'}]},
+
+      {t:'解法一：鎖定一個主題，輸出 100 次', s:'他 2019 年做的事｜03:10–13:50', blocks:[
+        {h:'他的起點',p:'2016 年他才知道有「視覺紀錄師」這個職業，知道之後很開心，但<b>更焦慮</b>，於是拼命看書。'},
+        {h:'2019 年他決定給自己一個任務',p:'挑戰一年看 <b>100 本書、畫 100 張圖解筆記</b>。大約兩三天一本，年底畫了 100 多張。'},
+        {h:'發生了什麼',ul:[
+          '<b>焦慮消失了。</b>「我發現我不太焦慮了，因為我就給自己一個任務⋯⋯<b>我其實根本沒有時間在焦慮</b>」，注意力從焦慮轉成「怎麼找下一本書、快速完成」',
+          '<b>能力快速成長</b>，因為應用了 100 次',
+          '<b>對外形成門檻。</b>「當你完成這件事情之後，對一般人來說，他會覺得有一個專業的門檻」']},
+        {h:'形式不限',tip:'短影音、文章、圖卡、筆記都可以，<b>重點是鎖定一個主題輸出 100 次</b>。不是輸出 100 篇不相干的東西。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3e4-notes.html#sec-anxiety" style="color:var(--purple)">筆記 3：挑戰輸出 100 次</a>'}]},
+
+      {t:'解法二：收集問題，然後回答', s:'8 萬字是怎麼來的｜2020 年', blocks:[
+        {h:'他做了什麼',p:'2020 年建了一個 <b>Google 表單</b>，收集大家對圖解應用的問題。'},
+        {h:'為什麼有效',p:'「當我收集了大家的問題，<b>我不可能全都會</b>。為了要回答大家問題的時候，我就要主動去找答案。<b>這時候我也沒有時間焦慮。</b>」'},
+        {h:'成果',ul:[
+          '收集了 <b>200 多個問題</b>，回答其中 <b>60 個</b>',
+          '用電子報寫成 60 篇文章，累積約 <b>8 萬字</b>',
+          '後來出版社私訊問他有沒有出書打算，<b>他敢答應</b>']},
+        {h:'關鍵在最後這句',tip:'「如果我沒有累積這些回答問題的素材，今天就算出版社問我有沒有出書的計畫，<b>我其實也不太敢答應，因為完全是零、一個字都沒有</b>，要無中生有，這挑戰其實蠻大的。」<br><br>機會來的時候，能不能接，取決於你手上已經有什麼。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3e4-notes.html#sec-anxiety" style="color:var(--purple)">筆記 3：收集問題然後回答</a>'}]},
+
+      {t:'解法三：社群，以及把 AI 當 24 小時教練', s:'兩種反饋來源｜13:50–16:00', blocks:[
+        {h:'社群解決的是「獨自學很孤單」',ul:[
+          '2019 年畫 100 張筆記的同時就<b>創了社群</b>，持續分享',
+          '留言、按讚、互動變成<b>回饋來源</b>',
+          '有了社群才能發表單收問題，形成循環']},
+        {h:'一個他沒想到的好處',tip:'「<b>你永遠不知道誰在裡面潛水。</b>我永遠也不知道有這麼多出版社的總編輯加入到這社群裡面，平常都潛水，也不會互動。但某一天它就會私訊你說有一些合作的機會。」企業人資主管、學校老師主任也在裡面。<br>關鍵是「持續的分享、持續的回答大家的問題」，<b>建立足夠的信任資本之後，後續的合作是自然而然發生的</b>。'},
+        {h:'AI 教練：他的全馬案例',steps:[
+          '2018 年跑過半馬，之後就沒再跑。2025 年決定挑戰<b>全馬 42 公里</b>',
+          '在 Gemini 開一個專案，叫「<b>健身挑戰每日運動</b>」',
+          '每天跑完就<b>語音輸入心得</b>，貼上 App 的里程數與配速',
+          'AI 以<b>教練的身份</b>回饋這次跑得如何、給建議']},
+        {h:'為什麼這件事有用',p:'「就算加入跑友群，<b>教練也不可能 24 小時立即回饋給我</b>。那我可能就沒有回饋，我就懶惰就放棄了。但是有 AI 之後，我做任何事情他可以<b>立刻</b>給我回饋。」他把回饋分成四種：情緒價值的、實質建設的、專業建議的、策略調整的。'},
+        {h:'結果',p:'「從去年 8 月到現在，不敢說每天都跑，但這個<b>跑步習慣就很神奇的沒有中斷過</b>。」'},
+        {h:'看課堂筆記',p:'👉 <a href="s3e4-notes.html#sec-coach" style="color:var(--purple)">筆記 4：把 AI 當教練</a>'}]}
+    ]
+  },
+
+  grid: {
+    key:'grid', color:'var(--blue)', emoji:'🗂️', code:'CHAPTER 02', title:'九宮格：把經驗變成帶得走的專業',
+    intro:'他的黃金公式是「你 × 專業 × 興趣 × 圖解 × AI」，並且點明：「前面四個很重要，因為 AI 大家都有嘛⋯⋯當我們只有最後一步驟 AI，其實大家是大同小異的。」這一章拆的是「專業」那一格。',
+    topics:[
+      {t:'年資不等於專業：他的痛點故事', s:'三件事讓他發現有問題｜17:04–20:00', blocks:[
+        {h:'背景',p:'創業前他做政府標案與寒暑假營隊，辦過幾十個營隊，但<b>從來沒整理過</b>，「就一直靠我的大腦的直覺或是靠我的記憶去做任何的判斷跟決定」。'},
+        {h:'三件事讓他驚醒',steps:[
+          '主管要他教新人辦營隊，他講了一兩個小時。一週後又來一個新人再講一次，<b>「這禮拜我講的內容好像跟上禮拜不太一樣」</b>，因為全靠回想，不穩定',
+          '新人聽完<b>「其實根本一頭霧水」</b>，反覆回來問，那個下午等於白花',
+          '最震撼：離職後主管問他辦營隊有哪些面向要注意，<b>他答不出來</b>。「我可以跟他說很多我辦營隊很精彩的故事，但是我發現我沒辦法有系統化的跟他說辦營隊到底有哪些面向」']},
+        {h:'他的自白',warn:'「別人看你是有七八年的年資，所以他會以你是專業的來看待你自己。但是<b>我自己內在是覺得其實蠻空虛的</b>，因為那七八年我其實沒有系統化的把我的專業累積出來。」'},
+        {h:'這段值得停下來想',tip:'年資不等於專業。<b>沒有系統化的經驗，換一個地方就帶不走。</b>'},
+        {h:'看課堂筆記',p:'👉 <a href="s3e4-notes.html#sec-grid" style="color:var(--blue)">筆記 6：專業，九宮格</a>'}]},
+
+      {t:'對內九宮格：把一件事拆成八個面向', s:'解法很簡單，是一張圖｜20:00–25:30', blocks:[
+        {h:'以辦營隊為例',p:'中心寫「營隊」，周圍八格：<b>主題企劃、行銷策略、行政庶務、財務管理、人員培訓、器材管理、品牌經營、課程設計</b>。每一格底下再展開細節。'},
+        {h:'三個好處',ul:[
+          '<b>可以有系統地講給別人聽：</b>辦好一個營隊有這八個面向',
+          '<b>可以累積與迭代：</b>「我這次在行銷活動好像做得不錯，我就可以把它加進來⋯⋯我辦 10 個營隊，這個九宮格它會越來越完整」',
+          '<b>可以教別人、開課、出書</b>']},
+        {h:'沒有九宮格會怎樣',warn:'辦 100 個營隊，腦袋裡也只會留下幾個比較有印象的故事，「<b>到底做對了什麼或是哪些是做錯的，你完全不記得</b>」。'},
+        {h:'兩個實務補充',p:'一、格子太小不是問題，「主題企劃可能又可以再拆成八格」，這是<b>一個地圖的概念</b>，細節用 Google 文件串連。<br>二、跟主管談案子時不用做簡報，「我用一個九宮格就可以快速讓他知道詳細內容，<b>然後他會覺得你超專業</b>」。'},
+        {h:'實機畫面',shot:{img:'s3e4-img/02-grid-inner.jpg',cap:'以辦營隊為例的九宮格，中心是「營隊」。［23:01］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3e4-notes.html#sec-grid" style="color:var(--blue)">筆記 6：一張九宮格</a>'}]},
+
+      {t:'三份清單，與唯一 AI 補不上的那一格', s:'對外分享要準備什麼｜25:28–35:50', blocks:[
+        {h:'三份清單',table:{head:['清單','怎麼做、為什麼有效'],rows:[
+          ['<b>問題清單</b>','收集這個主題的 100 個問題並回答。「你能夠回答這 100 個問題，其實你就大幅的進步跟成長了。」<b>他建議從這份開始</b>'],
+          ['<b>達人清單</b>','整理這個領域的達人，不一定要 100 個。他整理了 30 位。效果：「別人在看到你分享的時候，<b>他也會覺得你就是這達人的其中之一</b>」。越冷門越專業的領域效果越好'],
+          ['<b>書籍清單</b>','把知識分成四類：知識理論、態度原則、方法、<b>案例</b>']]}},
+        {h:'四類知識裡，只有一類 AI 找不到',tip:'「AI 可以找到知識理論，也可以找到態度原則，方法論其實也都 OK，<b>但案例是最難找到的。而且這個才是最有說服力的。</b>」<br><br>所以他的建議是：<b>把時間花在累積案例與經驗</b>，不管是自己的，還是你幫助別人解決問題的故事。「這個我覺得是在現在 AI 時代下最大的亮點。」'},
+        {h:'達人清單有個前提',warn:'「我可以直接 AI 快速整理 30 位圖解達人，但是<b>因為我在這個領域持續的分享，我分享出來的才更有說服力</b>。今天隨便一個人說我可以整理 30 位光學設計達人，但他沒有相關的背景跟領域，那個說服力其實是不足的。」'},
+        {h:'最核心的是那個故事',p:'他很喜歡的一句話：「<b>用拯救過你生命的事情來幫助更多人。</b>」他自己的版本：「AI 上網打任何資訊，要找圖解所有訊息都可以⋯⋯<b>但為什麼要聽邱奕霖分享？因為圖解拯救過邱奕霖的人生故事。</b>」'},
+        {h:'實機畫面',shot:{img:'s3e4-img/03-grid-outer.jpg',cap:'對外的九宮格：左欄是知識體系四層（案例經驗、方法論、態度原則、知識理論），右欄是三份清單，中間是你的主題與那個核心故事。［33:01］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3e4-notes.html#sec-lists" style="color:var(--blue)">筆記 7：一個故事與三份清單</a>'}]},
+
+      {t:'以出書為終點回推', s:'避免文章像放煙火一樣不見｜35:10', blocks:[
+        {h:'他的做法很具體',steps:[
+          '在 Google 文件裡<b>先開好書的目錄架構</b>',
+          '「雖然還沒有出版社找我出書，但我就<b>先跟 AI 協作，我先把我的目錄先寫一下</b>」',
+          '之後<b>每寫一篇文章就歸到對應的單元</b>']},
+        {h:'差別在哪',p:'「所以我在職場企業的圖解應用上就會一直累積很多文章，<b>但它不會是破碎的，它都在這個書的架構裡面</b>。今天如果真的有出版社要找我出書，我就直接快速的可以完成。」'},
+        {h:'沒有這個架構的話',warn:'要回頭把散落的文章找出來、排列、篩選，「<b>這時間太漫長，難度也太高了。而且難度太高就不會做</b>」，結果就是「我們分享一大堆的文章，<b>他可能就像放煙火一樣就不見了</b>」。'},
+        {h:'怎麼套到自己身上',tip:'不一定要出書。<b>任何一個「終點」都可以拿來回推</b>：一門課的大綱、一本手冊的目錄、一個系列的章節表。先把架子搭好，之後每篇東西都有地方放。'},
+        {h:'實機畫面',shot:{img:'s3e4-img/04-books.jpg',cap:'「專業的累積，從出書為終點回推最有效」。畫面上是他的三本著作。［35:10］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3e4-notes.html#sec-lists" style="color:var(--blue)">筆記 7：以出書為終點回推</a>'}]}
+    ]
+  },
+
+  visual: {
+    key:'visual', color:'var(--amber)', emoji:'🎨', code:'CHAPTER 03', title:'辨識度：圖解、興趣與視覺標籤',
+    intro:'這一章回答的是「AI 讓所有人的產出都變得很像，那你剩下什麼」。他的答案是視覺辨識度，而且一開場就先潑一盆冷水：不要照單全收 AI 生的圖。',
+    topics:[
+      {t:'先講一個陷阱：不要照單全收 AI 生的圖', s:'這段是整章的前提｜39:34', blocks:[
+        {h:'他說的',warn:'「大部分的 AI 生圖其實比較沒有辨別度，就是沒辦法看出來一看就是誰的筆記。<b>我把名字遮住，換成邱奕霖，好像也沒有違和。</b>那這樣子你累積了一百篇、一千張其實也沒有太大的效果，因為它沒辦法留下一個視覺的辨別度。」'},
+        {h:'他的結論',tip:'門檻消失了沒錯，但「<b>要能夠主動的應用這些圖，我覺得會是關鍵</b>」，而不是下個指令請 AI 把文章變成圖然後照單全收。'},
+        {h:'圖解分兩種，是比重不是對錯',table:{head:['類型','工具','用在哪'],rows:[
+          ['理性','交集圖、矩陣圖、流程圖','大家比較熟悉的那一類'],
+          ['感性','漫畫情境、火柴人','<b>要呈現案例的時候</b>，建議適時搭配一點']]}},
+        {h:'看課堂筆記',p:'👉 <a href="s3e4-notes.html#sec-visual" style="color:var(--amber)">筆記 9：圖解</a>'}]},
+
+      {t:'火柴人：一個字就能畫出所有角色', s:'為什麼推薦極簡畫法｜42:01', blocks:[
+        {h:'做法',p:'頭上寫字就能圖解任何角色；進階把字寫在身體、加表情，再加對話框，<b>就能畫出任何情境</b>。'},
+        {h:'為什麼不用 AI 生圖',tip:'「AI 可以生成很多圖，但<b>生成的圖有時候會變成一種雜訊</b>，因為那個角色就是彩色的，然後他穿什麼服裝、長相⋯⋯會變成太多的干擾。五顏六色的，<b>反而這種精簡的會更有效</b>」，讓人清楚知道角色是誰、有什麼情緒、說什麼話。'},
+        {h:'第二個理由更實際',p:'學會之後，你可以在<b>一張紙、白板或黑板上邊說邊畫</b>做即時溝通。AI 生圖做不到這件事。'},
+        {h:'實機畫面',shot:{img:'s3e4-img/05-stickman.jpg',cap:'頭上寫字就能圖解任何角色；加表情、加對話框，就能畫出任何情境。［42:01］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3e4-notes.html#sec-visual" style="color:var(--amber)">筆記 9：跳棋人</a>'}]},
+
+      {t:'萬用圖解筆記框架：三個元素', s:'聽演講當場畫完，把圖送給講者｜45:01', blocks:[
+        {h:'三個元素',steps:[
+          '<b>一個標題：</b>左上角畫一個火柴人加對話框，寫講者名字與講座主題',
+          '<b>一個架構：</b>中間三個圓圈，寫下三個印象深刻的收穫關鍵字，細節用括號補充在旁邊',
+          '<b>一個結論：</b>右下角畫你自己，寫上名字、表情，用對話框寫今天的心得收穫']},
+        {h:'他建議的用法很妙',tip:'聽演講時當場畫完，<b>把圖送給講者</b>。「對講者來說一定印象很深刻，也會非常開心」，而且講者很可能把你的圖 PO 在他自己的社群，<b>等於讓更多人認識你</b>。「所以我常常說分享學習心得是一個<b>日行多善</b>的事情。」'},
+        {h:'他也用這個架構讀書',p:'「我大概 <b>30 分鐘內就可以快速看完一本書的重點</b>，然後表達出來。不需要從頭看到尾⋯⋯站在知識分享的立場，就是把我自己覺得最有共鳴的分享出來就好。」'},
+        {h:'實機畫面',shot:{img:'s3e4-img/06-note-frame.jpg',cap:'「萬用的圖解筆記架構送給你！」一個標題、一個架構、一個結論。［45:01］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3e4-notes.html#sec-visual" style="color:var(--amber)">筆記 9：萬用筆記框架</a>'}]},
+
+      {t:'圖轉圖、圖轉文，加上你的視覺標籤', s:'把手繪變成可以一直用的資產｜46:30–52:00', blocks:[
+        {h:'他以前的困擾',p:'手繪筆記應用範圍狹隘，掃描放進 PPT 會有陰影，要變成文章還得重新打字。「<b>轉換一旦麻煩，你其實就不會做，不會做呢，你就會累積一大堆筆記，但那些筆記沒有其他用途。</b>」'},
+        {h:'現在的流程是兩段',steps:[
+          '<b>圖轉圖：</b>畫得不工整沒關係，拍照丟給 AI，變成想要的風格',
+          '<b>圖轉文：</b>畫完之後打開 AI，用<b>語音輸入</b>講心得。「畢竟這是我畫的，我總是能說出一些心得」，語音轉成文字，這張筆記就變成文章']},
+        {h:'順序不能顛倒',tip:'「文字有了之後，你要變簡報、要變成圖卡、要變成影片，難度其實都大幅降低了。<b>但關鍵是你有那張圖，因為那張圖是我們自己思考的想法、我們自己的觀點，而不是全部都丟給他外包。因為你全部丟給他外包，那其實大家都長得一樣。</b>」'},
+        {h:'視覺標籤與配色',ul:[
+          '讓自己的 <b>IP 角色</b>出現在所有筆記裡。「IP 角色他的商業價值其實是沒有天花板的，但關鍵是要累積，<b>不然人家根本不認識這是誰</b>」',
+          '<b>固定配色。</b>他自己所有產出都用黃黑配色：「看久了，看到這個黃黑配色就會知道是我們圖解力學院的產出」',
+          '建議：<b>選兩種顏色當主色，加一個 IP 圖，然後要持續。</b>「不要一下變來變去的，那其實沒辦法累積」']},
+        {h:'興趣：讓專業有記憶點',p:'他很誠實：方法論 AI 幾秒鐘就給你一套。差異來自<b>專業乘上你的興趣</b>。他自己喜歡打球，就把籃球相關文章整理成跟創業有關的反思。「<b>有一個人用籃球去談創業，會比單純跟人家談創業的心法來得更有記憶點。</b>」他說這招對素人特別重要，因為「不太可能橫空出世立刻跟資深前輩相比」。'},
+        {h:'實機畫面',shot:{img:'s3e4-img/07-atomic-habits.jpg',cap:'手繪草稿丟給 AI 之後的成果，可以變成各種風格。他強調「重點是有沒有自己的想法、有沒有這樣的一個架構」。［47:15］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3e4-notes.html#sec-you" style="color:var(--amber)">筆記 10：視覺標籤與配色</a>　｜　<a href="s3e4-notes.html#sec-interest" style="color:var(--amber)">筆記 8：興趣</a>'}]}
+    ]
+  },
+
+  diary: {
+    key:'diary', color:'var(--rose)', emoji:'📔', code:'CHAPTER 04', title:'40 萬字的 AI 日記系統',
+    intro:'他說這是 AI 時代的創作分水嶺。整堂課如果只帶走一件事，很多人會選這一段：每天五分鐘語音輸入，一年半累積 40 萬字，然後這 40 萬字變成一座只有你有的案例庫。',
+    topics:[
+      {t:'日記寫四個面向，不要只寫事實', s:'他從國中就開始寫｜48:55', blocks:[
+        {h:'他發現手寫日記的三個問題',ul:[
+          '<b>寫得慢</b>',
+          '想很多但<b>寫兩件就懶了</b>',
+          '<b>沒辦法數位化。</b>「那當它沒數位化的時候，其實你寫了 10 年 20 年⋯⋯<b>它沒辦法再利用</b>」']},
+        {h:'四個面向',table:{head:['面向','為什麼要有'],rows:[
+          ['<b>事實</b>','發生了什麼'],
+          ['<b>感受</b>','「如果只有寫事實就很容易變流水帳。但是如果你有寫到一些感受，我覺得會<b>更加個人化</b>」'],
+          ['<b>發現</b>','「你自己有沒有什麼樣困擾、發現、觀點？<b>這個我覺得很重要</b>」'],
+          ['<b>行動</b>','你有做什麼樣的行動']]}},
+        {h:'2025 年 3 月 1 號他改用 AI 寫',steps:[
+          '<b>開一個專案</b>',
+          '<b>語音輸入</b>',
+          '<b>給 AI 一些規則</b>，讓它重新編排、給清楚的日期與標題，把凌亂的內容寫成比較好讀的形式']},
+        {h:'一個重要的界線',warn:'他特別說明「<b>以我的為主，他不會自己亂掰</b>」。AI 在這裡的角色是<b>整理</b>，不是<b>創作</b>。這條界線如果沒守住，那 40 萬字就不是你的案例庫了。'},
+        {h:'成本',p:'「<b>你只要每天花個五分鐘，就把它語音輸入一下。</b>」累積到這堂課當天，大約 <b>40 萬字</b>。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3e4-notes.html#sec-you" style="color:var(--rose)">筆記 10：日記系統</a>'}]},
+
+      {t:'40 萬字丟進 NotebookLM，變成你的案例庫', s:'這才是重點｜54:52', blocks:[
+        {h:'他怎麼用',p:'把日記的<b>雲端連結丟進 NotebookLM</b>，之後想寫什麼就問它。'},
+        {h:'第一種用法：找案例',p:'「我只要問他任何問題，<b>我就有滿滿的案例了</b>。比如說我要問親子教養的，他就可以把我從去年 3 月 1 號到現在跟孩子溝通的一些問題、案例⋯⋯<b>我早就忘記可能發生什麼事了</b>，我要他找幾件就找幾件出來。那我要寫文章的時候，是有<b>滿滿的我個人的案例跟故事</b>。」'},
+        {h:'第二種用法：整理你自己的語錄',tip:'「如果我們今天要寫自己的寶典怎麼辦？你要回想一下你曾經講過哪些話，<b>哇這難度很高</b>。我直接丟給 NotebookLM 去搜尋我寫過的所有日記，他可以快速幫我分類我曾經講過哪些話，<b>每一句話後面都有案例跟故事</b>。」'},
+        {h:'把這段跟第二章接起來看',p:'第二章說「<b>案例是唯一 AI 補不上的那一格</b>」。這個日記系統就是他<b>生產案例的機器</b>。兩章其實是同一件事的前後半。'},
+        {h:'實機畫面',shot:{img:'s3e4-img/08-notebooklm-diary.jpg',cap:'把日記丟進 NotebookLM 之後：左邊是來源清單，中間是 AI 依據他的日記擬出的書籍大綱，右邊是可生成的各種格式。［54:52］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3e4-notes.html#sec-you" style="color:var(--rose)">筆記 10：這 40 萬字的用法</a>'}]},
+
+      {t:'未來日記，與黃金公式收尾', s:'一個很有意思的設計｜59:27', blocks:[
+        {h:'未來日記是什麼',p:'他在日記系統裡另外設計了一個功能：<b>每天會有一個「十年後的我」出現</b>，分享十年後的他在做什麼，並針對今天的困擾，<b>站在十年後的角度給建議與鼓勵</b>。'},
+        {h:'公式再收一次',ul:[
+          '<b>你自己：</b>故事與日記是保障；個人 IP 與視覺標示',
+          '<b>專業：</b>用九宮格系統化，再用三份清單讓人知道你有料',
+          '<b>興趣：</b>用興趣切入製造記憶點',
+          '<b>圖解：</b>最後用圖解呈現',
+          '<b>AI：</b>大家都有，所以它不是差異']},
+        {h:'他最後那句話',tip:'「<b>大部分的專業領域的內容都是文字，特別是越專業的主題，基本上都是文字，沒有圖解。所以當你能夠用圖解把你這個領域的知識、專業呈現出來，你就是這個領域的第一人。</b>」他說他的目標是幫助 100 個產業或領域的夥伴做到這件事。'},
+        {h:'實機畫面',shot:{img:'s3e4-img/01-formula.jpg',cap:'他總結的公式：你 × 專業 × 興趣 × 圖解 × AI。［16:32］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3e4-notes.html#sec-you" style="color:var(--rose)">筆記 10：未來日記</a>'}]}
+    ]
+  },
+
+  tools: {
+    key:'tools', color:'var(--teal)', emoji:'🛠️', code:'CHAPTER 05', title:'益師傅：四支工具與開發現場',
+    intro:'後半段換益師傅。他先對邱老師的結論提了一個不同意見，然後展示四支自製工具。但這一章最值得看的其實不是工具有多完整，而是它們出錯的時候他怎麼處理，三次都被錄下來了。',
+    topics:[
+      {t:'他跟邱老師的一點不同意見', s:'全場只有他投反對票｜59:47–69:39', blocks:[
+        {h:'他先問學員',p:'「認真做自己、經歷過了就好，是不是這樣？」<b>大家都按 1。</b>'},
+        {h:'然後他說',warn:'「<b>但是益師傅不覺得這樣。我覺得認真過了就一定要有一個結果。假如沒有這個結果，這麼認真，目的是為什麼？慢慢慢慢你會失去那個動能。</b>」'},
+        {h:'他怎麼把兩個說法接起來',p:'邱老師的 100 本書就是一個目標，「<b>所以他要有一個產出</b>」。兩人其實不衝突：持續需要一個具體的交付物來撐。'},
+        {h:'他自己的動力來源',tip:'「<b>因為我訂閱制要交付給大家，而且我寫出來的東西絕對不能很爛</b>，所以我就會很努力的去要求自己把這些東西給做出來。一個想法，我一定要有最後的輸出。假如沒有這個輸出，想法只是在腦袋裡。」<br>後面那句更直接：「<b>很多的想法，你我都有想法。少了做法，少了成果，那就是空談了。</b>常常聽到有些人講『我早就想到這樣』。與其這樣，還不如把它給做出來。」'},
+        {h:'他的數字與作息',ul:[
+          '累積的提示詞大約 <b>600 多個</b>，程式大約 <b>380 幾支</b>',
+          '「這不算什麼，比起有些人高產出的。<b>但是重點是我一直持續，我沒有中斷。</b>」',
+          '「我大部分每天夜深人靜的時候，等家人睡覺可能 10 點多，<b>一直研究要一兩點</b>。每天都是這樣的過程，包含出去玩也是這樣子。」',
+          '他對自己的評價：「<b>因為我的學習能力比較慢，所以我就必須要不斷不斷的一直試。</b>」']},
+        {h:'看課堂筆記',p:'👉 <a href="s3e4-notes.html#sec-output" style="color:var(--teal)">筆記 11：持續與輸出</a>'}]},
+
+      {t:'PDF 自動切割工具 v9，以及它的邊界', s:'工具一｜69:39–85:20', blocks:[
+        {h:'定位',p:'把電子書或期刊雜誌<b>拆成章節</b>，再一章一章丟進 NotebookLM 研讀，或做成語音 Podcast。他先問學員：「一個章節一個章節學習比較好，還是整本書學習比較好？」'},
+        {h:'操作',steps:[
+          '確認版本是 V9',
+          '打開 AI 功能，勾選 Groq API，貼上你的 API Key',
+          '按<b>測試連線</b>。失敗代表 Key 有問題，或那個模型又被停用了',
+          '上傳 PDF（最大 50 MB），它會自動依章節拆解',
+          '按<b>預覽</b>逐章確認拆得準不準']},
+        {h:'他當場示範了一個失敗案例',tip:'第一本書拆不了。他沒有換一本裝作沒事，而是直接講原因：那本書「<b>字小小的、灰灰的</b>」，而且<b>沒有目次頁碼</b>，「以至於沒有辦法做切割⋯⋯那這本書就不太適合。那怎麼辦呢？<b>你只能手動切。</b>」<br><b>讓學員看見工具的邊界，比只看見成功案例有用。</b>'},
+        {h:'一個要記下來的維護原則',warn:'舊版在 8 月 16 日因為它接的模型停用，AI 摘要功能整個不能用。他說：「<b>假若有模型被停用的狀況下，你一定得告訴益師傅，我可以改一下這個版本。</b>」<br>串第三方 AI 平台的工具，<b>模型退役就會壞，工具必須跟著改版</b>。'},
+        {h:'還有一整排功能',p:'目錄頁次指定、單頁摘要、三層大綱與 Mermaid 心智圖、逐頁拆成 JPG、OCR、影像處理（亮度對比、去雜訊、<b>歪斜扭正</b>）、頁面管理（重新匯出、合併、旋轉、加密解密、壓縮、自動書籤）、批次作業、兩份 PDF 前後比對、簽名疊加、畫線標記。'},
+        {h:'實機畫面',shot:{img:'s3e4-img/10-pdf-split.jpg',cap:'換一本適合的書之後，自動拆成多個章節，可逐章預覽驗證。［78:49］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3e4-notes.html#sec-pdf" style="color:var(--teal)">筆記 12：PDF 自動切割工具 v9</a>'}]},
+
+      {t:'消費族群分析儀', s:'工具二｜85:37–121:20', blocks:[
+        {h:'他自己的評價',p:'「<b>臭屁的講，我覺得它叫做強大。</b>」給它一個連結、或你們公司的產品資料，它就能做出一整份消費族群分析。'},
+        {h:'資料可以怎麼餵',table:{head:['來源','說明'],rows:[
+          ['<b>外部連結</b>','他說這個最好：「它會透過外部連結直接去讀取裡頭的資料」'],
+          ['截圖','支援 Ctrl+V 直接貼上，但<b>要給它完整的圖</b>'],
+          ['PDF／CSV／圖像','都可以'],
+          ['補充文字','「假如你怕它辨識會有錯誤，麻煩你給它這個品牌的資料」']]}},
+        {h:'產出',p:'十幾個分析頁籤：總結評語、SWOT、Top 10 接受度、五大象限雷達、價格對品牌、<b>購買轉化漏斗</b>、客群熱力圖、趨勢預測、行銷文案、競品對比、定價通路、族群深挖、營收試算、<b>BMC 商業模式圖</b>。匯出支援 PowerPoint、PDF、Word、Excel、單檔 HTML、JSON。'},
+        {h:'一個他順口講的設計習慣',tip:'新版一進來就有一張<b>流程圖</b>，六個步驟告訴你怎麼做。他說這是他往後寫程式的新習慣：「<b>我以後寫程式一開始進來的時候，我會想說設計一個類似像一個 rundown 的過程，那你就清楚說原來我要做什麼步驟。</b>」有點像 help 的概念。'},
+        {h:'另一種用法',p:'「這是分析別人的，<b>但是假如是你們家的產品呢？</b>你可以做一個分析的部分。」'},
+        {h:'實機畫面',shot:{img:'s3e4-img/13-funnel.jpg',cap:'分析結果頁：上排是匯出按鈕，下面是十幾個分析頁籤，畫面上是購買轉化漏斗。［114:15］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3e4-notes.html#sec-consumer" style="color:var(--teal)">筆記 13：消費族群分析儀</a>'}]},
+
+      {t:'星脈圖譜 v38：五種資料來源不能混用', s:'工具三，這段有個很好的產品設計說明｜121:20–139:10', blocks:[
+        {h:'它做什麼',p:'把任何主題畫成<b>關聯星圖</b>。八種圖譜類型（論文引用、技術演進脈絡、因果與影響鏈、產業生態、學術流派、歷史時序、問題解方風險、關鍵人物與組織），多種佈局（時間軸、階層圖、心智圖、蛇形圖、表格、力導向圖、環形圖）。'},
+        {h:'學員用錯模式，結果當然不對',warn:'有學員把台股代號打進「<b>主題生成</b>」。老師的解釋：「你給他一個台股金居，<b>他怎麼知道？他不是談股票狀況下，他根本不曉得要做如何的關聯。</b>這幾個用途不一樣，所以要切到合適的去做提問。」'},
+        {h:'六種模式各自的用途',table:{head:['模式','適合什麼'],rows:[
+          ['主題生成','研究一個主題（半導體、LLM 演進、物聯網），可指定年份區間'],
+          ['貼上文字','給一段文字，找出其中的關聯'],
+          ['上傳檔案','例如公司產品資料，找出產品之間的關聯性'],
+          ['網址','丟一個產品頁或產品列表頁'],
+          ['論文','用 DOI 或論文主題，<b>可驗證是否真的有這筆引用</b>'],
+          ['台股關聯','選族群或個股，做產業關聯分析']]}},
+        {h:'為什麼不用一個關鍵字框搞定',tip:'「<b>因為太廣義了，沒有辦法，因為怕會失焦，所以我才會一個一個把它分開。</b>」<br>這是很好的產品設計說明：<b>限制輸入的形狀，是為了讓輸出可靠。</b>這個道理反過來用在下提示詞上也成立。'},
+        {h:'V38 是什麼意思',p:'「<b>其實這個版本我改了，我不曉得改了不下數十次。所以你看到 V38，反正你看到我這個代號，真的就是跑了 38 次。</b>然後有些相同的也會歸在同一次，所以理論上應該跑了四五十次以上才有最後這個版本。」<b>你看到的完整工具，是幾十次迭代堆出來的。</b>'},
+        {h:'一段資安討論，他沒有硬掰',p:'有學員擔心資料會不會被送到境外平台。他的回答是：「一般模型串接，我只是用它的模型。資料會不會送過去，是本身在於這個平台會不會把這個資料丟過去。」但他也很誠實：「<b>我不曉得哪一種理論是對的啦。</b>」然後給了一個可以自己選的退路：「<b>假如有疑慮的人還是可以用 Groq。</b>」'},
+        {h:'實機畫面',shot:{img:'s3e4-img/16-atlas-timeline.jpg',cap:'時間軸佈局，分前期、中期、近期。他說「這個蠻重要的，你的一個論文的研究，它也有分這樣」。［126:01］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3e4-notes.html#sec-atlas" style="color:var(--teal)">筆記 14：星脈圖譜 v38</a>'}]},
+
+      {t:'本地端工具：把「哪個模型比較好」變成資料', s:'工具四，當天最新的東西｜139:18–147:20', blocks:[
+        {h:'它是什麼',p:'一個跑在<b>自己電腦上</b>的 AI 對話介面，接本機 <b>Ollama</b>。有專案切換、模型設定（路徑、溫度、預設系統提示詞、思考模型自動切換）、MCP 串接、網路搜尋、提示詞版型、語音與附檔。'},
+        {h:'為什麼做成執行檔而不是純網頁',p:'「<b>這樣我就可以避開 CORS 的問題</b>⋯⋯而且我之後假如改成所謂的 AI Agent 的版本，可能會更適合。」'},
+        {h:'他自己說出了下一步，用的就是 Skill 這個詞',tip:'「所以這概念<b>有點像是在做 Skill</b>。之後我想把這個東西做成一個 Skill，統一大家的做法：<b>斜線就是呼叫 Skill，@ 是呼叫 MCP。</b>」'},
+        {h:'最有想法的一段：模型評分資料庫',p:'他讓三個模型同時寫俄羅斯方塊，發現效果真的有差。他的規劃是再往前一步：「我想做一個模型比對之後，<b>後續還可以做評分</b>⋯⋯想把它做成一個<b>資料庫</b>。後續在引用的時候，什麼樣的主題哪一個模型效果比較好，可以做一個評分表。」'},
+        {h:'為什麼這個想法成熟',tip:'<b>把「哪個模型比較好」從感覺變成可累積的資料。</b>多數人選模型靠印象，他想把它變成經驗值。目前的問題是效能不如預期，他還在找瓶頸在哪一端。'},
+        {h:'實機畫面',shot:{img:'s3e4-img/18-model-compare.jpg',cap:'同時選三個模型問同一個問題，「有點像 chathub 的概念」。［143:41］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3e4-notes.html#sec-local" style="color:var(--teal)">筆記 15：本地端工具</a>'}]},
+
+      {t:'三次出錯，以及他怎麼處理', s:'這一堂後半段最值得看的部分｜貫穿後半堂', blocks:[
+        {h:'第一次：拆不了的那本 PDF',p:'［79:03］他沒有換一本裝作沒事，而是停下來<b>解釋為什麼這本不行</b>（字太小太淡、沒有目次頁碼），並直說「你只能手動切」。'},
+        {h:'第二次：他自己找不到最新版',p:'［87:44］示範時連續開錯兩次版本。「這個好像不是最新版本耶，等我一下」「為什麼原本流程圖那個不見了？」最後才找到，當場把舊檔刪掉、重新上傳。<b>當你同時開好幾個專案、每支又改了幾十版，版本管理本身就是一個問題。</b>'},
+        {h:'第三次：額度不夠，當場貼給 AI 修',p:'［94:12］分析跑到一半跳出錯誤。他的反應是直接把過程攤開：「<b>我順便給大家看一下益師傅怎麼改這個程式。這很簡單⋯⋯我就很簡單的把這個錯誤訊息 copy 給他，貼到 Claude 貼給他，讓他跑。所以待會大家就可以拿到新版的。</b>」他也不掩飾尷尬：「不好意思，漏氣。」'},
+        {h:'那則錯誤訊息本身就值得學',tip:'工具吐出的訊息寫得很完整：<b>說明發生什麼事</b>（輸入超過每分鐘 token 上限，限制 8000、這次要求 8042）、<b>它已經自己試過什麼</b>（已自動精簡四次仍失敗）、<b>你現在可以做什麼</b>（減少檔案、圖片改一張、等一分鐘、或升級方案）。<br><b>一個好的錯誤訊息就該長這樣。</b>妳自己請 AI 寫工具時也可以這樣要求它。'},
+        {h:'把三次串起來看，是一套完整的工作方法',ul:[
+          '出錯<b>不遮掩</b>',
+          '當場<b>說明原因</b>，或直接把錯誤訊息交給 AI',
+          '改好後<b>立刻重新發布</b>給使用者',
+          '並且告訴使用者「<b>以後遇到模型停用就來找我改</b>」']},
+        {h:'他自己的總結',p:'「<b>我不敢說我程式寫得很好，但是我只是說我真的很用心吧。</b>」'},
+        {h:'實機畫面',shot:{img:'s3e4-img/12-claude-dev.jpg',cap:'他的 Claude 開發對話：右邊是工具本體，左邊是那則錯誤訊息。左側清單可以看到他同時開著十幾個專案對話。［100:49］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3e4-notes.html#sec-dev" style="color:var(--teal)">筆記 16：AI 開發現場，三次出錯</a>'}]}
+    ]
+  }
+}
+;
+
+
+const ORDER = ['anxiety', 'grid', 'visual', 'diary', 'tools'];
+const $ = s=>document.querySelector(s);
+function renderChapter(ch){
+  const d=DATA[ch];const next=ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];const prev=ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html=`<div class="chapter-head"><span class="emoji">${d.emoji}</span><div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div></div>`;
+  d.topics.forEach((tp,i)=>{const id=`${ch}-${i}`;
+    html+=`<div class="topic" id="topic-${id}"><div class="topic-head" onclick="toggleTopic('${id}')"><span class="num">${i+1}</span><h4>${tp.t}<small>${tp.s}</small></h4><input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)"><span class="chev">▶</span></div><div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{html+=`<div class="block"><h5>${b.h}</h5>`;
+      if(b.p)html+=`<p>${b.p}</p>`;
+      if(b.ul)html+=`<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps)html+=`<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.table)html+=`<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.prompt)html+=`<div class="promptbox">${b.prompt}</div>`;
+      if(b.shot)html+=`<figure class="shot"><img src="${b.shot.img}" alt="" loading="lazy"><figcaption>${b.shot.cap}</figcaption></figure>`;
+      if(b.tip)html+=`<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn)html+=`<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html+=`</div>`;});
+    html+=`</div></div></div>`;});
+  html+=`<div class="chapnav"><a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a><a onclick="showHome()" style="text-align:center">回總覽<b>🏠 五大主題</b></a><a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a></div>`;
+  $('#view-'+ch).innerHTML=html;
+}
+ORDER.forEach(renderChapter);
+function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('#view-'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function showHome(){switchView('home');$('#crumbs').style.display='none';clearSearch();}
+function showChapter(ch){switchView(ch);$('#crumbs').style.display='flex';$('#crumbHere').textContent=`${DATA[ch].emoji} ${DATA[ch].title}`;clearSearch();syncChecks();}
+function toggleTopic(id){$('#topic-'+id).classList.toggle('open');}
+function openTopic(ch,i){showChapter(ch);const el=$('#topic-'+ch+'-'+i);el.classList.add('open');setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+const KEY='ecf-s3e4-skills-v1';
+const store=()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){const s=store();if(val)s[id]=1;else delete s[id];localStorage.setItem(KEY,JSON.stringify(s));updateProgress();}
+const TOTAL=ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){const done=Object.keys(store()).length;const pct=Math.round(done/TOTAL*100);$('#progFill').style.width=pct+'%';$('#progText').textContent=`${done} / ${TOTAL} 項技能已掌握`;$('#statDone').textContent=done;$('#statPct').textContent=pct+'%';ORDER.forEach(ch=>{const sub=DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;const el=document.querySelector(`[data-mini="${ch}"]`);if(el)el.style.width=Math.round(sub/DATA[ch].topics.length*100)+'%';});}
+function syncChecks(){const s=store();document.querySelectorAll('input[data-skill]').forEach(cb=>{cb.checked=!!s[cb.dataset.skill];});}
+function resetProgress(){if(confirm('確定要清空所有打勾進度嗎？')){localStorage.removeItem(KEY);syncChecks();updateProgress();}}
+function stripTags(s){return s.replace(/<[^>]+>/g,'');}
+const INDEX=[];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{let body=tp.s+' ';tp.blocks.forEach(b=>{if(b.p)body+=stripTags(b.p)+' ';if(b.ul)body+=b.ul.map(stripTags).join(' ')+' ';if(b.steps)body+=b.steps.map(stripTags).join(' ')+' ';if(b.tip)body+=stripTags(b.tip)+' ';if(b.warn)body+=stripTags(b.warn)+' ';if(b.prompt)body+=stripTags(b.prompt)+' ';if(b.table)body+=b.table.rows.flat().map(stripTags).join(' ')+' ';});INDEX.push({ch,i,title:tp.t,body});}));
+$('#searchInput').addEventListener('input',e=>{const q=e.target.value.trim();const box=$('#searchResults');if(!q){box.classList.remove('show');box.innerHTML='';return;}const hits=INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));box.classList.add('show');if(!hits.length){box.innerHTML=`<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：九宮格、案例、清單、日記、未來日記、V38、錯誤訊息、Ollama）</div>`;return;}const hl=s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);box.innerHTML=hits.map(x=>{const pos=x.body.toLowerCase().indexOf(q.toLowerCase());const snip=x.body.substr(Math.max(0,pos-20),90);return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})"><div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div><h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;}).join('');});
+function clearSearch(){$('#searchInput').value='';$('#searchResults').classList.remove('show');$('#searchResults').innerHTML='';}
+syncChecks();updateProgress();
+
+</script>
+</body>
+</html>
+
+</body>
+</html>

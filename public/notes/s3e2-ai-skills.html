@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>把做過一次的事，變成隨時能叫出來的 Skill｜ECF 第三季第二堂 互動式學習地圖</title>
+<meta name="description" content="ECF 訂閱制第三季第二堂（益師傅／楊俊益，2026/07/24）互動式學習地圖：五大主題 20 項實戰技能，涵蓋把流程封裝成 Skill 並參數化、Skill 只是提示詞所以能跨平台、五個平台的實測結果、用 Codex 讓 AI 學會你的 PowerPoint 版型並復刻 20 頁、看到別人成果的八步逆推法、成功後降一級測試省成本、Agent 會自我檢查與聊天的差別、Node-RED 與物聯網 3D 爆炸圖、七種風格生圖的三個訣竅，以及用「辯論交鋒」對抗 AI 的討好傾向。學會一項打一個勾，進度存在自己的瀏覽器。">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269;
+  --green:#3f8560; --orange:#bf6a1e; --red:#c0453f; --teal:#0d8f80; --amber:#9c7b23; --rose:#b5476a;
+  --feat:#5645D4; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(28px,4.6vw,46px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--txt);background:none;-webkit-text-fill-color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:680px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:9px}
+.steps li{list-style:none;counter-increment:st;display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--txt2);line-height:1.7}
+.steps li::before{content:counter(st);flex:none;width:25px;height:25px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:var(--c,var(--feat));margin-top:1px}
+.steps li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+.prompt,.promptbox{background:#1d1d1f;border:1px solid #2c2c31;border-radius:10px;padding:13px 15px;margin-top:6px;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt b,.promptbox b{color:#fff}
+figure.shot{margin:10px 0 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12px;color:var(--txt3);padding:8px 12px;border-top:1px solid var(--line);background:var(--bg2);line-height:1.6}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <a class="navlink" href="../radio/#ecf" style="border-color:#cdc7ef" onclick="if(history.length>1){history.back();return false}">← 回上一頁</a>
+  <div class="logo">
+    <div class="dot">🧩</div>
+    <div>Skill 化 地圖<small>SUBSCRIPTION S3 · EP2</small></div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋技能關鍵字：Skill、參數化、跨平台、簡報復刻、Codex、完整存取權、逆推、降一級、Agent、Node-RED、爆炸圖、生圖、辯論交鋒、base64…" autocomplete="off">
+  </div>
+  <a class="navlink" href="s3e2-notes.html">📝 課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">ECF 第三季第二堂 · 訂閱制 · 2026/07/24</span>
+  <h1>把做過一次的事<br>變成隨時能叫出來的 Skill</h1>
+  <p class="sub">這一堂表面上是四個工具的巡禮，但真正的主線只有一條：<b>當你用 AI 做成了一件事，怎麼讓它下次不用再做一次。</b><br>老師先用 Codex 讓 AI 學會一份 PowerPoint 的版型並復刻出 20 頁，成功之後<b>沒有停在那裡</b>，而是回頭跟 AI 說「把剛剛的動作做成一個 Skill」，再追加一句關鍵的話：<b>「你一定要變成參數。」</b>從此那份能力不再綁死在那一個檔案上。<br>點進每一章，逐層展開<b>本堂實際教到</b>的觀念、示範與操作，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🎙️ 生成式AI應用電台・訂閱制第三季</span>
+    <span>👤 益師傅（楊俊益・ECF）</span>
+    <span>⏱️ 兩段錄影，共 2 小時 1 分</span>
+    <span>🔰 小白友善</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>5</b><span>大主題</span></div>
+  <div class="stat"><b>20</b><span>實戰技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 20 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--purple)" onclick="showChapter('skill')">
+        <div class="glowline"></div><span class="emoji">🧩</span>
+        <h3><em>CHAPTER 01</em>把做過一次的事變成 Skill</h3>
+        <p>整堂主線：請 AI 把流程寫成 Skill、那句「你一定要變成參數」、Skill 只是提示詞所以能跨平台，以及五個平台的實測結果。</p>
+        <div class="foot"><div class="mini"><i data-mini="skill"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--blue)" onclick="showChapter('deck')">
+        <div class="glowline"></div><span class="emoji">🖼️</span>
+        <h3><em>CHAPTER 02</em>簡報復刻：讓 AI 學會你的版型</h3>
+        <p>Codex 完整六步、跳出來的風格建議一個都不要選、兩份切成縮圖並排驗收，以及可以套什麼資料進去。</p>
+        <div class="foot"><div class="mini"><i data-mini="deck"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--rose)" onclick="showChapter('method')">
+        <div class="glowline"></div><span class="emoji">🔑</span>
+        <h3><em>CHAPTER 03</em>可以帶走的方法論</h3>
+        <p>看到別人成果的八步逆推法、成功後降一級省成本、什麼時候該用會自我檢查的 Agent，以及他自己的分享紀律。</p>
+        <div class="foot"><div class="mini"><i data-mini="method"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--teal)" onclick="showChapter('tools')">
+        <div class="glowline"></div><span class="emoji">🔌</span>
+        <h3><em>CHAPTER 04</em>四個工具巡禮</h3>
+        <p>Node-RED 為什麼是流程思維的前置訓練、50 個元件的 3D 爆炸圖、把想法接上電的電路平台，以及斜線呼叫 Skill 拆書。</p>
+        <div class="foot"><div class="mini"><i data-mini="tools"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--amber)" onclick="showChapter('media')">
+        <div class="glowline"></div><span class="emoji">🎙️</span>
+        <h3><em>CHAPTER 05</em>圖像與 Podcast 的控制權</h3>
+        <p>讓 AI 真的畫圖的三個訣竅、Podcast 提示詞產生器的設定項，以及用「辯論交鋒」對抗 AI 的討好傾向。</p>
+        <div class="foot"><div class="mini"><i data-mini="media"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-skill" class="view" style="--c:var(--purple)"></section>
+  <section id="view-deck" class="view" style="--c:var(--blue)"></section>
+  <section id="view-method" class="view" style="--c:var(--rose)"></section>
+  <section id="view-tools" class="view" style="--c:var(--teal)"></section>
+  <section id="view-media" class="view" style="--c:var(--amber)"></section>
+</main>
+
+<footer>
+  本頁為訂閱制第三季 第二堂「把做過一次的事，變成隨時能叫出來的 Skill」課後整理・介面沿用本站互動式學習地圖版型<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2026｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+const DATA = {
+  skill: {
+    key:'skill', color:'var(--purple)', emoji:'🧩', code:'CHAPTER 01', title:'把做過一次的事變成 Skill',
+    intro:'整堂的主線。大部分人做成一件事就結束了，老師沒有。他成功復刻完簡報之後回頭跟 AI 說「把剛剛的動作做成一個 Skill」，再追加一句關鍵的話：「你一定要變成參數。」做成一次是成果，變成參數才是能力。',
+    topics:[
+      {t:'第一步：請 AI 把剛剛做的事寫成 Skill', s:'成功之後不要停在那裡｜一段 53:13–55:30', blocks:[
+        {h:'他的動機很實際',p:'「並不是每一個人都會去用 Codex。那假如在 ChatGPT 你有付費、但是你沒有用 Codex 的人，一樣可以做，<b>那不是很好嗎？</b>」'},
+        {h:'他對 AI 說的話',prompt:'請你幫我生成一個 Skill，幫我把剛剛的動作做成一個 Skill，<br>並且提供一個 Markdown 的語法讓我下載。'},
+        {h:'拿到什麼',p:'一份很長的提示詞檔。他自己笑說：「你會發現這個提示詞<b>一看就知道不是我寫的</b>。」'},
+        {h:'實機畫面',shot:{img:'s3e2-img/12-skill-file.jpg',cap:'AI 產生出來的 Skill 檔。［一段 55:01］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3e2-notes.html#sec-skill" style="color:var(--purple)">筆記 7：把流程變成參數化的 Skill</a>'}]},
+
+      {t:'最關鍵的一句話：你一定要變成參數', s:'整堂課的核心｜一段 64:25–65:02', blocks:[
+        {h:'他實際說的',prompt:'請將上面所有完成的事項做成一個 Skill，但是這個 Skill 能夠<b>根據使用者提供的任何的版型資料</b>來幫我完成上傳資料的復刻運用。<br>它就變成都是參數了，而不是固定就只能用哪一個檔案。<b>你一定要變成參數。</b>'},
+        {h:'差在哪',table:{head:['','沒參數化','參數化之後'],rows:[
+          ['能做什麼','只能復刻<b>那一個</b>檔案','給它<b>任何版型加任何資料</b>都照做'],
+          ['換題目','要重寫一次','換參數就好'],
+          ['它是什麼','一個成果','一個<b>能力</b>']]}},
+        {h:'他自己的 Skill 庫就是這樣長出來的',tip:'他最後說：「所以你知道為什麼益師傅那個 Skill 嗎？<b>就是我這樣講，它幫我做出來的。</b>」<br><br>妳可以直接把這句話當模板用：做完任何一件事，回頭說「<b>請把上面完成的事項做成 Skill，而且要能根據我提供的任何○○來執行，變成參數，不要綁死在這個檔案上</b>」。'},
+        {h:'實機畫面',shot:{img:'s3e2-img/14-parameterize.jpg',cap:'完成回報：沿用原範本版型與配色、整理 12 章核心內容、每頁附來源頁碼、通過 20 頁渲染與版型忠實度檢查，並產出一份 deviation-log.txt。［一段 64:57］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3e2-notes.html#sec-skill" style="color:var(--purple)">筆記 7：最關鍵的一句話</a>'}]},
+
+      {t:'Skill 只是提示詞，所以它可以跨平台走', s:'一個很多人自己綁住自己的誤解｜一段 57:03', blocks:[
+        {h:'他講得很直接',p:'「<b>沒有人告訴你不能這樣子用啊。</b>大家好像就是覺得 Skill 就是 Skill，不能用在別的地方。沒有這道理啦。任何地方都可以用。<b>畢竟它只是一個提示詞，它只是一個 prompt。</b>」'},
+        {h:'唯一的例外他也講清楚了',warn:'「<b>除非裡頭有提到串接的運用⋯⋯串接就沒辦法。</b>只是單純它只是一個描述、去取出它的特色來講的話，你當提示詞都可以用。」'},
+        {h:'搬到 ChatGPT 專案的做法',steps:[
+          'ChatGPT 專案 → 加 → 命名 → 建立',
+          '點中央（或右上三個點）進到<b>指令</b>，把整份 Skill 內容貼進去，儲存',
+          '到<b>資料來源</b>，上傳你要它學的版型檔']},
+        {h:'資料來源可以放很多份',p:'風格一、風格二、風格三，或是對 A 廠商、B 廠商、C 廠商的不同簡報，全部放進去。'},
+        {h:'ChatGPT 這條路的限制',warn:'沒訂閱的話「你要畫圖它最多又只 13 張就不太畫了，而且它最後會把所有的圖片都集中在一頁裡頭，<b>這就不是你要的</b>」。所以這條比較適合有訂閱的人。'},
+        {h:'實機畫面',shot:{img:'s3e2-img/13-gpt-project.jpg',cap:'ChatGPT 專案：Skill 內容貼進「指令」欄，版型檔上傳到「資料來源」。［一段 57:48］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3e2-notes.html#sec-skill" style="color:var(--purple)">筆記 7：Skill 不綁平台</a>'}]},
+
+      {t:'跨平台實測：哪個行、哪個不行', s:'他沒有只說「應該可以」，當場帶全班測｜二段 01:29–15:45', blocks:[
+        {h:'實測結果',table:{head:['平台','結果'],rows:[
+          ['Codex','✅ 成功。老師的主力做法'],
+          ['ChatGPT 專案','✅ 成功。適合有訂閱但不熟 Codex 的人，做好還能分享給別人用'],
+          ['Claude Code','✅ 學員當場測成功'],
+          ['Gemini Anti-gravity','✅ 學員當場測成功'],
+          ['Gemini（聊天）','❌ <b>風格對不上</b>。「它雖然都做出來了，但這個跟我要的風格完全都不同」']]}},
+        {h:'他把驗證分給全班做',tip:'學員回報成功後他說：「<b>還好你幫我試，這樣就代表 OK⋯⋯所以代表這個概念是成功的。</b>」把驗證分散給全班，既確認方法通用，也讓每個人真的動手。'},
+        {h:'實機畫面',shot:{img:'s3e2-img/15-gemini-fail.jpg',cap:'Gemini 的結果：東西是做出來了，但風格跟範本完全不同。［二段 01:33］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3e2-notes.html#sec-crossplatform" style="color:var(--purple)">筆記 8：跨平台實測</a>'}]}
+    ]
+  },
+
+  deck: {
+    key:'deck', color:'var(--blue)', emoji:'🖼️', code:'CHAPTER 02', title:'簡報復刻：讓 AI 學會你的版型',
+    intro:'起點是一個真實提問。老師說：「我上禮拜五在幫一個研習，一個老闆提到說，假如這樣子，會不會我給他一個簡報讓他去學習？」他回去驗證，答案是可以，花 16 分 27 秒做出 20 頁。',
+    topics:[
+      {t:'用 Codex 做的完整六步', s:'照著做｜一段 33:36–45:35', blocks:[
+        {h:'操作順序',steps:[
+          '專案 → 按加 → 命名（例如「簡報版型風格複製」）',
+          '<b>指定資料夾</b>，選一個你固定放東西的位置',
+          '設定 → 一般 → 打開<b>完整存取權</b>',
+          '把要當範本的 PowerPoint <b>複製到那個資料夾</b>',
+          '開新對話，貼上提示詞，<b>把裡面的檔名改成你資料夾裡的檔名</b>',
+          '送出，等它跑']},
+        {h:'第二步他示範了反例',warn:'他第一次沒指定資料夾，加上名字重複，<b>結果整個錯亂，只好全部刪掉重來</b>。'},
+        {h:'第三步為什麼重要',p:'不打開完整存取權的話，它每做一個動作都會回來問你，「停下來你也去忙別的事情，<b>你就沒有注意到你要按下一步</b>」。'},
+        {h:'實機畫面',shot:{img:'s3e2-img/09-codex-project.jpg',cap:'建立專案時一定要指定資料夾，不要從零開始。［一段 44:16］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3e2-notes.html#sec-deck" style="color:var(--blue)">筆記 6：簡報復刻</a>'}]},
+
+      {t:'跳出來的風格建議，一個都不要選', s:'最容易踩的坑｜一段 45:35 前後', blocks:[
+        {h:'他連講了好幾次',warn:'「當它出現這個風格的時候，<b>你都不要選。你都不要選喔，真的</b>，你只要選了之後，它會以它的風格為主。你就千萬不要選，你就不要管它。」'},
+        {h:'為什麼',tip:'因為你要的是「<b>學會你給的版型</b>」，不是「用它推薦的漂亮版型」。這兩件事會打架，選了它的風格，你的版型就被覆蓋掉了。'},
+        {h:'提示詞裡的關鍵一句',p:'他提供的提示詞裡除了指名範本檔案，還補一句「<b>如果使用到圖像，請使用 image generation 繪圖</b>」。'},
+        {h:'實機畫面',shot:{img:'s3e2-img/10-prompt.jpg',cap:'他提供的提示詞，關鍵是指名範本檔案。［一段 45:35］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3e2-notes.html#sec-deck" style="color:var(--blue)">筆記 6：一個都不要選</a>'}]},
+
+      {t:'怎麼驗收：兩份都切成格狀縮圖並排比', s:'很實在的驗證方式｜一段 51:11', blocks:[
+        {h:'他怎麼做',p:'把原始版型跟產出<b>並排、都切成格狀縮圖，一頁一頁對</b>。字體、大字體、版面結構、曲線圖位置都對得上。'},
+        {h:'回報裡藏著兩個細節',tip:'它自己做了<b>溢位與版型忠實度檢查</b>，還留下一份<b>偏差紀錄檔</b>（deviation-log.txt），並主動說明「未使用 imagegen，因原範本圖像元素已足夠」。<br>這就是下一章要講的，Agent 跟聊天最大的差別：<b>它會回頭檢查自己做得對不對。</b>'},
+        {h:'實機畫面',shot:{img:'s3e2-img/11-compare.jpg',cap:'左邊是 AI 復刻出來的 20 頁，右邊是原始版型，切成格狀縮圖並排比對。［一段 51:11］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3e2-notes.html#sec-deck" style="color:var(--blue)">筆記 6：花 16 分 27 秒做出 20 頁</a>'}]},
+
+      {t:'可以套什麼資料進去', s:'老師舉的例子很生活｜一段 52:00', blocks:[
+        {h:'他說的',ul:[
+          '你公司之前用的<b>匯報簡報</b>',
+          '<b>會議紀錄</b>的簡報',
+          '甚至把會議紀錄的 <b>MP3</b> 餵給它']},
+        {h:'它會怎麼做',p:'「<b>他會去學這 20 頁的風格</b>」，再用簡報功能把你的資料做出來。'},
+        {h:'版型不用 20 頁全拿',p:'他建議「不是 20 頁都拿來用」，<b>挑幾頁套自己的資料就好</b>。'},
+        {h:'課後練習',tip:'這堂沒有作業，但他有建議：拿簡報復刻多練幾次，而且「<b>你故意拿有曲線圖跟圖檔的部分，可以試試看</b>」。挑難的練，才知道邊界在哪。'},
+        {h:'實機畫面',shot:{img:'s3e2-img/03-ppt-template.jpg',cap:'版型包裡的一份資料分析資訊圖表，每個檔案 20 頁。［一段 11:20］'}},
+        {h:'一個界線',warn:'那批 PowerPoint 版型包<b>不隨筆記散布</b>。老師送給訂閱制學員時特別交代：「那你不要散布喔，這是益師傅花錢在網路上買⋯⋯但我們尊重原本（的作者）。」版型檔請到課程資料夾自行取用。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3e2-notes.html#sec-deck" style="color:var(--blue)">筆記 6：可以套什麼資料</a>'}]}
+    ]
+  },
+
+  method: {
+    key:'method', color:'var(--rose)', emoji:'🔑', code:'CHAPTER 03', title:'可以帶走的方法論',
+    intro:'這一章沒有工具，只有做法。四件事：看到別人的成果怎麼逆推成自己的、成功之後怎麼省錢、什麼時候該用 Agent 而不是聊天，以及他自己的分享紀律。',
+    topics:[
+      {t:'八步逆推法：把別人的成果變成自己的產線', s:'這堂最值得抄下來的方法論｜一段 27:05–28:41', blocks:[
+        {h:'有學員問他 3D 爆炸圖怎麼做的，他把整個過程講了一遍',steps:[
+          '<b>先看到別人的成果。</b>他在網路上看到有人用 AI 把晶片封裝一層層做成 3D，「我看到那個東西我就很驚豔」',
+          '<b>把提示詞收起來。</b>「他有一個提示詞，我就給他收起來」',
+          '<b>自己先試一次。</b>「發現真的可以畫出那個圖」',
+          '<b>不滿意就講出哪裡不滿意。</b>「我就覺得那個圖黑黑的醜醜的，就覺得我不喜歡」',
+          '<b>換成自己的題目，失敗了。</b>「我想改成 ESP32 的結構圖。結果他畫出來不對」',
+          '<b>給它參考物。</b>「我說你可不可以參考我給他看我那個爆炸圖的 Mermaid？給了他，他就幫我畫出來囉」',
+          '<b>再加上風格要求。</b>「我說我要 3D 的高質感、淺色系的。哇，他畫出來有光質感喔」',
+          '<b>找到訣竅就量產。</b>「從那時候我就開始一系列的就這樣做下去了」，堆疊到 50 組']},
+        {h:'為什麼這八步重要',tip:'可以套到<b>任何</b>你想學的 AI 產出。看到好東西不是收藏就算了，而是：收下提示詞 → 自己跑一次 → <b>說出不滿意的地方</b> → 換成自己的題目 → 失敗就<b>給它參考物</b> → 加上風格描述 → 成功後量產。<br><b>整個過程沒有一步需要你會畫圖。</b>'},
+        {h:'第六步跟第七步是關鍵',p:'失敗的時候不是放棄，是<b>給它一個可以照著看的東西</b>；然後才加風格形容詞。順序不能反。'},
+        {h:'實機畫面',shot:{img:'s3e2-img/04-explode-layers.jpg',cap:'量產出來的結果：左邊元件圖鑑，中間 3D 爆炸圖（可拉透明度滑桿逐層看），右邊規格與實體照片。［一段 14:23］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3e2-notes.html#sec-howmade" style="color:var(--rose)">筆記 5：那張 3D 圖是怎麼做出來的</a>'}]},
+
+      {t:'成功之後往下降一級再測一次', s:'很少人做但很值得養成的習慣｜二段 00:00–01:14', blocks:[
+        {h:'他做了什麼',p:'他一開始用「<b>超高</b>」推理跑，成功之後沒有就這樣算了，而是<b>降一級再跑一次</b>，看結果一不一樣。'},
+        {h:'他的原話',tip:'「我現在這次改成高，剛剛是超高嘛。<b>假如高可以達到一樣的效果，那就不要花那麼多錢。</b>」驗證結果：「高就可以了，不用寫到超高。」'},
+        {h:'實際結論',p:'有學員之前用「<b>中</b>」也成功過。所以這個任務用<b>中到高就夠</b>，超高是浪費。'},
+        {h:'為什麼值得養成',p:'做一次的差別不大，<b>做一百次就是明顯的成本差距</b>。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3e2-notes.html#sec-model" style="color:var(--rose)">筆記 9：模型選擇的經濟學</a>'}]},
+
+      {t:'Agent 跟在聊天視窗寫程式差在哪', s:'有人問他，他答得很具體｜二段 06:07–07:00', blocks:[
+        {h:'簡單的事，聊天就夠了',p:'「同樣一個彈珠台，在 Claude 裡頭 chat、就是聊天的方式，他去寫，他寫出來的<b>效果還不錯</b>。」'},
+        {h:'差別出現在複雜的時候',tip:'「假如你今天是屬於程序上比較複雜的，你用 AI Agent 來做有一個好處，<b>他會去檢視自己，他會去檢視自己到底哪一段有問題。</b>」'},
+        {h:'他舉的例子',p:'「我說請他幫我順便上架，<b>他會去檢查說他的上架結果，他自己預覽效果好不好</b>。可是我們自己開發程式卻不會有這樣的一個狀況。」'},
+        {h:'把這段跟簡報復刻放在一起看',p:'那句「通過 20 頁渲染、溢位與版型忠實度檢查」跟那份 deviation-log.txt，就是「<b>它會去檢視自己</b>」的具體長相。<b>你不用相信它做對了，因為它自己會回頭看，而且把結果留下來給你查。</b>'},
+        {h:'看課堂筆記',p:'👉 <a href="s3e2-notes.html#sec-agent" style="color:var(--rose)">筆記 11：Agent 跟聊天寫程式差在哪</a>'}]},
+
+      {t:'他的紀律：反覆測到有把握才敢講', s:'現場的真實｜第 14 節', blocks:[
+        {h:'他說的',p:'「<b>我就一直反覆測這個東西了。確定到這個提示詞是 OK 的、沒有問題，才敢跟大家分享。</b>」他給學員的每一段提示詞，背後都有一輪他自己先撞過的牆。'},
+        {h:'他也會踩到坑',p:'示範圖像工具時，他連續給錯版本，翻了好幾次日期才確認：「不好意思，我這個再整理一下給大家好不好⋯⋯我搞錯了。」<b>同時開很多專案、每支又改很多版，版本管理本身就是個問題。</b>'},
+        {h:'知道什麼不該做，跟知道什麼該做一樣重要',tip:'講 Podcast 工具時他一路加功能，講到後面自己停下來：「我幹嘛挖一個坑給自己跳？」然後問全班有沒有需要，沒人回應，他就說「<b>那就先不做吧</b>」。'},
+        {h:'他對自己的定位',p:'「<b>我不喜歡炫技，但是我喜歡講落地應用。炫技不是我的本事，我也沒那個本事。我有的就是想辦法把它變成一個落地應用。</b>」'},
+        {h:'看課堂筆記',p:'👉 <a href="s3e2-notes.html#sec-real" style="color:var(--rose)">筆記 14：現場的真實</a>'}]}
+    ]
+  },
+
+  tools: {
+    key:'tools', color:'var(--teal)', emoji:'🔌', code:'CHAPTER 04', title:'四個工具巡禮',
+    intro:'這堂表面上是工具展示，但每一個工具後面都有一句可以帶走的話。順著看下來你會發現：他做的不是工具，是讓人學得會的東西。',
+    topics:[
+      {t:'Node-RED 流程模擬器：為什麼一堂 AI 課要教這個', s:'工具一｜一段 01:02–08:00', blocks:[
+        {h:'它能做什麼',ul:[
+          '不是只有模擬。可以真的拉 inject、function、debug 節點，可以拉線，可以在裡面寫程式，然後<b>觸發、單步執行、隨時停在某一步</b>',
+          '可以匯入你自己的 Node-RED 流程，他當場拉了一個 AQI 空品流程進來，跑出真實資料',
+          '可以安裝新節點，AI 解析也能認得',
+          'AI 解析要接 API Key：<b>Groq</b> 負責文字解析，<b>Gemini</b> 負責畫圖（付費，他當時查約一個月 420 元）']},
+        {h:'真正的答案',tip:'「學這個你會覺得有點辛苦對不對？但是問題是<b>當你會這些東西之後，你內心裡有一些流程的概念</b>，你未來在學 Codex、或是 Claude Code、或是 n8n 這種 AI Agent 的部分，基本上你都可以克服了。」<br><b>Node-RED 是流程思維的前置訓練。</b>先在看得見的節點與連線上把流程想清楚，之後面對 Agent 就不會卡在觀念上。'},
+        {h:'一個值得學的念頭',p:'畫示意圖要付費，他馬上想替代方案：「<b>在這個地方是不是能夠產生一個示意圖的 Mermaid？你可以在 Mermaid 裡頭畫圖就不用錢了。</b>」<b>看到成本就想替代路徑</b>，這是做工具的人跟只會用工具的人的差別。'},
+        {h:'實機畫面',shot:{img:'s3e2-img/01-nodered-sim.jpg',cap:'把 Node-RED 程式拉進來，按觸發就會逐步跑，每個節點做了什麼都列在旁邊。［一段 03:20］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3e2-notes.html#sec-nodered" style="color:var(--teal)">筆記 2：Node-RED 流程模擬器</a>'}]},
+
+      {t:'物聯網 3D 爆炸圖：50 個元件', s:'工具二｜一段 13:09–17:10', blocks:[
+        {h:'收了什麼',p:'50 個感測元件與晶片：ESP32、UNO R3、Nano、Pro Mini、ESP32-CAM、DHT11、DHT22、SHT31、HC-SR04 超音波測距、LCD1602 等。每個都給<b>逐層結構、原始示意圖、電氣特性、接腳圖</b>，可 360 度旋轉、拉大層間距。'},
+        {h:'它的來歷有點感性',p:'他在整理自己的零件庫，「哇，裡頭好多好多的這種感測元件，我之前很愛買，裡頭我覺得應該幾十萬有吧」。後來沒做這塊，他打算把實體零件捐給學校，這套 3D 圖就是把那段經歷留下來的方式：「<b>假如至少代表益師傅曾經走過物聯網，對不對？</b>」'},
+        {h:'怎麼做出來的',p:'就是上一章那<b>八步逆推法</b>。'},
+        {h:'實機畫面',shot:{img:'s3e2-img/08-pinout.jpg',cap:'接腳圖可以放大看。［一段 26:00］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3e2-notes.html#sec-explode" style="color:var(--teal)">筆記 3：物聯網 3D 爆炸圖</a>'}]},
+
+      {t:'電路工作平台：它比積木程式多了什麼', s:'工具三｜一段 17:27–32:10', blocks:[
+        {h:'示範需求只有一句話',prompt:'ESP32 + DHT11 + OLED + 按鈕，透過 WiFi 使用 MQTT 傳送溫濕度與按鈕狀態'},
+        {h:'按下生成之後',p:'接線、程式、宣告檔、定義檔<b>一次到位</b>。'},
+        {h:'有學員問這跟積木程式像不像',tip:'他的回答是關鍵：「<b>最大的差別就是它有教學的成分。</b>」<br>接線一條一條教、接錯會報錯並建議換哪個腳位、換腳位程式跟著改、算耗電量、可模擬、可雲端燒錄、可反向監聽序列埠。'},
+        {h:'一個做工具的人的念頭',p:'他還打算加匿名人數統計：「總共有多少人進來，我就會知道了⋯⋯<b>我只是想要知道而已。</b>」而且說之後會教大家怎麼在 Codex 裡幫自己的工具加這個。<b>做完工具還想知道有沒有人用，這個念頭本身就值得學。</b>'},
+        {h:'實機畫面',shot:{img:'s3e2-img/05-circuit-gen.jpg',cap:'標語就是「把想法接上電」。左邊打一句話，中間出現麵包板接線圖，右邊直接生出 main.cpp、platformio.ini、config.h。［一段 18:08］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3e2-notes.html#sec-circuit" style="color:var(--teal)">筆記 4：把想法接上電</a>'}]},
+
+      {t:'Skill 實戰：斜線呼叫，720 頁的書拆成 10 章', s:'工具四｜二段 01:45–08:10', blocks:[
+        {h:'怎麼用',steps:[
+          '安裝好之後，打<b>斜線</b>就會跳出可用的 Skill 清單',
+          '選 PDF 拆分，然後<b>什麼都不用說</b>，直接把 PDF 丟進去送出',
+          '爆炸圖那支他做成<b>全域</b>的，「在任何專案裡頭都可以做這樣的運用」']},
+        {h:'他很誠實地講了缺點',warn:'同一件事他先前已經寫過一支網頁工具：「<b>但是我給你那個程式更快，對不對？還不用耗點數。</b>」Skill 版要扣 AI 的點數，網頁版免費而且更快。他建議「你自己評估在哪邊做會比較方便」。'},
+        {h:'那 Skill 版的優勢在哪',tip:'在於它<b>可以接下一步</b>：拆完可以直接寄 Mail 給你，或串到 NotebookLM 做成 Podcast。<b>單機工具做不到這件事。</b>'},
+        {h:'實機畫面',shot:{img:'s3e2-img/17-pdf-split.jpg',cap:'實測：720 頁的書拆成 10 個章節，逐章預覽驗證第二、七、八、九章都正確。［二段 05:05］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3e2-notes.html#sec-usingskill" style="color:var(--teal)">筆記 10：Skill 實戰</a>'}]}
+    ]
+  },
+
+  media: {
+    key:'media', color:'var(--amber)', emoji:'🎙️', code:'CHAPTER 05', title:'圖像與 Podcast 的控制權',
+    intro:'最後這一章是兩個很實用的技巧：怎麼讓 AI 真的畫圖而不是回你一堆提示詞，以及怎麼把 NotebookLM 的語音摘要從「隨便講講」變成可控的節目設定。裡面有一個對抗 AI 討好傾向的機制，非常值得記。',
+    topics:[
+      {t:'三個讓它乖乖畫圖的訣竅', s:'不然它只會回你一堆提示詞｜二段 08:11–23:30', blocks:[
+        {h:'訣竅一：一次講完要幾張',p:'「跟他講說 <b>1 到 7 請個別畫出圖像</b>，不然他會問你，他會問你說你到底要什麼，很浪費時間。」'},
+        {h:'訣竅二：指定編號時要補「請畫出圖像」',warn:'「你要 3 的話，<b>你不要只有輸入 3</b>。我發現在 Gemini 或 ChatGPT，他會寫出一大堆提示詞，<b>他就是不畫</b>，你要跟他講『再畫出圖像』，又浪費一次。」'},
+        {h:'訣竅三：專案設定裡務必勾「創作圖像」',p:'老師連講三次「<b>務必</b>」，不勾它就不會畫。'},
+        {h:'成本',p:'用 Gemini 3.1 Flash Lite Image，十幾秒一張，<b>一張約 1 元</b>，解析度最高 1024×1024。他的評估：「一般的教學，或是社群文案貼圖的部分，你當都是夠。」'},
+        {h:'一個順手學習的示範',tip:'AI 在過程中「無意中給我他的程式的語法，Python 的程式的語法，怎麼樣去控制他的位置」，他的反應是：「<b>哦，好，那我又學起來了。</b>」<br><b>AI 吐出來的中間過程往往比最終答案更有料，看到就收下來。</b>'},
+        {h:'實機畫面',shot:{img:'s3e2-img/18-seven-styles.jpg',cap:'一張人像丟進去，產出七種不同風格。［二段 09:40］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3e2-notes.html#sec-image" style="color:var(--amber)">筆記 12：七種風格</a>'}]},
+
+      {t:'Podcast 提示詞產生器：把語音摘要變成可控的', s:'它產生的不是節目，是提示詞｜二段 24:44–50:30', blocks:[
+        {h:'先講清楚它是什麼',p:'這支<b>不產生 Podcast</b>，它產生的是<b>給 NotebookLM 用的提示詞</b>。老師的說法：「這邊比較快，這邊可以生成你要的提示詞能用。」'},
+        {h:'可以設定什麼',table:{head:['項目','選項'],rows:[
+          ['聽眾對象','初學者、一般大眾、專業人士、主管或投資人'],
+          ['敘事節奏','漸進式、先高後穩、上上下下'],
+          ['主持人','自己命名、選性別、寫風格'],
+          ['時間長度','20 分或更長'],
+          ['對談風格','輕鬆對談、<b>辯論交鋒</b>等四種'],
+          ['必提關鍵字','一定要提到的東西'],
+          ['禁止提及','不得出現的主題，例如品牌名稱、政治立場'],
+          ['額外要求','繁體中文、口語化、幽默、引用數據、預告下集、互動提問']]}},
+        {h:'互動提問是什麼',p:'NotebookLM 的語音摘要「<b>最後是不是會留待幾個問題跟你們探索互動</b>」，那個效果就是從這個設定來的。'},
+        {h:'實機畫面',shot:{img:'s3e2-img/20-podcast-prompt.jpg',cap:'右下角可切換要產給 NotebookLM、Claude 還是 ChatGPT。［二段 35:30］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3e2-notes.html#sec-podcast" style="color:var(--amber)">筆記 13：Podcast 提示詞產生器</a>'}]},
+
+      {t:'「辯論交鋒」：用機制對抗 AI 的討好傾向', s:'整堂最值得記的一個小設定｜二段 30:44', blocks:[
+        {h:'他特別推薦這個選項',p:'「<b>假如你要探索一個主題，我都建議選辯論。</b>假如你想要探索一個文案、你自己寫的資料，你不確定到底好或不好⋯⋯麻煩你做一份叫做辯論，<b>另外一個會站在反對方來看你相關文件的資料</b>。」'},
+        {h:'理由才是重點',tip:'「<b>因為 LLM 被我們訓練，他訓練出來都是講好話。你可以勾選辯論，讓他站在不同的觀點來看這件事情。</b>」<br><br>這比提醒自己「要保持懷疑」有效得多，因為它是<b>機制</b>，不是自律。妳的論文、提案、講稿都可以這樣過一次。'},
+        {h:'怎麼套到自己身上',p:'不一定要用 Podcast。任何時候妳寫完一份東西，都可以直接說：「<b>請站在反對方的立場，逐點指出這份資料的問題。</b>」'},
+        {h:'實機畫面',shot:{img:'s3e2-img/21-debate.jpg',cap:'節目設定：聽眾對象、敘事節奏、主持人設定（可自己命名、選性別與風格）。［二段 29:36］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3e2-notes.html#sec-podcast" style="color:var(--amber)">筆記 13：辯論交鋒</a>'}]},
+
+      {t:'把圖片塞進單檔工具：全部用講的', s:'一個順手的小技巧｜二段 26:50', blocks:[
+        {h:'他問大家有沒有發現',p:'頁面上那張圖在<b>上下輕微飄動</b>。做法是：「你就丟一張圖跟他講，<b>你要去背，並且把這個圖透過 base64 直接給塞進去</b>，他就幫你做好囉。」'},
+        {h:'所以',p:'「<b>你的程式都永遠不用擔心只能用那些 emoji 的小圖，你也可以做一些漂亮的圖放在裡頭。</b>」'},
+        {h:'他的完整流程',steps:[
+          '網路上找圖',
+          '用 ChatGPT 轉成<b>向量圖</b>',
+          '改顏色，做成最終圖',
+          '丟給 AI 說「<b>幫我去背、放右上角、要有微微飄動的感覺</b>」']},
+        {h:'他的結論',tip:'「<b>全部都用講的。全部都腦袋有想法，你用講的把它講出來，他自然就可以幫你做。</b>」<br>門檻不在技術，在<b>妳有沒有想法</b>。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3e2-notes.html#sec-podcast" style="color:var(--amber)">筆記 13：把圖片塞進單檔工具</a>'}]}
+    ]
+  }
+}
+;
+
+
+const ORDER = ['skill', 'deck', 'method', 'tools', 'media'];
+const $ = s=>document.querySelector(s);
+function renderChapter(ch){
+  const d=DATA[ch];const next=ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];const prev=ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html=`<div class="chapter-head"><span class="emoji">${d.emoji}</span><div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div></div>`;
+  d.topics.forEach((tp,i)=>{const id=`${ch}-${i}`;
+    html+=`<div class="topic" id="topic-${id}"><div class="topic-head" onclick="toggleTopic('${id}')"><span class="num">${i+1}</span><h4>${tp.t}<small>${tp.s}</small></h4><input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)"><span class="chev">▶</span></div><div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{html+=`<div class="block"><h5>${b.h}</h5>`;
+      if(b.p)html+=`<p>${b.p}</p>`;
+      if(b.ul)html+=`<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps)html+=`<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.table)html+=`<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.prompt)html+=`<div class="promptbox">${b.prompt}</div>`;
+      if(b.shot)html+=`<figure class="shot"><img src="${b.shot.img}" alt="" loading="lazy"><figcaption>${b.shot.cap}</figcaption></figure>`;
+      if(b.tip)html+=`<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn)html+=`<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html+=`</div>`;});
+    html+=`</div></div></div>`;});
+  html+=`<div class="chapnav"><a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a><a onclick="showHome()" style="text-align:center">回總覽<b>🏠 五大主題</b></a><a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a></div>`;
+  $('#view-'+ch).innerHTML=html;
+}
+ORDER.forEach(renderChapter);
+function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('#view-'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function showHome(){switchView('home');$('#crumbs').style.display='none';clearSearch();}
+function showChapter(ch){switchView(ch);$('#crumbs').style.display='flex';$('#crumbHere').textContent=`${DATA[ch].emoji} ${DATA[ch].title}`;clearSearch();syncChecks();}
+function toggleTopic(id){$('#topic-'+id).classList.toggle('open');}
+function openTopic(ch,i){showChapter(ch);const el=$('#topic-'+ch+'-'+i);el.classList.add('open');setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+const KEY='ecf-s3e2-skills-v1';
+const store=()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){const s=store();if(val)s[id]=1;else delete s[id];localStorage.setItem(KEY,JSON.stringify(s));updateProgress();}
+const TOTAL=ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){const done=Object.keys(store()).length;const pct=Math.round(done/TOTAL*100);$('#progFill').style.width=pct+'%';$('#progText').textContent=`${done} / ${TOTAL} 項技能已掌握`;$('#statDone').textContent=done;$('#statPct').textContent=pct+'%';ORDER.forEach(ch=>{const sub=DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;const el=document.querySelector(`[data-mini="${ch}"]`);if(el)el.style.width=Math.round(sub/DATA[ch].topics.length*100)+'%';});}
+function syncChecks(){const s=store();document.querySelectorAll('input[data-skill]').forEach(cb=>{cb.checked=!!s[cb.dataset.skill];});}
+function resetProgress(){if(confirm('確定要清空所有打勾進度嗎？')){localStorage.removeItem(KEY);syncChecks();updateProgress();}}
+function stripTags(s){return s.replace(/<[^>]+>/g,'');}
+const INDEX=[];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{let body=tp.s+' ';tp.blocks.forEach(b=>{if(b.p)body+=stripTags(b.p)+' ';if(b.ul)body+=b.ul.map(stripTags).join(' ')+' ';if(b.steps)body+=b.steps.map(stripTags).join(' ')+' ';if(b.tip)body+=stripTags(b.tip)+' ';if(b.warn)body+=stripTags(b.warn)+' ';if(b.prompt)body+=stripTags(b.prompt)+' ';if(b.table)body+=b.table.rows.flat().map(stripTags).join(' ')+' ';});INDEX.push({ch,i,title:tp.t,body});}));
+$('#searchInput').addEventListener('input',e=>{const q=e.target.value.trim();const box=$('#searchResults');if(!q){box.classList.remove('show');box.innerHTML='';return;}const hits=INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));box.classList.add('show');if(!hits.length){box.innerHTML=`<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：參數、版型、逆推、降一級、自我檢查、辯論、base64、Mermaid）</div>`;return;}const hl=s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);box.innerHTML=hits.map(x=>{const pos=x.body.toLowerCase().indexOf(q.toLowerCase());const snip=x.body.substr(Math.max(0,pos-20),90);return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})"><div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div><h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;}).join('');});
+function clearSearch(){$('#searchInput').value='';$('#searchResults').classList.remove('show');$('#searchResults').innerHTML='';}
+syncChecks();updateProgress();
+
+</script>
+</body>
+</html>
+
+</body>
+</html>
