@@ -33,6 +33,12 @@ main{max-width:720px;margin:0 auto;padding:14px 14px 120px}
 .box .go{border:0;background:var(--navy);color:#fff;border-radius:var(--r);padding:0 18px;font-size:16px;font-weight:600}
 .box.sem .go{background:var(--sem)}
 .hint{font-size:13px;color:var(--mute);margin:10px 2px 0}
+.cardbox{margin-top:12px;background:#fffbe6;border:1px solid #f1dd9a;border-radius:var(--r);padding:12px 14px}
+.cardbox .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.cardbox .row b{font-size:13px;color:#8a5a00;flex:1}
+.cardbox button{border:1px solid #e0c86a;background:#fff;border-radius:10px;padding:8px 12px;font-size:14px;font-weight:600;color:#6b4a00}
+.cardbox .txt{font-size:18px;line-height:1.7;margin-top:8px;display:none}.cardbox .txt.on{display:block}
+.cardbox .id{font-size:12px;color:#a08030;margin-top:4px}
 .status{margin:12px 0 6px;font-size:14px;color:var(--mute)}
 .status b{color:var(--ink)}
 .prog{height:6px;background:#e3e8f0;border-radius:3px;overflow:hidden;margin-top:8px;display:none}.prog.on{display:block}
@@ -95,6 +101,7 @@ th,td{border-bottom:1px solid var(--line);padding:6px 5px;text-align:left;vertic
 <main>
   <div class="tabs"><button class="on" data-v="search">搜尋</button><button data-v="logs">日誌與筆記</button></div>
   <section id="vSearch">
+    <div class="cardbox" id="cardbox"><div class="row"><b>情境卡</b><button id="draw">🎴 抽一張</button><button id="redraw" style="display:none">這張不合適，換</button></div><div class="txt" id="cardtxt"></div><div class="id" id="cardid"></div></div>
     <div class="seg" style="margin-top:12px">
       <button id="mkw" class="on" data-m="kw">🔎 關鍵字搜尋<small>比對你打的字</small></button>
       <button id="msem" data-m="sem">💬 語意搜尋<small>比對你打的意思</small></button>
@@ -125,7 +132,7 @@ th,td{border-bottom:1px solid var(--line);padding:6px 5px;text-align:left;vertic
   <div class="body" id="vbody"></div>
 </div></div>
 <script>
-const DOCS={{DOCS}};const VECS=({{VECS}}).map(([sc,b])=>{const s=atob(b);const a=new Float32Array(s.length);for(let i=0;i<s.length;i++)a[i]=((s.charCodeAt(i)<<24)>>24)*sc;return a});const MODEL={{MODEL}};const QPREFIX={{QPREFIX}};
+const CARDS={{CARDS}};const DOCS={{DOCS}};const VECS=({{VECS}}).map(([sc,b])=>{const s=atob(b);const a=new Float32Array(s.length);for(let i=0;i<s.length;i++)a[i]=((s.charCodeAt(i)<<24)>>24)*sc;return a});const MODEL={{MODEL}};const QPREFIX={{QPREFIX}};
 const $=s=>document.querySelector(s);const LKEY='dualConsoleLog';let MODE='kw',embedder=null,loading=false,lastQ='';
 const SESSION=(()=>{try{let v=sessionStorage.getItem('dualSession');if(!v){v=Math.random().toString(36).slice(2,8);sessionStorage.setItem('dualSession',v)}return v}catch(e){return 'na'}})();
 const localTs=d=>{const p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}.${String(d.getMilliseconds()).padStart(3,'0')}`};
@@ -141,6 +148,10 @@ function renderLog(){let rows=[];try{rows=JSON.parse(localStorage.getItem(LKEY)|
 function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 function hl(s,q){const e=esc(s);if(!q)return e;const eq=esc(q).replace(/[.*+?^${}()|[\]\\]/g,'\\$&');return e.replace(new RegExp(eq,'gi'),m=>`<mark>${m}</mark>`)}
 $('#sessBtn').onclick=()=>$('#sess').classList.toggle('on');
+// 情境卡：同一場（同瀏覽器分頁）不重複；抽到哪張寫進日誌，受訪者只看到正面
+let drawn=[];try{drawn=JSON.parse(sessionStorage.getItem('dualDrawn')||'[]')}catch(e){}
+function drawCard(re){if(!$('#pid').value.trim()){gate();$('#sess').classList.add('on');return}const pool=CARDS.filter(c=>!drawn.includes(c.id));if(!pool.length){$('#cardtxt').textContent='這一場的卡都抽完了。';$('#cardtxt').classList.add('on');return}const c=pool[Math.floor(Math.random()*pool.length)];drawn.push(c.id);try{sessionStorage.setItem('dualDrawn',JSON.stringify(drawn))}catch(e){}$('#cardtxt').textContent=c.text;$('#cardtxt').classList.add('on');$('#cardid').textContent='卡 '+c.id;$('#redraw').style.display='';$('#draw').textContent='🎴 再抽一張';log('情境卡',re?'換卡':'抽卡',c.text,'','',c.id)}
+$('#draw').onclick=()=>drawCard(false);$('#redraw').onclick=()=>drawCard(true);
 $('#pid').oninput=()=>{$('#pidShow').textContent=$('#pid').value||'未設定';try{localStorage.setItem('dualPid',$('#pid').value)}catch(e){}gate()};$('#task').onchange=()=>{try{localStorage.setItem('dualTask',$('#task').value)}catch(e){}};
 try{$('#pid').value=localStorage.getItem('dualPid')||'';$('#task').value=localStorage.getItem('dualTask')||'';$('#pidShow').textContent=$('#pid').value||'未設定'}catch(e){}gate();
 document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('on'));b.classList.add('on');const logs=b.dataset.v==='logs';$('#vLogs').classList.toggle('on',logs);$('#vSearch').style.display=logs?'none':'';$('#judge').style.display=logs?'none':''});
