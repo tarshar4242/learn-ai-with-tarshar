@@ -36,7 +36,9 @@ const laws = [...new Set(docs.filter(d => d.type === '法條').map(d => d.law))]
 const guides = [...new Set(docs.filter(d => d.type === '指引').map(d => d.law))];
 const label = `法規 ${laws.length} 部 ${docs.filter(d => d.type === '法條').length} 條＋指引 ${guides.length} 冊 ${docs.filter(d => d.type === '指引').length} 段`;
 let html = readFileSync(new URL('./template.html', import.meta.url), 'utf8');
-html = html.replace('{{DOCS}}', JSON.stringify(docs)).replace('{{VECS}}', JSON.stringify(vecs))
+// 9/21 頁面瘦身：向量以 int8（每向量一個 scale）＋ base64 內嵌，10 MB → 約 2 MB；瀏覽器端解回 Float32。eval_fast.mjs 用同一套量化，評測數字與線上一致
+const q8 = v => { const sc = Math.max(...v.map(Math.abs)) / 127 || 1; const u = new Uint8Array(v.length); for (let i = 0; i < v.length; i++) u[i] = Math.round(v[i] / sc) & 255; return [Math.round(sc * 1e6) / 1e6, Buffer.from(u).toString('base64')]; };
+html = html.replace('{{DOCS}}', JSON.stringify(docs)).replace('{{VECS}}', JSON.stringify(vecs.map(q8)))
   .replace('{{MODEL}}', JSON.stringify(MODEL)).replace('{{QPREFIX}}', JSON.stringify(QPREFIX)).replace('{{CORPUS_LABEL}}', label).replace('{{BUILT}}', corpus.built);
 const out = new URL('../../public/thesis-library/tools/dual-search/index.html', import.meta.url);
 mkdirSync(new URL('../../public/thesis-library/tools/dual-search/', import.meta.url), { recursive: true });

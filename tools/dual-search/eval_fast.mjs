@@ -6,6 +6,9 @@ env.allowLocalModels = false;
 const corpus = JSON.parse(readFileSync(new URL('./build/corpus.json', import.meta.url), 'utf8'));
 const fz = JSON.parse(readFileSync(new URL('./sources/frozen_vecs.json', import.meta.url), 'utf8'));
 const docs = corpus.docs; if (fz.ids.length !== docs.length) throw new Error('向量與文件集不符');
+// 與 embed_build.mjs 相同的 int8 量化，評測的就是線上實際用的向量
+const q8r = v => { const sc = Math.max(...v.map(Math.abs)) / 127 || 1; return v.map(x => Math.round(x / sc) * sc); };
+fz.vectors = fz.vectors.map(q8r);
 const QPREFIX = '為這個句子生成表示以用於檢索相關文章：';
 const EVAL = [
   // 9/16 的 12 句民眾白話

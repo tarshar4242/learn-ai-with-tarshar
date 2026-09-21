@@ -125,7 +125,7 @@ th,td{border-bottom:1px solid var(--line);padding:6px 5px;text-align:left;vertic
   <div class="body" id="vbody"></div>
 </div></div>
 <script>
-const DOCS={{DOCS}};const VECS={{VECS}};const MODEL={{MODEL}};const QPREFIX={{QPREFIX}};
+const DOCS={{DOCS}};const VECS=({{VECS}}).map(([sc,b])=>{const s=atob(b);const a=new Float32Array(s.length);for(let i=0;i<s.length;i++)a[i]=((s.charCodeAt(i)<<24)>>24)*sc;return a});const MODEL={{MODEL}};const QPREFIX={{QPREFIX}};
 const $=s=>document.querySelector(s);const LKEY='dualConsoleLog';let MODE='kw',embedder=null,loading=false,lastQ='';
 const SESSION=(()=>{try{let v=sessionStorage.getItem('dualSession');if(!v){v=Math.random().toString(36).slice(2,8);sessionStorage.setItem('dualSession',v)}return v}catch(e){return 'na'}})();
 const localTs=d=>{const p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}.${String(d.getMilliseconds()).padStart(3,'0')}`};
