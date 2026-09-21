@@ -109,6 +109,9 @@ th,td{border-bottom:1px solid var(--line);padding:6px 5px;text-align:left;vertic
     <div class="note">研究者用。日誌只存在這台裝置的瀏覽器裡，不會上傳。每場結束先匯出再清空。</div>
     <textarea id="note" placeholder="觀察筆記：改寫幾次、先看什麼、說了什麼…"></textarea>
     <div class="tools"><button id="notesave">存一則筆記</button><button id="exp">⬇ 匯出 CSV</button><button id="clr">🗑 清空日誌</button><span class="note" id="logcnt"></span></div>
+    <div class="note" style="margin-top:14px"><b>研究者重測用</b>：每行一句，一次跑「關鍵字＋語意」兩種方式，匯出一個 HTML 檔，內含每句兩種方式的前 8 名與<b>每段全文</b>（受訪者點開會看到的全貌）。不寫進上面的訪談日誌。</div>
+    <textarea id="bq" placeholder="每行一句，例如：&#10;公司叫我不用再去上班了&#10;五十幾歲想找工作有沒有補助"></textarea>
+    <div class="tools"><button id="bexp">⬇ 匯出全貌（關鍵字＋語意，含全文）</button><span class="note" id="bst"></span></div>
     <table id="logtbl"><thead><tr><th>時間</th><th>受訪者</th><th>任務</th><th>路徑</th><th>事件</th><th>內容</th><th>結果數</th><th>最高分</th><th>結果清單／名次</th></tr></thead><tbody></tbody></table>
   </section>
 </main>
@@ -165,6 +168,16 @@ document.querySelectorAll('.judge .btns button').forEach(b=>b.onclick=()=>{log(m
 $('#notesave').onclick=()=>{const t=$('#note').value.trim();if(!t)return;log('觀察','筆記',t);$('#note').value=''};
 $('#exp').onclick=()=>{let rows=[];try{rows=JSON.parse(localStorage.getItem(LKEY)||'[]')}catch(e){}const cell=v=>{let x=String(v??'');if(/^[=+\-@]/.test(x))x="'"+x;return '"'+x.replace(/"/g,'""')+'"'};const csv='﻿本地時間,UTC,場次,受訪者,任務,路徑,事件,內容,結果數,最高分,結果清單或名次\n'+rows.map(r=>[r.lt||'',r.t,r.sid||'',r.pid,r.task,r.path,r.ev,r.content,r.n,r.score??'',r.extra||''].map(cell).join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='檢索日誌_'+($('#pid').value||'P00')+'_'+localTs(new Date()).slice(0,10)+'.csv';a.click()};
 $('#clr').onclick=()=>{if(confirm('確定清空？請先匯出。')){localStorage.removeItem(LKEY);renderLog()}};
+// 研究者重測：同一句同時跑兩種方式（與上面的 kwSearch／semSearch 同一套算法），輸出含全文的 HTML，不動訪談日誌
+function rankKw(q){const sc=bm25(q);return DOCS.map((d,i)=>({d,s:sc[i].s})).filter(x=>x.s>0).sort((a,b)=>b.s-a.s).slice(0,8)}
+async function rankSem(q){const ex=await getEmbedder();if(!ex)return null;const r=await ex(QPREFIX+q,{pooling:'mean',normalize:true});const v=Array.from(r.data);return DOCS.map((d,i)=>{let s=0;const w=VECS[i];for(let k=0;k<v.length;k++)s+=v[k]*w[k];return{d,s}}).sort((a,b)=>b.s-a.s).slice(0,8)}
+function fullCard(h,i,q,sem){const d=h.d;return `<div class="c"><div class="h"><b>第 ${i+1} 名</b> <span class="chip">${esc(d.type)}</span> ${esc(d.law)}｜${esc(d.no)}${d.chapter?'｜'+esc(d.chapter):''} <span class="s">分數 ${sem?h.s.toFixed(3):h.s.toFixed(2)}</span>${d.url?` <a href="${d.url}" target="_blank">出處</a>`:''}</div><div class="snip">畫面摘要：${esc(d.text.slice(0,180).replace(/\n+/g,' '))}…</div><div class="full">${hl(d.text,sem?'':q)}</div></div>`}
+$('#bexp').onclick=async()=>{const qs=norm($('#bq').value).split('\n').map(s=>s.trim()).filter(Boolean);if(!qs.length){$('#bst').textContent='先填至少一句';return}
+$('#bexp').disabled=true;const parts=[];for(let n=0;n<qs.length;n++){const q=qs[n];$('#bst').textContent=`處理中 ${n+1}/${qs.length}：${q}`;const kw=rankKw(q);const sem=await rankSem(q);
+parts.push(`<section><h2>${n+1}. 「${esc(q)}」</h2><div class="two"><div><h3>🔎 關鍵字搜尋（BM25）：${kw.length} 段</h3>${kw.length?kw.map((h,i)=>fullCard(h,i,q,false)).join(''):'<div class="c">沒有任何文件含有你打的字。</div>'}</div><div><h3>💬 語意搜尋（${esc(MODEL)}）：${sem?sem.length:0} 段</h3>${sem?sem.map((h,i)=>fullCard(h,i,q,true)).join(''):'<div class="c">語意模型未載入（需要網路）。</div>'}</div></div></section>`)}
+const when=localTs(new Date());const pid=$('#pid').value||'研究者';
+const html=`<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>檢索全貌 ${esc(when)}</title><style>body{font-family:-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;margin:16px;color:#1a1a1a;line-height:1.55}h1{font-size:20px}h2{font-size:18px;margin:28px 0 8px;padding-top:12px;border-top:2px solid #1F4E79}h3{font-size:15px;color:#1F4E79;margin:8px 0}.meta{color:#666;font-size:13px}.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}@media(max-width:800px){.two{grid-template-columns:1fr}}.c{border:1px solid #d5dde8;border-radius:10px;padding:10px 12px;margin:0 0 10px;background:#fff}.c .h{font-size:14px;margin-bottom:6px}.chip{display:inline-block;font-size:11px;border:1px solid #ccc;border-radius:6px;padding:0 5px;margin:0 4px}.s{color:#888;font-size:12px}.snip{font-size:12px;color:#555;background:#f6f8fb;padding:6px 8px;border-radius:6px;margin-bottom:6px}.full{white-space:pre-wrap;font-size:13.5px}mark{background:#fff3a0}@media print{.two{grid-template-columns:1fr}}</style></head><body><h1>雙路徑檢索台｜研究者重測全貌</h1><div class="meta">匯出時間 ${esc(when)}｜代號 ${esc(pid)}｜文件集 ${DOCS.length} 段（凍結版）｜語意模型 ${esc(MODEL)}｜每句各取前 8 名；「畫面摘要」是結果列表上受訪者看到的 180 字，「全文」是點開後看到的整段。</div>${parts.join('')}</body></html>`;
+const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([html],{type:'text/html'}));a.download='檢索全貌_'+pid+'_'+when.slice(0,16).replace(/[: ]/g,'-')+'.html';a.click();$('#bst').textContent=`已匯出 ${qs.length} 句`;$('#bexp').disabled=false};
 renderLog();
 </script>
 </body>
