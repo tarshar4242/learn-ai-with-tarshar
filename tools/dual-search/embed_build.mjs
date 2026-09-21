@@ -13,21 +13,24 @@ const docs = corpus.docs;
 // 向量也凍結：sources/frozen_vecs.json 存在且 id 對得上就直接用，避免每次部署在不同機器重算造成排名漂移
 import { existsSync } from 'node:fs';
 const FROZEN = new URL('./sources/frozen_vecs.json', import.meta.url);
-let vecs = null;
+let vecs = null, reuse = null;
 if (existsSync(FROZEN)) {
   const fz = JSON.parse(readFileSync(FROZEN, 'utf8'));
   if (fz.model === MODEL && fz.ids.length === docs.length && fz.ids.every((id, i) => id === docs[i].id)) { vecs = fz.vectors; console.log(`向量已凍結（${fz.built}），沿用 ${vecs.length} 筆，未重算。`); }
-  else console.log('凍結向量與文件集不符，重算。');
+  else if (fz.model === MODEL) { reuse = new Map(fz.ids.map((id, i) => [id, fz.vectors[i]])); console.log(`凍結向量與文件集不符，同 id 沿用、只算新增段（9/21 增量）。`); }
+  else console.log('凍結向量模型不同，全部重算。');
 }
 if (!vecs) {
-console.log(`文件 ${docs.length} 段，開始算向量…`);
-const ex = await pipeline('feature-extraction', MODEL, { quantized: true });
-vecs = [];
+const todo = docs.map((d, i) => i).filter(i => !(reuse && reuse.has(docs[i].id)));
+console.log(`文件 ${docs.length} 段，需計算 ${todo.length} 段…`);
+const ex = todo.length ? await pipeline('feature-extraction', MODEL, { quantized: true }) : null;
+vecs = new Array(docs.length); let n = 0;
 for (let i = 0; i < docs.length; i++) {
   const d = docs[i];
+  if (reuse && reuse.has(d.id)) { vecs[i] = reuse.get(d.id); continue; }
   const r = await ex(`${d.law} ${d.no} ${d.text}`.slice(0, 1500), { pooling: 'mean', normalize: true });
-  vecs.push(Array.from(r.data).map(x => Math.round(x * 10000) / 10000));
-  if ((i + 1) % 50 === 0) console.log(`${i + 1}/${docs.length}`);
+  vecs[i] = Array.from(r.data).map(x => Math.round(x * 10000) / 10000);
+  if (++n % 50 === 0) console.log(`${n}/${todo.length}`);
 }
 writeFileSync(FROZEN, JSON.stringify({ model: MODEL, built: corpus.built, ids: docs.map(d => d.id), vectors: vecs }));
 console.log('已寫入 sources/frozen_vecs.json（向量凍結）');

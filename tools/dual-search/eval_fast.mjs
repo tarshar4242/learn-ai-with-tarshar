@@ -33,6 +33,8 @@ const EVAL = [
   { q: '跟公司吵薪水吵不攏，可以找誰調解', kw: ['勞資爭議', '調解'] },
   { q: '身心障礙的人找工作，公司一定要僱用一定比例嗎', kw: ['身心障礙者', '進用', '百分之'] },
   { q: '參加職訓期間有生活費可以領嗎', kw: ['職業訓練生活津貼'] },
+  // 9/21 她自己測的句子
+  { q: '我是泰籍人力,公司倒閉我怎麼辦', kw: ['轉換雇主', '關廠、歇業'] },
 ];
 const relevant = e => new Set(docs.filter(d => e.kw.some(k => d.text.includes(k))).map(d => d.id));
 const ex = await pipeline('feature-extraction', fz.model, { quantized: true });
