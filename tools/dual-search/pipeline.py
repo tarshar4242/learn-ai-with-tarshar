@@ -31,9 +31,12 @@ def fetch_law(pcode):
         if t.group(1) is not None:
             chapter = re.sub(r"\s+", " ", strip(t.group(1))); continue
         no = strip(t.group(2))
-        lines = [strip(x) for x in re.findall(r'<div class="line-\d+">(.*?)</div>', t.group(3), re.S)]
+        # 9/21 修：有款項的條文，其「項」的 div 是 class="line-0000 show-number"，舊寫法只抓到純 line-XXXX，整個項會不見（例如第 4 條只剩「一、身分證明文件影本。」）
+        # 9/21 修二：條文區塊的 regex 以第一個「</div> </div>」收尾，最後一行的 </div> 會被吃掉，用 findall 要求 </div> 就會漏掉每條的最後一行；改成以 line 開頭切段
+        lines = [strip(re.sub(r"</div>\s*$", "", x)) for x in re.split(r'<div class="line-\d+[^"]*">', t.group(3))[1:]]
         text = "\n".join(l for l in lines if l)
         if not text: text = strip(t.group(3))
+        if re.fullmatch(r"[（(]\s*刪除\s*[）)]", text): continue  # 已刪除條文只剩「（刪除）」，不進文件集（9/21 重測發現會被撈出來）
         out.append({"id": f"{pcode}-{no.replace(' ', '')}", "law": name, "pcode": pcode, "chapter": chapter, "no": no,
                     "text": text, "url": url, "type": "法條", "date": date})
     if not out: raise ValueError(f"{pcode} 解析不到任何條文，頁面結構可能改了")
@@ -133,7 +136,9 @@ try:
 except Exception as e:
     report.append(f"⚠️ 45+ 常見問題失敗：{e}"); print(report[-1], file=sys.stderr)
 try:
-    fint = fetch_mol_fint(["中高齡者及高齡者就業促進法", "中高齡", "高齡者", "職務再設計", "銀髮", "年齡歧視", "退休再就業", "繼續僱用"]); docs += fint; report.append(f"函釋 勞動部行政函釋：{len(fint)} 則")
+    # 9/21 依就服乙級七個主題補關鍵字（資遣、失業給付、大量解僱、職災、性平、外國人、退休金、職訓）
+    fint = fetch_mol_fint(["中高齡者及高齡者就業促進法", "中高齡", "高齡者", "職務再設計", "銀髮", "年齡歧視", "退休再就業", "繼續僱用",
+                           "資遣費", "失業給付", "大量解僱", "職業災害補償", "性騷擾", "育嬰留職停薪", "聘僱外國人", "勞工退休金", "職業訓練生活津貼", "就業促進津貼"]); docs += fint; report.append(f"函釋 勞動部行政函釋：{len(fint)} 則")
 except Exception as e:
     report.append(f"⚠️ 函釋失敗：{e}"); print(report[-1], file=sys.stderr)
 # 太短的段（目錄、標題頁）不進文件集
