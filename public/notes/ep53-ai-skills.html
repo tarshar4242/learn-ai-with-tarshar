@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>把 AI Agent 的概念裝進會飛會走的載具裡｜直播電台 EP53 互動式學習地圖</title>
+<meta name="description" content="生成式AI應用電台 EP53（2026/09/11）互動式學習地圖：五大主題 21 項技能，涵蓋六個美軍系統的角色矩陣、從衛星到共同戰圖的資料流、人在迴圈上的人工核准閘門、載具端的 Hivemind／Nemyx／NEXUS／Kinesis 對回本機小模型、sub agent、MCP 與人可接管，機器狗零件與 AI 在哪裡、一台 Chatbot 為什麼不夠、斷橋故事裡兩個 Agent 的對話與檢討，以及 Gemini Notebook 影片摘要中文版與直式短片進簡報。學會一項打一個勾，進度存在自己的瀏覽器。">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269;
+  --green:#3f8560; --orange:#bf6a1e; --red:#c0453f; --teal:#0d8f80; --amber:#9c7b23;
+  --feat:#2f5d8a; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(28px,4.6vw,46px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--txt);background:none;-webkit-text-fill-color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:680px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:9px}
+.steps li{list-style:none;counter-increment:st;display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--txt2);line-height:1.7}
+.steps li::before{content:counter(st);flex:none;width:25px;height:25px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:var(--c,var(--feat));margin-top:1px}
+.steps li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+.prompt,.promptbox{background:#1d1d1f;border:1px solid #2c2c31;border-radius:10px;padding:13px 15px;margin-top:6px;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt b,.promptbox b{color:#fff}
+figure.shot{margin:10px 0 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12px;color:var(--txt3);padding:8px 12px;border-top:1px solid var(--line);background:var(--bg2);line-height:1.6}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <a class="navlink" href="../radio/" style="border-color:#c5d3e2" onclick="if(history.length>1){history.back();return false}">← 回上一頁</a>
+  <div class="logo">
+    <div class="dot">🛸</div>
+    <div>無人載具 × AI 地圖<small>生成式AI應用電台 · EP53</small></div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋技能關鍵字：Maven、Lattice、人在迴圈、邊緣運算、蜂群、sub agent、MCP、RAG、機器狗、影片摘要…" autocomplete="off">
+  </div>
+  <a class="navlink" href="ep53-notes.html">📝 課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">生成式AI應用電台 · 直播電台 EP53 · 2026/09/11</span>
+  <h1>把 AI Agent 的概念<br>裝進會飛會走的載具裡</h1>
+  <p class="sub">講師用兩支自製示意動畫，把「無人機、機器狗為什麼需要 AI、AI 裝在哪裡」講成一條你已經會的鏈：<b>資料丟給模型分析 → 做成儀表板 → 人看過再決定 → Agent 分工執行</b>。<br>前半段是今年三月戰事裡的六個美軍系統，後半段是一隻機器狗與一架無人機的斷橋故事，最後三分半示範 <b>Gemini Notebook 影片摘要中文版</b>。<br>點進每一章，逐層展開<b>本堂實際教到</b>的觀念、示範與對照，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🎙️ 生成式AI應用電台・直播電台</span>
+    <span>⏱️ 全長 28 分 0 秒</span>
+    <span>🔰 小白友善</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>5</b><span>大主題</span></div>
+  <div class="stat"><b>21</b><span>項技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 21 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--blue)" onclick="showChapter('chain')">
+        <div class="glowline"></div><span class="emoji">🛰️</span>
+        <h3><em>CHAPTER 01</em>戰場上的一條鏈：從衛星到人工核准</h3>
+        <p>六個系統先認名字、資料怎麼從感測器走到共同戰圖、以及為什麼流程圖上只有一個橘色的閘門。</p>
+        <div class="foot"><div class="mini"><i data-mini="chain"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--purple)" onclick="showChapter('vehicle')">
+        <div class="glowline"></div><span class="emoji">🐝</span>
+        <h3><em>CHAPTER 02</em>載具端四系統，用你會的東西解釋</h3>
+        <p>邊緣運算＝現場就算、蜂群＝實體化的 sub agent、NEXUS＝USB、Kinesis＝人可以切換的遙控器。</p>
+        <div class="foot"><div class="mini"><i data-mini="vehicle"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--green)" onclick="showChapter('robot')">
+        <div class="glowline"></div><span class="emoji">🐕</span>
+        <h3><em>CHAPTER 03</em>機器狗身上的 AI 在哪裡</h3>
+        <p>零件一個一個點過去，然後回答核心問題：一台 Chatbot 為什麼不夠、Agent 為什麼還要工作流、手腳天線與地形圖各是什麼。</p>
+        <div class="foot"><div class="mini"><i data-mini="robot"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--pink)" onclick="showChapter('story')">
+        <div class="glowline"></div><span class="emoji">🌉</span>
+        <h3><em>CHAPTER 04</em>斷橋故事：兩個 Agent 的合作</h3>
+        <p>六段故事對應六種民用任務、八個節拍、為什麼要一隻狗加一架無人機，以及任務之後的檢討。</p>
+        <div class="foot"><div class="mini"><i data-mini="story"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--teal)" onclick="showChapter('tools')">
+        <div class="glowline"></div><span class="emoji">🎬</span>
+        <h3><em>CHAPTER 05</em>工具更新與判斷心法</h3>
+        <p>影片摘要中文版怎麼生、直式短片怎麼進簡報、講師的動畫怎麼做的，以及看這類新聞時要問的兩個問題。</p>
+        <div class="foot"><div class="mini"><i data-mini="tools"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+
+    <div class="resources">
+      <h3>📦 <span>課程原始資料</span></h3>
+      <div class="res-grid">
+        <a href="ep53-notes.html"><span class="ic">📝</span><span><b>課堂筆記</b>11 章＋10 張關鍵畫面，完整脈絡與金句</span></a>
+        <a href="../radio/"><span class="ic">📻</span><span><b>直播電台系列</b>回系列總覽，一集一卡</span></a>
+        <a href="ep52-notes.html"><span class="ic">📊</span><span><b>上一集 EP52</b>如何讓 AI 協助完成 Power BI（視覺化）</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-chain" class="view" style="--c:var(--blue)"></section>
+  <section id="view-vehicle" class="view" style="--c:var(--purple)"></section>
+  <section id="view-robot" class="view" style="--c:var(--green)"></section>
+  <section id="view-story" class="view" style="--c:var(--pink)"></section>
+  <section id="view-tools" class="view" style="--c:var(--teal)"></section>
+</main>
+
+<footer>
+  本頁為直播電台 EP53「無人機發展趨勢與 AI 系統介紹」課後整理・介面沿用本站互動式學習地圖版型<br>
+  內容版權屬原講者與電台，本頁為學習筆記；若原講者或電台希望撤下，來信告知即刻移除<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2026｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+const DATA = {
+  chain: {
+    key:'chain', color:'var(--blue)', emoji:'🛰️', code:'CHAPTER 01', title:'戰場上的一條鏈：從衛星到人工核准',
+    intro:'講師的第一支動畫是九頁的互動簡報，主角是今年三月戰事裡的六個美軍系統。他自己先聲明「全部都是示意圖，不是真實的畫面」，動畫裡也標明這些是「角色映射示意」。這一章把上半條鏈走完：資料怎麼從感測器一路走到那個橘色的人工核准閘門。',
+    topics:[
+      {t:'六個系統先認名字', s:'角色矩陣一張圖｜錄影 03:56', blocks:[
+        {h:'一句話',p:'同一條任務鏈，六個系統各有<b>不同的責任邊界</b>。輸入是「多源感測＋指揮意圖＋規則約束」，輸出由六層共同完成。'},
+        {h:'六個系統',table:{head:['系統','角色','動作','交付'],rows:[
+          ['<b>Maven ＋ Claude</b>','情報理解','融合｜推理｜排序','情報優先序'],
+          ['<b>Lattice OS</b>','戰場指管','理解｜決策｜派遣','跨域任務包'],
+          ['<b>Hivemind</b>','任務自主','感知｜規劃｜飛控','載具自主'],
+          ['<b>Nemyx</b>','蜂群協同','分工｜隊形｜重協調','蜂群編隊'],
+          ['<b>NEXUS</b>','跨廠互通','Agent｜Hub｜協定','跨廠介面'],
+          ['<b>Kinesis</b>','戰術控制','控制｜交接｜TAK','操作接管']]}},
+        {h:'怎麼記',tip:'看每一欄最後那行「交付」就好：<b>這一格產出什麼、交給誰</b>。前兩個交給人，後四個交給載具。'},
+        {h:'示意，不是戰報',warn:'動畫 Nemyx 那一頁自己寫了「證據層級提醒」：功能描述來自原廠發表與展示，套進戰事情境時只能標為<b>角色映射示意</b>，不可說成已獲官方證實的參戰系統。引用時請保留這個態度。'},
+        {h:'實機畫面',shot:{img:'ep53-img/01-role-matrix.jpg',cap:'動畫第 3 頁的系統分工圖：六欄各標角色、動作、交付。［03:56］'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep53-notes.html#sec-open" style="color:var(--blue)">筆記 2：六個系統，先認名字</a>'}]},
+
+      {t:'通訊靠星鏈，不靠 WiFi', s:'最不起眼、卻先講的一格｜錄影 05:30–06:30', blocks:[
+        {h:'為什麼先講通訊',p:'戰場上不可能吃 WiFi、不可能接有線，所以無人機與載具吃的是<b>星鏈</b>。載具在現場靠自己的感測器判斷，把結果送回去靠的就是這條線。'},
+        {h:'講師的類比',p:'就像跟中華電信、遠傳續約一樣，付月租費，手機的網路直接接在星鏈上（他補充台灣目前還不行，日本可以）。'},
+        {h:'跟後面的關係',tip:'第 2 章的邊緣運算「很吃網路」，就是回到這一格。<b>現場算歸現場算，決定還是要送回去</b>。'},
+        {h:'逐字稿提醒',warn:'逐字稿把「衛星通訊」聽成「微信通訊」。講師另外提到星鏈最近開放的某種新方案，那幾個字辨識不清，筆記不補寫。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep53-notes.html#sec-c2" style="color:var(--blue)">筆記 3：第一步，通訊靠星鏈</a>'}]},
+
+      {t:'Maven 就是「把所有資料丟給 GPT」', s:'第一次把軍事系統對回日常｜錄影 06:30–07:48', blocks:[
+        {h:'它做什麼',p:'Maven 是情報推理與收集的地方，裡面搭載 Claude 幫忙判斷。收進來的是敵情、建築物、經緯度座標、影像——格式各不相同，先在這裡彙整。'},
+        {h:'原話',p:'「我們把所有的 Data，會給 GPT，然後 GPT，或者是大型語言模型，他把它分析之後，分門別類，幫你做出一個像是 Dashboard，像是儀表板一樣。」［07:28］'},
+        {h:'模型是可以換的',ul:[
+          '現在用 <b>Claude</b>，之後可能換別家的新模型',
+          '可能同時接<b>不同的 Agent</b>',
+          '也可能接<b>在地端的模型</b>']},
+        {h:'對回你自己',tip:'你把一堆檔案與截圖丟給 ChatGPT 請它分類整理，動作跟 Maven 是同一個。差別只在資料的來源。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep53-notes.html#sec-c2" style="color:var(--blue)">筆記 3：第二步，Maven</a>'}]},
+
+      {t:'Lattice 把儀表板變成「可以被人決策的任務」', s:'共同作戰圖像｜錄影 07:48–09:08', blocks:[
+        {h:'資料流',steps:[
+          '<b>前端收資料</b>：無人機、機器狗、人、士兵的衛星通訊，全部都是感測器',
+          '<b>Maven 彙整</b>：影像、經緯度座標、加密封包等不同格式統一整理',
+          '<b>Lattice 出戰圖</b>：變成一張共同作戰圖像，經緯度、座標、人數都在同一張圖上',
+          '<b>轉成任務</b>：現在看到這些平民、敵軍、建築物、基礎設施——把球交給人']},
+        {h:'看懂流程圖的顏色',tip:'<b>藍色虛線是資料往上送，橘色是決定往下發</b>。從人工核准出去的線才會變橘色。'},
+        {h:'他順口一句',p:'「台灣有買類似的東西。」［07:42］'},
+        {h:'實機畫面',shot:{img:'ep53-img/02-full-flow.jpg',cap:'共同作戰圖全流程：左側三個來源 → Maven → Lattice → 橘框人工核准 → 下方四個載具端系統。［04:36］'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep53-notes.html#sec-c2" style="color:var(--blue)">筆記 3：第三步，Lattice</a>'}]},
+
+      {t:'人工核准：整條鏈唯一不能省的閘門', s:'人在迴圈上，落到具體位置｜錄影 09:08–09:30', blocks:[
+        {h:'人要做什麼',ul:[
+          '檢查<b>有沒有看錯</b>',
+          '檢查<b>是不是偽裝的</b>、是不是錯誤的',
+          '決定要攻擊、偵查、送水、送物資還是救人',
+          '<b>保留接管的權利</b>']},
+        {h:'原話',p:'「現在在國際上的公約還沒有辦法讓他開放去做。所以一定會維持人的決策權。這也是大家常聽到的，人在迴圈上的一個概念。」［09:19–09:30］'},
+        {h:'重點',tip:'不是技術做不到自己動手，是<b>規則不允許</b>。所以流程圖上這個閘門是橘色的，跟其他格子都不一樣。'},
+        {h:'問自己',warn:'你自己在用 AI Agent 做事時，可以問同一個問題：<b>我的閘門放在哪一格？</b>哪些事 AI 可以直接做，哪些一定要經過我？'},
+        {h:'看課堂筆記',p:'👉 <a href="ep53-notes.html#sec-c2" style="color:var(--blue)">筆記 3：第四步，人工核准</a>'}]}
+    ]
+  },
+
+  vehicle: {
+    key:'vehicle', color:'var(--purple)', emoji:'🐝', code:'CHAPTER 02', title:'載具端四系統，用你會的東西解釋',
+    intro:'流程圖下半部的四個方塊，講師每一個都用你已經會的東西來解釋：本機小模型、sub agent、USB、遙控器。這一章沒有新概念，只有新對照。',
+    topics:[
+      {t:'Hivemind：邊緣運算，現場就算完', s:'小語言模型為什麼比較適合｜錄影 09:51–10:58', blocks:[
+        {h:'邊緣運算的白話版',p:'「現在無人機全部撒在外面，現在這些機器狗撒在外面，當他的資料再回傳到我們的這些資料太慢了，他現場就要做判斷，現場就要做掃描，他不可能拍什麼再掃回來，太慢了。」［10:00］'},
+        {h:'三個特點',ul:[
+          '<b>很吃網路</b>——還是要靠網路運作，所以第 1 章先講星鏈',
+          '<b>機子裡是小語言模型</b>——「以前我們都會說大語言模型很快，但是小語言模型比較適合邊緣運算上。」［10:29］',
+          '<b>自主飛行</b>——要飛到東側、飛到哪個經緯度座標，它自己判斷']},
+        {h:'決定權還在後面',tip:'他補了一句：「他的決定還是會回到你，但是他是即時的就已經做整合做整理。」<b>現場算，不等於現場決定。</b>'},
+        {h:'不是投資建議',warn:'講師提到「台灣買了，這應該是上個月的新聞」以及美股軍工股。筆記<b>不列公司名</b>，哪一則新聞、買了什麼，逐字稿裡沒有講清楚，不補。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep53-notes.html#sec-vehicle" style="color:var(--purple)">筆記 4：Hivemind</a>'}]},
+
+      {t:'Nemyx：蜂群就是實體化的 sub agent', s:'整堂最好記的一個對照｜錄影 10:58–13:01', blocks:[
+        {h:'原話',p:'「蜂群系統其實蠻重要的，因為他要把每一個任務做分工。<b>有點像我們現在在玩 AI agent 裡面的 sub agent，就是次級的 agent，他們會互相的分工。</b>跟早期讓所謂的 ChatGPT，大型的模型，大家扮演不同角色，互相討論，有點像。不過他現在都實體化。」［12:00］'},
+        {h:'為什麼要一群',ul:[
+          '一架不夠，有<b>母機與僚機</b>，整體做任務分工',
+          '有的擋子彈、有的擋飛彈、有的擋落石，讓任務可以繼續',
+          '<b>成本</b>：無人機越來越便宜，昂貴的飛彈可以用「幾十架便宜的去撞他」']},
+        {h:'往前推到機器人',p:'蜂群如果轉移到機器人，像特斯拉預計 2027 年量產的人形機器人，也是管家式的分工——你負責出門、你負責掃地、你負責煮飯，分工完各自回報。'},
+        {h:'定義',tip:'動畫第 6 頁的標題就是定義：<b>把多架異廠無人機變成協同群體</b>，重點是「群體行為」而非單機遙控。'},
+        {h:'實機畫面',shot:{img:'ep53-img/03-nemyx-tooltip.jpg',cap:'點到 Nemyx，底下狀態列：「把相容的異廠無人機編成協同群體，動態分配角色、區域與任務」。［13:01］'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep53-notes.html#sec-vehicle" style="color:var(--purple)">筆記 4：Nemyx</a>'}]},
+
+      {t:'NEXUS 像 USB，Kinesis 像遙控器', s:'介面整合與人可切換的接管｜錄影 13:00–14:00', blocks:[
+        {h:'NEXUS：介面整合',p:'無人機種類一多，「最需要的是介面的整合。我必須要有一個叫做有點像是一個 USB，有點像是一個資訊去把它整合在一起。」矩陣上寫的是 Agent＋Hub＋協定——把不同廠牌接在一起的轉接頭。'},
+        {h:'Kinesis：切換的遙控器',p:'「整合在一起不夠，還需要有一個類似遙控器的方式。」人在遙控時要能互相切換——雲端遙控、整合、地端接得起來。交付物是<b>操作接管</b>，就是第 1 章「保留接管權利」落到載具端的具體按鈕。'},
+        {h:'四個系統一次對照',table:{head:['系統','講師用什麼解釋','你已經會的對應'],rows:[
+          ['Hivemind','邊緣運算、小語言模型','在本機跑小模型'],
+          ['Nemyx','蜂群、母機與僚機','sub agent 分工'],
+          ['NEXUS','「有點像是一個 USB」','把不同工具接到同一個介面（第 3 章他會直接說 MCP）'],
+          ['Kinesis','「類似遙控器」','人隨時接管：Agent 跑到一半可以停、可以改']]}},
+        {h:'這一段的收尾',p:'「那時候美軍就是靠這套系統，算是第一次在戰爭中有 AI 大量的導入。」［14:00］細節他沒展開，「你就打史詩怒火戰爭 AI」。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep53-notes.html#sec-vehicle" style="color:var(--purple)">筆記 4：NEXUS 與 Kinesis</a>'}]}
+    ]
+  },
+
+  robot: {
+    key:'robot', color:'var(--green)', emoji:'🐕', code:'CHAPTER 03', title:'機器狗身上的 AI 在哪裡',
+    intro:'「講太多戰爭大家可能會覺得離比較遠。」講師切到第二支動畫「巡仔與小翼」，用一隻機器狗的零件配置圖，回答很多人會問的問題：AI 在哪裡？答案在 19:00 之後的一分半——那是整堂的核心。',
+    topics:[
+      {t:'民用的六種任務與前提', s:'拉回一般情境｜錄影 14:52–16:00', blocks:[
+        {h:'任務',ul:[
+          '<b>搜救</b>、<b>基礎設施巡檢</b>（發電廠）、<b>工廠守衛</b>、<b>校園巡邏</b>',
+          '環境條件：突然的大霧、橋斷了要接力、通訊方式、夜間搜尋',
+          '天空跟地面都要（海上與海下他還沒加）']},
+        {h:'前提',p:'這些「可能都是非紅色供應鏈或者是台製的安全的情況下」。'},
+        {h:'不參考任何一家',warn:'畫動畫時他交代 AI「不要參考任何一家機器狗，怕被侵犯人家的設計權」［16:00］。畫面上那隻狗不是任何一款產品。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep53-notes.html#sec-dog" style="color:var(--green)">筆記 5：民用的六種任務</a>'}]},
+
+      {t:'一隻機器狗身上有什麼', s:'零件一個一個點過去｜錄影 16:00–18:30', blocks:[
+        {h:'零件清單',table:{head:['零件','它做什麼'],rows:[
+          ['<b>照明與雷達</b>','雷達做掃描；語音跟照明放在機身上，每個機型位置不一樣'],
+          ['<b>通訊模組</b>','回傳資訊；它自己就是「一台行走的基地台」，是熱點'],
+          ['<b>足端接地感測</b>','地形是滑的、水的、泥沙、碎石地，能感觸回報'],
+          ['<b>平衡與關節</b>','「最重要是平衡性，我不希望他摔倒就沒了」；摔倒能翻身；趴、前進、轉身'],
+          ['<b>前端視覺／熱影像</b>','夜間用熱成像做比較詳細的掃描'],
+          ['<b>電池與回充</b>','最後要回充，「這是基本的」'],
+          ['<b>機上控制核心</b>','控制所有感知、做邊緣運算；把資訊暫存、檢查、分析，做判斷']]}},
+        {h:'為什麼要自己進去',p:'「人也不可能在旁邊控制他，因為不可能控制他進去這些危險的地方，他自己就進去找了。」［18:00］'},
+        {h:'無人機大同小異',tip:'「無人機更多我都不特別講，大同小異。」機體、雲台、熱像、探照燈、大燈；跟狗相比少了腳與地形感測，多了<b>返航管理</b>。'},
+        {h:'實機畫面',shot:{img:'ep53-img/05-dog-anatomy.jpg',cap:'巡仔 Q01 機器狗配置頁，八個標註，正點到「足端接地」。［17:31］'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep53-notes.html#sec-dog" style="color:var(--green)">筆記 5：一隻機器狗身上有什麼</a>'}]},
+
+      {t:'一台 Chatbot 為什麼不夠：模型 → Agent → 工作流', s:'整堂的核心一分半｜錄影 18:30–19:30', blocks:[
+        {h:'先自問自答',p:'「AI 在哪裡？AI 在這。」［18:30］講到機上控制核心時說的。零件都講完了，AI 是最後那一顆會判斷的核心。'},
+        {h:'原話',p:'「如果他單純只是一台 AI Chatbot，就是一般的大型的模型，基本上他是不夠的，所以他需要 agent。agent 也不夠。因為他除了 agent 之外，他要有一定的工作流，收到東西回到哪邊，有哪些機，導入哪些功能。」［19:00］'},
+        {h:'三層遞進',steps:[
+          '<b>一個大模型</b>——會聊天、會判斷，但沒有手腳，什麼都做不了',
+          '<b>加上 Agent</b>——可以自己決定下一步要做什麼',
+          '<b>加上工作流</b>——收到東西要回到哪裡、要導入哪些功能：它的腳、攝影機、天線']},
+        {h:'對回你自己',tip:'你在電腦上做 AI 自動化時遇到的「為什麼光有一個很聰明的模型不夠用」，跟這隻狗遇到的是<b>同一個問題</b>。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep53-notes.html#sec-dog" style="color:var(--green)">筆記 5：AI 在哪裡</a>'}]},
+
+      {t:'手腳天線是它的 MCP，地形圖是它的 RAG', s:'整堂的一句話｜錄影 19:30–20:14', blocks:[
+        {h:'整堂的一句話',p:'「<b>以前我們都是控制網頁、控制軟體。你就把他想想實體裡面他控制什麼。</b>他不可能說我要下載 Canva 在裡面做去背。但是你可以想像他要控制的工具有哪些？他的手，他的腳，他的天線。」［19:30］'},
+        {h:'他直接點名兩個詞',ul:[
+          '「你可以想像他要導入的 <b>MCP</b>」——它能碰到的工具：手、腳、天線',
+          '「還有導入的 <b>RAG</b> 有什麼？他需要有這邊的地形圖。他至少知道地形圖」——進場前就該知道的事']},
+        {h:'還要有保護',p:'影像辨識之外，「還有寫好的保護程式，避免被人家……」［20:00］——逐字稿這幾個字聽不清，筆記標為待確認，不猜。'},
+        {h:'對回你的 Agent 設定',table:{head:['機器狗','你的 Agent'],rows:[
+          ['手、腳、天線','檔案系統、瀏覽器、API（MCP）'],
+          ['地形圖','產品手冊、SOP（RAG）'],
+          ['收到訊號走哪條路','工作流'],
+          ['保護程式','安全規則、確認機制']]}},
+        {h:'少一層會怎樣',warn:'少一層，它就只是<b>一個會講話的盒子</b>。這一段用機器狗講，講的其實是你每天做自動化時的事。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep53-notes.html#sec-dog" style="color:var(--green)">筆記 5：以前控制網頁，現在控制手腳</a>'}]}
+    ]
+  },
+
+  story: {
+    key:'story', color:'var(--pink)', emoji:'🌉', code:'CHAPTER 04', title:'斷橋故事：兩個 Agent 的合作',
+    intro:'零件講完，他挑動畫裡的第四段「斷橋另一端」播給大家看。聲音沒開成功，「大家可以看字幕就好」，一邊播一邊講。這一章是把第 3 章的概念放進一個具體情境裡跑一遍。',
+    topics:[
+      {t:'六段故事對應六種任務、八個節拍', s:'動畫的結構｜錄影 21:23', blocks:[
+        {h:'六段故事',table:{head:['故事','對應的民用任務'],rows:[
+          ['01 雨夜，還有一盞燈','災後搜救'],
+          ['02 凌晨三點的異音','設施巡檢'],
+          ['03 霧裡的警示','環境偵測'],
+          ['04 斷橋另一端','物資接力'],
+          ['05 山後，重新連線','通聯中繼'],
+          ['06 林間的一次回應','夜間搜尋']]}},
+        {h:'每段都照八拍走',steps:[
+          '現場來訊','夥伴就位','空中找線索','地面接近','突發狀況','重新配合','一起完成','任務之後']},
+        {h:'注意',warn:'這兩張表是<b>從畫面文字抄下來的</b>，不是講師口述，可能有辨識誤差。'},
+        {h:'實機畫面',shot:{img:'ep53-img/07-story-list.jpg',cap:'故事選單：六張卡片、一條八拍的進度列。旁白「小翼負責跨越，巡仔在對岸接手。」［21:23］'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep53-notes.html#sec-story" style="color:var(--pink)">筆記 6：斷橋故事</a>'}]},
+
+      {t:'兩個 Agent 怎麼對話、接力、檢討', s:'故事在演什麼｜錄影 22:00–23:02', blocks:[
+        {h:'三個動作',ul:[
+          '<b>掃描與回報</b>——狗先掃描、把位置定好；遇到障礙告訴你「現在有障礙」。「就是他在展示他的掃描的技術。」',
+          '<b>兩個 Agent 對話</b>——「他們兩個互相對話，就是 Agent 之間的對話。」誰講話、誰收起來、換誰去完成',
+          '<b>任務後檢討</b>——「任務之後記得 Agent 他完成之後會去檢討，檢討他有沒有完成啊，或者是哪邊有問題。」然後飛回去']},
+        {h:'改計畫也要人確認',tip:'故事第 6 拍，狗提出「備用交接面，空地分開進場」，右上角任務通訊寫的是<b>觀察更新 → 提出方案・等待人員確認</b>。第 1 章那個橘色閘門，在民用情境裡長這樣。'},
+        {h:'實機畫面',shot:{img:'ep53-img/08-story-handoff.jpg',cap:'第 6 拍「重新配合」：巡仔頭上 STOP，右上角「等待人員確認」。［22:29］'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep53-notes.html#sec-story" style="color:var(--pink)">筆記 6：故事在演什麼</a>'}]},
+
+      {t:'為什麼要一隻狗加一架無人機', s:'多一個來源｜錄影 23:02–24:00', blocks:[
+        {h:'分工',p:'「他就是兩個互相合作，一個做掃描，一個做他可以比較實地的。」無人機負責看，狗負責走——狗的腳比無人車的輪胎或履帶靈活，可以進山林。'},
+        {h:'原話',p:'「<b>你給他多一點的 data，你給他多一點的資訊，影像的資訊或相關的資訊，他就能夠更完整的判斷。</b>」［23:31］'},
+        {h:'斷線怎麼辦',ul:[
+          '山林裡有些影像會被遮住、拍不到，靠狗過去把兩邊資訊彙整',
+          '通訊中斷時，狗會停下來、收網路重新連線——這是它自己身上帶著基地台的原因']},
+        {h:'看課堂筆記',p:'👉 <a href="ep53-notes.html#sec-story" style="color:var(--pink)">筆記 6：為什麼要兩個</a>'}]},
+
+      {t:'收尾：把帳號放進機器人', s:'方向是認真的｜錄影 24:00–24:49', blocks:[
+        {h:'想深入',p:'「有興趣可以看 paper，如果你看機械系的或者是航空系的，他們最近發了很多這樣的 paper。」'},
+        {h:'原話',p:'「你用 AI agent，用 ChatGPT 的概念來看，你會覺得好像跟我們平常在做的事情蠻像蠻類似的。……說不定今年底聖誕節的時候你就會收到一些機器人的禮物。那你就可以開始把你的 ChatGPT 帳號放到機器人的腦裡面，或者是把你的 Claude 或者是 Codex 的帳號放在人形機器人。」［24:19–24:49］'},
+        {h:'意思是',tip:'你現在練的 Agent、MCP、工作流，之後會<b>直接搬進實體</b>。半開玩笑，方向是認真的。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep53-notes.html#sec-story" style="color:var(--pink)">筆記 6：他的收尾</a>'}]}
+    ]
+  },
+
+  tools: {
+    key:'tools', color:'var(--teal)', emoji:'🎬', code:'CHAPTER 05', title:'工具更新與判斷心法',
+    intro:'最後三分半是慣例的工具更新：Gemini Notebook 影片摘要出了中文版，長內容變 60 秒直式短片，直接插進簡報。這一章也把整堂的判斷心法收在一起。',
+    topics:[
+      {t:'影片摘要中文版：四步生成', s:'英文版出了一個半月，中文版上週才出｜錄影 26:00–26:31', blocks:[
+        {h:'它是什麼',p:'「也不算新功能。他大概一個半月前出了英文版的影片摘要，中文版上個禮拜出了吧。」跟 Reels、Shorts「很像但不太像」——<b>它是把長內容變成直式的短片</b>，60 到 70 秒，「中文是準的」。'},
+        {h:'四步',steps:[
+          '在 <b>Gemini Notebook</b> 打開一本已放好來源的筆記本（他這本 9 個來源）',
+          '右側工作室點<b>「影片摘要」</b>',
+          '格式選<b>「精簡」</b>（標著「新推出」）；另一個選項是「說明影片」',
+          '語言選<b>「中文（繁體）」</b>，來源全選，按<b>立即生成</b>']},
+        {h:'可以指定重心',tip:'視窗下方有「影片要以什麼內容為重心？」可以填主題，他這次沒填直接生成。生出來的那支叫「2026 機器人產業的四大關鍵趨勢」。'},
+        {h:'產品名',warn:'畫面上的產品名是 <b>Gemini Notebook</b>（notebook.google.com），講師口中叫「Gemini 最近的 Notebook」。筆記照畫面寫，不替換成其他產品名。'},
+        {h:'實機畫面',shot:{img:'ep53-img/09-notebook-video-dialog.jpg',cap:'自訂影片摘要：格式精簡（新推出）、語言中文（繁體）、來源 9 個。［26:12］'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep53-notes.html#sec-tools" style="color:var(--teal)">筆記 7：影片摘要</a>'}]},
+
+      {t:'直式短片插進簡報，當引言', s:'三步｜錄影 27:05–28:00', blocks:[
+        {h:'拿來做什麼',ul:[
+          '放 Reels、做前導介紹',
+          '<b>當簡報的引言、導論的出口</b>']},
+        {h:'三步',steps:[
+          '開一份空白簡報，按<b>插入</b>',
+          '<b>媒體 → 視訊 → 從這個裝置</b>，選剛下載的影片，「他就可以無縫的放進來」',
+          '設定播放方式，開始簡報時它會<b>全螢幕播放</b>']},
+        {h:'實機畫面',shot:{img:'ep53-img/10-notebook-vertical-video.jpg',cap:'生成的直式短片，全長 1 分 13 秒，第一秒字幕「你以為的 AI，」。［27:15］'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep53-notes.html#sec-tools" style="color:var(--teal)">筆記 7：拿來做什麼</a>'}]},
+
+      {t:'講師的動畫怎麼做的：HTML＋Remotion＋Codex', s:'藏在課裡的第二個示範｜錄影 25:33', blocks:[
+        {h:'原話',p:'「我直接讓他畫 HTML，就是加 Remotion，就是最近也蠻紅的就是用 AI 去控制 Remotion，然後畫動畫。我的動畫設定就是他必須要有情境式，然後跟每段式的跟著我走。」［25:33］'},
+        {h:'怎麼做',steps:[
+          '搜 <b>Remotion</b>（用程式碼做動畫的工具）',
+          '用 <b>Codex</b> 去連它',
+          '把設定講清楚：<b>情境式、每一段跟著講述走</b>',
+          '「當然可以做得更好，點數花下去就可以更好」']},
+        {h:'為什麼值得注意',tip:'整堂的教材本身，就是「把需求講清楚、讓 AI 去控制一個工具」的產物。他沒有開 PowerPoint，也沒有畫圖軟體。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep53-notes.html#sec-tools" style="color:var(--teal)">筆記 7：那兩支動畫怎麼做的</a>'}]},
+
+      {t:'分清示意與實證：看這類新聞的兩個問題', s:'貫穿全堂的態度｜錄影 04:29', blocks:[
+        {h:'他自己的示範',ul:[
+          '動畫一開播就聲明「這個全部都是示意圖，不是真實的畫面」',
+          'Nemyx 那頁自己標了「證據層級提醒」：角色映射示意，不是已證實的參戰系統']},
+        {h:'他評論新聞',p:'有中國研究員用 Claude 模擬台灣防空——「<b>我覺得這只是新聞炒作，因為他真的有辦法模擬的話，他也沒辦法拿到真實的資料。</b>」［04:29］模型爬得到公開資料，爬不到飛彈防空與機密位置，除非有人給它實質的紙本資料或座標。「那個新聞可以稍微觀看一下，就當作新聞就好。」'},
+        {h:'兩個問題',steps:[
+          '新聞裡的 AI <b>有沒有拿到真資料</b>？',
+          '流程裡<b>誰在最後核准</b>？']},
+        {h:'看課堂筆記',p:'👉 <a href="ep53-notes.html#sec-real" style="color:var(--teal)">筆記 8：這堂課真正在教的事</a>'}]},
+
+      {t:'四個對照，把整堂收進一張表', s:'名詞可以忘，這張表不要｜貫穿全堂', blocks:[
+        {h:'軍事系統 ↔ 你已經會的事',table:{head:['系統','你已經會的事'],rows:[
+          ['Maven ＋ Claude','把資料丟給 GPT 分析'],
+          ['Lattice','做成儀表板'],
+          ['人工核准','你看過再決定'],
+          ['Hivemind','本機跑小模型'],
+          ['Nemyx','sub agent 分工'],
+          ['NEXUS','USB／MCP'],
+          ['Kinesis','人隨時能接管']]}},
+        {h:'實體裡的 AI 是什麼',p:'不是一顆模型，是<b>模型＋Agent＋工作流＋工具（MCP）＋知識（RAG）</b>。少一層就是一個會講話的盒子。'},
+        {h:'閘門在哪',tip:'「人在迴圈上」不是口號，是流程圖上一個具體的位置：Lattice 之後、載具之前；民用的送物資故事裡，改交接點一樣要「等待人員確認」。<b>設計自己的 Agent 流程時，也問一次閘門在哪一格。</b>'},
+        {h:'看課堂筆記',p:'👉 <a href="ep53-notes.html#sec-real" style="color:var(--teal)">筆記 8：四件事</a>'}]}
+    ]
+  }
+}
+;
+
+
+const ORDER = ['chain','vehicle','robot','story','tools'];
+const $ = s=>document.querySelector(s);
+function renderChapter(ch){
+  const d=DATA[ch];const next=ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];const prev=ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html=`<div class="chapter-head"><span class="emoji">${d.emoji}</span><div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div></div>`;
+  d.topics.forEach((tp,i)=>{const id=`${ch}-${i}`;
+    html+=`<div class="topic" id="topic-${id}"><div class="topic-head" onclick="toggleTopic('${id}')"><span class="num">${i+1}</span><h4>${tp.t}<small>${tp.s}</small></h4><input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)"><span class="chev">▶</span></div><div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{html+=`<div class="block"><h5>${b.h}</h5>`;
+      if(b.p)html+=`<p>${b.p}</p>`;
+      if(b.ul)html+=`<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps)html+=`<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.table)html+=`<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.prompt)html+=`<div class="promptbox">${b.prompt}</div>`;
+      if(b.shot)html+=`<figure class="shot"><img src="${b.shot.img}" alt="" loading="lazy"><figcaption>${b.shot.cap}</figcaption></figure>`;
+      if(b.tip)html+=`<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn)html+=`<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html+=`</div>`;});
+    html+=`</div></div></div>`;});
+  html+=`<div class="chapnav"><a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a><a onclick="showHome()" style="text-align:center">回總覽<b>🏠 五大主題</b></a><a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a></div>`;
+  $('#view-'+ch).innerHTML=html;
+}
+ORDER.forEach(renderChapter);
+function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('#view-'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function showHome(){switchView('home');$('#crumbs').style.display='none';clearSearch();}
+function showChapter(ch){switchView(ch);$('#crumbs').style.display='flex';$('#crumbHere').textContent=`${DATA[ch].emoji} ${DATA[ch].title}`;clearSearch();syncChecks();}
+function toggleTopic(id){$('#topic-'+id).classList.toggle('open');}
+function openTopic(ch,i){showChapter(ch);const el=$('#topic-'+ch+'-'+i);el.classList.add('open');setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+const KEY='ep53-skills-v1';
+const store=()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){const s=store();if(val)s[id]=1;else delete s[id];localStorage.setItem(KEY,JSON.stringify(s));updateProgress();}
+const TOTAL=ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){const done=Object.keys(store()).length;const pct=Math.round(done/TOTAL*100);$('#progFill').style.width=pct+'%';$('#progText').textContent=`${done} / ${TOTAL} 項技能已掌握`;$('#statDone').textContent=done;$('#statPct').textContent=pct+'%';ORDER.forEach(ch=>{const sub=DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;const el=document.querySelector(`[data-mini="${ch}"]`);if(el)el.style.width=Math.round(sub/DATA[ch].topics.length*100)+'%';});}
+function syncChecks(){const s=store();document.querySelectorAll('input[data-skill]').forEach(cb=>{cb.checked=!!s[cb.dataset.skill];});}
+function resetProgress(){if(confirm('確定要清空所有打勾進度嗎？')){localStorage.removeItem(KEY);syncChecks();updateProgress();}}
+function stripTags(s){return s.replace(/<[^>]+>/g,'');}
+const INDEX=[];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{let body=tp.s+' ';tp.blocks.forEach(b=>{if(b.p)body+=stripTags(b.p)+' ';if(b.ul)body+=b.ul.map(stripTags).join(' ')+' ';if(b.steps)body+=b.steps.map(stripTags).join(' ')+' ';if(b.tip)body+=stripTags(b.tip)+' ';if(b.warn)body+=stripTags(b.warn)+' ';if(b.prompt)body+=stripTags(b.prompt)+' ';if(b.table)body+=b.table.rows.flat().map(stripTags).join(' ')+' ';});INDEX.push({ch,i,title:tp.t,body});}));
+$('#searchInput').addEventListener('input',e=>{const q=e.target.value.trim();const box=$('#searchResults');if(!q){box.classList.remove('show');box.innerHTML='';return;}const hits=INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));box.classList.add('show');if(!hits.length){box.innerHTML=`<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：Maven、人在迴圈、邊緣運算、sub agent、MCP、機器狗、影片摘要）</div>`;return;}const hl=s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);box.innerHTML=hits.map(x=>{const pos=x.body.toLowerCase().indexOf(q.toLowerCase());const snip=x.body.substr(Math.max(0,pos-20),90);return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})"><div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div><h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;}).join('');});
+function clearSearch(){$('#searchInput').value='';$('#searchResults').classList.remove('show');$('#searchResults').innerHTML='';}
+syncChecks();updateProgress();
+</script>
+</body>
+</html>
