@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>把 AI 當第二雙眼睛，不是把質性研究外包給它｜直播電台 EP54 互動式學習地圖</title>
+<meta name="description" content="生成式AI應用電台 EP54（2026/09/26）互動式學習地圖：五大主題 19 項實戰技能，涵蓋 AI 只能抓到六成脈絡的分工比例、人與 AI 各自的三種盲點、讓 AI 先存而不論編第一次、反身性不能外包還要反過來用在 AI 身上、把 AI 當 VR 裝置與探測器練追問、AI 能不能當受訪者的界線、叫 AI 列相似相異表並附來源、研究者／Coding／Evidence／Perspective／Judge 五角色 Agent 小組、可追溯的輸出格式、Skill 從單一角色設計、夜市支付案例的候選編碼與證據覆核、研究者裁決與 Reflexive Memo、兩套 AI 編碼加自己那套做三角檢證、去識別化與 AI 介入的五條紅線。學會一項打一個勾，進度存在自己的瀏覽器。">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269;
+  --green:#3f8560; --orange:#bf6a1e; --red:#c0453f; --teal:#0d8f80; --amber:#9c7b23;
+  --feat:#3f8560; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(28px,4.6vw,46px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--txt);background:none;-webkit-text-fill-color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:680px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:9px}
+.steps li{list-style:none;counter-increment:st;display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--txt2);line-height:1.7}
+.steps li::before{content:counter(st);flex:none;width:25px;height:25px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:var(--c,var(--feat));margin-top:1px}
+.steps li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+.prompt,.promptbox{background:#1d1d1f;border:1px solid #2c2c31;border-radius:10px;padding:13px 15px;margin-top:6px;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt b,.promptbox b{color:#fff}
+figure.shot{margin:10px 0 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12px;color:var(--txt3);padding:8px 12px;border-top:1px solid var(--line);background:var(--bg2);line-height:1.6}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <a class="navlink" href="../radio/" style="border-color:#c5dccd" onclick="if(history.length>1){history.back();return false}">← 回上一頁</a>
+  <div class="logo">
+    <div class="dot">🔍</div>
+    <div>質性研究 × AI Agent 地圖<small>生成式AI應用電台 · EP54</small></div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋技能關鍵字：反身性、候選編碼、Evidence、三角檢證、存而不論、VR、紅線、Skill…" autocomplete="off">
+  </div>
+  <a class="navlink" href="ep54-notes.html">📝 課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">生成式AI應用電台 · 直播電台 EP54 · 2026/09/26</span>
+  <h1>把 AI 當第二雙眼睛<br>不是把質性研究外包給它</h1>
+  <p class="sub">老師一開口就承認「可以很輕鬆的把逐字稿直接丟給 AI 做編碼」，然後花了整堂講<b>為什麼做得到還不能這樣做</b>：AI 抓得到六成脈絡，剩下的是研究者的工作。<br>整堂一條線：先分清<b>人與 AI 各自的盲點</b>，把 AI 當 <b>VR 裝置與探測器</b>練功，把編碼拆給<b>五角色的 Agent 小組</b>，最後用夜市支付案例跑一輪，看 AI 提候選、找證據、停在研究者裁決點。<br>點進每一章，逐層展開<b>本堂實際教到</b>的觀念、界線與操作，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🎙️ 生成式AI應用電台・直播電台</span>
+    <span>⏱️ 全長 47 分 40 秒</span>
+    <span>🎓 論文與研究方法向</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>5</b><span>大主題</span></div>
+  <div class="stat"><b>19</b><span>實戰技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 19 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--purple)" onclick="showChapter('mindset')">
+        <div class="glowline"></div><span class="emoji">🧭</span>
+        <h3><em>CHAPTER 01</em>人機分工的心法</h3>
+        <p>逐字稿丟給 AI 做得到卻只能到六成、人與 AI 各自的三種盲點、反身性為什麼不能外包，以及讓 AI 先「存而不論」編一次的做法。</p>
+        <div class="foot"><div class="mini"><i data-mini="mindset"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--teal)" onclick="showChapter('practice')">
+        <div class="glowline"></div><span class="emoji">🥽</span>
+        <h3><em>CHAPTER 02</em>拿 AI 練功：VR 裝置與探測器</h3>
+        <p>三種技能移轉（情境設計、追問、腦力激盪）、AI 能不能當受訪者的界線，以及叫 AI 列相似相異表並附來源頁的基本操作。</p>
+        <div class="foot"><div class="mini"><i data-mini="practice"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--blue)" onclick="showChapter('team')">
+        <div class="glowline"></div><span class="emoji">🧑‍🤝‍🧑</span>
+        <h3><em>CHAPTER 03</em>質性研究 Agent 小組</h3>
+        <p>為什麼要一個管家加四個助手、五個角色各做什麼不做什麼、每一筆編碼都綁回原文的可追溯格式，以及 Skill 從單一角色開始設計。</p>
+        <div class="foot"><div class="mini"><i data-mini="team"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--orange)" onclick="showChapter('demo')">
+        <div class="glowline"></div><span class="emoji">🧪</span>
+        <h3><em>CHAPTER 04</em>Demo：夜市支付案例跑一輪</h3>
+        <p>準備四份檔案開群聊、正式做之前先 run 一次、Step 1 候選編碼、Step 2 證據覆核、Step 3 三個視角，最後停在研究者裁決點。</p>
+        <div class="foot"><div class="mini"><i data-mini="demo"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--pink)" onclick="showChapter('ethics')">
+        <div class="glowline"></div><span class="emoji">🛡️</span>
+        <h3><em>CHAPTER 05</em>品質、倫理與三角檢證</h3>
+        <p>兩套 AI 編碼加你自己那套做三角檢證、AI 介入的五條紅線、什麼資料不能直接餵給 AI，以及 GitHub 上的 Skill 為什麼要拿下來調。</p>
+        <div class="foot"><div class="mini"><i data-mini="ethics"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+
+    <div class="resources">
+      <h3>📦 <span>課程原始資料</span></h3>
+      <div class="res-grid">
+        <a href="ep54-notes.html"><span class="ic">📝</span><span><b>課堂筆記</b>11 章＋8 張關鍵畫面，含 16 則老師金句</span></a>
+        <a href="../radio/"><span class="ic">📻</span><span><b>直播電台系列</b>回系列總覽，一集一卡</span></a>
+        <a href="ep52-notes.html"><span class="ic">📊</span><span><b>相關 EP52</b>如何讓 AI 協助完成 Power BI（視覺化）</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-mindset" class="view" style="--c:var(--purple)"></section>
+  <section id="view-practice" class="view" style="--c:var(--teal)"></section>
+  <section id="view-team" class="view" style="--c:var(--blue)"></section>
+  <section id="view-demo" class="view" style="--c:var(--orange)"></section>
+  <section id="view-ethics" class="view" style="--c:var(--pink)"></section>
+</main>
+
+<footer>
+  本頁為直播電台 EP54「質性研究與 AI Agent 協助」課後整理・介面沿用本站互動式學習地圖版型<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2026｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+const DATA = {
+  mindset: {
+    key:'mindset', color:'var(--purple)', emoji:'🧭', code:'CHAPTER 01', title:'人機分工的心法',
+    intro:'老師從頭到尾沒說 AI 不會編碼。它會，格式還能做得像論文。他反覆講的是六成：AI 抓得到六成脈絡，剩下的細微情緒、人事時地物的連結、二度建構的詮釋，是研究者自己進田野才拿得到的。這一章先把位置站好，再談工具。',
+    topics:[
+      {t:'逐字稿丟給 AI 就算數？它只能到六成', s:'整堂的分工比例｜錄影 04:00–07:30', blocks:[
+        {h:'做得到的部分',p:'把訪談完的逐字稿丟給 AI，請它做<b>主題編碼、選擇編碼、摘出重要文字</b>，甚至寫成「一段論述、下面縮排引述」的論文格式，AI 都做得到。老師先承認這件事，再講為什麼不夠。'},
+        {h:'不夠的部分',ul:[
+          '質性研究看的不只是表面現象（一度建構），還有受訪者內心的詮釋、他跟這塊土地與這件事的連結（二度建構）',
+          '你進田野、做焦點團體、做深度訪談時觀察到的<b>細微情緒反應</b>，給 AI 再多 RAG、再多背景脈絡，它也不容易找到',
+          '老師估計 AI「至少幫我抓個六、五到七成左右的脈絡」，剩下的現象與現象、關聯與關聯、人事時地物的互動結果，交給人']},
+        {h:'原話',tip:'「但是他只能達成你六成的。中間有一些細節微小的、可能沒觀察到的，那就要交給人類。」［12:29］'},
+        {h:'配合的方式',warn:'AI 可以邊編你邊看它的初步想法，但要<b>先給它訪談大綱和研究內容</b>。不給的話，它拿到一大堆逐字稿，就只是照裡面的關鍵字在連，老師叫它「樂觀的接龍機器人」［12:00］。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep54-notes.html#sec-open" style="color:var(--purple)">筆記 2：做得到，為什麼還不能全交出去</a>'}]},
+
+      {t:'人有盲點，AI 也有：兩張三條的對照表', s:'簡報第 6、7 頁｜錄影 10:00–12:00', blocks:[
+        {h:'人的三種盲點',table:{head:['來源','後果'],rows:[
+          ['熟悉領域','容易想當然耳'],
+          ['理論框架','容易過早套用'],
+          ['立場價值','影響詮釋方向']]}},
+        {h:'AI 的三種問題',table:{head:['問題','長什麼樣'],rows:[
+          ['幻覺','補出原文沒有的意思'],
+          ['去脈絡','忽略情境與關係；老師說這是 AI「最大的問題」'],
+          ['過度自信','說得流暢但未必正確']]}},
+        {h:'具體場景',p:'大家很常一開始就把訪綱餵給 AI，AI 就照訪綱形成標題、往裡面填東西。這種做法會漏掉訪綱沒問到的東西：自治會會長是推政策的人、攤商是接受政策的人、還有攤商乾脆說「我就要現金買賣」。<b>反過來可以讓 AI 幫你點出：有沒有一些特殊立場是你當初沒看到的。</b>'},
+        {h:'結論',tip:'簡報第 8 頁：<b>問題不是 Human vs AI，而是怎麼做人機分工。不是取代、而是分工、更是互相校正。</b>兩張表各自的最後一行是「研究者也需要被校正」與「看起來合理 ≠ 研究上成立」。'},
+        {h:'實機畫面',shot:{img:'ep54-img/02-researcher-blindspots.jpg',cap:'簡報第 6 頁，老師停留最久的一頁。右下角「研究者也需要被校正」替 AI 的角色定了調。［10:18］'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep54-notes.html#sec-open" style="color:var(--purple)">筆記 2：人的盲點與 AI 的盲點</a>'}]},
+
+      {t:'讓 AI 先「存而不論」編第一次', s:'把質性研究的老規矩套到 AI 身上｜錄影 08:00–09:30', blocks:[
+        {h:'為什麼',p:'學質性研究時老師都會說「存而不論」：不帶主觀、不帶理論框架，先從比較客觀的角度看。老師建議把這件事也套在 AI 身上，讓它「一開始先沒有任何包袱的先編第一次」［08:30］。'},
+        {h:'怎麼做',steps:[
+          '<b>第一次不給訪綱</b>，只把逐字稿丟給它，告訴它「這是質性研究的分析」（不說的話它只會給一個很粗的摘要）',
+          '<b>換一個帳號或視窗</b>再做第二次，這次給訪綱。「你不要同一個帳號或同一個視窗，因為彼此的上下文是會互相影響的」',
+          '把兩次的結果跟你自己讀出來的東西對照，找趨同與趨異，慢慢把故事拼出來']},
+        {h:'為什麼要換視窗',warn:'同一個對話裡，前一次的分析會影響後一次。想要一次「沒有包袱」的版本，就得在乾淨的上下文裡跑。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep54-notes.html#sec-open" style="color:var(--purple)">筆記 2：反過來的做法</a>'}]},
+
+      {t:'反身性不能外包，還要反過來用在 AI 身上', s:'整堂的核心一課｜錄影 22:00–25:30', blocks:[
+        {h:'什麼是反身性',p:'老師說人跟機器最大的不同叫做反身性（Reflexivity）：<b>我自己為何會去這樣理解？</b>它決定你怎麼呈現故事的脈絡、主題為什麼特殊、你的寫作邏輯。簡報第 10 頁的三個問題：我為何這樣理解？我帶著什麼預設進場？我的詮釋排除了什麼？'},
+        {h:'翻過來用',steps:[
+          '<b>先想 AI 為什麼會這樣編</b>：它背後本來就是一個順著你的話說的東西，你還一味相信，等於放棄了獨立思考的空間',
+          '<b>把它當成田野裡在旁邊喊聲的人</b>，站在它的反立場：它帶著什麼立場？它在詮釋時排除了什麼？',
+          '<b>寫下你認同和不認同它的地方</b>：AI 幫你做到第二層（抓概念），但它的詮釋是最表面的，第二層詮釋「為什麼這個人這樣想」還是你的']},
+        {h:'原話',tip:'「所以你應該把他當成說他也是其中田野一個在旁邊喊聲的人。」［23:17］把 AI 從權威降回現場的一個聲音，反身性才用得上。'},
+        {h:'攤商的例子',p:'第一層：方便、減少溝通。第二層才是重點：<b>看不到實際的錢、可能被扣稅</b>（錢經過第三方支付進戶頭，以前夜市攤販不用報稅）；再上一層，自治會為什麼要推：跟第三方有簽約、夜市整體政策、消費者有 Coupon。AI 幫你找到「攤商多半提到手續費」這個趨勢，趨勢背後的邏輯要你自己細看。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep54-notes.html#sec-reflex" style="color:var(--purple)">筆記 4：最不能外包的反身性</a>'}]}
+    ]
+  },
+
+  practice: {
+    key:'practice', color:'var(--teal)', emoji:'🥽', code:'CHAPTER 02', title:'拿 AI 練功：VR 裝置與探測器',
+    intro:'三年前 GPT 剛出來時，老師做的兩個嘗試：把 AI 當田野練追問，把 AI 當探測器練歸納。這一章講的是可以怎麼練，以及練到哪裡為止就不能再往前走。',
+    topics:[
+      {t:'三種技能移轉：情境設計、追問、腦力激盪', s:'簡報第 4、5 頁｜錄影 13:00–19:00', blocks:[
+        {h:'為什麼要把 AI 當田野',p:'學質性研究通常先讀方法論、本體論、演繹與歸納；要等到跟著老師做研究，才知道深度訪談怎麼追問、焦點團體怎麼編排、訪綱怎麼設計。<b>看教科書體驗不到。</b>'},
+        {h:'對照表',table:{head:['詠唱指令心法','技能移轉自','練什麼'],rows:[
+          ['情境設計','田野調查法','把 AI 設計成一個田野，練習參與與觀察，模擬局內人的想法'],
+          ['追問','深度訪談法','把 AI 當受訪者，練習怎麼追問、怎麼往下挖'],
+          ['腦力激盪','焦點團體座談法','讓 AI 扮演多個參與者，練習你在團體裡怎麼拋問題、怎麼收斂']]}},
+        {h:'兩個比喻',ul:[
+          '<b>VR 裝置</b>：沒到現場很難想像怎麼做參與、做觀察；設計一個情境讓 AI 來對話，你進去練習理解局內人',
+          '<b>探測器</b>：存而不論的分析，透過歸納法一點一滴找蛛絲馬跡，編碼 → 概念 → 主題，把故事說出來']},
+        {h:'原話',tip:'「AI 變成你的 VR 裝置。因為以前我們要進入田野會談，怎麼變成局內的？你是做參與還是做觀察？」［18:00］'},
+        {h:'看課堂筆記',p:'👉 <a href="ep54-notes.html#sec-vr" style="color:var(--teal)">筆記 3：為什麼要把 AI 當成田野</a>'}]},
+
+      {t:'AI 能不能當受訪者？練習可以，當證據不行', s:'這堂最明確的一條界線｜錄影 15:00–17:30', blocks:[
+        {h:'現在有人在做什麼',p:'老師看到幾篇還沒刊登的 paper 在談：先讓 AI 吸收某個現象的背景與歷史脈絡，再拿訪綱依序訪談它，它生出一大堆逐字稿，研究者拿來分析。他也提到最近選舉出現的「AI Agent 民調」，把選民設定成 Agent 來回答。'},
+        {h:'界線',table:{head:['用法','老師的判斷'],rows:[
+          ['拿 AI 練追問技巧、練焦點團體的做法','<b>當然沒問題</b>，這是練習'],
+          ['拿 AI 練 Coding、練研究技巧','<b>可以</b>，就算學術上不承認也能拿來訓練自己'],
+          ['拿虛擬 AI Agent 回答的資料做分析、當研究佐證','<b>目前不太可能</b>，學術倫理上不被承認']]}},
+        {h:'他怎麼說',warn:'「明明沒有去訪談這個人，明明沒有去做深度訪談，但是卻生出五六十幾頁的逐字稿」來當研究佐證，目前沒看過期刊接受。他不排除隨時間演變成其中一派，但那是未來的事。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep54-notes.html#sec-vr" style="color:var(--teal)">筆記 3：界線</a>'}]},
+
+      {t:'快廣多：叫 AI 列相似相異表，每一項附來源頁', s:'AI 該做的事｜錄影 20:00–21:30', blocks:[
+        {h:'AI 擅長什麼',p:'簡報第 9 頁三個大字：<b>快</b>（大量文本初步整理）、<b>廣</b>（找重複模式與相似片段）、<b>多</b>（提出多個候選編碼）。底下那行小字是結論：「AI 擅長探索與生成候選，不取代人的專業判斷。」'},
+        {h:'老師自己的三步',steps:[
+          '把逐字稿丟給它，先很初步地說：<b>「初步有哪些相同相異，你幫我列一張表吧。」</b>',
+          '要求表裡要有相似之處，而且<b>每一項後面要給來源</b>：「你在哪一頁看到的，請告訴我。」相異之處同樣做法',
+          '接著問：<b>如果以紮根理論為基礎，開放編碼、主題編碼、選擇編碼的過程中，你是如何做出來的？</b>它就會列出一大堆 code 的過程']},
+        {h:'為什麼要來源',tip:'「你在哪一頁看到的」這一句就是後面 Evidence Agent 的雛形。從第一次對話開始就逼它交代出處，後面才有辦法回頭查。'},
+        {h:'實機畫面',shot:{img:'ep54-img/03-ai-strengths.jpg',cap:'簡報第 9 頁。第三格用的詞是「候選」，這個詞在後面兩章會一直出現。［20:15］'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep54-notes.html#sec-reflex" style="color:var(--teal)">筆記 4：AI 擅長什麼</a>'}]}
+    ]
+  },
+
+  team: {
+    key:'team', color:'var(--blue)', emoji:'🧑‍🤝‍🧑', code:'CHAPTER 03', title:'質性研究 Agent 小組',
+    intro:'「怎麼用才不失真」翻成一個可以動手搭的結構：一個管家加四個助手，每一個都有人設與 Skill，互相對話、互相檢查，人在中間。',
+    topics:[
+      {t:'從 Chatbot 到 Agent：為什麼要一個管家加四個助手', s:'簡報第 13、14 頁｜錄影 26:30–28:30', blocks:[
+        {h:'傳統做法',p:'用 ChatGPT 的專案、Gemini 的 Gem、NotebookLM 各自訓練不同的機器人做不同的事。到了 Agent，老師想要的是<b>「我今天有個管家在幫我處理這些逐字稿文本的分析」</b>，而且不只一個人。'},
+        {h:'一個 Bot 做完會怎樣',warn:'你只會拿到一份很順、很合理、但不知道從哪裡來的分析。拆成多個角色之後，Coding 只能提候選、Evidence 必須回原文、Judge 只能給建議，<b>證據才約束得了 AI</b>。'},
+        {h:'架構',ul:[
+          '一個主體的 Agent（管家），底下是一群 sub-Agent 或 sub-Bot',
+          '<b>每一個都有角色人設，而且可以灌給它相關的 Skill</b>，讓它更符合人設',
+          '角色互相對話、互相監工，最後停在研究者這裡：「中間還是有人，就是人在迴圈上」［30:59］']},
+        {h:'實機畫面',shot:{img:'ep54-img/04-agent-team.jpg',cap:'簡報第 14 頁，五個角色圍著中間的人機協作研究小組。［29:22］'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep54-notes.html#sec-team" style="color:var(--blue)">筆記 5：為什麼不是一個機器人做完</a>'}]},
+
+      {t:'五個角色各做什麼、刻意不做什麼', s:'簡報第 15～19 頁｜錄影 28:00–31:00', blocks:[
+        {h:'分工表',table:{head:['角色','做什麼','不做什麼'],rows:[
+          ['<b>1 研究者</b>','定問題、定框架、定判準；「幫你抓方向，至少不會偏太遠」','詮釋與責任中心，不能整個交給 AI'],
+          ['<b>2 Coding Agent</b>','輸入逐字稿片段，輸出候選編碼＋理由','只提候選，不宣稱唯一答案'],
+          ['<b>3 Evidence Agent</b>','每個編碼綁回原文；也可延伸看過去文獻有沒有類似','不重新編碼，只做支持／反駁的比對'],
+          ['<b>4 Perspective Agents</b>','同一份資料用現象學、紮根理論、批判視角各讀一次','不裁決哪個視角對'],
+          ['<b>5 Judge</b>','綜合各方，評估可信度，提 Accept／Modify／Reject 建議，指出立場變化','「不是直接說我就定稿了」']]}},
+        {h:'Coding 該抓出什麼',p:'老師舉攤商談電子支付的缺點：<b>手續費、錢要隔兩三天才進戶頭、現金流不夠、綁實際帳戶被告詐騙時整個鎖住沒法做生意</b>。這些片段與標籤是 Coding 該給的，而且原文一定要抓出來，後面要引述才用得上。'},
+        {h:'Judge 的用處',tip:'不是定稿，是指出<b>立場的變化</b>：例如受訪者前面反對電子支付，後面又把立場調回來。這種前後不一致，一個人讀很容易漏。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep54-notes.html#sec-team" style="color:var(--blue)">筆記 5：五個角色各做什麼、不做什麼</a>'}]},
+
+      {t:'可追溯的輸出格式：每一筆都綁回原文', s:'簡報第 20、21 頁｜老師課堂沒逐字講，本頁補上', blocks:[
+        {h:'七步工作流',steps:[
+          '研究設計',
+          '資料整理',
+          '候選編碼',
+          '證據比對',
+          '多視角檢查',
+          '人類裁決',
+          '主題整合']},
+        {h:'固定欄位',table:{head:['欄位','填什麼'],rows:[
+          ['資料片段 ID','例：A01-L16'],
+          ['原文','逐字稿那一句'],
+          ['候選編碼','優先 in-vivo（用受訪者原話）'],
+          ['理由','為什麼這樣編'],
+          ['替代解讀','同一句還能怎麼讀'],
+          ['研究者裁決','Accept／Modify／Reject'],
+          ['Memo','裁決理由，以及反身性問題的回答']]}},
+        {h:'注意',warn:'這兩頁是簡報畫面文字，不是課堂口述。但第 4 章 Demo 裡 Bot 跑出來的分析卡，欄位就長這樣：反駁／矛盾證據、上下文、替代解讀、理論視角、AI 裁決建議、研究者裁決（留白）、Reflexive Memo（留白）。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep54-notes.html#sec-team" style="color:var(--blue)">筆記 5：架構怎麼搭</a>'}]},
+
+      {t:'Skill 從單一角色開始設計', s:'自訂指令＋角色扮演＋偏好回應＋SOP｜錄影 38:00–39:00', blocks:[
+        {h:'原話',p:'「所以我會建議大家你要先從單一的去想。」［38:00］'},
+        {h:'先問自己',steps:[
+          'Coding Agent 的<b>編碼邏輯</b>是什麼？相同現象、相同概念怎麼編？',
+          '編碼時要<b>用什麼方法</b>（紮根？主題分析？）',
+          '把<b>自訂指令、角色扮演、偏好回應、該做的 SOP</b> 寫下來，這四樣就是 Skill',
+          '每個階段都搭配好之後，它才能順著把流程做出來']},
+        {h:'GitHub 上有現成的',tip:'網路上找得到質性研究的 Skill，可以下載來用；也可以用你自己常用的編碼邏輯打造自己的 Skill。老師這套各階段的 Agent 都是從 GitHub 上調整來的，不是同一個來源。'},
+        {h:'但要拿下來調',warn:'「因為他其實是請 AI 寫的 skill，所以少了一點人味。」［38:29］「我建議要拿下來調，因為還是會有自己使用程度上的落差。」［43:53］初學者可以先照用一兩次，從中迭代學習。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep54-notes.html#sec-demo" style="color:var(--blue)">筆記 6：兩個做之前的建議</a>'}]}
+    ]
+  },
+
+  demo: {
+    key:'demo', color:'var(--orange)', emoji:'🧪', code:'CHAPTER 04', title:'Demo：夜市支付案例跑一輪',
+    intro:'「這個其實不難，你就試著做做看就可以完成。」［31:29］題目是夜市外籍遊客的消費與支付行為，四份檔案丟進一個多 Bot 群聊，看管家分派、Coding 提候選、Evidence 覆核、Judge 建議，最後停在研究者裁決點。中間卡了一次電腦，老師也少叫了一個人，全部照實記。',
+    topics:[
+      {t:'準備四份檔案，開群聊先叫大家自我介紹', s:'錄影 34:00–37:20', blocks:[
+        {h:'四份檔案',ul:[
+          '<b>半結構式訪談大綱</b>：研究目的、共通題組、三組受訪者各自的追問',
+          '<b>模擬逐字稿 A01 外籍遊客</b>：Demo 的主角，每一句都有片段編號（A01-L01⋯）',
+          '<b>模擬逐字稿 A02 攤商、A03 自治會</b>：一起上傳當對照，課堂沒展開']},
+        {h:'老師的順序',steps:[
+          '每一個 Bot 各自賦予身份：管家、Judge、Perspective、Coding、Evidence',
+          '角色還沒配 Skill、還沒給裝備，<b>先開群聊</b>（有點像專案的功能），把角色拉進來',
+          '第一句話：<b>「請大家自我介紹一下」</b>。管家會第一個發言，然後號令其他人依序介紹',
+          '四份檔案丟進去，管家回報「收到這四份資料」，寫出 Research Setup']},
+        {h:'為什麼要拆角色',tip:'老師說一般人用 Agent 覺得複雜，是因為<b>沒有把角色區隔開來</b>。每個 Bot 一個身份，誰做了什麼一目了然。'},
+        {h:'工具名稱',warn:'老師用的多 Bot 群聊工具，逐字稿兩處聽到的名稱都不準，畫面上也沒有產品名，本頁不猜。他補充是付費工具，綁信用卡有 7 天試用、記得第 6 天取消；另有免費開源替代，名稱同樣聽不準。請以老師的講義或公告為準。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep54-notes.html#sec-demo" style="color:var(--orange)">筆記 6：老師用的工具長什麼樣</a>'}]},
+
+      {t:'正式跑之前，先用簡單資料 run 一次', s:'建 Agent 小組的第一條實務建議｜錄影 37:24', blocks:[
+        {h:'原話',p:'「你其實要開始正式做之前，你可以先 run 一次。」［37:24］'},
+        {h:'怎麼做',steps:[
+          '給它們<b>一筆比較簡單的資料</b>做完',
+          '看它們<b>少了什麼、缺了什麼</b>',
+          '再從中讓各角色去<b>補 Skill 與角色設定</b>',
+          '設定齊了再正式跑']},
+        {h:'課堂上的真實版本',tip:'老師自己就漏了：Evidence Agent 沒被拉進群聊。管家的反應是「沒關係他不在，我自己先跑」，老師再用 @ 把它叫進來，管家交代「剛才我代跑的部分交給你覆核，以你的為主」。<b>這就是先 run 一次會抓到的事。</b>'},
+        {h:'看課堂筆記',p:'👉 <a href="ep54-notes.html#sec-demo" style="color:var(--orange)">筆記 6：實際跑起來</a>'}]},
+
+      {t:'Step 1 候選編碼：只提候選，不宣稱唯一答案', s:'簡報第 23 頁＋群聊實況｜錄影 39:00–43:00', blocks:[
+        {h:'管家怎麼分派',p:'先寫 Research Setup：研究問題＝外籍遊客如何理解夜市支付選擇與交易經驗、方法＝半結構深度訪談、分析單位＝資料片段 ID。然後：<b>請 Coding Agent 針對 A01-L16～L28 這七個片段，各給 1～3 個大框架的候選編碼，並說明理由</b>；優先 in-vivo；不做主題、不做裁決。'},
+        {h:'簡報上的例子',p:'原文「我比較不敢用現金，刷卡安心一點。」可以同時是候選 1「支付安全感」、候選 2「對現金風險的顧慮」、候選 3「信任制度化支付」。<b>同一句資料，可以先保留多個可能解讀。</b>'},
+        {h:'初步結果',ul:[
+          '核心發現：<b>安心 ≈ 金額可見的「確認」，不是「一定要刷卡」</b>',
+          '不確定指向自己（怕聽錯、拿錯），不是攤商欺騙；排隊與怕添麻煩會讓人少確認或放棄購買',
+          'Judge 初步：多數 in-vivo 建議 Accept，約 5 碼建議 Modify（「可刷則優先刷卡」建議改成條件式），本輪無 Reject',
+          '停在研究者裁決點，不做 Final Theme']},
+        {h:'實機畫面',shot:{img:'ep54-img/07-coding-initial-result.jpg',cap:'群聊裡管家的「初步結果」。第三段直接列出可以先裁的三碼：L24「需要確認」、L18「刷卡安心一點」、L16「可刷則優先刷卡」。［43:01］'}},
+        {h:'注意',warn:'畫面上的候選碼與核心發現是 AI 在<b>模擬資料</b>上的產出，不是老師的研究結論。引用時請標明。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep54-notes.html#sec-demo" style="color:var(--orange)">筆記 6：初步結果</a>'}]},
+
+      {t:'Step 2 證據覆核、Step 3 三個視角讀同一句', s:'簡報第 24、25 頁＋群聊實況｜錄影 36:00、45:11', blocks:[
+        {h:'Evidence Agent 做了什麼',ul:[
+          '正式覆核 L16～L28 共 21 碼，整體與管家代跑一致',
+          '<b>加嚴兩處用語</b>：L16「可刷則優先刷卡」、L22「語言能力調節支付偏好」標為過度推論，理由是分析詞超出原句',
+          '設一條硬性禁區：任何「不信任攤商」的解讀都不行，因為 L20 已經否認']},
+        {h:'為什麼要看上下文',tip:'簡報第 24 頁：前文「怕找零麻煩」、本句「刷卡安心一點」、後文「語言不通更怕算錯」。<b>上下文會改變編碼的意義</b>：可能不只是安全感，也包含交易確定性與語言焦慮。'},
+        {h:'三個視角',table:{head:['視角','問什麼','同一句「刷卡安心一點」讀出什麼'],rows:[
+          ['現象學','經驗如何被感受？','安心感的主觀體驗'],
+          ['紮根理論','概念如何從資料浮現？','交易風險管理策略'],
+          ['批判視角','權力與制度怎麼影響？','制度信任與消費權力關係']]}},
+        {h:'不一致不代表有人錯',warn:'簡報第 25 頁的結論：同一份資料可以有不同合理解讀。研究者必須回答的是：<b>為什麼採納這個解釋？</b>'},
+        {h:'實機畫面',shot:{img:'ep54-img/08-evidence-review.jpg',cap:'Evidence Agent 交回正式覆核。Coding 提了「可刷則優先刷卡」，Judge 建議改條件式，Evidence 再補一刀說這是過度推論：三個角色對同一個碼三種力道。［45:11］'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep54-notes.html#sec-demo" style="color:var(--orange)">筆記 6：初步結果與證據覆核</a>'}]},
+
+      {t:'研究者裁決：Accept／Modify／Reject 與 Reflexive Memo', s:'人在迴圈上的介面長相｜錄影 33:19、43:00', blocks:[
+        {h:'三個選項',table:{head:['裁決','意思','要留什麼'],rows:[
+          ['Accept','符合原文，可納入','Memo：為什麼接受'],
+          ['Modify','部分調整後再使用','Memo：為什麼修改、改成什麼'],
+          ['Reject','不符合原文，不採用','Memo：為什麼拒絕']]}},
+        {h:'管家先問你的三個反身性問題',ul:[
+          '你為什麼會不會比較想用「排除」來讀這份資料？即使 A01 明確說「我不覺得被排除」？',
+          '「卡住 → 搞懂規則 → 權宜方法」這條故事線，有多少來自你對旅遊／數位支付的既有假設？',
+          '若暫時不用批判視角，你還會同樣重視 A01-L04 後半段的 App 預設嗎？有什麼資料可能因此被忽略或放大？']},
+        {h:'課堂停在哪裡',p:'「好，因為 Coding 要等你，研究者就是我本人，他等我裁決是要往這個方向走。」［43:00］課堂沒有再往下裁決，因為往下就是研究者自己的事了。'},
+        {h:'實機畫面',shot:{img:'ep54-img/05-butler-reflexivity-hitl.jpg',cap:'管家單獨模擬全部角色時給的畫面：上半是三個反身性問題，下半是對 A01-L01 候選碼的五個選項（Accept、Modify、Reject、先看下一段、改派四隻 Bot 重跑）。［33:19］'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep54-notes.html#sec-demo" style="color:var(--orange)">筆記 6：管家的分析卡與裁決選單</a>'}]}
+    ]
+  },
+
+  ethics: {
+    key:'ethics', color:'var(--pink)', emoji:'🛡️', code:'CHAPTER 05', title:'品質、倫理與三角檢證',
+    intro:'把前面四章收在三件事上：AI 的編碼怎麼跟你自己的對照、什麼不能餵給 AI、以及簡報最後兩頁老師沒時間講的底線。',
+    topics:[
+      {t:'兩套 AI 編碼加你自己那套：三角檢證', s:'全堂最值得抄下來的一句｜錄影 42:00–42:50', blocks:[
+        {h:'原話',p:'「但是請記得他的編碼是表象的，他可以做為第二套的編碼，甚至呢，你可以叫他提兩套編碼，然後加你來做三角檢證。」［42:00］'},
+        {h:'三角檢證是什麼',p:'不同證據之間互相對照驗證。原本多用在文獻上，老師說也可以用在編碼上。<b>「那過去不會有一個人做三套 Coding」</b>，因為一個人只看得出一套；現在 AI 可以設定不同人設、不同角度，做出兩套，加上你自己的，至少有兩套可以互相對照。'},
+        {h:'怎麼做',steps:[
+          '讓 AI 用<b>人設 A</b>編一套（例如紮根理論的視角）',
+          '讓 AI 用<b>人設 B</b>編一套（例如批判視角），最好在不同視窗',
+          '你自己回到逐字稿與訪綱，編<b>你的那套</b>',
+          '三套對照：一致的地方比較穩，不一致的地方就是要寫 Memo 解釋的地方']},
+        {h:'前提',warn:'你真的有自己那一套。否則只是拿兩套 AI 的互相確認，那不叫三角檢證。老師講這段的脈絡就是：<b>「你還是要回來看你的綱要和訪談紀錄，才有辦法跟他們對話，不然只會被牽著鼻子走。」</b>'},
+        {h:'看課堂筆記',p:'👉 <a href="ep54-notes.html#sec-demo" style="color:var(--pink)">筆記 6：迭代與三角檢證</a>'}]},
+
+      {t:'什麼資料不能直接餵給 AI', s:'去識別化先做｜錄影 26:30', blocks:[
+        {h:'老師的提醒',p:'效率會讓人看不見風險：<b>幻覺、偏誤，還有受訪者講的機敏個資、不想特別講的內容，「你把他放進去了，AI 就讀」。</b>'},
+        {h:'這堂為什麼可以整份上傳',tip:'因為三份逐字稿是老師寫的<b>模擬資料</b>，講義開頭就寫明教學分析使用，不是真實受訪者。你自己的訪談逐字稿不是。'},
+        {h:'動手前',steps:[
+          '真實逐字稿餵進任何 AI 工具之前，<b>先做去識別化</b>：姓名、地點、可反推身分的細節換成代碼',
+          '受訪者明說不想公開的段落，不要放進去',
+          '用付費工具前自行評估：老師示範的那套需綁信用卡才有試用期，本頁不替任何工具背書']},
+        {h:'看課堂筆記',p:'👉 <a href="ep54-notes.html#sec-wrap" style="color:var(--pink)">筆記 7：真實資料餵給 AI 之前</a>'}]},
+
+      {t:'AI 介入的五條紅線與結語', s:'簡報第 26、27 頁｜老師沒時間講，本頁補上', blocks:[
+        {h:'五條紅線',table:{head:['#','紅線','課堂上對應的地方'],rows:[
+          ['1','幻覺不可直接採信','「看起來合理 ≠ 研究上成立」；Evidence 標過度推論'],
+          ['2','敏感資料要先去識別','26:30 個資提醒'],
+          ['3','提示詞與版本要留紀錄','每一輪產出都是附檔 .md，管家註明本輪範圍'],
+          ['4','不可把裁決權完全外包','Judge 只提建議；「Coding 要等你，研究者就是我本人」'],
+          ['5','要能交代 AI 如何參與','可追溯輸出格式；「本輪由管家模擬輸出，未喚醒四隻 Bot」這種聲明']]}},
+        {h:'結語三句',ul:[
+          '<b>AI 提出可能性</b>',
+          '<b>證據約束 AI</b>',
+          '<b>研究者負責意義與責任</b>']},
+        {h:'最後一句',tip:'簡報第 27 頁的標題：<b>AI 不是答案機，而是反思鏡。</b>把 AI 變成第二雙眼睛，讓研究更透明、更扎實。'},
+        {h:'注意',warn:'這一項全部取自簡報畫面文字，不是課堂口述。老師講到 45 分鐘就收尾了，這兩頁沒有展開。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep54-notes.html#sec-wrap" style="color:var(--pink)">筆記 7：五條紅線與結語</a>'}]}
+    ]
+  }
+}
+;
+
+
+const ORDER = ['mindset','practice','team','demo','ethics'];
+const $ = s=>document.querySelector(s);
+function renderChapter(ch){
+  const d=DATA[ch];const next=ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];const prev=ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html=`<div class="chapter-head"><span class="emoji">${d.emoji}</span><div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div></div>`;
+  d.topics.forEach((tp,i)=>{const id=`${ch}-${i}`;
+    html+=`<div class="topic" id="topic-${id}"><div class="topic-head" onclick="toggleTopic('${id}')"><span class="num">${i+1}</span><h4>${tp.t}<small>${tp.s}</small></h4><input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)"><span class="chev">▶</span></div><div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{html+=`<div class="block"><h5>${b.h}</h5>`;
+      if(b.p)html+=`<p>${b.p}</p>`;
+      if(b.ul)html+=`<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps)html+=`<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.table)html+=`<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.prompt)html+=`<div class="promptbox">${b.prompt}</div>`;
+      if(b.shot)html+=`<figure class="shot"><img src="${b.shot.img}" alt="" loading="lazy"><figcaption>${b.shot.cap}</figcaption></figure>`;
+      if(b.tip)html+=`<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn)html+=`<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html+=`</div>`;});
+    html+=`</div></div></div>`;});
+  html+=`<div class="chapnav"><a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a><a onclick="showHome()" style="text-align:center">回總覽<b>🏠 五大主題</b></a><a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a></div>`;
+  $('#view-'+ch).innerHTML=html;
+}
+ORDER.forEach(renderChapter);
+function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('#view-'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function showHome(){switchView('home');$('#crumbs').style.display='none';clearSearch();}
+function showChapter(ch){switchView(ch);$('#crumbs').style.display='flex';$('#crumbHere').textContent=`${DATA[ch].emoji} ${DATA[ch].title}`;clearSearch();syncChecks();}
+function toggleTopic(id){$('#topic-'+id).classList.toggle('open');}
+function openTopic(ch,i){showChapter(ch);const el=$('#topic-'+ch+'-'+i);el.classList.add('open');setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+const KEY='ep54-skills-v1';
+const store=()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){const s=store();if(val)s[id]=1;else delete s[id];localStorage.setItem(KEY,JSON.stringify(s));updateProgress();}
+const TOTAL=ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){const done=Object.keys(store()).length;const pct=Math.round(done/TOTAL*100);$('#progFill').style.width=pct+'%';$('#progText').textContent=`${done} / ${TOTAL} 項技能已掌握`;$('#statDone').textContent=done;$('#statPct').textContent=pct+'%';ORDER.forEach(ch=>{const sub=DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;const el=document.querySelector(`[data-mini="${ch}"]`);if(el)el.style.width=Math.round(sub/DATA[ch].topics.length*100)+'%';});}
+function syncChecks(){const s=store();document.querySelectorAll('input[data-skill]').forEach(cb=>{cb.checked=!!s[cb.dataset.skill];});}
+function resetProgress(){if(confirm('確定要清空所有打勾進度嗎？')){localStorage.removeItem(KEY);syncChecks();updateProgress();}}
+function stripTags(s){return s.replace(/<[^>]+>/g,'');}
+const INDEX=[];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{let body=tp.s+' ';tp.blocks.forEach(b=>{if(b.p)body+=stripTags(b.p)+' ';if(b.ul)body+=b.ul.map(stripTags).join(' ')+' ';if(b.steps)body+=b.steps.map(stripTags).join(' ')+' ';if(b.tip)body+=stripTags(b.tip)+' ';if(b.warn)body+=stripTags(b.warn)+' ';if(b.prompt)body+=stripTags(b.prompt)+' ';if(b.table)body+=b.table.rows.flat().map(stripTags).join(' ')+' ';});INDEX.push({ch,i,title:tp.t,body});}));
+$('#searchInput').addEventListener('input',e=>{const q=e.target.value.trim();const box=$('#searchResults');if(!q){box.classList.remove('show');box.innerHTML='';return;}const hits=INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));box.classList.add('show');if(!hits.length){box.innerHTML=`<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：反身性、候選編碼、Evidence、三角檢證、存而不論、紅線）</div>`;return;}const hl=s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);box.innerHTML=hits.map(x=>{const pos=x.body.toLowerCase().indexOf(q.toLowerCase());const snip=x.body.substr(Math.max(0,pos-20),90);return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})"><div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div><h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;}).join('');});
+function clearSearch(){$('#searchInput').value='';$('#searchResults').classList.remove('show');$('#searchResults').innerHTML='';}
+syncChecks();updateProgress();
+</script>
+</body>
+</html>
