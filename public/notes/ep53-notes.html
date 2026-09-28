@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>直播電台 EP53 課堂筆記｜把 AI Agent 的概念，裝進會飛會走的載具裡</title>
+<meta name="description" content="生成式AI應用電台 EP53（2026/09/11 直播，全長 28 分）課堂筆記。講師用自製的示意動畫，把今年三月「史詩怒火」情境裡的六個美軍系統講成一條鏈：衛星與感測器收資料、Maven＋Claude 做情報推理、Lattice 產出共同戰圖、人工核准當決策閘門，再交給載具端的 Hivemind（邊緣運算與小語言模型）、Nemyx（蜂群分工，像 sub agent）、NEXUS（介面整合，像 USB）、Kinesis（人可接管的遙控切換）；接著拉回民用情境，用「巡仔與小翼」機器狗與無人機的斷橋故事，說明一台 Chatbot 為什麼不夠、Agent 為什麼還要工作流、手腳天線就是它的工具、地形圖就是它的 RAG；最後示範 Gemini Notebook 影片摘要中文版，把長影片變成 60 秒直式短片直接插進簡報。依錄影 39 張關鍵畫面＋116 段逐字稿整理。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#2f5d8a; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:760px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px;max-height:calc(100vh - 90px);overflow-y:auto}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:7px;border-left:none;font-size:13px}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.code{position:relative;background:var(--code);border:1px solid var(--line2);border-radius:10px;padding:13px 15px;margin:10px 0;font-size:13px;line-height:1.75;color:var(--ink);white-space:pre-wrap;font-family:"Cascadia Code",Consolas,monospace;overflow-x:auto}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.iframe-wrap{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000;margin:14px 0}
+.iframe-wrap iframe{display:block;width:100%;height:460px;border:0}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static;max-height:none} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} .iframe-wrap iframe{height:320px} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#c5d3e2" onclick="if(history.length>1){history.back();return false}">← 回上一頁</a>
+  <b>📝 直播電台 EP53 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="ep53-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 直播電台 · EP53</span>
+  <h1>把 AI Agent 的概念，<span>裝進會飛會走的載具裡</span></h1>
+  <p class="lead">「今天的主題稍微比較深一點，就當作一般的知識補充。」——講師開場就先把門檻放低。但整堂真正的鉤子在第 19 分鐘：<b>以前我們都是控制網頁、控制軟體，你就把它想成，實體裡面它控制什麼。</b><br>前半段用自製示意動畫拆解今年三月戰事裡的<b>六個美軍系統</b>——衛星收資料、<b>Maven＋Claude</b> 做情報推理、<b>Lattice</b> 產出共同戰圖、<b>人工核准</b>當閘門，再交給載具端的 <b>Hivemind／Nemyx／NEXUS／Kinesis</b>；後半段拉回民用情境，用<b>「巡仔與小翼」</b>機器狗與無人機的斷橋故事講清楚：一台 Chatbot 為什麼不夠、手腳天線就是它的工具、地形圖就是它的 RAG；最後三分半示範 <b>Gemini Notebook 影片摘要中文版</b>，長影片變 60 秒直式短片直接插進簡報。<br>本頁依<b>錄影 39 張關鍵畫面＋全程逐字稿 116 段</b>整理，重點段落附影片時間戳。</p>
+  <div class="meta">
+    <span>📅 2026/09/11（五）20:00 直播</span>
+    <span>👤 講師：電台講師</span>
+    <span>⏱️ 全長 28 分 0 秒（單段錄影）</span>
+    <span>🧩 主題：無人載具的 AI 軟體鏈 × 機器狗的 AI 在哪裡 × 影片摘要中文版</span>
+    <span>🔰 小白友善</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-overview">1. 一張圖看懂這堂</a>
+  <a href="#sec-open">2. 開場：一場戰爭，讓生成式 AI 第一次大規模進到無人載具</a>
+  <a href="#sec-c2">3. 從衛星到人工核准：情報怎麼變成一張共同戰圖</a>
+  <a href="#sec-vehicle">4. 載具端的四個系統：邊緣運算、蜂群、介面整合、遙控切換</a>
+  <a href="#sec-dog">5. 拉回一般情境：機器狗身上的 AI 到底在哪裡</a>
+  <a href="#sec-story">6. 斷橋故事：兩個 Agent 怎麼對話、接力、檢討</a>
+  <a href="#sec-tools">7. 本週工具更新：影片摘要出中文版，直式短片直接進簡報</a>
+  <a href="#sec-real">8. 這堂課真正在教的事</a>
+  <a href="#sec-quotes">9. 老師金句</a>
+  <a href="#sec-src">10. 資料來源與整理說明</a>
+</nav>
+
+<article>
+
+<!-- ══════════ 0. 課程資訊與教材 ══════════ -->
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--cyan))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>生成式AI應用電台 EP53｜無人機發展趨勢與 AI 系統介紹</td></tr>
+    <tr><th>直播日期</th><td>2026/09/11（五）20:00，本段錄影全長 <b>28 分 0 秒</b></td></tr>
+    <tr><th>講師</th><td>電台講師（錄影與逐字稿中未提及姓名，本頁不另行標示）</td></tr>
+    <tr><th>本堂主題</th><td>用兩支自製示意動畫，把「無人機、機器狗這些載具為什麼需要 AI、AI 裝在哪裡」講成一般人聽得懂的一條鏈；收尾補一則本週工具更新</td></tr>
+    <tr><th>課程節奏</th><td>三段：<b>軍事情境</b>（00:00–14:30，六個美軍系統的示意流程圖）→ <b>民用情境</b>（14:50–24:30，「巡仔與小翼」機器狗與無人機的斷橋故事）→ <b>工具更新</b>（24:50–28:00，Gemini Notebook 影片摘要中文版）</td></tr>
+    <tr><th>要先準備</th><td>這是觀念課，前 25 分鐘不需要任何工具。想跟著做最後一段的，要有 Google 帳號（開 notebook.google.com）與一份可以插入影片的簡報軟體</td></tr>
+  </table></div>
+
+  <h3>📁 課堂用到的教材</h3>
+  <p>這堂沒有簡報檔可下載。講師畫面上的兩支動畫（六系統流程圖、巡仔與小翼）都是他<b>自己用 AI 產出的本機網頁</b>（見第 7 章：HTML＋Remotion，透過 Codex 生成），課堂上跑在自己電腦的 <code>127.0.0.1</code>，沒有公開網址。他說有聲音的版本「晚點把它放在群組」，本頁不轉載也沒有連結。</p>
+
+  <div class="twrap"><table>
+    <tr><th style="width:230px">教材</th><th>課堂上拿來做什麼</th></tr>
+    <tr><td>示意動畫一：<code>無人機 AI 智慧平台分工與連動</code></td><td>九頁的互動簡報，含六系統角色矩陣、可點擊的共同作戰圖、每個系統一頁說明。第 2–4 章全部對照這支動畫講</td></tr>
+    <tr><td>示意動畫二：<code>巡仔與小翼｜空地任務紀事</code></td><td>六段故事（災後搜救、設施巡檢、環境偵測、物資接力、通聯中繼、夜間搜尋）＋機器狗與無人機的零件配置圖。第 5、6 章用的是「斷橋另一端」與配置頁</td></tr>
+    <tr><td>Gemini Notebook 的「影片摘要」</td><td>第 7 章示範：用 9 個機器人相關來源生出 60 秒直式短片，再插進空白簡報</td></tr>
+  </table></div>
+
+  <h3>🎬 課堂錄影</h3>
+  <p class="cd">單段錄影，全長 28 分 0 秒。前兩分鐘在調聲音與抓簡報，正式內容從 02:00 開始。</p>
+  <div class="note steel">🔧 <div>錄影由電台提供給報名學員，本頁不轉載也不提供連結。本頁是依錄影整理的圖文筆記，沒看過錄影一樣讀得懂。</div></div>
+
+  <div class="note gold">🔒 <div><b>本頁截圖都經過去識別化處理。</b>原始錄影是線上教室的畫面分享，右側會出現與會者欄位，整欄裁除（只保留左側 1440×810 的分享畫面）；畫面中若露出瀏覽器分頁、書籤列、網址與本機路徑、帳號頭像或工作列，一併裁掉或只保留內容區；逐字稿裡出現的學員稱呼也隱去。</div></div>
+
+  <div class="note gold">📄 <div><b>內容版權屬原講者與電台，本頁為學習筆記</b>；若原講者或電台希望撤下，來信告知即刻移除。</div></div>
+</section>
+
+<!-- ══════════ 1. 一張圖看懂這堂 ══════════ -->
+<section class="chapter" id="sec-overview">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--purple))">OVERVIEW</span>
+  <h2 class="ct">1. 一張圖看懂這堂</h2>
+  <p class="cd">整堂只有一條主線：戰場上那條「感測 → 推理 → 戰圖 → 人核准 → 載具執行」的鏈，每一格都對得回你平常在電腦上玩 AI 的某個概念。上排是講師畫的軍事系統，下排是他一路在對照的日常用法。</p>
+
+  <div class="svgwrap">
+  <svg viewBox="0 0 980 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="戰場系統鏈與日常 AI 概念的上下對照圖">
+    <defs>
+      <marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+        <path d="M0,0 L9,4.5 L0,9 z" fill="#9B9B9B"/>
+      </marker>
+    </defs>
+
+    <text x="490" y="26" text-anchor="middle" font-size="13" fill="#9B9B9B">上排：講師畫的戰場系統鏈　　下排：他一路對照的「你平常在做的事」</text>
+
+    <rect x="14" y="52" width="172" height="96" rx="12" fill="#EEF2F5" stroke="#D2DFE7"/>
+    <text x="100" y="80" text-anchor="middle" font-size="15" font-weight="700" fill="#255066">感測與通聯</text>
+    <text x="100" y="104" text-anchor="middle" font-size="12.5" fill="#5f5f5f">衛星／雷達／無人機影像</text>
+    <text x="100" y="122" text-anchor="middle" font-size="12.5" fill="#5f5f5f">機器狗、士兵都是感測器</text>
+
+    <rect x="212" y="52" width="172" height="96" rx="12" fill="#EEF4FB" stroke="#CFE0F1"/>
+    <text x="298" y="80" text-anchor="middle" font-size="15" font-weight="700" fill="#1d5e8f">Maven ＋ Claude</text>
+    <text x="298" y="104" text-anchor="middle" font-size="12.5" fill="#5f5f5f">情報推理與彙整</text>
+    <text x="298" y="122" text-anchor="middle" font-size="12.5" fill="#5f5f5f">模型可換，也可接在地模型</text>
+
+    <rect x="410" y="52" width="172" height="96" rx="12" fill="#EEF4FB" stroke="#CFE0F1"/>
+    <text x="496" y="80" text-anchor="middle" font-size="15" font-weight="700" fill="#1d5e8f">Lattice 共同戰圖</text>
+    <text x="496" y="104" text-anchor="middle" font-size="12.5" fill="#5f5f5f">經緯度、人數、建築物</text>
+    <text x="496" y="122" text-anchor="middle" font-size="12.5" fill="#5f5f5f">轉成可被人決策的任務</text>
+
+    <rect x="608" y="52" width="172" height="96" rx="12" fill="#FBF7EC" stroke="#EFE3C4"/>
+    <text x="694" y="80" text-anchor="middle" font-size="15" font-weight="700" fill="#7a5b12">人工核准</text>
+    <text x="694" y="104" text-anchor="middle" font-size="12.5" fill="#5f5f5f">有沒有看錯？是不是偽裝？</text>
+    <text x="694" y="122" text-anchor="middle" font-size="12.5" fill="#5f5f5f">人在迴圈上，保留接管權</text>
+
+    <rect x="806" y="52" width="160" height="96" rx="12" fill="#EDF7F1" stroke="#CBE6D5"/>
+    <text x="886" y="80" text-anchor="middle" font-size="15" font-weight="700" fill="#166a4c">載具端四系統</text>
+    <text x="886" y="104" text-anchor="middle" font-size="12.5" fill="#5f5f5f">Hivemind・Nemyx</text>
+    <text x="886" y="122" text-anchor="middle" font-size="12.5" fill="#5f5f5f">NEXUS・Kinesis</text>
+
+    <line x1="186" y1="100" x2="206" y2="100" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+    <line x1="384" y1="100" x2="404" y2="100" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+    <line x1="582" y1="100" x2="602" y2="100" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+    <line x1="780" y1="100" x2="800" y2="100" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+
+    <line x1="100" y1="148" x2="100" y2="196" stroke="#9B9B9B" stroke-width="1.2" stroke-dasharray="3 3"/>
+    <line x1="298" y1="148" x2="298" y2="196" stroke="#9B9B9B" stroke-width="1.2" stroke-dasharray="3 3"/>
+    <line x1="496" y1="148" x2="496" y2="196" stroke="#9B9B9B" stroke-width="1.2" stroke-dasharray="3 3"/>
+    <line x1="694" y1="148" x2="694" y2="196" stroke="#9B9B9B" stroke-width="1.2" stroke-dasharray="3 3"/>
+    <line x1="886" y1="148" x2="886" y2="196" stroke="#9B9B9B" stroke-width="1.2" stroke-dasharray="3 3"/>
+
+    <rect x="14" y="200" width="172" height="96" rx="12" fill="#F4F3F0" stroke="#DBD9D5"/>
+    <text x="100" y="228" text-anchor="middle" font-size="14.5" font-weight="700" fill="#191919">你手上的資料</text>
+    <text x="100" y="252" text-anchor="middle" font-size="12.5" fill="#5f5f5f">檔案、影像、座標</text>
+    <text x="100" y="270" text-anchor="middle" font-size="12.5" fill="#5f5f5f">格式各不相同</text>
+
+    <rect x="212" y="200" width="172" height="96" rx="12" fill="#F4F3F0" stroke="#DBD9D5"/>
+    <text x="298" y="228" text-anchor="middle" font-size="14.5" font-weight="700" fill="#191919">丟給 GPT 分析</text>
+    <text x="298" y="252" text-anchor="middle" font-size="12.5" fill="#5f5f5f">「把所有的 Data 給 GPT」</text>
+    <text x="298" y="270" text-anchor="middle" font-size="12.5" fill="#5f5f5f">分門別類</text>
+
+    <rect x="410" y="200" width="172" height="96" rx="12" fill="#F4F3F0" stroke="#DBD9D5"/>
+    <text x="496" y="228" text-anchor="middle" font-size="14.5" font-weight="700" fill="#191919">做成儀表板</text>
+    <text x="496" y="252" text-anchor="middle" font-size="12.5" fill="#5f5f5f">Dashboard 一眼看全貌</text>
+    <text x="496" y="270" text-anchor="middle" font-size="12.5" fill="#5f5f5f">台灣也買了類似的東西</text>
+
+    <rect x="608" y="200" width="172" height="96" rx="12" fill="#F4F3F0" stroke="#DBD9D5"/>
+    <text x="694" y="228" text-anchor="middle" font-size="14.5" font-weight="700" fill="#191919">你看過再決定</text>
+    <text x="694" y="252" text-anchor="middle" font-size="12.5" fill="#5f5f5f">AI 提案、人拍板</text>
+    <text x="694" y="270" text-anchor="middle" font-size="12.5" fill="#5f5f5f">不讓它自己動手</text>
+
+    <rect x="806" y="200" width="160" height="96" rx="12" fill="#F4F3F0" stroke="#DBD9D5"/>
+    <text x="886" y="228" text-anchor="middle" font-size="14.5" font-weight="700" fill="#191919">Agent 去執行</text>
+    <text x="886" y="252" text-anchor="middle" font-size="12.5" fill="#5f5f5f">sub agent 分工、MCP</text>
+    <text x="886" y="270" text-anchor="middle" font-size="12.5" fill="#5f5f5f">本機小模型、人可接管</text>
+
+    <text x="490" y="326" text-anchor="middle" font-size="12.5" fill="#2f5d8a" font-weight="700">差別只有一個：以前 Agent 控制的是網頁與軟體，現在控制的是它的手、腳、天線與攝影機。</text>
+  </svg>
+  <figcaption>上排五格是講師動畫裡的系統鏈（第 2–4 章）；下排是他每講一格就順口對回來的日常概念。第 5、6 章的機器狗故事，其實就是把最右邊那一格拆開來講：模型不夠、要 Agent、Agent 不夠、要工作流、工作流要接手腳與地形圖。</figcaption>
+  </div>
+
+  <div class="note blue">💡 <div>如果只記得一句話，記這句：<b>「以前我們都是控制網頁、控制軟體。你就把他想想實體裡面他控制什麼。」</b>［19:30］</div></div>
+</section>
+
+<!-- ══════════ 2. 開場 ══════════ -->
+<section class="chapter" id="sec-open">
+  <span class="chip" style="background:linear-gradient(90deg,var(--blue),var(--cyan))">00:00–05:30</span>
+  <h2 class="ct">2. 開場：一場戰爭，讓生成式 AI 第一次大規模進到無人載具</h2>
+  <p class="cd">前兩分鐘在調聲音與抓簡報。正式開講之後，講師先把兩件事講清楚：這堂為什麼要從戰爭講起，以及畫面上的東西全部都是示意。</p>
+
+  <p>他一開口就先降低期待：「今天的主題稍微比較深一點，所以如果大家有興趣的話可以聽一下。」接著點出為什麼現在要講這個——無人機、機器狗、無人船、無人艦，是<b>台灣立法院與國家資源正在大量投入的議題</b>，新聞天天有。而這些載具用到 AI 的地方，過去大部分是<b>辨識</b>與<b>資料處理</b>，隨著技術進步會越來越多元。</p>
+
+  <div class="golden">
+    <div class="q">「這個如果大家聽這部分會覺得比較深一點沒關係，就當作一般的知識補充。」</div>
+    <div class="a">［03:02］他在翻回簡報第一頁時說的。整堂的定位就是這句：不是要你學會操作，是讓你下次看到新聞時知道那些名詞在鏈子的哪一格。</div>
+  </div>
+
+  <h3>為什麼從戰爭講起</h3>
+  <p>他挑的案例是今年三月初美國、以色列與伊朗之間的那場戰事，行動代號他唸作「史詩怒火」。他的理由不是戰事本身，而是：<b>這是第一次有生成式 AI 比較完整地參與到無人載具的戰役裡</b>——AI 大量導入做分析、做處理。所以他把這一段當開場白，「讓大家稍微瞭解一下今天會講的主題大概會放在這個上面」。</p>
+
+  <div class="note gold">⚠️ <div><b>本頁不評論戰事，只記錄講師拿它當案例的部分。</b>他自己也在 14:52 把話題拉回來：「講太多戰爭大家可能會覺得離比較遠，那我們回到一般的情境。」想深入的人他建議直接搜「史詩怒火戰爭 AI」。</div></div>
+
+  <h3>畫面上的東西，全部是示意</h3>
+  <p>動畫一開始播放，他就先聲明：「這個全部都是示意圖，不是真實的畫面。」順帶評論了當天的一則新聞——有中國研究員用 Claude 模擬台灣防空情境。</p>
+
+  <div class="golden">
+    <div class="q">「我覺得這只是新聞炒作，因為他真的有辦法模擬的話，他也沒辦法拿到真實的資料，因為 Claude 在爬資料跟真實拿到現況的資料，我覺得是有落差的。」</div>
+    <div class="a">［04:29］他的判斷標準很簡單：模型爬得到公開資料，爬不到飛彈防空與機密位置——除非有人給它實質的紙本資料或經緯度座標。「那個新聞可以稍微觀看一下，就當作新聞就好。」</div>
+  </div>
+
+  <div class="note steel">🔧 <div>講師的動畫本身也很誠實。Nemyx 那一頁的角落有一則「證據層級提醒」（見第 4 章截圖）：功能描述主要來自原廠發表與展示，<b>若套入史詩怒火情境，應標示為「角色映射示意」，不可說成已獲官方證實的參戰系統</b>。也就是說，這六個系統是「這一類角色分別由誰扮演」的示意，不是戰報。本頁沿用同樣的態度。</div></div>
+
+  <h3>六個系統，先認名字</h3>
+  <p>動畫第三頁是一張「系統分工圖：同一任務鏈，不同責任邊界」。六個系統一字排開，每個都標了角色、動作與交付物。這張圖是第 3、4 章的地圖，先看過再往下讀。</p>
+
+  <figure class="shot">
+    <img src="ep53-img/01-role-matrix.jpg" alt="六個系統的角色矩陣：Maven+Claude、Lattice OS、Hivemind、Nemyx、NEXUS、Kinesis" loading="lazy">
+    <figcaption>動畫第 3 頁的角色矩陣。上方「任務輸入」寫著<b>多源感測＋指揮意圖＋規則約束</b>，六欄由左到右是 01 情報理解 <b>Maven＋Claude</b>（融合｜推理｜排序）、02 戰場指管 <b>Lattice OS</b>（理解｜決策｜派遣）、03 任務自主 <b>Hivemind</b>（感知｜規劃｜飛控）、04 蜂群協同 <b>Nemyx</b>（分工｜隊形｜重協調）、05 跨廠互通 <b>NEXUS</b>（Agent｜Hub｜協定）、06 戰術控制 <b>Kinesis</b>（控制｜交接｜TAK）。最下面一行「整體任務鏈」把輸入與輸出寫在一起：接收感測資料、任務意圖與安全規則，輸出由六層共同完成任務。看每欄最後那行「交付」，就知道這一格產出的是什麼、要交給誰。［03:56］</figcaption>
+  </figure>
+
+  <div class="twrap"><table>
+    <tr><th style="width:150px">系統</th><th style="width:110px">角色</th><th>一句話（依動畫畫面）</th><th style="width:120px">交付什麼</th></tr>
+    <tr><td><b>Maven ＋ Claude</b></td><td>情報理解</td><td>把各種來源的資料融合、推理、排優先序</td><td>情報優先序</td></tr>
+    <tr><td><b>Lattice OS</b></td><td>戰場指管</td><td>理解情勢、做決策、派遣任務（Battle Management C2）</td><td>跨域任務包</td></tr>
+    <tr><td><b>Hivemind</b></td><td>任務自主</td><td>載具上的 AI Pilot：感知、規劃、飛控</td><td>載具自主</td></tr>
+    <tr><td><b>Nemyx</b></td><td>蜂群協同</td><td>多架異廠無人機的分工、隊形、重協調</td><td>蜂群編隊</td></tr>
+    <tr><td><b>NEXUS</b></td><td>跨廠互通</td><td>Agent＋Hub＋協定，把不同廠牌介面接起來</td><td>跨廠介面</td></tr>
+    <tr><td><b>Kinesis</b></td><td>戰術控制</td><td>共同控制介面，控制、交接、接 TAK</td><td>操作接管</td></tr>
+  </table></div>
+
+  <div class="note blue">💡 <div>講師開場還提到一句：無人載具「所號稱的」是<b>不用有人去駕駛</b>——戰爭或災難時，做到很多以前要靠人工、靠機械進去的事［04:59–05:29］。這句話後面整堂都在回答一個問題：既然不用人駕駛，那誰在判斷？答案在第 3 章結尾。</div></div>
+</section>
+
+<!-- ══════════ 3. 從衛星到人工核准 ══════════ -->
+<section class="chapter" id="sec-c2">
+  <span class="chip" style="background:linear-gradient(90deg,var(--amber),var(--orange))">05:30–09:30</span>
+  <h2 class="ct">3. 從衛星到人工核准：情報怎麼變成一張共同戰圖</h2>
+  <p class="cd">動畫第二頁是可以點的流程圖。講師從最左邊的通訊講起，一路講到那個橘色的「人工核准」閘門，這一段是整條鏈的上半部。</p>
+
+  <figure class="shot">
+    <img src="ep53-img/02-full-flow.jpg" alt="六系統的共同作戰圖流程：左側感測來源，經 Maven、Lattice、人工核准，再到下方四個載具端系統" loading="lazy">
+    <figcaption>動畫第 2 頁「共同作戰圖」全流程。左側三個來源——<b>衛星／通聯、雷達／SIGINT、UAV EO/IR</b>（無人機的光電與紅外線影像）——用藍色虛線把資料送進 <b>Maven 情報推理</b>，再到 <b>Lattice 共同戰圖</b>，然後撞上右上角<b>橘框的「人工核准・決策閘門」</b>。從閘門出去的線變成<b>橘色</b>，代表「核准後的命令」，往下分給 Hivemind 自主飛行、Nemyx 蜂群協同、NEXUS 任務介接、Kinesis 戰術共控。中間那個 Hub 旁邊標著固定翼、旋翼機、UGV（無人地面載具）——這些都是被指揮的載具。左下角那台無人機旁還寫著 TRACK 97%，是它正在追蹤目標的信心度。看懂顏色就看懂整張圖：<b>藍色是資料往上送，橘色是決定往下發</b>。［04:36］</figcaption>
+  </figure>
+
+  <h3>第一步：通訊靠星鏈，不靠 WiFi</h3>
+  <p>他先講最不起眼的一格：通訊。戰場上不可能吃 WiFi、不可能接有線，所以無人機與載具吃的是<b>星鏈</b>。他用大家熟悉的事情類比——就像跟中華電信、遠傳續約一樣，付月租費，手機的網路直接接在星鏈上（他補充台灣目前還不行，日本可以）。載具在現場做判斷時，靠的是自己的感測器與掃描；把結果送回去，靠的就是這條線。</p>
+
+  <div class="note steel">🔧 <div>逐字稿在這一段把「衛星通訊」聽成「微信通訊」、「衛星通聯」聽成「衛星痛臉」，本頁依畫面上的「衛星／通聯」校正。講師另外提到星鏈最近開放了某種新的方案，逐字稿那幾個字辨識不清，<b>本頁不補寫</b>。</div></div>
+
+  <h3>第二步：Maven 是「把所有資料丟給 GPT」的那一格</h3>
+  <p>Maven 是情報推理與收集的地方，裡面搭載 Claude 幫忙判斷。講師特別說，這類平台的後端會不斷整理資料，<b>大型語言模型是可以換的</b>——現在用 Claude，之後可能換別家的新模型，也可能同時接不同的 Agent，甚至接在地端的模型。它做的事，用他的話講就是：</p>
+
+  <div class="golden">
+    <div class="q">「我們把所有的 Data，會給 GPT，然後 GPT，或者是大型語言模型，他把它分析之後，分門別類，幫你做出一個像是 Dashboard，像是儀表板一樣。」</div>
+    <div class="a">［07:28］這是整堂第一次把軍事系統對回日常用法。Maven 收的是敵情、建築物、經緯度座標、影像；你平常收的是檔案與截圖——動作是同一個。</div>
+  </div>
+
+  <h3>第三步：Lattice 把儀表板變成「可以被人決策的任務」</h3>
+  <p>所有前端收到的東西——不管是機器狗去掃的、人去看的、士兵身上衛星通訊回傳的——格式各不相同：影像、經緯度座標、加密封包，全部先到 Maven 彙整處理，再到 Lattice。Lattice 產出的叫<b>共同作戰圖像</b>：經緯度、座標、人數，以及所有無人機掃到的資料都在同一張圖上。他順口說「台灣有買類似的東西」。</p>
+  <p>但 Lattice 的重點不是畫圖，是<b>把彙整後的資訊轉成可以被人工決策的任務</b>：現在看到這些平民、這些敵軍、這些建築物、這些基礎設施——然後把球交給人。</p>
+
+  <ol class="st">
+    <li><b>前端收資料</b>：無人機、機器狗、人、士兵的衛星通訊，全部都是感測器。</li>
+    <li><b>Maven 彙整</b>：不同格式的資料統一整理，由語言模型做初步推理與分類。</li>
+    <li><b>Lattice 出戰圖</b>：變成一張共同作戰圖像，再轉成一包一包可以決策的任務。</li>
+    <li><b>人工核准</b>：人去檢查有沒有看錯、是不是偽裝、是不是錯誤的，決定要攻擊、偵查、送水、送物資還是救人。</li>
+    <li><b>命令往下發</b>：核准後才交給載具端的四個系統執行（第 4 章）。</li>
+  </ol>
+
+  <h3>第四步：人工核准——整條鏈唯一不能省的閘門</h3>
+  <p>他在這裡放慢速度。人要做的是<b>檢查</b>：有沒有看錯？有沒有是偽裝的？有沒有是錯誤的？而且要<b>保留接管的權利</b>。</p>
+
+  <div class="golden">
+    <div class="q">「現在在國際上的公約還沒有辦法讓他開放去做。所以一定會維持人的決策權。這也是大家常聽到的，人在迴圈上的一個概念。」</div>
+    <div class="a">［09:19–09:30］回答開場那個問題「不用人駕駛，那誰判斷」。不是技術做不到自己動手，是規則不允許——所以流程圖上那個閘門是橘色的，跟其他格子都不一樣。</div>
+  </div>
+
+  <div class="note blue">💡 <div>「人在迴圈上」（human-in-the-loop）平常聽起來像口號，在這張圖上它是<b>一個具體的位置</b>：Lattice 之後、載具之前。你自己在用 AI Agent 做事的時候，也可以問同一個問題——我的閘門放在哪一格？</div></div>
+</section>
+
+<!-- ══════════ 4. 載具端四系統 ══════════ -->
+<section class="chapter" id="sec-vehicle">
+  <span class="chip" style="background:linear-gradient(90deg,var(--purple),var(--blue))">09:30–14:30</span>
+  <h2 class="ct">4. 載具端的四個系統：邊緣運算、蜂群、介面整合、遙控切換</h2>
+  <p class="cd">流程圖下半部的四個方塊，講師每一個都用你已經會的東西來解釋：本機小模型、sub agent、USB、遙控器。</p>
+
+  <h3>Hivemind：讓載具自己在現場做決定（邊緣運算）</h3>
+  <p>Hivemind 是一家公司提供的系統，裝在載具端。講師用它來解釋「邊緣運算」這個大家聽過但不一定懂的詞：</p>
+
+  <div class="golden">
+    <div class="q">「現在無人機全部撒在外面，現在這些機器狗撒在外面，當他的資料再回傳到我們的這些資料太慢了，他現場就要做判斷，現場就要做掃描，他不可能拍什麼再掃回來，太慢了。」</div>
+    <div class="a">［10:00］邊緣運算的白話版：東西不回傳、在載具上就算完。他補了一句「他的決定還是會回到你，但是他是即時的就已經做整合做整理」——現場算，但決定權還在後面。</div>
+  </div>
+
+  <ul class="pt">
+    <li><b>很吃網路</b>——邊緣運算還是要靠網路運作，這也是第 3 章先講星鏈的原因。</li>
+    <li><b>機子裡是小語言模型</b>——「以前我們都會說大語言模型很快，但是小語言模型比較適合邊緣運算上。」［10:29］載具上跑不動大模型，也不需要。</li>
+    <li><b>自主飛行</b>——要飛到東側、飛到哪個經緯度座標，它自己判斷。</li>
+  </ul>
+
+  <div class="note gold">⚠️ <div>講師提到「台灣買了，這應該是上個月的新聞」，接著說「如果你剛好在看美股的話，這些剛好都是最近比較紅的軍工股，有興趣自己去查一下」［10:29–10:58］。<b>本頁不列公司名、不是投資建議</b>；哪一則新聞、買了什麼，逐字稿裡沒有講清楚，本頁不補。</div></div>
+
+  <h3>Nemyx：蜂群，就是實體化的 sub agent</h3>
+  <p>一架不夠，所以有母機與僚機，整體做任務分工。他舉的例子很直白：有人攻擊，它要衝出來擋子彈；有人射飛彈，它要去擋；落石衝下來，它要擋掉——為的是讓任務可以繼續執行。背後的邏輯是<b>成本</b>：無人機越來越便宜，分中高低等級，貴的飛得遠、續航好；昂貴的飛彈，可以用「幾十架便宜的去撞他」。</p>
+
+  <div class="golden">
+    <div class="q">「蜂群系統其實蠻重要的，因為他要把每一個任務做分工。有點像我們現在在玩 AI agent 裡面的 sub agent，就是次級的 agent，他們會互相的分工。跟早期讓所謂的 ChatGPT，大型的模型，大家扮演不同角色，互相討論，有點像。不過他現在都實體化。」</div>
+    <div class="a">［12:00］整堂最好記的一個對照。你在電腦上讓幾個 Agent 分工、互相討論，蜂群就是把同一件事搬到天上——「你就把它想像成在現在的實體的情況下，他就是這樣。」</div>
+  </div>
+
+  <p>他接著往前推：蜂群如果轉移到機器人，像特斯拉預計 2027 年量產的人形機器人，也是管家式的分工——你負責出門、你負責掃地、你負責煮飯，分工完各自回報。</p>
+
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="ep53-img/03-nemyx-tooltip.jpg" alt="流程圖上點選 Nemyx，下方狀態列顯示它把相容的異廠無人機編成協同群體" loading="lazy">
+      <figcaption>講師在流程圖上點到 <b>Nemyx 蜂群協同</b>，上方分頁切到 Nemyx，方塊亮起。看最底下那行狀態列：「把相容的異廠無人機編成協同群體，動態分配角色、區域與任務」——一句話就是它在做的事。從 Nemyx 往上的藍色虛線接的是那一串「＋」號小圖示，那些就是被編進群體的無人機。［13:01］</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="ep53-img/04-nemyx-slide.jpg" alt="動畫第 6 頁 Nemyx 說明：跨平台加入、任務分配、群體協同、規模與成本，以及證據層級提醒" loading="lazy">
+      <figcaption>動畫第 6 頁的 Nemyx 專頁，講師翻簡報時帶過。標題就把它定義完了：<b>把多架異廠無人機變成協同群體</b>，重點是「群體行為」而非單機遙控；右側四格是跨平台加入、任務分配、群體協同、規模與成本。<b>右下角的「證據層級提醒」值得看</b>：功能描述來自原廠發表與展示，套進戰事情境時只能標為「角色映射示意」。這是動畫作者自己畫的免責，本頁第 2 章的態度就是從這裡來的。［03:08］</figcaption>
+    </figure>
+  </div>
+
+  <h3>NEXUS：介面整合，像一顆 USB</h3>
+  <p>無人機有很多種——校園裡的無人機足球、考到專業執照的飛手玩的那種，他不一一講。他要講的是：種類一多，<b>最需要的是介面的整合</b>。「我必須要有一個叫做有點像是一個 USB，有點像是一個資訊去把它整合在一起。」NEXUS 在流程圖上叫「任務介接」，角色矩陣上叫「Agent＋Hub＋協定」，就是那顆把不同廠牌接在一起的轉接頭。</p>
+
+  <h3>Kinesis：整合完了，還要一支能切換的遙控器</h3>
+  <p>「整合在一起不夠，還需要有一個類似遙控器的方式。」如果是人在遙控，要能互相切換——雲端遙控、整合、地端，三者之間接得起來。Kinesis 在矩陣上寫的是「控制｜交接｜TAK」，交付物是「操作接管」：也就是第 3 章那個「保留接管權利」，落到載具端的具體按鈕。</p>
+
+  <div class="twrap"><table>
+    <tr><th style="width:120px">載具端系統</th><th style="width:170px">講師用什麼來解釋</th><th>你平常已經會的對應概念</th></tr>
+    <tr><td><b>Hivemind</b></td><td>邊緣運算、小語言模型</td><td>在本機跑小模型，不把每件事都送上雲端</td></tr>
+    <tr><td><b>Nemyx</b></td><td>蜂群、母機與僚機</td><td>AI Agent 裡的 sub agent 分工，或多個角色互相討論</td></tr>
+    <tr><td><b>NEXUS</b></td><td>「有點像是一個 USB」</td><td>把不同工具接到同一個介面上（第 5 章他會直接說 MCP）</td></tr>
+    <tr><td><b>Kinesis</b></td><td>「類似遙控器」、人可以切換</td><td>人隨時接管：Agent 跑到一半你可以停、可以改</td></tr>
+  </table></div>
+
+  <p>這一段的收尾：「那時候美軍就是靠這套系統，算是第一次在戰爭中有 AI 大量的導入，然後導入做分析、導入做相關的處理。」［14:00］中間的細節他沒展開，「你就打史詩怒火戰爭 AI，它就有非常非常多的相關的介紹」。</p>
+
+  <div class="note steel">🔧 <div>逐字稿在這一章錯得最多：邊緣運算被聽成「邊緣預算」「平原預算」、蜂群被聽成「風群」、母機僚機被聽成「木鳥的母雞／療雞」、機器狗被聽成「機器口／GT 狗」、ChatGPT 被聽成「trap」。本頁都依上下文校正。另外有兩處<b>聽不清楚、本頁不猜</b>：講師在 07:00 提到某個「GPT 的新模型出來之後可能改用」的模型名，以及 10:58 講蜂群時的一個型號，逐字稿分別寫成「Aztro」與「WNG」，原音不明，保留為〔待確認〕。</div></div>
+</section>
+
+<!-- ══════════ 5. 機器狗身上的 AI ══════════ -->
+<section class="chapter" id="sec-dog">
+  <span class="chip" style="background:linear-gradient(90deg,var(--green),var(--teal))">14:50–20:30</span>
+  <h2 class="ct">5. 拉回一般情境：機器狗身上的 AI 到底在哪裡</h2>
+  <p class="cd">「講太多戰爭大家可能會覺得離比較遠。」講師切到第二支動畫，用一隻機器狗的零件配置圖，回答一個很多人會問的問題：AI 在哪裡？</p>
+
+  <h3>民用的六種任務</h3>
+  <p>他先列了這隻狗與這架無人機會被派去做的事：<b>搜救、基礎設施巡檢（發電廠）、工廠守衛、校園巡邏</b>，再加上幾種環境條件——突然的大霧、橋斷了要接力、通訊方式、夜間搜尋。前提他講在前面：這些「可能都是非紅色供應鏈或者是台製的安全的情況下」。這支動畫叫<b>「巡仔與小翼」</b>——巡仔是機器狗，小翼是無人機。</p>
+
+  <div class="note steel">🔧 <div>畫動畫的時候，他特別交代 AI「不要參考任何一家機器狗，怕被侵犯人家的設計權」［16:00］。所以畫面上那隻狗不是任何一款產品。他也說目前沒看到那麼完整的台製機器狗，淘寶上有，「如果你要買要自己小心」。</div></div>
+
+  <h3>一隻機器狗身上有什麼</h3>
+  <p>他對著配置圖一個一個點過去。以下依他講的順序整理，右欄是他在 19:00 之後一路對照回來的 AI 概念——那是這一章真正的重點。</p>
+
+  <div class="twrap"><table>
+    <tr><th style="width:170px">零件</th><th>它做什麼（講師口述）</th><th style="width:220px">對回你平常用的 AI</th></tr>
+    <tr><td><b>照明與雷達</b></td><td>雷達做掃描，語音跟照明放在機身上，每個機型放的位置不一樣</td><td>感測器＝輸入</td></tr>
+    <tr><td><b>通訊模組</b></td><td>回傳資訊；同時它自己就是「一台行走的基地台」，是熱點</td><td>API 連線；斷線時停下來收訊號</td></tr>
+    <tr><td><b>足端接地感測</b></td><td>地形是滑的、水的、泥沙、碎石地，能感觸回報</td><td>環境資訊回填</td></tr>
+    <tr><td><b>平衡與關節</b></td><td>「最重要是平衡性，我不希望他摔倒就沒了」；摔倒能翻身；趴、前進、轉身，「很像人的關節」</td><td>——（純機械）</td></tr>
+    <tr><td><b>前端視覺／熱影像</b></td><td>夜間用熱成像做比較詳細的掃描</td><td>影像辨識</td></tr>
+    <tr><td><b>電池與回充</b></td><td>最後要回充，「這是基本的」</td><td>——</td></tr>
+    <tr><td><b>機上控制核心</b></td><td>控制所有感知、做邊緣運算，「不用再回傳到你的本機太久」；把資訊暫存、檢查、分析，做判斷</td><td>Agent＋工作流</td></tr>
+  </table></div>
+
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="ep53-img/05-dog-anatomy.jpg" alt="巡仔 Q01 機器狗的零件配置圖，左右各四個標註，目前停在足端接地" loading="lazy">
+      <figcaption>「巡仔 Q01／機器狗配置」頁，講師正點到第 4 項<b>足端接地｜感測接地狀態與地形回饋</b>。左欄由上到下是 LiDAR 掃描、照明／語音、通訊模組、足端接地；右欄是機上控制核心、前端視覺／熱影像、姿態與關節驅動、電池與回充接口。八個標註剛好對應上面那張表，而且他講的順序跟圖上的順序幾乎一致——先感測、再通訊、再運動、最後才講「AI 在這」的機上核心。［17:31］</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="ep53-img/06-drone-anatomy.jpg" alt="小翼 U01 無人機的零件配置圖，六個標註" loading="lazy">
+      <figcaption>「小翼 U01／無人機配置」頁，他說「無人機更多我都不特別講，大同小異」，只念了機體、雲台、熱像、探照燈、大燈。圖上六項：動力與機體姿態、雲台與可見光／熱影像、電源與返航管理、通訊模組、熱影像＋探照燈、機上定位與飛控。跟狗相比，少了腳與地形感測，多了返航管理——因為它要自己飛回去充電。［20:24］</figcaption>
+    </figure>
+  </div>
+
+  <h3>「AI 在哪裡？AI 在這。」</h3>
+  <p>講到機上控制核心時，他自問自答了這一句。接下來的一分半是整堂課的核心：為什麼一隻機器狗不能只裝一個 ChatGPT。</p>
+
+  <div class="golden">
+    <div class="q">「如果他單純只是一台 AI Chatbot，就是一般的大型的模型，基本上他是不夠的，所以他需要 agent。agent 也不夠。因為他除了 agent 之外，他要有一定的工作流，收到東西回到哪邊，有哪些機，導入哪些功能。」</div>
+    <div class="a">［19:00］三層遞進：模型 → Agent → 工作流。你在電腦上做 AI 自動化時遇到的「為什麼光有一個很聰明的模型不夠用」，跟這隻狗遇到的是同一個問題。</div>
+  </div>
+
+  <ol class="st">
+    <li><b>一個大模型</b>——會聊天、會判斷，但它沒有手腳，什麼都做不了。</li>
+    <li><b>加上 Agent</b>——可以自己決定下一步要做什麼。</li>
+    <li><b>加上工作流</b>——收到東西要回到哪裡、哪些機制、要導入哪些功能：導入它的腳、它的攝影機、它的天線。</li>
+    <li><b>接上工具</b>——「你可以想像他要控制的工具有哪些？他的手，他的腳，他的天線。」它不可能下載 Canva 去背，它控制的是實體零件。</li>
+    <li><b>接上知識</b>——「你可以想像他要導入的 MCP，還有導入的 RAG 有什麼？他需要有這邊的地形圖。他至少知道地形圖。」</li>
+    <li><b>加上保護</b>——影像辨識之外，還要有寫好的保護程式，避免被人劫走〔逐字稿此處聽不清，待確認〕。</li>
+  </ol>
+
+  <div class="golden">
+    <div class="q">「以前我們都是控制網頁、控制軟體。你就把他想想實體裡面他控制什麼。」</div>
+    <div class="a">［19:30］整堂的一句話。前面四章的所有系統，都可以用這句話重新讀一遍。</div>
+  </div>
+
+  <div class="note blue">💡 <div>把這一段對回你自己的 Agent 設定就很清楚了：<b>MCP 是它能碰到的工具</b>（手腳天線＝你的檔案系統、瀏覽器、API），<b>RAG 是它進場前就該知道的事</b>（地形圖＝你的產品手冊、SOP），<b>工作流是收到訊號後要走哪條路</b>。少一層，它就只是一個會講話的盒子。</div></div>
+</section>
+
+<!-- ══════════ 6. 斷橋故事 ══════════ -->
+<section class="chapter" id="sec-story">
+  <span class="chip" style="background:linear-gradient(90deg,var(--pink),var(--rose))">20:30–24:30</span>
+  <h2 class="ct">6. 斷橋故事：兩個 Agent 怎麼對話、接力、檢討</h2>
+  <p class="cd">零件講完，他挑動畫裡的第四段「斷橋另一端」播給大家看。聲音沒開成功，他說「大家可以看字幕就好」，一邊播一邊講。</p>
+
+  <figure class="shot">
+    <img src="ep53-img/07-story-list.jpg" alt="巡仔與小翼的六段故事清單，目前選在第四段斷橋另一端" loading="lazy">
+    <figcaption>動畫的故事選單。下方六張卡片就是六段故事，每段都對應第 5 章開頭他列的一種民用任務：<b>01 雨夜，還有一盞燈</b>（災後搜救）、<b>02 凌晨三點的異音</b>（設施巡檢）、<b>03 霧裡的警示</b>（環境偵測）、<b>04 斷橋另一端</b>（物資接力）、<b>05 山後，重新連線</b>（通聯中繼）、<b>06 林間的一次回應</b>（夜間搜尋）。中間那條進度列上的八個節拍——現場來訊、夥伴就位、空中找線索、地面接近、突發狀況、重新配合、一起完成、任務之後——每段故事都照這八拍走。畫面上的旁白：「小翼負責跨越，巡仔在對岸接手。」［21:23］</figcaption>
+  </figure>
+
+  <h3>故事在演什麼</h3>
+  <p>橋斷了，物資要送到對岸的接收點。無人機（小翼）負責飛過去，機器狗（巡仔）在對岸接手。中間發生的事，講師是這樣拆的：</p>
+  <ul class="pt">
+    <li><b>掃描與回報</b>——狗以前送物資可能有些不準，所以它先掃描、把位置定好；遇到障礙，它會告訴你「現在有障礙」。「就是他在展示他的掃描的技術。」</li>
+    <li><b>兩個 Agent 對話</b>——掃完、影像辨識發現狀況，「他們兩個互相對話，就是 Agent 之間的對話」。誰講話、誰收起來、換誰去完成，都是兩個 Agent 在協調。</li>
+    <li><b>任務後檢討</b>——「任務之後記得 Agent 他完成之後會去檢討，檢討他有沒有完成啊，或者是哪邊有問題。」然後飛回去。</li>
+  </ul>
+
+  <figure class="shot">
+    <img src="ep53-img/08-story-handoff.jpg" alt="斷橋故事第六拍：機器狗前方出現 STOP 警示，右上角任務通訊寫著觀察更新、提出方案、等待人員確認" loading="lazy">
+    <figcaption>故事走到第 6 拍「重新配合」。巡仔頭上跳出<b>STOP</b>，旁白是「提出備用交接面，空地分開進場」——原本的交接點不行，狗提出改用備用點，無人機從空中、狗從地面分頭進場。<b>右上角那個小框才是重點</b>：ASTRA 任務通訊寫著「觀察更新 → 提出方案・等待人員確認」。也就是說，即使是民用的送物資，改變計畫這件事還是先<b>提案、等人確認</b>——第 3 章那個橘色閘門，在民用情境裡長這樣。［22:29］</figcaption>
+  </figure>
+
+  <h3>為什麼要兩個，不是一個</h3>
+  <p>「他就是兩個互相合作，一個做掃描，一個做他可以比較實地的。」無人機負責看，狗負責走——狗的腳比無人車的輪胎或履帶靈活，可以進山林。山林裡有些影像會被遮住、拍不到，就要靠狗過去，把兩邊的資訊彙整。</p>
+
+  <div class="golden">
+    <div class="q">「你給他多一點的 data，你給他多一點的資訊，影像的資訊或相關的資訊，他就能夠更完整的判斷。」</div>
+    <div class="a">［23:31］兩個載具的理由，其實就是「多一個來源」。通訊中斷時，狗會停下來、收網路重新連線——這也是它自己身上帶著基地台的原因。</div>
+  </div>
+
+  <h3>他的收尾：把帳號放進機器人</h3>
+  <p>「有興趣可以看 paper，如果你看機械系的或者是航空系的，他們最近發了很多這樣的 paper。」然後是這一段真正的結論：</p>
+
+  <div class="golden">
+    <div class="q">「你用 AI agent，用 ChatGPT 的概念來看，你會覺得好像跟我們平常在做的事情蠻像蠻類似的。……說不定今年底聖誕節的時候你就會收到一些機器人的禮物。那你就可以開始把你的 ChatGPT 帳號放到機器人的腦裡面，或者是把你的 Claude 或者是 Codex 的帳號放在人形機器人，或者是這些實體的機器人上。」</div>
+    <div class="a">［24:19–24:49］半開玩笑，但方向是認真的：你現在練的 Agent、MCP、工作流，之後會直接搬進實體。</div>
+  </div>
+
+  <div class="note steel">🔧 <div>逐字稿把「小翼」聽成「小異」、「paper」聽成「PayPal」、「Claude」聽成「Cloud」、「ChatGPT」聽成「TrapBar／TrapG」，本頁依畫面與上下文校正。動畫裡有一句「這個人太小了，應該要大一點比較合理」，聽起來是講師對畫面比例的評論，跟內容無關，本頁略去。</div></div>
+</section>
+
+<!-- ══════════ 7. 本週工具更新 ══════════ -->
+<section class="chapter" id="sec-tools">
+  <span class="chip" style="background:linear-gradient(90deg,var(--teal),var(--cyan))">24:50–28:00</span>
+  <h2 class="ct">7. 本週工具更新：影片摘要出中文版，直式短片直接進簡報</h2>
+  <p class="cd">最後三分半是慣例的工具更新。剛好有人問他動畫是用什麼做的，他先答了那個，再示範 Gemini Notebook 的影片摘要。</p>
+
+  <h3>先回答：那兩支動畫怎麼做的</h3>
+  <p>「我直接讓他畫 HTML，就是加 Remotion。」Remotion 是用程式碼做動畫的工具，他讓 AI 去控制它。他給 AI 的設定是：<b>必須是情境式、每一段跟著他的講述走</b>。「如果大家有興趣你就打 Remotion，然後用 Codex 去連他之後就可以做出類似的效果。當然可以做得更好，點數花下去就可以更好。」</p>
+
+  <div class="note blue">💡 <div>這其實是這堂課藏著的第二個示範：整堂的教材本身，就是「把需求講清楚、讓 AI 去控制一個工具」的產物。他沒有開 PowerPoint，也沒有畫圖軟體。</div></div>
+
+  <h3>影片摘要：英文版出了一個半月，中文版上週才出</h3>
+  <p>「也不算新功能。他大概一個半月前出了英文版的影片摘要，那時候就想說中文版哪時候要出？中文版上個禮拜出了吧。」他強調它跟 Reels、Shorts 那種短影音「很像但不太像」——<b>它是把長內容變成直式的短片</b>，60 到 70 秒，而且「中文是準的」。</p>
+
+  <ol class="st">
+    <li>在 Gemini Notebook 打開一本已經放好來源的筆記本（他這本叫「機器人新紀元：仿生技術與安全邊界」，9 個來源）。</li>
+    <li>右側工作室點<b>「影片摘要」</b>。</li>
+    <li>格式選<b>「精簡」</b>（標著「新推出」，簡潔的摘要，方便快速掌握來源的核心概念）；另一個選項是「說明影片」（條理分明的詳盡摘要）。</li>
+    <li>語言選<b>「中文（繁體）」</b>，來源維持全選，按<b>立即生成</b>。生出來的那支叫「2026 機器人產業的四大關鍵趨勢」。</li>
+  </ol>
+
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="ep53-img/09-notebook-video-dialog.jpg" alt="自訂影片摘要的設定視窗：格式選精簡、語言中文繁體、來源九個" loading="lazy">
+      <figcaption>「自訂影片摘要」視窗。上方兩個格式：<b>精簡</b>（打勾，右上角掛著「新推出！」）與說明影片；左下「選擇語言」已經是<b>中文（繁體）</b>；右邊「來源」9 個。再往下還有「影片要以什麼內容為重心？」可以指定主題，他這次沒填直接生成。［26:12］</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="ep53-img/10-notebook-vertical-video.jpg" alt="媒體播放器裡播放生成的直式短片，畫面是一隻手在操作手機，字幕寫著你以為的 AI" loading="lazy">
+      <figcaption>下載下來用媒體播放器打開的樣子。<b>直式</b>、全長 1 分 13 秒，第一秒的字幕就是中文「你以為的 AI，」，畫面是一隻手在滑手機——這就是他說的「他其實就是把長影片變成直的」。這段是 9 個機器人相關來源濃縮出來的開場。［27:15］</figcaption>
+    </figure>
+  </div>
+
+  <h3>拿來做什麼：簡報的引言</h3>
+  <p>他給的用法很具體：放 Reels、做前導介紹，或者<b>當簡報的引言、導論的出口</b>。做法只有三步：</p>
+  <ol class="st">
+    <li>開一份空白簡報，按<b>插入</b>。</li>
+    <li><b>媒體 → 視訊 → 從這個裝置</b>，選剛下載的影片，「他就可以無縫的放進來」。</li>
+    <li>設定播放方式，開始簡報時它會<b>全螢幕播放</b>。</li>
+  </ol>
+
+  <div class="note steel">🔧 <div>畫面上的產品名是 <b>Gemini Notebook</b>（網址 notebook.google.com），講師口中叫它「Gemini 最近的 Notebook」，逐字稿聽成「JumanEye」。本頁照畫面寫 Gemini Notebook，<b>不替換成其他產品名</b>。「影片摘要」與「精簡／說明影片」是介面上的實際文字。</div></div>
+</section>
+
+<!-- ══════════ 8. 這堂課真正在教的事 ══════════ -->
+<section class="chapter" id="sec-real">
+  <span class="chip" style="background:linear-gradient(90deg,var(--orange),var(--amber))">TAKEAWAYS</span>
+  <h2 class="ct">8. 這堂課真正在教的事</h2>
+  <p class="cd">把 28 分鐘濃縮成四件事。名詞可以忘，這四件不要。</p>
+
+  <h3>一、每一個聽起來很軍事的系統，都對得回你已經會的東西</h3>
+  <p>Maven 是「把資料丟給 GPT 分析」，Lattice 是「做成儀表板」，人工核准是「你看過再決定」，Hivemind 是「本機跑小模型」，Nemyx 是「sub agent 分工」，NEXUS 是「USB／MCP」，Kinesis 是「人隨時能接管」。<b>講師整堂沒有引入任何一個你不會的概念</b>，他只是把你在螢幕上做的事，一格一格搬到天上與地上。</p>
+
+  <h3>二、「人在迴圈上」不是口號，是流程圖上一個具體的位置</h3>
+  <p>它在 Lattice 之後、載具之前，而且在民用的送物資故事裡也在——狗要改交接點，一樣是「提出方案、等待人員確認」。不是技術做不到自動，是「現在在國際上的公約還沒有辦法讓他開放去做」。<b>你設計自己的 Agent 流程時，也該問：我的閘門在哪一格。</b></p>
+
+  <h3>三、實體裡的 AI 不是一顆模型，是模型＋Agent＋工作流＋工具＋知識</h3>
+  <p>「一台 AI Chatbot 是不夠的，所以他需要 agent。agent 也不夠。」手、腳、天線是它的工具（MCP），地形圖是它的知識（RAG），收到訊號要走哪條路是工作流。少一層，它就是一個會講話的盒子。這一段用機器狗講，但講的是你在電腦上做自動化時每天遇到的事。</p>
+
+  <h3>四、分清示意與實證，是看這類新聞的基本功</h3>
+  <p>他自己的動畫全部是示意，Nemyx 那頁還自己標了「證據層級提醒」；用 Claude 模擬台灣防空的新聞，他的判斷是「就當作新聞就好」，理由是模型爬不到真實資料。<b>新聞裡的 AI 有沒有拿到真資料、誰在最後核准</b>——這兩個問題，這堂課之後你會自己問。</p>
+</section>
+
+<!-- ══════════ 9. 老師金句 ══════════ -->
+<section class="chapter" id="sec-quotes">
+  <span class="chip" style="background:linear-gradient(90deg,var(--amber),var(--rose))">QUOTES</span>
+  <h2 class="ct">9. 老師金句</h2>
+
+  <div class="golden"><div class="q">「這個如果大家聽這部分會覺得比較深一點沒關係，就當作一般的知識補充。」</div><div class="a">［03:02］整堂的定位。不是要你會操作，是讓你看新聞時知道名詞在鏈子的哪一格。</div></div>
+
+  <div class="golden"><div class="q">「這個全部都是示意圖，不是真實的畫面。」</div><div class="a">［04:29］動畫一開播就先聲明。本頁所有截圖也都是這支示意動畫。</div></div>
+
+  <div class="golden"><div class="q">「我覺得這只是新聞炒作，因為他真的有辦法模擬的話，他也沒辦法拿到真實的資料。」</div><div class="a">［04:29］評論「用 Claude 模擬台灣防空」的新聞。判斷標準：模型有沒有真資料。</div></div>
+
+  <div class="golden"><div class="q">「我們把所有的 Data，會給 GPT，然後 GPT，或者是大型語言模型，他把它分析之後，分門別類，幫你做出一個像是 Dashboard，像是儀表板一樣。」</div><div class="a">［07:28］Maven 在做的事，用你聽得懂的版本。</div></div>
+
+  <div class="golden"><div class="q">「現在在國際上的公約還沒有辦法讓他開放去做。所以一定會維持人的決策權。這也是大家常聽到的，人在迴圈上的一個概念。」</div><div class="a">［09:19–09:30］為什麼流程圖上有一個橘色的閘門。</div></div>
+
+  <div class="golden"><div class="q">「當他的資料再回傳到我們的這些資料太慢了，他現場就要做判斷，現場就要做掃描，他不可能拍什麼再掃回來，太慢了。」</div><div class="a">［10:00］邊緣運算最白話的解釋。</div></div>
+
+  <div class="golden"><div class="q">「以前我們都會說大語言模型很快，但是小語言模型比較適合邊緣運算上。」</div><div class="a">［10:29］載具上為什麼跑的是小模型。</div></div>
+
+  <div class="golden"><div class="q">「有點像我們現在在玩 AI agent 裡面的 sub agent，就是次級的 agent，他們會互相的分工。」</div><div class="a">［12:00］蜂群＝實體化的 sub agent。整堂最好記的一個對照。</div></div>
+
+  <div class="golden"><div class="q">「AI 在哪裡？AI 在這。」</div><div class="a">［18:30］講到機上控制核心時自問自答。零件都講完了，AI 是最後那一顆會判斷的核心。</div></div>
+
+  <div class="golden"><div class="q">「如果他單純只是一台 AI Chatbot，就是一般的大型的模型，基本上他是不夠的，所以他需要 agent。agent 也不夠。」</div><div class="a">［19:00］模型 → Agent → 工作流，三層遞進。</div></div>
+
+  <div class="golden"><div class="q">「以前我們都是控制網頁、控制軟體。你就把他想想實體裡面他控制什麼。」</div><div class="a">［19:30］整堂的一句話。</div></div>
+
+  <div class="golden"><div class="q">「你給他多一點的 data，你給他多一點的資訊，影像的資訊或相關的資訊，他就能夠更完整的判斷。」</div><div class="a">［23:31］為什麼要一隻狗加一架無人機，而不是只有一個。</div></div>
+
+  <div class="golden"><div class="q">「說不定今年底聖誕節的時候你就會收到一些機器人的禮物。那你就可以開始把你的 ChatGPT 帳號放到機器人的腦裡面。」</div><div class="a">［24:19］半開玩笑的收尾，方向是認真的。</div></div>
+
+  <div class="golden"><div class="q">「他其實就是把長影片變成直的。」</div><div class="a">［26:31］影片摘要中文版一句話。</div></div>
+</section>
+
+<!-- ══════════ 10. 資料來源與整理說明 ══════════ -->
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,var(--ink3),var(--ink2))">SOURCE</span>
+  <h2 class="ct">10. 資料來源與整理說明</h2>
+
+  <div class="twrap"><table>
+    <tr><th style="width:130px">來源</th><td>直播電台 EP53 錄影（2026/09/11），單段，全長 28 分 0 秒；沒有另外的簡報或講義檔</td></tr>
+    <tr><th>整理方式</th><td>全程本機處理：以場景偵測擷取 39 張關鍵畫面、產生 116 段逐字稿，再依逐字稿手寫章節目錄；截圖另從錄影補抓 3 個時間點（03:56、04:36、20:24）取得沒有系統提示框的畫面</td></tr>
+    <tr><th>時間戳</th><td>章節標題與引文後方的［mm:ss］對應錄影播放器時間</td></tr>
+    <tr><th>整理</th><td>竹貞（Tarshar 的逐幀筆記專員），2026/09/28</td></tr>
+  </table></div>
+
+  <h3>已知限制，請先看過再引用</h3>
+  <ul class="pt">
+    <li><b>逐字稿是機器產生的</b>，人名與工具名會聽錯。本頁修正了可以由畫面或上下文確認的錯字：Claude 被聽成「Cloud」、Grok 被聽成「Glock／Goke」、ChatGPT 被聽成「trap／TrapBar／TrapG」、Chatbot 被聽成「Checkbar」、Gemini 被聽成「JumanEye」、Maven 被聽成「Vamint」、Lattice 被聽成「Latis」、MCP 被聽成「MCD」、paper 被聽成「PayPal」、Reels 被聽成「REALS」、衛星通訊被聽成「微信通訊」、邊緣運算被聽成「邊緣預算／平原預算」、蜂群被聽成「風群」、母機僚機被聽成「木鳥的母雞／療雞」、機器狗被聽成「機器口／GT 狗」、大型語言模型被聽成「大型元模型」、儀表板被聽成「儀表版」、經緯度座標被聽成「金尾珠座標」、小翼被聽成「小異」、史詩怒火被聽成「死屍怒火」、生成式 AI 被聽成「深層式 AI」、Optimus 被聽成「Upromise」，共 22 類；<b>不確定的一律保留原樣，沒有猜測補詞</b>。</li>
+    <li><b>四處聽不清、本頁標為〔待確認〕不補寫</b>：07:00 提到的某個新模型名（逐字稿「GBT 的 Aztro」）、10:58 蜂群段落的一個型號（逐字稿「WNG」）、08:34 提到的一種資料格式（逐字稿「MATAM 格式」）、20:00 保護程式要避免的事（逐字稿「避免被人家遭享去」）。13:00 講到特斯拉機器人時提到的「Grok bot」也只有一句帶過，本頁未展開。</li>
+    <li><b>講師姓名</b>在錄影與逐字稿中都沒有出現，本頁一律寫「電台講師」，不從畫面上的任何名稱推測。</li>
+    <li>戰事與軍工相關內容<b>照講師口述整理，本頁不評論、不補充外部資料</b>；提到軍工股的段落不列公司名，不是投資建議。六個系統的功能描述來自講師動畫畫面，該動畫自己標明為「角色映射示意」，請勿當作已證實的戰報引用。</li>
+    <li><b>可信度分級</b>：金句章 14 則全部是錄影實錄（僅校正上述聽錯的工具名）；第 2 章的六系統表、第 6 章的六段故事與八個節拍、第 7 章的介面選項文字，是<b>從畫面文字抄下來的</b>，可能有辨識誤差；第 5 章零件表右欄「對回你平常用的 AI」是依講師 19:00–20:00 的口述整理，不是他逐項講的對照。</li>
+    <li>逐字稿中出現的學員稱呼、提問者暱稱，本頁一律隱去。課堂上有人問「簡報是用哪個軟體」，本頁只保留講師的回答。</li>
+    <li>課堂截圖已裁掉線上教室右側的與會者欄位（原始畫面 1920×1080，只保留左側 1440×810 的分享區）；非全螢幕的畫面另外裁掉瀏覽器分頁、書籤列、網址與本機路徑、帳號頭像與工作列。本頁 10 張截圖約每 3 分鐘一張，比一般每 10 分鐘一張密——這堂的內容幾乎全在兩支動畫的畫面上，少一張就少一個系統。</li>
+    <li>引用到作業、貼文或簡報之前，請對照錄影原始段落再確認一次。</li>
+  </ul>
+
+  <div class="note gold">📄 <div><b>內容版權屬原講者與電台，本頁為學習筆記</b>；若原講者或電台希望撤下，來信告知即刻移除。講師自製的兩支動畫沒有公開網址，本頁不提供、也不重製。</div></div>
+</section>
+
+</article>
+</div>
+
+<footer>
+  <p>📝 直播電台 EP53 課堂筆記 · 生成式AI應用電台</p>
+  <p>依錄影 39 張關鍵畫面＋全程逐字稿 116 段整理 · <a href="ep53-ai-skills.html">🗺️ 互動技能地圖</a> · <a href="../radio/">🏠 回筆記館入口</a></p>
+</footer>
+
+</body>
+</html>
