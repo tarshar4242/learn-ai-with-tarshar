@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>直播電台 EP54 課堂筆記｜把 AI 當第二雙眼睛，不是把質性研究外包給它</title>
+<meta name="description" content="生成式AI應用電台 EP54（2026/09/26 直播，全長 47 分 40 秒）課堂筆記。主題是質性研究與 AI Agent 協助：為什麼逐字稿丟給 AI 編碼做得到卻不能全交出去（AI 只抓得到六成脈絡）、人與 AI 各自的盲點、把 AI 當 VR 裝置與探測器練追問而不當受訪者、AI 擅長快廣多但最不能外包的是反身性、把編碼拆給研究者／Coding／Evidence／Perspective／Judge 五個角色的 Agent 小組、用夜市外籍遊客支付行為的模擬逐字稿在多 Bot 群聊實際跑一輪看候選編碼與證據覆核、兩套 AI 編碼加自己那套做三角檢證，以及 AI 介入的五條紅線。依錄影 48 張關鍵畫面＋229 段逐字稿整理。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#3f8560; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:760px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px;max-height:calc(100vh - 90px);overflow-y:auto}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:7px;border-left:none;font-size:13px}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.code{position:relative;background:var(--code);border:1px solid var(--line2);border-radius:10px;padding:13px 15px;margin:10px 0;font-size:13px;line-height:1.75;color:var(--ink);white-space:pre-wrap;font-family:"Cascadia Code",Consolas,monospace;overflow-x:auto}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.iframe-wrap{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000;margin:14px 0}
+.iframe-wrap iframe{display:block;width:100%;height:460px;border:0}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static;max-height:none} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} .iframe-wrap iframe{height:320px} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#c5dccd" onclick="if(history.length>1){history.back();return false}">← 回上一頁</a>
+  <b>📝 直播電台 EP54 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="ep54-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 直播電台 · EP54</span>
+  <h1>把 AI 當第二雙眼睛，<span>不是把質性研究外包給它</span></h1>
+  <p class="lead">「可以很輕鬆的把你訪談完的逐字稿直接丟給 AI，請他幫我做一些編碼。」老師一開口就承認這件事做得到，然後花了整堂課講<b>為什麼做得到還不能這樣做</b>：AI 抓得到六成脈絡，剩下的細微情緒與人事時地物的連結，是研究者自己的工作。<br>整堂一條主線：<b>先分清人與 AI 各自的盲點</b>，再把 AI 當 <b>VR 裝置與探測器</b>來練功，接著把編碼工作拆給一個<b>五角色的 Agent 小組</b>（研究者、Coding、Evidence、Perspective、Judge），最後用「夜市外籍遊客支付行為」的模擬逐字稿實際跑一輪，看 AI 提出候選編碼、回頭找證據、停在研究者裁決點。<br>本頁依<b>錄影 48 張關鍵畫面＋全程逐字稿 229 段</b>整理，重點段落附影片時間戳。</p>
+  <div class="meta">
+    <span>📅 2026/09/26（六）上午直播</span>
+    <span>⏱️ 全長 47 分 40 秒（單段錄影）</span>
+    <span>🧩 主題：質性編碼 × 反身性 × 多 Agent 分工</span>
+    <span>🎓 論文與研究方法向</span>
+    <span>🔰 小白友善</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-overview">1. 一張圖看懂這堂</a>
+  <a href="#sec-open">2. 逐字稿丟給 AI 就算數？人有盲點，AI 也有</a>
+  <a href="#sec-vr">3. 把 AI 當 VR 裝置與探測器：拿來練，不拿來當受訪者</a>
+  <a href="#sec-reflex">4. AI 擅長快、廣、多，最不能外包的是反身性</a>
+  <a href="#sec-team">5. 從 Chatbot 到 Agent 小組：一個管家加四個助手</a>
+  <a href="#sec-demo">6. Demo：夜市支付案例，五隻 Bot 群聊跑一輪</a>
+  <a href="#sec-wrap">7. 收尾：Skill 要拿下來調，紅線要自己守</a>
+  <a href="#sec-real">8. 這堂課真正在教的事</a>
+  <a href="#sec-quotes">9. 老師金句</a>
+  <a href="#sec-src">10. 資料來源與整理說明</a>
+</nav>
+
+<article>
+
+<!-- ══════════ 0. 課程資訊與教材 ══════════ -->
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--cyan))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>生成式AI應用電台 EP54｜質性研究與 AI Agent 協助（簡報副標「人機協作，不是全自動外包」）</td></tr>
+    <tr><th>直播日期</th><td>2026/09/26（六）上午，本段錄影全長 <b>47 分 40 秒</b></td></tr>
+    <tr><th>本堂主題</th><td>質性研究的逐字稿編碼能不能交給 AI、交到什麼程度；把編碼工作拆成五個 Agent 角色，讓每一筆候選編碼都綁回原文、停在研究者裁決點</td></tr>
+    <tr><th>課程節奏</th><td>老師開場說「今天只有 45 分鐘，最後留 15 分鐘 demo」。實際是前 31 分鐘講觀念（照簡報走）、31:30 起打開多 Bot 群聊做 Demo、43:20 之後收尾與課程預告。這是上週因趕車沒直播到的題目，補講，老師說後續（10 月的紮根理論課）會再發展更詳細的內容</td></tr>
+    <tr><th>要先準備</th><td>這堂不用裝任何東西。想跟著 Demo 做，需要一套能建立多個 Bot、再把它們拉進同一個群聊的 Agent 工具（老師用的那套需付費）；或照他 27:39 提到的傳統做法，用 ChatGPT 專案、Gemini 的 Gem 或 NotebookLM 各建一個角色來對照</td></tr>
+  </table></div>
+
+  <h3>📁 課堂用到的五份教材</h3>
+  <p>錄影、簡報與四份講義由電台提供給報名學員，本頁不轉載也不提供連結。以下說明五份檔案各自在課堂上的用途，方便你對照筆記閱讀。</p>
+
+  <div class="twrap"><table>
+    <tr><th style="width:230px">教材檔案</th><th>課堂上拿來做什麼</th></tr>
+    <tr><td><code>EP54 簡報（27 頁）</code></td><td>整堂的觀念骨架。第 1～13 頁講為什麼不能全自動（人的盲點、AI 的三種問題、快廣多、反身性、爭議核心）；第 14～21 頁是 Agent 小組五角色、七步工作流與可追溯輸出格式；第 22～25 頁是 Demo 案例與三個 Step；第 26～27 頁是五條紅線與結語。課堂畫面上開的檔案是 23 頁的版本，發給學員的是 27 頁；第 3、4、5 頁（冰山圖、詠唱心法、VR 裝置）課堂上老師是切到另一份舊簡報講的</td></tr>
+    <tr><td><code>半結構式訪談大綱</code></td><td>研究主題「夜市外籍遊客消費與支付行為」的訪綱：倫理開場、所有受訪者共用的核心題組，以及外籍遊客、攤商、自治會三組各自的追問題。Demo 時和逐字稿一起上傳，管家 Bot 據此寫出 Research Setup（研究問題、方法、分析單位）</td></tr>
+    <tr><td><code>模擬逐字稿 A01｜外籍遊客</code></td><td><b>Demo 的主角</b>。每一句都有片段編號（A01-L01、A01-L02⋯），Butler 先拿 L01「只收現金的摩擦／卡住」做人機裁決的測試，正式一輪則從 L16～L28「安心／現金」叢集做候選編碼</td></tr>
+    <tr><td><code>模擬逐字稿 A02｜夜市攤商</code></td><td>和 A01 一起上傳，管家回報「已讀到四份附件」。課堂時間不夠，這一份沒有展開；老師講攤商立場（方便、看不到錢、可能被扣稅）時用的是口述舉例</td></tr>
+    <tr><td><code>模擬逐字稿 A03｜夜市自治會</code></td><td>同上，作為對照組上傳。老師在第 2 章講「自治會要推、攤商不一定要」的立場差異時點到，Demo 未進入</td></tr>
+  </table></div>
+
+  <div class="note steel">🔧 <div>三份逐字稿都是<b>模擬資料</b>，講義開頭寫明「教學分析使用」，不是真實受訪者。老師在 26:30 特別提醒：真實研究裡受訪者講的機敏個資、不想公開的內容，餵給 AI 之前要先處理，這一點本頁在第 7 章另外整理。</div></div>
+
+  <h3>🎬 課堂錄影</h3>
+  <p class="cd">單段錄影，全長 47 分 40 秒。33:00 前後老師的電腦跳出容量不足，他離開處理後回來繼續，本頁照實記在第 6 章。</p>
+  <div class="note steel">🔧 <div>錄影由電台提供給報名學員，本頁不轉載也不提供連結。本頁是依錄影整理的圖文筆記，沒看過錄影一樣讀得懂。</div></div>
+
+  <div class="note gold">🔒 <div><b>本頁截圖都經過去識別化處理。</b>原始錄影是 Google Meet 畫面分享，右側 480 像素會出現參與者頭像與姓名，整欄裁除（只保留左側 1440×810 的分享畫面）；畫面中若出現操作者的瀏覽器側邊欄、書籤列、工作列、Office 帳號名稱或群聊標題裡的帳號名稱，一併裁掉；Meet 介面本身（含右側聊天室與學員留言）的畫面一張都不選；逐字稿裡出現的學員稱呼也隱去。</div></div>
+</section>
+
+<!-- ══════════ 1. 一張圖看懂這堂 ══════════ -->
+<section class="chapter" id="sec-overview">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--purple))">OVERVIEW</span>
+  <h2 class="ct">1. 一張圖看懂這堂</h2>
+  <p class="cd">整堂只回答一個問題：逐字稿編碼交給 AI，交到哪裡為止？老師的答案是一個迴圈：AI 提候選、證據綁回原文、不同視角讀一次，然後停下來等你裁決。</p>
+
+  <div class="svgwrap">
+  <svg viewBox="0 0 980 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="質性研究人機協作迴圈：逐字稿進入 AI 小組，產出可追溯的候選編碼，回到研究者裁決">
+    <defs>
+      <marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+        <path d="M0,0 L9,4.5 L0,9 z" fill="#9B9B9B"/>
+      </marker>
+    </defs>
+
+    <text x="490" y="28" text-anchor="middle" font-size="13" fill="#9B9B9B">人機協作，不是全自動外包：AI 做前三格，最後一格永遠是研究者</text>
+
+    <rect x="14" y="60" width="170" height="118" rx="12" fill="#EEF2F5" stroke="#D2DFE7"/>
+    <text x="99" y="90" text-anchor="middle" font-size="15" font-weight="700" fill="#255066">逐字稿＋訪綱</text>
+    <text x="99" y="114" text-anchor="middle" font-size="12.5" fill="#5f5f5f">A01 外籍遊客</text>
+    <text x="99" y="132" text-anchor="middle" font-size="12.5" fill="#5f5f5f">A02 攤商　A03 自治會</text>
+    <text x="99" y="150" text-anchor="middle" font-size="12.5" fill="#5f5f5f">每句都有片段編號</text>
+
+    <rect x="218" y="60" width="170" height="118" rx="12" fill="#FBF7EC" stroke="#EFE3C4"/>
+    <text x="303" y="90" text-anchor="middle" font-size="15" font-weight="700" fill="#7a5b12">Coding Agent</text>
+    <text x="303" y="114" text-anchor="middle" font-size="12.5" fill="#5f5f5f">每段提 1～3 個候選編碼</text>
+    <text x="303" y="132" text-anchor="middle" font-size="12.5" fill="#5f5f5f">優先 in-vivo（用原話）</text>
+    <text x="303" y="150" text-anchor="middle" font-size="12.5" fill="#5f5f5f">只提候選，不宣稱答案</text>
+
+    <rect x="422" y="60" width="170" height="118" rx="12" fill="#EDF7F1" stroke="#CBE6D5"/>
+    <text x="507" y="90" text-anchor="middle" font-size="15" font-weight="700" fill="#166a4c">Evidence Agent</text>
+    <text x="507" y="114" text-anchor="middle" font-size="12.5" fill="#5f5f5f">每個編碼綁回原文</text>
+    <text x="507" y="132" text-anchor="middle" font-size="12.5" fill="#5f5f5f">看前後文、找反證</text>
+    <text x="507" y="150" text-anchor="middle" font-size="12.5" fill="#5f5f5f">過度推論就標出來</text>
+
+    <rect x="626" y="60" width="170" height="118" rx="12" fill="#EEF4FB" stroke="#CFE0F1"/>
+    <text x="711" y="90" text-anchor="middle" font-size="15" font-weight="700" fill="#1d5e8f">Perspective × 3</text>
+    <text x="711" y="114" text-anchor="middle" font-size="12.5" fill="#5f5f5f">現象學：經驗怎麼被感受</text>
+    <text x="711" y="132" text-anchor="middle" font-size="12.5" fill="#5f5f5f">紮根：概念怎麼浮現</text>
+    <text x="711" y="150" text-anchor="middle" font-size="12.5" fill="#5f5f5f">批判：權力與制度</text>
+
+    <rect x="830" y="60" width="136" height="118" rx="12" fill="#F4F3F0" stroke="#DBD9D5"/>
+    <text x="898" y="90" text-anchor="middle" font-size="15" font-weight="700" fill="#3f8560">Judge 建議</text>
+    <text x="898" y="114" text-anchor="middle" font-size="12.5" fill="#5f5f5f">綜合可信度</text>
+    <text x="898" y="132" text-anchor="middle" font-size="12.5" fill="#5f5f5f">提 Accept／Modify</text>
+    <text x="898" y="150" text-anchor="middle" font-size="12.5" fill="#5f5f5f">但不做最終裁決</text>
+
+    <line x1="184" y1="119" x2="212" y2="119" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+    <line x1="388" y1="119" x2="416" y2="119" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+    <line x1="592" y1="119" x2="620" y2="119" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+    <line x1="796" y1="119" x2="824" y2="119" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+
+    <rect x="218" y="212" width="578" height="86" rx="10" fill="#FFFFFF" stroke="#3f8560" stroke-width="1.4"/>
+    <text x="507" y="240" text-anchor="middle" font-size="14.5" font-weight="700" fill="#191919">研究者裁決：Accept／Modify／Reject，每一筆都寫 Memo 說理由</text>
+    <text x="507" y="262" text-anchor="middle" font-size="12.5" fill="#5f5f5f">同時回答三個反身性問題：我為何這樣理解？我帶著什麼預設進場？我的詮釋排除了什麼？</text>
+    <text x="507" y="282" text-anchor="middle" font-size="12.5" fill="#5f5f5f">裁決完再回到逐字稿：AI 的編碼當第二套，加上你自己那套，做三角檢證</text>
+
+    <line x1="898" y1="178" x2="898" y2="255" stroke="#9B9B9B" stroke-width="1.6"/>
+    <line x1="898" y1="255" x2="802" y2="255" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+    <line x1="212" y1="255" x2="99" y2="255" stroke="#9B9B9B" stroke-width="1.6" stroke-dasharray="4 3"/>
+    <line x1="99" y1="255" x2="99" y2="184" stroke="#9B9B9B" stroke-width="1.6" stroke-dasharray="4 3" marker-end="url(#ar)"/>
+    <text x="150" y="315" text-anchor="middle" font-size="12" fill="#9B9B9B">虛線：裁決完回頭再讀資料，迭代</text>
+  </svg>
+  <figcaption>上排四格是 AI 小組能做的事：提候選、找證據、換視角、給建議。老師整堂反覆強調的是下面那一格：AI 幫你做到第二層（把概念抓出來），但「為什麼這個人這樣想」的第二層詮釋、以及最後的 Accept／Modify／Reject，一直是研究者的工作。</figcaption>
+  </div>
+
+  <div class="note blue">💡 <div>如果只記得一句話，記這句：<b>「但是請記得他的編碼是表象的，他可以做為第二套的編碼，甚至呢，你可以叫他提兩套編碼，然後加你來做三角檢證。」</b>［42:00］</div></div>
+</section>
+
+<!-- ══════════ 2. 開場與兩邊的盲點 ══════════ -->
+<section class="chapter" id="sec-open">
+  <span class="chip" style="background:linear-gradient(90deg,var(--blue),var(--cyan))">00:58–13:00</span>
+  <h2 class="ct">2. 逐字稿丟給 AI 就算數？人有盲點，AI 也有</h2>
+  <p class="cd">前 13 分鐘老師先把最常見的做法講出來，再一層一層說它哪裡不夠。</p>
+
+  <h3>從 NVivo 到 AI：大家已經在這樣做了</h3>
+  <p>質性研究要分析的多半是文字資料，過去用 NVivo 這類軟體找單詞、看情緒、跑文字雲，操作門檻不低。AI 的文字探勘能力起來之後，很多人直接拿它當質性分析的輔助工具，隨之而來的是兩個擔心：<b>AI 會不會幫你多做解釋？逐字稿編碼會不會出問題？</b>老師的回答是，這些擔心可以透過「把研究方法學到的技巧設計進 Agent 或自訂功能裡」來處理，而這堂課就是開端：先講國際上的趨勢與想法，留最後 15 分鐘 Demo「AI Agent 在分工上各自負責什麼，而且要設定成彼此可以互相監工」。</p>
+
+  <figure class="shot">
+    <img src="ep54-img/01-title-slide.jpg" alt="EP54 簡報首頁：質性研究與 AI Agent 協助，人機協作不是全自動外包" loading="lazy">
+    <figcaption>簡報第 1 頁，整堂的立場一句話寫完。左下三行「質性研究 × AI Agent／第二雙眼睛，不是自動代寫／編碼｜證據｜反身性｜工作流」就是後面第 4、5、6 章的順序；右邊三格「研究資料 → AI 協助 → 檢視與判斷」，第三格寫的是「回到資料、檢核證據，由研究者做最終詮釋」。老師 07:01 回到這一頁時，特別用紅線畫了「不是全自動外包」與「第二雙眼睛」。［05:24］</figcaption>
+  </figure>
+
+  <h3>做得到，為什麼還不能全交出去</h3>
+  <p>他很坦白：把訪談完的逐字稿丟給 AI，請它做主題編碼、選擇編碼、摘出重要文字，甚至寫成論文常見的「一段論述、下面縮排引述」格式，<b>AI 都做得到</b>。問題出在質性研究看的不只是表面現象（一度建構），還有受訪者內心的詮釋、他跟這塊土地與這件事的連結（二度建構）。這些是你進田野、做焦點團體、做深度訪談時觀察到的細微情緒反應，就算給 AI 再多 RAG、再多背景脈絡，它也不容易找到。</p>
+  <ul class="pt">
+    <li><b>AI 能做到的部分</b>：老師估計「至少幫我抓個六、五到七成左右的脈絡」，讓你大致掌握情境。</li>
+    <li><b>剩下要交給人的部分</b>：現象與現象、關聯與關聯，事件前後人事時地物之間的互動結果。</li>
+    <li><b>怎麼配合</b>：AI 可以邊編你邊看它的初步想法，但要先給它訪談大綱和研究內容，不然它拿到一大堆逐字稿，就只是照裡面的關鍵字在連。</li>
+  </ul>
+
+  <h3>反過來的做法：讓 AI 先「存而不論」編一次</h3>
+  <p>學質性研究時老師都會說「存而不論」：不帶主觀、不帶理論框架、先從比較客觀的角度看。老師建議把這件事也套在 AI 身上：</p>
+  <ol class="st">
+    <li><b>先不給訪綱</b>，只把逐字稿丟給它，告訴它「這是質性研究的分析」（不說的話它會給你一個非常粗略的摘要）。這一次是字與字之間的關鍵，看受訪者同時談到什麼。</li>
+    <li><b>換一個帳號或視窗</b>再做第二次（有訪綱的那次）。「你不要同一個帳號或同一個視窗，因為彼此的上下文是會互相影響的。」［08:30］</li>
+    <li>把兩次的結果跟你自己讀出來的東西對照，找出趨同與趨異，慢慢把故事拼出來。</li>
+  </ol>
+  <p>他舉的例子就是這堂後面 Demo 用的案例：觀光夜市推動行動支付，受訪三方是外國遊客、攤商、自治會會長。三種立場進來之後，你才看得到誰認同、誰不認同、大家對這件事各自的故事。</p>
+
+  <h3>人的盲點：訪綱一餵進去，故事線就被框住了</h3>
+  <p>簡報第 6 頁的標題是「人類研究者也不是沒有盲點」。老師講的具體場景是：大家很常一開始就把訪綱餵給 AI，AI 就照訪綱形成標題、往裡面填東西，填完你再回頭想「故事線這樣發展合理嗎」。這種做法會漏掉訪綱沒問到的東西，例如自治會會長是推政策的人、攤商是接受政策的人，還有攤商乾脆說「我就不要電子支付，我就要現金買賣」，這幾種立場之間的落差，訪綱式的分析抓不到。<b>所以反過來可以讓 AI 幫你點出：有沒有一些特殊立場是你當初沒看到的。</b></p>
+
+  <figure class="shot">
+    <img src="ep54-img/02-researcher-blindspots.jpg" alt="簡報第 6 頁：人類研究者也不是沒有盲點，熟悉領域、理論框架、立場價值三條" loading="lazy">
+    <figcaption>簡報第 6 頁。左邊三條箭頭是三種盲點的來源：熟悉領域讓你想當然耳、理論框架讓你過早套用、立場價值影響詮釋方向；右下角那句「研究者也需要被校正」是這一頁的重點，也是後面第 4 章反身性的伏筆。老師在這一頁停留最久，因為它替 AI 的角色定了調：不是取代研究者，是校正研究者。［10:18］</figcaption>
+  </figure>
+
+  <h3>AI 的盲點：去脈絡化，還有它本來就是接龍機器人</h3>
+  <p>老師說 AI 最大的問題是<b>去脈絡化</b>：它不管這個夜市在你心目中的樣子、不管你讀過多少 paper，就是針對你現成的資料、針對文字與文字之間的關聯做分析。沒給訪綱，它就是照關鍵字接龍；給了訪綱，它就照訪綱的脈絡依序找連結。這兩種都沒有錯，但都只能到六成，細節微小、沒被觀察到的部分要交給人類。</p>
+
+  <div class="golden">
+    <div class="q">「AI 就是一個樂觀的接龍機器人。你給他相關的 Point，他就針對這個 Point 去做相對應的資訊的連結、鏈結。」</div>
+    <div class="a">［12:00］解釋為什麼 AI 的分析「沒有錯但不夠」。它不是在理解，是在把你給的點連起來；你給什麼點，它就長成什麼樣。</div>
+  </div>
+
+  <div class="twrap"><table>
+    <tr><th style="width:130px"></th><th style="width:300px">人類研究者的盲點（簡報第 6 頁）</th><th>AI 最容易出問題的地方（簡報第 7 頁）</th></tr>
+    <tr><td>第一種</td><td>熟悉領域 → 容易想當然耳</td><td>幻覺 → 補出原文沒有的意思</td></tr>
+    <tr><td>第二種</td><td>理論框架 → 容易過早套用</td><td>去脈絡 → 忽略情境與關係</td></tr>
+    <tr><td>第三種</td><td>立場價值 → 影響詮釋方向</td><td>過度自信 → 說得流暢但未必正確</td></tr>
+    <tr><td>一句話</td><td>研究者也需要被校正</td><td>看起來合理 ≠ 研究上成立</td></tr>
+  </table></div>
+
+  <div class="note blue">💡 <div>把兩張表並排看，老師的結論就出來了（簡報第 8 頁）：<b>問題不是 Human vs AI，而是怎麼做人機分工。不是取代、而是分工、更是互相校正。</b>他也提到質性方法論期刊這幾年的變化：排除 AI 的聲音越來越小，討論的重點變成「如何讓 AI 融入研究工作流」，而且它的角色不只是工具，還會被注入研究方法上的用法。</div></div>
+</section>
+
+<!-- ══════════ 3. VR 裝置與探測器 ══════════ -->
+<section class="chapter" id="sec-vr">
+  <span class="chip" style="background:linear-gradient(90deg,var(--teal),var(--green))">13:00–20:00</span>
+  <h2 class="ct">3. 把 AI 當 VR 裝置與探測器：拿來練，不拿來當受訪者</h2>
+  <p class="cd">正式講編碼之前，老師先繞回三年前 GPT 剛出來時他做的兩個嘗試。這一章沒有截圖，因為重點全在口述的界線上。</p>
+
+  <h3>為什麼要把 AI 當成田野</h3>
+  <p>學質性研究的路徑通常是：先讀方法論、本體論，從演繹與歸納的邏輯、從亞里斯多德到哈伯瑪斯的論述切進去；要等到跟著老師做研究，才比較有機會知道深度訪談怎麼追問、焦點團體怎麼編排同質性與異質性、訪綱怎麼設計、編碼怎麼做。看教科書體驗不到。所以當時的想法是：<b>有沒有機會把 AI 當成一個田野的情境，去練習追問的技巧？把 AI 當成訪談對象，練習你丟問題、腦力激盪的方式？讓它模擬你實際進田野會遇到的情況？</b></p>
+
+  <div class="twrap"><table>
+    <tr><th style="width:130px">詠唱指令心法</th><th style="width:180px">技能移轉自</th><th>練什麼</th></tr>
+    <tr><td>情境設計</td><td>田野調查法</td><td>把 AI 設計成一個田野，你進去之後練習參與與觀察，模擬局內人的想法</td></tr>
+    <tr><td>追問</td><td>深度訪談法</td><td>把 AI 當受訪者，練習怎麼追問、怎麼往下挖</td></tr>
+    <tr><td>腦力激盪</td><td>焦點團體座談法</td><td>讓 AI 扮演多個參與者，練習你在團體裡怎麼拋問題、怎麼收斂</td></tr>
+  </table></div>
+  <p>這三組對應取自簡報第 4 頁「詠唱指令心法：質性研究途徑」，老師在 13:50 前後把這一頁帶過。</p>
+
+  <h3>兩個比喻</h3>
+  <ul class="pt">
+    <li><b>VR 裝置</b>：以前要進田野才知道怎麼變成局內人，你是做參與、做觀察、還是參與加觀察？沒到現場，看方法論的書很難想像。如果設計一個情境讓 AI 來對話、或把 AI 設計成一個田野，你進去之後就可以練習理解與思考局內人的想法。</li>
+    <li><b>探測器</b>：存而不論的分析怎麼做？怎麼透過歸納法，一點一滴找出蛛絲馬跡、系統化地連結，透過編碼把概念抓出來之後，再把編碼與概念、概念與主題之間的關係結合起來，把故事說出來。這也可以讓 AI 輔助你練習。</li>
+  </ul>
+
+  <div class="golden">
+    <div class="q">「AI 變成你的 VR 裝置。因為以前我們要進入田野會談，怎麼變成局內的？你是做參與還是做觀察？還是你是參與跟觀察？」</div>
+    <div class="a">［18:00］這是簡報第 5 頁「VR 裝置與探測器」那張圖的口述版。老師的用意是練習，不是替代田野。</div>
+  </div>
+
+  <h3>界線：AI 能不能當受訪者？</h3>
+  <p>老師提到最近看到幾篇還沒刊登的 paper 在談一件事：深度訪談的對象能不能是 AI？做法是先讓 AI 充分吸收某個現象的背景與歷史脈絡，然後研究者拿著訪綱依序去訪談它，它生出一大堆逐字稿，研究者再拿逐字稿做分析。他也提到最近選舉出現的「AI Agent 民調」，把選民設定成 Agent 來回答，不受時間空間限制。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:190px">用法</th><th style="width:130px">老師的判斷</th><th>理由</th></tr>
+    <tr><td>拿 AI 練追問技巧、練焦點團體的做法</td><td><b>當然沒問題</b></td><td>這是練習，不進論文</td></tr>
+    <tr><td>拿 AI 練 Coding、練研究技巧</td><td><b>可以</b></td><td>就算學術上不承認，還是可以拿來訓練自己</td></tr>
+    <tr><td>拿虛擬 AI Agent 回答的訪談資料做分析、當研究佐證</td><td><b>目前不太可能</b></td><td>「明明沒有去訪談這個人，卻生出五六十幾頁的逐字稿」，在學術倫理上不被承認。他說目前沒看過期刊接受，但不排除隨時間演變成其中一派</td></tr>
+  </table></div>
+
+  <div class="note steel">🔧 <div>老師補了一段自己的教學現況：這幾年比較沒開質性課，多讓學生練量化；今年剛好有一門大數據的課，他補了兩節讓學生做情境模擬與分析。兩節課走不完整個質性研究脈絡，所以他只能從方法論切、從工具導向切，讓學生知道「為何要這樣做」以及跟量化最大的差別在哪裡。這段是他解釋為什麼今天的內容只是開端。</div></div>
+</section>
+
+<!-- ══════════ 4. 快廣多與反身性 ══════════ -->
+<section class="chapter" id="sec-reflex">
+  <span class="chip" style="background:linear-gradient(90deg,var(--amber),var(--orange))">20:00–26:30</span>
+  <h2 class="ct">4. AI 擅長快、廣、多，最不能外包的是反身性</h2>
+  <p class="cd">這一章是整堂的核心：先給 AI 該做的事，再講唯一一件不能給它的事。</p>
+
+  <h3>AI 擅長什麼：快、廣、多</h3>
+  <p>第一，它可以很快把文本做初步分析，這點沒人質疑，你只會擔心它有沒有真的讀、讀的是不是表面。第二，它至少可以把相似的片段抓出來。老師自己的操作是這樣：</p>
+  <ol class="st">
+    <li>把逐字稿丟給它，先很初步地說：<b>「初步有哪些相同相異，你幫我列一張表吧。」</b></li>
+    <li>要求表裡要有<b>相似之處</b>，而且每一項後面要給<b>來源</b>：「你在哪一頁看到的，請告訴我。」相異之處同樣做法。</li>
+    <li>接著問它：<b>如果以紮根理論為基礎，開放編碼、主題編碼、選擇編碼的過程中，你是如何做出來的？詳細告訴我。</b>它就會列出一大堆 code 的過程。</li>
+  </ol>
+
+  <figure class="shot">
+    <img src="ep54-img/03-ai-strengths.jpg" alt="簡報第 9 頁：AI 最擅長做什麼，快、廣、多三格" loading="lazy">
+    <figcaption>簡報第 9 頁。三個大字各對一件事：快是大量文本初步整理、廣是找重複模式與相似片段、多是提出多個候選編碼。底下那一行小字才是這頁的結論：「AI 擅長探索與生成候選，不取代人的專業判斷。」注意第三格用的詞是「候選」，這個詞在後面第 5、6 章會一直出現。［20:15］</figcaption>
+  </figure>
+
+  <h3>最不能外包的：反身性（Reflexivity）</h3>
+  <p>老師說人跟機器最大的不同叫做反身性，這也是質性研究常被提到的：<b>我自己為何會去這樣理解？</b>它決定了你怎麼呈現這個故事的脈絡、你的主題為什麼特殊、你的個人性、你的寫作邏輯。你跟田野現場的當事人想的不一樣，原因是什麼？當事人有他在脈絡中的意義，你則是從參與、觀察、感受、從他人的角度理解之後，把它詮釋成你自己的觀點。</p>
+
+  <div class="golden">
+    <div class="q">「如果你一昧的聽從他人，你一昧的看著 AI 寫的，抱歉，你就會被牽著鼻子走。」</div>
+    <div class="a">［22:51］反身性這一段的起手式。接下來他講的是怎麼跳脫。</div>
+  </div>
+
+  <p>怎麼跳脫？他給的方法是把反身性也用在 AI 身上：</p>
+  <ul class="pt">
+    <li><b>先想 AI 為什麼會這樣編</b>：AI 背後本來就是一個會順著你的話說的東西，你還一味相信它，等於又違反了反身性、放棄了獨立思考的空間。</li>
+    <li><b>把它當成田野裡在旁邊喊聲的人</b>：它喊得比較大聲，是因為它站在大量資料的基礎上，看起來像是把精華結合起來了。這時候你要站在它的反立場：<b>它帶著什麼立場？它在詮釋的時候排除了什麼？</b></li>
+    <li><b>寫下你認同和不認同它的地方</b>：以前第一次看文本是粗略看，第二次才寫關鍵概念；現在 AI 幫你做到第二層了。但它的詮釋絕對是最表面的詮釋，請你進入第二層詮釋：問為什麼、為什麼這個人會這樣想、他講這段話背後的立場是什麼。</li>
+  </ul>
+
+  <div class="golden">
+    <div class="q">「所以你應該把他當成說他也是其中田野一個在旁邊喊聲的人。」</div>
+    <div class="a">［23:17］把 AI 從「權威」降回「現場的一個聲音」，反身性才有辦法用在它身上。</div>
+  </div>
+
+  <h3>用攤商當例子：第二層詮釋長什麼樣</h3>
+  <p>問攤商對行動支付的立場。第一層：方便，可以減少溝通，客人比一下、看牌子就好。第二層才是重點：<b>看不到實際的錢</b>；可能會<b>被扣稅</b>，因為錢經過第三方支付公司進到戶頭，過程中會被課到，而以前夜市攤販不用報稅；再往上一層，<b>自治會為什麼要推</b>：他們跟第三方有合作、有簽約，可能牽涉夜市整體的政策與文化，再加上消費者用電子支付有優惠、有 Coupon 券。AI 的編碼可以幫你找到「攤商多半提到手續費」這個趨勢，趨勢背後的邏輯要你自己細看，看看它寫的跟你想的有沒有落差。</p>
+
+  <div class="note gold">⚠️ <div>老師在 26:30 把話題轉到「要不要用 vs 怎麼用才不失真」，他認為後者才是大家現在該想的。效率會讓人看不見風險：<b>幻覺、偏誤，還有受訪者講的機敏個資、不想特別講的內容，你放進去了，AI 就讀了。</b>所以流程要設計成能去掉幻覺、把脈絡抓回來、想清楚視角怎麼處理，這就接到下一章的 Agent 小組。</div></div>
+
+  <div class="note steel">🔧 <div>逐字稿把「反身性」聽成「反身系統」「反生性」，本頁依簡報第 10 頁的標題「反身性（Reflexivity）」校正；「喊聲的人」那一句裡「他站在重能的基礎上」的「重能」聽不準，本頁在改寫時用「大量資料」帶過，引用原話時省略那半句，沒有猜測補詞。</div></div>
+</section>
+
+<!-- ══════════ 5. Agent 小組 ══════════ -->
+<section class="chapter" id="sec-team">
+  <span class="chip" style="background:linear-gradient(90deg,var(--purple),var(--blue))">26:30–31:30</span>
+  <h2 class="ct">5. 從 Chatbot 到 Agent 小組：一個管家加四個助手</h2>
+  <p class="cd">觀念講完，老師用五分鐘把「怎麼用才不失真」翻成一個可以動手搭的結構。</p>
+
+  <h3>為什麼不是一個機器人做完</h3>
+  <p>傳統做法是用 ChatGPT 的專案、Gemini 的 Gem、NotebookLM 各自訓練不同的機器人來完成不同的事。到了 Agent，老師想要的是<b>「我今天有個管家在幫我處理這些逐字稿文本的分析」</b>，而且不會只有一個人：有定方向的、有做 Coding 的、有找證據的、有比較立場的、最後有一個做裁決的。這些角色互相對話、互相檢查，人在中間。</p>
+
+  <figure class="shot">
+    <img src="ep54-img/04-agent-team.jpg" alt="簡報第 14 頁：我建議的質性研究 Agent 小組，五個角色圍著人機協作研究小組" loading="lazy">
+    <figcaption>簡報第 14 頁「我建議的質性研究 Agent 小組」。中間是人機協作研究小組，五個角色順時針排：1 研究者（設定問題、提供理論視角、把關方向）、2 Coding Agent（整理、編碼、分類歸納）、3 Evidence Agent（檢索文獻、比對證據、提供引文）、4 Perspective Agents（從不同理論與利害關係人視角分析）、5 Judge／研究者裁決（綜合分析、評估可信度、提出結論或建議）。老師 29:31 用紅框把五個圓一個一個圈出來講。［29:22］</figcaption>
+  </figure>
+
+  <h3>五個角色各做什麼、不做什麼</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">角色</th><th>做什麼（老師口述＋簡報第 15～19 頁）</th><th style="width:220px">刻意不做什麼</th></tr>
+    <tr><td><b>1 研究者</b></td><td>定問題、定框架、定判準：研究問題是什麼、用什麼方法論與理論視角、接受／修改／拒絕的標準。老師說研究者 Agent 的用處是「幫你抓方向，至少不會偏太遠」</td><td>研究者仍是詮釋與責任中心，這一角不能整個交給 AI</td></tr>
+    <tr><td><b>2 Coding Agent</b></td><td>輸入逐字稿片段，輸出候選編碼＋理由。例：攤商談電子支付的缺點，手續費、錢要隔兩三天才進戶頭、現金流不夠、綁實際帳戶被告詐騙時整個鎖住沒法做生意，這些都是它該抓出來的片段與標籤</td><td>只提候選，不宣稱唯一答案；Candidate Codes ≠ Final Codes</td></tr>
+    <tr><td><b>3 Evidence Agent</b></td><td>每一個編碼都綁回原文：你講的這段話、你鋪陳的這個故事，是從哪些逐字稿出來的。老師說這跟統計的驗證不一樣，也可以再延伸去看過去文獻有沒有類似的</td><td>不重新編碼，只做支持／反駁證據的比對</td></tr>
+    <tr><td><b>4 Perspective Agents</b></td><td>同一份資料用不同理論視角讀一次：現象學（經驗怎麼被感受）、紮根理論（概念怎麼從資料浮現）、批判視角（權力與制度怎麼影響）。老師口述時還列了建構論、女性主義</td><td>不裁決哪個視角對；不同結果不一定表示有人錯</td></tr>
+    <tr><td><b>5 Judge</b></td><td>綜合各方分析，評估可信度與合理性，提出 Accept／Modify／Reject 的建議，並指出立場的變化（例如受訪者前面反對電子支付、後面又把立場調回來）</td><td>「不是直接說我就定稿了」，最後一步永遠是研究者裁決＋Memo</td></tr>
+  </table></div>
+
+  <h3>架構怎麼搭：主 Agent 加 sub-Agent，各有人設與 Skill</h3>
+  <p>一個主體的 Agent（管家），底下是一群 sub-Agent 或 sub-Bot，<b>每一個都有角色人設，而且可以灌給它相關的 Skill</b>，讓它更符合人設。Coding 的時候至少要把原文抓出來，後面要引述、要寫論述才用得上；不同視角可以提供不同想法；最後有一個裁判給你「同意、修改、拒絕」的選項。</p>
+
+  <div class="golden">
+    <div class="q">「那這個大概的工作的就長這樣，中間還是有人，就是人在迴圈上。」</div>
+    <div class="a">［30:59］Human-in-the-loop 的白話版。這句話結束後他就開始 Demo。</div>
+  </div>
+
+  <div class="note blue">💡 <div>簡報第 20、21 頁把這件事再往下拆了兩層，老師課堂上沒逐字講，本頁補上供對照。<b>完整工作流七步</b>：研究設計 → 資料整理 → 候選編碼 → 證據比對 → 多視角檢查 → 人類裁決 → 主題整合。<b>可追溯的輸出格式</b>是一張固定欄位的表：資料片段 ID、原文、候選編碼、理由、替代解讀、研究者裁決（Accept／Modify／Reject）、Memo。老師在第 6 章 Demo 裡跑出來的東西，欄位就是這樣。（此段取自簡報畫面文字，不是課堂口述）</div></div>
+</section>
+
+<!-- ══════════ 6. Demo ══════════ -->
+<section class="chapter" id="sec-demo">
+  <span class="chip" style="background:linear-gradient(90deg,var(--orange),var(--rose))">31:30–43:20</span>
+  <h2 class="ct">6. Demo：夜市支付案例，五隻 Bot 群聊跑一輪</h2>
+  <p class="cd">「這個其實不難，你就試著做做看就可以完成。」［31:29］接下來 12 分鐘是實機操作，中間卡了一次電腦，本頁照實記。</p>
+
+  <h3>案例設定</h3>
+  <p>題目是<b>夜市外籍遊客的消費與支付行為</b>。老師選的場域是寧夏夜市，理由是外國人很容易到達。他想知道的是：外籍遊客為什麼可以直接用自己綁定的第三方支付，不用像我們出國逛夜市那樣先換現金。他預期 AI 會做出這幾層東西：</p>
+  <ul class="pt">
+    <li><b>第一層編碼</b>：「現金不敢用」，因為可能有假鈔、可能被搶。</li>
+    <li><b>第二層編碼</b>：安全感、風險、信任制度化。</li>
+    <li><b>證據</b>：找零的麻煩誰提到？刷卡比較安心誰提到？語言不通、怕算錯、用計算機比、用翻譯機，這些誰提到？</li>
+    <li><b>視角</b>：同一段話，從現象學、紮根理論、批判的角度各看一次。</li>
+  </ul>
+
+  <div class="note steel">🔧 <div>33:00 前後老師的電腦跳出容量不足，他說「完蛋了，我等一下來處理」，離開處理後回來繼續。這一段本頁照實記錄，沒有剪掉。</div></div>
+
+  <h3>老師用的工具長什麼樣</h3>
+  <p>他說這套工具最近很多人指定要上，因為它跳脫了一般用 Agent 的框架：一般人用 Agent 時<b>沒有把角色區隔開來</b>，就會覺得複雜、不清楚。這套工具裡每一個 Bot 都各自賦予身份，有一個管家，然後開一個<b>群聊</b>（有點像專案的功能），把所有角色拉進來。老師的順序是：角色還沒配 Skill、還沒給裝備，先開群聊，先叫大家自我介紹。管家會第一個發言，然後號令其他人依序介紹自己。</p>
+
+  <div class="note steel">🔧 <div><b>這套工具的名稱本頁不寫。</b>逐字稿在 44:59 與 46:30 兩處聽到的名稱都不準（聽起來像「Goke 的 Buds」「gogbox」），畫面上也沒有出現產品名，只看得到 Bot 名稱、群聊介面與右下角的「市集」。老師補充它是付費工具，綁信用卡有 7 天免費試用、記得第 6 天取消；另有一套免費開源的替代工具，名稱同樣聽不準（聽起來像「AutoDox」）。以上兩個名稱請以老師的講義或訂閱制群組公告為準〔待確認〕。</div></div>
+
+  <h3>兩個做之前的建議</h3>
+  <ol class="st">
+    <li><b>先 run 一次再正式做。</b>「你其實要開始正式做之前，你可以先 run 一次」［37:24］：給它們一筆比較簡單的資料做完，看它們少了什麼、缺了什麼，再從中讓各角色去補 Skill 與角色設定。</li>
+    <li><b>Skill 從單一角色開始想。</b>「我會建議大家你要先從單一的去想」［38:00］：Coding Agent 的編碼邏輯是什麼？相同現象、相同概念怎麼編？用什麼方法？自訂指令、角色扮演、偏好回應、該做的 SOP，這些都可以變成 Skill。</li>
+  </ol>
+
+  <div class="golden">
+    <div class="q">「因為他其實是請 AI 寫的 skill，所以少了一點人味。」</div>
+    <div class="a">［38:29］講 GitHub 上找得到的質性研究 Skill 為什麼「發展程度還有點落差」。你可以下載來用，也可以用自己常用的編碼邏輯打造自己的 Skill。</div>
+  </div>
+
+  <h3>實際跑起來：管家分派、少叫一個人、用 @ 補進來</h3>
+  <p>四份檔案（訪談大綱＋三份逐字稿）丟進群聊後，管家回報「收到這四份資料」，先寫出 Research Setup（研究問題＝外籍遊客如何理解夜市支付選擇與交易經驗、方法＝半結構深度訪談、分析單位＝資料片段 ID），然後分派：<b>請 Coding Agent 針對 A01-L16～L28 這七個片段，各給 1～3 個大框架的候選編碼，並說明理由</b>。</p>
+  <p>這裡發生一件很真實的事：老師少叫了一個人，Evidence Agent 沒被拉進群聊。管家的反應是「沒關係他不在，我自己先跑」。老師接著在輸入框打「請加入」，用 @ 把 Evidence Agent 叫進來。進來之後管家說：剛才我代跑了 Evidence 的部分，交給你覆核或重做，以你的為主，因為你的人設與 Skill 比較齊全。Coding Agent 也主動告訴 Evidence：請以我稍早附的檔案為主，我不重新編碼，除非研究者要求改。</p>
+
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="ep54-img/05-butler-reflexivity-hitl.jpg" alt="管家 Bot 的輸出：本輪反身性問題三則，以及研究者裁決的五個選項" loading="lazy">
+      <figcaption>Demo 前老師先開的單 Bot 對話，管家一個人模擬了全部角色（畫面上寫「本輪由管家依各角色規則模擬輸出，未喚醒側邊欄四隻 Bot」）。上半是給研究者的三個反身性問題，例如「你為什麼會不會比較想用『排除』來讀這份資料？即使 A01 明確說『我不覺得被排除』？」；下半是人機裁決的選單：對 A01-L01 的候選碼「只收現金的摩擦／卡住」，選 Accept、Modify、Reject、先看下一段分析卡、或改派給四隻專責 Bot 重跑。這就是「人在迴圈上」的介面長相。［33:19］</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="ep54-img/06-butler-analysis-card.jpg" alt="管家 Bot 的分析卡：反駁與矛盾證據、上下文、替代解讀、理論視角、AI 裁決建議" loading="lazy">
+      <figcaption>同一段對話往上捲，是一張分析卡的下半部，欄位就是簡報第 21 頁講的可追溯格式：反駁／矛盾證據（同段沒說「無法消費」，後文 L02 顯示後來提款完成交易，所以「卡住」可能是暫時中斷不是永久排除）、上下文、替代解讀、三個理論視角、AI 裁決建議（三個候選碼各給 Accept 或 Modify 的理由），最下面兩行「研究者裁決：等待研究者填寫」「Reflexive Memo：等待研究者填寫」是刻意留白的。［36:07］</figcaption>
+    </figure>
+  </div>
+
+  <h3>迭代：一邊等結果，一邊講三角檢證</h3>
+  <p>等 Bot 跑的空檔，老師講了這堂最重要的一段。質性研究本來就是迭代，第一次看、第二次看、第三次看想法都不同；他希望人可以進到這個人機協作的空間，看它們做到什麼程度、編碼做了什麼。<b>但你不能一味相信它，你還是要回來看你的綱要和訪談紀錄，才有辦法跟它們對話，不然只會被牽著鼻子走。</b>大家常犯的錯就是它編完我們就接受，但它的編碼是表象的，只能當第二套。</p>
+
+  <div class="golden">
+    <div class="q">「那過去不會有一個人做三套 Coding，大家都會覺得我光看一套 Coding，可能就會有這樣的侷限，但是因為現在 AI 他可以去設定他不同的人設，不同的角度，在做 Coding 的時候就可以做出兩套 Coding，再加上你自己的 Coding，你至少有兩套 Coding 可以互相的去做對照。」</div>
+    <div class="a">［42:30］三角檢證原本指不同證據之間互相對照，除了用在文獻上也可以用在編碼上。AI 讓「一個人做三套編碼」變成可行的事。</div>
+  </div>
+
+  <h3>初步結果：安心不等於一定要刷卡</h3>
+  <p>「先給我一個初步結果」之後，管家收斂出 A01「安心／現金」叢集（L16～L28）的核心發現：<b>安心約等於「金額可見的確認」，不是「一定要刷卡」</b>；不確定指向自己（怕聽錯、拿錯），不是攤商欺騙；排隊與怕添麻煩會讓人少確認或放棄購買。Judge 初步建議多數 in-vivo 編碼 Accept、約 5 碼 Modify（尤其「可刷則優先刷卡」建議改成條件式的「如果可以就刷卡」），本輪沒有 Reject，然後停在研究者裁決點。老師說：「Coding 要等你，研究者就是我本人，他等我裁決是要往這個方向走。」［43:00］課堂到這裡就沒有再往下裁決。</p>
+
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="ep54-img/07-coding-initial-result.jpg" alt="群聊裡管家 Bot 回報的初步結果：核心發現、Judge 初步建議、停在研究者裁決點" loading="lazy">
+      <figcaption>群聊裡管家的「初步結果」訊息。看三個地方：第一段核心發現用「≈」寫出安心與金額可見確認的關係；第二段 Judge 初步把建議分成 Accept 多數、Modify 約 5 碼、Reject 無；第三段直接列出可以先裁的三碼（L24「需要確認」、L18「刷卡安心一點」、L16「可刷則優先刷卡」），並註明不做 Final Theme。上面兩則是 Perspective 與 Coding 各自交件的訊息，附檔是 .md。［43:01］</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="ep54-img/08-evidence-review.jpg" alt="Evidence Agent 正式覆核 L16 到 L28 共 21 碼的結果，並標出兩處過度推論" loading="lazy">
+      <figcaption>兩分鐘後 Evidence Agent 交回正式覆核（L16～L28，21 碼）。它做的正是 Step 2 該做的事：整體與管家代跑一致，但<b>加嚴兩處用語</b>，L16「可刷則優先刷卡」與 L22「語言能力調節支付偏好」標為過度推論，理由是分析詞超出原句；再設一條硬性禁區：任何「不信任攤商」的解讀都不行，因為 L20 已經否認。這張圖出現在老師已經開始收尾的時候，他沒有再回頭讀它。［45:11］</figcaption>
+    </figure>
+  </div>
+
+  <div class="note green">✅ <div>把這兩張圖對著看就懂「證據約束 AI」是什麼意思：Coding 提了「可刷則優先刷卡」，Judge 建議改成條件式，Evidence 再補一刀說這是過度推論。三個角色對同一個碼給出三種力道，最後留給研究者決定。</div></div>
+
+  <div class="note steel">🔧 <div>畫面上 Bot 產出的文字（候選碼名稱、核心發現、覆核意見）本頁是<b>從截圖上讀下來的</b>，逐字稿裡沒有這些內容。它們是 AI 在模擬資料上的產出，不是老師的研究結論，引用時請標明。</div></div>
+</section>
+
+<!-- ══════════ 7. 收尾 ══════════ -->
+<section class="chapter" id="sec-wrap">
+  <span class="chip" style="background:linear-gradient(90deg,var(--green),var(--teal))">43:20–47:39</span>
+  <h2 class="ct">7. 收尾：Skill 要拿下來調，紅線要自己守</h2>
+  <p class="cd">最後四分鐘是老師的實務交代與課程預告，加上簡報最後兩頁他沒時間講的東西。</p>
+
+  <h3>Skill 從哪裡來</h3>
+  <ul class="pt">
+    <li>老師這套質性研究各階段的 Agent <b>都是從 GitHub 上調整來的，不是同一個來源</b>；每個階段搭配的 Skill 有的是改的、有的是自己建的。</li>
+    <li>要依你自己研究的需求調，「這個就是靠自己啦」。有些人會完全用 GitHub 上的，他不建議。</li>
+    <li>如果你是初學者、實務經驗少，可以先跟著 GitHub 上的 Skill 用一兩次，從中迭代、處理、學習。</li>
+  </ul>
+
+  <div class="golden">
+    <div class="q">「我建議要拿下來調，因為還是會有自己使用程度上的落差。」</div>
+    <div class="a">［43:53］對「能不能直接用 GitHub 上現成的質性研究 Skill」的回答。</div>
+  </div>
+
+  <h3>課程預告（老師口述，時間與形式請以電台公告為準）</h3>
+  <ul class="pt">
+    <li><b>10 月的紮根理論課</b>：會把紮根理論每一個階段（從編碼到形成理論）的 Skill 完整給學員，是他重新調過的改良版，並且會分「傳統改良版」與「AI 時代下的新版」兩套。他提到紮根理論的第二代、第三代傳人因為 AI 出現，正在做第三版的改良。</li>
+    <li><b>實體課</b>：台北市中山站附近，每次 4～5 人，先以 Codex 為主，Claude Code 之後再說。理由是 Agent 類的課實體效果好，可以直接看著你的電腦告訴你 agent.md、Skill、設定要怎麼調。</li>
+    <li>今天的簡報與錄影回放會請小幫手放到訂閱制的雲端。</li>
+  </ul>
+
+  <h3>簡報最後兩頁：五條紅線與結語</h3>
+  <p>時間不夠，老師沒有逐條講第 26、27 頁，但這兩頁是整套方法的底線，本頁補上（取自簡報畫面文字，不是課堂口述）：</p>
+  <div class="twrap"><table>
+    <tr><th style="width:60px">#</th><th style="width:230px">研究品質與倫理：AI 介入的五條紅線</th><th>對照老師課堂上講到的地方</th></tr>
+    <tr><td>1</td><td>幻覺不可直接採信</td><td>第 2 章「看起來合理 ≠ 研究上成立」；第 6 章 Evidence 標過度推論</td></tr>
+    <tr><td>2</td><td>敏感資料要先去識別</td><td>第 4 章 26:30 提醒受訪者的機敏個資不要直接餵進去</td></tr>
+    <tr><td>3</td><td>提示詞與版本要留紀錄</td><td>第 6 章每一輪產出都是附檔 .md，管家會註明本輪範圍（L16～L28）</td></tr>
+    <tr><td>4</td><td>不可把裁決權完全外包</td><td>第 5 章 Judge 只提建議；第 6 章「Coding 要等你，研究者就是我本人」</td></tr>
+    <tr><td>5</td><td>要能交代 AI 如何參與</td><td>第 5 章可追溯輸出格式；第 6 章「本輪由管家模擬輸出，未喚醒四隻 Bot」這種聲明</td></tr>
+  </table></div>
+  <p>第 27 頁結語的三句話：<b>AI 提出可能性、證據約束 AI、研究者負責意義與責任</b>。標題是「AI 不是答案機，而是反思鏡」。</p>
+
+  <div class="note gold">⚠️ <div><b>真實研究資料餵給任何 AI 工具之前，先做去識別化。</b>這堂的三份逐字稿是老師寫的模擬資料，所以可以整份上傳；你自己的訪談逐字稿不是。老師 26:30 的提醒是，受訪者講了比較多機敏的個資、或他不想特別講的內容，「你把他放進去了，AI 就讀」。另外，老師示範的付費工具需綁信用卡才有試用期，要不要用請自行評估，本頁不替任何工具背書。</div></div>
+</section>
+
+<!-- ══════════ 8. 這堂課真正在教的事 ══════════ -->
+<section class="chapter" id="sec-real">
+  <span class="chip" style="background:linear-gradient(90deg,var(--cyan),var(--purple))">TAKEAWAYS</span>
+  <h2 class="ct">8. 這堂課真正在教的事</h2>
+  <p class="cd">把 47 分鐘濃縮成四件事。四件都不是操作，是你在動手前要先站好的位置。</p>
+
+  <h3>一、AI 做得到的事，跟你該不該讓它做，是兩個問題</h3>
+  <p>老師從頭到尾沒有說 AI 不會編碼。它會，而且格式可以做得像論文。他反覆說的是六成：AI 抓得到六成脈絡，剩下的細微情緒、人事時地物的連結、二度建構的詮釋，是研究者自己進田野才拿得到的。所以問題從來不是「能不能用」，是「用了之後你還剩下什麼工作」。答案是：剩下最重要的那一段。</p>
+
+  <h3>二、反身性不能外包，而且要反過來用在 AI 身上</h3>
+  <p>「我為何這樣理解？我帶著什麼預設進場？我的詮釋排除了什麼？」這三個問題原本是問自己的。老師把它翻過來：AI 為什麼這樣編？它帶著什麼立場？它排除了什麼？把 AI 當成田野裡在旁邊喊聲的人，站在它的反立場看，你才會發現你跟它想的不一樣的地方在哪裡，而那個地方通常就是你的研究貢獻。</p>
+
+  <h3>三、把工作拆給角色，讓每一筆編碼都綁得回原文</h3>
+  <p>一個 Bot 做完所有事，你只會拿到一份很順、很合理、但不知道從哪裡來的分析。拆成研究者、Coding、Evidence、Perspective、Judge 五個角色之後，Coding 只能提候選、Evidence 必須回原文找支持與反證、Perspective 必須用三種理論各讀一次、Judge 只能給建議。Demo 裡 Evidence 把「可刷則優先刷卡」標成過度推論，就是這個結構在運作：<b>證據約束 AI</b>。</p>
+
+  <h3>四、AI 的編碼當第二套，加上你自己那套，做三角檢證</h3>
+  <p>「過去不會有一個人做三套 Coding。」現在可以：讓 AI 用兩種人設各編一套，加上你自己的，三套互相對照。這是這堂課給質性研究者最實際的一個新能力，前提是你真的有自己那一套，否則只是拿兩套 AI 的互相確認。老師收在簡報最後一頁的那句話是：AI 不是答案機，而是反思鏡。</p>
+</section>
+
+<!-- ══════════ 9. 老師金句 ══════════ -->
+<section class="chapter" id="sec-quotes">
+  <span class="chip" style="background:linear-gradient(90deg,var(--amber),var(--rose))">QUOTES</span>
+  <h2 class="ct">9. 老師金句</h2>
+
+  <div class="golden"><div class="q">「而且我要設定這些角色是彼此可以互相監工。就是他們可以互相的去做比較跟互相的做處理。」</div><div class="a">［03:36］開場預告 Demo 時說的。整堂 Agent 小組設計的出發點就是「互相監工」，不是分工而已。</div></div>
+
+  <div class="golden"><div class="q">「你也可以讓你的 AI 一開始先沒有任何包袱的先編第一次。」</div><div class="a">［08:30］把質性研究的「存而不論」套到 AI 身上：第一次不給訪綱，第二次換個帳號再給。</div></div>
+
+  <div class="golden"><div class="q">「研究者本身也不是沒有盲點，意味著就是人的經驗理論跟立場都可能只有讓我們看到部分我們想看的。」</div><div class="a">［10:00］簡報第 6 頁的口述版。AI 在這堂的角色是校正研究者，前提是先承認研究者需要被校正。</div></div>
+
+  <div class="golden"><div class="q">「AI 就是一個樂觀的接龍機器人。你給他相關的 Point，他就針對這個 Point 去做相對應的資訊的連結、鏈結。」</div><div class="a">［12:00］解釋 AI 為什麼「沒有錯但不夠」：它不理解，它接龍。</div></div>
+
+  <div class="golden"><div class="q">「但是他只能達成你六成的。中間有一些細節微小的、可能沒觀察到的，那就要交給人類。」</div><div class="a">［12:29］整堂的分工比例。逐字稿寫「六層」，依 06:58「六、五到七成」校正為「六成」。</div></div>
+
+  <div class="golden"><div class="q">「AI 變成你的 VR 裝置。因為以前我們要進入田野會談，怎麼變成局內的？你是做參與還是做觀察？」</div><div class="a">［18:00］第 3 章的核心比喻：拿 AI 練習進田野，不是拿 AI 代替田野。</div></div>
+
+  <div class="golden"><div class="q">「如果你一昧的聽從他人，你一昧的看著 AI 寫的，抱歉，你就會被牽著鼻子走。」</div><div class="a">［22:51］反身性那一段的第一句。</div></div>
+
+  <div class="golden"><div class="q">「所以你應該把他當成說他也是其中田野一個在旁邊喊聲的人。」</div><div class="a">［23:17］把 AI 從權威降回現場的一個聲音，反身性才用得上。</div></div>
+
+  <div class="golden"><div class="q">「但是他的這個詮釋絕對是最表面的詮釋，請你要進入到第二層的詮釋，你要問他說為什麼。」</div><div class="a">［25:00］AI 幫你做到第二層（抓概念），第二層詮釋（為什麼這個人這樣想）還是你的。</div></div>
+
+  <div class="golden"><div class="q">「要不要用跟怎麼用才不失真，我倒覺得怎麼用才不失真是最近大家會比較去思考的。」</div><div class="a">［26:30］從觀念轉到工具設計的轉折句。後面整個 Agent 小組都是在回答「怎麼用才不失真」。</div></div>
+
+  <div class="golden"><div class="q">「那這個大概的工作的就長這樣，中間還是有人，就是人在迴圈上。」</div><div class="a">［30:59］Human-in-the-loop。逐字稿寫「圍圈」，依簡報第 19 頁「Human-in-the-loop」校正。</div></div>
+
+  <div class="golden"><div class="q">「你其實要開始正式做之前，你可以先 run 一次。」</div><div class="a">［37:24］先用簡單資料跑一輪，看角色缺什麼再補 Skill。這是他建 Agent 小組的第一條實務建議。</div></div>
+
+  <div class="golden"><div class="q">「因為他其實是請 AI 寫的 skill，所以少了一點人味。」</div><div class="a">［38:29］評 GitHub 上現成的質性研究 Skill。逐字稿寫「人位」，依上下文校正為「人味」。</div></div>
+
+  <div class="golden"><div class="q">「但是請記得他的編碼是表象的，他可以做為第二套的編碼，甚至呢，你可以叫他提兩套編碼，然後加你來做三角檢證。」</div><div class="a">［42:00］全堂最值得抄下來的一句，也是第 1 章那張圖的底線。</div></div>
+
+  <div class="golden"><div class="q">「好，因為 Coding 要等你，研究者就是我本人，他等我裁決是要往這個方向走。」</div><div class="a">［43:00］Demo 停在研究者裁決點時說的。課堂沒有再往下，因為往下就是研究者自己的事了。</div></div>
+
+  <div class="golden"><div class="q">「我建議要拿下來調，因為還是會有自己使用程度上的落差。」</div><div class="a">［43:53］對「能不能直接用 GitHub 上的 Skill」的回答。</div></div>
+</section>
+
+<!-- ══════════ 10. 資料來源與整理說明 ══════════ -->
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,var(--ink3),var(--ink2))">SOURCE</span>
+  <h2 class="ct">10. 資料來源與整理說明</h2>
+
+  <div class="twrap"><table>
+    <tr><th style="width:130px">來源</th><td>2026/09/26 課堂錄影單段，全長 47 分 40 秒；課程教材五份（27 頁簡報＋半結構式訪談大綱＋三份模擬深度訪談逐字稿）</td></tr>
+    <tr><th>整理方式</th><td>全程本機處理：擷取 48 張關鍵畫面、產生 229 段逐字稿，再依逐字稿手寫章節目錄。第 5、7 章另外對照簡報畫面文字補了老師沒時間講的頁面，並逐處標明</td></tr>
+    <tr><th>時間戳</th><td>章節標題與引文後方的［mm:ss］對應錄影播放器時間</td></tr>
+    <tr><th>整理</th><td>竹貞（Tarshar 的逐幀筆記專員）</td></tr>
+  </table></div>
+
+  <h3>已知限制，請先看過再引用</h3>
+  <ul class="pt">
+    <li><b>逐字稿是機器產生的</b>，人名與工具名會聽錯。本頁修正了可以由畫面或上下文確認的錯字（NVivo 被聽成「Avivo」、GitHub 被聽成「gipart／Giphar」、Claude Code 被聽成「Cloud Code」、反身性被聽成「反身系統／反生性」、人在迴圈被聽成「人在圍圈」、人味被聽成「人位」、六成被聽成「六層」、質性研究被聽成「直信／執行／直線研究」、逐字稿被聽成「足字稿／主治稿／獨字稿」、訪綱被聽成「訪章／坊綱／坊章」、GPT 與 Gem 被聽成「GPD／GEM」，共 11 類、49 處）；<b>不確定的一律保留原樣，沒有猜測補詞</b>。</li>
+    <li><b>四個聽不準的名稱本頁刻意不寫</b>：老師示範的多 Bot 群聊工具（44:59「Goke 的 Buds」、46:30「gogbox」）、他提到的免費開源替代工具（46:30「AutoDox」）、23:31「他站在重能的基礎上」的「重能」、19:23「把銀汁湯湯的技術拉回來」那個詞。引用前請以老師的講義或公告為準〔待確認〕。</li>
+    <li>錄影開頭 00:00～00:58 是靜音時段，語音辨識產生了三句無意義的幻覺字幕，整理時已整段捨棄，不會出現在本頁。</li>
+    <li>老師的課程預告（10 月紮根理論課、實體課地點與人數、先以 Codex 為主）是口述內容，<b>本頁只記錄他說了什麼，實際開課資訊請以電台公告為準</b>。</li>
+    <li><b>可信度分級</b>：金句章 16 則全部是錄影實錄（僅校正上述聽錯的詞）；第 6 章四張 Bot 對話截圖裡的候選碼、核心發現與覆核意見是從畫面上讀下來的，<b>可能有辨識誤差，而且是 AI 在模擬資料上的產出，不是老師的研究結論</b>；第 5 章的七步工作流與輸出格式、第 7 章的五條紅線與結語取自簡報畫面文字，不是課堂口述。</li>
+    <li>逐字稿中出現的學員稱呼、提問者暱稱，本頁一律隱去；Meet 介面本身的畫面（含右側聊天室與學員留言）一張都沒有選進本頁。</li>
+    <li>課堂截圖已裁掉線上教室右側的與會者欄位（原始畫面 1920×1080，只保留左側 1440×810 的螢幕分享區），並再裁掉 PowerPoint 功能區、Windows 工作列與群聊工具的帳號欄。本頁 8 張截圖約每 6 分鐘一張，全部是簡報頁或 Bot 對話畫面，講者鏡頭 0 張。</li>
+    <li>引用到作業、貼文或簡報之前，請對照錄影原始段落再確認一次。</li>
+  </ul>
+
+  <div class="note gold">🔒 <div><b>版權屬原作者。</b>本頁是 Tarshar 個人的課堂整理，只公開她自己寫的筆記與經過去識別化的課堂截圖，不轉載錄影、簡報與講義原檔，也不提供任何下載連結。若原作者或課程方希望撤下本頁任何部分，來信告知即刻移除。</div></div>
+</section>
+
+</article>
+</div>
+
+<footer>
+  <p>📝 直播電台 EP54 課堂筆記 · 生成式AI應用電台</p>
+  <p>依錄影 48 張關鍵畫面＋全程逐字稿 229 段整理 · <a href="ep54-ai-skills.html">🗺️ 互動技能地圖</a> · <a href="../radio/">🏠 回筆記館入口</a></p>
+</footer>
+
+</body>
+</html>
