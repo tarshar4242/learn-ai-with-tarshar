@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>直播電台 加播場 課堂筆記｜Grok Bot：一個機器人做一件事，讓它們在雲端替你分工</title>
+<meta name="description" content="生成式AI應用電台 直播電台加播場（2026/09/11 晚上 21:00–21:30 直播，錄影全長 33 分 38 秒，免費版就能跟著做）課堂筆記。講師示範 xAI 剛推出的 Grok Bot：從 x.ai/bot 下載、綁 Grok 或 Cursor 帳號免費試用，先建一個「指揮中心」Bot，再讓它自己生出「特斯拉情報」（每天早上 8 點自動蒐集）與「簡報製作」兩個子 Bot；開一個群組聊天讓所有 Bot 自我介紹、互相派工做出 Optimus 三頁簡報；在市集接上 Google 行事曆與 Drive 連接器，一句話開好線上座談會並存成 Docs；用「教它一項任務」錄下操作讓它學成技能；最後用一句語音給所有 Bot 定共用規則，並叫指揮中心去找 Superdesign 技能重做簡報。依錄影 57 張關鍵畫面＋115 段逐字稿整理。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#6a3fb5; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:760px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px;max-height:calc(100vh - 90px);overflow-y:auto}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:7px;border-left:none;font-size:13px}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.code{position:relative;background:var(--code);border:1px solid var(--line2);border-radius:10px;padding:13px 15px;margin:10px 0;font-size:13px;line-height:1.75;color:var(--ink);white-space:pre-wrap;font-family:"Cascadia Code",Consolas,monospace;overflow-x:auto}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.iframe-wrap{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000;margin:14px 0}
+.iframe-wrap iframe{display:block;width:100%;height:460px;border:0}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static;max-height:none} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} .iframe-wrap iframe{height:320px} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/" style="border-color:#d6c8ee" onclick="if(history.length>1){history.back();return false}">← 回上一頁</a>
+  <b>📝 直播電台 加播場 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="ep53-grok-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 直播電台 · 加播場</span>
+  <h1>Grok Bot：一個機器人做一件事，<span>讓它們在雲端替你分工</span></h1>
+  <p class="lead">「它是機器人，它不是聊天視窗。」——講師在示範到一半時停下來講了這句，這就是 Grok Bot 跟你平常用的 ChatGPT 最大的差別：<b>你不是開一個對話框問問題，而是建一個有名字、有任務、有自己雲端電腦的 Bot，然後讓它去做</b>。<br>半小時裡他從 <b>x.ai/bot 下載</b>開始，建了一個<b>「指揮中心」</b>，讓它自己生出<b>「特斯拉情報」</b>（每天早上 8 點自動蒐集）與<b>「簡報製作」</b>兩個子 Bot；再開一個<b>群組聊天</b>讓 Bot 們自我介紹、互相派工做出三頁簡報；接著在<b>市集</b>接上 Google 行事曆與 Drive 連接器，一句話開好座談會並存成 Docs；用<b>「教它一項任務」</b>錄下操作讓它學；最後用一句語音給所有 Bot 定下<b>共用規則</b>，並派指揮中心去找美感技能重做簡報。<br>本頁依<b>錄影 57 張關鍵畫面＋全程逐字稿 115 段</b>整理，重點段落附影片時間戳。</p>
+  <div class="meta">
+    <span>📅 2026/09/11（四）21:00–21:30 加播</span>
+    <span>👤 講師：電台講師</span>
+    <span>⏱️ 全長 33 分 38 秒（單段錄影）</span>
+    <span>🧩 主題：Grok Bot 入門 × 多 Bot 分工群聊 × 連接器與技能</span>
+    <span>🔰 小白友善・免費版可用</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-overview">1. 一張圖看懂這堂</a>
+  <a href="#sec-download">2. 它不是聊天視窗：一個 Bot 只做一件事，免費版就能先玩</a>
+  <a href="#sec-firstbot">3. 先建「指揮中心」，再讓它幫你生第一個子 Bot 並排程</a>
+  <a href="#sec-group">4. 開一個群組聊天，讓 Bot 們自我介紹、互相派工做出三頁簡報</a>
+  <a href="#sec-cloud">5. Bot 有自己的雲端電腦：關掉視窗它還在做，你的電腦可以關機</a>
+  <a href="#sec-connector">6. 接上連接器（MCP）：一句話開好 Google 行事曆座談會、存成 Docs</a>
+  <a href="#sec-skill">7. 技能（Skill）：教它一項任務，錄下你的操作讓它學</a>
+  <a href="#sec-rules">8. 一句語音給所有 Bot 定共用規則，再派指揮中心去修簡報美感</a>
+  <a href="#sec-real">9. 這堂課真正在教的事</a>
+  <a href="#sec-quotes">10. 老師金句</a>
+  <a href="#sec-src">11. 資料來源與整理說明</a>
+</nav>
+
+<article>
+
+<!-- ══════════ 0. 課程資訊與教材 ══════════ -->
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--cyan))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>生成式AI應用電台 直播電台【加播】｜Grok Bot 我也能快速上手（免費版可用）</td></tr>
+    <tr><th>直播日期</th><td>2026/09/11（四）21:00–21:30，接在 EP53 同一晚之後加播，本段錄影全長 <b>33 分 38 秒</b></td></tr>
+    <tr><th>講師</th><td>電台講師（錄影中未提及姓名，本頁不另行標注）</td></tr>
+    <tr><th>本堂主題</th><td>xAI 剛推出的 Grok Bot 桌面／手機版：下載與免費試用、建第一個 Bot、讓主 Bot 生子 Bot 並排程、群組聊天互相派工、市集連接器（Google 行事曆／Drive）、教它一項任務、共用規則與 Skill 安全</td></tr>
+    <tr><th>課程節奏</th><td>全程螢幕操作、邊做邊講。前 3 分鐘講下載，3–10 分鐘建 Bot，10–16 分鐘群聊派工，16–24 分鐘連接器與技能，24–30 分鐘設定、共用規則與安全，最後 3 分鐘預告秋季共學</td></tr>
+    <tr><th>要先準備</th><td>到 <code>x.ai/bot</code> 下載桌面版（Windows／Mac 自動判斷）；一個 Grok 帳號或 Cursor 帳號用來登入；想試用需綁信用卡（有免費試用期，到期會自動扣款，見第 2 章提醒）</td></tr>
+  </table></div>
+
+  <h3>📁 課堂教材</h3>
+  <p>講師準備了一份 11 頁的圖解簡報（Grok Bot 是什麼、核心特色、10 分鐘建第一位 Bot、好任務指令的 5 個欄位、雲端電腦、外掛不是必要、存成技能、例行任務、多 Bot 分工、第一週安全交付檢查表），課堂上開場秀了一下就直接進軟體示範。簡報版權屬講師，本頁不轉載簡報頁面，只在對應章節引用它的觀念作對照。</p>
+
+  <h3>🎬 課堂錄影</h3>
+  <p class="cd">單段錄影，開頭幾秒是前一段 EP53 的收尾，本頁從 00:30 講師切入 Grok 主題開始整理。</p>
+  <div class="note steel">🔧 <div>錄影由電台提供，本頁不轉載也不提供連結。本頁是依錄影整理的圖文筆記，沒看過錄影一樣讀得懂。</div></div>
+
+  <div class="note gold">🔒 <div><b>本頁截圖都經過去識別化處理。</b>原始錄影是 Teams 畫面分享，右側與會者欄已整欄裁除；畫面裡 Grok 應用程式左下角的操作者帳號名、群組聊天標題列裡的帳號名、Windows 工作列、瀏覽器分頁列與書籤列，一律裁掉或塗成底色並改標「群組聊天」「（帳號名已隱去）」；逐字稿裡出現的學員稱呼也一併隱去。</div></div>
+</section>
+
+<!-- ══════════ 1. 一張圖看懂這堂 ══════════ -->
+<section class="chapter" id="sec-overview">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--purple))">OVERVIEW</span>
+  <h2 class="ct">1. 一張圖看懂這堂</h2>
+  <p class="cd">整堂只有一條主線：把「一個聊天視窗」換成「一群各有任務的機器人」。講師從左到右走了六步，每一步都是在把工作從自己手上交出去一點。</p>
+
+  <div class="svgwrap">
+  <svg viewBox="0 0 980 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Grok Bot 從下載到多 Bot 分工的六步流程圖">
+    <defs>
+      <marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+        <path d="M0,0 L9,4.5 L0,9 z" fill="#9B9B9B"/>
+      </marker>
+    </defs>
+
+    <text x="490" y="30" text-anchor="middle" font-size="13" fill="#9B9B9B">一個 Bot 做一件事：從「你自己問」到「它們自己分工」</text>
+
+    <rect x="14" y="70" width="146" height="112" rx="12" fill="#EEF2F5" stroke="#D2DFE7"/>
+    <text x="87" y="100" text-anchor="middle" font-size="15" font-weight="700" fill="#255066">下載登入</text>
+    <text x="87" y="124" text-anchor="middle" font-size="12.5" fill="#5f5f5f">x.ai/bot</text>
+    <text x="87" y="142" text-anchor="middle" font-size="12.5" fill="#5f5f5f">Grok 或 Cursor 帳號</text>
+    <text x="87" y="160" text-anchor="middle" font-size="12.5" fill="#5f5f5f">綁卡免費試用</text>
+
+    <rect x="178" y="70" width="146" height="112" rx="12" fill="#FBF7EC" stroke="#EFE3C4"/>
+    <text x="251" y="100" text-anchor="middle" font-size="15" font-weight="700" fill="#7a5b12">建指揮中心</text>
+    <text x="251" y="124" text-anchor="middle" font-size="12.5" fill="#5f5f5f">按 ＋ 建立 Bot</text>
+    <text x="251" y="142" text-anchor="middle" font-size="12.5" fill="#5f5f5f">告訴它：你是</text>
+    <text x="251" y="160" text-anchor="middle" font-size="12.5" fill="#5f5f5f">Bot 生產與號令中心</text>
+
+    <rect x="342" y="70" width="146" height="112" rx="12" fill="#EDF7F1" stroke="#CBE6D5"/>
+    <text x="415" y="100" text-anchor="middle" font-size="15" font-weight="700" fill="#166a4c">它生子 Bot</text>
+    <text x="415" y="124" text-anchor="middle" font-size="12.5" fill="#5f5f5f">特斯拉情報（排程）</text>
+    <text x="415" y="142" text-anchor="middle" font-size="12.5" fill="#5f5f5f">簡報製作</text>
+    <text x="415" y="160" text-anchor="middle" font-size="12.5" fill="#5f5f5f">每個只做一件事</text>
+
+    <rect x="506" y="70" width="146" height="112" rx="12" fill="#EEF4FB" stroke="#CFE0F1"/>
+    <text x="579" y="100" text-anchor="middle" font-size="15" font-weight="700" fill="#1d5e8f">群組聊天</text>
+    <text x="579" y="124" text-anchor="middle" font-size="12.5" fill="#5f5f5f">全部拉進來</text>
+    <text x="579" y="142" text-anchor="middle" font-size="12.5" fill="#5f5f5f">自我介紹、互相派工</text>
+    <text x="579" y="160" text-anchor="middle" font-size="12.5" fill="#5f5f5f">做出三頁簡報</text>
+
+    <rect x="670" y="70" width="146" height="112" rx="12" fill="#FBF7EC" stroke="#EFE3C4"/>
+    <text x="743" y="100" text-anchor="middle" font-size="15" font-weight="700" fill="#7a5b12">接連接器</text>
+    <text x="743" y="124" text-anchor="middle" font-size="12.5" fill="#5f5f5f">市集 → 外掛程式</text>
+    <text x="743" y="142" text-anchor="middle" font-size="12.5" fill="#5f5f5f">Google 行事曆＋Drive</text>
+    <text x="743" y="160" text-anchor="middle" font-size="12.5" fill="#5f5f5f">一句話開會存 Docs</text>
+
+    <rect x="834" y="70" width="132" height="112" rx="12" fill="#F4F3F0" stroke="#DBD9D5"/>
+    <text x="900" y="100" text-anchor="middle" font-size="15" font-weight="700" fill="#6a3fb5">技能與規則</text>
+    <text x="900" y="124" text-anchor="middle" font-size="12.5" fill="#5f5f5f">教它一項任務</text>
+    <text x="900" y="142" text-anchor="middle" font-size="12.5" fill="#5f5f5f">一句語音定共用規則</text>
+    <text x="900" y="160" text-anchor="middle" font-size="12.5" fill="#5f5f5f">Skill 先掃再裝</text>
+
+    <line x1="160" y1="126" x2="174" y2="126" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+    <line x1="324" y1="126" x2="338" y2="126" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+    <line x1="488" y1="126" x2="502" y2="126" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+    <line x1="652" y1="126" x2="666" y2="126" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+    <line x1="816" y1="126" x2="830" y2="126" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+
+    <rect x="178" y="212" width="474" height="66" rx="10" fill="#FFFFFF" stroke="#DBD9D5" stroke-dasharray="4 3"/>
+    <text x="415" y="238" text-anchor="middle" font-size="13.5" font-weight="700" fill="#191919">這三格全部在 Bot 自己的雲端電腦上跑</text>
+    <text x="415" y="260" text-anchor="middle" font-size="12.5" fill="#5f5f5f">關掉視窗它繼續做、不搶你的滑鼠、你的電腦可以關機、手機也能回傳</text>
+
+    <line x1="251" y1="182" x2="251" y2="208" stroke="#9B9B9B" stroke-width="1.2" stroke-dasharray="3 3"/>
+    <line x1="415" y1="182" x2="415" y2="208" stroke="#9B9B9B" stroke-width="1.2" stroke-dasharray="3 3"/>
+    <line x1="579" y1="182" x2="579" y2="208" stroke="#9B9B9B" stroke-width="1.2" stroke-dasharray="3 3"/>
+
+    <rect x="670" y="212" width="296" height="66" rx="10" fill="#F4F3F0" stroke="#DBD9D5"/>
+    <text x="818" y="238" text-anchor="middle" font-size="13.5" font-weight="700" fill="#191919">你只跟指揮中心講話</text>
+    <text x="818" y="258" text-anchor="middle" font-size="12.5" fill="#5f5f5f">它派工、它回報，你不用一個一個管</text>
+
+    <line x1="743" y1="182" x2="743" y2="208" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+    <line x1="900" y1="182" x2="900" y2="208" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+  </svg>
+  <figcaption>六格的差別不是功能多寡，是「你要親自做的事」一路往右遞減：第一格你自己裝、第二格你只講一句話、第三格起 Bot 自己建 Bot、第四格它們自己派工、第五格它自己接工具、第六格連規矩都由指揮中心幫你發下去——而這一切都跑在 Bot 的雲端電腦上，不吃你的電腦。</figcaption>
+  </div>
+
+  <div class="note blue">💡 <div>如果只記得一句話，記這句：<b>「你記得每一個機器人都是有任務的。它是機器人，它不是聊天視窗。」</b>［20:37］</div></div>
+</section>
+
+<!-- ══════════ 2. 下載與定位 ══════════ -->
+<section class="chapter" id="sec-download">
+  <span class="chip" style="background:linear-gradient(90deg,var(--blue),var(--cyan))">00:30–03:00</span>
+  <h2 class="ct">2. 它不是聊天視窗：一個 Bot 只做一件事，免費版就能先玩</h2>
+  <p class="cd">開場三分鐘，講師先把「這東西跟一般 AI 有什麼不一樣」講清楚，再帶大家去下載。</p>
+
+  <p>他說 Grok Bot 是 xAI 剛出的新工具，最近比較少人介紹。跟一般的 AI Agent「稍微不太一樣」的地方在於：它<b>不像 ChatGPT 那樣每一個旁邊都是類似的對話視窗</b>，而是<b>「一個機器人做一件事情」</b>——你建的每一個 Bot 都有名字、有任務、有自己的頭像，畫面看起來比較像通訊軟體的聯絡人清單，不像聊天紀錄清單。</p>
+
+  <figure class="shot">
+    <img src="ep53-grok-img/01-xai-bot-download.jpg" alt="x.ai/bot 官網的 Bot 示範畫面，左側列著 Account Manager、Talent Scout 等示範 Bot" loading="lazy">
+    <figcaption>下載的入口是 <code>x.ai/bot</code>，右上角黑色的 <b>Download</b> 按鈕會依你的電腦自動判斷給 Windows 或 Mac 版。頁面中間是官方的示範畫面，看左欄——Account Manager、Talent Scout、Expense Manager、Offsite crew——每一個都是一個「有職稱的 Bot」，不是一段對話；這就是講師說的「它跟一般 AI 稍微不太一樣」的第一眼證據。［02:31］</figcaption>
+  </figure>
+
+  <h3>下載與登入，三件事要知道</h3>
+  <ol class="st">
+    <li>到 <code>x.ai/bot</code> 按 <b>Download</b>，Windows 或 Mac 它會自動跳對的版本。</li>
+    <li>登入可以綁兩種帳號：<b>Grok 帳號</b>或 <b>Cursor 帳號</b>，看你手上有哪個。</li>
+    <li>它有免費試用：講師記得是「綁定信用卡就可以去做體驗跟使用」，送七天還是四天他沒把握。<b>時間到會自動扣款</b>，所以自己要記一個時間。</li>
+  </ol>
+
+  <div class="note gold">⚠️ <div><b>觀望期不用付費，但綁了卡就要自己記到期日。</b>講師的原話：「綁定記得，體驗使用就是時間到就是要會自動扣款，所以自己也要定一個時間。」他建議還在觀望的人「你就大概理解一下它在玩什麼」，看完再決定要不要綁定。</div></div>
+
+  <div class="note steel">🔧 <div>本頁章名寫「免費版就能先玩」，依據是講師在課堂上說的「我記得是可以免費試用的」與「它最近我記得有提供綁定信用卡就可以去做體驗跟使用」。<b>試用天數與方案細節他自己也說「我有忘記了」</b>，本頁不補寫數字，實際以 x.ai 官網為準。</div></div>
+</section>
+
+<!-- ══════════ 3. 建第一個 Bot ══════════ -->
+<section class="chapter" id="sec-firstbot">
+  <span class="chip" style="background:linear-gradient(90deg,var(--amber),var(--orange))">03:00–10:00</span>
+  <h2 class="ct">3. 先建「指揮中心」，再讓它幫你生第一個子 Bot 並排程</h2>
+  <p class="cd">這一段是整堂課的核心操作：講師沒有自己一個一個建 Bot，他只建了一個，然後叫它去建其他的。</p>
+
+  <h3>第一步：按加號，回答它的三個問題</h3>
+  <p>打開軟體，左上角按 <b>＋</b>，畫面上方會出現「收件者：搜尋或建立 Bot」。講師說這一步的意思是「你要告訴它，你的這個聊天要幹嘛」——你可以叫舊的 Bot 出來，也可以讓它們一起聊，這裡先一個人來，建一個新的。</p>
+
+  <figure class="shot">
+    <img src="ep53-grok-img/02-new-bot-onboarding.jpg" alt="新 Bot 的第一句對話：想先了解一下你最希望我幫你做什麼，下方有 A 到 D 四個選項" loading="lazy">
+    <figcaption>新 Bot 的第一句話不是「有什麼可以幫你」，而是<b>「你最希望我幫你做什麼？」</b>，並給四個選項：A 工作與專案、B 日常安排、C 訊息與溝通、D 先聊聊再說。講師沒有點選項，直接在下方輸入框打字（畫面上已打到「協助我」）。這個開場設計就是簡報第 4 頁講的「先選一個角色，不要一開始就包辦所有工作」。［04:01］</figcaption>
+  </figure>
+
+  <p>他給這個 Bot 的定位是一句話——<b>「請作為一個 Bot 生產中心及號令中心」</b>——理由是「我有很多 Agent，但是我希望有個人可以幫我管管這些 Agent，什麼時候該哪個 Agent 出來」。Bot 回覆：好，我來當你的 Bot 生產，負責規劃、派工跟調度。接著它反問你的興趣是什麼。</p>
+
+  <h3>第二步：講你要什麼，它自己去建子 Bot</h3>
+  <p>講師回答的興趣是特斯拉、馬斯克、人型機器人、無人計程車（德州的 Robotaxi），要一個「新聞收集器」。然後就發生了這堂課最值得看的一幕：<b>指揮中心自己把「特斯拉情報」這個 Bot 建出來了</b>，還幫它設好排程。</p>
+
+  <figure class="shot">
+    <img src="ep53-grok-img/03-command-center-dispatch.jpg" alt="新 Bot 回報兩件事都好了：已派特斯拉情報跑第一輪，每日摘要設在週一到週五早上 8 點" loading="lazy">
+    <figcaption>指揮中心回報「兩件事都好了」：<b>1. 已派「特斯拉情報」跑第一輪</b>（近 7 天、四主題、標來源、分事實／傳聞）；<b>2. 每日摘要已設：週一到週五、台北時間早上 8:00</b>，幾乎沒新聞時只會簡短帶過。下面還有一段值得看——講師說側邊欄找不到新 Bot，它回「其實已經建好了，在側邊欄應該看得到，要我再幫你開一個同名的，還是直接再派它跑一輪？」講師選了「再派一輪蒐集」。右上角黑框是講師實際打的字：「請把特斯拉情報 bot 建立出來」。［07:01］</figcaption>
+  </figure>
+
+  <div class="golden">
+    <div class="q">「記得它跟一般的 Agent 不同的是，它是建立 Bot，它不是建立聊天室。」</div>
+    <div class="a">［05:59］講師在看到指揮中心自動建出「特斯拉情報」時說的。這句話解釋了為什麼側邊欄會多一個「人」而不是多一段對話。</div>
+  </div>
+
+  <div class="note blue">💡 <div><b>側邊欄看不到新建的 Bot？重新開啟軟體就好。</b>講師當場遇到「我側邊欄找不到」，他的處理是關掉再開，Bot 就在那裡了——它其實早就建好了，只是畫面沒刷新。</div></div>
+
+  <h3>第三步：改名、編輯個人資料、給頭像</h3>
+  <ul class="pt">
+    <li><b>重新命名</b>——把第一個「新 Bot」改名叫「指揮中心」，子 Bot 叫「特斯拉情報」。名字就是它的職稱，之後群聊派工都靠名字認人。</li>
+    <li><b>編輯個人資料</b>——旁邊是它的基本設定，講師形容「這些是它剛剛寫的，算是它的 agents.md，然後它要做什麼」。你可以再給它一些標籤，讓它記得你要做什麼。</li>
+    <li><b>設定頭像</b>——可以用 Bot 自己「產生」一張圖（講師點了無人車的圖給特斯拉情報），也可以上傳。他提醒：「這些都是有容量限制的」，玩頭像會消耗 Token，「只是現在玩起來大家可能覺得蠻有趣的」。</li>
+  </ul>
+
+  <h3>第四步：再叫指揮中心生一個「簡報製作」Bot，並派工</h3>
+  <p>同樣的做法再來一次：告訴指揮中心「另外幫我做一個簡報機器人」。建好之後，指揮中心就跟簡報製作說「欸我要製作一個簡報」，<b>用剛剛特斯拉情報收回來的資料做一份 8 到 10 分鐘的內部簡報</b>。畫面上簡報製作沒有馬上跳出來，講師直接把視窗關掉——「關掉它會繼續做」。</p>
+
+  <div class="note steel">🔧 <div>這一章逐字稿把 Bot 聽成「Buds」「Bud」、Grok 聽成「Glock」「Goke」、Optimus 聽成「Automize」「Automax」，本頁依畫面校正。另外講師在 08:30 左右把「指揮中心」與「特斯拉情報」的名字講反過一次（畫面上很快就改對了），本頁以畫面上最後的命名為準。</div></div>
+</section>
+
+<!-- ══════════ 4. 群組聊天 ══════════ -->
+<section class="chapter" id="sec-group">
+  <span class="chip" style="background:linear-gradient(90deg,var(--purple),var(--blue))">10:30–16:30</span>
+  <h2 class="ct">4. 開一個群組聊天，讓 Bot 們自我介紹、互相派工做出三頁簡報</h2>
+  <p class="cd">有了三四個 Bot 之後，講師做了一件他形容為「瘋群戰術」的事：把它們全部拉進同一個群組。</p>
+
+  <h3>怎麼建群組</h3>
+  <ol class="st">
+    <li>按 <b>＋</b> 建立新聊天，這次在「收件者」裡<b>把所有 Bot 都加進來</b>（講師用 Ctrl 多選）：指揮中心、特斯拉情報、每日最新資訊產生、課程輔助、簡報製作。</li>
+    <li>群組建好之後，標題列會列出所有成員，右側「成員」欄也看得到每一個 Bot 的名字。</li>
+    <li>先丟一句：<b>「大家介紹自己」</b>。每個 Bot 會依序跳出來說自己負責什麼——講師說「有點像你在 Line 裡面，每個機器人就會開始介紹它是誰」。</li>
+  </ol>
+
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="ep53-grok-img/04-group-chat-intro.jpg" alt="群組聊天裡指揮中心、特斯拉情報、每日最新資訊產生依序自我介紹" loading="lazy">
+      <figcaption>「大家介紹自己」之後的畫面。三個 Bot 依序回覆：<b>指揮中心</b>「負責規劃要哪些 bot、建立它們、派工跟調度」；<b>特斯拉情報</b>「專門追 Tesla、馬斯克、Optimus、Robotaxi 的公開消息，分事實和傳聞，不做投資建議」；<b>每日最新資訊產生</b>「把每天值得看的新資訊整理成簡潔摘要」。講師說平常不需要叫它們自我介紹，「我只是要給你看它可以做這樣」。［12:46］</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="ep53-grok-img/05-group-chat-slides-final.jpg" alt="群組裡簡報製作交出三頁草稿，特斯拉情報確認素材對得上，指揮中心宣布定稿" loading="lazy">
+      <figcaption>三分鐘後的同一個群組。上方是簡報製作交出的三頁草稿（P3「接下來追什麼」列了五條）；接著<b>特斯拉情報</b>回「素材對得上，三頁沒有超譯。我這邊沒有要改的」；最後<b>指揮中心</b>收尾「三頁定稿先這樣用，對齊清楚、紅線也守住了，先交使用者」。整個過程講師只講了一句話，其餘全是 Bot 之間在對話。［16:01］</figcaption>
+    </figure>
+  </div>
+
+  <h3>一句話啟動：「大家討論一下，我想要介紹 Optimus 的三頁簡報」</h3>
+  <p>講師丟下這句之後就去做別的事了。群組裡發生的分工是這樣：</p>
+  <div class="twrap"><table>
+    <tr><th style="width:130px">誰</th><th>做了什麼</th></tr>
+    <tr><td><b>指揮中心</b></td><td>先派工：叫特斯拉情報「先補一版相關的資訊」，叫簡報製作「等素材到位之後拿出三頁的簡報」，叫課程輔助「先待命，除非要做交叉資訊」</td></tr>
+    <tr><td><b>特斯拉情報</b></td><td>把素材包整理出來：第一頁官方現況、第二頁產線（Fremont 停產 S／X 改裝 Optimus 產線）、第三頁接下來追什麼</td></tr>
+    <tr><td><b>簡報製作</b></td><td>拿素材寫三頁草稿，交回群組</td></tr>
+    <tr><td><b>特斯拉情報</b>（再上場）</td><td>當檢查者：「素材對得上，三頁沒有超譯，我這邊沒有要改的」</td></tr>
+    <tr><td><b>指揮中心</b>（收尾）</td><td>宣布定稿，「要改受眾或做成投影片再說」</td></tr>
+  </table></div>
+
+  <div class="note blue">💡 <div><b>你可以再多一個「檢查者」。</b>講師特別點出特斯拉情報回頭檢查簡報這一步：「收集資料的人可以去跟做簡報的人說，OK，素材我發現你都有用，你沒有亂講。」他說你也可以另外建一個專門當檢查者、或是模擬「上台要講這份簡報的人」的 Bot，讓它們先互相對過再交給你。這對應簡報第 10 頁的「主 Bot 拆任務，專業 Bot 各自交付」。</div></div>
+
+  <div class="golden">
+    <div class="q">「叫指揮中心幫你派。你就不用一個一個製作你的 Bot。然後指揮中心也會幫你指揮。它就是你的幕僚。」</div>
+    <div class="a">［14:29］群組派工跑起來之後講師下的結論。「幕僚」這個詞跟簡報第 1 頁的標題「你的 24 小時 AI 幕僚」是同一個意思。</div>
+  </div>
+
+  <p>到了 21:00 左右，指揮中心回報「pptx 做好了，檔案已私訊給你」，並把檔案放到 <code>C:\Users\User\Optimus_3pages.pptx</code>。講師打開 PowerPoint 看了一眼：三頁、深底、講者備註在備註欄——「我沒有灌給它任何的 Skill，那就先做一個簡單很粗版的」。這份粗版簡報就是第 8 章要回頭修的對象。</p>
+
+  <div class="note steel">🔧 <div>群組的名字畫面上是「每日最新資訊產生」——講師在 10:43 建群組時說「這個群組聊天要叫什麼呢？每日最新資訊產生」，但畫面上「每日最新資訊產生」同時也是一個 Bot 的名字（橘色三角頭像）。<b>本頁依畫面判斷它是一個 Bot，而群組本身以成員名單為標題</b>；講師的口述與畫面在這裡有出入，照實記錄。</div></div>
+</section>
+
+<!-- ══════════ 5. 雲端電腦 ══════════ -->
+<section class="chapter" id="sec-cloud">
+  <span class="chip" style="background:linear-gradient(90deg,var(--teal),var(--cyan))">13:00–13:40 · 24:00–25:30</span>
+  <h2 class="ct">5. Bot 有自己的雲端電腦：關掉視窗它還在做，你的電腦可以關機</h2>
+  <p class="cd">講師講了三次「關掉它會繼續做」。這一章把散在三個時間點的說明合在一起。</p>
+
+  <p>在群組派工進行中，講師點開了指揮中心右側的「螢幕」——那是一個獨立的畫面，裡面有<b>終端機</b>、有 <b>Chrome</b>。他說：「這邊有一台電腦，它們有一個雲端電腦，這邊是它雲端電腦的運作空間。它不是吃你的電腦，它是吃它放在雲端的資料。」所以 Bot 查資料、跑終端機、做簡報，全部發生在那台雲端機器上。</p>
+
+  <h3>這件事對你的三個意義</h3>
+  <ul class="pt">
+    <li><b>不搶滑鼠</b>——「如果大家有用 Agent 應該知道，在做簡報的時候它會搶你的東西。」Grok Bot 不會，因為它根本不在你的桌面上操作。</li>
+    <li><b>關掉視窗它繼續做</b>——簡報製作沒跳出來？關掉；群組聊天看完了？關掉。回來的時候東西已經做好了。</li>
+    <li><b>手機版能接手，電腦可以關機</b>——「行動版本的，你就手機就跟你的手機控制 Codex 一樣，只是你的電腦可以關機了。」指揮中心的回報也會傳到手機。</li>
+  </ul>
+
+  <div class="golden">
+    <div class="q">「因為它的運作不是靠你的電腦。它也不會搶你電腦的滑鼠。」</div>
+    <div class="a">［10:00］簡報製作 Bot 沒馬上出現、講師直接關掉視窗時說的。這是他解釋「為什麼敢關」的理由。</div>
+  </div>
+
+  <h3>設定頁裡值得看的四個地方</h3>
+  <p>24 分鐘處講師打開設定（左側「一般／電腦／用量與帳單／更新」四項）帶大家看：</p>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">項目</th><th>講師怎麼說</th></tr>
+    <tr><td><b>用量與帳單</b></td><td>「我現在用了 11，所以其實沒有很多」，額度「4 天後重置」</td></tr>
+    <tr><td><b>使用硬體加速</b></td><td>「你的電腦的 GPU 如果夠強，它會更快、更好使用。」他今天用的是一般筆電，所以沒開；設備好的人可以打開</td></tr>
+    <tr><td><b>時區</b></td><td>自動偵測（Asia/Taipei），排程任務靠它算時間</td></tr>
+    <tr><td><b>自動審核</b></td><td>「你可以告訴它，什麼時候要問你，什麼時候不用問你。」這就是簡報第 11 頁講的「付款、發布、刪除前必須批准」</td></tr>
+  </table></div>
+
+  <div class="note blue">💡 <div>你也可以反過來，讓它操作你的桌面：「它不會跟你搶桌面，但是如果你要讓它控制你的桌面也可以。」［24:28］預設是雲端跑，要它碰本機是你另外開的權限。</div></div>
+</section>
+
+<!-- ══════════ 6. 連接器 ══════════ -->
+<section class="chapter" id="sec-connector">
+  <span class="chip" style="background:linear-gradient(90deg,var(--pink),var(--rose))">16:30–21:30</span>
+  <h2 class="ct">6. 接上連接器（MCP）：一句話開好 Google 行事曆座談會、存成 Docs</h2>
+  <p class="cd">講師說這是他對 Grok Bot「最滿意」的一段。他新開了一個 Bot 專門示範連線。</p>
+
+  <h3>市集裡有什麼</h3>
+  <p>左下角的<b>市集</b>分兩個分頁：<b>外掛程式</b>（連接器）與 <b>Bot</b>（別人寫好的 Bot，可以直接拿來用）。外掛程式又分「精選／文件與檔案／付款／生產力／收件匣與協作／客戶支援／研究」等類別。</p>
+
+  <figure class="shot">
+    <img src="ep53-grok-img/06-marketplace-connectors.jpg" alt="市集的外掛程式分頁，精選區列出 Gmail、Google Calendar、Google Drive、Granola、Notion、Slack" loading="lazy">
+    <figcaption>市集的「外掛程式」分頁。上方寫著<b>「已安裝 4 個 · 1 個私人」</b>；精選區看得到 <b>Gmail、Google Calendar（已新增）、Google Drive（已新增）、Granola、Notion（Notion Skills ＋ Notion MCP server）、Slack（Slack MCP server）</b>。注意 Notion 與 Slack 的說明文字直接寫著「MCP server」——這就是講師口中「它也有一些所謂的 MCP」的意思。［17:16］</figcaption>
+  </figure>
+
+  <h3>實測：一句話開座談會＋存 Docs</h3>
+  <p>講師打了這句（畫面上逐字）：</p>
+  <div class="code">幫我在 google 行事曆 開啟一個線上座談會 09/11 21:00，把直播連結 儲存成 google docs後給我</div>
+
+  <p>他特別說明這句話的設計：<b>座談會的名稱沒給，但時間有給</b>；「直播連結」沒說是哪個平台，讓它自己判斷會用 Google Meet。接下來 Bot 做的事：</p>
+
+  <figure class="shot">
+    <img src="ep53-grok-img/07-calendar-drive-connector.jpg" alt="新 Bot 收到指令後先查連接器，詢問要不要加上 Google 行事曆和 Google Drive，選好幫我加上後開始建立" loading="lazy">
+    <figcaption>整段對話一次看完。Bot 先說「收到，先查 Google 行事曆／文件能不能連」，發現還沒連，跳出選項<b>「要幫你加上 Google 行事曆和 Google Drive 連接器嗎？」</b>——講師點 A「好，幫我加上」，它就自動連了兩個；接著它把預設講清楚：<b>「台北時間今天 9/11 21:00、1 小時、標題『線上座談會』、產生 Meet 連結後存成 Docs。回『繼續』我就建。」</b>講師回「繼續」，它就開始建。［20:21］</figcaption>
+  </figure>
+
+  <ol class="st">
+    <li>Bot 先檢查連接器有沒有接上，<b>沒接上會主動問你要不要加</b>，不用自己去市集找。</li>
+    <li>它判斷這件事要<b>同時用到行事曆和 Drive</b>，所以一次連兩個——講師說「因為兩個都要一起做，所以就交給它吧」。</li>
+    <li>動手前它先把<b>預設值</b>列給你確認（時間、長度、標題、要產生 Meet），你回「繼續」才做。</li>
+    <li>做完回傳三個連結：Meet、Docs、行事曆活動。講師打開自己的 Google 行事曆，活動與連結都在。</li>
+  </ol>
+
+  <div class="note green">✅ <div>講師的評價：「我覺得它有時候比 OpenCode，有時候也比 Claude Code 稍微順暢一點點，雖然說今天網路感比較慢。」［19:59］以及「光那個剛剛的 MCP 的連線我就覺得還蠻滿意的，它可以一口氣蠻聰明的就告訴你說我要開行事曆也要開 Google 的雲端，它就兩個一起幫我開。」［27:59］</div></div>
+
+  <div class="note gold">⚠️ <div>畫面上 Bot 回傳的 Meet 連結、Docs 連結與行事曆活動網址是講師本人的，<b>本頁選用的是它建立前的畫面，沒有收錄那些連結</b>。</div></div>
+
+  <div class="note steel">🔧 <div>講師口述中「連接器／外掛程式」與「MCP」是混著講的。從市集畫面看，Grok Bot 的外掛程式裡確實有標明「MCP server」的項目（Notion、Slack），但 Google 行事曆與 Drive 是否走 MCP 畫面上看不出來。本頁照原話保留「MCP」這個說法，另在此註明。逐字稿把 Google 行事曆聽成「GOOGLE 新勢力／形勢力／行程力」、Google Drive 聽成「GOOGLE DRIB／領端」、Google Docs 聽成「GOOGLE DOS」，已依畫面校正。</div></div>
+</section>
+
+<!-- ══════════ 7. 技能 ══════════ -->
+<section class="chapter" id="sec-skill">
+  <span class="chip" style="background:linear-gradient(90deg,var(--green),var(--teal))">21:30–24:00</span>
+  <h2 class="ct">7. 技能（Skill）：教它一項任務，錄下你的操作讓它學</h2>
+  <p class="cd">連接器是「接工具」，技能是「教做法」。這一段示範沒有完全成功，講師照樣把它講完。</p>
+
+  <h3>技能從哪裡來，三條路</h3>
+  <ul class="pt">
+    <li><b>從 GitHub 拿</b>——市集裡可以「GitHub 新增連線」，它會要你填一些值；講師的建議是「請它幫你新增比較快」，不用自己填。</li>
+    <li><b>用別人寫好的 Bot</b>——市集的 Bot 分頁有現成的可以直接拿來用。</li>
+    <li><b>在它的雲端電腦裝地端開源模型</b>——「你也可以在這個電腦裡面灌你地端版本的開源的，比如說你要做 DeepSeek 的，都可以放在裡面，你就用它的終端機打開。」他今天沒示範這條。</li>
+  </ul>
+
+  <h3>「教它一項任務」：錄下你的操作</h3>
+  <p>第四條路是這堂課實際示範的：在指揮中心的畫面上點<b>「教它一項任務」</b>，它會跳出一句話——「錄下你執行任務的過程。指揮中心會學習這些步驟，之後可以自行再次執行。」按<b>開始錄製</b>，接下來你做的事它都在看。講師形容「它很像 Power Automate 的內容」，微軟的自動化工具也有類似的錄製功能。</p>
+
+  <figure class="shot">
+    <img src="ep53-grok-img/08-teach-task-recording.jpg" alt="指揮中心正在觀看並學習的錄製畫面，紅框內是雲端桌面，下方有 Chrome 與終端機圖示" loading="lazy">
+    <figcaption>按下開始錄製之後的畫面：頂端寫著<b>「指揮中心 正在觀看並學習」</b>，右上角紅點計時 0:07。紅框裡是它的雲端桌面——底部只有三個圖示：<b>Chrome、一個應用程式、終端機</b>。講師本來要示範「打開終端機、打開 Word、搜尋 Google Map」，但網路太慢卡住了，最後只錄到打開 Chrome 就關掉。［23:21］</figcaption>
+  </figure>
+
+  <div class="note steel">🔧 <div><b>這次示範沒有做成技能，本頁照實記錄。</b>錄完 32 秒之後，指揮中心回覆：「錄影看完了：大概是開 Chrome → 點搜尋框 → 沒輸入 → 關掉。<b>沒有完成某個可重用流程，所以這次我先不做成 skill。</b>你可以再示範一次完整步驟，或告訴我你本來想教我做什麼。」講師選了「先算了」。他的說明是「應該是網路的關係」。這段其實很有價值：它證明 Bot 不會把一段沒意義的操作硬存成技能，這跟簡報第 8 頁「技能不是錄影重播，而是可檢查的工作方法」是同一件事。</div></div>
+
+  <div class="note blue">💡 <div>錄製的下方還有<b>「排程」</b>——講師點了一下說「排程在這裡，例行的任務」。第 3 章特斯拉情報那個「週一到週五早上 8 點」就是這種例行任務，右側「例行任務」欄看得到「特斯拉情報每日摘要 Weekdays at 8:00 AM (Asia/Taipei)」。簡報第 9 頁的建議是：先測試、再排程，穩定的技能才適合加上排程。</div></div>
+
+  <div class="golden">
+    <div class="q">「我沒有灌給它任何的 Skill。那就先做一個簡單很粗版的。你給它 Skill 之後它會做得更好。」</div>
+    <div class="a">［21:59］看到第一版 Optimus 三頁簡報時說的。這句埋了第 8 章的伏筆：簡報不好看，不是換工具，是給它技能。</div>
+  </div>
+</section>
+
+<!-- ══════════ 8. 共用規則與安全 ══════════ -->
+<section class="chapter" id="sec-rules">
+  <span class="chip" style="background:linear-gradient(90deg,var(--orange),var(--amber))">25:30–30:30</span>
+  <h2 class="ct">8. 一句語音給所有 Bot 定共用規則，再派指揮中心去修簡報美感</h2>
+  <p class="cd">最後五分鐘講師補了他認為「既然要讓這些 Agent 做事情有共識」就一定要做的一件事。</p>
+
+  <h3>一句語音，寫進所有 Bot 的共用記憶</h3>
+  <p>他對著指揮中心用<b>語音</b>講了這段（畫面上的語音辨識結果逐字，含口語）：</p>
+  <div class="code">我要做一個共同的規則，那所有的，欸，bot都要遵守。首先，這個bot，呃，大家做什麼事情之前，以快速能夠完成為主，但是你要刪我資料或處理我資料的時候，必須先告訴我。好，那完成這個，幫我儲存在你的共用資料庫，你的雲端螢幕裡面，雲端電腦裡面，讓所有的bot共享都遵守這個規則。</div>
+
+  <figure class="shot">
+    <img src="ep53-grok-img/09-shared-rule-all-bots.jpg" alt="指揮中心收到語音規則後回覆：好，我把這條寫進所有 bot 共用的規則裡" loading="lazy">
+    <figcaption>黑框是講師的語音原文，下方指揮中心一句回覆：<b>「好，我把這條寫進所有 bot 共用的規則裡。」</b>上半部還留著第 7 章那段錄製失敗的對話（「沒有完成某個可重用流程，所以這次我先不做成 skill」）。右側「指揮中心的螢幕」與「例行任務」欄一直開著，看得到它同時在做什麼。［26:31］</figcaption>
+  </figure>
+
+  <p>指揮中心把這段整理成兩條寫進「所有 bot 共用的使用者規則」：<b>1. 做事以快速完成為優先；2. 要刪、改、搬、清空你的既有資料，或做破壞性／不可逆處理前，必須先跟你說並確認</b>。並補了一句「一般蒐集、整理、摘要、草稿不受影響。我也在群組裡跟各 bot 公告了」。切到群組畫面，每個 Bot 都回了「收到」。</p>
+
+  <div class="golden">
+    <div class="q">「你就做一個統一的教育訓練。所有人都聽你講話。」</div>
+    <div class="a">［26:28］講師用「教育訓練」比喻這件事：規則講一次、存進雲端電腦，之後新建的 Bot 也不用重新交代你是誰。對應簡報第 11 頁的「明確禁區：付款、發布、刪除前必須批准」。</div>
+  </div>
+
+  <h3>不滿意簡報？不要自己改，叫指揮中心去找技能</h3>
+  <p>接著他示範怎麼用同一條指揮鏈修東西。他對指揮中心說：「我對簡報製作的 Bot 所製作的簡報非常不滿意，請上網去幫我抓一些 skill，讓它在製作簡報上更有美感、更有藝術感。」然後就不管了。</p>
+
+  <figure class="shot">
+    <img src="ep53-grok-img/10-superdesign-skill.jpg" alt="指揮中心回報已升級簡報製作人設、參考開源 presentation skill，並詢問是否安裝 Superdesign 後重做 Optimus 三頁" loading="lazy">
+    <figcaption>三分鐘後指揮中心的回報：<b>「2. 已升級『簡報製作』人設，並要求之後強制套用該 skill；3. 參考了開源 presentation skill 與 2026 簡報設計原則；你已有 Canva 可用。」</b>接著它自己提議「另外還有 Superdesign 插件（專做簡報／視覺畫布），尚未安裝，要我裝上嗎？」講師連點兩個 A：安裝 Superdesign → 重做 Optimus 三頁。它回「我先讀 skill 再開工」。［29:31］</figcaption>
+  </figure>
+
+  <p>到 31 分鐘處，「美感版三頁」出來了：深底＋科技紅、英雄句、雙欄、追蹤清單節奏，檔案是 <code>Optimus_三頁_美感版.pptx</code>。指揮中心還誠實補了一句：Superdesign 已安裝，但這個會話裡還沒出現可驅動的畫布工具，「若你要真的走 Superdesign 畫布，跟我說一聲，我下一輪再抓 skill 路徑重跑」。</p>
+
+  <div class="golden">
+    <div class="q">「靠指揮中心控制就好。你就不用那麼麻煩。因為它會回報啦。Agent 做好之後它會回報給你。」</div>
+    <div class="a">［28:59］講師說「希望大家不要看到後面有點龜毛牆」——意思是後面 Bot 之間來來回回的訊息很多，但你不用看，你只看指揮中心的回報。</div>
+  </div>
+
+  <h3>Skill 要先掃再裝</h3>
+  <div class="note gold">⚠️ <div><b>「那個 Skill 要小心。」</b>講師的建議是裝一個專門「掃讀」的 Bot——不是掃病毒，是掃 Skill 裡面有沒有藏程式：<b>「不要讓它去抓你的 API，不要去抓你的帳號密碼，不要去讀你的相關的文件。」</b>他說很多人下載 GPT 或各種 Skill 時都可以先這樣掃一次，並補一句「還好我這台電腦裡面沒什麼重要的東西，基本上空的」。［29:33］這跟本站另一條規矩「安裝新 Skill 前必先安全審查」是同一件事。</div></div>
+
+  <h3>跟 Codex、OpenCode、Claude Code 比</h3>
+  <ul class="pt">
+    <li><b>速度</b>——「我覺得不比 Codex 或不比 OpenCode 來的快」，但「有時候 Codex 或 OpenCode 因為你灌了太多的 Skill 反而變慢很多」。</li>
+    <li><b>指揮中心</b>——「Codex、Claude Code 目前沒有，但是可以寫一個指揮中心。只是官方出的一定會比較順，自己寫的會慢一點。」</li>
+    <li><b>概念相同</b>——他前幾天在 Line 社群分享過「讓各自的 Agent 各自做事」的做法（今天叫 Codex、今天叫 DeepSeek、今天叫 OpenCode 去幹嘛），「一樣的意思，只是它這邊全部都是 Grok 本身」。</li>
+  </ul>
+
+  <div class="note steel">🔧 <div>收尾三分鐘講師預告秋季共學：中秋節後一連四天晚上，內容是 Codex 環境設定與 10 個 Skill、用 Agent 控制 N8N、Power Automate、OpenCode 與 Codex 的落地化設計。<b>日期他自己說「記得自己都忘了」並在畫面外確認，逐字稿聽到的是「28、29 跟到 10 月 1 號」，本頁標為〔待確認〕</b>，報名資訊以電台公告為準。</div></div>
+</section>
+
+<!-- ══════════ 9. 這堂課真正在教的事 ══════════ -->
+<section class="chapter" id="sec-real">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--purple))">TAKEAWAYS</span>
+  <h2 class="ct">9. 這堂課真正在教的事</h2>
+  <p class="cd">把 30 分鐘濃縮成四件事。這四件都不是按鈕在哪裡，是你跟 AI 的關係要怎麼擺。</p>
+
+  <h3>一、先想「這個 Bot 的職稱是什麼」，再開始打字</h3>
+  <p>講師建的每一個 Bot 都只有一個工作：蒐集特斯拉新聞、做簡報、協助課程、統籌派工。他沒有建一個「什麼都會的助理」。簡報第 4 頁的話是「聚焦的 Bot，比萬能 Bot 更容易累積有用經驗」；他在課堂上的做法是<b>先給名字、再給一句任務、最後才給細節</b>。你打開軟體按加號之前，先想好這一句。</p>
+
+  <h3>二、你只需要一個指揮中心，其他的讓它去建</h3>
+  <p>整堂課講師親手建的 Bot 只有一個。特斯拉情報是指揮中心建的、簡報製作是指揮中心建的、排程是指揮中心設的、共用規則是指揮中心發的、Superdesign 是指揮中心裝的。<b>你跟一個 Bot 講話，它去管其他的</b>——這是「幕僚」的意思，也是你不會被十幾個 Bot 淹沒的唯一辦法。</p>
+
+  <h3>三、群組聊天不是聊天，是把工作流程攤在你眼前</h3>
+  <p>「大家討論一下，我想要介紹 Optimus 的三頁簡報」之後，你看到的是：誰先做、誰等誰、誰檢查誰、誰宣布完成。這些在其他工具裡是藏在後台的，在這裡是一則一則訊息。<b>看得到分工，你才知道哪個環節要加一個檢查者、哪個 Bot 該換人設。</b></p>
+
+  <h3>四、規則講一次就好，但要在給它權限之前講</h3>
+  <p>講師示範的共用規則只有一條真正的限制：「刪我資料或處理我資料的時候，必須先告訴我。」他是在 Bot 已經能連 Google Drive 之後才補這條的——順序反過來會更好。簡報第 11 頁的 7 天上線階梯是：第 1 天單次任務、第 3 天保存技能、第 7 天加入排程；<b>先讓它做可逆、可查、可接手的事，信任跟著成果一起累積</b>。而不管你信不信任它，別人寫的 Skill 先掃再裝。</p>
+</section>
+
+<!-- ══════════ 10. 老師金句 ══════════ -->
+<section class="chapter" id="sec-quotes">
+  <span class="chip" style="background:linear-gradient(90deg,var(--amber),var(--rose))">QUOTES</span>
+  <h2 class="ct">10. 老師金句</h2>
+
+  <div class="golden"><div class="q">「它是目前算是我覺得比較像真的 Grok 吧。」</div><div class="a">［00:30］開場介紹 Grok Bot 時的第一個評價。他的意思是這比 Grok 之前的聊天產品更像「會做事的那個」。</div></div>
+
+  <div class="golden"><div class="q">「綁定記得，體驗使用就是時間到就是要會自動扣款，所以自己也要定一個時間。」</div><div class="a">［02:30］講免費試用時的提醒。觀望期不用付費，但綁了卡就要自己記到期日。</div></div>
+
+  <div class="golden"><div class="q">「記得它跟一般的 Agent 不同的是，它是建立 Bot，它不是建立聊天室。」</div><div class="a">［05:59］指揮中心自動建出「特斯拉情報」時說的。側邊欄多的是一個「人」，不是一段對話。</div></div>
+
+  <div class="golden"><div class="q">「因為它的運作不是靠你的電腦。它也不會搶你電腦的滑鼠。」</div><div class="a">［10:00］簡報製作沒跳出來、他直接關掉視窗時的解釋。Bot 在自己的雲端電腦上跑。</div></div>
+
+  <div class="golden"><div class="q">「叫指揮中心幫你派。你就不用一個一個製作你的 Bot。然後指揮中心也會幫你指揮。它就是你的幕僚。」</div><div class="a">［14:29］群組派工跑起來之後的結論。整堂課他親手建的 Bot 只有這一個。</div></div>
+
+  <div class="golden"><div class="q">「就是我覺得它有時候比 OpenCode，有時候也比 Claude Code 稍微順暢一點點，雖然說今天網路感比較慢。」</div><div class="a">［19:59］連接器建好座談會之後的評價。他沒有說「更好」，是「有時候稍微順暢一點點」，用詞很保留。</div></div>
+
+  <div class="golden"><div class="q">「你記得每一個機器人都是有任務的。它是機器人，它不是聊天視窗。」</div><div class="a">［20:37］講完連接器示範後停下來講的。整堂課的主線就是這句。</div></div>
+
+  <div class="golden"><div class="q">「我沒有灌給它任何的 Skill。那就先做一個簡單很粗版的。你給它 Skill 之後它會做得更好。」</div><div class="a">［21:59］看第一版簡報時說的。成品不好看，先想的是「少了什麼技能」，不是「換個工具」。</div></div>
+
+  <div class="golden"><div class="q">「它不會跟你搶桌面。但是如果你要讓它控制你的桌面也可以。」</div><div class="a">［24:28］講設定頁時補的。預設在雲端跑，碰你的本機是另外開的權限。</div></div>
+
+  <div class="golden"><div class="q">「你就做一個統一的教育訓練。所有人都聽你講話。」</div><div class="a">［26:28］用語音定共用規則之後的比喻。規則存進雲端電腦，之後新建的 Bot 也不用重新交代。</div></div>
+
+  <div class="golden"><div class="q">「靠指揮中心控制就好。你就不用那麼麻煩。因為它會回報啦。Agent 做好之後它會回報給你。」</div><div class="a">［28:59］回應「後面 Bot 之間訊息很多會不會很煩」。你只看指揮中心的回報。</div></div>
+
+  <div class="golden"><div class="q">「那個 Skill 要小心。……不要讓它去抓你的 API，不要去抓你的帳號密碼，不要去讀你的相關的文件。」</div><div class="a">［29:33］收尾前的安全提醒。他的做法是裝一個專門掃 Skill 的 Bot，先掃再裝。</div></div>
+</section>
+
+<!-- ══════════ 11. 資料來源與整理說明 ══════════ -->
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,var(--ink3),var(--ink2))">SOURCE</span>
+  <h2 class="ct">11. 資料來源與整理說明</h2>
+
+  <div class="twrap"><table>
+    <tr><th style="width:130px">來源</th><td>直播電台加播場錄影（2026/09/11），單段，全長 33 分 38 秒；講師 11 頁圖解簡報僅作核對工具名與步驟之用，未轉載</td></tr>
+    <tr><th>整理方式</th><td>全程本機處理：以場景偵測擷取 57 張關鍵畫面、產生 115 段逐字稿，再依逐字稿手寫章節目錄；本頁 10 張截圖全部逐張去識別化後才放上</td></tr>
+    <tr><th>時間戳</th><td>章節標題與引文後方的［mm:ss］對應錄影播放器時間（錄影開頭約 30 秒是前一段 EP53 的收尾，本頁從 00:30 起整理）</td></tr>
+    <tr><th>整理</th><td>竹貞（Tarshar 的逐幀筆記專員），2026/09/28</td></tr>
+  </table></div>
+
+  <h3>已知限制，請先看過再引用</h3>
+  <ul class="pt">
+    <li><b>逐字稿是機器產生的</b>，人名與工具名會聽錯。本頁修正了可以由畫面或上下文確認的錯字：Grok 被聽成「Glock／Goke／Gl」、Bot 被聽成「Buds／Bud」、ChatGPT 被聽成「chip GPT」、Google 行事曆被聽成「GOOGLE 新勢力／形勢力／行程力」、Google Drive 被聽成「GOOGLE DRIB／領端」、Google Docs 被聽成「GOOGLE DOS」、Optimus 被聽成「Automize／Automax」、GitHub 被聽成「GipHub」、Claude Code 被聽成「Cloud Code」、DeepSeek 被聽成「Deep Stick」、幕僚被聽成「目瞭」、掃讀被聽成「少讀」、龜毛被聽成「龜大」，共 13 類、逾 40 處；<b>不確定的一律保留原樣，沒有猜測補詞</b>。</li>
+    <li>逐字稿在 03:59–04:00 有一段語音辨識錯亂（「幫你學會學習，我種他說……」），內容無法還原，本頁整段捨棄，只保留畫面上看得到的「協助我」與後續指揮中心的定位句。</li>
+    <li>講師口述中把「連接器／外掛程式」與「MCP」混著講，本頁<b>照原話保留他的用詞</b>，另在第 6 章加註畫面上能確認與不能確認的部分。</li>
+    <li>〔待確認〕三處：(1) 22:31 講師提到可在雲端電腦裝的另一個開源模型，逐字稿聽成「Open Loader」，無法由畫面確認是哪一個，本頁未寫入；(2) 21:43 講師把 Grok Bot 跟一個聽起來像「Hermist」的工具相比，無法確認正確名稱，本頁未寫入；(3) 秋季共學的日期逐字稿聽到「28、29 跟到 10 月 1 號」，講師自己也說要再確認，以電台公告為準。</li>
+    <li>第 2 章「免費版可用」的依據是講師口述「我記得是可以免費試用的」與「綁定信用卡就可以去做體驗跟使用」，試用天數他自己說忘了；本頁不補寫數字。</li>
+    <li><b>可信度分級</b>：金句章 12 則全部是錄影實錄（僅校正上述聽錯的工具名，並把「他」統一為指代 Bot 的「它」）；第 6、8 章的 <code>.code</code> 區塊是從畫面逐字抄下來的講師輸入內容（含語音辨識的口語），<b>可能有 OCR 誤差</b>；各章引用簡報頁碼的地方是拿講師簡報作對照，不是課堂口述。</li>
+    <li>逐字稿中出現的學員稱呼、提問者暱稱，本頁一律隱去。</li>
+    <li>課堂截圖已裁掉線上教室右側的與會者欄位（原始畫面 1920×1080，只保留左側 1440×810 的螢幕分享區再縮成 1280×720），並逐張塗掉 Grok 應用程式左下角的操作者帳號名、群組聊天標題列裡的帳號名、Windows 工作列、瀏覽器分頁與書籤列；含講師個人 Google 連結的畫面未選用。本頁 10 張截圖約每 3 分鐘一張，比一般每 10 分鐘一張密——這堂全程是軟體操作，每一張都對應一個沒看過就不知道長什麼樣的畫面。</li>
+    <li>引用到作業、貼文或簡報之前，請對照錄影原始段落再確認一次。</li>
+  </ul>
+
+  <div class="note gold">🔒 <div><b>內容版權屬原講者與電台，本頁為學習筆記；若原講者或電台希望撤下，來信告知即刻移除。</b>講師的 11 頁簡報屬講師所有，本頁只用影片截圖、不貼簡報頁面。</div></div>
+</section>
+
+</article>
+</div>
+
+<footer>
+  <p>📝 直播電台 加播場 課堂筆記 · 生成式AI應用電台（電台講師）</p>
+  <p>依錄影 57 張關鍵畫面＋全程逐字稿 115 段整理 · <a href="ep53-grok-ai-skills.html">🗺️ 互動技能地圖</a> · <a href="../radio/">🏠 回筆記館入口</a></p>
+</footer>
+
+</body>
+</html>
