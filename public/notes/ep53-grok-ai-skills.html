@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>一個機器人做一件事，讓它們在雲端替你分工｜直播電台 加播場 Grok Bot 互動式學習地圖</title>
+<meta name="description" content="生成式AI應用電台 直播電台加播場（2026/09/11）Grok Bot 互動式學習地圖：五大主題 18 項實戰技能，涵蓋 x.ai/bot 下載與免費試用、按加號建第一個 Bot、讓指揮中心自己生子 Bot 並排程、群組聊天自我介紹與互相派工、Bot 的雲端電腦與設定頁、市集連接器一句話開 Google 行事曆座談會、教它一項任務錄下操作、一句語音定共用規則、派指揮中心找 Superdesign 技能重做簡報，以及 Skill 先掃再裝。學會一項打一個勾，進度存在自己的瀏覽器。">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269;
+  --green:#3f8560; --orange:#bf6a1e; --red:#c0453f; --teal:#0d8f80; --amber:#9c7b23;
+  --feat:#6a3fb5; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(28px,4.6vw,46px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--txt);background:none;-webkit-text-fill-color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:680px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:9px}
+.steps li{list-style:none;counter-increment:st;display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--txt2);line-height:1.7}
+.steps li::before{content:counter(st);flex:none;width:25px;height:25px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:var(--c,var(--feat));margin-top:1px}
+.steps li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+.prompt,.promptbox{background:#1d1d1f;border:1px solid #2c2c31;border-radius:10px;padding:13px 15px;margin-top:6px;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt b,.promptbox b{color:#fff}
+figure.shot{margin:10px 0 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12px;color:var(--txt3);padding:8px 12px;border-top:1px solid var(--line);background:var(--bg2);line-height:1.6}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <a class="navlink" href="../radio/" style="border-color:#d6c8ee" onclick="if(history.length>1){history.back();return false}">← 回上一頁</a>
+  <div class="logo">
+    <div class="dot">🤖</div>
+    <div>Grok Bot 地圖<small>生成式AI應用電台 · 加播場</small></div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋技能關鍵字：下載、指揮中心、子 Bot、排程、群組、雲端電腦、連接器、行事曆、教它一項任務、共用規則、Skill…" autocomplete="off">
+  </div>
+  <a class="navlink" href="ep53-grok-notes.html">📝 課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">生成式AI應用電台 · 直播電台 加播場 · 2026/09/11</span>
+  <h1>一個機器人做一件事<br>讓它們在雲端替你分工</h1>
+  <p class="sub">「它是機器人，它不是聊天視窗。」講師用半小時示範 xAI 剛推出的 Grok Bot：<b>你不是開一個對話框問問題，而是建一個有名字、有任務、有自己雲端電腦的 Bot，然後讓它去做</b>。<br>他親手建的 Bot 只有一個「指揮中心」，其他的——特斯拉情報、簡報製作、排程、群組派工、連接器、共用規則、找技能——全部是指揮中心幫他做的。<b>免費版就能跟著做。</b><br>點進每一章，逐層展開<b>本堂實際教到</b>的觀念、示範與操作，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🎙️ 生成式AI應用電台・直播電台</span>
+    <span>⏱️ 全長 33 分 38 秒</span>
+    <span>🔰 小白友善・免費版可用</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>5</b><span>大主題</span></div>
+  <div class="stat"><b>18</b><span>實戰技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 18 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--purple)" onclick="showChapter('start')">
+        <div class="glowline"></div><span class="emoji">🚀</span>
+        <h3><em>CHAPTER 01</em>從下載到第一個 Bot</h3>
+        <p>x.ai/bot 下載、綁卡免費試用要記到期日、按加號回答它三個問題、把第一個 Bot 定位成「指揮中心」，再讓它自己生子 Bot 並排程。</p>
+        <div class="foot"><div class="mini"><i data-mini="start"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--blue)" onclick="showChapter('team')">
+        <div class="glowline"></div><span class="emoji">👥</span>
+        <h3><em>CHAPTER 02</em>多 Bot 分工：群組聊天與派工</h3>
+        <p>把所有 Bot 拉進一個群組、叫它們自我介紹、一句話啟動派工流程做出三頁簡報，以及為什麼要多加一個檢查者。</p>
+        <div class="foot"><div class="mini"><i data-mini="team"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--teal)" onclick="showChapter('cloud')">
+        <div class="glowline"></div><span class="emoji">☁️</span>
+        <h3><em>CHAPTER 03</em>Bot 的雲端電腦與設定</h3>
+        <p>關掉視窗它繼續做、不搶你的滑鼠、電腦可以關機手機接手；設定頁裡的用量、硬體加速、時區與自動審核。</p>
+        <div class="foot"><div class="mini"><i data-mini="cloud"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--pink)" onclick="showChapter('tools')">
+        <div class="glowline"></div><span class="emoji">🔌</span>
+        <h3><em>CHAPTER 04</em>連接器與技能</h3>
+        <p>市集裡的外掛程式、一句話開 Google 行事曆座談會並存成 Docs、「教它一項任務」錄下操作讓它學、例行任務排程。</p>
+        <div class="foot"><div class="mini"><i data-mini="tools"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--orange)" onclick="showChapter('safety')">
+        <div class="glowline"></div><span class="emoji">🛡️</span>
+        <h3><em>CHAPTER 05</em>共用規則、修正與安全</h3>
+        <p>一句語音給所有 Bot 定規則、不滿意就派指揮中心去找技能重做、Skill 先掃再裝，以及它跟 Codex／OpenCode 的差別。</p>
+        <div class="foot"><div class="mini"><i data-mini="safety"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+
+    <div class="resources">
+      <h3>📦 <span>課程原始資料</span></h3>
+      <div class="res-grid">
+        <a href="ep53-grok-notes.html"><span class="ic">📝</span><span><b>課堂筆記</b>12 章＋10 張關鍵畫面，完整操作步驟</span></a>
+        <a href="../radio/"><span class="ic">📻</span><span><b>直播電台系列</b>回系列總覽，一集一卡</span></a>
+        <a href="ep53-notes.html"><span class="ic">🎙️</span><span><b>同晚 EP53</b>加播前的正片，接著看更完整</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-start" class="view" style="--c:var(--purple)"></section>
+  <section id="view-team" class="view" style="--c:var(--blue)"></section>
+  <section id="view-cloud" class="view" style="--c:var(--teal)"></section>
+  <section id="view-tools" class="view" style="--c:var(--pink)"></section>
+  <section id="view-safety" class="view" style="--c:var(--orange)"></section>
+</main>
+
+<footer>
+  本頁為直播電台加播場「Grok Bot 我也能快速上手（免費版可用）」課後整理・介面沿用本站互動式學習地圖版型<br>
+  內容版權屬原講者與電台，本頁為學習筆記；若原講者或電台希望撤下，來信告知即刻移除<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2026｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+const DATA = {
+  start: {
+    key:'start', color:'var(--purple)', emoji:'🚀', code:'CHAPTER 01', title:'從下載到第一個 Bot',
+    intro:'講師開場就把定位講清楚：Grok Bot 跟 ChatGPT 最大的差別，不是聰不聰明，是「一個機器人做一件事」。你建的每一個 Bot 都有名字、有任務、有頭像，畫面像通訊軟體的聯絡人，不像聊天紀錄。這一章從下載到第一個 Bot 建好，他親手做的只有一件事：建一個「指揮中心」。',
+    topics:[
+      {t:'下載、登入、免費試用要記到期日', s:'從 x.ai/bot 開始｜錄影 00:30–03:00', blocks:[
+        {h:'三個步驟',steps:[
+          '到 <b>x.ai/bot</b> 按右上角黑色 <b>Download</b>，Windows 或 Mac 它會自動判斷',
+          '登入可以綁 <b>Grok 帳號</b>或 <b>Cursor 帳號</b>，看你手上有哪個',
+          '想試用要<b>綁信用卡</b>，講師記得是送七天還是四天，他自己也沒把握']},
+        {h:'一定要記得的一句',warn:'「綁定記得，體驗使用就是時間到就是要會自動扣款，所以自己也要定一個時間。」［02:30］觀望期不用付費，但綁了卡就要自己記到期日。'},
+        {h:'它跟一般 AI 差在哪',p:'講師說它「不像 ChatGPT 那樣每一個旁邊都是類似的對話視窗」，而是<b>「一個機器人做一件事情」</b>。官網示範畫面左欄列的是 Account Manager、Talent Scout、Expense Manager——每個都是一個有職稱的 Bot。'},
+        {h:'實機畫面',shot:{img:'ep53-grok-img/01-xai-bot-download.jpg',cap:'x.ai/bot 官網。右上 Download，左欄是官方示範的四個「有職稱的 Bot」。［02:31］'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep53-grok-notes.html#sec-download" style="color:var(--purple)">筆記 2：它不是聊天視窗，免費版就能先玩</a>'}]},
+
+      {t:'按加號，回答它的三個問題', s:'新 Bot 的第一句不是「有什麼可以幫你」｜錄影 03:00–05:00', blocks:[
+        {h:'怎麼做',steps:[
+          '左上角按 <b>＋</b>，上方出現「收件者：搜尋或建立 Bot」',
+          '新 Bot 會先問<b>「你最希望我幫你做什麼？」</b>，給四個選項：工作與專案／日常安排／訊息與溝通／先聊聊再說',
+          '講師沒點選項，直接在輸入框打字：<b>「請作為一個 Bot 生產中心及號令中心」</b>',
+          '它接著問你的興趣，講師答：特斯拉、馬斯克、人型機器人、無人計程車，要一個新聞收集器']},
+        {h:'為什麼第一個 Bot 是「指揮中心」',tip:'講師的理由：「我有很多 Agent，但是我希望有個人可以幫我管管這些 Agent，什麼時候該哪個 Agent 出來。」<b>你只跟這一個講話，其他的它去建、它去管。</b>'},
+        {h:'對照講師簡報',p:'簡報第 4 頁的建議是「先選一個角色，不要一開始就包辦所有工作」、「短名稱＋單一工作＋做事方式」。新 Bot 開場那四個選項就是在逼你先選角色。'},
+        {h:'實機畫面',shot:{img:'ep53-grok-img/02-new-bot-onboarding.jpg',cap:'新 Bot 的第一句話與四個選項，講師在下方輸入框打字中。［04:01］'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep53-grok-notes.html#sec-firstbot" style="color:var(--purple)">筆記 3：先建「指揮中心」</a>'}]},
+
+      {t:'讓指揮中心自己生子 Bot，並設好排程', s:'這堂課最值得看的一幕｜錄影 05:00–07:30', blocks:[
+        {h:'發生了什麼',p:'講師講完興趣之後，指揮中心<b>自己把「特斯拉情報」這個 Bot 建出來了</b>，還回報兩件事：1. 已派特斯拉情報跑第一輪（近 7 天、四主題、標來源、分事實／傳聞）；2. <b>每日摘要已設：週一到週五、台北時間早上 8:00</b>。'},
+        {h:'關鍵一句',tip:'「記得它跟一般的 Agent 不同的是，<b>它是建立 Bot，它不是建立聊天室</b>。」［05:59］側邊欄多的是一個「人」，不是一段對話。'},
+        {h:'側邊欄看不到新 Bot？',warn:'講師當場遇到「我側邊欄找不到」。指揮中心回：「其實已經建好了，在側邊欄應該看得到。」他的處理是<b>關掉軟體重新開啟</b>，Bot 就在那裡了——畫面沒刷新而已。'},
+        {h:'排程在哪裡看',p:'點進特斯拉情報右側的「例行任務」欄，看得到 <b>特斯拉情報每日摘要 Weekdays at 8:00 AM (Asia/Taipei)</b>。簡報第 9 頁的建議是：先測試、再排程，穩定的技能才適合加排程。'},
+        {h:'實機畫面',shot:{img:'ep53-grok-img/03-command-center-dispatch.jpg',cap:'指揮中心回報「兩件事都好了」，並問要再開一個同名的還是再派一輪。［07:01］'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep53-grok-notes.html#sec-firstbot" style="color:var(--purple)">筆記 3：第二步，講你要什麼，它自己去建子 Bot</a>'}]},
+
+      {t:'改名、編輯個人資料、給頭像', s:'名字就是職稱，群聊派工靠它認人｜錄影 07:30–09:00', blocks:[
+        {h:'三件事',ul:[
+          '<b>重新命名</b>——第一個「新 Bot」改叫「指揮中心」，子 Bot 叫「特斯拉情報」',
+          '<b>編輯個人資料</b>——講師形容那是它的 <b>agents.md</b>：它剛剛自己寫的任務描述，你可以再加標籤',
+          '<b>設定頭像</b>——可以叫它「產生」一張圖（講師給特斯拉情報一台無人車），也可以上傳']},
+        {h:'頭像會吃額度',warn:'「這些都是有容量限制的，只是現在玩起來大家可能覺得蠻有趣的。」產生頭像會消耗 Token，好玩歸好玩，額度有限。'},
+        {h:'再來一個',p:'同樣的做法再叫指揮中心生一個<b>「簡報製作」</b>Bot，並派工：用特斯拉情報收回來的資料做一份 8 到 10 分鐘的內部簡報。畫面上簡報製作沒馬上跳出來，講師直接把視窗關掉——「關掉它會繼續做」。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep53-grok-notes.html#sec-firstbot" style="color:var(--purple)">筆記 3：第三步與第四步</a>'}]}
+    ]
+  },
+
+  team: {
+    key:'team', color:'var(--blue)', emoji:'👥', code:'CHAPTER 02', title:'多 Bot 分工：群組聊天與派工',
+    intro:'有了三四個 Bot 之後，講師做了一件他形容為「瘋群戰術」的事：把它們全部拉進同一個群組。接下來他只講了一句話，其餘全是 Bot 之間在對話——誰先做、誰等誰、誰檢查誰、誰宣布完成，一則一則攤在你眼前。',
+    topics:[
+      {t:'建群組聊天，把所有 Bot 拉進來', s:'像 Line 群組一樣｜錄影 10:30–12:00', blocks:[
+        {h:'怎麼建',steps:[
+          '按 <b>＋</b> 建立新聊天，在「收件者」裡<b>把所有 Bot 都加進來</b>（講師用 Ctrl 多選）',
+          '群組建好後標題列會列出所有成員，右側「成員」欄也看得到每一個 Bot',
+          '先丟一句<b>「大家介紹自己」</b>，每個 Bot 會依序跳出來說自己負責什麼']},
+        {h:'講師的比喻',p:'「有點像你在 Line 裡面，Line 裡面每個機器人就會開始介紹它是誰。」他也說平常不需要叫它們自我介紹，「我只是要給你看它可以做這樣」。'},
+        {h:'實機畫面',shot:{img:'ep53-grok-img/04-group-chat-intro.jpg',cap:'指揮中心、特斯拉情報、每日最新資訊產生依序自我介紹。［12:46］'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep53-grok-notes.html#sec-group" style="color:var(--blue)">筆記 4：怎麼建群組</a>'}]},
+
+      {t:'一句話啟動派工，做出三頁簡報', s:'你講一句，它們自己分工｜錄影 12:00–16:30', blocks:[
+        {h:'那一句',prompt:'大家討論一下，我想要介紹 Optimus 的三頁簡報'},
+        {h:'群組裡發生的分工',table:{head:['誰','做了什麼'],rows:[
+          ['<b>指揮中心</b>','先派工：特斯拉情報「先補一版資訊」、簡報製作「等素材到位再出三頁」、課程輔助「先待命」'],
+          ['<b>特斯拉情報</b>','整理素材包：官方現況、產線、接下來追什麼'],
+          ['<b>簡報製作</b>','拿素材寫三頁草稿，交回群組'],
+          ['<b>特斯拉情報</b>（再上場）','當檢查者：「素材對得上，三頁沒有超譯，我這邊沒有要改的」'],
+          ['<b>指揮中心</b>（收尾）','宣布定稿，「要改受眾或做成投影片再說」']]}},
+        {h:'關鍵一句',tip:'「叫指揮中心幫你派。你就不用一個一個製作你的 Bot。然後指揮中心也會幫你指揮。<b>它就是你的幕僚。</b>」［14:29］'},
+        {h:'成品',p:'21:00 左右指揮中心回報「pptx 做好了，檔案已私訊給你」，放在 <b>C:\\Users\\User\\Optimus_3pages.pptx</b>。講師打開看了一眼：三頁、深底、講者備註在備註欄——「我沒有灌給它任何的 Skill，那就先做一個簡單很粗版的」。'},
+        {h:'實機畫面',shot:{img:'ep53-grok-img/05-group-chat-slides-final.jpg',cap:'簡報製作交出三頁草稿，特斯拉情報確認沒超譯，指揮中心宣布定稿。［16:01］'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep53-grok-notes.html#sec-group" style="color:var(--blue)">筆記 4：一句話啟動</a>'}]},
+
+      {t:'多加一個檢查者', s:'講師特別點出的一步｜錄影 15:31', blocks:[
+        {h:'他看到了什麼',p:'特斯拉情報做完資料之後，回頭檢查簡報製作的成品：「素材我發現你都有用，你沒有亂講，你是對的，我這邊沒有要改的。」<b>收集資料的人變成了檢查簡報的人。</b>'},
+        {h:'建議',tip:'「所以你可以再多一個這個<b>檢查者</b>，或者是這個<b>上台要上簡報的人</b>。」讓 Bot 們先互相對過，再交到你手上。這對應簡報第 10 頁「主 Bot 拆任務，專業 Bot 各自交付」，以及「多 Bot 的價值在清楚交接，不在數量越多越好」。'},
+        {h:'什麼時候該加',ul:[
+          '<b>資料型任務</b>——加一個「來源核對者」，只看有沒有亂講',
+          '<b>對外文件</b>——加一個「假裝是收件人」的 Bot，先讀一遍',
+          '<b>簡報</b>——加一個「要上台的人」，看講不講得順']},
+        {h:'看課堂筆記',p:'👉 <a href="ep53-grok-notes.html#sec-group" style="color:var(--blue)">筆記 4：你可以再多一個「檢查者」</a>'}]}
+    ]
+  },
+
+  cloud: {
+    key:'cloud', color:'var(--teal)', emoji:'☁️', code:'CHAPTER 03', title:'Bot 的雲端電腦與設定',
+    intro:'講師講了三次「關掉它會繼續做」。理由只有一個：每一個 Bot 都有自己的雲端電腦，裡面有終端機、有 Chrome，它查資料、做簡報全在那台機器上跑，不吃你的電腦。這一章把散在三個時間點的說明合在一起，加上設定頁裡值得看的四個地方。',
+    topics:[
+      {t:'關掉視窗它繼續做，不搶你的滑鼠', s:'為什麼敢關｜錄影 10:00 · 13:00–13:40', blocks:[
+        {h:'原話',p:'「因為它的運作不是靠你的電腦。它也不會搶你電腦的滑鼠。」［10:00］'},
+        {h:'它的電腦長什麼樣',p:'點開指揮中心右側的「螢幕」，是一個獨立畫面，裡面有<b>終端機</b>、有 <b>Chrome</b>。講師說：「這邊有一台電腦，它們有一個雲端電腦，這邊是它雲端電腦的運作空間。它不是吃你的電腦，它是吃它放在雲端的資料。」'},
+        {h:'跟其他 Agent 的差別',tip:'「如果大家有用 Agent 應該知道，在做簡報的時候它會搶你的東西。」Grok Bot 不會，因為它根本不在你的桌面上操作。要它碰你的本機也可以，但那是你另外開的權限：「它不會跟你搶桌面，但是如果你要讓它控制你的桌面也可以。」［24:28］'},
+        {h:'對照講師簡報',p:'簡報第 6 頁「關鍵差異：Bot 有自己的雲端電腦」——獨立環境、操作工具、看得見、持續運作。你的筆電關機，它仍可在背景繼續工作。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep53-grok-notes.html#sec-cloud" style="color:var(--teal)">筆記 5：Bot 有自己的雲端電腦</a>'}]},
+
+      {t:'手機版接手，電腦可以關機', s:'跟手機控制 Codex 一樣｜錄影 23:59', blocks:[
+        {h:'原話',p:'「行動版本的，你就手機就跟你的手機控制 Codex 一樣，<b>只是你的電腦可以關機了</b>。」'},
+        {h:'意思是',ul:[
+          '指揮中心的回報會傳到手機',
+          '你在外面也能派工、也能看進度',
+          '因為 Bot 跑在雲端，電腦開不開機跟它無關']},
+        {h:'看課堂筆記',p:'👉 <a href="ep53-grok-notes.html#sec-cloud" style="color:var(--teal)">筆記 5：這件事對你的三個意義</a>'}]},
+
+      {t:'設定頁裡值得看的四個地方', s:'用量、硬體加速、時區、自動審核｜錄影 24:00–25:30', blocks:[
+        {h:'四項',table:{head:['項目','講師怎麼說'],rows:[
+          ['<b>用量與帳單</b>','「我現在用了 11，所以其實沒有很多」，額度「4 天後重置」'],
+          ['<b>使用硬體加速</b>','「你的電腦的 GPU 如果夠強，它會更快、更好使用。」他用一般筆電所以沒開'],
+          ['<b>時區</b>','自動偵測（Asia/Taipei），排程任務靠它算時間'],
+          ['<b>自動審核</b>','「你可以告訴它，什麼時候要問你，什麼時候不用問你。」']]}},
+        {h:'自動審核就是安全閘門',tip:'簡報第 11 頁「明確禁區：付款、發布、刪除前必須批准」，在設定裡就是這一格。第 5 章的共用規則是用講的，這裡是用設定的，兩邊都要。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep53-grok-notes.html#sec-cloud" style="color:var(--teal)">筆記 5：設定頁裡值得看的四個地方</a>'}]}
+    ]
+  },
+
+  tools: {
+    key:'tools', color:'var(--pink)', emoji:'🔌', code:'CHAPTER 04', title:'連接器與技能',
+    intro:'連接器是「接工具」，技能是「教做法」。講師說連接器這段是他對 Grok Bot 最滿意的：一句話，它自己判斷要同時連行事曆和 Drive、自己問你要不要加、先列預設值再動手。技能那段示範沒完全成功，他照樣講完，本章也照實記。',
+    topics:[
+      {t:'市集：外掛程式與現成的 Bot', s:'左下角那個「市集」｜錄影 16:30–17:30', blocks:[
+        {h:'兩個分頁',ul:[
+          '<b>外掛程式</b>——連接器，分精選／文件與檔案／付款／生產力／收件匣與協作／客戶支援／研究',
+          '<b>Bot</b>——別人寫好的 Bot，可以直接拿來用']},
+        {h:'精選區有什麼',p:'<b>Gmail、Google Calendar、Google Drive、Granola、Notion、Slack</b>。Notion 與 Slack 的說明直接寫著「MCP server」——這就是講師口中「它也有一些所謂的 MCP」的意思。畫面上寫著「已安裝 4 個 · 1 個私人」。'},
+        {h:'一個名詞上的提醒',warn:'講師口述中「連接器／外掛程式」與「MCP」是混著講的。畫面上能確認的是：部分外掛程式明確標示 MCP server，但 Google 行事曆與 Drive 是否走 MCP 看不出來。筆記照原話保留他的用詞。'},
+        {h:'實機畫面',shot:{img:'ep53-grok-img/06-marketplace-connectors.jpg',cap:'市集的外掛程式分頁，Google Calendar 與 Google Drive 已新增。［17:16］'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep53-grok-notes.html#sec-connector" style="color:var(--pink)">筆記 6：市集裡有什麼</a>'}]},
+
+      {t:'一句話開 Google 行事曆座談會，存成 Docs', s:'講師最滿意的一段｜錄影 17:30–21:00', blocks:[
+        {h:'他打的那句',prompt:'幫我在 google 行事曆 開啟一個線上座談會 09/11 21:00，把直播連結 儲存成 google docs後給我'},
+        {h:'這句的設計',p:'座談會的<b>名稱沒給，時間有給</b>；「直播連結」沒說哪個平台，讓它自己判斷會用 Google Meet。'},
+        {h:'Bot 做的四件事',steps:[
+          '先檢查連接器有沒有接上，<b>沒接上會主動問你要不要加</b>，不用自己去市集找',
+          '判斷這件事要<b>同時用到行事曆和 Drive</b>，一次連兩個',
+          '動手前先列<b>預設值</b>（今天 9/11 21:00、1 小時、標題「線上座談會」、產生 Meet），你回「繼續」才做',
+          '做完回傳 Meet、Docs、行事曆活動三個連結，講師打開行事曆確認都在']},
+        {h:'講師的評價',tip:'「我覺得它有時候比 OpenCode，有時候也比 Claude Code 稍微順暢一點點。」［19:59］「光那個剛剛的 MCP 的連線我就覺得還蠻滿意的，它可以一口氣蠻聰明的就告訴你說我要開行事曆也要開 Google 的雲端。」［27:59］'},
+        {h:'實機畫面',shot:{img:'ep53-grok-img/07-calendar-drive-connector.jpg',cap:'Bot 先問要不要加連接器，加好後列出預設值，等你回「繼續」。［20:21］'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep53-grok-notes.html#sec-connector" style="color:var(--pink)">筆記 6：實測，一句話開座談會＋存 Docs</a>'}]},
+
+      {t:'技能從哪裡來：GitHub、現成 Bot、地端模型', s:'三條路｜錄影 21:30–22:30', blocks:[
+        {h:'三條路',ul:[
+          '<b>從 GitHub 拿</b>——市集裡可以「GitHub 新增連線」，它會要你填一些值；講師建議「請它幫你新增比較快」',
+          '<b>用別人寫好的 Bot</b>——市集的 Bot 分頁有現成的',
+          '<b>在它的雲端電腦裝地端開源模型</b>——「比如說你要做 DeepSeek 的，都可以放在裡面，你就用它的終端機打開。」他今天沒示範']},
+        {h:'先有技能，簡報才會好看',tip:'「我沒有灌給它任何的 Skill。那就先做一個簡單很粗版的。<b>你給它 Skill 之後它會做得更好。</b>」［21:59］成品不好看，先想的是「少了什麼技能」，不是「換個工具」。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep53-grok-notes.html#sec-skill" style="color:var(--pink)">筆記 7：技能從哪裡來，三條路</a>'}]},
+
+      {t:'「教它一項任務」：錄下你的操作讓它學', s:'示範沒成功，照實記｜錄影 22:30–24:00', blocks:[
+        {h:'怎麼做',steps:[
+          '在指揮中心畫面點<b>「教它一項任務」</b>',
+          '它會說：「錄下你執行任務的過程。指揮中心會學習這些步驟，之後可以自行再次執行。」按<b>開始錄製</b>',
+          '頂端顯示<b>「指揮中心 正在觀看並學習」</b>，紅框裡是它的雲端桌面，你在裡面操作',
+          '按關閉，它會確認這段要不要做成技能']},
+        {h:'當天發生了什麼',warn:'講師本來要示範打開終端機、開 Word、搜 Google Map，但網路太慢卡住，只錄到打開 Chrome 就關掉。指揮中心回：「錄影看完了：大概是開 Chrome → 點搜尋框 → 沒輸入 → 關掉。<b>沒有完成某個可重用流程，所以這次我先不做成 skill。</b>」講師選了「先算了」。'},
+        {h:'這段其實很有價值',tip:'它證明 Bot 不會把一段沒意義的操作硬存成技能。簡報第 8 頁的說法是：「<b>技能不是錄影重播，而是可檢查的工作方法</b>」——示範或說明 → 檢查草稿 → 設定邊界 → 安全測試。'},
+        {h:'排程也在這裡',p:'錄製的下方就是<b>排程</b>（例行任務）。第 1 章特斯拉情報那個「週一到週五早上 8 點」就是這種。簡報第 9 頁：先測試、再排程；你的筆電關機也能背景執行。'},
+        {h:'實機畫面',shot:{img:'ep53-grok-img/08-teach-task-recording.jpg',cap:'「指揮中心 正在觀看並學習」，紅框內是它的雲端桌面，底部有 Chrome 與終端機。［23:21］'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep53-grok-notes.html#sec-skill" style="color:var(--pink)">筆記 7：教它一項任務</a>'}]}
+    ]
+  },
+
+  safety: {
+    key:'safety', color:'var(--orange)', emoji:'🛡️', code:'CHAPTER 05', title:'共用規則、修正與安全',
+    intro:'最後五分鐘講師補了他認為「既然要讓這些 Agent 做事情有共識」就一定要做的一件事：用一句語音給所有 Bot 定共用規則。接著示範怎麼用同一條指揮鏈修東西——簡報不好看，不是自己改，是叫指揮中心去找技能。最後是 Skill 安全。',
+    topics:[
+      {t:'一句語音，寫進所有 Bot 的共用記憶', s:'統一的教育訓練｜錄影 25:30–27:00', blocks:[
+        {h:'他對指揮中心講的（語音辨識逐字）',prompt:'我要做一個共同的規則，那所有的，欸，bot都要遵守。首先，這個bot，呃，大家做什麼事情之前，以快速能夠完成為主，但是你要刪我資料或處理我資料的時候，必須先告訴我。好，那完成這個，幫我儲存在你的共用資料庫，你的雲端螢幕裡面，雲端電腦裡面，讓所有的bot共享都遵守這個規則。'},
+        {h:'指揮中心整理成兩條',ul:[
+          '<b>1.</b> 做事以快速完成為優先',
+          '<b>2.</b> 要刪、改、搬、清空你的既有資料，或做破壞性／不可逆處理前，必須先跟你說並確認']},
+        {h:'然後它自己去公告',p:'「我也在群組裡跟各 bot 公告了。」切到群組畫面，每個 Bot 都回「收到」。'},
+        {h:'比喻',tip:'「<b>你就做一個統一的教育訓練。所有人都聽你講話。</b>」［26:28］規則存進雲端電腦，之後新建的 Bot 也不用重新交代你是誰。'},
+        {h:'順序建議',warn:'講師是在 Bot 已經能連 Google Drive 之後才補這條的——<b>反過來會更好</b>：先定規則，再給權限。簡報第 11 頁的 7 天上線階梯是第 1 天單次任務、第 3 天保存技能、第 7 天加入排程。'},
+        {h:'實機畫面',shot:{img:'ep53-grok-img/09-shared-rule-all-bots.jpg',cap:'黑框是語音原文，指揮中心回「好，我把這條寫進所有 bot 共用的規則裡」。［26:31］'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep53-grok-notes.html#sec-rules" style="color:var(--orange)">筆記 8：一句語音，寫進所有 Bot 的共用記憶</a>'}]},
+
+      {t:'不滿意簡報？派指揮中心去找技能重做', s:'同一條指揮鏈修東西｜錄影 27:00–31:00', blocks:[
+        {h:'他講的',p:'「我對簡報製作的 Bot 所製作的簡報非常不滿意，請上網去幫我抓一些 skill，讓它在製作簡報上更有美感、更有藝術感。」然後就不管了。'},
+        {h:'三分鐘後指揮中心回報',steps:[
+          '已升級<b>「簡報製作」人設</b>，要求之後強制套用該 skill',
+          '參考了<b>開源 presentation skill</b> 與 2026 簡報設計原則；你已有 Canva 可用',
+          '自己提議：還有 <b>Superdesign</b> 插件（專做簡報／視覺畫布）尚未安裝，要我裝上嗎？',
+          '講師連點兩個 A：安裝 Superdesign → 重做 Optimus 三頁']},
+        {h:'成品',p:'31 分鐘處「美感版三頁」出來：深底＋科技紅、英雄句、雙欄、追蹤清單節奏，檔案 <b>Optimus_三頁_美感版.pptx</b>。指揮中心還誠實補一句：Superdesign 裝了但這個會話裡還沒出現畫布工具，「跟我說一聲，我下一輪再抓 skill 路徑重跑」。'},
+        {h:'關鍵一句',tip:'「<b>靠指揮中心控制就好。你就不用那麼麻煩。因為它會回報啦。</b>」［28:59］後面 Bot 之間來來回回的訊息很多，但你不用看，只看指揮中心的回報。'},
+        {h:'實機畫面',shot:{img:'ep53-grok-img/10-superdesign-skill.jpg',cap:'指揮中心回報已升級簡報製作人設，並提議安裝 Superdesign 重做三頁。［29:31］'}},
+        {h:'看課堂筆記',p:'👉 <a href="ep53-grok-notes.html#sec-rules" style="color:var(--orange)">筆記 8：不滿意簡報？叫指揮中心去找技能</a>'}]},
+
+      {t:'Skill 先掃再裝', s:'收尾前的安全提醒｜錄影 29:33', blocks:[
+        {h:'原話',warn:'「<b>那個 Skill 要小心。</b>……不要讓它去抓你的 API，不要去抓你的帳號密碼，不要去讀你的相關的文件。」'},
+        {h:'他的做法',p:'裝一個專門「<b>掃讀</b>」的 Bot——「所謂的掃讀不是掃病毒，是掃有沒有程式，Skill 裡面藏這些東西。」很多人下載 GPT 或各種 Skill 時都可以先這樣掃一次。他補一句：「還好我這台電腦裡面沒什麼重要的東西，基本上空的。」'},
+        {h:'掃什麼',ul:[
+          '有沒有把你的資料<b>回傳到外部網址</b>',
+          '有沒有去讀 <b>API 金鑰、帳號密碼</b>',
+          '有沒有去讀<b>跟任務無關的文件</b>']},
+        {h:'對照簡報',tip:'簡報第 11 頁「第一週上線：安全交付檢查表」——最小權限、明確禁區、保留證據、人工驗收；「Grok Bot 使用雲端資料儲存，敏感資料先確認政策」。'},
+        {h:'看課堂筆記',p:'👉 <a href="ep53-grok-notes.html#sec-rules" style="color:var(--orange)">筆記 8：Skill 要先掃再裝</a>'}]},
+
+      {t:'它跟 Codex、OpenCode、Claude Code 差在哪', s:'講師的誠實比較｜錄影 27:44–30:30', blocks:[
+        {h:'三點',table:{head:['面向','講師怎麼說'],rows:[
+          ['<b>速度</b>','「我覺得不比 Codex 或不比 OpenCode 來的快」，但「有時候 Codex 或 OpenCode 因為你灌了太多的 Skill 反而變慢很多」'],
+          ['<b>指揮中心</b>','「Codex、Claude Code 目前沒有，但是可以寫一個指揮中心。只是官方出的一定會比較順，自己寫的會慢一點。」'],
+          ['<b>概念</b>','他前幾天在社群分享過「讓各自的 Agent 各自做事」——今天叫 Codex、今天叫 DeepSeek、今天叫 OpenCode——「一樣的意思，只是它這邊全部都是 Grok 本身」']]}},
+        {h:'最滿意的是',tip:'MCP 連線那段：「它可以一口氣蠻聰明的就告訴你說我要開行事曆也要開 Google 的雲端，它就兩個一起幫我開。」'},
+        {h:'一句話總結這堂',p:'「<b>你記得每一個機器人都是有任務的。它是機器人，它不是聊天視窗。</b>」［20:37］'},
+        {h:'看課堂筆記',p:'👉 <a href="ep53-grok-notes.html#sec-real" style="color:var(--orange)">筆記 9：這堂課真正在教的事</a>'}]}
+    ]
+  }
+}
+;
+
+
+const ORDER = ['start','team','cloud','tools','safety'];
+const $ = s=>document.querySelector(s);
+function renderChapter(ch){
+  const d=DATA[ch];const next=ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];const prev=ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html=`<div class="chapter-head"><span class="emoji">${d.emoji}</span><div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div></div>`;
+  d.topics.forEach((tp,i)=>{const id=`${ch}-${i}`;
+    html+=`<div class="topic" id="topic-${id}"><div class="topic-head" onclick="toggleTopic('${id}')"><span class="num">${i+1}</span><h4>${tp.t}<small>${tp.s}</small></h4><input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)"><span class="chev">▶</span></div><div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{html+=`<div class="block"><h5>${b.h}</h5>`;
+      if(b.p)html+=`<p>${b.p}</p>`;
+      if(b.ul)html+=`<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps)html+=`<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.table)html+=`<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.prompt)html+=`<div class="promptbox">${b.prompt}</div>`;
+      if(b.shot)html+=`<figure class="shot"><img src="${b.shot.img}" alt="" loading="lazy"><figcaption>${b.shot.cap}</figcaption></figure>`;
+      if(b.tip)html+=`<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn)html+=`<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html+=`</div>`;});
+    html+=`</div></div></div>`;});
+  html+=`<div class="chapnav"><a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a><a onclick="showHome()" style="text-align:center">回總覽<b>🏠 五大主題</b></a><a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a></div>`;
+  $('#view-'+ch).innerHTML=html;
+}
+ORDER.forEach(renderChapter);
+function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('#view-'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function showHome(){switchView('home');$('#crumbs').style.display='none';clearSearch();}
+function showChapter(ch){switchView(ch);$('#crumbs').style.display='flex';$('#crumbHere').textContent=`${DATA[ch].emoji} ${DATA[ch].title}`;clearSearch();syncChecks();}
+function toggleTopic(id){$('#topic-'+id).classList.toggle('open');}
+function openTopic(ch,i){showChapter(ch);const el=$('#topic-'+ch+'-'+i);el.classList.add('open');setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+const KEY='ep53-grok-skills-v1';
+const store=()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){const s=store();if(val)s[id]=1;else delete s[id];localStorage.setItem(KEY,JSON.stringify(s));updateProgress();}
+const TOTAL=ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){const done=Object.keys(store()).length;const pct=Math.round(done/TOTAL*100);$('#progFill').style.width=pct+'%';$('#progText').textContent=`${done} / ${TOTAL} 項技能已掌握`;$('#statDone').textContent=done;$('#statPct').textContent=pct+'%';ORDER.forEach(ch=>{const sub=DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;const el=document.querySelector(`[data-mini="${ch}"]`);if(el)el.style.width=Math.round(sub/DATA[ch].topics.length*100)+'%';});}
+function syncChecks(){const s=store();document.querySelectorAll('input[data-skill]').forEach(cb=>{cb.checked=!!s[cb.dataset.skill];});}
+function resetProgress(){if(confirm('確定要清空所有打勾進度嗎？')){localStorage.removeItem(KEY);syncChecks();updateProgress();}}
+function stripTags(s){return s.replace(/<[^>]+>/g,'');}
+const INDEX=[];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{let body=tp.s+' ';tp.blocks.forEach(b=>{if(b.p)body+=stripTags(b.p)+' ';if(b.ul)body+=b.ul.map(stripTags).join(' ')+' ';if(b.steps)body+=b.steps.map(stripTags).join(' ')+' ';if(b.tip)body+=stripTags(b.tip)+' ';if(b.warn)body+=stripTags(b.warn)+' ';if(b.prompt)body+=stripTags(b.prompt)+' ';if(b.table)body+=b.table.rows.flat().map(stripTags).join(' ')+' ';});INDEX.push({ch,i,title:tp.t,body});}));
+$('#searchInput').addEventListener('input',e=>{const q=e.target.value.trim();const box=$('#searchResults');if(!q){box.classList.remove('show');box.innerHTML='';return;}const hits=INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));box.classList.add('show');if(!hits.length){box.innerHTML=`<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：指揮中心、排程、群組、連接器、行事曆、教它一項任務、共用規則、Skill）</div>`;return;}const hl=s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);box.innerHTML=hits.map(x=>{const pos=x.body.toLowerCase().indexOf(q.toLowerCase());const snip=x.body.substr(Math.max(0,pos-20),90);return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})"><div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div><h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;}).join('');});
+function clearSearch(){$('#searchInput').value='';$('#searchResults').classList.remove('show');$('#searchResults').innerHTML='';}
+syncChecks();updateProgress();
+</script>
+</body>
+</html>
