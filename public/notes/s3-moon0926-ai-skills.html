@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>三位學員上台分享，把做過一次的事變成別人也能用的東西｜ECF 中秋特別活動 互動式學習地圖</title>
+<meta name="description" content="ECF 訂閱制第三季中秋特別活動（2026/09/26）互動式學習地圖：五大主題 23 項實戰技能，涵蓋地球陪伴系列三部曲直播地圖網站為什麼會紅、隱藏功能與時刻表、爆紅後的 Vercel 帳單與贊助幣別、韋哥的 AI 制度中樞與知識卡、橘子老師用 Codex 把 Gem 轉成全域 Skill 並打造風格學習庫、AGENTS.md、WASM 布網防君子不防小人、Little-shot 到 One-shot 與 Loop Engineering、台股與八字兩支工具的界線，以及策略圖表製作專案的兩次示範。學會一項打一個勾，進度存在自己的瀏覽器。">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269;
+  --green:#3f8560; --orange:#bf6a1e; --red:#c0453f; --teal:#0d8f80; --amber:#9c7b23; --rose:#b5476a;
+  --feat:#A0641F; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(28px,4.6vw,46px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--txt);background:none;-webkit-text-fill-color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:680px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:9px}
+.steps li{list-style:none;counter-increment:st;display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--txt2);line-height:1.7}
+.steps li::before{content:counter(st);flex:none;width:25px;height:25px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:var(--c,var(--feat));margin-top:1px}
+.steps li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+.prompt,.promptbox{background:#1d1d1f;border:1px solid #2c2c31;border-radius:10px;padding:13px 15px;margin-top:6px;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt b,.promptbox b{color:#fff}
+figure.shot{margin:10px 0 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12px;color:var(--txt3);padding:8px 12px;border-top:1px solid var(--line);background:var(--bg2);line-height:1.6}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <a class="navlink" href="../radio/#ecf" style="border-color:#e3d1bd" onclick="if(history.length>1){history.back();return false}">← 回上一頁</a>
+  <div class="logo">
+    <div class="dot">🌕</div>
+    <div>中秋特別活動 地圖<small>SUBSCRIPTION S3 · MOON FESTIVAL</small></div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋技能關鍵字：直播、Vercel、贊助、制度、交付區、知識卡、Gem、全域 Skill、風格、比例、AGENTS.md、WASM、Sites、Little-shot、盲盒、策略圖表…" autocomplete="off">
+  </div>
+  <a class="navlink" href="s3-moon0926-notes.html">📝 課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">ECF 中秋特別活動 · 訂閱制第三季 · 2026/09/26</span>
+  <h1>三位學員上台分享<br>把做過一次的事變成別人也能用的東西</h1>
+  <p class="sub">中秋夜的線上同樂會。李佳恩老師的<b>地球陪伴系列三部曲</b>兩週破兩萬造訪；韋哥用一張圖講完<b>Claude 與 Codex 的分工制度</b>；橘子老師現場把「學一種畫風」整條流程<b>存成一個 Skill</b>。<br>益師傅接手送出兩支工具，示範 AGENTS.md、<b>WASM 布網</b>與<b>策略圖表製作</b>，中間講了 Little-shot 到 One-shot。<br>點進每一章，逐層展開<b>本場實際講到</b>的做法、示範與提醒，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🎙️ 生成式AI應用電台・訂閱制第三季</span>
+    <span>👤 益師傅＋三位學員分享</span>
+    <span>⏱️ 全長 3 小時 4 分</span>
+    <span>🔰 小白友善</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>5</b><span>大主題</span></div>
+  <div class="stat"><b>23</b><span>實戰技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 23 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--blue)" onclick="showChapter('globe')">
+        <div class="glowline"></div><span class="emoji">🌍</span>
+        <h3><em>CHAPTER 01</em>地球陪伴系列三部曲</h3>
+        <p>一個兩週破兩萬造訪的直播地圖網站：為什麼會紅、隱藏功能怎麼用、火車時刻表怎麼算，以及爆紅之後的帳單。</p>
+        <div class="foot"><div class="mini"><i data-mini="globe"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--amber)" onclick="showChapter('hub')">
+        <div class="glowline"></div><span class="emoji">🗂️</span>
+        <h3><em>CHAPTER 02</em>韋哥的 AI 制度中樞</h3>
+        <p>Claude 規劃審查、Codex 執行、交付區當月臺、禁區清單、人工當 API 的理由，還有知識卡與 Style MD。</p>
+        <div class="foot"><div class="mini"><i data-mini="hub"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--green)" onclick="showChapter('style')">
+        <div class="glowline"></div><span class="emoji">🎨</span>
+        <h3><em>CHAPTER 03</em>Codex 打造風格學習庫</h3>
+        <p>Gem 轉全域 Skill、工作與對話的差別、34 頁圖像集變提示詞模板、調比例，最後把整段流程存成一個 Skill。</p>
+        <div class="foot"><div class="mini"><i data-mini="style"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--rose)" onclick="showChapter('wasm')">
+        <div class="glowline"></div><span class="emoji">🔐</span>
+        <h3><em>CHAPTER 04</em>AGENTS.md 與 WASM 布網</h3>
+        <p>Codex 的個人設定檔、WASM 防君子不防小人、布網指令的三個關鍵、無痕驗證，以及 Little-shot 到 One-shot。</p>
+        <div class="foot"><div class="mini"><i data-mini="wasm"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--purple)" onclick="showChapter('gift')">
+        <div class="glowline"></div><span class="emoji">🎁</span>
+        <h3><em>CHAPTER 05</em>兩支工具與策略圖表製作</h3>
+        <p>台股 AI 主力行為判讀系統的界線、八字姓名合參 V4 新功能、ChatGPT 專案再教一次、策略圖表要自己判斷有沒有唬爛。</p>
+        <div class="foot"><div class="mini"><i data-mini="gift"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+    <div class="resources">
+      <h3>📚 <span>延伸資源</span></h3>
+      <div class="res-grid">
+        <a href="s3-moon0926-notes.html"><span class="ic">📝</span><span><b>課堂筆記完整版</b>19 章、35 張精選截圖、23 則金句</span></a>
+        <a href="https://drive.google.com/drive/folders/1F0UUSC0eNp9PLOV5KUGHNgfw7zvcrSgL" target="_blank" rel="noopener"><span class="ic">📁</span><span><b>課程資料夾（Google Drive）</b>錄影與七份教材，需登入</span></a>
+        <a href="s3-bonus2-notes.html"><span class="ic">🧩</span><span><b>對照：提示詞工程補充課</b>Little-shot 與 One-shot 的完整版</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-globe" class="view" style="--c:var(--blue)"></section>
+  <section id="view-hub" class="view" style="--c:var(--amber)"></section>
+  <section id="view-style" class="view" style="--c:var(--green)"></section>
+  <section id="view-wasm" class="view" style="--c:var(--rose)"></section>
+  <section id="view-gift" class="view" style="--c:var(--purple)"></section>
+</main>
+
+<footer>
+  本頁為訂閱制第三季 中秋特別活動（學員分享會）課後整理・介面沿用本站互動式學習地圖版型<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2026｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+const DATA = {
+  globe: {
+    key:'globe', color:'var(--blue)', emoji:'🌍', code:'CHAPTER 01', title:'地球陪伴系列三部曲',
+    intro:'第一位分享者李佳恩老師（南大附中、Studio0808 智造實驗室）做了三個互相連結的網站：全球動物現場、全球城市現場、全球交通現場。一顆可以轉的地球，點圖釘就打開那個地方的 YouTube 直播。他說沒有要講技術，但這一章有很多做網站的人不會告訴你的事。',
+    topics:[
+      {t:'為什麼會紅：真實的直播，不是 AI 影片', s:'兩週破兩萬造訪的原因｜錄影 02:00–10:00', blocks:[
+        {h:'發文順序其實是反的',p:'城市網站先發，兩週只有一兩百次造訪。動物網站發到一個<b>企鵝社團</b>（因為女兒喜歡企鵝），五千多個讚、一千多次分享。'},
+        {h:'他自己的判斷',tip:'「都是直播的部分，不是那種 AI 的影片，非常真實呈現在人面前。」以及「<b>你在動物園看不到這些動物在一起</b>」，非洲水坑同時有長頸鹿、羚羊、斑馬、大象。'},
+        {h:'一個技巧',p:'直播鏡頭大部分時間沒東西，但 YouTube 直播可以<b>拖曳時間軸往回看</b>，找到當地傍晚企鵝上岸的畫面。'},
+        {h:'實機畫面',shot:{img:'s3-moon0926-img/01-trilogy-poster.jpg',cap:'三部曲海報，右上角「7 天突破 20,000+ 造訪」。［01:47］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-moon0926-notes.html#sec-animalia" style="color:var(--blue)">筆記 2：一個兩週破兩萬造訪的網站是怎麼來的</a>'}]},
+
+      {t:'隱藏功能：天氣篩選、混音、番茄鐘、沉浸模式', s:'他說不講大家不會知道｜錄影 10:00–20:00', blocks:[
+        {h:'出發點很生活',p:'深夜讀書覺得無聊，需要一個漂亮的畫面陪你。所以第一個篩選是<b>天氣</b>：陽光普照、下雨、日出日落、深夜。'},
+        {h:'功能清單',table:{head:['功能','做什麼'],rows:[
+          ['只看能播的','129 個點位裡只有 94 個在直播，建議打開'],
+          ['加入混音','直播原音之外，載入爵士、古典等三種音樂，只選一種'],
+          ['番茄鐘／陪讀','從零往上計或倒數，紀錄<b>存在你的瀏覽器</b>不在他的網站'],
+          ['沉浸模式','鍵盤按 <b>F</b>，只剩地球和直播'],
+          ['帶我去一個地方','隨機抽一個鏡頭'],
+          ['推薦一個地方','一張表單，雙向回饋']]}},
+        {h:'地球可以轉',tip:'家長可以拿來教小朋友哪裡是亞洲、台灣在哪。老師回饋可以用在地理課、雙語教育，所以他補了英文和日文版。'},
+        {h:'實機畫面',shot:{img:'s3-moon0926-img/05-meanwhile-taipei101.jpg',cap:'台北象山鏡頭，示範最愛與混音。［19:55］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-moon0926-notes.html#sec-meanwhile" style="color:var(--blue)">筆記 3：全球城市現場的隱藏功能</a>'}]},
+
+      {t:'交通現場：時刻表是跟 AI 討論出來的', s:'把等待變成預告｜錄影 26:00–34:00', blocks:[
+        {h:'鏡頭從哪來',ul:[
+          '<b>機場</b>：拉瓜迪亞、拉斯維加斯，右上角顯示現在要起飛哪一班，有專人跟拍起降',
+          '<b>高雄小港</b>：來源是「空中電波」頻道，聽得到塔臺通訊，白天看更清楚',
+          '<b>火車</b>：紐約中央車站、布拉格中央車站、台東多良車站']},
+        {h:'時刻表的做法',p:'不是每個鏡頭都串得到，「空海還是要去申請一些 API」。多良車站廢站了沒有停靠時刻，他跟 AI 討論後的做法是<b>拿前一站和後一站的停靠時間，算距離推估經過時間</b>。示範時畫面顯示「即將經過」，火車真的來了。'},
+        {h:'解決的問題',tip:'「就不用在那邊傻傻等待說，欸什麼時候會有飛機出現，或是說什麼時候會有火車出現。」你點開多良車站，就知道 13 分鐘後有一班自強號會經過。'},
+        {h:'三個小功能',steps:['分享連結：直接複製「這個鏡頭」的網址給朋友','攝影機在哪裡：跳出 OpenStreetMap 地圖','回到預設：地球拖歪了按一下就回原位']},
+        {h:'實機畫面',shot:{img:'s3-moon0926-img/07-kaohsiung-atc.jpg',cap:'高雄小港機場的「空中電波」直播，右下角是正在降落的班機。［28:50］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-moon0926-notes.html#sec-vehicula" style="color:var(--blue)">筆記 4：全球交通現場</a>'}]},
+
+      {t:'爆紅之後的帳單：Vercel、贊助、幣別', s:'做網站的人很少講錢，他講了｜錄影 34:00–41:30', blocks:[
+        {h:'發生什麼事',p:'檔案推到 GitHub 串 Vercel。爆紅三四天後 Vercel 寄信：免費流量快爆，不升級 Pro 就把他<b>所有</b>網站停掉。Pro 一個月 20 美金，他刷了。三天用掉 2.19 美金，主要是 CDN 流量 16 GB。'},
+        {h:'額度不是到了就停',warn:'他設了 30 美金要通知，但 Vercel 的設計是流量爆了就<b>繼續扣</b>。他算過「一天一塊美金，一個月 20 塊可能還是不夠」。'},
+        {h:'他的決定',p:'還是推出去，而且維持免費，因為很多媽媽說小朋友喜歡。贊助用 <b>Buy Me a Coffee</b>，比較安全。'},
+        {h:'一定要先講清楚的事',warn:'「<b>對，是美金喔。</b>」你以為 100 塊是台幣，信用卡帳單會變 3000。一塊兩塊都可以，自由贊助。'},
+        {h:'整理者的自我定位',tip:'「其實直播都是他們提供的，所以其實辛苦的都是他們。所以觀看數跟收益都是這些原頻道。」'},
+        {h:'實機畫面',shot:{img:'s3-moon0926-img/10-vercel-usage.jpg',cap:'Vercel 用量頁：20 美金額度用了 2.19。［34:41］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-moon0926-notes.html#sec-bill" style="color:var(--blue)">筆記 5：爆紅之後的帳單</a>'}]}
+    ]
+  },
+
+  hub: {
+    key:'hub', color:'var(--amber)', emoji:'🗂️', code:'CHAPTER 02', title:'韋哥的 AI 制度中樞',
+    intro:'第二位是韋哥（韋格老師），人在露營車上用手機講，只有一張圖。起點是混亂：兩台電腦、兩個 AI，到底誰要做什麼？他的解法是跟 Claude 討論出一套制度，寫成文件放雲端，兩邊開工前都先讀。',
+    topics:[
+      {t:'一張圖：Claude 規劃審查，Codex 執行', s:'整場他只有這張圖｜錄影 48:00–56:00', blocks:[
+        {h:'圖上的七個區塊',table:{head:['區塊','他的說明'],rows:[
+          ['AI 制度中樞','開工必讀的一頁，裡面是他「不斷犯錯跟踩坑」累積的鐵律'],
+          ['Claude 工作區','講義、教案、記憶。負責規劃與審查'],
+          ['Codex 工作區','任務紀錄、素材。負責程式與技術執行'],
+          ['韋哥的第二大腦','Obsidian 剪藏和卡片，<b>Codex 永不能寫</b>'],
+          ['AI 技能庫','Skill 正本，兩邊捷徑共用'],
+          ['AI 交付區','給對方拿的月臺，「拿走後正本歸位」'],
+          ['本機永不上雲','程式本體、媒體冷存、工具鏈（Python、ffmpeg、npm）']]}},
+        {h:'實機畫面',shot:{img:'s3-moon0926-img/11-weige-ai-hub.jpg',cap:'AI 制度中樞架構圖。［48:04］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-moon0926-notes.html#sec-hub" style="color:var(--amber)">筆記 6：韋哥的 AI 制度中樞</a>'}]},
+
+      {t:'鐵律裡有什麼：階層、禁區、任務單', s:'不斷踩坑寫出來的｜錄影 54:00–58:00', blocks:[
+        {h:'四類規則',ul:[
+          '<b>角色階層</b>：他是老闆，Claude 提案與審查，Codex 遵守',
+          '<b>誰能讀、能進哪裡</b>：哪個動作要問，哪些你自己搞定',
+          '<b>禁區清單</b>：「只要跟學生有關的，你不准去碰」',
+          '<b>任務單與回報</b>：Claude 發任務單，Codex 做完丟交付區，Claude 監看審核']},
+        {h:'一句話的習慣',tip:'「我很常跟 AI 講一句就是<b>我不懂，我不會，請你教我</b>。」然後叫它一步一步分解。'},
+        {h:'他踩過的坑',warn:'曾在 Firebase 做了一個工具在課堂上用，用到爆量、網站停掉，「遠遠超過我預期的額度」。所以他對風險很謹慎。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-moon0926-notes.html#sec-hub" style="color:var(--amber)">筆記 6：鐵律裡有什麼</a>'}]},
+
+      {t:'為什麼他堅持自己當「人工 API」', s:'試過全自動又回頭｜錄影 56:00–66:00', blocks:[
+        {h:'他試過',p:'讓 Claude 直接呼叫 Codex 全自動跑。結果「<b>我會怕，因為我完全看不到他們聊了什麼</b>」。'},
+        {h:'更重要的原因',tip:'「身為一個老師我自己啦，我覺得<b>我要的是過程</b>。成果很重要沒有錯，可是我覺得我要的是過程。」看得懂、學會了，才能跟學生分享。'},
+        {h:'現在的流程',steps:['跟 Claude 講需求、定案','Claude 開規格、寫任務單','他人工貼給 Codex（Claude 已經學會怎麼幫他寫這段）','Codex 寫完丟交付區，Claude 監看審核','最後他自己再測一次，因為要給學生用']},
+        {h:'益師傅的評語',p:'「你看他還是會做 double check，確定到沒有問題才讓他做這些運用。」［178:25］'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-moon0926-notes.html#sec-hub" style="color:var(--amber)">筆記 6：人工 API 的理由</a>'}]},
+
+      {t:'知識卡與 Style MD：讓 AI 寫的東西有你的靈魂', s:'一卡一概念｜錄影 60:00–68:00', blocks:[
+        {h:'Style MD',p:'讓 Claude 讀完他的 Facebook 貼文和教案，整理出一份 Style MD，他審核過。另一個 Skill 最後會做迴圈檢查：符不符合他的語氣、有沒有去掉 AI 味。'},
+        {h:'知識卡（錦囊卡）的起因',p:'Claude 寫的講義很棒，但他發現「我以前也講過類似的東西」，AI 沒那個經驗就自己重新發明，新講法沒有比較好。於是花三天讓 Claude 把所有東西掃一遍，提取成知識卡。'},
+        {h:'一卡一概念',ul:['我怎麼比喻 RAG','我怎麼定義我認知的 vibe coding','我的立場、做過的例子、未來可以在什麼情況下用']},
+        {h:'目的',tip:'同一件事在不同場合，他希望講的一樣。「讓我寫出來的東西變成是<b>有我的靈魂存在</b>。」'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-moon0926-notes.html#sec-cards" style="color:var(--amber)">筆記 7：知識卡與 Style MD</a>'}]},
+
+      {t:'Gemini in Google Slides 會去翻你的雲端硬碟', s:'順手的示範｜錄影 68:00–72:00', blocks:[
+        {h:'他做了什麼',p:'在 Google Slides 叫出 Gemini，只輸入「製作簡報：Gemini Spark 的介紹與應用」。Gemini 去搜尋他的雲端硬碟，把所有提到 Gemini Spark 的講義列出來、告訴他哪些有關聯，他勾選允許用的，Gemini 依那些內容生成簡報。'},
+        {h:'限制',warn:'一次最多 <b>20 頁</b>，可以再繼續執行。也可以餵一份簡報風格讓它套用。'},
+        {h:'體會',tip:'「AI 的工具進步的好快，然後快到有的時候真的會跟不上。但我後來發現其實<b>知識的累積，才會是我們這一個時代最重要的東西</b>。」'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-moon0926-notes.html#sec-cards" style="color:var(--amber)">筆記 7：Google Slides 的示範</a>'}]}
+    ]
+  },
+
+  style: {
+    key:'style', color:'var(--green)', emoji:'🎨', code:'CHAPTER 03', title:'Codex 打造風格學習庫',
+    intro:'第三位是橘子老師。目標一句話：風格學好之後，丟一張照片，它自動分析、換成學到的風格、生出一張圖。而且要讓一個 Agent 串幾個 Skill 把流程跑完。這一章可以跟著做。',
+    topics:[
+      {t:'Gem 要收了，先轉成全域 Skill', s:'一句話安裝｜錄影 84:00–90:00', blocks:[
+        {h:'背景',p:'他以前寫過一個 Gem「終極圖像大師」分析圖像很完整。看到消息說 Gem 之後會收掉、轉成 Skill，就先把 Gem 轉成 Skill，壓縮檔裡就是一個 SKILL.md。'},
+        {h:'安裝提示詞',prompt:'請把上傳的檔案安裝成全域的 Skill，名稱叫做終極圖像大師'},
+        {h:'全域是什麼意思',tip:'不管你在哪一個專案，或沒有用專案，都可以叫出來。呼叫方式：對話框打一撇 <code>/</code>，找到 Ultimate Image Master。'},
+        {h:'Skill 相通',p:'「Gemini 做好的 Skill 放到 Codex 是一樣的，<b>Skill 是可以相通的</b>。」'},
+        {h:'實機畫面',shot:{img:'s3-moon0926-img/13-ultimate-image-master.jpg',cap:'下載終極圖像大師 SKILL，安裝為全域 SKILL。［85:20］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-moon0926-notes.html#sec-skill" style="color:var(--green)">筆記 8：把 Gem 轉成全域 Skill</a>'}]},
+
+      {t:'Codex、ChatGPT「工作」、ChatGPT「對話」差在哪', s:'很多人卡在這裡｜錄影 86:00–90:00', blocks:[
+        {h:'三個地方',table:{head:['你在哪裡','能不能呼叫本機 Skill 與專案'],rows:[
+          ['Codex 桌面版','可以'],
+          ['ChatGPT「工作」（Work）','可以，跟 Codex 串在一起，「兩個是相同的」'],
+          ['ChatGPT「對話」','<b>不行</b>，「其實他就是一般的聊天，沒辦法去呼叫你本機建立的這些 Skill」']]}},
+        {h:'益師傅補的一件事',warn:'Codex 處理完的檔案<b>放回你上傳的地方</b>：從下載資料夾丟的就回下載資料夾。想要下載檔跟它說「請提供下載檔案給我」，會放在專案 folder 的 output 資料夾。［120:16］'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-moon0926-notes.html#sec-output" style="color:var(--green)">筆記 11：檔案會放回你上傳的地方</a>'}]},
+
+      {t:'建專案：34 頁圖像集變成提示詞模板', s:'學的是色調筆觸，不是人物｜錄影 92:00–100:00', blocks:[
+        {h:'三步',steps:[
+          '在 Codex 建專案「<b>繪圖風格學習</b>」，來源資料夾同名（預設在「文件」底下）',
+          '把平常收集的圖放進一個 PDF：<b>風格圖像集01.pdf</b>，34 頁',
+          '上傳 PDF，下提示詞']},
+        {h:'提示詞',prompt:'解析上傳檔案中的這些圖片（或專案資料夾中的圖片），給我這些圖片風格描述完整設定，設計一個這種風格圖像的提示詞模板，讓我生成這種風格的圖像，像筆觸、色調、圖像氛圍、概念等'},
+        {h:'Codex 怎麼做',p:'先確認素材只有那份 PDF，「完整渲染全部頁面並做縮圖總覽，避免只憑文字抽取猜測視覺風格」，歸納出精密墨線、局部淡彩、白底留白等固定模組，產出 <code>風格圖像集01_風格解析與提示詞模板.md</code>。'},
+        {h:'實機畫面',shot:{img:'s3-moon0926-img/17-codex-report.jpg',cap:'Codex 的中間回報，它自己說「已查看 3 張圖像」。［99:46］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-moon0926-notes.html#sec-style" style="color:var(--green)">筆記 9：建立繪圖風格學習專案</a>'}]},
+
+      {t:'測試：生提示詞，再去 ChatGPT 網頁版生圖', s:'為什麼不在 Codex 裡生｜錄影 100:00–106:00', blocks:[
+        {h:'測試提示詞',prompt:'呼叫終極圖像大師，解析上傳圖像的色調、結構、物件、人物、背景等，並套用到風格圖像集01的提示詞模板，生成完整提示詞'},
+        {h:'生圖去哪裡',p:'Codex 內建的 Imagine 也能生，「不過我覺得在 ChatGPT 的網頁版，他生出來的會比他精緻一點」。所以他複製提示詞到 ChatGPT。'},
+        {h:'Copilot 的觀察',p:'同一段提示詞丟 Copilot，「Copilot 的生圖引擎跟 ChatGPT 一模一樣」，但 ChatGPT 生的比較厲害。'},
+        {h:'要看什麼',tip:'背景一定會不一樣，「可是我要的是他的這種色調跟他的線的這種筆觸的感覺」。'},
+        {h:'實機畫面',shot:{img:'s3-moon0926-img/18-chatgpt-style-image.jpg',cap:'ChatGPT 依提示詞生出的第一張。［103:07］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-moon0926-notes.html#sec-chain" style="color:var(--green)">筆記 10：測試與生圖</a>'}]},
+
+      {t:'改模板加一個可調的比例參數', s:'主視覺 90、重點物件 65｜錄影 106:00–110:00', blocks:[
+        {h:'他跟 Codex 說',prompt:'修改這個模板的設定，讓我可以調整比例</br>（風格佔的比例、主要人物與重點物件的繪圖相似度）'},
+        {h:'之後的行為',p:'每次執行 Codex 會先問：主視覺要佔多少、重點物件多少？他答 <b>主視覺 90、重點物件 65</b>，它再依設定生提示詞。'},
+        {h:'誠實的限制',warn:'示範的船，它把上面的生物解析成金魚（他覺得像章魚），「沒關係，可是我要的是他的畫風」。另外這批圖他判斷是 Midjourney 風格，「<b>不容易模仿出他那一種風格的樣子</b>」。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-moon0926-notes.html#sec-chain" style="color:var(--green)">筆記 10：調比例</a>'}]},
+
+      {t:'把整段對話存成一個全域 Skill，串另一個 Skill', s:'全場最值錢的一句｜錄影 109:00–118:30', blocks:[
+        {h:'提示詞',prompt:'將上述過程，使用終極圖像大師 SKILL 解析上傳圖像、色調、結構、物件、人物、背景等，並套用到風格圖像集01的提示詞模板，生成完整提示詞，建立全域 SKILL，名稱為「繪圖風格學習 SKILL」'},
+        {h:'之後怎麼用',p:'不需要在專案裡。一般對話丟一張圖，呼叫繪圖風格學習，它自動串終極圖像大師解析、套模板、問比例、生提示詞。「只要給圖就可以。」'},
+        {h:'延伸',tip:'沒訂閱 ChatGPT 畫圖不夠用，可以在 Skill 裡加一句「直接生圖」讓 Codex 生。「這一部分大家就自行延伸應用了。」'},
+        {h:'實機畫面',shot:{img:'s3-moon0926-img/21-dog-style.jpg',cap:'最後的測試：一張黑狗照片換成水彩線稿風，Copilot 與 ChatGPT 各一張。［117:47］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-moon0926-notes.html#sec-chain" style="color:var(--green)">筆記 10：存成一個 Skill</a>'}]}
+    ]
+  },
+
+  wasm: {
+    key:'wasm', color:'var(--rose)', emoji:'🔐', code:'CHAPTER 04', title:'AGENTS.md 與 WASM 布網',
+    intro:'益師傅今天的主題。先講 Codex 的個人設定檔 AGENTS.md，再用 WASM Skill 把八字工具布上網，讓人按右鍵檢視原始碼也看不到內容。等 Codex 跑的三分鐘，他講了 Little-shot 到 One-shot。',
+    topics:[
+      {t:'AGENTS.md：Codex 的個人設定', s:'也可以變成 CLAUDE.md｜錄影 146:30–149:30', blocks:[
+        {h:'它是什麼',p:'「這個是放在你的 Codex 裡頭的自我設定。」只是 Markdown，Codex 和 Claude 執行時都會先以這份為主。你可以跟 AI 說把它變成 CLAUDE.md。'},
+        {h:'四節',ul:['編碼前思考：不要想當然，不要掩蓋困惑','簡潔至上：用最少的程式碼解決問題','精準修改：只修改必要的部分，只清理你自己造成的混亂','目標導向執行：定義成功標準，反覆執行直到驗證通過']},
+        {h:'他老實說',p:'「網路上找的，再稍微改一下改一下。那不一定是好，但是你可以稍微改一下屬於自己的要求。」'},
+        {h:'Skill 裡為什麼會有程式碼',tip:'處理文案的 Skill 只要 Markdown，但要處理 UI、UX 的「裡頭可能會潛藏了 Python 的語法」，你不需要了解，能安裝就好。'},
+        {h:'實機畫面',shot:{img:'s3-moon0926-img/31-agents-md.jpg',cap:'AGENTS.md 的第 3、4 節。［167:41］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-moon0926-notes.html#sec-wasm" style="color:var(--rose)">筆記 14：AGENTS.md</a>'}]},
+
+      {t:'WASM 是什麼：防君子，不防小人', s:'他沒有誇大｜錄影 152:00–154:00', blocks:[
+        {h:'問題',p:'網頁程式是明碼，布到網路上，別人按右鍵「檢視原始碼」就看到全部。'},
+        {h:'做法',p:'把程式「變成一個 function 包圍，裡頭只會帶著一個函式的簡單的表示方式，而裡頭細節的部分你卻看不到」。別人複製去執行會不正常，「還是他只是一個空殼」。'},
+        {h:'界線',warn:'「<b>但是這個是防君子，不是防小人。</b>小人要解你的程式，還是有辦法解。」做一個反 WASM 一樣解得開。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-moon0926-notes.html#sec-wasm" style="color:var(--rose)">筆記 14：WASM 是什麼</a>'}]},
+
+      {t:'照著做：建 Skill、布網、驗證', s:'三個關鍵字｜錄影 149:30–166:30', blocks:[
+        {h:'五步',steps:[
+          '在 Codex 開專案「<b>Skill 創作</b>」，選固定資料夾，以後做 Skill 的對話都在這裡',
+          '上傳 WASM.skill 壓縮檔，說「請幫我建立 <b>WASM-new.skill</b>」',
+          '上傳要布網的 HTML，下布網指令',
+          '網址是 192.168 內網的話，按「外網」按鈕',
+          '填 API Key 驗證、排盤成功，再開<b>無痕視窗</b>試一次']},
+        {h:'布網指令',prompt:'請將上傳檔案幫我透過 /WASM-new 做布網的動作 @Sites<br>所有人都可以使用這網頁<br>網址中必須要有 ECF 字眼'},
+        {h:'三個關鍵',ul:[
+          '打一撇選 <b>/WASM-new</b> 這個 Skill',
+          '小老鼠 <b>@Sites</b> 指定布網工具，「不然他有時候搞不清楚」',
+          '「<b>所有人都可以使用</b>」一定要寫，不然開網頁要用 ChatGPT 登入']},
+        {h:'他的話',tip:'「原來可以這樣子要求，這都是口語化，叫做自然語言。你我都會的語言。」'},
+        {h:'照實記錄',warn:'他貼錯一次 API Key，重貼才過；回的網址先是內網，他自己也不知道為什麼。你照做時很可能一樣。'},
+        {h:'實機畫面',shot:{img:'s3-moon0926-img/29-wasm-skill-chat.jpg',cap:'布網對話：姓名五格已轉入 WASM、已移除內建 API 金鑰、透過 Sites 發布成功。［159:33］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-moon0926-notes.html#sec-wasm" style="color:var(--rose)">筆記 14：照著做</a>'}]},
+
+      {t:'Little-shot 到 One-shot', s:'等布網時講的觀念｜錄影 159:30–162:30', blocks:[
+        {h:'起因',p:'八字工具有人告訴他寫法有錯，他當初「只是去問 AI，AI 告訴我，我就覺得 AI 是對的」。'},
+        {h:'兩個詞',table:{head:['詞','他的定義'],rows:[
+          ['Little-shot','「當我們自己本身沒有鑑核能力的時候，完全都取決於 AI 來幫你做決策」'],
+          ['One-shot','AI 傳回來的東西，「你本身有這個能力去看他到底對與不對，適時的去做調整，最後就變成你的 One-shot」']]}},
+        {h:'三個時代',p:'Prompt Engineering → Context Engineering → 現在叫 <b>Loop Engineering</b>，回圈式的工程。它會依你的目的想辦法達成，但目的只給一句簡單描述，「你確定得到的東西會是你要的嗎」。'},
+        {h:'排程之前',warn:'先講清楚，看每次產出是不是一樣；一樣了才做排程管理，「不然他就像 <b>AI 抽盲盒</b>的概念」。'},
+        {h:'他的比喻',tip:'「他再怎麼懂你還是有時候要講清楚吧。<b>講清楚沒有那麼難嘛。</b>」人物一致現在容易（AI 的通識知道七龍珠長什麼樣），但你工作上的東西不是通識，那你為什麼不講清楚。'},
+        {h:'術語說明',p:'他全場用「Little-shot」「One-shot」，本頁照原話保留，不替換成 zero-shot、few-shot。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-moon0926-notes.html#sec-shot" style="color:var(--rose)">筆記 15：Little-shot 到 One-shot</a>'}]}
+    ]
+  },
+
+  gift: {
+    key:'gift', color:'var(--purple)', emoji:'🎁', code:'CHAPTER 05', title:'兩支工具與策略圖表製作',
+    intro:'益師傅送出的兩支工具，以及最後一個運用：用 ChatGPT 專案把一個連結變成策略發展藍圖。三段都有同一個提醒：產出要自己判斷對不對。',
+    topics:[
+      {t:'台股 AI 主力行為判讀系統：數據是真的，角度不保證', s:'不是投資建議｜錄影 122:00–133:30', blocks:[
+        {h:'它做什麼',p:'輸入代號，抓最近 60 個交易日真實資料（TWSE 優先、FinMind 備援），畫 18 格：主力趨勢、AI 決策核心、法人行為、KD、MACD，下方有綜合分析與技術報告。'},
+        {h:'三件事',ul:[
+          '「<b>這些數據都是正確的數據。至於他分析的角度，我不敢說他百分之百。</b>」建議對照自己的下單軟體',
+          '右下角 ECF LOGO 可以請 AI 移除，放 LOGO 是因為很多人抄他的圖',
+          '不用填 API Key，因為 FinMind 的 Key 他藏在裡頭了']},
+        {h:'免責',warn:'他整段反覆說「益師傅沒有推薦」、「要小心謹慎，做任何的投資都是如此」。本頁不列出示範代號。'},
+        {h:'實機畫面',shot:{img:'s3-moon0926-img/23-stock-dashboard-6672.jpg',cap:'18 格儀表板。「這個當初在做的時候花了蠻久的時間。」［130:09］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-moon0926-notes.html#sec-stock" style="color:var(--purple)">筆記 12：台股 AI 主力行為判讀系統</a>'}]},
+
+      {t:'八字×姓名合參 V4：Groq API、出生地、命盤庫', s:'新舊夥伴都送｜錄影 133:30–146:30', blocks:[
+        {h:'V4 新增',table:{head:['功能','他怎麼說'],rows:[
+          ['模型來源','Groq API 免費；Gemini API 可畫圖但要錢；<b>Ollama 本地端</b>是新的'],
+          ['出生地（經緯度）','「真的要研究八字，他的出生地是有關係的，有考究的」'],
+          ['時辰不確定','八字每次不一樣是因為媽媽每次講的時間不一樣，勾這個改以量測校正'],
+          ['命盤庫','把人存起來，下次直接拿出來換主題分析'],
+          ['分析主題','像提示詞一樣直接問，「說話要說清楚，要問明白，要直接問」'],
+          ['其他','雙人合盤、家族合盤、英文名、公司名']]}},
+        {h:'定位',tip:'「命沒有辦法改，只能改運。所以算命師要賺的是你改運的錢，不是改命。」參考，不是決定。'},
+        {h:'實機畫面',shot:{img:'s3-moon0926-img/25-bazi-app.jpg',cap:'V4 首頁：連線設定選 Groq、Gemini 或 Ollama。［136:26］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-moon0926-notes.html#sec-bazi" style="color:var(--purple)">筆記 13：八字×姓名合參 V4</a>'}]},
+
+      {t:'ChatGPT 專案再教一次：指令要另外填', s:'聊天版，不是 Codex｜錄影 169:00–172:00', blocks:[
+        {h:'四步',steps:[
+          '進 ChatGPT 聊天版，左側「專案」旁按加號，取名「策略圖表製作」',
+          '它不像 Gemini 寶石會顯示說明欄，指令要另外填：<b>電腦點專案標題、手機按三個點</b>',
+          '把〈策略圖表製作.txt〉整段貼進「指令」，儲存',
+          '在專案裡貼連結或檔案，「＋」裡選<b>創作圖像</b>，送出；想更好選中度推理']},
+        {h:'這份提示詞在做什麼',p:'「它可以根據你給它一個連結或上傳的檔案或是一個圖像，它可以把策略的藍圖給畫出來。」先讀資料，濃縮成<b>四個策略階段</b>，畫成 16:9 深藍科技感四張卡片。'},
+        {h:'實機畫面',shot:{img:'s3-moon0926-img/32-strategy-prompt.jpg',cap:'策略圖表製作.txt 的前半。［168:15］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-moon0926-notes.html#sec-strategy" style="color:var(--purple)">筆記 16：策略圖表製作</a>'}]},
+
+      {t:'策略圖表兩次示範：只給商品頁是產品圖，給公司資料才是藍圖', s:'還要自己判斷有沒有唬爛｜錄影 172:00–178:30', blocks:[
+        {h:'第一次',p:'PChome 的 ROG 筆電頁，貼連結加中文規格。出來一張漂亮的產品資訊圖。他自己說破：「<b>這不叫策略圖表，因為我只有商品的資料</b>」，而且型號畫錯了。'},
+        {h:'第二次',p:'換英業達官網，貼連結、寫上「英業達」以免錯亂，中度推理。出來四步驟的「英業達 策略發展藍圖」。「這叫做策略圖表，理論上就是要這種東西。」'},
+        {h:'重點在這句',warn:'「我們要去從我們的知識裡頭，去看他有沒有吹牛，不能隨便亂寫。所以 Little-shot 很棒，但是 Little-shot 吐出來的資料是不是我們要的？」'},
+        {h:'怎麼用',tip:'放完假要給老闆交代策略分析，公司的產品、公司的資料都可以丟。Gemini 寶石也做得到。'},
+        {h:'實機畫面',shot:{img:'s3-moon0926-img/36-inventec-blueprint.jpg',cap:'英業達策略發展藍圖：四張策略卡片，照教材版面。［178:57］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-moon0926-notes.html#sec-strategy" style="color:var(--purple)">筆記 16：兩次示範</a>'}]}
+    ]
+  }
+}
+;
+
+
+const ORDER = ['globe', 'hub', 'style', 'wasm', 'gift'];
+const $ = s=>document.querySelector(s);
+function renderChapter(ch){
+  const d=DATA[ch];const next=ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];const prev=ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html=`<div class="chapter-head"><span class="emoji">${d.emoji}</span><div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div></div>`;
+  d.topics.forEach((tp,i)=>{const id=`${ch}-${i}`;
+    html+=`<div class="topic" id="topic-${id}"><div class="topic-head" onclick="toggleTopic('${id}')"><span class="num">${i+1}</span><h4>${tp.t}<small>${tp.s}</small></h4><input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)"><span class="chev">▶</span></div><div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{html+=`<div class="block"><h5>${b.h}</h5>`;
+      if(b.p)html+=`<p>${b.p}</p>`;
+      if(b.ul)html+=`<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps)html+=`<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.table)html+=`<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.prompt)html+=`<div class="promptbox">${b.prompt}</div>`;
+      if(b.shot)html+=`<figure class="shot"><img src="${b.shot.img}" alt="" loading="lazy"><figcaption>${b.shot.cap}</figcaption></figure>`;
+      if(b.tip)html+=`<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn)html+=`<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html+=`</div>`;});
+    html+=`</div></div></div>`;});
+  html+=`<div class="chapnav"><a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a><a onclick="showHome()" style="text-align:center">回總覽<b>🏠 五大主題</b></a><a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a></div>`;
+  $('#view-'+ch).innerHTML=html;
+}
+ORDER.forEach(renderChapter);
+function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('#view-'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function showHome(){switchView('home');$('#crumbs').style.display='none';clearSearch();}
+function showChapter(ch){switchView(ch);$('#crumbs').style.display='flex';$('#crumbHere').textContent=`${DATA[ch].emoji} ${DATA[ch].title}`;clearSearch();syncChecks();}
+function toggleTopic(id){$('#topic-'+id).classList.toggle('open');}
+function openTopic(ch,i){showChapter(ch);const el=$('#topic-'+ch+'-'+i);el.classList.add('open');setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+const KEY='ecf-s3moon0926-skills-v1';
+const store=()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){const s=store();if(val)s[id]=1;else delete s[id];localStorage.setItem(KEY,JSON.stringify(s));updateProgress();}
+const TOTAL=ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){const done=Object.keys(store()).length;const pct=Math.round(done/TOTAL*100);$('#progFill').style.width=pct+'%';$('#progText').textContent=`${done} / ${TOTAL} 項技能已掌握`;$('#statDone').textContent=done;$('#statPct').textContent=pct+'%';ORDER.forEach(ch=>{const sub=DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;const el=document.querySelector(`[data-mini="${ch}"]`);if(el)el.style.width=Math.round(sub/DATA[ch].topics.length*100)+'%';});}
+function syncChecks(){const s=store();document.querySelectorAll('input[data-skill]').forEach(cb=>{cb.checked=!!s[cb.dataset.skill];});}
+function resetProgress(){if(confirm('確定要清空所有打勾進度嗎？')){localStorage.removeItem(KEY);syncChecks();updateProgress();}}
+function stripTags(s){return s.replace(/<[^>]+>/g,'');}
+const INDEX=[];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{let body=tp.s+' ';tp.blocks.forEach(b=>{if(b.p)body+=stripTags(b.p)+' ';if(b.ul)body+=b.ul.map(stripTags).join(' ')+' ';if(b.steps)body+=b.steps.map(stripTags).join(' ')+' ';if(b.tip)body+=stripTags(b.tip)+' ';if(b.warn)body+=stripTags(b.warn)+' ';if(b.prompt)body+=stripTags(b.prompt)+' ';if(b.table)body+=b.table.rows.flat().map(stripTags).join(' ')+' ';});INDEX.push({ch,i,title:tp.t,body});}));
+$('#searchInput').addEventListener('input',e=>{const q=e.target.value.trim();const box=$('#searchResults');if(!q){box.classList.remove('show');box.innerHTML='';return;}const hits=INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));box.classList.add('show');if(!hits.length){box.innerHTML=`<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：直播、交付區、知識卡、全域、比例、WASM、Sites、盲盒、策略圖表）</div>`;return;}const hl=s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);box.innerHTML=hits.map(x=>{const pos=x.body.toLowerCase().indexOf(q.toLowerCase());const snip=x.body.substr(Math.max(0,pos-20),90);return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})"><div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div><h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;}).join('');});
+function clearSearch(){$('#searchInput').value='';$('#searchResults').classList.remove('show');$('#searchResults').innerHTML='';}
+syncChecks();updateProgress();
+
+</script>
+</body>
+</html>
