@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>把一支工具的做法，變成可以反覆使用的專案指令｜ECF PDF 切割運用 互動式學習地圖</title>
+<meta name="description" content="ECF 訂閱制第三季補充課第四場（益師傅／楊俊益，2026/09/23）互動式學習地圖：五大主題 21 項實戰技能，涵蓋章節邊界的四個判斷、把長指令存進 ChatGPT 專案、拆完 PDF 要驗頁數與 manifest、反向工程的四個輸出層次與兩階段法、先解構再選圖、五種問題配五種圖、圖太長就拆單元並保留語法、SVG 放進 PowerPoint 要實測能不能改、企業提示詞產生器只產生指令不產生結果、五段套件怎麼檢查、放回專案用真實資料試一次，以及先固定分析框架再談要不要用 Agent。學會一項打一個勾，進度存在自己的瀏覽器。">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#F7F6F3; --panel:#ffffff; --panel2:#F7F6F3;
+  --line:#E7E6E3; --line2:#DBD9D5;
+  --txt:#191919; --txt2:#5f5f5f; --txt3:#9B9B9B;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269;
+  --green:#3f8560; --orange:#bf6a1e; --red:#c0453f; --teal:#0d8f80; --amber:#9c7b23; --rose:#b5476a;
+  --feat:#35618C; --feat2:color-mix(in srgb,var(--feat) 55%,#fff);
+  --radius:12px; --maxw:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.stars{display:none}
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:0 22px;height:56px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;font-size:15px}
+.logo .dot{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--feat) 14%,#fff);border:1px solid color-mix(in srgb,var(--feat) 26%,#fff)}
+.logo small{display:block;font-weight:500;color:var(--txt3);font-size:11px;letter-spacing:.08em}
+.searchbox{flex:1;max-width:520px;margin-left:auto;position:relative}
+.searchbox input{width:100%;padding:9px 14px 9px 38px;border-radius:9px;border:1px solid var(--line2);background:#fff;color:var(--txt);font-size:14px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--feat);box-shadow:0 0 0 3px color-mix(in srgb,var(--feat) 15%,transparent)}
+.searchbox .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px}
+.top .navlink{color:var(--txt2);font-size:13px;padding:7px 13px;border:1px solid var(--line2);border-radius:8px;white-space:nowrap;transition:.15s;font-weight:500}
+.top .navlink:hover{color:var(--feat);border-color:var(--feat)}
+.hero{position:relative;z-index:1;text-align:center;padding:52px 20px 30px;max-width:var(--maxw);margin:0 auto}
+.hero .ep{display:inline-block;padding:5px 15px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--feat);border:1px solid color-mix(in srgb,var(--feat) 28%,#fff);background:color-mix(in srgb,var(--feat) 8%,#fff);margin-bottom:20px}
+.hero h1{font-size:clamp(28px,4.6vw,46px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--txt);background:none;-webkit-text-fill-color:var(--txt)}
+.hero p.sub{margin:16px auto 0;max-width:680px;color:var(--txt2);font-size:16px;line-height:1.7}
+.hero p.sub b{color:var(--txt);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.hero .meta span{font-size:12.5px;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:4px 20px 26px;position:relative;z-index:1;max-width:var(--maxw);margin:0 auto}
+.stat{min-width:140px;text-align:center;padding:16px 22px;border-radius:var(--radius);background:#fff;border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--feat);letter-spacing:-.02em}
+.stat span{font-size:12.5px;color:var(--txt3)}
+.progressbar{max-width:var(--maxw);margin:0 auto 8px;padding:0 20px;position:relative;z-index:1}
+.progressbar .track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progressbar .fill{height:100%;width:0%;border-radius:999px;background:var(--feat);transition:width .5s}
+.progressbar .label{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:6px}
+.progressbar .label button{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;text-decoration:underline dotted}
+.progressbar .label button:hover{color:var(--red)}
+main{max-width:var(--maxw);margin:0 auto;padding:20px;position:relative;z-index:1}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt3);margin:6px 0 18px;flex-wrap:wrap}
+.crumbs a{color:var(--feat);cursor:pointer;font-weight:500}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .sep{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{position:relative;padding:24px 22px;border-radius:var(--radius);cursor:pointer;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c,var(--feat)) 50%,var(--line));box-shadow:0 16px 36px -22px color-mix(in srgb,var(--c,var(--feat)) 60%,transparent)}
+.card .glowline{position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--feat))}
+.card .emoji{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:color-mix(in srgb,var(--c,var(--feat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--c,var(--feat)) 24%,#fff)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;color:var(--txt)}
+.card h3 em{font-style:normal;color:var(--c,var(--feat));font-size:11px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.card p{font-size:13.5px;color:var(--txt2);line-height:1.7;min-height:64px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--txt3)}
+.card .foot .go{color:var(--c,var(--feat));font-weight:600}
+.card .mini{height:5px;border-radius:99px;background:var(--bg2);overflow:hidden;flex:1;margin-right:12px}
+.card .mini i{display:block;height:100%;width:0%;background:var(--c,var(--feat));border-radius:99px;transition:width .4s}
+.view{display:none;animation:fadeIn .3s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chapter-head{display:flex;align-items:center;gap:16px;padding:22px;border-radius:var(--radius);margin-bottom:20px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.chapter-head .emoji{font-size:40px}
+.chapter-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--txt)}
+.chapter-head h2 em{font-style:normal;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:4px;font-weight:600}
+.chapter-head p{color:var(--txt2);font-size:13.5px;margin-top:4px;line-height:1.7}
+.topic{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;background:#fff;overflow:hidden;transition:border-color .18s}
+.topic.open{border-color:color-mix(in srgb,var(--c,var(--feat)) 40%,var(--line))}
+.topic-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.topic-head:hover{background:var(--bg2)}
+.topic-head .num{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--c,var(--feat))}
+.topic-head h4{font-size:16px;font-weight:700;flex:1;color:var(--txt)}
+.topic-head h4 small{display:block;font-weight:400;color:var(--txt3);font-size:12px;margin-top:3px}
+.topic-head .chev{color:var(--txt3);transition:transform .3s;font-size:12px}
+.topic.open .chev{transform:rotate(90deg)}
+.topic-head input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+.topic-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.topic.open .topic-body{max-height:6000px}
+.topic-inner{padding:4px 18px 20px;border-top:1px solid var(--line)}
+.block{margin-top:16px}
+.block>h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--feat));margin-bottom:9px;display:flex;align-items:center;gap:8px;font-weight:600}
+.block>h5::before{content:"";width:12px;height:2px;background:var(--c,var(--feat))}
+.block p{font-size:14px;color:var(--txt2);line-height:1.85}
+.block b{color:var(--txt);font-weight:600}
+ul.points{list-style:none}
+ul.points li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--txt2);line-height:1.75}
+ul.points li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c,var(--feat))}
+ul.points li b{color:var(--txt);font-weight:600}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:9px}
+.steps li{list-style:none;counter-increment:st;display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--txt2);line-height:1.7}
+.steps li::before{content:counter(st);flex:none;width:25px;height:25px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:var(--c,var(--feat));margin-top:1px}
+.steps li b{color:var(--txt);font-weight:600}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;color:var(--txt2)}
+table.cmp th{background:var(--bg2);color:var(--txt);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);font-weight:600}
+table.cmp td{padding:9px 12px;border:1px solid var(--line);line-height:1.7}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.callout{display:flex;gap:12px;border-radius:10px;padding:13px 15px;font-size:13.5px;line-height:1.8;margin-top:14px}
+.callout.tip{background:#EDF7F1;border:1px solid #CBE6D5;color:#166a4c}
+.callout.warn{background:#FBF7EC;border:1px solid #EFE3C4;color:#7a5b12}
+.callout .ic{font-size:17px}
+.prompt,.promptbox{background:#1d1d1f;border:1px solid #2c2c31;border-radius:10px;padding:13px 15px;margin-top:6px;font-size:13px;line-height:1.85;color:#e6e6ea;white-space:pre-wrap;font-family:"Cascadia Code",Consolas,"Noto Sans TC",monospace}
+.prompt b,.promptbox b{color:#fff}
+figure.shot{margin:10px 0 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12px;color:var(--txt3);padding:8px 12px;border-top:1px solid var(--line);background:var(--bg2);line-height:1.6}
+.chapnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chapnav a{flex:1;min-width:200px;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:13.5px;cursor:pointer;transition:.15s;background:#fff}
+.chapnav a:hover{border-color:var(--feat);color:var(--feat)}
+.chapnav a b{display:block;color:var(--txt);font-size:14.5px;margin-top:3px}
+.chapnav a:hover b{color:var(--feat)}
+#searchResults{display:none;margin-bottom:20px}
+#searchResults.show{display:block}
+.sr-item{padding:14px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.15s}
+.sr-item:hover{border-color:var(--feat)}
+.sr-item .path{font-size:11.5px;color:var(--txt3);letter-spacing:.06em;margin-bottom:4px}
+.sr-item h6{font-size:15px;color:var(--txt)}
+.sr-item p{font-size:12.5px;color:var(--txt2);margin-top:4px}
+.sr-empty{color:var(--txt3);font-size:14px;text-align:center;padding:30px}
+mark{background:color-mix(in srgb,var(--feat) 20%,#fff);color:var(--txt);border-radius:3px;padding:0 2px}
+.resources{margin-top:42px;padding:24px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--line)}
+.resources h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--txt)}
+.resources h3 span{color:var(--feat)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.res-grid a{display:flex;gap:12px;align-items:center;color:var(--txt2);border:1px solid var(--line);border-radius:10px;padding:14px;transition:.15s;font-size:13.5px;background:#fff}
+.res-grid a:hover{border-color:var(--feat);color:var(--feat);transform:translateY(-2px)}
+.res-grid a .ic{font-size:20px}
+.res-grid a b{display:block;color:var(--txt);font-size:14px}
+.res-grid a:hover b{color:var(--feat)}
+footer{margin-top:52px;padding:30px 20px 44px;text-align:center;color:var(--txt3);font-size:12.5px;border-top:1px solid var(--line);position:relative;z-index:1;line-height:1.9}
+footer .heart{color:var(--pink)}
+@media (max-width:640px){header.top{flex-wrap:wrap;height:auto;padding:10px 16px}.searchbox{order:3;max-width:100%;flex-basis:100%}.hero{padding-top:40px}.card p{min-height:0}}
+</style>
+
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<header class="top">
+  <a class="navlink" href="../radio/#ecf" style="border-color:#c7d6e4" onclick="if(history.length>1){history.back();return false}">← 回上一頁</a>
+  <div class="logo">
+    <div class="dot">✂️</div>
+    <div>PDF 切割運用 地圖<small>SUBSCRIPTION S3 · BONUS 4</small></div>
+  </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="search" placeholder="搜尋技能關鍵字：章節、邊界、專案、指令、頁數、manifest、反向工程、One-shot、Mermaid、PlantUML、SVG、產生器、五段、框架、Agent…" autocomplete="off">
+  </div>
+  <a class="navlink" href="s3-pdf0923-notes.html">📝 課堂筆記</a>
+</header>
+
+<section class="hero">
+  <span class="ep">ECF 補充課（第四場） · 訂閱制第三季 · 2026/09/23</span>
+  <h1>把一支工具的做法<br>變成可以反覆使用的專案指令</h1>
+  <p class="sub">這堂表面上在教「用 ChatGPT 專案切 PDF」，但益師傅真正在做的是另一件事：<b>把工具裡的判斷規則抽出來，寫成下次還能用的指令。</b><br>主線走五站：先把章節怎麼判定講清楚、把長指令存進專案、拆完要驗頁數、用反向工程把工具還原成規格與圖解、最後用企業提示詞產生器把同一套做法推到別的工作。<br>點進每一章，逐層展開<b>本堂實際教到</b>的觀念、示範與操作，學會一項就打一個勾。</p>
+  <div class="meta">
+    <span>🎙️ 生成式AI應用電台・訂閱制第三季</span>
+    <span>👤 益師傅（楊俊益・ECF）</span>
+    <span>⏱️ 全長 2 小時 4 分</span>
+    <span>🔰 小白友善</span>
+    <span>✅ 進度自動記憶（本機瀏覽器）</span>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b>5</b><span>大主題</span></div>
+  <div class="stat"><b>21</b><span>實戰技能</span></div>
+  <div class="stat"><b id="statDone">0</b><span>已完成</span></div>
+  <div class="stat"><b id="statPct">0%</b><span>完成度</span></div>
+</div>
+
+<div class="progressbar">
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <div class="label"><span id="progText">0 / 21 項技能已掌握</span><button onclick="resetProgress()">重置進度</button></div>
+</div>
+
+<main>
+  <div id="searchResults"></div>
+  <nav class="crumbs" id="crumbs" style="display:none">
+    <a onclick="showHome()">🏠 首頁</a><span class="sep">›</span><span id="crumbHere"></span>
+  </nav>
+
+  <section id="view-home" class="view active">
+    <div class="grid">
+      <div class="card" style="--c:var(--green)" onclick="showChapter('rules')">
+        <div class="glowline"></div><span class="emoji">📐</span>
+        <h3><em>CHAPTER 01</em>先把判斷規則說清楚</h3>
+        <p>章節從哪裡開始、到哪裡結束、哪些頁不算：這些 Domain Know-how 才是換工具時要帶走的東西。</p>
+        <div class="foot"><div class="mini"><i data-mini="rules"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--purple)" onclick="showChapter('project')">
+        <div class="glowline"></div><span class="emoji">🗂️</span>
+        <h3><em>CHAPTER 02</em>長指令存進專案，拆完要驗頁數</h3>
+        <p>四步把教材貼進專案指令，之後只丟檔案；拆分後五個驗證動作，下載連結只是交付的一部分。</p>
+        <div class="foot"><div class="mini"><i data-mini="project"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--cyan)" onclick="showChapter('reverse')">
+        <div class="glowline"></div><span class="emoji">🔍</span>
+        <h3><em>CHAPTER 03</em>反向工程：把工具還原成規格</h3>
+        <p>四個輸出層次、One-shot 範例只給顆粒度、HTML 太長的兩階段法，以及「檔名不等於內容」的提醒。</p>
+        <div class="foot"><div class="mini"><i data-mini="reverse"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--amber)" onclick="showChapter('diagram')">
+        <div class="glowline"></div><span class="emoji">🧩</span>
+        <h3><em>CHAPTER 04</em>圖解、語法與可編輯 SVG</h3>
+        <p>先解構再選圖、五種問題配五種圖、圖太長就拆單元、SVG 放進 PowerPoint 之後要實際測能不能改。</p>
+        <div class="foot"><div class="mini"><i data-mini="diagram"></i></div><span class="go">進入 ›</span></div>
+      </div>
+      <div class="card" style="--c:var(--rose)" onclick="showChapter('studio')">
+        <div class="glowline"></div><span class="emoji">🏭</span>
+        <h3><em>CHAPTER 05</em>提示詞產生器與分析框架</h3>
+        <p>產生器只幫你寫指令，不替你做完工作；五段套件怎麼檢查、放回專案用真資料試一次，以及要不要用 Agent。</p>
+        <div class="foot"><div class="mini"><i data-mini="studio"></i></div><span class="go">進入 ›</span></div>
+      </div>
+    </div>
+    <div class="resources">
+      <h3>📚 <span>延伸資源</span></h3>
+      <div class="res-grid">
+        <a href="s3-pdf0923-notes.html"><span class="ic">📝</span><span><b>課堂筆記完整版</b>16 章、13 張精選截圖、老師金句</span></a>
+        <a href="s3-pdf0923-prompts.html"><span class="ic">🧰</span><span><b>集中提示詞庫</b>14 則教材提示詞，可搜尋、可整段複製</span></a>
+        <a href="https://drive.google.com/drive/folders/1htN4CsSWZMyIXZQ_LdKMnLKyvokXvvQi" target="_blank" rel="noopener"><span class="ic">📁</span><span><b>課程資料夾（Google Drive）</b>錄影與五份教材，需登入</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-rules" class="view" style="--c:var(--green)"></section>
+  <section id="view-project" class="view" style="--c:var(--purple)"></section>
+  <section id="view-reverse" class="view" style="--c:var(--cyan)"></section>
+  <section id="view-diagram" class="view" style="--c:var(--amber)"></section>
+  <section id="view-studio" class="view" style="--c:var(--rose)"></section>
+</main>
+
+<footer>
+  本頁為訂閱制第三季 補充課（第四場）「ChatGPT 專案活用技巧：PDF 切割」課後整理・介面沿用本站互動式學習地圖版型<br>
+  🍀 Learn AI with Tarshar <span class="heart">♥</span> 2026｜進度僅存於本機瀏覽器 localStorage
+</footer>
+
+<script>
+const DATA = {
+  rules: {
+    key:'rules', color:'var(--green)', emoji:'📐', code:'CHAPTER 01', title:'先把判斷規則說清楚',
+    intro:'這堂課從一支 PDF 拆分工具開始，但真正要拆解的不是 PDF，是工具裡的判斷邏輯。跟 AI 說「幫我按章節切」只是講出結果；章節從哪裡開始、到哪裡結束、哪些頁不算章節，才決定它做不做得對。',
+    topics:[
+      {t:'章節邊界的四個判斷', s:'整堂的地基｜錄影 03:00–08:00', blocks:[
+        {h:'先講結論',p:'「幫我按章節切 PDF」這句話裡藏了四個要先講清楚的判斷。<b>沒講，AI 就只能猜。</b>'},
+        {h:'四個判斷',table:{head:['碰到的問題','要交給 AI 的規則'],rows:[
+          ['如何找到章節起點','先找書籤或大綱，再核對目錄與正文標題'],
+          ['一般章節在哪裡結束','通常是下一章首頁的前一頁；仍要排除夾在中間的非章節頁'],
+          ['最後一章怎麼辦','辨認參考文獻、索引、附錄的邊界，不直接延伸到最後一頁'],
+          ['書上的頁碼與 PDF 不同','以含封面的 PDF 實際頁碼為準，核對偏移']]}},
+        {h:'比對「Chapter」字樣不夠',warn:'很多人以為找到「Chapter」兩個字就能切。教材〈PDF 章節拆分助理〉的規則比這完整得多：<b>邊界、例外、頁碼偏移、驗證標準</b>都要寫。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-pdf0923-notes.html#sec-rules" style="color:var(--green)">筆記 2：先把判斷規則說清楚</a>'}]},
+
+      {t:'Domain Know-how 是可以搬走的資產', s:'換工具時真正要留下的東西｜錄影 03:00–08:00', blocks:[
+        {h:'他的說法',p:'老師把這些從實際工作磨出來的判斷叫做 <b>Domain Know-how</b>。它可以寫進程式，也可以變成專案指令。'},
+        {h:'為什麼重要',tip:'程式會改版、模型會換、平台會停掉功能。<b>會被帶走的只有規則本身。</b>所以這堂教的不是「用哪個工具」，是「怎麼把你的判斷寫成別人（和 AI）能照做的規則」。'},
+        {h:'用在自己身上',p:'挑一件你常做、而且已經有自己一套判斷的事（審件、排版、整理會議紀錄），把「我怎麼判斷」寫成四五條規則。<b>這份規則就是你的第一份專案指令。</b>'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-pdf0923-notes.html#sec-rules" style="color:var(--green)">筆記 2：規則是可以搬走的</a>'}]},
+
+      {t:'模型要拿真實任務測，工具版本要分清楚', s:'課堂開場的工具巡禮｜錄影 08:00–18:00', blocks:[
+        {h:'課堂先秀了什麼',p:'模型比較圖表、圖表工具、PDF 拆分工具的新版，還有 3D 場域模擬。用意是讓你看到<b>同一個想法可以一直迭代成不同的應用</b>。'},
+        {h:'他的提醒',warn:'少數作品的試用感受，還不足以認定某個模型永遠比較好。<b>要拿你自己的真實任務去測。</b>'},
+        {h:'三個版本不要混',table:{head:['來源','怎麼看它'],rows:[
+          ['資料夾裡的 <b>PDF拆分工具-new.html</b>','既有程式，這堂拿來當反向工程的案例'],
+          ['錄影展示的 <b>v12</b>','看功能演進用；本機模型與翻譯等展示，不是附檔就有的功能'],
+          ['模型比較與 3D 展示','課堂背景，不是使用建議']]}},
+        {h:'實機畫面',shot:{img:'s3-pdf0923-img/01-pdf-tool.jpg',cap:'課堂展示的新版 PDF 工具：左側預覽原頁，右側列出可編輯的章節起訖。切割前仍要確認章節邊界。［14:33］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-pdf0923-notes.html#sec-tool-choice" style="color:var(--green)">筆記 3：模型要拿真實任務測</a>'}]}
+    ]
+  },
+
+  project: {
+    key:'project', color:'var(--purple)', emoji:'🗂️', code:'CHAPTER 02', title:'長指令存進專案，拆完要驗頁數',
+    intro:'一般對話每次都要重新交代做法，很容易漏掉規則。專案的價值是先把一套穩定的工作方式存好，日後只換當次的檔案。這章有兩個實作：把教材貼進專案，以及拆完之後怎麼驗收。',
+    topics:[
+      {t:'四步把教材貼進專案指令', s:'ChatGPT 專案實作｜錄影 18:00–24:00', blocks:[
+        {h:'操作順序',steps:[
+          '打開教材〈<b>PDF 章節拆分助理.txt</b>〉，複製完整內容',
+          '在 ChatGPT 建立新專案，取一個能辨識用途的名字，例如「PDF 拆分運用」',
+          '進入專案設定，找到「<b>指令</b>」區，貼上完整教材並儲存',
+          '建立對話、上傳<b>自己有權處理</b>的 PDF，觀察它是否先檢查檔案、列出章節範圍']},
+        {h:'關鍵在哪',tip:'重點是把<b>完整的判斷與驗證規則</b>放在指令區讓後續對話共用，不是把教材當成一次性的聊天訊息貼進去。'},
+        {h:'實機畫面',shot:{img:'s3-pdf0923-img/02-project-instructions.jpg',cap:'專案設定裡的「指令」欄。整份教材貼在這裡，之後每個對話都會帶著這套規則。［22:01］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-pdf0923-notes.html#sec-project" style="color:var(--purple)">筆記 4：把長指令存進專案</a>'}]},
+
+      {t:'記憶設定與手機操作的眉角', s:'照步驟做也會卡的地方｜錄影 18:00–24:00', blocks:[
+        {h:'三個設定考量',table:{head:['設定','課堂的說明'],rows:[
+          ['預設記憶','老師用「跨專案延續脈絡」來解釋；實際可用範圍依當時帳號設定'],
+          ['僅限專案的記憶','需要獨立脈絡的案件，可以限制在這個專案內'],
+          ['手機操作','手機從<b>三個點</b>進專案設定；介面改版後以實際畫面為準']]}},
+        {h:'一個界線',warn:'記憶設定決定的是<b>脈絡怎麼延續</b>，不代替資料權限或檔案處理能力。教材明寫：沒有執行工具時必須說明限制，<b>不能虛構下載連結</b>。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-pdf0923-notes.html#sec-project" style="color:var(--purple)">筆記 4：記憶設定與手機操作</a>'}]},
+
+      {t:'拆完的五個驗證動作', s:'下載連結只是交付的一部分｜錄影 24:00–31:45', blocks:[
+        {h:'課堂怎麼做',p:'上傳 PDF 後先讓專案辨識，再下「開始拆分」。AI 用程式處理檔案，最後列出章節、範圍、下載項目與驗證說明。'},
+        {h:'五個動作',steps:[
+          '確認來源檔名、總頁數、是否加密、文字能不能讀',
+          '核對章節表裡的 <b>PDF 實際起訖頁</b>；邊界不確定就先問',
+          '以原頁複製的方式拆分，保留排版，不把文字重新生成',
+          '重開每一章，核對<b>頁數＝訖頁－起頁＋1</b>，章數比對 manifest',
+          '交付每章 PDF、manifest.json 與 ZIP，<b>不覆寫原件</b>']},
+        {h:'實機畫面',shot:{img:'s3-pdf0923-img/03-split-result.jpg',cap:'專案回覆列出各章下載項目與整包 ZIP，並說明頁數驗證。看「章節檔案＋章節範圍＋檢查結果」是否成套。［31:40］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-pdf0923-notes.html#sec-split" style="color:var(--purple)">筆記 5：拆完要驗證頁數</a>'}]},
+
+      {t:'生成不等於交付', s:'教材分得很清楚的一件事｜錄影 24:00–31:45', blocks:[
+        {h:'兩件事要分開',p:'教材把「<b>只是提出做法</b>」與「<b>真的產出檔案</b>」分得很清楚。看到一串檔名不算成功，輸出要真的對得上原檔。'},
+        {h:'用在任何 AI 任務',tip:'最後應該能指出三件事：<b>檔案在哪裡、做了哪些檢查、還有哪個地方不確定。</b>做不到這三件，就不要說做完了。'},
+        {h:'誠實記錄',warn:'本筆記記錄的是錄影中的示範結果。整理時沒有拿到示範用的那本 PDF，<b>沒有重跑</b>那次拆分。實作時請用自己的授權檔案核對。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-pdf0923-notes.html#sec-split" style="color:var(--purple)">筆記 5：生成不等於交付</a>'}]}
+    ]
+  },
+
+  reverse: {
+    key:'reverse', color:'var(--cyan)', emoji:'🔍', code:'CHAPTER 03', title:'反向工程：把工具還原成規格',
+    intro:'把程式丟給 AI 不只是問「它在做什麼」。課堂用的反向工程提示詞，要 AI 從實際 HTML 還原標題文案、技術規格、配色、版面、元件與功能流程，最後形成一份可以重建這支工具的創作提示詞。',
+    topics:[
+      {t:'反向工程的四個輸出層次', s:'教材的骨架｜錄影 31:45–46:30', blocks:[
+        {h:'先定角色',p:'教材先把 AI 定成<b>前端工程師＋技術文件專家</b>，再列出必須忠實反映的內容。關鍵字是「<b>實際的文案、數值、函式與流程</b>」，避免只拿到通用的網頁設計描述。'},
+        {h:'四個層次',table:{head:['輸出層次','它要回答的問題'],rows:[
+          ['角色與目標、程式標題','這是什麼工具，要完成哪個任務？'],
+          ['技術規格與設計系統','用哪些資源、API、字體與配色數值？'],
+          ['版型、元件、功能規格','每個區塊怎麼互動，成功與失敗怎麼處理？'],
+          ['實作陷阱與一句話濃縮','重建時最容易漏什麼，核心需求怎麼帶走？']]}},
+        {h:'實機畫面',shot:{img:'s3-pdf0923-img/04-reverse-prompt.jpg',cap:'教材先定義角色，再列出必須忠實反映的內容。［38:25］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-pdf0923-notes.html#sec-reverse" style="color:var(--cyan)">筆記 6：反向工程先還原規格</a>'}]},
+
+      {t:'One-shot 範例給的是顆粒度，不是內容', s:'最容易誤會的地方｜錄影 31:45–46:30', blocks:[
+        {h:'範例在做什麼',p:'教材裡的 One-shot 範例提供的是<b>顆粒度與章節結構</b>，讓 AI 知道要寫到多細、分成哪幾節。'},
+        {h:'不是要它照抄',warn:'如果你輸入的是 PDF 拆分工具，產出就應該描述 PDF 工具，<b>不能把範例裡去背工具的功能抄進來</b>。檢查反向工程有沒有偏題，第一步就是看它談的是不是這支工具的 PDF 預覽、章節辨識與下載流程。'},
+        {h:'實機畫面',shot:{img:'s3-pdf0923-img/05-reverse-result.jpg',cap:'AI 開始產出 PDF 自動切割工具的完整創作提示詞。先看它有沒有偏題。［46:35］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-pdf0923-notes.html#sec-reverse" style="color:var(--cyan)">筆記 6：One-shot 範例的用途</a>'}]},
+
+      {t:'HTML 太長：先摘要，再輸出', s:'教材的兩階段法｜錄影 31:45–46:30', blocks:[
+        {h:'兩階段',steps:[
+          '先請 AI <b>萃取結構摘要</b>',
+          '再依摘要輸出完整的創作提示詞']},
+        {h:'摘要不能丟掉什麼',ul:[
+          '<b>配色數值</b>、字體',
+          '<b>函式名稱</b>、API 與錯誤處理',
+          '機密值一律換成<b>佔位符</b>，不要原樣留在提示詞裡']},
+        {h:'看課堂筆記',p:'👉 <a href="s3-pdf0923-notes.html#sec-reverse" style="color:var(--cyan)">筆記 6：兩階段法</a>'}]},
+
+      {t:'檔名不等於內容', s:'整理時對照教材發現的事｜教材附檔', blocks:[
+        {h:'兩份提示詞',table:{head:['教材','實際內容'],rows:[
+          ['HTML反向工程_<b>UML</b>提示詞.md','較基本的反向工程套件；<b>沒有</b>完整的 PlantUML 強制圖解規格'],
+          ['HTML反向工程_<b>Mermaid</b>提示詞.md','明列圖解要求與 D1～D6 六種圖']]}},
+        {h:'還有一個',warn:'附檔 <b>PDF拆分工具-new.html</b> 裡的兩個 AI 章節偵測函式（geminiChapterDetection、intelligentChapterDetection）<b>只有佔位註解</b>。畫面上有 AI 設定區，不代表偵測已經實作。'},
+        {h:'帶走的習慣',tip:'拿到任何工具檔或提示詞檔，<b>打開看內容再用</b>，不要憑檔名決定它做得到什麼。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-pdf0923-notes.html#sec-diagrams" style="color:var(--cyan)">筆記 7：附檔的實際限制</a>'}]}
+    ]
+  },
+
+  diagram: {
+    key:'diagram', color:'var(--amber)', emoji:'🧩', code:'CHAPTER 04', title:'圖解、語法與可編輯 SVG',
+    intro:'課堂並沒有一路順利：最初的 Mermaid 示範出現密集難讀的結果，要求下載語法後又偏離期待。老師沒有把它當成成功，而是換另一份提示詞與新專案繼續。這章講的是：有生成圖，不代表圖已經表達正確。',
+    topics:[
+      {t:'先解構、再選圖的四步', s:'圖不是直接畫出來的｜錄影 46:30–60:00', blocks:[
+        {h:'四步',steps:[
+          '先請 AI 把<b>內容、流程與規格</b>解構出來',
+          '自己檢查解構是否符合資料，不確定的地方先補問',
+          '再指定<b>圖的類型與目的</b>，請它依已確認的內容產生語法',
+          '把語法放進對應工具，確認能繪製、能讀懂、沒漏條件或例外']},
+        {h:'老師用的詞',p:'老師用 Little-shot、One-shot 來談框架的約束作用，本頁照原話保留。最值得帶走的是<b>先給清楚結構並核對內容，再做圖像轉換</b>。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-pdf0923-notes.html#sec-diagrams" style="color:var(--amber)">筆記 7：先確認解構結果，再選圖</a>'}]},
+
+      {t:'五種問題，配五種圖', s:'不要所有問題都畫成同一種箭頭圖｜錄影 46:30–60:00', blocks:[
+        {h:'對照表',table:{head:['要讓對方看懂什麼','可考慮的圖'],rows:[
+          ['誰參與、使用者可以做什麼','使用案例圖（Use case）'],
+          ['誰先對誰做什麼、訊息怎麼往返','時序圖（Sequence）'],
+          ['步驟、分支、回到前一步的路徑','活動圖或流程圖'],
+          ['閒置、處理、成功與失敗怎麼切換','狀態圖'],
+          ['元件、模組或類別怎麼依賴','類別圖或結構圖']]}},
+        {h:'實機畫面',shot:{img:'s3-pdf0923-img/06-uml-structure.jpg',cap:'PlantUML 的狀態圖範例，左側語法、右側狀態與轉移。看圖之前先確定要解釋的是「流程步驟」還是「狀態變化」。［58:01］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-pdf0923-notes.html#sec-diagrams" style="color:var(--amber)">筆記 7：選能回答問題的圖</a>'}]},
+
+      {t:'圖太長就拆單元，語法一定要留', s:'一張圖回答一個問題｜錄影 60:00–69:30', blocks:[
+        {h:'先講判斷',p:'AI 產出的圖大到看不完，不一定是資料錯了，可能是一次塞進太多層次。課堂把複雜流程改成「<b>以各單元分別輸出</b>」。'},
+        {h:'五步',steps:[
+          '要求提供圖表的<b>原始語法</b>，保留可修改的版本',
+          'PlantUML 檢查 <b>@startuml 與 @enduml</b> 是否成對',
+          '貼到繪圖工具；沒更新就先確認語法完整與預覽狀態',
+          '圖過長時，按單元、角色或主要步驟拆成數張，保留彼此關係',
+          '語法與圖檔分開存，<b>用途不同</b>']},
+        {h:'老師原話',tip:'「<b>你要跟他講語法，語法最大的好處是你可以改。</b>」［62:08］'},
+        {h:'三種東西各留什麼',table:{head:['保留','下次能做什麼'],rows:[
+          ['原始語法','調整節點、順序、分支與標籤，重新繪圖'],
+          ['SVG','在相容工具中放大，並視結構編輯'],
+          ['PNG／PDF','展示、閱讀、交付；不當成原始流程']]}},
+        {h:'實機畫面',shot:{img:'s3-pdf0923-img/07-mermaid-sequence.jpg',cap:'Mermaid 編輯器：左側可改的文字語法，右側訊息往返。兩份都留。［67:21］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-pdf0923-notes.html#sec-source-code" style="color:var(--amber)">筆記 8：圖太長就拆單元</a>'}]},
+
+      {t:'SVG 放進 PowerPoint，要實際測能不能改', s:'現場試驗，不保證一次成功｜錄影 69:30–89:30', blocks:[
+        {h:'課堂做了什麼',p:'請 ChatGPT 把各單元語法轉成 SVG 並打包，過程有存取提示與等待，最後看到 17 個單元的下載項目。老師明說這是<b>現場試驗</b>。'},
+        {h:'五步',steps:[
+          '下載 SVG，打開支援此格式的簡報工具',
+          '課堂用 PowerPoint 的<b>插入圖片</b>加入 SVG',
+          '依版本把圖形<b>轉成可編輯物件或取消群組</b>，再測節點、線條與文字',
+          '檢查文字、位置與字型有沒有偏移',
+          '保留原始語法，別只剩拆開後的簡報物件']},
+        {h:'副檔名不能代替檢查',warn:'只看見副檔名是 SVG，還不能確定文字與線條都能修改。<b>某些 SVG 內含的是點陣圖片。</b>不同來源的 SVG 要逐一測。'},
+        {h:'實機畫面',shot:{img:'s3-pdf0923-img/09-slide-vector.jpg',cap:'SVG 圖表放進 PowerPoint 投影片。看的是每個節點、連線、文字能否獨立調整。［86:42］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-pdf0923-notes.html#sec-svg" style="color:var(--amber)">筆記 9：SVG 要實際打開</a>'}]},
+
+      {t:'生成圖片 vs 可編輯向量，是兩種需求', s:'另一條路｜錄影 69:30–89:30', blocks:[
+        {h:'另一條路',p:'老師也示範把既有 UML 語法交給<b>圖像生成</b>功能，畫出比較直觀的流程圖圖片。'},
+        {h:'分清楚',tip:'生成圖片適合<b>快速展示</b>；要精準修改節點與文字，還是要回到<b>原始語法</b>。這是兩種需求，不要用一種取代另一種。'},
+        {h:'實機畫面',shot:{img:'s3-pdf0923-img/10-rendered-diagram.jpg',cap:'同一組單元內容被畫成流程圖圖片，層次直觀，但要改就得回語法。［83:26］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-pdf0923-notes.html#sec-svg" style="color:var(--amber)">筆記 9：生成圖片的用途</a>'}]}
+    ]
+  },
+
+  studio: {
+    key:'studio', color:'var(--rose)', emoji:'🏭', code:'CHAPTER 05', title:'提示詞產生器與分析框架',
+    intro:'後半段把同一套做法推到別的工作情境：企業提示詞工程產生器把情境、角色、來源、技巧與輸出規格組成五段套件。老師特別強調一句話：它先幫你產生提示詞，不是按一次就把工作做完。',
+    topics:[
+      {t:'產生器產生的是提示詞，不是結果', s:'老師先跟大家講的話｜錄影 90:00–98:00', blocks:[
+        {h:'老師原話',tip:'「<b>它只是幫你產生提示詞，不是幫你產生結果，先跟大家講。</b>」［92:54］'},
+        {h:'要填的五個部分',table:{head:['要填的部分','在提示詞裡的作用'],rows:[
+          ['情境、角色、使用者身分','從誰的角度，替誰完成哪一項工作'],
+          ['任務目標與背景限制','做什麼、做到哪裡、要遵守什麼'],
+          ['資料來源型態','設計日後上傳檔案、貼文字、給圖片或表格的插槽'],
+          ['技巧與範例','任務拆解、範例、方案比較、自我檢查等工作方式'],
+          ['輸出規格','固定格式、語言、語氣、深度與必要欄位']]}},
+        {h:'一個常見誤會',warn:'「資料來源型態」是在<b>設計未來怎麼餵資料</b>，不代表這一刻已經把案件資料交給產生器。給範本是讓它學結構與提問方式，<b>不要把範例當成正式案件內容</b>。'},
+        {h:'實機畫面',shot:{img:'s3-pdf0923-img/11-prompt-settings.jpg',cap:'產生器先選企業情境，再帶入角色、目標與限制。預設值只是起點。［94:01］'}},
+        {h:'看課堂筆記',p:'👉 <a href="s3-pdf0923-notes.html#sec-prompt-studio" style="color:var(--rose)">筆記 10：產生器先寫工作指令</a>'}]},
+
+      {t:'五段套件怎麼檢查', s:'篇幅長不等於規格對｜錄影 90:00–106:00', blocks:[
+        {h:'檢查表',table:{head:['套件的五段','檢查重點'],rows:[
+          ['System Prompt','角色、流程、判斷準則、限制與輸出規範是否完整'],
+          ['User Prompt 模板','變數與資料區域是否清楚，使用者知道要放什麼'],
+          ['輸出範例骨架','格式是否固定，缺資料時看不看得出來'],
+          ['品質檢核清單','哪些條件必須在回答前檢查'],
+          ['使用說明','怎麼填資料、失敗了怎麼修']]}},
+        {h:'實機畫面',shot:{img:'s3-pdf0923-img/12-prompt-result.jpg',cap:'右側產出完整套件，左側仍留著情境設定。比對角色、流程與輸出要求是否一致，再下載或放進專案。［97:01］'}},
+        {h:'集中提示詞庫',p:'本站另整理了 <a href="s3-pdf0923-prompts.html" style="color:var(--rose)">14 則教材提示詞</a>，可搜尋、可整段複製，其中保留工具實際的五段輸出規格。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-pdf0923-notes.html#sec-reuse" style="color:var(--rose)">筆記 11：五段套件</a>'}]},
+
+      {t:'放回專案，用真實資料試一次', s:'從「寫得完整」到「做得對」｜錄影 98:00–106:00', blocks:[
+        {h:'課堂的第二輪示範',p:'用一份行銷企劃案：把產生的完整指令貼回<b>新的專案</b>，再提供實際企劃案，看分析是否照要求執行。'},
+        {h:'五步',steps:[
+          '選一個常做的任務，用產生器或提示詞庫建立工作規格',
+          '下載或複製完整套件，核對各欄與實際需求',
+          '<b>穩定規則放專案指令，當次資料放對話</b>',
+          '用一份熟悉的案例測：有沒有漏項、誤把範例當資料、產出格式能不能用',
+          '修正規則與範例，再拿另一份資料測']},
+        {h:'實機畫面',shot:{img:'s3-pdf0923-img/13-schema-result.jpg',cap:'分析回覆裡出現結構化欄位與結論。回頭對照提示詞的輸出規格，確認是有資料依據的分析。畫面數值只屬示範。［105:05］'}},
+        {h:'再往下一步',p:'同一套工作規則也可以請程式代理工具整理成 <b>Skill</b>。能轉移的是任務流程與驗證條件，實際檔案格式與工具能力仍要配合環境。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-pdf0923-notes.html#sec-reuse" style="color:var(--rose)">筆記 11：用真實資料試一次</a>'}]},
+
+      {t:'先固定分析框架，再談要不要 Agent', s:'問答時間｜錄影 106:00–124:39', blocks:[
+        {h:'回到最初的問題',p:'同一段影片，為什麼今天跟明天分析出來不一樣？老師把答案放在「<b>你給了什麼解析框架</b>」，而不是換模型。'},
+        {h:'四步',steps:[
+          '先請 AI 列出這個任務可能需要的分析條件，並說明理由',
+          '自己挑選、刪除、補充，形成真正需要的框架',
+          '要求它依框架逐項處理，缺來源的項目<b>明說未知</b>',
+          '用同一套框架比較不同資料與不同次產出，再修正規則']},
+        {h:'三個問答的判斷',table:{head:['課堂問答','可以帶走的判斷'],rows:[
+          ['影片解析','確認 AI 真的讀了影片或逐字稿；按標題推測的文字不算影片內容'],
+          ['要不要用 AI Agent','看任務是否反覆發生、能不能省瑣碎步驟、時間與成本划不划算'],
+          ['作品網站與圖中文字修正','先說清楚用途、權限與想改的位置；可用功能依平台與帳號而定']]}},
+        {h:'老師對 Agent 的定義',tip:'「代理」就是按指定要求完成一件<b>反覆發生</b>的工作，不一定一次要串很多事。現有工具已經把單一任務做得夠好，就先把規格與驗證做好。'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-pdf0923-notes.html#sec-task-first" style="color:var(--rose)">筆記 12：先固定分析框架</a>'}]},
+
+      {t:'這堂課真正在教的事', s:'四個帶走的觀點｜整堂', blocks:[
+        {h:'四點',ul:[
+          '<b>規則是可以搬走的資產。</b>程式會改版、模型會換，章節怎麼判、流程怎麼拆、輸出怎麼驗，寫下來才能換環境繼續用。',
+          '<b>先有可核對的結構，再轉成漂亮的呈現。</b>解構、語法、SVG、生成圖片各有用途，先確認內容對，再挑格式。',
+          '<b>專案指令讓重複工作更容易開始。</b>固定規則放專案，每次只換資料，也比較容易查這一次漏在哪一步。',
+          '<b>生成不等於驗收。</b>PDF 要驗頁數，程式要看真正實作了什麼，圖要能打開，提示詞要用真案例試跑。']},
+        {h:'老師原話',tip:'「<b>寧可講清楚，可以省掉你反覆要求的工作。</b>」［52:00］'},
+        {h:'看課堂筆記',p:'👉 <a href="s3-pdf0923-notes.html#sec-real" style="color:var(--rose)">筆記 13：這堂課真正在教的事</a>'}]}
+    ]
+  }
+}
+;
+
+
+const ORDER = ['rules', 'project', 'reverse', 'diagram', 'studio'];
+const $ = s=>document.querySelector(s);
+function renderChapter(ch){
+  const d=DATA[ch];const next=ORDER[(ORDER.indexOf(ch)+1)%ORDER.length];const prev=ORDER[(ORDER.indexOf(ch)+ORDER.length-1)%ORDER.length];
+  let html=`<div class="chapter-head"><span class="emoji">${d.emoji}</span><div><h2><em>${d.code}</em>${d.title}</h2><p>${d.intro}</p></div></div>`;
+  d.topics.forEach((tp,i)=>{const id=`${ch}-${i}`;
+    html+=`<div class="topic" id="topic-${id}"><div class="topic-head" onclick="toggleTopic('${id}')"><span class="num">${i+1}</span><h4>${tp.t}<small>${tp.s}</small></h4><input type="checkbox" data-skill="${id}" title="學會了就打勾" onclick="event.stopPropagation()" onchange="setDone('${id}',this.checked)"><span class="chev">▶</span></div><div class="topic-body"><div class="topic-inner">`;
+    tp.blocks.forEach(b=>{html+=`<div class="block"><h5>${b.h}</h5>`;
+      if(b.p)html+=`<p>${b.p}</p>`;
+      if(b.ul)html+=`<ul class="points">${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+      if(b.steps)html+=`<ol class="steps">${b.steps.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;
+      if(b.table)html+=`<div class="tablewrap"><table class="cmp"><thead><tr>${b.table.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if(b.prompt)html+=`<div class="promptbox">${b.prompt}</div>`;
+      if(b.shot)html+=`<figure class="shot"><img src="${b.shot.img}" alt="" loading="lazy"><figcaption>${b.shot.cap}</figcaption></figure>`;
+      if(b.tip)html+=`<div class="callout tip"><span class="ic">💡</span><span>${b.tip}</span></div>`;
+      if(b.warn)html+=`<div class="callout warn"><span class="ic">⚠️</span><span>${b.warn}</span></div>`;
+      html+=`</div>`;});
+    html+=`</div></div></div>`;});
+  html+=`<div class="chapnav"><a onclick="showChapter('${prev}')">‹ 上一章<b>${DATA[prev].emoji} ${DATA[prev].title}</b></a><a onclick="showHome()" style="text-align:center">回總覽<b>🏠 五大主題</b></a><a onclick="showChapter('${next}')" style="text-align:right">下一章 ›<b>${DATA[next].emoji} ${DATA[next].title}</b></a></div>`;
+  $('#view-'+ch).innerHTML=html;
+}
+ORDER.forEach(renderChapter);
+function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('#view-'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function showHome(){switchView('home');$('#crumbs').style.display='none';clearSearch();}
+function showChapter(ch){switchView(ch);$('#crumbs').style.display='flex';$('#crumbHere').textContent=`${DATA[ch].emoji} ${DATA[ch].title}`;clearSearch();syncChecks();}
+function toggleTopic(id){$('#topic-'+id).classList.toggle('open');}
+function openTopic(ch,i){showChapter(ch);const el=$('#topic-'+ch+'-'+i);el.classList.add('open');setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+const KEY='ecf-s3pdf0923-skills-v1';
+const store=()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+function setDone(id,val){const s=store();if(val)s[id]=1;else delete s[id];localStorage.setItem(KEY,JSON.stringify(s));updateProgress();}
+const TOTAL=ORDER.reduce((n,ch)=>n+DATA[ch].topics.length,0);
+function updateProgress(){const done=Object.keys(store()).length;const pct=Math.round(done/TOTAL*100);$('#progFill').style.width=pct+'%';$('#progText').textContent=`${done} / ${TOTAL} 項技能已掌握`;$('#statDone').textContent=done;$('#statPct').textContent=pct+'%';ORDER.forEach(ch=>{const sub=DATA[ch].topics.filter((_,i)=>store()[ch+'-'+i]).length;const el=document.querySelector(`[data-mini="${ch}"]`);if(el)el.style.width=Math.round(sub/DATA[ch].topics.length*100)+'%';});}
+function syncChecks(){const s=store();document.querySelectorAll('input[data-skill]').forEach(cb=>{cb.checked=!!s[cb.dataset.skill];});}
+function resetProgress(){if(confirm('確定要清空所有打勾進度嗎？')){localStorage.removeItem(KEY);syncChecks();updateProgress();}}
+function stripTags(s){return s.replace(/<[^>]+>/g,'');}
+const INDEX=[];
+ORDER.forEach(ch=>DATA[ch].topics.forEach((tp,i)=>{let body=tp.s+' ';tp.blocks.forEach(b=>{if(b.p)body+=stripTags(b.p)+' ';if(b.ul)body+=b.ul.map(stripTags).join(' ')+' ';if(b.steps)body+=b.steps.map(stripTags).join(' ')+' ';if(b.tip)body+=stripTags(b.tip)+' ';if(b.warn)body+=stripTags(b.warn)+' ';if(b.prompt)body+=stripTags(b.prompt)+' ';if(b.table)body+=b.table.rows.flat().map(stripTags).join(' ')+' ';});INDEX.push({ch,i,title:tp.t,body});}));
+$('#searchInput').addEventListener('input',e=>{const q=e.target.value.trim();const box=$('#searchResults');if(!q){box.classList.remove('show');box.innerHTML='';return;}const hits=INDEX.filter(x=>(x.title+x.body).toLowerCase().includes(q.toLowerCase()));box.classList.add('show');if(!hits.length){box.innerHTML=`<div class="sr-empty">找不到「${q}」，換個關鍵字試試（例：章節、專案、頁數、反向工程、Mermaid、SVG、產生器、框架）</div>`;return;}const hl=s=>s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`);box.innerHTML=hits.map(x=>{const pos=x.body.toLowerCase().indexOf(q.toLowerCase());const snip=x.body.substr(Math.max(0,pos-20),90);return `<div class="sr-item" onclick="openTopic('${x.ch}',${x.i})"><div class="path">${DATA[x.ch].emoji} ${DATA[x.ch].title} › 技能 ${x.i+1}</div><h6>${hl(x.title)}</h6><p>…${hl(snip)}…</p></div>`;}).join('');});
+function clearSearch(){$('#searchInput').value='';$('#searchResults').classList.remove('show');$('#searchResults').innerHTML='';}
+syncChecks();updateProgress();
+
+</script>
+</body>
+</html>

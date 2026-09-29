@@ -1,0 +1,866 @@
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>中秋特別活動 課堂筆記｜三位學員上台分享，把做過一次的事變成別人也能用的東西</title>
+<meta name="description" content="生成式AI應用電台・訂閱制第三季中秋特別活動（2026/09/26）課堂筆記：三位學員分享＋益師傅四個簡單運用。李佳恩老師的地球陪伴系列三部曲直播地圖網站（動物、城市、交通三個網站的隱藏功能、爆紅後的 Vercel 帳單與贊助）、韋哥的 AI 制度中樞（Claude 規劃審查、Codex 執行、交付區當月臺、知識卡與 Style MD）、橘子老師用 Codex 打造風格學習庫（Gem 轉全域 Skill、34 頁圖像集變提示詞模板、調比例、整段流程存成 Skill）、益師傅的台股 AI 主力行為判讀系統、八字姓名合參 V4、AGENTS.md、WASM 布網防君子不防小人、Little-shot 到 One-shot 與 Loop Engineering、策略圖表製作專案。依錄影 336 張場景畫面＋1867 段逐字稿整理，重點段落附時間戳。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#A0641F; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:760px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px;max-height:calc(100vh - 90px);overflow-y:auto}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:7px;border-left:none;font-size:13px}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.code{position:relative;background:var(--code);border:1px solid var(--line2);border-radius:10px;padding:13px 15px;margin:10px 0;font-size:13px;line-height:1.75;color:var(--ink);white-space:pre-wrap;font-family:"Cascadia Code",Consolas,monospace;overflow-x:auto}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.iframe-wrap{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000;margin:14px 0}
+.iframe-wrap iframe{display:block;width:100%;height:460px;border:0}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static;max-height:none} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} .iframe-wrap iframe{height:320px} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/#ecf" style="border-color:#e3d1bd" onclick="if(history.length>1){history.back();return false}">← 回上一頁</a>
+  <b>📝 中秋特別活動 課堂筆記</b>
+  <div class="right">
+    <a class="btn" href="s3-moon0926-ai-skills.html">🗺️ 互動技能地圖</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式AI應用電台 · 訂閱制第三季 · 中秋特別活動</span>
+  <h1>三位學員上台分享，<span>把做過一次的事變成別人也能用的東西</span></h1>
+  <p class="lead">中秋夜的線上同樂會，益師傅把麥克風交給三位訂閱制學員：一位做了兩週就破兩萬次造訪的「地球陪伴系列三部曲」直播地圖網站，一位在露營車上用一張圖講完自己怎麼讓 Claude 與 Codex 分工，一位現場示範用 Codex 把「學習一種畫風」整條流程存成一個 Skill。<br>後半場益師傅接手，送出台股 AI 主力行為判讀系統與八字姓名合參 V4 兩支工具，示範 AGENTS.md、用 WASM Skill 布網讓人看不到原始碼，最後用「策略圖表製作」專案把一個連結變成策略發展藍圖。四段分享其實都在講同一件事：<b>做過的事，怎麼變成能重複用、能分享出去的東西。</b><br>本頁依<b>錄影 336 張場景畫面＋全程逐字稿 1867 段</b>整理，重點段落附影片時間戳。</p>
+  <div class="meta">
+    <span>📅 2026/09/26（六）21:13 直播</span>
+    <span>👤 主持：益師傅（楊俊益・ECF）＋三位學員分享</span>
+    <span>⏱️ 全長 3 小時 4 分（單段錄影）</span>
+    <span>🧩 主題：直播地圖網站 × AI 分工制度 × 風格 Skill × WASM 布網</span>
+    <span>🔰 小白友善</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-overview">1. 一張圖看懂這場</a>
+  <a href="#sec-animalia">2. 分享一：一個兩週破兩萬造訪的網站是怎麼來的</a>
+  <a href="#sec-meanwhile">3. 全球城市現場的隱藏功能：天氣、混音、番茄鐘、沉浸模式</a>
+  <a href="#sec-vehicula">4. 全球交通現場：機場起降、塔臺電波、火車時刻表怎麼算</a>
+  <a href="#sec-bill">5. 爆紅之後的帳單：Vercel 流量、贊助與「辛苦的都是原頻道」</a>
+  <a href="#sec-hub">6. 分享二：韋哥的 AI 制度中樞，Claude 規劃、Codex 執行</a>
+  <a href="#sec-cards">7. 知識卡與 Style MD：讓 AI 寫出來的東西有自己的靈魂</a>
+  <a href="#sec-skill">8. 分享三：把 Gem 轉成全域 Skill，工作與對話的差別</a>
+  <a href="#sec-style">9. 建立繪圖風格學習專案：34 頁圖像集變成提示詞模板</a>
+  <a href="#sec-chain">10. 測試、調比例，再把整段流程存成一個 Skill</a>
+  <a href="#sec-output">11. 益師傅補充：Codex 處理完的檔案會放回你上傳的地方</a>
+  <a href="#sec-stock">12. 送禮一：台股 AI 主力行為判讀系統</a>
+  <a href="#sec-bazi">13. 送禮二：八字×姓名合參 V4，Groq API 與命盤庫</a>
+  <a href="#sec-wasm">14. AGENTS.md 與 WASM 布網：防君子不防小人</a>
+  <a href="#sec-shot">15. Little-shot 到 One-shot：講清楚，不然就是抽盲盒</a>
+  <a href="#sec-strategy">16. 策略圖表製作：一個連結長出策略發展藍圖，還要自己判斷有沒有唬爛</a>
+  <a href="#sec-real">17. 這場真正在教的事</a>
+  <a href="#sec-quotes">18. 老師與分享者金句</a>
+  <a href="#sec-src">19. 資料來源與整理說明</a>
+</nav>
+
+<article>
+
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--cyan))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>ECF 訂閱制第三季｜2026 中秋特別活動（學員分享會）</td></tr>
+    <tr><th>直播日期</th><td>2026/09/26（六）21:13 開始，本段錄影全長 <b>3 小時 4 分 19 秒</b></td></tr>
+    <tr><th>主持</th><td>益師傅（楊俊益・ECF）</td></tr>
+    <tr><th>分享者</th><td>李佳恩老師（南大附中、Studio0808 智造實驗室）／韋哥（韋格老師，韋哥科技教室）／橘子老師（橘子腦師）</td></tr>
+    <tr><th>本堂主題</th><td>三段學員分享＋益師傅四個簡單運用：直播地圖網站、Claude 與 Codex 的分工制度、用 Codex 打造風格學習 Skill、AGENTS.md、WASM 布網、策略圖表製作</td></tr>
+    <tr><th>四個段落</th><td>00:00–41:30 分享一 ／ 46:30–74:30 分享二 ／ 79:30–118:30 分享三 ／ 122:00–184:00 益師傅</td></tr>
+    <tr><th>要先準備</th><td>Codex 桌面版或 ChatGPT「工作」模式（做 Skill 用）、ChatGPT 聊天版（做專案用）、Groq 免費 API Key（八字工具用）</td></tr>
+  </table></div>
+
+  <h3>📁 課程資料夾（Google Drive）</h3>
+  <p>益師傅在課末上傳的七份檔案都在這個資料夾，錄影也在裡面的「課程錄影」子資料夾。</p>
+  <p style="margin-top:8px"><a href="https://drive.google.com/drive/folders/1F0UUSC0eNp9PLOV5KUGHNgfw7zvcrSgL" target="_blank" rel="noopener">🔗 開啟「20260926 中秋特別活動」課程資料夾 ›</a></p>
+
+  <figure class="shot">
+    <img src="s3-moon0926-img/24-drive-folder.jpg" alt="Google Drive 課程資料夾，七個檔案剛上傳完成" loading="lazy">
+    <figcaption>課末益師傅現場把七個檔案丟進 Drive：WASM Skill 原始碼、台灣薪資位階 3D 網頁、策略圖表製作提示詞、會議記錄提示詞、Skill 連結、AGENTS.md。右下角的「已成功上傳 7 個項目」就是那一刻。［134:44］</figcaption>
+  </figure>
+
+  <div class="twrap"><table>
+    <tr><th style="width:230px">教材檔案</th><th>課堂上拿來做什麼</th></tr>
+    <tr><td><code>WASM.skill_完整原始碼.zip</code></td><td>第 14 章。丟給 Codex 說「請幫我建立 WASM-new.skill」，之後布網時呼叫，讓人檢視原始碼看不到內容</td></tr>
+    <tr><td><code>AGENTS.md</code></td><td>第 14 章。Codex 的個人設定檔，四節行為準則；也可以叫 AI 改成 CLAUDE.md</td></tr>
+    <tr><td><code>策略圖表製作.txt</code></td><td>第 16 章。貼進 ChatGPT 專案「指令」欄，之後丟連結或檔案就長出四步驟策略發展藍圖</td></tr>
+    <tr><td><code>會議記錄.txt</code></td><td>會議錄音轉正式會議紀要 PDF 的提示詞，課堂沒有示範，附在資料夾裡</td></tr>
+    <tr><td><code>Skill 連結.txt</code></td><td>一個可下載更多 Skill 的網站連結，益師傅說「用 GitHub 裡頭最快」</td></tr>
+    <tr><td><code>台灣薪資位階_3D高質版.html</code></td><td>附贈的單檔工具，課堂沒有講</td></tr>
+    <tr><td>八字姓名學 V4、台股 AI 主力行為判讀系統</td><td>第 12、13 章。課堂另以連結送出，不在本頁提供</td></tr>
+  </table></div>
+
+  <h3>🎬 課堂錄影（可直接在頁面播放）</h3>
+  <p class="cd">單段錄影。0:00 起是李佳恩老師，46:30 起是韋哥，79:30 起是橘子老師，122:00 之後是益師傅。</p>
+  <div class="iframe-wrap"><iframe src="https://drive.google.com/file/d/1NEKIgnOd_JBn45eFBx1W1JJeJTqQABYt/preview" allow="autoplay" allowfullscreen></iframe></div>
+  <div class="note steel">🔧 <div>錄影為老師分享，內嵌播放需先登入你自己的 Google 帳號（此資料夾已分享給你）。若顯示載入中或權限提示，改從上面的「課程資料夾」連結進去即可。</div></div>
+  <div class="note gold">🔒 <div><b>本頁的截圖已裁掉線上教室的與會者名單。</b>原始錄影是 Teams 畫面分享，右側會出現學員頭像與姓名；整理成公開頁面時一律裁除，分享者的瀏覽器分頁列、書籤列與作業系統工作列也一併裁掉，逐字稿裡出現的學員暱稱隱去。API 金鑰出現的畫面沒有選用。</div></div>
+</section>
+
+<section class="chapter" id="sec-overview">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--purple))">OVERVIEW</span>
+  <h2 class="ct">1. 一張圖看懂這場</h2>
+  <p class="cd">四個人講四件不同的事，但放在一起看，是同一條線：先做出一個自己真的會用的東西，再想辦法讓它能重複用、能交給別人用。</p>
+
+  <div class="svgwrap">
+  <svg viewBox="0 0 980 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="中秋特別活動四段分享的主線">
+    <defs>
+      <marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+        <path d="M0,0 L9,4.5 L0,9 z" fill="#9B9B9B"/>
+      </marker>
+    </defs>
+    <rect x="14" y="70" width="220" height="118" rx="12" fill="#EEF4FB" stroke="#CFE0F1"/>
+    <text x="124" y="100" text-anchor="middle" font-size="15" font-weight="700" fill="#1d5e8f">分享一：把興趣做成網站</text>
+    <text x="124" y="124" text-anchor="middle" font-size="12.5" fill="#5f5f5f">地球陪伴三部曲</text>
+    <text x="124" y="142" text-anchor="middle" font-size="12.5" fill="#5f5f5f">動物・城市・交通直播地圖</text>
+    <text x="124" y="160" text-anchor="middle" font-size="12.5" fill="#5f5f5f">兩週破兩萬造訪，帳單也來了</text>
+
+    <rect x="258" y="70" width="220" height="118" rx="12" fill="#FBF7EC" stroke="#EFE3C4"/>
+    <text x="368" y="100" text-anchor="middle" font-size="15" font-weight="700" fill="#7a5b12">分享二：把做法寫成制度</text>
+    <text x="368" y="124" text-anchor="middle" font-size="12.5" fill="#5f5f5f">Claude 規劃審查</text>
+    <text x="368" y="142" text-anchor="middle" font-size="12.5" fill="#5f5f5f">Codex 程式執行、交付區當月臺</text>
+    <text x="368" y="160" text-anchor="middle" font-size="12.5" fill="#5f5f5f">知識卡讓比喻前後一致</text>
+
+    <rect x="502" y="70" width="220" height="118" rx="12" fill="#EDF7F1" stroke="#CBE6D5"/>
+    <text x="612" y="100" text-anchor="middle" font-size="15" font-weight="700" fill="#166a4c">分享三：把流程存成 Skill</text>
+    <text x="612" y="124" text-anchor="middle" font-size="12.5" fill="#5f5f5f">Gem 轉全域 Skill</text>
+    <text x="612" y="142" text-anchor="middle" font-size="12.5" fill="#5f5f5f">34 頁圖像集變提示詞模板</text>
+    <text x="612" y="160" text-anchor="middle" font-size="12.5" fill="#5f5f5f">丟一張圖就換成那個畫風</text>
+
+    <rect x="746" y="70" width="220" height="118" rx="12" fill="#EEF2F5" stroke="#D2DFE7"/>
+    <text x="856" y="100" text-anchor="middle" font-size="15" font-weight="700" fill="#255066">益師傅：把成品交出去</text>
+    <text x="856" y="124" text-anchor="middle" font-size="12.5" fill="#5f5f5f">AGENTS.md 定規矩</text>
+    <text x="856" y="142" text-anchor="middle" font-size="12.5" fill="#5f5f5f">WASM 布網防君子不防小人</text>
+    <text x="856" y="160" text-anchor="middle" font-size="12.5" fill="#5f5f5f">策略圖表要自己判斷有沒有唬爛</text>
+
+    <line x1="124" y1="188" x2="124" y2="230" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+    <line x1="368" y1="188" x2="368" y2="230" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+    <line x1="612" y1="188" x2="612" y2="230" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+    <line x1="856" y1="188" x2="856" y2="230" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+
+    <rect x="14" y="238" width="952" height="72" rx="12" fill="#F4F3F0" stroke="#DBD9D5"/>
+    <text x="490" y="266" text-anchor="middle" font-size="15" font-weight="700" fill="#A0641F">共同的一句話：做過一次的事，怎麼變成能重複用、能分享出去的東西</text>
+    <text x="490" y="292" text-anchor="middle" font-size="12.5" fill="#5f5f5f">網站 → 制度文件 → Skill → 布網成品，四種形式，同一個動作。而且四個人都先確認「這東西對不對」，才交出去。</text>
+  </svg>
+  <figcaption>從「做給自己用的網站」到「讓 AI 照做的制度」到「一句話叫出來的 Skill」，最後是「布上網給所有人用」。層層往外交出去。</figcaption>
+  </div>
+
+  <div class="note blue">💡 <div>如果只記得一句話，記這句：<b>「我後來發現其實知識的累積，才會是我們這一個時代最重要的東西。」</b>［71:25］韋哥講的，但四段分享都在證明它。</div></div>
+</section>
+
+<section class="chapter" id="sec-animalia">
+  <span class="chip" style="background:linear-gradient(90deg,var(--blue),var(--cyan))">00:00–10:00</span>
+  <h2 class="ct">2. 分享一：一個兩週破兩萬造訪的網站是怎麼來的</h2>
+  <p class="cd">第一位分享者是南大附中的李佳恩老師（Studio0808 智造實驗室）。他一開場就說「沒有要講什麼太多 AI 相關的技術」，只是來分享一個做了一兩個禮拜、然後「算是有一點爆紅」的網站。</p>
+
+  <p>「地球陪伴系列三部曲」是三個互相連結的網站：<b>全球動物現場 Animalia Live</b>、<b>全球城市現場 Meanwhile</b>（網站上叫「此刻正是深夜的地方」）、<b>全球交通現場 Vehicula Live</b>。共同點是一顆可以轉的 3D 地球，點上面的圖釘就打開那個地方的 YouTube 直播鏡頭。三個網站都用 Claude 開發，翻譯再請 Gemini 驗證。</p>
+
+  <figure class="shot">
+    <img src="s3-moon0926-img/01-trilogy-poster.jpg" alt="地球陪伴系列三部曲海報，三個網站各附 QR Code" loading="lazy">
+    <figcaption>他自己做的介紹海報。右上角「7 天突破 20,000+ 造訪」就是這場分享的起點；三個 QR Code 分別是城市、動物、交通三個網站。［01:47］</figcaption>
+  </figure>
+
+  <h3>先做的城市網站沒人看，動物網站一發就爆</h3>
+  <p>他坦白說發文順序其實是反的：城市網站先發，兩個禮拜只有一兩百次造訪；上個禮拜天把動物網站發到一個企鵝社團，因為女兒喜歡企鵝，他特別收了一系列企鵝鏡頭。結果那篇貼文五千多個讚、一千多次分享。他自己也「滿嚇一跳的」。</p>
+  <ul class="pt">
+    <li><b>直播不是 AI 影片</b>——他認為吸引人的關鍵是「都是直播的部分，不是那種 AI 的影片，非常真實呈現在人面前」。</li>
+    <li><b>可以拖曳時間</b>——藍企鵝的鏡頭大部分時間只看得到海豹躺著，但你可以把 YouTube 直播的時間軸往回拉，找到當地傍晚六七點一群企鵝上岸的畫面。</li>
+    <li><b>每天都是驚喜包</b>——非洲草原的水坑鏡頭，中午過後會有長頸鹿、羚羊、斑馬、大象一起來喝水，前一天他第一次看到獵豹。</li>
+    <li><b>胖熊週</b>——9 月 22 日起美國的「Fat Bear Week」，棕熊在鮭魚爆多的河裡挑食。益師傅串場時補充 Discovery 的說法：秋天的熊只挑脂肪高的部位，剩下的正好餵鳥和其他魚。</li>
+  </ul>
+
+  <figure class="shot">
+    <img src="s3-moon0926-img/03-animalia-elephants.jpg" alt="全球動物現場網站，肯亞奧多尼奧旅館水坑的大象直播" loading="lazy">
+    <figcaption>全球動物現場的介面：左邊是依當地時間排的時刻表，中間是地球，右邊是打開的鏡頭。這一個是肯亞的水坑，他說「你在動物園看不到這些動物在一起」。［01:09］</figcaption>
+  </figure>
+
+  <div class="golden">
+    <div class="q">「像這個斑馬的影片啊，就會感覺很像，很像是假的，很像 AI，但是它就是栩栩如生在你的面前。」</div>
+    <div class="a">［09:30］他解釋這個網站為什麼會爆紅：真實的直播在 AI 影片氾濫的時代反而稀有。</div>
+  </div>
+</section>
+
+<section class="chapter" id="sec-meanwhile">
+  <span class="chip" style="background:linear-gradient(90deg,var(--teal),var(--green))">10:00–26:00</span>
+  <h2 class="ct">3. 全球城市現場的隱藏功能：天氣、混音、番茄鐘、沉浸模式</h2>
+  <p class="cd">他說「如果我不講，其實大部分的人可能會不知道這網站它所隱藏的一些功能」。這一章把他示範的功能列成清單，是三個網站共用的設計。</p>
+
+  <p>城市網站的出發點很生活：深夜讀書覺得無聊，需要一個漂亮的畫面陪你。所以第一個篩選條件是<b>天氣</b>：你要陽光普照的城市、正在下雨的、日出日落的，還是深夜的。</p>
+
+  <div class="twrap"><table>
+    <tr><th style="width:150px">功能</th><th>它在做什麼</th></tr>
+    <tr><td>只看能播的</td><td>129 個點位裡實際在直播的只有 94 個，很多 YouTube 鏡頭會停播。建議打開這個開關。</td></tr>
+    <tr><td>我的最愛</td><td>右上角加愛心，時刻表就會出現愛心，可以只看最愛。</td></tr>
+    <tr><td>自動輪播</td><td>依時刻表一路環遊世界。</td></tr>
+    <tr><td>加入混音</td><td>「挑一個聲音陪我」：直播原音之外，可以載入爵士、古典等三種 YouTube 音樂，只選你喜歡的那一種。</td></tr>
+    <tr><td>番茄鐘／陪讀</td><td>「開始專注」從零往上計，或倒數 5 到 90 分鐘；不到一分鐘不算。紀錄存在你的瀏覽器，不在他的網站。</td></tr>
+    <tr><td>帶我去一個地方</td><td>隨機挑一個鏡頭，示範時剛好抽到馬榮火山。</td></tr>
+    <tr><td>推薦一個地方</td><td>一張表單，讓使用者把發現的好鏡頭推薦給他。雙向回饋。</td></tr>
+    <tr><td>沉浸模式</td><td>鍵盤按 <b>F</b>，只剩地球和直播畫面；連地球都不要就把直播全螢幕。</td></tr>
+    <tr><td>三種語言</td><td>繁中、英文、日文。日文是前一天剛加的。</td></tr>
+  </table></div>
+
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="s3-moon0926-img/02-meanwhile-hakodate.jpg" alt="此刻正是深夜的地方，函館山百萬夜景" loading="lazy">
+      <figcaption>開場送給大家的「百萬夜景」：函館山鏡頭。左欄依當地時間排序，底下是天氣篩選的小標籤。［00:11］</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="s3-moon0926-img/05-meanwhile-taipei101.jpg" alt="台北象山鏡頭看 101 夜景" loading="lazy">
+      <figcaption>台北象山鏡頭。他用這一個示範加入最愛與混音，「聽著爵士的音樂，陪伴你念書」。［19:55］</figcaption>
+    </figure>
+  </div>
+
+  <h3>地球是可以轉的，所以老師拿來教地理</h3>
+  <p>地球可以手動旋轉，他說家長可以用它教小朋友哪裡是亞洲、台灣在哪、日本在哪。貼文底下有老師回饋可以用在地理課、雙語教育、國際教育，所以他才補上英文和日文版。</p>
+  <p>他也順便帶了一趟世界：極光要選當地晚上十點十一點、基拉韋亞火山的直播網站資訊做得很豐富、尼加拉瀑布整天都是水氣但水聲很適合陪讀、艾比路是做了網站才知道這麼有名、義大利五漁村「原來明信片上就是長這樣」、威尼斯連救護車都是船、雪梨港灣大橋跨年可以看煙火。</p>
+
+  <div class="note steel">🔧 <div>翻譯這一段他講得很誠實：三個網站都用 Claude 開發，日文版請 Gemini 做驗證，「你會發現 AI 沒有說百分之百都會準確，還是會抓出來蠻多問題的，讓他們兩個去做一個整合」。逐字稿在 18:00 附近有一段語音辨識的重複幻覺（靜音時段），本頁整段捨棄。</div></div>
+</section>
+
+<section class="chapter" id="sec-vehicula">
+  <span class="chip" style="background:linear-gradient(90deg,var(--orange),var(--amber))">26:00–34:00</span>
+  <h2 class="ct">4. 全球交通現場：機場起降、塔臺電波、火車時刻表怎麼算</h2>
+  <p class="cd">第三個主題是交通。起點是他出國時會在機場拍飛機起降，「應該也蠻多人喜歡看飛機起降的」。</p>
+
+  <figure class="shot">
+    <img src="s3-moon0926-img/04-vehicula-globe.jpg" alt="全球交通現場，篩選飛機類型的地球視圖" loading="lazy">
+    <figcaption>全球交通現場：59 個現場，分成飛機、鐵道、船與運河三類，底下還能依此刻白天、晨昏、夜晚篩。［04:16］</figcaption>
+  </figure>
+
+  <ul class="pt">
+    <li><b>紐約拉瓜迪亞、拉斯維加斯機場</b>——右上角會顯示現在要起飛的是哪一班，鏡頭有專人跟拍起飛與降落的那一瞬間。</li>
+    <li><b>高雄小港機場</b>——來源是「空中電波」頻道，聽得到塔臺通訊，白天看更清楚。</li>
+    <li><b>紐約中央車站、布拉格中央車站</b>——他沒想到有這麼棒的鏡頭。</li>
+    <li><b>台東多良車站</b>——已經廢站，火車不停，但會經過。</li>
+  </ul>
+
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="s3-moon0926-img/06-vehicula-laguardia.jpg" alt="紐約拉瓜迪亞機場直播，左側列出附近的航班" loading="lazy">
+      <figcaption>拉瓜迪亞機場鏡頭，中間的「此刻在附近的航班」是他串航班資料做出來的。［27:47］</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="s3-moon0926-img/07-kaohsiung-atc.jpg" alt="空中電波頻道的高雄小港機場跑道夜景" loading="lazy">
+      <figcaption>高雄小港機場的「空中電波」直播，右下角是正在降落的班機資訊。他說「晚上那個燈會霧霧的，白天看其實蠻清楚的」。［28:50］</figcaption>
+    </figure>
+  </div>
+
+  <h3>時刻表：不是每個鏡頭都串得到，臺灣的火車是跟 AI 討論出來的</h3>
+  <p>飛機和火車的時刻表要看資料有沒有免費提供，「空海還是要去申請一些 API」。多良車站廢站了，沒有停靠時刻，他跟 AI 討論之後的做法是：<b>拿前一站和後一站的停靠時間，再算距離推估經過時間</b>。示範時畫面顯示「即將經過」，火車真的就跑過來了。</p>
+  <div class="note blue">💡 <div>這個功能解決的問題很具體：你點開多良車站，可以知道 13 分鐘後有一班台東開往七堵的自強號會經過，「就不用傻傻的守在這個鏡頭」。這是把「等待」變成「預告」。</div></div>
+
+  <h3>三個小功能</h3>
+  <ol class="st">
+    <li><b>分享連結</b>：直接複製「這個鏡頭」的網址給朋友，對方打開就是中央車站，不用再教他怎麼點。</li>
+    <li><b>攝影機在哪裡</b>：點一下跳出 OpenStreetMap 地圖，知道鏡頭架在哪。</li>
+    <li><b>回到預設</b>：地球拖歪了按一下就回原位。</li>
+  </ol>
+
+  <figure class="shot">
+    <img src="s3-moon0926-img/08-vehicula-guide.jpg" alt="交通現場第一次進站的說明視窗" loading="lazy">
+    <figcaption>第一次進站會看到的說明頁，四步：挑一種條件、點地球上的圖釘、讓現場的聲音陪你、要讀書就開個計時。有英文與日文版。［29:40］</figcaption>
+  </figure>
+</section>
+
+<section class="chapter" id="sec-bill">
+  <span class="chip" style="background:linear-gradient(90deg,var(--rose),var(--pink))">34:00–41:30</span>
+  <h2 class="ct">5. 爆紅之後的帳單：Vercel 流量、贊助與「辛苦的都是原頻道」</h2>
+  <p class="cd">這一章是整場最實際的一段。做網站的人很少講錢，他講了。</p>
+
+  <p>他的部署方式是檔案推到 GitHub，GitHub 串到 Vercel。動物網站爆紅三四天後 Vercel 寄信：免費方案的流量快爆了，不升級 Pro 就會把他<b>所有</b>網站停掉，而他上面還放著米其林、影音工具等很多站。Pro 一個月 20 美金，他就刷下去了。</p>
+
+  <figure class="shot">
+    <img src="s3-moon0926-img/10-vercel-usage.jpg" alt="Vercel 用量頁面，已用 2.19 美金" loading="lazy">
+    <figcaption>Vercel 的用量頁：Pro 方案內含 20 美金額度，三天用掉 2.19 美金，主要是 CDN 流量 16 GB。他算過「一天一塊美金，一個月 20 塊可能還是不夠」。［34:41］</figcaption>
+  </figure>
+
+  <ul class="pt">
+    <li><b>額度不是到了就停</b>——他有設上限 30 美金要通知，但 Vercel 的設計是流量爆了就繼續扣，30、40 美金照扣。</li>
+    <li><b>天人交戰之後的決定</b>——要不要再推出去給更多人？他決定推，而且維持免費，因為很多媽媽說小朋友很喜歡。</li>
+    <li><b>贊助用 Buy Me a Coffee</b>——比較安全，不用擔心詐騙。網站右下角都有「請我喝杯咖啡」。</li>
+  </ul>
+
+  <div class="note gold">⚠️ <div><b>計價單位是美金。</b>他特別提醒兩次：「你以為是 100 塊臺幣，但是到時候你的信用卡帳單，你可能就會下一條」，一塊兩塊都可以，自由贊助。這一段對任何想開贊助的人都適用：先講清楚幣別。</div></div>
+
+  <figure class="shot">
+    <img src="s3-moon0926-img/09-studio0808-home.jpg" alt="Studio0808 智造實驗室首頁，生活小幫手工具列表" loading="lazy">
+    <figcaption>他所有作品的入口「Studio0808 智造實驗室」。三個地球網站、PDF 工具、影音工具箱都從這裡連。首頁那段程式碼寫著「目前以 Claude／Gemini＋Antigravity 為主」。［39:03］</figcaption>
+  </figure>
+
+  <div class="golden">
+    <div class="q">「其實直播都是他們提供的，所以其實辛苦的都是他們。所以觀看數跟收益都是這些原頻道。對，只是我幫大家匯整起來，然後也帶入這個地球陪伴的概念。」</div>
+    <div class="a">［40:37］回應為什麼要做這個網站。他把自己定位成整理者，不是內容的擁有者。</div>
+  </div>
+</section>
+
+<section class="chapter" id="sec-hub">
+  <span class="chip" style="background:linear-gradient(90deg,var(--amber),var(--orange))">46:30–60:00</span>
+  <h2 class="ct">6. 分享二：韋哥的 AI 制度中樞，Claude 規劃、Codex 執行</h2>
+  <p class="cd">第二位是韋哥（韋格老師）。他人在露營，躲到車上用手機講，手邊只有一張圖。益師傅說他在別的社團分享「都人山人海」。他自己說「我覺得我蠻笨的」，然後講了整場最有結構的一段。</p>
+
+  <h3>問題是從混亂開始的</h3>
+  <p>他有兩台電腦（學校一台、家裡一台），一開始用 ChatGPT，後來 Claude 紅了就用 Claude，再後來發現 Codex 也不錯。結果「有些東西用 Claude，有些用 Codex」就混亂了：<b>到底誰要做什麼、誰能做什麼、我要怎麼讓他們順利執行？</b>他的解法是跟 Claude 討論「我的制度」，把所有東西寫成文件放在雲端，兩台電腦都直接讀。</p>
+
+  <figure class="shot">
+    <img src="s3-moon0926-img/11-weige-ai-hub.jpg" alt="AI 制度中樞架構圖：Claude 與 Codex 兩邊工作區、共用技能庫、交付區、本機永不上雲" loading="lazy">
+    <figcaption>整場他只有這一張圖。最上面是「AI 制度中樞」，開工必讀；左邊 Claude 負責規劃、講義、知識、審查，右邊 Codex 負責程式與技術執行；中間「AI 技能庫」兩邊共用；下面「AI 交付區」是給對方拿的月臺；最底下三個框是永不上雲的本機。［48:04］</figcaption>
+  </figure>
+
+  <div class="twrap"><table>
+    <tr><th style="width:150px">圖上的區塊</th><th>他的說明</th></tr>
+    <tr><td>AI 制度中樞</td><td>一個固定資料夾。不管 Claude 還是 Codex，開工第一件事先進去讀那一頁，裡面是他「不斷犯錯跟踩坑」累積的鐵律。</td></tr>
+    <tr><td>Claude 工作區</td><td>講義、教案、記憶。他是老師，Claude 最常拿來寫講義。</td></tr>
+    <tr><td>Codex 工作區</td><td>任務紀錄、素材。程式的部分直接讓 Codex 做。</td></tr>
+    <tr><td>韋哥的第二大腦</td><td>Obsidian 剪藏和卡片，Codex 永不能寫。</td></tr>
+    <tr><td>AI 技能庫</td><td>Skill 正本，兩邊捷徑共用。他的 Skill 沒有特別上傳，就是一個資料夾兩邊自己去看。</td></tr>
+    <tr><td>AI 交付區</td><td>給 Codex 的，Claude 放、Codex 拿；給 Claude 的，Codex 放、Claude 審。「月臺不是倉庫，拿走後正本歸位」。</td></tr>
+    <tr><td>本機永不上雲</td><td>程式本體與執行環境、媒體冷存（錄影、聲音、封存）、工具鏈（Python、ffmpeg、npm）。</td></tr>
+  </table></div>
+
+  <h3>鐵律裡有什麼</h3>
+  <ul class="pt">
+    <li><b>角色階層</b>——他是老闆，Claude 負責規劃與審查，Codex 負責遵守。所有制度和規則也習慣讓 Claude 提案。</li>
+    <li><b>誰能讀、誰不能讀，能進哪裡、不能進哪裡</b>——哪個動作要問，哪些你自己去搞定。</li>
+    <li><b>禁區清單</b>——「身為一個老師，學生的資料，我不會讓我的 AI 去碰。只要跟學生有關的，你不准去碰。」</li>
+    <li><b>任務單與回報</b>——Claude 發任務單給 Codex，Codex 做完丟交付區，Claude 監看、審核，過了才叫他繼續。</li>
+  </ul>
+
+  <h3>為什麼他堅持自己當「人工 API」</h3>
+  <p>Claude 規劃完，他是人工把任務貼給 Codex 的。他也試過讓 Claude 直接呼叫 Codex 全自動跑，但「我會怕，因為我完全看不到他們聊了什麼」。另一個原因更重要：他想學。「我覺得我是一個老師，我聽得懂了，我看得懂了，我學會了，那我就能夠去跟我的學生去分享。」</p>
+
+  <div class="golden">
+    <div class="q">「我覺得就是我很常跟 AI 講一句就是我不懂，我不會，請你教我。」</div>
+    <div class="a">［52:59］他說自己的 AI 之所以會進步，除了訂閱制課程，就是這句話，然後叫它一步一步分解。</div>
+  </div>
+  <div class="golden">
+    <div class="q">「身為一個老師我自己啦，我覺得我要的是過程。成果很重要沒有錯，可是我覺得我要的是過程。」</div>
+    <div class="a">［66:00］解釋為什麼不開全自動。他要觀察過程，才知道自己學到什麼、學生能學到什麼。</div>
+  </div>
+
+  <div class="note steel">🔧 <div>他一開始也踩過坑：曾在 Firebase 做了一個東西在課堂上用，用到爆量、網站停掉，幸運的是沒被收費，但「遠遠超過我預期的額度」。所以他後來對風險很謹慎。益師傅在收尾時特別點名這件事：「你看他還是會做 double check，確定到沒有問題才讓他做這些運用。」［178:25］</div></div>
+</section>
+
+<section class="chapter" id="sec-cards">
+  <span class="chip" style="background:linear-gradient(90deg,var(--purple),var(--blue))">60:00–74:30</span>
+  <h2 class="ct">7. 知識卡與 Style MD：讓 AI 寫出來的東西有自己的靈魂</h2>
+  <p class="cd">制度講完，他講第二件事：怎麼讓 AI 寫的講義像他自己寫的。答案是兩份東西，Style MD 和知識卡。</p>
+
+  <h3>Style MD：讓 Claude 讀完你所有的東西</h3>
+  <p>他讓 Claude 把他的 Facebook 貼文、教案全部讀完，整理出一份 Style MD，他審核過，「所以他已經最了解我的講義、我的教案」。他還有一個自己的 Skill，最後會做一個迴圈檢查：有沒有符合他平常的語氣和習慣、有沒有把 AI 味去掉。</p>
+
+  <h3>知識卡（他叫錦囊卡）：一張卡只記一個概念</h3>
+  <p>起因是一個真實的困擾：Claude 幫他寫的講義很棒，但他發現「我以前也講過類似的東西」，AI 沒有那個經驗，就自己重新發明一個講法，而新講法並沒有比較好。於是他花了三天，讓 Claude 把他所有的東西再掃過一遍，把講過的內容提取成知識卡。</p>
+  <ul class="pt">
+    <li><b>一卡一概念</b>——例如「我是怎麼比喻 RAG」「我怎麼定義我認知的 vibe coding」「我的立場是什麼」「我做過什麼例子」「未來可以在什麼情況下用」。</li>
+    <li><b>目的是一致</b>——簡報不是大改就是小改，他不希望前後講法不對、舉例有誤差。同一件事在不同場合，他希望講的一樣。</li>
+    <li><b>讓 Agent 讀得懂</b>——「你只要有相關的，你就去讀那個卡片」，出來的東西就會是他的習慣、他的模式。</li>
+  </ul>
+
+  <h3>一個順手的示範：Gemini in Google Slides 會去翻你的雲端硬碟</h3>
+  <p>他回答群友問題時錄的一段：在 Google Slides 裡叫出 Gemini，只輸入「製作簡報：Gemini Spark 的介紹與應用」，Gemini 就去搜尋他的雲端硬碟，把所有提到 Gemini Spark 的講義列出來、告訴他哪些比較有關聯，他勾選允許用的講義，Gemini 就依那些內容規劃並生成簡報。限制是<b>一次最多 20 頁</b>，可以再繼續執行；也可以餵一份簡報風格讓它套用。</p>
+
+  <div class="golden">
+    <div class="q">「AI 的工具進步的好快，然後快到有的時候真的會跟不上。但我後來發現其實知識的累積，才會是我們這一個時代最重要的東西。」</div>
+    <div class="a">［71:25］從 Google Slides 的示範體會到的：工具會換，累積下來、而且轉化成 AI 讀得懂的知識，才是帶得走的。</div>
+  </div>
+
+  <div class="note blue">💡 <div>他最後補了自己的來時路：一開始沒開任何自動核准，AI 問他一個問題他看不懂，就「一張一張圖，截了」貼到網頁版 ChatGPT 和 Gemini 問「這是什麼意思」。前面很花時間，所以後期才敢「很放膽的讓我的 Agent 去玩」，甚至在陪小孩錄影時用手機 Remote Control 家裡的電腦。這條路跟訂閱制第三季第五堂史大講的「先把 L2 知識庫做起來」是同一件事。</div></div>
+</section>
+
+<section class="chapter" id="sec-skill">
+  <span class="chip" style="background:linear-gradient(90deg,var(--green),var(--teal))">79:30–92:00</span>
+  <h2 class="ct">8. 分享三：把 Gem 轉成全域 Skill，工作與對話的差別</h2>
+  <p class="cd">第三位是橘子老師。他講了一整天課，晚上還來示範這兩天測試的東西：用 Codex 打造一個「風格學習庫」。這一章先講前置的 Skill 安裝與觀念，下一章才是實作。</p>
+
+  <figure class="shot">
+    <img src="s3-moon0926-img/12-orange-title.jpg" alt="AI Agent：Codex 打造風格學習庫 標題頁" loading="lazy">
+    <figcaption>他的 Canva 簡報標題頁。目標一句話：風格學好之後，丟一張照片，它自動分析，換成學到的風格，生出一張圖。［79:48］</figcaption>
+  </figure>
+
+  <h3>他要做的事</h3>
+  <p>平常看到別人的圖有一定的風格，以前他用 NotebookLM 做過類似的學習。這次希望一個 Agent 串起幾個做好的 Skill：<b>只要給一張照片，它就依照這幾個 Skill 把流程跑完</b>。第一步是分析圖，他以前就寫過一個 Gem 叫「終極圖像大師」，分析圖像很完整。</p>
+
+  <h3>Gem 要收了，先轉成 Skill</h3>
+  <p>他看到消息說 Gem 之後應該會收掉，都會轉成 Skill，「以後應該就是像 GPTs 或一些 Gem 可能都會轉成 Skill 的方式來運作」。所以他把 Gem 轉成 Skill，一個壓縮檔裡其實就是一個 SKILL.md。安裝只要一句話：</p>
+  <div class="code">請把上傳的檔案安裝成全域的 Skill，名稱叫做終極圖像大師</div>
+
+  <figure class="shot">
+    <img src="s3-moon0926-img/13-ultimate-image-master.jpg" alt="終極圖像大師 SKILL 安裝說明頁" loading="lazy">
+    <figcaption>簡報第 2 頁：下載終極圖像大師 SKILL 的壓縮檔，丟給 Codex，「將上傳檔案安裝為全域 SKILL，SKILL 名稱為終極圖像大師」。［85:20］</figcaption>
+  </figure>
+
+  <div class="golden">
+    <div class="q">「Gemini 做好的 Skill 放到 Codex 是一樣的，Skill 是可以相通的。」</div>
+    <div class="a">［90:14］回答為什麼在 Gemini 做的 Skill 可以直接裝進 Codex。</div>
+  </div>
+
+  <h3>Codex、ChatGPT 的「工作」與「對話」，三個地方差在哪</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:170px">你在哪裡</th><th>能不能呼叫本機的 Skill 與專案</th></tr>
+    <tr><td>Codex 桌面版</td><td>可以。有專案，也有一般對話；一般對話在專案清單下面。</td></tr>
+    <tr><td>ChatGPT「工作」（Work）</td><td>可以。跟 Codex 串在一起，看得到你在 Codex 建的專案和 Skill，「兩個是相同的」。</td></tr>
+    <tr><td>ChatGPT「對話」</td><td><b>不行。</b>「其實他就是一般的聊天，他是沒辦法去呼叫你本機建立的這些 Skill。」</td></tr>
+  </table></div>
+
+  <h3>全域 Skill 與專案是兩件事</h3>
+  <p>他的終極圖像大師是在一般對話裝的，沒有放在任何專案裡。裝成「全域」的意思是：<b>不管你在哪一個專案，或沒有用專案，都可以把它叫出來用</b>。呼叫方式是在對話框打一撇 <code>/</code>，往下找到 Ultimate Image Master。</p>
+  <div class="note steel">🔧 <div>課堂上有人問「Codex 沒有出現 MD，安裝嗎」，橘子老師的回答是那個壓縮檔裡就是 MD 檔。益師傅後來在第 11 章補充了檔案會放在哪裡。</div></div>
+</section>
+
+<section class="chapter" id="sec-style">
+  <span class="chip" style="background:linear-gradient(90deg,var(--cyan),var(--blue))">92:00–104:00</span>
+  <h2 class="ct">9. 建立繪圖風格學習專案：34 頁圖像集變成提示詞模板</h2>
+  <p class="cd">Skill 裝好之後開始建資料庫。他強調要學的不是圖裡的人物，是「這種色調風格的概念」。</p>
+
+  <ol class="st">
+    <li>在 Codex（或 ChatGPT 工作）建立一個專案，名稱「<b>繪圖風格學習</b>」，來源資料夾用同名資料夾。Codex 的專案資料夾預設在「文件」底下。</li>
+    <li>把平常收集、覺得不錯的圖全部放進同一個 PDF：<b>風格圖像集01.pdf</b>，34 頁。也可以直接把圖放進專案資料夾。</li>
+    <li>上傳 PDF，下這段提示詞（可以自己加想要的部分）：</li>
+  </ol>
+  <div class="code">解析上傳檔案中的這些圖片（或專案資料夾中的圖片），給我這些圖片風格描述完整設定，設計一個這種風格圖像的提示詞模板，讓我生成這種風格的圖像，像筆觸、色調、圖像氛圍、概念等</div>
+
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="s3-moon0926-img/14-style-project-slide.jpg" alt="建立繪圖風格學習專案的簡報頁，編輯專案視窗" loading="lazy">
+      <figcaption>簡報第 4 頁：專案名稱「繪圖風格學習」，來源資料夾同名。［93:40］</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="s3-moon0926-img/15-style-pdf.jpg" alt="風格圖像集01.pdf 第 6 頁，水彩線稿風格人物" loading="lazy">
+      <figcaption>風格圖像集 01，共 34 頁。他要學的是這種水彩暈染、留白、細線筆觸的色調，不是人物本身。［95:08］</figcaption>
+    </figure>
+  </div>
+
+  <h3>Codex 怎麼回</h3>
+  <p>它先說明會用「PDF 解析」與「圖片風格拆解」兩套技能，確認專案資料夾裡沒有其他圖片、主要素材是 34 頁 PDF，然後完整渲染全部頁面做縮圖總覽，「避免只憑文字抽取猜測視覺風格」。看完之後的結論是這批圖高度一致：精密墨線、局部淡彩、拼貼與剖面式雙重敘事、白底留白、有機物與機械殘骸混種。最後它產出一個 md 檔：<code>風格圖像集01_風格解析與提示詞模板.md</code>。</p>
+
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="s3-moon0926-img/17-codex-report.jpg" alt="Codex 回覆：先確認素材，再渲染全部頁面做總覽，歸納出固定風格模組" loading="lazy">
+      <figcaption>Codex 的中間回報。注意它自己說「已查看 3 張圖像」、「完整渲染全部頁面並做縮圖總覽」，這是它真的看圖而不是猜的證據。［99:46］</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="s3-moon0926-img/16-codex-style-analysis.jpg" alt="Codex 已編輯風格解析與提示詞模板 md，接著解析一張新上傳的圖" loading="lazy">
+      <figcaption>模板做好（+147 行）之後，他丟一張新圖測試：「解析上傳圖像，色調、結構、物件、人物、背景等，並套用到風格圖像集01的提示詞模板，生成完整提示詞」。［99:32］</figcaption>
+    </figure>
+  </div>
+
+  <div class="note blue">💡 <div>模板做完會存在專案資料夾裡的 md 檔，打開就看得到它歸納的筆觸、色調與特色。這就是韋哥講的「知識卡」在圖像領域的版本：把一批圖的共同特徵寫成一份可重複套用的文字。</div></div>
+</section>
+
+<section class="chapter" id="sec-chain">
+  <span class="chip" style="background:linear-gradient(90deg,var(--pink),var(--rose))">104:00–118:30</span>
+  <h2 class="ct">10. 測試、調比例，再把整段流程存成一個 Skill</h2>
+  <p class="cd">模板有了，接下來三步：丟一張圖測、覺得比例不對就改模板、確定可用就把整個對話過程做成 Skill。</p>
+
+  <h3>第一步：丟一張圖，讓它生提示詞，再去別的地方生圖</h3>
+  <p>解析時他會呼叫終極圖像大師（打一撇找到它），要它「解析上傳圖像的色調、結構、物件、人物、背景，並套用到風格圖像集01的提示詞模板，生成完整提示詞」。提示詞出來之後，他不在 Codex 裡生圖，而是複製到 ChatGPT 網頁版，因為「他生出來的會比他精緻一點」。</p>
+
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="s3-moon0926-img/18-chatgpt-style-image.jpg" alt="ChatGPT 依提示詞生成的風格圖：懸浮建築與人物" loading="lazy">
+      <figcaption>ChatGPT 網頁版生出來的第一張。背景一定會不一樣，「可是我要的是他的這種色調跟他的線的這種筆觸的感覺」。［103:07］</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="s3-moon0926-img/19-copilot-whale-ship.jpg" alt="Copilot 用同一段提示詞生成的鯨魚船" loading="lazy">
+      <figcaption>同一段提示詞丟 Copilot。他說 Copilot 的生圖引擎跟 ChatGPT 一模一樣，「可是 ChatGPT 我覺得他生的圖是比較厲害的」。［104:33］</figcaption>
+    </figure>
+  </div>
+
+  <h3>第二步：模板加一個可以調的參數</h3>
+  <p>他想控制主要人物和重點物件的「繪圖相似度佔比」，就跟 Codex 說「修改這個模板的設定，讓我可以調整比例」。之後每次執行，Codex 會先問：主視覺要佔多少、重點物件多少？他答主視覺 90、重點物件 65，它再依這個設定生提示詞。示範的那張船，它把上面的生物解析成金魚（他覺得像章魚），「沒關係，可是我要的是他的畫風」。</p>
+  <div class="note gold">⚠️ <div>他也老實說限制：這批圖他判斷是 Midjourney 生成的風格，「要生成 Midjourney 的，跟一般的模型訓練其實是比較不一樣，所以不容易模仿出他那一種風格的樣子」。</div></div>
+
+  <h3>第三步：把整段對話做成全域 Skill</h3>
+  <div class="code">將上述過程，使用終極圖像大師 SKILL 解析上傳圖像、色調、結構、物件、人物、背景等，並套用到風格圖像集01的提示詞模板，生成完整提示詞，建立全域 SKILL，名稱為「繪圖風格學習 SKILL」</div>
+  <p>Codex 回「驗證通過」之後，這個 Skill 就隨時可以叫出來，不需要在專案裡。他示範在一般對話丟一張圖，呼叫繪圖風格學習，它自動串終極圖像大師解析、套模板、問比例、生提示詞。</p>
+
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="s3-moon0926-img/20-skill-chain-slide.jpg" alt="簡報第 7 頁：將上述過程建立成全域 SKILL 的提示詞" loading="lazy">
+      <figcaption>簡報第 7 頁就是那句「將上述過程…建立全域 SKILL」。一個 Skill 串另一個 Skill。［117:29］</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="s3-moon0926-img/21-dog-style.jpg" alt="用繪圖風格學習 Skill 把一張狗的照片換成水彩線稿風" loading="lazy">
+      <figcaption>最後的測試：丟一張黑狗照片，Copilot 與 ChatGPT 各生一張。「這兩個風格其實還蠻像的。」［117:47］</figcaption>
+    </figure>
+  </div>
+
+  <div class="note green">✅ <div>他的收尾：「如果你是沒有訂閱 ChatGPT 的話，畫圖不夠用，可以考慮 Codex 再叫回來用」，直接在 Skill 裡加一句「直接生圖」也可以。這一部分「大家就自行延伸應用了」。</div></div>
+</section>
+
+<section class="chapter" id="sec-output">
+  <span class="chip" style="background:linear-gradient(90deg,var(--teal),var(--green))">118:30–122:00</span>
+  <h2 class="ct">11. 益師傅補充：Codex 處理完的檔案會放回你上傳的地方</h2>
+  <p class="cd">橘子老師講完，有夥伴問為什麼安裝之後資料不在專案資料夾。益師傅用兩分鐘講清楚一個很多人卡住的習慣。</p>
+  <ul class="pt">
+    <li><b>從哪裡丟給它，它就放回哪裡</b>——你用「下載」資料夾的檔案丟給 Codex，處理完的程式或檔案就在原本上傳的路徑底下。</li>
+    <li><b>想放在專案裡</b>——直接把檔案放進專案 folder，跟它講「這個 folder 底下某個檔案」，或者剛好只有一個檔案就不用講。</li>
+    <li><b>想要下載檔</b>——跟它說「請提供下載檔案給我」，它就會放在你建立專案的 folder 裡的 <code>output</code> 資料夾。</li>
+  </ul>
+  <div class="golden">
+    <div class="q">「所以有時候實作還是蠻重要的。聽都聽得懂，但是過一段時間你再去碰，欸，到底我是要把資料放在這個資料夾呢，還是提供來源部分上傳給他呢？」</div>
+    <div class="a">［119:33］他鼓勵大家跟著做，這一段就是「聽懂」和「做得出來」的差距在哪裡。</div>
+  </div>
+</section>
+
+<section class="chapter" id="sec-stock">
+  <span class="chip" style="background:linear-gradient(90deg,var(--blue),var(--purple))">122:00–133:30</span>
+  <h2 class="ct">12. 送禮一：台股 AI 主力行為判讀系統</h2>
+  <p class="cd">益師傅本來說「今天可以不用講」，結果從十二點前講到過十二點。第一個禮物是訂閱制夥伴早有的工具，這次給的是 Claude 做的新版。</p>
+
+  <p>輸入股票代號按「開始分析」，會抓最近 60 個交易日的真實資料（TWSE 優先、FinMind 備援），畫出 18 格：主力趨勢、AI 決策核心、多維度判斷、AI 主力籌碼熱區、法人行為分析、KD、MACD 等，最下方有綜合分析與技術報告。他強調三件事：</p>
+  <ul class="pt">
+    <li><b>數據是真的</b>——「這些數據都是正確的數據。至於他分析的角度，我不敢說他百分之百。」他建議對照自己的下單軟體看三大法人與主力。</li>
+    <li><b>右下角的 ECF LOGO 可以拿掉</b>——「你可以下載之後再跟他講說，請將右下角 ECF 的 LOGO 給去除掉。」放 LOGO 是因為網路上、Threads 上很多人抄他的圖。</li>
+    <li><b>為什麼不用填 API Key</b>——課末有人問，他說 FinMind 的 Key 已經藏在裡頭，讓大家方便；「收費也是找我」。</li>
+  </ul>
+
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="s3-moon0926-img/22-stock-dashboard-home.jpg" alt="台股 AI 主力行為判讀系統首頁，輸入代號" loading="lazy">
+      <figcaption>首頁只有一個輸入框，右上角是下載儀表板 PNG、CSV、HTML 與列印 PDF。［129:00］</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="s3-moon0926-img/23-stock-dashboard-6672.jpg" alt="18 格儀表板分析結果，主力態度持續買超" loading="lazy">
+      <figcaption>示範代號跑出來的 18 格。他說「這個圖表夠漂亮吧」、「這個當初在做的時候花了蠻久的時間」。［130:09］</figcaption>
+    </figure>
+  </div>
+
+  <div class="note gold">⚠️ <div><b>不是投資建議。</b>他整段反覆說「益師傅沒有推薦」、「一切都是不小心」、「要小心謹慎，做任何的投資都是如此」。本頁不列出他示範的代號，畫面上的價位與分析全是課堂示範輸出。</div></div>
+</section>
+
+<section class="chapter" id="sec-bazi">
+  <span class="chip" style="background:linear-gradient(90deg,var(--amber),var(--rose))">133:30–146:30</span>
+  <h2 class="ct">13. 送禮二：八字×姓名合參 V4，Groq API 與命盤庫</h2>
+  <p class="cd">第二個禮物是 9 月 2 日的 V4 版八字姓名學。「這個是人生一定要算的，必算的部分。」他說今天大方一點，新舊夥伴都送。</p>
+
+  <figure class="shot">
+    <img src="s3-moon0926-img/25-bazi-app.jpg" alt="八字×姓名合參 V4 首頁：連線設定、姓名學分析、取名建議" loading="lazy">
+    <figcaption>V4 的首頁。左上「連線設定」選 Groq、Gemini 或 Ollama 本地端，貼 API Key 按驗證；右邊是姓名學分析與取名／改名建議。［136:26］</figcaption>
+  </figure>
+
+  <h3>V4 新增了什麼</h3>
+  <div class="twrap"><table>
+    <tr><th style="width:150px">功能</th><th>他怎麼說</th></tr>
+    <tr><td>模型來源</td><td>Groq API 免費；Gemini API 可以畫圖但要錢；<b>Ollama 本地端</b>是新的，「連現在目前的新生都還沒有這個程式」。</td></tr>
+    <tr><td>出生地（經緯度）</td><td>「真的要研究八字，他的出生地是有關係的，有考究的。」</td></tr>
+    <tr><td>時辰不確定</td><td>八字每次都不一樣是因為媽媽每次講的時間不一樣；勾「時辰不確定」改以量測校正。</td></tr>
+    <tr><td>命盤庫</td><td>把這個人的資料存起來，下次直接拿出來分析，因為只是分析的主題不一樣。</td></tr>
+    <tr><td>分析主題</td><td>像提示詞一樣直接問：「說話要說清楚，要問明白，要直接問」。他的示範題是某檔股票 9 月 29 日買適合嗎。</td></tr>
+    <tr><td>其他</td><td>雙人合盤、家族合盤、英文名、公司名，都能算。</td></tr>
+  </table></div>
+
+  <figure class="shot">
+    <img src="s3-moon0926-img/26-bazi-chart.jpg" alt="流年流月運勢折線圖與長條圖" loading="lazy">
+    <figcaption>命盤跑出來之後的流年、流月運勢圖。命盤和大運他說「看不懂，看底下的中文註解」，是餵了人家的命盤學資料才畫得出來的。［144:06］</figcaption>
+  </figure>
+
+  <figure class="shot">
+    <img src="s3-moon0926-img/27-bazi-analysis.jpg" alt="AI 推演的文字分析：命盤總覽、逐項主題分析" loading="lazy">
+    <figcaption>文字分析區：命盤總覽、用神喜忌，再逐項回答你設定的主題，下方可以匯出 TXT、DOCX、PDF，還能「追問 AI」。［146:42］</figcaption>
+  </figure>
+
+  <div class="golden">
+    <div class="q">「命沒有辦法改，只能改運。所以算命師要賺的是你改運的錢，不是改命。」</div>
+    <div class="a">［145:42］他一邊玩笑一邊講的一句，也是這個工具的定位：參考，不是決定。</div>
+  </div>
+  <div class="note steel">🔧 <div>本頁截圖刻意避開他輸入自己出生年月日的畫面，只留運勢圖與分析區。他示範時算的是自己，命中缺水、接下來十年大運最旺，這些是他公開講的玩笑話，本頁不做進一步整理。</div></div>
+</section>
+
+<section class="chapter" id="sec-wasm">
+  <span class="chip" style="background:linear-gradient(90deg,var(--green),var(--cyan))">146:30–166:30</span>
+  <h2 class="ct">14. AGENTS.md 與 WASM 布網：防君子不防小人</h2>
+  <p class="cd">這才是他今天的主題。先講 AGENTS.md，再用 WASM Skill 把八字工具布上網，讓人按右鍵檢視原始碼也看不到內容。</p>
+
+  <h3>AGENTS.md：Codex 的個人設定</h3>
+  <p>「這個是放在你的 Codex 裡頭的自我設定，就是你個人的一些自我設定的部分。」它只是 Markdown，所以你也可以跟 AI 說把它變成 CLAUDE.md。Codex 和 Claude 執行時都會先以這份設定為主。內容他很老實：「網路上找的，再稍微改一下」。四節是：編碼前思考、簡潔至上、精準修改、目標導向執行。</p>
+
+  <figure class="shot">
+    <img src="s3-moon0926-img/31-agents-md.jpg" alt="AGENTS.md 內容：簡潔至上、精準修改、目標導向執行" loading="lazy">
+    <figcaption>他打開的 AGENTS.md：第 3 節「只修改必要的部分，只清理你自己造成的混亂」，第 4 節「定義成功標準，反覆執行直到驗證通過」。［167:41］</figcaption>
+  </figure>
+
+  <div class="note blue">💡 <div>有人問為什麼 WASM 那個壓縮檔裡有程式碼，不像一般 Skill 只有 Markdown。他說一般 Skill 處理文案只要 Markdown，但要處理 UI、UX 這類設定的，「它裡頭可能會潛藏了 Python 的語法」，你不需要了解，能安裝就好。</div></div>
+
+  <h3>WASM 是什麼</h3>
+  <p>網頁程式是明碼，布到網路上，別人按滑鼠右鍵「檢視原始碼」就看到全部。WASM（WebAssembly）的概念是把程式重新編碼成你看不懂的方式：「把這個程式稍微變成一個 function 包圍，裡頭只會帶著一個函式的簡單的表示方式，而裡頭細節的部分你卻看不到」。別人複製原始碼去執行會不正常，「還是他只是一個空殼」。</p>
+  <div class="golden">
+    <div class="q">「但是這個是防君子，不是防小人。小人要解你的程式，還是有辦法解。」</div>
+    <div class="a">［153:19］他沒有誇大這個 Skill 能做什麼。想解的人做一個反 WASM 一樣解得開。</div>
+  </div>
+
+  <h3>照著做：五個步驟</h3>
+  <ol class="st">
+    <li>在 Codex 開一個專案「<b>Skill 創作</b>」，選一個固定資料夾，以後所有做 Skill 的對話都在這裡找，「不會散在任何一個地方」。按 Trust 信任。</li>
+    <li>上傳 <code>WASM.skill_完整原始碼.zip</code>，跟它說「請幫我建立 <b>WASM-new.skill</b>」。改名字是因為他之前裝過，怕跟舊的混。</li>
+    <li>上傳要布網的 HTML（示範用八字姓名學 V4），下這段：</li>
+  </ol>
+  <div class="code">請將上傳檔案幫我透過 /WASM-new 做布網的動作 @Sites
+所有人都可以使用這網頁
+網址中必須要有 ECF 字眼</div>
+  <ol class="st" start="4">
+    <li>三個關鍵：打一撇選 <b>WASM-new</b> 這個 Skill；用小老鼠 <b>@Sites</b> 指定布網工具，不然它有時候搞不清楚；<b>「所有人都可以使用」</b>一定要寫，不然開網頁要用 ChatGPT 登入。網址帶 ECF 只是做區隔，「原來可以這樣子要求，這都是口語化，叫做自然語言」。</li>
+    <li>它回的網址如果是 192.168 開頭的內網，按「外網」按鈕會用預設瀏覽器開外部網址。填 API Key 驗證、排盤成功，再開一個<b>無痕視窗</b>試，「無痕可以用就代表都沒有問題了」。</li>
+  </ol>
+
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="s3-moon0926-img/29-wasm-skill-chat.jpg" alt="ChatGPT 工作模式裡的 WASM 布網對話" loading="lazy">
+      <figcaption>布網那段對話。它回報：姓名五格已轉入 WASM、已移除內建 API 金鑰、透過 Sites 發布成功、網址含 ecf。［159:33］</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="s3-moon0926-img/30-bazi-wasm-site.jpg" alt="布網後的八字×姓名合參網頁，在瀏覽器中開啟" loading="lazy">
+      <figcaption>布上網的成品，網址是 ecf 開頭的 chatgpt.site。他填 Key 驗證、排盤，然後開無痕再試一次。［163:38］</figcaption>
+    </figure>
+  </div>
+
+  <div class="note steel">🔧 <div>示範時他貼錯一次 API Key，重貼才驗證成功；回的網址先是內網，他自己也說「我不曉得他今天為什麼是變成內網」。這些都照實記錄，因為你照做時很可能碰到一樣的狀況。</div></div>
+</section>
+
+<section class="chapter" id="sec-shot">
+  <span class="chip" style="background:linear-gradient(90deg,var(--orange),var(--amber))">159:30–162:30</span>
+  <h2 class="ct">15. Little-shot 到 One-shot：講清楚，不然就是抽盲盒</h2>
+  <p class="cd">等 Codex 跑布網的三分鐘，他講了一段觀念，是整場最像「上課」的部分。起因是八字工具：有人告訴他裡頭的寫法有錯，他當初以為 AI 是對的。</p>
+
+  <ul class="pt">
+    <li><b>Little-shot</b>——「當我們自己本身沒有鑑核能力的時候，完全都取決於 AI 來幫你做決策」，這叫 Little-shot。</li>
+    <li><b>One-shot</b>——AI 傳回來的東西，「假如你本身有這個能力去看他到底對與不對，你可以適時的去做調整，調整完最後就變成你的 One-shot。這是重點」。</li>
+    <li><b>三個時代</b>——以前談 Prompt Engineering，後來談 Context Engineering，現在叫 <b>Loop Engineering</b>，回圈式的工程：它會依照你的目的想辦法達成。但目的只給一句簡單描述，「你確定得到的東西會是你要的嗎」。</li>
+    <li><b>排程之前先確認一致</b>——先講清楚，看它每次產出是不是都一樣；結果一樣了才做排程管理，「不然他就像 AI 抽盲盒的概念」。</li>
+    <li><b>風格一致比人物一致難</b>——人物一致現在容易，因為 AI 的通識知道七龍珠主角長什麼樣；但你工作上、學校學務的東西不是通識，「那你為什麼不講清楚」。這句是回應橘子老師那段風格學習。</li>
+  </ul>
+
+  <div class="golden">
+    <div class="q">「他再怎麼懂你還是有時候要講清楚吧。講清楚沒有那麼難嘛。」</div>
+    <div class="a">［161:31］他把 AI 當人看：跟家人、同事溝通都要講清楚，何況 AI。</div>
+  </div>
+  <div class="note steel">🔧 <div>他全場用「Little-shot」與「One-shot」兩個詞，本頁照原話保留，不替換成 zero-shot、few-shot 等標準術語。他在 9 月 5 日的提示詞工程補充課用的是同一組詞，兩堂可以對照看。</div></div>
+</section>
+
+<section class="chapter" id="sec-strategy">
+  <span class="chip" style="background:linear-gradient(90deg,var(--purple),var(--pink))">166:30–178:30</span>
+  <h2 class="ct">16. 策略圖表製作：一個連結長出策略發展藍圖，還要自己判斷有沒有唬爛</h2>
+  <p class="cd">最後一個運用，也是他順便把「ChatGPT 專案」再教一次的段落。「有些人已經很久忘記益師傅了，去年的事情，我今天再教一下。」</p>
+
+  <h3>這份提示詞在做什麼</h3>
+  <p>「它可以根據你給它一個連結或上傳的檔案或是一個圖像，它可以把策略的藍圖給畫出來。」教材〈策略圖表製作.txt〉要求 AI 先讀完資料，萃取產業趨勢、策略方向、轉型重點、風險與行動，濃縮成<b>四個策略階段</b>，畫成 16:9、深藍科技感、四張直式卡片的資訊圖表，全部繁體中文、不要錯字、不要浮水印。</p>
+
+  <figure class="shot">
+    <img src="s3-moon0926-img/32-strategy-prompt.jpg" alt="策略圖表製作.txt 的提示詞內容" loading="lazy">
+    <figcaption>教材原文的前半：圖像主題怎麼替換、整體版面深藍漸層、16:9 橫式、四個並列卡片。［168:15］</figcaption>
+  </figure>
+
+  <h3>建專案的四步（聊天版，不是 Codex）</h3>
+  <ol class="st">
+    <li>進 ChatGPT 聊天版，左側「專案」旁按加號，取名「策略圖表製作」，建立專案。</li>
+    <li>它不像 Gemini 寶石會直接顯示說明欄，指令要另外填：<b>電腦點專案標題、手機按三個點</b>，進專案設定。</li>
+    <li>把〈策略圖表製作.txt〉整段貼進「指令」，儲存。</li>
+    <li>之後在專案裡貼連結或檔案，「＋」裡選<b>創作圖像</b>，送出。想更好可以選中度推理。</li>
+  </ol>
+
+  <h3>第一次示範：只給商品頁，它畫的是產品圖</h3>
+  <p>他從 PChome 24h 選了一台 ROG 電競筆電，貼連結，再把頁面上的中文規格複製過去（「PChome 頁面這麼多，有信用卡付款機制、有贈品，你不確定他抓的東西到底對不對」）。出來是一張很漂亮的產品資訊圖。他自己說破：「這不叫策略圖表，因為我只有商品的資料」；而且圖上的型號畫錯了，「他混亂了」。</p>
+
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="s3-moon0926-img/33-pchome-rog.jpg" alt="PChome 24h 的 ROG Strix SCAR 18 商品頁" loading="lazy">
+      <figcaption>來源：PChome 的商品頁。他說「假如這臺是益師傅的電腦」。［173:03］</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="s3-moon0926-img/34-rog-infographic.jpg" alt="ChatGPT 產出的 ROG 筆電資訊圖，四張規格卡片" loading="lazy">
+      <figcaption>產出：漂亮，但是產品圖不是策略圖，而且型號寫錯。「我們要確實地去判斷他是不是正確。」［174:47］</figcaption>
+    </figure>
+  </div>
+
+  <h3>第二次示範：給公司資料，才長出策略藍圖</h3>
+  <p>換成英業達的公司網站，貼連結、寫上「英業達」以免它錯亂，選創作圖像、中度推理。出來的就是四步驟的「英業達 策略發展藍圖」：卓越工程研發、智慧製造升級、企業算力布局、全球韌性經營。「這叫做策略圖表，理論上就是要這種東西。」</p>
+
+  <div class="shotgrid">
+    <figure class="shot">
+      <img src="s3-moon0926-img/35-inventec-site.jpg" alt="英業達官網首頁" loading="lazy">
+      <figcaption>來源換成一間公司的官網。［177:03］</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="s3-moon0926-img/36-inventec-blueprint.jpg" alt="英業達策略發展藍圖：四步驟卡片的資訊圖" loading="lazy">
+      <figcaption>產出：主標題、副標題「依據官網資訊分析整理」、四張策略卡片，完全照教材的版面規格。［178:57］</figcaption>
+    </figure>
+  </div>
+
+  <div class="golden">
+    <div class="q">「我們要去從我們的知識裡頭，去看他有沒有吹牛，不能隨便亂寫。所以 Little-shot 很棒，但是 Little-shot 吐出來的資料是不是我們要的？」</div>
+    <div class="a">［175:33］看到型號畫錯之後講的。把第 15 章的觀念直接用在剛剛的產出上。</div>
+  </div>
+  <div class="note blue">💡 <div>他建議的用法：放完假要給老闆交代策略分析，公司的產品、公司的資料都可以丟；「對於在企業上或是在個人發展上，我覺得幫助非常非常大」。在 Gemini 的寶石裡做同樣的事也可以。</div></div>
+</section>
+
+<section class="chapter" id="sec-real">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--purple))">TAKEAWAYS</span>
+  <h2 class="ct">17. 這場真正在教的事</h2>
+  <h3>一、做給自己用的東西，才會被別人用</h3>
+  <p>李佳恩老師的網站是女兒喜歡企鵝、自己深夜讀書想要一個畫面；韋哥的制度是兩台電腦搞混了；橘子老師的 Skill 是平常看到喜歡的畫風想留下來。沒有一個是為了「做個作品」而做的。</p>
+  <h3>二、每個人都先驗證，才交出去</h3>
+  <p>網站爆紅前先看過每一個鏡頭能不能播；Claude 審 Codex，人再審一次；風格模板先丟一張圖測、覺得不對就改；布網之後開無痕再試一次；策略圖出來先看型號對不對。益師傅收尾點名韋哥「還是會做 double check」，其實四個人都是。</p>
+  <h3>三、能重複用的形式有四種</h3>
+  <p>一個網站、一份制度文件、一個 Skill、一個專案指令。從最具體到最抽象，都是「把做過一次的動作，變成下次一句話就能叫出來的東西」。</p>
+  <h3>四、知識累積比工具重要</h3>
+  <p>韋哥的知識卡、橘子老師的風格模板、益師傅的 AGENTS.md，本質上都是同一個東西：把自己的判斷寫成 AI 讀得懂的文字。工具會換，這些帶得走。</p>
+  <h3>五、講清楚沒有那麼難</h3>
+  <p>「所有人都可以使用」要寫，幣別是美金要說，學生資料不准碰要列進禁區，主視覺要佔 90 要講。Loop Engineering 之前，先把話講清楚。</p>
+</section>
+
+<section class="chapter" id="sec-quotes">
+  <span class="chip" style="background:linear-gradient(90deg,var(--amber),var(--rose))">QUOTES</span>
+  <h2 class="ct">18. 老師與分享者金句</h2>
+  <div class="golden"><div class="q">「你在動物園看不到這些動物在一起。」</div><div class="a">［09:10］李佳恩老師解釋非洲水坑鏡頭為什麼會紅。</div></div>
+
+  <div class="golden"><div class="q">「像這個斑馬的影片啊，就會感覺很像，很像是假的，很像 AI，但是它就是栩栩如生在你的面前。」</div><div class="a">［09:30］真實直播在 AI 影片氾濫時代的價值。</div></div>
+
+  <div class="golden"><div class="q">「就是不用在那邊傻傻等待說，欸什麼時候會有飛機出現，或是說什麼時候會有火車出現這樣子。」</div><div class="a">［31:51］時刻表功能存在的理由。</div></div>
+
+  <div class="golden"><div class="q">「對，是美金喔。」</div><div class="a">［37:41］贊助前要先講清楚的一件事，他講了兩次。</div></div>
+
+  <div class="golden"><div class="q">「其實直播都是他們提供的，所以其實辛苦的都是他們。所以觀看數跟收益都是這些原頻道。」</div><div class="a">［40:37］整理者的自我定位。</div></div>
+
+  <div class="golden"><div class="q">「因為這樣就逼著他們要一直做新的創作出來好不好？不要放過他們。」</div><div class="a">［46:04］益師傅宣布這三位以後是固定班底。</div></div>
+
+  <div class="golden"><div class="q">「我覺得就是我很常跟 AI 講一句就是我不懂，我不會，請你教我。」</div><div class="a">［52:59］韋哥的 AI 為什麼會進步。</div></div>
+
+  <div class="golden"><div class="q">「我會怕，因為我完全看不到他們聊了什麼，然後講了什麼。」</div><div class="a">［65:28］韋哥試過全自動之後回頭當人工 API 的原因。</div></div>
+
+  <div class="golden"><div class="q">「身為一個老師我自己啦，我覺得我要的是過程。成果很重要沒有錯，可是我覺得我要的是過程。」</div><div class="a">［66:00］同上，另一個原因。</div></div>
+
+  <div class="golden"><div class="q">「AI 的工具進步的好快，然後快到有的時候真的會跟不上。但我後來發現其實知識的累積，才會是我們這一個時代最重要的東西。」</div><div class="a">［71:25］韋哥從 Google Slides 的示範體會到的。</div></div>
+
+  <div class="golden"><div class="q">「我真的一張一張圖，截了，開了。那個時候我還開網頁版的 ChatGPT，開網頁版的 Gemini，我一個一個貼上去，這是什麼意思？解釋給我。」</div><div class="a">［73:34］韋哥的來時路。</div></div>
+
+  <div class="golden"><div class="q">「Gemini 做好的 Skill 放到 Codex 是一樣的，Skill 是可以相通的。」</div><div class="a">［90:14］橘子老師。</div></div>
+
+  <div class="golden"><div class="q">「如果你在 ChatGPT 的對話，其實他就是一般的聊天，他是沒辦法去呼叫你本機建立的這些 Skill。」</div><div class="a">［88:00］橘子老師講「工作」與「對話」的差別。</div></div>
+
+  <div class="golden"><div class="q">「所以有時候實作還是蠻重要的。」</div><div class="a">［119:33］益師傅在橘子老師講完之後。</div></div>
+
+  <div class="golden"><div class="q">「這些數據都是正確的數據。至於他分析的角度，我不敢說他百分之百。」</div><div class="a">［131:14］台股工具的界線。</div></div>
+
+  <div class="golden"><div class="q">「真的要研究八字，他的出生地是有關係的，有考究的。」</div><div class="a">［138:52］V4 為什麼加出生地。</div></div>
+
+  <div class="golden"><div class="q">「命沒有辦法改，只能改運。」</div><div class="a">［145:42］八字工具的定位。</div></div>
+
+  <div class="golden"><div class="q">「但是這個是防君子，不是防小人。」</div><div class="a">［153:19］WASM 能做什麼、不能做什麼。</div></div>
+
+  <div class="golden"><div class="q">「原來可以這樣子要求，這都是口語化，叫做自然語言。你我都會的語言。」</div><div class="a">［156:52］布網指令不用文謅謅。</div></div>
+
+  <div class="golden"><div class="q">「他再怎麼懂你還是有時候要講清楚吧。講清楚沒有那麼難嘛。」</div><div class="a">［161:31］Loop Engineering 之前先講清楚。</div></div>
+
+  <div class="golden"><div class="q">「不然他就像 AI 抽盲盒的概念。」</div><div class="a">［161:55］結果不一致就做排程的下場。</div></div>
+
+  <div class="golden"><div class="q">「他說益師傅，這不叫策略圖表，因為我只有商品的資料。」</div><div class="a">［174:51］自己說破第一次示範的問題。</div></div>
+
+  <div class="golden"><div class="q">「所以發現每個人的個性不一樣，每個人做事的風格不一樣，做出來的作品也會不太一樣。」</div><div class="a">［178:39］收尾。</div></div>
+</section>
+
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,var(--ink3),var(--ink2))">SOURCE</span>
+  <h2 class="ct">19. 資料來源與整理說明</h2>
+
+  <div class="twrap"><table>
+    <tr><th style="width:130px">來源</th><td>2026/09/26 課堂錄影單段，全長 3 小時 4 分 19 秒；課程資料夾七份檔案</td></tr>
+    <tr><th>整理方式</th><td>全程本機處理：場景偵測擷取 336 張畫面、產生 1867 段逐字稿，再依逐字稿手寫章節目錄；正式頁精選 35 張截圖，全部裁掉與會者欄、瀏覽器分頁列與工作列</td></tr>
+    <tr><th>時間戳</th><td>章節標題與引文後方的［mm:ss］對應錄影播放器時間，超過一小時仍以累計分鐘表示</td></tr>
+    <tr><th>整理</th><td>竹貞（Tarshar 的逐幀筆記專員）</td></tr>
+  </table></div>
+
+  <h3>已知限制，請先看過再引用</h3>
+  <ul class="pt">
+    <li><b>逐字稿是機器產生的</b>，人名與工具名會聽錯。可確定的錯字（Cloud→Claude、JAMM→Gem、深層→生成、布王→布網、Glock→Groq、German→Gemini、TrackGPT→ChatGPT、一師傅／義師傅→益師傅等）已修正；<b>不確定的一律保留原樣，沒有猜測補詞</b>。</li>
+    <li>錄影 18:00、22:00、34:00、98:00、112:00、122:00、168:00、170:00 前後各有一段語音辨識產生的重複幻覺或亂碼（多為切換畫面的靜音時段），整理時已整段捨棄，不會出現在本頁。</li>
+    <li>益師傅全場使用「Little-shot」與「One-shot」兩個詞，本頁照原話保留，未替換成 zero-shot、few-shot 等標準術語。</li>
+    <li>三位分享者以他們自己在課堂上的稱呼與公開品牌名稱記錄（Studio0808 智造實驗室、韋哥科技教室、橘子腦師），提問的學員暱稱一律隱去。</li>
+    <li>課堂截圖已裁掉線上教室右側的與會者名單；出現 API 金鑰、個人出生資料的畫面沒有選用。</li>
+    <li>台股工具與八字工具的示範內容都是課堂當下的輸出，<b>不是投資建議，也不是命理建議</b>；示範用的股票代號本頁不列出。</li>
+    <li>引用到作業、貼文或簡報之前，請對照錄影原始段落再確認一次。</li>
+  </ul>
+
+  <div class="note gold">🔒 <div><b>工具檔與工具網址不放在這一頁。</b>台股 AI 主力行為判讀系統、八字×姓名合參 V4、WASM Skill 是益師傅送給訂閱制夥伴的，請從課程資料夾與課堂連結取得；三個直播地圖網站是李佳恩老師的公開作品，入口在他的 Studio0808 智造實驗室。教材與錄影版權屬原作者，若原作者或課程方希望撤下，來信告知即刻移除。</div></div>
+</section>
+
+</article>
+</div>
+
+<footer>
+  <p>📝 中秋特別活動 課堂筆記 · 生成式AI應用電台・訂閱制第三季（益師傅＋三位學員分享）</p>
+  <p>依錄影關鍵畫面＋全程逐字稿整理 · <a href="s3-moon0926-ai-skills.html">🗺️ 互動技能地圖</a> · <a href="../radio/#ecf">🏠 回筆記館入口</a></p>
+</footer>
+
+</body>
+</html>
