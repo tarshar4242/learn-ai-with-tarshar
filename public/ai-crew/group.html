@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>小組空間</title>
+<meta name="theme-color" content="#2F8F62">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=Noto+Serif+TC:wght@700&display=swap">
+<link rel="stylesheet" href="shared/site.css">
+<style>
+.panel { display: flex; flex-direction: column; gap: 12px; }
+.panel-lead { margin: 0; font-size: 13px; color: var(--ink-soft); }
+.you-line { font-size: 13px; color: var(--ink-soft); }
+.you-line b { color: var(--ink); }
+</style>
+</head>
+<body>
+<header class="site-head" id="head"></header>
+<main class="page">
+
+  <div class="group-head">
+    <span class="sw" id="sw"></span>
+    <div class="t"><b id="gName">小組</b><small id="gTag"></small></div>
+  </div>
+  <p class="you-line" id="youLine"></p>
+
+  <div class="tabs" role="tablist" id="tabs">
+    <button class="tab" role="tab" id="tab-handouts" aria-controls="p-handouts" aria-selected="true" type="button">課程講義</button>
+    <button class="tab" role="tab" id="tab-works" aria-controls="p-works" aria-selected="false" type="button">實作存檔</button>
+    <button class="tab" role="tab" id="tab-members" aria-controls="p-members" aria-selected="false" type="button">小組成員</button>
+    <button class="tab" role="tab" id="tab-schedule" aria-controls="p-schedule" aria-selected="false" type="button">課程進度</button>
+  </div>
+
+  <section class="panel" role="tabpanel" id="p-handouts" aria-labelledby="tab-handouts">
+    <p class="panel-lead">每堂課的講義，上課前後都可以回來看。</p>
+    <ul class="list" id="handouts"></ul>
+  </section>
+  <section class="panel" role="tabpanel" id="p-works" aria-labelledby="tab-works" hidden>
+    <p class="panel-lead">同組夥伴做出來的東西，看別人怎麼做也是學習。</p>
+    <ul class="list" id="works"></ul>
+  </section>
+  <section class="panel" role="tabpanel" id="p-members" aria-labelledby="tab-members" hidden>
+    <p class="panel-lead">跟你同一組的夥伴。</p>
+    <div class="members" id="members"></div>
+  </section>
+  <section class="panel" role="tabpanel" id="p-schedule" aria-labelledby="tab-schedule" hidden>
+    <p class="panel-lead">這一組的上課時間。</p>
+    <ul class="list" id="schedule"></ul>
+  </section>
+
+</main>
+<footer class="foot" id="foot">🍀 Learn AI with Tarshar | 2026</footer>
+
+<script src="shared/site.js"></script>
+<script>
+(async () => {
+  const { loadConfig, groupOf, siteHeader, toast, requireCard } = AICrew;
+  const $ = (id) => document.getElementById(id);
+  const card = requireCard();
+  if (!card) return;
+  siteHeader($("head"));
+  let cfg = null;
+  try { cfg = await loadConfig(); } catch (e) { console.error(e); toast("設定檔讀不到，稍後再試"); return; }
+  siteHeader($("head"), { title: cfg.workshop.name });
+  $("foot").textContent = "🍀 " + cfg.workshop.signature;
+  const g = groupOf(cfg, card.group);
+  if (!g) { toast("找不到你的小組，請重新領證"); location.replace("id.html"); return; }
+  document.title = g.name + "｜小組空間";
+  $("sw").style.background = g.color;
+  $("gName").textContent = g.name;
+  $("gTag").textContent = g.tagline || "";
+  $("youLine").innerHTML = `你是 <b>${card.name}</b>，NO. ${card.serial}，${card.issued} 領證`;
+
+  const el = (tag, cls, text) => { const n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; };
+  const empty = (text) => { const d = el("div", "empty", text); return d; };
+  const linkItem = (mark, title, sub, url) => {
+    const a = el(url ? "a" : "div", "item");
+    if (url) { a.href = url; a.target = "_blank"; a.rel = "noopener"; }
+    a.append(el("span", "mark", mark));
+    const t = el("span", "txt"); t.append(el("b", null, title)); if (sub) t.append(el("small", null, sub)); a.append(t);
+    if (url) a.append(el("span", "go", "›"));
+    return a;
+  };
+
+  /* 講義 */
+  if (g.handoutsOpen !== true) $("handouts").append(empty("老師還在準備這一組的講義，上課前會放上來。"));
+  else if (!g.handouts || !g.handouts.length) $("handouts").append(empty("還沒有講義。"));
+  else g.handouts.forEach((h, i) => $("handouts").append(linkItem(String(i + 1).padStart(2, "0"), h.title, h.note || "", h.url)));
+
+  /* 實作存檔 */
+  if (g.worksOpen !== true) $("works").append(empty("實作存檔在第一堂課之後開放。"));
+  else if (!g.works || !g.works.length) $("works").append(empty("還沒有人交作品，你可以當第一個。"));
+  else g.works.forEach((w) => $("works").append(linkItem((w.by || "作").slice(0, 2), w.title, [w.by, w.date].filter(Boolean).join("・"), w.url)));
+
+  /* 成員：名冊上的名字加上你自己；照片留在各自手機，這裡只顯示名字 */
+  const names = (cfg.roster || []).filter((r) => r.group === g.id).map((r) => r.name);
+  if (!names.includes(card.name)) names.push(card.name);
+  if (!names.length) $("members").append(empty("還沒有成員。"));
+  for (const n of names) {
+    const m = el("span", "member" + (n === card.name ? " you" : ""));
+    m.append(el("i", null, n.slice(0, 1)), document.createTextNode(n + (n === card.name ? "（你）" : "")));
+    $("members").append(m);
+  }
+
+  /* 進度 */
+  const WD = ["週日", "週一", "週二", "週三", "週四", "週五", "週六"];
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  if (!g.schedule || !g.schedule.length) $("schedule").append(empty("時間還在安排中，敬請期待。"));
+  else g.schedule.map((s) => ({ ...s, d: new Date(s.date + "T00:00:00") })).sort((a, b) => a.d - b.d).forEach((s) => {
+    const days = Math.round((s.d - today) / 864e5);
+    const state = days < 0 ? "已上完" : days === 0 ? "就是今天" : "還有 " + days + " 天";
+    const it = linkItem((s.d.getMonth() + 1) + "/" + s.d.getDate(), s.title, [WD[s.d.getDay()], s.place, state].filter(Boolean).join("・"), s.url);
+    if (days >= 0 && !$("schedule").querySelector(".you")) it.classList.add("you");
+    $("schedule").append(it);
+  });
+
+  /* 分頁切換，網址 #handouts / #works / #members / #schedule 可直接開到該頁 */
+  const TABS = ["handouts", "works", "members", "schedule"];
+  function pick(key) {
+    if (!TABS.includes(key)) key = "handouts";
+    for (const k of TABS) {
+      $("tab-" + k).setAttribute("aria-selected", String(k === key));
+      $("p-" + k).hidden = k !== key;
+    }
+  }
+  for (const k of TABS) $("tab-" + k).addEventListener("click", () => { pick(k); try { history.replaceState(null, "", "#" + k); } catch {} });
+  pick(location.hash.replace("#", ""));
+  addEventListener("hashchange", () => pick(location.hash.replace("#", "")));
+})();
+</script>
+</body>
+</html>

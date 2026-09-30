@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI 陪跑工作坊小組成員證</title>
+<meta name="description" content="選一個主題加入小組，領取你的小組成員證，打開講義與實作存檔。">
+<meta name="theme-color" content="#2F8F62">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=Noto+Serif+TC:wght@700&display=swap">
+<link rel="stylesheet" href="shared/site.css">
+<style>
+.intro { text-align: center; align-items: center; padding: 26px 20px; }
+.intro .lead { max-width: 30ch; }
+.intro .btn { min-width: 230px; margin-top: 4px; }
+.mine { display: flex; flex-direction: column; gap: 8px; }
+.mine .who { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; font-size: 13px; color: var(--ink-soft); }
+.mine .who b { color: var(--ink); font-size: 15px; }
+.section-title { margin: 6px 0 -6px; font-size: 13px; font-weight: 700; color: var(--ink-soft); letter-spacing: .06em; }
+.next { display: flex; align-items: center; gap: 12px; }
+.next .d { flex: none; text-align: center; min-width: 58px; padding: 6px 8px; border-radius: 12px; background: #EEF7F1; color: var(--green-deep); font-family: var(--font-num); font-weight: 800; line-height: 1.1; }
+.next .d small { display: block; font-size: 11px; font-weight: 700; }
+.next .t { min-width: 0; }
+.next .t b { display: block; font-size: 14.5px; }
+.next .t small { color: var(--ink-soft); font-size: 12px; }
+</style>
+</head>
+<body>
+<header class="site-head" id="head"></header>
+<main class="page">
+
+  <section class="card intro accent" id="intro">
+    <span class="eyebrow" id="season">AI 陪跑工作坊</span>
+    <h1 class="page-title">領取小組成員證</h1>
+    <p class="lead slogan" id="slogan">一個人學會很難，一組人一起跑就不難。</p>
+    <p class="lead" id="introText">選一個你最想解決的主題，加入那一組。領到證之後，就能打開這一組的講義和大家的實作存檔。</p>
+    <a class="btn" id="joinBtn" href="id.html">加入小組</a>
+  </section>
+
+  <section class="mine" id="mine" hidden>
+    <div class="who"><span>你的小組成員證</span><b id="mineGroup"></b></div>
+    <a class="badge" id="badge" href="id.html" aria-label="查看我的小組成員證"><span class="wait" id="badgeWait">成員證準備中</span><img id="badgeImg" alt="" hidden></a>
+    <p class="badge-hint">點開可以看直式完整版，可以分享、下載</p>
+  </section>
+
+  <p class="section-title" id="gridTitle">小組空間</p>
+  <nav class="grid" id="grid">
+    <a class="tile" id="tHandouts" href="group.html#handouts"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h11l5 5v11H4z"/><path d="M15 4v5h5"/><path d="M8 13h8M8 17h8"/></svg></span><b>課程講義</b><span>這一組每堂課的講義</span></a>
+    <a class="tile" id="tWorks" href="group.html#works"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16v13H4z"/><path d="M8 7V4h8v3"/><path d="M12 11v5M9.5 13.5h5"/></svg></span><b>實作存檔</b><span>大家做出來的作品</span></a>
+    <a class="tile" id="tMembers" href="group.html#members"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17" cy="9" r="2.6"/><path d="M15.5 14.5a5 5 0 0 1 6 5"/></svg></span><b>小組成員</b><span>跟你同一組的夥伴</span></a>
+    <a class="tile" id="tSchedule" href="group.html#schedule"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span><b>課程進度</b><span>下一堂什麼時候</span></a>
+  </nav>
+
+  <section class="card next" id="next" hidden>
+    <div class="d"><span id="nextMd">10/14</span><small id="nextWd">週二</small></div>
+    <div class="t"><b id="nextTitle"></b><small id="nextSub"></small></div>
+  </section>
+
+</main>
+<footer class="foot" id="foot">🍀 Learn AI with Tarshar | 2026</footer>
+
+<script src="shared/site.js"></script>
+<script src="shared/crew-card.js"></script>
+<script>
+(async () => {
+  const { Card, loadConfig, groupOf, siteHeader, toast } = AICrew;
+  const $ = (id) => document.getElementById(id);
+  const ICON_LOCK = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
+  siteHeader($("head"), { home: true });
+  const card = Card.get();
+  let cfg = null;
+  try { cfg = await loadConfig(); } catch (e) { console.error(e); }
+  if (cfg) {
+    $("season").textContent = cfg.workshop.name + "・" + cfg.workshop.season;
+    $("slogan").textContent = cfg.workshop.slogan;
+    $("introText").textContent = cfg.workshop.intro;
+    $("foot").textContent = "🍀 " + cfg.workshop.signature;
+    siteHeader($("head"), { home: true, title: cfg.workshop.name });
+    if (cfg.joinOpen === false && !card) {
+      const b = $("joinBtn");
+      b.removeAttribute("href");
+      b.setAttribute("aria-disabled", "true");
+      b.textContent = "即將開放";
+      b.addEventListener("click", (ev) => { ev.preventDefault(); toast("小組報名即將開放"); });
+    }
+  }
+  const group = cfg && card ? groupOf(cfg, card.group) : null;
+
+  /* 四格磚：沒有證就上鎖；有證但這一組還沒開放的內容顯示準備中 */
+  const GATED = { tHandouts: "handoutsOpen", tWorks: "worksOpen" };
+  for (const id of ["tHandouts", "tWorks", "tMembers", "tSchedule"]) {
+    const tile = $(id);
+    if (!card) {
+      tile.classList.add("locked");
+      tile.querySelector(".ico").innerHTML = ICON_LOCK;
+      tile.setAttribute("aria-disabled", "true");
+      tile.addEventListener("click", (ev) => { ev.preventDefault(); toast("先領取小組成員證，就能解鎖"); });
+      continue;
+    }
+    if (GATED[id] && group && group[GATED[id]] !== true) {
+      tile.classList.add("soon");
+      tile.querySelector("span:last-child").textContent = "老師準備中，敬請期待";
+      tile.addEventListener("click", (ev) => { ev.preventDefault(); toast("這一組的內容還在準備中"); });
+    }
+  }
+
+  if (card) {
+    $("intro").hidden = true;
+    $("mine").hidden = false;
+    $("mineGroup").textContent = card.groupName;
+    const meta = cfg ? { workshop: cfg.workshop.name, season: cfg.workshop.season, signature: cfg.workshop.signature, slogan: cfg.workshop.slogan } : { workshop: "AI 陪跑工作坊", season: "", signature: "Learn AI with Tarshar | 2026", slogan: "" };
+    try {
+      const c = await CrewCard.renderBadge(card, meta);
+      const img = $("badgeImg");
+      img.src = c.toDataURL("image/jpeg", 0.9);
+      await img.decode().catch(() => {});
+      img.hidden = false;
+      $("badgeWait").hidden = true;
+    } catch (e) {
+      console.error(e);
+      $("badgeWait").textContent = "點這裡查看成員證";
+    }
+    /* 下一堂課 */
+    if (group && group.schedule && group.schedule.length) {
+      const today = new Date(); today.setHours(0, 0, 0, 0);
+      const up = group.schedule.map((s) => ({ ...s, d: new Date(s.date + "T00:00:00") })).filter((s) => s.d >= today).sort((a, b) => a.d - b.d)[0];
+      if (up) {
+        const WD = ["週日", "週一", "週二", "週三", "週四", "週五", "週六"];
+        $("nextMd").textContent = (up.d.getMonth() + 1) + "/" + up.d.getDate();
+        $("nextWd").textContent = WD[up.d.getDay()];
+        $("nextTitle").textContent = up.title;
+        const days = Math.round((up.d - today) / 864e5);
+        $("nextSub").textContent = (up.place ? up.place + "・" : "") + (days === 0 ? "就是今天" : "還有 " + days + " 天");
+        $("next").hidden = false;
+      }
+    }
+  }
+})();
+</script>
+</body>
+</html>
