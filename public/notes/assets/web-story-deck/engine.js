@@ -1,4 +1,4 @@
-/* web-story-deck ｜ 網頁感劇本簡報引擎 v0.1
+/* web-story-deck ｜ 網頁感劇本簡報引擎 v0.2（形象 C 深藍版）
    讀頁面裡 <script id="deck" type="application/json"> 的劇本，渲染成場景並負責播放。
    操作：→ / 空白鍵 / 點右側 = 下一拍；← / 點左側 = 上一場；N = 講者備忘；F = 全螢幕
    網址參數：?v=portrait（直式）、?auto=1（自動播放）、?loop=1、?beat=1400（每拍毫秒）、#3（跳到第 3 場） */
@@ -15,31 +15,35 @@
     beatMs: +q.get('beat') || deck.beatMs || 1400,
     sceneMs: +q.get('scene') || deck.sceneMs || 2200,
     chrome: q.get('chrome') !== '0',
-    mascot: deck.mascot || 'assets/web-story-deck/xiaod.png'
+    mascot: deck.mascot || 'assets/web-story-deck/robot.svg',
+    motif: deck.motif || 'assets/web-story-deck/clover-nodes.svg',
+    theme: q.get('theme') || deck.theme || 'dark'
   }, {});
 
   document.body.dataset.orient = opt.orient;
   document.body.dataset.auto = opt.auto ? '1' : '0';
   document.body.dataset.chrome = opt.chrome ? '1' : '0';
+  document.body.dataset.theme = opt.theme;
   document.title = deck.title || 'web-story-deck';
 
   const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   // 允許劇本用 [[…]] 標黃、**…** 變藍字強調
   const rich = s => esc(s).replace(/\[\[(.+?)\]\]/g, '<mark>$1</mark>').replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
-  const tints = ['tint-blue', 'tint-orange', 'tint-teal', 'tint-cream'];
-  const chipTones = ['', 'orange', 'teal', 'cream'];
+  const acc = ['', 'a2', 'a3', 'a4']; // 強調色輪替：青綠、天空藍、暖橘、幸運草綠（只用在細條與號碼）
   const pad2 = n => String(n).padStart(2, '0');
 
   // ---------- 各版型渲染 ----------
   const R = {};
+  const mascot = (cls = '', beat = 0) => `<div class="mascot pop ${cls}" data-beat="${beat}"><img src="${opt.mascot}" alt="AI 夥伴"></div>`;
 
   R.cover = (s, i) => `
-    <div class="lesson-no" data-beat="0">${esc(s.no || deck.no || pad2(i + 1))}</div>
-    <div class="kicker" data-beat="0">${esc(s.kicker || deck.series || '')}</div>
-    <h1 class="title" data-beat="0">${rich(s.title)}</h1>
-    ${s.sub ? `<p class="sub" data-beat="0">${rich(s.sub)}</p>` : ''}
-    ${s.chips?.length ? `<div class="chips">${s.chips.map((c) => `<span class="pill light" data-beat="0">${esc(c)}</span>`).join('')}</div>` : ''}
-    <div class="mascot pop" data-beat="0"><img src="${opt.mascot}" alt="小D"></div>`;
+    <div class="head">
+      <div class="kicker" data-beat="0">${esc(s.kicker || deck.series || '')}</div>
+      <h1 class="title" data-beat="0">${rich(s.title)}</h1>
+      ${s.sub ? `<p class="sub" data-beat="0">${rich(s.sub)}</p>` : ''}
+      ${s.chips?.length ? `<div class="chips">${s.chips.map(c => `<span class="pill" data-beat="0">${esc(c)}</span>`).join('')}</div>` : ''}
+    </div>
+    ${mascot()}`;
 
   R.hook = (s) => {
     let b = 1;
@@ -49,12 +53,11 @@
     <div class="body">
       <div class="phone" data-beat="0">
         <div class="topbar"><span class="dot">AI</span>${esc(s.app || 'AI 助理')}</div>
-        ${chat}
-        ${s.question ? `<div class="ask pop" data-beat="${b++}">${rich(s.question)}</div>` : ''}
+        <div class="chat">${chat}${s.question ? `<div class="ask pop" data-beat="${b++}">${rich(s.question)}</div>` : ''}</div>
         <div class="inputbar"><span>${esc(s.placeholder || '輸入訊息…')}</span><i></i></div>
       </div>
     </div>
-    ${note(s)}`;
+    ${note(s, b)}`;
   };
 
   R.compare = (s) => {
@@ -62,32 +65,30 @@
       <div class="card ${cls} ${c.tone === 'bad' ? 'bad' : c.tone === 'good' ? 'good' : ''}" data-beat="${1 + k}">
         ${c.label ? `<div class="label">${esc(c.label)}</div>` : ''}
         <h3>${rich(c.title)}</h3>
-        ${c.body ? `<p>${rich(c.body)}</p>` : ''}
+        ${c.body ? `<p>${rich(c.body)}</p>` : '<p></p>'}
         ${c.badge ? `<span class="badge">${esc(c.badge)}</span>` : ''}
       </div>`;
     return `
     ${head(s)}
-    <div class="body"><div class="pair">
-      ${card(s.left, 0, 'slide-l')}${card(s.right, 1, 'slide-r')}
-    </div></div>
+    <div class="body"><div class="pair">${card(s.left, 0, 'slide-l')}${card(s.right, 1, 'slide-r')}</div></div>
     ${note(s, 3)}`;
   };
+
+  const stepCard = (it, k) => `
+    <div class="card ${acc[k % 4]} drop" data-beat="${1 + k}">
+      <span class="num">${esc(it.n || pad2(k + 1))}</span>
+      <h3>${rich(it.title)}</h3>
+      ${it.desc ? `<p>${rich(it.desc)}</p>` : '<p></p>'}
+      <div class="bar"></div>
+    </div>`;
 
   R.steps = (s) => {
     const items = s.items || [];
     return `
     ${head(s)}
     <div class="body">
-      <div class="row">
-        ${items.map((it, k) => `
-          <div class="card ${tints[k % 4]} drop" data-beat="${1 + k}">
-            <span class="num">${esc(it.n || pad2(k + 1))}</span>
-            <h3>${rich(it.title)}</h3>
-            ${it.desc ? `<p>${rich(it.desc)}</p>` : ''}
-            <div class="bar"></div>
-          </div>`).join('')}
-      </div>
-      ${s.cta ? `<div class="cta"><span class="pill blue pop" data-beat="${1 + items.length}">${esc(s.cta)}</span></div>` : ''}
+      <div class="row">${items.map(stepCard).join('')}</div>
+      ${s.cta ? `<div class="cta"><span class="pill solid pop" data-beat="${1 + items.length}">${esc(s.cta)}</span></div>` : ''}
     </div>
     ${note(s, 2 + items.length)}`;
   };
@@ -98,16 +99,16 @@
     let b = 1 + src.length;
     return `
     ${head(s)}
-    <div class="body">
-      <div class="sources">${src.map((t, k) => `<span class="chip ${chipTones[k % 4]} drop" data-beat="${1 + k}"><span class="ico">≡</span>${esc(t)}</span>`).join('')}</div>
+    <div class="body"><div class="pipe">
+      <div class="sources">${src.map((t, k) => `<span class="chip ${acc[k % 4]} drop" data-beat="${1 + k}"><span class="ico">≡</span>${esc(t)}</span>`).join('')}</div>
       <div class="arrow down" data-beat="${b}"></div>
       <div class="panel pop" data-beat="${b}">
         <h4>${esc(s.panel?.title || '')}</h4>
         <div class="cells">${cells.map((c, k) => `<div class="cell"><b>${esc(c.n || pad2(k + 1))}</b><span>${esc(c.title || c)}</span></div>`).join('')}</div>
       </div>
       <div class="wire" data-beat="${b + 1}"><span class="seg"></span><span class="knot"></span><span class="seg"></span>${s.link ? `<span class="lab">${esc(s.link)}</span>` : ''}</div>
-      <div class="target ${(s.target || 'AI').length > 3 ? 'text' : ''} pop" data-beat="${b + 1}">${esc(s.target || 'AI')}</div>
-    </div>
+      <div class="target pop" data-beat="${b + 1}">${esc(s.target || 'AI')}</div>
+    </div></div>
     ${note(s, b + 2)}`;
   };
 
@@ -119,13 +120,13 @@
     <div class="body">
       <div class="chart" data-beat="0">
         ${bars.map((x, k) => `
-          <div class="bar-wrap ${esc(x.color || ['', 'yellow', '', 'orange'][k % 4])}" data-beat="${1 + k}" style="--h:${Math.round((+x.value / max) * 100)}">
+          <div class="bar-wrap ${esc(x.color || acc[k % 4])}" data-beat="${1 + k}" style="--h:${Math.round((+x.value / max) * 100)}">
             <span class="val">${esc(x.display || x.value)}${esc(x.unit || '')}</span>
             <div class="col"></div>
             <span class="lab">${esc(x.label)}</span>
           </div>`).join('')}
       </div>
-      ${s.question ? `<div class="question"><span class="pill light pop" data-beat="${1 + bars.length}">${rich(s.question)}</span></div>` : ''}
+      ${s.question ? `<div class="cta"><span class="pill accent pop" data-beat="${1 + bars.length}">${rich(s.question)}</span></div>` : ''}
     </div>
     ${note(s, 2 + bars.length)}`;
   };
@@ -135,21 +136,13 @@
     const n = items.length;
     return `
     ${head(s)}
-    <div class="frame" data-beat="0" data-stack data-total="${n}" data-progress="${esc(s.progress || '已放進 {n}／{total} 項')}">
-      <div class="fh">
-        <div><h3>${rich(s.panelTitle || '')}</h3>${s.panelSub ? `<p>${rich(s.panelSub)}</p>` : ''}</div>
-        <div class="fh-right">${s.badge ? `<span class="pill light">${esc(s.badge)}</span>` : ''}<span class="pill" data-role="progress"></span></div>
+    <div class="body" data-stack data-total="${n}" data-progress="${esc(s.progress || '已放好 {n}／{total} 項')}">
+      <div class="stack-top">
+        ${s.badge ? `<span class="pill" data-beat="0">${esc(s.badge)}</span>` : '<span></span>'}
+        <span class="pill solid" data-role="progress" data-beat="0"></span>
       </div>
-      <div class="crane"><span class="rope"></span><div class="mascot"><img src="${opt.mascot}" alt="小D"></div></div>
-      <div class="slots">
-        ${items.map((it, k) => `
-          <div class="card ${tints[k % 4]} drop" data-beat="${1 + k}">
-            <span class="num">${esc(it.n || pad2(k + 1))}</span>
-            <h3>${rich(it.title)}</h3>
-            ${it.desc ? `<p>${rich(it.desc)}</p>` : ''}
-            <div class="bar"></div>
-          </div>`).join('')}
-      </div>
+      <div class="crane"><span class="rope"></span><div class="mascot"><img src="${opt.mascot}" alt="AI 夥伴"></div></div>
+      <div class="slots">${items.map(stepCard).join('')}</div>
     </div>
     ${note(s, n + 1)}`;
   };
@@ -158,29 +151,31 @@
     let b = 1;
     const col = (c) => `
       <div class="col ${c.tone === 'stop' ? 'stop' : 'ok'}">
-        <div class="head-pill"><span class="pill ${c.tone === 'stop' ? '' : 'teal'}" data-beat="${b++}">${esc(c.label)}</span></div>
+        <div><span class="pill ${c.tone === 'stop' ? 'accent' : 'solid'}" data-beat="${b++}">${esc(c.label)}</span></div>
         ${(c.items || []).map(t => `<div class="item slide-${c.tone === 'stop' ? 'r' : 'l'}" data-beat="${b++}"><span class="mark">${c.tone === 'stop' ? '×' : '✓'}</span><span>${rich(t)}</span></div>`).join('')}
       </div>`;
-    const cols = (s.cols || []).map(col).join('');
-    return `${head(s)}<div class="body"><div class="cols">${cols}</div></div>${note(s, b)}`;
+    return `${head(s)}<div class="body"><div class="cols">${(s.cols || []).map(col).join('')}</div></div>${note(s, b)}`;
   };
 
   R.quote = (s) => `
     ${head(s)}
     <div class="body">
       <div class="quote pop" data-beat="1">
-        ${s.tag ? `<span class="pill yellow tag">${esc(s.tag)}</span>` : ''}
-        ${rich(s.text)}
+        ${s.tag ? `<span class="pill accent tag">${esc(s.tag)}</span>` : ''}
+        <div>${rich(s.text)}</div>
       </div>
     </div>
-    ${note(s, 2)}`;
+    ${note(s, 2)}
+    ${mascot('', 1)}`;
 
   R.golden = (s) => `
-    <div class="orbit">${(s.chips || []).slice(0, 4).map((c, k) => `<span class="chip ${chipTones[k % 4]}" data-beat="${2 + k}"><span class="ico">≡</span>${esc(c)}</span>`).join('')}</div>
-    ${s.kicker ? `<div class="kicker" data-beat="0">${esc(s.kicker)}</div>` : ''}
-    <p class="big" data-beat="1">${rich(s.text)}</p>
-    ${s.after ? `<p class="after" data-beat="${2 + (s.chips || []).length}">${rich(s.after)}</p>` : ''}
-    ${s.mascot !== false ? `<div class="mascot pop" data-beat="1"><img src="${opt.mascot}" alt="小D"></div>` : ''}`;
+    <div class="head">
+      ${s.kicker ? `<div class="kicker" data-beat="0">${esc(s.kicker)}</div>` : ''}
+      <p class="big" data-beat="0">${rich(s.text)}</p>
+      ${s.after ? `<p class="after" data-beat="1">${rich(s.after)}</p>` : ''}
+      ${s.chips?.length ? `<div class="takeaways">${s.chips.slice(0, 4).map((c, k) => `<span class="pill" data-beat="${2 + k}">${esc(c)}</span>`).join('')}</div>` : ''}
+    </div>
+    ${s.mascot !== false ? mascot('', 0) : ''}`;
 
   R.agenda = (s) => `
     ${head(s)}
@@ -201,8 +196,16 @@
       ${s.sub ? `<p class="sub" data-beat="0">${rich(s.sub)}</p>` : ''}
     </div>`;
   }
+  // 註解列一定輸出（沒有內容也佔位），換場時內容區高度才不會跳
   function note(s, beat) {
-    return s.note ? `<p class="note" data-beat="${beat ?? 1}">${rich(s.note)}</p>` : '';
+    return `<p class="note" ${s.note ? `data-beat="${beat ?? 1}"` : ''}>${s.note ? rich(s.note) : ''}</p>`;
+  }
+  // 頁尾品牌帶：署名依 logo.svg 定版（同大小同粗細，只有 Tarshar 用品牌綠）
+  function foot(s, i) {
+    const brand = (deck.brand || '🍀 Learn AI with Tarshar | 2026')
+      .replace(/\s*\|\s*/, '<span class="bar">|</span>')
+      .replace('Tarshar', '<span class="t">Tarshar</span>');
+    return `<div class="foot"><span class="series">${esc(s.footer || footL)}</span><span class="brand">${brand}</span><span class="pageno">${pad2(i + 1)}</span></div>`;
   }
 
   let els = null;
@@ -216,15 +219,13 @@
   }
   const scenes = deck.scenes || [];
   const footL = deck.footer || deck.series || '';
-  const footR = deck.brand || '🍀 Learn AI with Tarshar | 2026';
 
   scenes.forEach((s, i) => {
     const el = document.createElement('section');
     el.className = `scene t-${s.type}`;
     el.dataset.index = i;
     const render = R[s.type] || ((x) => `${head(x)}<div class="body"><p class="sub">（未知版型 ${esc(x.type)}）</p></div>`);
-    el.innerHTML = render(s, i) + (s.type === 'cover' ? '' : `
-      <div class="foot"><span>${esc(s.footer || footL)}</span><span class="brand">${esc(footR)}</span><span class="pageno">${pad2(i + 1)}</span></div>`);
+    el.innerHTML = `<img class="motif" src="${opt.motif}" alt="">` + render(s, i) + foot(s, i);
     stage.appendChild(el);
   });
   const progress = document.createElement('div'); progress.className = 'progress'; stage.appendChild(progress);
@@ -275,10 +276,11 @@
       const idx = Math.min(Math.max(beat, 1), total) - 1;
       const target = slots[idx];
       if (target) {
-        const x = target.offsetLeft + target.offsetWidth / 2;
-        const slotsTop = st.querySelector('.slots').offsetTop;
-        const mascotH = crane.querySelector('.mascot').offsetHeight || 150;
-        crane.style.setProperty('--rope', `${Math.max(120, slotsTop + 40 - mascotH - 6)}px`);
+        const slotsEl = st.querySelector('.slots');
+        const x = slotsEl.offsetLeft + target.offsetLeft + target.offsetWidth / 2;
+        const slotsTop = slotsEl.offsetTop;
+        const mascotH = crane.querySelector('.mascot').offsetHeight || 140;
+        crane.style.setProperty('--rope', `${Math.max(60, slotsTop + 40 - mascotH - 4)}px`);
         crane.style.setProperty('--x', `${x}px`);
         crane.classList.toggle('lift', beat > total);
       }
