@@ -230,9 +230,21 @@ body[data-orient="portrait"] .foot::before { clip-path: path("M0 24 C 140 2 300 
 
 /* ============ 版型 ============ */
 
+/* 小D＋小機器人同框 */
+.duo { position: absolute; right: var(--pad-x); bottom: calc(var(--foot-h) - 4px); display: flex; align-items: flex-end; z-index: 1; pointer-events: none; }
+.duo .host { height: 420px; width: auto; filter: drop-shadow(0 8px 16px rgba(0,0,0,.35)); }
+.duo .robot { height: 220px; width: auto; margin-right: -36px; margin-bottom: 6px; }
+body[data-orient="portrait"] .duo { right: 50%; transform: translateX(50%); }
+body[data-orient="portrait"] .duo .host { height: 520px; }
+body[data-orient="portrait"] .duo .robot { height: 280px; margin-right: -40px; }
+.scene [data-beat].pop.duo { transform: scale(.7); }
+body[data-orient="portrait"] .scene [data-beat].pop.duo { transform: translateX(50%) scale(.7); }
+.scene [data-beat].pop.duo.on { transform: none; }
+body[data-orient="portrait"] .scene [data-beat].pop.duo.on { transform: translateX(50%); }
+
 /* 01 封面 */
 .scene.t-cover { grid-template-rows: 1fr auto; align-content: center; }
-.scene.t-cover .head { padding-right: 0; align-self: center; max-width: 1120px; }
+.scene.t-cover .head { padding-right: 0; align-self: center; max-width: 1000px; }
 .scene.t-cover .title { font-size: var(--fs-display); line-height: var(--lh-display); margin-bottom: 24px; }
 .scene.t-cover .sub { font-size: var(--fs-h2); line-height: var(--lh-h2); color: var(--fg); opacity: .9; }
 .scene.t-cover .chips { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 48px; }
@@ -242,7 +254,7 @@ body[data-orient="portrait"] .foot::before { clip-path: path("M0 24 C 140 2 300 
   font: 800 var(--fs-lg)/1 var(--font-en); color: var(--teal);
   padding: 12px 20px; border: var(--border) solid var(--line); border-radius: var(--radius-sm); background: rgba(15,26,51,.6);
 }
-body[data-orient="portrait"] .scene.t-cover .head { max-width: 100%; align-self: start; padding-top: 240px; }
+body[data-orient="portrait"] .scene.t-cover .head { max-width: 100%; align-self: start; padding-top: 200px; }
 body[data-orient="portrait"] .scene.t-cover .mascot { right: 50%; transform: translateX(50%); bottom: calc(var(--foot-h) + 80px); width: 360px; }
 
 /* 02 議程 */
@@ -379,11 +391,13 @@ body[data-orient="portrait"] .scene.t-quote .mascot { display: none; }
 
 /* 11 金句收尾 */
 .scene.t-golden { grid-template-rows: 1fr auto; align-content: center; }
-.scene.t-golden .head { padding-right: 0; align-self: center; text-align: center; justify-self: center; max-width: 1280px; }
+.scene.t-golden .head { padding-right: 0; align-self: center; text-align: left; justify-self: start; max-width: 1000px; }
+body[data-orient="portrait"] .scene.t-golden .head { text-align: center; justify-self: center; max-width: 100%; }
 .scene.t-golden .big { font-size: var(--fs-display); line-height: 1.25; font-weight: 900; margin: 0; text-wrap: balance; }
-body[data-orient="landscape"] .scene.t-golden .big { font-size: 68px; }
+body[data-orient="landscape"] .scene.t-golden .big { font-size: 64px; }
 .scene.t-golden .after { margin: 32px 0 0; font-size: var(--fs-lg); color: var(--muted); font-weight: 600; }
-.scene.t-golden .takeaways { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; margin-top: 40px; }
+.scene.t-golden .takeaways { display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 16px; margin-top: 40px; }
+body[data-orient="portrait"] .scene.t-golden .takeaways { justify-content: center; }
 .scene.t-golden .mascot { right: calc(var(--pad-x) + 24px); bottom: calc(var(--foot-h) + 24px); width: 200px; }
 body[data-orient="portrait"] .scene.t-golden .mascot { right: 50%; transform: translateX(50%); bottom: calc(var(--foot-h) + 60px); width: 300px; }
 body[data-orient="portrait"] .scene.t-golden .head { align-self: start; padding-top: 200px; }

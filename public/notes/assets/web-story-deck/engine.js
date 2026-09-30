@@ -17,6 +17,7 @@
     chrome: q.get('chrome') !== '0',
     mascot: deck.mascot || 'assets/web-story-deck/robot.svg',
     motif: deck.motif || 'assets/web-story-deck/clover-nodes.svg',
+    host: deck.host === false ? null : (deck.host || 'assets/web-story-deck/xiaod-chibi.png'),
     theme: q.get('theme') || deck.theme || 'dark'
   }, {});
 
@@ -35,6 +36,10 @@
   // ---------- 各版型渲染 ----------
   const R = {};
   const mascot = (cls = '', beat = 0) => `<div class="mascot pop ${cls}" data-beat="${beat}"><img src="${opt.mascot}" alt="AI 夥伴"></div>`;
+  // 小D 本人＋小機器人同框（封面、金句場）；機器人不得比人大（DESIGN.md 第 6 節）
+  const duo = (beat = 0) => opt.host
+    ? `<div class="duo pop" data-beat="${beat}"><img class="robot" src="${opt.mascot}" alt="AI 夥伴"><img class="host" src="${opt.host}" alt="小D"></div>`
+    : mascot('', beat);
 
   R.cover = (s, i) => `
     <div class="head">
@@ -43,7 +48,7 @@
       ${s.sub ? `<p class="sub" data-beat="0">${rich(s.sub)}</p>` : ''}
       ${s.chips?.length ? `<div class="chips">${s.chips.map(c => `<span class="pill" data-beat="0">${esc(c)}</span>`).join('')}</div>` : ''}
     </div>
-    ${mascot()}`;
+    ${duo()}`;
 
   R.hook = (s) => {
     let b = 1;
@@ -175,7 +180,7 @@
       ${s.after ? `<p class="after" data-beat="1">${rich(s.after)}</p>` : ''}
       ${s.chips?.length ? `<div class="takeaways">${s.chips.slice(0, 4).map((c, k) => `<span class="pill" data-beat="${2 + k}">${esc(c)}</span>`).join('')}</div>` : ''}
     </div>
-    ${s.mascot !== false ? mascot('', 0) : ''}`;
+    ${s.mascot !== false ? duo(0) : ''}`;
 
   R.agenda = (s) => `
     ${head(s)}
