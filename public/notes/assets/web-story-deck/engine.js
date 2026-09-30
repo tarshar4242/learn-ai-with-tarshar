@@ -205,8 +205,15 @@
     return s.note ? `<p class="note" data-beat="${beat ?? 1}">${rich(s.note)}</p>` : '';
   }
 
+  let els = null;
   // ---------- 建立 DOM ----------
-  const stage = document.querySelector('.stage');
+  const viewport = document.querySelector('.viewport');
+  let stage = document.querySelector('.stage');
+  let box = document.querySelector('.stage-box');
+  if (!box) { // 舊模板相容：自動包一層 .stage-box
+    box = document.createElement('div'); box.className = 'stage-box';
+    stage.replaceWith(box); box.appendChild(stage);
+  }
   const scenes = deck.scenes || [];
   const footL = deck.footer || deck.series || '';
   const footR = deck.brand || '🍀 Learn AI with Tarshar | 2026';
@@ -224,32 +231,37 @@
   const zl = document.createElement('div'); zl.className = 'tap-zone left'; stage.appendChild(zl);
   const zr = document.createElement('div'); zr.className = 'tap-zone right'; stage.appendChild(zr);
 
-  const notesPanel = document.createElement('div'); notesPanel.className = 'notes-panel'; document.body.appendChild(notesPanel);
+  const notesPanel = document.createElement('div'); notesPanel.className = 'notes-panel'; viewport.appendChild(notesPanel);
   if (!opt.auto) {
     const help = document.createElement('div'); help.className = 'help';
-    help.textContent = '→ 下一拍 ｜ ← 上一場 ｜ N 備忘 ｜ F 全螢幕 ｜ ?v=portrait 直式';
-    document.body.appendChild(help);
+    help.textContent = '→ 下一拍 ｜ ← 上一場 ｜ N 備忘 ｜ F 全螢幕';
+    viewport.appendChild(help);
   }
 
-  // ---------- 縮放 ----------
+  // ---------- 縮放：只看 .stage-box 的實際寬度，不看視窗高度 ----------
+  const stageW = () => document.body.dataset.orient === 'portrait' ? 1080 : 1600;
   function fit() {
-    const W = +getComputedStyle(document.body).getPropertyValue('--stage-w');
-    const H = +getComputedStyle(document.body).getPropertyValue('--stage-h');
-    const pad = opt.chrome ? 0.96 : 1;
-    const k = Math.min(innerWidth / W, innerHeight / H) * pad;
-    stage.style.transform = `scale(${k})`;
+    const w = box.clientWidth;
+    if (!w) return; // 容器還沒有尺寸（iframe 剛載入），等 ResizeObserver 再來
+    stage.style.setProperty('--k', String(w / stageW()));
   }
-  addEventListener('resize', () => {
-    if (!opt.orientLocked) {
-      const want = innerHeight > innerWidth ? 'portrait' : 'landscape';
-      if (want !== document.body.dataset.orient) { document.body.dataset.orient = want; fit(); show(cur, beat); return; }
-    }
-    fit();
-  }); fit();
+  function pickOrient() {
+    if (opt.orientLocked) return;
+    const de = document.documentElement;
+    const want = (innerHeight || de.clientHeight) > (innerWidth || de.clientWidth) ? 'portrait' : 'landscape';
+    if (want !== document.body.dataset.orient) { document.body.dataset.orient = want; fit(); if (els) show(cur, beat); }
+  }
+  if ('ResizeObserver' in window) new ResizeObserver(() => { pickOrient(); fit(); }).observe(box);
+  addEventListener('resize', () => { pickOrient(); fit(); });
+  addEventListener('orientationchange', () => setTimeout(() => { pickOrient(); fit(); }, 200));
+  addEventListener('pageshow', fit);
+  fit();
+  // 前 3 秒多補幾次，保險起見（某些內嵌容器不觸發 resize）
+  let tries = 0; const iv = setInterval(() => { fit(); if (++tries > 12) clearInterval(iv); }, 250);
 
   // ---------- 播放狀態 ----------
   let cur = 0, beat = 0;
-  const els = [...stage.querySelectorAll('.scene')];
+  els = [...stage.querySelectorAll('.scene')];
   const maxBeat = el => Math.max(0, ...[...el.querySelectorAll('[data-beat]')].map(x => +x.dataset.beat));
 
   function applyBeats(el) {
