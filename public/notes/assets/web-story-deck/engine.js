@@ -36,10 +36,10 @@
   R.cover = (s, i) => `
     <div class="lesson-no" data-beat="0">${esc(s.no || deck.no || pad2(i + 1))}</div>
     <div class="kicker" data-beat="0">${esc(s.kicker || deck.series || '')}</div>
-    <h1 class="title" data-beat="1">${rich(s.title)}</h1>
-    ${s.sub ? `<p class="sub" data-beat="2">${rich(s.sub)}</p>` : ''}
-    ${s.chips?.length ? `<div class="chips">${s.chips.map((c, k) => `<span class="pill light" data-beat="${3 + k}">${esc(c)}</span>`).join('')}</div>` : ''}
-    <div class="mascot pop" data-beat="1"><img src="${opt.mascot}" alt="小D"></div>`;
+    <h1 class="title" data-beat="0">${rich(s.title)}</h1>
+    ${s.sub ? `<p class="sub" data-beat="0">${rich(s.sub)}</p>` : ''}
+    ${s.chips?.length ? `<div class="chips">${s.chips.map((c) => `<span class="pill light" data-beat="0">${esc(c)}</span>`).join('')}</div>` : ''}
+    <div class="mascot pop" data-beat="0"><img src="${opt.mascot}" alt="小D"></div>`;
 
   R.hook = (s) => {
     let b = 1;
@@ -232,11 +232,10 @@
   const zr = document.createElement('div'); zr.className = 'tap-zone right'; stage.appendChild(zr);
 
   const notesPanel = document.createElement('div'); notesPanel.className = 'notes-panel'; viewport.appendChild(notesPanel);
-  if (!opt.auto) {
-    const help = document.createElement('div'); help.className = 'help';
-    help.textContent = '→ 下一拍 ｜ ← 上一場 ｜ N 備忘 ｜ F 全螢幕';
-    viewport.appendChild(help);
-  }
+  const ctrl = document.createElement('div'); ctrl.className = 'ctrl';
+  ctrl.innerHTML = `<button class="big" data-act="prev" aria-label="上一場">‹</button><span class="pos"></span><button class="big" data-act="next" aria-label="下一拍">›</button><button data-act="auto">▶ 自動播放</button><button data-act="notes">備忘</button><button data-act="fs">全螢幕</button>`;
+  viewport.appendChild(ctrl);
+  const posEl = ctrl.querySelector('.pos');
 
   // ---------- 縮放：只看 .stage-box 的實際寬度，不看視窗高度 ----------
   const stageW = () => document.body.dataset.orient === 'portrait' ? 1080 : 1600;
@@ -300,6 +299,7 @@
     notesPanel.innerHTML = n ? `<b>第 ${cur + 1} 場備忘：</b>${esc(n)}` : `<b>第 ${cur + 1} 場</b>（沒有備忘）`;
     document.body.dataset.curScene = cur;
     document.body.dataset.curBeat = beat;
+    if (posEl) posEl.textContent = `${cur + 1} / ${els.length}`;
   }
 
   function next() {
@@ -314,43 +314,54 @@
   function revealAll() { show(cur, maxBeat(els[cur])); }
 
   addEventListener('keydown', e => {
-    if (['ArrowRight', ' ', 'PageDown', 'Enter'].includes(e.key)) { e.preventDefault(); next(); }
-    else if (['ArrowLeft', 'PageUp', 'Backspace'].includes(e.key)) { e.preventDefault(); prev(); }
+    if (['ArrowRight', ' ', 'PageDown', 'Enter'].includes(e.key)) { e.preventDefault(); stopAuto(); next(); }
+    else if (['ArrowLeft', 'PageUp', 'Backspace'].includes(e.key)) { e.preventDefault(); stopAuto(); prev(); }
     else if (e.key === 'ArrowDown') { e.preventDefault(); revealAll(); }
     else if (e.key.toLowerCase() === 'n') notesPanel.classList.toggle('open');
     else if (e.key.toLowerCase() === 'f') { try { (document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen()).catch(() => {}); } catch { /* 不支援全螢幕 */ } }
     else if (e.key === 'Home') show(0, 0);
     else if (e.key === 'End') show(els.length - 1, maxBeat(els[els.length - 1]));
   });
-  zr.addEventListener('click', next);
-  zl.addEventListener('click', prev);
+  zr.addEventListener('click', () => { stopAuto(); next(); });
+  zl.addEventListener('click', () => { stopAuto(); prev(); });
   let tx = null;
   addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
   addEventListener('touchend', e => {
     if (tx == null) return;
     const dx = e.changedTouches[0].clientX - tx; tx = null;
-    if (dx < -40) next(); else if (dx > 40) prev();
+    if (dx < -40) { stopAuto(); next(); } else if (dx > 40) { stopAuto(); prev(); }
   });
 
   // 起始場
   const h = parseInt(location.hash.slice(1), 10);
   show(Number.isFinite(h) && h > 0 ? h - 1 : 0, 0);
 
-  // ---------- 自動播放（錄影用） ----------
-  if (opt.auto) {
-    const tick = () => {
-      const wasLast = cur === els.length - 1 && beat >= maxBeat(els[cur]);
-      if (wasLast) {
-        if (opt.loop) { show(0, 0); setTimeout(tick, opt.sceneMs); return; }
-        document.body.dataset.done = '1';
-        return;
-      }
-      const beforeScene = cur;
-      next();
-      setTimeout(tick, cur !== beforeScene ? opt.sceneMs : opt.beatMs);
-    };
-    setTimeout(tick, opt.sceneMs);
+  // ---------- 自動播放（錄影用 ?auto=1，或按控制列的「自動播放」） ----------
+  let autoTimer = null;
+  function tick() {
+    const wasLast = cur === els.length - 1 && beat >= maxBeat(els[cur]);
+    if (wasLast) {
+      if (opt.loop) { show(0, 0); autoTimer = setTimeout(tick, opt.sceneMs); return; }
+      if (opt.auto) document.body.dataset.done = '1';
+      stopAuto(); return;
+    }
+    const beforeScene = cur;
+    next();
+    autoTimer = setTimeout(tick, cur !== beforeScene ? opt.sceneMs : opt.beatMs);
   }
+  function startAuto() { stopAuto(); ctrl.querySelector('[data-act=auto]').classList.add('on'); autoTimer = setTimeout(tick, opt.sceneMs); }
+  function stopAuto() { if (autoTimer) clearTimeout(autoTimer); autoTimer = null; ctrl.querySelector('[data-act=auto]').classList.remove('on'); }
+  if (opt.auto) startAuto();
+
+  ctrl.addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    const act = b.dataset.act;
+    if (act === 'next') { stopAuto(); next(); }
+    else if (act === 'prev') { stopAuto(); prev(); }
+    else if (act === 'auto') { autoTimer ? stopAuto() : startAuto(); }
+    else if (act === 'notes') notesPanel.classList.toggle('open');
+    else if (act === 'fs') { try { (document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen()).catch(() => {}); } catch { /* 不支援 */ } }
+  });
 
   // 對外：讓截圖腳本可以控制
   window.__deck = { next, prev, show, revealAll, count: els.length, maxBeat: i => maxBeat(els[i]), get cur() { return cur; }, get beat() { return beat; } };

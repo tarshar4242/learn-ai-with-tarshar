@@ -42,16 +42,18 @@ body {
 body[data-orient="portrait"] { --stage-w: 1080; --stage-h: 1920; --ar: 0.5625; }
 
 /* ---- 舞台：依「容器寬度」等比縮放，不依賴視窗高度或 position:fixed（iOS 內嵌 iframe 會出錯） ---- */
-.viewport { position: relative; width: 100%; min-height: 100vh; min-height: 100dvh; display: grid; place-items: center; }
-body[data-chrome="1"] .viewport { padding: 2vh 2vw; }
+.viewport { position: relative; width: 100%; min-height: 100vh; min-height: 100dvh; display: grid; place-items: center; overflow: hidden; padding-bottom: 64px; }
+body[data-chrome="0"] .viewport, body[data-auto="1"] .viewport { padding-bottom: 0; }
+body[data-chrome="1"] .viewport { padding: 2vh 2vw 64px; }
 .stage-box {
   position: relative; overflow: hidden;
-  width: min(100%, calc(100vh * var(--ar)));
-  width: min(100%, calc(100dvh * var(--ar)));
+  width: min(100%, calc((100vh - 84px) * var(--ar)));
+  width: min(100%, calc((100dvh - 84px) * var(--ar)));
   aspect-ratio: var(--stage-w) / var(--stage-h);
   background: var(--mist);
 }
 body[data-chrome="1"] .stage-box { border-radius: 18px; box-shadow: 0 30px 80px rgba(0,0,0,.45); }
+body[data-chrome="0"] .stage-box, body[data-auto="1"] .stage-box { width: min(100%, calc(100vh * var(--ar))); width: min(100%, calc(100dvh * var(--ar))); }
 .stage {
   position: absolute; left: 0; top: 0;
   width: calc(var(--stage-w) * 1px);
@@ -386,17 +388,25 @@ body[data-orient="portrait"] .scene.t-agenda .stop b { grid-row: 1 / span 2; mar
 
 /* ---- 講者備忘、操作說明 ---- */
 .notes-panel {
-  position: absolute; left: 0; right: 0; bottom: 0; z-index: 20;
-  background: rgba(22,35,63,.96); color: #fff; padding: 18px 28px; font-size: 18px; line-height: 1.6;
-  transform: translateY(100%); transition: transform .3s ease; max-height: 40vh; overflow: auto;
+  position: absolute; left: 0; right: 0; bottom: 64px; z-index: 20;
+  background: rgba(22,35,63,.97); color: #fff; padding: 16px 20px; font-size: 16px; line-height: 1.6;
+  transform: translateY(120%); transition: transform .3s ease; max-height: 40vh; overflow: auto; visibility: hidden;
 }
-.notes-panel.open { transform: none; }
+.notes-panel.open { transform: none; visibility: visible; }
 .notes-panel b { color: var(--yellow); }
-.help {
-  position: absolute; right: 16px; bottom: 6px; z-index: 20; max-width: calc(100% - 32px); text-align: right;
-  color: rgba(255,255,255,.55); font-size: 12px; font-family: var(--font-en);
+.ctrl {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 21; height: 64px;
+  display: flex; justify-content: center; align-items: center; gap: 8px; padding: 0 12px env(safe-area-inset-bottom, 0px);
+  background: linear-gradient(transparent, rgba(15,24,48,.9));
 }
-body[data-auto="1"] .help { display: none; }
+.ctrl button {
+  appearance: none; border: 1px solid rgba(255,255,255,.28); background: rgba(255,255,255,.08); color: #fff;
+  font: 600 14px/1 var(--font-tc); padding: 0 14px; height: 38px; border-radius: 999px; cursor: pointer; white-space: nowrap;
+}
+.ctrl button.big { font-size: 20px; padding: 0 20px; }
+.ctrl button.on { background: var(--blue); border-color: var(--blue); }
+.ctrl .pos { color: rgba(255,255,255,.6); font: 600 13px/1 var(--font-en); padding: 0 6px; }
+body[data-auto="1"] .ctrl, body[data-chrome="0"] .ctrl { display: none; }
 .tap-zone { position: absolute; top: 0; bottom: 0; width: 30%; z-index: 4; cursor: pointer; }
 .tap-zone.left { left: 0; }
 .tap-zone.right { right: 0; }
