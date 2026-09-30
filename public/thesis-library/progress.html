@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>目前論文進展｜Tarshar</title>
+<link rel="icon" href="../favicon.ico">
+<style>
+:root{--ink:#26332c;--muted:#718078;--green:#39775b;--deep:#264f3c;--paper:#f4f3ed;--card:#fffefa;--line:#dce3dc;--gold:#c49240;--red:#a74f5c;--blue:#3d6a8a}
+*{box-sizing:border-box}
+body{margin:0;color:var(--ink);background:var(--paper);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","Microsoft JhengHei",sans-serif;overflow-x:hidden;line-height:1.7}
+.top{position:sticky;top:0;z-index:20;background:var(--deep);color:#fff;padding:10px clamp(12px,4vw,40px);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.top a{padding:7px 10px;border:1px solid #ffffff44;border-radius:8px;color:#fff;text-decoration:none;font-size:11px;font-weight:900}
+.top b{margin-right:auto;font-size:14px}
+.hero{padding:28px clamp(16px,6vw,80px) 20px;background:linear-gradient(145deg,#fffefa,#eaf0e9)}
+h1{margin:0 0 8px;font-family:Georgia,"Noto Serif TC",serif;font-size:clamp(23px,4.5vw,38px);line-height:1.25}
+.headline{font-size:clamp(14px,2.2vw,17px);font-weight:700;color:var(--deep);margin:0 0 6px}
+.sub{color:var(--muted);font-size:12.5px}
+main{max-width:1000px;margin:auto;padding:22px clamp(14px,4vw,28px) 70px}
+section{margin:0 0 28px}
+h2{font-family:Georgia,"Noto Serif TC",serif;font-size:clamp(19px,3vw,25px);margin:0 0 4px;color:var(--deep)}
+.lead{margin:0 0 14px;color:var(--muted);font-size:12.5px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:10px}
+.ch-head{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:5px}
+.ch-head b{font-size:15px}
+.ch-head .pg{color:var(--muted);font-size:12px}
+.pill{display:inline-block;padding:2px 9px;border-radius:99px;font-size:11px;font-weight:900}
+.ok{background:#e6f1ea;color:#2c5c47}.wait{background:#f4ece0;color:#8a6a2f}.none{background:#eeefee;color:#7a827c}
+.det{font-size:12.5px;color:#4d5a52;margin:6px 0 9px}
+.links a{display:inline-block;margin:0 8px 0 0;font-size:12px;font-weight:800;color:var(--green);text-decoration:none;border-bottom:1px solid #bcd3c4}
+.ask li{margin:9px 0}
+.ask b{color:var(--deep)}
+.ask .why{display:block;font-size:12.5px;color:#5c6b62;margin-top:2px}
+table{width:100%;border-collapse:collapse;font-size:13px;background:var(--card)}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:#e9f2ec;color:var(--deep);font-weight:700}
+td.dt{white-space:nowrap;font-weight:800;color:var(--deep)}
+.flag{color:var(--gold);font-weight:800}
+ul{margin:6px 0;padding-left:20px}li{margin:4px 0}
+.warn{border-left:5px solid var(--gold);background:#fdf8ef}
+.warn b{color:#8a6a2f}
+.tag{display:inline-block;padding:1px 8px;border-radius:99px;font-size:11px;font-weight:900;background:#eef3ef;color:#4d5a52;margin-right:6px}
+.who-prof{background:#f0e6ea;color:#8d4f5e}.who-me{background:#e7eef4;color:#3d6a8a}.who-sch{background:#eef0e7;color:#6b7040}
+.log li{font-size:13px}.log .d{font-weight:800;color:var(--green);margin-right:6px}
+.foot{margin-top:26px;padding-top:14px;border-top:1px solid var(--line);color:var(--muted);font-size:12px}
+@media(max-width:620px){table,tbody,tr,td,th{display:block}thead{display:none}tr{border:1px solid var(--line);border-radius:10px;margin-bottom:10px;padding:8px 10px;background:var(--card)}td{border:0;border-bottom:1px solid #eef2ee;padding:5px 0}tr td:last-child{border-bottom:0}}
+</style>
+</head>
+<body>
+<header class="top">
+  <a href="index.html">← 回研讀庫</a><b>📊 目前論文進展</b>
+  <a href="plan.html#updnote">🗓 Meeting 紀錄</a>
+</header>
+
+<section class="hero">
+  <h1>目前論文進展</h1>
+  <p class="headline" id="headline"></p>
+  <p class="sub"><span id="updated"></span>　·　<span id="note"></span>　·　知臨（Codex）與 CC 協力維護，有改隨時更新。</p>
+</section>
+
+<main>
+  <section>
+    <h2>下一個關卡</h2>
+    <p class="lead" id="gateLead"></p>
+    <div class="card"><b>要帶的</b><div class="det" id="gateBring"></div>
+      <b>要問的</b><ul class="ask" id="gateAsk"></ul></div>
+  </section>
+
+  <section>
+    <h2>五章進度</h2>
+    <p class="lead">前三章是工作初稿，不是定稿；檔案在論文 Drive，點連結要先登入。</p>
+    <div class="grid" id="chapters"></div>
+    <div class="card" id="mergedCard"></div>
+  </section>
+
+  <section>
+    <h2>時程關卡</h2>
+    <p class="lead">標 <span class="flag">待確認</span> 的表示資訊還沒釐清，不要照著排。</p>
+    <table><thead><tr><th>日期</th><th>關卡</th><th>說明</th></tr></thead><tbody id="ms"></tbody></table>
+    <div class="card warn" style="margin-top:10px"><b>還沒釐清的兩件事</b><ul id="unknown"></ul></div>
+  </section>
+
+  <section>
+    <h2>待決事項</h2>
+    <p class="lead">共 16 項，出自第三章附表一。依誰能拍板排序。</p>
+    <table><thead><tr><th>誰決定</th><th>事項</th></tr></thead><tbody id="dec"></tbody></table>
+  </section>
+
+  <section>
+    <h2>已經定了，不用再問</h2>
+    <div class="card"><ul id="settled"></ul></div>
+  </section>
+
+  <section>
+    <h2>工具與材料</h2>
+    <div class="grid" id="tools"></div>
+    <div class="card" id="lit"></div>
+  </section>
+
+  <section>
+    <h2>風險與待處理</h2>
+    <div id="risks"></div>
+  </section>
+
+  <section>
+    <h2>做過什麼（履歷）</h2>
+    <div class="card"><ul class="log" id="log"></ul></div>
+  </section>
+
+  <p class="foot">這一頁只放狀態、日期、決定與連結，<b>不放論文內文</b>。原因是申請口試要附比對率報告、相似度高於 25% 不得申請，公開網頁上的論文文字有可能被比對系統收錄，反過來與自己的論文相互比中。論文正文一律只放在論文 Drive。</p>
+</main>
+
+<script src="progress.js"></script>
+<script>
+(function(){
+  var P = window.PROGRESS, $ = function(id){return document.getElementById(id)};
+  var esc = function(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
+
+  $('headline').textContent = P.headline;
+  $('note').textContent = P.note;
+
+  // 更新時間 + 距下一關卡天數
+  var today = new Date(); today.setHours(0,0,0,0);
+  var gd = new Date(P.nextGate.date+'T00:00:00');
+  var days = Math.round((gd-today)/86400000);
+  $('updated').textContent = '最後更新 '+P.updated;
+  $('gateLead').innerHTML = '<b style="color:var(--deep);font-size:15px">'+esc(P.nextGate.date)+'　'+esc(P.nextGate.title)+'</b>　'+
+    (days>0 ? '還有 '+days+' 天' : days===0 ? '就是今天' : '已過 '+(-days)+' 天');
+  $('gateBring').textContent = P.nextGate.bring;
+  $('gateAsk').innerHTML = P.nextGate.ask.map(function(a){
+    return '<li><b>'+esc(a.q)+'</b><span class="why">'+esc(a.why)+'</span></li>'}).join('');
+
+  // 章節
+  $('chapters').innerHTML = P.chapters.map(function(c){
+    var cls = c.state.indexOf('已交付')>=0 ? 'ok' : c.state.indexOf('尚未')>=0 ? 'none' : 'wait';
+    var links = '';
+    if(c.word) links += '<a href="'+esc(c.word)+'" target="_blank" rel="noopener">Word</a>';
+    if(c.pdf)  links += '<a href="'+esc(c.pdf)+'" target="_blank" rel="noopener">PDF</a>';
+    return '<div class="card"><div class="ch-head"><b>'+esc(c.n)+'　'+esc(c.title)+'</b>'+
+      (c.pages?'<span class="pg">'+c.pages+' 頁</span>':'')+
+      '<span class="pill '+cls+'">'+esc(c.state)+'</span></div>'+
+      '<div class="det">'+esc(c.detail)+'</div>'+
+      (links?'<div class="links">'+links+'</div>':'')+'</div>'}).join('');
+
+  var m = P.merged;
+  $('mergedCard').innerHTML = '<div class="ch-head"><b>前三章合併稿</b><span class="pg">'+m.pages+' 頁</span>'+
+    '<span class="pill ok">可閱讀</span></div><div class="links">'+
+    '<a href="'+esc(m.word)+'" target="_blank" rel="noopener">合併稿 Word</a>'+
+    '<a href="'+esc(m.pdf)+'" target="_blank" rel="noopener">合併稿 PDF</a>'+
+    '<a href="'+esc(m.folder)+'" target="_blank" rel="noopener">論文 Drive 資料夾</a></div>';
+
+  // 時程
+  $('ms').innerHTML = P.milestones.map(function(x){
+    return '<tr><td class="dt">'+esc(x.date)+'</td><td><b>'+esc(x.label)+'</b>'+
+      (x.ok?'':' <span class="flag">待確認</span>')+'</td><td>'+esc(x.note)+'</td></tr>'}).join('');
+  $('unknown').innerHTML = P.scheduleUnknown.map(function(s){return '<li>'+esc(s)+'</li>'}).join('');
+
+  // 待決
+  $('dec').innerHTML = P.decisions.map(function(d){
+    var cls = d.who.indexOf('教授')>=0 ? 'who-prof' : d.who.indexOf('校內')>=0 ? 'who-sch' : 'who-me';
+    return '<tr><td><span class="tag '+cls+'">'+esc(d.who)+'</span></td>'+
+      '<td>第 '+d.n+' 項　'+esc(d.item)+'</td></tr>'}).join('');
+
+  $('settled').innerHTML = P.settled.map(function(s){return '<li>'+esc(s)+'</li>'}).join('');
+
+  // 工具
+  $('tools').innerHTML = P.tools.map(function(t){
+    var cls = t.state.indexOf('尚未')>=0 ? 'wait' : 'ok';
+    return '<div class="card"><div class="ch-head"><b>'+esc(t.name)+'</b>'+
+      '<span class="pill '+cls+'">'+esc(t.state)+'</span></div><div class="det">'+esc(t.detail)+'</div>'+
+      (t.link?'<div class="links"><a href="'+esc(t.link)+'" target="_blank" rel="noopener">開啟</a></div>':'')+'</div>'}).join('');
+  $('lit').innerHTML = '<b>文獻</b><div class="det">雲端文獻 '+P.literature.total+' 篇，其中 '+
+    P.literature.cards+' 篇已有網頁研讀卡。'+esc(P.literature.note)+'</div>'+
+    '<div class="links"><a href="index.html#library">查看全部文獻</a></div>';
+
+  $('risks').innerHTML = P.risks.map(function(r){
+    return '<div class="card warn"><b>'+esc(r.t)+'</b><div class="det">'+esc(r.d)+'</div></div>'}).join('');
+
+  $('log').innerHTML = P.log.map(function(l){
+    return '<li><span class="d">'+esc(l.d)+'</span>'+esc(l.t)+'</li>'}).join('');
+})();
+</script>
+</body>
+</html>
