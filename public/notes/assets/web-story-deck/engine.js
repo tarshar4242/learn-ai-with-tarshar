@@ -1,0 +1,345 @@
+/* web-story-deck ｜ 網頁感劇本簡報引擎 v0.1
+   讀頁面裡 <script id="deck" type="application/json"> 的劇本，渲染成場景並負責播放。
+   操作：→ / 空白鍵 / 點右側 = 下一拍；← / 點左側 = 上一場；N = 講者備忘；F = 全螢幕
+   網址參數：?v=portrait（直式）、?auto=1（自動播放）、?loop=1、?beat=1400（每拍毫秒）、#3（跳到第 3 場） */
+(function () {
+  'use strict';
+
+  const q = new URLSearchParams(location.search);
+  const deck = JSON.parse(document.getElementById('deck').textContent);
+  const opt = Object.assign({
+    orient: q.get('v') === 'portrait' ? 'portrait' : q.get('v') === 'landscape' ? 'landscape' : (innerHeight > innerWidth ? 'portrait' : 'landscape'),
+    orientLocked: !!q.get('v'),
+    auto: q.get('auto') === '1',
+    loop: q.get('loop') === '1',
+    beatMs: +q.get('beat') || deck.beatMs || 1400,
+    sceneMs: +q.get('scene') || deck.sceneMs || 2200,
+    chrome: q.get('chrome') !== '0',
+    mascot: deck.mascot || 'assets/web-story-deck/xiaod.png'
+  }, {});
+
+  document.body.dataset.orient = opt.orient;
+  document.body.dataset.auto = opt.auto ? '1' : '0';
+  document.body.dataset.chrome = opt.chrome ? '1' : '0';
+  document.title = deck.title || 'web-story-deck';
+
+  const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  // 允許劇本用 [[…]] 標黃、**…** 變藍字強調
+  const rich = s => esc(s).replace(/\[\[(.+?)\]\]/g, '<mark>$1</mark>').replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+  const tints = ['tint-blue', 'tint-orange', 'tint-teal', 'tint-cream'];
+  const chipTones = ['', 'orange', 'teal', 'cream'];
+  const pad2 = n => String(n).padStart(2, '0');
+
+  // ---------- 各版型渲染 ----------
+  const R = {};
+
+  R.cover = (s, i) => `
+    <div class="lesson-no" data-beat="0">${esc(s.no || deck.no || pad2(i + 1))}</div>
+    <div class="kicker" data-beat="0">${esc(s.kicker || deck.series || '')}</div>
+    <h1 class="title" data-beat="1">${rich(s.title)}</h1>
+    ${s.sub ? `<p class="sub" data-beat="2">${rich(s.sub)}</p>` : ''}
+    ${s.chips?.length ? `<div class="chips">${s.chips.map((c, k) => `<span class="pill light" data-beat="${3 + k}">${esc(c)}</span>`).join('')}</div>` : ''}
+    <div class="mascot pop" data-beat="1"><img src="${opt.mascot}" alt="小D"></div>`;
+
+  R.hook = (s) => {
+    let b = 1;
+    const chat = (s.chat || []).map(m => `<div class="bubble ${esc(m.who || 'ai')}" data-beat="${b++}">${rich(m.text)}</div>`).join('');
+    return `
+    ${head(s)}
+    <div class="body">
+      <div class="phone" data-beat="0">
+        <div class="topbar"><span class="dot">AI</span>${esc(s.app || 'AI 助理')}</div>
+        ${chat}
+        ${s.question ? `<div class="ask pop" data-beat="${b++}">${rich(s.question)}</div>` : ''}
+        <div class="inputbar"><span>${esc(s.placeholder || '輸入訊息…')}</span><i></i></div>
+      </div>
+    </div>
+    ${note(s)}`;
+  };
+
+  R.compare = (s) => {
+    const card = (c, k, cls) => `
+      <div class="card ${cls} ${c.tone === 'bad' ? 'bad' : c.tone === 'good' ? 'good' : ''}" data-beat="${1 + k}">
+        ${c.label ? `<div class="label">${esc(c.label)}</div>` : ''}
+        <h3>${rich(c.title)}</h3>
+        ${c.body ? `<p>${rich(c.body)}</p>` : ''}
+        ${c.badge ? `<span class="badge">${esc(c.badge)}</span>` : ''}
+      </div>`;
+    return `
+    ${head(s)}
+    <div class="body"><div class="pair">
+      ${card(s.left, 0, 'slide-l')}${card(s.right, 1, 'slide-r')}
+    </div></div>
+    ${note(s, 3)}`;
+  };
+
+  R.steps = (s) => {
+    const items = s.items || [];
+    return `
+    ${head(s)}
+    <div class="body">
+      <div class="row">
+        ${items.map((it, k) => `
+          <div class="card ${tints[k % 4]} drop" data-beat="${1 + k}">
+            <span class="num">${esc(it.n || pad2(k + 1))}</span>
+            <h3>${rich(it.title)}</h3>
+            ${it.desc ? `<p>${rich(it.desc)}</p>` : ''}
+            <div class="bar"></div>
+          </div>`).join('')}
+      </div>
+      ${s.cta ? `<div class="cta"><span class="pill blue pop" data-beat="${1 + items.length}">${esc(s.cta)}</span></div>` : ''}
+    </div>
+    ${note(s, 2 + items.length)}`;
+  };
+
+  R.flow = (s) => {
+    const src = s.sources || [];
+    const cells = s.panel?.items || [];
+    let b = 1 + src.length;
+    return `
+    ${head(s)}
+    <div class="body">
+      <div class="sources">${src.map((t, k) => `<span class="chip ${chipTones[k % 4]} drop" data-beat="${1 + k}"><span class="ico">≡</span>${esc(t)}</span>`).join('')}</div>
+      <div class="arrow down" data-beat="${b}"></div>
+      <div class="panel pop" data-beat="${b}">
+        <h4>${esc(s.panel?.title || '')}</h4>
+        <div class="cells">${cells.map((c, k) => `<div class="cell"><b>${esc(c.n || pad2(k + 1))}</b><span>${esc(c.title || c)}</span></div>`).join('')}</div>
+      </div>
+      <div class="wire" data-beat="${b + 1}"><span class="seg"></span><span class="knot"></span><span class="seg"></span>${s.link ? `<span class="lab">${esc(s.link)}</span>` : ''}</div>
+      <div class="target ${(s.target || 'AI').length > 3 ? 'text' : ''} pop" data-beat="${b + 1}">${esc(s.target || 'AI')}</div>
+    </div>
+    ${note(s, b + 2)}`;
+  };
+
+  R.bars = (s) => {
+    const bars = s.bars || [];
+    const max = Math.max(...bars.map(x => +x.value || 0), 1);
+    return `
+    ${head(s)}
+    <div class="body">
+      <div class="chart" data-beat="0">
+        ${bars.map((x, k) => `
+          <div class="bar-wrap ${esc(x.color || ['', 'yellow', '', 'orange'][k % 4])}" data-beat="${1 + k}" style="--h:${Math.round((+x.value / max) * 100)}">
+            <span class="val">${esc(x.display || x.value)}${esc(x.unit || '')}</span>
+            <div class="col"></div>
+            <span class="lab">${esc(x.label)}</span>
+          </div>`).join('')}
+      </div>
+      ${s.question ? `<div class="question"><span class="pill light pop" data-beat="${1 + bars.length}">${rich(s.question)}</span></div>` : ''}
+    </div>
+    ${note(s, 2 + bars.length)}`;
+  };
+
+  R.stack = (s) => {
+    const items = s.items || [];
+    const n = items.length;
+    return `
+    ${head(s)}
+    <div class="frame" data-beat="0" data-stack data-total="${n}" data-progress="${esc(s.progress || '已放進 {n}／{total} 項')}">
+      <div class="fh">
+        <div><h3>${rich(s.panelTitle || '')}</h3>${s.panelSub ? `<p>${rich(s.panelSub)}</p>` : ''}</div>
+        <div class="fh-right">${s.badge ? `<span class="pill light">${esc(s.badge)}</span>` : ''}<span class="pill" data-role="progress"></span></div>
+      </div>
+      <div class="crane"><span class="rope"></span><div class="mascot"><img src="${opt.mascot}" alt="小D"></div></div>
+      <div class="slots">
+        ${items.map((it, k) => `
+          <div class="card ${tints[k % 4]} drop" data-beat="${1 + k}">
+            <span class="num">${esc(it.n || pad2(k + 1))}</span>
+            <h3>${rich(it.title)}</h3>
+            ${it.desc ? `<p>${rich(it.desc)}</p>` : ''}
+            <div class="bar"></div>
+          </div>`).join('')}
+      </div>
+    </div>
+    ${note(s, n + 1)}`;
+  };
+
+  R.checklist = (s) => {
+    let b = 1;
+    const col = (c) => `
+      <div class="col ${c.tone === 'stop' ? 'stop' : 'ok'}">
+        <div class="head-pill"><span class="pill ${c.tone === 'stop' ? '' : 'teal'}" data-beat="${b++}">${esc(c.label)}</span></div>
+        ${(c.items || []).map(t => `<div class="item slide-${c.tone === 'stop' ? 'r' : 'l'}" data-beat="${b++}"><span class="mark">${c.tone === 'stop' ? '×' : '✓'}</span><span>${rich(t)}</span></div>`).join('')}
+      </div>`;
+    const cols = (s.cols || []).map(col).join('');
+    return `${head(s)}<div class="body"><div class="cols">${cols}</div></div>${note(s, b)}`;
+  };
+
+  R.quote = (s) => `
+    ${head(s)}
+    <div class="body">
+      <div class="quote pop" data-beat="1">
+        ${s.tag ? `<span class="pill yellow tag">${esc(s.tag)}</span>` : ''}
+        ${rich(s.text)}
+      </div>
+    </div>
+    ${note(s, 2)}`;
+
+  R.golden = (s) => `
+    <div class="orbit">${(s.chips || []).slice(0, 4).map((c, k) => `<span class="chip ${chipTones[k % 4]}" data-beat="${2 + k}"><span class="ico">≡</span>${esc(c)}</span>`).join('')}</div>
+    ${s.kicker ? `<div class="kicker" data-beat="0">${esc(s.kicker)}</div>` : ''}
+    <p class="big" data-beat="1">${rich(s.text)}</p>
+    ${s.after ? `<p class="after" data-beat="${2 + (s.chips || []).length}">${rich(s.after)}</p>` : ''}
+    ${s.mascot !== false ? `<div class="mascot pop" data-beat="1"><img src="${opt.mascot}" alt="小D"></div>` : ''}`;
+
+  R.agenda = (s) => `
+    ${head(s)}
+    <div class="body"><div class="track">
+      ${(s.stops || []).map((st, k) => `
+        <div class="stop ${st.break ? 'break' : ''} drop" data-beat="${1 + k}">
+          <b>${esc(st.n || (st.break ? '☕' : pad2(k + 1)))}</b>
+          <h3>${rich(st.title)}</h3>
+          ${st.time ? `<p>${esc(st.time)}</p>` : ''}
+        </div>`).join('')}
+    </div></div>
+    ${note(s, 1 + (s.stops || []).length)}`;
+
+  function head(s) {
+    return `<div class="head">
+      ${s.kicker ? `<div class="kicker" data-beat="0">${esc(s.kicker)}</div>` : ''}
+      <h2 class="title" data-beat="0">${rich(s.title || '')}</h2>
+      ${s.sub ? `<p class="sub" data-beat="0">${rich(s.sub)}</p>` : ''}
+    </div>`;
+  }
+  function note(s, beat) {
+    return s.note ? `<p class="note" data-beat="${beat ?? 1}">${rich(s.note)}</p>` : '';
+  }
+
+  // ---------- 建立 DOM ----------
+  const stage = document.querySelector('.stage');
+  const scenes = deck.scenes || [];
+  const footL = deck.footer || deck.series || '';
+  const footR = deck.brand || '🍀 Learn AI with Tarshar | 2026';
+
+  scenes.forEach((s, i) => {
+    const el = document.createElement('section');
+    el.className = `scene t-${s.type}`;
+    el.dataset.index = i;
+    const render = R[s.type] || ((x) => `${head(x)}<div class="body"><p class="sub">（未知版型 ${esc(x.type)}）</p></div>`);
+    el.innerHTML = render(s, i) + (s.type === 'cover' ? '' : `
+      <div class="foot"><span>${esc(s.footer || footL)}</span><span class="brand">${esc(footR)}</span><span class="pageno">${pad2(i + 1)}</span></div>`);
+    stage.appendChild(el);
+  });
+  const progress = document.createElement('div'); progress.className = 'progress'; stage.appendChild(progress);
+  const zl = document.createElement('div'); zl.className = 'tap-zone left'; stage.appendChild(zl);
+  const zr = document.createElement('div'); zr.className = 'tap-zone right'; stage.appendChild(zr);
+
+  const notesPanel = document.createElement('div'); notesPanel.className = 'notes-panel'; document.body.appendChild(notesPanel);
+  if (!opt.auto) {
+    const help = document.createElement('div'); help.className = 'help';
+    help.textContent = '→ 下一拍 ｜ ← 上一場 ｜ N 備忘 ｜ F 全螢幕 ｜ ?v=portrait 直式';
+    document.body.appendChild(help);
+  }
+
+  // ---------- 縮放 ----------
+  function fit() {
+    const W = +getComputedStyle(document.body).getPropertyValue('--stage-w');
+    const H = +getComputedStyle(document.body).getPropertyValue('--stage-h');
+    const pad = opt.chrome ? 0.96 : 1;
+    const k = Math.min(innerWidth / W, innerHeight / H) * pad;
+    stage.style.transform = `scale(${k})`;
+  }
+  addEventListener('resize', () => {
+    if (!opt.orientLocked) {
+      const want = innerHeight > innerWidth ? 'portrait' : 'landscape';
+      if (want !== document.body.dataset.orient) { document.body.dataset.orient = want; fit(); show(cur, beat); return; }
+    }
+    fit();
+  }); fit();
+
+  // ---------- 播放狀態 ----------
+  let cur = 0, beat = 0;
+  const els = [...stage.querySelectorAll('.scene')];
+  const maxBeat = el => Math.max(0, ...[...el.querySelectorAll('[data-beat]')].map(x => +x.dataset.beat));
+
+  function applyBeats(el) {
+    el.querySelectorAll('[data-beat]').forEach(x => x.classList.toggle('on', +x.dataset.beat <= beat));
+    const st = el.querySelector('[data-stack]');
+    if (st) {
+      const total = +st.dataset.total;
+      const n = Math.min(beat, total);
+      st.querySelector('[data-role=progress]').textContent = st.dataset.progress.replace('{n}', n).replace('{total}', total);
+      const crane = st.querySelector('.crane');
+      const slots = [...st.querySelectorAll('.slots .card')];
+      const idx = Math.min(Math.max(beat, 1), total) - 1;
+      const target = slots[idx];
+      if (target) {
+        const x = target.offsetLeft + target.offsetWidth / 2;
+        const slotsTop = st.querySelector('.slots').offsetTop;
+        const mascotH = crane.querySelector('.mascot').offsetHeight || 150;
+        crane.style.setProperty('--rope', `${Math.max(120, slotsTop + 40 - mascotH - 6)}px`);
+        crane.style.setProperty('--x', `${x}px`);
+        crane.classList.toggle('lift', beat > total);
+      }
+    }
+  }
+
+  function show(i, b) {
+    cur = Math.max(0, Math.min(i, els.length - 1));
+    beat = b == null ? 0 : b;
+    els.forEach((el, k) => {
+      el.classList.toggle('is-active', k === cur);
+      el.classList.toggle('is-past', k < cur);
+    });
+    applyBeats(els[cur]);
+    progress.style.width = `${((cur + 1) / els.length) * 100}%`;
+    try { history.replaceState(null, '', `#${cur + 1}`); } catch { /* 沙盒內不允許就略過 */ }
+    const n = scenes[cur].notes;
+    notesPanel.innerHTML = n ? `<b>第 ${cur + 1} 場備忘：</b>${esc(n)}` : `<b>第 ${cur + 1} 場</b>（沒有備忘）`;
+    document.body.dataset.curScene = cur;
+    document.body.dataset.curBeat = beat;
+  }
+
+  function next() {
+    if (beat < maxBeat(els[cur])) { beat++; applyBeats(els[cur]); document.body.dataset.curBeat = beat; return true; }
+    if (cur < els.length - 1) { show(cur + 1, 0); return true; }
+    return false;
+  }
+  function prev() {
+    if (cur > 0) show(cur - 1, maxBeat(els[cur - 1]));
+    else show(0, 0);
+  }
+  function revealAll() { show(cur, maxBeat(els[cur])); }
+
+  addEventListener('keydown', e => {
+    if (['ArrowRight', ' ', 'PageDown', 'Enter'].includes(e.key)) { e.preventDefault(); next(); }
+    else if (['ArrowLeft', 'PageUp', 'Backspace'].includes(e.key)) { e.preventDefault(); prev(); }
+    else if (e.key === 'ArrowDown') { e.preventDefault(); revealAll(); }
+    else if (e.key.toLowerCase() === 'n') notesPanel.classList.toggle('open');
+    else if (e.key.toLowerCase() === 'f') { try { (document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen()).catch(() => {}); } catch { /* 不支援全螢幕 */ } }
+    else if (e.key === 'Home') show(0, 0);
+    else if (e.key === 'End') show(els.length - 1, maxBeat(els[els.length - 1]));
+  });
+  zr.addEventListener('click', next);
+  zl.addEventListener('click', prev);
+  let tx = null;
+  addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+  addEventListener('touchend', e => {
+    if (tx == null) return;
+    const dx = e.changedTouches[0].clientX - tx; tx = null;
+    if (dx < -40) next(); else if (dx > 40) prev();
+  });
+
+  // 起始場
+  const h = parseInt(location.hash.slice(1), 10);
+  show(Number.isFinite(h) && h > 0 ? h - 1 : 0, 0);
+
+  // ---------- 自動播放（錄影用） ----------
+  if (opt.auto) {
+    const tick = () => {
+      const wasLast = cur === els.length - 1 && beat >= maxBeat(els[cur]);
+      if (wasLast) {
+        if (opt.loop) { show(0, 0); setTimeout(tick, opt.sceneMs); return; }
+        document.body.dataset.done = '1';
+        return;
+      }
+      const beforeScene = cur;
+      next();
+      setTimeout(tick, cur !== beforeScene ? opt.sceneMs : opt.beatMs);
+    };
+    setTimeout(tick, opt.sceneMs);
+  }
+
+  // 對外：讓截圖腳本可以控制
+  window.__deck = { next, prev, show, revealAll, count: els.length, maxBeat: i => maxBeat(els[i]), get cur() { return cur; }, get beat() { return beat; } };
+})();
