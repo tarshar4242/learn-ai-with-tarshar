@@ -67,6 +67,16 @@ ul{margin:6px 0;padding-left:20px}li{margin:4px 0}
   </section>
 
   <section>
+    <h2>交付目標與缺件</h2>
+    <p class="lead" id="targetLead"></p>
+    <div class="card warn"><b>A 組　尚未撰寫的內容</b>
+      <table style="margin-top:8px"><thead><tr><th>編號</th><th>項目</th><th>要先有什麼才能寫</th></tr></thead><tbody id="gapsA"></tbody></table></div>
+    <div class="card warn"><b>B 組　待確認的系所格式規定</b>
+      <table style="margin-top:8px"><thead><tr><th>編號</th><th>項目</th><th>說明</th></tr></thead><tbody id="gapsB"></tbody></table></div>
+    <p class="lead">C 組（研究設計待決 16 項）見下方「待決事項」，D 組（風險）見下方「風險與待處理」。編號與共同大腦的全文骨架一致。</p>
+  </section>
+
+  <section>
     <h2>五章進度</h2>
     <p class="lead">前三章是工作初稿，不是定稿；檔案在論文 Drive，點連結要先登入。</p>
     <div class="grid" id="chapters"></div>
@@ -107,7 +117,7 @@ ul{margin:6px 0;padding-left:20px}li{margin:4px 0}
     <div class="card"><ul class="log" id="log"></ul></div>
   </section>
 
-  <p class="foot">這一頁只放狀態、日期、決定與連結，<b>不放論文內文</b>。原因是申請口試要附比對率報告、相似度高於 25% 不得申請，公開網頁上的論文文字有可能被比對系統收錄，反過來與自己的論文相互比中。論文正文一律只放在論文 Drive。</p>
+  <p class="foot">這一頁只放狀態、日期、決定與連結，<b>不放論文內文</b>。原因是申請口試要附比對率報告、相似度高於 25% 不得申請，公開網頁上的論文文字有可能被比對系統收錄，反過來與自己的論文相互比中。論文正文一律只放在論文 Drive。本頁的缺件編號與共同大腦「研究｜論文全文｜可口試版骨架.md」一致，兩邊同步更新。</p>
 </main>
 
 <script src="progress.js"></script>
@@ -129,6 +139,14 @@ ul{margin:6px 0;padding-left:20px}li{margin:4px 0}
   $('gateBring').textContent = P.nextGate.bring;
   $('gateAsk').innerHTML = P.nextGate.ask.map(function(a){
     return '<li><b>'+esc(a.q)+'</b><span class="why">'+esc(a.why)+'</span></li>'}).join('');
+
+  // 交付目標與缺件
+  var tg = P.target;
+  $('targetLead').innerHTML = '目標：<b style="color:var(--deep)">'+esc(tg.name)+'</b>　·　目前有的：'+esc(tg.now)+'<br>'+esc(tg.gapNote);
+  $('gapsA').innerHTML = P.gapsA.map(function(g){
+    return '<tr><td class="dt">'+esc(g.id)+'</td><td><b>'+esc(g.item)+'</b></td><td>'+esc(g.dep)+'</td></tr>'}).join('');
+  $('gapsB').innerHTML = P.gapsB.map(function(g){
+    return '<tr><td class="dt">'+esc(g.id)+'</td><td><b>'+esc(g.item)+'</b></td><td>'+esc(g.dep)+'</td></tr>'}).join('');
 
   // 章節
   $('chapters').innerHTML = P.chapters.map(function(c){
