@@ -15,30 +15,47 @@
     beatMs: +q.get('beat') || deck.beatMs || 1400,
     sceneMs: +q.get('scene') || deck.sceneMs || 2200,
     chrome: q.get('chrome') !== '0',
-    mascot: deck.mascot || 'assets/web-story-deck/robot.svg',
-    motif: deck.motif || 'assets/web-story-deck/clover-nodes.svg',
-    host: deck.host === false ? null : (deck.host || 'assets/web-story-deck/xiaod-chibi.png'),
-    theme: q.get('theme') || deck.theme || 'dark'
+    assetBase: deck.assetBase || 'assets/web-story-deck/',
+    theme: q.get('theme') || deck.theme || 'dark',
+    accent: q.get('accent') || deck.accent || 'orange'
   }, {});
 
   document.body.dataset.orient = opt.orient;
   document.body.dataset.auto = opt.auto ? '1' : '0';
   document.body.dataset.chrome = opt.chrome ? '1' : '0';
   document.body.dataset.theme = opt.theme;
+  document.body.dataset.accent = opt.accent;
   document.title = deck.title || 'web-story-deck';
 
+  const asset = n => (deck.assets && deck.assets[n]) || (opt.assetBase + n);
+  const MOOD_BY_TYPE = { cover: 'default', agenda: 'default', hook: 'think', compare: 'think', steps: 'point', flow: 'point', bars: 'think', stack: 'default', checklist: 'alert', quote: 'point', golden: 'cheer' };
+  const POSE_BY_TYPE = { cover: 'chibi', hook: 'think', compare: 'think', steps: 'point', flow: 'point', bars: 'think', checklist: 'stop', quote: 'point', golden: 'cheer', agenda: 'chibi', stack: 'chibi' };
+  const robotFor = s => { const m = s.mood || MOOD_BY_TYPE[s.type] || 'default'; return asset(m === 'default' ? 'robot.svg' : `robot-${m}.svg`); };
+  const hostFor = s => { if (deck.host === false || s.host === false) return null; const p = s.pose || (deck.poses && deck.poses[POSE_BY_TYPE[s.type] || 'chibi']) || 'chibi'; return asset(`xiaod-${p}.png`); };
+  opt.motif = asset((deck.theme && deck.theme !== 'dark') ? 'clover-nodes-light.svg' : 'clover-nodes.svg');
   const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   // 允許劇本用 [[…]] 標黃、**…** 變藍字強調
   const rich = s => esc(s).replace(/\[\[(.+?)\]\]/g, '<mark>$1</mark>').replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
-  const acc = ['', 'a2', 'a3', 'a4']; // 強調色輪替：青綠、天空藍、暖橘、幸運草綠（只用在細條與號碼）
+  const ACC = ['', 'a2', 'a3', 'a4']; // 強調色輪替：青綠、天空藍、暖橘、幸運草綠（只用在細條與號碼）
+  const ENTER = ['drop', 'rise', 'slide-l', 'pop', 'tilt']; // 進場動作輪替
+  const BG = ['plain', 'glow', 'band', 'rail'];              // 背景變化輪替
+  const MOTIF = ['right', 'left', 'right', 'none'];           // 幸運草節點位置輪替
+  let acc = ACC, enter = 'drop';                              // 每場渲染前重設
+  const variantFor = (s, i) => ({
+    enter: s.enter || ENTER[i % ENTER.length],
+    bg: s.bg || BG[i % BG.length],
+    motif: s.motif || MOTIF[i % MOTIF.length],
+    shift: (s.accentShift ?? i) % 4
+  });
   const pad2 = n => String(n).padStart(2, '0');
 
   // ---------- 各版型渲染 ----------
   const R = {};
-  const mascot = (cls = '', beat = 0) => `<div class="mascot pop ${cls}" data-beat="${beat}"><img src="${opt.mascot}" alt="AI 夥伴"></div>`;
-  // 小D 本人＋小機器人同框（封面、金句場）；機器人不得比人大（DESIGN.md 第 6 節）
-  const duo = (beat = 0) => opt.host
-    ? `<div class="duo pop" data-beat="${beat}"><img class="robot" src="${opt.mascot}" alt="AI 夥伴"><img class="host" src="${opt.host}" alt="小D"></div>`
+  let cur_s = null; // 目前渲染中的場（給 mascot／duo 取表情與姿勢）
+  const mascot = (cls = '', beat = 0) => `<div class="mascot pop ${cls}" data-beat="${beat}"><img src="${robotFor(cur_s)}" alt="AI 夥伴"></div>`;
+  // 小D 本人＋小機器人同框（封面、金句場，或單場 host:true）；機器人不得比人大（DESIGN.md 第 6 節）
+  const duo = (beat = 0, small = false) => hostFor(cur_s)
+    ? `<div class="duo pop ${small ? 'small' : ''}" data-beat="${beat}"><img class="robot" src="${robotFor(cur_s)}" alt="AI 夥伴"><img class="host" src="${hostFor(cur_s)}" alt="小D"></div>`
     : mascot('', beat);
 
   R.cover = (s, i) => `
@@ -67,7 +84,7 @@
 
   R.compare = (s) => {
     const card = (c, k, cls) => `
-      <div class="card ${cls} ${c.tone === 'bad' ? 'bad' : c.tone === 'good' ? 'good' : ''}" data-beat="${1 + k}">
+      <div class="card ${enter === 'slide-l' ? cls : enter} ${c.tone === 'bad' ? 'bad' : c.tone === 'good' ? 'good' : ''}" data-beat="${1 + k}">
         ${c.label ? `<div class="label">${esc(c.label)}</div>` : ''}
         <h3>${rich(c.title)}</h3>
         ${c.body ? `<p>${rich(c.body)}</p>` : '<p></p>'}
@@ -80,7 +97,7 @@
   };
 
   const stepCard = (it, k) => `
-    <div class="card ${acc[k % 4]} drop" data-beat="${1 + k}">
+    <div class="card ${acc[(k) % 4]} ${enter}" data-beat="${1 + k}">
       <span class="num">${esc(it.n || pad2(k + 1))}</span>
       <h3>${rich(it.title)}</h3>
       ${it.desc ? `<p>${rich(it.desc)}</p>` : '<p></p>'}
@@ -105,7 +122,7 @@
     return `
     ${head(s)}
     <div class="body"><div class="pipe">
-      <div class="sources">${src.map((t, k) => `<span class="chip ${acc[k % 4]} drop" data-beat="${1 + k}"><span class="ico">≡</span>${esc(t)}</span>`).join('')}</div>
+      <div class="sources">${src.map((t, k) => `<span class="chip ${acc[(k) % 4]} ${enter}" data-beat="${1 + k}"><span class="ico">≡</span>${esc(t)}</span>`).join('')}</div>
       <div class="arrow down" data-beat="${b}"></div>
       <div class="panel pop" data-beat="${b}">
         <h4>${esc(s.panel?.title || '')}</h4>
@@ -125,7 +142,7 @@
     <div class="body">
       <div class="chart" data-beat="0">
         ${bars.map((x, k) => `
-          <div class="bar-wrap ${esc(x.color || acc[k % 4])}" data-beat="${1 + k}" style="--h:${Math.round((+x.value / max) * 100)}">
+          <div class="bar-wrap ${esc(x.color || acc[(k) % 4])}" data-beat="${1 + k}" style="--h:${Math.round((+x.value / max) * 100)}">
             <span class="val">${esc(x.display || x.value)}${esc(x.unit || '')}</span>
             <div class="col"></div>
             <span class="lab">${esc(x.label)}</span>
@@ -146,7 +163,7 @@
         ${s.badge ? `<span class="pill" data-beat="0">${esc(s.badge)}</span>` : '<span></span>'}
         <span class="pill solid" data-role="progress" data-beat="0"></span>
       </div>
-      <div class="crane"><span class="rope"></span><div class="mascot"><img src="${opt.mascot}" alt="AI 夥伴"></div></div>
+      <div class="crane"><span class="rope"></span><div class="mascot"><img src="${robotFor(s)}" alt="AI 夥伴"></div></div>
       <div class="slots">${items.map(stepCard).join('')}</div>
     </div>
     ${note(s, n + 1)}`;
@@ -157,7 +174,7 @@
     const col = (c) => `
       <div class="col ${c.tone === 'stop' ? 'stop' : 'ok'}">
         <div><span class="pill ${c.tone === 'stop' ? 'accent' : 'solid'}" data-beat="${b++}">${esc(c.label)}</span></div>
-        ${(c.items || []).map(t => `<div class="item slide-${c.tone === 'stop' ? 'r' : 'l'}" data-beat="${b++}"><span class="mark">${c.tone === 'stop' ? '×' : '✓'}</span><span>${rich(t)}</span></div>`).join('')}
+        ${(c.items || []).map(t => `<div class="item ${enter === 'slide-l' ? 'slide-' + (c.tone === 'stop' ? 'r' : 'l') : enter}" data-beat="${b++}"><span class="mark">${c.tone === 'stop' ? '×' : '✓'}</span><span>${rich(t)}</span></div>`).join('')}
       </div>`;
     return `${head(s)}<div class="body"><div class="cols">${(s.cols || []).map(col).join('')}</div></div>${note(s, b)}`;
   };
@@ -186,7 +203,7 @@
     ${head(s)}
     <div class="body"><div class="track">
       ${(s.stops || []).map((st, k) => `
-        <div class="stop ${st.break ? 'break' : ''} drop" data-beat="${1 + k}">
+        <div class="stop ${st.break ? 'break' : ''} ${enter}" data-beat="${1 + k}">
           <b>${esc(st.n || (st.break ? '☕' : pad2(k + 1)))}</b>
           <h3>${rich(st.title)}</h3>
           ${st.time ? `<p>${esc(st.time)}</p>` : ''}
@@ -230,7 +247,13 @@
     el.className = `scene t-${s.type}`;
     el.dataset.index = i;
     const render = R[s.type] || ((x) => `${head(x)}<div class="body"><p class="sub">（未知版型 ${esc(x.type)}）</p></div>`);
-    el.innerHTML = `<img class="motif" src="${opt.motif}" alt="">` + render(s, i) + foot(s, i);
+    cur_s = s;
+    const v = variantFor(s, i);
+    acc = ACC.slice(v.shift).concat(ACC.slice(0, v.shift)); // 每場的卡片色序不同
+    enter = v.enter;
+    if (s.type !== 'cover' && s.type !== 'golden') el.classList.add(`bg-${v.bg}`, `m-${v.motif === 'right' ? 'right' : v.motif}`);
+    const extraHost = (s.host === true && s.type !== 'cover' && s.type !== 'golden') ? duo(0, true) : '';
+    el.innerHTML = `<img class="motif" src="${opt.motif}" alt="">` + render(s, i) + extraHost + foot(s, i);
     stage.appendChild(el);
   });
   const progress = document.createElement('div'); progress.className = 'progress'; stage.appendChild(progress);

@@ -64,12 +64,34 @@ body[data-orient="portrait"] {
   --motif-w: 520px;
 }
 
-/* 淺色主題（可選：劇本 theme:"light"） */
+/* ---- 主題（劇本 theme:"dark"|"light"|"journal"|"warm"，或網址 ?theme=）----
+   品牌固定的是：幸運草節點、小D＋小機器人、頁尾署名、三列骨架、六級字級。主題只換底色、卡片質感、強調色。 */
 body[data-theme="light"] {
   --bg: var(--mist); --fg: var(--navy); --muted: #5B6780;
   --card: #FFFFFF; --card-2: #F4F7FD; --line: rgba(27,179,154,.7); --line-soft: rgba(22,35,63,.18);
   --pill-bg: rgba(27,179,154,.12); --orange-text: #C7773F; --stage-frame: #D7E0EE;
+  --teal-soft: #128F7A; --clover: #5EA82E;
 }
+/* 形象 B｜知識手帳編輯室：紙張米白、低彩度綠、駝棕、柔珊瑚、淡天空藍、墨色 */
+body[data-theme="journal"] {
+  --bg: #F5EAD7; --fg: #35352F; --muted: #6B6358;
+  --card: #FFFDF8; --card-2: #F3EBDC; --line: rgba(116,131,90,.55); --line-soft: rgba(166,124,82,.35);
+  --teal: #74835A; --teal-soft: #5E6E44; --blue: #7FA8B8; --sky: #A9CED7; --orange: #D99576; --orange-text: #B8603F;
+  --clover: #8FBF4F; --clover-deep: #74835A; --cream: #E8D9BF; --foot-fg: #4A4038; --foot-brand: #4A7A2E;
+  --pill-bg: rgba(116,131,90,.12); --stage-frame: #D9CBB2; --navy-deep: #35352F;
+}
+/* 形象 A｜暖陽幸運草學習室：奶油白、幸運草綠、橄欖綠、暖杏橘、木質棕、深墨綠 */
+body[data-theme="warm"] {
+  --bg: #FFF9EE; --fg: #173C32; --muted: #5F6B5E;
+  --card: #FFFFFF; --card-2: #F6F1E6; --line: rgba(47,143,98,.55); --line-soft: rgba(154,107,69,.3);
+  --teal: #2F8F62; --teal-soft: #246F4C; --blue: #4C9ED9; --sky: #4C9ED9; --orange: #E8A87C; --orange-text: #B9683A;
+  --clover: #7DBE47; --clover-deep: #2F8F62; --cream: #2F8F62; --foot-fg: #FFF9EE; --foot-brand: #FFF9EE;
+  --pill-bg: rgba(47,143,98,.1); --stage-frame: #EADFCB; --navy-deep: #FFFFFF;
+}
+/* 重點色（劇本 accent:"orange"|"teal"|"sky"|"clover"）：只影響 [[…]] 與重點膠囊 */
+body[data-accent="teal"] { --orange-text: var(--teal-soft); --orange: var(--teal); }
+body[data-accent="sky"] { --orange-text: var(--sky); --orange: var(--sky); }
+body[data-accent="clover"] { --orange-text: var(--clover); --orange: var(--clover); }
 
 * { box-sizing: border-box; }
 html, body { margin: 0; min-height: 100%; }
@@ -105,7 +127,13 @@ body[data-chrome="1"] .stage-box { border-radius: 16px; box-shadow: 0 30px 80px 
   transform-origin: 0 0; transform: scale(var(--k, 1));
   overflow: hidden;
 }
-body[data-theme="light"] .stage { background: radial-gradient(circle at 1px 1px, rgba(22,35,63,.10) 1px, transparent 1.5px) 0 0 / 32px 32px, var(--bg); }
+body[data-theme="light"] .stage, body[data-theme="warm"] .stage { background: radial-gradient(circle at 1px 1px, rgba(22,35,63,.10) 1px, transparent 1.5px) 0 0 / 32px 32px, var(--bg); }
+body[data-theme="journal"] .stage { background: radial-gradient(circle at 1px 1px, rgba(53,53,47,.14) 1.2px, transparent 1.8px) 0 0 / 28px 28px, var(--bg); }
+body[data-theme="journal"] .scene::after { content: ""; position: absolute; left: 36px; top: -14px; width: 150px; height: 34px; background: rgba(169,206,215,.55); transform: rotate(-4deg); pointer-events: none; }
+body[data-theme="journal"] .scene:nth-child(even)::after { left: auto; right: 48px; background: rgba(217,149,118,.5); transform: rotate(3deg); }
+body[data-theme="journal"] .card, body[data-theme="journal"] .stop, body[data-theme="journal"] .item, body[data-theme="journal"] .phone, body[data-theme="journal"] .quote { box-shadow: 2px 3px 0 rgba(166,124,82,.25); }
+body[data-theme="warm"] .card, body[data-theme="warm"] .stop, body[data-theme="warm"] .item { box-shadow: 0 6px 18px rgba(23,60,50,.08); }
+body[data-theme="light"] .motif, body[data-theme="journal"] .motif, body[data-theme="warm"] .motif { opacity: .45; }
 
 /* ---- 場景骨架：標題區／內容區／註解列 ---- */
 .scene {
@@ -124,16 +152,26 @@ body[data-theme="light"] .stage { background: radial-gradient(circle at 1px 1px,
 .scene.t-hook .motif { display: none; }
 body[data-theme="light"] .motif { opacity: .35; }
 
+/* 場次變化（劇本 scene.bg / scene.enter / scene.motif，沒填就依場次自動輪替）*/
+.scene.bg-glow::before { content: ""; position: absolute; inset: 0; background: radial-gradient(60% 50% at 30% 40%, rgba(27,179,154,.14), transparent 70%); pointer-events: none; }
+.scene.bg-band::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: calc(var(--pad-top) + var(--head-h) - 24px); background: rgba(255,255,255,.035); border-bottom: 1px solid var(--line-soft); pointer-events: none; }
+body[data-theme="light"] .scene.bg-band::before, body[data-theme="journal"] .scene.bg-band::before, body[data-theme="warm"] .scene.bg-band::before { background: rgba(0,0,0,.035); }
+.scene.bg-rail::before { content: ""; position: absolute; left: calc(var(--pad-x) - 28px); top: var(--pad-top); bottom: calc(var(--foot-h) + 24px); width: 4px; border-radius: 2px; background: linear-gradient(var(--teal), transparent); pointer-events: none; }
+.scene.m-left .motif { right: auto; left: -60px; top: auto; bottom: calc(var(--foot-h) - 30px); transform: scaleX(-1); width: calc(var(--motif-w) * .75); opacity: .35; }
+.scene.m-none .motif { display: none; }
+.scene.m-big .motif { width: calc(var(--motif-w) * 1.35); opacity: .8; right: -20px; top: -40px; }
+
 /* 進場 */
 .scene [data-beat] { opacity: 0; transform: translateY(28px); transition: opacity var(--beat) ease, transform var(--beat) var(--ease); }
 .scene [data-beat].on { opacity: 1; transform: none; }
 .scene [data-beat].drop { transform: translateY(-140px) rotate(-3deg); }
-.scene [data-beat].drop.on { transform: none; }
+.scene [data-beat].rise { transform: translateY(80px); }
 .scene [data-beat].pop { transform: scale(.7); }
-.scene [data-beat].pop.on { transform: none; }
 .scene [data-beat].slide-l { transform: translateX(-60px); }
 .scene [data-beat].slide-r { transform: translateX(60px); }
-.scene [data-beat].slide-l.on, .scene [data-beat].slide-r.on { transform: none; }
+.scene [data-beat].fade { transform: none; }
+.scene [data-beat].tilt { transform: translateY(60px) rotate(2deg); transform-origin: left bottom; }
+.scene [data-beat].drop.on, .scene [data-beat].rise.on, .scene [data-beat].pop.on, .scene [data-beat].slide-l.on, .scene [data-beat].slide-r.on, .scene [data-beat].fade.on, .scene [data-beat].tilt.on { transform: none; }
 
 /* ---- 標題區 ---- */
 .head { position: relative; z-index: 1; align-self: start; padding-right: calc(var(--motif-w) * .55); }
@@ -234,7 +272,13 @@ body[data-orient="portrait"] .foot::before { clip-path: path("M0 24 C 140 2 300 
 .duo { position: absolute; right: var(--pad-x); bottom: calc(var(--foot-h) - 4px); display: flex; align-items: flex-end; z-index: 1; pointer-events: none; }
 .duo .host { height: 420px; width: auto; filter: drop-shadow(0 8px 16px rgba(0,0,0,.35)); }
 .duo .robot { height: 220px; width: auto; margin-right: -36px; margin-bottom: 6px; }
+.duo.small { right: calc(var(--pad-x) - 24px); bottom: calc(var(--foot-h) + var(--note-h) - 20px); z-index: 2; }
+.duo.small .host { height: 240px; }
+.duo.small .robot { height: 120px; margin-right: -24px; }
 body[data-orient="portrait"] .duo { right: 50%; transform: translateX(50%); }
+body[data-orient="portrait"] .duo.small { right: 24px; transform: none; bottom: calc(var(--foot-h) + var(--note-h)); }
+body[data-orient="portrait"] .duo.small .host { height: 260px; }
+body[data-orient="portrait"] .duo.small .robot { height: 130px; }
 body[data-orient="portrait"] .duo .host { height: 520px; }
 body[data-orient="portrait"] .duo .robot { height: 280px; margin-right: -40px; }
 .scene [data-beat].pop.duo { transform: scale(.7); }
