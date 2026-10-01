@@ -161,6 +161,13 @@ ul{margin:6px 0;padding-left:20px}li{margin:4px 0}
       '<div class="det">'+esc(c.detail)+'</div>'+
       (links?'<div class="links">'+links+'</div>':'')+'</div>'}).join('');
 
+  var fu = P.full;
+  if (fu) {
+    $('mergedCard').insertAdjacentHTML('beforebegin',
+      '<div class="card"><div class="ch-head"><b>'+esc(fu.name)+'</b><span class="pg">'+fu.pages+
+      ' 頁</span><span class="pill ok">最新</span></div><div class="det">'+esc(fu.note)+
+      '</div><div class="links"><a href="'+esc(fu.folder)+'" target="_blank" rel="noopener">論文 Drive 資料夾</a></div></div>');
+  }
   var m = P.merged;
   $('mergedCard').innerHTML = '<div class="ch-head"><b>前三章合併稿</b><span class="pg">'+m.pages+' 頁</span>'+
     '<span class="pill ok">可閱讀</span></div><div class="links">'+
