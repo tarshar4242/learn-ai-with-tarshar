@@ -83,3 +83,11 @@
 - `public/notes/materials/ai-office-startup/course-materials.zip` — 完整課程 PDF 與可編輯練習教材包。
 - `output/ai-office-build/publish.py` — 正式網站 PDF 連結修正與教材包打包。
 - 公開課程：https://tarshar4242.github.io/learn-ai-with-tarshar/notes/ai-office-startup.html
+
+
+## EP55 AI × GIS 城市資料視覺化
+
+- `public/notes/ep55-notes.html` — 51 分 49 秒錄影與 32 頁簡報整合的課堂筆記。
+- `public/notes/ep55-ai-skills.html` — 互動技能地圖與學習勾選。
+- `public/notes/ep55-img/` — 經裁切去識別的課堂重點畫面。
+- 課程入口由 `src/data/radio.json` 索引；原始錄影與完整講義保存在指定 Drive，不納入公開網站。
