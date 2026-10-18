@@ -91,3 +91,11 @@
 - `public/notes/ep55-ai-skills.html` — 互動技能地圖與學習勾選。
 - `public/notes/ep55-img/` — 經裁切去識別的課堂重點畫面。
 - 課程入口由 `src/data/radio.json` 索引；原始錄影與完整講義保存在指定 Drive，不納入公開網站。
+
+## 公務戰情室
+
+[開啟戰情室](https://tarshar4242.github.io/learn-ai-with-tarshar/civic-war-room/?k=145)。首頁及選單的管理者入口也可以進入；右上角可開現況日曆，切換月曆與甘特圖。
+
+程式唯一維護位置：`public/civic-war-room/`。Gmail、Google 行事曆為直接連結；工作卡是示範，沒有讀取帳號資料。設定只存目前瀏覽器，跨裝置使用 JSON 匯出／匯入。
+
+首次在新裝置開啟本人持有的個人啟用連結，可載入額外入口。公開檔案只含通用入口及 AES-GCM 加密的連結包，啟用金鑰不入庫；網址片段使用後立即移除。`?k=145` 僅控制入口顯示，不是登入驗證。不要把私人啟用連結、未公開公務內容或個資提交到此公開 repo。

@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><title>公務生態系戰情室</title><link rel="stylesheet" href="styles.css"></head>
+<body>
+<noscript><p>瀏覽器未允許 JavaScript，功能無法操作。請使用允許 JavaScript 的瀏覽器。</p></noscript>
+<div id="storageWarning" role="alert" hidden></div>
+<header><div class="topline"><a class="home-link" href="../?k=145">← 回我的網站</a><div class="header-tools"><span id="today"></span><button class="schedule-entry" data-view="schedule" aria-pressed="false" aria-label="開啟現況日曆與甘特圖"><span aria-hidden="true">▦</span> 現況日曆</button></div></div><h1>公務生態系<span>戰情室</span></h1><p>今天要做的事，以及辦事需要的地方。</p><div class="statusline"><span>真實入口連結</span><span>工作卡為模擬資料</span><span>未自動同步任何帳號</span></div></header>
+<main>
+<section aria-label="今天先看" class="overview"><div><span class="eyebrow">今天先看 · 示範工作</span><h2 id="dailyTitle">正在載入</h2><p id="dailyText"></p></div><button class="primary" id="toTasks">查看示範工作 →</button></section>
+<nav aria-label="主要功能"><button class="tab selected" data-view="links" aria-pressed="true">工作入口</button><button class="tab" data-view="tasks" aria-pressed="false">示範工作</button><button class="tab" data-view="guide" aria-pressed="false">使用與接續</button></nav>
+<section id="linksView"><p id="setupNotice" class="schedule-note" role="status" hidden></p><div class="sectionhead"><div><h2>需要的，都從這裡進去</h2><p>連回原本工具與資料庫，不另外複製內容。</p></div><button id="addLink" class="primary">＋ 新增入口</button></div>
+<div class="filters"><label class="search">搜尋入口<input type="search" id="linkSearch" placeholder="例如：日誌、公文、練習"></label><label>入口分類<select id="linkCategory"><option value="">全部入口分類</option></select></label><label class="check"><input type="checkbox" id="favOnly"> 只看收藏</label></div>
+<p id="linkCount" class="muted" aria-live="polite"></p><div id="linkGrid" class="grid"></div>
+<details class="missing"><summary>還有哪些入口尚未接齊？</summary><p>其他公務信箱、內網系統、共用磁碟及其他聊天室的完整清單，尚未取得可核對網址。你可以直接新增入口；這不會授權任何帳號串接。</p><p>已加入 Google 行事曆與 Gmail 的官方入口，使用原本登入帳號；本頁不會自動讀取行程或信件。個人啟用連結會載入已核對的熟成局 9 個 Notion 入口。這次只確認入口與用途，沒有完成所有聊天室／資料列的漏登稽核，也不表示排程正常運作。</p></details></section>
+<section id="tasksView" hidden><div class="sectionhead"><div><h2>事情追到哪裡</h2><p>全部為可修改的虛構練習資料。請勿輸入未公開公務內容或個資。</p></div><button class="primary" id="addTask">＋ 新增示範工作</button></div><div class="filters"><label class="search">搜尋工作<input id="taskSearch" type="search" placeholder="標題、來源或下一步"></label><label>處理佇列<select id="taskStatus"><option value="">全部處理佇列</option></select></label><label>工作類別<select id="taskCategory"><option value="">全部工作類別</option></select></label></div><div id="metrics" class="metrics"></div><p id="taskCount" class="muted" aria-live="polite"></p><div id="taskGrid" class="grid tasks"></div></section>
+<section id="scheduleView" hidden aria-label="工作現況">
+<div class="sectionhead"><div><span class="eyebrow">工作時間與進度</span><h2>現況日曆與甘特圖</h2><p id="scheduleSummary" aria-live="polite"></p></div><a class="button" href="https://calendar.google.com/" target="_blank" rel="noopener noreferrer">開啟 Google 行事曆 ↗</a></div>
+<p class="schedule-note">目前呈現本站的示範工作卡；Google 行程尚未同步。修改工作卡後，這裡會一起更新。</p>
+<div class="schedule-toolbar"><div class="actions" aria-label="檢視方式"><button class="primary" data-schedule-mode="calendar" aria-pressed="true">月曆</button><button data-schedule-mode="gantt" aria-pressed="false">甘特圖</button></div><label>工作狀態<select id="scheduleStatus"><option value="">全部狀態</option></select></label></div>
+<div class="month-nav"><button id="schedulePrev" aria-label="上一個月">‹</button><h3 id="scheduleMonthLabel" aria-live="polite"></h3><button id="scheduleNext" aria-label="下一個月">›</button><button id="scheduleToday">回到今天</button></div>
+<div class="schedule-legend"><span><i class="active"></i>進行中</span><span><i class="waiting"></i>等待回覆</span><span><i class="late"></i>逾期</span><span><i class="finished"></i>已完成</span></div>
+<div id="calendarPanel"><div class="calendar-grid" id="calendarGrid" aria-label="月份工作日期"></div><h3 id="agendaDate"></h3><div id="agendaList"></div></div>
+<div id="ganttPanel" hidden><p class="muted" id="ganttCount"></p><p class="muted">○ 開始　◆ 到期　● 追蹤　｜直線為今天；手機可左右滑動時間軸。</p><div class="gantt-scroll" tabindex="0" role="region" aria-label="甘特圖時間軸，可左右捲動"><div id="ganttTable"></div></div><p id="ganttEmpty" class="empty" hidden>本月沒有符合篩選的排程。可切換月份，或為工作補上日期。</p></div>
+<details class="unscheduled"><summary id="unscheduledTitle"></summary><div id="unscheduledList"></div></details>
+</section>
+<section id="guideView" hidden><h2>這一版可以怎麼用</h2><div class="guidegrid"><article><h3>每天打開</h3><ol><li>看上方今日摘要，進入示範工作了解追蹤方式。</li><li>在「工作入口」搜尋或收藏需要的工具。</li><li>點「開啟入口」，使用原本帳號與原本資料。</li><li>新增常用連結；定期匯出備份。</li></ol></article><article><h3>資料放在哪裡</h3><p>收藏、自訂入口與示範卡保存在目前瀏覽器。關閉後可保留；無痕模式、清除網站資料或更換瀏覽器可能遺失。</p><p>手機與電腦不會自動同步。匯出後在另一裝置匯入，即可帶走設定。匯入採合併，同代碼有差異時保留為另一筆，不默默覆蓋。</p></article><article><h3>哪些是真實、哪些是示範</h3><p>Notion 入口已由連接器讀取核對；資料仍在 Notion。首頁不會自動讀取工作日誌或寄信。</p><p>工作卡、摘要與草稿為模擬資料。建議文字依規則產生，不是假裝 AI 已理解真實業務；「我的判斷」由你填寫。</p></article><article><h3>手機打開與外出使用</h3><p>這是你原本網站裡的戰情室，手機與電腦可直接開啟，外出不需要 Mac mini 開機。Gmail、Google 行事曆與 Notion 各自使用原本帳號。</p><p>第一次在新裝置使用，開啟知臨提供的個人啟用連結，即可載入私人入口；之後從網站首頁進入即可。這個啟用連結請自行保留。舊網址的自訂設定可先匯出，再到這裡匯入；單檔離線版也可匯入同一份備份。</p></article></div>
+<div class="actions"><button id="exportData" class="primary">匯出設定與示範工作</button><label class="button">匯入備份<input id="importData" type="file" accept="application/json,.json" hidden></label><button id="restoreDemo">補回缺少的示範卡</button><a class="button" href="offline.html" download>下載單檔離線版</a></div><p id="importResult" role="status"></p>
+<details><summary>貼到熟成局的檢核指令</summary><p>此指令只會複製到剪貼簿，不會代你傳訊息。</p><textarea id="auditPrompt" rows="10" readonly></textarea><button id="copyAudit">複製檢核指令</button></details></section>
+<footer>知臨 · 第一版可操作原型 · 入口核對 2026-10-18<br>僅存通用入口與模擬資料；公務正本留在原有允許環境。</footer>
+</main>
+<dialog id="editor" aria-labelledby="dialogTitle"><form id="editForm"><div class="sectionhead"><h2 id="dialogTitle"></h2><button type="button" id="closeEditor" aria-label="關閉編輯視窗">✕</button></div><div id="formFields"></div><p id="formError" role="alert"></p><div class="actions"><button type="submit" class="primary">儲存</button><button type="button" id="cancelEdit">取消</button></div></form></dialog>
+<div id="toast" role="status" hidden></div>
+<script src="data.js"></script><script src="bootstrap.js"></script>
+</body></html>
