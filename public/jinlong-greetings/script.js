@@ -113,9 +113,7 @@
     const b=makeButton(name,()=>{state.greeting=id;invalidate();render();}); b.dataset.greeting=id;$('greetings').append(b);
   }
   for(const c of D.categories) {
-    const b=makeButton('',()=>{state.category=c.id;state.series='auto';invalidate();render();});b.className='category';b.dataset.category=c.id;b.setAttribute('aria-label',c.name);
-    const img=document.createElement('img');img.src=`./assets/${c.id}.svg`;img.alt='';img.width=320;img.height=160;
-    const cap=document.createElement('span');cap.className='caption';const strong=document.createElement('strong');strong.textContent=c.emoji+' '+c.name;const hint=document.createElement('span');hint.className='hint';hint.textContent=c.hint;cap.append(strong,hint);b.append(img,cap);$('categories').append(b);
+    const b=makeButton(c.name,()=>{state.category=c.id;state.series='auto';invalidate();render();});b.className='category';b.dataset.category=c.id;b.setAttribute('aria-label',c.name);$('categories').append(b);
   }
   D.signatures.forEach((s,i)=>$('signature').add(new Option(s,i)));
   Object.keys(D.holidayBlessings).filter(x=>x!=='通用').forEach(name=>$('festival-chips').append(makeButton(name,()=>{state.holidayName=name;$('festival-name').value=name;invalidate();})));
@@ -145,10 +143,12 @@
       $('summary').textContent=`${current.title} · ${current.style} · 直式 4:5`;
       $('preview-title').textContent=current.title;$('preview-blessing').textContent=current.blessing;$('preview-signature').textContent=current.signature;
       $('prompt-text').value=current.prompt;$('copy-status').textContent='';$('prompt-details').open=false;$('form-error').hidden=true;$('result').hidden=false;
-      renderHoliday();$('result').focus({preventScroll:true});$('result').scrollIntoView({behavior:'auto',block:'start'});
+      renderHoliday();$('result').focus({preventScroll:true});
     } catch(e) {$('form-error').textContent=e.message||'這次未能準備指令。請重新選擇問候類型，再試一次。';$('form-error').hidden=false;$('form-error').scrollIntoView({block:'center'});}
   }
   $('builder').addEventListener('submit',e=>{e.preventDefault();generate();});$('shuffle').addEventListener('click',generate);
+  function closeResult() {$('result').hidden=true;$('generate').focus({preventScroll:true});}
+  $('close-result').addEventListener('click',closeResult);$('edit-settings').addEventListener('click',closeResult);
   function selectText() {$('prompt-details').open=true;$('prompt-text').focus();$('prompt-text').select();$('prompt-text').setSelectionRange(0,$('prompt-text').value.length);}
   $('select-text').addEventListener('click',selectText);
   $('copy').addEventListener('click',async()=>{
