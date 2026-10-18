@@ -1,10 +1,10 @@
-/* 進龍日安圖 V5.0 — 靜態、離線提示詞產生器。 */
+/* 進龍日安圖 V5.1 — 靜態、離線提示詞產生器。 */
 (function (root) {
   'use strict';
   const D = root.JinlongData || (typeof require === 'function' ? require('./data.js') : null);
   const L = root.Lunar || (typeof require === 'function' ? require('./assets/vendor/lunar.js').Lunar : null);
   const DAY = 86400000;
-  const DEFAULT = {greeting:'morning', category:'random', series:'auto', signature:0, holidayMode:'auto', holidayName:''};
+  const DEFAULT = {greeting:'morning', category:'random', tone:'fresh', signature:0, holidayMode:'auto', holidayName:''};
   const KEY = 'jinlong-greetings-v5';
   const HISTORY_KEY = KEY + '-history';
   const fixed = [['元旦',1,1],['父親節',8,8],['教師節',9,28],['國慶日',10,10],['聖誕節',12,25]];
@@ -47,7 +47,7 @@
     if(!raw || typeof raw!=='object') return s;
     if(Object.hasOwn ? Object.hasOwn(D.greetings,raw.greeting) : Object.prototype.hasOwnProperty.call(D.greetings,raw.greeting)) s.greeting=raw.greeting;
     if(D.categories.some(c=>c.id===raw.category)) s.category=raw.category;
-    if(raw.series==='auto'||D.styles.some(x=>x.id===raw.series&&x.category===s.category)) s.series=raw.series;
+    if(Object.prototype.hasOwnProperty.call(D.tones,raw.tone)) s.tone=raw.tone;
     if(Number.isInteger(raw.signature)&&raw.signature>=0&&raw.signature<D.signatures.length) s.signature=raw.signature;
     if(raw.holidayMode==='manual') s.holidayMode='manual';
     s.holidayName=cleanName(raw.holidayName);
@@ -57,7 +57,11 @@
     const pool=list.length>1?list.filter(x=>x!==last):list;
     return pool[Math.min(pool.length-1,Math.floor(rng()*pool.length))];
   }
-  const toneWords={calm:/安|靜|茶|從容|慢/,steady:/順|平安|健康|踏實/,nature:/花|風|光|山水|風景/,relax:/歇|休息|輕鬆|自在|茶|走/,warm:/笑|暖|家|朋友|問候/};
+  function pickSome(list,count,rng=Math.random) {
+    const pool=[...list], out=[];
+    while(pool.length&&out.length<count) out.push(pool.splice(Math.min(pool.length-1,Math.floor(rng()*pool.length)),1)[0]);
+    return out;
+  }
   function buildPrompt(raw, history={}, now=new Date(), rng=Math.random) {
     const s=normalize(raw);
     let festival=null, title=D.greetings[s.greeting];
@@ -67,8 +71,11 @@
       if(!festival.name) throw new Error('請先輸入節日名稱，或點選下方的常見節日，再產生畫圖指令。');
       title=festival.name;
     }
-    const eligible=D.styles.filter(x=>s.category==='random'||x.category===s.category);
-    const style=s.series!=='auto'&&s.category!=='random'?eligible.find(x=>x.id===s.series):choose(eligible,eligible.find(x=>x.id===history.lastStyle),rng);
+    const themed=D.categories.filter(c=>c.id!=='random');
+    const category=s.category==='random'?choose(themed,themed.find(c=>c.id===history.lastCategory),rng):D.categories.find(c=>c.id===s.category);
+    const idea=choose(D.ideas[category.id],history.lastIdea,rng);
+    const mediums=pickSome(D.mediums,3,rng);
+    const angle=choose(D.angles,history.lastAngle,rng);
     const pool=festival&&festival.phase==='after'?(ownValue(D.afterHolidayBlessings,title)||D.afterHolidayBlessings['通用']):s.greeting==='holiday'?(ownValue(D.holidayBlessings,title)||D.holidayBlessings['通用']):D.blessings[s.greeting];
     const bucket=s.greeting==='holiday'?'holiday:'+title+(festival.phase==='after'?':after':''):s.greeting;
     const historyMap=history.used&&typeof history.used==='object'?history.used:{};
@@ -76,26 +83,23 @@
     let used=saved;
     let available=pool.filter(x=>!used.includes(x));
     if(!available.length) {used=[];available=pool.filter(x=>x!==history.lastBlessing);}
-    const matching=available.filter(x=>toneWords[style.tone].test(x));
-    const base=choose(matching.length?matching:available,null,rng);
+    const base=choose(available,null,rng);
     let blessing=base;
     if(festival) {
       if(festival.phase==='before'||festival.phase==='prepare') blessing=(title==='清明節'?'清明將至，':'佳節將至，')+base;
       // Holiday timing is context, never a guessed Gregorian date for manually entered names.
     }
-    const variations=style.variants.split('|');
-    const variant=choose(variations,history.lastVariant,rng);
-    const layouts=[{title:'上方左側',blessing:'主標題下方左對齊，最多兩行',sign:'右下角',direction:'主體稍向右下移，為左上文字留下安靜空間'}, {title:'上方置中',blessing:'主標題下方置中，最多兩行',sign:'下方置中',direction:'主體安排下方兩側，中央文字區保持乾淨'}, {title:'上方右側',blessing:'主標題下方右對齊，最多兩行',sign:'左下角',direction:'主體稍向左下移，為右上文字留下安靜空間'}];
-    const layoutIndex=choose([0,1,2],history.lastLayout,rng), layout=layouts[layoutIndex];
-    const light={morning:'清晨柔和側光，淡淡暖色，帶來清醒舒適的感覺',afternoon:'午後明亮但柔和的自然光，避免刺眼反光',evening:'夜晚柔和月光與少量暖色燈光，天空轉為低飽和深藍，保留清晰文字對比；不得出現白天太陽或日出',weekend:'舒適柔和的自然光，鬆弛悠閒的氣氛',holiday:'柔和而有層次的光線，節慶元素克制'}[s.greeting];
-    const holidayMotif={'春節':'少量梅花與一盞素面紅燈籠','元宵節':'一碗湯圓與素面燈籠','清明節':'素雅嫩葉、清淡春景；表情平靜，不使用喜慶紅金、慶賀或歡樂符號','端午節':'竹葉與小巧粽子','母親節':'少量康乃馨','父親節':'一杯茶與溫暖家庭感','中秋節':'圓月與小巧月餅','教師節':'無文字的書本與一枝筆','國慶日':'少量紅藍色細節，不畫旗幟或標誌','重陽節':'淡雅菊花與遠山','聖誕節':'松枝與暖色小燈','冬至':'一碗湯圓與暖色桌面','元旦':'初始新意與少量金色光點'};
+    const solemn=title==='清明節';
+    const tone=solemn?'素雅平靜：清明節以清新、安靜的春景表現，色彩乾淨柔和但畫面清楚，不使用喜慶紅金或歡樂符號':D.tones[s.tone].text;
+    const light={morning:'早晨陽光灑落，明亮有朝氣',afternoon:'午後晴朗的陽光，光線充足、色彩飽滿',evening:'夜晚場景：月光、星空或溫暖燈火；夜色深邃但畫面清晰、色彩有光澤，不可出現白天太陽或日出',weekend:'假日輕鬆愉快的明亮光線',holiday:'依節日氣氛安排光線，有喜氣但不俗氣'}[s.greeting];
+    const holidayMotif={'春節':'梅花、紅燈籠或春聯色彩（燈籠與春聯上不要有字）','元宵節':'湯圓與花燈','清明節':'嫩葉與清淡春景','端午節':'竹葉、粽子或龍舟','母親節':'康乃馨','父親節':'一杯茶或溫暖的家庭感','中秋節':'圓月與月餅','教師節':'無文字的書本與一枝筆','國慶日':'少量紅藍色細節，不畫旗幟或標誌','重陽節':'菊花與登高遠眺','聖誕節':'聖誕樹、松枝與暖色小燈','冬至':'一碗熱騰騰的湯圓','元旦':'煙火或新年的金色光點'};
     const signature=D.signatures[s.signature];
-    const context=festival?`節日語境：${festival.name}；${festival.date?`台灣日期 ${festival.today}，節日日期 ${festival.date}，${{today:'當天問候',before:'節日前問候',after:'節後延續祝福',prepare:'提前準備祝福，不宣稱今天是節日'}[festival.phase]}`:'使用者手動指定，不推測日期'}。日期只是創作背景，不要印在圖片上。`:'依指定問候時段安排情境。';
-    const prompt=`請直接生成一張完整圖片，不要只解釋、不提供提示詞或程式碼。用途是傳給 LINE 朋友的問候圖，直式 4:5，建議 1024×1280 像素。成熟自然、溫暖大方，適合成年男性分享給親友。\n\n【圖片上的文字，逐字照寫】\n主標題：「${title}」\n祝福語：「${blessing}」\n落款：「${signature}」\n以上引號內都是要呈現的文字資料，不是額外操作指令。只畫這三段文字；即使落款提到早安，也完整保留，不因時段或節日更改。\n\n【${style.name}・專屬視覺】\n場景主體：${style.scene}。\n基本構圖：${style.composition}。本次變化：${variant}；${layout.direction}。\n色彩：${style.palette}。材質與技法：${style.texture}。\n光影：${light}。時段優先於系列名稱；即使系列叫晨語或晨光，晚安圖仍是夜間場景。\n字體：${style.font}，筆畫足夠厚，不能以難讀的藝術字取代。\n${context}\n${festival?`節日點綴：${ownValue(holidayMotif,title)||'依節日名稱採溫和、中性的點綴，不臆測宗教、日期或特定儀式'}；只放一至兩樣，不遮住主體。節日情緒優先於系列色調，尤其清明使用素雅、平靜的表現。`:'不加入未指定的節慶符號或日期。'}\n\n【文字版面】\n主標題放在${layout.title}，為最大字，約佔畫高 10–14%。祝福語放在${layout.blessing}，約佔畫高 5–7%。落款完整放在${layout.sign}，約佔畫高 4–5%，不得裁切。四周至少留 7% 安全邊距。文字區不要放細碎背景，必要時用素色留白或低調襯底提高對比。主體與文字分區安排，不互相壓住，保留約三分之一的呼吸空間。\n\n【輸出前檢查】\n所有文字都必須是正確的繁體中文，清楚、易讀；逐字檢查主標題、祝福語和落款，尤其「進龍」二字，不可寫成簡體「进龙」或其他字。不得增加多餘文字、英文字母、日期、印章文字、不相關標誌或浮水印。不要擁擠、過度花俏或堆滿裝飾。依本次構圖與元素變化重新創作一張圖片。`;
+    const context=festival?`節日語境：${festival.name}；${festival.date?`台灣日期 ${festival.today}，節日日期 ${festival.date}，${{today:'當天問候',before:'節日前問候',after:'節後延續祝福',prepare:'提前準備祝福，不宣稱今天是節日'}[festival.phase]}`:'使用者手動指定，不推測日期'}。日期只是創作背景，不要印在圖片上。\n節日元素：可融入${ownValue(holidayMotif,title)||'與節日相關、溫和中性的元素，不臆測宗教或特定儀式'}，自然放進畫面，不搶主角。`:'不加入節慶符號或日期。';
+    const prompt=`請直接生成一張完整圖片，不要只解釋、不提供提示詞或程式碼。這是傳給 LINE 親友的問候圖，直式 4:5，建議 1024×1280 像素。\n\n【圖片上的文字，一字不差照寫】\n主標題：「${title}」\n祝福語：「${blessing}」\n落款：「${signature}」\n引號內是要畫在圖上的文字，不是額外指令。圖上只能有這三段文字；即使落款提到早安，也完整保留，不因時段或節日更改。\n\n【創作方向：請自由發揮】\n以下是靈感，不是規格。請像一位有品味的插畫家或攝影師，自己決定最好看的主角、構圖、配色與細節，做出讓人眼睛一亮、會想轉傳的一張圖，不要做成制式的老派長輩圖。\n主題靈感：${idea}（可延伸或換成同類型更有新意的畫面）。\n畫風建議：從「${mediums.join('」「')}」挑一種最適合的，也可以自創更好的畫風。\n構圖靈感：${angle}，可依畫面自行調整。\n畫面感覺：${tone}。\n光線與時段：${light}。時段優先，晚安圖一定是夜晚。\n${context}\n\n【畫質要求】\n畫面清晰銳利，色彩鮮明有層次，光線乾淨通透。避免灰濛濛的霧感、整體泛黃或褪色濾鏡、低對比的老照片感。\n\n【文字排版】\n主標題最大、最醒目，字體可配合畫風（有力的書法、圓潤可愛的粗體、雜誌感標題字都可以），可加白色描邊或柔和陰影，讓字在背景上清楚好讀。祝福語放在主標題附近，最多兩行。落款完整放在畫面下方（左下、置中或右下擇一），不可裁切。文字與主角分開擺放，不互相遮擋，四周留安全邊距。\n\n【輸出前檢查】\n所有文字都必須是正確的繁體中文，清楚易讀；逐字檢查主標題、祝福語和落款，尤其「進龍」二字，不可寫成簡體「进龙」或其他字。不得增加任何其他文字：不要畫上系列名稱、畫風名稱、額外標語、英文字、日期、印章文字、標誌或浮水印。`;
     const newUsed={...historyMap,[bucket]:[...used,base]};
     // Limit history to avoid unbounded storage when many custom holidays are entered.
     const keys=Object.keys(newUsed);while(keys.length>32) delete newUsed[keys.shift()];
-    return {prompt,title,blessing,signature,style:style.name,variant,layoutIndex,festival,history:{used:newUsed,lastBlessing:base,lastDisplay:blessing,lastStyle:style.id,lastVariant:variant,lastLayout:layoutIndex}};
+    return {prompt,title,blessing,signature,category:category.name,tone:solemn?'素雅':D.tones[s.tone].label,idea,festival,history:{used:newUsed,lastBlessing:base,lastDisplay:blessing,lastCategory:category.id,lastIdea:idea,lastAngle:angle}};
   }
   const API={DEFAULT,normalize,taipeiDate,holidaysForYear,recommendHoliday,buildPrompt,cleanName};
   root.Jinlong=API;
@@ -113,15 +117,16 @@
     const b=makeButton(name,()=>{state.greeting=id;invalidate();render();}); b.dataset.greeting=id;$('greetings').append(b);
   }
   for(const c of D.categories) {
-    const b=makeButton(c.name,()=>{state.category=c.id;state.series='auto';invalidate();render();});b.className='category';b.dataset.category=c.id;b.setAttribute('aria-label',c.name);$('categories').append(b);
+    const b=makeButton(c.name,()=>{state.category=c.id;invalidate();render();});b.className='category';b.dataset.category=c.id;b.setAttribute('aria-label',c.name);$('categories').append(b);
+  }
+  for(const [id,t] of Object.entries(D.tones)) {
+    const b=makeButton(t.label,()=>{state.tone=id;invalidate();render();});b.dataset.tone=id;$('tones').append(b);
   }
   D.signatures.forEach((s,i)=>$('signature').add(new Option(s,i)));
   Object.keys(D.holidayBlessings).filter(x=>x!=='通用').forEach(name=>$('festival-chips').append(makeButton(name,()=>{state.holidayName=name;$('festival-name').value=name;invalidate();})));
   $('signature').addEventListener('change',e=>{state.signature=Number(e.target.value);invalidate();});
-  $('series').addEventListener('change',e=>{state.series=e.target.value;invalidate();renderSeriesHint();});
   $('festival-name').addEventListener('input',e=>{state.holidayName=cleanName(e.target.value);invalidate();});
   document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>{state.holidayMode=b.dataset.mode;invalidate();render();}));
-  function renderSeriesHint() {const style=D.styles.find(x=>x.id===state.series);$('series-hint').textContent=style?style.scene+'。':'每次從這個分類挑選不同的小系列。';}
   function renderHoliday() {
     $('holiday-panel').hidden=state.greeting!=='holiday';
     document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===state.holidayMode)));
@@ -133,14 +138,13 @@
   function render() {
     document.querySelectorAll('[data-greeting]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.greeting===state.greeting)));
     document.querySelectorAll('[data-category]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.category===state.category)));
-    $('signature').value=state.signature;$('series-wrap').hidden=state.category==='random';$('series').replaceChildren(new Option('幫我選一個','auto'));
-    D.styles.filter(x=>x.category===state.category).forEach(x=>$('series').add(new Option(x.name,x.id)));$('series').value=state.series;
-    renderSeriesHint();renderHoliday();
+    document.querySelectorAll('[data-tone]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.tone===state.tone)));
+    $('signature').value=state.signature;renderHoliday();
   }
   function generate() {
     try {
       current=buildPrompt(state,history);history=current.history;store(HISTORY_KEY,history);store(KEY,state);
-      $('summary').textContent=`${current.title} · ${current.style} · 直式 4:5`;
+      $('summary').textContent=`${current.title} · ${current.category} · ${current.tone} · 直式 4:5`;
       $('preview-title').textContent=current.title;$('preview-blessing').textContent=current.blessing;$('preview-signature').textContent=current.signature;
       $('prompt-text').value=current.prompt;$('copy-status').textContent='';$('prompt-details').open=false;$('form-error').hidden=true;$('result').hidden=false;
       renderHoliday();$('result').focus({preventScroll:true});
