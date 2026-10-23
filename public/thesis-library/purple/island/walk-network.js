@@ -1,5 +1,6 @@
 // One geometric definition drives both the visible paths and the walker.
-export const WALK_RADIUS = 1.85;
+import {PATH_RADIUS} from './world-layout.js';
+export const WALK_RADIUS = PATH_RADIUS;
 export const WALK_Y = .76;
 export function ringPoint(index, radius=WALK_RADIUS) {
   const angle=index*Math.PI/6;

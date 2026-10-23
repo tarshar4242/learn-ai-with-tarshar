@@ -1,11 +1,12 @@
 // 五島論文智能島：溫暖黏土微縮 3D 場景（茜茜 Claude 實作，Codex 負責 HTML/CSS/資料）
 import * as THREE from './vendor/three.module.js';
 import {OrbitControls} from './vendor/OrbitControls.js';
-import {makeWalkNetwork, makeTour, sampleTour, ringPoint, WALK_Y} from './walk-network.js';
+import {makeWalkNetwork, makeTour, sampleTour, ringPoint, WALK_Y} from './walk-network.js?v=space-1023';
 import {createTarsharAvatar} from './tarshar-avatar.js?v=hair-1023';
+import {ISLAND_RADIUS as R, PATH_WIDTH, BRIDGE_WIDTH, islandPosition} from './world-layout.js';
 import {RoundedBoxGeometry} from './vendor/RoundedBoxGeometry.js';
 
-const R = 2.02, SPACING = 2.28, TOP = 0.65, WATER_Y = -0.18, GY = TOP + 0.05;
+const TOP = 0.65, WATER_Y = -0.18, GY = TOP + 0.05;
 const SQ3 = Math.sqrt(3);
 const C = {coral: '#f08a74', cream: '#fbf0da', sage: '#a9c9a0', lilac: '#c3b1e1', wood: '#c99a6b', woodD: '#9a6b45',
   stone: '#efe4d0', gold: '#f3c46b', glass: '#d6edf2', warm: '#ffd88a', mustard: '#f2c879', dark: '#6e5a4a', white: '#fffaf0'};
@@ -172,7 +173,7 @@ const modelKey = (m) => (MODELS[String(m || '').toLowerCase()] ? String(m).toLow
 // ---------- 場景組裝 ----------
 const hexv = (x, z) => Math.max(Math.abs(x), 0.5 * Math.abs(x) + 0.866 * Math.abs(z));
 const hexDist = (a, b) => { const dq = a.axial[0] - b.axial[0], dr = a.axial[1] - b.axial[1]; return Math.max(Math.abs(dq), Math.abs(dr), Math.abs(dq + dr)); };
-const SLOTS = [[-1.02, 0.15], [1.02, 0.15], [-0.65, -0.85], [0.65, -0.85], [-1.03, -0.45], [1.03, -0.45]];
+const SLOTS = [[-1.4, .55], [1.4, .55], [0, 1.5], [-1.15, -1.2], [1.15, -1.2], [0, -1.6]];
 
 function xf(x, y, z, ry, s) {
   return new THREE.Matrix4().compose(new THREE.Vector3(x, y, z), new THREE.Quaternion().setFromEuler(new THREE.Euler(0, ry || 0, 0)), new THREE.Vector3(s, s, s));
@@ -183,52 +184,53 @@ function buildIsland(L, isl, i, all) {
   const base = B(L, own, xf(cx, 0, cz, 0, 1));
   const ic = new THREE.Color(isl.color);
   const grass = mix(C.sage, isl.color, 0.14);
-  base.part('hexS', 'clay', 0, -0.3, 0, 2.08, 0.6, 2.08, 0, mix('#c9a98a', isl.color, 0.1));
-  base.part('hexT', 'clay', 0, 0.325, 0, 2.02, 0.65, 2.02, 0, mix('#efdcbc', isl.color, 0.22));
-  base.part('hex', 'clay', 0, 0.2, 0, 2.065, 0.05, 2.065, 0, mix('#f6e9cf', isl.color, 0.45));
-  base.part('hex', 'clay', 0, 0.6, 0, 2.05, 0.1, 2.05, 0, ic);
-  base.part('hex', 'clay', 0, TOP + 0.025, 0, 1.9, 0.05, 1.9, 0, grass);
+  base.part('hexS', 'clay', 0, -0.3, 0, R+.06, 0.6, R+.06, 0, mix('#c9a98a', isl.color, 0.1));
+  base.part('hexT', 'clay', 0, 0.325, 0, R, 0.65, R, 0, mix('#efdcbc', isl.color, 0.22));
+  base.part('hex', 'clay', 0, 0.2, 0, R+.045, 0.05, R+.045, 0, mix('#f6e9cf', isl.color, 0.45));
+  base.part('hex', 'clay', 0, 0.6, 0, R+.03, 0.1, R+.03, 0, ic);
+  base.part('hex', 'clay', 0, TOP + 0.025, 0, R-.12, 0.05, R-.12, 0, grass);
 
   const occ = [], free = (x, z, r) => occ.every((o) => Math.hypot(o.x - x, o.z - z) > o.r + r);
   const loc = (x, z, ry, s) => B(L, own, xf(cx + x, GY, cz + z, ry, s));
   const bridges = all.filter((o, j) => j !== i && hexDist(isl, o) === 1).map((o) => {
     const dx = o.x - cx, dz = o.z - cz, d = Math.hypot(dx, dz); return {x: dx / d, z: dz / d, o};
   });
-  const ends = bridges.map((b2) => [b2.x * 1.602147, b2.z * 1.602147]);
+  const ends = bridges.map((b2) => [b2.x * Math.hypot(ringPoint(1).x,ringPoint(1).z), b2.z * Math.hypot(ringPoint(1).x,ringPoint(1).z)]);
   ends.forEach(([x, z]) => occ.push({x, z, r: 0.45}));
 
   // 主建物 + 最多三個不同造型的小細節
   const items = isl.items || [];
   const mainModel = modelKey(items[0] && items[0].model);
   const ms = 1.4 * (MODEL_SCALE[mainModel] || 1);
-  modelFn(mainModel)(loc(0, -0.3, 0, ms), rng, ic);
-  const bld = [{x: 0, z: -0.3, r: 0.95}]; occ.push(bld[0]);
+  modelFn(mainModel)(loc(0, -0.65, 0, ms), rng, ic);
+  const bld = [{x: 0, z: -0.65, r: 1.05}]; occ.push(bld[0]);
   const used = new Set([mainModel]), secs = [];
   for (const it of items) { const k = modelKey(it.model); if (!used.has(k) && secs.length < 3) { used.add(k); secs.push(k); } }
   const taken = new Set();
   secs.forEach((k) => {
     let best = -1, bs = -1e9;
     SLOTS.forEach((s, j) => {
-      if (taken.has(j)) return;
+      if (taken.has(j) || !free(s[0],s[1],.55)) return;
       const sc = Math.min(9, ...ends.map((e) => Math.hypot(e[0] - s[0], e[1] - s[1]))) - j * 0.05;
       if (sc > bs) { bs = sc; best = j; }
     });
+    if(best<0)return;
     taken.add(best);
-    const [sx, sz] = SLOTS[best], s = 0.48 * (MODEL_SCALE[k] || 1);
+    const [sx, sz] = SLOTS[best], s = 0.65 * (MODEL_SCALE[k] || 1);
     modelFn(k)(loc(sx, sz, Math.atan2(-sx, 3) * 0.6, s), rng, ic);
-    const c = {x: sx, z: sz, r: 0.45}; occ.push(c); bld.push(c);
+    const c = {x: sx, z: sz, r: 0.55}; occ.push(c); bld.push(c);
   });
 
   // Twelve path nodes: six vertices and six bridge-facing midpoints.
   for(let k=0;k<12;k++) {
     const a=ringPoint(k),b=ringPoint((k+1)%12),length=Math.hypot(b.x-a.x,b.z-a.z);
-    base.part('box','clay',(a.x+b.x)/2,WALK_Y-.025,(a.z+b.z)/2,.25,.05,length+.018,Math.atan2(b.x-a.x,b.z-a.z),'#f0debd');
-    base.cyl(a.x,WALK_Y-.048,a.z,.125,.048,'#f0debd');
+    base.part('box','clay',(a.x+b.x)/2,WALK_Y-.025,(a.z+b.z)/2,PATH_WIDTH,.05,length+.018,Math.atan2(b.x-a.x,b.z-a.z),'#f0debd');
+    base.cyl(a.x,WALK_Y-.048,a.z,PATH_WIDTH/2,.048,'#f0debd');
   }
   // 廣場與六角步道
-  const plaza = [0, 0.75];
-  base.part('hex', 'clay', plaza[0], GY + 0.015, plaza[1], 0.6, 0.03, 0.6, 0, C.stone);
-  base.part('hex', 'clay', plaza[0], GY + 0.03, plaza[1], 0.38, 0.02, 0.38, 0, '#f7eedd');
+  const plaza = [0, 1.22];
+  base.part('hex', 'clay', plaza[0], GY + 0.015, plaza[1], 0.85, 0.03, 0.85, 0, C.stone);
+  base.part('hex', 'clay', plaza[0], GY + 0.03, plaza[1], 0.58, 0.02, 0.58, 0, '#f7eedd');
   const targets = ends.concat(secs.length ? SLOTS.filter((s, j) => taken.has(j)) : []);
   targets.forEach(([tx, tz]) => {
     const vx = tx - plaza[0], vz = tz - plaza[1], len = Math.hypot(vx, vz);
@@ -244,32 +246,32 @@ function buildIsland(L, isl, i, all) {
     const b = loc(x, z, 0, 1); occ.push({x, z, r: 0.12});
     b.cyl(0, 0, 0, 0.06, 0.05, C.dark); b.cyl(0, 0.05, 0, 0.022, 0.5, C.dark); b.sph(0, 0.58, 0, 0.065, C.warm, 'glow'); b.cone(0, 0.62, 0, 0.09, 0.07, C.dark);
   };
-  lamp(-0.62, 0.95); lamp(0.62, 0.95);
+  lamp(-0.9, 1.5); lamp(0.9, 1.5);
   ends.slice(0, 2).forEach(([x, z]) => lamp(x * 0.8 + z * 0.2, z * 0.8 - x * 0.2));
   const place = (n, rmin, hexMax, r, fn) => {
     for (let t = 0, d = 0; d < n && t < 80; t++) {
-      const a = rng() * 6.283, rad = Math.min(rmin,.95) + rng() * (1.17 - Math.min(rmin,.95)), x = Math.cos(a) * rad, z = Math.sin(a) * rad;
-      if (hexv(x, z) > hexMax || !free(x, z, r)) continue;
+      const a = rng() * 6.283, rad = rmin + rng() * (1.88 - rmin), x = Math.cos(a) * rad, z = Math.sin(a) * rad;
+      if (hexv(x, z) > hexMax || hexv(x,z)+r>2.03 || !free(x, z, r)) continue;
       occ.push({x, z, r}); fn(x, z); d++;
     }
   };
-  place(2, 0.9, 1.5, 0.3, (x, z) => {
+  place(2, 1.1, 1.88, 0.3, (x, z) => {
     const b = loc(x, z, Math.atan2(-x, -z), 1);
     b.box(0, 0.16, 0, 0.5, 0.05, 0.17, C.wood); b.box(0, 0.22, -0.08, 0.5, 0.18, 0.035, C.wood); b.box(-0.2, 0, 0, 0.05, 0.16, 0.15, C.woodD); b.box(0.2, 0, 0, 0.05, 0.16, 0.15, C.woodD);
   });
-  place(5 + Math.floor(rng() * 2), 1.0, 1.5, 0.24, (x, z) => {
+  place(5 + Math.floor(rng() * 2), 1.35, 1.88, 0.38, (x, z) => {
     const b = loc(x, z, rng() * 6, 0.85 + rng() * 0.45), pine = rng() < 0.3, blossom = !pine && rng() < 0.25;
     b.cyl(0, 0, 0, 0.05, 0.3, C.woodD);
     if (pine) { b.cone(0, 0.2, 0, 0.26, 0.4, GREENS[2]); b.cone(0, 0.45, 0, 0.2, 0.36, GREENS[0]); b.cone(0, 0.68, 0, 0.13, 0.28, GREENS[1]); }
     else { const g = blossom ? '#f2a99a' : GREENS[Math.floor(rng() * 4)]; b.sph(0, 0.45, 0, 0.28, g); b.sph(0.1, 0.68, 0.03, 0.2, mix(g, '#ffffff', 0.15)); }
   });
   const FL = [C.coral, C.lilac, C.cream, C.mustard, '#e59aa8'];
-  place(9, 0.7, 1.58, 0.1, (x, z) => {
+  place(9, 1.0, 1.88, 0.1, (x, z) => {
     const b = loc(x, z, 0, 1);
     b.sph(0, 0.02, 0, 0.07, C.sage, 'clay', 0.5); b.sph(0, 0.07, 0, 0.045, FL[Math.floor(rng() * FL.length)]);
   });
   // 彩旗
-  const fb = loc(0, 1.0, 0, .68), fc = [C.coral, C.cream, C.lilac, ic];
+  const fb = loc(0, 1.9, 0, .8), fc = [C.coral, C.cream, C.lilac, ic];
   fb.cyl(-0.95, 0, 0, 0.025, 0.58, C.dark); fb.cyl(0.95, 0, 0, 0.025, 0.58, C.dark);
   for (let k = 1; k < 9; k++) {
     const u = k / 9, y = 0.56 - 0.13 * 4 * u * (1 - u);
@@ -286,10 +288,10 @@ function buildBridges(L, islands) {
     const bl=B(L,Math.floor(edge.a/12),null);
     for(let k=0;k<9;k++) {
       const t=(k+.5)/9,y=WALK_Y+.1*Math.sin(t*Math.PI);
-      bl.part('box','clay',a.x+dx*t,y-.025,a.z+dz*t,.54,.05,edge.length/9+.012,ry,k%2?C.wood:'#d6a97a');
+      bl.part('box','clay',a.x+dx*t,y-.025,a.z+dz*t,BRIDGE_WIDTH,.05,edge.length/9+.012,ry,k%2?C.wood:'#d6a97a');
     }
     for(const side of [-1,1]) {
-      const px=-uz*side*.29,pz=ux*side*.29;
+      const px=-uz*side*(BRIDGE_WIDTH/2+.035),pz=ux*side*(BRIDGE_WIDTH/2+.035);
       for(const t of [0,1])bl.cyl(a.x+dx*t+px,WALK_Y,a.z+dz*t+pz,.025,.28,C.woodD);
       bl.part('box','clay',(a.x+b.x)/2+px,WALK_Y+.27,(a.z+b.z)/2+pz,.025,.025,edge.length,ry,C.dark);
     }
@@ -331,11 +333,11 @@ export async function createIslandScene({container, data, onSelect, onError, onF
   const rng0 = mulberry32(1023);
 
   // 島位置
-  const islands = data.islands.map((d) => ({...d, x: SQ3 * SPACING * (d.axial[0] + d.axial[1] / 2), z: 1.5 * SPACING * d.axial[1]}));
+  const islands = data.islands.map((d) => ({...d, ...islandPosition(d.axial)}));
   const byId = new Map(islands.map((d, i) => [d.id, i]));
   const bb = new THREE.Box3();
-  islands.forEach((d) => bb.expandByPoint(new THREE.Vector3(d.x - 2.1, -0.3, d.z - 2.1)).expandByPoint(new THREE.Vector3(d.x + 2.1, 3.7, d.z + 2.1)));
-  const center = bb.getCenter(new THREE.Vector3()), extentR = Math.max(...islands.map((d) => Math.hypot(d.x - center.x, d.z - center.z))) + 2.1;
+  islands.forEach((d) => bb.expandByPoint(new THREE.Vector3(d.x - R-.1, -0.3, d.z - R-.1)).expandByPoint(new THREE.Vector3(d.x + R+.1, 3.7, d.z + R+.1)));
+  const center = bb.getCenter(new THREE.Vector3()), extentR = Math.max(...islands.map((d) => Math.hypot(d.x - center.x, d.z - center.z))) + R+.1;
 
   // 光
   const sun = new THREE.DirectionalLight(0xffffff, 1);
@@ -369,18 +371,18 @@ export async function createIslandScene({container, data, onSelect, onError, onF
   const waterMat = new THREE.ShaderMaterial({
     transparent: true, depthWrite: false,
     uniforms: {uTime: {value: 0}, uShallow: {value: new THREE.Color()}, uDeep: {value: new THREE.Color()}, uFoam: {value: new THREE.Color()},
-      uC: {value: Array.from({length:8}, (_,i) => new THREE.Vector2(islands[i]?.x || 0, islands[i]?.z || 0))}, uN: {value: islands.length}, uMid: {value: new THREE.Vector2(center.x, center.z)}, uFade: {value: 62}},
+      uC: {value: Array.from({length:8}, (_,i) => new THREE.Vector2(islands[i]?.x || 0, islands[i]?.z || 0))}, uN: {value: islands.length}, uRadius: {value:R}, uMid: {value: new THREE.Vector2(center.x, center.z)}, uFade: {value: 62}},
     vertexShader: 'varying vec2 vXZ; void main(){ vec4 w = modelMatrix*vec4(position,1.); vXZ = w.xz; gl_Position = projectionMatrix*viewMatrix*w; }',
-    fragmentShader: `uniform float uTime,uFade; uniform vec3 uShallow,uDeep,uFoam; uniform vec2 uC[8],uMid; uniform int uN; varying vec2 vXZ;
+    fragmentShader: `uniform float uTime,uFade,uRadius; uniform vec3 uShallow,uDeep,uFoam; uniform vec2 uC[8],uMid; uniform int uN; varying vec2 vXZ;
       float hexd(vec2 p){ p=abs(p); return max(p.x, p.x*.5+p.y*.8660254); }
       void main(){
         float h=100.; for(int i=0;i<8;i++){ if(i>=uN) break; h=min(h,hexd(vXZ-uC[i])); }
-        float sh=1.-smoothstep(1.7,3.4,h), r=length(vXZ-uMid), t=uTime;
+        float sh=1.-smoothstep(uRadius*.82,uRadius+1.4,h), r=length(vXZ-uMid), t=uTime;
         vec3 col=mix(uDeep,uShallow,max(sh,.35*(1.-smoothstep(5.,30.,r))));
         float w=sin(vXZ.x*1.3+t*.7+sin(vXZ.y*.8+t*.5)*1.4)+sin(vXZ.y*1.7-t*.6+sin(vXZ.x*.7-t*.4)*1.2);
         col=mix(col,vec3(1.),smoothstep(1.55,1.95,w)*.16);
-        float f=(1.-smoothstep(0.,.09,abs(h-(1.95+.04*sin(t*1.3+vXZ.x*3.+vXZ.y*2.)))))*.75
-               +(1.-smoothstep(0.,.05,abs(h-2.2-.05*sin(t*1.1+vXZ.y*2.))))*.3*sh;
+        float f=(1.-smoothstep(0.,.09,abs(h-(uRadius*.94+.04*sin(t*1.3+vXZ.x*3.+vXZ.y*2.)))))*.75
+               +(1.-smoothstep(0.,.05,abs(h-uRadius*1.08-.05*sin(t*1.1+vXZ.y*2.))))*.3*sh;
         col=mix(col,uFoam,clamp(f,0.,1.));
         gl_FragColor=vec4(col,(1.-smoothstep(uFade*.55,uFade,r))*.96);
         #include <tonemapping_fragment>
@@ -392,7 +394,7 @@ export async function createIslandScene({container, data, onSelect, onError, onF
 
   // 選取光環
   const ringMat = new THREE.MeshBasicMaterial({color: 0xfff0b8, transparent: true, opacity: 0.6, depthWrite: false});
-  const ring = new THREE.Mesh(new THREE.RingGeometry(2.2, 2.5, 6, 1, Math.PI / 2), ringMat);
+  const ring = new THREE.Mesh(new THREE.RingGeometry(R+.18, R+.48, 6, 1, Math.PI / 2), ringMat);
   ring.rotation.x = -Math.PI / 2; ring.visible = false; ring.renderOrder = 1; scene.add(ring);
 
   // 小船、雲、小人（少量獨立 mesh，供動畫）
@@ -404,7 +406,7 @@ export async function createIslandScene({container, data, onSelect, onError, onF
     const hull = new THREE.Mesh(geos.rbox, stdMat([C.coral, C.lilac, C.mustard][k])); hull.scale.set(0.5, 0.1, 0.2); hull.position.y = 0.05;
     const mast = new THREE.Mesh(geos.cyl, stdMat(C.woodD)); mast.scale.set(0.012, 0.4, 0.012); mast.position.y = 0.3;
     const sail = new THREE.Mesh(geos.prism, stdMat(C.cream)); sail.scale.set(0.07, 0.28, 0.01); sail.position.set(0.02, 0.12, 0); sail.rotation.y = 0;
-    g.add(hull, mast, sail); g.userData = {base: new THREE.Vector3(d.x + (ox / l) * 2.85, WATER_Y + 0.03, d.z + (oz / l) * 2.85), tan: new THREE.Vector3(-oz / l, 0, ox / l), ph: k * 2};
+    g.add(hull, mast, sail); g.userData = {base: new THREE.Vector3(d.x + (ox / l) * (R+.85), WATER_Y + 0.03, d.z + (oz / l) * (R+.85)), tan: new THREE.Vector3(-oz / l, 0, ox / l), ph: k * 2};
     g.position.copy(g.userData.base); g.traverse((o) => { o.castShadow = true; }); scene.add(g); boats.push(g);
   });
   const cloudMat = stdMat('#ffffff', {transparent: true, opacity: 0.85, depthWrite: false}), clouds = [];
@@ -419,7 +421,7 @@ export async function createIslandScene({container, data, onSelect, onError, onF
   const avatar = createTarsharAvatar(data.avatar);
   const avatarScale = data.avatar.scale || 1;
   avatar.group.scale.setScalar(avatarScale);scene.add(avatar.group);
-  let walkingDistance = 0, walkerSample=sampleTour(network,tour,0), following=false;
+  let walkingDistance = 0, walkerSample=sampleTour(network,tour,0), following=false, followDistance=6;
   avatar.group.position.set(walkerSample.x,walkerSample.y,walkerSample.z);
   avatar.group.rotation.y=walkerSample.heading;
   const walkerBadge=document.createElement('button');
@@ -461,14 +463,14 @@ export async function createIslandScene({container, data, onSelect, onError, onF
 
   // 狀態
   const mqReduce = matchMedia('(prefers-reduced-motion: reduce)');
-  let reduced = mqReduce.matches, motion = data.avatar.autoWalk !== false, flows = false, visible = true, disposed = false, lost = false, selected = null, userMoved = false;
+  let reduced = mqReduce.matches, motion = data.avatar.autoWalk !== false, flows = false, visible = true, disposed = false, lost = false, selected = null, userMoved = false, arriving = true;
   let raf = 0, last = 0, simT = 0, frames = 0, flight = null, active = [], todName = 'day', todTween = null;
   const cur = cloneState(TOD.day);
   const effMotion = () => motion && !reduced && visible && !document.hidden;
 
   const controls = new OrbitControls(camera, canvas);
-  controls.enableDamping = !reduced; controls.dampingFactor = 0.07; controls.enablePan = false;
-  controls.minPolarAngle = THREE.MathUtils.degToRad(25); controls.maxPolarAngle = THREE.MathUtils.degToRad(70); controls.minDistance = 4; controls.maxDistance = 65;
+  controls.enableDamping = !reduced; controls.dampingFactor = 0.07; controls.enablePan = true; controls.screenSpacePanning = false; controls.panSpeed = .8;
+  controls.minPolarAngle = THREE.MathUtils.degToRad(25); controls.maxPolarAngle = THREE.MathUtils.degToRad(70); controls.minDistance = 2.8; controls.maxDistance = 65;
 
   const DIR0 = new THREE.Vector3(0.24, 0.65, 0.87).normalize(), home = {target: new THREE.Vector3(center.x, 1.1, center.z), dist: 30};
   function computeHome(w, h) {
@@ -488,7 +490,10 @@ export async function createIslandScene({container, data, onSelect, onError, onF
     if (w < 2 || h < 2) return;
     renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
     computeHome(w, h);
-    if (!userMoved && !selected && !flight) applyView(home.target, DIR0, home.dist);
+    if (!userMoved && !selected && !flight) {
+      if(w<700 && arriving){const start=islands[byId.get('chapters') ?? 0];const distance=Math.max(16,(R+.5)/(Math.tan(THREE.MathUtils.degToRad(camera.fov/2))*(w/h)*.93)+2);applyView(new THREE.Vector3(start.x,1.1,start.z),DIR0,distance);}
+      else applyView(home.target, DIR0, home.dist);
+    }
     labels.forEach((l,i) => { l.textContent = w < 600 ? String(i+1).padStart(2,'0') : islands[i].title; l.style.fontSize = w < 600 ? '12px' : '13px'; });
     requestRender();
   }
@@ -510,7 +515,7 @@ export async function createIslandScene({container, data, onSelect, onError, onF
     ring.visible = i !== undefined;
     if (i !== undefined) { ring.position.set(islands[i].x, WATER_Y + 0.03, islands[i].z); ringMat.color.set(0xfff0b8); }
     const to = i === undefined ? null : new THREE.Vector3(islands[i].x, 0.9, islands[i].z);
-    flyTo(to || home.target, i === undefined ? null : Math.max(10, home.dist * 0.42), i === undefined);
+    flyTo(to || home.target, i === undefined ? null : Math.max(12, home.dist * 0.32), i === undefined);
   }
   function flyTo(target, dist, toHomeDir, customDir=null) {
     const dirNow = camera.position.clone().sub(controls.target).normalize(), toDir = customDir || (toHomeDir ? DIR0.clone() : dirNow.clone()), toD = dist || home.dist;
@@ -556,10 +561,13 @@ export async function createIslandScene({container, data, onSelect, onError, onF
       lookAtWalker.copy(avatar.group.position).add(new THREE.Vector3(0,avatar.height*avatarScale*.5,0));
       const heading=avatar.group.rotation.y;
       const dir=new THREE.Vector3(Math.sin(heading)*.85+Math.cos(heading)*.22,.58,Math.cos(heading)*.85-Math.sin(heading)*.22).normalize();
-      const next=lookAtWalker.clone().addScaledVector(dir,6);
+      const next=lookAtWalker.clone().addScaledVector(dir,followDistance);
       controls.target.copy(lookAtWalker);camera.position.lerp(next,Math.min(1,dt*5));
     }
     const damping = controls.update();
+    // Keep panning near the islands; reset always restores the whole archipelago.
+    const bounded=controls.target.clone();bounded.x=clamp(bounded.x,bb.min.x-3,bb.max.x+3);bounded.z=clamp(bounded.z,bb.min.z-3,bb.max.z+3);bounded.y=clamp(bounded.y,.5,3);
+    camera.position.add(bounded.clone().sub(controls.target));controls.target.copy(bounded);
     if (damping) active.push('damping');
     try { renderer.render(scene, camera); frames++; } catch (error) { lost = true; onError && onError(error); return; }
     updateLabels();
@@ -572,7 +580,7 @@ export async function createIslandScene({container, data, onSelect, onError, onF
       _p.set(d.x, 3.0, d.z).project(camera);
       const bt = labels[i], px = (_p.x * .5 + .5) * w, py = (-_p.y * .5 + .5) * h;
       const half = bt.offsetWidth / 2;
-      const vis = _p.z < 1 && px > half + 8 && px < w - half - 8 && py > 110 && py < h - 105;
+      const vis = _p.z < 1 && px > half + 8 && px < w - half - 8 && py > 110 && py < h - 105 && !(px>w-88 && py<285);
       bt.style.visibility = vis ? 'visible' : 'hidden';
       if (vis) { bt.style.transform = `translate3d(${((_p.x * 0.5 + 0.5) * w).toFixed(1)}px,${((-_p.y * 0.5 + 0.5) * h).toFixed(1)}px,0) translate(-50%,-100%)`; bt.style.zIndex = String(Math.round((1 - _p.z) * 1000)); }
     });
@@ -581,7 +589,7 @@ export async function createIslandScene({container, data, onSelect, onError, onF
   function updateWalkerBadge() {
     _p.copy(avatar.group.position);_p.y+=avatar.height*avatarScale+.17;_p.project(camera);
     const w=container.clientWidth,h=container.clientHeight,x=(_p.x*.5+.5)*w,y=(-_p.y*.5+.5)*h;
-    const vis=visible&&_p.z<1&&x>25&&x<w-25&&y>75&&y<h-85;
+    const vis=visible&&_p.z<1&&x>25&&x<w-25&&y>75&&y<h-85&&!(x>w-88&&y<285);
     walkerBadge.hidden=!vis;
     if(vis)walkerBadge.style.transform=`translate(${x}px,${y}px) translate(-50%,-100%)`;
   }
@@ -608,6 +616,7 @@ export async function createIslandScene({container, data, onSelect, onError, onF
     lastHover = performance.now(); canvas.style.cursor = pick(e.clientX, e.clientY) ? 'pointer' : 'grab';
   };
   const onKey = (e) => {
+    if(['+','=','-'].includes(e.key)){e.preventDefault();api.zoom(e.key==='-'?1.25:.8);return;}
     const m = {ArrowLeft: [-0.12, 0], ArrowRight: [0.12, 0], ArrowUp: [0, -0.08], ArrowDown: [0, 0.08]}[e.key];
     if (!m) return;
     e.preventDefault(); flight = null; followState(false); userMoved = true;
@@ -626,7 +635,7 @@ export async function createIslandScene({container, data, onSelect, onError, onF
 
   const api = {
     select(id) { if (!disposed) selectIsland(id); },
-    reset() { if (disposed) return; selectIsland(null); },
+    reset() { if (disposed) return; userMoved=false;arriving=false;selectIsland(null); },
     setTime(name) {
       if (!TOD[name] || disposed) return;
       todName = name;
@@ -634,13 +643,14 @@ export async function createIslandScene({container, data, onSelect, onError, onF
       requestRender();
     },
     setMotion(v) { motion = !!v; if(!motion)avatar.step(simT,false); last = 0; requestRender(); },
-    followWalker(value=true) { followState(value); if(value) { const t=avatar.group.position.clone();t.y+=avatar.height*avatarScale*.5;const h=avatar.group.rotation.y;const dir=new THREE.Vector3(Math.sin(h)*.85+Math.cos(h)*.22,.58,Math.cos(h)*.85-Math.sin(h)*.22).normalize();flyTo(t,6.0,false,dir); } requestRender(); },
+    followWalker(value=true) { userMoved=true;followDistance=6;followState(value); if(value) { const t=avatar.group.position.clone();t.y+=avatar.height*avatarScale*.5;const h=avatar.group.rotation.y;const dir=new THREE.Vector3(Math.sin(h)*.85+Math.cos(h)*.22,.58,Math.cos(h)*.85-Math.sin(h)*.22).normalize();flyTo(t,followDistance,false,dir); } requestRender(); },
+    zoom(factor) { if(disposed)return;userMoved=true;const distance=clamp(camera.position.distanceTo(controls.target)*factor,following?3.5:controls.minDistance,controls.maxDistance);if(following)followDistance=distance;flyTo(controls.target,distance,false); },
     setFlows(v) { flows = !!v; flowMesh.visible = flows; if (flows) updateFlow(0); requestRender(); },
     setVisible(v) { visible = !!v; if (visible) { last = 0; resize(); } else if (raf) { cancelAnimationFrame(raf); raf = 0; } },
     getStats() {
       const i = renderer.info;
       return {drawCalls: i.render.calls, triangles: i.render.triangles, geometries: i.memory.geometries, revision: THREE.REVISION, instances: totalInst, instancedMeshes: pickables.length,
-        cameraPosition: camera.position.toArray(), cameraTarget: controls.target.toArray(), walker:{name:data.avatar.name,distance:walkingDistance,position:avatar.group.position.toArray(),kind:walkerSample.kind,from:walkerSample.from,to:walkerSample.to,routeLength:tour.length,following,routeNodes:network.nodes.length}, frames, motion: effMotion(), reducedMotion: reduced, flows, time: todName, selected, visible, activeAnimations: active.slice(), pixelRatio: renderer.getPixelRatio(), contextLost: lost};
+        layout:{radius:R,pathWidth:PATH_WIDTH,bridgeWidth:BRIDGE_WIDTH,panEnabled:controls.enablePan},cameraDistance:camera.position.distanceTo(controls.target),cameraPosition: camera.position.toArray(), cameraTarget: controls.target.toArray(), walker:{name:data.avatar.name,distance:walkingDistance,position:avatar.group.position.toArray(),kind:walkerSample.kind,from:walkerSample.from,to:walkerSample.to,routeLength:tour.length,following,routeNodes:network.nodes.length}, frames, motion: effMotion(), reducedMotion: reduced, flows, time: todName, selected, visible, activeAnimations: active.slice(), pixelRatio: renderer.getPixelRatio(), contextLost: lost};
     },
     dispose() {
       if (disposed) return; disposed = true;
@@ -657,6 +667,6 @@ export async function createIslandScene({container, data, onSelect, onError, onF
   };
 
   resize();
-  if (frames === 0) { applyView(home.target, DIR0, home.dist); requestRender(); }
+  if (frames === 0) requestRender();
   return api;
 }
