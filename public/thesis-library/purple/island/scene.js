@@ -1,6 +1,8 @@
 // 五島論文智能島：溫暖黏土微縮 3D 場景（茜茜 Claude 實作，Codex 負責 HTML/CSS/資料）
 import * as THREE from './vendor/three.module.js';
 import {OrbitControls} from './vendor/OrbitControls.js';
+import {makeWalkNetwork, makeTour, sampleTour, ringPoint, WALK_Y} from './walk-network.js';
+import {createTarsharAvatar} from './tarshar-avatar.js';
 import {RoundedBoxGeometry} from './vendor/RoundedBoxGeometry.js';
 
 const R = 2.02, SPACING = 2.28, TOP = 0.65, WATER_Y = -0.18, GY = TOP + 0.05;
@@ -170,7 +172,7 @@ const modelKey = (m) => (MODELS[String(m || '').toLowerCase()] ? String(m).toLow
 // ---------- 場景組裝 ----------
 const hexv = (x, z) => Math.max(Math.abs(x), 0.5 * Math.abs(x) + 0.866 * Math.abs(z));
 const hexDist = (a, b) => { const dq = a.axial[0] - b.axial[0], dr = a.axial[1] - b.axial[1]; return Math.max(Math.abs(dq), Math.abs(dr), Math.abs(dq + dr)); };
-const SLOTS = [[-1.25, 0.3], [1.25, 0.3], [-0.8, -1.0], [0.8, -1.0], [-1.4, -0.55], [1.4, -0.55]];
+const SLOTS = [[-1.02, 0.15], [1.02, 0.15], [-0.65, -0.85], [0.65, -0.85], [-1.03, -0.45], [1.03, -0.45]];
 
 function xf(x, y, z, ry, s) {
   return new THREE.Matrix4().compose(new THREE.Vector3(x, y, z), new THREE.Quaternion().setFromEuler(new THREE.Euler(0, ry || 0, 0)), new THREE.Vector3(s, s, s));
@@ -192,7 +194,7 @@ function buildIsland(L, isl, i, all) {
   const bridges = all.filter((o, j) => j !== i && hexDist(isl, o) === 1).map((o) => {
     const dx = o.x - cx, dz = o.z - cz, d = Math.hypot(dx, dz); return {x: dx / d, z: dz / d, o};
   });
-  const ends = bridges.map((b2) => [b2.x * 1.55, b2.z * 1.55]);
+  const ends = bridges.map((b2) => [b2.x * 1.602147, b2.z * 1.602147]);
   ends.forEach(([x, z]) => occ.push({x, z, r: 0.45}));
 
   // 主建物 + 最多三個不同造型的小細節
@@ -212,11 +214,17 @@ function buildIsland(L, isl, i, all) {
       if (sc > bs) { bs = sc; best = j; }
     });
     taken.add(best);
-    const [sx, sz] = SLOTS[best], s = 0.58 * (MODEL_SCALE[k] || 1);
+    const [sx, sz] = SLOTS[best], s = 0.48 * (MODEL_SCALE[k] || 1);
     modelFn(k)(loc(sx, sz, Math.atan2(-sx, 3) * 0.6, s), rng, ic);
     const c = {x: sx, z: sz, r: 0.45}; occ.push(c); bld.push(c);
   });
 
+  // Twelve path nodes: six vertices and six bridge-facing midpoints.
+  for(let k=0;k<12;k++) {
+    const a=ringPoint(k),b=ringPoint((k+1)%12),length=Math.hypot(b.x-a.x,b.z-a.z);
+    base.part('box','clay',(a.x+b.x)/2,WALK_Y-.025,(a.z+b.z)/2,.25,.05,length+.018,Math.atan2(b.x-a.x,b.z-a.z),'#f0debd');
+    base.cyl(a.x,WALK_Y-.048,a.z,.125,.048,'#f0debd');
+  }
   // 廣場與六角步道
   const plaza = [0, 0.75];
   base.part('hex', 'clay', plaza[0], GY + 0.015, plaza[1], 0.6, 0.03, 0.6, 0, C.stone);
@@ -240,7 +248,7 @@ function buildIsland(L, isl, i, all) {
   ends.slice(0, 2).forEach(([x, z]) => lamp(x * 0.8 + z * 0.2, z * 0.8 - x * 0.2));
   const place = (n, rmin, hexMax, r, fn) => {
     for (let t = 0, d = 0; d < n && t < 80; t++) {
-      const a = rng() * 6.283, rad = rmin + rng() * (1.62 - rmin), x = Math.cos(a) * rad, z = Math.sin(a) * rad;
+      const a = rng() * 6.283, rad = Math.min(rmin,.95) + rng() * (1.17 - Math.min(rmin,.95)), x = Math.cos(a) * rad, z = Math.sin(a) * rad;
       if (hexv(x, z) > hexMax || !free(x, z, r)) continue;
       occ.push({x, z, r}); fn(x, z); d++;
     }
@@ -261,7 +269,7 @@ function buildIsland(L, isl, i, all) {
     b.sph(0, 0.02, 0, 0.07, C.sage, 'clay', 0.5); b.sph(0, 0.07, 0, 0.045, FL[Math.floor(rng() * FL.length)]);
   });
   // 彩旗
-  const fb = loc(0, 1.2, 0, 1), fc = [C.coral, C.cream, C.lilac, ic];
+  const fb = loc(0, 1.0, 0, .68), fc = [C.coral, C.cream, C.lilac, ic];
   fb.cyl(-0.95, 0, 0, 0.025, 0.58, C.dark); fb.cyl(0.95, 0, 0, 0.025, 0.58, C.dark);
   for (let k = 1; k < 9; k++) {
     const u = k / 9, y = 0.56 - 0.13 * 4 * u * (1 - u);
@@ -272,22 +280,20 @@ function buildIsland(L, isl, i, all) {
 }
 
 function buildBridges(L, islands) {
-  const done = new Set();
-  islands.forEach((a, i) => islands.forEach((b, j) => {
-    if (i >= j || hexDist(a, b) !== 1 || done.has(i + '-' + j)) return;
-    done.add(i + '-' + j);
-    const dx = b.x - a.x, dz = b.z - a.z, d = Math.hypot(dx, dz), ux = dx / d, uz = dz / d, mx = (a.x + b.x) / 2, mz = (a.z + b.z) / 2, ry = Math.atan2(ux, uz);
-    const bl = B(L, i, null);
-    for (let k = 0; k < 9; k++) {
-      const s = (k - 4) * 0.145, arch = 0.08 * (1 - Math.pow(s / 0.58, 2));
-      bl.part('box', 'clay', mx + ux * s, GY + 0.045 + arch, mz + uz * s, 0.62, 0.05, 0.12, ry, k % 2 ? C.wood : '#d6a97a');
+  const network=makeWalkNetwork(islands);
+  for(const edge of network.edges.filter(e=>e.kind==='bridge')) {
+    const a=network.nodes[edge.a],b=network.nodes[edge.b],dx=b.x-a.x,dz=b.z-a.z,ry=Math.atan2(dx,dz),ux=dx/edge.length,uz=dz/edge.length;
+    const bl=B(L,Math.floor(edge.a/12),null);
+    for(let k=0;k<9;k++) {
+      const t=(k+.5)/9,y=WALK_Y+.1*Math.sin(t*Math.PI);
+      bl.part('box','clay',a.x+dx*t,y-.025,a.z+dz*t,.54,.05,edge.length/9+.012,ry,k%2?C.wood:'#d6a97a');
     }
-    for (const sd of [-1, 1]) {
-      const px = -uz * sd * 0.3, pz = ux * sd * 0.3;
-      for (const e of [-0.5, 0.5]) bl.cyl(mx + ux * e + px, GY, mz + uz * e + pz, 0.03, 0.26, C.woodD);
-      bl.part('box', 'clay', mx + px, GY + 0.22, mz + pz, 0.025, 0.025, 1.0, ry, C.dark);
+    for(const side of [-1,1]) {
+      const px=-uz*side*.29,pz=ux*side*.29;
+      for(const t of [0,1])bl.cyl(a.x+dx*t+px,WALK_Y,a.z+dz*t+pz,.025,.28,C.woodD);
+      bl.part('box','clay',(a.x+b.x)/2+px,WALK_Y+.27,(a.z+b.z)/2+pz,.025,.025,edge.length,ry,C.dark);
     }
-  }));
+  }
 }
 
 function buildFar(L, rng, center) {
@@ -301,7 +307,7 @@ function buildFar(L, rng, center) {
 }
 
 // ---------- 主入口 ----------
-export async function createIslandScene({container, data, onSelect, onError}) {
+export async function createIslandScene({container, data, onSelect, onError, onFollowChange}) {
   const noop = () => {};
   const stub = {select: noop, reset: noop, setTime: noop, setMotion: noop, setFlows: noop, setVisible: noop, dispose: noop, getStats: () => ({error: true})};
   let renderer;
@@ -408,15 +414,21 @@ export async function createIslandScene({container, data, onSelect, onError}) {
     g.position.set(center.x + (k * 9.3 % 36) - 18, back ? 6 + (k % 2) : 3.6, center.z + (back ? -(extentR + 5 + k) : extentR + 4 + k)); g.scale.setScalar(1 + (k % 3) * 0.35);
     g.userData.speed = 0.25 + (k % 3) * 0.08; scene.add(g); clouds.push(g);
   }
-  const people = [];
-  const skin = stdMat('#f6d3b3');
-  [0, 2, 4].forEach((ii, k) => {
-    const d = islands[ii % islands.length], g = new THREE.Group(), cols = ['#e59aa8', '#8fb6c9', '#f2c879'];
-    const body = new THREE.Mesh(sphG, stdMat(cols[k])), head = new THREE.Mesh(sphG, skin), hat = new THREE.Mesh(geos.cone, stdMat(cols[(k + 1) % 3]));
-    body.scale.set(0.08, 0.11, 0.08); body.position.y = 0.11; head.scale.setScalar(0.07); head.position.y = 0.28; hat.scale.set(0.07, 0.1, 0.07); hat.position.y = 0.38;
-    g.add(body, head, hat); g.traverse((o) => { o.castShadow = true; });
-    g.userData = {cx: d.x, cz: d.z + 0.75, ph: k * 1.7, sp: 0.5 + k * 0.12}; g.position.set(d.x, GY, d.z + 0.75); scene.add(g); people.push(g);
-  });
+  const network = makeWalkNetwork(islands);
+  const tour = makeTour(network,islands,data.avatar.route);
+  const avatar = createTarsharAvatar(data.avatar);
+  const avatarScale = data.avatar.scale || 1;
+  avatar.group.scale.setScalar(avatarScale);scene.add(avatar.group);
+  let walkingDistance = 0, walkerSample=sampleTour(network,tour,0), following=false;
+  avatar.group.position.set(walkerSample.x,walkerSample.y,walkerSample.z);
+  avatar.group.rotation.y=walkerSample.heading;
+  const walkerBadge=document.createElement('button');
+  walkerBadge.type='button';walkerBadge.className='walker-name';walkerBadge.textContent=data.avatar.name;
+  walkerBadge.setAttribute('aria-label','跟著 '+data.avatar.name+' 散步');
+  walkerBadge.addEventListener('click',()=>api.followWalker(true));
+  container.appendChild(walkerBadge);
+  function followState(value) { following=value; if(onFollowChange)onFollowChange(following); }
+  const lookAtWalker=new THREE.Vector3();
 
   // 島間彎曲虛線示意（InstancedMesh 小短棒）
   const curves = (data.flows || []).filter(f => byId.has(f.from) && byId.has(f.to)).map(f => {
@@ -449,14 +461,14 @@ export async function createIslandScene({container, data, onSelect, onError}) {
 
   // 狀態
   const mqReduce = matchMedia('(prefers-reduced-motion: reduce)');
-  let reduced = mqReduce.matches, motion = false, flows = false, visible = true, disposed = false, lost = false, selected = null, userMoved = false;
+  let reduced = mqReduce.matches, motion = data.avatar.autoWalk !== false, flows = false, visible = true, disposed = false, lost = false, selected = null, userMoved = false;
   let raf = 0, last = 0, simT = 0, frames = 0, flight = null, active = [], todName = 'day', todTween = null;
   const cur = cloneState(TOD.day);
   const effMotion = () => motion && !reduced && visible && !document.hidden;
 
   const controls = new OrbitControls(camera, canvas);
   controls.enableDamping = !reduced; controls.dampingFactor = 0.07; controls.enablePan = false;
-  controls.minPolarAngle = THREE.MathUtils.degToRad(25); controls.maxPolarAngle = THREE.MathUtils.degToRad(70); controls.minDistance = 8; controls.maxDistance = 65;
+  controls.minPolarAngle = THREE.MathUtils.degToRad(25); controls.maxPolarAngle = THREE.MathUtils.degToRad(70); controls.minDistance = 4; controls.maxDistance = 65;
 
   const DIR0 = new THREE.Vector3(0.24, 0.65, 0.87).normalize(), home = {target: new THREE.Vector3(center.x, 1.1, center.z), dist: 30};
   function computeHome(w, h) {
@@ -491,6 +503,7 @@ export async function createIslandScene({container, data, onSelect, onError}) {
   applyTod();
 
   function selectIsland(id) {
+    followState(false);
     const i = byId.get(id);
     selected = i === undefined ? null : id;
     labels.forEach((l, k) => { const on = k === i; l.setAttribute('aria-pressed', on ? 'true' : 'false'); l.classList.toggle('is-selected', on); l.style.background = on ? islands[k].color : 'rgba(255,248,235,.94)'; l.style.color = on ? '#fff' : '#5a4636'; });
@@ -499,8 +512,8 @@ export async function createIslandScene({container, data, onSelect, onError}) {
     const to = i === undefined ? null : new THREE.Vector3(islands[i].x, 0.9, islands[i].z);
     flyTo(to || home.target, i === undefined ? null : Math.max(10, home.dist * 0.42), i === undefined);
   }
-  function flyTo(target, dist, toHomeDir) {
-    const dirNow = camera.position.clone().sub(controls.target).normalize(), toDir = toHomeDir ? DIR0.clone() : dirNow.clone(), toD = dist || home.dist;
+  function flyTo(target, dist, toHomeDir, customDir=null) {
+    const dirNow = camera.position.clone().sub(controls.target).normalize(), toDir = customDir || (toHomeDir ? DIR0.clone() : dirNow.clone()), toD = dist || home.dist;
     if (reduced) { flight = null; applyView(target, toDir, toD); requestRender(); return; }
     flight = {t0: performance.now(), dur: 800, fromT: controls.target.clone(), toT: target.clone(), fromDir: dirNow, toDir, fromD: camera.position.distanceTo(controls.target), toD};
     requestRender();
@@ -529,14 +542,28 @@ export async function createIslandScene({container, data, onSelect, onError}) {
       simT += dt; active.push('motion'); waterMat.uniforms.uTime.value = simT;
       boats.forEach((g) => { const u = g.userData; g.position.copy(u.base).addScaledVector(u.tan, Math.sin(simT * 0.3 + u.ph) * 0.35); g.position.y += Math.sin(simT * 1.6 + u.ph) * 0.02; g.rotation.set(0, Math.atan2(-u.tan.z, u.tan.x), Math.sin(simT * 1.3 + u.ph) * 0.05); });
       clouds.forEach((c) => { c.position.x += c.userData.speed * dt; if (c.position.x > center.x + extentR + 18) c.position.x = center.x - extentR - 18; });
-      people.forEach((g) => { const u = g.userData, s = Math.sin(simT * u.sp + u.ph); g.position.set(u.cx + s * 0.45, GY + Math.abs(Math.sin(simT * 7 * u.sp + u.ph)) * 0.025, u.cz); g.rotation.y = Math.cos(simT * u.sp + u.ph) > 0 ? Math.PI / 2 : -Math.PI / 2; });
+      walkingDistance += dt*(data.avatar.speed || .48);
+      walkerSample=sampleTour(network,tour,walkingDistance);
+      avatar.group.position.set(walkerSample.x,walkerSample.y,walkerSample.z);
+      let angle=walkerSample.heading-avatar.group.rotation.y;
+      angle=Math.atan2(Math.sin(angle),Math.cos(angle));
+      avatar.group.rotation.y+=angle*Math.min(1,dt*12);
+      avatar.step(simT,true);
       if (flows) updateFlow((simT * 0.06) % 1);
       if (selected) ringMat.opacity = 0.5 + Math.sin(simT * 3) * 0.15;
+    }
+    if(following && !flight) {
+      lookAtWalker.copy(avatar.group.position).add(new THREE.Vector3(0,avatar.height*avatarScale*.5,0));
+      const heading=avatar.group.rotation.y;
+      const dir=new THREE.Vector3(Math.sin(heading)*.85+Math.cos(heading)*.22,.58,Math.cos(heading)*.85-Math.sin(heading)*.22).normalize();
+      const next=lookAtWalker.clone().addScaledVector(dir,6);
+      controls.target.copy(lookAtWalker);camera.position.lerp(next,Math.min(1,dt*5));
     }
     const damping = controls.update();
     if (damping) active.push('damping');
     try { renderer.render(scene, camera); frames++; } catch (error) { lost = true; onError && onError(error); return; }
     updateLabels();
+    updateWalkerBadge();
     if (flight || todTween || em || damping) requestRender();
   }
   function updateLabels() {
@@ -551,6 +578,13 @@ export async function createIslandScene({container, data, onSelect, onError}) {
     });
   }
 
+  function updateWalkerBadge() {
+    _p.copy(avatar.group.position);_p.y+=avatar.height*avatarScale+.17;_p.project(camera);
+    const w=container.clientWidth,h=container.clientHeight,x=(_p.x*.5+.5)*w,y=(-_p.y*.5+.5)*h;
+    const vis=visible&&_p.z<1&&x>25&&x<w-25&&y>75&&y<h-85;
+    walkerBadge.hidden=!vis;
+    if(vis)walkerBadge.style.transform=`translate(${x}px,${y}px) translate(-50%,-100%)`;
+  }
   // 互動：拖曳旋轉由 OrbitControls；點擊（位移 <=6px）才做 raycast
   const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
   function pick(cx, cy) {
@@ -560,7 +594,7 @@ export async function createIslandScene({container, data, onSelect, onError}) {
     return null;
   }
   let down = null, lastHover = 0; const pointers = new Set();
-  const onDown = (e) => { pointers.add(e.pointerId); down = pointers.size === 1 ? {id: e.pointerId, x: e.clientX, y: e.clientY, moved:false} : null; flight = null; userMoved = true; requestRender(); };
+  const onDown = (e) => { pointers.add(e.pointerId); down = pointers.size === 1 ? {id: e.pointerId, x: e.clientX, y: e.clientY, moved:false} : null; flight = null; followState(false); userMoved = true; requestRender(); };
   const onUp = (e) => {
     const d = down; down = null; pointers.delete(e.pointerId);
     if (!d || d.moved || pointers.size || d.id !== e.pointerId || Math.hypot(e.clientX - d.x, e.clientY - d.y) > 6) return;
@@ -576,7 +610,7 @@ export async function createIslandScene({container, data, onSelect, onError}) {
   const onKey = (e) => {
     const m = {ArrowLeft: [-0.12, 0], ArrowRight: [0.12, 0], ArrowUp: [0, -0.08], ArrowDown: [0, 0.08]}[e.key];
     if (!m) return;
-    e.preventDefault(); flight = null; userMoved = true;
+    e.preventDefault(); flight = null; followState(false); userMoved = true;
     const off = camera.position.clone().sub(controls.target); _sp.setFromVector3(off);
     _sp.theta += m[0]; _sp.phi = clamp(_sp.phi + m[1], controls.minPolarAngle, controls.maxPolarAngle);
     camera.position.copy(controls.target).add(off.setFromSpherical(_sp)); camera.lookAt(controls.target); controls.update(); requestRender();
@@ -586,7 +620,7 @@ export async function createIslandScene({container, data, onSelect, onError}) {
   const onReduce = () => { reduced = mqReduce.matches; controls.enableDamping = !reduced; if (reduced) { if(flight) applyView(flight.toT, flight.toDir, flight.toD); flight = null; if(todTween) { Object.assign(cur,cloneState(TOD[todName])); applyTod(); todTween=null; } } last = 0; requestRender(); };
   canvas.addEventListener('pointerdown', onDown); canvas.addEventListener('pointerup', onUp); canvas.addEventListener('pointercancel', onCancel);
   canvas.addEventListener('pointermove', onMove); canvas.addEventListener('keydown', onKey); canvas.addEventListener('webglcontextlost', onLost);
-  controls.addEventListener('change', requestRender); controls.addEventListener('start', () => { userMoved = true; flight = null; requestRender(); });
+  controls.addEventListener('change', requestRender); controls.addEventListener('start', () => { followState(false); userMoved = true; flight = null; requestRender(); });
   document.addEventListener('visibilitychange', onVis); mqReduce.addEventListener && mqReduce.addEventListener('change', onReduce);
   const ro = new ResizeObserver(resize); ro.observe(container);
 
@@ -599,13 +633,14 @@ export async function createIslandScene({container, data, onSelect, onError}) {
       if (reduced) { Object.assign(cur, cloneState(TOD[name])); applyTod(); todTween = null; } else todTween = {from: cloneState(cur), k: 0};
       requestRender();
     },
-    setMotion(v) { motion = !!v; last = 0; requestRender(); },
+    setMotion(v) { motion = !!v; if(!motion)avatar.step(simT,false); last = 0; requestRender(); },
+    followWalker(value=true) { followState(value); if(value) { const t=avatar.group.position.clone();t.y+=avatar.height*avatarScale*.5;const h=avatar.group.rotation.y;const dir=new THREE.Vector3(Math.sin(h)*.85+Math.cos(h)*.22,.58,Math.cos(h)*.85-Math.sin(h)*.22).normalize();flyTo(t,6.0,false,dir); } requestRender(); },
     setFlows(v) { flows = !!v; flowMesh.visible = flows; if (flows) updateFlow(0); requestRender(); },
     setVisible(v) { visible = !!v; if (visible) { last = 0; resize(); } else if (raf) { cancelAnimationFrame(raf); raf = 0; } },
     getStats() {
       const i = renderer.info;
       return {drawCalls: i.render.calls, triangles: i.render.triangles, geometries: i.memory.geometries, revision: THREE.REVISION, instances: totalInst, instancedMeshes: pickables.length,
-        cameraPosition: camera.position.toArray(), cameraTarget: controls.target.toArray(), frames, motion: effMotion(), reducedMotion: reduced, flows, time: todName, selected, visible, activeAnimations: active.slice(), pixelRatio: renderer.getPixelRatio(), contextLost: lost};
+        cameraPosition: camera.position.toArray(), cameraTarget: controls.target.toArray(), walker:{name:data.avatar.name,distance:walkingDistance,position:avatar.group.position.toArray(),kind:walkerSample.kind,from:walkerSample.from,to:walkerSample.to,routeLength:tour.length,following,routeNodes:network.nodes.length}, frames, motion: effMotion(), reducedMotion: reduced, flows, time: todName, selected, visible, activeAnimations: active.slice(), pixelRatio: renderer.getPixelRatio(), contextLost: lost};
     },
     dispose() {
       if (disposed) return; disposed = true;
@@ -617,7 +652,7 @@ export async function createIslandScene({container, data, onSelect, onError}) {
       pickables.forEach((m) => m.dispose()); flowMesh.dispose();
       Object.values(geos).forEach((g) => g.dispose()); Object.values(mats).forEach((m) => m.dispose());
       disp.forEach((o) => o.dispose()); waterMat.dispose(); water.geometry.dispose(); ring.geometry.dispose(); ringMat.dispose(); flowMat.dispose();
-      renderer.dispose(); canvas.remove(); overlay.remove();
+      avatar.dispose();walkerBadge.remove();renderer.dispose(); canvas.remove(); overlay.remove();
     },
   };
 
