@@ -19,7 +19,7 @@ function renderList(query='') {
  });if(!found)$('list-content').append(el('p','沒有符合的資料。試試「第三章」「文獻」或「評分」。'));
 }
 function setMode(value) {
- mode=value;const map=value==='map';if(!map&&expanded)expandView(false);document.querySelector('.view-tools').hidden=!map||failed3D;$('map-tab').setAttribute('aria-pressed',String(map));$('list-tab').setAttribute('aria-pressed',String(!map));
+ mode=value;$('companion-menu').hidden=true;$('companions-open').setAttribute('aria-expanded','false');const map=value==='map';if(!map&&expanded)expandView(false);document.querySelector('.view-tools').hidden=!map||failed3D;$('map-tab').setAttribute('aria-pressed',String(map));$('list-tab').setAttribute('aria-pressed',String(!map));
  $('list-view').hidden=map;$('scene').hidden=!map;$('scene-controls').hidden=!map||failed3D;$('map-hint').hidden=!map||failed3D;$('reset').hidden=!map||failed3D;$('follow-walker').hidden=!map||failed3D;
  $('zoom-in').hidden=!map||failed3D;$('zoom-out').hidden=!map||failed3D;
  $('flow-legend').hidden=!map||$('flows').getAttribute('aria-pressed')!=='true';scene?.setVisible(map);save('thesis-island-mode',value);
@@ -74,7 +74,7 @@ function statusInfo(){
 function motionPref(){if(reduced.matches){$('motion').setAttribute('aria-pressed','false');scene?.setMotion(false);}$('motion').disabled=reduced.matches;$('motion').title=reduced.matches?'依系統「減少動態效果」設定，動畫已停用':'只播放場景動畫，不執行 AI 任務';}
 async function init(){
  try {
-  const response=await fetch('./data.json?v=festival-1023');if(!response.ok)throw new Error('Snapshot unavailable');DATA=await response.json();
+  const response=await fetch('./data.json?v=companions-1023');if(!response.ok)throw new Error('Snapshot unavailable');DATA=await response.json();
   if(DATA.schemaVersion!=='1.0.0'||!Array.isArray(DATA.islands))throw new Error('Unsupported snapshot');
   $('brand-logo').src=safeUrl(DATA.brand.logoUrl);$('brand-logo').alt=DATA.brand.logoAlt;$('motion').setAttribute('aria-pressed',String(DATA.avatar.autoWalk&&!reduced.matches));$('history-link').href=safeUrl(DATA.historyUrl);$('focus').textContent=DATA.currentFocus;$('focus-status').textContent=DATA.currentStatus;$('next-action').textContent=DATA.nextAction;$('continue').href=safeUrl(DATA.primaryUrl);$('continue').firstChild.textContent=DATA.primaryLabel+' ';
   const age=(Date.now()-Date.parse(DATA.generatedAt))/3600000;const date=new Date(DATA.generatedAt).toLocaleDateString('zh-TW',{timeZone:'Asia/Taipei'});
@@ -87,9 +87,12 @@ async function init(){
    const entries=el('div',undefined,'fair-entries');island.items.forEach(item=>entries.append(boothButton(item,island)));group.append(entries);$('island-nav').append(group);
   });
   renderList();statusInfo();motionPref();
+  const people=[{id:'tarshar',name:'Tarshar',role:'研究主人'},...(DATA.companions||[])];
+  people.forEach(person=>{const b=el('button',person.name);b.dataset.person=person.id;b.addEventListener('click',()=>{$('detail').close();scene?.followPerson(person.id,true);$('companion-menu').hidden=true;$('companions-open').setAttribute('aria-expanded','false');});$('companion-menu').append(b);});
+  $('companions-open').addEventListener('click',()=>{const open=$('companion-menu').hidden;$('companion-menu').hidden=!open;$('companions-open').setAttribute('aria-expanded',String(open));});
   $('search').addEventListener('input',e=>renderList(e.target.value));$('list-tab').addEventListener('click',()=>setMode('list'));$('map-tab').addEventListener('click',()=>setMode('map'));$('reset').addEventListener('click',()=>{scene?.reset();selected=null;selectedItem=null;updateSelection(null);});
   $('expand-view').addEventListener('click',()=>expandView(!expanded));$('zoom-in').addEventListener('click',()=>scene?.zoom(.8));$('zoom-out').addEventListener('click',()=>scene?.zoom(1.25));
-  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('detail').open){e.preventDefault();$('detail').close();return;}if(e.key==='Escape'&&expanded&&!document.querySelector('dialog[open]')){e.preventDefault();expandView(false);}});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('companion-menu').hidden){$('companion-menu').hidden=true;$('companions-open').setAttribute('aria-expanded','false');$('companions-open').focus();return;}if(e.key==='Escape'&&$('detail').open){e.preventDefault();$('detail').close();return;}if(e.key==='Escape'&&expanded&&!document.querySelector('dialog[open]')){e.preventDefault();expandView(false);}});
   $('follow-walker').addEventListener('click',()=>scene?.followWalker($('follow-walker').getAttribute('aria-pressed')!=='true'));
   $('flows').addEventListener('click',()=>{const enabled=$('flows').getAttribute('aria-pressed')!=='true';$('flows').setAttribute('aria-pressed',String(enabled));scene?.setFlows(enabled);$('flow-legend').hidden=!enabled;});
   $('motion').addEventListener('click',()=>{const enabled=$('motion').getAttribute('aria-pressed')!=='true';$('motion').setAttribute('aria-pressed',String(enabled));$('motion').firstChild.textContent=enabled?'Ⅱ ':'▷ ';scene?.setMotion(enabled);});
@@ -97,7 +100,7 @@ async function init(){
   reduced.addEventListener('change',motionPref);
   if(saved('thesis-island-mode')==='list')setMode('list');
   // The list is built first. All WebGL/module errors are contained below.
-  try { const {createIslandScene}=await import('./scene.js?v=festival-1023');scene=await createIslandScene({container:$('scene'),data:DATA,onSelect:select,onSelectItem:selectItem,onError:failScene,onFollowChange:value=>{$('follow-walker').setAttribute('aria-pressed',String(value));document.querySelector('.world-card').classList.toggle('following',value);}});$('scene-loading').hidden=true;scene.setVisible(mode==='map');motionPref(); }
+  try { const {createIslandScene}=await import('./scene.js?v=companions-1023');scene=await createIslandScene({container:$('scene'),data:DATA,onSelect:select,onSelectItem:selectItem,onError:failScene,onFollowChange:(value,id)=>{$('follow-walker').setAttribute('aria-pressed',String(value&&id==='tarshar'));document.querySelectorAll('[data-person]').forEach(b=>b.setAttribute('aria-pressed',String(value&&b.dataset.person===id)));document.querySelector('.world-card').classList.toggle('following',value);}});$('scene-loading').hidden=true;scene.setVisible(mode==='map');motionPref(); }
   catch(error){failScene(error);}
   if(!saved('thesis-island-welcome')){$('help-open').classList.add('welcome-hint');$('map-hint').textContent='按「展開」自在逛園區 · 按 ＋ 看細節';save('thesis-island-welcome','shown');}
   // Read-only diagnostics for reproducible browser checks. No query engine calls.

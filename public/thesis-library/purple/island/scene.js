@@ -2,6 +2,7 @@
 import * as THREE from './vendor/three.module.js';
 import {OrbitControls} from './vendor/OrbitControls.js';
 import {makeWalkNetwork, makeTour, sampleTour, ringPoint, WALK_Y} from './walk-network.js?v=restore-1023';
+import {createResearchCompanion} from './research-companions.js?v=companions-1023';
 import {createTarsharAvatar} from './tarshar-avatar.js?v=restore-1023';
 import {ISLAND_RADIUS as R, PATH_WIDTH, BRIDGE_WIDTH, islandPosition} from './world-layout.js';
 import {RoundedBoxGeometry} from './vendor/RoundedBoxGeometry.js';
@@ -261,7 +262,7 @@ export async function createIslandScene({container, data, onSelect, onSelectItem
   const avatar = createTarsharAvatar(data.avatar);
   const avatarScale = data.avatar.scale || 1;
   avatar.group.scale.setScalar(avatarScale);scene.add(avatar.group);
-  let walkingDistance = 0, walkerSample=sampleTour(network,tour,0), following=false, followDistance=6;
+  let walkingDistance = 0, walkerSample=sampleTour(network,tour,0), following=false, followingId=null, followDistance=6;
   avatar.group.position.set(walkerSample.x,walkerSample.y,walkerSample.z);
   avatar.group.rotation.y=walkerSample.heading;
   const walkerBadge=document.createElement('button');
@@ -269,7 +270,19 @@ export async function createIslandScene({container, data, onSelect, onSelectItem
   walkerBadge.setAttribute('aria-label','跟著 '+data.avatar.name+' 散步');
   walkerBadge.addEventListener('click',()=>api.followWalker(true));
   container.appendChild(walkerBadge);
-  function followState(value) { following=value; if(onFollowChange)onFollowChange(following); }
+  const companions=(data.companions||[]).map(profile=>{
+    const model=createResearchCompanion(profile),scale=profile.scale||1;
+    model.group.scale.setScalar(scale);scene.add(model.group);
+    const distance=tour.length*(profile.offset||0),sample=sampleTour(network,tour,distance);
+    model.group.position.set(sample.x,sample.y,sample.z);model.group.rotation.y=sample.heading;
+    const badge=document.createElement('button');badge.type='button';badge.className='walker-name companion-name';badge.textContent=profile.name;
+    badge.setAttribute('aria-label','跟著 '+profile.name+' 散步');badge.style.setProperty('--person-color',profile.clothing);
+    badge.addEventListener('click',()=>api.followPerson(profile.id,true));container.appendChild(badge);
+    return {profile,model,scale,distance,sample,badge};
+  });
+  function followedPerson(){const c=companions.find(c=>c.profile.id===followingId);return c?{model:c.model,scale:c.scale}:{model:avatar,scale:avatarScale};}
+  function followState(value) { following=value;if(!value)followingId=null; if(onFollowChange)onFollowChange(following,followingId); }
+
   const lookAtWalker=new THREE.Vector3();
 
   // 區間彎曲虛線示意（InstancedMesh 小短棒；僅示意，不代表真實研究事件）
@@ -432,12 +445,19 @@ export async function createIslandScene({container, data, onSelect, onSelectItem
       angle=Math.atan2(Math.sin(angle),Math.cos(angle));
       avatar.group.rotation.y+=angle*Math.min(1,dt*12);
       avatar.step(simT,true);
+      companions.forEach(c=>{
+        c.distance+=dt*(data.avatar.speed||.48);c.sample=sampleTour(network,tour,c.distance);
+        c.model.group.position.set(c.sample.x,c.sample.y,c.sample.z);
+        let a=c.sample.heading-c.model.group.rotation.y;a=Math.atan2(Math.sin(a),Math.cos(a));c.model.group.rotation.y+=a*Math.min(1,dt*12);
+        c.model.step(simT,true);
+      });
       if (flows) updateFlow((simT * 0.06) % 1);
       if (selected) { ringMat.opacity = 0.5 + Math.sin(simT * 3) * 0.15; boothRingMat.opacity = 0.75 + Math.sin(simT * 3) * 0.2; }
     }
     if(following && !flight) {
-      lookAtWalker.copy(avatar.group.position).add(new THREE.Vector3(0,avatar.height*avatarScale*.5,0));
-      const heading=avatar.group.rotation.y;
+      const person=followedPerson();
+      lookAtWalker.copy(person.model.group.position).add(new THREE.Vector3(0,person.model.height*person.scale*.5,0));
+      const heading=person.model.group.rotation.y;
       const dir=new THREE.Vector3(Math.sin(heading)*.85+Math.cos(heading)*.22,.58,Math.cos(heading)*.85-Math.sin(heading)*.22).normalize();
       const next=lookAtWalker.clone().addScaledVector(dir,followDistance);
       controls.target.copy(lookAtWalker);camera.position.lerp(next,Math.min(1,dt*5));
@@ -448,8 +468,8 @@ export async function createIslandScene({container, data, onSelect, onSelectItem
     camera.position.add(bounded.clone().sub(controls.target));controls.target.copy(bounded);
     if (damping) active.push('damping');
     try { renderer.render(scene, camera); frames++; } catch (error) { lost = true; onError && onError(error); return; }
-    updateLabels();
     updateWalkerBadge();
+    updateLabels();
     if (flight || todTween || em || damping) requestRender();
   }
   function updateLabels() {
@@ -464,7 +484,7 @@ export async function createIslandScene({container, data, onSelect, onSelectItem
         for(const dx of [0,-65,65]) {
           const px=Math.max(bw/2+9,Math.min(w-bw/2-9,ax+dx)), py=ay+dy;
           const r={l:px-bw/2-5,r:px+bw/2+5,t:py-bh-5,b:py+5};
-          if(r.t<78||r.b>h-96||(r.r>w-88&&r.t<245)||used.some(o=>r.l<o.r&&r.r>o.l&&r.t<o.b&&r.b>o.t))continue;
+          if(r.t<78||r.b>h-96||(r.r>w-88&&r.t<315)||used.some(o=>r.l<o.r&&r.r>o.l&&r.t<o.b&&r.b>o.t))continue;
           spot={px,py,r};break;
         }
         if(spot)break;
@@ -472,7 +492,7 @@ export async function createIslandScene({container, data, onSelect, onSelectItem
       bt.style.visibility=spot?'visible':'hidden';
       if(spot){used.push(spot.r);bt.style.transform=`translate3d(${spot.px.toFixed(1)}px,${spot.py.toFixed(1)}px,0) translate(-50%,-100%)`;bt.style.zIndex=String(priority);}
     };
-    if(!walkerBadge.hidden){const r=walkerBadge.getBoundingClientRect(),c=container.getBoundingClientRect();used.push({l:r.left-c.left-5,r:r.right-c.left+5,t:r.top-c.top-5,b:r.bottom-c.top+5});}
+    for(const badge of [walkerBadge,...companions.map(c=>c.badge)])if(!badge.hidden){const r=badge.getBoundingClientRect(),c=container.getBoundingClientRect();used.push({l:r.left-c.left-5,r:r.right-c.left+5,t:r.top-c.top-5,b:r.bottom-c.top+5});}
     labels.forEach(l=>{l.style.visibility='hidden';});
     if(!selected)islands.forEach((d,i)=>place(labels[i],d.x,3,d.z,20));
     pins.forEach(p=>{p.el.style.visibility='hidden';});
@@ -482,12 +502,19 @@ export async function createIslandScene({container, data, onSelect, onSelectItem
   }
 
   function updateWalkerBadge() {
-    _p.copy(avatar.group.position);_p.y+=avatar.height*avatarScale+.17;_p.project(camera);
-    const w=container.clientWidth,h=container.clientHeight,x=(_p.x*.5+.5)*w,y=(-_p.y*.5+.5)*h;
-    const vis=visible&&_p.z<1&&x>25&&x<w-25&&y>75&&y<h-85&&!(x>w-88&&y<285);
-    walkerBadge.hidden=!vis;
-    if(vis)walkerBadge.style.transform=`translate(${x}px,${y}px) translate(-50%,-100%)`;
+    const used=[],w=container.clientWidth,h=container.clientHeight;
+    const people=[{id:'tarshar',model:avatar,scale:avatarScale,badge:walkerBadge},...companions.map(c=>({id:c.profile.id,...c}))];
+    people.sort((a,b)=>Number(b.id===followingId)-Number(a.id===followingId));
+    for(const person of people){
+      _p.copy(person.model.group.position);_p.y+=person.model.height*person.scale+.17;_p.project(camera);
+      const x=(_p.x*.5+.5)*w,y=(-_p.y*.5+.5)*h,bw=person.badge.offsetWidth||100;
+      const r={l:x-bw/2,r:x+bw/2,t:y-44,b:y+6};
+      const near=person.id==='tarshar'||person.id===followingId||camera.position.distanceTo(person.model.group.position)<26;
+      const vis=near&&visible&&_p.z<1&&r.l>8&&r.r<w-8&&y>90&&y<h-85&&!(r.r>w-88&&r.t<315)&&!used.some(o=>r.l<o.r&&r.r>o.l&&r.t<o.b&&r.b>o.t);
+      person.badge.hidden=!vis;if(vis){used.push(r);person.badge.style.transform=`translate(${x}px,${y}px) translate(-50%,-100%)`;}
+    }
   }
+
   // 互動：拖曳旋轉由 OrbitControls；點擊（位移 <=6px）才做 raycast，命中攤位回報項目、否則回報所屬區
   const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
   function pick(cx, cy) {
@@ -543,14 +570,20 @@ export async function createIslandScene({container, data, onSelect, onSelectItem
       if (reduced) { Object.assign(cur, cloneState(TOD[name])); applyTod(); todTween = null; } else todTween = {from: cloneState(cur), k: 0};
       requestRender();
     },
-    setMotion(v) { motion = !!v; if(!motion)avatar.step(simT,false); last = 0; requestRender(); },
-    followWalker(value=true) { userMoved=true;followDistance=6;followState(value); if(value) { const t=avatar.group.position.clone();t.y+=avatar.height*avatarScale*.5;const h=avatar.group.rotation.y;const dir=new THREE.Vector3(Math.sin(h)*.85+Math.cos(h)*.22,.58,Math.cos(h)*.85-Math.sin(h)*.22).normalize();flyTo(t,followDistance,false,dir); } requestRender(); },
+    setMotion(v) { motion = !!v; if(!motion){avatar.step(simT,false);companions.forEach(c=>c.model.step(simT,false));} last = 0; requestRender(); },
+    followWalker(value=true) { api.followPerson('tarshar',value); },
+    followPerson(id,value=true) {
+      if(disposed||id!=='tarshar'&&!companions.some(c=>c.profile.id===id))return;
+      userMoved=true;followDistance=6;followingId=id;followState(value);
+      if(value){const {model,scale}=followedPerson(),t=model.group.position.clone();t.y+=model.height*scale*.5;const h=model.group.rotation.y;const dir=new THREE.Vector3(Math.sin(h)*.85+Math.cos(h)*.22,.58,Math.cos(h)*.85-Math.sin(h)*.22).normalize();flyTo(t,followDistance,false,dir);}requestRender();
+    },
     zoom(factor) { if(disposed)return;userMoved=true;const distance=clamp(camera.position.distanceTo(controls.target)*factor,following?3.5:controls.minDistance,controls.maxDistance);if(following)followDistance=distance;flyTo(controls.target,distance,false); },
     setFlows(v) { flows = !!v; flowMesh.visible = flows; if (flows) updateFlow(0); requestRender(); },
     setVisible(v) { visible = !!v; if (visible) { last = 0; resize(); } else if (raf) { cancelAnimationFrame(raf); raf = 0; } },
     getStats() {
       const i = renderer.info;
       return {drawCalls: i.render.calls, triangles: i.render.triangles, geometries: i.memory.geometries, revision: THREE.REVISION, instances: totalInst, instancedMeshes: allMeshes.length,
+        people:[{id:'tarshar',name:data.avatar.name,position:avatar.group.position.toArray(),distance:walkingDistance},...companions.map(c=>({id:c.profile.id,name:c.profile.name,role:c.profile.role,gender:c.profile.gender,position:c.model.group.position.toArray(),distance:c.distance,kind:c.sample.kind}))],followingId,
         theme: 'research-festival', itemModels: booths.length, selectedItem, booths: booths.map((b) => ({id: b.id, islandId: b.islandId, x: b.x, y: b.y, z: b.z})),
         layout:{radius:R,pathWidth:PATH_WIDTH,bridgeWidth:BRIDGE_WIDTH,panEnabled:controls.enablePan},cameraDistance:camera.position.distanceTo(controls.target),cameraPosition: camera.position.toArray(), cameraTarget: controls.target.toArray(), walker:{name:data.avatar.name,distance:walkingDistance,position:avatar.group.position.toArray(),kind:walkerSample.kind,from:walkerSample.from,to:walkerSample.to,routeLength:tour.length,following,routeNodes:network.nodes.length}, frames, motion: effMotion(), reducedMotion: reduced, flows, time: todName, selected, visible, activeAnimations: active.slice(), pixelRatio: renderer.getPixelRatio(), contextLost: lost};
     },
@@ -564,7 +597,7 @@ export async function createIslandScene({container, data, onSelect, onSelectItem
       allMeshes.forEach((m) => m.dispose()); flowMesh.dispose();
       Object.values(geos).forEach((g) => g.dispose()); Object.values(mats).forEach((m) => m.dispose());
       disp.forEach((o) => o.dispose()); landmarks.dispose(); ring.geometry.dispose(); ringMat.dispose(); boothRing.geometry.dispose(); boothRingMat.dispose(); flowMat.dispose();
-      avatar.dispose();walkerBadge.remove();renderer.dispose(); canvas.remove(); overlay.remove();
+      companions.forEach(c=>{c.model.dispose();c.badge.remove();});avatar.dispose();walkerBadge.remove();renderer.dispose(); canvas.remove(); overlay.remove();
     },
   };
 
