@@ -1,0 +1,90 @@
+{
+  "date": "2026-10-23",
+  "platformTests": "35 passed; no query engine/model calls for island tests",
+  "browser": "Chrome headless on macOS, SwiftShader; not physical iPhone",
+  "viewports": [
+    [
+      1440,
+      1080
+    ],
+    [
+      390,
+      844
+    ],
+    [
+      320,
+      812
+    ]
+  ],
+  "passed": [
+    "Five islands and 15 source items",
+    "Chapter 3 Word/PDF links",
+    "A/B Tailscale link",
+    "List search",
+    "Keyboard label selection and focus return",
+    "Camera arrow keys (confirmed with position changes)",
+    "Drag does not open card",
+    "No horizontal overflow at tested widths",
+    "Module failure fallback",
+    "WebGL unavailable fallback",
+    "WebGL context loss fallback",
+    "localStorage denied fallback",
+    "Dynamic reduced motion on/off",
+    "Idle rendered frames unchanged across 1 second",
+    "List mode stops rendering",
+    "Mobile pixel ratio <= 1.4",
+    "CSP and route traversal test"
+  ],
+  "notTested": [
+    "Physical iPhone Safari performance and battery",
+    "Real-time event adapter (not implemented)",
+    "Formal research/model comparison"
+  ],
+  "initialDefectsFixed": [
+    "Shader uniform array length",
+    "Scene labels blocking toolbar",
+    "Data-driven flow endpoints",
+    "Night readability",
+    "Canvas focus visibility",
+    "Clipped labels hidden near controls"
+  ],
+  "motionEvidence": {
+    "keyboardCameraChanged": true,
+    "motionActive": true,
+    "dynamicReducedMotion": {
+      "disabled": true,
+      "idleFrames": 0,
+      "stats": {
+        "drawCalls": 39,
+        "triangles": 128296,
+        "geometries": 13,
+        "revision": "160",
+        "instances": 740,
+        "instancedMeshes": 15,
+        "cameraPosition": [
+          3.8825328454438446,
+          19.91570665861344,
+          27.544672798015306
+        ],
+        "cameraTarget": [
+          0,
+          1.1,
+          1.7099999999999997
+        ],
+        "frames": 6,
+        "motion": false,
+        "reducedMotion": true,
+        "flows": false,
+        "time": "day",
+        "selected": null,
+        "visible": true,
+        "activeAnimations": [],
+        "pixelRatio": 1,
+        "contextLost": false
+      }
+    },
+    "reenable": true,
+    "listPausesRendering": true
+  },
+  "independentReview": "Two-stage review: no blocking issues. Focus ring and clipped labels fixed."
+}
