@@ -2,7 +2,7 @@
 import * as THREE from './vendor/three.module.js';
 import {OrbitControls} from './vendor/OrbitControls.js';
 import {makeWalkNetwork, makeTour, sampleTour, ringPoint, WALK_Y} from './walk-network.js';
-import {createTarsharAvatar} from './tarshar-avatar.js';
+import {createTarsharAvatar} from './tarshar-avatar.js?v=hair-1023';
 import {RoundedBoxGeometry} from './vendor/RoundedBoxGeometry.js';
 
 const R = 2.02, SPACING = 2.28, TOP = 0.65, WATER_Y = -0.18, GY = TOP + 0.05;

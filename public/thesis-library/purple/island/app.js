@@ -40,7 +40,7 @@ function statusInfo(){
 function motionPref(){if(reduced.matches){$('motion').setAttribute('aria-pressed','false');scene?.setMotion(false);}$('motion').disabled=reduced.matches;$('motion').title=reduced.matches?'依系統「減少動態效果」設定，動畫已停用':'只播放場景動畫，不執行 AI 任務';}
 async function init(){
  try {
-  const response=await fetch('./data.json?v=avatar-1023');if(!response.ok)throw new Error('Snapshot unavailable');DATA=await response.json();
+  const response=await fetch('./data.json?v=hair-1023');if(!response.ok)throw new Error('Snapshot unavailable');DATA=await response.json();
   if(DATA.schemaVersion!=='1.0.0'||!Array.isArray(DATA.islands))throw new Error('Unsupported snapshot');
   $('brand-logo').src=safeUrl(DATA.brand.logoUrl);$('brand-logo').alt=DATA.brand.logoAlt;$('motion').setAttribute('aria-pressed',String(DATA.avatar.autoWalk&&!reduced.matches));$('history-link').href=safeUrl(DATA.historyUrl);$('focus').textContent=DATA.currentFocus;$('focus-status').textContent=DATA.currentStatus;$('next-action').textContent=DATA.nextAction;$('continue').href=safeUrl(DATA.primaryUrl);$('continue').firstChild.textContent=DATA.primaryLabel+' ';
   const age=(Date.now()-Date.parse(DATA.generatedAt))/3600000;const date=new Date(DATA.generatedAt).toLocaleDateString('zh-TW',{timeZone:'Asia/Taipei'});
@@ -55,7 +55,7 @@ async function init(){
   reduced.addEventListener('change',motionPref);
   if(saved('thesis-island-mode')==='list')setMode('list');
   // The list is built first. All WebGL/module errors are contained below.
-  try { const {createIslandScene}=await import('./scene.js?v=avatar-1023');scene=await createIslandScene({container:$('scene'),data:DATA,onSelect:select,onError:failScene,onFollowChange:value=>{$('follow-walker').setAttribute('aria-pressed',String(value));document.querySelector('.world-card').classList.toggle('following',value);}});$('scene-loading').hidden=true;scene.setVisible(mode==='map');motionPref(); }
+  try { const {createIslandScene}=await import('./scene.js?v=hair-1023');scene=await createIslandScene({container:$('scene'),data:DATA,onSelect:select,onError:failScene,onFollowChange:value=>{$('follow-walker').setAttribute('aria-pressed',String(value));document.querySelector('.world-card').classList.toggle('following',value);}});$('scene-loading').hidden=true;scene.setVisible(mode==='map');motionPref(); }
   catch(error){failScene(error);}
   if(!saved('thesis-island-welcome')){$('help-open').classList.add('welcome-hint');$('map-hint').textContent='妳的公仔正在散步 · 點「找 Tarshar」拉近看';save('thesis-island-welcome','shown');}
   // Read-only diagnostics for reproducible browser checks. No query engine calls.

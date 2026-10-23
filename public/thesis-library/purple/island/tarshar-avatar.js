@@ -1,12 +1,12 @@
 import * as THREE from './vendor/three.module.js';
 import {mergeGeometries} from './vendor/BufferGeometryUtils.js';
 
-// Tarshar Q版公仔：棕色波浪中長髮、圓框眼鏡、橫條紋上衣、牛仔背心、牛仔褲、白鞋、鼠尾草綠斜背包。
+// Tarshar Q版公仔：深棕色自然分線中長髮、圓框眼鏡、橫條紋上衣、牛仔背心、牛仔褲、白鞋、鼠尾草綠斜背包。
 // 全程式幾何，靜態部位依 vertex color 合併。drawcalls = 頭 + 軀幹 + 四肢 = 6。
 
 const C = {
   skin: 0xf6d3b8, skinDeep: 0xe9b79a, blush: 0xf2a39a,
-  hair: 0x6a4126, hairDark: 0x4d2f1b, hairLight: 0x8b5b34,
+  hair: 0x59463e, hairDark: 0x40322d, hairLight: 0x665148,
   eye: 0x2b1810, white: 0xffffff, mouth: 0x8e3b36, frame: 0x5b3a2a,
   cream: 0xf5eddd, navy: 0x26334f,
   vest: 0x426da3, vestLight: 0x5f8bbd, jeans: 0x5081b5, cuff: 0x7aa2cc,
@@ -116,63 +116,74 @@ function buildHead() {
     sph(L, C.skinDeep, d.p, [0.006, 0.006, 0.004], {q: d.q, w: 6, h: 4});
   }
 
-  // 頭髮：頂部圓頂
-  const hc = {x: 0, y: 0.848, z: -0.012};
-  sph(L, C.hair, [hc.x, hc.y, hc.z], [0.233, 0.218, 0.222], {w: 28, h: 14, thL: 1.25});
-  // 後方與兩側長髮量體
-  sph(L, C.hair, [0, 0.77, -0.06], [0.238, 0.255, 0.16], {w: 28, h: 16, phiS: Math.PI - 0.55, phiL: Math.PI + 1.1, thS: 0.35, thL: 2.25});
-  // 頂部蓬度
-  for (const [x, z, s] of [[-0.09, -0.02, 0.07], [0.02, 0.0, 0.08], [0.1, -0.03, 0.065], [-0.03, -0.1, 0.075], [0.07, -0.1, 0.06]]) {
-    sph(L, C.hairLight, [x, 1.055 - Math.abs(x) * 0.18, z], [s, s * 0.55, s], {w: 8, h: 6});
-  }
-  // Side-parted locks sweep over the crown; avoid a straight fringe/hat silhouette.
-  for(let i=0;i<5;i++) {
-    const shift=i*.015;
-    const pts=[[.055-shift,1.069,.025],[.005-shift,1.064,.112],[-.09-shift,1.008,.18],[-.172-shift,.941,.15],[-.204-shift,.865,.09]];
-    tube(L,i%2?C.hair:C.hairLight,pts,.018,20,6);
-  }
-  for(let i=0;i<3;i++) {
-    const shift=i*.018;
-    tube(L,i%2?C.hair:C.hairLight,[[.062+shift,1.061,.04],[.13+shift,1.027,.106],[.19+shift,.96,.125],[.213+shift,.86,.065]],.018,18,6);
-  }
-  // 髮絲高光（曲線 Tube）
-  for (let k = 0; k < 9; k++) {
-    const base = Math.PI - 0.45 + (k / 8) * (Math.PI + 0.9);
-    const pts = [];
-    const ph = k * 1.3;
-    for (let j = 0; j <= 9; j++) {
-      const u = j / 9;
-      const th = 0.55 + u * 1.95;
-      const phi = base + 0.1 * Math.sin(u * 9 + ph);
-      const R = 1.012;
-      pts.push([
-        -Math.cos(phi) * Math.sin(th) * 0.238 * R,
-        0.77 + Math.cos(th) * 0.255 * R,
-        -0.06 + Math.sin(phi) * Math.sin(th) * 0.16 * R,
-      ]);
-    }
-    tube(L, k % 2 ? C.hairLight : C.hairDark, pts, 0.0055, 14, 4);
-  }
-  // 兩側垂下的波浪髮束
-  for (const sx of [-1, 1]) {
-    const pts = [];
-    for (let j = 0; j <= 10; j++) {
-      const u = j / 10;
-      pts.push([sx * (0.212 + 0.018 * Math.sin(u * 11)), 0.86 - u * 0.26, 0.035 + 0.03 * u + 0.014 * Math.cos(u * 11)]);
-    }
-    tube(L, C.hair, pts, 0.032, 18, 6);
-    tube(L, C.hairLight, pts.map(p => [p[0] + sx * 0.006, p[1], p[2] + 0.018]), 0.007, 14, 4);
-    // 髮尾捲
-    for (let j = 0; j < 3; j++) {
-      sph(L, j === 1 ? C.hairLight : C.hair, [sx * (0.208 + j * 0.006), 0.6 - j * 0.012, 0.075 - j * 0.026], 0.04 - j * 0.004, {w: 9, h: 7});
+  // 一整片順髮外殼：自然分線、兩側落到肩膀，只有髮尾輕彎。
+  // 不用髮絲管線、頂部球塊或珠串捲髮，保持手機近看輪廓乾淨。
+  const hairPositions = [], hairIndices = [], hairColors = [];
+  const hairSegments = 64, hairRows = 32;
+  for (let row = 0; row <= hairRows; row++) {
+    const u = row / hairRows;
+    for (let col = 0; col <= hairSegments; col++) {
+      const phi = col / hairSegments * Math.PI * 2;
+      const front = Math.max(0, Math.cos(phi));
+      const maxTheta = 2.62 - 1.75 * Math.pow(front, 1.15);
+      const theta = u * maxTheta;
+      const sinT = Math.sin(theta);
+      // 肩線以下向內收；只留寬廣、平滑的髮尾弧度。
+      const end = THREE.MathUtils.smoothstep(theta, 1.7, 2.62);
+      const width = theta > Math.PI / 2 ? 1 - 0.10 * end : sinT;
+      const x = Math.sin(phi) * width * 0.239;
+      const y = 0.837 + Math.cos(theta) * (0.23 + 0.065 * end);
+      const z = -0.012 + Math.cos(phi) * width * (0.222 - 0.025 * end);
+      // 分線以很淺的凹痕形成，沒有貼在頭頂的凸起線條。
+      const part = Math.exp(-Math.pow(x / 0.019, 2)) * THREE.MathUtils.smoothstep(y, 0.985, 1.05);
+      hairPositions.push(x, y - part * 0.008, z);
+      const shade = new THREE.Color(C.hair).lerp(new THREE.Color(C.hairLight), Math.max(0, Math.sin(phi + 0.4)) * 0.15);
+      hairColors.push(shade.r, shade.g, shade.b);
+      if (row < hairRows && col < hairSegments) {
+        const i = row * (hairSegments + 1) + col, j = i + hairSegments + 1;
+        hairIndices.push(i, j, i + 1, j, j + 1, i + 1);
+      }
     }
   }
-  // 後方髮尾捲
-  for (let i = 0; i < 9; i++) {
-    const phi = Math.PI - 0.5 + (i / 8) * (Math.PI + 1.0);
-    const x = -Math.cos(phi) * 0.205, z = Math.sin(phi) * 0.13 - 0.06;
-    const y = 0.575 + (i % 2) * 0.03;
-    sph(L, i % 3 === 0 ? C.hairLight : (i % 2 ? C.hair : C.hairDark), [x, y, z], 0.048, {w: 9, h: 7});
+  const hair = new THREE.BufferGeometry();
+  hair.setAttribute('position', new THREE.Float32BufferAttribute(hairPositions, 3));
+  hair.setIndex(hairIndices);
+  hair.computeVertexNormals();
+  // 上色與其餘頭部合併，維持原本 6 個公仔 draw calls。
+  const smoothHair = hair.toNonIndexed();
+  const colorValues = [];
+  for (const i of hairIndices) colorValues.push(...hairColors.slice(i * 3, i * 3 + 3));
+  smoothHair.setAttribute('color', new THREE.Float32BufferAttribute(colorValues, 3));
+  L.push(smoothHair); hair.dispose();
+  // 兩片寬而扁的側髮落到肩旁，避免從正面看成短髮帽；只在尾端輕彎。
+  for (const side of [-1, 1]) {
+    const curve = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(side * .17, .97, .065),
+      new THREE.Vector3(side * .223, .86, .075),
+      new THREE.Vector3(side * .232, .73, .09),
+      new THREE.Vector3(side * .218, .61, .105),
+      new THREE.Vector3(side * .233, .54, .075),
+    ]);
+    const vertices = [], indices = [], rows = 28, columns = 12;
+    for (let row = 0; row <= rows; row++) {
+      const t = row / rows, center = curve.getPoint(t), tangent = curve.getTangent(t);
+      const across = new THREE.Vector3(tangent.y, -tangent.x, 0).normalize();
+      const taper = Math.pow(Math.sin(Math.PI * t), .32);
+      for (let col = 0; col <= columns; col++) {
+        const angle = col / columns * Math.PI * 2;
+        vertices.push(center.x + across.x * Math.cos(angle) * .042 * taper,
+          center.y + across.y * Math.cos(angle) * .042 * taper,
+          center.z + Math.sin(angle) * .024 * taper);
+        if (row < rows && col < columns) {
+          const i = row * (columns + 1) + col, j = i + columns + 1;
+          indices.push(i, j, i + 1, j, j + 1, i + 1);
+        }
+      }
+    }
+    const lock = new THREE.BufferGeometry();
+    lock.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+    lock.setIndex(indices); lock.computeVertexNormals();
+    put(L, lock, C.hair);
   }
   // 耳朵（藏在髮下，只露一點）
   for (const sx of [-1, 1]) sph(L, C.skin, [sx * 0.213, 0.82, 0.0], [0.014, 0.03, 0.022], {w: 6, h: 6});
@@ -322,5 +333,5 @@ export function createTarsharAvatar(profile = {}) {
   }
 
   step(0, false);
-  return {group, height: 1.10, step, dispose, bodyRoot};
+  return {group, height: 1.07, step, dispose, bodyRoot};
 }
