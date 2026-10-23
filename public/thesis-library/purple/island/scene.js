@@ -1,16 +1,15 @@
 // 五島論文智能島：溫暖黏土微縮 3D 場景（茜茜 Claude 實作，Codex 負責 HTML/CSS/資料）
 import * as THREE from './vendor/three.module.js';
 import {OrbitControls} from './vendor/OrbitControls.js';
-import {makeWalkNetwork, makeTour, sampleTour, ringPoint, WALK_Y} from './walk-network.js?v=space-1023';
-import {createTarsharAvatar} from './tarshar-avatar.js?v=library-1023';
+import {makeWalkNetwork, makeTour, sampleTour, ringPoint, WALK_Y} from './walk-network.js?v=restore-1023';
+import {createTarsharAvatar} from './tarshar-avatar.js?v=restore-1023';
 import {ISLAND_RADIUS as R, PATH_WIDTH, BRIDGE_WIDTH, islandPosition} from './world-layout.js';
-import {LIBRARY_MODELS} from './library-kit.js?v=library-1023';
 import {RoundedBoxGeometry} from './vendor/RoundedBoxGeometry.js';
 
 const TOP = 0.65, WATER_Y = -0.18, GY = TOP + 0.05;
 const SQ3 = Math.sqrt(3);
-const C = {coral: '#b98665', cream: '#f5eddb', sage: '#889b7c', lilac: '#a6aaa0', wood: '#ae895e', woodD: '#68533e',
-  stone: '#ebe2d0', gold: '#c7a26b', glass: '#d6edf2', warm: '#ffd88a', mustard: '#f2c879', dark: '#6e5a4a', white: '#fffaf0'};
+const C = {coral: '#f08a74', cream: '#fbf0da', sage: '#a9c9a0', lilac: '#c3b1e1', wood: '#c99a6b', woodD: '#9a6b45',
+  stone: '#efe4d0', gold: '#f3c46b', glass: '#d6edf2', warm: '#ffd88a', mustard: '#f2c879', dark: '#6e5a4a', white: '#fffaf0'};
 const GREENS = ['#8fb98a', '#a5c79a', '#7aab84', '#b3d1a0'];
 const BOOKS = ['#f08a74', '#c3b1e1', '#f2c879', '#a9c9a0', '#fbf0da', '#e59aa8', '#8fb6c9'];
 
@@ -31,7 +30,7 @@ const TOD = {
   dawn: {sunCol: T('#ffb894'), sunI: 2.3, sunPos: new THREE.Vector3(-11, 6, 5), hemiSky: T('#ffd0b8'), hemiGround: T('#8a7a8e'), hemiI: 0.95,
     exposure: 1.0, shallow: T('#a8dbd0'), deep: T('#82a9c6'), foam: T('#fff1e6'), glow: 0.8, cloud: T('#ffe3d6')},
   day: {sunCol: T('#fff1d6'), sunI: 2.9, sunPos: new THREE.Vector3(-7, 12, 7), hemiSky: T('#fff4e0'), hemiGround: T('#b8a98e'), hemiI: 1.05,
-    exposure: 1.05, shallow: T('#b6d5ca'), deep: T('#86b4ae'), foam: T('#ffffff'), glow: 0.7, cloud: T('#ffffff')},
+    exposure: 1.05, shallow: T('#93e2d3'), deep: T('#62b6d0'), foam: T('#ffffff'), glow: 0.7, cloud: T('#ffffff')},
   dusk: {sunCol: T('#ff9a6a'), sunI: 2.1, sunPos: new THREE.Vector3(12, 5, 6), hemiSky: T('#ffb9a0'), hemiGround: T('#6b5a7a'), hemiI: 0.85,
     exposure: 1.0, shallow: T('#93b9c6'), deep: T('#5c719c'), foam: T('#ffe6d6'), glow: 0.95, cloud: T('#ffc3a8')},
   night: {sunCol: T('#9db4ff'), sunI: 0.6, sunPos: new THREE.Vector3(6, 10, -4), hemiSky: T('#97a9d4'), hemiGround: T('#726682'), hemiI: 1.65,
@@ -86,7 +85,6 @@ function B(list, own, base) {
 
 // ---------- 建物模型：腳印半徑約 0.6，正面朝 +z ----------
 const MODELS = {
-  ...LIBRARY_MODELS,
   lighthouse(b, rng, a) {
     b.cyl(0, 0, 0, 0.5, 0.12, C.stone);
     b.cyl(0, 0.12, 0, 0.34, 0.5, C.cream); b.cyl(0, 0.62, 0, 0.3, 0.45, a); b.cyl(0, 1.07, 0, 0.27, 0.45, C.cream); b.cyl(0, 1.52, 0, 0.24, 0.3, a);
@@ -185,7 +183,7 @@ function buildIsland(L, isl, i, all) {
   const rng = mulberry32(1023 + i * 97), own = i, {x: cx, z: cz} = isl;
   const base = B(L, own, xf(cx, 0, cz, 0, 1));
   const ic = new THREE.Color(isl.color);
-  const grass = mix('#eee6d5', isl.color, 0.045);
+  const grass = mix(C.sage, isl.color, 0.14);
   base.part('hexS', 'clay', 0, -0.3, 0, R+.06, 0.6, R+.06, 0, mix('#c9a98a', isl.color, 0.1));
   base.part('hexT', 'clay', 0, 0.325, 0, R, 0.65, R, 0, mix('#efdcbc', isl.color, 0.22));
   base.part('hex', 'clay', 0, 0.2, 0, R+.045, 0.05, R+.045, 0, mix('#f6e9cf', isl.color, 0.45));
@@ -202,13 +200,12 @@ function buildIsland(L, isl, i, all) {
 
   // 主建物 + 最多三個不同造型的小細節
   const items = isl.items || [];
-  const mainModel = modelKey(isl.sceneModel || (items[0] && items[0].model));
-  const isLibrary = Boolean(LIBRARY_MODELS[mainModel]);
-  const ms = isLibrary ? 1.25 : 1.4 * (MODEL_SCALE[mainModel] || 1);
-  modelFn(mainModel)(loc(0, isLibrary ? -.35 : -.65, 0, ms), rng, ic);
-  const bld = [{x: 0, z: isLibrary ? -.35 : -.65, r: isLibrary ? 1.65 : 1.05}]; occ.push(bld[0]);
+  const mainModel = modelKey(items[0] && items[0].model);
+  const ms = 1.4 * (MODEL_SCALE[mainModel] || 1);
+  modelFn(mainModel)(loc(0, -0.65, 0, ms), rng, ic);
+  const bld = [{x: 0, z: -0.65, r: 1.05}]; occ.push(bld[0]);
   const used = new Set([mainModel]), secs = [];
-  for (const it of (isLibrary ? [] : items)) { const k = modelKey(it.model); if (!used.has(k) && secs.length < 3) { used.add(k); secs.push(k); } }
+  for (const it of items) { const k = modelKey(it.model); if (!used.has(k) && secs.length < 3) { used.add(k); secs.push(k); } }
   const taken = new Set();
   secs.forEach((k) => {
     let best = -1, bs = -1e9;
@@ -227,13 +224,13 @@ function buildIsland(L, isl, i, all) {
   // Twelve path nodes: six vertices and six bridge-facing midpoints.
   for(let k=0;k<12;k++) {
     const a=ringPoint(k),b=ringPoint((k+1)%12),length=Math.hypot(b.x-a.x,b.z-a.z);
-    base.part('box','clay',(a.x+b.x)/2,WALK_Y-.025,(a.z+b.z)/2,PATH_WIDTH,.05,length+.018,Math.atan2(b.x-a.x,b.z-a.z),'#d8c4a0');
-    base.cyl(a.x,WALK_Y-.048,a.z,PATH_WIDTH/2,.048,'#d8c4a0');
+    base.part('box','clay',(a.x+b.x)/2,WALK_Y-.025,(a.z+b.z)/2,PATH_WIDTH,.05,length+.018,Math.atan2(b.x-a.x,b.z-a.z),'#f0debd');
+    base.cyl(a.x,WALK_Y-.048,a.z,PATH_WIDTH/2,.048,'#f0debd');
   }
   // 廣場與六角步道
   const plaza = [0, 1.22];
-  base.box(0,GY,1.25,1.65,.035,1.0,'#d3bea0');
-  base.box(0,GY+.035,1.25,1.5,.012,.88,'#e7ddc8');
+  base.part('hex', 'clay', plaza[0], GY + 0.015, plaza[1], 0.85, 0.03, 0.85, 0, C.stone);
+  base.part('hex', 'clay', plaza[0], GY + 0.03, plaza[1], 0.58, 0.02, 0.58, 0, '#f7eedd');
   const targets = ends.concat(secs.length ? SLOTS.filter((s, j) => taken.has(j)) : []);
   targets.forEach(([tx, tz]) => {
     const vx = tx - plaza[0], vz = tz - plaza[1], len = Math.hypot(vx, vz);
@@ -262,24 +259,25 @@ function buildIsland(L, isl, i, all) {
     const b = loc(x, z, Math.atan2(-x, -z), 1);
     b.box(0, 0.16, 0, 0.5, 0.05, 0.17, C.wood); b.box(0, 0.22, -0.08, 0.5, 0.18, 0.035, C.wood); b.box(-0.2, 0, 0, 0.05, 0.16, 0.15, C.woodD); b.box(0.2, 0, 0, 0.05, 0.16, 0.15, C.woodD);
   });
-  place(2, 1.35, 1.88, 0.38, (x, z) => {
+  place(5 + Math.floor(rng() * 2), 1.35, 1.88, 0.38, (x, z) => {
     const b = loc(x, z, rng() * 6, 0.85 + rng() * 0.45), pine = rng() < 0.3, blossom = !pine && rng() < 0.25;
     b.cyl(0, 0, 0, 0.05, 0.3, C.woodD);
     if (pine) { b.cone(0, 0.2, 0, 0.26, 0.4, GREENS[2]); b.cone(0, 0.45, 0, 0.2, 0.36, GREENS[0]); b.cone(0, 0.68, 0, 0.13, 0.28, GREENS[1]); }
     else { const g = blossom ? '#f2a99a' : GREENS[Math.floor(rng() * 4)]; b.sph(0, 0.45, 0, 0.28, g); b.sph(0.1, 0.68, 0.03, 0.2, mix(g, '#ffffff', 0.15)); }
   });
   const FL = [C.coral, C.lilac, C.cream, C.mustard, '#e59aa8'];
-  place(3, 1.0, 1.88, 0.1, (x, z) => {
+  place(9, 1.0, 1.88, 0.1, (x, z) => {
     const b = loc(x, z, 0, 1);
     b.sph(0, 0.02, 0, 0.07, C.sage, 'clay', 0.5); b.sph(0, 0.07, 0, 0.045, FL[Math.floor(rng() * FL.length)]);
   });
-  // 庭院閱讀桌：開書、深綠小燈與兩張椅子，取代遊樂場彩旗。
-  const rb=loc(0,1.25,0,1);
-  rb.box(0,.42,0,1.1,.07,.48,C.wood);
-  for(const x of [-.44,.44])for(const z of [-.15,.15])rb.box(x,0,z,.055,.42,.055,C.woodD);
-  rb.slab(-.1,.5,.015,.23,.018,.25,C.cream,0,0,.08);rb.slab(.13,.5,.015,.23,.018,.25,C.cream,0,0,-.08);
-  rb.cyl(.4,.49,-.1,.065,.025,C.gold);rb.cyl(.4,.515,-.1,.013,.18,C.gold);rb.sph(.4,.72,-.1,.085,'#465e4a','clay',.48);
-  for(const x of [-.35,.35]){rb.box(x,.23,.42,.3,.06,.28,'#738571');rb.box(x,.28,.55,.3,.23,.035,'#738571');for(const lx of [-.1,.1])rb.box(x+lx,0,.42,.035,.23,.035,C.woodD);}
+  // 彩旗
+  const fb = loc(0, 1.9, 0, .8), fc = [C.coral, C.cream, C.lilac, ic];
+  fb.cyl(-0.95, 0, 0, 0.025, 0.58, C.dark); fb.cyl(0.95, 0, 0, 0.025, 0.58, C.dark);
+  for (let k = 1; k < 9; k++) {
+    const u = k / 9, y = 0.56 - 0.13 * 4 * u * (1 - u);
+    fb.part('prism', 'clay', -0.95 + u * 1.9, y, 0, 0.09, 0.11, 0.02, 0, fc[k % 4], Math.PI);
+  }
+  occ.push({x: 0, z: 1.2, r: 0.1});
   return {bridges, ends};
 }
 
@@ -382,7 +380,7 @@ export async function createIslandScene({container, data, onSelect, onError, onF
         float sh=1.-smoothstep(uRadius*.82,uRadius+1.4,h), r=length(vXZ-uMid), t=uTime;
         vec3 col=mix(uDeep,uShallow,max(sh,.35*(1.-smoothstep(5.,30.,r))));
         float w=sin(vXZ.x*1.3+t*.7+sin(vXZ.y*.8+t*.5)*1.4)+sin(vXZ.y*1.7-t*.6+sin(vXZ.x*.7-t*.4)*1.2);
-        col=mix(col,vec3(1.),smoothstep(1.55,1.95,w)*.08);
+        col=mix(col,vec3(1.),smoothstep(1.55,1.95,w)*.16);
         float f=(1.-smoothstep(0.,.09,abs(h-(uRadius*.94+.04*sin(t*1.3+vXZ.x*3.+vXZ.y*2.)))))*.75
                +(1.-smoothstep(0.,.05,abs(h-uRadius*1.08-.05*sin(t*1.1+vXZ.y*2.))))*.3*sh;
         col=mix(col,uFoam,clamp(f,0.,1.));
@@ -412,7 +410,7 @@ export async function createIslandScene({container, data, onSelect, onError, onF
     g.position.copy(g.userData.base); g.traverse((o) => { o.castShadow = true; }); scene.add(g); boats.push(g);
   });
   const cloudMat = stdMat('#ffffff', {transparent: true, opacity: 0.85, depthWrite: false}), clouds = [];
-  for (let k = 0; k < 3; k++) {
+  for (let k = 0; k < 5; k++) {
     const g = new THREE.Group(), back = k < 3;
     [[0, 0, 0, 1.1], [1, 0.1, 0.2, 0.85], [-1, 0, -0.1, 0.8], [0.3, 0.45, 0, 0.7]].forEach(([x, y, z, s]) => { const m = new THREE.Mesh(sphG, cloudMat); m.scale.set(s, s * 0.6, s * 0.8); m.position.set(x * 1.1, y, z); g.add(m); });
     g.position.set(center.x + (k * 9.3 % 36) - 18, back ? 6 + (k % 2) : 3.6, center.z + (back ? -(extentR + 5 + k) : extentR + 4 + k)); g.scale.setScalar(1 + (k % 3) * 0.35);
@@ -496,7 +494,7 @@ export async function createIslandScene({container, data, onSelect, onError, onF
       if(w<700 && arriving){const start=islands[byId.get('chapters') ?? 0];const distance=Math.max(16,(R+.5)/(Math.tan(THREE.MathUtils.degToRad(camera.fov/2))*(w/h)*.93)+2);applyView(new THREE.Vector3(start.x,1.1,start.z),DIR0,distance);}
       else applyView(home.target, DIR0, home.dist);
     }
-    labels.forEach((l,i) => { l.textContent = w < 600 ? String(i+1).padStart(2,'0') : islands[i].title; l.style.fontSize = w < 600 ? '12px' : '13px'; });
+    labels.forEach((l,i) => { l.textContent = islands[i].title; l.style.fontSize = w < 600 ? '11px' : '13px'; });
     requestRender();
   }
 

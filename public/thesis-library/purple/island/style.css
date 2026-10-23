@@ -29,10 +29,7 @@ body.view-expanded{overflow:hidden}
 
 .skip:not(:focus){clip-path:inset(50%)}
 
-/* Reading-library palette: warm paper, walnut, sage and quiet brass details. */
-:root{--ink:#364338;--muted:#747769;--paper:#faf7ee;--line:#ddd8c9;--coral:#977551;--sage:#ede9dc}
-.world-card{background:radial-gradient(ellipse at 45% 25%,#f3ecd9 0%,#dbe5d8 50%,#adcac0 100%);border-color:#b9c9b8}
-.intro h1{letter-spacing:3px}.intro .eyebrow{color:#8b7657}
-.focus-card{background:#eee8d8;border:1px solid #e2d7c1}.island-tab{background:#fffdf6}
-.island-tab .island-icon{border-radius:5px}.island-tab small{color:#8b7657}
-.world-toolbar .segmented,.view-tools,#scene-controls>div{background:#fffcf0ed}
+/* Keep the actual research contents visible, not only five numbered tabs. */
+.island-tab{align-items:flex-start}.island-tab>span:last-child{min-width:0}.island-contents{display:block;font-size:12px;line-height:1.65;margin-top:8px;font-weight:400;overflow-wrap:anywhere}
+@media(max-width:1000px){.island-nav{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:700px){.island-nav{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.island-tab{flex-direction:row;text-align:left;padding:14px 12px;gap:9px}.island-tab strong{font-size:15px}.island-tab small{font-size:10px}.island-contents{font-size:12px}.island-tab:last-child{grid-column:1/-1}}
