@@ -24,16 +24,19 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      # 雙路徑檢索台：依 tools/dual-search/sources 重抓法規、切 PDF、算向量、打包成 public/thesis-library/tools/dual-search/index.html
-      # 失敗時不擋整站部署，沿用 repo 裡已有的 index.html
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Build dual-search corpus
-        continue-on-error: true
-        run: |
-          pip install pymupdf
-          cd tools/dual-search && npm ci && python3 pipeline.py && node embed_build.mjs
+      # 雙路徑檢索台（綠區歷史）：2026-10-23 起停止自動重抓／重算。
+      # 原因：檢索台屬 10/22 以前的綠區研究設計，已凍結為歷史；每次部署重算會悄悄改變歷史頁面。
+      # 現在直接沿用 repo 裡已有的 public/thesis-library/tools/dual-search/index.html，整站部署照常。
+      # 日後若真的要手動重建：本機在 tools/dual-search 跑 pipeline.py 與 embed_build.mjs（template.html 已含綠區橫幅），再 commit 產出的 index.html。
+      # 還原自動重建：把下面註解掉的步驟取消註解即可。
+      # - uses: actions/setup-python@v5
+      #   with:
+      #     python-version: '3.12'
+      # - name: Build dual-search corpus
+      #   continue-on-error: true
+      #   run: |
+      #     pip install pymupdf
+      #     cd tools/dual-search && npm ci && python3 pipeline.py && node embed_build.mjs
       - run: npm run build
       - uses: actions/upload-pages-artifact@v3
         with:

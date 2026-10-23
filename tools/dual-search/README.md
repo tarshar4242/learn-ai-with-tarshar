@@ -1,3 +1,5 @@
+> 綠區歷史工具：2026-10-23 起已停用網站部署時的自動重抓與向量重算。以下自動建置描述保留為歷史；現行紫區另見網站 thesis-library/purple/。
+
 # 雙路徑檢索台｜研究工具說明
 
 網址：https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/tools/dual-search/
