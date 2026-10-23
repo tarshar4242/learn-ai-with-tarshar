@@ -14,7 +14,7 @@ function renderList(query='') {
  $('list-content').replaceChildren();let found=0;const q=query.trim().toLocaleLowerCase();
  DATA.islands.forEach((island,index)=>{
   const matches=island.items.filter(item=>[island.title,item.title,item.description,item.status].join(' ').toLocaleLowerCase().includes(q));if(!matches.length)return;
-  const section=el('article',undefined,'list-island');section.append(el('p',`ISLAND ${String(index+1).padStart(2,'0')}`,'eyebrow'),el('h2',island.icon+' '+island.title),el('p',island.summary));
+  const section=el('article',undefined,'list-island');section.append(el('p',`ROOM ${String(index+1).padStart(2,'0')}`,'eyebrow'),el('h2',island.icon+' '+island.title),el('p',island.summary));
   matches.forEach(item=>{const d=el('details');d.open=Boolean(q);d.append(el('summary',item.title),itemCard(item));section.append(d);found++;});$('list-content').append(section);
  });if(!found)$('list-content').append(el('p','沒有符合的資料。試試「第三章」「文獻」或「評分」。'));
 }
@@ -41,18 +41,18 @@ function failScene(error) {
  console.warn('Island scene unavailable:',error?.name||'WebGL unavailable');
 }
 function statusInfo(){
- const body=$('status-body');body.replaceChildren();body.append(el('p',DATA.snapshotNote),el('p','五島中的文字來自紫區研究資料；書屋、橋、日夜與虛線是視覺示意。此頁不呼叫語言模型，不會啟動任務。'));
+ const body=$('status-body');body.replaceChildren();body.append(el('p',DATA.snapshotNote),el('p','五館中的文字來自紫區研究資料；書館、閱讀庭院、橋、日夜與虛線是視覺示意。此頁不呼叫語言模型，不會啟動任務。'));
  const dl=el('dl');for(const [key,value]of [['快照更新',new Date(DATA.generatedAt).toLocaleString('zh-TW',{timeZone:'Asia/Taipei'})+'（台北時間）'],['研究來源版本',DATA.sourceCommits.research],['平台來源版本',DATA.sourceCommits.platform],['現有實驗模型',DATA.runtimeModel.embedding+' / '+DATA.runtimeModel.generation],['模型狀態',DATA.runtimeModel.status],['真實執行事件',DATA.events.length?'已有公開刪敏事件':'尚未接入；沒有即時任務紀錄']])dl.append(el('dt',key),el('dd',value));body.append(dl,link('查看設計與模型分工 ↗',DATA.planUrl));
 }
 function motionPref(){if(reduced.matches){$('motion').setAttribute('aria-pressed','false');scene?.setMotion(false);}$('motion').disabled=reduced.matches;$('motion').title=reduced.matches?'依系統「減少動態效果」設定，動畫已停用':'只播放場景動畫，不執行 AI 任務';}
 async function init(){
  try {
-  const response=await fetch('./data.json?v=space-1023');if(!response.ok)throw new Error('Snapshot unavailable');DATA=await response.json();
+  const response=await fetch('./data.json?v=library-1023');if(!response.ok)throw new Error('Snapshot unavailable');DATA=await response.json();
   if(DATA.schemaVersion!=='1.0.0'||!Array.isArray(DATA.islands))throw new Error('Unsupported snapshot');
   $('brand-logo').src=safeUrl(DATA.brand.logoUrl);$('brand-logo').alt=DATA.brand.logoAlt;$('motion').setAttribute('aria-pressed',String(DATA.avatar.autoWalk&&!reduced.matches));$('history-link').href=safeUrl(DATA.historyUrl);$('focus').textContent=DATA.currentFocus;$('focus-status').textContent=DATA.currentStatus;$('next-action').textContent=DATA.nextAction;$('continue').href=safeUrl(DATA.primaryUrl);$('continue').firstChild.textContent=DATA.primaryLabel+' ';
   const age=(Date.now()-Date.parse(DATA.generatedAt))/3600000;const date=new Date(DATA.generatedAt).toLocaleDateString('zh-TW',{timeZone:'Asia/Taipei'});
   $('snapshot-text').textContent=`${date} 核對快照${age>24?' · 已超過 24 小時，非即時':''}`;
-  DATA.islands.forEach((island,index)=>{const b=el('button',undefined,'island-tab');b.dataset.id=island.id;b.style.setProperty('--island-color',island.color);b.setAttribute('aria-pressed','false');const text=el('span');text.append(el('small','ISLAND '+String(index+1).padStart(2,'0')),el('strong',island.title));b.append(el('span',island.icon,'island-icon'),text);b.addEventListener('click',()=>select(island.id));$('island-nav').append(b);});
+  DATA.islands.forEach((island,index)=>{const b=el('button',undefined,'island-tab');b.dataset.id=island.id;b.style.setProperty('--island-color',island.color);b.setAttribute('aria-pressed','false');const text=el('span');text.append(el('small','ROOM '+String(index+1).padStart(2,'0')),el('strong',island.title));b.append(el('span',island.icon,'island-icon'),text);b.addEventListener('click',()=>select(island.id));$('island-nav').append(b);});
   renderList();statusInfo();motionPref();
   $('search').addEventListener('input',e=>renderList(e.target.value));$('list-tab').addEventListener('click',()=>setMode('list'));$('map-tab').addEventListener('click',()=>setMode('map'));$('reset').addEventListener('click',()=>{scene?.reset();selected=null;for(const b of $('island-nav').children)b.setAttribute('aria-pressed','false');});
   $('expand-view').addEventListener('click',()=>expandView(!expanded));$('zoom-in').addEventListener('click',()=>scene?.zoom(.8));$('zoom-out').addEventListener('click',()=>scene?.zoom(1.25));
@@ -64,7 +64,7 @@ async function init(){
   reduced.addEventListener('change',motionPref);
   if(saved('thesis-island-mode')==='list')setMode('list');
   // The list is built first. All WebGL/module errors are contained below.
-  try { const {createIslandScene}=await import('./scene.js?v=space-1023');scene=await createIslandScene({container:$('scene'),data:DATA,onSelect:select,onError:failScene,onFollowChange:value=>{$('follow-walker').setAttribute('aria-pressed',String(value));document.querySelector('.world-card').classList.toggle('following',value);}});$('scene-loading').hidden=true;scene.setVisible(mode==='map');motionPref(); }
+  try { const {createIslandScene}=await import('./scene.js?v=library-1023');scene=await createIslandScene({container:$('scene'),data:DATA,onSelect:select,onError:failScene,onFollowChange:value=>{$('follow-walker').setAttribute('aria-pressed',String(value));document.querySelector('.world-card').classList.toggle('following',value);}});$('scene-loading').hidden=true;scene.setVisible(mode==='map');motionPref(); }
   catch(error){failScene(error);}
   if(!saved('thesis-island-welcome')){$('help-open').classList.add('welcome-hint');$('map-hint').textContent='按「展開」自在逛島 · 按 ＋ 看細節';save('thesis-island-welcome','shown');}
   // Read-only diagnostics for reproducible browser checks. No query engine calls.

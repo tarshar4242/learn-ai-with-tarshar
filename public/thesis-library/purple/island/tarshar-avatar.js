@@ -116,7 +116,7 @@ function buildHead() {
     sph(L, C.skinDeep, d.p, [0.006, 0.006, 0.004], {q: d.q, w: 6, h: 4});
   }
 
-  // 一整片順髮外殼：自然分線、兩側落到肩膀，只有髮尾輕彎。
+  // 一整片順髮外殼；依本人要求移除兩條獨立垂髮，髮量只留在後側。
   // 不用髮絲管線、頂部球塊或珠串捲髮，保持手機近看輪廓乾淨。
   const hairPositions = [], hairIndices = [], hairColors = [];
   const hairSegments = 64, hairRows = 32;
@@ -155,36 +155,6 @@ function buildHead() {
   for (const i of hairIndices) colorValues.push(...hairColors.slice(i * 3, i * 3 + 3));
   smoothHair.setAttribute('color', new THREE.Float32BufferAttribute(colorValues, 3));
   L.push(smoothHair); hair.dispose();
-  // 兩片寬而扁的側髮落到肩旁，避免從正面看成短髮帽；只在尾端輕彎。
-  for (const side of [-1, 1]) {
-    const curve = new THREE.CatmullRomCurve3([
-      new THREE.Vector3(side * .17, .97, .065),
-      new THREE.Vector3(side * .223, .86, .075),
-      new THREE.Vector3(side * .232, .73, .09),
-      new THREE.Vector3(side * .218, .61, .105),
-      new THREE.Vector3(side * .233, .54, .075),
-    ]);
-    const vertices = [], indices = [], rows = 28, columns = 12;
-    for (let row = 0; row <= rows; row++) {
-      const t = row / rows, center = curve.getPoint(t), tangent = curve.getTangent(t);
-      const across = new THREE.Vector3(tangent.y, -tangent.x, 0).normalize();
-      const taper = Math.pow(Math.sin(Math.PI * t), .32);
-      for (let col = 0; col <= columns; col++) {
-        const angle = col / columns * Math.PI * 2;
-        vertices.push(center.x + across.x * Math.cos(angle) * .042 * taper,
-          center.y + across.y * Math.cos(angle) * .042 * taper,
-          center.z + Math.sin(angle) * .024 * taper);
-        if (row < rows && col < columns) {
-          const i = row * (columns + 1) + col, j = i + columns + 1;
-          indices.push(i, j, i + 1, j, j + 1, i + 1);
-        }
-      }
-    }
-    const lock = new THREE.BufferGeometry();
-    lock.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
-    lock.setIndex(indices); lock.computeVertexNormals();
-    put(L, lock, C.hair);
-  }
   // 耳朵（藏在髮下，只露一點）
   for (const sx of [-1, 1]) sph(L, C.skin, [sx * 0.213, 0.82, 0.0], [0.014, 0.03, 0.022], {w: 6, h: 6});
 
