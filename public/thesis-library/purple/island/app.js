@@ -8,6 +8,7 @@ function safeUrl(value) { try { const url = new URL(value, location.href); retur
 function link(label,url,cls) { const a=el('a',label,cls); const href=safeUrl(url); if(href) {a.href=href;a.target='_blank';a.rel='noopener noreferrer';} else {a.textContent+=' · 來源待補';} return a; }
 function itemCard(item) {
  const node=el('div',undefined,'item-card'); node.append(el('span',item.status,'status-chip'),el('p',item.description),el('p','下一步｜'+item.nextAction,'next'),link(item.sourceLabel+' ↗',item.sourceUrl));
+ for(const related of item.relatedLinks||[])node.append(link(related.label+' ↗',related.url,'related-source'));
  const evidence=el('details',undefined,'source-details');evidence.append(el('summary','資料來源'),el('p',`更新：${item.updatedAt} · 來源版本 ${item.sourceRevision.slice(0,12)}`,'source-meta'),el('p',item.verifiedBy,'source-meta'));node.append(evidence);return node;
 }
 function renderList(query='') {
@@ -29,7 +30,7 @@ function setMode(value) {
 function expandView(value) {
  expanded=value;document.querySelector('.world-card').classList.toggle('expanded',value);document.body.classList.toggle('view-expanded',value);
  $('expand-view').setAttribute('aria-pressed',String(value));$('expand-view').setAttribute('aria-label',value?'收起逛園區畫面':'展開逛園區');$('expand-view').firstChild.textContent=value?'⤡':'⤢';$('expand-view').querySelector('span').textContent=value?'收起':'展開';
- for(const node of document.querySelectorAll('.skip,.site-header,.intro,.guide-launch,.fair-program,.below-map,footer'))node.inert=value;
+ for(const node of document.querySelectorAll('.skip,.site-header,.intro,.research-entry,.guide-launch,.fair-program,.below-map,footer'))node.inert=value;
  if(!value)$('expand-view').focus({preventScroll:true});
 }
 function updateSelection(id) {
@@ -101,10 +102,11 @@ function statusInfo(){
 function motionPref(){if(reduced.matches){$('motion').setAttribute('aria-pressed','false');$('motion').firstChild.textContent='▷ ';scene?.setMotion(false);}$('motion').disabled=reduced.matches;$('motion').title=reduced.matches?'依系統「減少動態效果」設定，動畫已停用':'只播放場景動畫，不執行 AI 任務';}
 async function init(){
  try {
-  const response=await fetch('./data.json?v=guide-1026');if(!response.ok)throw new Error('Snapshot unavailable');DATA=await response.json();
+  const response=await fetch('./data.json?v=research-sync-1026',{cache:'no-cache'});if(!response.ok)throw new Error('Snapshot unavailable');DATA=await response.json();
   if(DATA.schemaVersion!=='1.0.0'||!Array.isArray(DATA.islands))throw new Error('Unsupported snapshot');
   $('brand-logo').src=safeUrl(DATA.brand.logoUrl);$('brand-logo').alt=DATA.brand.logoAlt;$('motion').setAttribute('aria-pressed',String(DATA.avatar.autoWalk&&!reduced.matches));$('history-link').href=safeUrl(DATA.historyUrl);$('focus').textContent=DATA.currentFocus;$('focus-status').textContent=DATA.currentStatus;$('next-action').textContent=DATA.nextAction;$('continue').href=safeUrl(DATA.primaryUrl);$('continue').firstChild.textContent=DATA.primaryLabel+' ';
   const age=(Date.now()-Date.parse(DATA.generatedAt))/3600000;const date=new Date(DATA.generatedAt).toLocaleDateString('zh-TW',{timeZone:'Asia/Taipei'});
+  const entries=$('research-entry-links');entries.replaceChildren();for(const entry of DATA.researchLinks||[])entries.append(link(entry.label+' ↗',entry.url));
   $('snapshot-text').textContent=`${date} 核對快照${age>24?' · 已超過 24 小時，非即時':''}`;
   DATA.islands.forEach((island,index)=>{
    const group=el('article',undefined,'fair-zone');group.style.setProperty('--island-color',island.color);
