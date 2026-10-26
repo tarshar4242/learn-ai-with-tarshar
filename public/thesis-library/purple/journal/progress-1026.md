@@ -124,3 +124,14 @@ Tarshar 同意依審查與討論修訂各章，但明確要求原論文題目不
 - [現行全文 PDF](https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/purple/materials/thesis.pdf)
 - [Meeting 討論單](https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/purple/materials/meeting-1026.pdf)
 - [Drive 全文與討論單](https://drive.google.com/drive/folders/1e1c1oqhetrp6GGqgQ6ZvBDC_s9J5MASA)
+
+
+## 2026-10-26｜老師排版寄送版修正
+
+Tarshar 指出 meeting 文件要寄給老師，必須依上次提供的排版教材；工作稿不是例外。先前只在 Word 指定字型、PDF卻用替代字型，且討論單與自動目錄仍有落差，不應稱已符合。此次重讀八節原始 PPTX 與嵌圖，校正封面對齊、空公式目錄及浮水印等過度推論。
+
+完成：全文59頁、討論單4頁，Word／PDF全黑、標楷體＋Times New Roman、自動章節與目錄、圖表交互參照、分節頁碼。63頁逐頁檢查，57個目錄位置、11個圖表標號核對；轉檔章內表號重設問題已修正。Word桌面因鎖定未開啟，不能宣稱桌面測試完成。原題、SECI C與RQ1/RQ2及研究待決事項保留。原始41份會議包與舊全文保留。
+
+[新版與驗收](https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/purple/meeting-1026/teacher-format/)｜[Drive寄老師版](https://drive.google.com/drive/folders/1mtbVZqFOaB2NRrZ3JdDD8klQiSHQOUbH)。新版本同步共同腦、RAY、網站與Drive；未代寄郵件。正文12點、1.5倍行距與頁邊界是預設，仍與老師明文區分。
+
+下一步：由Tarshar帶此版給教授討論題名與方法；依實際決議更新，不把AI排版驗收視為研究核准。知臨。

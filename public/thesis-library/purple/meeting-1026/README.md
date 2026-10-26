@@ -1,3 +1,5 @@
+> **★寄老師請用 10/26 老師排版修正版：[59 頁全文與 4 頁討論單](https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/purple/meeting-1026/teacher-format/)｜[Drive 寄送版](https://drive.google.com/drive/folders/1mtbVZqFOaB2NRrZ3JdDD8klQiSHQOUbH)。** 舊版與原始審查證據保留為歷史，不作本次寄送主文。
+
 # ★先讀｜論文 Meeting 資料包
 
 **版本：2026-10-26 修訂版｜會議日期：待定｜狀態：供教授討論，尚未核定。**
