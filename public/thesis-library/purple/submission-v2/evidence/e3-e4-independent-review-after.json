@@ -1,0 +1,649 @@
+{
+  "review": "E3/E4 read-only independent regression after fixes",
+  "paid_api_calls": 0,
+  "before_evidence_sha256": "8e73aa8bdbce89a2a58cc048bcc6b42318c4ec86f136aa8578b525ca7d73a01f",
+  "after_evidence_sha256": "e70e8e1d79e7c9d39c676cfe9432835d4a6ab32094c434f838738be5bbc9ca63",
+  "reviewed_file_sha256": {
+    "app/answer_checks.py": "7ad083d8bb904b0a4533678a09e1efa00927999e46a8615dae0bc946c9a4dd9d",
+    "app/engine.py": "5146e34f63c6d2599fe06cd0f6497382f30d93ca184872b4292e2a1359b77d15",
+    "static/app.js": "c713618c968bf65c7300b5ecebb24e39664384d01d310f76246f3ca62455699e",
+    "tests/test_answer_checks.py": "64c654d4481b66a34839256b9c73952a2f8393be7fcd16d1eb6c5a2e2e9ca873"
+  },
+  "targeted_pytest": "21 passed in 0.06s",
+  "cases": [
+    {
+      "id": "equal_decimal",
+      "before": {
+        "answer": "10.0日以上",
+        "source": "10日以上",
+        "answer_tokens": [
+          {
+            "raw": "10.0日以上",
+            "key": [
+              "",
+              "1E+1",
+              "日",
+              "以上"
+            ]
+          }
+        ],
+        "source_tokens": [
+          {
+            "raw": "10日以上",
+            "key": [
+              "",
+              "10",
+              "日",
+              "以上"
+            ]
+          }
+        ],
+        "mismatches": [
+          {
+            "kind": "quantity_boundary",
+            "raw": "10.0日以上",
+            "key": [
+              "",
+              "1E+1",
+              "日",
+              "以上"
+            ]
+          }
+        ]
+      },
+      "after": {
+        "answer": "10.0日以上",
+        "source": "10日以上",
+        "answer_tokens": [
+          {
+            "raw": "10.0日以上",
+            "key": [
+              "",
+              "10",
+              "日",
+              "以上"
+            ]
+          }
+        ],
+        "source_tokens": [
+          {
+            "raw": "10日以上",
+            "key": [
+              "",
+              "10",
+              "日",
+              "以上"
+            ]
+          }
+        ],
+        "mismatches": []
+      },
+      "verdict": "previously observed issue corrected"
+    },
+    {
+      "id": "thousands_separator",
+      "before": {
+        "answer": "1,000元以上",
+        "source": "0元以上",
+        "answer_tokens": [
+          {
+            "raw": "000元以上",
+            "key": [
+              "",
+              "0",
+              "元",
+              "以上"
+            ]
+          }
+        ],
+        "source_tokens": [
+          {
+            "raw": "0元以上",
+            "key": [
+              "",
+              "0",
+              "元",
+              "以上"
+            ]
+          }
+        ],
+        "mismatches": []
+      },
+      "after": {
+        "answer": "1,000元以上",
+        "source": "0元以上",
+        "answer_tokens": [
+          {
+            "raw": "1,000元以上",
+            "key": [
+              "",
+              "1000",
+              "元",
+              "以上"
+            ]
+          }
+        ],
+        "source_tokens": [
+          {
+            "raw": "0元以上",
+            "key": [
+              "",
+              "0",
+              "元",
+              "以上"
+            ]
+          }
+        ],
+        "mismatches": [
+          {
+            "kind": "quantity_boundary",
+            "raw": "1,000元以上",
+            "key": [
+              "",
+              "1000",
+              "元",
+              "以上"
+            ]
+          }
+        ]
+      },
+      "verdict": "previously observed issue corrected"
+    },
+    {
+      "id": "negative_modal",
+      "before": {
+        "answer": "不應提出申請",
+        "source": "應提出申請",
+        "answer_tokens": [],
+        "source_tokens": [],
+        "mismatches": []
+      },
+      "after": {
+        "answer": "不應提出申請",
+        "source": "應提出申請",
+        "answer_tokens": [],
+        "source_tokens": [],
+        "mismatches": [
+          {
+            "kind": "modal",
+            "raw": "不應"
+          }
+        ]
+      },
+      "verdict": "previously observed issue corrected"
+    },
+    {
+      "id": "less_than_boundary",
+      "before": {
+        "answer": "六個月",
+        "source": "未達六個月",
+        "answer_tokens": [
+          {
+            "raw": "六個月",
+            "key": [
+              "",
+              "6",
+              "個月",
+              ""
+            ]
+          }
+        ],
+        "source_tokens": [
+          {
+            "raw": "六個月",
+            "key": [
+              "",
+              "6",
+              "個月",
+              ""
+            ]
+          }
+        ],
+        "mismatches": []
+      },
+      "after": {
+        "answer": "六個月",
+        "source": "未達六個月",
+        "answer_tokens": [
+          {
+            "raw": "六個月",
+            "key": [
+              "",
+              "6",
+              "個月",
+              ""
+            ]
+          }
+        ],
+        "source_tokens": [
+          {
+            "raw": "未達六個月",
+            "key": [
+              "未達",
+              "6",
+              "個月",
+              ""
+            ]
+          }
+        ],
+        "mismatches": [
+          {
+            "kind": "quantity_boundary",
+            "raw": "六個月",
+            "key": [
+              "",
+              "6",
+              "個月",
+              ""
+            ]
+          }
+        ]
+      },
+      "verdict": "previously observed issue corrected"
+    },
+    {
+      "id": "display_point_renumbering",
+      "before": {
+        "dropped_point_renumbering": {
+          "warnings": [
+            "第 2 點：原文片段不符，需人工核對。",
+            "第 2 點：數字限定詞或應／得／不得用語與所引原文未對上，需人工核對。",
+            "模型引用了不在本輪證據中的來源（1 個），相關要點已移除。"
+          ],
+          "citations": [
+            {
+              "id": "good",
+              "law": "測試",
+              "no": "第1條",
+              "title": "測試 第1條",
+              "type": null,
+              "text": "三十日以上，應提出申請。",
+              "url": null,
+              "status": "版本待查",
+              "effective_from": null,
+              "superseded_by": null,
+              "validity_note": "",
+              "validity_sources": [],
+              "ref": 1
+            }
+          ],
+          "points": [
+            {
+              "text": "超過30日應提出申請",
+              "citations": [
+                "good"
+              ],
+              "quote": "不在原文",
+              "quote_check": {
+                "point": 2,
+                "matched": false,
+                "matching_ids": [],
+                "reason": "not_substring_of_cited_evidence"
+              },
+              "boundary_mismatch": [
+                {
+                  "kind": "quantity_boundary",
+                  "raw": "超過30日",
+                  "key": [
+                    "超過",
+                    "30",
+                    "日",
+                    ""
+                  ]
+                }
+              ],
+              "warnings": [
+                "原文片段不符，需人工核對",
+                "數字限定詞或應／得／不得用語與所引原文未對上，需人工核對"
+              ],
+              "refs": [
+                1
+              ]
+            }
+          ],
+          "answer": "1. 超過30日應提出申請 [1]",
+          "status": "answered"
+        },
+        "trace": {
+          "model_status": "answered",
+          "validation": {
+            "points_in": 2,
+            "points_kept": 1,
+            "points_dropped": 1,
+            "invalid_citations": [
+              "fake"
+            ]
+          },
+          "quote_checks": [
+            {
+              "point": 2,
+              "matched": false,
+              "matching_ids": [],
+              "reason": "not_substring_of_cited_evidence"
+            }
+          ],
+          "boundary_mismatch": [
+            {
+              "point": 2,
+              "kind": "quantity_boundary",
+              "raw": "超過30日",
+              "key": [
+                "超過",
+                "30",
+                "日",
+                ""
+              ]
+            }
+          ]
+        }
+      },
+      "after": {
+        "dropped_point_renumbering": {
+          "warnings": [
+            "第 1 點：原文片段不符，需人工核對。",
+            "第 1 點：數字限定詞或應／得／不得用語與所引原文未對上，需人工核對。",
+            "模型引用了不在本輪證據中的來源（1 個），相關要點已移除。"
+          ],
+          "citations": [
+            {
+              "id": "good",
+              "law": "測試",
+              "no": "第1條",
+              "title": "測試 第1條",
+              "type": null,
+              "text": "三十日以上，應提出申請。",
+              "url": null,
+              "status": "版本待查",
+              "effective_from": null,
+              "superseded_by": null,
+              "validity_note": "",
+              "validity_sources": [],
+              "ref": 1
+            }
+          ],
+          "points": [
+            {
+              "text": "超過30日應提出申請",
+              "citations": [
+                "good"
+              ],
+              "quote": "不在原文",
+              "quote_check": {
+                "point": 1,
+                "original_point": 2,
+                "matched": false,
+                "matching_ids": [],
+                "reason": "not_substring_of_cited_evidence"
+              },
+              "boundary_mismatch": [
+                {
+                  "kind": "quantity_boundary",
+                  "raw": "超過30日",
+                  "key": [
+                    "超過",
+                    "30",
+                    "日",
+                    ""
+                  ]
+                }
+              ],
+              "warnings": [
+                "原文片段不符，需人工核對",
+                "數字限定詞或應／得／不得用語與所引原文未對上，需人工核對"
+              ],
+              "refs": [
+                1
+              ]
+            }
+          ],
+          "answer": "1. 超過30日應提出申請 [1]",
+          "status": "answered"
+        },
+        "trace": {
+          "model_status": "answered",
+          "validation": {
+            "points_in": 2,
+            "points_kept": 1,
+            "points_dropped": 1,
+            "invalid_citations": [
+              "fake"
+            ]
+          },
+          "quote_checks": [
+            {
+              "point": 1,
+              "original_point": 2,
+              "matched": false,
+              "matching_ids": [],
+              "reason": "not_substring_of_cited_evidence"
+            }
+          ],
+          "boundary_mismatch": [
+            {
+              "point": 1,
+              "original_point": 2,
+              "kind": "quantity_boundary",
+              "raw": "超過30日",
+              "key": [
+                "超過",
+                "30",
+                "日",
+                ""
+              ]
+            }
+          ]
+        }
+      },
+      "verdict": "previously observed issue corrected"
+    }
+  ],
+  "preserved_checks": [
+    {
+      "id": "chinese_arabic_equal",
+      "before": {
+        "answer": "30日以上",
+        "source": "三十日以上",
+        "answer_tokens": [
+          {
+            "raw": "30日以上",
+            "key": [
+              "",
+              "30",
+              "日",
+              "以上"
+            ]
+          }
+        ],
+        "source_tokens": [
+          {
+            "raw": "三十日以上",
+            "key": [
+              "",
+              "30",
+              "日",
+              "以上"
+            ]
+          }
+        ],
+        "mismatches": []
+      },
+      "after": {
+        "answer": "30日以上",
+        "source": "三十日以上",
+        "answer_tokens": [
+          {
+            "raw": "30日以上",
+            "key": [
+              "",
+              "30",
+              "日",
+              "以上"
+            ]
+          }
+        ],
+        "source_tokens": [
+          {
+            "raw": "三十日以上",
+            "key": [
+              "",
+              "30",
+              "日",
+              "以上"
+            ]
+          }
+        ],
+        "mismatches": []
+      }
+    },
+    {
+      "id": "quote_beyond_evidence_limit",
+      "before": {
+        "quote_beyond_evidence": {
+          "warnings": [
+            "第 1 點：原文片段不符，需人工核對。"
+          ],
+          "citations": [
+            {
+              "id": "good",
+              "law": "測試",
+              "no": "第1條",
+              "title": "測試 第1條",
+              "type": null,
+              "text": "甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲禁止獨特尾段",
+              "url": null,
+              "status": "版本待查",
+              "effective_from": null,
+              "superseded_by": null,
+              "validity_note": "",
+              "validity_sources": [],
+              "ref": 1
+            }
+          ],
+          "points": [
+            {
+              "text": "核對尾段",
+              "citations": [
+                "good"
+              ],
+              "quote": "禁止獨特尾段",
+              "quote_check": {
+                "point": 1,
+                "matched": false,
+                "matching_ids": [],
+                "reason": "not_substring_of_cited_evidence"
+              },
+              "boundary_mismatch": [],
+              "warnings": [
+                "原文片段不符，需人工核對"
+              ],
+              "refs": [
+                1
+              ]
+            }
+          ],
+          "answer": "1. 核對尾段 [1]",
+          "status": "answered"
+        },
+        "trace": {
+          "model_status": "answered",
+          "validation": {
+            "points_in": 1,
+            "points_kept": 1,
+            "points_dropped": 0,
+            "invalid_citations": []
+          },
+          "quote_checks": [
+            {
+              "point": 1,
+              "matched": false,
+              "matching_ids": [],
+              "reason": "not_substring_of_cited_evidence"
+            }
+          ],
+          "boundary_mismatch": []
+        }
+      },
+      "after": {
+        "quote_beyond_evidence": {
+          "warnings": [
+            "第 1 點：原文片段不符，需人工核對。"
+          ],
+          "citations": [
+            {
+              "id": "good",
+              "law": "測試",
+              "no": "第1條",
+              "title": "測試 第1條",
+              "type": null,
+              "text": "甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲禁止獨特尾段",
+              "url": null,
+              "status": "版本待查",
+              "effective_from": null,
+              "superseded_by": null,
+              "validity_note": "",
+              "validity_sources": [],
+              "ref": 1
+            }
+          ],
+          "points": [
+            {
+              "text": "核對尾段",
+              "citations": [
+                "good"
+              ],
+              "quote": "禁止獨特尾段",
+              "quote_check": {
+                "point": 1,
+                "original_point": 1,
+                "matched": false,
+                "matching_ids": [],
+                "reason": "not_substring_of_cited_evidence"
+              },
+              "boundary_mismatch": [],
+              "warnings": [
+                "原文片段不符，需人工核對"
+              ],
+              "refs": [
+                1
+              ]
+            }
+          ],
+          "answer": "1. 核對尾段 [1]",
+          "status": "answered"
+        },
+        "trace": {
+          "model_status": "answered",
+          "validation": {
+            "points_in": 1,
+            "points_kept": 1,
+            "points_dropped": 0,
+            "invalid_citations": []
+          },
+          "quote_checks": [
+            {
+              "point": 1,
+              "original_point": 1,
+              "matched": false,
+              "matching_ids": [],
+              "reason": "not_substring_of_cited_evidence"
+            }
+          ],
+          "boundary_mismatch": []
+        }
+      }
+    }
+  ],
+  "prompt_review": {
+    "permits_version_qualified_summary": true,
+    "does_not_promote_unknown_to_valid": true,
+    "remaining_ambiguity": "單憑該來源 can be misread as permitting current-law assertion from several unverified sources. Clarify multiple unverified sources do not confirm current validity.",
+    "live_llm_result": "not measured in this review"
+  },
+  "remaining_limits": [
+    "token set membership cannot establish claim-source entailment or subject binding",
+    "unsupported numeric forms can remain unrecognized",
+    "short literal quote can match without supporting a claim",
+    "modal lexical heuristics may match unrelated word senses",
+    "AI validity caveat compliance is not programmatically guaranteed"
+  ]
+}

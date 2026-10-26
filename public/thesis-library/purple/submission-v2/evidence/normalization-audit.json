@@ -1,0 +1,999 @@
+{
+  "version": "e1-common-corpus-normalization-v1",
+  "purpose": "development-only; not formal experiment results",
+  "source_sha256": "3beff8975506e157fbab89e61035788171909a0b0eb4fae16ec9550be67674c0",
+  "normalized_sha256": "c116bfae77d3744a9419e315fc8ec66a049bbe02574d4846a3a1190129b22afa",
+  "script_sha256": "4a0b361134ad08d5cb832ba9a520bf0b997c4a365dd6f142855f458a2736a9fd",
+  "source_snapshot": "source-3beff8975506e157fbab89e61035788171909a0b0eb4fae16ec9550be67674c0.json",
+  "candidate": "corpus-normalized.json",
+  "mapping_file": "text-offset-mapping.jsonl",
+  "mapping_sha256": "956ffcc6f7bd60e8337eefd651be7e7e788844c6001988f34cb651ace479a502",
+  "offset_convention": "zero-based Unicode code points; half-open; segments=[normalized_start,normalized_end,raw_start,raw_end]",
+  "rules": [
+    "remove CR",
+    "join single LF strictly between CJK characters",
+    "retain blank-line paragraph boundaries",
+    "retain one identical abstract and label 函釋要旨索引",
+    "no width, number, punctuation, case, whitespace, or query normalization"
+  ],
+  "before": {
+    "documents": 1781,
+    "types": {
+      "法條": 1481,
+      "指引": 157,
+      "問答": 5,
+      "函釋": 138
+    },
+    "cr_characters": 284,
+    "cjk_hard_break_documents": 299,
+    "duplicate_abstract_documents": 138,
+    "duplicate_abstract_ids": [
+      "FINT-1",
+      "FINT-2",
+      "FINT-3",
+      "FINT-4",
+      "FINT-5",
+      "FINT-7",
+      "FINT-8",
+      "FINT-9",
+      "FINT-10",
+      "FINT-11",
+      "FINT-12",
+      "FINT-13",
+      "FINT-14",
+      "FINT-17",
+      "FINT-19",
+      "FINT-20",
+      "FINT-21",
+      "FINT-22",
+      "FINT-23",
+      "FINT-24",
+      "FINT-25",
+      "FINT-26",
+      "FINT-27",
+      "FINT-28",
+      "FINT-29",
+      "FINT-30",
+      "FINT-31",
+      "FINT-32",
+      "FINT-33",
+      "FINT-34",
+      "FINT-35",
+      "FINT-36",
+      "FINT-38",
+      "FINT-39",
+      "FINT-40",
+      "FINT-41",
+      "FINT-42",
+      "FINT-43",
+      "FINT-44",
+      "FINT-45",
+      "FINT-46",
+      "FINT-47",
+      "FINT-48",
+      "FINT-49",
+      "FINT-50",
+      "FINT-51",
+      "FINT-52",
+      "FINT-54",
+      "FINT-55",
+      "FINT-56",
+      "FINT-57",
+      "FINT-58",
+      "FINT-59",
+      "FINT-60",
+      "FINT-61",
+      "FINT-62",
+      "FINT-63",
+      "FINT-64",
+      "FINT-65",
+      "FINT-66",
+      "FINT-67",
+      "FINT-68",
+      "FINT-69",
+      "FINT-70",
+      "FINT-71",
+      "FINT-72",
+      "FINT-73",
+      "FINT-74",
+      "FINT-75",
+      "FINT-78",
+      "FINT-79",
+      "FINT-80",
+      "FINT-81",
+      "FINT-82",
+      "FINT-83",
+      "FINT-84",
+      "FINT-85",
+      "FINT-86",
+      "FINT-87",
+      "FINT-88",
+      "FINT-89",
+      "FINT-90",
+      "FINT-91",
+      "FINT-92",
+      "FINT-93",
+      "FINT-94",
+      "FINT-95",
+      "FINT-96",
+      "FINT-97",
+      "FINT-98",
+      "FINT-99",
+      "FINT-100",
+      "FINT-101",
+      "FINT-102",
+      "FINT-103",
+      "FINT-104",
+      "FINT-105",
+      "FINT-106",
+      "FINT-107",
+      "FINT-108",
+      "FINT-109",
+      "FINT-110",
+      "FINT-111",
+      "FINT-112",
+      "FINT-113",
+      "FINT-114",
+      "FINT-115",
+      "FINT-116",
+      "FINT-117",
+      "FINT-118",
+      "FINT-119",
+      "FINT-120",
+      "FINT-121",
+      "FINT-122",
+      "FINT-123",
+      "FINT-124",
+      "FINT-125",
+      "FINT-126",
+      "FINT-127",
+      "FINT-128",
+      "FINT-129",
+      "FINT-130",
+      "FINT-131",
+      "FINT-132",
+      "FINT-133",
+      "FINT-134",
+      "FINT-135",
+      "FINT-136",
+      "FINT-137",
+      "FINT-138",
+      "FINT-139",
+      "FINT-140",
+      "FINT-141",
+      "FINT-142",
+      "FINT-143",
+      "FINT-144",
+      "FINT-145",
+      "FINT-146"
+    ]
+  },
+  "after": {
+    "documents": 1781,
+    "types": {
+      "法條": 1481,
+      "指引": 157,
+      "問答": 5,
+      "函釋要旨索引": 138
+    },
+    "cr_characters": 0,
+    "cjk_hard_break_documents": 0,
+    "duplicate_abstract_documents": 0,
+    "duplicate_abstract_ids": []
+  },
+  "modified_text_documents": 299,
+  "modified_type_documents": 138,
+  "idempotent": true,
+  "literal_development_comparisons": [
+    {
+      "before": {
+        "query": "育嬰",
+        "matched_documents": 41,
+        "occurrences": 107,
+        "matches": [
+          {
+            "id": "N0050021-第10條",
+            "occurrences": 1
+          },
+          {
+            "id": "N0050021-第11條",
+            "occurrences": 2
+          },
+          {
+            "id": "N0050021-第19-2條",
+            "occurrences": 4
+          },
+          {
+            "id": "N0050022-第12條",
+            "occurrences": 1
+          },
+          {
+            "id": "N0050022-第16-1條",
+            "occurrences": 3
+          },
+          {
+            "id": "N0050022-第19-2條",
+            "occurrences": 3
+          },
+          {
+            "id": "N0050002-第21條",
+            "occurrences": 1
+          },
+          {
+            "id": "N0030014-第3條",
+            "occurrences": 1
+          },
+          {
+            "id": "N0030014-第16條",
+            "occurrences": 6
+          },
+          {
+            "id": "N0030014-第17條",
+            "occurrences": 1
+          },
+          {
+            "id": "N0030015-第8條",
+            "occurrences": 1
+          },
+          {
+            "id": "G2____-p51-1",
+            "occurrences": 2
+          },
+          {
+            "id": "FINT-28",
+            "occurrences": 2
+          },
+          {
+            "id": "FINT-44",
+            "occurrences": 4
+          },
+          {
+            "id": "FINT-91",
+            "occurrences": 6
+          },
+          {
+            "id": "FINT-92",
+            "occurrences": 2
+          },
+          {
+            "id": "FINT-93",
+            "occurrences": 4
+          },
+          {
+            "id": "FINT-94",
+            "occurrences": 2
+          },
+          {
+            "id": "FINT-95",
+            "occurrences": 2
+          },
+          {
+            "id": "FINT-96",
+            "occurrences": 4
+          },
+          {
+            "id": "FINT-97",
+            "occurrences": 2
+          },
+          {
+            "id": "FINT-98",
+            "occurrences": 2
+          },
+          {
+            "id": "FINT-100",
+            "occurrences": 6
+          },
+          {
+            "id": "FINT-101",
+            "occurrences": 2
+          },
+          {
+            "id": "FINT-102",
+            "occurrences": 2
+          },
+          {
+            "id": "FINT-104",
+            "occurrences": 2
+          },
+          {
+            "id": "FINT-105",
+            "occurrences": 4
+          },
+          {
+            "id": "FINT-106",
+            "occurrences": 2
+          },
+          {
+            "id": "FINT-107",
+            "occurrences": 2
+          },
+          {
+            "id": "FINT-108",
+            "occurrences": 2
+          },
+          {
+            "id": "FINT-109",
+            "occurrences": 4
+          },
+          {
+            "id": "FINT-124",
+            "occurrences": 4
+          },
+          {
+            "id": "purple-FL015153-1",
+            "occurrences": 1
+          },
+          {
+            "id": "purple-FL015153-2",
+            "occurrences": 7
+          },
+          {
+            "id": "purple-FL015153-3",
+            "occurrences": 2
+          },
+          {
+            "id": "purple-FL015153-4",
+            "occurrences": 2
+          },
+          {
+            "id": "purple-FL015153-5",
+            "occurrences": 2
+          },
+          {
+            "id": "purple-FL015153-6",
+            "occurrences": 2
+          },
+          {
+            "id": "purple-FL015153-7",
+            "occurrences": 2
+          },
+          {
+            "id": "purple-FL015153-8",
+            "occurrences": 2
+          },
+          {
+            "id": "purple-FL015153-9",
+            "occurrences": 1
+          }
+        ]
+      },
+      "after": {
+        "query": "育嬰",
+        "matched_documents": 41,
+        "occurrences": 77,
+        "matches": [
+          {
+            "id": "N0050021-第10條",
+            "occurrences": 1
+          },
+          {
+            "id": "N0050021-第11條",
+            "occurrences": 2
+          },
+          {
+            "id": "N0050021-第19-2條",
+            "occurrences": 4
+          },
+          {
+            "id": "N0050022-第12條",
+            "occurrences": 1
+          },
+          {
+            "id": "N0050022-第16-1條",
+            "occurrences": 3
+          },
+          {
+            "id": "N0050022-第19-2條",
+            "occurrences": 3
+          },
+          {
+            "id": "N0050002-第21條",
+            "occurrences": 1
+          },
+          {
+            "id": "N0030014-第3條",
+            "occurrences": 1
+          },
+          {
+            "id": "N0030014-第16條",
+            "occurrences": 6
+          },
+          {
+            "id": "N0030014-第17條",
+            "occurrences": 1
+          },
+          {
+            "id": "N0030015-第8條",
+            "occurrences": 1
+          },
+          {
+            "id": "G2____-p51-1",
+            "occurrences": 2
+          },
+          {
+            "id": "FINT-28",
+            "occurrences": 1
+          },
+          {
+            "id": "FINT-44",
+            "occurrences": 2
+          },
+          {
+            "id": "FINT-91",
+            "occurrences": 3
+          },
+          {
+            "id": "FINT-92",
+            "occurrences": 1
+          },
+          {
+            "id": "FINT-93",
+            "occurrences": 2
+          },
+          {
+            "id": "FINT-94",
+            "occurrences": 1
+          },
+          {
+            "id": "FINT-95",
+            "occurrences": 1
+          },
+          {
+            "id": "FINT-96",
+            "occurrences": 2
+          },
+          {
+            "id": "FINT-97",
+            "occurrences": 1
+          },
+          {
+            "id": "FINT-98",
+            "occurrences": 1
+          },
+          {
+            "id": "FINT-100",
+            "occurrences": 3
+          },
+          {
+            "id": "FINT-101",
+            "occurrences": 1
+          },
+          {
+            "id": "FINT-102",
+            "occurrences": 1
+          },
+          {
+            "id": "FINT-104",
+            "occurrences": 1
+          },
+          {
+            "id": "FINT-105",
+            "occurrences": 2
+          },
+          {
+            "id": "FINT-106",
+            "occurrences": 1
+          },
+          {
+            "id": "FINT-107",
+            "occurrences": 1
+          },
+          {
+            "id": "FINT-108",
+            "occurrences": 1
+          },
+          {
+            "id": "FINT-109",
+            "occurrences": 2
+          },
+          {
+            "id": "FINT-124",
+            "occurrences": 2
+          },
+          {
+            "id": "purple-FL015153-1",
+            "occurrences": 1
+          },
+          {
+            "id": "purple-FL015153-2",
+            "occurrences": 7
+          },
+          {
+            "id": "purple-FL015153-3",
+            "occurrences": 2
+          },
+          {
+            "id": "purple-FL015153-4",
+            "occurrences": 2
+          },
+          {
+            "id": "purple-FL015153-5",
+            "occurrences": 2
+          },
+          {
+            "id": "purple-FL015153-6",
+            "occurrences": 2
+          },
+          {
+            "id": "purple-FL015153-7",
+            "occurrences": 2
+          },
+          {
+            "id": "purple-FL015153-8",
+            "occurrences": 2
+          },
+          {
+            "id": "purple-FL015153-9",
+            "occurrences": 1
+          }
+        ]
+      }
+    },
+    {
+      "before": {
+        "query": "育嬰留職停薪",
+        "matched_documents": 38,
+        "occurrences": 92,
+        "matches": [
+          {
+            "id": "N0050021-第10條",
+            "occurrences": 1
+          },
+          {
+            "id": "N0050021-第11條",
+            "occurrences": 2
+          },
+          {
+            "id": "N0050021-第19-2條",
+            "occurrences": 4
+          },
+          {
+            "id": "N0050022-第12條",
+            "occurrences": 1
+          },
+          {
+            "id": "N0050022-第16-1條",
+            "occurrences": 3
+          },
+          {
+            "id": "N0050022-第19-2條",
+            "occurrences": 3
+          },
+          {
+            "id": "N0050002-第21條",
+            "occurrences": 1
+          },
+          {
+            "id": "N0030014-第3條",
+            "occurrences": 1
+          },
+          {
+            "id": "N0030014-第16條",
+            "occurrences": 6
+          },
+          {
+            "id": "N0030014-第17條",
+            "occurrences": 1
+          },
+          {
+            "id": "N0030015-第8條",
+            "occurrences": 1
+          },
+          {
+            "id": "G2____-p51-1",
+            "occurrences": 1
+          },
+          {
+            "id": "FINT-28",
+            "occurrences": 2
+          },
+          {
+            "id": "FINT-44",
+            "occurrences": 4
+          },
+          {
+            "id": "FINT-91",
+            "occurrences": 2
+          },
+          {
+            "id": "FINT-92",
+            "occurrences": 2
+          },
+          {
+            "id": "FINT-93",
+            "occurrences": 4
+          },
+          {
+            "id": "FINT-94",
+            "occurrences": 2
+          },
+          {
+            "id": "FINT-96",
+            "occurrences": 4
+          },
+          {
+            "id": "FINT-97",
+            "occurrences": 2
+          },
+          {
+            "id": "FINT-100",
+            "occurrences": 4
+          },
+          {
+            "id": "FINT-101",
+            "occurrences": 2
+          },
+          {
+            "id": "FINT-102",
+            "occurrences": 2
+          },
+          {
+            "id": "FINT-104",
+            "occurrences": 2
+          },
+          {
+            "id": "FINT-105",
+            "occurrences": 4
+          },
+          {
+            "id": "FINT-106",
+            "occurrences": 2
+          },
+          {
+            "id": "FINT-108",
+            "occurrences": 2
+          },
+          {
+            "id": "FINT-109",
+            "occurrences": 4
+          },
+          {
+            "id": "FINT-124",
+            "occurrences": 2
+          },
+          {
+            "id": "purple-FL015153-1",
+            "occurrences": 1
+          },
+          {
+            "id": "purple-FL015153-2",
+            "occurrences": 7
+          },
+          {
+            "id": "purple-FL015153-3",
+            "occurrences": 2
+          },
+          {
+            "id": "purple-FL015153-4",
+            "occurrences": 2
+          },
+          {
+            "id": "purple-FL015153-5",
+            "occurrences": 2
+          },
+          {
+            "id": "purple-FL015153-6",
+            "occurrences": 2
+          },
+          {
+            "id": "purple-FL015153-7",
+            "occurrences": 2
+          },
+          {
+            "id": "purple-FL015153-8",
+            "occurrences": 2
+          },
+          {
+            "id": "purple-FL015153-9",
+            "occurrences": 1
+          }
+        ]
+      },
+      "after": {
+        "query": "育嬰留職停薪",
+        "matched_documents": 41,
+        "occurrences": 76,
+        "matches": [
+          {
+            "id": "N0050021-第10條",
+            "occurrences": 1
+          },
+          {
+            "id": "N0050021-第11條",
+            "occurrences": 2
+          },
+          {
+            "id": "N0050021-第19-2條",
+            "occurrences": 4
+          },
+          {
+            "id": "N0050022-第12條",
+            "occurrences": 1
+          },
+          {
+            "id": "N0050022-第16-1條",
+            "occurrences": 3
+          },
+          {
+            "id": "N0050022-第19-2條",
+            "occurrences": 3
+          },
+          {
+            "id": "N0050002-第21條",
+            "occurrences": 1
+          },
+          {
+            "id": "N0030014-第3條",
+            "occurrences": 1
+          },
+          {
+            "id": "N0030014-第16條",
+            "occurrences": 6
+          },
+          {
+            "id": "N0030014-第17條",
+            "occurrences": 1
+          },
+          {
+            "id": "N0030015-第8條",
+            "occurrences": 1
+          },
+          {
+            "id": "G2____-p51-1",
+            "occurrences": 1
+          },
+          {
+            "id": "FINT-28",
+            "occurrences": 1
+          },
+          {
+            "id": "FINT-44",
+            "occurrences": 2
+          },
+          {
+            "id": "FINT-91",
+            "occurrences": 3
+          },
+          {
+            "id": "FINT-92",
+            "occurrences": 1
+          },
+          {
+            "id": "FINT-93",
+            "occurrences": 2
+          },
+          {
+            "id": "FINT-94",
+            "occurrences": 1
+          },
+          {
+            "id": "FINT-95",
+            "occurrences": 1
+          },
+          {
+            "id": "FINT-96",
+            "occurrences": 2
+          },
+          {
+            "id": "FINT-97",
+            "occurrences": 1
+          },
+          {
+            "id": "FINT-98",
+            "occurrences": 1
+          },
+          {
+            "id": "FINT-100",
+            "occurrences": 3
+          },
+          {
+            "id": "FINT-101",
+            "occurrences": 1
+          },
+          {
+            "id": "FINT-102",
+            "occurrences": 1
+          },
+          {
+            "id": "FINT-104",
+            "occurrences": 1
+          },
+          {
+            "id": "FINT-105",
+            "occurrences": 2
+          },
+          {
+            "id": "FINT-106",
+            "occurrences": 1
+          },
+          {
+            "id": "FINT-107",
+            "occurrences": 1
+          },
+          {
+            "id": "FINT-108",
+            "occurrences": 1
+          },
+          {
+            "id": "FINT-109",
+            "occurrences": 2
+          },
+          {
+            "id": "FINT-124",
+            "occurrences": 2
+          },
+          {
+            "id": "purple-FL015153-1",
+            "occurrences": 1
+          },
+          {
+            "id": "purple-FL015153-2",
+            "occurrences": 7
+          },
+          {
+            "id": "purple-FL015153-3",
+            "occurrences": 2
+          },
+          {
+            "id": "purple-FL015153-4",
+            "occurrences": 2
+          },
+          {
+            "id": "purple-FL015153-5",
+            "occurrences": 2
+          },
+          {
+            "id": "purple-FL015153-6",
+            "occurrences": 2
+          },
+          {
+            "id": "purple-FL015153-7",
+            "occurrences": 2
+          },
+          {
+            "id": "purple-FL015153-8",
+            "occurrences": 2
+          },
+          {
+            "id": "purple-FL015153-9",
+            "occurrences": 1
+          }
+        ]
+      }
+    },
+    {
+      "before": {
+        "query": "育嬰假如何請",
+        "matched_documents": 0,
+        "occurrences": 0,
+        "matches": []
+      },
+      "after": {
+        "query": "育嬰假如何請",
+        "matched_documents": 0,
+        "occurrences": 0,
+        "matches": []
+      }
+    },
+    {
+      "before": {
+        "query": "企業雇主",
+        "matched_documents": 11,
+        "occurrences": 12,
+        "matches": [
+          {
+            "id": "G2____-p4-1",
+            "occurrences": 1
+          },
+          {
+            "id": "G2____-p5-1",
+            "occurrences": 1
+          },
+          {
+            "id": "G2____-p21-1",
+            "occurrences": 1
+          },
+          {
+            "id": "G2____-p23-1",
+            "occurrences": 1
+          },
+          {
+            "id": "G2____-p25-1",
+            "occurrences": 1
+          },
+          {
+            "id": "G2____-p43-1",
+            "occurrences": 1
+          },
+          {
+            "id": "G2____-p57-1",
+            "occurrences": 1
+          },
+          {
+            "id": "G2____-p58-1",
+            "occurrences": 2
+          },
+          {
+            "id": "G2____-p63-1",
+            "occurrences": 1
+          },
+          {
+            "id": "G2____-p92-1",
+            "occurrences": 1
+          },
+          {
+            "id": "G2____-p105-1",
+            "occurrences": 1
+          }
+        ]
+      },
+      "after": {
+        "query": "企業雇主",
+        "matched_documents": 13,
+        "occurrences": 15,
+        "matches": [
+          {
+            "id": "G2____-p2-1",
+            "occurrences": 1
+          },
+          {
+            "id": "G2____-p4-1",
+            "occurrences": 1
+          },
+          {
+            "id": "G2____-p5-1",
+            "occurrences": 1
+          },
+          {
+            "id": "G2____-p21-1",
+            "occurrences": 2
+          },
+          {
+            "id": "G2____-p23-1",
+            "occurrences": 1
+          },
+          {
+            "id": "G2____-p25-1",
+            "occurrences": 1
+          },
+          {
+            "id": "G2____-p43-1",
+            "occurrences": 1
+          },
+          {
+            "id": "G2____-p55-1",
+            "occurrences": 1
+          },
+          {
+            "id": "G2____-p57-1",
+            "occurrences": 1
+          },
+          {
+            "id": "G2____-p58-1",
+            "occurrences": 2
+          },
+          {
+            "id": "G2____-p63-1",
+            "occurrences": 1
+          },
+          {
+            "id": "G2____-p92-1",
+            "occurrences": 1
+          },
+          {
+            "id": "G2____-p105-1",
+            "occurrences": 1
+          }
+        ]
+      }
+    }
+  ],
+  "limitations": [
+    "CJK adjacency is a deterministic layout heuristic, not a reconstruction of authoritative paragraph semantics.",
+    "Blank lines remain intact; single LF adjacent to punctuation, Latin text, digits or indentation is intentionally retained.",
+    "Existing fullwidth/halfwidth, Arabic/Chinese-number differences are unchanged and require a researcher decision.",
+    "Duplicate abstracts are not newly acquired full official interpretations; the index label makes this limitation explicit.",
+    "Raw and normalized texts are both retained. Runtime must promote the same candidate for A and B; this script does not modify live corpus or manifest.",
+    "The corpus top-level report is inherited source metadata, not a new normalization audit. This file is the current E1 audit."
+  ]
+}
