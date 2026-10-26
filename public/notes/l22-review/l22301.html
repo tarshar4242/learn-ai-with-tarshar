@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="iPAS 中級 L22301 統計學在大數據中的應用：兩種錯誤、檢定力、多重檢定、偏差與方差、ROC、檢定方法選擇、流式分位數與辛普森悖論的圖解觀念複習。">
+<title>L22301 統計觀念複習｜🍀Learn AI with Tarshar</title>
+<style>
+:root{
+  --bg:#08101f;--bg2:#0d1830;--panel:#111f3b;--panel2:#152746;
+  --line:rgba(137,172,255,.18);--text:#eef4ff;--muted:#a7b7d8;--dim:#7183aa;
+  --cyan:#41dcff;--blue:#6690ff;--purple:#b57bff;--green:#4de1a1;--orange:#ffc45b;--red:#ff8a80
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;color:var(--text);line-height:1.85;background:
+radial-gradient(900px 500px at 10% -10%,rgba(65,220,255,.13),transparent 65%),
+radial-gradient(900px 520px at 95% 10%,rgba(181,123,255,.14),transparent 62%),var(--bg);min-height:100vh}
+a{color:var(--cyan)}.wrap{width:min(880px,calc(100% - 32px));margin:auto}
+.topbar{position:sticky;top:0;z-index:20;background:rgba(8,16,31,.84);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.topbar .wrap{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.back{text-decoration:none;color:var(--cyan);font-size:14px;font-weight:800}.brand{font-size:12px;color:var(--muted);letter-spacing:1.5px}
+.hero{padding:46px 0 18px}
+.eyebrow{display:inline-flex;padding:6px 13px;border:1px solid rgba(65,220,255,.35);border-radius:999px;color:var(--cyan);font-size:12px;letter-spacing:2px;background:rgba(65,220,255,.06)}
+h1{font-size:clamp(28px,5vw,46px);line-height:1.25;margin:16px 0 10px;letter-spacing:-.02em}
+.lead{color:var(--muted);font-size:16px;margin:0}
+.toc{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:26px 0 8px}
+.toc a{display:block;text-decoration:none;color:var(--text);border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:rgba(17,31,59,.72);font-size:14px;font-weight:700}
+.toc a span{color:var(--cyan);margin-right:6px}
+section{margin:38px 0}
+h2{font-size:24px;margin:0 0 12px;padding-top:8px;border-top:1px solid var(--line)}
+h2 small{display:block;color:var(--cyan);font-size:12px;letter-spacing:2px;margin-top:14px}
+h3{font-size:17px;color:var(--orange);margin:22px 0 6px}
+p{margin:8px 0}
+.why{border-left:4px solid var(--cyan);background:rgba(65,220,255,.06);border-radius:0 14px 14px 0;padding:12px 16px;color:var(--muted)}
+.why b{color:var(--text)}
+figure{margin:16px 0;background:#fff;border-radius:16px;padding:8px;overflow:hidden}
+figure img{display:block;width:100%;height:auto}figcaption{color:#666;font-size:12px;text-align:right;padding:2px 6px 0}
+ol,ul{padding-left:22px;color:var(--muted)}li{margin:4px 0}li b{color:var(--text)}
+.tbl{overflow-x:auto;margin:14px 0;border:1px solid var(--line);border-radius:14px}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:14px}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:var(--panel2);color:var(--cyan);font-weight:800}tr:last-child td{border-bottom:0}
+td b{color:var(--orange)}
+.trap{border:1px solid rgba(255,138,128,.4);background:rgba(255,138,128,.07);border-radius:14px;padding:12px 16px;margin:14px 0}
+.trap b{color:var(--red)}
+.recap{counter-reset:n;list-style:none;padding:0}
+.recap li{counter-increment:n;position:relative;padding:12px 14px 12px 50px;border:1px solid var(--line);border-radius:14px;background:rgba(17,31,59,.72);margin:8px 0;color:var(--text)}
+.recap li::before{content:counter(n);position:absolute;left:14px;top:12px;width:26px;height:26px;border-radius:50%;background:var(--green);color:#062418;font-weight:900;text-align:center;line-height:26px;font-size:13px}
+footer{text-align:center;color:var(--dim);font-size:12px;line-height:1.9;border-top:1px solid var(--line);margin-top:50px;padding:30px 20px 44px}
+@media(max-width:600px){.wrap{width:calc(100% - 32px)}.brand{display:none}.toc{grid-template-columns:1fr}h2{font-size:21px}}
+</style>
+</head>
+<body>
+<nav class="topbar"><div class="wrap"><a class="back" href="../ipas-intermediate.html">← iPAS 中級總覽</a><span class="brand">🍀 LEARN AI WITH TARSHAR · L22 觀念複習</span></div></nav>
+
+<main class="wrap">
+<header class="hero">
+  <span class="eyebrow">iPAS 中級 · 科目二 · L22301</span>
+  <h1>統計學在大數據中的應用｜觀念圖解複習</h1>
+  <p class="lead">七個最容易混淆的觀念，每個都照「為什麼需要它 → 一步步搭起來 → 對照表 → 易錯提醒」整理。先看圖，再讀文字。</p>
+  <nav class="toc" aria-label="目錄">
+    <a href="#u1"><span>①</span>兩種錯誤、α、β、檢定力</a>
+    <a href="#u2"><span>②</span>多重檢定：FWER 與 FDR</a>
+    <a href="#u3"><span>③</span>偏差與方差</a>
+    <a href="#u4"><span>④</span>分類與迴歸指標、ROC</a>
+    <a href="#u5"><span>⑤</span>檢定方法怎麼選</a>
+    <a href="#u6"><span>⑥</span>流式資料算分位數</a>
+    <a href="#u7"><span>⑦</span>辛普森悖論</a>
+    <a href="#recap"><span>★</span>十句話總整理</a>
+  </nav>
+</header>
+
+<section id="u1">
+  <h2><small>單元 ①</small>假設檢定的兩種錯誤、α、β 與檢定力</h2>
+  <p class="why"><b>為什麼需要這個概念？</b> 做 A/B 測試時，我們只看到樣本，看不到真相，所以判斷一定可能出錯。統計學不假裝自己不會錯，而是先講清楚「會錯在哪裡、錯的機率多大」，再決定可以接受多少錯誤。</p>
+  <h3>一步步搭起來</h3>
+  <ol>
+    <li><b>先立一個保守的說法 H0</b>：「兩個版本沒有差異」。沒有足夠證據之前先相信它，就像法庭上先假設被告清白。</li>
+    <li><b>真相只有兩種</b>：H0 真的成立（沒差異），或 H0 不成立（真的有差異）。</li>
+    <li><b>判決也只有兩種</b>：拒絕 H0（宣告有差異），或不拒絕 H0（證據不夠）。</li>
+    <li><b>2 × 2 一交叉，就出現四種結果</b>：兩格判對、兩格判錯。</li>
+  </ol>
+  <figure><a href="img/errors.png" target="_blank" rel="noopener"><img src="img/errors.png" alt="假設檢定判決表：型一錯誤、型二錯誤、檢定力與信心水準四格" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="tbl"><table>
+    <tr><th>名詞</th><th>定義</th><th>生活比喻</th><th>記法</th></tr>
+    <tr><td><b>型 I 錯誤</b></td><td>H0 為真，卻拒絕了 H0</td><td>冤枉好人</td><td>機率＝α（顯著水準，常用 0.05）</td></tr>
+    <tr><td><b>型 II 錯誤</b></td><td>H0 為偽，卻沒拒絕 H0</td><td>放走壞人</td><td>機率＝β</td></tr>
+    <tr><td><b>檢定力 Power</b></td><td>H0 為偽時，正確拒絕 H0</td><td>抓到壞人</td><td>＝1 − β</td></tr>
+    <tr><td>信心水準</td><td>H0 為真時，正確不拒絕 H0</td><td>沒冤枉好人</td><td>＝1 − α</td></tr>
+  </table></div>
+  <h3>α 和 β 的蹺蹺板</h3>
+  <p>門檻線畫在哪裡，決定兩種錯誤的大小。α 調小，等於要更有把握才肯說「有差異」，門檻往右移：冤枉好人（紅色）變少，真的有差異時被放走（橘色）就變多。</p>
+  <figure><a href="img/alphabeta.png" target="_blank" rel="noopener"><img src="img/alphabeta.png" alt="α 由 0.05 降到 0.01 時，型一錯誤面積縮小、型二錯誤面積變大" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <ul>
+    <li>樣本數固定時，α 和 β 一個降、另一個就升。</li>
+    <li><b>想讓兩個錯誤同時變少，只能加大樣本。</b>樣本變大，兩座山變窄，重疊就變少。</li>
+  </ul>
+  <div class="trap"><b>易錯提醒：</b>檢定力的前提是「對立假設為真」，也就是真的有差異；它等於 1 − β，不是 α。α 是 H0 為真時誤判的機率，情境剛好相反。</div>
+</section>
+
+<section id="u2">
+  <h2><small>單元 ②</small>多重檢定：誤判會累積，FWER 與 FDR</h2>
+  <p class="why"><b>為什麼需要這個概念？</b> 一次檢定冤枉好人的機率是 5%，聽起來不大。但如果同時比較 20 個廣告版本，每一次都抽一張 5% 的「誤判籤」，抽越多次，至少中一次的機率就越高。不處理的話，報告裡宣稱「顯著」的結果，很可能有幾個只是運氣。</p>
+  <figure><a href="img/multiple.png" target="_blank" rel="noopener"><img src="img/multiple.png" alt="檢定次數越多，至少誤判一次的機率越高的長條圖" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="tbl"><table>
+    <tr><th></th><th>FWER（族系錯誤率）</th><th>FDR（錯誤發現率）</th></tr>
+    <tr><td>控制什麼</td><td><b>至少犯一個</b>型 I 錯誤的機率</td><td><b>宣告顯著的結果裡</b>，其實是假警報的<b>比例期望值</b></td></tr>
+    <tr><td>代表方法</td><td>Bonferroni：每次門檻改成 α ÷ n</td><td>Benjamini-Hochberg 程序</td></tr>
+    <tr><td>嚴格程度</td><td>很嚴格，一個假警報都不想要</td><td>比較寬鬆，容許少量假警報</td></tr>
+    <tr><td>適合情境</td><td>錯一個代價很大（如藥物上市）</td><td>檢定數量很多、想找候選目標（如大量廣告篩選）</td></tr>
+  </table></div>
+  <figure><a href="img/fdr.png" target="_blank" rel="noopener"><img src="img/fdr.png" alt="20 個宣告顯著的結果中有 2 個是假警報，錯誤發現比例 10%" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="trap"><b>易錯提醒：</b>多次檢定不校正，問題是「整體型 I 錯誤膨脹」。「檢定力降低」是做了校正之後的副作用：門檻變嚴，比較難抓到真差異。記法：FWER 看全部檢定裡有沒有出過假警報；FDR 只看宣告顯著的那一堆裡，假警報佔幾成。</div>
+</section>
+
+<section id="u3">
+  <h2><small>單元 ③</small>偏差與方差：模型學太少，還是背太多</h2>
+  <p class="why"><b>為什麼需要這個概念？</b> 模型預測不準，原因可能剛好相反：可能是太簡單，連基本規律都沒學到；也可能是太複雜，把訓練資料裡的雜訊都背下來。兩種病的藥方不同，所以要先分清楚是哪一種。</p>
+  <figure><a href="img/biasvar.png" target="_blank" rel="noopener"><img src="img/biasvar.png" alt="欠擬合、剛好、過擬合三種模型的對照圖" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="tbl"><table>
+    <tr><th></th><th>高偏差（High Bias）</th><th>高方差（High Variance）</th></tr>
+    <tr><td>白話</td><td><b>學太少</b>、想法太死板</td><td><b>背太多</b>、連雜訊都記住</td></tr>
+    <tr><td>正式名稱</td><td>欠擬合 Underfitting</td><td>過擬合 Overfitting</td></tr>
+    <tr><td>訓練表現</td><td>差</td><td>很好</td></tr>
+    <tr><td>測試表現</td><td>差</td><td>很差</td></tr>
+    <tr><td>特徵</td><td>模型太簡單</td><td>對訓練資料的小變化很敏感、預測分散</td></tr>
+    <tr><td>怎麼改</td><td>增加模型複雜度、加特徵</td><td>正規化、簡化模型、增加資料</td></tr>
+  </table></div>
+  <div class="trap"><b>易錯提醒：</b>「訓練很好、測試很差」「對小變化很敏感」「預測很分散」都是<b>高方差</b>的特徵。看到「太簡單、抓不到基本模式」才是高偏差。</div>
+</section>
+
+<section id="u4">
+  <h2><small>單元 ④</small>分類和迴歸用不同的評分方法、ROC 曲線</h2>
+  <p class="why"><b>為什麼需要這個概念？</b> 模型要先分清楚在做哪種事：<b>預測一個數字</b>（房價、營收）叫迴歸；<b>預測一個類別</b>（有病沒病、會不會流失）叫分類。考試最愛把兩邊的指標混在一起。</p>
+  <div class="tbl"><table>
+    <tr><th></th><th>迴歸（預測數字）</th><th>分類（預測類別）</th></tr>
+    <tr><td>問的是</td><td>差多少？</td><td>猜對沒？</td></tr>
+    <tr><td>常用指標</td><td><b>RMSE、MAE、R²</b></td><td><b>準確率 Accuracy</b>、精確率、召回率、F1、ROC／AUC</td></tr>
+    <tr><td>例子</td><td>預測房價 850 萬，實際 900 萬，差 50 萬</td><td>預測會流失，實際也流失，猜對</td></tr>
+  </table></div>
+  <p><b>ROC 曲線：</b>分類模型要先設一個門檻（例如機率超過 0.5 才算有病）。門檻一路調整，每個門檻都能算出一組（假正率, 真正率），連起來就是 ROC 曲線。越靠左上角越好；斜對角線代表亂猜。</p>
+  <figure><a href="img/roc.png" target="_blank" rel="noopener"><img src="img/roc.png" alt="ROC 曲線與混淆矩陣：橫軸假正率、縱軸真正率" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="tbl"><table>
+    <tr><th>軸</th><th>指標</th><th>公式</th><th>白話</th></tr>
+    <tr><td><b>橫軸</b></td><td>假正率 FPR</td><td>FP ÷ (FP + TN)</td><td>真的沒病的人裡，被誤判有病的比例</td></tr>
+    <tr><td><b>縱軸</b></td><td>真正率 TPR（＝召回率）</td><td>TP ÷ (TP + FN)</td><td>真的有病的人裡，被抓出來的比例</td></tr>
+    <tr><td>對照</td><td>PR 曲線</td><td>精確率 vs 召回率</td><td>另一種曲線，常被拿來混淆</td></tr>
+  </table></div>
+  <div class="trap"><b>易錯提醒：</b>準確率是「類別猜對幾個」，屬於分類指標；R² 是迴歸指標。ROC 的兩個軸都用「真相」那一列來算：真的有病的那列算 TPR，真的沒病的那列算 FPR。</div>
+</section>
+
+<section id="u5">
+  <h2><small>單元 ⑤</small>檢定方法怎麼選</h2>
+  <p class="why"><b>為什麼需要這個概念？</b> 每種檢定只適合一種資料，選錯方法，算出來的 P 值沒有意義。判斷方式很簡單：<b>先看你在比的是比例、平均數，還是兩個變數的關係。</b></p>
+  <figure><a href="img/testchoice.png" target="_blank" rel="noopener"><img src="img/testchoice.png" alt="檢定方法選擇圖：比例用卡方或比例 Z 檢定、平均數用 t 檢定、三組以上用 ANOVA、兩連續變數用皮爾森" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="trap"><b>易錯提醒：</b>轉換率、點擊率是「有／沒有」的比例，比較兩組比例用卡方檢定或比例 Z 檢定。皮爾森相關是看兩個連續變數有沒有一起變化，不是用來比較兩組差別。</div>
+</section>
+
+<section id="u6">
+  <h2><small>單元 ⑥</small>資料放不進記憶體時，怎麼算分位數</h2>
+  <p class="why"><b>為什麼需要這個概念？</b> 算平均很簡單，邊讀邊加總就好。但<b>分位數（中位數、第 99 百分位）需要排序</b>，一般做法是全部存下來再排。資料有 10 億筆、還一直流進來時，記憶體放不下，就要改用「近似演算法」：只記一份小摘要，用它估出分位數。</p>
+  <figure><a href="img/stream.png" target="_blank" rel="noopener"><img src="img/stream.png" alt="全部存下來排序與流式摘要估計分位數的對照" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="tbl"><table>
+    <tr><th>方法</th><th>它真正的用途</th><th>能不能算分位數</th></tr>
+    <tr><td>AVG()</td><td>算平均數</td><td>不能</td></tr>
+    <tr><td>標準差</td><td>算離散程度</td><td>不能</td></tr>
+    <tr><td><b>GK 算法、t-digest</b></td><td><b>流式資料的分位數近似估計</b></td><td><b>能，而且只用很小的記憶體</b></td></tr>
+    <tr><td>PCA 主成分分析</td><td>降維：減少欄位數</td><td>不能</td></tr>
+  </table></div>
+  <div class="trap"><b>易錯提醒：</b>PCA 處理的是「欄位太多」，不是「資料太多筆」。關鍵字組合「分位數＋放不進記憶體＋近似」就對應 GK、t-digest。</div>
+</section>
+
+<section id="u7">
+  <h2><small>單元 ⑦</small>辛普森悖論</h2>
+  <p class="why"><b>為什麼需要這個概念？</b> 我們習慣把資料加總起來看整體趨勢，但如果各組的組成比例差很多，合併後的結論可能跟每一組都相反。這是大數據分析最常見的陷阱之一，也是「相關不等於因果」的親戚。</p>
+  <figure><a href="img/simpson.png" target="_blank" rel="noopener"><img src="img/simpson.png" alt="腎結石治療研究：分組看治療 A 都贏，合併後治療 B 看起來贏" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <ul>
+    <li><b>定義：</b>在各個分組裡都看到同一個趨勢，資料合併之後，這個趨勢卻消失甚至反轉。</li>
+    <li><b>原因：</b>有一個藏起來的分組變數（上圖是病情輕重），而且各組的人數分配很不平均。</li>
+    <li><b>怎麼防：</b>看到合併後的結論，回頭問「各組的組成比例一樣嗎？」；必要時分層分析。</li>
+  </ul>
+  <div class="trap"><b>易錯提醒：</b>「相關不等於因果」是相近但不同的觀念。辛普森悖論的重點是「分組 vs 合併，趨勢反轉」。</div>
+</section>
+
+<section id="recap">
+  <h2><small>總整理</small>本章要記的十句話</h2>
+  <ol class="recap">
+    <li>型 I 錯誤＝冤枉好人（機率 α）；型 II 錯誤＝放走壞人（機率 β）。</li>
+    <li>檢定力＝1 − β＝真的有差異時，抓得到的機率。不是 α。</li>
+    <li>α 調低 → 型 I 降、型 II 升；想兩個都降，只能加大樣本。</li>
+    <li>多次檢定不校正 → 整體型 I 錯誤膨脹；做了校正，副作用才是檢定力降低。</li>
+    <li>FWER＝至少一個假警報的機率（Bonferroni）；FDR＝宣告顯著裡假警報的比例。</li>
+    <li>高偏差＝太簡單＝欠擬合；高方差＝背太多＝過擬合。</li>
+    <li>Accuracy 是分類指標；RMSE、MAE、R² 是迴歸指標。</li>
+    <li>ROC：橫軸 FPR、縱軸 TPR；精確率對召回率是 PR 曲線。</li>
+    <li>比例 → 卡方或比例 Z；兩組平均 → t；三組以上 → ANOVA；兩個連續變數的關係 → 皮爾森。</li>
+    <li>流式資料算分位數 → GK、t-digest；分組趨勢合併後反轉 → 辛普森悖論。</li>
+  </ol>
+</section>
+</main>
+
+<footer>🍀 Learn AI with Tarshar · iPAS 中級 L22 觀念複習<br>依 L22301 學習範圍整理的原創圖解，不含考古題原文。辛普森悖論範例數字取自 Charig 等人 1986 年腎結石治療研究。</footer>
+</body>
+</html>
