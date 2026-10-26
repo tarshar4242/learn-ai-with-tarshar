@@ -51,3 +51,32 @@ export function sampleTour(network,tour,distance){
   return {x:a.x+(b.x-a.x)*t,y:WALK_Y+(segment.kind==='bridge'?.1*Math.sin(t*Math.PI):0),z:a.z+(b.z-a.z)*t,
     heading:Math.atan2(b.x-a.x,b.z-a.z),kind:segment.kind,islandId:t<.5?a.islandId:b.islandId,from:segment.from,to:segment.to,t};
 }
+
+// A destination route starts on the current edge, never by snapping to a node.
+export function makeRoute(network, start, end) {
+  if (!network.nodes[end]) throw new Error('Unknown route destination');
+  const edgeLength = Math.hypot(network.nodes[start.from].x-network.nodes[start.to].x, network.nodes[start.from].z-network.nodes[start.to].z);
+  const options = [
+    {node:start.from, t1:0, length:edgeLength*start.t},
+    {node:start.to, t1:1, length:edgeLength*(1-start.t)}
+  ].map(option=>{
+    const rest=network.shortest(option.node,end);
+    return {...option,rest,total:option.length+rest.reduce((n,s)=>n+s.length,0)};
+  }).sort((a,b)=>a.total-b.total);
+  const best=options[0], segments=[];
+  if(best.length>1e-8)segments.push({from:start.from,to:start.to,kind:start.kind,t0:start.t,t1:best.t1,length:best.length});
+  segments.push(...best.rest.map(s=>({...s,t0:0,t1:1})));
+  let length=0;for(const s of segments){s.start=length;length+=s.length;s.end=length;}
+  return {segments,length,end};
+}
+export function sampleRoute(network,route,distance) {
+  if(!route.segments.length){const p=network.nodes[route.end];return {...p,heading:0,kind:'path',from:route.end,to:route.end,t:0};}
+  const d=Math.max(0,Math.min(route.length,distance)),s=route.segments.find(s=>d<s.end)||route.segments.at(-1);
+  const f=(d-s.start)/s.length,t=s.t0+(s.t1-s.t0)*f,a=network.nodes[s.from],b=network.nodes[s.to],direction=Math.sign(s.t1-s.t0);
+  return {x:a.x+(b.x-a.x)*t,y:WALK_Y+(s.kind==='bridge'?.1*Math.sin(t*Math.PI):0),z:a.z+(b.z-a.z)*t,
+    heading:Math.atan2((b.x-a.x)*direction,(b.z-a.z)*direction),kind:s.kind,islandId:t<.5?a.islandId:b.islandId,from:s.from,to:s.to,t};
+}
+export function nearestBoothNode(network,booth) {
+  return network.nodes.reduce((best,node,index)=>node.islandId===booth.islandId&&
+    (best===null||Math.hypot(node.x-booth.x,node.z-booth.z)<Math.hypot(network.nodes[best].x-booth.x,network.nodes[best].z-booth.z))?index:best,null);
+}

@@ -1,5 +1,5 @@
 const $ = id => document.getElementById(id);
-let DATA, scene, mode = 'map', selected = null, selectedItem = null, failed3D = false, expanded = false;
+let DATA, scene, mode = 'map', selected = null, selectedItem = null, failed3D = false, expanded = false, guideMode = false, guideItem = null, detailOrigin = null;
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 const saved = key => { try { return localStorage.getItem(key); } catch { return null; } };
 const save = (key,value) => { try { localStorage.setItem(key,value); } catch {} };
@@ -8,26 +8,28 @@ function safeUrl(value) { try { const url = new URL(value, location.href); retur
 function link(label,url,cls) { const a=el('a',label,cls); const href=safeUrl(url); if(href) {a.href=href;a.target='_blank';a.rel='noopener noreferrer';} else {a.textContent+=' · 來源待補';} return a; }
 function itemCard(item) {
  const node=el('div',undefined,'item-card'); node.append(el('span',item.status,'status-chip'),el('p',item.description),el('p','下一步｜'+item.nextAction,'next'),link(item.sourceLabel+' ↗',item.sourceUrl));
- const evidence=el('details',undefined,'source-details');evidence.append(el('summary','來源與核對狀態'),el('p',`更新：${item.updatedAt} · 來源版本 ${item.sourceRevision.slice(0,12)}`,'source-meta'),el('p',item.verifiedBy,'source-meta'));node.append(evidence);return node;
+ const evidence=el('details',undefined,'source-details');evidence.append(el('summary','資料來源'),el('p',`更新：${item.updatedAt} · 來源版本 ${item.sourceRevision.slice(0,12)}`,'source-meta'),el('p',item.verifiedBy,'source-meta'));node.append(evidence);return node;
 }
 function renderList(query='') {
  $('list-content').replaceChildren();let found=0;const q=query.trim().toLocaleLowerCase();
  DATA.islands.forEach((island,index)=>{
   const matches=island.items.filter(item=>[island.title,item.title,item.description,item.status].join(' ').toLocaleLowerCase().includes(q));if(!matches.length)return;
   const section=el('article',undefined,'list-island');section.append(el('p',`ZONE ${String(index+1).padStart(2,'0')}`,'eyebrow'),el('h2',island.icon+' '+island.title),el('p',island.summary));
-  matches.forEach(item=>{const d=el('details');d.open=Boolean(q);d.append(el('summary',item.title),itemCard(item));const visit=el('button','到這個攤位看看 →','visit-booth');visit.addEventListener('click',()=>{if(!failed3D)setMode('map');selectItem(item.id);});d.append(visit);section.append(d);found++;});$('list-content').append(section);
+  matches.forEach(item=>{const d=el('details');d.open=Boolean(q);d.append(el('summary',item.title),itemCard(item));const visit=el('button','請 Tarshar 帶我去 →','visit-booth');visit.addEventListener('click',()=>startGuide(item.id));d.append(visit);section.append(d);found++;});$('list-content').append(section);
  });if(!found)$('list-content').append(el('p','沒有符合的資料。試試「第三章」「文獻」或「評分」。'));
 }
 function setMode(value) {
+ if(value!=='map')scene?.stopGuide();
  mode=value;$('companion-menu').hidden=true;$('companions-open').setAttribute('aria-expanded','false');const map=value==='map';if(!map&&expanded)expandView(false);document.querySelector('.view-tools').hidden=!map||failed3D;$('map-tab').setAttribute('aria-pressed',String(map));$('list-tab').setAttribute('aria-pressed',String(!map));
  $('list-view').hidden=map;$('scene').hidden=!map;$('scene-controls').hidden=!map||failed3D;$('map-hint').hidden=!map||failed3D;$('reset').hidden=!map||failed3D;$('follow-walker').hidden=!map||failed3D;
+ $('guide-mode').disabled=failed3D;
  $('zoom-in').hidden=!map||failed3D;$('zoom-out').hidden=!map||failed3D;
  $('flow-legend').hidden=!map||$('flows').getAttribute('aria-pressed')!=='true';scene?.setVisible(map);save('thesis-island-mode',value);
 }
 function expandView(value) {
  expanded=value;document.querySelector('.world-card').classList.toggle('expanded',value);document.body.classList.toggle('view-expanded',value);
  $('expand-view').setAttribute('aria-pressed',String(value));$('expand-view').setAttribute('aria-label',value?'收起逛園區畫面':'展開逛園區');$('expand-view').firstChild.textContent=value?'⤡':'⤢';$('expand-view').querySelector('span').textContent=value?'收起':'展開';
- for(const node of document.querySelectorAll('.skip,.site-header,.intro,.fair-program,.below-map,footer'))node.inert=value;
+ for(const node of document.querySelectorAll('.skip,.site-header,.intro,.guide-launch,.fair-program,.below-map,footer'))node.inert=value;
  if(!value)$('expand-view').focus({preventScroll:true});
 }
 function updateSelection(id) {
@@ -35,7 +37,7 @@ function updateSelection(id) {
  document.querySelectorAll('.island-tab').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.id===id)));
  document.querySelectorAll('[data-item-id]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.itemId===selectedItem)));
 }
-function showDetail(){const world=document.querySelector('.world-card'),r=world.getBoundingClientRect();if(!expanded&&(r.top< -60||r.top>innerHeight*.24))world.scrollIntoView({block:'start',behavior:reduced.matches?'instant':'smooth'});if(!$('detail').open)$('detail').show();$('detail').scrollTop=0;$('detail').querySelector('.dialog-close').focus({preventScroll:true});}
+function showDetail(){if(!$('detail').open)detailOrigin=document.activeElement;const world=document.querySelector('.world-card'),r=world.getBoundingClientRect();if(!expanded&&(r.top< -60||r.top>innerHeight*.24))world.scrollIntoView({block:'start',behavior:reduced.matches?'instant':'smooth'});if(!$('detail').open)$('detail').show();$('detail').scrollTop=0;$('detail').querySelector('.dialog-close').focus({preventScroll:true});}
 function boothButton(item,island,cls='booth-entry') {
  const b=el('button',undefined,cls);b.type='button';b.dataset.itemId=item.id;
  b.append(el('span',item.title,'booth-title'),el('span',item.status,'booth-status'));
@@ -54,27 +56,52 @@ function select(id) {
  body.append(el('p','展區導覽 · '+island.items.length+' 個研究攤位','eyebrow'),title,el('p',island.subtitle,'detail-subtitle'),el('p',island.summary));
  const list=el('div',undefined,'zone-booths');island.items.forEach(item=>{const wrap=el('article',undefined,'zone-booth');wrap.append(boothButton(item,island),el('p',item.description));list.append(wrap);});body.append(list,relatedZones(island));showDetail();
 }
-function selectItem(id) {
+function selectItem(id,{direct=false,arrival=false}={}) {
+ if(!direct&&guideMode&&scene&&!failed3D){startGuide(id);return;}
  const island=DATA.islands.find(i=>i.items.some(item=>item.id===id));if(!island)return;const item=island.items.find(item=>item.id===id);
- selectedItem=id;updateSelection(island.id);if(scene?.selectItem)scene.selectItem(id);else scene?.select(island.id);
+ selectedItem=id;updateSelection(island.id);if(!arrival){if(scene?.selectItem)scene.selectItem(id);else scene?.select(island.id);}
  const body=$('detail-body');body.replaceChildren();const back=el('button','← '+island.title,'detail-back');back.addEventListener('click',()=>select(island.id));
  const title=el('h2',item.title);title.id='detail-title';body.append(back,el('p','研究攤位 · '+String(island.items.indexOf(item)+1).padStart(2,'0'),'eyebrow'),title,itemCard(item));
+ if(scene&&!failed3D){const visit=el('button',arrival?'回到自由探索':'請 Tarshar 帶我去 →','visit-booth');visit.addEventListener('click',()=>{if(arrival){setGuideMode(false);$('detail').close();}else startGuide(id);});body.append(visit);}
  const peers=el('section',undefined,'peer-booths');peers.append(el('h3','同區還有這些攤位'));
  island.items.filter(other=>other.id!==id).forEach(other=>peers.append(boothButton(other,island,'peer-booth')));
  body.append(peers,relatedZones(island));showDetail();
 }
+function setGuideMode(value){
+ guideMode=value;$('guide-mode').setAttribute('aria-pressed',String(value));$('guide-mode-copy').textContent=value?'點選攤位，Tarshar 就會帶妳沿路走過去。':'自由探索中；可直接閱讀，也可請 Tarshar 帶路。';if(!value)scene?.explore();
+}
+function guideChanged(state){
+ guideItem=state.status==='idle'?null:state.itemId;
+ $('guide-hud').hidden=state.status==='idle'||state.status==='arrived';
+ if(!guideItem)return;
+ const item=DATA.islands.flatMap(i=>i.items).find(i=>i.id===guideItem);
+ const prefix=state.status==='paused'?'導覽已暫停':state.status==='arrived'?'抵達':'正在前往';
+ $('guide-destination').textContent=`${prefix} · ${item?.title||''}`;
+ $('guide-progress').value=state.progress;
+ $('guide-progress').setAttribute('aria-label',`前往${item?.title||'攤位'}的進度`);
+ if(state.status==='arrived')$('guide-announcement').textContent=`已抵達${item?.title||'攤位'}，研究內容已開啟。`;
+}
+function startGuide(id){
+ if(!scene||failed3D){selectItem(id,{direct:true});return;}
+ $('detail').close();setMode('map');
+ const island=DATA.islands.find(i=>i.items.some(it=>it.id===id));if(!island)return;
+ selectedItem=id;updateSelection(island.id);
+ document.querySelector('.world-card').scrollIntoView({block:'start',behavior:reduced.matches?'instant':'smooth'});
+ $('guide-announcement').textContent='Tarshar 出發帶路了，可以隨時停止或直接閱讀。';
+ scene.guideTo(id);
+}
 function failScene(error) {
- failed3D=true;scene?.dispose();scene=null;$('scene-loading').hidden=true;$('scene-error').hidden=false;$('scene-error').textContent='3D 暫時無法顯示，妳仍可使用下方清單與全部資料連結。';$('map-tab').disabled=true;setMode('list');
+ failed3D=true;scene?.dispose();scene=null;guideChanged({status:'idle'});$('scene-loading').hidden=true;$('scene-error').hidden=false;$('scene-error').textContent='3D 暫時無法顯示，妳仍可使用下方清單與全部資料連結。';$('map-tab').disabled=true;setMode('list');
  console.warn('Island scene unavailable:',error?.name||'WebGL unavailable');
 }
 function statusInfo(){
  const body=$('status-body');body.replaceChildren();body.append(el('p',DATA.snapshotNote),el('p','園區中的文字來自紫區研究資料；攤位、舞台、人物、日夜與路線是視覺示意。此頁不呼叫語言模型，不會啟動任務。'));
  const dl=el('dl');for(const [key,value]of [['快照更新',new Date(DATA.generatedAt).toLocaleString('zh-TW',{timeZone:'Asia/Taipei'})+'（台北時間）'],['研究來源版本',DATA.sourceCommits.research],['平台來源版本',DATA.sourceCommits.platform],['現有實驗模型',DATA.runtimeModel.embedding+' / '+DATA.runtimeModel.generation],['模型狀態',DATA.runtimeModel.status],['真實執行事件',DATA.events.length?'已有公開刪敏事件':'尚未接入；沒有即時任務紀錄']])dl.append(el('dt',key),el('dd',value));body.append(dl,link('查看設計與模型分工 ↗',DATA.planUrl));
 }
-function motionPref(){if(reduced.matches){$('motion').setAttribute('aria-pressed','false');scene?.setMotion(false);}$('motion').disabled=reduced.matches;$('motion').title=reduced.matches?'依系統「減少動態效果」設定，動畫已停用':'只播放場景動畫，不執行 AI 任務';}
+function motionPref(){if(reduced.matches){$('motion').setAttribute('aria-pressed','false');$('motion').firstChild.textContent='▷ ';scene?.setMotion(false);}$('motion').disabled=reduced.matches;$('motion').title=reduced.matches?'依系統「減少動態效果」設定，動畫已停用':'只播放場景動畫，不執行 AI 任務';}
 async function init(){
  try {
-  const response=await fetch('./data.json?v=companions-1023');if(!response.ok)throw new Error('Snapshot unavailable');DATA=await response.json();
+  const response=await fetch('./data.json?v=guide-1026');if(!response.ok)throw new Error('Snapshot unavailable');DATA=await response.json();
   if(DATA.schemaVersion!=='1.0.0'||!Array.isArray(DATA.islands))throw new Error('Unsupported snapshot');
   $('brand-logo').src=safeUrl(DATA.brand.logoUrl);$('brand-logo').alt=DATA.brand.logoAlt;$('motion').setAttribute('aria-pressed',String(DATA.avatar.autoWalk&&!reduced.matches));$('history-link').href=safeUrl(DATA.historyUrl);$('focus').textContent=DATA.currentFocus;$('focus-status').textContent=DATA.currentStatus;$('next-action').textContent=DATA.nextAction;$('continue').href=safeUrl(DATA.primaryUrl);$('continue').firstChild.textContent=DATA.primaryLabel+' ';
   const age=(Date.now()-Date.parse(DATA.generatedAt))/3600000;const date=new Date(DATA.generatedAt).toLocaleDateString('zh-TW',{timeZone:'Asia/Taipei'});
@@ -90,9 +117,13 @@ async function init(){
   const people=[{id:'tarshar',name:'Tarshar',role:'研究主人'},...(DATA.companions||[])];
   people.forEach(person=>{const b=el('button',person.name);b.dataset.person=person.id;b.addEventListener('click',()=>{$('detail').close();scene?.followPerson(person.id,true);$('companion-menu').hidden=true;$('companions-open').setAttribute('aria-expanded','false');});$('companion-menu').append(b);});
   $('companions-open').addEventListener('click',()=>{const open=$('companion-menu').hidden;$('companion-menu').hidden=!open;$('companions-open').setAttribute('aria-expanded',String(open));});
+  $('guide-mode').addEventListener('click',()=>setGuideMode(!guideMode));
+  $('guide-stop').addEventListener('click',()=>{scene?.stopGuide();$('guide-announcement').textContent='這一趟導覽已停止。可以選擇其他攤位，或關閉 Tarshar 帶路。';$('scene').querySelector('canvas')?.focus({preventScroll:true});});
+  $('guide-read').addEventListener('click',()=>{const id=guideItem;if(id)selectItem(id,{direct:true});});
+  $('guide-skip').addEventListener('click',()=>scene?.finishGuide());
   $('search').addEventListener('input',e=>renderList(e.target.value));$('list-tab').addEventListener('click',()=>setMode('list'));$('map-tab').addEventListener('click',()=>setMode('map'));$('reset').addEventListener('click',()=>{scene?.reset();selected=null;selectedItem=null;updateSelection(null);});
   $('expand-view').addEventListener('click',()=>expandView(!expanded));$('zoom-in').addEventListener('click',()=>scene?.zoom(.8));$('zoom-out').addEventListener('click',()=>scene?.zoom(1.25));
-  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('companion-menu').hidden){$('companion-menu').hidden=true;$('companions-open').setAttribute('aria-expanded','false');$('companions-open').focus();return;}if(e.key==='Escape'&&$('detail').open){e.preventDefault();$('detail').close();return;}if(e.key==='Escape'&&expanded&&!document.querySelector('dialog[open]')){e.preventDefault();expandView(false);}});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('companion-menu').hidden){$('companion-menu').hidden=true;$('companions-open').setAttribute('aria-expanded','false');$('companions-open').focus();return;}if(e.key==='Escape'&&$('detail').open){e.preventDefault();$('detail').close();return;}if(e.key==='Escape'&&guideItem){e.preventDefault();scene?.stopGuide();return;}if(e.key==='Escape'&&expanded&&!document.querySelector('dialog[open]')){e.preventDefault();expandView(false);}});
   $('follow-walker').addEventListener('click',()=>scene?.followWalker($('follow-walker').getAttribute('aria-pressed')!=='true'));
   $('flows').addEventListener('click',()=>{const enabled=$('flows').getAttribute('aria-pressed')!=='true';$('flows').setAttribute('aria-pressed',String(enabled));scene?.setFlows(enabled);$('flow-legend').hidden=!enabled;});
   $('motion').addEventListener('click',()=>{const enabled=$('motion').getAttribute('aria-pressed')!=='true';$('motion').setAttribute('aria-pressed',String(enabled));$('motion').firstChild.textContent=enabled?'Ⅱ ':'▷ ';scene?.setMotion(enabled);});
@@ -100,14 +131,15 @@ async function init(){
   reduced.addEventListener('change',motionPref);
   if(saved('thesis-island-mode')==='list')setMode('list');
   // The list is built first. All WebGL/module errors are contained below.
-  try { const {createIslandScene}=await import('./scene.js?v=companions-1023');scene=await createIslandScene({container:$('scene'),data:DATA,onSelect:select,onSelectItem:selectItem,onError:failScene,onFollowChange:(value,id)=>{$('follow-walker').setAttribute('aria-pressed',String(value&&id==='tarshar'));document.querySelectorAll('[data-person]').forEach(b=>b.setAttribute('aria-pressed',String(value&&b.dataset.person===id)));document.querySelector('.world-card').classList.toggle('following',value);}});$('scene-loading').hidden=true;scene.setVisible(mode==='map');motionPref(); }
+  try { const {createIslandScene}=await import('./scene.js?v=guide-1026');scene=await createIslandScene({container:$('scene'),data:DATA,onSelect:select,onSelectItem:selectItem,onError:failScene,onGuideChange:guideChanged,onGuideArrive:id=>selectItem(id,{direct:true,arrival:true}),onFollowChange:(value,id)=>{$('follow-walker').setAttribute('aria-pressed',String(value&&id==='tarshar'));document.querySelectorAll('[data-person]').forEach(b=>b.setAttribute('aria-pressed',String(value&&b.dataset.person===id)));document.querySelector('.world-card').classList.toggle('following',value);}});$('scene-loading').hidden=true;scene.setVisible(mode==='map');motionPref(); }
   catch(error){failScene(error);}
   if(!saved('thesis-island-welcome')){$('help-open').classList.add('welcome-hint');$('map-hint').textContent='按「展開」自在逛園區 · 按 ＋ 看細節';save('thesis-island-welcome','shown');}
   // Read-only diagnostics for reproducible browser checks. No query engine calls.
-  window.islandDiagnostics=()=>({mode,expanded,selected,selectedItem,failed3D,revision:DATA.sourceCommits,items:DATA.islands.reduce((n,i)=>n+i.items.length,0),scene:scene?.getStats()});
+  window.islandDiagnostics=()=>({mode,expanded,selected,selectedItem,guideMode,guideItem,failed3D,revision:DATA.sourceCommits,items:DATA.islands.reduce((n,i)=>n+i.items.length,0),scene:scene?.getStats()});
  } catch(error){$('scene-loading').hidden=true;$('focus-status').textContent='快照讀取失敗；研究正本仍可開啟。';const box=$('data-error');box.hidden=false;box.replaceChildren(el('p','研究快照暫時無法載入。可重新整理，或開啟紫區資料庫。'),link('開啟紫區資料庫 ↗','https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/purple/'));setMode('list');}
 }
 document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>$(b.dataset.close).close()));
+$('detail').addEventListener('close',()=>{if(detailOrigin?.isConnected&&!detailOrigin.closest('[inert]')&&detailOrigin.getClientRects().length)detailOrigin.focus({preventScroll:true});});
 $('help-open').addEventListener('click',()=>$('help').showModal());$('status-open').addEventListener('click',()=>$('status-dialog').showModal());
 for(const d of document.querySelectorAll('dialog'))d.addEventListener('click',e=>{if(e.target===d){const r=d.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)d.close();}});
 init();

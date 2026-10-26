@@ -1,7 +1,7 @@
 // Tarshar 研究同樂會：溫暖黏土微縮 3D 草地園區（Claude 實作，Codex 負責 HTML/CSS/資料）
 import * as THREE from './vendor/three.module.js';
 import {OrbitControls} from './vendor/OrbitControls.js';
-import {makeWalkNetwork, makeTour, sampleTour, ringPoint, WALK_Y} from './walk-network.js?v=restore-1023';
+import {makeWalkNetwork, makeTour, sampleTour, makeRoute, sampleRoute, nearestBoothNode, ringPoint, WALK_Y} from './walk-network.js?v=guide-1026';
 import {createResearchCompanion} from './research-companions.js?v=companions-1023';
 import {createTarsharAvatar} from './tarshar-avatar.js?v=restore-1023';
 import {ISLAND_RADIUS as R, PATH_WIDTH, BRIDGE_WIDTH, islandPosition} from './world-layout.js';
@@ -177,7 +177,7 @@ function xf(x, y, z, ry, s) {
 }
 
 // ---------- 主入口 ----------
-export async function createIslandScene({container, data, onSelect, onSelectItem, onError, onFollowChange}) {
+export async function createIslandScene({container, data, onSelect, onSelectItem, onError, onFollowChange, onGuideChange, onGuideArrive}) {
   const noop = () => {};
   const stub = {select: noop, selectItem: noop, reset: noop, setTime: noop, setMotion: noop, setFlows: noop, setVisible: noop, dispose: noop, getStats: () => ({error: true})};
   let renderer;
@@ -262,6 +262,7 @@ export async function createIslandScene({container, data, onSelect, onSelectItem
   const avatar = createTarsharAvatar(data.avatar);
   const avatarScale = data.avatar.scale || 1;
   avatar.group.scale.setScalar(avatarScale);scene.add(avatar.group);
+  let navigation=null, parked=false, guideState={status:'idle',itemId:null,progress:0}, routeLine=null;
   let walkingDistance = 0, walkerSample=sampleTour(network,tour,0), following=false, followingId=null, followDistance=6;
   avatar.group.position.set(walkerSample.x,walkerSample.y,walkerSample.z);
   avatar.group.rotation.y=walkerSample.heading;
@@ -386,6 +387,7 @@ export async function createIslandScene({container, data, onSelect, onSelectItem
     highlightItem(selectedItem);
   }
   function selectIsland(id) {
+    stopGuide();
     followState(false);
     const i = byId.get(id);
     selected = i === undefined ? null : id; selectedItem = null;
@@ -396,9 +398,10 @@ export async function createIslandScene({container, data, onSelect, onSelectItem
     const to = i === undefined ? null : new THREE.Vector3(islands[i].x, 0.9, islands[i].z);
     flyTo(to || home.target, i === undefined ? null : Math.max(12, home.dist * 0.32, fitDist(3.6, 0.92)), i === undefined);
   }
-  function selectItemById(itemId) {
+  function selectItemById(itemId, arrival=false) {
     const b = boothById.get(itemId);
     if (!b) return;
+    if(!arrival)stopGuide();
     followState(false);
     const i = byId.get(b.islandId);
     selected = b.islandId; selectedItem = itemId;
@@ -406,7 +409,52 @@ export async function createIslandScene({container, data, onSelect, onSelectItem
     ring.visible = false;
     boothRing.visible = true; boothRing.position.set(b.x, b.groundY + 0.03, b.z); boothRingMat.color.set(0xfff0b8);
     const viewDir=new THREE.Vector3(b.x-islands[i].x,1.1,b.z-islands[i].z).normalize();
-    flyTo(new THREE.Vector3(b.x, 1.05, b.z), Math.max(5.2, fitDist(1.0, 0.85) + 1.5), false, viewDir);
+    flyTo(new THREE.Vector3(b.x, 1.05, b.z), Math.max(arrival?7:5.2, fitDist(arrival?1.5:1.0, 0.85) + 1.5), false, viewDir);
+  }
+  function reportGuide(status, progress=guideState.progress) {
+    const next={status,itemId:guideState.itemId,progress};
+    if(next.status!==guideState.status||next.progress!==guideState.progress||status==='walking') {
+      guideState=next;onGuideChange?.({...guideState});
+    }
+  }
+  function clearRouteLine(){if(routeLine){scene.remove(routeLine);routeLine.geometry.dispose();routeLine.material.dispose();routeLine=null;}}
+  function stopGuide() {
+    if(!navigation&&guideState.status==='idle')return;
+    navigation=null;parked=true;avatar.step(simT,false);clearRouteLine();
+    guideState={status:'idle',itemId:null,progress:0};onGuideChange?.({...guideState});followState(false);requestRender();
+  }
+  function positionAvatar(sample){walkerSample=sample;avatar.group.position.set(sample.x,sample.y,sample.z);}
+  function finishGuide() {
+    if(!navigation||navigation.kind!=='guide')return;
+    const id=guideState.itemId,b=boothById.get(id);
+    positionAvatar(sampleRoute(network,navigation.route,navigation.route.length));
+    avatar.group.rotation.y=Math.atan2(b.x-walkerSample.x,b.z-walkerSample.z);
+    navigation=null;parked=true;avatar.step(simT,false);clearRouteLine();
+    reportGuide('arrived',100);selectItemById(id,true);onGuideArrive?.(id);requestRender();
+  }
+  function guideTo(itemId) {
+    const booth=boothById.get(itemId);if(!booth||disposed)return false;
+    // Highlight without starting the booth camera flight; the camera follows the walk instead.
+    selected=booth.islandId;selectedItem=itemId;markSelection(byId.get(selected));ring.visible=false;
+    boothRing.visible=true;boothRing.position.set(booth.x,booth.groundY+.03,booth.z);
+    const route=makeRoute(network,walkerSample,nearestBoothNode(network,booth));
+    navigation={kind:'guide',route,distance:0};parked=false;
+    guideState={status:'starting',itemId,progress:0};reportGuide('walking',0);clearRouteLine();
+    const points=[];for(let d=0;d<route.length;d+=.2){const p=sampleRoute(network,route,d);points.push(new THREE.Vector3(p.x,p.y+.045,p.z));}
+    const end=sampleRoute(network,route,route.length);points.push(new THREE.Vector3(end.x,end.y+.045,end.z));
+    if(points.length>1){routeLine=new THREE.Line(new THREE.BufferGeometry().setFromPoints(points),new THREE.LineDashedMaterial({color:0xb55436,dashSize:.16,gapSize:.10,depthTest:false}));routeLine.computeLineDistances();routeLine.renderOrder=3;scene.add(routeLine);}
+    userMoved=true;followingId='tarshar';followState(true);followDistance=isMobile?10:8;
+    flyTo(avatar.group.position.clone().add(new THREE.Vector3(0,.65,0)),followDistance,false,DIR0);
+    if(reduced||!motion||route.length<.01)finishGuide();
+    requestRender();return true;
+  }
+  function resumeRoaming() {
+    if(!parked||navigation)return;
+    // Rejoin the old loop along real edges, rather than teleporting after a visit.
+    let best=null;
+    for(const segment of tour.segments){const route=makeRoute(network,walkerSample,segment.from);if(!best||route.length<best.route.length)best={route,resumeAt:segment.start};}
+    guideState={status:'idle',itemId:null,progress:0};onGuideChange?.({...guideState});
+    navigation={kind:'rejoin',...best,distance:0};parked=false;
   }
   function flyTo(target, dist, toHomeDir, customDir=null) {
     const dirNow = camera.position.clone().sub(controls.target).normalize(), toDir = customDir || (toHomeDir ? DIR0.clone() : dirNow.clone()), toD = dist || home.dist;
@@ -438,13 +486,20 @@ export async function createIslandScene({container, data, onSelect, onSelectItem
       simT += dt; active.push('motion');
       landmarks.update(simT);
       clouds.forEach((c) => { c.position.x += c.userData.speed * dt; if (c.position.x > center.x + extentR + 18) c.position.x = center.x - extentR - 18; });
-      walkingDistance += dt*(data.avatar.speed || .48);
-      walkerSample=sampleTour(network,tour,walkingDistance);
-      avatar.group.position.set(walkerSample.x,walkerSample.y,walkerSample.z);
-      let angle=walkerSample.heading-avatar.group.rotation.y;
+      if(navigation){
+        const nav=navigation;
+        nav.distance=Math.min(nav.route.length,nav.distance+dt*(nav.kind==='guide'?1.6:(data.avatar.speed||.48)));
+        positionAvatar(sampleRoute(network,nav.route,nav.distance));
+        if(nav.kind==='guide'){
+          const pct=Math.floor(nav.distance/Math.max(.001,nav.route.length)*100);
+          if(pct!==guideState.progress)reportGuide('walking',pct);
+          if(nav.distance>=nav.route.length)finishGuide();
+        }else if(nav.distance>=nav.route.length){walkingDistance=nav.resumeAt;navigation=null;}
+      }else if(!parked){walkingDistance+=dt*(data.avatar.speed||.48);positionAvatar(sampleTour(network,tour,walkingDistance));}
+      if(!parked){let angle=walkerSample.heading-avatar.group.rotation.y;
       angle=Math.atan2(Math.sin(angle),Math.cos(angle));
-      avatar.group.rotation.y+=angle*Math.min(1,dt*12);
-      avatar.step(simT,true);
+      avatar.group.rotation.y+=angle*Math.min(1,dt*12);}
+      avatar.step(simT,!parked);
       companions.forEach(c=>{
         c.distance+=dt*(data.avatar.speed||.48);c.sample=sampleTour(network,tour,c.distance);
         c.model.group.position.set(c.sample.x,c.sample.y,c.sample.z);
@@ -458,7 +513,7 @@ export async function createIslandScene({container, data, onSelect, onSelectItem
       const person=followedPerson();
       lookAtWalker.copy(person.model.group.position).add(new THREE.Vector3(0,person.model.height*person.scale*.5,0));
       const heading=person.model.group.rotation.y;
-      const dir=new THREE.Vector3(Math.sin(heading)*.85+Math.cos(heading)*.22,.58,Math.cos(heading)*.85-Math.sin(heading)*.22).normalize();
+      const dir=navigation?.kind==='guide'?DIR0:new THREE.Vector3(Math.sin(heading)*.85+Math.cos(heading)*.22,.58,Math.cos(heading)*.85-Math.sin(heading)*.22).normalize();
       const next=lookAtWalker.clone().addScaledVector(dir,followDistance);
       controls.target.copy(lookAtWalker);camera.position.lerp(next,Math.min(1,dt*5));
     }
@@ -553,7 +608,7 @@ export async function createIslandScene({container, data, onSelect, onSelectItem
   };
   const onLost = (e) => { e.preventDefault(); lost = true; if (raf) cancelAnimationFrame(raf); raf = 0; onError && onError(new Error('WebGL context lost')); };
   const onVis = () => { last = 0; if (document.hidden && raf) { cancelAnimationFrame(raf); raf = 0; } else requestRender(); };
-  const onReduce = () => { reduced = mqReduce.matches; controls.enableDamping = !reduced; if (reduced) { if(flight) applyView(flight.toT, flight.toDir, flight.toD); flight = null; if(todTween) { Object.assign(cur,cloneState(TOD[todName])); applyTod(); todTween=null; } } last = 0; requestRender(); };
+  const onReduce = () => { reduced = mqReduce.matches; controls.enableDamping = !reduced; if (reduced) { if(navigation?.kind==='guide')finishGuide(); if(flight) applyView(flight.toT, flight.toDir, flight.toD); flight = null; if(todTween) { Object.assign(cur,cloneState(TOD[todName])); applyTod(); todTween=null; } } last = 0; requestRender(); };
   canvas.addEventListener('pointerdown', onDown); canvas.addEventListener('pointerup', onUp); canvas.addEventListener('pointercancel', onCancel);
   canvas.addEventListener('pointermove', onMove); canvas.addEventListener('keydown', onKey); canvas.addEventListener('webglcontextlost', onLost);
   controls.addEventListener('change', requestRender); controls.addEventListener('start', () => { followState(false); userMoved = true; flight = null; requestRender(); });
@@ -561,19 +616,23 @@ export async function createIslandScene({container, data, onSelect, onSelectItem
   const ro = new ResizeObserver(resize); ro.observe(container);
 
   const api = {
+    guideTo, stopGuide, finishGuide,
+    explore(){stopGuide();if(motion)resumeRoaming();requestRender();},
     select(id) { if (!disposed) selectIsland(id); },
     selectItem(itemId) { if (!disposed) selectItemById(itemId); },
-    reset() { if (disposed) return; userMoved=false;arriving=false;selectIsland(null); },
+    reset() { if (disposed) return; userMoved=false;arriving=false;selectIsland(null);if(motion)resumeRoaming(); },
     setTime(name) {
       if (!TOD[name] || disposed) return;
       todName = name;
       if (reduced) { Object.assign(cur, cloneState(TOD[name])); applyTod(); todTween = null; } else todTween = {from: cloneState(cur), k: 0};
       requestRender();
     },
-    setMotion(v) { motion = !!v; if(!motion){avatar.step(simT,false);companions.forEach(c=>c.model.step(simT,false));} last = 0; requestRender(); },
+    setMotion(v) { motion = !!v; if(motion)resumeRoaming();if(navigation?.kind==='guide')reportGuide(motion?'walking':'paused'); if(!motion){avatar.step(simT,false);companions.forEach(c=>c.model.step(simT,false));} last = 0; requestRender(); },
     followWalker(value=true) { api.followPerson('tarshar',value); },
     followPerson(id,value=true) {
       if(disposed||id!=='tarshar'&&!companions.some(c=>c.profile.id===id))return;
+      if(id!=='tarshar')stopGuide();
+      if(value&&id==='tarshar'&&motion)resumeRoaming();
       userMoved=true;followDistance=6;followingId=id;followState(value);
       if(value){const {model,scale}=followedPerson(),t=model.group.position.clone();t.y+=model.height*scale*.5;const h=model.group.rotation.y;const dir=new THREE.Vector3(Math.sin(h)*.85+Math.cos(h)*.22,.58,Math.cos(h)*.85-Math.sin(h)*.22).normalize();flyTo(t,followDistance,false,dir);}requestRender();
     },
@@ -583,12 +642,14 @@ export async function createIslandScene({container, data, onSelect, onSelectItem
     getStats() {
       const i = renderer.info;
       return {drawCalls: i.render.calls, triangles: i.render.triangles, geometries: i.memory.geometries, revision: THREE.REVISION, instances: totalInst, instancedMeshes: allMeshes.length,
+        guide:{...guideState,routeLength:navigation?.route.length??0,travelled:navigation?.distance??0,parked},
         people:[{id:'tarshar',name:data.avatar.name,position:avatar.group.position.toArray(),distance:walkingDistance},...companions.map(c=>({id:c.profile.id,name:c.profile.name,role:c.profile.role,gender:c.profile.gender,position:c.model.group.position.toArray(),distance:c.distance,kind:c.sample.kind}))],followingId,
         theme: 'research-festival', itemModels: booths.length, selectedItem, booths: booths.map((b) => ({id: b.id, islandId: b.islandId, x: b.x, y: b.y, z: b.z})),
         layout:{radius:R,pathWidth:PATH_WIDTH,bridgeWidth:BRIDGE_WIDTH,panEnabled:controls.enablePan},cameraDistance:camera.position.distanceTo(controls.target),cameraPosition: camera.position.toArray(), cameraTarget: controls.target.toArray(), walker:{name:data.avatar.name,distance:walkingDistance,position:avatar.group.position.toArray(),kind:walkerSample.kind,from:walkerSample.from,to:walkerSample.to,routeLength:tour.length,following,routeNodes:network.nodes.length}, frames, motion: effMotion(), reducedMotion: reduced, flows, time: todName, selected, visible, activeAnimations: active.slice(), pixelRatio: renderer.getPixelRatio(), contextLost: lost};
     },
     dispose() {
       if (disposed) return; disposed = true;
+      clearRouteLine();
       if (raf) cancelAnimationFrame(raf); raf = 0; ro.disconnect();
       canvas.removeEventListener('pointerdown', onDown); canvas.removeEventListener('pointerup', onUp); canvas.removeEventListener('pointercancel', onCancel);
       canvas.removeEventListener('pointermove', onMove); canvas.removeEventListener('keydown', onKey); canvas.removeEventListener('webglcontextlost', onLost);
