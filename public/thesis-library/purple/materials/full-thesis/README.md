@@ -1,40 +1,38 @@
 ---
-updated: 2026-10-23
-tags: [論文, 紫區, 全文工作稿]
-summary: 47 頁全文工作稿，黑字完成可據材料書寫的內容，紅字標示待補與待確認。
+updated: 2026-10-26
+tags: [論文, 紫區, 原題保留, 教授裁決, SECI, 方法修訂]
+summary: 58 頁五章修訂討論稿與 3 頁 meeting 討論單；原題完整保留，題名與正式方法待教授裁決。
 ---
 
 # 紫區論文全文工作稿
 
-本稿依本人要求，由既有材料寫出可完成的正文，保留紅字待補。這是可逐章修改、供教授討論的全文工作稿，不是已完成正式實驗的送審定稿。
+★本輪重要決定：原題完整保留；依研究者同意修訂五章，改題與正式研究方案交教授裁決。這是方法修訂討論稿，尚未完成正式實驗、尚未獲教授核定。
 
-- [Word 可編輯全文](../thesis.docx) — 47 頁；封面、中英文摘要、誌謝位置、目錄、圖表目錄、五章正文、參考文獻與五份附錄。
-- [PDF 閱讀版](../thesis.pdf) — 含可點目錄及書籤，適合手機查看。
-- [Markdown 文字正本](../thesis.md) — 後續內容修改由此比對；待補標記在 Word／PDF 呈紅字。
-- [架構圖](architecture.png) — 同一文件庫，A 字面查找，B 完整 AI 語意檢索與問答。
-- [文獻來源與核對紀錄](sources.json) — 10 筆文獻的核對程度與使用範圍。
-- [茜茜內容審查](claude-review.md) — 實際 Claude Code 第二輪檢查意見；六項建議已整合。
-- [協作與審查紀錄](collaboration.json) — Codex 與 Claude 分工及 CLI 費用估算，並非實際帳單餘額。
-- [版面與頁碼驗證](validation.json) — 47 頁、45 個目錄項、55 個頁碼目標、9 表及 1 圖。
-- [四處同步清單](sync-manifest.json) — 公開檔名、Drive 檔案 ID 與雜湊。
+原題：AI 語意向量知識庫對隱性知識外化文件之檢索成效研究：與傳統關鍵字搜尋之比較
+
+- [Word 全文](../thesis.docx)／[PDF 全文](../thesis.pdf)／[Markdown 正本](../thesis.md)：58 頁，五章、中英文摘要、目錄、參考文獻與六份附錄；待補與待確認維持紅字。
+- [Meeting 討論單 Word](../meeting-1026.docx)／[PDF](../meeting-1026.pdf)／[文字稿](../meeting-1026.md)：3 頁，三個核心問題、五章調整、備案與老師決議欄。
+- [架構圖](architecture.png)：同一語料；RQ1 共同取回、RQ2 B 跨來源整合回答；SECI C 視角。
+- [文獻核對](sources.json)／[協作紀錄](collaboration.json)／[版面頁碼驗證](validation.json)／[四處同步清單](sync-manifest.json)。
+- [10/23 茜茜歷史審查](claude-review.md)：保留當時紀錄，並非本輪 Claude 新審查。
+
+## 本輪修訂
+
+第一章保留口語查詢與詞彙落差動機，補入 SECI 組合化；第二章以 C 組合化為理論視角，區分工具支援與完整知識創造。第三章對齊 RQ1 A/B 共同取回與 RQ2 B 跨文件整合，A 回答品質記不適用。第四章補入 E1–E4 的開發證據並與正式結果分開；第五章保留研究限制，不預填 AI 勝出。附錄六新增教授裁決事項。
+
+兩個未消失的落差：公開文件尚缺其外化形成過程證據；B 包含改寫、取回與生成，差異不能全部歸因向量。題名保留不等於這兩個落差已經解決。Meeting 應主動說明，不把老師未提出異議視為核可。
+
+## 仍待完成
+
+教授核定題名與方法；語料範圍與效力查核、157 筆缺網址、50 筆嵌入截斷；正式題組、標準答案、操作規程、評閱與分析設計；正式實驗與學校格式。其他 E5–E12 與 D 批工單仍須逐項驗收，不能因本輪章節調整就宣稱全部完成。
 
 ## 直接開啟
 
-- [網站下載入口](https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/purple/?k=145#downloads)
-- [PDF](https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/purple/materials/thesis.pdf)
-- [Word](https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/purple/materials/thesis.docx)
+- [網站下載入口](https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/purple/#downloads)
+- [全文 PDF](https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/purple/materials/thesis.pdf)／[全文 Word](https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/purple/materials/thesis.docx)
+- [Meeting PDF](https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/purple/materials/meeting-1026.pdf)
 - [Drive 全文資料夾](https://drive.google.com/drive/folders/1e1c1oqhetrp6GGqgQ6ZvBDC_s9J5MASA)
 
-## 已完成與仍待完成
+本輪內容對照平台 858ace6／0.1.2 與 E1–E4 補充包。舊 v1/v2、綠區及歷史回測保留；本輪未改研究引擎。Word 指定標楷體與 Times New Roman；PDF 中文暫以芫荽楷體呈現。正式送審前仍須套用並核對學校正式範本。
 
-已完成五章可據現有材料書寫的內容；第三章 3.1–3.7 都有正文。第四章僅將具來源的開發觀察寫成已發生的事，正式評估表保持紅字待補。第五章說明目前可以與不可以下的結論，不預填 B 組優於 A 組。
-
-下一步是確認工作題名與研究方法、凍結正式語料及題組、建立標準答案與評分規準，執行正式評估後補入第四、五章及摘要。教授確認、正式樣本數、統計結果、研究倫理程序與學校格式未完成，不能把黑字視為教授審定。NotebookLM 僅作功能體驗參照，未主張效能相同。
-
-Word 指定標楷體與 Times New Roman；本機無標楷體，PDF 中文以芫荽楷體代替，已在前置說明揭露。正式送審前依學校範本再核對。
-
-## 來源與版本
-
-本輪以紫區平台 `a885e58` 作內容核對基準；同期 `1cb4cbb` 的 engine.py 與該基準一致。1,781 項開發語料與既有工程測試不是正式實驗成績。綠區與早期第三章起點保留，未覆寫。共同大腦保存正本，RAY、網站與 Drive 為明示同步副本。
-
-知臨｜2026-10-23
+知臨｜2026-10-26

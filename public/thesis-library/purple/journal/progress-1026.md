@@ -96,7 +96,7 @@ NotebookLM 是 Tarshar 發想與體驗的參照，尚未在同條件下實測，
 ## 七、可接續查核的入口
 
 - [紫區現行研究入口](https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/purple/)
-- [47 頁全文工作稿 PDF](https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/purple/materials/thesis.pdf)
+- [全文工作稿 PDF（現行版本；舊稿 47 頁見歷史紀錄）](https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/purple/materials/thesis.pdf)
 - [43 頁原 v1 提交報告與文獻 DOI](https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/purple/submission/)
 - [E1 至 E4 修正包及完整驗證證據](https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/purple/submission-v2/)
 - [Drive 修正資料夾](https://drive.google.com/drive/folders/1gFzeQDHRuoDO2y6k4qqFZ2croXnDp7DV)
@@ -109,3 +109,18 @@ NotebookLM 是 Tarshar 發想與體驗的參照，尚未在同條件下實測，
 ## 本筆日誌同步入口
 
 [Notion 研究生學習日誌](https://www.notion.so/405702fe1019819a8887e876332b6a6c) · [手機閱讀版](https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/purple/journal/)
+
+
+## 2026-10-26 續記：保留原題，修訂五章並交教授裁決
+
+Tarshar 同意依審查與討論修訂各章，但明確要求原論文題目不要大改。封面恢復並完整保留「AI 語意向量知識庫對隱性知識外化文件之檢索成效研究：與傳統關鍵字搜尋之比較」；改題與方法核定交由指導教授。
+
+已將五章修訂為 58 頁討論稿：以 SECI 的 C 組合化為理論視角，RQ1 比較共同支持資料的取回，RQ2 評 B 的跨來源整合回答，A 回答品質記不適用；E1–E4 工程證據補入開發觀察，正式成效仍待補。另備 3 頁 meeting 討論單與附錄六決議欄。
+
+原題保留不代表外化證據落差已解決，也不代表教授已核定。Meeting 應主動說明公開材料的形成證據不足、B 含問答而非純檢索、A 僅代表字面查找，請老師決定原題沿用條件或最小調整。未討論者不視為默認。
+
+本輪由 Codex 整合並作獨立內容與逐頁版面複核；10/23 的 Claude 審查保留為歷史紀錄，不改標成本輪新審查。58 頁、57 個目錄與圖表頁碼目標核對通過。沒有啟動 E5–E12、沒有新增正式樣本，D 批剩餘的文獻深讀及其他事項仍待逐項驗收。
+
+- [現行全文 PDF](https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/purple/materials/thesis.pdf)
+- [Meeting 討論單](https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/purple/materials/meeting-1026.pdf)
+- [Drive 全文與討論單](https://drive.google.com/drive/folders/1e1c1oqhetrp6GGqgQ6ZvBDC_s9J5MASA)
