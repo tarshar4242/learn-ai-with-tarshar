@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>不會打麻將的人，也能擺好一張麻將桌｜Tarshar AI協作日誌</title><meta name="description" content="阿芷說麻將很好玩，但我不會打。我請 AI 照台式規則做了一個有陪玩教練的麻將遊戲「我家三缺一」，完整記下我怎麼一次次把 AI 拉回來。"><link rel="canonical" href="https://tarshar4242.github.io/learn-ai-with-tarshar/notes/mahjong-ai-collaboration-journal.html"><meta property="og:title" content="不會打麻將的人，也能擺好一張麻將桌"><meta property="og:image" content="https://tarshar4242.github.io/learn-ai-with-tarshar/notes/assets/mahjong-journal/cover.jpg"><style>*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#faf7eb;color:#283229;font-family:"PingFang TC","Noto Sans TC",sans-serif;line-height:1.9}a{color:#4f612f;text-underline-offset:4px}header,main,footer{max-width:900px;margin:auto;padding:24px}header img{width:100%;max-width:420px;display:block;margin:24px auto 0;border-radius:18px;box-shadow:0 10px 30px #4f612f22}h1{font-size:clamp(30px,5vw,48px);line-height:1.4;letter-spacing:.02em;margin:16px 0}h2{font-size:25px;line-height:1.5;color:#4f612f}h3{font-size:20px;color:#4f612f;margin-top:32px}h4{font-size:18px}p,li{font-size:18px}p{margin:0 0 22px}section{margin:40px 0 64px;scroll-margin-top:20px}nav{display:grid;grid-template-columns:1fr 1fr;gap:10px}nav a{padding:12px;background:#e9eddd;border-radius:10px;text-decoration:none;font-size:16px}.eyebrow{color:#617440;font-size:14px;letter-spacing:.12em}.downloads{display:flex;flex-wrap:wrap;gap:12px;margin:24px 0}.downloads a{border:1px solid #819b3e;background:#fffdf5;padding:10px 18px;border-radius:30px;text-decoration:none}.note{padding:20px;background:#e9eddd;border-radius:16px}.table-wrap{overflow-x:auto}table{border-collapse:collapse;min-width:560px;width:100%;font-size:15px}th,td{padding:12px;border:1px solid #cbd7ab;text-align:left;vertical-align:top}th{background:#cbd7ab}footer{border-top:1px solid #cbd7ab;color:#617440;text-align:center}footer img{width:150px;display:block;margin:20px auto}@media(max-width:600px){header,main,footer{padding:20px}nav{grid-template-columns:1fr}p,li{font-size:17px}h2{font-size:23px}.downloads a{font-size:15px;padding:9px 14px}}</style></head><body><header><a href="../blog/">← 回到部落格文章</a><img src="assets/mahjong-journal/cover.jpg" alt="小D版手冊封面：空著一個位子的麻將桌"><div class="eyebrow">AI協作日誌 · 2026.10.18 · 小D版手冊 v1.0</div><h1>不會打麻將的人，<br>也能擺好一張麻將桌</h1><p>阿芷說麻將很好玩，可是我不會打。所以我請 AI 照台式規則，做了一桌有陪玩教練的麻將遊戲「我家三缺一」。這份日誌記下我怎麼一次次把 AI 拉回來。</p><div class="downloads"><a href="assets/mahjong-journal/journal.pdf" download>下載 PDF</a><a href="assets/mahjong-journal/manual.html">閱讀手冊版</a><a href="assets/mahjong-journal/journal.md" download>下載 Markdown</a><a href="https://tarshar-mahjong.onrender.com" target="_blank" rel="noopener">開一桌玩玩看</a></div><p class="note">遊戲放在免費雲端主機，沒人玩 15 分鐘會睡著，第一個打開的人要等 30 秒到 1 分鐘。四個真人同時實打還沒正式試過，內容是 2026 年 10 月 18 日的快照。</p></header><main><section><h2>閱讀目錄</h2><nav><a href="#part-0">00　導讀</a><a href="#part-1">01　第一部｜做出一桌能玩的台式麻將</a><a href="#part-2">02　第二部｜讓不會打的人也能坐上桌</a><a href="#part-3">03　第三部｜實際發生的偏航與 AI 修正</a><a href="#part-4">04　第四部｜正式決策帳</a><a href="#part-5">05　第五部｜學習關鍵字辭典</a><a href="#part-6">06　第六部｜可以帶回論文／研究的素材</a><a href="#part-7">07　第七部｜產出的文件與狀態</a><a href="#part-8">08　第八部｜仍待確認</a><a href="#part-9">09　第九部｜現在正確的下一步</a></nav></section><section id="part-0"><div class="eyebrow">00 / 09</div><h2>導讀</h2><h2>0. 為什麼我要先做這份日誌</h2>
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>不會打麻將的人，也能擺好一張麻將桌｜Tarshar AI協作日誌</title><meta name="description" content="阿芷說麻將很好玩，但我不會打。我請 AI 照台式規則做了一個有陪玩教練的麻將遊戲「我家三缺一」，完整記下我怎麼一次次把 AI 拉回來。"><link rel="canonical" href="https://tarshar4242.github.io/learn-ai-with-tarshar/notes/mahjong-ai-collaboration-journal.html"><meta property="og:title" content="不會打麻將的人，也能擺好一張麻將桌"><meta property="og:description" content="不會打麻將的我，和 AI 一起做了一桌有陪玩教練的台式麻將。"><meta property="og:image" content="https://tarshar4242.github.io/learn-ai-with-tarshar/notes/assets/mahjong-journal/cover.jpg"><style>*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#faf7eb;color:#283229;font-family:"PingFang TC","Noto Sans TC",sans-serif;line-height:1.9}a{color:#4f612f;text-underline-offset:4px}header,main,footer{max-width:900px;margin:auto;padding:24px}header img{width:100%;max-width:420px;display:block;margin:24px auto 0;border-radius:18px;box-shadow:0 10px 30px #4f612f22}h1{font-size:clamp(30px,5vw,48px);line-height:1.4;letter-spacing:.02em;margin:16px 0}h2{font-size:25px;line-height:1.5;color:#4f612f}h3{font-size:20px;color:#4f612f;margin-top:32px}h4{font-size:18px}p,li{font-size:18px}p{margin:0 0 22px}section{margin:40px 0 64px;scroll-margin-top:20px}nav{display:grid;grid-template-columns:1fr 1fr;gap:10px}nav a{padding:12px;background:#e9eddd;border-radius:10px;text-decoration:none;font-size:16px}.eyebrow{color:#617440;font-size:14px;letter-spacing:.12em}.downloads{display:flex;flex-wrap:wrap;gap:12px;margin:24px 0}.downloads a{border:1px solid #819b3e;background:#fffdf5;padding:10px 18px;border-radius:30px;text-decoration:none}.note{padding:20px;background:#e9eddd;border-radius:16px}.table-wrap{overflow-x:auto}table{border-collapse:collapse;min-width:560px;width:100%;font-size:15px}th,td{padding:12px;border:1px solid #cbd7ab;text-align:left;vertical-align:top}th{background:#cbd7ab}footer{border-top:1px solid #cbd7ab;color:#617440;text-align:center}footer img{width:150px;display:block;margin:20px auto}@media(max-width:600px){header,main,footer{padding:20px}nav{grid-template-columns:1fr}p,li{font-size:17px}h2{font-size:23px}.downloads a{font-size:15px;padding:9px 14px}}</style></head><body><header><a href="../blog/">← 回到部落格文章</a><img src="assets/mahjong-journal/cover.jpg" alt="小D版手冊封面：空著一個位子的麻將桌"><div class="eyebrow">AI協作日誌 · 2026.10.18 · 小D版手冊 v1.1（2026.10.26 更新）</div><h1>不會打麻將的人，<br>也能擺好一張麻將桌</h1><p>阿芷說麻將很好玩，可是我不會打。所以我請 AI 照台式規則，做了一桌有陪玩教練的麻將遊戲「我家三缺一」。這份日誌記下我怎麼一次次把 AI 拉回來。</p><div class="downloads"><a href="https://tarshar-mahjong.onrender.com" target="_blank" rel="noopener">🀄 開一桌玩玩看</a><a href="assets/mahjong-journal/journal.pdf" download>下載 PDF</a><a href="assets/mahjong-journal/manual.html">閱讀手冊版</a><a href="assets/mahjong-journal/journal.md" download>下載 Markdown</a></div><p class="note">第一次玩建議選「🐣 小白」，並把陪玩教練碰碰打開。遊戲放在免費雲端主機，沒人玩 15 分鐘會睡著，第一個打開的人要等 30 秒到 1 分鐘。小白版的難度還在收集真人戰績、會再微調；本頁內容更新到 2026 年 10 月 26 日。</p></header><main><section><h2>閱讀目錄</h2><nav><a href="#part-0">00　導讀</a><a href="#part-1">01　第一部｜做出一桌能玩的台式麻將</a><a href="#part-2">02　第二部｜讓不會打的人也能坐上桌</a><a href="#part-3">03　第三部｜實際發生的偏航與 AI 修正</a><a href="#part-4">04　第四部｜正式決策帳</a><a href="#part-5">05　第五部｜學習關鍵字辭典</a><a href="#part-6">06　第六部｜可以帶回論文／研究的素材</a><a href="#part-7">07　第七部｜產出的文件與狀態</a><a href="#part-8">08　第八部｜仍待確認</a><a href="#part-9">09　第九部｜現在正確的下一步</a></nav></section><section id="part-0"><div class="eyebrow">00 / 09</div><h2>導讀</h2><h2>0. 為什麼我要先做這份日誌</h2>
 <p>過年阿芷跟劇團去南園駐園演出，空檔時大家一起打了麻將。阿芷回來說很有趣，要找我們一起玩。</p>
 <p>問題是我不會打麻將。我知道「三缺一」好像很紅，可是我從來沒進 App 實際玩過一輪，也不知道別人是怎麼設計的。</p>
 <p>所以我起心動念，想自己做一個小玩具。我沒有寫規格書，只請 AI 參考台式麻將應有的規則幫我設計，並且一定要考慮像我這種完全不會的小白，要有一個陪玩教練。有了這個遊戲，就可以找機會大家一起玩。</p>
@@ -49,7 +49,7 @@
 <ul>
 <li><strong>我原本怎麼想</strong>：我要的是四個真人一起打，不只是跟電腦打。</li>
 <li><strong>AI 一開始怎麼理解</strong>：AI 一度理解成「四個人對戰」的另一種意思，我當場補一句「是可以四個人對」，把意思講清楚。</li>
-<li><strong>最後整理成什麼</strong>：放上雲端 Render，產生固定網址 https://tarshar-mahjong.onrender.com ，朋友不用跟我在同一個 Wi-Fi。後來又加了邀請卡，可以一鍵傳 LINE。</li>
+<li><strong>最後整理成什麼</strong>：放上雲端 Render，產生固定網址 <a href="https://tarshar-mahjong.onrender.com">https://tarshar-mahjong.onrender.com</a> ，朋友不用跟我在同一個 Wi-Fi。後來又加了邀請卡，可以一鍵傳 LINE。</li>
 <li><strong>狀態</strong>：已確認（技術上可多人連線）；四個真人同時實打：待驗證</li>
 </ul></section><section id="part-2"><div class="eyebrow">02 / 09</div><h2>第二部｜讓不會打的人也能坐上桌</h2><h2>6. 陪玩教練「碰碰」的誕生</h2>
 <ul>
@@ -84,7 +84,17 @@
 <li><strong>AI 後來改成</strong>：首頁標上 1、2、3：挑角色 → 要碰碰陪你打嗎 → 準備好就開打。碰碰的選擇直接放在首頁三選一。</li>
 <li><strong>狀態</strong>：已確認</li>
 <li><strong>形成的規則</strong>：排版先照使用者的操作順序，再談好不好看。</li>
-</ul></section><section id="part-3"><div class="eyebrow">03 / 09</div><h2>第三部｜實際發生的偏航與 AI 修正</h2><h2>10. 碰碰把整張牌桌蓋住了</h2>
+</ul>
+<h2>10. 朋友說「太難了，都是電腦在贏」</h2>
+<ul>
+<li><strong>當時情境</strong>：日誌發佈後，朋友試玩的回饋是：太難了，都是電腦在贏。</li>
+<li><strong>我原本怎麼想</strong>：應該要有容易版跟高手版。我先問 AI：「要你做兩個版本，程式上會不會有難度？」</li>
+<li><strong>AI 一開始怎麼理解</strong>：AI 去看電腦玩家怎麼出牌，發現它每一手都精算、划算就吃碰、胡牌從不漏，新手一坐下等於面對三個老手。它判斷不難改，提出小白版（會失誤、少吃碰、偶爾漏胡）和高手版（照樣精算，再加上有人聽牌時會防守）。</li>
+<li><strong>我怎麼決定</strong>：難度放在首頁、預設小白版、由開桌的人決定整桌難度，名稱用「小白／高手」。</li>
+<li><strong>最後整理成什麼</strong>：首頁第 3 步改成「選電腦難度，準備開打」；等人畫面、牌桌最上面、朋友輸入桌號時，都會顯示這桌是小白還是高手。</li>
+<li><strong>狀態</strong>：已確認（功能已上線）；真人是否真的覺得簡單：待驗證</li>
+<li><strong>形成的規則</strong>：難不難，要以來玩的人為準，不是以程式算得多精為準。</li>
+</ul></section><section id="part-3"><div class="eyebrow">03 / 09</div><h2>第三部｜實際發生的偏航與 AI 修正</h2><h2>11. 碰碰把整張牌桌蓋住了</h2>
 <ul>
 <li>AI 原本：讓碰碰的對話框浮在牌桌上面。</li>
 <li>我的修正：「這樣會好看嗎？看不到其他三個人。」碰碰應該是獨立的一塊，不能蓋到其他資訊。</li>
@@ -93,14 +103,14 @@
 <li>可重用規則：輔助資訊不能遮住主要資訊；越次要的東西放越外圍。</li>
 <li>適用邊界：手機和電腦版都適用。</li>
 </ul>
-<h2>11. 我說「我沒畫面不能決定」</h2>
+<h2>12. 我說「我沒畫面不能決定」</h2>
 <ul>
 <li>AI 原本：用文字列了四個版面選項，請我回代號。</li>
 <li>我的修正：「我沒畫面不能決定。」</li>
 <li>後來改成：AI 直接把推薦方案做出來截圖給我看。</li>
 <li>可重用規則：版面類的決定要先給畫面，不要只給文字選項。</li>
 </ul>
-<h2>12. 我看到的和 AI 說的不是同一個版本</h2>
+<h2>13. 我看到的和 AI 說的不是同一個版本</h2>
 <ul>
 <li>AI 原本：做好六個角色後說「先不上線，等你確認」。</li>
 <li>我看到的：我打開線上網址只看到四個角色，以為 AI 漏做。</li>
@@ -108,14 +118,14 @@
 <li>後來改成：直接上線，之後每次都附線上截圖和版本號。</li>
 <li>可重用規則：說「預覽」時要講清楚在哪裡看得到；給使用者能自己核對的版本號。</li>
 </ul>
-<h2>13. 首頁置中後，上下留了一大片空白</h2>
+<h2>14. 首頁置中後，上下留了一大片空白</h2>
 <ul>
 <li>AI 原本：為了「一頁看完」把內容縮小置中。</li>
 <li>我的修正：「這樣的排版也不好看吧，不然就做個框框，比較不會那麼明顯看到上方下方的留白。」</li>
 <li>後來改成：喜帖金框，框會跟著手機高度撐滿，內容平均分布。</li>
 <li>可重用規則：解決一個問題（要捲動）不能製造另一個問題（大片空白），改完要看整體。</li>
 </ul>
-<h2>14. 手機工具列擋住手牌，連續五輪（本次最大的偏航）</h2>
+<h2>15. 手機工具列擋住手牌，連續五輪（本次最大的偏航）</h2>
 <ul>
 <li>AI 原本：第一輪以為留白不夠，加大底部空間；第二輪再加大；第三輪推測我的手機一直在用舊版畫面，加了版本號強迫更新。</li>
 <li>我的修正：每一輪我都截圖回去：「你沒有往上拉，因為還是蓋住啊」「一樣會被擋住啊」。我也明確要求：「不管上下要不要調整內縮，底下那一段一定要預留白，手機原本的功能選項列不能蓋到。」</li>
@@ -125,14 +135,14 @@
 <li>可重用規則：AI 說「測過了」不等於真人的手機沒問題。實機截圖是最後一關，而且一張好的截圖比十句描述有用。</li>
 <li>適用邊界：只要成品要在手機上用，都要留實機驗證這一步。</li>
 </ul>
-<h2>15. 碰碰的話被截掉，也沒有「需要再叫」</h2>
+<h2>16. 碰碰的話被截掉，也沒有「需要再叫」</h2>
 <ul>
 <li>AI 原本：碰碰收合時只顯示一行，長句把對話框撐出畫面外；碰碰只有開和關兩種。</li>
 <li>我的修正：「碰碰的留言內容會被截掉」；「應該要有一個選項是有需要再呼叫碰碰」。</li>
 <li>後來改成：對話框固定在畫面內；碰碰改成三種模式：不用、隨時陪打、需要再叫。</li>
 <li>可重用規則：教練不是越多話越好，要讓學的人自己決定什麼時候被教。</li>
 </ul>
-<h2>16. 這份日誌本身也偏航了兩次</h2>
+<h2>17. 這份日誌本身也偏航了兩次</h2>
 <ul>
 <li>AI 原本：第一次我說「找 skill 做 AI 協作日誌」，AI 找不到同名技能，就自己拿「專案交接說明」頂替，寫成一份技術交接文件；我說方向錯了之後，AI 又自己編了一個格式。</li>
 <li>我的修正：「我請你去找 skill，如果你找不到你要告訴我，而不是給我一個很奇怪的東西。我既然會這樣講，有可能真的沒有這個 skill，但那也表示我的雲端硬碟應該有類似的文件可以參考，你確定都有找過了嗎？」</li>
@@ -140,12 +150,55 @@
 <li>可重用規則：使用者指定的 skill 找不到時，先說清楚找不到，再去雲端硬碟、Notion 找她自己的範本，不能自行替代。</li>
 <li>適用邊界：所有「照我的某某格式做」的請求。</li>
 </ul>
-<h2>17. 貼文也寫錯了重點</h2>
+<h2>18. 貼文也寫錯了重點</h2>
 <ul>
 <li>AI 原本：把 FB 貼文寫成「技術怎麼做、工具列改了五輪」。</li>
 <li>我的修正：我真正想說的是起心動念：阿芷劇團過年去南園駐園、空檔打麻將、我不會打、所以自己設計一個有陪玩教練的小遊戲，好讓大家可以一起玩。</li>
 <li>後來改成：貼文改以這段故事為主。</li>
 <li>可重用規則：先問「這篇要讓誰感受到什麼」，再決定放哪些過程。</li>
+</ul>
+<h2>19. AI 說「實測」，其實是模擬</h2>
+<ul>
+<li>AI 原本：小白版做好後，AI 回報「實測數字：小白版大約每 2 局贏 1 局，高手版大約每 3 局贏 1 局」。其實那是讓程式模擬一位照碰碰建議打的玩家，各打 150 局算出來的，沒有任何真人打過。</li>
+<li>我的修正：「你去真的派人實測過，小白版真的簡單嗎？」</li>
+<li>為什麼：模擬玩家不會猶豫、不會看錯牌、不會緊張亂按；而且只模擬了「乖乖聽碰碰」一種程度，跟真的新手不一樣。</li>
+<li>後來改成：AI 承認沒有找真人測，改口稱為模擬，並補跑四種程度的模擬；再新增戰績紀錄，讓真人打完就留下真實數字：網站統計頁（/stats.html）看全部真人，每個人手機設定裡的「我的戰績」看自己。</li>
+<li>模擬結果（每種各 150 局，AI 建議參考，非真人數據）：</li>
+</ul>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>玩家程度</th>
+<th>小白版胡牌率</th>
+<th>高手版胡牌率</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>每手照碰碰建議打</td>
+<td>55% 到 68%</td>
+<td>約 25% 到 31%</td>
+</tr>
+<tr>
+<td>一成時間亂打</td>
+<td>57%</td>
+<td>20%</td>
+</tr>
+<tr>
+<td>四分之一時間亂打</td>
+<td>32%</td>
+<td>12%</td>
+</tr>
+<tr>
+<td>一半時間亂打</td>
+<td>15%</td>
+<td>3%</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>可重用規則：「模擬」「測試」「實測」要分清楚。回報效果數字時，寫明是誰、用什麼方式、測了幾次；沒有真人參與，就不能叫實測。</li>
+<li>適用邊界：所有「效果好不好」的數字回報。</li>
 </ul></section><section id="part-4"><div class="eyebrow">04 / 09</div><h2>第四部｜正式決策帳</h2><div class="table-wrap"><table>
 <thead>
 <tr>
@@ -262,6 +315,30 @@
 <td>只留 Markdown</td>
 <td>無</td>
 </tr>
+<tr>
+<td>D14</td>
+<td>日誌公開放上我的網站，FB 貼文附遊戲與日誌網址</td>
+<td>我決定，之後直接傳連結給大家</td>
+<td>已確認</td>
+<td>只放雲端硬碟</td>
+<td>朋友不想被提名時改代稱</td>
+</tr>
+<tr>
+<td>D15</td>
+<td>電腦分小白、高手兩級，首頁選，預設小白，開桌者決定</td>
+<td>朋友說太難；我照 AI 建議拍板</td>
+<td>已確認</td>
+<td>只有一種電腦；三級以上</td>
+<td>真人戰績顯示小白仍太難或太簡單時</td>
+</tr>
+<tr>
+<td>D16</td>
+<td>新增戰績紀錄：網站統計頁＋手機裡的我的戰績</td>
+<td>要用真人數字驗證難度，不只靠模擬</td>
+<td>已確認</td>
+<td>只靠模擬；請大家手記</td>
+<td>統計頁因主機重新部署歸零時，改收手機戰績</td>
+</tr>
 </tbody>
 </table></div></section><section id="part-5"><div class="eyebrow">05 / 09</div><h2>第五部｜學習關鍵字辭典</h2><h2>1. 麻將本身</h2>
 <h3>聽牌｜Ready hand（Tenpai）</h3>
@@ -329,6 +406,22 @@
 <li>本案例子：首頁改成 1 挑角色、2 選碰碰、3 開打。</li>
 <li>我需要記住：好看之前，先順手。</li>
 </ul>
+<h3>模擬與實測｜Simulation vs. Field test</h3>
+<ul>
+<li>生活比喻：模擬是駕訓班的電腦模擬器，實測是真的開車上路。</li>
+<li>白話意思：模擬是讓程式假裝成玩家打很多局；實測是真人拿手機實際玩。</li>
+<li>正式定義：模擬以模型重現系統行為以估計結果；實地測試在真實使用情境下以真實使用者驗證。</li>
+<li>本案例子：AI 先用模擬算出小白版勝率，被我問「真的派人實測過嗎」，才補上戰績紀錄收真人數據。</li>
+<li>我需要記住：AI 給數字時，先問是模擬還是實測。</li>
+</ul>
+<h3>勝率基準｜Baseline win rate</h3>
+<ul>
+<li>生活比喻：四個人猜拳搶最後一塊蛋糕，公平的話每人四分之一的機會。</li>
+<li>白話意思：四個實力差不多的人打麻將，每人平均大約四局贏一局。</li>
+<li>正式定義：在參與者能力相同的假設下，各方預期的勝率，用來比較是否偏難或偏易。</li>
+<li>本案例子：小白版要讓新手明顯高於 25%，高手版則接近或低於 25%。</li>
+<li>我需要記住：說「好不好贏」，要跟 25% 比。</li>
+</ul>
 <h3>實機測試｜Real-device testing</h3>
 <ul>
 <li>生活比喻：衣服在模特兒身上好看，不代表我穿起來合身。</li>
@@ -357,14 +450,16 @@
 <li>仍需補證：範本被重複使用的次數與效果紀錄。</li>
 </ul></section><section id="part-7"><div class="eyebrow">07 / 09</div><h2>第七部｜產出的文件與狀態</h2><h2>正式正本</h2>
 <ul>
-<li>線上遊戲：https://tarshar-mahjong.onrender.com （目前版本 a1c767f8）</li>
-<li>程式碼：GitHub <code>tarshar4242/thesis-library</code> 的 <code>mahjong/</code> 資料夾，已合併進 main</li>
+<li>線上遊戲：<a href="https://tarshar-mahjong.onrender.com">https://tarshar-mahjong.onrender.com</a> （目前版本 66890a75，含小白／高手與戰績紀錄）</li>
+<li>戰績統計頁：<a href="https://tarshar-mahjong.onrender.com/stats.html">https://tarshar-mahjong.onrender.com/stats.html</a> （主機重新部署或休眠後可能歸零）</li>
+<li>本日誌網頁版：<a href="https://tarshar4242.github.io/learn-ai-with-tarshar/notes/mahjong-ai-collaboration-journal.html">https://tarshar4242.github.io/learn-ai-with-tarshar/notes/mahjong-ai-collaboration-journal.html</a> （可直接傳連結，附 PDF、手冊版與 Markdown 下載）</li>
+<li>程式碼與日誌原稿：GitHub <code>tarshar4242/thesis-library</code>（<code>mahjong/</code> 資料夾、本日誌 Markdown、<code>docs/ai-journal/</code> 小D版手冊），已合併進 main</li>
 <li>遊戲說明：<code>mahjong/README.md</code></li>
 </ul>
 <h2>試作／待確認</h2>
 <ul>
-<li>本日誌：<code>AI協作日誌_我家三缺一_20261018.md</code>（GitHub 工作分支 <code>claude/determined-brahmagupta-j1vv5o</code>，尚未合併 main、尚未同步 Google Drive）</li>
-<li>FB 貼文第二版（以阿芷劇團的故事為主），待我定稿</li>
+<li>FB 貼文第二版（以阿芷劇團的故事為主，附遊戲與日誌網址），待我發布</li>
+<li>小白版的難度設定（電腦約三成機率出錯、吃碰減半、約四分之一漏胡），等真人戰績再調</li>
 </ul>
 <h2>暫停、降級或淘汰</h2>
 <ul>
@@ -372,19 +467,23 @@
 <li>已淘汰：第一版 AI 協作日誌（AI 自編格式，已覆蓋）</li>
 <li>已淘汰：第一版 FB 貼文（重點放在技術過程）</li>
 <li>降級保留：奶茶米白、翡翠綠兩種封面（網址加參數仍可切換）</li>
+<li>尚未同步：Google 雲端硬碟（日誌與手冊目前在 GitHub 和網站）</li>
 </ul></section><section id="part-8"><div class="eyebrow">08 / 09</div><h2>第八部｜仍待確認</h2><ul>
 <li>四個真人同時在線實打還沒試過，只做過模擬瀏覽器的多人測試。負責：我揪人；需要的證據：一局完整實打。</li>
+<li>小白版對真的新手是否夠簡單。負責：我揪阿芷和大家打 5 到 10 局，AI 讀統計頁；需要的證據：真人戰績。</li>
+<li>統計頁會因主機重新部署或休眠歸零，大家試打期間 AI 不更新遊戲；萬一歸零，改收大家手機裡的「我的戰績」。</li>
 <li>阿芷他們在南園玩的規則，跟遊戲裡的台數規則是否一致。負責：問阿芷。</li>
 </ul></section><section id="part-9"><div class="eyebrow">09 / 09</div><h2>第九部｜現在正確的下一步</h2><h2>先做什麼</h2>
-<p>我逐段看這份日誌，確認有沒有漏掉或理解錯的地方。</p>
+<p>發布 FB 貼文，揪阿芷和大家選「小白」、開著碰碰打 5 到 10 局。</p>
 <h2>確認後再做什麼</h2>
 <ul>
-<li>定稿貼文，揪阿芷和大家開一桌實打。</li>
-<li>實打後把發現的問題補進下一份日誌。</li>
+<li>打完跟 AI 說一聲，AI 讀統計頁，依真人勝率調整小白版的強弱。</li>
+<li>實打發現的問題，補進下一份日誌。</li>
 </ul>
 <h2>本輪不做什麼</h2>
 <ul>
+<li>大家試打完、AI 讀到數字之前，不更新遊戲。</li>
 <li>不加新功能。</li>
 </ul>
 <h2>本次演化的一句話</h2>
-<p>不會打麻將的人，也能和 AI 一起把一張桌子擺好；但桌子穩不穩，要靠真人的手機來驗。</p></section><a href="#">↑ 回到頁首</a></main><footer><img src="../images/logo-tarshar.png" alt="Learn AI with Tarshar"><p>🍀 Learn AI with Tarshar | 2026</p><a href="../blog/">更多部落格文章</a></footer></body></html>
+<p>不會打麻將的人，也能和 AI 一起把一張桌子擺好；但桌子穩不穩、好不好贏，都要靠真人來驗。</p></section><a href="#">↑ 回到頁首</a></main><footer><img src="../images/logo-tarshar.png" alt="Learn AI with Tarshar"><p>🍀 Learn AI with Tarshar | 2026</p><a href="../blog/">更多部落格文章</a></footer></body></html>
