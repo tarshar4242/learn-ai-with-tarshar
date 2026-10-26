@@ -9,6 +9,15 @@
 跟課程筆記館（kt-sweet-journey）不一樣的地方：這個網站可以依對象給不同的專屬網址（分眾），
 而且有一個可以自己改內容的後台。
 
+## 同樂會獨立入口
+
+主選單「工具集」下方新增兩個入口，頁尾亦可進入：
+
+- [知識同樂會](https://tarshar-knowledge-festival.tarshar4242.chatgpt.site/) — 全網站探索、帳號收藏與熱門統計；目前僅擁有者可用。提供網址不會自動授權其他帳號。
+- [研究同樂會](https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/purple/island/) — 五展區、十五攤位的研究園區；沿用原公開版本。
+
+兩個網址可分開提供。選單由 `src/lib/nav.js` 維護，側欄與頁尾共用；本次僅新增入口，不更動兩站分享設定或研究試玩分支。
+
 ## 怎麼改內容（不用寫程式）
 
 1. 打開後台：**https://tarshar4242.github.io/learn-ai-with-tarshar/admin/**

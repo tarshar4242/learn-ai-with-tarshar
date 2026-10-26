@@ -32,7 +32,7 @@ const navNonEmpty = {
       const hidden = gated && nonEmpty.indexOf('public') === -1;
       return (
         <a
-          href={`${base}${item.href}`}
+          href={item.external ? item.href : `${base}${item.href}`}
           class={active ? 'active' : ''}
           data-nav-link
           data-nonempty-for={gated ? nonEmpty.join(',') : undefined}
@@ -40,6 +40,7 @@ const navNonEmpty = {
         >
           <span class="dot"></span>
           <span>{item.label}</span>
+          {item.note && <small class="nav-note">{item.note}</small>}
         </a>
       );
     })}
@@ -112,6 +113,7 @@ const navNonEmpty = {
     color: var(--c-brand);
     font-weight: 500;
   }
+  .nav-note { margin-left: auto; white-space: nowrap; font-size: 10px; color: var(--c-body-soft); border: 1px solid var(--c-border); border-radius: 999px; padding: 1px 6px; }
   .nav .dot {
     width: 6px;
     height: 6px;
