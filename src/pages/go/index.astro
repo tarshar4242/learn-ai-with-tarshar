@@ -1,0 +1,70 @@
+---
+/* /go/ 的守門頁。
+   有人把短網址尾巴砍掉（.../go/thesis/ → .../go/）就會落在這裡。
+   這裡什麼都不列，直接把人帶回公開首頁——看不到有哪些短網址存在。 */
+const base = import.meta.env.BASE_URL;
+---
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>Learn AI with Tarshar</title>
+    <link rel="canonical" href={new URL(base, Astro.site).toString()} />
+    <meta http-equiv="refresh" content={`0; url=${base}`} />
+    <link rel="icon" href={`${base}favicon.svg`} type="image/svg+xml" />
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background: #fbfaf6;
+        color: #26302a;
+        line-height: 1.8;
+        font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans TC', 'PingFang TC',
+          'Microsoft JhengHei', sans-serif;
+      }
+      main {
+        max-width: 520px;
+        padding: 40px 24px;
+        text-align: center;
+      }
+      .mark {
+        font-size: 40px;
+        margin-bottom: 16px;
+      }
+      p {
+        color: #5c685f;
+        margin: 0 0 20px;
+      }
+      a {
+        display: inline-block;
+        padding: 11px 18px;
+        border-radius: 999px;
+        background: #1f6b45;
+        color: #fff;
+        text-decoration: none;
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="mark">🍀</div>
+      <p>正在回到 Learn AI with Tarshar 首頁……</p>
+      <a id="home" href={base}>沒有自動跳轉？點這裡</a>
+    </main>
+
+    <script is:inline define:vars={{ base }}>
+      (function () {
+        var dest = base + window.location.search + window.location.hash;
+        var link = document.getElementById('home');
+        if (link) link.setAttribute('href', dest);
+        window.location.replace(dest);
+      })();
+    </script>
+  </body>
+</html>
