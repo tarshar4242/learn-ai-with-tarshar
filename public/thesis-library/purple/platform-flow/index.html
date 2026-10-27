@@ -1,0 +1,97 @@
+<!doctype html><html lang="zh-Hant"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>實驗平台｜現行流程與八步對照</title><style>body{margin:0;background:#fffaf3;color:#302b32;font:17px/1.8 system-ui,sans-serif}main{max-width:900px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:23px;margin-top:32px}a{color:#64407c}table{width:100%;border-collapse:collapse;table-layout:fixed}td,th{padding:10px;border:1px solid #ded3e5;overflow-wrap:anywhere;text-align:left}code{overflow-wrap:anywhere}nav{display:flex;flex-wrap:wrap;gap:18px}@media(max-width:600px){main{padding:16px}h1{font-size:24px}table{font-size:14px}td,th{padding:7px}} </style><main><nav><a href="../island/">研究同樂會</a><a href="../">紫區圖書館</a><a href="../todos/">紅字缺件待辦表</a></nav><h1>研究｜實驗平台｜現行運作流程與八步對照</h1>
+<p>更新：2026-10-27
+狀態：依現行程式、模型設定及外部審查包整理；描述開發版，不代表正式研究成效</p>
+<h2>一句話結論</h2>
+<p>紫區 B 組是「語言模型改寫問題＋BGE 向量檢索＋語言模型依來源生成答案與引用」的自建 RAG。它沒有照常見八步圖完整實作：目前沒有語意重新切塊、BM25 混合檢索或獨立重排序模型。</p>
+<h2>兩個 AI 角色</h2>
+<table>
+<thead>
+<tr>
+<th>角色</th>
+<th>現行模型</th>
+<th>工作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>理解問題與整理答案</td>
+<td>OpenAI <code>gpt-5.4-mini-2026-03-17</code></td>
+<td>產生主要及補充查詢；閱讀候選資料；生成答案與引用</td>
+</tr>
+<tr>
+<td>將文字轉為向量</td>
+<td>本機 <code>BAAI/bge-base-zh-v1.5</code></td>
+<td>將資料與查詢轉為 768 維向量，計算相似度</td>
+</tr>
+</tbody>
+</table>
+<p>模型名稱只描述現行開發設定，不表示它們已被正式比較為最佳模型。</p>
+<h2>B 組實際流程</h2>
+<ol>
+<li>事先載入並清理共同文件庫；現行開發快照有 1,781 個可檢索項目，這不是 1,781 份獨立完整文件。</li>
+<li>沿用法條、指引段落、問答與函釋要旨等既有單位，不另做語意切塊。</li>
+<li>BGE 將各單位的標題與內文轉為向量並保存。</li>
+<li>使用者輸入口語問題後，語言模型產生主要查詢及最多兩個補充查詢，並保留原問題。</li>
+<li>BGE 將各查詢轉為向量；每個查詢取相似度前 8 筆，合併、去重後最多 20 筆。</li>
+<li>語言模型讀取候選資料，每筆最多帶入 1,500 字元，生成答案與引用。</li>
+<li>程式檢查引用識別碼與部分文字條件，再顯示結果。問題不明或證據不足有追問與拒答路徑，但是否每次判斷正確仍須正式測試。</li>
+</ol>
+<h2>與常見八步圖逐項對照</h2>
+<table>
+<thead>
+<tr>
+<th>常見步驟</th>
+<th>現行平台</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>文字擷取與清理</td>
+<td>有前處理；提問時不重新抓官網</td>
+</tr>
+<tr>
+<td>語意切塊</td>
+<td>沒有；沿用既有資料單位</td>
+</tr>
+<tr>
+<td>向量化</td>
+<td>有；BGE 產生 768 維向量</td>
+</tr>
+<tr>
+<td>向量索引</td>
+<td>功能上有；保存向量陣列並逐筆算相似度，未另部署向量資料庫</td>
+</tr>
+<tr>
+<td>問題理解與改寫</td>
+<td>有；主要查詢、最多兩個補充查詢及原問題一起搜尋</td>
+</tr>
+<tr>
+<td>混合檢索</td>
+<td>沒有；B 組沒有混入 BM25 結果</td>
+</tr>
+<tr>
+<td>獨立重排序</td>
+<td>沒有；依向量分數排序後輪流合併、去重</td>
+</tr>
+<tr>
+<td>結果與來源</td>
+<td>有；生成回答、附引用並做程式檢查</td>
+</tr>
+</tbody>
+</table>
+<h2>A 組與研究界線</h2>
+<p>A 組是同一文件庫的連續字串查找：輸入文字、尋找完全相同的連續字串、顯示命中原文。它沒有問題改寫、向量或自動回答，因此不能代表所有關鍵字搜尋方法。</p>
+<p>目前正式設計仍是 A 字面查找與 B 自建 RAG 兩組。NotebookLM 是功能參照，尚未成為正式第三組。若要加入，需另定操作規程、版本紀錄與人工評閱；建議先用固定小題組作工具能力驗收，再交由教授決定是否納入。</p>
+<h2>研究限制</h2>
+<ul>
+<li>B 組同時包含改寫、向量、生成與互動，研究比較的是整體工具使用方式，不能把差異單獨歸因於向量模型。</li>
+<li>前段檢索若漏掉必要資料，後段生成答案也可能不完整。</li>
+<li>架構存在不等於能力已驗證；仍須事前固定題目，檢查需求理解、來源命中、條件保留、整合正確、引用及證據不足時的處理。</li>
+<li>現行平台、語料與案例是開發證據，正式語料、題組、程序、評分及教授確認仍待凍結。</li>
+</ul>
+<h2>證據入口</h2>
+<ul>
+<li><a href="../">紫區現行研究入口</a></li>
+<li><a href="../submission/">外部審查提交報告</a></li>
+<li><a href="../meeting-1026/teacher-format/thesis.pdf">五章工作稿</a></li>
+</ul><footer><p>更新日期：2026-10-27 · 開發版說明，非正式研究結果</p><a href="source.md">下載來源文字</a></footer></main></html>
