@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="iPAS 中級 L22303 數據可視化工具：Python 畫圖函式庫、BI 工具（Tableau、Power BI、Qlik、Looker Studio）、視覺編碼、設計原則與圖表選擇的圖解觀念複習。">
+<title>L22303 數據可視化觀念複習｜🍀Learn AI with Tarshar</title>
+<style>
+:root{
+  --bg:#08101f;--bg2:#0d1830;--panel:#111f3b;--panel2:#152746;
+  --line:rgba(137,172,255,.18);--text:#eef4ff;--muted:#a7b7d8;--dim:#7183aa;
+  --cyan:#41dcff;--blue:#6690ff;--purple:#b57bff;--green:#4de1a1;--orange:#ffc45b;--red:#ff8a80
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;color:var(--text);line-height:1.85;background:
+radial-gradient(900px 500px at 10% -10%,rgba(65,220,255,.13),transparent 65%),
+radial-gradient(900px 520px at 95% 10%,rgba(181,123,255,.14),transparent 62%),var(--bg);min-height:100vh}
+a{color:var(--cyan)}.wrap{width:min(880px,calc(100% - 32px));margin:auto}
+.topbar{position:sticky;top:0;z-index:20;background:rgba(8,16,31,.84);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.topbar .wrap{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.back{text-decoration:none;color:var(--cyan);font-size:14px;font-weight:800}.brand{font-size:12px;color:var(--muted);letter-spacing:1.5px}
+.hero{padding:46px 0 18px}
+.eyebrow{display:inline-flex;padding:6px 13px;border:1px solid rgba(65,220,255,.35);border-radius:999px;color:var(--cyan);font-size:12px;letter-spacing:2px;background:rgba(65,220,255,.06)}
+h1{font-size:clamp(28px,5vw,46px);line-height:1.25;margin:16px 0 10px;letter-spacing:-.02em}
+.lead{color:var(--muted);font-size:16px;margin:0}
+.toc{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:26px 0 8px}
+.toc a{display:block;text-decoration:none;color:var(--text);border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:rgba(17,31,59,.72);font-size:14px;font-weight:700}
+.toc a span{color:var(--cyan);margin-right:6px}
+section{margin:38px 0}
+h2{font-size:24px;margin:0 0 12px;padding-top:8px;border-top:1px solid var(--line)}
+h2 small{display:block;color:var(--cyan);font-size:12px;letter-spacing:2px;margin-top:14px}
+h3{font-size:17px;color:var(--orange);margin:22px 0 6px}
+h4{font-size:15px;color:var(--cyan);margin:0 0 4px}
+p{margin:8px 0}
+.why{border-left:4px solid var(--cyan);background:rgba(65,220,255,.06);border-radius:0 14px 14px 0;padding:12px 16px;color:var(--muted)}
+.why b{color:var(--text)}
+figure{margin:16px 0;background:#fff;border-radius:16px;padding:8px;overflow:hidden}
+figure img{display:block;width:100%;height:auto}figcaption{color:#666;font-size:12px;text-align:right;padding:2px 6px 0}
+ol,ul{padding-left:22px;color:var(--muted)}li{margin:4px 0}li b{color:var(--text)}
+.defs{display:grid;gap:10px;margin:12px 0}
+.def{border:1px solid var(--line);border-radius:14px;background:rgba(17,31,59,.72);padding:12px 16px}
+.def ul{margin:2px 0 0;padding-left:20px;font-size:14.5px}
+.def li b{color:var(--orange)}
+.note{color:var(--muted);font-size:14px}
+.tbl{overflow-x:auto;margin:14px 0;border:1px solid var(--line);border-radius:14px}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:14px}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:var(--panel2);color:var(--cyan);font-weight:800}tr:last-child td{border-bottom:0}
+td b{color:var(--orange)}
+tr.grp td{background:rgba(181,123,255,.12);color:var(--purple);font-weight:800}
+.hook{border:1px solid rgba(255,196,91,.5);background:linear-gradient(135deg,rgba(255,196,91,.13),rgba(255,196,91,.04));border-radius:14px;padding:12px 16px 12px;margin:14px 0}
+.hook .tag{display:inline-block;font-size:12px;font-weight:900;letter-spacing:1.5px;color:#2a1a00;background:var(--orange);border-radius:999px;padding:2px 10px;margin-bottom:6px}
+.hook ul{margin:0;padding-left:20px;color:var(--text)}.hook li b{color:var(--orange)}
+.trap{border:1px solid rgba(255,138,128,.4);background:rgba(255,138,128,.07);border-radius:14px;padding:12px 16px;margin:14px 0}
+.trap b{color:var(--red)}
+.recap{counter-reset:n;list-style:none;padding:0}
+.recap li{counter-increment:n;position:relative;padding:12px 14px 12px 50px;border:1px solid var(--line);border-radius:14px;background:rgba(17,31,59,.72);margin:8px 0;color:var(--text)}
+.recap li::before{content:counter(n);position:absolute;left:14px;top:12px;width:26px;height:26px;border-radius:50%;background:var(--green);color:#062418;font-weight:900;text-align:center;line-height:26px;font-size:13px}
+.quiz{list-style:none;padding:0;counter-reset:q}
+.quiz li{counter-increment:q;border:1px solid var(--line);border-radius:14px;background:rgba(17,31,59,.72);padding:12px 16px;margin:10px 0;color:var(--text)}
+.quiz li::before{content:"練習 " counter(q);display:block;color:var(--cyan);font-size:12px;font-weight:900;letter-spacing:1.5px}
+details{margin-top:8px}summary{cursor:pointer;color:var(--green);font-weight:800;font-size:14px}
+details p{color:var(--muted);font-size:14.5px}details b{color:var(--orange)}
+footer{text-align:center;color:var(--dim);font-size:12px;line-height:1.9;border-top:1px solid var(--line);margin-top:50px;padding:30px 20px 44px}
+@media(max-width:600px){.wrap{width:calc(100% - 32px)}.brand{display:none}.toc{grid-template-columns:1fr}h2{font-size:21px}}
+code{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:.9em;color:var(--cyan);background:rgba(65,220,255,.08);border-radius:6px;padding:1px 6px;word-break:break-word}
+.cheat{border:2px solid var(--orange);background:linear-gradient(135deg,rgba(255,196,91,.16),rgba(255,196,91,.05));border-radius:16px;padding:14px 14px 6px;margin:18px 0}
+.cheat .tag{display:inline-block;font-size:12px;font-weight:900;letter-spacing:1.5px;color:#2a1a00;background:var(--orange);border-radius:999px;padding:2px 10px;margin-bottom:4px}
+.cheat h4{color:var(--orange);font-size:17px;margin:4px 0 2px}
+.cheat .tbl{background:rgba(8,16,31,.55)}
+.cheat td code{white-space:nowrap}
+</style>
+</head>
+<body>
+<nav class="topbar"><div class="wrap"><a class="back" href="../ipas-intermediate.html">← iPAS 中級總覽</a><span class="brand">🍀 LEARN AI WITH TARSHAR · L22 觀念複習</span></div></nav>
+
+<main class="wrap">
+<header class="hero">
+  <span class="eyebrow">iPAS 中級 · 科目二 · L22303</span>
+  <h1>數據可視化工具｜觀念圖解複習</h1>
+  <p class="lead">這一章的難處不在觀念深，而在<b>工具名稱多、功能名字像</b>：Matplotlib、pyplot、Pandas 的 .plot()、plt.show() 常一起出現，各管不同的事；Power BI 的報表檢視、資料表檢視、模型檢視也只差兩個字。所以每個工具先<b>放進一張關係圖</b>看清楚誰在底層、誰疊在上面，再整理成<b>可以背的速查表</b>。每個單元照「為什麼需要它 → 一步步搭起來 → 名詞各自定義 → 整合比較表 → 記憶鉤子 → 易錯提醒」排列。</p>
+  <div class="hook"><span class="tag">先背這兩張</span><ul>
+    <li><b>單元 ① 的「Python 畫圖函式庫速查表」</b>和<b>單元 ② 的「BI 工具對照表」</b>都用黃框標出來，考前請先背這兩張。</li>
+  </ul></div>
+  <nav class="toc" aria-label="目錄">
+    <a href="#u1"><span>①</span>Python 畫圖函式庫：Matplotlib 家族</a>
+    <a href="#u2"><span>②</span>BI 工具：Tableau、Power BI、Qlik、Looker Studio</a>
+    <a href="#u3"><span>③</span>視覺編碼精確度</a>
+    <a href="#u4"><span>④</span>設計原則：墨水、格式塔、視線、色盲</a>
+    <a href="#u5"><span>⑤</span>圖表選擇：瀑布圖、Treemap、氣泡圖</a>
+    <a href="#recap"><span>★</span>十句話總整理</a>
+    <a href="#glossary"><span>☰</span>全章名詞總彙整表</a>
+    <a href="#quiz"><span>✎</span>自我檢測 10 題</a>
+  </nav>
+</header>
+
+<!-- ================================================== 單元① -->
+<section id="u1">
+  <h2><small>單元 ①</small>Python 畫圖函式庫：Matplotlib 與 pyplot、Seaborn、Plotly／Bokeh、Pandas .plot()</h2>
+  <p class="why"><b>為什麼需要它？</b> 用 Python 分析完資料，下一步通常是畫成圖給人看。Python 本身沒有內建畫圖功能，要靠別人寫好的「函式庫」（可以想成一盒工具）。畫圖的工具盒有好幾盒，最常被問的是：<b>哪一盒是地基？哪一盒畫互動圖？哪個指令是「畫」、哪個是「顯示」？</b> 先看懂它們的上下關係，這些問題都能用同一張圖解決。</p>
+  <h3>一步步搭起來：從表格到一張圖</h3>
+  <ol>
+    <li><b>先有資料。</b>用 Pandas 把資料裝成一張表（DataFrame），例如三個月的營收 120、150、90。Pandas 是<b>整理表格</b>的工具。</li>
+    <li><b>畫出來。</b>最基本的畫法是 Matplotlib。通常寫 <code>import matplotlib.pyplot as plt</code>，意思是「把 Matplotlib 裡的 pyplot 子模組叫進來，簡稱 plt」，之後用 <code>plt.plot()</code>、<code>plt.bar()</code> 畫線、畫長條。</li>
+    <li><b>顯示出來。</b>在一般的 Python 程式裡，畫好的圖要再呼叫 <code>plt.show()</code> 才會跳出視窗；在 Jupyter 筆記本裡，圖通常會自動顯示。<b>畫（plot）和顯示（show）是兩件事。</b></li>
+    <li><b>想偷懶。</b>Pandas 的表格自己有 .plot() 方法，一行 <code>df.plot(kind="bar")</code> 就能畫，它在底層替你呼叫 Matplotlib。</li>
+    <li><b>想畫得好看又有統計味。</b>用 Seaborn，例如 <code>sns.histplot(df)</code> 畫分布圖，預設配色和樣式比較美觀，它也是疊在 Matplotlib 上。</li>
+    <li><b>想放到網頁讓人用滑鼠互動。</b>改用 Plotly 或 Bokeh：滑鼠移上去能看數字，可以縮放、平移。它們有自己的一套畫圖引擎，不是疊在 Matplotlib 上。</li>
+  </ol>
+  <figure><a href="img/l22303-pylibs.png" target="_blank" rel="noopener"><img src="img/l22303-pylibs.png" alt="Python 畫圖函式庫關係圖：左邊靜態圖家族，Seaborn 與 Pandas 的 .plot() 在底層呼叫 Matplotlib，Matplotlib 最常用的子模組是 pyplot，產出 PNG、PDF、SVG 靜態圖；右邊互動網頁圖家族 Plotly 與 Bokeh 各自獨立，產出可懸停縮放的 HTML 互動圖；NumPy、Pillow、scikit-learn 不是畫圖函式庫" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <p>一段完整的小程式長這樣（左邊是程式，右邊是白話說明）：</p>
+  <div class="tbl"><table>
+    <tr><th>程式</th><th>白話說明</th></tr>
+    <tr><td><code>import pandas as pd</code></td><td>叫進表格工具 Pandas，簡稱 pd</td></tr>
+    <tr><td><code>import matplotlib.pyplot as plt</code></td><td>叫進畫圖地基的 pyplot，簡稱 plt</td></tr>
+    <tr><td><code>df = pd.DataFrame({"月": ["一月", "二月", "三月"], "營收": [120, 150, 90]})</code></td><td>做一張三個月營收的表</td></tr>
+    <tr><td><code>df.plot(x="月", y="營收", kind="bar")</code></td><td>用表格自己的 .plot() 畫長條圖</td></tr>
+    <tr><td><code>plt.show()</code></td><td>把畫好的圖顯示出來</td></tr>
+  </table></div>
+
+  <h3>名詞各自定義</h3>
+  <div class="defs">
+    <div class="def"><h4>Matplotlib</h4><ul>
+      <li><b>是什麼：</b>Python 最基礎、歷史最久的畫圖函式庫，畫的主要是<b>靜態圖</b>（PNG、PDF、SVG 等圖檔）。</li>
+      <li><b>怎麼運作：</b>提供一套模仿 MATLAB 的畫圖指令（就是 pyplot），也提供比較進階的「物件導向」寫法（<code>fig, ax = plt.subplots()</code>），可以控制每一條線、每一個刻度。</li>
+      <li><b>適合：</b>報告、論文、需要精細調整每個細節的圖。</li>
+      <li><b>優缺點：</b>控制最細、功能最全，很多函式庫都建在它上面；但預設樣式比較陽春，要畫漂亮的統計圖得寫比較多程式碼。</li></ul></div>
+    <div class="def"><h4>pyplot（matplotlib.pyplot）</h4><ul>
+      <li><b>是什麼：</b>Matplotlib 裡<b>最常用的子模組</b>，提供類似 MATLAB 的快速畫圖介面，習慣簡稱 plt。</li>
+      <li><b>怎麼運作：</b>它會自動記住「目前這張圖」和「目前這組座標軸」，所以 <code>plt.plot()</code>、<code>plt.title()</code>、<code>plt.show()</code> 一行一行寫就能畫完；也可以用 <code>plt.gcf()</code>、<code>plt.gca()</code> 取得目前的圖和座標軸。</li>
+      <li><b>容易搞混：</b>matplotlib.style 也是 Matplotlib 的子模組，但它負責的是<b>換整體外觀主題</b>（例如 <code>plt.style.use("ggplot")</code>），不是拿來畫圖的。</li></ul></div>
+    <div class="def"><h4>plt.show()</h4><ul>
+      <li><b>是什麼：</b>Matplotlib 的「<b>顯示</b>」指令，把目前畫好的圖顯示出來。</li>
+      <li><b>注意：</b>它是 pyplot 的函式，不是 Pandas 表格的方法。Plotly 的圖物件也有 <code>fig.show()</code>，同樣是「顯示」的意思。記法：<b>plot 是畫，show 是秀出來</b>。</li></ul></div>
+    <div class="def"><h4>Pandas 的 .plot()</h4><ul>
+      <li><b>是什麼：</b>Pandas 的 DataFrame（表格）和 Series（單一欄）物件內建的畫圖方法，可以直接在資料上呼叫。</li>
+      <li><b>怎麼運作：</b>預設在底層呼叫 Matplotlib；用 kind= 換圖種，例如 "line"（折線，預設）、"bar"（長條）、"hist"（直方圖）、"scatter"（散佈）。改設定也能換成 Plotly 等其他畫圖引擎。</li>
+      <li><b>適合：</b>資料分析途中想<b>快速看一眼</b>資料長什麼樣子。</li>
+      <li><b>優缺點：</b>最省事，一行就有圖；要精細調整時，還是得回到 Matplotlib 的寫法。</li></ul></div>
+    <div class="def"><h4>Seaborn</h4><ul>
+      <li><b>是什麼：</b>建立在 Matplotlib 之上的<b>統計視覺化</b>函式庫，常簡稱 sns。</li>
+      <li><b>適合：</b>分布圖、箱形圖、迴歸線、熱圖、多組比較這類統計圖。</li>
+      <li><b>優點：</b>預設樣式和配色好看；和 Pandas 表格搭配很順，常常一行就畫出 Matplotlib 要好幾行的統計圖。</li>
+      <li><b>缺點：</b>要做非常細的客製，還是要回頭用 Matplotlib 的指令；它的賣點不是速度，也不是 3D 圖。</li></ul></div>
+    <div class="def"><h4>Plotly</h4><ul>
+      <li><b>是什麼：</b>做<b>互動式</b>圖表的函式庫，圖可以放在網頁或 Jupyter 裡，滑鼠懸停顯示數值，可縮放、平移。</li>
+      <li><b>怎麼運作：</b>常用 plotly.express（簡稱 px）的高階寫法，例如 <code>px.line(...)</code>、<code>px.scatter(...)</code> 幾行就有互動圖；做網頁儀表板時常搭配同一家的 Dash。</li>
+      <li><b>優缺點：</b>互動效果好、適合分享到網頁；資料點非常多時可能變慢，要輸出靜態圖檔需另外安裝匯出工具。</li></ul></div>
+    <div class="def"><h4>Bokeh</h4><ul>
+      <li><b>是什麼：</b>另一套做<b>網頁互動圖</b>的函式庫，和 Plotly 定位相近，兩者是各自獨立的套件。</li>
+      <li><b>適合：</b>需要在瀏覽器中互動，或接上持續更新的資料（Bokeh 有自己的伺服器功能）。</li></ul></div>
+    <div class="def"><h4>常被拿來混淆、但不是畫圖函式庫的名字</h4><ul>
+      <li><b>NumPy：</b>做數值運算、陣列計算的基礎函式庫。Matplotlib 用它來處理數字，但 NumPy 自己不畫圖。</li>
+      <li><b>Pillow：</b>處理<b>圖片檔</b>（開檔、縮放、裁切、轉格式）的函式庫，不是用來把資料畫成圖表。</li>
+      <li><b>scikit-learn：</b>機器學習函式庫（分類、迴歸、分群），不是畫圖工具。</li>
+      <li><b>.visualize()、.draw()：</b>不是 Pandas 表格的畫圖方法，看到可以直接排除。</li></ul></div>
+  </div>
+
+  <h3>整合比較表</h3>
+  <div class="cheat">
+    <span class="tag">要背的速查表</span>
+    <h4>Python 畫圖函式庫速查表</h4>
+    <div class="tbl"><table>
+      <tr><th>名稱</th><th>是什麼</th><th>靜態／互動</th><th>什麼時候用</th><th>一行程式範例</th><th>口訣</th><th>容易搞混</th></tr>
+      <tr><td><b>Matplotlib</b></td><td>最基礎的畫圖函式庫</td><td>靜態為主</td><td>報告、論文、要細調</td><td><code>import matplotlib.pyplot as plt</code></td><td>地基</td><td>Pandas、NumPy</td></tr>
+      <tr><td><b>pyplot</b></td><td>Matplotlib 最常用的子模組</td><td>靜態為主</td><td>快速畫圖、取得目前的圖</td><td><code>plt.plot(x, y)</code></td><td>plt 是快捷鍵</td><td>style 子模組</td></tr>
+      <tr><td><b>plt.show()</b></td><td>把畫好的圖顯示出來</td><td>（顯示用）</td><td>一般程式要看到圖時</td><td><code>plt.show()</code></td><td>show 是秀出來</td><td>Pandas 的 .plot()</td></tr>
+      <tr><td><b>Pandas .plot()</b></td><td>表格物件內建的畫圖方法</td><td>靜態（預設用 Matplotlib）</td><td>分析中快速看一眼</td><td><code>df.plot(kind="bar")</code></td><td>表格自己會畫</td><td>.show()</td></tr>
+      <tr><td><b>Seaborn</b></td><td>疊在 Matplotlib 上的統計圖函式庫</td><td>靜態</td><td>分布、箱形、熱圖</td><td><code>sns.histplot(df)</code></td><td>好看的統計圖</td><td>Matplotlib</td></tr>
+      <tr><td><b>Plotly</b></td><td>互動式圖表函式庫</td><td>互動（網頁）</td><td>要懸停、縮放、放網頁</td><td><code>px.scatter(df, x="a", y="b")</code></td><td>要互動找 P 和 B</td><td>Bokeh</td></tr>
+      <tr><td><b>Bokeh</b></td><td>另一套網頁互動圖函式庫</td><td>互動（網頁）</td><td>瀏覽器互動、即時資料</td><td><code>show(figure())</code></td><td>要互動找 P 和 B</td><td>Plotly</td></tr>
+      <tr><td>NumPy／Pillow／scikit-learn</td><td>數值運算／圖片處理／機器學習</td><td>不是畫圖</td><td>（不是畫圖工具）</td><td>無</td><td>不是畫圖的</td><td>Matplotlib</td></tr>
+    </table></div>
+  </div>
+  <div class="hook"><span class="tag">記憶鉤子</span><ul>
+    <li><b>「Matplotlib 是地基，pyplot 是它的快捷鍵（plt）。」</b></li>
+    <li><b>「Seaborn 和 Pandas 蓋在地基上；要互動，找 Plotly、Bokeh（P 和 B）。」</b></li>
+    <li><b>「plot 是畫，show 是秀出來」</b>：表格直接畫圖用 .plot()，plt.show() 負責顯示。</li>
+    <li><b>NumPy 算數字、Pillow 修照片、scikit-learn 做機器學習，三個都不是畫圖工具。</b></li>
+  </ul></div>
+  <div class="trap"><b>易錯提醒：</b>Pandas 的 .plot() 能畫圖，但底層是呼叫 Matplotlib，所以 Pandas 是「蓋在地基上的房子」，不是地基本身。matplotlib.style 和 pyplot 都是 Matplotlib 的子模組，但 style 管外觀主題，取得目前圖形與座標軸、快速畫圖的是 pyplot。.show() 是 pyplot 的函式，不是表格物件的方法。Matplotlib 在某些環境也能做簡單互動，但主要用途是靜態圖；要在網頁上懸停、縮放，常見選擇是 Plotly 或 Bokeh。</div>
+</section>
+
+<!-- ================================================== 單元② -->
+<section id="u2">
+  <h2><small>單元 ②</small>BI 工具：Tableau、Power BI、Qlik Sense、Looker Studio</h2>
+  <p class="why"><b>為什麼需要它？</b> 不是每個人都會寫程式。公司裡的業務、主管想要「每天打開就看得到最新業績」的儀表板，這就是 <b>BI（商業智慧）工具</b>的工作：用拖拉的方式把資料變成互動圖表和儀表板，還能分享給同事。最常見的四套是 Tableau、Power BI、Qlik Sense、Looker Studio，每套都有自己的招牌名詞。</p>
+  <h3>一步步搭起來：四套工具的共同流程</h3>
+  <ol>
+    <li><b>連資料：</b>接上 Excel、資料庫、雲端服務。</li>
+    <li><b>洗資料：</b>刪重複、改格式、合併欄位。</li>
+    <li><b>建模型：</b>告訴工具「訂單表」和「客戶表」是靠哪個欄位連起來的。</li>
+    <li><b>拖拉成圖：</b>決定哪個欄位拿來<b>分組</b>、哪個欄位拿來<b>計算</b>。</li>
+    <li><b>組成儀表板並分享：</b>把幾張圖排在同一頁，發佈出去讓別人看。</li>
+  </ol>
+  <p>下面依工具分開講，每套只記它最有代表性的名詞。</p>
+
+  <h3>②-1 Tableau：維度、度量與常用功能</h3>
+  <figure><a href="img/l22303-tableau.png" target="_blank" rel="noopener"><img src="img/l22303-tableau.png" alt="Tableau 維度與度量：維度地區放進欄、度量銷售額放進列並自動加總，6 筆訂單依地區加總後北區 200、中區 180、南區 150；藍色膠囊是離散、綠色膠囊是連續" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>維度 Dimension</h4><ul>
+      <li><b>是什麼：</b>拿來<b>分組、切開資料</b>的欄位，通常是文字、類別、日期，例如地區、產品類別、訂單日期。</li>
+      <li><b>怎麼運作：</b>放進畫面後，會把資料切成一組一組（北區、中區、南區），決定「畫幾根長條、幾個點」。</li></ul></div>
+    <div class="def"><h4>度量 Measure</h4><ul>
+      <li><b>是什麼：</b>拿來<b>計算</b>的數字欄位，例如銷售額、利潤、數量。</li>
+      <li><b>怎麼運作：</b>放進畫面後會<b>自動彙總</b>（預設多半是 SUM 加總，也可改成平均、計數等）。上圖：6 筆訂單依地區加總後，北區 200、中區 180、南區 150。</li></ul></div>
+    <div class="def"><h4>離散 vs 連續（藍色膠囊 vs 綠色膠囊）</h4><ul>
+      <li><b>是什麼：</b>Tableau 另一組分法：<b>藍色＝離散</b>，一格一格的值（產生標題、分類）；<b>綠色＝連續</b>，一條數線上的值（產生座標軸）。</li>
+      <li><b>和維度／度量的關係：</b>維度多半是藍色、度量多半是綠色，所以常被混為一談；但兩組觀念可以互換，例如日期可以當離散，也可以當連續。</li></ul></div>
+    <div class="def"><h4>Tableau 其他常見功能</h4><ul>
+      <li><b>參數 Parameter：</b>讓使用者自己輸入或選擇的一個變數，例如「顯示前 N 名」裡的 N，可以拿來改變計算或篩選。</li>
+      <li><b>集 Set：</b>從某個維度裡自訂出來的一群成員，例如「前 10 大客戶」，可用來比較「在集合內 vs 不在集合內」。</li>
+      <li><b>工作表、儀表板、故事：</b>工作表＝一張圖；<b>儀表板 Dashboard</b>＝把多張工作表排在同一頁；<b>故事 Story</b>＝把多張工作表或儀表板排成一連串頁面，像簡報一樣依序說明。</li>
+      <li><b>地理角色 Geographic Role：</b>把欄位指定成國家、縣市、郵遞區號等，Tableau 會自動配上經緯度，就能畫地圖。</li>
+      <li><b>表計算 Table Calculation：</b>在畫面上已彙總的結果上再算一次，例如累計加總、佔總和的百分比、排名、和上期的差。</li></ul></div>
+  </div>
+
+  <h3>②-2 Power BI：Desktop 三種檢視、Power Query、DAX、量值、Service、書籤</h3>
+  <figure><a href="img/l22303-powerbi_flow.png" target="_blank" rel="noopener"><img src="img/l22303-powerbi_flow.png" alt="Power BI 工作流程：Desktop 裡先用 Power Query 編輯器取得清理資料、再到模型檢視拉關聯、再到報表檢視拖拉視覺效果排版面，最後發佈到 Service 雲端分享；Desktop 左側檢視有報表、資料表（舊稱資料檢視）、模型三種，Power Query 是另開的視窗" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>Power BI Desktop 與 Power BI Service</h4><ul>
+      <li><b>Desktop：</b>裝在 Windows 電腦上的<b>製作軟體</b>，可以免費下載，用來接資料、建模型、做報表。</li>
+      <li><b>Service：</b>網頁上的<b>雲端平台</b>（powerbi.com）：報表發佈上去後，可以分享給同事、設定排程自動更新資料、把重要圖表釘選成儀表板。分享給別人通常需要相應的付費授權或公司的容量方案，細節依公司方案而定。</li></ul></div>
+    <div class="def"><h4>Desktop 左側的三種檢視</h4><ul>
+      <li><b>報表檢視 Report view：</b><b>建立視覺效果、排版報表頁面</b>的畫布，拖拉欄位就出圖。</li>
+      <li><b>資料表檢視 Table view：</b>查看資料載入後每張表長什麼樣子（舊版名稱叫「資料檢視 Data view」，有些教材仍用舊名）。</li>
+      <li><b>模型檢視 Model view：</b>管理資料表之間的<b>關聯</b>，例如訂單表的客戶編號連到客戶表。</li>
+      <li><b>新版另有：</b>DAX 查詢檢視、TMDL 檢視等，偏進階使用；入門最常考的是前三個。</li></ul></div>
+    <div class="def"><h4>Power Query 編輯器</h4><ul>
+      <li><b>是什麼：</b>Power BI 裡<b>取得資料、清理資料</b>的工具（Excel 裡也有同一套），背後的語言叫 M。</li>
+      <li><b>注意：</b>它不是左側的「檢視」之一，而是另外打開的視窗（通常按「轉換資料」進入）。</li>
+      <li><b>適合：</b>刪重複列、拆欄、改資料型別、合併多張表。</li></ul></div>
+    <div class="def"><h4>DAX（Data Analysis Expressions）</h4><ul>
+      <li><b>是什麼：</b>Power BI 寫<b>計算公式</b>的語言，長得有點像 Excel 函數，例如 <code>總銷售額 = SUM(銷售[小計])</code>。</li>
+      <li><b>用途：</b>寫「量值」和「計算資料行」。</li></ul></div>
+  </div>
+  <figure><a href="img/l22303-measure_column.png" target="_blank" rel="noopener"><img src="img/l22303-measure_column.png" alt="Power BI 計算資料行與量值：計算資料行每一列各算一次小計等於單價乘數量，四列是 300、300、200、210 並存進表裡；量值總銷售額不存每一列，沒有篩選時是 1,010、篩選飲料 600、篩選零食 410" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>量值 Measure vs 計算資料行 Calculated column</h4><ul>
+      <li><b>計算資料行：</b><b>每一列各算一次</b>，結果存進表裡，像在 Excel 多加一欄。上圖：小計＝單價 × 數量，四列分別是 300、300、200、210。適合拿來分組、篩選；代價是每列都存，佔記憶體。</li>
+      <li><b>量值：</b><b>不存在每一列</b>，放進圖表時才依「目前的篩選條件」即時計算。上圖：總銷售額沒篩選時是 1,010，篩選飲料時是 600、零食是 410。適合總和、平均、比率這類會隨篩選變動的數字。</li>
+      <li><b>小心名字：</b>Tableau 的「度量 Measure」是一種<b>欄位</b>；Power BI 的「量值 Measure」是一條<b>公式</b>。英文一樣，意思不一樣。</li></ul></div>
+    <div class="def"><h4>書籤 Bookmarks</h4><ul>
+      <li><b>是什麼：</b><b>存下報表頁面當下的狀態</b>：套了哪些篩選器、交叉分析篩選器選了什麼、哪些視覺效果顯示或隱藏、排序方式等。</li>
+      <li><b>用途：</b>一鍵回到某個畫面；搭配按鈕做出「點一下切換畫面」的導覽效果；開會時依序播放，像簡報一樣說故事。</li>
+      <li><b>容易搞混：</b>它存的是「畫面狀態」，不是收藏圖表類型，也不是在 DAX 公式或資料表上做記號。</li></ul></div>
+  </div>
+
+  <h3>②-3 Qlik Sense：關聯引擎</h3>
+  <figure><a href="img/l22303-qlik.png" target="_blank" rel="noopener"><img src="img/l22303-qlik.png" alt="Qlik Sense 關聯引擎：7 筆銷售紀錄中點選北區，業務員小王、小李和產品筆電、手機變白色表示有關聯，小陳、小張、平板、耳機變灰色表示無關；綠是點選的、白是有關聯、灰是無關" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>關聯引擎 Associative Engine</h4><ul>
+      <li><b>是什麼：</b>Qlik 的招牌技術：資料載入後，欄位之間的關聯都被記下來，使用者點選任何一個值，<b>所有圖表和清單會同時連動</b>。</li>
+      <li><b>怎麼看：</b>常用顏色表示：<b>綠＝你點選的，白＝和選擇有關聯，灰＝和選擇無關（被排除）</b>。上圖：點「北區」，業務員剩小王、小李是白色，產品剩筆電、手機是白色，平板和耳機變灰。</li>
+      <li><b>優點：</b>可以自由探索，不用事先設計好查詢路徑；灰色讓人看見「沒有發生的事」，例如北區從沒賣過平板。</li>
+      <li><b>常見誤解：</b>Qlik 能連很多種資料來源（不限 Excel），主要靠拖拉介面和自己的載入腳本，不是建立在 Python 上；它能畫地圖，但地理分析不是它的招牌。</li></ul></div>
+  </div>
+
+  <h3>②-4 Looker Studio（對照用）</h3>
+  <div class="defs">
+    <div class="def"><h4>Looker Studio</h4><ul>
+      <li><b>是什麼：</b>Google 的<b>網頁版免費</b>報表與儀表板工具，前身叫 Google Data Studio，2022 年改名。</li>
+      <li><b>適合：</b>資料本來就在 Google 服務裡的時候，例如 Google 試算表、Google Analytics、BigQuery、Google Ads；分享方式和 Google 文件很像，給連結就能看。</li>
+      <li><b>容易搞混：</b>Google 另有一套付費的企業級產品叫 Looker，兩者是不同產品。</li></ul></div>
+  </div>
+
+  <h3>整合比較表</h3>
+  <div class="cheat">
+    <span class="tag">要背的對照表</span>
+    <h4>BI 工具對照表</h4>
+    <div class="tbl"><table>
+      <tr><th>工具</th><th>開發商</th><th>招牌特色</th><th>核心名詞</th><th>適用情境</th><th>關鍵差異</th><th>容易搞混</th></tr>
+      <tr><td><b>Tableau</b></td><td>Tableau（現屬 Salesforce）</td><td>拖拉式視覺探索</td><td>維度、度量、藍色離散／綠色連續、儀表板、故事</td><td>要快速探索、做精美互動圖</td><td><b>維度切、度量算</b></td><td>Power BI 的量值</td></tr>
+      <tr><td><b>Power BI</b></td><td>Microsoft</td><td>和 Excel、Microsoft 365 整合</td><td>Power Query、DAX、量值、計算資料行、報表／資料表／模型檢視、書籤</td><td>公司已用微軟產品</td><td><b>Desktop 製作、Service 分享</b></td><td>Tableau 的度量</td></tr>
+      <tr><td><b>Qlik Sense</b></td><td>Qlik</td><td><b>關聯引擎</b></td><td>點選、綠白灰</td><td>想自由點選探索關聯</td><td><b>一點全連動</b></td><td>一般篩選器</td></tr>
+      <tr><td><b>Looker Studio</b></td><td>Google</td><td>網頁版、免費</td><td>資料來源、報表共用</td><td>資料在 Google 服務裡</td><td><b>接 Google 服務最順</b></td><td>Looker（付費企業版）</td></tr>
+    </table></div>
+  </div>
+  <p>Power BI 常見的五個名詞再並排一次：</p>
+  <div class="tbl"><table>
+    <tr><th>名詞</th><th>一句話定義</th><th>在哪裡</th><th>關鍵分辨點</th><th>容易搞混</th></tr>
+    <tr><td><b>Power Query 編輯器</b></td><td>取得、清理資料</td><td>另開的視窗（轉換資料）</td><td><b>洗資料</b></td><td>資料表檢視</td></tr>
+    <tr><td><b>資料表檢視</b>（舊稱資料檢視）</td><td>看載入後的表格內容</td><td>Desktop 左側</td><td><b>看資料用，不排版</b></td><td>報表檢視</td></tr>
+    <tr><td><b>模型檢視</b></td><td>管理資料表之間的關聯</td><td>Desktop 左側</td><td><b>拉關聯線</b></td><td>Power Query</td></tr>
+    <tr><td><b>報表檢視</b></td><td>建立視覺效果、排版面</td><td>Desktop 左側</td><td><b>排版面、出圖</b></td><td>資料表檢視</td></tr>
+    <tr><td><b>書籤</b></td><td>存下頁面當下的狀態</td><td>報表檢視的書籤窗格</td><td><b>存畫面狀態</b></td><td>收藏圖表</td></tr>
+  </table></div>
+  <div class="hook"><span class="tag">記憶鉤子</span><ul>
+    <li><b>Tableau：「維度切，度量算」</b>：要被加總的數字就是度量。</li>
+    <li><b>Power BI：「洗資料找 Power Query，連關聯找模型，排版面找報表，分享找 Service」</b>，順序記成「先洗、再連、後畫、最後分享」。</li>
+    <li><b>Power BI 書籤＝「畫面快照」</b>：存篩選、顯示隱藏、排序，拿來切換畫面和說故事。</li>
+    <li><b>Qlik＝關聯引擎，「綠白灰」一點全連動；Looker Studio＝Google 家的免費網頁報表。</b></li>
+  </ul></div>
+  <div class="trap"><b>易錯提醒：</b>Tableau 裡要被加總的數值欄位（銷售額、利潤）是度量，維度是拿來分組的；參數是使用者輸入的變數，集是自訂的一群成員。Power BI 的資料表檢視看得到資料但不能排版面，排版面是報表檢視；洗資料在 Power Query，不在任何一個左側檢視。書籤和 DAX 公式無關。</div>
+</section>
+
+<!-- ================================================== 單元③ -->
+<section id="u3">
+  <h2><small>單元 ③</small>視覺編碼精確度：位置＞長度＞角度＞面積＞顏色</h2>
+  <p class="why"><b>為什麼需要它？（從零講）</b> 畫圖其實是在做一件事：<b>把數字換成眼睛看得到的東西</b>。數字 40 可以畫成一個比較高的點、一根比較長的長條、一塊比較大的扇形、一個比較大的圓，或一個比較深的顏色。這個「把數字換成視覺屬性」的動作，就叫<b>視覺編碼</b>。問題是，人眼對這些屬性的判斷準確度差很多：比兩根長條誰長很容易；比兩個顏色深淺差幾倍，幾乎猜不出來。所以選圖的第一個原則是：<b>重要的數字，用眼睛最準的方式畫</b>。</p>
+  <h3>一步步搭起來</h3>
+  <ol>
+    <li><b>認識「視覺屬性」：</b>常見的有位置（點在刻度上的高度）、長度（長條多長）、角度或斜率（扇形張開多大、線有多斜）、面積（圓或方塊多大）、顏色的飽和度或亮度（多深多淺）。</li>
+    <li><b>做實驗：</b>1984 年 Cleveland 與 McGill 請受試者看各種圖，判斷「小的是大的幾成」，再比較每種畫法猜錯多少。</li>
+    <li><b>排出名次：</b>結果大致是<b>位置（共同刻度）最準 → 長度 → 角度／斜率 → 面積 → 顏色飽和度或亮度最不準</b>。原論文把長度和角度放在相近等級，各研究的細節略有差異，常見教材簡化成這個順序。</li>
+    <li><b>為什麼顏色排最後？</b>① 顏色沒有刻度，沒有「從 0 開始量」的基準線；② 人對深淺的感覺不是等比例的，深一倍不會被看成大一倍；③ 同一個顏色放在不同背景旁邊，看起來的深淺會不一樣。所以顏色很適合看「大致哪裡高、哪裡低」的模式，不適合讀出精確數字。</li>
+  </ol>
+  <figure><a href="img/l22303-encoding_ladder.png" target="_blank" rel="noopener"><img src="img/l22303-encoding_ladder.png" alt="視覺編碼精確度階梯：同樣 A 等於 40、B 等於 30、C 等於 20 三個數字，分別用位置、長度、角度、面積、顏色飽和度五種方式畫，越上面越容易看出 A 是 C 的 2 倍，顏色排最後" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+
+  <h3>名詞各自定義</h3>
+  <div class="defs">
+    <div class="def"><h4>位置（共同刻度）Position on a common scale</h4><ul>
+      <li><b>是什麼：</b>數值用「點或長條頂端在同一條刻度上的高度」表示，例如長條圖、點圖、散佈圖。</li>
+      <li><b>優點：</b>大家共用一條基準線和刻度，比大小、估倍數最準。</li></ul></div>
+    <div class="def"><h4>長度 Length</h4><ul>
+      <li><b>是什麼：</b>數值用線段或長條的長短表示，但起點未必對齊同一條基準線。</li>
+      <li><b>注意：</b>堆疊長條圖中間那幾段，起點沒有對齊，主要靠長度判斷，比最下面那段（有對齊）難比較。</li></ul></div>
+    <div class="def"><h4>角度／斜率 Angle／Slope</h4><ul>
+      <li><b>是什麼：</b>數值用扇形張開的角度（圓餅圖）或線的傾斜程度表示。</li>
+      <li><b>注意：</b>人對角度的判斷比長度差，所以要精確比較幾個類別的大小，長條圖通常比圓餅圖好讀。</li></ul></div>
+    <div class="def"><h4>面積 Area</h4><ul>
+      <li><b>是什麼：</b>數值用圓形或方塊的大小表示，例如氣泡圖、Treemap。</li>
+      <li><b>注意：</b>人通常會低估面積的差距；而且面積要和數值成正比，半徑要開根號（單元 ⑤ 氣泡圖會實算）。</li></ul></div>
+    <div class="def"><h4>顏色飽和度／亮度 Color saturation／Luminance</h4><ul>
+      <li><b>是什麼：</b>數值用顏色的深淺或鮮豔程度表示，例如熱圖、面量圖（依數值替地圖區塊上色）。</li>
+      <li><b>適合：</b>看整體模式、找熱點；要讀精確數值時，最好再加上數字標籤。</li>
+      <li><b>小心：</b>顏色的「<b>色相</b>」（紅、藍、綠這種不同顏色）適合拿來<b>區分類別</b>，不適合表示數字大小。</li></ul></div>
+  </div>
+
+  <h3>整合比較表</h3>
+  <div class="tbl"><table>
+    <tr><th>視覺編碼</th><th>一句話定義</th><th>精確度</th><th>常見圖表</th><th>關鍵分辨點</th><th>容易搞混</th></tr>
+    <tr><td><b>位置（共同刻度）</b></td><td>點在同一刻度上的高度</td><td><b>第 1 名，最準</b></td><td>長條圖、點圖、散佈圖</td><td>有共同基準線</td><td>長度</td></tr>
+    <tr><td><b>長度</b></td><td>線段或長條多長</td><td>第 2 名</td><td>堆疊長條的中間段</td><td>起點未必對齊</td><td>位置</td></tr>
+    <tr><td><b>角度／斜率</b></td><td>扇形開多大、線多斜</td><td>第 3 名</td><td>圓餅圖、斜率圖</td><td>比長度難判斷</td><td>面積</td></tr>
+    <tr><td><b>面積</b></td><td>圓或方塊多大</td><td>第 4 名</td><td>氣泡圖、Treemap</td><td>差距常被低估</td><td>半徑</td></tr>
+    <tr><td><b>顏色飽和度／亮度</b></td><td>顏色多深多淺</td><td><b>第 5 名，最不準</b></td><td>熱圖、面量圖</td><td>適合看模式，不適合讀數</td><td>色相（分類用）</td></tr>
+  </table></div>
+  <div class="hook"><span class="tag">記憶鉤子</span><ul>
+    <li><b>「位、長、角、面、色」，越前面越準，顏色排最後。</b></li>
+    <li><b>要比大小用長條（位置），要看大致模式才用顏色。</b>理由一句話：<b>顏色沒有刻度，深一倍看起來不像大一倍</b>。</li>
+    <li><b>色相分類別，深淺才表示大小；但深淺也是最不準的那一種。</b></li>
+  </ul></div>
+  <div class="trap"><b>易錯提醒：</b>被問「哪一種最不精確」時，答案落在顏色飽和度／亮度；位置是最準的那一端，不要把順序看反。角度排在長度之後、面積之前。</div>
+</section>
+
+<!-- ================================================== 單元④ -->
+<section id="u4">
+  <h2><small>單元 ④</small>設計原則：數據墨水比、格式塔、視覺層次、色盲友善</h2>
+  <p class="why"><b>為什麼需要它？</b> 選對圖種之後，還要把圖「設計得好讀」。這個單元四個觀念各管一件事：<b>墨水該花在哪裡</b>（數據墨水比）、<b>大腦怎麼自動分組</b>（格式塔）、<b>眼睛先看哪裡</b>（視覺層次）、<b>有人看不出紅綠怎麼辦</b>（色盲友善）。</p>
+
+  <h3>④-1 數據墨水比與圖表垃圾（從零講）</h3>
+  <p>想像一張長條圖：灰色背景、粗格線、黑色外框、立體陰影、每根長條一個顏色、旁邊再放一個圖例。看起來很「豐富」，但讀者真正要看的只有四根長條的高低。統計學家 Edward Tufte 在 1983 年提出一個量化的想法：<b>一張圖用掉的墨水，有多少是真的在呈現數字？</b>這個比例就是數據墨水比。</p>
+  <ol>
+    <li><b>把墨水分兩種：</b>呈現數字本身的叫<b>數據墨水</b>（例如長條本體）；其他的叫<b>非數據墨水</b>（背景、格線、外框、陰影、裝飾）。</li>
+    <li><b>算比例：</b>數據墨水比＝數據墨水 ÷ 整張圖用掉的全部墨水。</li>
+    <li><b>實際算一次：</b>下圖用程式數像素：改之前長條佔全部墨水約 22%，改之後約 96%。（這裡為了好算，只把長條本體算成數據墨水。）</li>
+    <li><b>怎麼改：</b>能刪的裝飾先刪；不能刪的（座標軸、類別名稱）就淡化；需要的數值直接標在長條上，取代圖例和密密的格線。</li>
+  </ol>
+  <figure><a href="img/l22303-data_ink.png" target="_blank" rel="noopener"><img src="img/l22303-data_ink.png" alt="數據墨水比前後對照：同一張四季長條圖，改之前有灰底、粗格線、外框、立體陰影、彩虹配色和圖例，數據墨水比約 22%；改之後只留長條、類別名稱和直接標上的數值，約 96%" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>數據墨水比 Data-Ink Ratio</h4><ul>
+      <li><b>是什麼：</b>圖中用來呈現數據本身的墨水 ÷ 整張圖用掉的墨水。Tufte 主張在合理範圍內<b>盡量提高</b>這個比例。</li>
+      <li><b>怎麼用：</b>刪掉或淡化不幫助讀數的元素，讓注意力集中在數字上。</li>
+      <li><b>例外：</b>不是越少越好。必要的標題、單位、座標軸、資料標籤要留，否則讀者看不懂；做簡報想讓觀眾記住時，適度的圖示也有幫助，前提是不干擾讀數。</li></ul></div>
+    <div class="def"><h4>圖表垃圾 Chartjunk</h4><ul>
+      <li><b>是什麼：</b>Tufte 用來稱呼「不傳達資訊、反而干擾閱讀」的裝飾，例如 3D 效果、花紋背景、過多顏色、多餘的外框和陰影。</li>
+      <li><b>為什麼不好：</b>3D 立體會讓長條的高度難以對準刻度，裝飾越多，眼睛越難找到重點。</li></ul></div>
+  </div>
+
+  <h3>④-2 格式塔原則</h3>
+  <p>格式塔（Gestalt）是德文「完整的形狀」。心理學家發現，人看東西時<b>不會一個一個點去看，而是自動把它們組成一個整體</b>。做圖時順著這個傾向排版，讀者不用解說就知道哪些東西是同一組。</p>
+  <figure><a href="img/l22303-gestalt.png" target="_blank" rel="noopener"><img src="img/l22303-gestalt.png" alt="格式塔四原則圖解：鄰近性靠得近的看成同一組、相似性顏色形狀像的看成同一類、連續性眼睛沿平順的線看下去、閉合性有缺口的形狀大腦會自動補完整" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>鄰近性 Proximity</h4><ul>
+      <li><b>是什麼：</b>靠得近的東西，會被看成同一組。</li>
+      <li><b>用在圖表：</b>分組長條圖裡，同一組的長條靠在一起，組與組之間留空白。</li></ul></div>
+    <div class="def"><h4>相似性 Similarity</h4><ul>
+      <li><b>是什麼：</b>顏色、形狀、大小相似的東西，會被看成同一類。</li>
+      <li><b>用在圖表：</b>同一個資料系列整條線、所有長條都用同一個顏色。</li></ul></div>
+    <div class="def"><h4>連續性 Continuity</h4><ul>
+      <li><b>是什麼：</b>眼睛會沿著平順的線或方向一直看下去。</li>
+      <li><b>用在圖表：</b>折線圖讓人自然看出趨勢；排列整齊的元素讓視線順著走。</li></ul></div>
+    <div class="def"><h4>閉合性 Closure</h4><ul>
+      <li><b>是什麼：</b>有缺口的形狀，大腦會自動補成完整的形狀。</li>
+      <li><b>用在圖表：</b>不需要每一區都畫粗外框，用留白和對齊就能圍出區塊。</li></ul></div>
+    <div class="def"><h4>其他常見原則（補充）</h4><ul>
+      <li><b>圖形與背景：</b>人會自動分出「主角」和「背景」，所以重點用醒目色、其他用灰色。</li>
+      <li><b>共同區域：</b>被同一個框或底色圍住的東西，會被看成同一組。</li>
+      <li><b>不是格式塔的：</b>對顏色的敏感度、追蹤移動物體、閱讀文字的習慣，屬於別的視覺或閱讀現象。</li></ul></div>
+  </div>
+
+  <h3>④-3 視覺層次：KPI 放左上角</h3>
+  <p>儀表板上有十幾個數字，主管通常只看幾秒鐘。設計時要先決定「誰最重要」，再把它放在<b>眼睛最先看到的地方</b>，這就是視覺層次。</p>
+  <figure><a href="img/l22303-fpattern.png" target="_blank" rel="noopener"><img src="img/l22303-fpattern.png" alt="視線路線圖：資訊多的儀表板視線呈 F 型，先橫掃最上方的 KPI 再往下；版面簡單時呈 Z 型，左上、右上、左下、右下；兩種都從左上角開始，所以最重要的 KPI 通常放左上角" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>視覺層次 Visual Hierarchy</h4><ul>
+      <li><b>是什麼：</b>用位置、大小、顏色、粗細安排資訊的先後，讓讀者先看到最重要的。</li>
+      <li><b>怎麼做：</b>最重要的 KPI 放在左上角、字放大；次要的圖表放中間；明細表放下方或右下。</li></ul></div>
+    <div class="def"><h4>F 型與 Z 型視線</h4><ul>
+      <li><b>F 型：</b>閱讀文字、數字很多的頁面時（例如網頁眼動研究），視線常先橫掃最上方，再掃下一行，然後沿左邊往下。</li>
+      <li><b>Z 型：</b>元素少、版面簡單時，視線常沿左上 → 右上 → 左下 → 右下移動。</li>
+      <li><b>共同點：</b>兩種都從<b>左上角</b>開始，所以 KPI 放左上角最容易先被看到。</li>
+      <li><b>例外：</b>這是由左往右閱讀的習慣；由右往左的語言（如阿拉伯文）方向常相反。特別大、特別鮮豔的元素也會先搶走目光。</li></ul></div>
+    <div class="def"><h4>KPI 關鍵績效指標</h4><ul>
+      <li><b>是什麼：</b>Key Performance Indicator，衡量目標有沒有達成的少數關鍵數字，例如營收、毛利率、新客戶數。</li>
+      <li><b>儀表板原則：</b>一頁放少數幾個 KPI 就好，放在最先被看到的位置，必要時加上和目標或上期的比較。</li></ul></div>
+  </div>
+
+  <h3>④-4 色盲友善配色</h3>
+  <p>有一部分的人分不清某些顏色，最常見的是<b>紅綠色盲</b>：紅色和綠色看起來都像暗黃褐色。如果圖表用紅、綠區分「虧損、獲利」或「今年、去年」，他們就看不出差別。下圖用色覺模擬矩陣逐像素換算，色差 ΔE（數字越小越難分）從約 107 掉到約 4，紅綠幾乎變成同一色；藍＋橘則維持約 120 以上。</p>
+  <figure><a href="img/l22303-colorblind.png" target="_blank" rel="noopener"><img src="img/l22303-colorblind.png" alt="紅綠色盲模擬：紅色加綠色的長條圖在一般色覺下色差約 107，在紅綠色盲模擬下只剩約 4，幾乎同色；藍色加橘色在兩種情況下色差都在 120 左右，色盲友善" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>紅綠色盲 Red-green color vision deficiency</h4><ul>
+      <li><b>是什麼：</b>對紅色或綠色的感光比較弱或缺少，分成偏紅弱（第一型）和偏綠弱（第二型），都會讓<b>紅和綠難以分辨</b>。</li>
+      <li><b>有多常見：</b>是最常見的色覺差異。常見統計是男性約 8%、女性約 0.5%（以北歐血統族群的研究為主，其他族群比例不同）。</li></ul></div>
+    <div class="def"><h4>藍黃色盲（對照用）</h4><ul>
+      <li><b>是什麼：</b>分不清藍和黃（第三型），比紅綠色盲<b>少見很多</b>。</li></ul></div>
+    <div class="def"><h4>色盲友善的做法</h4><ul>
+      <li><b>換配色：</b>用藍＋橘這類在色盲模擬下仍分得開的組合，或使用專為色盲設計的色盤。</li>
+      <li><b>不只靠顏色：</b>再加上形狀、線型（實線／虛線）、圖案或直接標文字，讓沒有顏色也看得懂。</li>
+      <li><b>檢查：</b>做完用色盲模擬工具看一次，或轉成灰階看是否還分得出來。</li></ul></div>
+  </div>
+
+  <h3>整合比較表</h3>
+  <div class="tbl"><table>
+    <tr><th>名詞</th><th>一句話定義</th><th>特性</th><th>適用情境</th><th>關鍵分辨點</th><th>容易搞混</th></tr>
+    <tr><td><b>數據墨水比</b></td><td>呈現數據的墨水 ÷ 全部墨水</td><td>Tufte 提出；合理範圍內越高越好</td><td>圖太花、裝飾太多</td><td><b>刪裝飾，不刪必要標籤</b></td><td>「文字越少越好」</td></tr>
+    <tr><td><b>圖表垃圾</b></td><td>不傳達資訊的裝飾</td><td>3D、花紋、多餘顏色</td><td>檢查要刪什麼</td><td><b>干擾讀數的裝飾</b></td><td>必要的座標軸</td></tr>
+    <tr><td><b>格式塔原則</b></td><td>大腦自動把元素組成整體</td><td>近、像、連、補</td><td>排版、分組、配色</td><td><b>看成「一組」的傾向</b></td><td>顏色敏感度</td></tr>
+    <tr><td><b>視覺層次</b></td><td>安排資訊被看到的先後</td><td>位置、大小、顏色</td><td>儀表板版面</td><td><b>KPI 放左上</b></td><td>放正中央</td></tr>
+    <tr><td><b>F 型／Z 型</b></td><td>眼睛掃描頁面的路線</td><td>都從左上開始</td><td>資訊多用 F、簡單用 Z</td><td><b>由左往右閱讀的習慣</b></td><td>由右往左的語言</td></tr>
+    <tr><td><b>紅綠色盲</b></td><td>紅和綠難以分辨</td><td>最常見的色覺差異</td><td>選配色時</td><td><b>紅＋綠不要用來區分</b></td><td>藍黃色盲（少見）</td></tr>
+  </table></div>
+  <div class="hook"><span class="tag">記憶鉤子</span><ul>
+    <li><b>數據墨水比：「墨水花在數字上」</b>，刪掉不幫助讀數的裝飾，但必要的標籤要留。</li>
+    <li><b>格式塔：「近、像、連、補」</b>：鄰近、相似、連續、閉合。</li>
+    <li><b>「眼睛先看左上」，KPI 坐頭等艙。</b></li>
+    <li><b>「紅綠不並排，藍橘較安全」</b>，再加上形狀或文字，不只靠顏色。</li>
+  </ul></div>
+  <div class="trap"><b>易錯提醒：</b>「顏色越多越好」「加 3D 更專業」都是在增加非數據墨水，方向剛好相反；「文字標籤越少越好」是常見誤解，Tufte 要刪的是不傳達資訊的裝飾，不是所有文字。單獨一個很大的元素放正中央確實吸睛，但儀表板元素多時，讀者習慣從左上開始掃。紅綠色盲難分的是紅和綠，藍和黃是另一種比較少見的色盲。</div>
+</section>
+
+<!-- ================================================== 單元⑤ -->
+<section id="u5">
+  <h2><small>單元 ⑤</small>圖表選擇：瀑布圖、Treemap、氣泡圖與常見圖表</h2>
+  <p class="why"><b>為什麼需要它？</b> 同一份資料可以畫成很多種圖，但每種圖擅長回答的問題不一樣。選圖的順序是：<b>先問「我想讓人看懂什麼問題」，再挑圖</b>，而不是先挑一個好看的圖。常見的考法是描述一種資料或一個問題，要你說出該用哪種圖。</p>
+  <h3>一步步搭起來</h3>
+  <ol>
+    <li><b>說出問題：</b>是比大小？看趨勢？看組成？看關係？看分布？還是看地點？</li>
+    <li><b>對照地圖選圖：</b>下圖是十種常見問題和常見選法，不是唯一答案。</li>
+    <li><b>套用單元 ③ ④：</b>選定圖種後，再檢查：重要數字是不是用位置或長度畫？有沒有多餘裝飾？配色色盲看得出來嗎？</li>
+  </ol>
+  <figure><a href="img/l22303-chart_map.png" target="_blank" rel="noopener"><img src="img/l22303-chart_map.png" alt="圖表選擇地圖：比較類別大小用長條圖、看時間趨勢用折線圖、從起點到終點的增減用瀑布圖、有層級的佔比用樹狀圖 Treemap、兩個數字的關係用散佈圖、三個數字一起看用氣泡圖、兩個時間點的變化用斜率圖、類別裡的小類比較用分組長條圖、數值分布用直方圖或箱形圖、地點用地圖" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <p>三種比較少見、卻常被問到的圖，實際畫一次：</p>
+  <figure><a href="img/l22303-waterfall.png" target="_blank" rel="noopener"><img src="img/l22303-waterfall.png" alt="瀑布圖：年度營收期初 100，新客戶加 40、漲價加 25、客戶流失減 30、促銷折扣減 15，期末 120；藍色是起點和終點、綠色增加、紅色減少" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <p class="note">數字由程式實算：期初 100 ＋ 40 ＋ 25 － 30 － 15 ＝ 期末 120。每一根浮在空中的長條，起點都接在前一步的終點。</p>
+  <figure><a href="img/l22303-treemap.png" target="_blank" rel="noopener"><img src="img/l22303-treemap.png" alt="樹狀圖 Treemap：公司年度預算 1,000 萬分給業務部 500 萬、研發部 350 萬、行政部 150 萬，底下再分 7 個組，例如北區 250 萬佔 25% 面積；同叫樹狀圖的 Dendrogram 是另一種圖" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <p class="note">用 squarify 演算法切分：每一塊的面積佔比和預算佔比一致（例如北區 250 萬＝25% 的面積），七塊加起來是 100%。</p>
+  <figure><a href="img/l22303-bubble.png" target="_blank" rel="noopener"><img src="img/l22303-bubble.png" alt="氣泡圖：橫軸廣告費、縱軸營收、泡泡大小代表客戶數；丙 900 人是乙 100 人的 9 倍，泡泡面積 9 倍、半徑只要 3 倍" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+
+  <h3>名詞各自定義</h3>
+  <div class="defs">
+    <div class="def"><h4>瀑布圖 Waterfall Chart</h4><ul>
+      <li><b>是什麼：</b>呈現<b>一個起始值</b>經過一連串<b>增加和減少</b>，最後變成<b>結束值</b>的過程。起點和終點畫成完整的長條，中間每一步是浮在空中的一段。</li>
+      <li><b>適合：</b>損益說明（營收怎麼變成淨利）、預算增減、現金流、人數增減。</li>
+      <li><b>優缺點：</b>一眼看出「是哪一步讓數字變多或變少」；但步驟太多會擠，正負數交錯時要用顏色清楚區分。</li></ul></div>
+    <div class="def"><h4>樹狀圖 Treemap</h4><ul>
+      <li><b>是什麼：</b>用<b>大框套小框</b>的方塊表示<b>有層次結構的資料</b>，每塊的<b>面積代表它佔整體的比例</b>。</li>
+      <li><b>適合：</b>部門底下有各組的預算、商品大類底下有小類的銷售、硬碟各資料夾佔用的空間。</li>
+      <li><b>優缺點：</b>空間利用率高，可以同時看層級和佔比；但面積不容易精確比較（單元 ③），類別太多時小方塊會擠到看不清。</li>
+      <li><b>小心同名：</b>中文也叫「樹狀圖」的 <b>Dendrogram</b> 是階層式分群畫出來的分枝圖（<a href="l22302.html#u4">L22302 單元 ④</a>），看的是合併順序，和 Treemap 是不同的圖。</li></ul></div>
+    <div class="def"><h4>氣泡圖 Bubble Chart</h4><ul>
+      <li><b>是什麼：</b>散佈圖的延伸：橫軸、縱軸各一個數字，<b>泡泡大小</b>再表示第三個數字（顏色還可以表示第四個）。</li>
+      <li><b>重點：</b>泡泡要用<b>面積</b>對應數值。上圖丙的客戶 900 人是乙 100 人的 9 倍，面積是 9 倍，半徑只要 3 倍；直接把半徑放大 9 倍，面積會變 81 倍，誇大差距。</li></ul></div>
+    <div class="def"><h4>散佈圖 Scatter Plot</h4><ul>
+      <li><b>是什麼：</b>每一筆資料是一個點，看兩個數字之間的<b>關係</b>（例如廣告費和營收）。</li>
+      <li><b>適合：</b>看相關、看分群、找離群值。</li></ul></div>
+    <div class="def"><h4>斜率圖 Slope Chart</h4><ul>
+      <li><b>是什麼：</b>左右兩條直軸代表兩個時間點，同一類別在兩邊各一個點，用直線連起來。</li>
+      <li><b>適合：</b>比較很多類別在<b>兩個時間點</b>之間誰升、誰降，看線的斜率就知道。</li></ul></div>
+    <div class="def"><h4>分組長條圖 vs 堆疊長條圖</h4><ul>
+      <li><b>分組長條圖：</b>每個大類下面的小類<b>並排</b>，適合比較小類之間的大小（運用鄰近性）。</li>
+      <li><b>堆疊長條圖：</b>小類<b>往上疊</b>成一根，適合看「總量＋組成」；但中間的段落沒有對齊基準線，比較難精確比較（單元 ③）。</li></ul></div>
+    <div class="def"><h4>直方圖、箱形圖、圓餅圖（對照用）</h4><ul>
+      <li><b>直方圖：</b>把數值切成區間，數每區有幾筆，看<b>分布形狀</b>。</li>
+      <li><b>箱形圖：</b>用中位數、四分位數、極端值摘要分布，方便<b>並排比較多組</b>。</li>
+      <li><b>圓餅圖：</b>看<b>少數幾類</b>佔整體的比例；類別多或要精確比較時，長條圖通常更好讀。</li></ul></div>
+  </div>
+
+  <h3>整合比較表：什麼問題 → 用什麼圖</h3>
+  <div class="tbl"><table>
+    <tr><th>想回答的問題</th><th>常見圖表</th><th>定義</th><th>適用情境</th><th>關鍵差異</th><th>容易搞混</th></tr>
+    <tr><td>各類別誰大誰小</td><td><b>長條圖</b></td><td>長條高度表示數值</td><td>業績排名</td><td>位置、長度最準</td><td>圓餅圖</td></tr>
+    <tr><td>隨時間怎麼變</td><td><b>折線圖</b></td><td>點連成線看趨勢</td><td>月營收</td><td>時間放橫軸</td><td>斜率圖</td></tr>
+    <tr><td>從起點到終點怎麼加減</td><td><b>瀑布圖</b></td><td>起點、一步步增減、終點</td><td>損益、預算增減</td><td><b>浮在空中的長條</b></td><td>堆疊長條圖</td></tr>
+    <tr><td>有層級的佔比</td><td><b>樹狀圖 Treemap</b></td><td>大框套小框，面積＝佔比</td><td>部門與各組預算</td><td><b>層級＋佔比</b></td><td>Dendrogram</td></tr>
+    <tr><td>兩個數字的關係</td><td><b>散佈圖</b></td><td>一點一筆資料</td><td>廣告費與營收</td><td>看相關、離群值</td><td>氣泡圖</td></tr>
+    <tr><td>三個數字一起看</td><td><b>氣泡圖</b></td><td>x、y＋泡泡大小</td><td>產品比較</td><td><b>面積代表第三個數字</b></td><td>散佈圖</td></tr>
+    <tr><td>兩個時間點誰升誰降</td><td><b>斜率圖</b></td><td>左右兩點連一條線</td><td>去年 vs 今年排名</td><td>看兩個時間點</td><td>折線圖</td></tr>
+    <tr><td>大類裡的小類比較</td><td><b>分組長條圖</b></td><td>小類並排</td><td>各區各產品</td><td>並排不疊</td><td>堆疊長條圖</td></tr>
+    <tr><td>數值怎麼分布</td><td><b>直方圖、箱形圖</b></td><td>區間次數／五數摘要</td><td>成績分布</td><td>看形狀、比多組</td><td>長條圖</td></tr>
+    <tr><td>發生在哪裡</td><td><b>地圖</b></td><td>依地點上色或標點</td><td>各縣市門市</td><td>需要地理欄位</td><td>Treemap</td></tr>
+    <tr><td>誰和誰有連結</td><td><b>網絡圖</b></td><td>點是對象、線是關係</td><td>社群網路分析</td><td>看連結，不看佔比</td><td>Treemap</td></tr>
+  </table></div>
+  <div class="hook"><span class="tag">記憶鉤子</span><ul>
+    <li><b>瀑布圖＝「一步步加減的帳」</b>：看錢從哪來、往哪去。</li>
+    <li><b>Treemap＝「層級＋佔比」</b>，一塊地切成大小不同的田；它不是分群用的 Dendrogram。</li>
+    <li><b>氣泡圖用「面積」說話，半徑要開根號。</b></li>
+    <li><b>比大小用長條、看趨勢用折線、加減用瀑布、層級佔比用 Treemap。</b></li>
+  </ul></div>
+  <div class="trap"><b>易錯提醒：</b>瀑布圖不是看地理分布（那是地圖），也不是看多個類別在不同時間的佔比變化（常用堆疊面積圖或百分比堆疊長條圖），更不是看兩個變數的相關（散佈圖或相關係數熱圖）。Treemap 不是畫時間序列、地理資料或網絡關係的圖。</div>
+</section>
+
+<!-- ================================================== 總整理 -->
+<section id="recap">
+  <h2><small>總整理</small>本章要記的十句話</h2>
+  <ol class="recap">
+    <li>Matplotlib 是 Python 畫圖的地基，最常用的子模組是 pyplot（<code>import matplotlib.pyplot as plt</code>）。</li>
+    <li>Seaborn 疊在 Matplotlib 上，優勢是預設樣式好看、畫統計圖方便；賣點不是速度，也不是 3D。</li>
+    <li>要互動、能在網頁懸停縮放，常見選擇是 Plotly 或 Bokeh。</li>
+    <li>表格直接畫圖用 df.plot()；plt.show() 負責把圖顯示出來。plot 是畫，show 是秀出來。</li>
+    <li>Tableau：維度拿來切、度量拿來算；要被加總的數值欄位就是度量。</li>
+    <li>Power BI：洗資料找 Power Query、連關聯找模型檢視、排版面找報表檢視、分享找 Service；書籤存的是畫面狀態。</li>
+    <li>Qlik Sense 的招牌是關聯引擎，綠白灰一點全連動；Looker Studio 是 Google 的免費網頁報表工具。</li>
+    <li>視覺編碼精確度：位置＞長度＞角度＞面積＞顏色，顏色飽和度最不適合比大小。</li>
+    <li>數據墨水比：墨水花在數字上，刪掉不幫助讀數的裝飾；格式塔：近、像、連、補；KPI 通常放左上角。</li>
+    <li>紅綠色盲分不清紅和綠，改用藍＋橘並加上形狀或文字；瀑布圖看加減過程、Treemap 看層級佔比、氣泡圖用面積表示第三個數字。</li>
+  </ol>
+</section>
+
+<!-- ================================================== 總彙整表 -->
+<section id="glossary">
+  <h2><small>考前速查</small>全章名詞總彙整表</h2>
+  <p class="note">把五個單元的比較表濃縮成一張。複習時遮住右邊三欄，看名詞說得出定義，再對照。</p>
+  <div class="tbl"><table>
+    <tr><th>名詞</th><th>一句話定義</th><th>口訣</th><th>容易跟誰搞混</th></tr>
+    <tr class="grp"><td colspan="4">單元 ① Python 畫圖函式庫</td></tr>
+    <tr><td><b>Matplotlib</b></td><td>最基礎的畫圖函式庫，靜態圖為主</td><td>地基</td><td>Pandas、NumPy</td></tr>
+    <tr><td><b>pyplot</b></td><td>Matplotlib 最常用的子模組，類似 MATLAB</td><td>plt 是快捷鍵</td><td>style 子模組</td></tr>
+    <tr><td><b>plt.show()</b></td><td>把畫好的圖顯示出來</td><td>show 是秀出來</td><td>.plot()</td></tr>
+    <tr><td><b>Pandas .plot()</b></td><td>表格物件內建的畫圖方法，底層預設用 Matplotlib</td><td>表格自己會畫</td><td>.show()</td></tr>
+    <tr><td><b>Seaborn</b></td><td>疊在 Matplotlib 上的統計圖函式庫</td><td>好看的統計圖</td><td>Matplotlib</td></tr>
+    <tr><td><b>Plotly／Bokeh</b></td><td>網頁互動圖函式庫</td><td>要互動找 P 和 B</td><td>Matplotlib</td></tr>
+    <tr><td><b>NumPy／Pillow／scikit-learn</b></td><td>數值運算／圖片處理／機器學習</td><td>不是畫圖的</td><td>Matplotlib</td></tr>
+    <tr class="grp"><td colspan="4">單元 ② BI 工具</td></tr>
+    <tr><td><b>維度（Tableau）</b></td><td>拿來分組、切開的欄位</td><td>維度切</td><td>度量</td></tr>
+    <tr><td><b>度量（Tableau）</b></td><td>拿來計算、自動彙總的數字欄位</td><td>度量算</td><td>維度</td></tr>
+    <tr><td><b>藍色／綠色膠囊（Tableau）</b></td><td>藍＝離散，綠＝連續</td><td>藍一格格、綠一條線</td><td>維度／度量</td></tr>
+    <tr><td><b>儀表板／故事（Tableau）</b></td><td>多張圖排一頁／多頁依序說明</td><td>故事像簡報</td><td>工作表</td></tr>
+    <tr><td><b>Power Query 編輯器</b></td><td>取得、清理資料</td><td>先洗</td><td>資料表檢視</td></tr>
+    <tr><td><b>模型檢視</b></td><td>管理資料表之間的關聯</td><td>再連</td><td>Power Query</td></tr>
+    <tr><td><b>報表檢視</b></td><td>建立視覺效果、排版報表頁面</td><td>後畫</td><td>資料（表）檢視</td></tr>
+    <tr><td><b>DAX</b></td><td>Power BI 的計算公式語言</td><td>像 Excel 函數</td><td>M 語言</td></tr>
+    <tr><td><b>量值 vs 計算資料行</b></td><td>看篩選臨時算／每列算好存起來</td><td>量值臨時算</td><td>Tableau 的度量</td></tr>
+    <tr><td><b>Power BI Service</b></td><td>雲端發佈、分享、排程更新</td><td>最後分享</td><td>Desktop</td></tr>
+    <tr><td><b>書籤（Power BI）</b></td><td>存下報表頁面當下的狀態</td><td>畫面快照</td><td>收藏圖表</td></tr>
+    <tr><td><b>關聯引擎（Qlik）</b></td><td>點一個值，所有欄位綠白灰連動</td><td>一點全連動</td><td>一般篩選器</td></tr>
+    <tr><td><b>Looker Studio</b></td><td>Google 的免費網頁報表工具</td><td>接 Google 最順</td><td>Looker</td></tr>
+    <tr class="grp"><td colspan="4">單元 ③ 視覺編碼</td></tr>
+    <tr><td><b>視覺編碼</b></td><td>把數字換成位置、長度、顏色等視覺屬性</td><td>數字變成看得到的</td><td>圖表類型</td></tr>
+    <tr><td><b>精確度排序</b></td><td>位置＞長度＞角度＞面積＞顏色</td><td>位、長、角、面、色</td><td>順序看反</td></tr>
+    <tr><td><b>顏色飽和度／亮度</b></td><td>最不適合比大小的編碼</td><td>顏色沒有刻度</td><td>色相（分類用）</td></tr>
+    <tr class="grp"><td colspan="4">單元 ④ 設計原則</td></tr>
+    <tr><td><b>數據墨水比</b></td><td>呈現數據的墨水 ÷ 全部墨水</td><td>墨水花在數字上</td><td>文字越少越好</td></tr>
+    <tr><td><b>圖表垃圾</b></td><td>不傳達資訊的裝飾</td><td>3D、陰影、花紋</td><td>必要標籤</td></tr>
+    <tr><td><b>格式塔原則</b></td><td>大腦把零散元素看成整體</td><td>近、像、連、補</td><td>顏色敏感度</td></tr>
+    <tr><td><b>視覺層次／F 型</b></td><td>安排先後；視線從左上開始</td><td>KPI 坐頭等艙</td><td>放正中央</td></tr>
+    <tr><td><b>紅綠色盲</b></td><td>紅和綠難分辨，最常見</td><td>紅綠不並排</td><td>藍黃色盲</td></tr>
+    <tr class="grp"><td colspan="4">單元 ⑤ 圖表選擇</td></tr>
+    <tr><td><b>瀑布圖</b></td><td>起始值經一連串增減到結束值</td><td>一步步加減的帳</td><td>堆疊長條圖</td></tr>
+    <tr><td><b>樹狀圖 Treemap</b></td><td>有層級的資料，面積＝佔比</td><td>層級＋佔比</td><td>Dendrogram</td></tr>
+    <tr><td><b>氣泡圖</b></td><td>x、y＋泡泡大小表示三個數字</td><td>面積說話、半徑開根號</td><td>散佈圖</td></tr>
+    <tr><td><b>斜率圖</b></td><td>兩個時間點之間誰升誰降</td><td>左右兩點連線</td><td>折線圖</td></tr>
+    <tr><td><b>分組長條圖</b></td><td>小類並排比較</td><td>並排不疊</td><td>堆疊長條圖</td></tr>
+  </table></div>
+</section>
+
+<!-- ================================================== 自我檢測 -->
+<section id="quiz">
+  <h2><small>動手練</small>自我檢測 10 題</h2>
+  <p class="note">自編情境練習，練的是「看情境選工具、選圖」。先自己想好答案，再點「看答案」。</p>
+  <ol class="quiz">
+    <li>你要做一張散佈圖放在公司內部網頁上，希望同事把滑鼠移到點上就看到客戶名稱，還能放大局部。用 Python 的話，常見會選哪兩個函式庫之一？
+      <details><summary>看答案</summary><p><b>Plotly 或 Bokeh。</b>兩者都能做網頁互動圖（懸停顯示資訊、縮放、平移）；Matplotlib、Seaborn 主要畫靜態圖。</p></details></li>
+    <li>你已經把每月營收整理成 Pandas 表格 df，想用最少的程式碼畫出折線圖。要呼叫哪個方法？如果寫在一般 Python 程式（不是 Jupyter）裡，圖沒有跳出來，還要補哪一行？
+      <details><summary>看答案</summary><p><b>df.plot()</b>（折線是預設，也可以寫 kind="line"）。一般程式裡要再補 <b>plt.show()</b> 把圖顯示出來；plot 是畫，show 是秀出來。</p></details></li>
+    <li>同事說：「Seaborn 是 Matplotlib 的升級版，所以速度比較快。」這句話哪裡不對？Seaborn 真正的優勢是什麼？
+      <details><summary>看答案</summary><p><b>Seaborn 疊在 Matplotlib 上，底層還是呼叫 Matplotlib，一般不會比較快。</b>它的優勢是<b>預設樣式好看、畫統計圖方便</b>。</p></details></li>
+    <li>在 Tableau 裡，「門市名稱」和「來客數」兩個欄位，各自通常屬於維度還是度量？
+      <details><summary>看答案</summary><p><b>門市名稱＝維度</b>（拿來分組）；<b>來客數＝度量</b>（拿來加總或平均）。</p></details></li>
+    <li>在 Power BI 裡，你要先把日期格式統一、刪掉重複的列，應該在哪裡做？做完後要把圖表拖到頁面上排版，又要切到哪一個檢視？
+      <details><summary>看答案</summary><p><b>Power Query 編輯器</b>負責清理資料；排版圖表要切到<b>報表檢視</b>。</p></details></li>
+    <li>主管想在 Power BI 報表上按一個按鈕，就在「只看北區」和「全國」兩種畫面之間切換。可以用什麼功能做到？
+      <details><summary>看答案</summary><p><b>書籤＋按鈕。</b>書籤存下「只看北區」和「全國」兩種畫面狀態（篩選、顯示的視覺效果），按鈕負責切換。</p></details></li>
+    <li>要讓主管精確比較 5 家分店的業績大小，用圓餅圖還是長條圖比較好？請用視覺編碼的排序說明理由。
+      <details><summary>看答案</summary><p><b>長條圖。</b>長條圖用位置／長度表示數值，排在精確度最前面；圓餅圖用角度，比較難判斷差多少。</p></details></li>
+    <li>一張長條圖有深灰背景、粗格線、立體陰影、每根長條不同顏色，旁邊還有圖例。用數據墨水比的觀念，你會怎麼改？哪些東西不能刪？
+      <details><summary>看答案</summary><p><b>刪掉灰底、粗格線、立體陰影；改成同一個顏色；把數值直接標在長條上，取代圖例。</b>不能刪的是座標軸或類別名稱、單位、必要的標題。</p></details></li>
+    <li>業務報表用紅色表示「未達標」、綠色表示「達標」，並排在一起。可能有什麼問題？怎麼改？
+      <details><summary>看答案</summary><p><b>紅綠色盲的人可能分不出達標和未達標。</b>改用藍＋橘這類色盲友善配色，並加上符號（例如勾和叉）或「達標、未達標」文字標籤，不只靠顏色。</p></details></li>
+    <li>想說明「期初現金 500 萬，經過營收、成本、稅金，最後剩多少」，用什麼圖？若改成泡泡圖表示客戶數，A 的客戶數是 B 的 4 倍，A 的泡泡半徑應是 B 的幾倍？
+      <details><summary>看答案</summary><p><b>瀑布圖。</b>泡泡用面積表示數值，客戶數 4 倍＝面積 4 倍，<b>半徑是 √4＝2 倍</b>。</p></details></li>
+  </ol>
+</section>
+</main>
+
+<p style="text-align:center;color:var(--muted);font-size:14px;margin:44px 0 0">其他章：<a href="index.html">L22 觀念複習總目錄</a></p>
+<footer>🍀 Learn AI with Tarshar · iPAS 中級 L22 觀念複習<br>依 L22303 學習範圍整理的原創圖解，不含考古題原文。圖中數字皆為自編範例並以程式實際計算。</footer>
+</body>
+</html>
