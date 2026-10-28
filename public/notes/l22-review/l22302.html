@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="iPAS 中級 L22302 常見的大數據分析方法：分類評估指標、任務類型、關聯規則、分群、檢定選擇、決策樹、PCA 與零散觀念的圖解觀念複習。">
+<title>L22302 大數據分析方法觀念複習｜🍀Learn AI with Tarshar</title>
+<style>
+:root{
+  --bg:#08101f;--bg2:#0d1830;--panel:#111f3b;--panel2:#152746;
+  --line:rgba(137,172,255,.18);--text:#eef4ff;--muted:#a7b7d8;--dim:#7183aa;
+  --cyan:#41dcff;--blue:#6690ff;--purple:#b57bff;--green:#4de1a1;--orange:#ffc45b;--red:#ff8a80
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;color:var(--text);line-height:1.85;background:
+radial-gradient(900px 500px at 10% -10%,rgba(65,220,255,.13),transparent 65%),
+radial-gradient(900px 520px at 95% 10%,rgba(181,123,255,.14),transparent 62%),var(--bg);min-height:100vh}
+a{color:var(--cyan)}.wrap{width:min(880px,calc(100% - 32px));margin:auto}
+.topbar{position:sticky;top:0;z-index:20;background:rgba(8,16,31,.84);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.topbar .wrap{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.back{text-decoration:none;color:var(--cyan);font-size:14px;font-weight:800}.brand{font-size:12px;color:var(--muted);letter-spacing:1.5px}
+.hero{padding:46px 0 18px}
+.eyebrow{display:inline-flex;padding:6px 13px;border:1px solid rgba(65,220,255,.35);border-radius:999px;color:var(--cyan);font-size:12px;letter-spacing:2px;background:rgba(65,220,255,.06)}
+h1{font-size:clamp(28px,5vw,46px);line-height:1.25;margin:16px 0 10px;letter-spacing:-.02em}
+.lead{color:var(--muted);font-size:16px;margin:0}
+.toc{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:26px 0 8px}
+.toc a{display:block;text-decoration:none;color:var(--text);border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:rgba(17,31,59,.72);font-size:14px;font-weight:700}
+.toc a span{color:var(--cyan);margin-right:6px}
+section{margin:38px 0}
+h2{font-size:24px;margin:0 0 12px;padding-top:8px;border-top:1px solid var(--line)}
+h2 small{display:block;color:var(--cyan);font-size:12px;letter-spacing:2px;margin-top:14px}
+h3{font-size:17px;color:var(--orange);margin:22px 0 6px}
+h4{font-size:15px;color:var(--cyan);margin:0 0 4px}
+p{margin:8px 0}
+.why{border-left:4px solid var(--cyan);background:rgba(65,220,255,.06);border-radius:0 14px 14px 0;padding:12px 16px;color:var(--muted)}
+.why b{color:var(--text)}
+figure{margin:16px 0;background:#fff;border-radius:16px;padding:8px;overflow:hidden}
+figure img{display:block;width:100%;height:auto}figcaption{color:#666;font-size:12px;text-align:right;padding:2px 6px 0}
+ol,ul{padding-left:22px;color:var(--muted)}li{margin:4px 0}li b{color:var(--text)}
+.defs{display:grid;gap:10px;margin:12px 0}
+.def{border:1px solid var(--line);border-radius:14px;background:rgba(17,31,59,.72);padding:12px 16px}
+.def ul{margin:2px 0 0;padding-left:20px;font-size:14.5px}
+.def li b{color:var(--orange)}
+.note{color:var(--muted);font-size:14px}
+.tbl{overflow-x:auto;margin:14px 0;border:1px solid var(--line);border-radius:14px}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:14px}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:var(--panel2);color:var(--cyan);font-weight:800}tr:last-child td{border-bottom:0}
+td b{color:var(--orange)}
+tr.grp td{background:rgba(181,123,255,.12);color:var(--purple);font-weight:800}
+.hook{border:1px solid rgba(255,196,91,.5);background:linear-gradient(135deg,rgba(255,196,91,.13),rgba(255,196,91,.04));border-radius:14px;padding:12px 16px 12px;margin:14px 0}
+.hook .tag{display:inline-block;font-size:12px;font-weight:900;letter-spacing:1.5px;color:#2a1a00;background:var(--orange);border-radius:999px;padding:2px 10px;margin-bottom:6px}
+.hook ul{margin:0;padding-left:20px;color:var(--text)}.hook li b{color:var(--orange)}
+.trap{border:1px solid rgba(255,138,128,.4);background:rgba(255,138,128,.07);border-radius:14px;padding:12px 16px;margin:14px 0}
+.trap b{color:var(--red)}
+.recap{counter-reset:n;list-style:none;padding:0}
+.recap li{counter-increment:n;position:relative;padding:12px 14px 12px 50px;border:1px solid var(--line);border-radius:14px;background:rgba(17,31,59,.72);margin:8px 0;color:var(--text)}
+.recap li::before{content:counter(n);position:absolute;left:14px;top:12px;width:26px;height:26px;border-radius:50%;background:var(--green);color:#062418;font-weight:900;text-align:center;line-height:26px;font-size:13px}
+.quiz{list-style:none;padding:0;counter-reset:q}
+.quiz li{counter-increment:q;border:1px solid var(--line);border-radius:14px;background:rgba(17,31,59,.72);padding:12px 16px;margin:10px 0;color:var(--text)}
+.quiz li::before{content:"練習 " counter(q);display:block;color:var(--cyan);font-size:12px;font-weight:900;letter-spacing:1.5px}
+details{margin-top:8px}summary{cursor:pointer;color:var(--green);font-weight:800;font-size:14px}
+details p{color:var(--muted);font-size:14.5px}details b{color:var(--orange)}
+footer{text-align:center;color:var(--dim);font-size:12px;line-height:1.9;border-top:1px solid var(--line);margin-top:50px;padding:30px 20px 44px}
+@media(max-width:600px){.wrap{width:calc(100% - 32px)}.brand{display:none}.toc{grid-template-columns:1fr}h2{font-size:21px}}
+</style>
+</head>
+<body>
+<nav class="topbar"><div class="wrap"><a class="back" href="../ipas-intermediate.html">← iPAS 中級總覽</a><span class="brand">🍀 LEARN AI WITH TARSHAR · L22 觀念複習</span></div></nav>
+
+<main class="wrap">
+<header class="hero">
+  <span class="eyebrow">iPAS 中級 · 科目二 · L22302</span>
+  <h1>常見的大數據分析方法｜觀念圖解複習</h1>
+  <p class="lead">這一章不難在計算，難在<b>名詞多、長得像</b>。每個單元都照「為什麼需要它 → 一步步搭起來 → 名詞各自定義 → 整合比較表 → 記憶鉤子 → 易錯提醒」整理。先看圖，再讀文字，最後用自我檢測練手感。</p>
+  <nav class="toc" aria-label="目錄">
+    <a href="#u1"><span>①</span>分類評估指標、ROC 與 PR 曲線</a>
+    <a href="#u2"><span>②</span>任務類型：監督與非監督</a>
+    <a href="#u3"><span>③</span>關聯規則與 Apriori</a>
+    <a href="#u4"><span>④</span>分群：K-means、階層式、DBSCAN</a>
+    <a href="#u5"><span>⑤</span>檢定怎麼選：獨立 t、配對 t、ANOVA</a>
+    <a href="#u6"><span>⑥</span>決策樹與過擬合的剎車</a>
+    <a href="#u7"><span>⑦</span>PCA 主成分分析</a>
+    <a href="#u8"><span>⑧</span>零散觀念：3V、中心性、LDA、共線性</a>
+    <a href="#recap"><span>★</span>十句話總整理</a>
+    <a href="#glossary"><span>☰</span>全章名詞總彙整表</a>
+    <a href="#quiz"><span>✎</span>自我檢測 10 題</a>
+  </nav>
+</header>
+
+<!-- ================================================== 單元① -->
+<section id="u1">
+  <h2><small>單元 ①</small>分類評估指標：混淆矩陣、精確率、召回率、FPR、F1、ROC 與 PR 曲線</h2>
+  <p class="why"><b>為什麼需要它？</b> 假設你做了一個模型，預測哪些客戶下個月會流失，好讓業務先去關心。老闆問：「它準不準？」這句話其實有好幾種問法：它說會流失的人，<b>有幾成真的流失</b>？真的會流失的人，<b>它抓到幾成</b>？沒有要流失的人，<b>被它誤報了幾成</b>？答案都不一樣，所以每個問法都有自己的名字。只要先學會畫一張<b>混淆矩陣</b>，所有名字都能從它算出來。</p>
+  <h3>一步步搭起來</h3>
+  <ol>
+    <li><b>先數人頭：</b>200 位客戶裡，事後看真的流失 40 人、沒流失 160 人。</li>
+    <li><b>再看模型怎麼說：</b>模型說「會流失」50 人、「不會流失」150 人。</li>
+    <li><b>交叉成四格：</b>說會、真的流失＝30 人（TP）；說會、其實沒流失＝20 人（FP）；說不會、其實流失了＝10 人（FN）；說不會、也真的沒流失＝140 人（TN）。</li>
+    <li><b>每個指標，就是「挑某一列或某一欄當分母」</b>，看下圖。</li>
+  </ol>
+  <figure><a href="img/l22302-confusion.png" target="_blank" rel="noopener"><img src="img/l22302-confusion.png" alt="200 位客戶流失預測的混淆矩陣：TP 30、FN 10、FP 20、TN 140，以及精確率 0.60、召回率 0.75、FPR 0.125、準確率 0.85、F1 約 0.67 的算法" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <p>精確率和召回率最常搞混。它們的<b>分子都是 TP（抓對的人）</b>，差別只在分母：</p>
+  <figure><a href="img/l22302-precision_recall.png" target="_blank" rel="noopener"><img src="img/l22302-precision_recall.png" alt="精確率看模型說是的 50 人、召回率看真的流失的 40 人，分子都是抓對的 30 人" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <p><b>為什麼不能只看準確率？</b> 如果模型很懶，對 200 人一律說「不會流失」，準確率是 160 ÷ 200＝80%，看起來不差，但它一個要流失的人都沒抓到（召回率＝0）。「是」很少的資料（類別不平衡）裡，準確率會騙人。</p>
+
+  <h3>名詞各自定義</h3>
+  <div class="defs">
+    <div class="def"><h4>混淆矩陣 Confusion Matrix</h4><ul>
+      <li><b>是什麼：</b>把「真相」和「模型的預測」交叉成 2 × 2 四格：TP、FP、FN、TN。</li>
+      <li><b>怎麼讀名字：</b>第二個字（陽／陰）＝模型說什麼；第一個字（真／偽）＝說得對不對。FP 偽陽性＝模型說「是」，但說錯了。</li>
+      <li><b>用途：</b>所有分類指標的原料。</li></ul></div>
+    <div class="def"><h4>準確率 Accuracy</h4><ul>
+      <li><b>是什麼：</b>全部樣本裡猜對的比例＝(TP＋TN) ÷ 全部。例子：170 ÷ 200＝0.85。</li>
+      <li><b>適合：</b>兩類人數差不多、兩種錯誤代價也差不多的時候。</li>
+      <li><b>優缺點：</b>最直覺；但類別不平衡時會誤導。它是<b>一個數字</b>，不是曲線的軸。</li></ul></div>
+    <div class="def"><h4>精確率 Precision</h4><ul>
+      <li><b>是什麼：</b>模型說「是」的那一群裡，真的是「是」的比例＝TP ÷ (TP＋FP)。例子：30 ÷ 50＝0.60。</li>
+      <li><b>適合：</b><b>誤報代價高</b>的情況，例如垃圾信過濾（把重要信丟進垃圾桶很糟）。</li>
+      <li><b>優缺點：</b>看得出模型「說得有多可靠」；但不管漏掉多少，只挑最有把握的一兩個來說，精確率就很高。</li></ul></div>
+    <div class="def"><h4>召回率 Recall（也叫真陽性率 TPR、敏感度）</h4><ul>
+      <li><b>是什麼：</b>真的是「是」的那一群裡，被模型抓到的比例＝TP ÷ (TP＋FN)。例子：30 ÷ 40＝0.75。</li>
+      <li><b>適合：</b><b>漏抓代價高</b>的情況，例如癌症篩檢、詐騙偵測、流失預警。</li>
+      <li><b>優缺點：</b>看得出「漏網之魚有多少」；但不管誤報，把所有人都說成「是」，召回率就是 100%。</li>
+      <li><b>和精確率的拉扯：</b>判「是」的門檻調低，召回率通常上升、精確率下降；調高則相反。</li></ul></div>
+    <div class="def"><h4>偽陽性率 FPR（False Positive Rate）</h4><ul>
+      <li><b>是什麼：</b>真的是「否」的那一群裡，被誤報成「是」的比例＝FP ÷ (FP＋TN)。例子：20 ÷ 160＝0.125。</li>
+      <li><b>關聯：</b>FPR＝1 − 特異度（特異度＝TN ÷ (FP＋TN)＝0.875）。</li>
+      <li><b>用途：</b>ROC 曲線的<b>橫軸</b>。</li></ul></div>
+    <div class="def"><h4>F1 分數</h4><ul>
+      <li><b>是什麼：</b>精確率和召回率的調和平均＝2 × P × R ÷ (P＋R)。例子：約 0.67。</li>
+      <li><b>適合：</b>類別不平衡，精確率、召回率都想顧的時候。</li>
+      <li><b>優缺點：</b>只要一邊很低，F1 就被拉低，不能靠單邊衝高；它和準確率一樣是<b>一個數字</b>。</li></ul></div>
+    <div class="def"><h4>ROC 曲線與 AUC</h4><ul>
+      <li><b>是什麼：</b>把判「是」的門檻從嚴到鬆一路調，每個門檻算出一組（FPR, TPR），連成曲線。<b>橫軸 FPR、縱軸 TPR。</b></li>
+      <li><b>怎麼看：</b>越靠左上角越好；斜對角線＝亂猜。曲線下面積叫 AUC，0.5＝亂猜，1＝完美。</li>
+      <li><b>優缺點：</b>不用先決定門檻就能比模型；但「是」非常稀少時，ROC 看起來偏樂觀，這時改看 PR 曲線。</li></ul></div>
+    <div class="def"><h4>PR 曲線（Precision-Recall Curve）</h4><ul>
+      <li><b>是什麼：</b>同樣一路調門檻，但畫的是橫軸召回率、縱軸精確率。</li>
+      <li><b>怎麼看：</b>越靠右上角越好；亂猜的水平線高度＝資料中「是」的比例（例子 40 ÷ 200＝0.2）。</li>
+      <li><b>適合：</b>「是」很稀少的資料，例如詐騙、罕見疾病。</li></ul></div>
+  </div>
+  <figure><a href="img/l22302-roc_pr.png" target="_blank" rel="noopener"><img src="img/l22302-roc_pr.png" alt="ROC 曲線橫軸偽陽性率、縱軸真陽性率，越靠左上越好；PR 曲線橫軸召回率、縱軸精確率，越靠右上越好" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <p class="note">兩條曲線是同一個模型；紅點就是混淆矩陣例子的那個門檻：在 ROC 上是（FPR 0.125, TPR 0.75），在 PR 上是（召回率 0.75, 精確率 0.60）。</p>
+
+  <h3>整合比較表</h3>
+  <div class="tbl"><table>
+    <tr><th>名詞</th><th>一句話定義</th><th>公式（例子）</th><th>適用情境</th><th>關鍵分辨點</th><th>容易搞混</th></tr>
+    <tr><td><b>準確率</b></td><td>全部人裡猜對幾成</td><td>(TP＋TN)÷全部（0.85）</td><td>兩類人數差不多</td><td>分母是全部；單一數字</td><td>F1</td></tr>
+    <tr><td><b>精確率</b></td><td>我說是的裡，真的是幾成</td><td>TP÷(TP＋FP)（0.60）</td><td>誤報代價高</td><td>分母是「模型說是」</td><td>召回率</td></tr>
+    <tr><td><b>召回率／TPR</b></td><td>真的是的裡，我抓到幾成</td><td>TP÷(TP＋FN)（0.75）</td><td>漏抓代價高</td><td>分母是「真的是」；ROC 縱軸</td><td>精確率</td></tr>
+    <tr><td><b>FPR</b></td><td>真的否的裡，被誤報幾成</td><td>FP÷(FP＋TN)（0.125）</td><td>看誤報</td><td>分母是「真的否」；ROC 橫軸</td><td>精確率</td></tr>
+    <tr><td><b>F1</b></td><td>精確率與召回率的調和平均</td><td>2PR÷(P＋R)（0.67）</td><td>不平衡、兩者都要顧</td><td>單一數字，不是軸</td><td>準確率</td></tr>
+    <tr><td><b>ROC 曲線</b></td><td>門檻一路調，畫 FPR 對 TPR</td><td>橫 FPR、縱 TPR</td><td>比較模型整體好壞</td><td>橫錯縱對；左上最好</td><td>PR 曲線、軸向顛倒</td></tr>
+    <tr><td><b>PR 曲線</b></td><td>門檻一路調，畫召回率對精確率</td><td>橫 Recall、縱 Precision</td><td>「是」很稀少</td><td>右上最好</td><td>ROC 曲線</td></tr>
+  </table></div>
+  <div class="hook"><span class="tag">記憶鉤子</span><ul>
+    <li><b>精確率：「我說是的，裡面真的是幾個？」</b>（分母＝模型說是）</li>
+    <li><b>召回率：「真的是的，我抓到幾個？」</b>（分母＝真的是）。召回＝把真的「召回來」幾個。</li>
+    <li><b>ROC：「先錯後對、橫錯縱對」</b>：橫軸是犯錯的 FPR，縱軸是抓對的 TPR。</li>
+    <li><b>曲線的軸一定是「率」</b>；準確率、F1 是「分數」，不會拿來當 ROC 的軸。</li>
+  </ul></div>
+  <div class="trap"><b>易錯提醒：</b>看到「<b>預測為</b>正類的樣本當中」，分母是模型說是，那是精確率；看到「<b>實際為</b>正類的樣本當中」，分母是真的是，那是召回率。精確率對召回率畫出來的是 PR 曲線，不是 ROC；ROC 的兩軸也很常被對調來混淆。</div>
+</section>
+
+<!-- ================================================== 單元② -->
+<section id="u2">
+  <h2><small>單元 ②</small>任務類型：監督式與非監督式、分類與迴歸、邏輯迴歸的名字陷阱</h2>
+  <p class="why"><b>為什麼需要它？</b> 拿到一個問題，第一件事是判斷「這是哪一種任務」，因為任務決定了要用哪一類方法、用哪一種指標評分。常見的考法是描述一個情境（例如「預測客戶會不會流失」）要你說出任務名稱，或反過來給一個方法名稱，問它屬於哪一類。</p>
+  <h3>一步步搭起來</h3>
+  <ol>
+    <li><b>先想像兩種學生。</b>第一種拿到附解答的練習本，做完對答案、修正自己，這是<b>監督式學習</b>：每筆資料都附上標準答案（又叫標籤）。第二種只拿到一堆沒解答的資料，只能自己找規律，這是<b>非監督式學習</b>。</li>
+    <li><b>監督式再分兩種，看「答案長什麼樣」：</b>答案是類別（是／否、A／B／C）＝<b>分類</b>；答案是數字（營收 125 萬、溫度 28 度）＝<b>迴歸</b>。</li>
+    <li><b>非監督式常見三種：</b>相似的分成一群＝<b>分群</b>；找常常一起出現的東西＝<b>關聯規則</b>；把很多欄位濃縮成少數幾個＝<b>降維</b>。</li>
+    <li><b>判斷順序：</b>① 有沒有標準答案？② 有的話，答案是類別還是數字？</li>
+  </ol>
+  <figure><a href="img/l22302-tasks.png" target="_blank" rel="noopener"><img src="img/l22302-tasks.png" alt="機器學習任務地圖：有標準答案是監督式（分類、迴歸），沒有是非監督式（分群、關聯規則、降維）" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+
+  <h3>名詞各自定義</h3>
+  <div class="defs">
+    <div class="def"><h4>監督式學習 Supervised Learning</h4><ul>
+      <li><b>是什麼：</b>用「資料＋標準答案」配對好的資料訓練，學會後去預測新資料的答案。</li>
+      <li><b>適合：</b>手上有歷史答案的問題，例如去年哪些客戶流失了、過去每間房子賣多少。</li>
+      <li><b>優缺點：</b>目標明確、可以對答案評分；但要先有大量標好答案的資料，標註很花人力。</li></ul></div>
+    <div class="def"><h4>非監督式學習 Unsupervised Learning</h4><ul>
+      <li><b>是什麼：</b>資料沒有標準答案，讓電腦自己找結構：分群、關聯、降維。</li>
+      <li><b>適合：</b>想先探索資料，例如「我的會員可以分成哪幾種人？」</li>
+      <li><b>優缺點：</b>不用標註；但沒有答案可對，好壞較難判斷，結果要人來解讀。</li></ul></div>
+    <div class="def"><h4>分類 Classification（監督式）</h4><ul>
+      <li><b>是什麼：</b>預測一個<b>類別</b>。兩類叫二元分類，三類以上叫多元分類。</li>
+      <li><b>常見方法：</b>邏輯迴歸、決策樹、隨機森林、支持向量機 SVM。</li>
+      <li><b>評分方式：</b>準確率、精確率、召回率、F1、ROC／AUC（單元 ①）。</li></ul></div>
+    <div class="def"><h4>迴歸 Regression（監督式）</h4><ul>
+      <li><b>是什麼：</b>預測一個<b>連續的數字</b>，例如下個月營收、房價。</li>
+      <li><b>常見方法：</b>線性迴歸（決策樹、隨機森林也有迴歸版）。</li>
+      <li><b>評分方式：</b>RMSE、MAE、R²（L22301 學過）。</li></ul></div>
+    <div class="def"><h4>分群 Clustering（非監督式）</h4><ul>
+      <li><b>是什麼：</b>沒有答案，依「彼此像不像」分成幾群。分類的類別是事先定好的，分群的群是電腦自己找出來的。</li>
+      <li><b>常見方法：</b>K-means、階層式分群、DBSCAN（單元 ④）。</li></ul></div>
+    <div class="def"><h4>關聯規則 Association Rules（非監督式）</h4><ul>
+      <li><b>是什麼：</b>找出「A 出現時，B 也常出現」的規則，最有名的是購物籃分析。</li>
+      <li><b>常見方法：</b>Apriori（單元 ③）。</li></ul></div>
+    <div class="def"><h4>降維 Dimensionality Reduction（非監督式）</h4><ul>
+      <li><b>是什麼：</b>欄位太多時，濃縮成少數幾個新欄位，盡量保留原本的資訊。</li>
+      <li><b>常見方法：</b>PCA 主成分分析（單元 ⑦）。它不需要標準答案，所以屬於<b>非監督式</b>。</li></ul></div>
+    <div class="def"><h4>邏輯迴歸 Logistic Regression（監督式，做分類）</h4><ul>
+      <li><b>是什麼：</b>名字有「迴歸」，但工作是<b>分類</b>，主要用在<b>二元分類</b>。</li>
+      <li><b>怎麼運作：</b>各欄位加權加總成一個分數，用 S 形曲線壓成 0 到 1 的機率，再切門檻（例如 ≥ 0.5）判成「是」或「否」。</li>
+      <li><b>優缺點：</b>簡單、快、每個欄位的影響方向好解釋；但只能畫直線型的分界。</li></ul></div>
+  </div>
+  <figure><a href="img/l22302-logistic.png" target="_blank" rel="noopener"><img src="img/l22302-logistic.png" alt="邏輯迴歸流程：客戶資料加權加總、S 形曲線壓成 0 到 1 的機率、切 0.5 門檻判斷會不會流失" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>支持向量機 SVM、隨機森林 Random Forest（監督式）</h4><ul>
+      <li><b>SVM：</b>在兩類資料中間找一條「離兩邊都最遠」的分界線，主要拿來分類。</li>
+      <li><b>隨機森林：</b>種很多棵決策樹，每棵看的資料和欄位都不太一樣，最後投票，比單一棵樹穩定。</li>
+      <li><b>共同點：</b>訓練時都要有標準答案，所以都是<b>監督式</b>。</li></ul></div>
+  </div>
+
+  <h3>整合比較表</h3>
+  <div class="tbl"><table>
+    <tr><th>名詞</th><th>一句話定義</th><th>特性</th><th>適用情境</th><th>關鍵分辨點</th><th>容易搞混</th></tr>
+    <tr><td><b>監督式學習</b></td><td>照著標準答案學</td><td>要有標籤；可對答案評分</td><td>有歷史答案</td><td>資料有答案</td><td>非監督式</td></tr>
+    <tr><td><b>非監督式學習</b></td><td>沒答案，自己找結構</td><td>不用標籤；結果要人解讀</td><td>先探索資料</td><td>資料沒答案</td><td>監督式</td></tr>
+    <tr><td><b>分類</b></td><td>預測類別</td><td>監督式；輸出是／否或 A／B／C</td><td>流失、垃圾信</td><td>答案是類別</td><td>分群、迴歸</td></tr>
+    <tr><td><b>迴歸</b></td><td>預測數字</td><td>監督式；輸出連續值</td><td>營收、房價</td><td>答案是數字</td><td>邏輯迴歸（名字像）</td></tr>
+    <tr><td><b>分群</b></td><td>相似的放一群</td><td>非監督；群是自己找的</td><td>客戶分眾</td><td>類別不是事先定好</td><td>分類</td></tr>
+    <tr><td><b>關聯規則</b></td><td>找常一起出現的</td><td>非監督；輸出「A → B」規則</td><td>購物籃、交叉銷售</td><td>看組合，不預測</td><td>分群</td></tr>
+    <tr><td><b>降維（PCA）</b></td><td>多欄濃縮成少欄</td><td>非監督；保留最多變異</td><td>欄位太多、視覺化</td><td>減少欄位數</td><td>分群</td></tr>
+    <tr><td><b>邏輯迴歸</b></td><td>算機率再切兩類</td><td>監督式；S 形曲線</td><td>是非題的預測</td><td>名字有迴歸，其實是分類</td><td>線性迴歸</td></tr>
+  </table></div>
+  <div class="hook"><span class="tag">記憶鉤子</span><ul>
+    <li><b>「有解答本＝監督，沒解答本＝非監督」。</b></li>
+    <li><b>「答案是類別＝分類，答案是數字＝迴歸」</b>：看到「是否」「會不會」就是分類。</li>
+    <li><b>「邏輯迴歸，回答是非題」</b>：名字是迴歸，工作是二元分類。</li>
+    <li><b>PCA、K-means、Apriori 不需要答案＝非監督；SVM、邏輯迴歸、隨機森林、決策樹要答案＝監督。</b></li>
+  </ul></div>
+  <div class="trap"><b>易錯提醒：</b>分類和迴歸都在「預測」，看到「預測」兩個字不代表迴歸，要看<b>答案是類別還是數字</b>。另外，邏輯迴歸和多元線性迴歸名字很像，但前者做分類、後者預測數字。</div>
+</section>
+
+<!-- ================================================== 單元③ -->
+<section id="u3">
+  <h2><small>單元 ③</small>關聯規則：支持度、信賴度、提升度與 Apriori</h2>
+  <p class="why"><b>為什麼需要它？</b> 超市想知道「哪些商品常常被一起買」，好決定擺放位置、組合優惠或推薦。可是規則可能有幾萬條，有的只是巧合、有的根本很少發生，所以需要幾個數字來判斷一條規則值不值得用。</p>
+  <h3>一步步搭起來：用 10 張收據算「麵包 → 牛奶」</h3>
+  <ol>
+    <li><b>數次數：</b>有麵包 6 張、有牛奶 5 張、兩樣都有 4 張。</li>
+    <li><b>這個組合常不常見？</b>4 ÷ 10＝40%，這叫<b>支持度</b>。</li>
+    <li><b>買了麵包的人，有幾成也買牛奶？</b>4 ÷ 6≈66.7%，這叫<b>信賴度</b>。</li>
+    <li><b>66.7% 算高嗎？</b>不看麵包，本來就有 5 ÷ 10＝50% 的人買牛奶。66.7% ÷ 50%≈1.33，這叫<b>提升度</b>：大於 1，表示買麵包真的讓買牛奶的機會變高。</li>
+  </ol>
+  <figure><a href="img/l22302-basket.png" target="_blank" rel="noopener"><img src="img/l22302-basket.png" alt="10 張收據的購物籃分析：麵包加牛奶支持度 40%、信賴度約 66.7%、提升度約 1.33" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <p class="note"><b>注意方向：</b>信賴度有方向性。反過來算「牛奶 → 麵包」＝4 ÷ 5＝80%，和 66.7% 不一樣；但支持度（40%）和提升度（約 1.33）兩個方向都一樣。</p>
+
+  <h3>名詞各自定義</h3>
+  <div class="defs">
+    <div class="def"><h4>支持度 Support</h4><ul>
+      <li><b>是什麼：</b>A 和 B 一起出現的交易，佔全部交易的比例。例子：4 ÷ 10＝40%。</li>
+      <li><b>用途：</b>先把太少發生的組合篩掉，太罕見的規則沒有商業價值。</li>
+      <li><b>缺點：</b>只說明常不常見，不說明 A 和 B 有沒有關係。</li></ul></div>
+    <div class="def"><h4>信賴度 Confidence</h4><ul>
+      <li><b>是什麼：</b>有 A 的交易裡，也有 B 的比例＝一起出現 ÷ 有 A。例子：4 ÷ 6≈66.7%。</li>
+      <li><b>用途：</b>衡量規則「A → B」有多可靠，也就是條件機率 P(B｜A)。</li>
+      <li><b>缺點：</b>B 本來就熱賣的話，信賴度自然很高，會誤以為 A 帶動了 B，所以要再看提升度。</li></ul></div>
+    <div class="def"><h4>提升度 Lift</h4><ul>
+      <li><b>是什麼：</b>信賴度 ÷ B 本來被買的比例。例子：66.7% ÷ 50%≈1.33。</li>
+      <li><b>怎麼看：</b>大於 1：正相關，A 帶動 B；等於 1：互不相干；小於 1：互相排斥。</li>
+      <li><b>優點：</b>排除「B 本來就熱賣」的假象，最能看出真正的關聯。</li></ul></div>
+    <div class="def"><h4>覆蓋率 Coverage</h4><ul>
+      <li><b>是什麼：</b>只看規則的前項 A：有 A 的交易佔全部的比例。例子：麵包 6 ÷ 10＝60%。</li>
+      <li><b>和信賴度的差別：</b>覆蓋率只問「多少人買 A」，<b>不管 B</b>；信賴度問「買 A 的人裡幾成也買 B」。</li></ul></div>
+    <div class="def"><h4>Apriori 演算法</h4><ul>
+      <li><b>是什麼：</b>做<b>關聯規則探勘</b>的經典演算法：一層一層找出常一起出現的商品組合（頻繁項目集），再從中產生規則。</li>
+      <li><b>怎麼運作：</b>先找單一商品，留下過門檻的；再兩兩配對、數次數、篩選；再往三個一組疊上去。關鍵：<b>小組合不常見，包含它的大組合一定也不常見</b>，可以直接剪掉不數。</li>
+      <li><b>優缺點：</b>邏輯簡單好懂；但要反覆掃描資料，商品很多時候選組合爆量（後來有 FP-Growth 等改良）。</li></ul></div>
+  </div>
+  <figure><a href="img/l22302-apriori.png" target="_blank" rel="noopener"><img src="img/l22302-apriori.png" alt="Apriori 一層層找頻繁組合：第一層單一商品、第二層兩兩組合、第三層因為子組合沒過關直接剪掉" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+
+  <h3>整合比較表</h3>
+  <div class="tbl"><table>
+    <tr><th>名詞</th><th>一句話定義</th><th>計算（例子）</th><th>適用情境</th><th>關鍵分辨點</th><th>容易搞混</th></tr>
+    <tr><td><b>支持度</b></td><td>這個組合有多常見</td><td>A 和 B 一起 ÷ 全部（40%）</td><td>先篩掉罕見組合</td><td>分母是全部交易</td><td>信賴度</td></tr>
+    <tr><td><b>信賴度</b></td><td>買 A 的人裡幾成也買 B</td><td>A 和 B 一起 ÷ 有 A（66.7%）</td><td>規則可不可靠</td><td>分母是買 A 的人；有方向</td><td>支持度、覆蓋率</td></tr>
+    <tr><td><b>提升度</b></td><td>A 有沒有真的帶動 B</td><td>信賴度 ÷ B 的比例（1.33）</td><td>排除熱賣假象</td><td>和 1 比；兩方向相同</td><td>信賴度</td></tr>
+    <tr><td><b>覆蓋率</b></td><td>有多少交易含 A</td><td>有 A ÷ 全部（60%）</td><td>看前項多普遍</td><td>不管 B</td><td>信賴度</td></tr>
+    <tr><td><b>Apriori</b></td><td>一層層找頻繁組合</td><td>小組合不常見就剪掉</td><td>購物籃、關聯規則探勘</td><td>屬關聯規則，非監督</td><td>分群、分類</td></tr>
+  </table></div>
+  <div class="hook"><span class="tag">記憶鉤子</span><ul>
+    <li><b>支持度＝「多常見」</b>（分母全部）；<b>信賴度＝「買 A 的人裡，幾成也買 B」</b>（分母是買 A 的人）；<b>提升度＝「有沒有真的帶動」</b>（跟 1 比）。</li>
+    <li>聽到「<b>有 A 的人當中，也有 B 的比例</b>」＝信賴度。</li>
+    <li><b>看到 Apriori，就想到購物籃＝關聯規則探勘。</b></li>
+  </ul></div>
+  <div class="trap"><b>易錯提醒：</b>覆蓋率和信賴度都跟「A」有關，但覆蓋率完全不看 B。Apriori 不是圖像辨識、時間序列或異常偵測的方法，它只做「找一起出現的組合」。</div>
+</section>
+
+<!-- ================================================== 單元④ -->
+<section id="u4">
+  <h2><small>單元 ④</small>分群方法：K-means 與肘部法則、階層式分群與樹狀圖、DBSCAN</h2>
+  <p class="why"><b>為什麼需要它？</b> 你有 1 萬名會員的消費紀錄，想知道「他們可以分成哪幾種人」，好設計不同的行銷方式。沒有人事先告訴你答案，只能靠「誰跟誰比較像」來分組，這就是分群。不同方法對「像」的定義不同，適合的資料形狀也不同。</p>
+  <h3>一步步搭起來（先學最常見的 K-means）</h3>
+  <ol>
+    <li><b>先決定要分幾群（K）</b>，例如 K＝3，隨機放 3 個中心點。</li>
+    <li><b>每位會員找離自己最近的中心點</b>，加入那一群。</li>
+    <li><b>每群重新算平均位置</b>，把中心點移過去。</li>
+    <li><b>重複第 2、3 步</b>，直到中心點不再移動。</li>
+  </ol>
+  <p><b>K 要選幾？</b> 群分越多，每群裡的人一定越靠近中心（組內距離總和越小），分到每人一群時是 0，但那沒有意義。把 K＝1、2、3…的組內距離總和畫成曲線，找下降突然變平緩的轉折點，這就是<b>肘部法則</b>。下圖是實際用 K-means 跑出來的：K＝3 之前每多分一群就省很多（1957 → 978 → 248），之後只省一點點（248 → 212 → 183）。</p>
+  <figure><a href="img/l22302-elbow.png" target="_blank" rel="noopener"><img src="img/l22302-elbow.png" alt="肘部法則：三群客戶資料，組內距離總和曲線在 K 等於 3 出現手肘" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+
+  <h3>名詞各自定義</h3>
+  <div class="defs">
+    <div class="def"><h4>K-means（K-平均演算法）</h4><ul>
+      <li><b>是什麼：</b>先指定群數 K，反覆「分到最近中心、重算中心」直到穩定。</li>
+      <li><b>適合：</b>群大致是圓球狀、大小差不多，而且大概知道要分幾群。</li>
+      <li><b>優點：</b>簡單、速度快，資料量大也跑得動。</li>
+      <li><b>缺點：</b>要事先給 K；結果受初始中心影響；不擅長彎曲或不規則形狀；每個點都會被硬塞進某一群。</li></ul></div>
+    <div class="def"><h4>肘部法則 Elbow Method</h4><ul>
+      <li><b>是什麼：</b>幫 K-means <b>選 K</b> 的方法：畫「K 對組內距離總和」的曲線，選轉折那一點。</li>
+      <li><b>缺點：</b>曲線很平滑時看不出手肘，可改看輪廓係數等指標。</li></ul></div>
+    <div class="def"><h4>階層式分群 Hierarchical Clustering</h4><ul>
+      <li><b>是什麼：</b>一開始每個點自己一群，每次把<b>最近的兩群合併</b>，一路合到剩一群（凝聚式）；也有由上往下一路分裂的分裂式。</li>
+      <li><b>產出：</b>一張<b>樹狀圖 Dendrogram</b>：越低處合併的越像。在不同高度橫切一刀，就得到不同群數。</li>
+      <li><b>優缺點：</b>不用事先決定 K、樹狀圖好解釋；但要算所有點兩兩的距離，資料一大就很慢。</li></ul></div>
+  </div>
+  <figure><a href="img/l22302-dendrogram.png" target="_blank" rel="noopener"><img src="img/l22302-dendrogram.png" alt="六位客戶的階層式分群樹狀圖，紅色虛線切一刀分成三群" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <p class="note">上圖用「兩群中最近兩點的距離」（單一連結）實際算出：A＋B 先合（0.67），C＋D 次之（0.86），F 再併入 A、B（1.40）。紅線切在 1.40 和 2.00 之間，剛好分成 3 群：｛A、B、F｝、｛C、D｝、｛E｝。</p>
+  <div class="defs">
+    <div class="def"><h4>DBSCAN（以密度為基礎的分群）</h4><ul>
+      <li><b>是什麼：</b>看密度分群：一個點周圍（半徑 eps 內）至少有 minPts 個點，就是<b>核心點</b>；核心點彼此相連，一路長成一群。</li>
+      <li><b>三種點：</b>核心點、邊界點（在核心點旁，自己周圍不夠密）、<b>雜訊點</b>（哪群都不屬於）。</li>
+      <li><b>適合：</b><b>形狀不規則</b>（彎月、長條），而且<b>有雜訊</b>的資料。</li>
+      <li><b>優點：</b>不用給 K；能分出任意形狀；雜訊點不會被硬塞進群裡。</li>
+      <li><b>缺點：</b>eps 和 minPts 要調；各群密度差很多時難處理；維度很高時距離失去鑑別力，效果變差。</li></ul></div>
+  </div>
+  <figure><a href="img/l22302-kmeans_dbscan.png" target="_blank" rel="noopener"><img src="img/l22302-kmeans_dbscan.png" alt="同一份兩條彎月加雜訊的資料：K-means 切錯，DBSCAN 分對兩條彎月並把六個亂點標成雜訊" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>高斯混合模型 GMM（對照用）</h4><ul>
+      <li><b>是什麼：</b>假設資料由幾座「鐘形山」疊起來，算出每個點屬於每座山的<b>機率</b>（軟分群）。</li>
+      <li><b>和 K-means 的差別：</b>K-means 每點只屬於一群、群偏圓；GMM 給機率，群可以是橢圓。它不產生樹狀圖。</li></ul></div>
+  </div>
+
+  <h3>整合比較表</h3>
+  <div class="tbl"><table>
+    <tr><th>名詞</th><th>一句話定義</th><th>特性</th><th>適用情境</th><th>關鍵分辨點</th><th>容易搞混</th></tr>
+    <tr><td><b>K-means</b></td><td>反覆找最近中心</td><td>要先給 K；群偏圓球；快</td><td>大量資料、球狀群</td><td>要給 K；每點都被分進群</td><td>DBSCAN、GMM</td></tr>
+    <tr><td><b>肘部法則</b></td><td>幫 K-means 選 K</td><td>看組內距離曲線的轉折</td><td>不知道分幾群</td><td>選 K 的方法</td><td>交叉驗證、網格搜尋、梯度下降</td></tr>
+    <tr><td><b>階層式分群</b></td><td>最近的兩群一路合併</td><td>不用給 K；產出樹狀圖</td><td>中小型資料、要看層次</td><td>樹狀圖 Dendrogram</td><td>K-means</td></tr>
+    <tr><td><b>DBSCAN</b></td><td>沿著密集處長成群</td><td>不用給 K；可抓雜訊</td><td>形狀不規則、有雜訊</td><td>密度＋雜訊點</td><td>K-means</td></tr>
+    <tr><td><b>GMM</b></td><td>每點屬於各群的機率</td><td>軟分群；群可為橢圓</td><td>群有重疊</td><td>給機率</td><td>K-means</td></tr>
+  </table></div>
+  <div class="hook"><span class="tag">記憶鉤子</span><ul>
+    <li><b>K-means 愛「圓球」、要先給 K；選 K 用「肘部法則」：彎下去的手肘，就是該停的地方。</b></li>
+    <li><b>看到「樹狀圖 Dendrogram」＝階層式分群。</b></li>
+    <li><b>看到「形狀不規則」「雜訊點 Noise」＝DBSCAN。</b></li>
+  </ul></div>
+  <div class="trap"><b>易錯提醒：</b>梯度下降是訓練模型時「一步步調參數讓誤差變小」的最佳化方法，不是選群數的方法；交叉驗證主要評估要有答案可對的監督式模型；網格搜尋只是一組組試參數，本身不回答 K 該選幾。另外，「K 已知、群呈球狀」是 K-means 的主場，不是 DBSCAN 的強項；維度很高時 DBSCAN 反而吃虧。</div>
+</section>
+
+<!-- ================================================== 單元⑤ -->
+<section id="u5">
+  <h2><small>單元 ⑤</small>檢定方法怎麼選：單一樣本 t、獨立樣本 t、配對樣本 t、ANOVA</h2>
+  <p class="why"><b>為什麼需要它？</b> L22301 學過：每種檢定只適合一種資料。這一章把「比較平均數」再細分：同樣是比兩組平均，<b>兩組是不是同一批人</b>，用的檢定就不一樣。選錯了，算出來的 P 值不可信。</p>
+  <h3>一步步搭起來</h3>
+  <ol>
+    <li><b>在比什麼？</b>比「比例」（轉換率）→ 卡方或比例 Z 檢定；比「平均數」→ 往下走。</li>
+    <li><b>有幾組？</b>1 組跟一個已知數字比 → 單一樣本 t；2 組 → 往下走；3 組以上 → ANOVA。</li>
+    <li><b>兩組是同一批人量兩次嗎？</b>是（同一班期中、期末）→ <b>配對樣本 t</b>；不是（A 班、B 班）→ <b>獨立樣本 t</b>。</li>
+  </ol>
+  <figure><a href="img/l22302-ttests.png" target="_blank" rel="noopener"><img src="img/l22302-ttests.png" alt="比較平均數的檢定選擇圖：一組用單一樣本 t、兩組看是否同一群人分配對或獨立樣本 t、三組以上用 ANOVA" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <p class="note"><b>為什麼配對要分開算？</b> 同一個人前後兩次分數有關聯（本來就強的人兩次都高）。配對 t 檢定先算每個人的「進步分數」，只看進步的部分，把個人程度差異排除，所以更敏銳。兩批不同的人沒有一對一的配對，只能用獨立樣本 t。</p>
+
+  <h3>名詞各自定義</h3>
+  <div class="defs">
+    <div class="def"><h4>單一樣本 t 檢定</h4><ul>
+      <li><b>是什麼：</b>一組資料的平均，和一個<b>已知的數字</b>比較。例：本店平均客單價是否不同於公司目標 500 元。</li>
+      <li><b>前提：</b>資料大致常態，或樣本數夠大。</li></ul></div>
+    <div class="def"><h4>獨立樣本 t 檢定 Independent Samples t-test</h4><ul>
+      <li><b>是什麼：</b>比較<b>兩組不同的人</b>的平均數有沒有顯著差異。例：A 班和 B 班的平均成績。</li>
+      <li><b>前提：</b>兩組彼此獨立、資料大致常態；兩組變異數差很多時改用 Welch 版本。</li>
+      <li><b>優缺點：</b>最常用、好理解；但只能比兩組。</li></ul></div>
+    <div class="def"><h4>配對樣本 t 檢定 Paired Samples t-test</h4><ul>
+      <li><b>是什麼：</b>比較<b>同一批人（或一對一配好的對象）量兩次</b>的平均數。例：同一班期中 vs 期末、同一批病人吃藥前 vs 吃藥後。</li>
+      <li><b>怎麼運作：</b>先算每個人的差值（後 − 前），再檢定差值的平均是不是 0。</li>
+      <li><b>優點：</b>排除個人原本程度的差異，比較容易看出真正的變化。</li></ul></div>
+    <div class="def"><h4>變異數分析 ANOVA</h4><ul>
+      <li><b>是什麼：</b>比較<b>三組以上</b>的平均數是否全部相同。例：北、中、南三家分店的平均業績。</li>
+      <li><b>為什麼不兩兩做 t 檢定：</b>三組要做 3 次，次數一多誤判機率就膨脹（多重檢定）。ANOVA 一次就好。</li>
+      <li><b>缺點：</b>只告訴你「至少有一組不同」，要知道是哪一組，還要做事後比較。</li></ul></div>
+    <div class="def"><h4>卡方檢定 Chi-squared test（對照用）</h4><ul>
+      <li><b>是什麼：</b>處理<b>類別資料的次數</b>，例如兩組的轉換「有／沒有」比例是否不同、兩個類別變數有沒有關聯。</li>
+      <li><b>和 t 檢定的差別：</b>t 檢定比<b>平均數</b>，卡方比<b>次數或比例</b>。</li></ul></div>
+  </div>
+
+  <h3>整合比較表</h3>
+  <div class="tbl"><table>
+    <tr><th>名詞</th><th>一句話定義</th><th>特性</th><th>適用情境</th><th>關鍵分辨點</th><th>容易搞混</th></tr>
+    <tr><td><b>單一樣本 t</b></td><td>一組平均 vs 已知數字</td><td>只有一組資料</td><td>跟目標值、標準值比</td><td>只有 1 組</td><td>獨立 t</td></tr>
+    <tr><td><b>獨立樣本 t</b></td><td>兩批不同人的平均比較</td><td>兩組互不相干</td><td>A 班 vs B 班</td><td>不同的人</td><td>配對 t</td></tr>
+    <tr><td><b>配對樣本 t</b></td><td>同一批人前後的平均比較</td><td>先算每人差值</td><td>期中 vs 期末、前測後測</td><td>同一批人量兩次</td><td>獨立 t</td></tr>
+    <tr><td><b>ANOVA</b></td><td>三組以上平均比較</td><td>一次檢定；需事後比較</td><td>三家分店、三種版本</td><td>3 組以上</td><td>多次 t 檢定</td></tr>
+    <tr><td><b>卡方檢定</b></td><td>類別次數或比例比較</td><td>看次數，不看平均</td><td>轉換率、有／無</td><td>比比例不是平均</td><td>t 檢定</td></tr>
+  </table></div>
+  <div class="hook"><span class="tag">記憶鉤子</span><ul>
+    <li><b>「同一批人前後比＝配對；兩批不同的人＝獨立；三組以上＝ANOVA；比例＝卡方。」</b></li>
+    <li><b>讀情境先圈兩個字：「同一」還是「兩組」。</b></li>
+  </ul></div>
+  <div class="trap"><b>易錯提醒：</b>看到「兩組<b>獨立</b>樣本」就不是配對；配對一定要有「同一批人量兩次」或「一對一配好」的關係。比的是平均數就不是卡方。</div>
+</section>
+
+<!-- ================================================== 單元⑥ -->
+<section id="u6">
+  <h2><small>單元 ⑥</small>決策樹與過擬合：深度、最小樣本數、剪枝、max_features</h2>
+  <p class="why"><b>為什麼需要它？</b> 決策樹是一連串「是／否」問題組成的判斷流程，像醫生問診：「客訴超過 3 次嗎？→ 用不到 6 個月嗎？→ 判會流失」。它很好懂，但有個壞習慣：一直問下去，它能把訓練資料<b>每一筆都答對</b>，連巧合都背下來，換一批新資料就失準，這叫<b>過擬合</b>（L22301 的高方差那一邊）。所以要幫它裝「剎車」。</p>
+  <h3>一步步搭起來</h3>
+  <ol>
+    <li><b>樹怎麼長？</b>每一步挑一個最能把資料分乾淨的問題（欄位＋門檻），分成兩堆，再對每一堆繼續問。</li>
+    <li><b>不管它會怎樣？</b>一直分到每片葉子只剩一兩個人，訓練資料全部答對。</li>
+    <li><b>問題在哪？</b>那些很細的規則，很多只是這批資料的巧合，對新客戶沒用。</li>
+  </ol>
+  <figure><a href="img/l22302-tree_depth.png" target="_blank" rel="noopener"><img src="img/l22302-tree_depth.png" alt="淺的決策樹規則簡單、新客戶也適用；太深的樹每片葉子只剩一兩個人，連巧合都背下來造成過擬合" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <ol start="4">
+    <li><b>裝剎車：</b>讓樹「更簡單、更保守」的設定都是剎車。</li>
+  </ol>
+  <figure><a href="img/l22302-tree_brakes.png" target="_blank" rel="noopener"><img src="img/l22302-tree_brakes.png" alt="決策樹防過擬合的剎車：限制最大深度、節點最小樣本數、剪枝、減少 max_features；增加 max_features 不是剎車" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+
+  <h3>名詞各自定義</h3>
+  <div class="defs">
+    <div class="def"><h4>決策樹 Decision Tree</h4><ul>
+      <li><b>是什麼：</b>用一層層「是／否」問題來分類或預測的模型，屬於監督式，分類、迴歸都能做。</li>
+      <li><b>優點：</b>像流程圖，最好解釋；數值、類別欄位都能用，不用先標準化。</li>
+      <li><b>缺點：</b>很容易過擬合；資料稍變，整棵樹可能完全不同（不穩定），所以常改用隨機森林。</li></ul></div>
+    <div class="def"><h4>過擬合 Overfitting</h4><ul>
+      <li><b>是什麼：</b>把訓練資料（包括雜訊和巧合）背得太熟，訓練表現很好，新資料表現很差。</li>
+      <li><b>訊號：</b>訓練準確率很高，測試準確率明顯較低。</li></ul></div>
+    <div class="def"><h4>限制最大深度 max_depth</h4><ul>
+      <li><b>是什麼：</b>規定樹最多只能問幾層。</li>
+      <li><b>效果：</b>層數少、規則粗，比較不會背到細節，是<b>剎車</b>。</li></ul></div>
+    <div class="def"><h4>節點分裂最小樣本數 min_samples_split</h4><ul>
+      <li><b>是什麼：</b>一個節點至少要有幾筆資料，才准再往下分。</li>
+      <li><b>效果：</b>人太少就不再分，避免為了一兩個人特地長出一條規則，是<b>剎車</b>。</li></ul></div>
+    <div class="def"><h4>剪枝 Pruning</h4><ul>
+      <li><b>是什麼：</b>把樹上對新資料沒幫助的枝幹剪掉。可以長的時候提早停（預剪枝），或長完再剪（後剪枝）。</li>
+      <li><b>效果：</b>讓樹變簡單，是防過擬合的<b>標準做法</b>。</li></ul></div>
+    <div class="def"><h4>最大特徵數 max_features</h4><ul>
+      <li><b>是什麼：</b>每次分裂時，最多只能從幾個欄位裡挑問題。</li>
+      <li><b>效果：</b><b>減少</b>它，每次只看一部分欄位、加入隨機性，比較不會過度貼合（隨機森林就靠這招）；<b>增加</b>它，樹每次都挑最貼合訓練資料的欄位，反而更容易過擬合，所以<b>不是</b>剎車。</li></ul></div>
+  </div>
+
+  <h3>整合比較表</h3>
+  <div class="tbl"><table>
+    <tr><th>名詞</th><th>一句話定義</th><th>特性</th><th>適用情境</th><th>關鍵分辨點</th><th>容易搞混</th></tr>
+    <tr><td><b>決策樹</b></td><td>一層層是非題做判斷</td><td>好解釋；易過擬合</td><td>要說得出理由的預測</td><td>監督式；分類迴歸都能做</td><td>隨機森林</td></tr>
+    <tr><td><b>過擬合</b></td><td>背太熟，新資料失準</td><td>訓練好、測試差</td><td>模型太複雜時</td><td>高方差那一邊</td><td>欠擬合</td></tr>
+    <tr><td><b>限制最大深度</b></td><td>最多問幾層</td><td>調小＝更簡單</td><td>樹太深時</td><td>限制＝剎車</td><td>max_features</td></tr>
+    <tr><td><b>最小分裂樣本數</b></td><td>人太少就不再分</td><td>調大＝更保守</td><td>葉子太碎時</td><td>提高門檻＝剎車</td><td>最大深度</td></tr>
+    <tr><td><b>剪枝</b></td><td>剪掉沒用的枝</td><td>預剪枝或後剪枝</td><td>樹長完太複雜</td><td>剪掉＝剎車</td><td>限制深度</td></tr>
+    <tr><td><b>max_features</b></td><td>每次分裂可看的欄位數</td><td>減少＝加隨機性</td><td>隨機森林常用</td><td>減少才是剎車，增加不是</td><td>max_depth</td></tr>
+  </table></div>
+  <div class="hook"><span class="tag">記憶鉤子</span><ul>
+    <li><b>「樹長太深會背答案，要幫它剎車。」</b></li>
+    <li><b>剎車都是「限制、提高門檻、剪掉、減少」，看到「增加」要警覺。</b></li>
+  </ul></div>
+  <div class="trap"><b>易錯提醒：</b>遇到「<b>不包含</b>」「<b>不正確</b>」這種反向問法，先把三個字圈起來，再把每個設定標「是剎車／不是剎車」，最後挑那個「不是」。剪枝是最標準的剎車，別因為讀反而把它挑掉。</div>
+</section>
+
+<!-- ================================================== 單元⑦ -->
+<section id="u7">
+  <h2><small>單元 ⑦</small>PCA 主成分分析：找變異數最大的方向</h2>
+  <p class="why"><b>為什麼需要它？</b> 資料有 100 個欄位時，很多欄位其實在講同一件事（例如身高和體重常常一起變大）。欄位太多會讓模型變慢、難畫圖，還會有共線性問題（單元 ⑧）。PCA 的想法是：找出幾個「新方向」，用少數幾個新欄位就保留大部分的資訊。</p>
+  <h3>一步步搭起來</h3>
+  <ol>
+    <li><b>什麼叫「資訊」？</b>某個欄位每個人都一樣，就沒辦法分辨任何人，等於沒有資訊。資料在某個方向上<b>散得越開（變異數越大）</b>，越能分辨彼此，資訊越多。</li>
+    <li><b>找最散的方向：</b>在資料雲裡轉一圈，找投影後變異數最大的方向，這是<b>第 1 主成分</b>。</li>
+    <li><b>找第二散的方向：</b>要和第 1 主成分垂直、變異數次大，這是<b>第 2 主成分</b>，依此類推。</li>
+    <li><b>只留前幾個：</b>下圖的例子，第 1 主成分就保留約 96% 的變異，兩個欄位可以濃縮成一個。</li>
+  </ol>
+  <figure><a href="img/l22302-pca.png" target="_blank" rel="noopener"><img src="img/l22302-pca.png" alt="身高體重散佈圖上的第 1 主成分與第 2 主成分，第 1 主成分保留約 96% 的變異" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+
+  <h3>名詞各自定義</h3>
+  <div class="defs">
+    <div class="def"><h4>主成分分析 PCA</h4><ul>
+      <li><b>是什麼：</b>一種<b>降維</b>方法：把原本的欄位重新組合成幾個互相垂直的新方向（主成分），依變異數由大到小排列，只留前面幾個。</li>
+      <li><b>屬於：</b>非監督式學習（不需要標準答案）。</li>
+      <li><b>優點：</b>減少欄位、加快模型、方便畫圖；主成分彼此不相關，可以解決多重共線性。</li>
+      <li><b>缺點：</b>主成分是原欄位的混合，很難解釋代表什麼；欄位單位不同要先標準化；只抓直線型關係。</li></ul></div>
+    <div class="def"><h4>變異數 Variance</h4><ul>
+      <li><b>是什麼：</b>資料離平均值散得多開。PCA 要<b>最大化</b>的就是它。</li></ul></div>
+    <div class="def"><h4>解釋變異比例</h4><ul>
+      <li><b>是什麼：</b>某個主成分保留了原本總變異的幾成，用來決定要留幾個主成分。例子：第 1 主成分約 96%。</li></ul></div>
+    <div class="def"><h4>容易混進來的其他名詞</h4><ul>
+      <li><b>平均值：</b>資料的中心。PCA 第一步會先把資料移到平均值，但那不是它要找的東西。</li>
+      <li><b>相關性：</b>兩個欄位一起變化的程度。PCA 是<b>利用</b>欄位之間的共變異來計算，但它最大化的是變異數，不是相關性。</li>
+      <li><b>偏度：</b>分布左右對不對稱，和 PCA 無關。</li></ul></div>
+  </div>
+
+  <h3>整合比較表</h3>
+  <div class="tbl"><table>
+    <tr><th>名詞</th><th>一句話定義</th><th>特性</th><th>適用情境</th><th>關鍵分辨點</th><th>容易搞混</th></tr>
+    <tr><td><b>PCA</b></td><td>找最散的方向來降維</td><td>非監督；主成分互相垂直</td><td>欄位太多、共線性、視覺化</td><td>最大化變異數</td><td>分群、LDA</td></tr>
+    <tr><td><b>主成分</b></td><td>重新組合出的新方向</td><td>依變異數由大到小排</td><td>取前幾個代表全部</td><td>第 1 個最散</td><td>原始欄位</td></tr>
+    <tr><td><b>變異數</b></td><td>資料散得多開</td><td>越大資訊越多</td><td>PCA 的目標</td><td>PCA 要最大化的</td><td>相關性、平均值</td></tr>
+    <tr><td><b>相關性</b></td><td>兩欄一起變化的程度</td><td>−1 到 1</td><td>看兩變數關係</td><td>PCA 的原料，不是目標</td><td>變異數</td></tr>
+  </table></div>
+  <div class="hook"><span class="tag">記憶鉤子</span><ul>
+    <li><b>「PCA 找最散的方向」。散＝變異數，不是平均值，也不是相關係數。</b></li>
+    <li><b>PCA＝降維＝非監督式。</b></li>
+  </ul></div>
+  <div class="trap"><b>易錯提醒：</b>「相關性」最容易誤選：PCA 確實從欄位之間的共變異去算，但它要最大化的是<b>投影後的變異數</b>。</div>
+</section>
+
+<!-- ================================================== 單元⑧ -->
+<section id="u8">
+  <h2><small>單元 ⑧</small>零散觀念快記：3V 與 5V、中心性、LDA 主題模型、多重共線性</h2>
+  <p class="why"><b>為什麼放在一起？</b> 這四個觀念彼此獨立，但都是「名詞對定義」的考法。每個都先講為什麼需要，再定義、比較。</p>
+
+  <h3>⑧-1 大數據的 3V 與 5V</h3>
+  <p><b>為什麼需要它？</b> 「大數據」不是只有「資料很多」。業界用幾個 V 開頭的英文字描述它和一般資料的差別，最基本的是 3V，後來擴充成 5V。最常見的陷阱，是把後來加的 V 混進原始 3V 裡。</p>
+  <figure><a href="img/l22302-v5.png" target="_blank" rel="noopener"><img src="img/l22302-v5.png" alt="大數據的 V：原始 3V 是 Volume 量、Velocity 速、Variety 多樣性，5V 再加 Veracity 真實性與 Value 價值" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="tbl"><table>
+    <tr><th>V</th><th>中文</th><th>一句話定義</th><th>屬於</th></tr>
+    <tr><td><b>Volume</b></td><td>量</td><td>資料量非常大</td><td><b>3V</b></td></tr>
+    <tr><td><b>Velocity</b></td><td>速</td><td>資料產生、流動、需要處理的速度很快</td><td><b>3V</b></td></tr>
+    <tr><td><b>Variety</b></td><td>多樣性</td><td>資料型態很多：表格、文字、圖片、影音、感測器</td><td><b>3V</b></td></tr>
+    <tr><td>Veracity</td><td>真實性</td><td>資料可不可信、有沒有雜訊或錯誤</td><td>5V 擴充</td></tr>
+    <tr><td>Value</td><td>價值</td><td>資料能不能轉成商業價值</td><td>5V 擴充</td></tr>
+  </table></div>
+  <p class="note">Validity 有效性偶爾出現在更多 V 的版本裡，也不是原始 3V。</p>
+  <div class="hook"><span class="tag">記憶鉤子</span><ul>
+    <li><b>「又多、又快、又雜」＝3V</b>；再問「可信嗎、值錢嗎」＝5V。</li>
+  </ul></div>
+
+  <h3>⑧-2 社群網路分析：中心性</h3>
+  <p><b>為什麼需要它？</b> 社群網路分析把「人」畫成點、「關係」畫成線。行銷最想知道：<b>誰是關鍵人物</b>？找到他，訊息就傳得最快最廣。衡量「一個點有多重要」的指標統稱<b>中心性</b>；其他幾個名詞描述的是「關係網長什麼樣子」。</p>
+  <figure><a href="img/l22302-centrality.png" target="_blank" rel="noopener"><img src="img/l22302-centrality.png" alt="社群網路圖：小美連到 7 個人是關鍵人物，右側對照中心性、群集係數、路徑長度、網路密度" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <p class="note">用上圖算一次：圖中共 10 人、11 條線。</p>
+  <div class="defs">
+    <div class="def"><h4>中心性 Centrality</h4><ul>
+      <li><b>是什麼：</b>衡量<b>一個點在網路中有多重要、多有影響力</b>的一群指標。</li>
+      <li><b>常見種類：</b>度中心性（直接連了幾個人）；中介中心性（多少人之間的最短路徑要經過他，像橋樑）；接近中心性（到其他所有人平均有多近）。</li>
+      <li><b>例子：</b>小美直接連 7 人，度中心性＝7 ÷ 9≈0.78（9＝除了她以外的人數），全網最高。</li></ul></div>
+    <div class="def"><h4>群集係數 Clustering Coefficient</h4><ul>
+      <li><b>是什麼：</b>一個人的朋友之間，<b>彼此也是朋友</b>的比例，看圈子緊不緊密。</li>
+      <li><b>例子：</b>小美的 7 個朋友兩兩配對有 21 種組合，實際互相認識的只有 A–B、E–F 兩對，群集係數＝2 ÷ 21≈0.10。她很重要，但朋友彼此不太熟。</li></ul></div>
+    <div class="def"><h4>路徑長度 Path Length</h4><ul>
+      <li><b>是什麼：</b>兩個點之間最少要經過幾條線。例：G → 小美 → D → H → I，共 4 步。</li></ul></div>
+    <div class="def"><h4>網路密度 Network Density</h4><ul>
+      <li><b>是什麼：</b>實際線數 ÷ 所有可能的線數，看<b>整張網</b>連得多滿。例：11 ÷ 45≈0.24。它描述整體，不描述個人。</li></ul></div>
+  </div>
+  <div class="tbl"><table>
+    <tr><th>名詞</th><th>一句話定義</th><th>看的對象</th><th>關鍵分辨點</th><th>容易搞混</th></tr>
+    <tr><td><b>中心性</b></td><td>一個點有多重要</td><td>單一個點</td><td>問「誰最重要、影響力」</td><td>群集係數</td></tr>
+    <tr><td><b>群集係數</b></td><td>朋友之間彼此也認識的比例</td><td>一個點的朋友圈</td><td>問「圈子多緊密」</td><td>中心性</td></tr>
+    <tr><td><b>路徑長度</b></td><td>兩點之間隔幾步</td><td>兩個點</td><td>問「距離」</td><td>密度</td></tr>
+    <tr><td><b>網路密度</b></td><td>整張網連得多滿</td><td>整張網</td><td>問「整體連結程度」</td><td>群集係數</td></tr>
+  </table></div>
+  <div class="hook"><span class="tag">記憶鉤子</span><ul>
+    <li><b>「誰最重要、影響力多大」就是中心性</b>；其他三個都在描述「關係網的樣子」。</li>
+  </ul></div>
+
+  <h3>⑧-3 LDA 主題模型</h3>
+  <p><b>為什麼需要它？</b> 你有 10 萬則顧客留言，不可能一篇篇讀。想知道「大家都在聊哪些主題」，就要讓電腦從字詞的共同出現裡自己整理出主題。LDA（潛在狄利克雷分佈）就是最常用的<b>主題模型</b>。</p>
+  <figure><a href="img/l22302-lda.png" target="_blank" rel="noopener"><img src="img/l22302-lda.png" alt="LDA 主題模型：每篇文章是幾個主題的混合，每個主題是一組常一起出現的字，例如運動、美食、旅遊" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>LDA 潛在狄利克雷分佈 Latent Dirichlet Allocation</h4><ul>
+      <li><b>是什麼：</b>一種機率模型，假設<b>每篇文章是幾個主題的混合</b>、<b>每個主題是一組常一起出現的字</b>，從大量文章反推出這些主題。</li>
+      <li><b>屬於：</b>非監督式，用途是<b>主題模型 Topic Modeling</b>。</li>
+      <li><b>優缺點：</b>能快速掌握大量文字的主軸；但主題數要自己設，找出的主題還要人來命名、解讀。</li>
+      <li><b>小心同名：</b>LDA 也是「線性判別分析 Linear Discriminant Analysis」的縮寫，那是監督式的分類／降維方法。出現「狄利克雷」就是主題模型。</li></ul></div>
+  </div>
+  <div class="tbl"><table>
+    <tr><th>任務</th><th>一句話定義</th><th>和 LDA 主題模型的差別</th></tr>
+    <tr><td><b>主題模型</b></td><td>從大量文章找出「在聊哪些主題」</td><td>LDA 就是做這個</td></tr>
+    <tr><td>情感分析</td><td>判斷一段文字是正面還是負面</td><td>看「態度」，不是「主題」</td></tr>
+    <tr><td>序列標註</td><td>替句子裡每個字詞貼標籤（例如標出人名、地名）</td><td>逐字標記，不是整篇歸納</td></tr>
+    <tr><td>機器翻譯</td><td>把一種語言轉成另一種語言</td><td>輸出另一種語言的句子</td></tr>
+  </table></div>
+  <div class="hook"><span class="tag">記憶鉤子</span><ul>
+    <li><b>「潛在狄利克雷，挖出潛在主題」。</b></li>
+  </ul></div>
+
+  <h3>⑧-4 多重共線性</h3>
+  <p><b>為什麼需要它？</b> 做迴歸時，我們想知道「每個欄位對結果有多少影響」。但如果兩個輸入欄位幾乎在講同一件事（例如坪數和房間數），模型就分不清功勞該算誰的，算出來的係數忽大忽小、甚至正負號顛倒，很難解釋。</p>
+  <figure><a href="img/l22302-collinearity.png" target="_blank" rel="noopener"><img src="img/l22302-collinearity.png" alt="多重共線性示意：坪數和房間數彼此高度相關是問題，特徵和要預測的房價相關是好事" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>多重共線性 Multicollinearity（兩個時叫共線性）</h4><ul>
+      <li><b>是什麼：</b>模型裡<b>兩個或多個輸入特徵之間</b>高度相關。</li>
+      <li><b>造成什麼問題：</b>個別係數不穩定、標準誤變大、難解釋單一欄位的影響；但對整體預測準不準，影響往往不大。</li>
+      <li><b>怎麼發現：</b>看欄位之間的相關係數矩陣，或算變異數膨脹因子 VIF（常見警戒線大於 10，有些人用 5）。</li>
+      <li><b>怎麼處理：</b>刪掉其中一個、合併成一個指標、用 PCA 轉成不相關的主成分，或用 Ridge 等正規化方法。</li></ul></div>
+  </div>
+  <div class="tbl"><table>
+    <tr><th>現象</th><th>一句話定義</th><th>是不是共線性</th><th>說明</th></tr>
+    <tr><td>特徵和特徵高度相關</td><td>輸入欄位彼此太像</td><td><b>是</b></td><td>這就是多重共線性</td></tr>
+    <tr><td>特徵和目標高度相關</td><td>輸入欄位和要預測的結果有關</td><td>不是</td><td>這是好事，模型靠它預測</td></tr>
+    <tr><td>殘差之間有相關</td><td>預測誤差彼此有規律</td><td>不是</td><td>這叫自相關，常見於時間序列</td></tr>
+    <tr><td>大量異常值</td><td>有很多極端的資料點</td><td>不是</td><td>這是離群值問題</td></tr>
+  </table></div>
+  <div class="hook"><span class="tag">記憶鉤子</span><ul>
+    <li><b>「共線性是自己人太像，不是跟目標很像」。</b></li>
+  </ul></div>
+  <div class="trap"><b>易錯提醒：</b>3V 的陷阱是把 Value、Veracity 混進原始三個；中心性的陷阱是群集係數（那是圈子緊密度，不是個人重要性）；LDA 的陷阱是同名的線性判別分析；共線性的陷阱是「特徵和目標相關」，那是好事。</div>
+</section>
+
+<!-- ================================================== 總整理 -->
+<section id="recap">
+  <h2><small>總整理</small>本章要記的十句話</h2>
+  <ol class="recap">
+    <li>精確率＝我說是的裡面真的是幾個（TP÷(TP＋FP)）；召回率＝真的是的裡面我抓到幾個（TP÷(TP＋FN)）。</li>
+    <li>ROC：橫軸 FPR、縱軸 TPR，「橫錯縱對」；精確率對召回率是 PR 曲線；準確率、F1 是單一分數，不是軸。</li>
+    <li>類別不平衡時，準確率會騙人，要看精確率、召回率或 F1。</li>
+    <li>有標準答案＝監督；答案是類別＝分類、是數字＝迴歸；邏輯迴歸雖叫迴歸，做的是二元分類。</li>
+    <li>PCA、K-means、Apriori 不需要答案（非監督）；SVM、邏輯迴歸、決策樹、隨機森林需要答案（監督）。</li>
+    <li>支持度＝多常見；信賴度＝買 A 的人裡幾成也買 B；提升度＞1＝真的有帶動。Apriori＝關聯規則探勘。</li>
+    <li>K-means 要先給 K，用肘部法則選；樹狀圖＝階層式；形狀不規則又有雜訊＝DBSCAN。</li>
+    <li>同一批人前後比＝配對 t；兩批不同人＝獨立 t；三組以上＝ANOVA；比例＝卡方。</li>
+    <li>決策樹防過擬合：限制深度、提高最小分裂樣本數、剪枝、減少 max_features；「增加」不是剎車。</li>
+    <li>PCA 找變異數最大的方向；3V＝量、速、多樣性；中心性＝重要性；LDA＝主題模型；共線性＝特徵彼此太像。</li>
+  </ol>
+</section>
+
+<!-- ================================================== 總彙整表 -->
+<section id="glossary">
+  <h2><small>考前速查</small>全章名詞總彙整表</h2>
+  <p class="note">把八個單元的比較表濃縮成一張。複習時遮住右邊三欄，看名詞說得出定義，再對照。</p>
+  <div class="tbl"><table>
+    <tr><th>名詞</th><th>一句話定義</th><th>口訣</th><th>容易跟誰搞混</th></tr>
+    <tr class="grp"><td colspan="4">單元 ① 分類評估指標</td></tr>
+    <tr><td><b>準確率</b></td><td>全部人裡猜對幾成</td><td>分母是全部</td><td>F1</td></tr>
+    <tr><td><b>精確率</b></td><td>模型說是的裡，真的是幾成</td><td>我說是的，有幾個真的是</td><td>召回率</td></tr>
+    <tr><td><b>召回率／TPR</b></td><td>真的是的裡，抓到幾成</td><td>真的是的，我抓到幾個</td><td>精確率</td></tr>
+    <tr><td><b>FPR</b></td><td>真的否的裡，被誤報幾成</td><td>誤報率，ROC 的橫軸</td><td>精確率</td></tr>
+    <tr><td><b>F1</b></td><td>精確率與召回率的調和平均</td><td>兩邊都顧的和事佬</td><td>準確率</td></tr>
+    <tr><td><b>ROC 曲線</b></td><td>橫軸 FPR、縱軸 TPR</td><td>橫錯縱對，左上最好</td><td>PR 曲線</td></tr>
+    <tr><td><b>PR 曲線</b></td><td>橫軸召回率、縱軸精確率</td><td>正類稀少時看它</td><td>ROC 曲線</td></tr>
+    <tr class="grp"><td colspan="4">單元 ② 任務類型</td></tr>
+    <tr><td><b>監督式學習</b></td><td>照著標準答案學</td><td>有解答本</td><td>非監督式</td></tr>
+    <tr><td><b>非監督式學習</b></td><td>沒答案，自己找結構</td><td>沒解答本</td><td>監督式</td></tr>
+    <tr><td><b>分類</b></td><td>預測類別</td><td>答案是類別</td><td>分群、迴歸</td></tr>
+    <tr><td><b>迴歸</b></td><td>預測數字</td><td>答案是數字</td><td>邏輯迴歸</td></tr>
+    <tr><td><b>邏輯迴歸</b></td><td>算機率再切兩類</td><td>邏輯迴歸，回答是非題</td><td>線性迴歸</td></tr>
+    <tr><td><b>分群</b></td><td>相似的放一群，群不是事先定好</td><td>物以類聚</td><td>分類</td></tr>
+    <tr><td><b>降維</b></td><td>多欄位濃縮成少欄位</td><td>化繁為簡</td><td>分群</td></tr>
+    <tr class="grp"><td colspan="4">單元 ③ 關聯規則</td></tr>
+    <tr><td><b>支持度</b></td><td>A 和 B 一起出現 ÷ 全部</td><td>多常見</td><td>信賴度</td></tr>
+    <tr><td><b>信賴度</b></td><td>A 和 B 一起出現 ÷ 有 A</td><td>買 A 的人裡幾成也買 B</td><td>支持度、覆蓋率</td></tr>
+    <tr><td><b>提升度</b></td><td>信賴度 ÷ B 本來的比例</td><td>跟 1 比，有沒有真的帶動</td><td>信賴度</td></tr>
+    <tr><td><b>覆蓋率</b></td><td>有 A ÷ 全部</td><td>只看 A，不管 B</td><td>信賴度</td></tr>
+    <tr><td><b>Apriori</b></td><td>一層層找頻繁組合</td><td>看到 Apriori 想到購物籃</td><td>分群演算法</td></tr>
+    <tr class="grp"><td colspan="4">單元 ④ 分群方法</td></tr>
+    <tr><td><b>K-means</b></td><td>反覆分到最近中心</td><td>愛圓球、要先給 K</td><td>DBSCAN</td></tr>
+    <tr><td><b>肘部法則</b></td><td>選 K 的方法</td><td>彎下去的手肘就停</td><td>交叉驗證、梯度下降</td></tr>
+    <tr><td><b>階層式分群</b></td><td>最近兩群一路合併</td><td>看到樹狀圖就是它</td><td>K-means</td></tr>
+    <tr><td><b>DBSCAN</b></td><td>沿密集處長成群，標出雜訊</td><td>看密度、抓雜訊、不用給 K</td><td>K-means</td></tr>
+    <tr><td><b>GMM</b></td><td>每點屬於各群的機率</td><td>給機率的軟分群</td><td>K-means</td></tr>
+    <tr class="grp"><td colspan="4">單元 ⑤ 檢定方法</td></tr>
+    <tr><td><b>單一樣本 t</b></td><td>一組平均 vs 已知數字</td><td>只有 1 組</td><td>獨立 t</td></tr>
+    <tr><td><b>獨立樣本 t</b></td><td>兩批不同人的平均</td><td>兩批不同的人</td><td>配對 t</td></tr>
+    <tr><td><b>配對樣本 t</b></td><td>同一批人前後的平均</td><td>同一批人前後比</td><td>獨立 t</td></tr>
+    <tr><td><b>ANOVA</b></td><td>三組以上平均</td><td>三組以上</td><td>多次 t 檢定</td></tr>
+    <tr><td><b>卡方檢定</b></td><td>類別次數或比例</td><td>比例找卡方</td><td>t 檢定</td></tr>
+    <tr class="grp"><td colspan="4">單元 ⑥ 決策樹與過擬合</td></tr>
+    <tr><td><b>過擬合</b></td><td>背太熟，新資料失準</td><td>訓練好、測試差</td><td>欠擬合</td></tr>
+    <tr><td><b>限制最大深度</b></td><td>最多問幾層</td><td>限制＝剎車</td><td>max_features</td></tr>
+    <tr><td><b>最小分裂樣本數</b></td><td>人太少就不再分</td><td>提高門檻＝剎車</td><td>最大深度</td></tr>
+    <tr><td><b>剪枝</b></td><td>剪掉沒用的枝</td><td>剪掉＝剎車</td><td>限制深度</td></tr>
+    <tr><td><b>max_features</b></td><td>每次分裂可看幾個欄位</td><td>減少才是剎車，增加不是</td><td>max_depth</td></tr>
+    <tr class="grp"><td colspan="4">單元 ⑦ PCA</td></tr>
+    <tr><td><b>PCA</b></td><td>找變異數最大的方向來降維</td><td>PCA 找最散的方向</td><td>相關性、分群</td></tr>
+    <tr class="grp"><td colspan="4">單元 ⑧ 零散觀念</td></tr>
+    <tr><td><b>3V</b></td><td>量、速、多樣性</td><td>又多、又快、又雜</td><td>5V 的真實性、價值</td></tr>
+    <tr><td><b>中心性</b></td><td>一個點有多重要</td><td>誰最重要</td><td>群集係數</td></tr>
+    <tr><td><b>群集係數</b></td><td>朋友之間彼此也認識的比例</td><td>圈子多緊密</td><td>中心性</td></tr>
+    <tr><td><b>網路密度</b></td><td>整張網連得多滿</td><td>看整體不看個人</td><td>群集係數</td></tr>
+    <tr><td><b>LDA（主題模型）</b></td><td>從文章找出主題</td><td>潛在狄利克雷，挖出潛在主題</td><td>線性判別分析</td></tr>
+    <tr><td><b>多重共線性</b></td><td>輸入特徵彼此高度相關</td><td>自己人太像</td><td>特徵和目標相關</td></tr>
+  </table></div>
+</section>
+
+<!-- ================================================== 自我檢測 -->
+<section id="quiz">
+  <h2><small>動手練</small>自我檢測 10 題</h2>
+  <p class="note">自編情境練習，練的是「看情境選名詞」。先自己想好答案，再點「看答案」。</p>
+  <ol class="quiz">
+    <li>醫院用模型篩檢癌症，最怕漏掉真正生病的人。這時最該重視哪一個指標？
+      <details><summary>看答案</summary><p><b>召回率</b>（TPR）。漏抓代價高，要問「真的生病的人，抓到幾個」。</p></details></li>
+    <li>公司信箱的垃圾信過濾器，最怕把客戶的重要來信誤判成垃圾信。這時最該重視哪一個指標？
+      <details><summary>看答案</summary><p><b>精確率</b>。誤報代價高，要問「我說是垃圾信的，真的是幾封」。</p></details></li>
+    <li>模型判定 80 筆交易是詐騙，其中 60 筆真的是詐騙；全部資料裡真正的詐騙共有 100 筆。精確率和召回率各是多少？
+      <details><summary>看答案</summary><p><b>精確率＝60 ÷ 80＝0.75；召回率＝60 ÷ 100＝0.60。</b>精確率的分母是「模型說是」的 80 筆，召回率的分母是「真的是」的 100 筆。</p></details></li>
+    <li>畫 ROC 曲線時，橫軸和縱軸各放什麼？曲線越靠哪一個角落代表模型越好？
+      <details><summary>看答案</summary><p><b>橫軸偽陽性率 FPR、縱軸真陽性率 TPR</b>，越靠<b>左上角</b>越好（誤報少、抓得多）。</p></details></li>
+    <li>想用過去的資料預測「明天的最高氣溫是幾度」，這屬於哪一種機器學習任務？
+      <details><summary>看答案</summary><p><b>迴歸</b>（監督式）。答案是一個數字。</p></details></li>
+    <li>電商有 5 萬名會員的消費紀錄，想讓電腦自動把會員分成幾種類型，事先沒有任何分類答案。這屬於哪一類學習？可以用什麼方法？
+      <details><summary>看答案</summary><p><b>非監督式學習的分群</b>，可以用 K-means（再用肘部法則選要分幾群），或階層式分群。</p></details></li>
+    <li>100 張收據中，有 20 張買了尿布，其中 12 張也買了啤酒；全部有 30 張買了啤酒。請算「尿布 → 啤酒」的支持度、信賴度、提升度。
+      <details><summary>看答案</summary><p><b>支持度＝12 ÷ 100＝12%；信賴度＝12 ÷ 20＝60%；提升度＝60% ÷ 30%＝2.0。</b>提升度大於 1，買尿布的人買啤酒的機會是平常的 2 倍。</p></details></li>
+    <li>門市的顧客位置資料，分布成彎彎曲曲的帶狀，還夾雜一些零星的亂點。用 K-means 還是 DBSCAN 比較適合？為什麼？
+      <details><summary>看答案</summary><p><b>DBSCAN。</b>形狀不規則、有雜訊點，DBSCAN 沿著密集處分群並把亂點標成雜訊；K-means 只會切出圓球狀的群，還會把亂點硬塞進群裡。</p></details></li>
+    <li>同一批 30 位員工，受訓前、受訓後各考一次，想知道分數有沒有進步，用哪一種檢定？如果改成比較台北、台中、高雄三家分店的平均業績呢？
+      <details><summary>看答案</summary><p><b>同一批人前後比＝配對樣本 t 檢定；三家分店＝三組以上平均數＝ANOVA。</b></p></details></li>
+    <li>預測員工離職的模型裡，同時放了「月薪」和「年薪」兩個欄位，可能會出現什麼問題？
+      <details><summary>看答案</summary><p><b>多重共線性。</b>年薪大約是月薪的固定倍數，兩個欄位高度相關，模型分不清影響該算誰的，係數會不穩定、難解釋。可以只留一個。</p></details></li>
+  </ol>
+</section>
+</main>
+
+<p style="text-align:center;color:var(--muted);font-size:14px;margin:44px 0 0">其他章：<a href="index.html">L22 觀念複習總目錄</a></p>
+<footer>🍀 Learn AI with Tarshar · iPAS 中級 L22 觀念複習<br>依 L22302 學習範圍整理的原創圖解，不含考古題原文。圖中數字皆為自編範例並以程式實際計算。</footer>
+</body>
+</html>
