@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="iPAS 中級 L22203 數據處理技術與工具：Pandas 與 SQL 合併分組、離散化與對數轉換、標準化歸一化與 PCA、重複數據判定、Hadoop 與 Spark 分工、抽樣的圖解觀念複習。">
+<meta name="description" content="iPAS 中級 L22203 數據處理技術與工具：Pandas 與 SQL 合併分組、離散化與對數轉換、標準化歸一化與 PCA、重複數據判定、Hadoop 與 Spark 分工、抽樣、批次與串流、ETL 與 ELT 的圖解觀念複習。">
 <title>L22203 數據處理觀念複習｜🍀Learn AI with Tarshar</title>
 <style>
 :root{
@@ -58,14 +58,15 @@ footer{text-align:center;color:var(--dim);font-size:12px;line-height:1.9;border-
 <header class="hero">
   <span class="eyebrow">iPAS 中級 · 科目二 · L22203</span>
   <h1>數據處理技術與工具｜觀念圖解複習</h1>
-  <p class="lead">五個最容易混淆的觀念，每個都照「為什麼需要它 → 一步步搭起來 → 對照表 → 易錯提醒」整理。這一章多半是「名詞對功能」的配對，先看圖，把每一組配起來就記得住。</p>
+  <p class="lead">六個最容易混淆的觀念，每個都照「為什麼需要它 → 一步步搭起來 → 對照表 → 易錯提醒」整理。這一章多半是「名詞對功能」的配對，先看圖，把每一組配起來就記得住。</p>
   <nav class="toc" aria-label="目錄">
     <a href="#u1"><span>①</span>Pandas 與 SQL：合併與分組</a>
     <a href="#u2"><span>②</span>數據轉換：分箱、對數、縮放、PCA</a>
     <a href="#u3"><span>③</span>重複數據怎麼判定</a>
     <a href="#u4"><span>④</span>Hadoop 與 Spark 分工</a>
     <a href="#u5"><span>⑤</span>抽樣與它的鄰居們</a>
-    <a href="#recap"><span>★</span>十二句話總整理</a>
+    <a href="#u6"><span>⑥</span>資料管線：批次與串流、ETL 與 ELT</a>
+    <a href="#recap"><span>★</span>十六句話總整理</a>
   </nav>
 </header>
 
@@ -76,23 +77,23 @@ footer{text-align:center;color:var(--dim);font-size:12px;line-height:1.9;border-
   <ol>
     <li><b>先問：兩張表的欄位一樣嗎？</b>一樣（例如 1 月檔、2 月檔都是「日期、產品、金額」），就是把列往下疊，用 <b>concat()</b>。</li>
     <li><b>欄位不一樣，但有共同的鍵欄位</b>（例如都有「客戶ID」），就是依鍵對接，用 <b>merge()</b>，等於資料庫的 JOIN。</li>
-    <li><b>merge 還要決定「留哪些鍵」</b>：參數 how 有 inner、left、right、outer 四種。</li>
-    <li><b>接好之後要分組算統計</b>：Pandas 用 groupby() 加聚合方法；SQL 用 GROUP BY 加聚合函數（SUM、AVG、COUNT、MAX、MIN）。</li>
+    <li><b>merge 還要決定「留哪些鍵」</b>：參數 how 最常用的是 inner、left、right、outer 四種（另有 cross 等）。沒有指定時，merge 預設 how＝'inner'，join() 預設 how＝'left'。</li>
+    <li><b>接好之後要分組算統計</b>：Pandas 用 groupby() 加聚合方法；SQL 用 GROUP BY，通常搭配聚合函數（SUM、AVG、COUNT、MAX、MIN）。</li>
   </ol>
-  <figure><a href="img/l22203-pandas.png" target="_blank" rel="noopener"><img src="img/l22203-pandas.png" alt="concat 把兩個欄位相同的月份檔垂直堆疊成四列；merge 依客戶ID 對接兩張表，並列出 inner、left、right、outer 四種保留方式" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <figure><a href="img/l22203-pandas.png" target="_blank" rel="noopener"><img src="img/l22203-pandas.png" alt="concat 把兩個欄位相同的月份檔垂直堆疊成四列；merge 依客戶ID 對接兩張表，並列出最常用的 inner、left、right、outer 四種保留方式" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
   <div class="tbl"><table>
     <tr><th>想做什麼</th><th>Pandas</th><th>SQL 對應</th><th>一句話</th></tr>
-    <tr><td>兩張表依同一個鍵接起來</td><td><b>merge()</b></td><td>JOIN</td><td>依鍵欄位橫向對接，how 決定留哪些鍵</td></tr>
+    <tr><td>兩張表依同一個鍵接起來</td><td><b>merge()</b></td><td>JOIN</td><td>依鍵欄位橫向對接，how 決定留哪些鍵（預設 inner）</td></tr>
     <tr><td>結構相同的檔案接成一個大檔</td><td><b>concat()</b></td><td>UNION ALL</td><td>往下堆疊（也可以設定成橫向）</td></tr>
-    <tr><td>依索引橫向合併</td><td>join()</td><td>JOIN</td><td>預設用索引對接，不是拿來堆疊的</td></tr>
-    <tr><td>分組後算每組統計</td><td><b>groupby()</b>＋聚合方法</td><td><b>GROUP BY</b>＋聚合函數</td><td>SUM、AVG、COUNT、MAX、MIN</td></tr>
+    <tr><td>依索引橫向合併</td><td>join()</td><td>JOIN</td><td>預設用索引對接（how 預設 left），不是拿來堆疊的</td></tr>
+    <tr><td>分組後算每組統計</td><td><b>groupby()</b>＋聚合方法</td><td><b>GROUP BY</b>＋聚合函數</td><td>SUM、AVG、COUNT、MAX、MIN；分組後再篩選用 HAVING</td></tr>
     <tr><td>選欄位、指定來源表、篩條件</td><td>df[...]、query()</td><td>SELECT、FROM、WHERE</td><td>SELECT 選欄位，WHERE 篩列</td></tr>
     <tr><td>排序</td><td>sort_values()</td><td>ORDER BY</td><td>排序不是 GROUP BY 的工作</td></tr>
     <tr><td>刪除有缺失值的列或欄</td><td>dropna()</td><td>WHERE … IS NOT NULL</td><td>把空值那幾筆拿掉</td></tr>
     <tr><td>刪除完全重複的列</td><td>drop_duplicates()</td><td>DISTINCT</td><td>只留一份</td></tr>
-    <tr><td>看前幾列／最後幾列</td><td>head(5)／tail(5)</td><td>LIMIT</td><td>head 看開頭，tail 看結尾</td></tr>
+    <tr><td>看前幾列／最後幾列</td><td>head(5)／tail(5)</td><td>LIMIT n（取前 n 筆）；看最後幾筆要寫 ORDER BY 欄位 DESC LIMIT n</td><td>head 對應 LIMIT；tail 在 SQL 沒有直接對應，要先反向排序再 LIMIT</td></tr>
   </table></div>
-  <div class="trap"><b>易錯提醒：</b>記法是「<b>堆疊用 concat，對照合併用 merge</b>」。concat 不看鍵欄位，只是把表疊在一起；merge 一定要有鍵。join() 雖然也是合併，但預設看的是索引。另外，GROUP BY 的搭檔是聚合函數，排序要找 ORDER BY，兩者別配錯。</div>
+  <div class="trap"><b>易錯提醒：</b>記法是「<b>堆疊用 concat，對照合併用 merge</b>」。concat 不看鍵欄位，只是把表疊在一起；merge 一定要有鍵。join() 雖然也是合併，但預設看的是索引。GROUP BY 通常搭配聚合函數，但不搭配也能執行（效果等同 DISTINCT）；SELECT 裡沒有被聚合的欄位，必須寫進 GROUP BY；分組之後要再篩選，用 HAVING，不是 WHERE。排序要找 ORDER BY，別跟 GROUP BY 配錯。還有，SQL 沒寫 ORDER BY 時不保證回傳順序，所以 LIMIT 取到的「前幾筆」要搭配 ORDER BY 才固定。</div>
 </section>
 
 <section id="u2">
@@ -123,26 +124,28 @@ footer{text-align:center;color:var(--dim);font-size:12px;line-height:1.9;border-
   </ul>
 
   <h3>標準化、歸一化與 PCA：誰能消除特徵相關？</h3>
-  <figure><a href="img/l22203-scaling.png" target="_blank" rel="noopener"><img src="img/l22203-scaling.png" alt="同樣五個數字經歸一化縮到 0 到 1、經標準化變成平均 0 標準差 1，點與點的相對位置都不變" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
-  <p>標準化和歸一化都是「把每個欄位各自換一把尺」。換尺不會改變點與點的相對位置，所以欄位和欄位之間的相關性也不會改變。真正能把相關性拿掉的是 PCA：它把座標軸轉到資料散開最多的方向，得到一組彼此不相關的新特徵（主成分）。</p>
+  <figure><a href="img/l22203-scaling.png" target="_blank" rel="noopener"><img src="img/l22203-scaling.png" alt="同一個特徵的五個值，經歸一化縮到預設範圍 0 到 1、經標準化變成平均 0 標準差 1，點與點的相對位置都不變；並提醒 Min-Max 很怕離群值、標準化不會把資料變成常態" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <p>標準化和歸一化都是「把每個欄位各自換一把尺」。換尺不會改變點與點的相對位置，所以欄位和欄位之間的相關性也不會改變。真正能把相關性拿掉的是 PCA：它把座標軸轉到資料散開最多的方向，得到一組彼此不相關的新特徵（主成分）。不過 PCA 只去除<b>線性</b>相關，非線性的關係它處理不到。</p>
   <figure><a href="img/l22203-pca.png" target="_blank" rel="noopener"><img src="img/l22203-pca.png" alt="左圖兩個特徵高度相關呈斜線分佈，紅線為第一主成分；右圖轉換後主成分彼此不相關、散開成一團" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
   <div class="tbl"><table>
     <tr><th>方法</th><th>做什麼</th><th>會改變特徵間的相關性嗎？</th><th>主要用途</th></tr>
     <tr><td><b>標準化</b> Z-score</td><td>變成平均 0、標準差 1</td><td><b>不會</b>（只改尺度）</td><td>各欄位尺度差很大時，讓大家站在同一起跑線</td></tr>
-    <tr><td><b>歸一化</b> Min-Max</td><td>縮到 [0, 1]</td><td><b>不會</b>（只改尺度）</td><td>對數值範圍有嚴格要求時，例如圖像像素</td></tr>
+    <tr><td><b>歸一化</b> Min-Max</td><td>縮到指定範圍，預設 [0, 1]（又稱正規化）</td><td><b>不會</b>（只改尺度）</td><td>對數值範圍有嚴格要求時，例如圖像像素</td></tr>
     <tr><td><b>對數轉換</b></td><td>取對數</td><td>不是用來消除相關的</td><td>處理右偏</td></tr>
-    <tr><td><b>PCA</b></td><td>旋轉到新的軸（主成分）</td><td><b>會</b>：主成分彼此線性無關</td><td>降維、保留最多變異、去除欄位間的重複資訊</td></tr>
+    <tr><td><b>PCA</b></td><td>旋轉到新的軸（主成分）</td><td><b>會</b>：主成分彼此不相關（相關係數 0）、主軸互相正交；只去除線性相關</td><td>降維、保留最多變異、去除欄位間的重複資訊</td></tr>
   </table></div>
   <ul>
     <li><b>PCA 的主要目的是降維，並盡量保留原始資料的變異。</b>主成分彼此不相關，是它附帶的特性。</li>
     <li><b>做 PCA 之前通常先標準化</b>，避免數字範圍特別大的欄位主導整個結果。</li>
+    <li><b>Min-Max 很怕離群值：</b>只要出現一個特別大的值，其他點就全被擠在一小段裡（圖上的 100 就是例子）。</li>
+    <li><b>標準化不會把資料變成常態：</b>它只是平移和縮放，分佈原本歪的，標準化之後一樣歪。</li>
   </ul>
-  <div class="trap"><b>易錯提醒：</b>特徵縮放之後結果<b>仍然是數字</b>；離散化之後才變成類別。獨熱編碼是把「類別」變成好幾個 0／1 欄位，方向剛好和分箱相反。看到「消除特徵之間的線性相關」就想 PCA，不是標準化，也不是歸一化。</div>
+  <div class="trap"><b>易錯提醒：</b>特徵縮放之後結果<b>仍然是數字</b>；離散化之後才變成類別。獨熱編碼是把「類別」變成好幾個 0／1 欄位，常接在分箱之後使用，但它不會把分箱還原成連續數字。看到「消除特徵之間的線性相關」就想 PCA，不是標準化，也不是歸一化。</div>
 </section>
 
 <section id="u3">
   <h2><small>單元 ③</small>重複數據怎麼判定</h2>
-  <p class="why"><b>為什麼需要這個概念？</b> 同一筆訂單被系統記了兩次，營收就會被算多。所以清理資料時要先找出重複。問題是：怎樣才叫「重複」？答案看的是資料的<b>內容</b>，不是它進來的時間，也不是它存在電腦哪裡。</p>
+  <p class="why"><b>為什麼需要這個概念？</b> 同一筆訂單被系統記了兩次，營收就會被算多。所以清理資料時要先找出重複。問題是：怎樣才叫「重複」？答案取決於你定義的<b>比對範圍</b>，不能單看它進來的時間，也跟它存在電腦哪裡無關。</p>
   <h3>一步步搭起來</h3>
   <ol>
     <li><b>先決定比對範圍</b>：比對全部欄位，或只比對你指定的<b>鍵欄位（Key Columns）</b>。</li>
@@ -152,10 +155,10 @@ footer{text-align:center;color:var(--dim);font-size:12px;line-height:1.9;border-
   <div class="tbl"><table>
     <tr><th>客戶ID</th><th>姓名</th><th>金額</th><th>時間戳記</th><th>以「客戶ID＋姓名＋金額」為鍵，是重複嗎？</th></tr>
     <tr><td>A1</td><td>小美</td><td>80</td><td>10:00</td><td>第一筆，作為比較基準</td></tr>
-    <tr><td>A1</td><td>小美</td><td>80</td><td>10:05</td><td><b>重複</b>：鍵欄位完全相同，只是時間不同</td></tr>
+    <tr><td>A1</td><td>小美</td><td>80</td><td>10:05</td><td><b>重複</b>（以本表選定的鍵來看）：鍵欄位完全相同，時間戳記不在鍵裡</td></tr>
     <tr><td>A1</td><td>小美</td><td>90</td><td>10:00</td><td>不是重複：金額不同，時間一樣也沒用</td></tr>
   </table></div>
-  <div class="trap"><b>易錯提醒：</b>時間戳記不能當判斷標準：時間不同的兩筆，內容可能一樣（這才是重複）；時間相同的兩筆，內容也可能完全不同。記憶體位址是電腦內部存放位置，跟資料內容無關；平均值相同也不代表是同一筆。</div>
+  <div class="trap"><b>易錯提醒：</b>時間戳記不能「單獨」當判斷標準：時間相同不代表重複，時間不同也不代表一定不是重複。算不算重複，取決於你定義的比對範圍：比對全部欄位時，時間戳記也在裡面，時間不同就不算重複；鍵欄位只選客戶ID＋姓名＋金額時，時間不同仍算重複。實務上最可靠的鍵，是訂單編號這類唯一識別碼。記憶體位址是電腦內部存放位置，跟資料內容無關；平均值相同也不代表是同一筆。</div>
 </section>
 
 <section id="u4">
@@ -165,20 +168,33 @@ footer{text-align:center;color:var(--dim);font-size:12px;line-height:1.9;border-
   <ol>
     <li><b>最底層 HDFS</b>：把大檔案切成很多塊，分散存在很多台機器上。</li>
     <li><b>往上一層 YARN</b>：資源管理與任務調度，決定誰用多少 CPU 和記憶體、工作排到哪台機器執行。</li>
-    <li><b>再往上是運算框架</b>：MapReduce 把運算拆成 Map 與 Reduce 兩步，以批次方式處理；Spark 盡量在記憶體裡運算，速度快很多。</li>
-    <li><b>最上層是好用的介面</b>：Hive 讓人用 SQL 查詢大數據，底下再交給運算引擎執行。</li>
+    <li><b>再往上是運算框架</b>：MapReduce 把運算分成 Map、Shuffle、Reduce 三個階段，以批次方式處理，每個階段的中間結果都寫回磁碟；Spark 把中間結果盡量留在記憶體，再加上 DAG 排程，需要反覆算很多輪的迭代運算（例如機器學習）特別快。記憶體不夠時，Spark 也會把資料寫入磁碟。</li>
+    <li><b>最上層是好用的介面</b>：Hive 讓人用類 SQL 的 HiveQL 查詢大數據，屬於批次查詢、延遲高；Pig 則用 Pig Latin 腳本描述資料處理流程。兩者底下都再交給運算引擎執行。</li>
+    <li><b>注意 Spark 的位置</b>：Spark 可以脫離 Hadoop 獨立部署，也可以跑在 YARN 上、讀 HDFS 的資料。它取代的是 MapReduce，不是 HDFS。</li>
   </ol>
-  <figure><a href="img/l22203-hadoop.png" target="_blank" rel="noopener"><img src="img/l22203-hadoop.png" alt="Hadoop 生態系四層圖：由下而上為 HDFS 儲存、YARN 資源管理與調度、MapReduce 與 Spark 運算框架、Hive 與 Pig 上層介面" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <figure><a href="img/l22203-hadoop.png" target="_blank" rel="noopener"><img src="img/l22203-hadoop.png" alt="Hadoop 生態系四層圖：由下而上為 HDFS 儲存、YARN 資源管理與調度、運算框架（MapReduce 分 Map、Shuffle、Reduce 且中間結果寫回磁碟；Spark 中間結果留在記憶體加上 DAG 排程）、上層介面（Hive 的類 SQL 批次查詢、Pig 腳本）；下方註明 Spark 可獨立部署，取代的是 MapReduce 不是 HDFS" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
   <div class="tbl"><table>
     <tr><th>元件</th><th>負責什麼</th><th>一句話</th></tr>
     <tr><td><b>HDFS</b></td><td>分散式儲存</td><td>倉庫：把大檔案切塊存在很多台機器上</td></tr>
     <tr><td><b>YARN</b></td><td><b>資源管理與任務調度</b></td><td>調度員：分配 CPU、記憶體，安排工作在哪裡跑</td></tr>
-    <tr><td><b>MapReduce</b></td><td>批次運算模型</td><td>工人：把運算拆成 Map 與 Reduce 兩步</td></tr>
-    <tr><td><b>Spark</b></td><td>快速的分散式運算框架</td><td>工人：多在記憶體運算；最核心的資料抽象是 <b>RDD</b></td></tr>
-    <tr><td><b>Hive</b></td><td>用 SQL 查詢大數據</td><td>櫃台：上層介面，底下仍交給 MapReduce 或其他引擎執行</td></tr>
+    <tr><td><b>MapReduce</b></td><td>批次運算模型</td><td>工人：Map、Shuffle、Reduce 三階段，中間結果寫回磁碟</td></tr>
+    <tr><td><b>Spark</b></td><td>快速的分散式運算框架</td><td>工人：中間結果留在記憶體＋DAG 排程；最核心的資料抽象是 <b>RDD</b>；可獨立部署</td></tr>
+    <tr><td><b>Hive</b></td><td>用類 SQL 的 HiveQL 做批次查詢</td><td>櫃台：上層介面，延遲高；底下交給 MapReduce 或其他引擎執行</td></tr>
+    <tr><td>Pig</td><td>用 Pig Latin 腳本描述資料處理流程</td><td>另一種上層介面，寫腳本而不是寫 SQL</td></tr>
   </table></div>
   <p><b>RDD 是什麼？</b> RDD 全名是彈性分散式資料集（Resilient Distributed Dataset），是 Spark 最底層、最核心的資料抽象：一份資料被切成很多片，分散在不同機器上，而且壞掉時可以依照記錄的計算步驟重算回來。Spark 的 DataFrame 是建在 RDD 之上、比較好用的高階介面。</p>
-  <div class="trap"><b>易錯提醒：</b>HDFS 管<b>儲存</b>，YARN 管<b>調度</b>，兩個最常被搞混。問「Spark 核心抽象」要答 RDD，不是 DataFrame（它是上層介面），也不是 HDFS（那是儲存系統）或 MapReduce（那是另一套運算框架）。</div>
+  <h3>RDD 的兩種操作：Transformation 與 Action</h3>
+  <p>對 RDD 下的指令分成兩類。<b>Transformation（轉換）是惰性的</b>：下指令時 Spark 只把步驟記下來，畫成一張 DAG，並不馬上算。<b>Action（動作）</b>一出現，Spark 才照著記下來的步驟真正開始算，並把結果交回來或寫出去。</p>
+  <div class="tbl"><table>
+    <tr><th>類型</th><th>做什麼</th><th>常見例子</th><th>什麼時候真的算？</th></tr>
+    <tr><td><b>Transformation</b></td><td>從一個 RDD 產生新的 RDD</td><td>map、filter、flatMap、groupByKey、reduceByKey、join</td><td><b>不會馬上算</b>（惰性求值），只記下步驟</td></tr>
+    <tr><td><b>Action</b></td><td>要一個結果，交回程式或寫出去</td><td>count、collect、take、first、reduce、saveAsTextFile</td><td><b>這時才觸發</b>前面所有步驟一起算</td></tr>
+  </table></div>
+  <ul>
+    <li><b>為什麼要惰性？</b>Spark 先看完整條流程，才能把步驟合併、少做白工；記下來的步驟也讓資料壞掉時可以重算回來。</li>
+    <li><b>分辨口訣：</b>回傳的還是 RDD，就是 Transformation；回傳一個數字、一份清單，或把檔案寫出去，就是 Action。</li>
+  </ul>
+  <div class="trap"><b>易錯提醒：</b>HDFS 管<b>儲存</b>，YARN 管<b>調度</b>，兩個最常被搞混。問「Spark 核心抽象」要答 RDD，不是 DataFrame（它是上層介面），也不是 HDFS（那是儲存系統）或 MapReduce（那是另一套運算框架）。另外小心名字很像的一對：reduce 是 Action，reduceByKey 是 Transformation。</div>
 </section>
 
 <section id="u5">
@@ -199,29 +215,71 @@ footer{text-align:center;color:var(--dim);font-size:12px;line-height:1.9;border-
   </table></div>
   <div class="tbl"><table>
     <tr><th>抽樣方式</th><th>怎麼抽</th><th>適合情境</th></tr>
-    <tr><td><b>簡單隨機抽樣</b></td><td>每個個體被抽中的機率相等</td><td>母體很均勻時</td></tr>
-    <tr><td><b>分層抽樣</b></td><td>先分成子群體，再依比例在每層裡抽</td><td>想讓樣本反映各子群體的比例</td></tr>
-    <tr><td>系統抽樣</td><td>固定間隔抽一個，例如每 100 筆抽 1 筆</td><td>資料已排成清單、操作要簡單</td></tr>
-    <tr><td>整群抽樣</td><td>以群組為單位，抽中的群組全部納入</td><td>資料天然分成很多群，例如分店、班級</td></tr>
+    <tr><td><b>簡單隨機抽樣</b></td><td>每個個體被抽中的機率相等，而且任何一組 n 筆樣本被抽中的機率也都相同</td><td>母體很均勻時</td></tr>
+    <tr><td><b>分層抽樣</b></td><td>先分成子群體（層），每一層都抽，常依比例抽；分層原則是層內相似、層間不同</td><td>想讓樣本反映各子群體的比例</td></tr>
+    <tr><td>系統抽樣</td><td>先隨機選一個起點，之後固定間隔抽一個，例如每 100 筆抽 1 筆</td><td>資料已排成清單、操作要簡單；清單本身有週期性時要小心，可能每次都抽到同一種</td></tr>
+    <tr><td>整群抽樣</td><td>隨機抽出部分群組，抽中的群組全部納入；理想上群內差異大、群間相似</td><td>資料天然分成很多群，例如分店、班級</td></tr>
   </table></div>
-  <div class="trap"><b>易錯提醒：</b>聚合也會讓資料變少，所以最容易和抽樣混淆。分辨方法：抽樣後拿到的是「一部分原始資料」；聚合後拿到的是「算出來的摘要數字」。</div>
+  <div class="trap"><b>易錯提醒：</b>聚合也會讓資料變少，所以最容易和抽樣混淆。分辨方法：抽樣後拿到的是「一部分原始資料」；聚合後拿到的是「算出來的摘要數字」。另外，「每個個體被抽中的機率相等」不是簡單隨機抽樣獨有，系統抽樣也做得到；簡單隨機抽樣多了一個條件：任何一組 n 筆樣本被抽中的機率都相同。分層和整群也別搞反：分層是每一層都抽（層內相似），整群是只抽部分群組、抽中就整群收（群內差異大）。</div>
+</section>
+
+<section id="u6">
+  <h2><small>單元 ⑥</small>資料管線：批次與串流、ETL 與 ELT</h2>
+  <p class="why"><b>為什麼需要這個概念？</b> 資料不會只處理一次就結束：每天都有新訂單、每秒都有新點擊。要決定「多久算一次」（批次還是串流），也要決定「先整理再放進倉庫，還是先放進去再整理」（ETL 還是 ELT）。這兩組加上一堆工具名稱，最常被拿來考配對。</p>
+  <h3>一步步搭起來</h3>
+  <ol>
+    <li><b>先問：結果要多即時？</b>隔天看報表就夠 → 批次；要幾秒內反應（例如盜刷偵測）→ 串流。</li>
+    <li><b>串流再分兩種</b>：每隔幾秒切成一小批來算，叫<b>微批次</b>（Spark Streaming）；每一筆一進來就算，叫<b>原生逐筆串流</b>（Flink）。</li>
+    <li><b>資料要有人負責運送</b>：Kafka 像一條輸送帶，負責接收、暫存、傳遞事件，真正的運算交給 Spark 或 Flink。</li>
+    <li><b>資料進倉庫的順序</b>：先轉換再載入叫 ETL；先載入再轉換叫 ELT。</li>
+    <li><b>最後要有人排班</b>：每一步什麼時候跑、照什麼順序跑，交給排程工具，例如 Airflow。</li>
+  </ol>
+  <h3>批次 vs 串流</h3>
+  <figure><a href="img/l22203-stream.png" target="_blank" rel="noopener"><img src="img/l22203-stream.png" alt="同一串資料的三種處理方式：批次是收齊一整段再算一次，例如 MapReduce；微批次是每隔幾秒切成小批來算，例如 Spark Streaming；逐筆串流是每一筆一到就算，例如 Flink。延遲由高到低依序是批次、微批次、逐筆串流；Kafka 是訊息佇列，負責傳遞事件，不是運算引擎" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="tbl"><table>
+    <tr><th>方式</th><th>怎麼算</th><th>延遲</th><th>代表工具</th></tr>
+    <tr><td><b>批次</b></td><td>收齊一整段資料（例如一天）再一次算完</td><td>高（小時、天）</td><td>MapReduce、Spark 批次作業、Hive</td></tr>
+    <tr><td><b>微批次</b></td><td>每隔幾秒切成一小批，一批一批算</td><td>中（秒級）</td><td><b>Spark Streaming</b></td></tr>
+    <tr><td><b>原生逐筆串流</b></td><td>每一筆資料一進來就處理</td><td>低（毫秒級）</td><td><b>Flink</b></td></tr>
+    <tr><td>訊息佇列（不是運算）</td><td>接收、暫存、傳遞事件給下游</td><td>不適用</td><td><b>Kafka</b></td></tr>
+  </table></div>
+  <h3>ETL vs ELT</h3>
+  <figure><a href="img/l22203-etl.png" target="_blank" rel="noopener"><img src="img/l22203-etl.png" alt="ETL 的順序是擷取、轉換、載入，資料先在處理伺服器洗好才放進資料倉儲；ELT 的順序是擷取、載入、轉換，原始資料先放進倉儲，再在倉儲裡用 SQL 轉換。dbt 負責 ELT 裡的轉換，Airflow 負責排程與編排、本身不做轉換" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="tbl"><table>
+    <tr><th>比較</th><th>ETL</th><th>ELT</th></tr>
+    <tr><td>順序</td><td>擷取 → <b>轉換</b> → 載入</td><td>擷取 → 載入 → <b>轉換</b></td></tr>
+    <tr><td>在哪裡轉換</td><td>進倉庫之前，在另外的處理伺服器</td><td>進倉庫之後，在倉儲裡用 SQL</td></tr>
+    <tr><td>倉庫裡放什麼</td><td>只放整理好的資料</td><td>原始資料也在，之後想換算法可以重算</td></tr>
+    <tr><td>常見情境</td><td>傳統資料倉儲、資料要先去識別化才能進倉</td><td>雲端資料倉儲，運算能力強，先存再說</td></tr>
+  </table></div>
+  <div class="tbl"><table>
+    <tr><th>工具</th><th>負責什麼</th><th>一句話</th></tr>
+    <tr><td><b>Airflow</b></td><td>工作流程的排程與編排</td><td>排班表：決定每一步什麼時候跑、照什麼順序，本身不做轉換</td></tr>
+    <tr><td><b>dbt</b></td><td>ELT 裡的 T</td><td>在資料倉儲裡用 SQL 做轉換</td></tr>
+    <tr><td><b>Kafka</b></td><td>訊息佇列、事件串流平台</td><td>輸送帶：把資料送到下游，運算交給 Spark、Flink</td></tr>
+  </table></div>
+  <div class="trap"><b>易錯提醒：</b>Kafka 最常被誤當成運算引擎。它的本業是接收、暫存、傳遞事件；要算東西，通常接 Spark 或 Flink（Kafka 另有 Kafka Streams 函式庫可做簡單運算，但那是另一個元件）。Spark Streaming 是<b>微批次</b>，Flink 才是<b>原生逐筆串流</b>，兩者別配反。Airflow 管「什麼時候跑」，dbt 管「怎麼轉換」，ETL 和 ELT 只差在 T 和 L 誰先。</div>
 </section>
 
 <section id="recap">
-  <h2><small>總整理</small>本章要記的十二句話</h2>
+  <h2><small>總整理</small>本章要記的十六句話</h2>
   <ol class="recap">
     <li>concat 往下疊（結構相同）；merge 依鍵欄位接（像 JOIN）；join 預設用索引。</li>
-    <li>merge 的 how：inner 只留共同鍵、left／right 以一邊為主、outer 全部都留。</li>
-    <li>GROUP BY 一定搭配聚合函數（SUM、AVG、COUNT、MAX、MIN）。</li>
-    <li>SELECT 選欄位、FROM 指定表、WHERE 篩條件、ORDER BY 排序。</li>
+    <li>merge 的 how 最常用四種：inner 只留共同鍵、left／right 以一邊為主、outer 全部都留（另有 cross）；merge 預設 inner，join() 預設 left。</li>
+    <li>GROUP BY 通常搭配聚合函數（SUM、AVG、COUNT、MAX、MIN）算出各組統計；SELECT 裡沒有被聚合的欄位，必須寫進 GROUP BY；分組之後要再篩選，用 HAVING，不是 WHERE。</li>
+    <li>SELECT 選欄位、FROM 指定表、WHERE 篩條件、ORDER BY 排序；head 對應 LIMIT，tail 要先 ORDER BY … DESC 再 LIMIT。</li>
     <li>連續數字切成區間或類別＝離散化／分箱。</li>
     <li>對數轉換用在右偏（正偏態）；類別資料不能取對數。</li>
-    <li>標準化、歸一化只改尺度，不改相關性；歸一化縮到 [0, 1]，標準化變成平均 0、標準差 1。</li>
-    <li>PCA：降維、保留變異、主成分彼此不相關；做之前通常先標準化。</li>
-    <li>重複＝全部欄位或鍵欄位的值完全相同，不是看時間戳記。</li>
-    <li>HDFS 儲存、YARN 資源管理與調度、MapReduce／Spark 運算、Hive 用 SQL 查詢。</li>
+    <li>標準化、歸一化只改尺度，不改相關性；歸一化預設縮到 [0, 1]（很怕離群值），標準化變成平均 0、標準差 1（不會變成常態）。</li>
+    <li>PCA：降維、保留變異、主成分彼此不相關（只去除線性相關）；做之前通常先標準化。</li>
+    <li>重複＝在選定的比對範圍（全部欄位或指定鍵欄位）內，值全部相同；不能只看時間戳記、記憶體位址或平均值。</li>
+    <li>HDFS 儲存、YARN 資源管理與調度、MapReduce（Map、Shuffle、Reduce，中間結果寫磁碟）／Spark（記憶體＋DAG）運算、Hive 用類 SQL 的 HiveQL 批次查詢；Spark 可獨立部署，取代的是 MapReduce。</li>
     <li>Spark 核心抽象＝RDD；DataFrame 是建在它上面的高階介面。</li>
-    <li>抽樣＝選代表性子集來降低成本；聚合是算摘要、整合是合併來源。</li>
+    <li>RDD 的 Transformation 是惰性的（map、filter、reduceByKey），遇到 Action（count、collect、reduce）才真的算。</li>
+    <li>抽樣＝選代表性子集來降低成本；聚合是算摘要、整合是合併來源。分層每層都抽、整群抽中就整群收、系統抽樣從隨機起點固定間隔抽。</li>
+    <li>批次收齊再算；Spark Streaming 是微批次；Flink 是原生逐筆串流。</li>
+    <li>Kafka 是訊息佇列（輸送帶），不是運算引擎。</li>
+    <li>ETL 先轉換再載入、ELT 先載入再轉換；Airflow 管排程，dbt 管 ELT 的 T。</li>
   </ol>
 </section>
 </main>

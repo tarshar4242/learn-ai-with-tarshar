@@ -73,7 +73,7 @@ footer{text-align:center;color:var(--dim);font-size:12px;line-height:1.9;border-
   <p class="why"><b>為什麼需要這個概念？</b> 同一批資料，用錯圖就看不出重點。選圖其實只要回答兩個問題：<b>我手上是什麼類型的資料？</b>以及<b>我想看出什麼？</b>兩個答案一對上，圖就決定了。</p>
   <h3>一步步搭起來</h3>
   <ol>
-    <li><b>先分資料類型</b>：類別資料是「分成幾類」（產品 A、B、C，男／女）；連續數值資料是「可以量出任意數字」（身高、銷售額、分數）。</li>
+    <li><b>先分資料類型</b>：類別資料是「分成幾類」，又分<b>名目</b>（產品 A、B、C，男／女，沒有大小順序）與<b>順序</b>（滿意度高中低、名次，有先後但間距不一定相等）；數值資料是「用數字量出來」，又分<b>離散</b>（可數，例如來客數、訂單筆數）與<b>連續</b>（可量，例如身高、等候時間）。</li>
     <li><b>再問想看什麼</b>：數量多寡？占比？兩個變數有沒有關係？隨時間怎麼變？分佈長什麼樣？</li>
     <li><b>最後查表</b>：資料類型＋目的，對到一種圖或表。</li>
   </ol>
@@ -94,6 +94,14 @@ footer{text-align:center;color:var(--dim);font-size:12px;line-height:1.9;border-
     <li>左右兩端各補一個「頻數 0」的點，讓線落回橫軸，成為封閉的多邊形。</li>
   </ol>
   <figure><a href="img/l22101-freqpoly.png" target="_blank" rel="noopener"><img src="img/l22101-freqpoly.png" alt="頻率多邊形示意圖：直方圖各柱頂部中點以紅線相連，兩端各補一個頻數為 0 的點落回橫軸" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <p>它有一個長得很像的兄弟叫<b>累積次數多邊形</b>（又稱肩形圖），兩者的點畫在不同位置：</p>
+  <div class="tbl"><table>
+    <tr><th></th><th>頻率多邊形</th><th>累積次數多邊形</th></tr>
+    <tr><td>點畫在哪裡</td><td>每組的<b>組中點</b></td><td>每組的<b>組上限</b>（以下累積）</td></tr>
+    <tr><td>縱軸是什麼</td><td>該組的次數</td><td>到這一組為止的累積次數</td></tr>
+    <tr><td>起點與終點</td><td>兩端各補一個次數 0 的點，落回橫軸</td><td>從第一組的下限、累積 0 開始，最後到總筆數</td></tr>
+    <tr><td>線的形狀</td><td>有升有降，看分佈形狀</td><td>只升不降（可持平），看「某個值以下有多少筆」</td></tr>
+  </table></div>
   <h3>列聯表是什麼</h3>
   <p>列聯表是一張<b>表</b>，不是圖。列放一個類別變數（例如性別），欄放另一個類別變數（例如有沒有購買），每一格填「同時符合兩個條件的人數」。有了這張表，就能進一步用卡方檢定看兩個類別有沒有關聯。</p>
   <div class="trap"><b>易錯提醒：</b>散佈圖和列聯表都在看「兩個變數的關係」，差別在資料類型：兩個都是連續數字用散佈圖，兩個都是類別用列聯表。看「隨時間的走勢」要用折線圖，圓餅圖只能看占比，箱型圖只能看分佈摘要，都看不出趨勢。</div>
@@ -141,7 +149,7 @@ footer{text-align:center;color:var(--dim);font-size:12px;line-height:1.9;border-
     <li><b>關鍵字一：「至少」。</b>它給的是保守的下限，所以數字比常態分佈的實際比例低。</li>
     <li><b>關鍵字二：「任何分佈」。</b>不要求對稱、不要求是常態，只要平均數和標準差存在就成立。</li>
   </ul>
-  <div class="trap"><b>易錯提醒：</b>四分位數「切點有 3 個、段數有 4 段」，問的是哪一個要看清楚。柴比雪夫不是常態分佈專用，也不要求資料對稱或峰度為 0；它的價值正是「什麼形狀都能用」。</div>
+  <div class="trap"><b>易錯提醒：</b>四分位數「切點有 3 個、段數有 4 段」，問的是哪一個要看清楚。柴比雪夫不是常態分佈專用，也不要求資料對稱或超額峰度為 0；它的價值正是「什麼形狀都能用」。</div>
 </section>
 
 <section id="u3">
@@ -162,15 +170,17 @@ footer{text-align:center;color:var(--dim);font-size:12px;line-height:1.9;border-
     <tr><td>≈ 0</td><td>對稱</td><td>兩邊一樣</td><td>三者差不多</td></tr>
     <tr><td>&lt; 0</td><td>左偏（負偏）</td><td>向左</td><td><b>平均數</b> ＜ 中位數 ＜ 眾數</td></tr>
   </table></div>
-  <p>記法：不用硬背兩種順序，只要記住「<b>平均數永遠站在尾巴那一側</b>」，另外兩個的順序就跟著出來。這是單峰、明顯偏斜時的常見規律，少數特殊分佈會有例外，考試以這張表為準。</p>
+  <p>注意方向只能單向推：<b>對稱分佈的偏態一定是 0，但偏態為 0 不保證對稱</b>，有些不對稱的分佈左右剛好抵消也會算出 0，要搭配圖形確認。</p>
+  <p>記法：不用硬背兩種順序，只要記住「<b>平均數通常站在尾巴那一側</b>」，另外兩個的順序就跟著出來。這是單峰、明顯偏斜時的常見規律，少數特殊分佈會有例外，考試以這張表為準。</p>
 
   <h3>峰度：看尾巴，不只看尖不尖</h3>
   <div class="tbl"><table>
-    <tr><th>名稱</th><th>英文</th><th>尾巴</th><th>極端值</th></tr>
-    <tr><td><b>高狹峰</b></td><td>Leptokurtic</td><td><b>厚</b></td><td><b>多</b></td></tr>
-    <tr><td>常態峰</td><td>Mesokurtic</td><td>中等（以常態分佈為基準）</td><td>普通</td></tr>
-    <tr><td>低闊峰</td><td>Platykurtic</td><td>薄</td><td>少</td></tr>
+    <tr><th>名稱</th><th>英文</th><th>峰度係數（超額峰度）</th><th>尾巴</th><th>極端值</th></tr>
+    <tr><td><b>高狹峰</b></td><td>Leptokurtic</td><td><b>＞ 3</b>（超額 ＞ 0）</td><td><b>厚</b></td><td><b>多</b></td></tr>
+    <tr><td>常態峰</td><td>Mesokurtic</td><td><b>＝ 3</b>（超額＝0）</td><td>中等（以常態分佈為基準）</td><td>普通</td></tr>
+    <tr><td>低闊峰</td><td>Platykurtic</td><td><b>＜ 3</b>（超額 ＜ 0）</td><td>薄</td><td>少</td></tr>
   </table></div>
+  <p>超額峰度＝峰度係數 − 3，把常態分佈校正成 0。題目說「峰度為 0 代表常態」時，指的是超額峰度；說「峰度為 3」時，指的是原始的峰度係數。兩種寫法都會出現，先看清楚是哪一種。</p>
   <figure><a href="img/l22101-kurt.png" target="_blank" rel="noopener"><img src="img/l22101-kurt.png" alt="變異數相同的高狹峰、常態峰、低闊峰三條曲線，右側放大右尾，可見高狹峰尾巴最厚、低闊峰幾乎沒有尾巴" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
   <p>教材常說高狹峰「尖」，這個印象沒錯，但更準確的重點是<b>尾巴的極端值</b>：在變異數相同的條件下，高狹峰的尾巴比常態更厚，極端值更常出現；低闊峰的尾巴比常態更薄。</p>
   <div class="trap"><b>易錯提醒：</b>「右偏」的山峰其實在<b>左邊</b>，右邊是長尾巴。偏態看的是歪向哪邊，峰度看的是尾巴厚薄，兩者是不同的形狀指標。看到「尾巴厚、極端值多」就是高狹峰，「尾巴薄」是低闊峰，不要只憑「尖」或「平」判斷。</div>
@@ -183,9 +193,10 @@ footer{text-align:center;color:var(--dim);font-size:12px;line-height:1.9;border-
   <ol>
     <li><b>正負號＝方向。</b>正：一個升，另一個也升。負：一個升，另一個降。</li>
     <li><b>絕對值＝強度。</b>越接近 1 越強，越接近 0 越弱，跟正負號無關。</li>
-    <li><b>只看「直線」關係</b>，而且只用在<b>兩個連續數值</b>之間。</li>
+    <li><b>只看「直線」關係</b>：適用於兩個<b>等距或比率尺度</b>的數值變數，衡量的是線性關係。</li>
   </ol>
-  <figure><a href="img/l22101-scatter_r.png" target="_blank" rel="noopener"><img src="img/l22101-scatter_r.png" alt="三張散佈圖：r 約 −0.85 點由左上往右下排成一條帶、r 約 0 點散成一團、r 約 +0.9 點由左下往右上排成一條帶" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <figure><a href="img/l22101-scatter_r.png" target="_blank" rel="noopener"><img src="img/l22101-scatter_r.png" alt="三張散佈圖：r 約 −0.85 點由左上往右下排成一條有明顯寬度的斜帶、r 約 0 點散成一團、r 約 +0.9 點由左下往右上排成一條有寬度的斜帶" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <p>看圖估 r 的感覺：<b>|r| 約 0.98</b> 時點幾乎排成一條直線；<b>0.85 到 0.9</b> 是方向很清楚、但有明顯寬度的斜帶（上圖）；<b>0.5</b> 左右只看得出大致趨勢。</p>
   <div class="tbl"><table>
     <tr><th>r 的值</th><th>方向</th><th>強度</th><th>白話</th></tr>
     <tr><td>+0.9</td><td>正</td><td>強</td><td>一個升，另一個也明顯升</td></tr>
@@ -196,7 +207,7 @@ footer{text-align:center;color:var(--dim);font-size:12px;line-height:1.9;border-
   <h3>不同資料，配不同的關聯方法</h3>
   <div class="tbl"><table>
     <tr><th>兩個變數是什麼</th><th>常用的關聯方法</th></tr>
-    <tr><td>兩個<b>連續數值</b></td><td><b>皮爾森相關係數</b></td></tr>
+    <tr><td>兩個<b>等距或比率尺度的數值</b></td><td><b>皮爾森相關係數</b></td></tr>
     <tr><td>兩個<b>次序</b>資料（名次、等級）</td><td>斯皮爾曼等級相關係數</td></tr>
     <tr><td>兩個<b>名目類別</b></td><td>列聯表、卡方檢定</td></tr>
     <tr><td>一個類別、一個數值</td><td>分組比較（例如各組平均、並排箱型圖）</td></tr>
@@ -210,12 +221,22 @@ footer{text-align:center;color:var(--dim);font-size:12px;line-height:1.9;border-
     <li><b>做法：</b>把每個變數換成排名（第 1 名、第 2 名⋯），再用排名去算相關。</li>
     <li><b>看的是「單調」：</b>一個增加時，另一個一路增加（或一路減少）就夠了，不要求是直線。</li>
   </ol>
+  <h3>斯皮爾曼的簡算公式</h3>
+  <p>排名之間<b>沒有同分</b>時，可以用簡算公式：<b>ρ ＝ 1 − 6Σd² ÷ [n(n² − 1)]</b>，d 是每一筆資料在兩個變數上的名次差，n 是筆數。有同分時要改用「排名後再算皮爾森」，不能直接套這條公式。</p>
+  <div class="tbl"><table>
+    <tr><th>學生</th><th>甲</th><th>乙</th><th>丙</th><th>丁</th><th>戊</th></tr>
+    <tr><td>數學名次</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+    <tr><td>英文名次</td><td>2</td><td>1</td><td>4</td><td>3</td><td>5</td></tr>
+    <tr><td>名次差 d</td><td>−1</td><td>+1</td><td>−1</td><td>+1</td><td>0</td></tr>
+    <tr><td>d²</td><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td></tr>
+  </table></div>
+  <p>Σd² ＝ 4，n ＝ 5，ρ ＝ 1 − 6 × 4 ÷ (5 × 24) ＝ 1 − 0.2 ＝ <b>0.8</b>，兩科名次高度同向。</p>
   <figure><a href="img/l22101-spearman.png" target="_blank" rel="noopener"><img src="img/l22101-spearman.png" alt="左圖直線上升時皮爾森與斯皮爾曼都等於 1；右圖彎曲但一路上升時皮爾森小於 1、斯皮爾曼仍等於 1" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
   <div class="tbl"><table>
     <tr><th></th><th>皮爾森</th><th>斯皮爾曼</th></tr>
     <tr><td>用的資料</td><td>原始數字</td><td>換成排名後的等級</td></tr>
     <tr><td>衡量什麼關係</td><td>線性（直線）</td><td>單調（一路升或一路降）</td></tr>
-    <tr><td>適用資料</td><td>連續數值</td><td>連續數值，也適用次序資料</td></tr>
+    <tr><td>適用資料</td><td>等距或比率尺度的數值</td><td>數值資料，也適用次序資料</td></tr>
     <tr><td>對極端值</td><td>較敏感</td><td>較不敏感（只看排名）</td></tr>
     <tr><td>值域</td><td>−1 到 +1</td><td><b>也是 −1 到 +1</b></td></tr>
   </table></div>
@@ -232,11 +253,11 @@ footer{text-align:center;color:var(--dim);font-size:12px;line-height:1.9;border-
     <li>四分位數：3 個切點、4 段；Q2 就是中位數。</li>
     <li>柴比雪夫：任何形狀都成立，平均 ±k 個標準差內至少 1 − 1/k²（k＝2 → 75%）。</li>
     <li>偏態：尾巴往哪邊拖就往哪邊偏；正值＝右偏，負值＝左偏。</li>
-    <li>右偏：眾數 ＜ 中位數 ＜ 平均數；左偏：平均數 ＜ 中位數 ＜ 眾數（平均數被尾巴拉走）。</li>
-    <li>峰度看尾巴厚度：高狹峰＝尾巴厚、極端值多；低闊峰＝尾巴薄。</li>
-    <li>皮爾森 r：正負看方向，絕對值看強度，只管直線、只配兩個連續數值。</li>
+    <li>單峰、明顯偏斜時通常是：右偏：眾數 ＜ 中位數 ＜ 平均數；左偏：平均數 ＜ 中位數 ＜ 眾數（平均數被尾巴拉走）。</li>
+    <li>峰度看尾巴厚度：高狹峰＝尾巴厚、極端值多（峰度係數 ＞ 3，超額 ＞ 0）；低闊峰＝尾巴薄（＜ 3，超額 ＜ 0）。</li>
+    <li>皮爾森 r：正負看方向，絕對值看強度；適用於兩個等距或比率尺度的數值變數，衡量線性關係。</li>
     <li>r 接近 0＝沒有線性關係，不等於沒有關係（可能是 U 形等曲線關係）。</li>
-    <li>斯皮爾曼：先換排名再算，看單調不限直線，值域也是 −1 到 +1。</li>
+    <li>斯皮爾曼：先換排名再算，看單調不限直線，值域也是 −1 到 +1；沒有同分時可用 ρ＝1 − 6Σd² ÷ [n(n² − 1)]。</li>
   </ol>
 </section>
 <p class="more">其他章：<a href="index.html">L22 觀念複習總目錄</a></p>

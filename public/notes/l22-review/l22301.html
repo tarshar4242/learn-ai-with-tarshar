@@ -89,44 +89,53 @@ footer{text-align:center;color:var(--dim);font-size:12px;line-height:1.9;border-
     <tr><td>信心水準</td><td>H0 為真時，正確不拒絕 H0</td><td>沒冤枉好人</td><td>＝1 − α</td></tr>
   </table></div>
   <h3>α 和 β 的蹺蹺板</h3>
-  <p>門檻線畫在哪裡，決定兩種錯誤的大小。α 調小，等於要更有把握才肯說「有差異」，門檻往右移：冤枉好人（紅色）變少，真的有差異時被放走（橘色）就變多。</p>
-  <figure><a href="img/alphabeta.png" target="_blank" rel="noopener"><img src="img/alphabeta.png" alt="α 由 0.05 降到 0.01 時，型一錯誤面積縮小、型二錯誤面積變大" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <p>門檻線畫在哪裡，決定兩種錯誤的大小。α 調小，等於要更有把握才肯說「有差異」，門檻往右移：冤枉好人（紅色）變少，真的有差異時被放走（橘色）就變多。下圖是<b>單尾 Z 檢定</b>，所以門檻線在 1.645（α＝0.05）和 2.326（α＝0.01）；如果是<b>雙尾</b>，α＝0.05 的臨界值是 <b>±1.96</b>（兩邊各放 0.025）。</p>
+  <figure><a href="img/alphabeta.png" target="_blank" rel="noopener"><img src="img/alphabeta.png" alt="單尾 Z 檢定：α 由 0.05 降到 0.01 時，門檻線由 1.645 移到 2.326，型一錯誤面積縮小、型二錯誤面積變大；雙尾 α＝0.05 的臨界值是 ±1.96" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
   <ul>
-    <li>樣本數固定時，α 和 β 一個降、另一個就升。</li>
-    <li><b>想讓兩個錯誤同時變少，只能加大樣本。</b>樣本變大，兩座山變窄，重疊就變少。</li>
+    <li>在樣本數、資料變異、真實差異大小都固定時，α 和 β 一個降、另一個就升。</li>
+    <li><b>想讓兩個錯誤同時變少，最直接的做法是加大樣本</b>；降低量測變異、改用配對設計也有幫助。樣本變大，標準誤變小：在圖這種標準化的 Z 軸上，看起來是兩座山的距離拉開；換回原本的單位看，就是兩座山變窄。不管哪種看法，重疊都變少。</li>
   </ul>
+  <h3>影響檢定力的五個因素</h3>
+  <div class="tbl"><table>
+    <tr><th>因素</th><th>怎麼變，檢定力會提高</th><th>白話</th></tr>
+    <tr><td><b>樣本數 n</b></td><td>變大</td><td>證據越多，越容易看出真差異</td></tr>
+    <tr><td><b>效應大小</b></td><td>真實差異越大</td><td>差很多比差一點點好抓</td></tr>
+    <tr><td><b>資料變異（標準差）</b></td><td>變小</td><td>雜訊越少，訊號越清楚</td></tr>
+    <tr><td><b>顯著水準 α</b></td><td>調大（例如 0.01 改 0.05）</td><td>門檻放寬比較容易拒絕 H0，代價是型 I 錯誤變多</td></tr>
+    <tr><td><b>單尾或雙尾</b></td><td>方向猜對時，單尾比雙尾高</td><td>α 全放在一邊，門檻比較低</td></tr>
+  </table></div>
   <div class="trap"><b>易錯提醒：</b>檢定力的前提是「對立假設為真」，也就是真的有差異；它等於 1 − β，不是 α。α 是 H0 為真時誤判的機率，情境剛好相反。</div>
 </section>
 
 <section id="u2">
   <h2><small>單元 ②</small>多重檢定：誤判會累積，FWER 與 FDR</h2>
   <p class="why"><b>為什麼需要這個概念？</b> 一次檢定冤枉好人的機率是 5%，聽起來不大。但如果同時比較 20 個廣告版本，每一次都抽一張 5% 的「誤判籤」，抽越多次，至少中一次的機率就越高。不處理的話，報告裡宣稱「顯著」的結果，很可能有幾個只是運氣。</p>
-  <figure><a href="img/multiple.png" target="_blank" rel="noopener"><img src="img/multiple.png" alt="檢定次數越多，至少誤判一次的機率越高的長條圖" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <figure><a href="img/multiple.png" target="_blank" rel="noopener"><img src="img/multiple.png" alt="檢定次數越多，至少誤判一次的機率越高的長條圖；公式 1 − 0.95 的 n 次方，假設各檢定彼此獨立且 H0 都成立" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
   <div class="tbl"><table>
     <tr><th></th><th>FWER（族系錯誤率）</th><th>FDR（錯誤發現率）</th></tr>
     <tr><td>控制什麼</td><td><b>至少犯一個</b>型 I 錯誤的機率</td><td><b>宣告顯著的結果裡</b>，其實是假警報的<b>比例期望值</b></td></tr>
     <tr><td>代表方法</td><td>Bonferroni：每次門檻改成 α ÷ n</td><td>Benjamini-Hochberg 程序</td></tr>
-    <tr><td>嚴格程度</td><td>很嚴格，一個假警報都不想要</td><td>比較寬鬆，容許少量假警報</td></tr>
+    <tr><td>嚴格程度</td><td>很嚴格，把「至少一個假警報」的機率壓在 α 以下</td><td>比較寬鬆，容許少量假警報</td></tr>
     <tr><td>適合情境</td><td>錯一個代價很大（如藥物上市）</td><td>檢定數量很多、想找候選目標（如大量廣告篩選）</td></tr>
   </table></div>
-  <figure><a href="img/fdr.png" target="_blank" rel="noopener"><img src="img/fdr.png" alt="20 個宣告顯著的結果中有 2 個是假警報，錯誤發現比例 10%" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
-  <div class="trap"><b>易錯提醒：</b>多次檢定不校正，問題是「整體型 I 錯誤膨脹」。「檢定力降低」是做了校正之後的副作用：門檻變嚴，比較難抓到真差異。記法：FWER 看全部檢定裡有沒有出過假警報；FDR 只看宣告顯著的那一堆裡，假警報佔幾成。</div>
+  <figure><a href="img/fdr.png" target="_blank" rel="noopener"><img src="img/fdr.png" alt="20 個宣告顯著的結果中有 2 個是假警報，錯誤發現比例 10%；FDR 控制的是這個比例的期望值" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="trap"><b>易錯提醒：</b>多次檢定不校正，問題是「整體型 I 錯誤膨脹」。「檢定力降低」是做了校正之後的副作用：門檻變嚴，比較難抓到真差異。記法：FWER 看全部檢定裡有沒有出過假警報；FDR 只看宣告顯著的那一堆裡，假警報比例的期望值。</div>
 </section>
 
 <section id="u3">
   <h2><small>單元 ③</small>偏差與方差：模型學太少，還是背太多</h2>
-  <p class="why"><b>為什麼需要這個概念？</b> 模型預測不準，原因可能剛好相反：可能是太簡單，連基本規律都沒學到；也可能是太複雜，把訓練資料裡的雜訊都背下來。兩種病的藥方不同，所以要先分清楚是哪一種。</p>
-  <figure><a href="img/biasvar.png" target="_blank" rel="noopener"><img src="img/biasvar.png" alt="欠擬合、剛好、過擬合三種模型的對照圖" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <p class="why"><b>為什麼需要這個概念？</b>（「方差」Variance 台灣常稱變異、變異數，本頁沿用「方差」。）模型預測不準，原因可能剛好相反：可能是太簡單，連基本規律都沒學到；也可能是太複雜，把訓練資料裡的雜訊都背下來。兩種病的藥方不同，所以要先分清楚是哪一種。</p>
+  <figure><a href="img/biasvar.png" target="_blank" rel="noopener"><img src="img/biasvar.png" alt="欠擬合、剛好、過擬合三種模型的對照圖：欠擬合是一條直線，剛好是平滑曲線抓到基本模式，過擬合曲線穿過每一個點、在點與點之間上下亂抖" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
   <div class="tbl"><table>
     <tr><th></th><th>高偏差（High Bias）</th><th>高方差（High Variance）</th></tr>
     <tr><td>白話</td><td><b>學太少</b>、想法太死板</td><td><b>背太多</b>、連雜訊都記住</td></tr>
     <tr><td>正式名稱</td><td>欠擬合 Underfitting</td><td>過擬合 Overfitting</td></tr>
     <tr><td>訓練表現</td><td>差</td><td>很好</td></tr>
-    <tr><td>測試表現</td><td>差</td><td>很差</td></tr>
+    <tr><td>測試表現</td><td>也差，和訓練<b>落差小</b></td><td>明顯比訓練差，<b>落差大</b></td></tr>
     <tr><td>特徵</td><td>模型太簡單</td><td>對訓練資料的小變化很敏感、預測分散</td></tr>
     <tr><td>怎麼改</td><td>增加模型複雜度、加特徵</td><td>正規化、簡化模型、增加資料</td></tr>
   </table></div>
-  <div class="trap"><b>易錯提醒：</b>「訓練很好、測試很差」「對小變化很敏感」「預測很分散」都是<b>高方差</b>的特徵。看到「太簡單、抓不到基本模式」才是高偏差。</div>
+  <div class="trap"><b>易錯提醒：</b>「訓練很好、測試很差」「對小變化很敏感」「預測很分散」都是<b>高方差</b>的特徵。看到「太簡單、抓不到基本模式」才是高偏差。分辨訣竅看<b>訓練與測試的落差</b>：兩個都差、落差小是高偏差；訓練好、測試明顯掉下來是高方差。圖裡的過擬合曲線穿過每一個點、上下亂抖，就是把雜訊也背下來的樣子。</div>
 </section>
 
 <section id="u4">
@@ -142,18 +151,29 @@ footer{text-align:center;color:var(--dim);font-size:12px;line-height:1.9;border-
   <figure><a href="img/roc.png" target="_blank" rel="noopener"><img src="img/roc.png" alt="ROC 曲線與混淆矩陣：橫軸假正率、縱軸真正率" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
   <div class="tbl"><table>
     <tr><th>軸</th><th>指標</th><th>公式</th><th>白話</th></tr>
-    <tr><td><b>橫軸</b></td><td>假正率 FPR</td><td>FP ÷ (FP + TN)</td><td>真的沒病的人裡，被誤判有病的比例</td></tr>
-    <tr><td><b>縱軸</b></td><td>真正率 TPR（＝召回率）</td><td>TP ÷ (TP + FN)</td><td>真的有病的人裡，被抓出來的比例</td></tr>
+    <tr><td><b>橫軸</b></td><td>假正率 FPR（＝1 − 特異度）</td><td>FP ÷ (FP + TN)</td><td>真的沒病的人裡，被誤判有病的比例</td></tr>
+    <tr><td><b>縱軸</b></td><td>真正率 TPR（＝召回率＝敏感度）</td><td>TP ÷ (TP + FN)</td><td>真的有病的人裡，被抓出來的比例</td></tr>
+    <tr><td>面積</td><td>AUC</td><td>ROC 曲線下的面積，通常介於 0.5 到 1（低於 0.5 比亂猜還差）</td><td>隨機抽一個真的有病、一個真的沒病的人，模型給有病那位的分數比較高的機率</td></tr>
     <tr><td>對照</td><td>PR 曲線</td><td>精確率 vs 召回率</td><td>另一種曲線，常被拿來混淆</td></tr>
   </table></div>
+  <p><b>名詞對照：</b>特異度（Specificity）＝TN ÷ (TN + FP)，是「真的沒病的人裡，被正確判為沒病的比例」，所以 FPR＝1 − 特異度。AUC＝0.5 等於亂猜，AUC＝1 是完美分開。</p>
   <div class="trap"><b>易錯提醒：</b>準確率是「類別猜對幾個」，屬於分類指標；R² 是迴歸指標。ROC 的兩個軸都用「真相」那一列來算：真的有病的那列算 TPR，真的沒病的那列算 FPR。</div>
 </section>
 
 <section id="u5">
   <h2><small>單元 ⑤</small>檢定方法怎麼選</h2>
-  <p class="why"><b>為什麼需要這個概念？</b> 每種檢定只適合一種資料，選錯方法，算出來的 P 值沒有意義。判斷方式很簡單：<b>先看你在比的是比例、平均數，還是兩個變數的關係。</b></p>
-  <figure><a href="img/testchoice.png" target="_blank" rel="noopener"><img src="img/testchoice.png" alt="檢定方法選擇圖：比例用卡方或比例 Z 檢定、平均數用 t 檢定、三組以上用 ANOVA、兩連續變數用皮爾森" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
-  <div class="trap"><b>易錯提醒：</b>轉換率、點擊率是「有／沒有」的比例，比較兩組比例用卡方檢定或比例 Z 檢定。皮爾森相關是看兩個連續變數有沒有一起變化，不是用來比較兩組差別。</div>
+  <p class="why"><b>為什麼需要這個概念？</b> 每種檢定只適合一種資料，選錯方法，算出來的 P 值沒有意義。判斷方式很簡單：<b>先看你在比的是比例、平均數，還是兩個變數的關係；再看有幾組、是不是同一批人。</b></p>
+  <figure><a href="img/testchoice.png" target="_blank" rel="noopener"><img src="img/testchoice.png" alt="檢定方法選擇圖：兩組比例用卡方或比例 Z 檢定、三組以上比例用卡方檢定、兩組獨立平均數用獨立樣本 t 檢定、同一批人前後比較用配對 t 檢定、三組以上平均數用 ANOVA 且顯著後做事後比較、兩連續變數的線性關係用皮爾森" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="tbl"><table>
+    <tr><th>情境</th><th>用什麼</th><th>關鍵字</th></tr>
+    <tr><td>兩組比例</td><td><b>卡方檢定或比例 Z 檢定</b></td><td>轉換率、點擊率、有／沒有</td></tr>
+    <tr><td>三組以上比例</td><td><b>卡方檢定</b></td><td>A、B、C 三版的轉換率</td></tr>
+    <tr><td>兩組平均數，兩批不同的人</td><td><b>獨立樣本 t 檢定</b></td><td>兩組互不相干</td></tr>
+    <tr><td>同一批人前後比較</td><td><b>配對 t 檢定</b></td><td>改版前、改版後；同一人量兩次</td></tr>
+    <tr><td>三組以上平均數</td><td><b>ANOVA</b>，顯著後做<b>事後比較</b>（如 Tukey）</td><td>ANOVA 只告訴你「至少有一組不同」</td></tr>
+    <tr><td>兩個連續變數的線性關係</td><td><b>皮爾森相關係數檢定</b></td><td>一起「線性」變化嗎？</td></tr>
+  </table></div>
+  <div class="trap"><b>易錯提醒：</b>轉換率、點擊率是「有／沒有」的比例，比較兩組比例用卡方檢定或比例 Z 檢定；三組以上的比例用卡方檢定。同一批人前後比較要用<b>配對 t</b>，不是獨立樣本 t。ANOVA 顯著只代表「至少有一組平均數不同」，要知道是哪幾組不同，還要做事後比較（例如 Tukey）。皮爾森相關看的是兩個連續變數有沒有<b>「線性」</b>的一起變化，r＝0 只代表沒有線性關係，不代表兩者無關（例如 U 形關係）；它也不是用來比較兩組差別。</div>
 </section>
 
 <section id="u6">
@@ -176,7 +196,7 @@ footer{text-align:center;color:var(--dim);font-size:12px;line-height:1.9;border-
   <figure><a href="img/simpson.png" target="_blank" rel="noopener"><img src="img/simpson.png" alt="腎結石治療研究：分組看治療 A 都贏，合併後治療 B 看起來贏" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
   <ul>
     <li><b>定義：</b>在各個分組裡都看到同一個趨勢，資料合併之後，這個趨勢卻消失甚至反轉。</li>
-    <li><b>原因：</b>有一個藏起來的分組變數（上圖是病情輕重），而且各組的人數分配很不平均。</li>
+    <li><b>原因：</b>有一個藏起來的干擾變數（上圖是結石大小），它同時影響「分到哪種治療」和「治療結果」，而且兩種治療在各層的比重差很多：A 多半治大結石，B 多半治小結石。</li>
     <li><b>怎麼防：</b>看到合併後的結論，回頭問「各組的組成比例一樣嗎？」；必要時分層分析。</li>
   </ul>
   <div class="trap"><b>易錯提醒：</b>「相關不等於因果」是相近但不同的觀念。辛普森悖論的重點是「分組 vs 合併，趨勢反轉」。</div>
@@ -187,13 +207,13 @@ footer{text-align:center;color:var(--dim);font-size:12px;line-height:1.9;border-
   <ol class="recap">
     <li>型 I 錯誤＝冤枉好人（機率 α）；型 II 錯誤＝放走壞人（機率 β）。</li>
     <li>檢定力＝1 − β＝真的有差異時，抓得到的機率。不是 α。</li>
-    <li>α 調低 → 型 I 降、型 II 升；想兩個都降，只能加大樣本。</li>
+    <li>α 調低 → 型 I 降、型 II 升；想兩個都降，最直接是加大樣本（降低變異、改用配對設計也有幫助）。</li>
     <li>多次檢定不校正 → 整體型 I 錯誤膨脹；做了校正，副作用才是檢定力降低。</li>
-    <li>FWER＝至少一個假警報的機率（Bonferroni）；FDR＝宣告顯著裡假警報的比例。</li>
+    <li>FWER＝至少一個假警報的機率（Bonferroni）；FDR＝宣告顯著裡假警報比例的期望值（BH 程序）。</li>
     <li>高偏差＝太簡單＝欠擬合；高方差＝背太多＝過擬合。</li>
     <li>Accuracy 是分類指標；RMSE、MAE、R² 是迴歸指標。</li>
-    <li>ROC：橫軸 FPR、縱軸 TPR；精確率對召回率是 PR 曲線。</li>
-    <li>比例 → 卡方或比例 Z；兩組平均 → t；三組以上 → ANOVA；兩個連續變數的關係 → 皮爾森。</li>
+    <li>ROC：橫軸 FPR（＝1 − 特異度）、縱軸 TPR（＝召回率＝敏感度）；AUC 越接近 1 越好；精確率對召回率是 PR 曲線。</li>
+    <li>兩組比例 → 卡方或比例 Z；三組以上比例 → 卡方；兩組獨立平均 → 獨立樣本 t；同一批人前後 → 配對 t；三組以上平均 → ANOVA（顯著後做 Tukey 等事後比較）；兩個連續變數的線性關係 → 皮爾森。</li>
     <li>流式資料算分位數 → GK、t-digest；分組趨勢合併後反轉 → 辛普森悖論。</li>
   </ol>
 </section>

@@ -66,7 +66,7 @@ footer{text-align:center;color:var(--dim);font-size:12px;line-height:1.9;border-
     <a href="#u3"><span>③</span>HDFS：切大塊、各存 3 份</a>
     <a href="#u4"><span>④</span>欄式儲存、資料倉儲與資料湖</a>
     <a href="#u5"><span>⑤</span>CAP 定理與資料保護</a>
-    <a href="#recap"><span>★</span>十五句話總整理</a>
+    <a href="#recap"><span>★</span>十八句話總整理</a>
   </nav>
 </header>
 
@@ -89,7 +89,7 @@ footer{text-align:center;color:var(--dim);font-size:12px;line-height:1.9;border-
   <p class="why"><b>為什麼需要這個概念？</b> 「區塊」「檔案」「物件」這三個詞常常一起出現，又都叫「儲存」，很容易糊成一團。它們的差別在於：<b>資料被切成什麼單位、用什麼方式找回來。</b>雲端服務（像 AWS、Azure）會把這三種分別做成不同產品，所以看到產品名要能配回類型。</p>
   <h3>一步步搭起來</h3>
   <ol>
-    <li><b>區塊儲存</b>：把硬碟切成一格一格固定大小的空櫃子，格子裡放什麼、怎麼排，由作業系統或資料庫自己安排。最貼近硬體，所以最快。</li>
+    <li><b>區塊儲存</b>：把硬碟切成一格一格固定大小的空櫃子，格子裡放什麼、怎麼排，由作業系統或資料庫自己安排。最貼近硬體，所以延遲通常最低；代價是比較貴、一次通常只掛給一台主機、擴充不如物件儲存方便。</li>
     <li><b>檔案儲存</b>：在格子上面加一層「檔案系統」，用資料夾和檔名（路徑）來找資料，大家習慣的共用資料夾就是這種。</li>
     <li><b>物件儲存</b>：不用資料夾，每份資料打包成一個「物件」＝<b>資料本身＋標籤（中繼資料）＋唯一 ID</b>，丟進一個大桶子，用網址 API 存取。量再大都能往上加，而且便宜。</li>
   </ol>
@@ -110,23 +110,23 @@ footer{text-align:center;color:var(--dim);font-size:12px;line-height:1.9;border-
 
 <section id="u2">
   <h2><small>單元 ②</small>NoSQL 的四種資料模型：鍵值、文件、寬欄、圖形</h2>
-  <p class="why"><b>為什麼需要這個概念？</b> 傳統關聯式資料庫（SQL）把資料放進欄位事先規定好的表格，很嚴謹，也保證強一致（ACID）。但遇到「資料結構常變」「資料量超級大」「關係超複雜」就吃力。<b>NoSQL（Not Only SQL）不是一種資料庫，而是一整個家族</b>，每一種擅長一件不同的事。這一塊最常考的就是「產品名 ↔ 類型」配對。</p>
+  <p class="why"><b>為什麼需要這個概念？</b> 傳統關聯式資料庫（RDBMS，用 SQL 查詢）把資料放進欄位事先規定好的表格，很嚴謹，也支援 ACID 交易（原子性、一致性、隔離性、持久性）。但遇到「資料結構常變」「資料量超級大」「關係超複雜」就吃力。<b>NoSQL（Not Only SQL）不是一種資料庫，而是一整個家族</b>，每一種擅長一件不同的事。這一塊最常考的就是「產品名 ↔ 類型」配對。</p>
   <h3>一步步搭起來</h3>
   <ol>
-    <li><b>先記住共同點：</b>NoSQL 大多容易水平擴充（高擴展性）、結構有彈性（彈性綱要）、高可用性。共同的代價是<b>不一定提供傳統資料庫那種強 ACID 交易保證</b>。</li>
+    <li><b>先記住共同點：</b>NoSQL 大多容易水平擴充（高擴展性）、結構有彈性（彈性綱要）、高可用性。共同的代價是<b>不一定提供傳統資料庫那種強 ACID 交易保證</b>，多數採 <b>BASE</b>（最終一致性，見單元 ⑤）。但這不代表 NoSQL 全部不支援 ACID：Neo4j、MongoDB 4.0 以後都支援 ACID 交易。</li>
     <li><b>再用同一件事比較四種存法：</b>下圖把「小美買了咖啡」這件事，分別存進四種模型。</li>
-    <li><b>鍵值：</b>拿一個「鍵」直接查出「值」，像查字典，最簡單也最快。</li>
+    <li><b>鍵值：</b>拿一個「鍵」直接查出「值」，像查字典，用鍵查詢極快；但幾乎只能用鍵查，不適合依「值」的內容做條件查詢（例如「找出所有買咖啡的人」）。</li>
     <li><b>文件：</b>每筆資料是一份類似 JSON 的文件，每份文件的欄位可以不一樣。</li>
     <li><b>寬欄：</b>看起來像大表格，用「列鍵」找到一行，但欄位可以隨時增加、空的不佔空間，資料分散在很多台機器。</li>
-    <li><b>圖形：</b>只存「點」（人、物）和「線」（關係），專門回答「誰跟誰有關」。</li>
+    <li><b>圖形：</b>以「節點」（人、物）和「邊」（關係）為核心，節點和邊上都可以帶屬性（例如「購買」這條邊記金額與日期），專門回答「誰跟誰有關」。</li>
   </ol>
-  <figure><a href="img/l22202-nosql4.png" target="_blank" rel="noopener"><img src="img/l22202-nosql4.png" alt="同一件事「小美買了咖啡」在鍵值、文件、寬欄、圖形四種資料模型中的存法對照，並標出代表產品 Redis、MongoDB、Cassandra 與 HBase、Neo4j" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <figure><a href="img/l22202-nosql4.png" target="_blank" rel="noopener"><img src="img/l22202-nosql4.png" alt="同一件事「小美買了咖啡」在鍵值、文件、寬欄、圖形四種資料模型中的存法對照：鍵值用鍵查值極快但幾乎只能用鍵查，圖形以節點和邊為核心且兩者都能帶屬性，並標出代表產品 Redis、MongoDB、Cassandra 與 HBase、Neo4j" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
   <div class="tbl"><table>
     <tr><th>類型</th><th>一句話</th><th>代表產品</th><th>適合</th></tr>
-    <tr><td><b>鍵值</b> Key-Value</td><td>拿「鍵」直接查出「值」，像字典</td><td><b>Redis</b></td><td>快取、購物車、計數器（要超快）</td></tr>
+    <tr><td><b>鍵值</b> Key-Value</td><td>拿「鍵」直接查出「值」，像字典；幾乎只能用鍵查</td><td><b>Redis</b></td><td>快取、購物車、計數器（要超快）</td></tr>
     <tr><td><b>文件</b> Document</td><td>一份份 JSON 文件，欄位可不同</td><td><b>MongoDB</b></td><td>資料結構常變動、商品型錄、內容管理</td></tr>
     <tr><td><b>寬欄</b> Wide-Column</td><td>大表格，但欄位自由增減，分散在多台機器</td><td><b>Cassandra、HBase</b></td><td>海量寫入、時間序列、感測器資料</td></tr>
-    <tr><td><b>圖形</b> Graph</td><td>點（人、物）＋線（關係）</td><td><b>Neo4j</b></td><td>社群關係、推薦系統、詐欺偵測</td></tr>
+    <tr><td><b>圖形</b> Graph</td><td>節點（人、物）＋邊（關係），兩者都能帶屬性</td><td><b>Neo4j</b></td><td>社群關係、推薦系統、詐欺偵測</td></tr>
   </table></div>
   <h3>用情境關鍵字反推類型</h3>
   <ul>
@@ -136,7 +136,7 @@ footer{text-align:center;color:var(--dim);font-size:12px;line-height:1.9;border-
     <li>看到「關係複雜」「社交網路」「推薦」「誰認識誰」→ <b>圖形</b>。</li>
     <li>產品配對口訣：<b>瑞迪斯查字典、蒙果看文件、卡珊卓拉存大表、奈歐四傑畫關係</b>。</li>
   </ul>
-  <div class="trap"><b>易錯提醒：</b>「<b>寬欄</b>」（Wide-Column，Cassandra、HBase）是 NoSQL 的一類；「<b>欄式</b>」（Columnar，Parquet、ORC 這類為分析查詢設計的存法）是另一個概念，在單元 ④。名字都有「欄」，用途不同。另外 Redis 是鍵值，不是欄式；MongoDB 是文件，不是鍵值。</div>
+  <div class="trap"><b>易錯提醒：</b>「<b>寬欄</b>」（Wide-Column，Cassandra、HBase）是 NoSQL 的一類；「<b>欄式</b>」（Columnar，Parquet、ORC 這類為分析查詢設計的存法）是另一個概念，在單元 ④。名字都有「欄」，用途不同。但要注意：不少教材也把 HBase、Cassandra 叫「欄式資料庫」或「欄族（Column Family）資料庫」，題目在講 <b>NoSQL 四大類</b>時出現的「欄式」，指的就是寬欄；在講 <b>OLAP、Parquet</b> 時才是單元 ④ 的欄式儲存。簡體教材的「列式存儲」等於台灣說的「欄式」，「行式」等於台灣的「列式」，「列族」就是欄族。另外 Redis 是鍵值，不是欄式；MongoDB 是文件，不是鍵值。<br><b>ACID 的 C ≠ CAP 的 C：</b>ACID 的一致性是「交易前後資料都符合規則」（例如轉帳後總金額不變）；CAP 的一致性是「每個節點都讀到最新資料」。兩個都叫一致性，意思不同。</div>
 </section>
 
 <section id="u3">
@@ -144,26 +144,29 @@ footer{text-align:center;color:var(--dim);font-size:12px;line-height:1.9;border-
   <p class="why"><b>為什麼需要這個概念？</b> HDFS（Hadoop 分散式檔案系統）是大數據的「儲存底座」。一個檔案大到一台機器裝不下、讀不完，怎麼辦？<b>切成大塊，分散到很多台便宜的機器上，而且每塊多存幾份</b>，壞掉幾台也不怕。</p>
   <h3>一步步搭起來</h3>
   <ol>
-    <li><b>切成區塊（Block）：</b>預設 <b>128 MB</b> 一塊（舊版 64 MB，也可以設 256 MB），比一般電腦檔案系統的區塊大很多。</li>
+    <li><b>切成區塊（Block）：</b>預設 <b>128 MB</b> 一塊（舊版 64 MB，也可以設 256 MB），比一般電腦檔案系統的區塊大很多。最後一塊可以比較小（例如 300 MB 的檔案切成 128＋128＋44 MB），不會硬補滿。</li>
     <li><b>每塊存 3 份：</b>預設複製係數是 3，三份放在不同機器。壞掉一兩台，資料還在，這就是<b>容錯</b>。</li>
     <li><b>NameNode＝總機／目錄：</b>只記「檔案叫什麼、每個區塊放在哪幾台」（命名空間＋區塊對應表），不存實際資料。</li>
     <li><b>DataNode＝倉庫：</b>真正存放區塊的機器。</li>
+    <li><b>Secondary NameNode＝幫忙整理目錄的助手：</b>定期把 NameNode 的目錄快照（fsimage）和異動日誌（edits）合併成新的快照（叫 checkpoint），讓 NameNode 重開機時不用重播一大堆日誌。它<b>不是熱備援</b>：NameNode 掛了，它不會自動接手。要高可用，得另外設 <b>Standby NameNode</b>（HA 架構）。</li>
   </ol>
-  <figure><a href="img/l22202-hdfs.png" target="_blank" rel="noopener"><img src="img/l22202-hdfs.png" alt="HDFS 架構圖：大檔案切成 B1 到 B4 區塊，NameNode 記錄每個區塊位置，四台 DataNode 各存部分區塊，每個區塊共 3 份" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <figure><a href="img/l22202-hdfs.png" target="_blank" rel="noopener"><img src="img/l22202-hdfs.png" alt="HDFS 架構圖：大檔案切成 B1 到 B4 區塊（預設 128 MB，最後一塊可較小），NameNode 記錄每個區塊位置，四台 DataNode 各存部分區塊，每個區塊共 3 份；設計目標是高吞吐、一次寫入多次讀取，不擅長極低延遲隨機讀寫與大量小檔案（塞爆的是 NameNode 記憶體）" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
   <div class="tbl"><table>
     <tr><th>角色</th><th>屬於誰</th><th>負責什麼</th></tr>
     <tr><td><b>NameNode</b></td><td>HDFS</td><td>命名空間、區塊對應表（目錄），不存資料本身</td></tr>
     <tr><td><b>DataNode</b></td><td>HDFS</td><td>存放實際的區塊</td></tr>
+    <tr><td>Secondary NameNode</td><td>HDFS</td><td>定期合併目錄快照與異動日誌（checkpoint）；<b>不是熱備援</b>，不會自動接手</td></tr>
     <tr><td>ResourceManager</td><td>YARN</td><td>整個叢集的運算資源分配</td></tr>
     <tr><td>NodeManager</td><td>YARN</td><td>每台機器上的運算資源管理</td></tr>
   </table></div>
   <div class="tbl"><table>
     <tr><th>HDFS 擅長</th><th>HDFS 不擅長</th></tr>
-    <tr><td><b>高吞吐量</b>：一次順序讀寫大量資料</td><td><b>極低延遲</b>的隨機讀寫（這種需求改用 Redis 等）</td></tr>
-    <tr><td>可靠地存<b>非常大的檔案</b>、串流式存取</td><td><b>大量小檔案</b>（NameNode 的目錄會被塞爆）</td></tr>
+    <tr><td><b>高吞吐量</b>：一次順序讀寫大量資料</td><td><b>極低延遲</b>的隨機讀寫（在 Hadoop 生態系裡改用架在 HDFS 上的 <b>HBase</b>）</td></tr>
+    <tr><td>可靠地存<b>非常大的檔案</b>、串流式存取</td><td><b>大量小檔案</b>：每個檔案、每個區塊都要在 NameNode 的<b>記憶體</b>裡記一筆，問題出在 NameNode 記憶體，不是磁碟空間</td></tr>
+    <tr><td><b>一次寫入、多次讀取</b></td><td>修改檔案中間的內容（只能附加在尾端或整個重寫）</td></tr>
     <tr><td>高擴展性、高容錯性</td><td>完整支援 POSIX 的所有檔案操作</td></tr>
   </table></div>
-  <div class="trap"><b>易錯提醒：</b>存「目錄」的是 NameNode，不是 DataNode；ResourceManager、NodeManager 是 YARN 管運算資源的角色，跟 HDFS 存資料無關。分散式檔案系統的優點是高擴展、高容錯、高吞吐，<b>「極低延遲」不是它的優點</b>。要挑出「不是優點」的那一個時，把每個說法逐一換成「這是它的優點嗎？」再檢查一次。</div>
+  <div class="trap"><b>易錯提醒：</b>存「目錄」的是 NameNode，不是 DataNode；ResourceManager、NodeManager 是 YARN 管運算資源的角色，跟 HDFS 存資料無關。分散式檔案系統的優點是高擴展、高容錯、高吞吐，<b>「極低延遲」不是它的優點</b>。要挑出「不是優點」的那一個時，把每個說法逐一換成「這是它的優點嗎？」再檢查一次。看到「Secondary NameNode 是 NameNode 的熱備援、會自動接手」→ 錯，它只負責合併目錄檔。</div>
 </section>
 
 <section id="u4">
@@ -188,6 +191,20 @@ footer{text-align:center;color:var(--dim);font-size:12px;line-height:1.9;border-
     <li><b>資料沼澤（Data Swamp）：</b>資料湖沒有治理，什麼都往裡丟，最後品質低、找不到、不能用。</li>
     <li><b>資料市集（Data Mart，也有人譯作資料超市）：</b>資料倉儲的<b>子集</b>，只聚焦某個部門或某個主題。</li>
   </ul>
+  <h3>資料倉儲的四大特性（Inmon 的定義）</h3>
+  <div class="tbl"><table>
+    <tr><th>特性</th><th>意思</th><th>白話例子</th></tr>
+    <tr><td><b>主題導向</b> Subject-Oriented</td><td>依分析主題（客戶、產品、銷售）組織，不是依日常作業系統組織</td><td>不分「POS 系統」「網購系統」，而是整理成一個「銷售」主題</td></tr>
+    <tr><td><b>整合</b> Integrated</td><td>把多個來源的格式、單位、代碼統一</td><td>性別有的寫 M／F、有的寫 1／0，進倉儲前統一成一種</td></tr>
+    <tr><td><b>時變</b> Time-Variant</td><td>保存歷史，每筆資料都帶時間</td><td>可以比較去年和今年的業績</td></tr>
+    <tr><td><b>不可揮發</b> Non-Volatile</td><td>資料載入後以查詢為主，不會隨日常交易被修改或刪除</td><td>訂單取消了，原系統刪掉，倉儲裡的歷史紀錄還在</td></tr>
+  </table></div>
+  <h3>星狀綱要：倉儲裡的表怎麼擺</h3>
+  <ul>
+    <li><b>星狀綱要（Star Schema）：</b>中間一張<b>事實表</b>（Fact Table，放可以加總的數字，例如銷售金額、數量，再加上連到各維度的鍵），四周圍著好幾張<b>維度表</b>（Dimension Table，放描述，例如客戶、產品、時間、門市）。畫出來像一顆星星，查詢時只要連一層，很適合 OLAP。</li>
+    <li><b>雪花綱要（Snowflake Schema）：</b>把維度表再拆細（例如「產品」再拆出「產品類別」表），減少重複，但查詢要多連幾層。</li>
+    <li>下面的 SCD 處理的就是<b>維度表</b>裡的資料怎麼更新。</li>
+  </ul>
   <h3>維度緩慢變更 SCD：客戶搬家了，倉儲怎麼記？</h3>
   <p>客戶小美本來住台北，後來搬到高雄。資料倉儲裡的「客戶」維度要怎麼改，有三種經典做法：</p>
   <div class="tbl"><table>
@@ -204,32 +221,48 @@ footer{text-align:center;color:var(--dim);font-size:12px;line-height:1.9;border-
   <p class="why"><b>為什麼需要這個概念？</b> 資料一旦分散在很多台機器，就會遇到兩個現實問題：<b>機器之間的網路會斷</b>，以及<b>機器本身會壞</b>。CAP 定理說明網路斷掉時系統只能怎麼取捨；複製、糾刪碼、備份則是防止機器壞掉時資料消失。</p>
   <h3>一步步搭起來：CAP 定理</h3>
   <ol>
-    <li><b>C 一致性（Consistency）：</b>每個人讀到的都是最新資料。</li>
-    <li><b>A 可用性（Availability）：</b>每個請求都會得到回應。</li>
+    <li><b>C 一致性（Consistency）：</b>每個節點讀到的都是最新資料。</li>
+    <li><b>A 可用性（Availability）：</b>每個請求都會得到<b>非錯誤</b>的回應，但不保證回應的是最新資料。</li>
     <li><b>P 分區容錯性（Partition Tolerance）：</b>網路斷成兩半，系統仍能繼續運作。</li>
     <li><b>結論：</b>三者無法同時被完全滿足。分散式系統的網路一定可能斷，P 必須要，所以斷線時只能在 C 和 A 之間二選一（CP 或 AP）。</li>
+    <li><b>舊說法「三選二」：</b>很多教材寫成「最多只能滿足兩項」，分成 <b>CA、CP、AP</b> 三種。其中 <b>CA</b> 只在「不會發生分區」時成立，例如單機的關聯式資料庫（RDBMS）；一旦是分散式系統，就只剩 CP 或 AP 可選。</li>
   </ol>
-  <figure><a href="img/l22202-cap.png" target="_blank" rel="noopener"><img src="img/l22202-cap.png" alt="CAP 定理三角形：一致性、可用性、分區容錯性，網路斷線時只能在一致性與可用性間二選一" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <figure><a href="img/l22202-cap.png" target="_blank" rel="noopener"><img src="img/l22202-cap.png" alt="CAP 定理三角形：一致性指每個節點讀到最新資料，可用性指每個請求都有非錯誤回應但不保證最新，分區容錯性指網路斷成兩半仍能運作；網路斷線時只能在一致性與可用性間二選一，舊說法三選二分為 CA、CP、AP，CA 只在不分區時成立，例如單機關聯式資料庫；常見歸類 HBase、MongoDB 偏 CP，Cassandra、CouchDB、DynamoDB 偏 AP" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="tbl"><table>
+    <tr><th>歸類</th><th>斷線時怎麼做</th><th>常見產品</th></tr>
+    <tr><td><b>CA</b></td><td>不考慮分區（根本不分散）</td><td>單機的關聯式資料庫（RDBMS）</td></tr>
+    <tr><td><b>CP</b></td><td>寧可暫停服務，也不給舊資料</td><td><b>HBase、MongoDB</b></td></tr>
+    <tr><td><b>AP</b></td><td>先回應，資料之後再慢慢一致</td><td><b>Cassandra、CouchDB、DynamoDB</b></td></tr>
+  </table></div>
+  <p>這是常見的考試歸類；實際產品多半可以調整設定，在一致性和可用性之間移動。</p>
+  <h3>ACID vs BASE：兩種「一致」的態度</h3>
+  <p>CAP 選了 AP 的系統，通常就走 BASE 路線：不要求每一刻都一致，只要求<b>最後</b>會一致。</p>
+  <div class="tbl"><table>
+    <tr><th></th><th>ACID（傳統關聯式資料庫）</th><th>BASE（多數 NoSQL）</th></tr>
+    <tr><td>組成</td><td><b>A</b>tomicity 原子性：交易全做或全不做<br><b>C</b>onsistency 一致性：交易前後都符合規則<br><b>I</b>solation 隔離性：同時進行的交易互不干擾<br><b>D</b>urability 持久性：交易完成就不會遺失</td><td><b>B</b>asically <b>A</b>vailable 基本可用：出問題時仍盡量回應<br><b>S</b>oft state 軟狀態：資料可以暫時處在不一致的中間狀態<br><b>E</b>ventually consistent 最終一致性：等一段時間，所有節點會變一致</td></tr>
+    <tr><td>重視</td><td>正確、強一致</td><td>可用、可擴充</td></tr>
+    <tr><td>適合</td><td>銀行轉帳、訂單扣款</td><td>社群按讚數、商品瀏覽數</td></tr>
+  </table></div>
   <h3>資料保護：複製、糾刪碼、3-2-1、RPO 與 RTO</h3>
-  <figure><a href="img/l22202-backup.png" target="_blank" rel="noopener"><img src="img/l22202-backup.png" alt="備份與災難復原圖：3-2-1 備份原則，以及時間軸上 RPO 為上次備份到災難、RTO 為災難到系統恢復" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <figure><a href="img/l22202-backup.png" target="_blank" rel="noopener"><img src="img/l22202-backup.png" alt="備份與災難復原圖：3-2-1 備份原則是 3 份資料（1 份正本放硬碟、備份 1 放磁帶、備份 2 放異地雲端）、2 種不同類型的儲存媒體、1 份放異地，以及時間軸上 RPO 為上次備份到災難、RTO 為災難到系統恢復" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
   <div class="tbl"><table>
     <tr><th></th><th>複製 Replication（例：HDFS 存 3 份）</th><th>糾刪碼 Erasure Coding</th></tr>
     <tr><td>做法</td><td>整份資料多存幾份</td><td>資料切成 k 塊，再算出 m 塊「校驗塊」，壞掉任意 m 塊都能算回來</td></tr>
     <tr><td>空間用量</td><td>3 份＝佔 <b>3 倍</b>空間</td><td>例如 6 塊資料＋3 塊校驗＝只佔 <b>1.5 倍</b>空間</td></tr>
     <tr><td>容錯</td><td>3 份可壞 2 份</td><td>6＋3 可壞任意 3 塊</td></tr>
-    <tr><td>代價</td><td>簡單、讀取快</td><td>計算較複雜，修復時要重算；資料仍分散在網路上的多台機器</td></tr>
+    <tr><td>代價</td><td><b>空間成本高</b>（3 份＝佔 3 倍空間）；優點是做法簡單、讀取與修復都快</td><td>編碼與修復都要計算；修復時要從多台機器讀回資料再重算，網路負擔大；所以多用於不常讀的<b>冷資料</b></td></tr>
   </table></div>
   <div class="tbl"><table>
     <tr><th>名詞</th><th>意思</th><th>記法</th></tr>
-    <tr><td><b>3-2-1 原則</b></td><td>3 份資料、2 種不同媒介、1 份放異地</td><td>防同一地點的火災、水災、被盜讓所有副本一起消失</td></tr>
+    <tr><td><b>3-2-1 原則</b></td><td>3 份資料（1 份正本＋2 份備份）、2 種不同媒介、1 份放異地</td><td>防同一地點的火災、水災、被盜讓所有資料一起消失。「不同媒介」指不同類型的儲存媒體，例如硬碟與磁帶；內接硬碟和外接硬碟都是硬碟，不算兩種</td></tr>
     <tr><td><b>RPO</b></td><td>最多能容忍遺失多久的資料</td><td>Point＝資料回到哪個時間點；RPO 1 小時 → 至少每小時備份一次</td></tr>
     <tr><td><b>RTO</b></td><td>最多能容忍停機多久</td><td>Time＝花多久恢復</td></tr>
   </table></div>
-  <div class="trap"><b>易錯提醒：</b>CAP 的 C 是 <b>Consistency 一致性</b>，不是 Capacity（容量）也不是 Cost（成本）；A 是 Availability，不是 Authenticity。糾刪碼的優勢是<b>儲存效率高、更省空間</b>，代價是計算比較複雜，不是「比較簡單」。</div>
+  <div class="trap"><b>易錯提醒：</b>CAP 的 C 是 <b>Consistency 一致性</b>，不是 Capacity（容量）也不是 Cost（成本）；A 是 Availability，不是 Authenticity。糾刪碼的優勢是<b>儲存效率高、更省空間</b>，代價是計算比較複雜，不是「比較簡單」。3-2-1 的「3」是 <b>3 份資料（含正本）</b>，不是 3 份副本。</div>
 </section>
 
 <section id="recap">
-  <h2><small>總整理</small>本章要記的十五句話</h2>
+  <h2><small>總整理</small>本章要記的十八句話</h2>
   <ol class="recap">
     <li>每種儲存都是為了解決一個特定問題；先問「要解決什麼問題」，再配名詞。</li>
     <li>區塊＝格子（資料庫、虛擬機）；檔案＝資料夾與檔名（NAS）；物件＝貼標籤的貨架（S3、Azure Blob）。</li>
@@ -237,15 +270,18 @@ footer{text-align:center;color:var(--dim);font-size:12px;line-height:1.9;border-
     <li>Redis＝鍵值：像字典，用在快取。</li>
     <li>MongoDB＝文件：一份份 JSON，結構常變也沒關係。</li>
     <li>Cassandra、HBase＝寬欄：海量寫入、時間序列。</li>
-    <li>Neo4j＝圖形：點與線，查「誰跟誰有關」。</li>
-    <li>NoSQL 的長處是高擴展、彈性綱要、高可用；強 ACID 交易保證不是它的長處。</li>
-    <li>HDFS 切 128 MB 大區塊、每塊存 3 份；NameNode 管目錄、DataNode 存資料；重吞吐，不重低延遲。</li>
+    <li>Neo4j＝圖形：以節點和邊為核心，兩者都能帶屬性，查「誰跟誰有關」。</li>
+    <li>NoSQL 的長處是高擴展、彈性綱要、高可用；多數採 BASE（最終一致性），強 ACID 不是共同長處，但不代表全部不支援（Neo4j、MongoDB 4.0 以後都支援）。</li>
+    <li>ACID＝原子、一致、隔離、持久；BASE＝基本可用、軟狀態、最終一致。ACID 的 C（符合規則）不等於 CAP 的 C（讀到最新）。</li>
+    <li>HDFS 預設切 128 MB 區塊（最後一塊可較小）、每塊存 3 份；NameNode 管目錄、DataNode 存資料；重吞吐，不重低延遲；一次寫入、多次讀取。</li>
+    <li>Secondary NameNode 只負責定期合併目錄檔，不是熱備援；要高可用得靠 Standby NameNode。</li>
     <li>ResourceManager、NodeManager 屬於 YARN，管運算資源，不是 HDFS 的儲存節點。</li>
     <li>Parquet、ORC 是欄式；分析（OLAP）用欄式，交易（OLTP）用列式。</li>
     <li>資料倉儲寫入時定綱要、資料湖讀取時定綱要；湖倉一體＝資料湖加上 ACID（Delta Lake）。</li>
+    <li>資料倉儲四大特性：主題導向、整合、時變、不可揮發；星狀綱要＝中間事實表、四周維度表。</li>
     <li>SCD：Type 1 覆蓋、Type 2 新增一列保留完整歷史、Type 3 新增一欄。</li>
-    <li>CAP＝一致性、可用性、分區容錯性，三者不能同時完美；C 不是 Capacity。</li>
-    <li>3-2-1＝3 份、2 種媒介、1 份異地；RPO 看可遺失多少資料、RTO 看多久恢復；糾刪碼比複製省空間。</li>
+    <li>CAP＝一致性、可用性、分區容錯性，三者不能同時完美；斷線時選 CP 或 AP，CA 只在不分區時成立（單機 RDBMS）；C 不是 Capacity。</li>
+    <li>3-2-1＝3 份資料（含正本）、2 種不同類型的媒介、1 份異地；RPO 看可遺失多少資料、RTO 看多久恢復；糾刪碼比複製省空間。</li>
   </ol>
 </section>
 
