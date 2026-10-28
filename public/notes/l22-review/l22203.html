@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="iPAS 中級 L22203 數據處理技術與工具：Pandas 與 SQL 合併分組、離散化與對數轉換、標準化歸一化與 PCA、重複數據判定、Hadoop 與 Spark 分工、抽樣的圖解觀念複習。">
+<title>L22203 數據處理觀念複習｜🍀Learn AI with Tarshar</title>
+<style>
+:root{
+  --bg:#08101f;--bg2:#0d1830;--panel:#111f3b;--panel2:#152746;
+  --line:rgba(137,172,255,.18);--text:#eef4ff;--muted:#a7b7d8;--dim:#7183aa;
+  --cyan:#41dcff;--blue:#6690ff;--purple:#b57bff;--green:#4de1a1;--orange:#ffc45b;--red:#ff8a80
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;color:var(--text);line-height:1.85;background:
+radial-gradient(900px 500px at 10% -10%,rgba(65,220,255,.13),transparent 65%),
+radial-gradient(900px 520px at 95% 10%,rgba(181,123,255,.14),transparent 62%),var(--bg);min-height:100vh}
+a{color:var(--cyan)}.wrap{width:min(880px,calc(100% - 32px));margin:auto}
+.topbar{position:sticky;top:0;z-index:20;background:rgba(8,16,31,.84);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.topbar .wrap{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.back{text-decoration:none;color:var(--cyan);font-size:14px;font-weight:800}.brand{font-size:12px;color:var(--muted);letter-spacing:1.5px}
+.hero{padding:46px 0 18px}
+.eyebrow{display:inline-flex;padding:6px 13px;border:1px solid rgba(65,220,255,.35);border-radius:999px;color:var(--cyan);font-size:12px;letter-spacing:2px;background:rgba(65,220,255,.06)}
+h1{font-size:clamp(28px,5vw,46px);line-height:1.25;margin:16px 0 10px;letter-spacing:-.02em}
+.lead{color:var(--muted);font-size:16px;margin:0}
+.toc{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:26px 0 8px}
+.toc a{display:block;text-decoration:none;color:var(--text);border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:rgba(17,31,59,.72);font-size:14px;font-weight:700}
+.toc a span{color:var(--cyan);margin-right:6px}
+section{margin:38px 0}
+h2{font-size:24px;margin:0 0 12px;padding-top:8px;border-top:1px solid var(--line)}
+h2 small{display:block;color:var(--cyan);font-size:12px;letter-spacing:2px;margin-top:14px}
+h3{font-size:17px;color:var(--orange);margin:22px 0 6px}
+p{margin:8px 0}
+.why{border-left:4px solid var(--cyan);background:rgba(65,220,255,.06);border-radius:0 14px 14px 0;padding:12px 16px;color:var(--muted)}
+.why b{color:var(--text)}
+figure{margin:16px 0;background:#fff;border-radius:16px;padding:8px;overflow:hidden}
+figure img{display:block;width:100%;height:auto}figcaption{color:#666;font-size:12px;text-align:right;padding:2px 6px 0}
+ol,ul{padding-left:22px;color:var(--muted)}li{margin:4px 0}li b{color:var(--text)}
+.tbl{overflow-x:auto;margin:14px 0;border:1px solid var(--line);border-radius:14px}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:14px}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:var(--panel2);color:var(--cyan);font-weight:800}tr:last-child td{border-bottom:0}
+td b{color:var(--orange)}
+.trap{border:1px solid rgba(255,138,128,.4);background:rgba(255,138,128,.07);border-radius:14px;padding:12px 16px;margin:14px 0}
+.trap b{color:var(--red)}
+.recap{counter-reset:n;list-style:none;padding:0}
+.recap li{counter-increment:n;position:relative;padding:12px 14px 12px 50px;border:1px solid var(--line);border-radius:14px;background:rgba(17,31,59,.72);margin:8px 0;color:var(--text)}
+.recap li::before{content:counter(n);position:absolute;left:14px;top:12px;width:26px;height:26px;border-radius:50%;background:var(--green);color:#062418;font-weight:900;text-align:center;line-height:26px;font-size:13px}
+.other{text-align:center;color:var(--muted);font-size:14px;margin:50px 0 0}
+footer{text-align:center;color:var(--dim);font-size:12px;line-height:1.9;border-top:1px solid var(--line);margin-top:16px;padding:30px 20px 44px}
+@media(max-width:600px){.wrap{width:calc(100% - 32px)}.brand{display:none}.toc{grid-template-columns:1fr}h2{font-size:21px}}
+</style>
+</head>
+<body>
+<nav class="topbar"><div class="wrap"><a class="back" href="../ipas-intermediate.html">← iPAS 中級總覽</a><span class="brand">🍀 LEARN AI WITH TARSHAR · L22 觀念複習</span></div></nav>
+
+<main class="wrap">
+<header class="hero">
+  <span class="eyebrow">iPAS 中級 · 科目二 · L22203</span>
+  <h1>數據處理技術與工具｜觀念圖解複習</h1>
+  <p class="lead">五個最容易混淆的觀念，每個都照「為什麼需要它 → 一步步搭起來 → 對照表 → 易錯提醒」整理。這一章多半是「名詞對功能」的配對，先看圖，把每一組配起來就記得住。</p>
+  <nav class="toc" aria-label="目錄">
+    <a href="#u1"><span>①</span>Pandas 與 SQL：合併與分組</a>
+    <a href="#u2"><span>②</span>數據轉換：分箱、對數、縮放、PCA</a>
+    <a href="#u3"><span>③</span>重複數據怎麼判定</a>
+    <a href="#u4"><span>④</span>Hadoop 與 Spark 分工</a>
+    <a href="#u5"><span>⑤</span>抽樣與它的鄰居們</a>
+    <a href="#recap"><span>★</span>十二句話總整理</a>
+  </nav>
+</header>
+
+<section id="u1">
+  <h2><small>單元 ①</small>Pandas 與 SQL 常用操作：合併與分組</h2>
+  <p class="why"><b>為什麼需要這個概念？</b> 真實資料很少只有一張表：每個月一個檔、客戶資料和訂單資料分開放。分析之前，第一件事就是「把表接起來」或「分組算統計」。Pandas 和 SQL 各有一套工具，名字很像，用途卻不同，最常被拿來混。</p>
+  <h3>一步步搭起來</h3>
+  <ol>
+    <li><b>先問：兩張表的欄位一樣嗎？</b>一樣（例如 1 月檔、2 月檔都是「日期、產品、金額」），就是把列往下疊，用 <b>concat()</b>。</li>
+    <li><b>欄位不一樣，但有共同的鍵欄位</b>（例如都有「客戶ID」），就是依鍵對接，用 <b>merge()</b>，等於資料庫的 JOIN。</li>
+    <li><b>merge 還要決定「留哪些鍵」</b>：參數 how 有 inner、left、right、outer 四種。</li>
+    <li><b>接好之後要分組算統計</b>：Pandas 用 groupby() 加聚合方法；SQL 用 GROUP BY 加聚合函數（SUM、AVG、COUNT、MAX、MIN）。</li>
+  </ol>
+  <figure><a href="img/l22203-pandas.png" target="_blank" rel="noopener"><img src="img/l22203-pandas.png" alt="concat 把兩個欄位相同的月份檔垂直堆疊成四列；merge 依客戶ID 對接兩張表，並列出 inner、left、right、outer 四種保留方式" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="tbl"><table>
+    <tr><th>想做什麼</th><th>Pandas</th><th>SQL 對應</th><th>一句話</th></tr>
+    <tr><td>兩張表依同一個鍵接起來</td><td><b>merge()</b></td><td>JOIN</td><td>依鍵欄位橫向對接，how 決定留哪些鍵</td></tr>
+    <tr><td>結構相同的檔案接成一個大檔</td><td><b>concat()</b></td><td>UNION ALL</td><td>往下堆疊（也可以設定成橫向）</td></tr>
+    <tr><td>依索引橫向合併</td><td>join()</td><td>JOIN</td><td>預設用索引對接，不是拿來堆疊的</td></tr>
+    <tr><td>分組後算每組統計</td><td><b>groupby()</b>＋聚合方法</td><td><b>GROUP BY</b>＋聚合函數</td><td>SUM、AVG、COUNT、MAX、MIN</td></tr>
+    <tr><td>選欄位、指定來源表、篩條件</td><td>df[...]、query()</td><td>SELECT、FROM、WHERE</td><td>SELECT 選欄位，WHERE 篩列</td></tr>
+    <tr><td>排序</td><td>sort_values()</td><td>ORDER BY</td><td>排序不是 GROUP BY 的工作</td></tr>
+    <tr><td>刪除有缺失值的列或欄</td><td>dropna()</td><td>WHERE … IS NOT NULL</td><td>把空值那幾筆拿掉</td></tr>
+    <tr><td>刪除完全重複的列</td><td>drop_duplicates()</td><td>DISTINCT</td><td>只留一份</td></tr>
+    <tr><td>看前幾列／最後幾列</td><td>head(5)／tail(5)</td><td>LIMIT</td><td>head 看開頭，tail 看結尾</td></tr>
+  </table></div>
+  <div class="trap"><b>易錯提醒：</b>記法是「<b>堆疊用 concat，對照合併用 merge</b>」。concat 不看鍵欄位，只是把表疊在一起；merge 一定要有鍵。join() 雖然也是合併，但預設看的是索引。另外，GROUP BY 的搭檔是聚合函數，排序要找 ORDER BY，兩者別配錯。</div>
+</section>
+
+<section id="u2">
+  <h2><small>單元 ②</small>數據轉換：離散化、對數轉換、縮放與 PCA</h2>
+  <p class="why"><b>為什麼需要這個概念？</b> 原始資料常常不能直接餵給模型：有的欄位是連續數字但我們想要分組，有的分佈歪得很嚴重，有的欄位數字大小差好幾百倍，有的欄位彼此幾乎在講同一件事。每一種問題有自己的轉換方法，名字聽起來都像「整理數字」，但解決的問題完全不同。</p>
+  <h3>一步步搭起來</h3>
+  <ol>
+    <li><b>想把連續數字變成幾個類別</b> → 離散化（分箱）。</li>
+    <li><b>分佈往右拖一條長尾巴</b> → 對數轉換。</li>
+    <li><b>各欄位的數字範圍差很多</b> → 標準化或歸一化（只改尺度）。</li>
+    <li><b>欄位彼此高度相關、想減少欄位數</b> → PCA（主成分分析）。</li>
+  </ol>
+
+  <h3>離散化／分箱：連續數字切成區間</h3>
+  <div class="tbl"><table>
+    <tr><th>年齡（連續數字）</th><th>18</th><th>25</th><th>38</th><th>52</th><th>70</th></tr>
+    <tr><td>分箱後（類別）</td><td>青年</td><td>青年</td><td>中年</td><td>中年</td><td>老年</td></tr>
+  </table></div>
+  <p>把連續的數值切成有限個區間或類別，叫<b>離散化（Discretization）</b>，也叫<b>分箱（Binning）</b>。切完之後資料變成「類別」，不再是連續數字。區間怎麼切由分析目的決定，可以等寬，也可以依人數等分。</p>
+
+  <h3>對數轉換：專門對付右偏</h3>
+  <figure><a href="img/l22203-logskew.png" target="_blank" rel="noopener"><img src="img/l22203-logskew.png" alt="左圖為右偏分佈，多數值很小、長尾在右；右圖為取對數後接近對稱的分佈" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <ul>
+    <li><b>右偏（正偏態）：</b>多數數值很小，少數特別大，收入、價格、點擊數都很常見。平均數會被少數極大值拉走。</li>
+    <li><b>取對數之後：</b>大的數被壓得比較近，長尾縮短，分佈變得比較對稱，有利後續分析與建模。</li>
+    <li><b>不適用：</b>本來就對稱的資料不需要；左偏的長尾在另一邊，取對數反而更歪；類別資料不是數字，不能取對數。</li>
+    <li><b>小提醒：</b>對數只能用在大於 0 的數；資料裡有 0 時，實務上常改用 log(x＋1)。</li>
+  </ul>
+
+  <h3>標準化、歸一化與 PCA：誰能消除特徵相關？</h3>
+  <figure><a href="img/l22203-scaling.png" target="_blank" rel="noopener"><img src="img/l22203-scaling.png" alt="同樣五個數字經歸一化縮到 0 到 1、經標準化變成平均 0 標準差 1，點與點的相對位置都不變" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <p>標準化和歸一化都是「把每個欄位各自換一把尺」。換尺不會改變點與點的相對位置，所以欄位和欄位之間的相關性也不會改變。真正能把相關性拿掉的是 PCA：它把座標軸轉到資料散開最多的方向，得到一組彼此不相關的新特徵（主成分）。</p>
+  <figure><a href="img/l22203-pca.png" target="_blank" rel="noopener"><img src="img/l22203-pca.png" alt="左圖兩個特徵高度相關呈斜線分佈，紅線為第一主成分；右圖轉換後主成分彼此不相關、散開成一團" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="tbl"><table>
+    <tr><th>方法</th><th>做什麼</th><th>會改變特徵間的相關性嗎？</th><th>主要用途</th></tr>
+    <tr><td><b>標準化</b> Z-score</td><td>變成平均 0、標準差 1</td><td><b>不會</b>（只改尺度）</td><td>各欄位尺度差很大時，讓大家站在同一起跑線</td></tr>
+    <tr><td><b>歸一化</b> Min-Max</td><td>縮到 [0, 1]</td><td><b>不會</b>（只改尺度）</td><td>對數值範圍有嚴格要求時，例如圖像像素</td></tr>
+    <tr><td><b>對數轉換</b></td><td>取對數</td><td>不是用來消除相關的</td><td>處理右偏</td></tr>
+    <tr><td><b>PCA</b></td><td>旋轉到新的軸（主成分）</td><td><b>會</b>：主成分彼此線性無關</td><td>降維、保留最多變異、去除欄位間的重複資訊</td></tr>
+  </table></div>
+  <ul>
+    <li><b>PCA 的主要目的是降維，並盡量保留原始資料的變異。</b>主成分彼此不相關，是它附帶的特性。</li>
+    <li><b>做 PCA 之前通常先標準化</b>，避免數字範圍特別大的欄位主導整個結果。</li>
+  </ul>
+  <div class="trap"><b>易錯提醒：</b>特徵縮放之後結果<b>仍然是數字</b>；離散化之後才變成類別。獨熱編碼是把「類別」變成好幾個 0／1 欄位，方向剛好和分箱相反。看到「消除特徵之間的線性相關」就想 PCA，不是標準化，也不是歸一化。</div>
+</section>
+
+<section id="u3">
+  <h2><small>單元 ③</small>重複數據怎麼判定</h2>
+  <p class="why"><b>為什麼需要這個概念？</b> 同一筆訂單被系統記了兩次，營收就會被算多。所以清理資料時要先找出重複。問題是：怎樣才叫「重複」？答案看的是資料的<b>內容</b>，不是它進來的時間，也不是它存在電腦哪裡。</p>
+  <h3>一步步搭起來</h3>
+  <ol>
+    <li><b>先決定比對範圍</b>：比對全部欄位，或只比對你指定的<b>鍵欄位（Key Columns）</b>。</li>
+    <li><b>範圍內的值全部相同，才算重複。</b></li>
+    <li><b>找到重複後，再決定留哪一筆</b>：留最早的、最新的，或最可靠的那筆，依情境而定。</li>
+  </ol>
+  <div class="tbl"><table>
+    <tr><th>客戶ID</th><th>姓名</th><th>金額</th><th>時間戳記</th><th>以「客戶ID＋姓名＋金額」為鍵，是重複嗎？</th></tr>
+    <tr><td>A1</td><td>小美</td><td>80</td><td>10:00</td><td>第一筆，作為比較基準</td></tr>
+    <tr><td>A1</td><td>小美</td><td>80</td><td>10:05</td><td><b>重複</b>：鍵欄位完全相同，只是時間不同</td></tr>
+    <tr><td>A1</td><td>小美</td><td>90</td><td>10:00</td><td>不是重複：金額不同，時間一樣也沒用</td></tr>
+  </table></div>
+  <div class="trap"><b>易錯提醒：</b>時間戳記不能當判斷標準：時間不同的兩筆，內容可能一樣（這才是重複）；時間相同的兩筆，內容也可能完全不同。記憶體位址是電腦內部存放位置，跟資料內容無關；平均值相同也不代表是同一筆。</div>
+</section>
+
+<section id="u4">
+  <h2><small>單元 ④</small>Hadoop 與 Spark 分工：誰存、誰調度、誰運算</h2>
+  <p class="why"><b>為什麼需要這個概念？</b> 資料大到一台電腦放不下、算不完，就要很多台機器一起合作。合作需要分工：有人負責<b>把資料存好</b>，有人負責<b>分配每台機器的資源、把工作排進去</b>，有人負責<b>真正動手算</b>。考試最愛問「這件事是哪個元件負責的」。</p>
+  <h3>一步步搭起來（由下往上）</h3>
+  <ol>
+    <li><b>最底層 HDFS</b>：把大檔案切成很多塊，分散存在很多台機器上。</li>
+    <li><b>往上一層 YARN</b>：資源管理與任務調度，決定誰用多少 CPU 和記憶體、工作排到哪台機器執行。</li>
+    <li><b>再往上是運算框架</b>：MapReduce 把運算拆成 Map 與 Reduce 兩步，以批次方式處理；Spark 盡量在記憶體裡運算，速度快很多。</li>
+    <li><b>最上層是好用的介面</b>：Hive 讓人用 SQL 查詢大數據，底下再交給運算引擎執行。</li>
+  </ol>
+  <figure><a href="img/l22203-hadoop.png" target="_blank" rel="noopener"><img src="img/l22203-hadoop.png" alt="Hadoop 生態系四層圖：由下而上為 HDFS 儲存、YARN 資源管理與調度、MapReduce 與 Spark 運算框架、Hive 與 Pig 上層介面" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="tbl"><table>
+    <tr><th>元件</th><th>負責什麼</th><th>一句話</th></tr>
+    <tr><td><b>HDFS</b></td><td>分散式儲存</td><td>倉庫：把大檔案切塊存在很多台機器上</td></tr>
+    <tr><td><b>YARN</b></td><td><b>資源管理與任務調度</b></td><td>調度員：分配 CPU、記憶體，安排工作在哪裡跑</td></tr>
+    <tr><td><b>MapReduce</b></td><td>批次運算模型</td><td>工人：把運算拆成 Map 與 Reduce 兩步</td></tr>
+    <tr><td><b>Spark</b></td><td>快速的分散式運算框架</td><td>工人：多在記憶體運算；最核心的資料抽象是 <b>RDD</b></td></tr>
+    <tr><td><b>Hive</b></td><td>用 SQL 查詢大數據</td><td>櫃台：上層介面，底下仍交給 MapReduce 或其他引擎執行</td></tr>
+  </table></div>
+  <p><b>RDD 是什麼？</b> RDD 全名是彈性分散式資料集（Resilient Distributed Dataset），是 Spark 最底層、最核心的資料抽象：一份資料被切成很多片，分散在不同機器上，而且壞掉時可以依照記錄的計算步驟重算回來。Spark 的 DataFrame 是建在 RDD 之上、比較好用的高階介面。</p>
+  <div class="trap"><b>易錯提醒：</b>HDFS 管<b>儲存</b>，YARN 管<b>調度</b>，兩個最常被搞混。問「Spark 核心抽象」要答 RDD，不是 DataFrame（它是上層介面），也不是 HDFS（那是儲存系統）或 MapReduce（那是另一套運算框架）。</div>
+</section>
+
+<section id="u5">
+  <h2><small>單元 ⑤</small>抽樣與它的鄰居們</h2>
+  <p class="why"><b>為什麼需要這個概念？</b> 資料有幾億筆時，每次分析都跑全部太慢也太貴。如果能挑出一小部分、又能代表整體，就能用很低的成本得到差不多的結論。這就是抽樣。它常和聚合、整合、標準化擺在一起比較，因為它們都在「處理資料」，但目的完全不同。</p>
+  <h3>一步步搭起來</h3>
+  <ol>
+    <li><b>目的</b>：降低計算成本，但結論仍要能代表整體。</li>
+    <li><b>做法</b>：從大資料集中選出一部分「代表性子集」，每一筆仍是原本的資料。</li>
+    <li><b>挑選方式</b>：依資料特性選一種抽樣方法（見下表）。</li>
+  </ol>
+  <div class="tbl"><table>
+    <tr><th>名稱</th><th>做什麼</th><th>跟抽樣的差別</th></tr>
+    <tr><td><b>數據抽樣</b></td><td>從大資料集中選出代表性子集</td><td><b>目的：降低計算成本</b>，選出來的仍是原始資料</td></tr>
+    <tr><td>數據聚合</td><td>把很多筆算成一個摘要（總和、平均）</td><td>筆數也變少，但不是「挑一部分」，而是「算出一個數」</td></tr>
+    <tr><td>數據整合</td><td>把不同來源的資料合併</td><td>是增加資訊，不是減少資料量</td></tr>
+    <tr><td>數據標準化</td><td>把數值重新量尺</td><td>資料筆數完全不變</td></tr>
+  </table></div>
+  <div class="tbl"><table>
+    <tr><th>抽樣方式</th><th>怎麼抽</th><th>適合情境</th></tr>
+    <tr><td><b>簡單隨機抽樣</b></td><td>每個個體被抽中的機率相等</td><td>母體很均勻時</td></tr>
+    <tr><td><b>分層抽樣</b></td><td>先分成子群體，再依比例在每層裡抽</td><td>想讓樣本反映各子群體的比例</td></tr>
+    <tr><td>系統抽樣</td><td>固定間隔抽一個，例如每 100 筆抽 1 筆</td><td>資料已排成清單、操作要簡單</td></tr>
+    <tr><td>整群抽樣</td><td>以群組為單位，抽中的群組全部納入</td><td>資料天然分成很多群，例如分店、班級</td></tr>
+  </table></div>
+  <div class="trap"><b>易錯提醒：</b>聚合也會讓資料變少，所以最容易和抽樣混淆。分辨方法：抽樣後拿到的是「一部分原始資料」；聚合後拿到的是「算出來的摘要數字」。</div>
+</section>
+
+<section id="recap">
+  <h2><small>總整理</small>本章要記的十二句話</h2>
+  <ol class="recap">
+    <li>concat 往下疊（結構相同）；merge 依鍵欄位接（像 JOIN）；join 預設用索引。</li>
+    <li>merge 的 how：inner 只留共同鍵、left／right 以一邊為主、outer 全部都留。</li>
+    <li>GROUP BY 一定搭配聚合函數（SUM、AVG、COUNT、MAX、MIN）。</li>
+    <li>SELECT 選欄位、FROM 指定表、WHERE 篩條件、ORDER BY 排序。</li>
+    <li>連續數字切成區間或類別＝離散化／分箱。</li>
+    <li>對數轉換用在右偏（正偏態）；類別資料不能取對數。</li>
+    <li>標準化、歸一化只改尺度，不改相關性；歸一化縮到 [0, 1]，標準化變成平均 0、標準差 1。</li>
+    <li>PCA：降維、保留變異、主成分彼此不相關；做之前通常先標準化。</li>
+    <li>重複＝全部欄位或鍵欄位的值完全相同，不是看時間戳記。</li>
+    <li>HDFS 儲存、YARN 資源管理與調度、MapReduce／Spark 運算、Hive 用 SQL 查詢。</li>
+    <li>Spark 核心抽象＝RDD；DataFrame 是建在它上面的高階介面。</li>
+    <li>抽樣＝選代表性子集來降低成本；聚合是算摘要、整合是合併來源。</li>
+  </ol>
+</section>
+</main>
+
+<p class="other">其他章：<a href="index.html">L22 觀念複習總目錄</a></p>
+<footer>🍀 Learn AI with Tarshar · iPAS 中級 L22 觀念複習<br>依 L22203 學習範圍整理的原創圖解，不含考古題原文。</footer>
+</body>
+</html>

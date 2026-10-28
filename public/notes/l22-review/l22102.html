@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="iPAS 中級 L22102 機率分佈與資料分佈模型：互斥與獨立、貝氏定理、期望值與變異數、PDF 與 CDF、常見分佈、常態分佈與 P-P 圖、中央極限定理與大數法則的圖解觀念複習。">
+<title>L22102 機率分佈觀念複習｜🍀Learn AI with Tarshar</title>
+<style>
+:root{
+  --bg:#08101f;--bg2:#0d1830;--panel:#111f3b;--panel2:#152746;
+  --line:rgba(137,172,255,.18);--text:#eef4ff;--muted:#a7b7d8;--dim:#7183aa;
+  --cyan:#41dcff;--blue:#6690ff;--purple:#b57bff;--green:#4de1a1;--orange:#ffc45b;--red:#ff8a80
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;color:var(--text);line-height:1.85;background:
+radial-gradient(900px 500px at 10% -10%,rgba(65,220,255,.13),transparent 65%),
+radial-gradient(900px 520px at 95% 10%,rgba(181,123,255,.14),transparent 62%),var(--bg);min-height:100vh}
+a{color:var(--cyan)}.wrap{width:min(880px,calc(100% - 32px));margin:auto}
+.topbar{position:sticky;top:0;z-index:20;background:rgba(8,16,31,.84);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.topbar .wrap{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.back{text-decoration:none;color:var(--cyan);font-size:14px;font-weight:800}.brand{font-size:12px;color:var(--muted);letter-spacing:1.5px}
+.hero{padding:46px 0 18px}
+.eyebrow{display:inline-flex;padding:6px 13px;border:1px solid rgba(65,220,255,.35);border-radius:999px;color:var(--cyan);font-size:12px;letter-spacing:2px;background:rgba(65,220,255,.06)}
+h1{font-size:clamp(28px,5vw,46px);line-height:1.25;margin:16px 0 10px;letter-spacing:-.02em}
+.lead{color:var(--muted);font-size:16px;margin:0}
+.toc{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:26px 0 8px}
+.toc a{display:block;text-decoration:none;color:var(--text);border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:rgba(17,31,59,.72);font-size:14px;font-weight:700}
+.toc a span{color:var(--cyan);margin-right:6px}
+section{margin:38px 0}
+h2{font-size:24px;margin:0 0 12px;padding-top:8px;border-top:1px solid var(--line)}
+h2 small{display:block;color:var(--cyan);font-size:12px;letter-spacing:2px;margin-top:14px}
+h3{font-size:17px;color:var(--orange);margin:22px 0 6px}
+p{margin:8px 0}
+.why{border-left:4px solid var(--cyan);background:rgba(65,220,255,.06);border-radius:0 14px 14px 0;padding:12px 16px;color:var(--muted)}
+.why b{color:var(--text)}
+figure{margin:16px 0;background:#fff;border-radius:16px;padding:8px;overflow:hidden}
+figure img{display:block;width:100%;height:auto}figcaption{color:#666;font-size:12px;text-align:right;padding:2px 6px 0}
+ol,ul{padding-left:22px;color:var(--muted)}li{margin:4px 0}li b{color:var(--text)}
+.tbl{overflow-x:auto;margin:14px 0;border:1px solid var(--line);border-radius:14px}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:14px}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:var(--panel2);color:var(--cyan);font-weight:800}tr:last-child td{border-bottom:0}
+td b{color:var(--orange)}
+.trap{border:1px solid rgba(255,138,128,.4);background:rgba(255,138,128,.07);border-radius:14px;padding:12px 16px;margin:14px 0}
+.trap b{color:var(--red)}
+.recap{counter-reset:n;list-style:none;padding:0}
+.recap li{counter-increment:n;position:relative;padding:12px 14px 12px 50px;border:1px solid var(--line);border-radius:14px;background:rgba(17,31,59,.72);margin:8px 0;color:var(--text)}
+.recap li::before{content:counter(n);position:absolute;left:14px;top:12px;width:26px;height:26px;border-radius:50%;background:var(--green);color:#062418;font-weight:900;text-align:center;line-height:26px;font-size:13px}
+footer{text-align:center;color:var(--dim);font-size:12px;line-height:1.9;border-top:1px solid var(--line);margin-top:50px;padding:30px 20px 44px}
+@media(max-width:600px){.wrap{width:calc(100% - 32px)}.brand{display:none}.toc{grid-template-columns:1fr}h2{font-size:21px}}
+</style>
+</head>
+<body>
+<nav class="topbar"><div class="wrap"><a class="back" href="../ipas-intermediate.html">← iPAS 中級總覽</a><span class="brand">🍀 LEARN AI WITH TARSHAR · L22 觀念複習</span></div></nav>
+
+<main class="wrap">
+<header class="hero">
+  <span class="eyebrow">iPAS 中級 · 科目二 · L22102</span>
+  <h1>機率分佈與資料分佈模型｜觀念圖解複習</h1>
+  <p class="lead">這一章是整個 L22 的底子。最容易卡住的不是單一公式，而是長得很像的名詞：互斥與獨立、PDF 與 CDF、指數與卜瓦松、中央極限定理與大數法則。六個單元都照「為什麼需要它 → 一步步搭起來 → 對照表 → 易錯提醒」整理。先看圖，再讀文字。</p>
+  <nav class="toc" aria-label="目錄">
+    <a href="#u1"><span>①</span>機率與事件關係</a>
+    <a href="#u2"><span>②</span>貝氏定理與機率模型</a>
+    <a href="#u3"><span>③</span>期望值與變異數</a>
+    <a href="#u4"><span>④</span>PDF、CDF 與常見分佈</a>
+    <a href="#u5"><span>⑤</span>常態分佈與診斷圖</a>
+    <a href="#u6"><span>⑥</span>抽樣、推論與估計</a>
+    <a href="#recap"><span>★</span>十六句話總整理</a>
+  </nav>
+</header>
+
+<section id="u1">
+  <h2><small>單元 ①</small>機率與事件關係：範圍、互斥、獨立</h2>
+  <p class="why"><b>為什麼需要這個概念？</b> 之後所有的機率計算，都建立在三塊地基上：機率能取什麼範圍、兩個事件之間是什麼關係、兩個變數之間有沒有一起變動。地基搞混，後面的公式就會用錯地方。</p>
+  <h3>一步步搭起來</h3>
+  <ol>
+    <li><b>機率是一個介於 0 和 1 之間的數字</b>：0 代表不可能發生，1 代表一定發生，0.5 是一半一半。公理化定義規定 0 ≤ P(A) ≤ 1，所以機率不會是負數，也不會超過 1。</li>
+    <li><b>兩個事件「能不能同時發生」</b>：不能同時發生，叫互斥。</li>
+    <li><b>兩個事件「有沒有互相影響」</b>：一個發不發生，完全不改變另一個的機率，叫獨立。</li>
+    <li><b>把「事件」換成「變數」</b>：兩個變數有沒有一起變大、一起變小，用共變異數來量。</li>
+  </ol>
+  <div class="tbl"><table>
+    <tr><th></th><th>互斥 Mutually Exclusive</th><th>獨立 Independent</th></tr>
+    <tr><td>意思</td><td><b>不能同時發生</b></td><td>一個事件發生與否，<b>不影響</b>另一個的機率</td></tr>
+    <tr><td>例子</td><td>擲一顆骰子：「出 1」和「出 2」</td><td>擲兩顆骰子：第一顆的點數和第二顆的點數</td></tr>
+    <tr><td>看什麼</td><td>能不能一起出現</td><td>有沒有改變對方的機率</td></tr>
+    <tr><td>公式</td><td>P(A ∩ B) ＝ 0</td><td>P(A ∩ B) ＝ P(A) × P(B)</td></tr>
+  </table></div>
+  <h3>共變異數：兩個變數有沒有一起變動</h3>
+  <div class="tbl"><table>
+    <tr><th>兩個變數的關係</th><th>共變異數</th></tr>
+    <tr><td>一起變大、一起變小</td><td><b>正</b></td></tr>
+    <tr><td>一個變大，另一個變小</td><td><b>負</b></td></tr>
+    <tr><td>沒有線性的一起變動</td><td><b>0</b></td></tr>
+  </table></div>
+  <ul>
+    <li><b>兩變數獨立 → 共變異數一定是 0。</b>互不影響，自然不會一起變動。</li>
+    <li><b>反過來不一定成立：</b>共變異數是 0，只代表沒有「直線式」的一起變動。例如 Y ＝ X²，X 從負到正時 Y 先降後升（U 形），共變異數可以是 0，但 Y 完全由 X 決定，顯然不獨立。</li>
+    <li>相關係數的範圍是 −1 到 1，那是共變異數「標準化」之後的版本；兩個變異數相乘 Var(X) × Var(Y) 則是另一個東西，不是共變異數。</li>
+  </ul>
+  <div class="trap"><b>易錯提醒：</b>互斥和獨立常被當成同一件事，其實剛好相反。擲一顆骰子「出 1」和「出 2」互斥，但<b>不獨立</b>：一旦出了 1，出 2 的機率就變成 0，這就是影響。只要兩個事件各自機率都大於 0，互斥就一定不獨立。另外，「聯集等於整個樣本空間」說的是互補，不是互斥。</div>
+</section>
+
+<section id="u2">
+  <h2><small>單元 ②</small>貝氏定理與機率模型：貝氏分類器、HMM、GMM</h2>
+  <p class="why"><b>為什麼需要這個概念？</b> 機器學習很多時候在做同一件事：<b>看到新證據，更新原本的判斷</b>。貝氏定理是這件事的基本公式；貝氏分類器、隱馬可夫模型把它用在不同情境；高斯混合模型則是用機率來分群。</p>
+  <h3>貝氏定理：看到證據後更新判斷</h3>
+  <p>用垃圾信當例子：信箱有 1000 封信，其中 200 封是垃圾信。看到一封信寫著「免費」，它是垃圾信的機率有多大？</p>
+  <div class="tbl"><table>
+    <tr><th>名稱</th><th>白話</th><th>這個例子</th></tr>
+    <tr><td><b>事前機率 Prior</b></td><td>還沒看到證據前，原本的機率</td><td>垃圾信占 200 ÷ 1000 ＝ 20%</td></tr>
+    <tr><td><b>概度 Likelihood</b></td><td>如果是垃圾信，出現這個證據的機率</td><td>垃圾信裡 80% 有「免費」→ 160 封</td></tr>
+    <tr><td><b>證據 Evidence</b></td><td>這個證據整體出現的機率</td><td>正常信 800 封中 10% 有「免費」→ 80 封；合計 240 封，占 24%</td></tr>
+    <tr><td><b>事後機率 Posterior</b></td><td>看到證據後，更新過的機率</td><td>160 ÷ 240 ≈ 66.7%</td></tr>
+  </table></div>
+  <p><b>公式：事後 ＝ 事前 × 概度 ÷ 證據。</b>代入：0.2 × 0.8 ÷ 0.24 ≈ 0.667。</p>
+  <h3>貝氏分類器為什麼叫「天真」</h3>
+  <ol>
+    <li><b>問題：</b>判斷一封信是不是垃圾信，要同時看很多特徵（有沒有「免費」、有沒有「中獎」……）。特徵彼此有關聯的話，機率非常難算。</li>
+    <li><b>天真的做法：</b>假設<b>在已知類別的條件下，各特徵彼此獨立</b>。這樣每個特徵各算各的機率，再相乘就好。</li>
+    <li><b>例子：</b>垃圾信裡有 60% 含「免費」、50% 含「中獎」。假設條件獨立，垃圾信裡兩個字都有的比例估成 0.6 × 0.5 ＝ 30%。</li>
+    <li><b>代價：</b>計算大幅簡化，但現實中特徵常常有關聯，這個假設不一定成立，結果可能不夠準。</li>
+  </ol>
+  <h3>隱馬可夫模型 HMM：看線索，猜看不到的真相</h3>
+  <p>一句話：有一排你<b>看不到</b>的真相，每一個真相會露出一個你<b>看得到</b>的線索，你要靠線索去推真相。</p>
+  <figure><a href="img/l22102-hmm.png" target="_blank" rel="noopener"><img src="img/l22102-hmm.png" alt="隱馬可夫模型示意圖：上排是看不到的天氣狀態（晴、雨、雨）依序轉移，下排是看得到的觀測（沒帶傘、帶傘、帶傘），三組規則是初始機率、轉移機率與輸出機率" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="tbl"><table>
+    <tr><th></th><th>例子</th><th>看得到嗎</th></tr>
+    <tr><td><b>狀態（隱藏）</b></td><td>外面的天氣：晴、雨</td><td>看不到，所以叫「隱藏」</td></tr>
+    <tr><td><b>觀測（輸出）</b></td><td>朋友有沒有帶傘</td><td>看得到</td></tr>
+    <tr><td>規則（參數）</td><td>初始機率、轉移機率、輸出機率</td><td>寫在模型裡，<b>不是</b>隱藏的東西</td></tr>
+  </table></div>
+  <p>「馬可夫」是附加的規則：<b>明天的狀態只跟今天有關</b>，不用管更早以前。</p>
+  <h3>高斯混合模型 GMM：沒有標籤也能分群</h3>
+  <div class="tbl"><table>
+    <tr><th></th><th>監督式學習</th><th>非監督式學習</th></tr>
+    <tr><td>資料有沒有答案（標籤）</td><td>有，例如每封信已標好「垃圾／正常」</td><td><b>沒有</b>，只有資料本身</td></tr>
+    <tr><td>做什麼</td><td>學會預測答案（分類、迴歸）</td><td>找出資料自己的結構，例如<b>分群</b></td></tr>
+  </table></div>
+  <p><b>GMM 的想法：</b>把資料看成「<b>好幾個常態分佈混在一起</b>」，再用機率判斷每一筆資料比較可能屬於哪一群。例如把一群人的身高丟進去，它會自己分出偏高和偏矮兩堆，過程中沒有人事先告訴它任何標籤。所以 GMM 屬於<b>非監督式的聚類</b>。</p>
+  <div class="trap"><b>易錯提醒：</b>概度和事後機率不一樣：概度是「垃圾信裡有『免費』的比例」（80%），事後是「有『免費』的信裡是垃圾信的比例」（約 67%）。HMM 裡被隱藏的是<b>狀態序列</b>，轉移機率、輸出機率、初始分佈都是模型的參數，不是隱藏的東西。GMM 沒有標籤，是非監督式分群，不是分類，也不是強化學習或降維。</div>
+</section>
+
+<section id="u3">
+  <h2><small>單元 ③</small>期望值與變異數</h2>
+  <p class="why"><b>為什麼需要這個概念？</b> 描述一個機率分佈，最基本的兩個數字是：<b>長期平均落在哪裡</b>（期望值），以及<b>有多分散</b>（變異數）。後面的二項、卜瓦松、常態，都會用這兩個數字來介紹。</p>
+  <h3>一步步搭起來</h3>
+  <ol>
+    <li><b>期望值 E[X]</b>：每個可能值乘上它的機率，再加起來，也就是加權平均。</li>
+    <li><b>變異數的定義</b>：Var(X) ＝ E[(X − E[X])²]，先算每個值離平均多遠，平方後再取平均。</li>
+    <li><b>變異數的化簡式</b>：Var(X) ＝ E[X²] − (E[X])²，平方的平均，減去平均的平方。兩種寫法結果一樣。</li>
+  </ol>
+  <p>用一個小例子驗算：X 取 1、2、3，機率分別是 0.2、0.5、0.3。</p>
+  <div class="tbl"><table>
+    <tr><th>步驟</th><th>算式</th><th>結果</th></tr>
+    <tr><td>期望值 E[X]</td><td>1×0.2 ＋ 2×0.5 ＋ 3×0.3</td><td><b>2.1</b></td></tr>
+    <tr><td>E[X²]</td><td>1×0.2 ＋ 4×0.5 ＋ 9×0.3</td><td>4.9</td></tr>
+    <tr><td>化簡式</td><td>4.9 − 2.1² ＝ 4.9 − 4.41</td><td><b>0.49</b></td></tr>
+    <tr><td>定義式</td><td>0.2×(1−2.1)² ＋ 0.5×(2−2.1)² ＋ 0.3×(3−2.1)²</td><td>0.242 ＋ 0.005 ＋ 0.243 ＝ <b>0.49</b></td></tr>
+  </table></div>
+  <h3>每個值乘上常數，或加上常數</h3>
+  <p>例：全班零用錢平均 70 元，每個人都調成原本的 1.1 倍，平均就變成 70 × 1.1 ＝ 77 元。</p>
+  <div class="tbl"><table>
+    <tr><th>做了什麼</th><th>期望值變成</th><th>變異數變成</th></tr>
+    <tr><td>每個值<b>乘以</b> c</td><td><b>c × E[X]</b></td><td>c² × Var(X)</td></tr>
+    <tr><td>每個值<b>加上</b> c</td><td>E[X] ＋ c</td><td>不變（整批平移，分散程度一樣）</td></tr>
+  </table></div>
+  <h3>二項分佈的平均與變異數</h3>
+  <p><b>二項分佈 B(n, p)</b>：做 n 次獨立試驗，每次成功機率是 p，數成功了幾次。</p>
+  <div class="tbl"><table>
+    <tr><th></th><th>公式</th><th>例：n＝20、p＝0.5</th><th>例：n＝10、p＝0.8</th></tr>
+    <tr><td>平均數</td><td><b>np</b></td><td>20 × 0.5 ＝ 10</td><td>10 × 0.8 ＝ 8</td></tr>
+    <tr><td>變異數</td><td><b>np(1 − p)</b></td><td>20 × 0.5 × 0.5 ＝ 5</td><td>10 × 0.8 × 0.2 ＝ 1.6</td></tr>
+  </table></div>
+  <ul>
+    <li>只做 1 次（n ＝ 1）就是伯努利分佈：平均 p、變異數 p(1 − p)。</li>
+    <li>記法：二項的變異數 ＝ 平均數 × (1 − p)，所以一定比平均數小。</li>
+  </ul>
+  <div class="trap"><b>易錯提醒：</b>「平均和變異數相等」是<b>卜瓦松分佈</b>的特性（兩者都是 λ），不是二項。二項的變異數要多乘一個 (1 − p)。另外，E[X²] 只是「平方的平均」，少減了 (E[X])² 就不是變異數。</div>
+</section>
+
+<section id="u4">
+  <h2><small>單元 ④</small>PDF、CDF 與常見分佈</h2>
+  <p class="why"><b>為什麼需要這個概念？</b> 這一塊反覆在問兩件事：這個機率函數<b>畫出來長怎樣、代表什麼</b>；以及眼前這個情境<b>該用哪一個分佈</b>。只要把「高度 vs 面積」「多久 vs 幾次」分清楚，大部分就能判斷。</p>
+  <h3>PDF：高度是密度，面積才是機率</h3>
+  <figure><a href="img/l22102-pdfarea.png" target="_blank" rel="noopener"><img src="img/l22102-pdfarea.png" alt="機率密度函數示意圖：a 到 b 之間曲線下的面積等於落在該區間的機率，單一個點沒有寬度所以機率為 0" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <ol>
+    <li>連續型變數可以取無限多個值，所以<b>剛好等於某一個點的機率是 0</b>。</li>
+    <li>只能問「落在某個區間」的機率，答案是那段區間<b>曲線下的面積</b>（也就是 PDF 在 [a, b] 上的積分）。</li>
+    <li>PDF 的高度叫「密度」，可以大於 1；但整條曲線下的總面積一定等於 1。</li>
+  </ol>
+  <p><b>均勻分佈 U(a, b)</b>：區間內每個位置一樣可能，所以 PDF 是一條水平線，畫出來是一個長方形。寬是 b − a，面積要等於 1，所以高度一定是 <b>1 ÷ (b − a)</b>；區間外的高度是 0。</p>
+  <h3>CDF：累積到這裡有多少</h3>
+  <p><b>CDF 的定義：F(x) ＝ P(X ≤ x)</b>，也就是「x 以下」的機率全部加起來。</p>
+  <figure><a href="img/l22102-cdf.png" target="_blank" rel="noopener"><img src="img/l22102-cdf.png" alt="累積分布函數階梯圖：分數 50 到 90 的累積機率依序為 0.1、0.3、0.6、0.9、1.0，F(60) 等於 0.3" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <ul>
+    <li>CDF 從 0 開始，<b>只會往上升或持平</b>，最後到 1。</li>
+    <li>注意是「<b>小於等於 x</b>」，不是「剛好等於 x」，也不是「大於 x」。</li>
+  </ul>
+  <div class="tbl"><table>
+    <tr><th>函數</th><th>回答的問題</th><th>適用</th></tr>
+    <tr><td><b>PMF</b> 機率質量函數</td><td>剛好等於 x 的機率 P(X ＝ x)</td><td>離散型</td></tr>
+    <tr><td><b>PDF</b> 機率密度函數</td><td>曲線高度（密度），面積才是機率</td><td>連續型</td></tr>
+    <tr><td><b>CDF</b> 累積分布函數</td><td>x 以下的機率 P(X ≤ x)</td><td>離散型、連續型都有</td></tr>
+  </table></div>
+  <h3>符號：大寫是累積，小寫是高度</h3>
+  <div class="tbl"><table>
+    <tr><th>意思</th><th>一般分佈</th><th>標準常態分佈</th></tr>
+    <tr><td>PDF（曲線高度）</td><td>小寫 f(x)</td><td>小寫 <b>φ(z)</b></td></tr>
+    <tr><td>CDF（累積機率）</td><td>大寫 F(x)</td><td>大寫 <b>Φ(z)</b></td></tr>
+  </table></div>
+  <p>容易混進來的符號：Γ(z) 是伽瑪函數，B(n, p) 是二項分佈的寫法，兩者都不是常態的 PDF 或 CDF。</p>
+  <h3>指數分佈：等待時間與壽命</h3>
+  <figure><a href="img/l22102-exp.png" target="_blank" rel="noopener"><img src="img/l22102-exp.png" alt="指數分佈的機率密度曲線：最高點在最左邊，一路往下滑但永遠大於 0" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <ul>
+    <li><b>用途：</b>描述「要等多久」或「能撐多久」，例如兩通客服電話之間隔多久、燈泡能亮多久。</li>
+    <li><b>形狀：</b>最高點在最左邊，一路往下滑，而且永遠大於 0（單調遞減且恆為正）。</li>
+    <li>對照：對稱的鐘形是常態分佈；一條水平線是均勻分佈。</li>
+  </ul>
+  <h3>問「多久」還是「幾次」？</h3>
+  <div class="tbl"><table>
+    <tr><th>情境在問</th><th>資料型態</th><th>用哪個分佈</th><th>例子</th></tr>
+    <tr><td><b>多久</b>（時間長度）</td><td>連續、不會是負數</td><td><b>指數分佈、韋伯分佈</b></td><td>燈泡壽命、下一位客人要等多久</td></tr>
+    <tr><td><b>幾次</b>（次數，沒有上限）</td><td>整數 0、1、2……</td><td><b>卜瓦松分佈</b></td><td>一小時內進來幾位客人</td></tr>
+    <tr><td>n 次裡成功幾次</td><td>整數 0 到 n</td><td>二項分佈</td><td>抽 10 個產品有幾個合格</td></tr>
+  </table></div>
+  <h3>卜瓦松分佈：λ 要配合時間長度</h3>
+  <ol>
+    <li><b>卜瓦松分佈</b>描述「一段時間內發生幾次」，λ 是這段時間的平均次數。</li>
+    <li><b>λ 要先換算成你問的那段時間</b>：平均每 10 分鐘進來 2 位客人，問 30 分鐘 → λ ＝ 2 × 3 ＝ 6；問 5 分鐘 → λ ＝ 1。</li>
+    <li>公式 P(X ＝ k) ＝ λ<sup>k</sup> × e<sup>−λ</sup> ÷ k!。例：λ ＝ 6、k ＝ 5，算出來約 0.16。考試通常不用手算，重點是認出「次數 → 卜瓦松」並把 λ 換算對。</li>
+  </ol>
+  <div class="trap"><b>易錯提醒：</b>常態分佈可能出現負數，不適合描述壽命；二項和卜瓦松數的是次數，也不適合描述時間。卜瓦松不能換成二項，因為它沒有固定的試驗次數 n，發生次數沒有上限。λ 一定要乘上（或除以）時間長度，不能直接拿「每小時幾次」去算「兩小時」的機率。</div>
+</section>
+
+<section id="u5">
+  <h2><small>單元 ⑤</small>常態分佈與診斷圖</h2>
+  <p class="why"><b>為什麼需要這個概念？</b> 常態分佈是統計裡最重要的分佈，很多方法都假設資料接近常態。所以要知道四件事：它長什麼樣、怎麼標準化、有哪些現成的比例可以用，以及怎麼檢查手上的資料到底像不像常態。</p>
+  <h3>一步步搭起來</h3>
+  <ol>
+    <li><b>形狀：</b>左右對稱的鐘形，<b>峰值在平均數 μ</b>，平均數、中位數、眾數三者重合。</li>
+    <li><b>兩個參數決定一切：</b>μ 決定中心在哪，σ 決定胖瘦。一般常態的 μ 是多少，峰值就在多少，不一定是 0。</li>
+    <li><b>標準常態分佈：</b>規定 <b>μ ＝ 0、σ ＝ 1</b>。「標準」的意思就是這兩個數字固定，不隨資料改變。</li>
+    <li><b>標準化（Z 分數）：</b>Z ＝ (X − μ) ÷ σ，先減平均，再除標準差，任何常態都能換成標準常態來查表。</li>
+  </ol>
+  <div class="tbl"><table>
+    <tr><th>例子</th><th>算式</th><th>意思</th></tr>
+    <tr><td>μ＝50、σ＝10、X＝70</td><td>(70 − 50) ÷ 10 ＝ <b>2</b></td><td>比平均高 2 個標準差</td></tr>
+    <tr><td>μ＝50、σ＝10、X＝40</td><td>(40 − 50) ÷ 10 ＝ <b>−1</b></td><td>比平均低 1 個標準差</td></tr>
+  </table></div>
+  <h3>經驗法則：68、95、99.7</h3>
+  <figure><a href="img/l22102-emprule.png" target="_blank" rel="noopener"><img src="img/l22102-emprule.png" alt="常態分佈經驗法則：平均數正負一個標準差約 68%，正負兩個約 95%，正負三個約 99.7%" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="tbl"><table>
+    <tr><th>範圍</th><th>約占多少資料</th></tr>
+    <tr><td>μ ± 1σ</td><td><b>約 68%</b></td></tr>
+    <tr><td>μ ± 2σ</td><td>約 95%</td></tr>
+    <tr><td>μ ± 3σ</td><td>約 99.7%</td></tr>
+  </table></div>
+  <p><b>這套比例只適用常態分佈。</b>資料不是常態時，改用柴比雪夫不等式：落在 μ ± kσ 之內的比例至少是 1 − 1/k²，例如 k ＝ 2 時至少 75%。</p>
+  <h3>P-P 圖與 Q-Q 圖：檢查資料像不像常態</h3>
+  <figure><a href="img/l22102-pp.png" target="_blank" rel="noopener"><img src="img/l22102-pp.png" alt="兩張 P-P 圖對照：左圖點貼著對角線代表資料很像常態，右圖點明顯偏離對角線代表不像常態；兩軸都是累積機率" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="tbl"><table>
+    <tr><th></th><th>P-P 圖</th><th>Q-Q 圖</th></tr>
+    <tr><td>兩條軸畫什麼</td><td><b>累積機率</b>（理論 vs 實際），範圍都是 0 到 1</td><td><b>分位數</b>（理論分位數 vs 樣本分位數），是實際的數值</td></tr>
+    <tr><td>怎麼看</td><td>點貼著對角線 → 吻合</td><td>點貼著一直線 → 吻合</td></tr>
+    <tr><td>用途</td><td colspan="2">兩者都在檢查樣本是否接近某個理論分佈（最常是常態）</td></tr>
+  </table></div>
+  <p><b>P-P 圖的點是怎麼算出來的？</b>用前面學過的 Φ(z)。以 10 位同學的成績示範（平均 71、標準差約 11.8）：</p>
+  <div class="tbl"><table>
+    <tr><th>分數</th><th>z</th><th>理論累積 Φ(z)</th><th>實際累積（名次 ÷ 10）</th></tr>
+    <tr><td>52</td><td>−1.60</td><td>0.05</td><td>0.1</td></tr>
+    <tr><td>58</td><td>−1.10</td><td>0.14</td><td>0.2</td></tr>
+    <tr><td>63</td><td>−0.68</td><td>0.25</td><td>0.3</td></tr>
+    <tr><td>67</td><td>−0.34</td><td>0.37</td><td>0.4</td></tr>
+    <tr><td>70</td><td>−0.08</td><td>0.47</td><td>0.5</td></tr>
+    <tr><td>72</td><td>0.08</td><td>0.53</td><td>0.6</td></tr>
+    <tr><td>75</td><td>0.34</td><td>0.63</td><td>0.7</td></tr>
+    <tr><td>78</td><td>0.59</td><td>0.72</td><td>0.8</td></tr>
+    <tr><td>83</td><td>1.01</td><td>0.84</td><td>0.9</td></tr>
+    <tr><td>92</td><td>1.77</td><td>0.96</td><td>1.0</td></tr>
+  </table></div>
+  <p>每一列就是一個點（橫軸＝理論累積，縱軸＝實際累積）。兩欄數字都很接近，點就會貼著對角線，代表資料很像常態。實務上實際累積常用（名次 − 0.5）÷ n 做修正，這裡為了好懂直接用名次 ÷ n。</p>
+  <div class="trap"><b>易錯提醒：</b>峰值在 μ，「峰值在 0」只有標準常態才成立。標準常態的 σ 是 1，不可能是 0。P-P 圖兩軸都是<b>累積機率</b>，不是 PDF 的高度，也不是平均數、變異數這種單一數字。Q-Q 圖是拿來檢查分佈的，不是找異常值（那是箱型圖）、也不是看兩個變數的相關（那是散佈圖）。</div>
+</section>
+
+<section id="u6">
+  <h2><small>單元 ⑥</small>抽樣、推論與估計：CLT、大數法則、MLE、蒙地卡羅</h2>
+  <p class="why"><b>為什麼需要這個概念？</b> 我們通常只拿得到<b>樣本</b>，卻想知道<b>母體</b>。這一組觀念就是樣本和母體之間的橋：樣本平均數會分佈成什麼樣子、抽越多會不會越準、怎麼從資料估計參數，以及算不出來時怎麼用隨機模擬去估。</p>
+  <h3>中央極限定理 CLT：平均數的分佈會變成常態</h3>
+  <figure><a href="img/l22102-clt.png" target="_blank" rel="noopener"><img src="img/l22102-clt.png" alt="中央極限定理示意圖：左邊母體是右偏的歪斜分佈，右邊每次抽 30 個取平均、重複多次後，平均數的分佈接近常態" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <ol>
+    <li>從母體抽 n 個樣本，算一次平均數。</li>
+    <li>重複很多次，就會得到很多個「樣本平均數」。</li>
+    <li>把這些平均數畫成直方圖，<b>它會越來越接近常態</b>，即使母體本身歪斜、不是常態。</li>
+    <li><b>前提：</b>樣本彼此獨立且來自同一個分佈（i.i.d.），母體變異數有限，而且 n 要夠大。<b>母體不必是常態</b>，也不需要事先知道母體標準差。</li>
+    <li><b>n 越大，平均數的分佈越窄：</b>標準誤 ＝ σ ÷ √n 會變小。抽越多，平均越穩定，而且仍然以母體平均數為中心。</li>
+  </ol>
+  <h3>大數法則 LLN：抽越多，平均越接近真相</h3>
+  <p><b>核心：</b>獨立重複試驗的次數越來越多，樣本平均數會收斂到母體的期望值。例如公正骰子的期望值是 3.5，只擲 3 次平均可能差很多，擲一萬次平均就會非常接近 3.5。</p>
+  <div class="tbl"><table>
+    <tr><th></th><th>大數法則 LLN</th><th>中央極限定理 CLT</th></tr>
+    <tr><td>講什麼</td><td>樣本平均數<b>會收斂到哪裡</b>（母體期望值）</td><td>樣本平均數的<b>分佈長什麼樣</b>（接近常態）</td></tr>
+    <tr><td>關鍵詞</td><td>次數趨近無窮大、收斂</td><td>分佈、趨近常態、標準誤</td></tr>
+  </table></div>
+  <h3>最大概度估計 MLE：選最能解釋資料的參數</h3>
+  <p><b>想法：</b>手上有一批資料，想猜產生它的參數。MLE 選的是<b>讓「剛好看到這批資料」的機率最大</b>的那組參數。</p>
+  <p>例：丟一枚硬幣 10 次，看到 7 次正面。正面機率 p 該猜多少？把不同的 p 代進去，算「10 次剛好 7 次正面」的機率：</p>
+  <div class="tbl"><table>
+    <tr><th>猜的 p</th><th>10 次剛好 7 次正面的機率</th><th>結果</th></tr>
+    <tr><td>0.5</td><td>120 × 0.5⁷ × 0.5³ ≈ 0.117</td><td></td></tr>
+    <tr><td><b>0.7</b></td><td>120 × 0.7⁷ × 0.3³ ≈ <b>0.267</b></td><td><b>最大，所以 MLE 選 p ＝ 0.7</b></td></tr>
+    <tr><td>0.9</td><td>120 × 0.9⁷ × 0.1³ ≈ 0.057</td><td></td></tr>
+  </table></div>
+  <div class="tbl"><table>
+    <tr><th>估計方法</th><th>選參數的標準</th></tr>
+    <tr><td><b>最大概度估計 MLE</b></td><td>讓觀測資料的聯合機率（概度）最大</td></tr>
+    <tr><td>最大後驗估計 MAP</td><td>讓後驗機率最大，會把事前機率也算進去，是貝氏的做法</td></tr>
+    <tr><td>最小平方法</td><td>讓誤差平方和最小</td></tr>
+  </table></div>
+  <h3>蒙地卡羅方法：算不出來，就大量隨機抽樣去估</h3>
+  <p><b>核心：</b>用大量的隨機抽樣，去估計很難直接算出來的結果。例：想估計圓周率 π，在一個正方形裡隨機丟一萬個點，數有多少落在內接的四分之一圓裡，這個比例乘以 4 就是 π 的近似值。點丟得越多越準，背後撐腰的就是大數法則。</p>
+  <div class="trap"><b>易錯提醒：</b>n 變大時，標準誤是<b>變小</b>，不是變大；平均數的分佈也是<b>更像</b>常態，不是更不像。「次數趨近無窮大，平均收斂到期望值」是大數法則，「平均數的分佈趨近常態」才是中央極限定理，兩個常被對調。蒙地卡羅靠的是重複隨機抽樣，不是精確公式推導，也不是規則推理或專家系統。</div>
+</section>
+
+<section id="recap">
+  <h2><small>總整理</small>本章要記的十六句話</h2>
+  <ol class="recap">
+    <li>機率最小 0、最大 1，不會是負數，也不會超過 1。</li>
+    <li>互斥＝不能同時發生；獨立＝互不影響。擲一顆骰子出 1 和出 2，互斥但不獨立。</li>
+    <li>兩變數獨立 → 共變異數 ＝ 0；反過來不一定成立。</li>
+    <li>貝氏：事後 ＝ 事前 × 概度 ÷ 證據；概度和事後不一樣。</li>
+    <li>貝氏分類器的天真假設：已知類別後，各特徵條件獨立，所以機率可以相乘。</li>
+    <li>HMM：隱藏的是狀態；轉移、輸出、初始分佈是參數，不隱藏。</li>
+    <li>GMM：非監督式分群，把資料看成好幾個常態混在一起。</li>
+    <li>E[cX] ＝ c × E[X]；Var(X) ＝ E[X²] − (E[X])²。</li>
+    <li>二項：平均 np、變異數 np(1 − p)；平均等於變異數的是卜瓦松。</li>
+    <li>PDF 的面積才是機率，連續型單點機率 ＝ 0；CDF ＝ P(X ≤ x)，只會往上升到 1。</li>
+    <li>大寫＝累積，小寫＝高度：Φ 是標準常態 CDF，φ 是標準常態 PDF。</li>
+    <li>均勻 U(a, b) 的 PDF 高度 ＝ 1 ÷ (b − a)；指數分佈一路下滑且恆為正。</li>
+    <li>問「多久」用指數（或韋伯），問「幾次」用卜瓦松；卜瓦松的 λ 要配合時間長度換算。</li>
+    <li>常態：峰值在 μ；標準常態 μ ＝ 0、σ ＝ 1；經驗法則 68%、95%、99.7%；Z ＝ (X − μ) ÷ σ。</li>
+    <li>P-P 圖兩軸都是累積機率；Q-Q 圖畫分位數；兩者都在檢查資料像不像某個理論分佈。</li>
+    <li>CLT：i.i.d. 且 n 夠大，平均數的分佈趨近常態、標準誤 σ ÷ √n 變小；大數法則：平均收斂到期望值；MLE：讓資料出現機率最大的參數。</li>
+  </ol>
+</section>
+
+<p class="lead" style="text-align:center;margin-top:44px">其他章：<a href="index.html">L22 觀念複習總目錄</a></p>
+</main>
+
+<footer>🍀 Learn AI with Tarshar · iPAS 中級 L22 觀念複習<br>依 L22102 學習範圍整理的原創圖解，不含考古題原文。文中數字皆為說明用的示範例子。</footer>
+</body>
+</html>

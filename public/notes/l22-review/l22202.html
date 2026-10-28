@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="iPAS 中級 L22202 數據儲存與管理：區塊／檔案／物件儲存、NoSQL 四種資料模型、HDFS、欄式儲存與資料倉儲、CAP 定理與資料保護的圖解觀念複習。">
+<title>L22202 資料儲存與 NoSQL 觀念複習｜🍀Learn AI with Tarshar</title>
+<style>
+:root{
+  --bg:#08101f;--bg2:#0d1830;--panel:#111f3b;--panel2:#152746;
+  --line:rgba(137,172,255,.18);--text:#eef4ff;--muted:#a7b7d8;--dim:#7183aa;
+  --cyan:#41dcff;--blue:#6690ff;--purple:#b57bff;--green:#4de1a1;--orange:#ffc45b;--red:#ff8a80
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;color:var(--text);line-height:1.85;background:
+radial-gradient(900px 500px at 10% -10%,rgba(65,220,255,.13),transparent 65%),
+radial-gradient(900px 520px at 95% 10%,rgba(181,123,255,.14),transparent 62%),var(--bg);min-height:100vh}
+a{color:var(--cyan)}.wrap{width:min(880px,calc(100% - 32px));margin:auto}
+.topbar{position:sticky;top:0;z-index:20;background:rgba(8,16,31,.84);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.topbar .wrap{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.back{text-decoration:none;color:var(--cyan);font-size:14px;font-weight:800}.brand{font-size:12px;color:var(--muted);letter-spacing:1.5px}
+.hero{padding:46px 0 18px}
+.eyebrow{display:inline-flex;padding:6px 13px;border:1px solid rgba(65,220,255,.35);border-radius:999px;color:var(--cyan);font-size:12px;letter-spacing:2px;background:rgba(65,220,255,.06)}
+h1{font-size:clamp(28px,5vw,46px);line-height:1.25;margin:16px 0 10px;letter-spacing:-.02em}
+.lead{color:var(--muted);font-size:16px;margin:0}
+.toc{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:26px 0 8px}
+.toc a{display:block;text-decoration:none;color:var(--text);border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:rgba(17,31,59,.72);font-size:14px;font-weight:700}
+.toc a span{color:var(--cyan);margin-right:6px}
+section{margin:38px 0}
+h2{font-size:24px;margin:0 0 12px;padding-top:8px;border-top:1px solid var(--line)}
+h2 small{display:block;color:var(--cyan);font-size:12px;letter-spacing:2px;margin-top:14px}
+h3{font-size:17px;color:var(--orange);margin:22px 0 6px}
+p{margin:8px 0}
+.why{border-left:4px solid var(--cyan);background:rgba(65,220,255,.06);border-radius:0 14px 14px 0;padding:12px 16px;color:var(--muted)}
+.why b{color:var(--text)}
+figure{margin:16px 0;background:#fff;border-radius:16px;padding:8px;overflow:hidden}
+figure img{display:block;width:100%;height:auto}figcaption{color:#666;font-size:12px;text-align:right;padding:2px 6px 0}
+ol,ul{padding-left:22px;color:var(--muted)}li{margin:4px 0}li b{color:var(--text)}
+.tbl{overflow-x:auto;margin:14px 0;border:1px solid var(--line);border-radius:14px}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:14px}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:var(--panel2);color:var(--cyan);font-weight:800}tr:last-child td{border-bottom:0}
+td b{color:var(--orange)}
+.trap{border:1px solid rgba(255,138,128,.4);background:rgba(255,138,128,.07);border-radius:14px;padding:12px 16px;margin:14px 0}
+.trap b{color:var(--red)}
+.recap{counter-reset:n;list-style:none;padding:0}
+.recap li{counter-increment:n;position:relative;padding:12px 14px 12px 50px;border:1px solid var(--line);border-radius:14px;background:rgba(17,31,59,.72);margin:8px 0;color:var(--text)}
+.recap li::before{content:counter(n);position:absolute;left:14px;top:12px;width:26px;height:26px;border-radius:50%;background:var(--green);color:#062418;font-weight:900;text-align:center;line-height:26px;font-size:13px}
+.other{text-align:center;color:var(--muted);font-size:14px;margin:44px 0 0}
+footer{text-align:center;color:var(--dim);font-size:12px;line-height:1.9;border-top:1px solid var(--line);margin-top:18px;padding:30px 20px 44px}
+@media(max-width:600px){.wrap{width:calc(100% - 32px)}.brand{display:none}.toc{grid-template-columns:1fr}h2{font-size:21px}}
+</style>
+</head>
+<body>
+<nav class="topbar"><div class="wrap"><a class="back" href="../ipas-intermediate.html">← iPAS 中級總覽</a><span class="brand">🍀 LEARN AI WITH TARSHAR · L22 觀念複習</span></div></nav>
+
+<main class="wrap">
+<header class="hero">
+  <span class="eyebrow">iPAS 中級 · 科目二 · L22202</span>
+  <h1>數據儲存與管理｜資料儲存與 NoSQL 觀念圖解複習</h1>
+  <p class="lead">先看一張全貌，再拆成五個觀念單元，每個都照「為什麼需要它 → 一步步搭起來 → 對照表 → 易錯提醒」整理。NoSQL 四種資料模型放在最前面、講最細。先看圖，再讀文字。</p>
+  <nav class="toc" aria-label="目錄">
+    <a href="#u0"><span>◎</span>全貌：為什麼有這麼多種儲存</a>
+    <a href="#u1"><span>①</span>三種儲存：區塊、檔案、物件</a>
+    <a href="#u2"><span>②</span>NoSQL 四種資料模型</a>
+    <a href="#u3"><span>③</span>HDFS：切大塊、各存 3 份</a>
+    <a href="#u4"><span>④</span>欄式儲存、資料倉儲與資料湖</a>
+    <a href="#u5"><span>⑤</span>CAP 定理與資料保護</a>
+    <a href="#recap"><span>★</span>十五句話總整理</a>
+  </nav>
+</header>
+
+<section id="u0">
+  <h2><small>先看全貌</small>為什麼會有這麼多種「儲存」？</h2>
+  <p class="why"><b>為什麼要先看全貌？</b> 以前資料很單純：一台電腦、一個資料庫、整齊的表格。後來資料變多、變雜、要求變快，舊做法一個一個卡住，於是每卡住一次，就長出一種新的儲存方式。<b>每一種儲存或資料庫，都是為了解決某一種特定問題而生。</b>記住「它解決什麼問題」，名詞就不會混在一起。</p>
+  <div class="tbl"><table>
+    <tr><th>新狀況</th><th>舊做法卡在哪</th><th>於是出現</th></tr>
+    <tr><td>資料量遠超過一台伺服器</td><td>一台機器裝不下</td><td><b>分散式儲存</b>：很多台機器一起存（HDFS、雲端物件儲存）</td></tr>
+    <tr><td>資料不整齊：圖片、影片、文字、JSON</td><td>表格欄位規定死，放不進去</td><td><b>NoSQL</b>、<b>資料湖</b></td></tr>
+    <tr><td>要超快查：購物車、快取</td><td>傳統資料庫太慢</td><td><b>鍵值儲存</b>、<b>記憶體資料庫</b>（Redis）</td></tr>
+    <tr><td>要查「誰跟誰有關」</td><td>表格查關係要連好幾層</td><td><b>圖形資料庫</b>（Neo4j）</td></tr>
+    <tr><td>要做大量分析、報表</td><td>處理交易的資料庫不適合</td><td><b>資料倉儲</b>、<b>欄式儲存</b></td></tr>
+    <tr><td>怕資料遺失</td><td>只有一份，一壞就沒了</td><td><b>複製、備份、糾刪碼</b></td></tr>
+  </table></div>
+</section>
+
+<section id="u1">
+  <h2><small>單元 ①</small>三種儲存：區塊、檔案、物件</h2>
+  <p class="why"><b>為什麼需要這個概念？</b> 「區塊」「檔案」「物件」這三個詞常常一起出現，又都叫「儲存」，很容易糊成一團。它們的差別在於：<b>資料被切成什麼單位、用什麼方式找回來。</b>雲端服務（像 AWS、Azure）會把這三種分別做成不同產品，所以看到產品名要能配回類型。</p>
+  <h3>一步步搭起來</h3>
+  <ol>
+    <li><b>區塊儲存</b>：把硬碟切成一格一格固定大小的空櫃子，格子裡放什麼、怎麼排，由作業系統或資料庫自己安排。最貼近硬體，所以最快。</li>
+    <li><b>檔案儲存</b>：在格子上面加一層「檔案系統」，用資料夾和檔名（路徑）來找資料，大家習慣的共用資料夾就是這種。</li>
+    <li><b>物件儲存</b>：不用資料夾，每份資料打包成一個「物件」＝<b>資料本身＋標籤（中繼資料）＋唯一 ID</b>，丟進一個大桶子，用網址 API 存取。量再大都能往上加，而且便宜。</li>
+  </ol>
+  <figure><a href="img/l22202-storage3.png" target="_blank" rel="noopener"><img src="img/l22202-storage3.png" alt="三種儲存對照圖：區塊像一格格空櫃子、檔案像有資料夾和檔名的檔案櫃、物件像貼好標籤的貨架，並列出存取方式、代表產品與適合用途" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="tbl"><table>
+    <tr><th></th><th>區塊 Block</th><th>檔案 File</th><th>物件 Object</th></tr>
+    <tr><td>比喻</td><td>一格格空櫃子</td><td>有資料夾的檔案櫃</td><td>貼好標籤的貨架</td></tr>
+    <tr><td>怎麼找資料</td><td>作業系統／資料庫自己管理格子</td><td>路徑＋檔名</td><td>網址 API＋物件 ID</td></tr>
+    <tr><td>代表</td><td>SAN、AWS EBS</td><td>NAS、NFS</td><td><b>AWS S3、Azure Blob</b></td></tr>
+    <tr><td>適合</td><td>資料庫、虛擬機（要快）</td><td>共用資料夾、辦公文件</td><td>圖片影片、備份、資料湖（量大、便宜）</td></tr>
+  </table></div>
+  <ul>
+    <li><b>NAS 與 SAN：</b>NAS 提供<b>檔案級</b>儲存，像一個共用資料夾；SAN 提供<b>區塊級</b>儲存，像直接幫伺服器接上一顆硬碟。</li>
+    <li><b>資料湖的底層</b>通常是便宜、可以一直擴充的<b>物件儲存</b>或 HDFS。</li>
+  </ul>
+  <div class="trap"><b>易錯提醒：</b>S3、Azure Blob 是<b>物件儲存</b>，不是區塊儲存。判斷口訣：看到「網址存取、標籤、桶子（bucket）、量大便宜」→ 物件；看到「像一顆硬碟、給資料庫或虛擬機用」→ 區塊；看到「資料夾、路徑、共用」→ 檔案。另外，這裡的「區塊儲存」跟下面 HDFS 把檔案「切成區塊」是不同層次的事，別混在一起。</div>
+</section>
+
+<section id="u2">
+  <h2><small>單元 ②</small>NoSQL 的四種資料模型：鍵值、文件、寬欄、圖形</h2>
+  <p class="why"><b>為什麼需要這個概念？</b> 傳統關聯式資料庫（SQL）把資料放進欄位事先規定好的表格，很嚴謹，也保證強一致（ACID）。但遇到「資料結構常變」「資料量超級大」「關係超複雜」就吃力。<b>NoSQL（Not Only SQL）不是一種資料庫，而是一整個家族</b>，每一種擅長一件不同的事。這一塊最常考的就是「產品名 ↔ 類型」配對。</p>
+  <h3>一步步搭起來</h3>
+  <ol>
+    <li><b>先記住共同點：</b>NoSQL 大多容易水平擴充（高擴展性）、結構有彈性（彈性綱要）、高可用性。共同的代價是<b>不一定提供傳統資料庫那種強 ACID 交易保證</b>。</li>
+    <li><b>再用同一件事比較四種存法：</b>下圖把「小美買了咖啡」這件事，分別存進四種模型。</li>
+    <li><b>鍵值：</b>拿一個「鍵」直接查出「值」，像查字典，最簡單也最快。</li>
+    <li><b>文件：</b>每筆資料是一份類似 JSON 的文件，每份文件的欄位可以不一樣。</li>
+    <li><b>寬欄：</b>看起來像大表格，用「列鍵」找到一行，但欄位可以隨時增加、空的不佔空間，資料分散在很多台機器。</li>
+    <li><b>圖形：</b>只存「點」（人、物）和「線」（關係），專門回答「誰跟誰有關」。</li>
+  </ol>
+  <figure><a href="img/l22202-nosql4.png" target="_blank" rel="noopener"><img src="img/l22202-nosql4.png" alt="同一件事「小美買了咖啡」在鍵值、文件、寬欄、圖形四種資料模型中的存法對照，並標出代表產品 Redis、MongoDB、Cassandra 與 HBase、Neo4j" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="tbl"><table>
+    <tr><th>類型</th><th>一句話</th><th>代表產品</th><th>適合</th></tr>
+    <tr><td><b>鍵值</b> Key-Value</td><td>拿「鍵」直接查出「值」，像字典</td><td><b>Redis</b></td><td>快取、購物車、計數器（要超快）</td></tr>
+    <tr><td><b>文件</b> Document</td><td>一份份 JSON 文件，欄位可不同</td><td><b>MongoDB</b></td><td>資料結構常變動、商品型錄、內容管理</td></tr>
+    <tr><td><b>寬欄</b> Wide-Column</td><td>大表格，但欄位自由增減，分散在多台機器</td><td><b>Cassandra、HBase</b></td><td>海量寫入、時間序列、感測器資料</td></tr>
+    <tr><td><b>圖形</b> Graph</td><td>點（人、物）＋線（關係）</td><td><b>Neo4j</b></td><td>社群關係、推薦系統、詐欺偵測</td></tr>
+  </table></div>
+  <h3>用情境關鍵字反推類型</h3>
+  <ul>
+    <li>看到「快取」「超低延遲」「購物車」「計數器」→ <b>鍵值</b>（常放在記憶體裡）。</li>
+    <li>看到「JSON」「結構常變」「每筆欄位不同」→ <b>文件</b>。</li>
+    <li>看到「海量寫入」「時間序列」「感測器」→ <b>寬欄</b>。</li>
+    <li>看到「關係複雜」「社交網路」「推薦」「誰認識誰」→ <b>圖形</b>。</li>
+    <li>產品配對口訣：<b>瑞迪斯查字典、蒙果看文件、卡珊卓拉存大表、奈歐四傑畫關係</b>。</li>
+  </ul>
+  <div class="trap"><b>易錯提醒：</b>「<b>寬欄</b>」（Wide-Column，Cassandra、HBase）是 NoSQL 的一類；「<b>欄式</b>」（Columnar，Parquet、ORC 這類為分析查詢設計的存法）是另一個概念，在單元 ④。名字都有「欄」，用途不同。另外 Redis 是鍵值，不是欄式；MongoDB 是文件，不是鍵值。</div>
+</section>
+
+<section id="u3">
+  <h2><small>單元 ③</small>HDFS：把大檔案切碎、每塊各存 3 份</h2>
+  <p class="why"><b>為什麼需要這個概念？</b> HDFS（Hadoop 分散式檔案系統）是大數據的「儲存底座」。一個檔案大到一台機器裝不下、讀不完，怎麼辦？<b>切成大塊，分散到很多台便宜的機器上，而且每塊多存幾份</b>，壞掉幾台也不怕。</p>
+  <h3>一步步搭起來</h3>
+  <ol>
+    <li><b>切成區塊（Block）：</b>預設 <b>128 MB</b> 一塊（舊版 64 MB，也可以設 256 MB），比一般電腦檔案系統的區塊大很多。</li>
+    <li><b>每塊存 3 份：</b>預設複製係數是 3，三份放在不同機器。壞掉一兩台，資料還在，這就是<b>容錯</b>。</li>
+    <li><b>NameNode＝總機／目錄：</b>只記「檔案叫什麼、每個區塊放在哪幾台」（命名空間＋區塊對應表），不存實際資料。</li>
+    <li><b>DataNode＝倉庫：</b>真正存放區塊的機器。</li>
+  </ol>
+  <figure><a href="img/l22202-hdfs.png" target="_blank" rel="noopener"><img src="img/l22202-hdfs.png" alt="HDFS 架構圖：大檔案切成 B1 到 B4 區塊，NameNode 記錄每個區塊位置，四台 DataNode 各存部分區塊，每個區塊共 3 份" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="tbl"><table>
+    <tr><th>角色</th><th>屬於誰</th><th>負責什麼</th></tr>
+    <tr><td><b>NameNode</b></td><td>HDFS</td><td>命名空間、區塊對應表（目錄），不存資料本身</td></tr>
+    <tr><td><b>DataNode</b></td><td>HDFS</td><td>存放實際的區塊</td></tr>
+    <tr><td>ResourceManager</td><td>YARN</td><td>整個叢集的運算資源分配</td></tr>
+    <tr><td>NodeManager</td><td>YARN</td><td>每台機器上的運算資源管理</td></tr>
+  </table></div>
+  <div class="tbl"><table>
+    <tr><th>HDFS 擅長</th><th>HDFS 不擅長</th></tr>
+    <tr><td><b>高吞吐量</b>：一次順序讀寫大量資料</td><td><b>極低延遲</b>的隨機讀寫（這種需求改用 Redis 等）</td></tr>
+    <tr><td>可靠地存<b>非常大的檔案</b>、串流式存取</td><td><b>大量小檔案</b>（NameNode 的目錄會被塞爆）</td></tr>
+    <tr><td>高擴展性、高容錯性</td><td>完整支援 POSIX 的所有檔案操作</td></tr>
+  </table></div>
+  <div class="trap"><b>易錯提醒：</b>存「目錄」的是 NameNode，不是 DataNode；ResourceManager、NodeManager 是 YARN 管運算資源的角色，跟 HDFS 存資料無關。分散式檔案系統的優點是高擴展、高容錯、高吞吐，<b>「極低延遲」不是它的優點</b>。要挑出「不是優點」的那一個時，把每個說法逐一換成「這是它的優點嗎？」再檢查一次。</div>
+</section>
+
+<section id="u4">
+  <h2><small>單元 ④</small>欄式儲存、資料倉儲與資料湖</h2>
+  <p class="why"><b>為什麼需要這個概念？</b> 同一份資料，要「記一筆訂單」跟要「分析全部訂單」，最適合的存法不一樣。前者一次要一整筆，後者一次只要某一欄的所有值。分析需求長大之後，又分化出資料倉儲、資料湖、湖倉一體這幾種「大型資料存放區」。</p>
+  <h3>一步步搭起來：列式 vs 欄式</h3>
+  <ol>
+    <li><b>列式</b>：一整列一整列存，讀「整筆訂單」很快，適合<b>交易處理（OLTP）</b>。</li>
+    <li><b>欄式</b>：一整欄一整欄存，要算「平均價格」只讀價格那一欄，快很多；同一欄資料型態一樣，還很好壓縮，適合<b>分析處理（OLAP）</b>。</li>
+    <li><b>Parquet、ORC</b> 是資料湖裡最常用的<b>欄式</b>檔案格式。</li>
+  </ol>
+  <figure><a href="img/l22202-rowcol.png" target="_blank" rel="noopener"><img src="img/l22202-rowcol.png" alt="列式與欄式儲存對照：同一張訂單表，列式整列存適合交易，欄式整欄存只讀價格欄即可算平均，適合分析" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <h3>資料倉儲、資料湖、湖倉一體</h3>
+  <div class="tbl"><table>
+    <tr><th></th><th>資料倉儲 DW</th><th>資料湖 Data Lake</th><th>湖倉一體 Lakehouse</th></tr>
+    <tr><td>存什麼</td><td>整理過的<b>結構化</b>資料</td><td><b>各種原始資料</b>（結構化、半結構化、非結構化）</td><td>兩者兼具</td></tr>
+    <tr><td>綱要何時定</td><td><b>寫入時</b>先定（Schema-on-Write）</td><td><b>讀取時</b>才定（Schema-on-Read）</td><td>兩者兼具</td></tr>
+    <tr><td>用途</td><td>BI、報表、決策分析（OLAP）</td><td>探索、機器學習、保存原始資料</td><td>同一份資料兩種用途都能做</td></tr>
+    <tr><td>底層</td><td>關聯式資料庫、欄式儲存</td><td>物件儲存或 HDFS（便宜、可擴充）</td><td>在資料湖上加管理與 <b>ACID</b>（例：Delta Lake）</td></tr>
+  </table></div>
+  <ul>
+    <li><b>資料沼澤（Data Swamp）：</b>資料湖沒有治理，什麼都往裡丟，最後品質低、找不到、不能用。</li>
+    <li><b>資料市集（Data Mart，也有人譯作資料超市）：</b>資料倉儲的<b>子集</b>，只聚焦某個部門或某個主題。</li>
+  </ul>
+  <h3>維度緩慢變更 SCD：客戶搬家了，倉儲怎麼記？</h3>
+  <p>客戶小美本來住台北，後來搬到高雄。資料倉儲裡的「客戶」維度要怎麼改，有三種經典做法：</p>
+  <div class="tbl"><table>
+    <tr><th>類型</th><th>做法</th><th>結果</th><th>保留歷史嗎</th></tr>
+    <tr><td>Type 1</td><td>直接<b>覆蓋</b>舊值</td><td>只剩「高雄」</td><td>沒有</td></tr>
+    <tr><td><b>Type 2</b></td><td><b>新增一列</b>，用生效日、失效日或版本號區分</td><td>「台北（到 8/1）」與「高雄（8/1 起）」兩列都在</td><td><b>有，完整保留</b></td></tr>
+    <tr><td>Type 3</td><td><b>新增一個欄位</b>存上一個值</td><td>目前城市＝高雄，先前城市＝台北</td><td>只保留上一次</td></tr>
+  </table></div>
+  <div class="trap"><b>易錯提醒：</b>ORC 的全名是 Optimized Row Columnar，名字裡有 Row，但它是<b>欄式</b>格式，不要被名字騙。SCD 的記法：Type 1 覆蓋、<b>Type 2 加一列</b>、Type 3 加一欄；要「完整歷史」就是 Type 2。</div>
+</section>
+
+<section id="u5">
+  <h2><small>單元 ⑤</small>CAP 定理與資料保護</h2>
+  <p class="why"><b>為什麼需要這個概念？</b> 資料一旦分散在很多台機器，就會遇到兩個現實問題：<b>機器之間的網路會斷</b>，以及<b>機器本身會壞</b>。CAP 定理說明網路斷掉時系統只能怎麼取捨；複製、糾刪碼、備份則是防止機器壞掉時資料消失。</p>
+  <h3>一步步搭起來：CAP 定理</h3>
+  <ol>
+    <li><b>C 一致性（Consistency）：</b>每個人讀到的都是最新資料。</li>
+    <li><b>A 可用性（Availability）：</b>每個請求都會得到回應。</li>
+    <li><b>P 分區容錯性（Partition Tolerance）：</b>網路斷成兩半，系統仍能繼續運作。</li>
+    <li><b>結論：</b>三者無法同時被完全滿足。分散式系統的網路一定可能斷，P 必須要，所以斷線時只能在 C 和 A 之間二選一（CP 或 AP）。</li>
+  </ol>
+  <figure><a href="img/l22202-cap.png" target="_blank" rel="noopener"><img src="img/l22202-cap.png" alt="CAP 定理三角形：一致性、可用性、分區容錯性，網路斷線時只能在一致性與可用性間二選一" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <h3>資料保護：複製、糾刪碼、3-2-1、RPO 與 RTO</h3>
+  <figure><a href="img/l22202-backup.png" target="_blank" rel="noopener"><img src="img/l22202-backup.png" alt="備份與災難復原圖：3-2-1 備份原則，以及時間軸上 RPO 為上次備份到災難、RTO 為災難到系統恢復" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="tbl"><table>
+    <tr><th></th><th>複製 Replication（例：HDFS 存 3 份）</th><th>糾刪碼 Erasure Coding</th></tr>
+    <tr><td>做法</td><td>整份資料多存幾份</td><td>資料切成 k 塊，再算出 m 塊「校驗塊」，壞掉任意 m 塊都能算回來</td></tr>
+    <tr><td>空間用量</td><td>3 份＝佔 <b>3 倍</b>空間</td><td>例如 6 塊資料＋3 塊校驗＝只佔 <b>1.5 倍</b>空間</td></tr>
+    <tr><td>容錯</td><td>3 份可壞 2 份</td><td>6＋3 可壞任意 3 塊</td></tr>
+    <tr><td>代價</td><td>簡單、讀取快</td><td>計算較複雜，修復時要重算；資料仍分散在網路上的多台機器</td></tr>
+  </table></div>
+  <div class="tbl"><table>
+    <tr><th>名詞</th><th>意思</th><th>記法</th></tr>
+    <tr><td><b>3-2-1 原則</b></td><td>3 份資料、2 種不同媒介、1 份放異地</td><td>防同一地點的火災、水災、被盜讓所有副本一起消失</td></tr>
+    <tr><td><b>RPO</b></td><td>最多能容忍遺失多久的資料</td><td>Point＝資料回到哪個時間點；RPO 1 小時 → 至少每小時備份一次</td></tr>
+    <tr><td><b>RTO</b></td><td>最多能容忍停機多久</td><td>Time＝花多久恢復</td></tr>
+  </table></div>
+  <div class="trap"><b>易錯提醒：</b>CAP 的 C 是 <b>Consistency 一致性</b>，不是 Capacity（容量）也不是 Cost（成本）；A 是 Availability，不是 Authenticity。糾刪碼的優勢是<b>儲存效率高、更省空間</b>，代價是計算比較複雜，不是「比較簡單」。</div>
+</section>
+
+<section id="recap">
+  <h2><small>總整理</small>本章要記的十五句話</h2>
+  <ol class="recap">
+    <li>每種儲存都是為了解決一個特定問題；先問「要解決什麼問題」，再配名詞。</li>
+    <li>區塊＝格子（資料庫、虛擬機）；檔案＝資料夾與檔名（NAS）；物件＝貼標籤的貨架（S3、Azure Blob）。</li>
+    <li>NAS 是檔案級、SAN 是區塊級；資料湖底層常用物件儲存或 HDFS。</li>
+    <li>Redis＝鍵值：像字典，用在快取。</li>
+    <li>MongoDB＝文件：一份份 JSON，結構常變也沒關係。</li>
+    <li>Cassandra、HBase＝寬欄：海量寫入、時間序列。</li>
+    <li>Neo4j＝圖形：點與線，查「誰跟誰有關」。</li>
+    <li>NoSQL 的長處是高擴展、彈性綱要、高可用；強 ACID 交易保證不是它的長處。</li>
+    <li>HDFS 切 128 MB 大區塊、每塊存 3 份；NameNode 管目錄、DataNode 存資料；重吞吐，不重低延遲。</li>
+    <li>ResourceManager、NodeManager 屬於 YARN，管運算資源，不是 HDFS 的儲存節點。</li>
+    <li>Parquet、ORC 是欄式；分析（OLAP）用欄式，交易（OLTP）用列式。</li>
+    <li>資料倉儲寫入時定綱要、資料湖讀取時定綱要；湖倉一體＝資料湖加上 ACID（Delta Lake）。</li>
+    <li>SCD：Type 1 覆蓋、Type 2 新增一列保留完整歷史、Type 3 新增一欄。</li>
+    <li>CAP＝一致性、可用性、分區容錯性，三者不能同時完美；C 不是 Capacity。</li>
+    <li>3-2-1＝3 份、2 種媒介、1 份異地；RPO 看可遺失多少資料、RTO 看多久恢復；糾刪碼比複製省空間。</li>
+  </ol>
+</section>
+
+<p class="other">其他章：<a href="index.html">L22 觀念複習總目錄</a></p>
+</main>
+
+<footer>🍀 Learn AI with Tarshar · iPAS 中級 L22 觀念複習<br>依 L22202 學習範圍整理的原創圖解，不含考古題原文。</footer>
+</body>
+</html>

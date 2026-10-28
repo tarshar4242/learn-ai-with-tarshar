@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="iPAS 中級 L22101 敘述性統計與資料摘要技術：圖表怎麼選、變異數與四分位數、柴比雪夫不等式、偏態與峰度、皮爾森與斯皮爾曼相關係數的圖解觀念複習。">
+<title>L22101 敘述統計觀念複習｜🍀Learn AI with Tarshar</title>
+<style>
+:root{
+  --bg:#08101f;--bg2:#0d1830;--panel:#111f3b;--panel2:#152746;
+  --line:rgba(137,172,255,.18);--text:#eef4ff;--muted:#a7b7d8;--dim:#7183aa;
+  --cyan:#41dcff;--blue:#6690ff;--purple:#b57bff;--green:#4de1a1;--orange:#ffc45b;--red:#ff8a80
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;color:var(--text);line-height:1.85;background:
+radial-gradient(900px 500px at 10% -10%,rgba(65,220,255,.13),transparent 65%),
+radial-gradient(900px 520px at 95% 10%,rgba(181,123,255,.14),transparent 62%),var(--bg);min-height:100vh}
+a{color:var(--cyan)}.wrap{width:min(880px,calc(100% - 32px));margin:auto}
+.topbar{position:sticky;top:0;z-index:20;background:rgba(8,16,31,.84);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.topbar .wrap{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.back{text-decoration:none;color:var(--cyan);font-size:14px;font-weight:800}.brand{font-size:12px;color:var(--muted);letter-spacing:1.5px}
+.hero{padding:46px 0 18px}
+.eyebrow{display:inline-flex;padding:6px 13px;border:1px solid rgba(65,220,255,.35);border-radius:999px;color:var(--cyan);font-size:12px;letter-spacing:2px;background:rgba(65,220,255,.06)}
+h1{font-size:clamp(28px,5vw,46px);line-height:1.25;margin:16px 0 10px;letter-spacing:-.02em}
+.lead{color:var(--muted);font-size:16px;margin:0}
+.toc{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:26px 0 8px}
+.toc a{display:block;text-decoration:none;color:var(--text);border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:rgba(17,31,59,.72);font-size:14px;font-weight:700}
+.toc a span{color:var(--cyan);margin-right:6px}
+section{margin:38px 0}
+h2{font-size:24px;margin:0 0 12px;padding-top:8px;border-top:1px solid var(--line)}
+h2 small{display:block;color:var(--cyan);font-size:12px;letter-spacing:2px;margin-top:14px}
+h3{font-size:17px;color:var(--orange);margin:22px 0 6px}
+p{margin:8px 0}
+.why{border-left:4px solid var(--cyan);background:rgba(65,220,255,.06);border-radius:0 14px 14px 0;padding:12px 16px;color:var(--muted)}
+.why b{color:var(--text)}
+figure{margin:16px 0;background:#fff;border-radius:16px;padding:8px;overflow:hidden}
+figure img{display:block;width:100%;height:auto}figcaption{color:#666;font-size:12px;text-align:right;padding:2px 6px 0}
+ol,ul{padding-left:22px;color:var(--muted)}li{margin:4px 0}li b{color:var(--text)}
+.tbl{overflow-x:auto;margin:14px 0;border:1px solid var(--line);border-radius:14px}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:14px}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:var(--panel2);color:var(--cyan);font-weight:800}tr:last-child td{border-bottom:0}
+td b{color:var(--orange)}
+.trap{border:1px solid rgba(255,138,128,.4);background:rgba(255,138,128,.07);border-radius:14px;padding:12px 16px;margin:14px 0}
+.trap b{color:var(--red)}
+.recap{counter-reset:n;list-style:none;padding:0}
+.recap li{counter-increment:n;position:relative;padding:12px 14px 12px 50px;border:1px solid var(--line);border-radius:14px;background:rgba(17,31,59,.72);margin:8px 0;color:var(--text)}
+.recap li::before{content:counter(n);position:absolute;left:14px;top:12px;width:26px;height:26px;border-radius:50%;background:var(--green);color:#062418;font-weight:900;text-align:center;line-height:26px;font-size:13px}
+.more{text-align:center;color:var(--muted);font-size:14px;margin:40px 0 0}
+footer{text-align:center;color:var(--dim);font-size:12px;line-height:1.9;border-top:1px solid var(--line);margin-top:50px;padding:30px 20px 44px}
+@media(max-width:600px){.wrap{width:calc(100% - 32px)}.brand{display:none}.toc{grid-template-columns:1fr}h2{font-size:21px}}
+</style>
+</head>
+<body>
+<nav class="topbar"><div class="wrap"><a class="back" href="../ipas-intermediate.html">← iPAS 中級總覽</a><span class="brand">🍀 LEARN AI WITH TARSHAR · L22 觀念複習</span></div></nav>
+
+<main class="wrap">
+<header class="hero">
+  <span class="eyebrow">iPAS 中級 · 科目二 · L22101</span>
+  <h1>敘述性統計與資料摘要｜觀念圖解複習</h1>
+  <p class="lead">四組最容易混淆的觀念，每組都照「為什麼需要它 → 一步步搭起來 → 對照表 → 易錯提醒」整理。先看圖，再讀文字。</p>
+  <nav class="toc" aria-label="目錄">
+    <a href="#u1"><span>①</span>圖表和表格怎麼選</a>
+    <a href="#u2"><span>②</span>分散程度：變異數、四分位數、柴比雪夫</a>
+    <a href="#u3"><span>③</span>分佈的形狀：偏態與峰度</a>
+    <a href="#u4"><span>④</span>相關係數：皮爾森與斯皮爾曼</a>
+    <a href="#recap"><span>★</span>十二句話總整理</a>
+  </nav>
+</header>
+
+<section id="u1">
+  <h2><small>單元 ①</small>圖表和表格怎麼選</h2>
+  <p class="why"><b>為什麼需要這個概念？</b> 同一批資料，用錯圖就看不出重點。選圖其實只要回答兩個問題：<b>我手上是什麼類型的資料？</b>以及<b>我想看出什麼？</b>兩個答案一對上，圖就決定了。</p>
+  <h3>一步步搭起來</h3>
+  <ol>
+    <li><b>先分資料類型</b>：類別資料是「分成幾類」（產品 A、B、C，男／女）；連續數值資料是「可以量出任意數字」（身高、銷售額、分數）。</li>
+    <li><b>再問想看什麼</b>：數量多寡？占比？兩個變數有沒有關係？隨時間怎麼變？分佈長什麼樣？</li>
+    <li><b>最後查表</b>：資料類型＋目的，對到一種圖或表。</li>
+  </ol>
+  <div class="tbl"><table>
+    <tr><th>我想看什麼</th><th>資料類型</th><th>用什麼</th></tr>
+    <tr><td>每一類各有多少</td><td>單一類別</td><td>長條圖</td></tr>
+    <tr><td>各部分占整體幾 %</td><td>類別比例</td><td>圓餅圖、堆疊長條圖</td></tr>
+    <tr><td>兩個數字會不會一起變化</td><td>兩個連續數值</td><td><b>散佈圖</b></td></tr>
+    <tr><td>數字隨時間的走勢，還要比較好幾條</td><td>時間序列</td><td><b>折線圖（多條線就畫多線折線圖）</b></td></tr>
+    <tr><td>一個數字的分佈形狀</td><td>單一連續數值</td><td>直方圖、箱型圖、密度圖、<b>頻率多邊形</b></td></tr>
+    <tr><td>兩個類別之間有沒有關聯</td><td>兩個類別</td><td><b>列聯表（交叉表）</b></td></tr>
+  </table></div>
+  <h3>頻率多邊形怎麼畫</h3>
+  <p>它是直方圖的變形，三步完成：</p>
+  <ol>
+    <li>先畫直方圖，找出每根柱子<b>頂部的中點</b>。</li>
+    <li>把這些中點用<b>直線</b>依序連起來。</li>
+    <li>左右兩端各補一個「頻數 0」的點，讓線落回橫軸，成為封閉的多邊形。</li>
+  </ol>
+  <figure><a href="img/l22101-freqpoly.png" target="_blank" rel="noopener"><img src="img/l22101-freqpoly.png" alt="頻率多邊形示意圖：直方圖各柱頂部中點以紅線相連，兩端各補一個頻數為 0 的點落回橫軸" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <h3>列聯表是什麼</h3>
+  <p>列聯表是一張<b>表</b>，不是圖。列放一個類別變數（例如性別），欄放另一個類別變數（例如有沒有購買），每一格填「同時符合兩個條件的人數」。有了這張表，就能進一步用卡方檢定看兩個類別有沒有關聯。</p>
+  <div class="trap"><b>易錯提醒：</b>散佈圖和列聯表都在看「兩個變數的關係」，差別在資料類型：兩個都是連續數字用散佈圖，兩個都是類別用列聯表。看「隨時間的走勢」要用折線圖，圓餅圖只能看占比，箱型圖只能看分佈摘要，都看不出趨勢。</div>
+</section>
+
+<section id="u2">
+  <h2><small>單元 ②</small>分散程度：變異數、四分位數、柴比雪夫不等式</h2>
+  <p class="why"><b>為什麼需要這個概念？</b> 平均數只告訴你「中間在哪裡」，卻看不出資料是「大家都差不多」還是「彼此差很多」。這一單元的三個工具，都在回答「資料散得多開」。</p>
+  <h3>變異數：一步步搭起來</h3>
+  <ol>
+    <li>先算平均數。</li>
+    <li>看每個數字離平均差多遠。</li>
+    <li>把每個差距平方，避免正負互相抵消。</li>
+    <li>全部加起來再平均。</li>
+  </ol>
+  <div class="tbl"><table>
+    <tr><th>資料</th><th>平均</th><th>每個差距</th><th>變異數</th></tr>
+    <tr><td>5、5、5、5</td><td>5</td><td>0、0、0、0</td><td><b>0</b>（完全沒有分散）</td></tr>
+    <tr><td>3、5、5、7</td><td>5</td><td>−2、0、0、+2</td><td>大於 0（有分散）</td></tr>
+    <tr><td>1、5、5、9</td><td>5</td><td>−4、0、0、+4</td><td>更大（更分散）</td></tr>
+  </table></div>
+  <p>資料全部一樣時，每個數字都等於平均，差距全是 0，<b>變異數就是 0</b>。變異數越大，資料越分散。</p>
+  <p>小補充：上面第 4 步「除以資料筆數」是母體變異數；用樣本估計母體時，通常改成除以「筆數減 1」，叫樣本變異數。兩種算法遇到全部相同的資料，結果都是 0。</p>
+
+  <h3>四分位數：3 個切點、4 段</h3>
+  <p>平均數容易被極端值拉走。把資料由小到大排好，再平均切成幾段，就能更穩地看出資料落在哪裡。要切成 <b>4 段</b>，需要切 <b>3 刀</b>，這 3 個切點就是 Q1、Q2、Q3。</p>
+  <ul>
+    <li><b>Q1</b>：第 25 百分位，前四分之一的位置。</li>
+    <li><b>Q2</b>：第 50 百分位，也就是<b>中位數</b>。</li>
+    <li><b>Q3</b>：第 75 百分位，前四分之三的位置。</li>
+  </ul>
+  <figure><a href="img/l22101-quartile.png" target="_blank" rel="noopener"><img src="img/l22101-quartile.png" alt="四分位數示意圖：12 筆排序後的資料被 Q1、Q2、Q3 三條紅線切成四段，每段約 25%" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <p>Q3 減 Q1 叫<b>四分位距（IQR）</b>，代表中間一半的資料散得多開，箱型圖的「箱子」就是它。</p>
+
+  <h3>柴比雪夫不等式：不管什麼形狀都成立的保證</h3>
+  <p>常態分佈有一套好用的經驗法則：約 68%、95%、99.7% 的資料落在平均 ±1、2、3 個標準差內。但現實資料不一定是常態，這時可以改用柴比雪夫不等式。</p>
+  <p><b>它說的是：</b>距離平均 k 個標準差以內，<b>至少</b>有 <b>1 − 1/k²</b> 的資料（k 要大於 1 才有意義）。</p>
+  <div class="tbl"><table>
+    <tr><th>k（幾個標準差）</th><th>算式 1 − 1/k²</th><th>至少有多少資料在範圍內</th><th>常態分佈的實際比例（對照）</th></tr>
+    <tr><td>2</td><td>1 − 1/4</td><td><b>75%</b></td><td>約 95%</td></tr>
+    <tr><td>3</td><td>1 − 1/9</td><td>約 <b>88.9%</b></td><td>約 99.7%</td></tr>
+    <tr><td>4</td><td>1 − 1/16</td><td><b>93.75%</b></td><td>幾乎 100%</td></tr>
+  </table></div>
+  <ul>
+    <li><b>關鍵字一：「至少」。</b>它給的是保守的下限，所以數字比常態分佈的實際比例低。</li>
+    <li><b>關鍵字二：「任何分佈」。</b>不要求對稱、不要求是常態，只要平均數和標準差存在就成立。</li>
+  </ul>
+  <div class="trap"><b>易錯提醒：</b>四分位數「切點有 3 個、段數有 4 段」，問的是哪一個要看清楚。柴比雪夫不是常態分佈專用，也不要求資料對稱或峰度為 0；它的價值正是「什麼形狀都能用」。</div>
+</section>
+
+<section id="u3">
+  <h2><small>單元 ③</small>分佈的形狀：偏態與峰度</h2>
+  <p class="why"><b>為什麼需要這個概念？</b> 平均數和標準差告訴你「中間在哪、散多開」，卻看不出分佈的<b>形狀</b>。偏態回答「有沒有歪向一邊」，峰度回答「尾巴厚不厚、極端值多不多」。</p>
+  <h3>偏態：一步步搭起來</h3>
+  <ol>
+    <li><b>先看尾巴往哪邊拖</b>，不是看山峰在哪。</li>
+    <li>尾巴往<b>右</b>拖 → <b>右偏</b> → 偏態係數<b>大於 0</b>（又叫正偏）。</li>
+    <li>尾巴往<b>左</b>拖 → <b>左偏</b> → 偏態係數<b>小於 0</b>（又叫負偏）。</li>
+    <li>左右差不多 → <b>對稱</b> → 偏態係數接近 0。</li>
+    <li><b>平均數被尾巴拉走</b>：平均數對極端值很敏感，尾巴往哪邊，平均數就往哪邊跑；眾數留在山峰，中位數夾在中間。</li>
+  </ol>
+  <figure><a href="img/l22101-skew.png" target="_blank" rel="noopener"><img src="img/l22101-skew.png" alt="右偏、對稱、左偏三種分佈，標出眾數、中位數、平均數的位置：右偏時平均數最靠右，左偏時平均數最靠左" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="tbl"><table>
+    <tr><th>偏態係數</th><th>形狀</th><th>尾巴</th><th>平均、中位、眾數的順序（由小到大）</th></tr>
+    <tr><td>&gt; 0</td><td>右偏（正偏）</td><td>向右</td><td>眾數 ＜ 中位數 ＜ <b>平均數</b></td></tr>
+    <tr><td>≈ 0</td><td>對稱</td><td>兩邊一樣</td><td>三者差不多</td></tr>
+    <tr><td>&lt; 0</td><td>左偏（負偏）</td><td>向左</td><td><b>平均數</b> ＜ 中位數 ＜ 眾數</td></tr>
+  </table></div>
+  <p>記法：不用硬背兩種順序，只要記住「<b>平均數永遠站在尾巴那一側</b>」，另外兩個的順序就跟著出來。這是單峰、明顯偏斜時的常見規律，少數特殊分佈會有例外，考試以這張表為準。</p>
+
+  <h3>峰度：看尾巴，不只看尖不尖</h3>
+  <div class="tbl"><table>
+    <tr><th>名稱</th><th>英文</th><th>尾巴</th><th>極端值</th></tr>
+    <tr><td><b>高狹峰</b></td><td>Leptokurtic</td><td><b>厚</b></td><td><b>多</b></td></tr>
+    <tr><td>常態峰</td><td>Mesokurtic</td><td>中等（以常態分佈為基準）</td><td>普通</td></tr>
+    <tr><td>低闊峰</td><td>Platykurtic</td><td>薄</td><td>少</td></tr>
+  </table></div>
+  <figure><a href="img/l22101-kurt.png" target="_blank" rel="noopener"><img src="img/l22101-kurt.png" alt="變異數相同的高狹峰、常態峰、低闊峰三條曲線，右側放大右尾，可見高狹峰尾巴最厚、低闊峰幾乎沒有尾巴" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <p>教材常說高狹峰「尖」，這個印象沒錯，但更準確的重點是<b>尾巴的極端值</b>：在變異數相同的條件下，高狹峰的尾巴比常態更厚，極端值更常出現；低闊峰的尾巴比常態更薄。</p>
+  <div class="trap"><b>易錯提醒：</b>「右偏」的山峰其實在<b>左邊</b>，右邊是長尾巴。偏態看的是歪向哪邊，峰度看的是尾巴厚薄，兩者是不同的形狀指標。看到「尾巴厚、極端值多」就是高狹峰，「尾巴薄」是低闊峰，不要只憑「尖」或「平」判斷。</div>
+</section>
+
+<section id="u4">
+  <h2><small>單元 ④</small>相關係數：皮爾森與斯皮爾曼</h2>
+  <p class="why"><b>為什麼需要這個概念？</b> 想知道兩個東西是不是一起變化，例如廣告費和業績。相關係數把這種關係壓成<b>一個介於 −1 到 +1 的數字</b>。下面先講皮爾森，再講斯皮爾曼，最後放在一起比較。</p>
+  <h3>皮爾森相關係數 r：三個資訊分開讀</h3>
+  <ol>
+    <li><b>正負號＝方向。</b>正：一個升，另一個也升。負：一個升，另一個降。</li>
+    <li><b>絕對值＝強度。</b>越接近 1 越強，越接近 0 越弱，跟正負號無關。</li>
+    <li><b>只看「直線」關係</b>，而且只用在<b>兩個連續數值</b>之間。</li>
+  </ol>
+  <figure><a href="img/l22101-scatter_r.png" target="_blank" rel="noopener"><img src="img/l22101-scatter_r.png" alt="三張散佈圖：r 約 −0.85 點由左上往右下排成一條帶、r 約 0 點散成一團、r 約 +0.9 點由左下往右上排成一條帶" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="tbl"><table>
+    <tr><th>r 的值</th><th>方向</th><th>強度</th><th>白話</th></tr>
+    <tr><td>+0.9</td><td>正</td><td>強</td><td>一個升，另一個也明顯升</td></tr>
+    <tr><td><b>−0.85</b></td><td><b>負</b></td><td><b>強（0.85 接近 1）</b></td><td>一個升，另一個明顯降</td></tr>
+    <tr><td>−0.1</td><td>負</td><td>很弱</td><td>幾乎看不出直線趨勢</td></tr>
+    <tr><td>0</td><td>無</td><td>無</td><td>沒有直線趨勢</td></tr>
+  </table></div>
+  <h3>不同資料，配不同的關聯方法</h3>
+  <div class="tbl"><table>
+    <tr><th>兩個變數是什麼</th><th>常用的關聯方法</th></tr>
+    <tr><td>兩個<b>連續數值</b></td><td><b>皮爾森相關係數</b></td></tr>
+    <tr><td>兩個<b>次序</b>資料（名次、等級）</td><td>斯皮爾曼等級相關係數</td></tr>
+    <tr><td>兩個<b>名目類別</b></td><td>列聯表、卡方檢定</td></tr>
+    <tr><td>一個類別、一個數值</td><td>分組比較（例如各組平均、並排箱型圖）</td></tr>
+  </table></div>
+  <h3>r 接近 0，不等於沒有關係</h3>
+  <p>r 接近 0 只代表<b>沒有直線關係</b>。下面這個 U 形的例子，兩個變數的關係很明確，但皮爾森算出來的 r 會接近 0，因為左半邊往下、右半邊往上，直線趨勢互相抵消了。</p>
+  <figure><a href="img/l22101-ushape.png" target="_blank" rel="noopener"><img src="img/l22101-ushape.png" alt="U 形散佈圖：點先下降再上升，關係明確但皮爾森 r 接近 0" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <h3>斯皮爾曼等級相關係數：先換排名再算</h3>
+  <ol>
+    <li><b>為什麼需要它：</b>有些資料是「彎的但一路往上」，或只有名次沒有精確數字。皮爾森遇到彎曲的關係會低估。</li>
+    <li><b>做法：</b>把每個變數換成排名（第 1 名、第 2 名⋯），再用排名去算相關。</li>
+    <li><b>看的是「單調」：</b>一個增加時，另一個一路增加（或一路減少）就夠了，不要求是直線。</li>
+  </ol>
+  <figure><a href="img/l22101-spearman.png" target="_blank" rel="noopener"><img src="img/l22101-spearman.png" alt="左圖直線上升時皮爾森與斯皮爾曼都等於 1；右圖彎曲但一路上升時皮爾森小於 1、斯皮爾曼仍等於 1" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="tbl"><table>
+    <tr><th></th><th>皮爾森</th><th>斯皮爾曼</th></tr>
+    <tr><td>用的資料</td><td>原始數字</td><td>換成排名後的等級</td></tr>
+    <tr><td>衡量什麼關係</td><td>線性（直線）</td><td>單調（一路升或一路降）</td></tr>
+    <tr><td>適用資料</td><td>連續數值</td><td>連續數值，也適用次序資料</td></tr>
+    <tr><td>對極端值</td><td>較敏感</td><td>較不敏感（只看排名）</td></tr>
+    <tr><td>值域</td><td>−1 到 +1</td><td><b>也是 −1 到 +1</b></td></tr>
+  </table></div>
+  <div class="trap"><b>易錯提醒：</b>強度看<b>絕對值</b>，−0.85 比 +0.3 強得多，負號只代表方向相反。皮爾森不能直接用在名目類別上。斯皮爾曼的值域跟皮爾森一樣是 −1 到 +1，不是 0 到 1；而且它因為只看排名，對極端值<b>比較不敏感</b>。</div>
+</section>
+
+<section id="recap">
+  <h2><small>總整理</small>本章要記的十二句話</h2>
+  <ol class="recap">
+    <li>兩個連續數字的關係 → 散佈圖；隨時間的走勢要比較多類 → 多線折線圖。</li>
+    <li>頻率多邊形＝直方圖每組頂部中點用直線連起來，兩端補 0。</li>
+    <li>兩個類別變數的關係 → 列聯表（交叉表），再用卡方檢定。</li>
+    <li>資料全部相同 → 變異數＝0。</li>
+    <li>四分位數：3 個切點、4 段；Q2 就是中位數。</li>
+    <li>柴比雪夫：任何形狀都成立，平均 ±k 個標準差內至少 1 − 1/k²（k＝2 → 75%）。</li>
+    <li>偏態：尾巴往哪邊拖就往哪邊偏；正值＝右偏，負值＝左偏。</li>
+    <li>右偏：眾數 ＜ 中位數 ＜ 平均數；左偏：平均數 ＜ 中位數 ＜ 眾數（平均數被尾巴拉走）。</li>
+    <li>峰度看尾巴厚度：高狹峰＝尾巴厚、極端值多；低闊峰＝尾巴薄。</li>
+    <li>皮爾森 r：正負看方向，絕對值看強度，只管直線、只配兩個連續數值。</li>
+    <li>r 接近 0＝沒有線性關係，不等於沒有關係（可能是 U 形等曲線關係）。</li>
+    <li>斯皮爾曼：先換排名再算，看單調不限直線，值域也是 −1 到 +1。</li>
+  </ol>
+</section>
+<p class="more">其他章：<a href="index.html">L22 觀念複習總目錄</a></p>
+</main>
+
+<footer>🍀 Learn AI with Tarshar · iPAS 中級 L22 觀念複習<br>依 L22101 學習範圍整理的原創圖解，不含考古題原文。</footer>
+</body>
+</html>
