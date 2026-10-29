@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="iPAS 中級 L22401 大數據與機器學習：Hadoop（HDFS、YARN、MapReduce）與 Spark、特徵工程、集成學習、推薦系統、調參與 SHAP 可解釋性的圖解觀念複習。">
+<title>L22401 大數據與機器學習觀念複習｜🍀Learn AI with Tarshar</title>
+<style>
+:root{
+  --bg:#08101f;--bg2:#0d1830;--panel:#111f3b;--panel2:#152746;
+  --line:rgba(137,172,255,.18);--text:#eef4ff;--muted:#a7b7d8;--dim:#7183aa;
+  --cyan:#41dcff;--blue:#6690ff;--purple:#b57bff;--green:#4de1a1;--orange:#ffc45b;--red:#ff8a80
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;color:var(--text);line-height:1.85;background:
+radial-gradient(900px 500px at 10% -10%,rgba(65,220,255,.13),transparent 65%),
+radial-gradient(900px 520px at 95% 10%,rgba(181,123,255,.14),transparent 62%),var(--bg);min-height:100vh}
+a{color:var(--cyan)}.wrap{width:min(880px,calc(100% - 32px));margin:auto}
+.topbar{position:sticky;top:0;z-index:20;background:rgba(8,16,31,.84);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.topbar .wrap{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.back{text-decoration:none;color:var(--cyan);font-size:14px;font-weight:800}.brand{font-size:12px;color:var(--muted);letter-spacing:1.5px}
+.hero{padding:46px 0 18px}
+.eyebrow{display:inline-flex;padding:6px 13px;border:1px solid rgba(65,220,255,.35);border-radius:999px;color:var(--cyan);font-size:12px;letter-spacing:2px;background:rgba(65,220,255,.06)}
+h1{font-size:clamp(28px,5vw,46px);line-height:1.25;margin:16px 0 10px;letter-spacing:-.02em}
+.lead{color:var(--muted);font-size:16px;margin:0}
+.toc{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:26px 0 8px}
+.toc a{display:block;text-decoration:none;color:var(--text);border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:rgba(17,31,59,.72);font-size:14px;font-weight:700}
+.toc a span{color:var(--cyan);margin-right:6px}
+section{margin:38px 0}
+h2{font-size:24px;margin:0 0 12px;padding-top:8px;border-top:1px solid var(--line)}
+h2 small{display:block;color:var(--cyan);font-size:12px;letter-spacing:2px;margin-top:14px}
+h3{font-size:17px;color:var(--orange);margin:22px 0 6px}
+h4{font-size:15px;color:var(--cyan);margin:0 0 4px}
+p{margin:8px 0}
+.why{border-left:4px solid var(--cyan);background:rgba(65,220,255,.06);border-radius:0 14px 14px 0;padding:12px 16px;color:var(--muted)}
+.why b{color:var(--text)}
+figure{margin:16px 0;background:#fff;border-radius:16px;padding:8px;overflow:hidden}
+figure img{display:block;width:100%;height:auto}figcaption{color:#666;font-size:12px;text-align:right;padding:2px 6px 0}
+ol,ul{padding-left:22px;color:var(--muted)}li{margin:4px 0}li b{color:var(--text)}
+.defs{display:grid;gap:10px;margin:12px 0}
+.def{border:1px solid var(--line);border-radius:14px;background:rgba(17,31,59,.72);padding:12px 16px}
+.def ul{margin:2px 0 0;padding-left:20px;font-size:14.5px}
+.def li b{color:var(--orange)}
+.note{color:var(--muted);font-size:14px}
+.tbl{overflow-x:auto;margin:14px 0;border:1px solid var(--line);border-radius:14px}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:14px}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:var(--panel2);color:var(--cyan);font-weight:800}tr:last-child td{border-bottom:0}
+td b{color:var(--orange)}
+tr.grp td{background:rgba(181,123,255,.12);color:var(--purple);font-weight:800}
+.hook{border:1px solid rgba(255,196,91,.5);background:linear-gradient(135deg,rgba(255,196,91,.13),rgba(255,196,91,.04));border-radius:14px;padding:12px 16px 12px;margin:14px 0}
+.hook .tag{display:inline-block;font-size:12px;font-weight:900;letter-spacing:1.5px;color:#2a1a00;background:var(--orange);border-radius:999px;padding:2px 10px;margin-bottom:6px}
+.hook ul{margin:0;padding-left:20px;color:var(--text)}.hook li b{color:var(--orange)}
+.trap{border:1px solid rgba(255,138,128,.4);background:rgba(255,138,128,.07);border-radius:14px;padding:12px 16px;margin:14px 0}
+.trap b{color:var(--red)}
+.recap{counter-reset:n;list-style:none;padding:0}
+.recap li{counter-increment:n;position:relative;padding:12px 14px 12px 50px;border:1px solid var(--line);border-radius:14px;background:rgba(17,31,59,.72);margin:8px 0;color:var(--text)}
+.recap li::before{content:counter(n);position:absolute;left:14px;top:12px;width:26px;height:26px;border-radius:50%;background:var(--green);color:#062418;font-weight:900;text-align:center;line-height:26px;font-size:13px}
+.quiz{list-style:none;padding:0;counter-reset:q}
+.quiz li{counter-increment:q;border:1px solid var(--line);border-radius:14px;background:rgba(17,31,59,.72);padding:12px 16px;margin:10px 0;color:var(--text)}
+.quiz li::before{content:"練習 " counter(q);display:block;color:var(--cyan);font-size:12px;font-weight:900;letter-spacing:1.5px}
+details{margin-top:8px}summary{cursor:pointer;color:var(--green);font-weight:800;font-size:14px}
+details p{color:var(--muted);font-size:14.5px}details b{color:var(--orange)}
+footer{text-align:center;color:var(--dim);font-size:12px;line-height:1.9;border-top:1px solid var(--line);margin-top:50px;padding:30px 20px 44px}
+@media(max-width:600px){.wrap{width:calc(100% - 32px)}.brand{display:none}.toc{grid-template-columns:1fr}h2{font-size:21px}}
+code{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:.9em;color:var(--cyan);background:rgba(65,220,255,.08);border-radius:6px;padding:1px 6px;word-break:break-word}
+.cheat{border:2px solid var(--orange);background:linear-gradient(135deg,rgba(255,196,91,.16),rgba(255,196,91,.05));border-radius:16px;padding:14px 14px 6px;margin:18px 0}
+.cheat .tag{display:inline-block;font-size:12px;font-weight:900;letter-spacing:1.5px;color:#2a1a00;background:var(--orange);border-radius:999px;padding:2px 10px;margin-bottom:4px}
+.cheat h4{color:var(--orange);font-size:17px;margin:4px 0 2px}
+.cheat .tbl{background:rgba(8,16,31,.55)}
+.cheat td code{white-space:nowrap}
+</style>
+</head>
+<body>
+<nav class="topbar"><div class="wrap"><a class="back" href="../ipas-intermediate.html">← iPAS 中級總覽</a><span class="brand">🍀 LEARN AI WITH TARSHAR · L22 觀念複習</span></div></nav>
+
+<main class="wrap">
+<header class="hero">
+  <span class="eyebrow">iPAS 中級 · 科目二 · L22401</span>
+  <h1>大數據與機器學習｜觀念圖解複習</h1>
+  <p class="lead">這一章的觀念本身不難，難在<b>名字很多、而且長得像</b>：Hadoop 家族有 HDFS、YARN、MapReduce；Spark 家族有 Spark SQL、Streaming、MLlib、GraphX；機器學習這邊又有標準化、歸一化、獨熱編碼、PCA、自動編碼器、Bagging、Boosting。每個名字背後的觀念都說得清楚，麻煩的是「誰負責什麼」沒有放在同一張表裡比較過。所以每個單元照「為什麼需要它 → 一步步搭起來 → 名詞各自定義 → 整合比較表 → 記憶鉤子 → 易錯提醒」排列。</p>
+  <div class="hook"><span class="tag">先背這兩張</span><ul>
+    <li><b>單元 ① 的「Hadoop／Spark 組件速查表」</b>和<b>單元 ⑤ 的「機器學習框架速查表」</b>都用黃框標出來，工具名稱對應先背這兩張。</li>
+    <li>背法：<b>看「一句話功能」那一欄，說得出組件或工具的名字</b>，就過關了。</li>
+  </ul></div>
+  <nav class="toc" aria-label="目錄">
+    <a href="#map"><span>◎</span>全章地圖：一筆大數據從存到解釋</a>
+    <a href="#u1"><span>①</span>Hadoop 生態系與 Spark</a>
+    <a href="#u2"><span>②</span>特徵工程：縮放、編碼、滯後窗口、降維、選擇</a>
+    <a href="#u3"><span>③</span>集成學習：Bagging vs Boosting</a>
+    <a href="#u4"><span>④</span>推薦系統：協同過濾與矩陣分解</a>
+    <a href="#u5"><span>⑤</span>調參、SHAP 可解釋性與框架</a>
+    <a href="#recap"><span>★</span>十句話總整理</a>
+    <a href="#glossary"><span>☰</span>全章名詞總彙整表</a>
+    <a href="#quiz"><span>✎</span>自我檢測 10 題</a>
+  </nav>
+</header>
+
+<!-- ================================================== 全章地圖 -->
+<section id="map">
+  <h2><small>先看全貌</small>全章地圖：一筆大數據從存放到被解釋</h2>
+  <p>本章的工具和方法，剛好可以排成一條流程：<b>先存起來 → 分配電腦資源 → 處理特徵 → 訓練模型 → 調參與解釋</b>。後面五個單元，就是沿著這條線一站一站講。</p>
+  <figure><a href="img/l22401-tools_map.png" target="_blank" rel="noopener"><img src="img/l22401-tools_map.png" alt="本章工具地圖：存用 HDFS 或雲端儲存，管資源用 YARN 或 Kubernetes，處理特徵用 Spark SQL 或 Pandas，訓練模型用 MLlib、scikit-learn 或 TensorFlow、PyTorch，調參解釋用網格搜索和 SHAP" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+</section>
+
+<!-- ================================================== 單元① -->
+<section id="u1">
+  <h2><small>單元 ①</small>Hadoop 生態系（HDFS、YARN、MapReduce）與 Spark</h2>
+  <p class="why"><b>為什麼需要它？</b> 資料大到一台電腦裝不下、算不完的時候，就得把工作分給很多台電腦一起做。但很多台電腦一起做事，會冒出三個問題：<b>① 資料要放哪裡、壞一台怎麼辦？② 誰可以用哪幾台電腦？③ 一件大工作怎麼拆給大家、最後再合起來？</b> Hadoop 用三個組件分別回答這三個問題；Spark 則是後來出現、把第 ③ 件事做得更快的計算引擎。</p>
+  <h3>一步步搭起來（用「物流中心」比喻）</h3>
+  <ol>
+    <li><b>先有一群電腦（叢集）。</b>用很多台一般規格的伺服器，而不是一台超級電腦，比較便宜也比較好擴充。</li>
+    <li><b>蓋倉庫＝HDFS。</b>把一個超大檔案切成很多「區塊」，分散放到不同電腦，而且每塊都存好幾份副本。某台電腦壞了，資料還能從別台拿到。</li>
+    <li><b>設調度中心＝YARN。</b>很多程式同時要算，總要有人決定「誰用哪幾台電腦的 CPU 和記憶體」。YARN 就是叢集的資源管理員。</li>
+    <li><b>派工人＝MapReduce。</b>把工作拆成「Map：各台電腦分頭處理自己那份資料」和「Reduce：把結果合起來」兩段。</li>
+    <li><b>換更快的工人＝Spark。</b>MapReduce 每一步都把結果寫回磁碟，反覆運算時很慢；Spark 把中間結果盡量留在記憶體，同一份資料要算很多輪時特別有感。Spark 可以跑在 YARN 上、讀 HDFS 的資料，也可以單獨部署。</li>
+  </ol>
+  <figure><a href="img/l22401-hadoop_stack.png" target="_blank" rel="noopener"><img src="img/l22401-hadoop_stack.png" alt="Hadoop 生態系三層圖：最下層 HDFS 負責存，1024MB 的檔案切成 8 個 128MB 區塊，每塊 3 份共 24 個區塊副本；中間 YARN 負責管 CPU 與記憶體；最上層 MapReduce 與 Spark 負責算" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+
+  <h3>名詞各自定義</h3>
+  <div class="defs">
+    <div class="def"><h4>HDFS（Hadoop Distributed File System，Hadoop 分散式檔案系統）</h4><ul>
+      <li><b>是什麼：</b>Hadoop 的<b>儲存層</b>：在一般規格電腦組成的大型叢集上，<b>可靠地儲存超大檔案</b>。</li>
+      <li><b>怎麼運作：</b>檔案切成固定大小的區塊（常見預設 128MB），每塊預設複製 3 份放在不同電腦。<b>NameNode</b> 記錄「哪個區塊放在哪台」，<b>DataNode</b> 實際存放資料。上圖例子：1024MB 的檔切成 8 塊，× 3 份＝ 24 個區塊副本。</li>
+      <li><b>適合：</b>一次寫入、之後大量讀取的超大檔案，例如日誌、感測器紀錄。</li>
+      <li><b>不擅長：</b>大量小檔案、需要隨機改寫某一小段的資料、要求毫秒級回應的查詢。</li></ul></div>
+    <div class="def"><h4>YARN（Yet Another Resource Negotiator）</h4><ul>
+      <li><b>是什麼：</b>Hadoop 的<b>資源管理層</b>（Hadoop 2 之後出現），負責把叢集的 CPU、記憶體分配給不同的應用程式。</li>
+      <li><b>怎麼運作：</b><b>ResourceManager</b> 是總調度，掌握整個叢集的資源；每台電腦上的 <b>NodeManager</b> 回報自己還有多少資源；每個應用程式有自己的 ApplicationMaster，向 ResourceManager 申請「容器」（一份 CPU＋記憶體）來執行工作。</li>
+      <li><b>重點：</b>YARN 自己<b>不存資料、也不做計算</b>；它讓 MapReduce、Spark 等不同引擎可以共用同一個叢集。</li></ul></div>
+  </div>
+  <figure><a href="img/l22401-mapreduce.png" target="_blank" rel="noopener"><img src="img/l22401-mapreduce.png" alt="MapReduce 字數統計流程：三段文字共 8 個字，Map 在各台電腦輸出（貓, 1）這類鍵值配對，Shuffle 把同一個字送到同一處，Reduce 加總得到貓 3 次、狗 2 次、鳥 3 次" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>MapReduce</h4><ul>
+      <li><b>是什麼：</b>一種<b>分散式計算的程式設計模型</b>，也是 Hadoop 最早的計算引擎（用 Java 寫成）。</li>
+      <li><b>怎麼運作：</b><b>Map（對應）</b>：每台電腦處理自己那份資料，輸出「鍵、值」配對，例如（貓, 1）。<b>Shuffle（分組）</b>：系統把同一個鍵的值送到同一處，過程中會自動排序、合併。<b>Reduce（彙總）</b>：把同一鍵的值合起來，例如貓 1＋1＋1＝ 3。</li>
+      <li><b>優缺點：</b>穩定、容錯好、適合超大批次工作；但每一步結果都寫回磁碟，需要反覆運算（例如機器學習訓練）時較慢。</li></ul></div>
+  </div>
+  <figure><a href="img/l22401-spark_vs_mr.png" target="_blank" rel="noopener"><img src="img/l22401-spark_vs_mr.png" alt="Spark 為什麼常比 MapReduce 快：同樣反覆算 3 輪，MapReduce 每輪讀一次寫一次磁碟共 6 次，Spark 只在開頭讀一次、最後寫一次共 2 次，中間結果放在記憶體" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>Apache Spark</h4><ul>
+      <li><b>是什麼：</b>通用的<b>分散式計算引擎</b>，源自加州大學柏克萊分校，主要用 Scala 寫成，提供 Scala、Java、Python（PySpark）、R、SQL 等介面。</li>
+      <li><b>為什麼常比 MapReduce 快：</b><b>記憶體內計算（In-Memory Computing）</b>：中間結果盡量留在記憶體，減少磁碟讀寫。上圖同樣反覆算 3 輪，MapReduce 讀寫磁碟 6 次、Spark 只要 2 次。另外 Spark 會先把整串步驟排成一張執行計畫圖（DAG），再一起最佳化執行。</li>
+      <li><b>注意：</b>記憶體不夠時 Spark 也會把部分資料寫到磁碟；實際快多少依工作型態而定，反覆運算的工作差距最明顯。速度差異主要來自設計，和程式語言關係不大。</li></ul></div>
+  </div>
+  <figure><a href="img/l22401-spark_components.png" target="_blank" rel="noopener"><img src="img/l22401-spark_components.png" alt="Spark 四大元件：Spark SQL 處理結構化資料、Spark Streaming 處理即時資料流、MLlib 做機器學習、GraphX 做圖運算，四者都建在 Spark Core 上；資源可由 YARN、Kubernetes 或獨立模式分配，資料可放 HDFS、雲端儲存或資料庫" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>Spark 的四大元件（都建在 Spark Core 上）</h4><ul>
+      <li><b>Spark SQL：</b>處理<b>結構化資料</b>，可以用 SQL 或 DataFrame 查詢、彙總表格。</li>
+      <li><b>Spark Streaming：</b>處理<b>即時資料流</b>，把連續進來的資料切成小批次處理。新專案多改用以 Spark SQL 引擎為基礎的 Structured Streaming（結構化串流）。</li>
+      <li><b>MLlib：</b>Spark 的<b>機器學習函式庫</b>：分類、迴歸、分群、推薦（ALS）、特徵處理，以及把步驟串起來的 ML Pipeline。</li>
+      <li><b>GraphX：</b>Spark 的<b>圖運算</b>元件：處理「點和線」的資料，例如社群網路、知識圖譜，內建 PageRank、連通元件等演算法。這裡的「圖」不是圖片，而是第 8 章社群網路分析裡「點（人）和線（關係）」組成的網絡。</li>
+      <li><b>Spark Core：</b>最底層的核心：工作排程、記憶體管理、容錯，以及最基本的資料結構 RDD。</li></ul></div>
+  </div>
+  <figure><a href="img/l22401-rdd_vs_df.png" target="_blank" rel="noopener"><img src="img/l22401-rdd_vs_df.png" alt="RDD 與 DataFrame 對照：RDD 是一串沒有欄位名稱的物件，Spark 照你寫的步驟執行；DataFrame 有欄位名稱與型別，可交給 Catalyst 優化器改寫計畫，例如先篩選再合併讓合併筆數從 1,000,000 降到 2,000，再由 Tungsten 引擎有效率地執行" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>RDD（Resilient Distributed Dataset，彈性分散式資料集）</h4><ul>
+      <li><b>是什麼：</b>Spark 最早、最底層的資料結構：分散在很多台電腦上的一串物件。</li>
+      <li><b>特性：</b>不可變更；記得自己是「從哪份資料、經過哪些步驟算出來的」（血緣），某台電腦壞了可以照血緣重算回來，這就是「彈性」。</li>
+      <li><b>限制：</b>沒有欄位名稱和型別，Spark 看不懂內容，大多照你寫的步驟執行，比較難自動優化。</li></ul></div>
+    <div class="def"><h4>DataFrame</h4><ul>
+      <li><b>是什麼：</b>有<b>欄位名稱與型別（schema）</b>的分散式表格，用法和 Pandas、SQL 很像。</li>
+      <li><b>優勢：</b>因為 Spark 看得懂資料結構，可以交給 <b>Catalyst 優化器</b>改寫執行計畫，再由 <b>Tungsten 引擎</b>有效率地執行。</li></ul></div>
+    <div class="def"><h4>Catalyst 優化器與 Tungsten 引擎</h4><ul>
+      <li><b>Catalyst：</b>Spark SQL／DataFrame 的<b>查詢優化器</b>：把你寫的查詢分析成邏輯計畫，套用規則改寫（例如<b>先篩選再合併</b>、提早丟掉用不到的欄位），再選出實際執行的物理計畫。上圖例子：先篩選後，要合併的筆數從 1,000,000 降到 2,000，少 500 倍。</li>
+      <li><b>Tungsten：</b>Spark 的<b>執行層效率改善計畫</b>：用更省空間的二進位格式在記憶體裡排資料、把好幾個步驟合成一段程式碼一起跑（全階段程式碼生成），讓 CPU 少做白工。</li>
+      <li><b>一句話分：</b><b>Catalyst 決定「怎麼做比較聰明」，Tungsten 負責「做的時候比較省」。</b></li></ul></div>
+    <div class="def"><h4>MLlib 的兩套 API</h4><ul>
+      <li><b>RDD-based API（spark.mllib）：</b>早期版本，Spark 2.0 起進入維護模式，主要修錯、不再加新功能。</li>
+      <li><b>DataFrame-based API（spark.ml）：</b>現在的主要 API：介面比較統一好用、可以享受 Catalyst 與 Tungsten 的優化，還能用 <b>ML Pipeline</b> 把「特徵轉換 → 訓練 → 預測」串成一條固定流程。</li>
+      <li><b>Pipeline 的零件：</b><b>Transformer</b>（轉換器，把一張 DataFrame 變成另一張，例如已訓練好的模型）、<b>Estimator</b>（估計器，用資料訓練後產生 Transformer，例如還沒訓練的演算法）。</li></ul></div>
+    <div class="def"><h4>常一起出現、容易混淆的其他名字（對照用）</h4><ul>
+      <li><b>Hive：</b>在 Hadoop 上用類似 SQL 的語法查詢資料的工具。</li>
+      <li><b>HBase：</b>建在 HDFS 上的 NoSQL 資料庫，適合大量資料的即時讀寫（第 5 章的欄族式資料庫）。</li>
+      <li><b>Kafka：</b>訊息佇列與串流平台，負責「接住並傳送」不斷進來的事件，常放在 Spark Streaming 前面。</li></ul></div>
+  </div>
+
+  <h3>整合比較表</h3>
+  <div class="cheat">
+    <span class="tag">先背這張</span>
+    <h4>Hadoop／Spark 組件速查表</h4>
+    <div class="tbl"><table>
+      <tr><th>組件</th><th>一句話功能</th><th>屬於</th><th>看到這些關鍵字就想到它</th><th>口訣</th><th>容易搞混</th></tr>
+      <tr><td><b>HDFS</b></td><td>在叢集上可靠地存超大檔案</td><td>Hadoop 存</td><td>分散式檔案、區塊、副本、標準硬體</td><td>倉庫</td><td>YARN、記憶體內計算</td></tr>
+      <tr><td><b>YARN</b></td><td>分配 CPU、記憶體給各個應用程式</td><td>Hadoop 管</td><td>資源管理、排程、叢集資源</td><td>調度中心</td><td>MapReduce</td></tr>
+      <tr><td><b>MapReduce</b></td><td>拆開做（Map）再合起來（Reduce）</td><td>Hadoop 算</td><td>Map 和 Reduce、批次處理</td><td>拆開做、合起來</td><td>中間的 Shuffle 步驟</td></tr>
+      <tr><td><b>Spark Core／RDD</b></td><td>核心引擎；最底層資料結構</td><td>Spark</td><td>記憶體內計算、血緣容錯</td><td>桌上作業</td><td>MapReduce</td></tr>
+      <tr><td><b>Spark SQL</b></td><td>用 SQL／DataFrame 查結構化資料</td><td>Spark</td><td>SQL、表格、結構化</td><td>查表</td><td>MLlib</td></tr>
+      <tr><td><b>Spark Streaming</b></td><td>處理即時資料流</td><td>Spark</td><td>即時、串流、事件</td><td>追即時</td><td>Spark SQL</td></tr>
+      <tr><td><b>MLlib</b></td><td>Spark 的機器學習函式庫</td><td>Spark</td><td>機器學習、分類、推薦 ALS</td><td>學模型</td><td>GraphX</td></tr>
+      <tr><td><b>GraphX</b></td><td>Spark 的圖運算元件</td><td>Spark</td><td>社群網路、知識圖譜、PageRank</td><td>走關係網</td><td>MLlib</td></tr>
+      <tr><td><b>Catalyst</b></td><td>改寫查詢的執行計畫</td><td>Spark SQL</td><td>查詢優化</td><td>改計畫</td><td>Tungsten</td></tr>
+      <tr><td><b>Tungsten</b></td><td>讓記憶體與 CPU 跑得更省</td><td>Spark 執行層</td><td>記憶體管理、程式碼生成</td><td>跑得省</td><td>Catalyst</td></tr>
+    </table></div>
+  </div>
+  <p>兩組最常被拿來比的，再並排一次：</p>
+  <div class="tbl"><table>
+    <tr><th>比較項目</th><th>Hadoop MapReduce</th><th>Apache Spark</th></tr>
+    <tr><td><b>中間結果放哪</b></td><td>每一步寫回磁碟</td><td>盡量留在記憶體</td></tr>
+    <tr><td><b>反覆運算（如機器學習）</b></td><td>較慢，每輪都讀寫磁碟</td><td>常見明顯較快</td></tr>
+    <tr><td><b>程式寫法</b></td><td>只有 Map、Reduce 兩種動作，複雜工作要串很多個</td><td>很多現成操作，可以一路串起來</td></tr>
+    <tr><td><b>主要開發語言</b></td><td>Java</td><td>Scala（另提供 Python、R、SQL 介面）</td></tr>
+    <tr><td><b>即時串流</b></td><td>不擅長，以批次為主</td><td>有 Streaming／Structured Streaming</td></tr>
+    <tr><td><b>和 Hadoop 的關係</b></td><td>Hadoop 原生的計算引擎</td><td>可以跑在 YARN 上、讀 HDFS，也可單獨部署</td></tr>
+  </table></div>
+  <div class="tbl"><table>
+    <tr><th>比較項目</th><th>RDD-based API</th><th>DataFrame-based API</th></tr>
+    <tr><td><b>資料長什麼樣</b></td><td>一串物件，沒有欄位名稱</td><td>有欄位名稱與型別的表格</td></tr>
+    <tr><td><b>Spark 能不能自動優化</b></td><td>較難，照你寫的步驟跑</td><td>可以，靠 Catalyst＋Tungsten</td></tr>
+    <tr><td><b>在 MLlib 的地位</b></td><td>維護模式（spark.mllib）</td><td>主要 API（spark.ml）</td></tr>
+    <tr><td><b>ML Pipeline</b></td><td>沒有</td><td>有，可串成固定流程</td></tr>
+    <tr><td><b>支援的語言</b></td><td>Scala、Java、Python</td><td>Scala、Java、Python、R</td></tr>
+  </table></div>
+  <div class="hook"><span class="tag">記憶鉤子</span><ul>
+    <li><b>「HDFS 存、YARN 管、MapReduce 算」</b>：倉庫、調度中心、工人。</li>
+    <li><b>「Map 拆開做、Reduce 合起來」</b>：名字本身就是那兩個動作。</li>
+    <li><b>「Spark 把東西放桌上（記憶體），MapReduce 一直跑倉庫（磁碟）」。</b></li>
+    <li><b>「SQL 查表、Streaming 追即時、MLlib 學模型、GraphX 走關係網」。</b></li>
+    <li><b>「Catalyst 改計畫、Tungsten 跑得省」</b>；DataFrame 看得懂欄位，所以能被優化。</li>
+  </ul></div>
+  <div class="trap"><b>易錯提醒：</b>YARN 只分配資源，不存資料也不做計算；存資料是 HDFS，計算是 MapReduce 或 Spark。MapReduce 的兩個主角是 Map 和 Reduce，排序、合併是中間 Shuffle 自動做的幕後步驟，一般的讀檔寫檔也不是它的核心概念。GraphX 的「圖」指點和線組成的關係網，不是圖片；用機器學習分析社群網路時才找 MLlib。Spark 也能處理半結構化、非結構化資料，不限表格。</div>
+</section>
+
+<!-- ================================================== 單元② -->
+<section id="u2">
+  <h2><small>單元 ②</small>特徵工程手法對照：縮放、編碼、滯後與窗口、降維、特徵選擇</h2>
+  <p class="why"><b>為什麼需要它？</b> 模型只看得懂數字，而且很「死腦筋」：欄位的單位差太多，它會以為大數字比較重要；類別寫成文字，它讀不懂；欄位太多，它會被雜訊干擾、算很久；時間序列只給今天的值，它不知道昨天發生什麼事。<b>特徵工程</b>就是在訓練模型之前，把原始資料整理成模型好用的樣子。最常被問的是：<b>看到一個問題，選出對應的手法。</b></p>
+  <h3>一步步搭起來（一張客戶銷售表的整理流程）</h3>
+  <ol>
+    <li><b>類別變數字＝編碼。</b>「顏色：紅、綠、藍」換成 0 和 1 的欄位（獨熱編碼），類別太多時用特徵雜湊。</li>
+    <li><b>統一尺度＝特徵縮放。</b>年齡（幾十）和年收入（幾十萬）放在一起，用標準化或歸一化換成同一把尺。</li>
+    <li><b>從時間造新欄位＝滯後與窗口特徵。</b>「昨天的銷售」「過去 7 天平均」都是把過去的資訊搬成今天的欄位。</li>
+    <li><b>欄位太多時＝特徵選擇或降維。</b>特徵選擇是<b>挑出</b>有用的原始欄位；降維是把很多欄位<b>壓縮成</b>少數幾個新欄位（PCA、自動編碼器）。</li>
+  </ol>
+
+  <h3>名詞各自定義</h3>
+  <figure><a href="img/l22401-scaling.png" target="_blank" rel="noopener"><img src="img/l22401-scaling.png" alt="特徵縮放表：甲到戊五人的年齡與年收入，換成 z 分數與 0 到 1 的值；甲戊兩人差 35 歲、收入只差 60,000 元，原始距離中年齡只佔約 0.00003%，標準化後年齡佔 99.2%" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>特徵縮放 Feature Scaling</h4><ul>
+      <li><b>是什麼：</b>把不同單位、不同範圍的數值欄位，換成<b>可以互相比較的尺度</b>。它不新增也不刪除欄位，只改數值的大小範圍。</li>
+      <li><b>為什麼需要：</b>很多演算法靠「距離」或「梯度」學習。上圖甲、戊兩人差 35 歲、收入只差 60,000 元，原始距離裡年齡只佔約 0.00003%，幾乎被收入淹沒；標準化後年齡佔 99.2%，真正的差別才被看見。</li>
+      <li><b>誰特別需要：</b>KNN、K-means、SVM、用梯度下降訓練的模型（邏輯迴歸、神經網路）、PCA。決策樹、隨機森林這類樹模型通常不太受影響。</li></ul></div>
+    <div class="def"><h4>標準化 Standardization（z 分數）</h4><ul>
+      <li><b>公式：</b>z ＝（x − 平均）÷ 標準差。</li>
+      <li><b>結果：</b>平均變成 0、標準差變成 1，數值沒有固定上下限。</li>
+      <li><b>適合：</b>資料接近常態分布、或可能有離群值的情況；很多傳統機器學習演算法的常見選擇。</li></ul></div>
+    <div class="def"><h4>歸一化 Normalization（最小最大縮放）</h4><ul>
+      <li><b>公式：</b>（x − 最小值）÷（最大值 − 最小值）。</li>
+      <li><b>結果：</b>壓到 0 到 1 之間。</li>
+      <li><b>適合／注意：</b>需要固定範圍時，例如影像像素、神經網路的輸入。一個極端值就會把其他值擠在一起，對離群值敏感。另外，有些教材或工具的「Normalization」是指把每一列資料向量縮成長度 1，看到時留意上下文。</li></ul></div>
+  </div>
+  <figure><a href="img/l22401-encoding.png" target="_blank" rel="noopener"><img src="img/l22401-encoding.png" alt="類別編碼對照：獨熱編碼把紅綠藍 3 種顏色拆成 3 個 0／1 欄位；特徵雜湊把台北、台中、高雄、嘉義、花蓮丟進固定 4 個桶，台北與花蓮落在同一桶形成碰撞" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>獨熱編碼 One-Hot Encoding</h4><ul>
+      <li><b>是什麼：</b>把一個類別欄位拆成多個 0／1 欄位，每個類別一欄，屬於哪類就在那欄填 1。</li>
+      <li><b>適合：</b>類別數量不多、類別之間沒有大小順序（例如顏色、縣市）。</li>
+      <li><b>缺點：</b>類別上萬種時欄位爆量，表格又寬又稀疏。它是<b>編碼</b>，不是縮放。</li></ul></div>
+    <div class="def"><h4>特徵雜湊 Feature Hashing（雜湊技巧）</h4><ul>
+      <li><b>是什麼：</b>用雜湊函數把類別丟進<b>固定數量</b>的桶，桶數決定欄位數。</li>
+      <li><b>優缺點：</b>欄位數固定、不用事先記住所有類別、新類別也能處理；但不同類別可能落在同一桶（碰撞，上圖台北與花蓮），而且難以從桶反查原本是哪個類別。</li></ul></div>
+  </div>
+  <figure><a href="img/l22401-lag_window.png" target="_blank" rel="noopener"><img src="img/l22401-lag_window.png" alt="滯後與窗口特徵：8 天銷售量 12、15、11、18、20、17、22、25；以第 7 天為例，前 1 天的滯後特徵是第 6 天的 17，前 3 天平均的窗口特徵是（18＋20＋17）÷ 3 ＝ 18.3" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>滯後特徵 Lag Features</h4><ul>
+      <li><b>是什麼：</b>把<b>過去某個時間點</b>的值，當成今天的一個欄位。例如「前 1 天銷售」「上個月同期銷售」。</li>
+      <li><b>例子：</b>上圖第 7 天的「前 1 天」＝第 6 天的 17。「和去年同月比多了多少」就是今天的值減掉往回推一段固定時間的值。</li></ul></div>
+    <div class="def"><h4>窗口特徵 Window Features（滾動統計）</h4><ul>
+      <li><b>是什麼：</b>框住<b>一段過去的時間</b>算統計量，例如過去 7 天平均、過去 30 天最大值。</li>
+      <li><b>例子：</b>上圖第 7 天的「前 3 天平均」＝（18＋20＋17）÷ 3 ＝ 18.3。</li>
+      <li><b>注意：</b>做特徵時要用「當天以前」的資料，否則等於偷看答案（資料洩漏），模型上線後表現常會明顯變差。</li></ul></div>
+  </div>
+  <figure><a href="img/l22401-pca_ae.png" target="_blank" rel="noopener"><img src="img/l22401-pca_ae.png" alt="降維對照：PCA 在 40 個點中找到一條紅色直線，第一主成分保留 96.7% 的變化，兩個欄位壓成一個；自動編碼器是神經網路，編碼器壓到中間 2 個數字的瓶頸，解碼器再盡量還原輸入，中間那層就是低維嵌入" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>降維 Dimensionality Reduction</h4><ul>
+      <li><b>是什麼：</b>把很多欄位<b>壓縮成少數幾個新欄位</b>，盡量保留原本的資訊。新欄位通常不是原本的任何一欄，而是混合出來的。</li>
+      <li><b>用途：</b>加快訓練、減少雜訊、畫成 2D／3D 圖來看、當成其他模型的輸入特徵。</li></ul></div>
+    <div class="def"><h4>主成分分析 PCA</h4><ul>
+      <li><b>是什麼：</b><b>線性</b>降維方法：找出資料變化最大的方向（主成分），把資料投影上去。</li>
+      <li><b>例子：</b>上圖 40 個點幾乎排成一條斜線，第一主成分就保留了 96.7% 的變化，兩個欄位可以壓成一個。</li>
+      <li><b>注意：</b>PCA 對尺度敏感，通常先做標準化；它是降維，不是縮放。</li></ul></div>
+    <div class="def"><h4>自動編碼器 Autoencoder</h4><ul>
+      <li><b>是什麼：</b>一種<b>神經網路</b>：前半段「編碼器」把輸入壓到很窄的中間層（瓶頸），後半段「解碼器」再盡量還原成原本的輸入。</li>
+      <li><b>學到什麼：</b>為了能還原，瓶頸那幾個數字被迫保留最重要的資訊，這就是資料的<b>低維表示（嵌入）</b>。訓練不需要人工標註答案。</li>
+      <li><b>和 PCA 的差別：</b>PCA 找的是直線（線性）方向；自動編碼器有非線性的激活函數，能學到彎曲、複雜的關係，代價是需要較多資料和運算。</li></ul></div>
+    <div class="def"><h4>特徵選擇 Feature Selection</h4><ul>
+      <li><b>是什麼：</b>從原本的欄位中<b>挑出一部分</b>保留，其餘丟掉；保留下來的欄位內容不變。</li>
+      <li><b>常見做法：</b>過濾法（先用相關係數等統計量篩）、包裝法（換不同欄位組合實際訓練比較）、嵌入法（模型訓練時順便挑，例如 Lasso 迴歸、樹模型的重要性）。</li>
+      <li><b>和降維的差別：</b>特徵選擇是「挑」，原欄位保留原樣；降維是「壓」，產生新的混合欄位。兩者都不處理數值範圍不一的問題。</li></ul></div>
+  </div>
+
+  <h3>整合比較表</h3>
+  <div class="tbl"><table>
+    <tr><th>手法</th><th>做什麼</th><th>輸入 → 輸出的變化</th><th>何時用</th><th>代表方法</th><th>容易搞混</th></tr>
+    <tr><td><b>特徵縮放</b></td><td>換成同一把尺</td><td>欄位數不變，數值範圍改變</td><td>欄位單位差很多；用距離、梯度的模型</td><td><b>標準化、歸一化</b></td><td>特徵選擇</td></tr>
+    <tr><td><b>類別編碼</b></td><td>文字類別變數字</td><td>1 欄類別 → 多欄 0／1（或固定桶數）</td><td>有顏色、城市這類文字欄位</td><td>獨熱編碼、特徵雜湊</td><td>特徵縮放</td></tr>
+    <tr><td><b>滯後／窗口特徵</b></td><td>把過去搬到今天</td><td>新增「前幾天」「過去 N 天統計」欄位</td><td>時間序列預測</td><td>前 1 天值、7 天平均</td><td>降維</td></tr>
+    <tr><td><b>降維</b></td><td>壓縮成少數新欄位</td><td>很多欄 → 少數混合新欄</td><td>欄位太多、想視覺化、要嵌入</td><td><b>PCA、自動編碼器</b></td><td>特徵選擇</td></tr>
+    <tr><td><b>特徵選擇</b></td><td>挑出有用的欄位</td><td>很多欄 → 其中幾欄（原樣保留）</td><td>欄位太多、想提升可解釋性</td><td>過濾、包裝、嵌入法</td><td>降維、縮放</td></tr>
+  </table></div>
+  <div class="hook"><span class="tag">記憶鉤子</span><ul>
+    <li><b>縮放是「換同一把尺」、編碼是「文字變數字」、降維是「壓縮」、選擇是「挑欄位」、滯後與窗口是「把過去搬到今天」。</b></li>
+    <li><b>標準化：平均 0、標準差 1；歸一化：壓到 0～1。</b>看到「數值範圍差很多」就想到縮放。</li>
+    <li><b>自動編碼器＝先壓縮再還原，中間那層就是精華（嵌入）。</b></li>
+  </ul></div>
+  <div class="trap"><b>易錯提醒：</b>欄位範圍差很多時，挑掉幾個欄位解決不了問題，留下來的欄位範圍照樣差很多，要用的是縮放。獨熱編碼處理的是文字類別，不是數字範圍。PCA 本身怕尺度不一，通常先縮放才做。要學「低維嵌入」找自動編碼器；SVM、決策樹、KNN 是分類或迴歸模型，輸出的是答案，不是一組濃縮特徵。</div>
+</section>
+
+<!-- ================================================== 單元③ -->
+<section id="u3">
+  <h2><small>單元 ③</small>集成學習：Bagging（隨機森林）vs Boosting（AdaBoost、GBDT）</h2>
+  <p class="why"><b>為什麼需要它？</b> 單一個模型常有兩種毛病：一種是<b>不穩定</b>，資料換一點點、結果就差很多（變異大，例如一棵很深的決策樹）；另一種是<b>學不夠</b>，太簡單抓不到規律（偏差大，例如只切一刀的小樹）。<b>集成學習</b>的想法是「三個臭皮匠勝過一個諸葛亮」：把很多個模型組合起來。組合的方式主要有兩種，剛好各治一種毛病。</p>
+  <h3>一步步搭起來</h3>
+  <ol>
+    <li><b>先有「弱學習器」。</b>單獨使用時只比亂猜好一點的簡單模型，最常見的是很淺的決策樹。</li>
+    <li><b>Bagging 路線：大家同時做、一起投票。</b>從原始資料<b>有放回地抽樣</b>出好幾份，每份各訓練一棵樹，最後分類用多數決、數值用平均。每棵樹的錯誤方向不同，平均起來就穩定了。</li>
+    <li><b>Bagging 進階：隨機森林。</b>除了抽樣資料，每次分岔時也只隨機挑一部分欄位來選，讓樹和樹更不一樣，投票效果更好。</li>
+    <li><b>Boosting 路線：一個接一個、專門訂正。</b>先訓練第 1 個弱學習器，看它錯在哪；第 2 個<b>特別加重</b>那些分錯的資料；第 3 個再補第 2 個的錯……最後依各自的表現<b>加權合成</b>一個強學習器。</li>
+  </ol>
+  <figure><a href="img/l22401-bagging_boosting.png" target="_blank" rel="noopener"><img src="img/l22401-bagging_boosting.png" alt="Bagging 與 Boosting 對照：Bagging 從原始資料抽樣 5 次訓練 5 棵樹，3 票會、2 票不會，多數決結果為會；Boosting 依序訓練弱學習器，10 筆資料每筆權重 0.10，第 1 個錯 3 筆，更新後分錯的每筆 0.167、分對的每筆 0.071，分錯的 3 筆合計佔 50%" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <p>上圖 Boosting 的數字是照 AdaBoost 的公式實際算的：10 筆資料一開始每筆權重 0.10，第 1 個學習器錯了 3 筆，錯誤率 0.3，它的發言權 α ＝ ½ ln（0.7 ÷ 0.3）≈ 0.42。更新後分錯的每筆變 0.167、分對的每筆變 0.071，<b>分錯的 3 筆合計佔了 50%</b>，下一個學習器自然會把注意力放在它們身上。</p>
+
+  <h3>名詞各自定義</h3>
+  <div class="defs">
+    <div class="def"><h4>集成學習 Ensemble Learning</h4><ul>
+      <li><b>是什麼：</b>訓練多個模型，再把它們的預測組合起來，通常比單一模型更準、更穩。</li>
+      <li><b>三大類：</b>Bagging（平行、投票）、Boosting（依序、訂正）、Stacking（用另一個模型學「怎麼組合」前面幾個模型的預測）。</li></ul></div>
+    <div class="def"><h4>Bagging（Bootstrap Aggregating，自助聚合）</h4><ul>
+      <li><b>怎麼運作：</b>有放回抽樣出多份資料 → 各自<b>平行</b>訓練 → 投票或平均。</li>
+      <li><b>主要改善：</b>降低<b>變異</b>（模型不穩定的問題）。</li>
+      <li><b>代表：</b><b>隨機森林 Random Forest</b>：Bagging ＋每次分岔隨機挑欄位。</li></ul></div>
+    <div class="def"><h4>Boosting（提升法）</h4><ul>
+      <li><b>怎麼運作：</b><b>依序</b>訓練，每個新的弱學習器專門修正前面的錯誤，最後加權合成。</li>
+      <li><b>主要改善：</b>降低<b>偏差</b>（學不夠的問題）；但如果輪數太多也可能過度配適。</li>
+      <li><b>AdaBoost：</b>每輪<b>加重被分錯樣本的權重</b>，下一個學習器就會更重視它們。</li>
+      <li><b>梯度提升 Gradient Boosting（GBDT）：</b>每棵新樹去學「前面模型還差多少」（殘差，更精確說是損失函數的負梯度）。XGBoost、LightGBM、CatBoost 都是這一路的實作。</li></ul></div>
+    <div class="def"><h4>不是集成學習、但常被放在一起比的方法</h4><ul>
+      <li><b>K-平均 K-means：</b><b>非監督式</b>分群，把資料分成 K 群，沒有「弱學習器組合」的概念。</li>
+      <li><b>主成分分析 PCA：</b><b>降維</b>方法，也是非監督式，不是用來預測的監督式演算法。</li></ul></div>
+  </div>
+
+  <h3>整合比較表</h3>
+  <div class="tbl"><table>
+    <tr><th>比較項目</th><th>Bagging</th><th>Boosting</th></tr>
+    <tr><td><b>訓練順序</b></td><td><b>平行</b>：各棵同時訓練、互不影響</td><td><b>依序</b>：一個接一個，後面看前面的錯</td></tr>
+    <tr><td><b>每個模型看的資料</b></td><td>各自有放回抽樣的一份</td><td>同一份資料，但分錯的權重變重（或改學殘差）</td></tr>
+    <tr><td><b>怎麼合成</b></td><td>多數決或平均（每個一票）</td><td><b>加權</b>合成（表現好的發言權大）</td></tr>
+    <tr><td><b>主要解決</b></td><td>變異大、不穩定</td><td>偏差大、學不夠</td></tr>
+    <tr><td><b>代表演算法</b></td><td><b>隨機森林</b></td><td><b>AdaBoost、GBDT、XGBoost、LightGBM</b></td></tr>
+    <tr><td><b>比喻</b></td><td>一群人各自作答再投票</td><td>接力賽，每一棒專門訂正前一棒的錯</td></tr>
+    <tr><td><b>關鍵字</b></td><td>抽樣、平行、投票、隨機挑欄位</td><td>依序、逐步、聚焦之前分錯的、弱變強</td></tr>
+  </table></div>
+  <div class="hook"><span class="tag">記憶鉤子</span><ul>
+    <li><b>Bagging 大家一起投票（平行）；Boosting 一棒接一棒訂正錯誤（依序）。</b></li>
+    <li><b>看到「逐步」「加權」「之前分錯的」想到 Boosting；看到「多棵樹投票」「隨機抽樣」想到隨機森林（Bagging）。</b></li>
+    <li><b>Bagging 治不穩定（變異），Boosting 治學不夠（偏差）。</b></li>
+  </ul></div>
+  <div class="trap"><b>易錯提醒：</b>隨機森林也是由很多棵決策樹組成，所以很容易和 Boosting 混在一起；分辨的關鍵是<b>後面的樹會不會看前面的樹錯在哪</b>。隨機森林的樹各自訓練、最後投票，屬於 Bagging；會回頭加重錯誤、一棒接一棒的才是 Boosting。K-means 和 PCA 都是非監督式方法，不屬於集成學習。</div>
+</section>
+
+<!-- ================================================== 單元④ -->
+<section id="u4">
+  <h2><small>單元 ④</small>推薦系統：協同過濾、矩陣分解（SVD、ALS）</h2>
+  <p class="why"><b>為什麼需要它？</b> 影音平台有上萬部片，每個人只看過其中一小部分。把「每個人對每部片的評分」排成一張表，絕大部分格子是空的。推薦系統要做的事，就是<b>猜出空格裡的分數</b>，再把猜得高的片推薦給那個人。常見的問法是：哪種方法專門用「大家過去的評分」來補空格？</p>
+  <h3>一步步搭起來</h3>
+  <ol>
+    <li><b>排出評分表（使用者 × 物品）。</b>列是人、欄是片，格子是評分，沒看過就是空格。</li>
+    <li><b>協同過濾的直覺。</b>「和你口味相近的人喜歡的，你可能也喜歡」。不用知道片的內容，只看大家的評分模式。</li>
+    <li><b>矩陣分解。</b>假設每個人有幾個隱藏的「口味分數」（例如多愛動作、多愛浪漫），每部片也有對應的「特性分數」。把大評分表拆成「人 × 口味」和「片 × 特性」兩張小表，兩張小表相乘就能還原評分表，<b>原本空的格子也會算出數字</b>。</li>
+    <li><b>用 ALS 把兩張小表算出來。</b>先固定「片」那張表，解出每個人的口味；再固定「人」那張，解出每部片的特性；輪流算到穩定。</li>
+  </ol>
+  <figure><a href="img/l22401-matrix_factorization.png" target="_blank" rel="noopener"><img src="img/l22401-matrix_factorization.png" alt="矩陣分解補評分表：小美、阿傑、小芳、大雄對 5 類片的評分有 4 個空格，用 ALS 拆成每人 2 個口味分數與每片 2 個特性分數，相乘回來後空格預測為小美愛情片 2.4、阿傑科幻片 3.1、小芳恐怖片 1.5、大雄動作片 1.5，已知格誤差 RMSE 約 0.24" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <p>上圖是用 ALS（2 個潛在因子）實際算出來的：已知格子的誤差 RMSE 約 0.24，四個空格補上的預測是小美×愛情片 2.4、阿傑×科幻片 3.1、小芳×恐怖片 1.5、大雄×動作片 1.5。小美和阿傑口味接近（都愛動作、恐怖），所以阿傑沒看過的科幻片，系統預測他會給中上的分數。</p>
+
+  <h3>名詞各自定義</h3>
+  <div class="defs">
+    <div class="def"><h4>協同過濾 Collaborative Filtering</h4><ul>
+      <li><b>是什麼：</b>只根據<b>使用者與物品的互動紀錄</b>（評分、點擊、購買）來推薦，不需要知道物品內容。</li>
+      <li><b>兩種做法：</b><b>記憶式</b>：直接算相似度，例如「找口味相近的人」（使用者為基礎）或「找常被一起喜歡的物品」（物品為基礎）。<b>模型式</b>：從評分表學出模型，<b>矩陣分解就是最具代表性的模型式協同過濾</b>。</li>
+      <li><b>缺點：</b>新使用者、新物品沒有紀錄時很難推薦（冷啟動問題）。</li></ul></div>
+    <div class="def"><h4>內容式推薦 Content-based（對照用）</h4><ul>
+      <li><b>是什麼：</b>根據物品本身的特徵（類型、演員、關鍵字）推薦和你看過的相似的東西。</li>
+      <li><b>和協同過濾的差別：</b>內容式看「東西像不像」，協同過濾看「人的行為像不像」。實務上常把兩者混合。</li></ul></div>
+    <div class="def"><h4>矩陣分解 Matrix Factorization</h4><ul>
+      <li><b>是什麼：</b>把稀疏的評分矩陣 R 近似拆成兩個小矩陣相乘：R ≈ U ×（V 的轉置）。U 每列是一個人的潛在因子，V 每列是一個物品的潛在因子。</li>
+      <li><b>預測方式：</b>某人對某物品的預測分數＝兩組潛在因子的內積（對應位置相乘再加總）。</li>
+      <li><b>潛在因子：</b>模型自己學出來的隱藏維度，不一定有人看得懂的名稱，可以想成「口味方向」。</li></ul></div>
+    <div class="def"><h4>SVD（奇異值分解）在推薦系統裡</h4><ul>
+      <li><b>原本的意思：</b>線性代數裡把一個完整矩陣拆成三個矩陣（U、Σ、V 的轉置）的方法，PCA 也常用它計算。</li>
+      <li><b>推薦系統裡：</b>評分表有大量空格，傳統 SVD 不能直接處理空格，所以常用「只拿已知格子來訓練」的 SVD 式矩陣分解（Netflix 競賽時期很有名，常被稱為 Funk SVD）。在推薦的情境看到「SVD」，通常指的就是這一類矩陣分解。</li></ul></div>
+    <div class="def"><h4>ALS（Alternating Least Squares，交替最小平方法）</h4><ul>
+      <li><b>怎麼運作：</b>固定 V 解 U（變成一般的最小平方問題），再固定 U 解 V，交替進行到穩定。</li>
+      <li><b>特色：</b>每一步都容易平行化，適合大資料；<b>Spark MLlib 內建 ALS 推薦演算法</b>，也支援「點擊、觀看次數」這類隱式回饋。</li></ul></div>
+    <div class="def"><h4>不是為評分表設計、但常被拿來比的方法</h4><ul>
+      <li><b>線性迴歸：</b>用一組<b>特徵欄位</b>預測一個連續數值，例如用坪數、屋齡預測房價。它需要每筆資料都有完整的特徵，本身不會利用「評分表裡人和物品的交叉關係」，所以不是補評分表空格的典型方法。</li>
+      <li><b>K-means：</b>把資料分群，可以拿來把相似的人分組，但它不直接預測某人對某物品的分數。</li>
+      <li><b>決策樹：</b>依特徵一層層判斷做分類或迴歸，同樣不是針對評分矩陣設計的。</li></ul></div>
+  </div>
+
+  <h3>整合比較表</h3>
+  <div class="tbl"><table>
+    <tr><th>方法</th><th>一句話定義</th><th>需要什麼資料</th><th>怎麼預測</th><th>優點</th><th>容易搞混</th></tr>
+    <tr><td><b>記憶式協同過濾</b></td><td>找口味相近的人或常一起被喜歡的物品</td><td>評分表</td><td>用相似者的評分加權平均</td><td>直覺、好解釋</td><td>內容式推薦</td></tr>
+    <tr><td><b>矩陣分解</b></td><td>評分表拆成人、物品兩張潛在因子表</td><td>評分表</td><td>兩組因子內積</td><td>能補空格、可擴充到大資料</td><td>線性迴歸</td></tr>
+    <tr><td><b>SVD（推薦用）</b></td><td>只用已知格訓練的分解法</td><td>評分表</td><td>同上</td><td>經典、效果好</td><td>傳統完整 SVD</td></tr>
+    <tr><td><b>ALS</b></td><td>交替固定一邊、解另一邊</td><td>評分表或隱式回饋</td><td>同上</td><td>易平行，Spark MLlib 內建</td><td>梯度下降</td></tr>
+    <tr><td><b>內容式推薦</b></td><td>推薦和你看過內容相似的物品</td><td>物品特徵</td><td>比對物品相似度</td><td>新物品也能推</td><td>協同過濾</td></tr>
+  </table></div>
+  <div class="hook"><span class="tag">記憶鉤子</span><ul>
+    <li><b>「評分表補空格＝矩陣分解（SVD、ALS）」</b>，它是協同過濾的一種。</li>
+    <li><b>協同過濾看「人的行為像不像」，內容式看「東西像不像」。</b></li>
+    <li><b>ALS：固定一邊解另一邊，輪流算；Spark MLlib 內建。</b></li>
+  </ul></div>
+  <div class="trap"><b>易錯提醒：</b>「預測一個分數」很容易讓人直覺想到迴歸，但補評分表空格的典型方法是矩陣分解：它從「誰評了哪些物品、評幾分」這張交叉表裡找出隱藏的口味模式，線性迴歸做不到這件事。把「預測評分＝迴歸」這個直覺，換成「評分表補空格＝矩陣分解」。</div>
+</section>
+
+<!-- ================================================== 單元⑤ -->
+<section id="u5">
+  <h2><small>單元 ⑤</small>調參、可解釋性與框架：網格搜索、SHAP、TensorFlow／PyTorch</h2>
+  <p class="why"><b>為什麼需要它？</b> 模型選好之後還有三件事：<b>① 設定要怎麼調</b>（超參數）、<b>② 模型為什麼這樣判斷</b>（可解釋性）、<b>③ 用什麼工具來寫</b>（框架）。對應的三個常見問題是：網格搜索的缺點是什麼？SHAP 在解釋什麼？TensorFlow、PyTorch 用在哪個領域？</p>
+  <h3>一步步搭起來</h3>
+  <ol>
+    <li><b>分清參數和超參數。</b>參數是模型從資料學出來的（例如迴歸係數、神經網路權重）；超參數是<b>訓練前由人設定</b>的（例如學習率、樹的深度、樹的數量）。</li>
+    <li><b>試不同的超參數組合。</b>每組都要訓練一次、用驗證資料打分數，通常搭配交叉驗證（例如 5 折，就要訓練 5 次）。</li>
+    <li><b>挑出分數最好的組合。</b>網格搜索是「每個組合都試」，隨機搜索是「隨機抽一些組合試」，貝氏最佳化是「根據已經試過的結果，猜下一組最可能更好的」。</li>
+    <li><b>解釋模型。</b>用 SHAP 等方法，看每個特徵對某一筆預測推高或拉低了多少。</li>
+    <li><b>選工具。</b>傳統機器學習常用 scikit-learn，大資料用 Spark MLlib，深度學習用 TensorFlow 或 PyTorch。</li>
+  </ol>
+  <figure><a href="img/l22401-grid_search.png" target="_blank" rel="noopener"><img src="img/l22401-grid_search.png" alt="網格搜索成本：兩個超參數 4 種學習率乘 3 種深度是 12 個格點；再加樹數 5 種變成 60 組，乘 5 折交叉驗證是 300 次訓練，每次 2 分鐘共 600 分鐘約 10 小時；隨機搜索 20 組只要 200 分鐘" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+
+  <h3>名詞各自定義</h3>
+  <div class="defs">
+    <div class="def"><h4>超參數調整 Hyperparameter Tuning</h4><ul>
+      <li><b>是什麼：</b>在訓練前尋找一組最合適的超參數設定，讓模型在沒看過的資料上表現最好。</li>
+      <li><b>搭配：</b>通常和<b>交叉驗證</b>一起用：把資料分成 K 份，輪流拿一份驗證、其他訓練，取平均分數。</li></ul></div>
+    <div class="def"><h4>網格搜索 Grid Search</h4><ul>
+      <li><b>怎麼運作：</b>每個超參數列出幾個候選值，<b>所有組合全部試一遍</b>。</li>
+      <li><b>缺點：</b><b>計算成本很高</b>：組合數是各超參數候選數<b>相乘</b>，再乘上交叉驗證的折數。上圖 4 × 3 × 5 ＝ 60 組，× 5 折＝ 300 次訓練，每次 2 分鐘就要 600 分鐘（10 小時）。多加一個超參數，總數又要再乘一次。</li>
+      <li><b>另一個限制：</b>只會在你列出的格點裡挑最好的，格點之間如果藏著更好的值，它看不到。</li>
+      <li><b>優點：</b>簡單、徹底、結果可重現；類別型超參數（例如核函數選 linear 或 rbf）也能直接列進去。它是逐一比較每個格點，不像梯度下降那樣一步步往下走而卡在局部低點。</li></ul></div>
+    <div class="def"><h4>隨機搜索 Random Search 與貝氏最佳化 Bayesian Optimization</h4><ul>
+      <li><b>隨機搜索：</b>從超參數範圍中隨機抽固定數量的組合來試。上圖 20 組 × 5 折＝ 100 次，只要 200 分鐘；很多情況下，用較少次數就能找到夠好的組合。</li>
+      <li><b>貝氏最佳化：</b>根據已經試過的結果建立「分數預測模型」，挑最有希望的下一組來試，比盲目亂試更省次數。</li></ul></div>
+  </div>
+  <figure><a href="img/l22401-shap.png" target="_blank" rel="noopener"><img src="img/l22401-shap.png" alt="SHAP 瀑布圖：房價模型平均預測 214 萬元，坪數 45 推高 45、屋齡 30 拉低 24、離捷運近推高 90，214 ＋ 45 － 24 ＋ 90 ＝ 325，等於這間房的預測值" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>SHAP（SHapley Additive exPlanations）</h4><ul>
+      <li><b>是什麼：</b>一種<b>模型可解釋性</b>方法，用來解釋<b>單一筆預測</b>中，每個特徵各貢獻了多少（相對於平均預測）。</li>
+      <li><b>理論來源：</b>賽局理論的 <b>Shapley 值</b>：一群人合作得到獎金，依每個人的貢獻公平分配。這裡的「人」換成特徵、「獎金」換成「這筆預測和平均預測的差距」。</li>
+      <li><b>加總性：</b><b>平均預測＋所有特徵的 SHAP 值＝這筆的預測</b>。上圖：214 ＋ 45 － 24 ＋ 90 ＝ 325（線性模型可以精確算出每個 SHAP 值）。</li>
+      <li><b>全域用法：</b>把很多筆資料的 SHAP 絕對值平均，可以看出整體上哪些特徵最重要。</li>
+      <li><b>不是拿來做的事：</b>評估整體準確率（看準確率、F1 等指標）、挑超參數（網格搜索的工作）、找異常值（孤立森林這類異常偵測方法的工作）。</li></ul></div>
+    <div class="def"><h4>其他可解釋性名詞（對照用）</h4><ul>
+      <li><b>特徵重要性 Feature Importance：</b>整體來說哪些特徵對模型最重要，常見於樹模型；它是「全域」的，不說明某一筆為什麼。</li>
+      <li><b>LIME：</b>在某一筆資料附近，用簡單的線性模型去近似複雜模型，也是解釋單筆預測的方法，但沒有 SHAP 的加總性保證。</li></ul></div>
+    <div class="def"><h4>深度學習框架 TensorFlow 與 PyTorch</h4><ul>
+      <li><b>是什麼：</b>兩套主流的<b>開源深度學習框架</b>，用來開發與訓練神經網路與其他機器學習模型。</li>
+      <li><b>共同功能：</b>自動微分（自動算梯度）、使用 GPU 加速、提供現成的神經網路層與最佳化器。</li>
+      <li><b>TensorFlow：</b>Google 開發、2015 年開源；常搭配高階 API <b>Keras</b> 使用，部署工具完整（如手機、網頁端）。</li>
+      <li><b>PyTorch：</b>Meta（原 Facebook）開發、2016 年推出，2022 年起移交 PyTorch 基金會管理；寫法貼近一般 Python，在研究界非常普及。</li></ul></div>
+  </div>
+
+  <h3>整合比較表</h3>
+  <div class="cheat">
+    <span class="tag">先背這張</span>
+    <h4>機器學習框架速查表</h4>
+    <div class="tbl"><table>
+      <tr><th>工具</th><th>主要用途</th><th>開發者</th><th>代表情境</th><th>口訣</th><th>容易搞混</th></tr>
+      <tr><td><b>TensorFlow</b></td><td>深度學習模型開發與訓練</td><td>Google</td><td>影像辨識、語音、部署到手機</td><td>深度學習雙雄之一</td><td>Tableau（名字像）</td></tr>
+      <tr><td><b>PyTorch</b></td><td>深度學習模型開發與訓練</td><td>Meta／PyTorch 基金會</td><td>研究、生成式模型</td><td>深度學習雙雄之一</td><td>Python 本身</td></tr>
+      <tr><td><b>Keras</b></td><td>高階神經網路 API</td><td>開源社群（Google 支持）</td><td>快速搭模型</td><td>神經網路的簡易版介面</td><td>TensorFlow</td></tr>
+      <tr><td><b>scikit-learn</b></td><td>傳統機器學習</td><td>開源社群</td><td>迴歸、分類、分群、網格搜索</td><td>單機傳統 ML</td><td>深度學習框架</td></tr>
+      <tr><td><b>Spark MLlib</b></td><td>分散式機器學習</td><td>Apache</td><td>大資料上的分類、推薦 ALS</td><td>大資料的 ML</td><td>scikit-learn</td></tr>
+      <tr><td><b>SHAP</b></td><td>解釋單筆預測</td><td>開源套件</td><td>說明模型為什麼這樣判斷</td><td>記功記過</td><td>特徵重要性</td></tr>
+      <tr><td>Matplotlib／Tableau</td><td>資料視覺化</td><td>（第 9 章）</td><td>畫圖、儀表板</td><td>不是訓練模型</td><td>TensorFlow</td></tr>
+      <tr><td>MySQL／PostgreSQL</td><td>關聯式資料庫</td><td>（第 5 章）</td><td>存放表格資料</td><td>不是訓練模型</td><td>HDFS</td></tr>
+      <tr><td>HTML／JavaScript／React</td><td>網頁前端開發</td><td>（網頁技術）</td><td>做網站畫面</td><td>不是訓練模型</td><td>PyTorch</td></tr>
+    </table></div>
+  </div>
+  <div class="tbl"><table>
+    <tr><th>比較項目</th><th>網格搜索</th><th>隨機搜索</th><th>貝氏最佳化</th></tr>
+    <tr><td><b>怎麼挑組合</b></td><td>全部組合都試</td><td>隨機抽固定數量</td><td>依已試結果挑最有希望的</td></tr>
+    <tr><td><b>成本</b></td><td><b>最高，組合數用乘的</b></td><td>自己決定次數</td><td>通常比隨機更省次數</td></tr>
+    <tr><td><b>找得到最好的嗎</b></td><td>只在列出的格點裡找</td><td>看運氣與次數</td><td>通常較快接近好的區域</td></tr>
+    <tr><td><b>適合</b></td><td>超參數少、候選值少</td><td>超參數多、預算有限</td><td>每次訓練很貴</td></tr>
+  </table></div>
+  <div class="hook"><span class="tag">記憶鉤子</span><ul>
+    <li><b>網格搜索的缺點是「貴」：組合數用乘的，還要再乘交叉驗證折數。</b></li>
+    <li><b>SHAP＝替每個特徵記功記過：平均預測＋各特徵貢獻＝這筆預測。</b>解釋的是單筆，不是準確率。</li>
+    <li><b>TensorFlow、PyTorch＝深度學習雙雄；scikit-learn 做傳統 ML；Spark MLlib 做大資料 ML。</b></li>
+  </ul></div>
+  <div class="trap"><b>易錯提醒：</b>網格搜索最主要的缺點是計算成本，「會錯過格點之間的值」是次要限制；類別型超參數也能直接列進去。SHAP 解釋的是「這一筆為什麼是這個預測」，它不評估準確率、不挑超參數、也不找異常值。TensorFlow 和 Tableau 名字有點像，一個訓練模型、一個做儀表板。</div>
+</section>
+
+<!-- ================================================== 總整理 -->
+<section id="recap">
+  <h2><small>總整理</small>本章要記的十句話</h2>
+  <ol class="recap">
+    <li>Hadoop 三層：HDFS 存（區塊＋多份副本）、YARN 管（分配 CPU 和記憶體）、MapReduce 算。</li>
+    <li>MapReduce 的兩個核心操作就是 Map（拆開各自做）和 Reduce（合起來彙總），中間由 Shuffle 分組。</li>
+    <li>Spark 常比 MapReduce 快，主因是記憶體內計算，減少磁碟讀寫；反覆運算的工作最明顯。</li>
+    <li>Spark 四元件：SQL 查表、Streaming 追即時、MLlib 學模型、GraphX 走關係網。</li>
+    <li>MLlib 的 DataFrame API：統一好用、Catalyst 改計畫、Tungsten 跑得省，還有 ML Pipeline；RDD API 已進入維護模式。</li>
+    <li>數值範圍差太多用特徵縮放：標準化（平均 0、標準差 1）或歸一化（壓到 0～1）；特徵選擇是挑欄位，不是縮放。</li>
+    <li>「過去 7 天平均」是窗口特徵，「上個月同期」是滯後特徵；學低維嵌入用自動編碼器，線性降維用 PCA。</li>
+    <li>Bagging 平行投票（隨機森林）治不穩定；Boosting 依序訂正錯誤（AdaBoost、GBDT）治學不夠。</li>
+    <li>用過去評分預測沒評過的物品＝矩陣分解（SVD、ALS），屬於協同過濾。</li>
+    <li>網格搜索的缺點是貴；SHAP 解釋單筆預測中各特徵的貢獻；TensorFlow、PyTorch 做深度學習。</li>
+  </ol>
+</section>
+
+<!-- ================================================== 總彙整表 -->
+<section id="glossary">
+  <h2><small>考前速查</small>全章名詞總彙整表</h2>
+  <p class="note">把五個單元的比較表濃縮成一張。複習時遮住右邊三欄，看名詞說得出定義，再對照。</p>
+  <div class="tbl"><table>
+    <tr><th>名詞</th><th>一句話定義</th><th>口訣</th><th>容易跟誰搞混</th></tr>
+    <tr class="grp"><td colspan="4">單元 ① Hadoop 生態系與 Spark</td></tr>
+    <tr><td><b>HDFS</b></td><td>在叢集上可靠地存超大檔案（區塊＋副本）</td><td>倉庫</td><td>YARN</td></tr>
+    <tr><td><b>NameNode／DataNode</b></td><td>記錄區塊位置／實際存放資料</td><td>目錄與貨架</td><td>ResourceManager</td></tr>
+    <tr><td><b>YARN</b></td><td>叢集資源管理器，分配 CPU 和記憶體</td><td>調度中心</td><td>MapReduce</td></tr>
+    <tr><td><b>MapReduce</b></td><td>Map 拆開做、Shuffle 分組、Reduce 合起來</td><td>拆開做、合起來</td><td>Shuffle 的排序合併</td></tr>
+    <tr><td><b>Spark</b></td><td>記憶體內計算的分散式引擎</td><td>東西放桌上</td><td>MapReduce</td></tr>
+    <tr><td><b>Spark SQL</b></td><td>用 SQL／DataFrame 處理結構化資料</td><td>查表</td><td>MLlib</td></tr>
+    <tr><td><b>Spark Streaming</b></td><td>處理即時資料流（新版 Structured Streaming）</td><td>追即時</td><td>Kafka</td></tr>
+    <tr><td><b>MLlib</b></td><td>Spark 的機器學習函式庫</td><td>學模型</td><td>GraphX</td></tr>
+    <tr><td><b>GraphX</b></td><td>Spark 的圖運算元件</td><td>走關係網</td><td>MLlib</td></tr>
+    <tr><td><b>RDD</b></td><td>最底層、沒有欄位名稱的分散式資料集</td><td>一串物件</td><td>DataFrame</td></tr>
+    <tr><td><b>DataFrame</b></td><td>有欄位名稱與型別的分散式表格</td><td>看得懂欄位</td><td>RDD</td></tr>
+    <tr><td><b>Catalyst／Tungsten</b></td><td>查詢優化器／執行層效率引擎</td><td>改計畫／跑得省</td><td>彼此</td></tr>
+    <tr><td><b>ML Pipeline</b></td><td>把轉換、訓練、預測串成固定流程</td><td>生產線</td><td>DAG</td></tr>
+    <tr class="grp"><td colspan="4">單元 ② 特徵工程</td></tr>
+    <tr><td><b>特徵縮放</b></td><td>把不同範圍的數值換成同一把尺</td><td>換同一把尺</td><td>特徵選擇</td></tr>
+    <tr><td><b>標準化</b></td><td>（x − 平均）÷ 標準差，平均 0、標準差 1</td><td>z 分數</td><td>歸一化</td></tr>
+    <tr><td><b>歸一化（最小最大）</b></td><td>壓到 0 到 1 之間</td><td>壓進 0～1</td><td>標準化</td></tr>
+    <tr><td><b>獨熱編碼</b></td><td>每個類別開一欄 0／1</td><td>類別少用獨熱</td><td>特徵縮放</td></tr>
+    <tr><td><b>特徵雜湊</b></td><td>用雜湊丟進固定數量的桶</td><td>類別超多用雜湊</td><td>獨熱編碼</td></tr>
+    <tr><td><b>滯後特徵</b></td><td>過去某個時間點的值當今天的欄位</td><td>回頭看某一天</td><td>窗口特徵</td></tr>
+    <tr><td><b>窗口特徵</b></td><td>一段過去時間的統計量（如 7 天平均）</td><td>框一段時間</td><td>滯後特徵</td></tr>
+    <tr><td><b>PCA</b></td><td>線性降維，找變化最大的方向</td><td>找一條直線</td><td>特徵選擇</td></tr>
+    <tr><td><b>自動編碼器</b></td><td>神經網路先壓縮再還原，中間層＝嵌入</td><td>中間那層是精華</td><td>SVM</td></tr>
+    <tr><td><b>特徵選擇</b></td><td>挑出部分原始欄位保留</td><td>挑欄位</td><td>降維、縮放</td></tr>
+    <tr class="grp"><td colspan="4">單元 ③ 集成學習</td></tr>
+    <tr><td><b>弱學習器</b></td><td>只比亂猜好一點的簡單模型</td><td>小樹</td><td>強學習器</td></tr>
+    <tr><td><b>Bagging</b></td><td>有放回抽樣、平行訓練、投票</td><td>一起投票</td><td>Boosting</td></tr>
+    <tr><td><b>隨機森林</b></td><td>Bagging＋分岔時隨機挑欄位</td><td>很多樹投票</td><td>Boosting</td></tr>
+    <tr><td><b>Boosting</b></td><td>依序訓練、後面訂正前面的錯、加權合成</td><td>接力訂正</td><td>隨機森林</td></tr>
+    <tr><td><b>AdaBoost／GBDT</b></td><td>加重分錯樣本的權重／學殘差</td><td>加權錯誤／補差額</td><td>Bagging</td></tr>
+    <tr class="grp"><td colspan="4">單元 ④ 推薦系統</td></tr>
+    <tr><td><b>協同過濾</b></td><td>只看使用者與物品的互動紀錄來推薦</td><td>看人的行為</td><td>內容式推薦</td></tr>
+    <tr><td><b>矩陣分解</b></td><td>評分表拆成人、物品兩張潛在因子表</td><td>補空格</td><td>線性迴歸</td></tr>
+    <tr><td><b>SVD（推薦用）</b></td><td>只用已知格訓練的分解法</td><td>經典分解</td><td>完整 SVD</td></tr>
+    <tr><td><b>ALS</b></td><td>交替固定一邊、解另一邊</td><td>輪流解</td><td>梯度下降</td></tr>
+    <tr><td><b>冷啟動</b></td><td>新用戶、新物品沒有紀錄難推薦</td><td>沒資料就難猜</td><td>資料稀疏</td></tr>
+    <tr class="grp"><td colspan="4">單元 ⑤ 調參、可解釋性與框架</td></tr>
+    <tr><td><b>超參數</b></td><td>訓練前由人設定的值（學習率、深度）</td><td>人設的</td><td>參數</td></tr>
+    <tr><td><b>網格搜索</b></td><td>全部組合都試，成本用乘的</td><td>貴</td><td>隨機搜索</td></tr>
+    <tr><td><b>隨機搜索／貝氏最佳化</b></td><td>抽樣試／依已試結果挑下一組</td><td>省次數</td><td>網格搜索</td></tr>
+    <tr><td><b>SHAP</b></td><td>單筆預測中各特徵的貢獻，總和＝預測－平均</td><td>記功記過</td><td>特徵重要性</td></tr>
+    <tr><td><b>TensorFlow／PyTorch</b></td><td>深度學習模型開發與訓練框架</td><td>深度學習雙雄</td><td>視覺化工具</td></tr>
+    <tr><td><b>scikit-learn</b></td><td>單機傳統機器學習函式庫</td><td>傳統 ML</td><td>Spark MLlib</td></tr>
+  </table></div>
+</section>
+
+<!-- ================================================== 自我檢測 -->
+<section id="quiz">
+  <h2><small>動手練</small>自我檢測 10 題</h2>
+  <p class="note">自編情境練習，練的是「看情境選工具、選方法」。先自己想好答案，再點「看答案」。</p>
+  <ol class="quiz">
+    <li>公司每天產生 3TB 的機台日誌，要放在 50 台一般伺服器上，而且其中一台壞掉時資料不能遺失。Hadoop 裡負責這件事的是哪個組件？它靠什麼機制做到不遺失？
+      <details><summary>看答案</summary><p><b>HDFS。</b>檔案切成區塊，每塊預設複製 3 份放在不同電腦，一台壞掉還能從其他副本讀到。</p></details></li>
+    <li>同一個 Hadoop 叢集上，行銷部的 Spark 報表和工程部的 MapReduce 批次工作同時在跑，誰來決定各自能用多少 CPU 和記憶體？
+      <details><summary>看答案</summary><p><b>YARN。</b>它是叢集資源管理器，ResourceManager 統一分配 CPU 和記憶體給不同的應用程式。</p></details></li>
+    <li>要統計 1 億則留言中每個關鍵字出現幾次。請用 MapReduce 的兩個階段說明：第一階段每台電腦在做什麼？第二階段在做什麼？
+      <details><summary>看答案</summary><p><b>Map 階段：</b>每台電腦處理自己那份留言，每看到一個關鍵字就輸出（關鍵字, 1）。<b>Reduce 階段：</b>系統先把同一關鍵字的配對分到同一處（Shuffle），再把它們加總成出現次數。</p></details></li>
+    <li>同事說：「Spark 比 MapReduce 快，是因為 Spark 用比較快的程式語言寫的。」這句話哪裡不對？主要原因是什麼？
+      <details><summary>看答案</summary><p><b>主要原因不是程式語言，而是記憶體內計算：</b>Spark 把中間結果盡量留在記憶體，減少磁碟讀寫，反覆運算時差距最明顯。（而且 Spark 主要用 Scala、MapReduce 用 Java，兩者都跑在 JVM 上。）</p></details></li>
+    <li>你要在 Spark 上做三件事：(1) 用 SQL 算各縣市營收、(2) 分析會員之間的推薦關係網找出關鍵人物、(3) 訓練一個流失預測模型。各用哪個元件？
+      <details><summary>看答案</summary><p><b>(1) Spark SQL；(2) GraphX</b>（會員和關係是點和線組成的圖）；<b>(3) MLlib</b>（機器學習）。</p></details></li>
+    <li>一份資料有「身高（公分）」和「年薪（元）」兩個欄位，要拿去做 KNN 分類。應該先做什麼處理？如果改用決策樹，這一步一樣重要嗎？
+      <details><summary>看答案</summary><p><b>先做特徵縮放</b>（標準化或歸一化），否則年薪的大數字會主導距離。決策樹是依門檻切分，通常不太受尺度影響，這一步相對沒那麼重要。</p></details></li>
+    <li>要預測明天的便當銷量，你新增了兩個欄位：「昨天的銷量」和「過去 14 天的平均銷量」。這兩個欄位各屬於哪一種特徵？做這兩個欄位時要注意什麼？
+      <details><summary>看答案</summary><p><b>「昨天的銷量」是滯後特徵，「過去 14 天平均」是窗口特徵。</b>要注意只用預測日以前的資料，不要把當天或未來的值算進去（避免資料洩漏）。</p></details></li>
+    <li>資料有 300 個欄位，你想壓成 10 個濃縮特徵來畫圖和分群，而且懷疑欄位之間有彎曲的非線性關係。PCA 和自動編碼器哪個比較合適？如果只是想「留下最有用的 20 個原始欄位」，又該用什麼？
+      <details><summary>看答案</summary><p><b>自動編碼器比較合適</b>，它能學非線性關係，中間瓶頸層輸出的就是 10 維嵌入；PCA 只找線性方向。只想留下 20 個原始欄位，則用<b>特徵選擇</b>。</p></details></li>
+    <li>一個模型的做法是：先訓練一棵小樹，把它分錯的資料加重，再訓練第二棵小樹專門補救，如此重複 100 次後加權合成。這是 Bagging 還是 Boosting？隨機森林屬於哪一種？
+      <details><summary>看答案</summary><p><b>Boosting</b>（依序、加重分錯的資料、加權合成，像 AdaBoost）。<b>隨機森林屬於 Bagging</b>（平行訓練、投票）。</p></details></li>
+    <li>你要調 3 個超參數，候選值分別有 5、4、6 種，並做 10 折交叉驗證。網格搜索總共要訓練幾次？如果模型預測某位客戶會流失，主管問「為什麼是他」，可以用什麼方法說明每個特徵的影響？
+      <details><summary>看答案</summary><p><b>5 × 4 × 6 ＝ 120 組，× 10 折＝ 1,200 次訓練。</b>解釋單一客戶的預測可以用 <b>SHAP</b>：平均預測加上各特徵的 SHAP 值等於這位客戶的預測，正值代表推高流失機率、負值代表拉低。</p></details></li>
+  </ol>
+</section>
+</main>
+
+<p style="text-align:center;color:var(--muted);font-size:14px;margin:44px 0 0">其他章：<a href="index.html">L22 觀念複習總目錄</a></p>
+<footer>🍀 Learn AI with Tarshar · iPAS 中級 L22 觀念複習<br>依 L22401 學習範圍整理的原創圖解，不含考古題原文。圖中數字皆為自編範例並以程式實際計算。</footer>
+</body>
+</html>
