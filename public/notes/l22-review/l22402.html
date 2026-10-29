@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="iPAS 中級 L22402 大數據在鑑別式 AI 中的應用：鑑別式與生成式、分類模型速查、過度擬合與資料漂移、混淆矩陣與 ROC、分散式訓練、圖像前處理與 MLOps 的圖解觀念複習。">
+<title>L22402 鑑別式 AI 觀念複習｜🍀Learn AI with Tarshar</title>
+<style>
+:root{
+  --bg:#08101f;--bg2:#0d1830;--panel:#111f3b;--panel2:#152746;
+  --line:rgba(137,172,255,.18);--text:#eef4ff;--muted:#a7b7d8;--dim:#7183aa;
+  --cyan:#41dcff;--blue:#6690ff;--purple:#b57bff;--green:#4de1a1;--orange:#ffc45b;--red:#ff8a80
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;color:var(--text);line-height:1.85;background:
+radial-gradient(900px 500px at 10% -10%,rgba(65,220,255,.13),transparent 65%),
+radial-gradient(900px 520px at 95% 10%,rgba(181,123,255,.14),transparent 62%),var(--bg);min-height:100vh}
+a{color:var(--cyan)}.wrap{width:min(880px,calc(100% - 32px));margin:auto}
+.topbar{position:sticky;top:0;z-index:20;background:rgba(8,16,31,.84);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.topbar .wrap{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.back{text-decoration:none;color:var(--cyan);font-size:14px;font-weight:800}.brand{font-size:12px;color:var(--muted);letter-spacing:1.5px}
+.hero{padding:46px 0 18px}
+.eyebrow{display:inline-flex;padding:6px 13px;border:1px solid rgba(65,220,255,.35);border-radius:999px;color:var(--cyan);font-size:12px;letter-spacing:2px;background:rgba(65,220,255,.06)}
+h1{font-size:clamp(28px,5vw,46px);line-height:1.25;margin:16px 0 10px;letter-spacing:-.02em}
+.lead{color:var(--muted);font-size:16px;margin:0}
+.toc{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:26px 0 8px}
+.toc a{display:block;text-decoration:none;color:var(--text);border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:rgba(17,31,59,.72);font-size:14px;font-weight:700}
+.toc a span{color:var(--cyan);margin-right:6px}
+section{margin:38px 0}
+h2{font-size:24px;margin:0 0 12px;padding-top:8px;border-top:1px solid var(--line)}
+h2 small{display:block;color:var(--cyan);font-size:12px;letter-spacing:2px;margin-top:14px}
+h3{font-size:17px;color:var(--orange);margin:22px 0 6px}
+h4{font-size:15px;color:var(--cyan);margin:0 0 4px}
+p{margin:8px 0}
+.why{border-left:4px solid var(--cyan);background:rgba(65,220,255,.06);border-radius:0 14px 14px 0;padding:12px 16px;color:var(--muted)}
+.why b{color:var(--text)}
+figure{margin:16px 0;background:#fff;border-radius:16px;padding:8px;overflow:hidden}
+figure img{display:block;width:100%;height:auto}figcaption{color:#666;font-size:12px;text-align:right;padding:2px 6px 0}
+ol,ul{padding-left:22px;color:var(--muted)}li{margin:4px 0}li b{color:var(--text)}
+.defs{display:grid;gap:10px;margin:12px 0}
+.def{border:1px solid var(--line);border-radius:14px;background:rgba(17,31,59,.72);padding:12px 16px}
+.def ul{margin:2px 0 0;padding-left:20px;font-size:14.5px}
+.def li b{color:var(--orange)}
+.note{color:var(--muted);font-size:14px}
+.tbl{overflow-x:auto;margin:14px 0;border:1px solid var(--line);border-radius:14px}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:14px}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:var(--panel2);color:var(--cyan);font-weight:800}tr:last-child td{border-bottom:0}
+td b{color:var(--orange)}
+tr.grp td{background:rgba(181,123,255,.12);color:var(--purple);font-weight:800}
+.hook{border:1px solid rgba(255,196,91,.5);background:linear-gradient(135deg,rgba(255,196,91,.13),rgba(255,196,91,.04));border-radius:14px;padding:12px 16px 12px;margin:14px 0}
+.hook .tag{display:inline-block;font-size:12px;font-weight:900;letter-spacing:1.5px;color:#2a1a00;background:var(--orange);border-radius:999px;padding:2px 10px;margin-bottom:6px}
+.hook ul{margin:0;padding-left:20px;color:var(--text)}.hook li b{color:var(--orange)}
+.trap{border:1px solid rgba(255,138,128,.4);background:rgba(255,138,128,.07);border-radius:14px;padding:12px 16px;margin:14px 0}
+.trap b{color:var(--red)}
+.recap{counter-reset:n;list-style:none;padding:0}
+.recap li{counter-increment:n;position:relative;padding:12px 14px 12px 50px;border:1px solid var(--line);border-radius:14px;background:rgba(17,31,59,.72);margin:8px 0;color:var(--text)}
+.recap li::before{content:counter(n);position:absolute;left:14px;top:12px;width:26px;height:26px;border-radius:50%;background:var(--green);color:#062418;font-weight:900;text-align:center;line-height:26px;font-size:13px}
+.quiz{list-style:none;padding:0;counter-reset:q}
+.quiz li{counter-increment:q;border:1px solid var(--line);border-radius:14px;background:rgba(17,31,59,.72);padding:12px 16px;margin:10px 0;color:var(--text)}
+.quiz li::before{content:"練習 " counter(q);display:block;color:var(--cyan);font-size:12px;font-weight:900;letter-spacing:1.5px}
+details{margin-top:8px}summary{cursor:pointer;color:var(--green);font-weight:800;font-size:14px}
+details p{color:var(--muted);font-size:14.5px}details b{color:var(--orange)}
+footer{text-align:center;color:var(--dim);font-size:12px;line-height:1.9;border-top:1px solid var(--line);margin-top:50px;padding:30px 20px 44px}
+@media(max-width:600px){.wrap{width:calc(100% - 32px)}.brand{display:none}.toc{grid-template-columns:1fr}h2{font-size:21px}}
+code{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:.9em;color:var(--cyan);background:rgba(65,220,255,.08);border-radius:6px;padding:1px 6px;word-break:break-word}
+.cheat{border:2px solid var(--orange);background:linear-gradient(135deg,rgba(255,196,91,.16),rgba(255,196,91,.05));border-radius:16px;padding:14px 14px 6px;margin:18px 0}
+.cheat .tag{display:inline-block;font-size:12px;font-weight:900;letter-spacing:1.5px;color:#2a1a00;background:var(--orange);border-radius:999px;padding:2px 10px;margin-bottom:4px}
+.cheat h4{color:var(--orange);font-size:17px;margin:4px 0 2px}
+.cheat .tbl{background:rgba(8,16,31,.55)}
+.cheat td code{white-space:nowrap}
+</style>
+</head>
+<body>
+<nav class="topbar"><div class="wrap"><a class="back" href="../ipas-intermediate.html">← iPAS 中級總覽</a><span class="brand">🍀 LEARN AI WITH TARSHAR · L22 觀念複習</span></div></nav>
+
+<main class="wrap">
+<header class="hero">
+  <span class="eyebrow">iPAS 中級 · 科目二 · L22402</span>
+  <h1>大數據在鑑別式 AI 中的應用｜觀念圖解複習</h1>
+  <p class="lead">這一章的主角是<b>鑑別式模型</b>：給一筆資料，判斷它屬於哪一類（或預測一個數字）。容易卡住的地方有兩種：一是<b>模型名字和招牌特性對不起來</b>（核技巧是誰？條件獨立是誰？），二是<b>兩個長得很像的現象分不清</b>（過度擬合和資料漂移、ROC 的兩個軸）。所以每個單元照「為什麼需要它 → 一步步搭起來 → 名詞各自定義 → 整合比較表 → 記憶鉤子 → 易錯提醒」排列。</p>
+  <div class="hook"><span class="tag">先背這張</span><ul>
+    <li><b>單元 ① 的「分類模型速查表」</b>用黃框標出來，模型名稱和特性的對應先背這一張。</li>
+    <li>背法：<b>遮住第一欄，看「看到這些關鍵字就想到它」那一欄，說得出模型名字</b>，就過關了。</li>
+    <li>最常混的三組：<b>核技巧＋最大間隔＝SVM</b>；<b>貝氏定理＋條件獨立＋快＝樸素貝氏</b>；<b>非線性＋資料量龐大＝深度神經網路 DNN</b>。</li>
+  </ul></div>
+  <nav class="toc" aria-label="目錄">
+    <a href="#map"><span>◎</span>全章地圖：一個分類專案的五站</a>
+    <a href="#u1"><span>①</span>鑑別式 vs 生成式、分類模型速查</a>
+    <a href="#u2"><span>②</span>過度擬合、欠擬合、資料漂移</a>
+    <a href="#u3"><span>③</span>評估指標：混淆矩陣、ROC 與 AUC</a>
+    <a href="#u4"><span>④</span>分散式訓練與高基數特徵</a>
+    <a href="#u5"><span>⑤</span>圖像前處理與上線維運</a>
+    <a href="#recap"><span>★</span>十句話總整理</a>
+    <a href="#glossary"><span>☰</span>全章名詞總彙整表</a>
+    <a href="#negative"><span>※</span>否定題審題提醒</a>
+    <a href="#quiz"><span>✎</span>自我檢測 10 題</a>
+  </nav>
+</header>
+
+<!-- ================================================== 全章地圖 -->
+<section id="map">
+  <h2><small>先看全貌</small>全章地圖：一個分類專案的五站</h2>
+  <p>本章五個單元，剛好是做一個分類專案的順序。後面就沿著這條線一站一站講：</p>
+  <div class="tbl"><table>
+    <tr><th>站</th><th>這一站在問什麼</th><th>本章的關鍵名詞</th></tr>
+    <tr><td><b>① 選模型</b></td><td>資料是直的還是彎的？資料量大不大？</td><td>鑑別式、生成式、SVM、樸素貝氏、DNN</td></tr>
+    <tr><td><b>② 訓練時別學歪</b></td><td>模型是學太少、背太多，還是世界變了？</td><td>欠擬合、過度擬合、資料漂移、提早停止</td></tr>
+    <tr><td><b>③ 用對的指標打分</b></td><td>只看準確率會不會被騙？</td><td>混淆矩陣、精確率、召回率、ROC、AUC</td></tr>
+    <tr><td><b>④ 資料太大時分工</b></td><td>切資料還是切模型？誰保管參數？一步看多少資料？</td><td>資料平行、參數伺服器、小批次 SGD、高基數</td></tr>
+    <tr><td><b>⑤ 前處理與上線後</b></td><td>圖片怎麼整理？上線後怎麼維持？</td><td>調整大小、歸一化、資料增強、MLOps、聯邦學習、公平性</td></tr>
+  </table></div>
+</section>
+
+<!-- ================================================== 單元① -->
+<section id="u1">
+  <h2><small>單元 ①</small>鑑別式 vs 生成式，以及分類模型速查</h2>
+  <p class="why"><b>為什麼需要它？</b> 分類模型的名字很多，每個都有一兩個「招牌特性」，例如核技巧、條件獨立、非線性又資料量龐大。只要把名字和招牌特性對起來，看到一句描述就能說出是哪個模型。所以先搞懂兩大類模型在做什麼，再把常見的分類模型放進同一張表，一次比較它們的核心想法、關鍵字和優缺點。</p>
+  <h3>一步步搭起來</h3>
+  <ol>
+    <li><b>分類問題長什麼樣。</b>每筆資料有幾個特徵（X），要判斷它的類別（Y），例如「這封信是不是垃圾信」「這位客戶會不會流失」。</li>
+    <li><b>兩種解題思路。</b>鑑別式模型直接學「看到 X，Y 是哪一類的機率」，也就是畫出一條<b>決策邊界</b>；生成式模型先學「每一類的資料大概長什麼樣」，再用貝氏定理回推類別，而且能產生新資料。</li>
+    <li><b>界線是直的還是彎的。</b>邏輯迴歸、線性 SVM 畫直線（線性）；決策樹、KNN、核 SVM、神經網路能畫彎曲的界線（非線性）。</li>
+    <li><b>資料量大不大。</b>資料很多時，要看模型的「訓練」和「預測」會不會變得太慢。核 SVM、KNN 在超大資料上比較吃力；邏輯迴歸、樸素貝氏、樹模型、用小批次訓練的神經網路比較能擴充。</li>
+  </ol>
+  <figure><a href="img/l22402-disc_vs_gen.png" target="_blank" rel="noopener"><img src="img/l22402-disc_vs_gen.png" alt="鑑別式與生成式對照：左邊鑑別式模型（邏輯迴歸）畫出一條藍色決策邊界，準確率 98%，黑圈新資料是紅類的機率 0.85；右邊生成式模型用圈圈描出每一類資料的分布，同一個新點用貝氏定理算出紅類機率 0.87，還能生成新樣本" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+
+  <h3>名詞各自定義</h3>
+  <div class="defs">
+    <div class="def"><h4>鑑別式模型 Discriminative Model</h4><ul>
+      <li><b>是什麼：</b>直接學習 <b>P(Y｜X)</b>：給定資料特徵 X，判斷類別 Y 的機率，或直接學出決策邊界。</li>
+      <li><b>優點：</b>目標就是「分得準」，通常比生成式模型直接、省資源，分類準確度也常比較好。</li>
+      <li><b>代表：</b>邏輯迴歸、SVM、決策樹、隨機森林、GBDT、KNN、深度神經網路（用來分類時）。</li></ul></div>
+    <div class="def"><h4>生成式模型 Generative Model</h4><ul>
+      <li><b>是什麼：</b>學習資料和類別的聯合分布 <b>P(X, Y)</b>（或每一類的 P(X｜Y)），也就是「每一類的資料長什麼樣」。</li>
+      <li><b>能做的事：</b>用貝氏定理推回 P(Y｜X) 來分類；也能<b>產生新樣本</b>，例如生成圖片、文字。</li>
+      <li><b>代表：</b>樸素貝氏、高斯混合模型、隱馬可夫模型、GAN、大型語言模型。</li>
+      <li><b>分類上的小提醒：</b>學術上樸素貝氏常被歸為生成式模型，但它最常見的用途是「拿來分類」，所以也常和其他分類模型放在一起比較。記住它的招牌特性（貝氏定理、條件獨立、快）最實用；若你的教材另有說法，以教材為準。</li></ul></div>
+    <div class="def"><h4>決策邊界 Decision Boundary</h4><ul>
+      <li><b>是什麼：</b>特徵空間裡把不同類別分開的那條線（或曲面）。線的一邊判 A 類、另一邊判 B 類。</li>
+      <li><b>例子：</b>上圖左邊的藍線就是邏輯迴歸學出的決策邊界，訓練資料準確率約 98%。</li></ul></div>
+  </div>
+  <figure><a href="img/l22402-svm_kernel.png" target="_blank" rel="noopener"><img src="img/l22402-svm_kernel.png" alt="SVM 與核技巧：左圖最大間隔的藍色界線間隔寬 1.97，換一條轉 30 度的灰線間隔只剩 1.36，黑圈是決定界線的支持向量；右圖一維資料一刀切不開，加上 x 平方的座標後一條橫線就能切開；核方法要算每兩筆資料的相似度，10 萬筆就有 100 億組配對" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>支持向量機 SVM（Support Vector Machine）</h4><ul>
+      <li><b>核心想法：</b>找一條<b>離兩邊最近的點都最遠</b>的界線（最大間隔，Margin）。上圖藍線的間隔寬 1.97，換一條轉 30° 的灰線，間隔只剩 1.36。</li>
+      <li><b>支持向量：</b>最靠近界線的那幾個點（上圖黑圈）。界線的位置由它們決定，其他點稍微移動也不影響。</li>
+      <li><b>核技巧 Kernel Trick：</b>資料在原本的空間分不開時，想像把它搬到更高維的空間就分得開了（上圖右：加一個 x² 座標，一條橫線就切開）。核函數讓模型<b>不必真的算出新座標</b>，直接算「升維後兩筆資料有多像」。常見核函數有線性核、多項式核、RBF（高斯）核。</li>
+      <li><b>缺點：</b>核 SVM 要比較「每兩筆資料」的相似度，計算量大約隨筆數的平方以上成長。10 萬筆就有 100 億組配對，所以<b>資料量極大時訓練可能很慢</b>。</li></ul></div>
+  </div>
+  <figure><a href="img/l22402-naive_bayes.png" target="_blank" rel="noopener"><img src="img/l22402-naive_bayes.png" alt="樸素貝氏計算例：信件含免費與中獎等字，垃圾信分數 0.4 乘 0.6 乘 0.3 等於 0.072，正常信分數 0.6 乘 0.1 乘 0.05 等於 0.003，換算後是垃圾信的機率約 96%；因為假設特徵條件獨立，機率可以直接相乘" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>樸素貝氏分類器 Naive Bayes</h4><ul>
+      <li><b>核心想法：</b>用<b>貝氏定理</b>算「看到這些特徵時，屬於某類的機率」，並<b>假設特徵之間條件獨立</b>，所以每個特徵的機率可以直接相乘。</li>
+      <li><b>例子：</b>上圖垃圾信分數 0.4 × 0.6 × 0.3 ＝ 0.072，正常信分數 0.6 × 0.1 × 0.05 ＝ 0.003，換算後是垃圾信的機率約 96%。</li>
+      <li><b>優點：</b>訓練只要數次數，<b>計算簡單、速度快</b>，在文字分類（垃圾信、情感分析）常被拿來當基準模型。</li>
+      <li><b>限制：</b>「條件獨立」在真實的高維資料裡常常不成立，算出來的機率值可能不準；它沒有核技巧，也不是以「訓練慢」出名。</li></ul></div>
+  </div>
+  <figure><a href="img/l22402-linear_vs_dnn.png" target="_blank" rel="noopener"><img src="img/l22402-linear_vs_dnn.png" alt="同心圓資料 400 筆：邏輯迴歸畫的是直線，準確率約 52% 和亂猜差不多；兩層隱藏層的神經網路畫出圓形界線，訓練資料準確率 100%" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>深度神經網路 DNN（Deep Neural Network）</h4><ul>
+      <li><b>核心想法：</b>很多層神經元疊起來，每一層做一次「加權總和＋非線性激活函數」，層數越多越能表示複雜、彎曲的關係。</li>
+      <li><b>例子：</b>上圖同心圓資料，邏輯迴歸畫的是直線，準確率約 52%；兩層隱藏層的神經網路畫出圓形界線，訓練資料準確率 100%。</li>
+      <li><b>適合：</b><b>非線性關係＋資料量龐大</b>，例如影像、語音、文字、大量行為紀錄；可以用小批次訓練、GPU 加速，資料越多通常越能發揮。</li>
+      <li><b>缺點：</b>需要大量資料和運算資源、超參數多、比較難解釋為什麼這樣判斷。</li></ul></div>
+    <div class="def"><h4>其他常見分類模型</h4><ul>
+      <li><b>邏輯迴歸 Logistic Regression：</b>把特徵加權總和丟進 Sigmoid 函數變成 0～1 的機率，界線是直線。快、好解釋，常當第一個基準模型。名字有「迴歸」，但主要用來<b>分類</b>。</li>
+      <li><b>決策樹 Decision Tree：</b>一連串「如果…就…」的問題把資料切開，像流程圖。好解釋，但一棵很深的樹容易過度擬合。</li>
+      <li><b>隨機森林 Random Forest：</b>很多棵決策樹各自用抽樣資料訓練，再投票（Bagging）。比單棵樹穩定，每棵樹可以平行訓練。</li>
+      <li><b>梯度提升決策樹 GBDT：</b>一棵接一棵訓練，每棵新樹專門修正前面的誤差（Boosting）。表格資料上準確度常常很好；XGBoost、LightGBM 是常見實作。</li>
+      <li><b>K 近鄰 KNN：</b>不事先訓練，預測時找最近的 K 筆資料投票。概念簡單、能處理非線性；但<b>資料量大時，每次預測都要和大量資料算距離，很慢、很吃記憶體</b>，也需要先做特徵縮放。</li>
+      <li><b>線性判別分析 LDA：</b>找一個投影方向讓不同類別分得最開，界線是直線；也常用來降維。</li></ul></div>
+    <div class="def"><h4>常被放在一起、但不是分類器的名字（對照用）</h4><ul>
+      <li><b>主成分分析 PCA：</b><b>降維</b>方法（非監督式），把很多欄位壓成少數幾個新欄位，而且抓的是線性結構；它本身不做分類，壓完還要再接一個分類模型。</li>
+      <li><b>線性迴歸 Linear Regression：</b>預測<b>連續數值</b>（例如房價），不是分類器，表示的也是線性關係。</li></ul></div>
+  </div>
+
+  <h3>整合比較表</h3>
+  <div class="cheat">
+    <span class="tag">先背這張</span>
+    <h4>分類模型速查表</h4>
+    <div class="tbl"><table>
+      <tr><th>模型</th><th>核心想法</th><th>看到這些關鍵字就想到它</th><th>優點</th><th>缺點／限制</th><th>容易搞混</th></tr>
+      <tr><td><b>邏輯迴歸</b></td><td>加權總和轉成機率</td><td>線性、機率、基準模型</td><td>快、好解釋</td><td>界線是直線</td><td>線性迴歸</td></tr>
+      <tr><td><b>SVM</b></td><td>最大間隔的界線</td><td><b>核技巧、最大間隔、超平面、支持向量</b></td><td>高維表現好</td><td><b>大資料訓練慢</b></td><td>邏輯迴歸</td></tr>
+      <tr><td><b>樸素貝氏</b></td><td>貝氏定理＋條件獨立</td><td><b>貝氏定理、條件獨立</b></td><td><b>計算簡單、快</b></td><td>假設常不成立</td><td>SVM</td></tr>
+      <tr><td><b>決策樹</b></td><td>如果…就…的規則</td><td>規則、流程圖</td><td>好懂</td><td>易過度擬合</td><td>隨機森林</td></tr>
+      <tr><td><b>隨機森林</b></td><td>多棵樹投票</td><td>Bagging、投票、平行</td><td>穩定、可平行</td><td>模型較大</td><td>GBDT</td></tr>
+      <tr><td><b>GBDT</b></td><td>樹接力修正誤差</td><td>Boosting、殘差</td><td>表格資料常很準</td><td>依序訓練</td><td>隨機森林</td></tr>
+      <tr><td><b>KNN</b></td><td>看最近 K 個鄰居</td><td>鄰居、距離</td><td>簡單、可非線性</td><td><b>大資料預測慢</b></td><td>K-means</td></tr>
+      <tr><td><b>DNN</b></td><td>多層非線性轉換</td><td><b>非線性、資料量龐大、GPU</b></td><td>能學複雜關係</td><td>難解釋、要大量資料</td><td>PCA</td></tr>
+    </table></div>
+  </div>
+  <p>兩大類模型再並排一次：</p>
+  <div class="tbl"><table>
+    <tr><th>比較項目</th><th>鑑別式模型</th><th>生成式模型</th></tr>
+    <tr><td><b>學什麼</b></td><td>P(Y｜X)：看到資料判類別</td><td>P(X, Y)：每一類的資料分布</td></tr>
+    <tr><td><b>畫面比喻</b></td><td>畫一條界線</td><td>畫每一類的輪廓</td></tr>
+    <tr><td><b>能不能產生新資料</b></td><td>通常不行</td><td>可以</td></tr>
+    <tr><td><b>分類效率</b></td><td>通常較直接、較省</td><td>要多學資料分布，通常較費工</td></tr>
+    <tr><td><b>代表</b></td><td>邏輯迴歸、SVM、樹模型、KNN、DNN</td><td>樸素貝氏、高斯混合、GAN、大型語言模型</td></tr>
+  </table></div>
+  <div class="hook"><span class="tag">記憶鉤子</span><ul>
+    <li><b>鑑別式「畫界線」，生成式「畫輪廓、還能造新的」。</b></li>
+    <li><b>SVM＝最大間隔＋核技巧，強但大資料慢；樸素貝氏＝貝氏定理＋條件獨立，快但天真。</b></li>
+    <li><b>非線性＋資料量龐大＝DNN；PCA 是降維，不是分類器。</b></li>
+  </ul></div>
+  <div class="trap"><b>易錯提醒：</b>PCA 常和分類模型出現在同一串名字裡，但它是降維，本身不做分類，而且抓的是線性結構。KNN 雖然能處理非線性，資料量一大，每次預測都要和大量資料比距離，反而不適合。樸素貝氏以「快」出名，看到「訓練可能很慢」「核技巧」要想到的是 SVM。邏輯迴歸名字有「迴歸」，做的卻是分類；預測連續數值的是線性迴歸。</div>
+</section>
+
+<!-- ================================================== 單元② -->
+<section id="u2">
+  <h2><small>單元 ②</small>過度擬合、欠擬合、資料漂移：三種「表現變差」</h2>
+  <p class="why"><b>為什麼需要它？</b> 模型表現變差時，原因可能完全不同：模型太簡單、模型把訓練資料背起來、或是上線後世界變了。原因不同，對策也不同。所以要學會<b>看現象說出名字</b>，例如「訓練集持續變好、驗證集開始下降」是哪一種。</p>
+  <h3>一步步搭起來</h3>
+  <ol>
+    <li><b>把資料分成三份。</b>訓練集（拿來學）、驗證集（訓練中檢查、調參數用）、測試集（最後打分數用）。驗證集和測試集是模型「沒看過」的資料。</li>
+    <li><b>一邊訓練、一邊看兩條線。</b>每訓練一輪，就記下訓練集和驗證集的表現。</li>
+    <li><b>兩條線一起變好＝還在學規律。</b>這時繼續訓練是有幫助的。</li>
+    <li><b>訓練線還在升、驗證線開始降＝過度擬合。</b>模型開始把訓練資料裡的雜訊和巧合也背下來。在這個轉折點附近停下來，就是「提早停止」。</li>
+    <li><b>上線之後再看一次。</b>就算訓練時一切正常，上線幾個月後新資料的分布可能變了，表現也會下降，這是資料漂移。</li>
+  </ol>
+  <figure><a href="img/l22402-overfit_curve.png" target="_blank" rel="noopener"><img src="img/l22402-overfit_curve.png" alt="神經網路訓練曲線：驗證集準確率在第 750 輪左右達到最高約 76%，之後訓練集繼續升到約 99%，驗證集卻掉到約 72%，兩條線的開口越來越大就是過度擬合" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <p>上圖是實際訓練一個神經網路得到的曲線：驗證集準確率在第 750 輪左右達到最高約 76%，之後訓練集繼續升到約 99%，驗證集卻掉到約 72%。這個「開口越來越大」的形狀，就是過度擬合的典型樣子。</p>
+  <figure><a href="img/l22402-fit_drift.png" target="_blank" rel="noopener"><img src="img/l22402-fit_drift.png" alt="三種表現變差：用直線配彎曲資料是欠擬合，訓練誤差 0.29、驗證誤差 0.34；剛剛好的曲線訓練誤差 0.11、驗證誤差 0.24；11 次曲線穿過每個點是過度擬合，訓練誤差 0.00、驗證誤差 1.33；下方資料漂移例子，同一個門檻 65 在訓練時期準確率 94%，一年後資料整體右移，準確率掉到 73%" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+
+  <h3>名詞各自定義</h3>
+  <div class="defs">
+    <div class="def"><h4>過度擬合 Overfitting</h4><ul>
+      <li><b>是什麼：</b>模型在<b>訓練資料上表現很好，在沒看過的資料上表現變差</b>，因為它把訓練資料的雜訊、巧合也記下來了。</li>
+      <li><b>訊號：</b>訓練準確率持續提高，驗證準確率到某個點後開始下降。上圖多項式例子：11 次曲線訓練誤差 0.00，驗證誤差卻是 1.33。</li>
+      <li><b>對策：</b>提早停止（Early Stopping）、正規化（L1、L2）、Dropout、增加資料或資料增強、降低模型複雜度、交叉驗證。</li></ul></div>
+    <div class="def"><h4>欠擬合 Underfitting</h4><ul>
+      <li><b>是什麼：</b>模型太簡單，連訓練資料的規律都沒學起來。</li>
+      <li><b>訊號：</b><b>訓練和驗證表現都差</b>。上圖用直線去配彎曲資料，訓練誤差 0.29、驗證誤差 0.34，兩個都偏高。</li>
+      <li><b>對策：</b>換更複雜的模型、加入更好的特徵、訓練久一點、減少過強的正規化。</li></ul></div>
+    <div class="def"><h4>資料漂移 Data Drift</h4><ul>
+      <li><b>是什麼：</b>模型<b>上線後</b>，新進資料的分布和訓練時不一樣了，例如消費習慣改變、季節變化、感測器換型號。</li>
+      <li><b>訊號：</b>訓練、驗證時表現都正常，部署一段時間後實際效能下降。上圖同一個門檻在訓練時期準確率約 94%，資料整體右移後掉到約 73%。</li>
+      <li><b>相關名詞：</b><b>概念漂移（Concept Drift）</b>：連「特徵和答案的關係」都變了，例如詐騙手法改變，同樣的行為以前正常、現在可疑。</li>
+      <li><b>對策：</b>持續監控資料分布和模型效能、設定警報、定期或觸發式重新訓練（單元 ⑤ 的 MLOps）。</li></ul></div>
+    <div class="def"><h4>模型收斂 Convergence</h4><ul>
+      <li><b>是什麼：</b>訓練一段時間後，損失（誤差）不再明顯下降、參數趨於穩定。</li>
+      <li><b>重點：</b>收斂是<b>正常的訓練狀態</b>，表示「學得差不多了」，本身不是問題，也不等於過度擬合。</li></ul></div>
+  </div>
+
+  <h3>整合比較表</h3>
+  <div class="tbl"><table>
+    <tr><th>現象</th><th>訓練集表現</th><th>驗證集表現</th><th>什麼時候看得到</th><th>原因</th><th>對策</th></tr>
+    <tr><td><b>欠擬合</b></td><td>差</td><td>差</td><td>訓練當下</td><td>模型太簡單</td><td>換複雜模型、加特徵</td></tr>
+    <tr><td><b>剛剛好</b></td><td>好</td><td>好</td><td>訓練當下</td><td>學到真正規律</td><td>保持、做最終測試</td></tr>
+    <tr><td><b>過度擬合</b></td><td><b>很好，持續變好</b></td><td><b>到某點後變差</b></td><td>訓練當下</td><td>背下雜訊</td><td>提早停止、正規化、Dropout、加資料</td></tr>
+    <tr><td><b>資料漂移</b></td><td>（訓練時正常）</td><td>（訓練時正常）</td><td><b>上線後</b></td><td>新資料分布改變</td><td>監控、重新訓練</td></tr>
+    <tr><td><b>模型收斂</b></td><td>趨於穩定</td><td>趨於穩定</td><td>訓練當下</td><td>學得差不多了</td><td>可以停止訓練</td></tr>
+  </table></div>
+  <div class="hook"><span class="tag">記憶鉤子</span><ul>
+    <li><b>訓練好、驗證差＝過度擬合（背答案）；兩個都差＝欠擬合（學太少）。</b></li>
+    <li><b>資料漂移是「時間」問題：上線後世界變了，不是訓練曲線上的現象。</b></li>
+    <li><b>收斂只是「學完了、穩定了」，是正常狀態。</b></li>
+  </ul></div>
+  <div class="trap"><b>易錯提醒：</b>過度擬合和資料漂移都是「表現變差」，差別在<b>發生的時間點</b>。描述裡出現「訓練集」和「驗證集」兩條線分開，是過度擬合；出現「部署後」「隨時間」「新資料和以前不一樣」，才是資料漂移。欠擬合是兩條線都不好；收斂是正常狀態，不是毛病。</div>
+</section>
+
+<!-- ================================================== 單元③ -->
+<section id="u3">
+  <h2><small>單元 ③</small>評估指標：混淆矩陣、精確率、召回率、ROC 與 AUC</h2>
+  <p class="why"><b>為什麼需要它？</b> 只看「準確率」會被騙。像罕見疾病、詐欺交易這類資料，正例非常少，一個什麼都猜「沒有」的模型準確率也能很高，卻一個都沒抓到。所以要把結果拆開，用好幾個指標從不同角度看。ROC 曲線和 PR 曲線則是把「門檻」這個變數也考慮進去。</p>
+  <h3>一步步搭起來（用一組實算數字）</h3>
+  <ol>
+    <li><b>模型對每筆資料給一個分數。</b>分數高於門檻判「有病」，低於門檻判「沒病」。</li>
+    <li><b>和實際答案對照，填進四格。</b>這四格叫<b>混淆矩陣</b>：TP（抓對）、FN（漏掉）、FP（誤報）、TN（正確放行）。</li>
+    <li><b>用四格算出各種指標。</b>準確率、精確率、召回率、特異度、偽陽性率，各自回答不同的問題。</li>
+    <li><b>門檻改來改去，每個門檻都算一組（FPR, TPR），連成曲線＝ROC 曲線。</b>曲線下面積就是 AUC。</li>
+  </ol>
+  <figure><a href="img/l22402-confusion.png" target="_blank" rel="noopener"><img src="img/l22402-confusion.png" alt="混淆矩陣例子：1,000 人中 TP 40、FN 10、FP 60、TN 890，準確率 93%、精確率 40%、召回率 80%、特異度 93.7%、偽陽性率 6.3%、F1 約 0.53；對照一個全部猜沒病的偷懶模型，準確率 95% 但召回率 0%" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+
+  <h3>名詞各自定義</h3>
+  <div class="defs">
+    <div class="def"><h4>混淆矩陣 Confusion Matrix</h4><ul>
+      <li><b>是什麼：</b>把預測結果和實際答案交叉成 2 × 2 的四格表：<b>TP 真陽性、FN 偽陰性、FP 偽陽性、TN 真陰性</b>。</li>
+      <li><b>記法：</b>後面的「陽性／陰性」是模型的<b>預測</b>；前面的「真／偽」是預測<b>對不對</b>。例如 FP＝預測陽性、但預測錯了（其實沒病）。</li></ul></div>
+    <div class="def"><h4>準確率 Accuracy</h4><ul>
+      <li><b>公式：</b>（TP＋TN）÷ 全部。上圖（40＋890）÷ 1,000 ＝ 93%。</li>
+      <li><b>陷阱：</b>類別不平衡時會誤導：全部猜「沒病」的模型準確率 95%，比上面的模型還高，但召回率是 0%。</li></ul></div>
+    <div class="def"><h4>精確率 Precision</h4><ul>
+      <li><b>公式：</b>TP ÷（TP＋FP）。上圖 40 ÷ 100 ＝ 40%。</li>
+      <li><b>回答的問題：</b>模型說「有病」的人裡面，有幾成真的有病？<b>怕誤報</b>時看它（例如垃圾信過濾，不想把正常信丟掉）。</li></ul></div>
+    <div class="def"><h4>召回率 Recall（＝真陽性率 TPR、敏感度）</h4><ul>
+      <li><b>公式：</b>TP ÷（TP＋FN）。上圖 40 ÷ 50 ＝ 80%。</li>
+      <li><b>回答的問題：</b>真正有病的人，模型抓到幾成？<b>怕漏抓</b>時看它（例如罕見疾病篩檢、詐欺偵測）。</li></ul></div>
+    <div class="def"><h4>特異度 Specificity（＝真陰性率 TNR）與偽陽性率 FPR</h4><ul>
+      <li><b>特異度：</b>TN ÷（TN＋FP），健康的人被正確放行的比例。上圖 890 ÷ 950 ≈ 93.7%。</li>
+      <li><b>偽陽性率 FPR：</b>FP ÷（FP＋TN），健康的人被誤報的比例，<b>FPR ＝ 1 − 特異度</b>。上圖 60 ÷ 950 ≈ 6.3%。</li>
+      <li><b>偽陰性率 FNR：</b>FN ÷（FN＋TP），病人被漏掉的比例，<b>FNR ＝ 1 − 召回率</b>。</li></ul></div>
+    <div class="def"><h4>F1 分數 F1-Score</h4><ul>
+      <li><b>公式：</b>精確率和召回率的調和平均：2 × 精確率 × 召回率 ÷（精確率＋召回率）。上圖 2 × 0.4 × 0.8 ÷ 1.2 ≈ 0.53。</li>
+      <li><b>用途：</b>想同時兼顧精確率和召回率時，用一個數字代表。</li></ul></div>
+  </div>
+  <figure><a href="img/l22402-roc_pr.png" target="_blank" rel="noopener"><img src="img/l22402-roc_pr.png" alt="ROC 曲線與 PR 曲線：ROC 橫軸偽陽性率、縱軸真陽性率，門檻 0.5 時的點是（0.22, 0.81），AUC 約 0.88，對角線代表亂猜；PR 曲線橫軸召回率、縱軸精確率，亂猜基準線是正例比例 0.20" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>ROC 曲線 Receiver Operating Characteristic Curve</h4><ul>
+      <li><b>兩個軸：</b><b>橫軸是偽陽性率 FPR；縱軸是真陽性率 TPR（召回率）</b>。</li>
+      <li><b>怎麼畫：</b>把門檻從高調到低，每個門檻算一組（FPR, TPR）畫成一點，連起來。上圖門檻 0.5 時這一點是（0.22, 0.81）。</li>
+      <li><b>怎麼看：</b>越靠<b>左上角</b>越好（誤報少、抓得多）；對角線代表亂猜。</li></ul></div>
+    <div class="def"><h4>AUC（Area Under the Curve，曲線下面積）</h4><ul>
+      <li><b>是什麼：</b>ROC 曲線下方的面積，介於 0 到 1。<b>1 是完美、0.5 等於亂猜</b>。上圖 AUC 約 0.88。</li>
+      <li><b>直覺意義：</b>隨機抽一個正例和一個負例，模型給正例的分數比較高的機率。</li></ul></div>
+    <div class="def"><h4>PR 曲線 Precision-Recall Curve</h4><ul>
+      <li><b>兩個軸：</b>常見畫法是<b>橫軸召回率、縱軸精確率</b>。</li>
+      <li><b>用途：</b>正例很少（極度不平衡）時，PR 曲線比 ROC 更能看出模型抓正例的能力。亂猜的基準線是正例比例（上圖 0.20）。</li></ul></div>
+  </div>
+
+  <h3>整合比較表</h3>
+  <div class="tbl"><table>
+    <tr><th>指標</th><th>公式</th><th>回答的問題</th><th>什麼時候特別看它</th><th>上圖數值</th></tr>
+    <tr><td><b>準確率</b></td><td>（TP＋TN）÷ 全部</td><td>整體猜對多少</td><td>類別大致平衡時</td><td>93%</td></tr>
+    <tr><td><b>精確率</b></td><td>TP ÷（TP＋FP）</td><td>說有的，真的有幾成</td><td>怕誤報</td><td>40%</td></tr>
+    <tr><td><b>召回率（TPR）</b></td><td>TP ÷（TP＋FN）</td><td>真的有的，抓到幾成</td><td><b>怕漏抓：罕病、詐欺</b></td><td>80%</td></tr>
+    <tr><td><b>特異度（TNR）</b></td><td>TN ÷（TN＋FP）</td><td>沒有的，正確放行幾成</td><td>怕冤枉好人</td><td>93.7%</td></tr>
+    <tr><td><b>FPR</b></td><td>FP ÷（FP＋TN）</td><td>沒有的，被誤報幾成</td><td>ROC 的<b>橫軸</b></td><td>6.3%</td></tr>
+    <tr><td><b>F1</b></td><td>精確率與召回率的調和平均</td><td>兩者兼顧</td><td>不平衡又兩者都在乎</td><td>0.53</td></tr>
+    <tr><td><b>AUC</b></td><td>ROC 曲線下面積</td><td>整體排序能力</td><td>比較不同模型</td><td>0.88</td></tr>
+  </table></div>
+  <div class="tbl"><table>
+    <tr><th>比較項目</th><th>ROC 曲線</th><th>PR 曲線</th></tr>
+    <tr><td><b>橫軸</b></td><td><b>偽陽性率 FPR</b></td><td>召回率 Recall</td></tr>
+    <tr><td><b>縱軸</b></td><td><b>真陽性率 TPR（召回率）</b></td><td>精確率 Precision</td></tr>
+    <tr><td><b>最好的位置</b></td><td>左上角</td><td>右上角</td></tr>
+    <tr><td><b>亂猜基準</b></td><td>對角線（AUC ＝ 0.5）</td><td>水平線＝正例比例</td></tr>
+    <tr><td><b>適合</b></td><td>一般比較、類別不太懸殊</td><td>正例極少的不平衡資料</td></tr>
+  </table></div>
+  <div class="hook"><span class="tag">記憶鉤子</span><ul>
+    <li><b>ROC：橫 FPR、縱 TPR，「左上角」最好；AUC 1 最好、0.5 是亂猜。</b>想成「誤報多少（往右）、抓到多少（往上）」。</li>
+    <li><b>怕漏抓看召回率，怕誤報看精確率；類別不平衡時別只看準確率。</b></li>
+    <li><b>準確率、F1 是「一個門檻下的一個數字」，不拿來當曲線的軸。</b></li>
+  </ul></div>
+  <div class="trap"><b>易錯提醒：</b>ROC 的兩個軸是 FPR 和 TPR；精確率和召回率是 PR 曲線的兩個指標，別把兩種曲線混在一起。TNR（特異度）＝ 1 − FPR、FNR ＝ 1 − TPR，剛好是 ROC 兩個軸的「另一半」，看到它們要多想一步。準確率和 F1 是某一個門檻下算出的單一數字，用來總結表現，不是曲線的軸。</div>
+</section>
+
+<!-- ================================================== 單元④ -->
+<section id="u4">
+  <h2><small>單元 ④</small>分散式訓練：資料平行、參數伺服器、小批次 SGD、高基數特徵</h2>
+  <p class="why"><b>為什麼需要它？</b> 資料多到一台電腦放不下、算不完時，就要讓很多台電腦（或很多張 GPU）一起訓練同一個模型。這時要回答三個問題：<b>要切什麼？</b>（資料還是模型）<b>誰保管參數？</b>（參數伺服器）<b>每一步看多少資料？</b>（梯度下降的變體）。另外，大資料常有「類別多到爆」的欄位，例如使用者 ID，直接做獨熱編碼會撐爆記憶體。</p>
+  <h3>一步步搭起來</h3>
+  <ol>
+    <li><b>先懂梯度下降。</b>模型先隨便猜參數，算出誤差，再沿著「讓誤差變小」的方向（負梯度）走一小步，重複很多次。</li>
+    <li><b>決定一步看多少資料。</b>看全部（批次）、看 1 筆（隨機）、看一小批（小批次）。大資料分散式訓練最常用小批次。</li>
+    <li><b>把資料切給多台電腦＝資料平行。</b>每台拿一份資料、用同一個模型，算出自己那份的梯度。</li>
+    <li><b>把梯度集中起來＝參數伺服器。</b>工作節點（Worker）把梯度上傳，伺服器節點（Server）平均後更新全域參數，再讓大家下載新參數。</li>
+    <li><b>模型太大才拆模型＝模型平行。</b>一張 GPU 放不下整個模型時，把不同層放到不同 GPU。</li>
+  </ol>
+  <figure><a href="img/l22402-parallel_ps.png" target="_blank" rel="noopener"><img src="img/l22402-parallel_ps.png" alt="分散式訓練對照：資料平行把 1,000,000 筆資料切成 4 份，每份 250,000 筆，每台用同一份完整模型；模型平行把模型分成 4 段層放在 4 張 GPU；參數伺服器保管全域參數 w 等於 2.0，四個工作節點的梯度 -2.47、-2.91、-2.95、-2.80 平均 -2.78，用學習率 0.1 更新後 w 等於 2.278" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+
+  <h3>名詞各自定義</h3>
+  <div class="defs">
+    <div class="def"><h4>資料平行化 Data Parallelism</h4><ul>
+      <li><b>是什麼：</b>把大型資料集<b>按筆數切成多個子集</b>，分配到不同計算節點；<b>每個節點用相同的模型</b>處理自己那份資料，再把結果（梯度）合併。</li>
+      <li><b>例子：</b>上圖 1,000,000 筆資料切給 4 台，每台 250,000 筆，四台的模型是同一份。</li>
+      <li><b>常見實作：</b>參數伺服器架構，或是節點之間直接互相加總梯度的 All-Reduce 方式；Spark MLlib、TensorFlow、PyTorch 都支援資料平行。</li></ul></div>
+    <div class="def"><h4>模型平行化 Model Parallelism</h4><ul>
+      <li><b>是什麼：</b>模型太大、一個節點放不下時，把<b>模型的不同部分（例如不同層）</b>放到不同節點或 GPU。</li>
+      <li><b>和資料平行的差別：</b>資料平行「拆資料、每台模型一樣」；模型平行「拆模型、資料依序流過各台」。大型語言模型常兩者並用。</li></ul></div>
+    <div class="def"><h4>參數伺服器 Parameter Server</h4><ul>
+      <li><b>是什麼：</b>分散式訓練的一種架構，分成<b>伺服器節點</b>和<b>工作節點</b>兩種角色。</li>
+      <li><b>伺服器節點（Server）：</b><b>保存與管理全域模型參數</b>，接收各工作節點的梯度，彙總後更新參數，再提供最新參數。</li>
+      <li><b>工作節點（Worker）：</b>讀取自己那份資料，用目前的參數<b>計算梯度</b>，上傳（Push）梯度、下載（Pull）新參數。</li>
+      <li><b>例子：</b>上圖四個工作節點的梯度平均是 −2.78，伺服器用學習率 0.1 更新：2.0 − 0.1 ×（−2.78）＝ 2.278。</li></ul></div>
+    <div class="def"><h4>用 MapReduce 計算梯度</h4><ul>
+      <li><b>Map 階段：</b>每個節點用目前參數，計算自己那份資料的<b>局部梯度</b>（或局部梯度總和）。</li>
+      <li><b>Reduce 階段：</b>把各節點的局部梯度<b>加總、平均</b>，得到全域梯度，用來更新模型參數。</li>
+      <li><b>限制：</b>每一輪都要讀寫磁碟，反覆訓練很多輪時較慢，這也是 Spark 常被用來做機器學習的原因（見第 10 章）。</li></ul></div>
+  </div>
+  <figure><a href="img/l22402-minibatch.png" target="_blank" rel="noopener"><img src="img/l22402-minibatch.png" alt="三種梯度下降對照：批次每步用全部資料、路線平滑；隨機梯度下降每步 1 筆、路線亂跳；小批次每步一小批、兼顧穩定與速度；1,000,000 筆資料跑一輪，批次更新 1 次、隨機更新 1,000,000 次、每批 256 筆的小批次約更新 3,907 次" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>批次梯度下降 BGD（Batch Gradient Descent）</h4><ul>
+      <li><b>怎麼運作：</b>每一步用<b>全部</b>資料算梯度，再更新一次。</li>
+      <li><b>優缺點：</b>路線平滑穩定；但資料很大時每走一步都很貴，分散在多台時，每步都要等所有節點算完全部資料。</li></ul></div>
+    <div class="def"><h4>隨機梯度下降 SGD（Stochastic Gradient Descent）</h4><ul>
+      <li><b>怎麼運作：</b>每一步只用 <b>1 筆</b>資料算梯度就更新。</li>
+      <li><b>優缺點：</b>每步很便宜、更新次數多；但路線亂跳，而且一次只算 1 筆，不容易發揮平行運算。</li></ul></div>
+    <div class="def"><h4>小批次隨機梯度下降 Mini-batch SGD</h4><ul>
+      <li><b>怎麼運作：</b>每一步用<b>一小批</b>資料（例如 32、256 筆）算梯度。</li>
+      <li><b>為什麼最常用：</b>兼顧穩定和速度；每一批可以拆給多個節點或 GPU 一起算，特別適合分散式大資料訓練。上圖 1,000,000 筆、每批 256 筆，一輪約更新 3,907 次。</li>
+      <li><b>延伸：</b>Adam、Momentum 等最佳化器，多半也是建立在小批次梯度上的改良。</li></ul></div>
+    <div class="def"><h4>牛頓法與共軛梯度法（對照用）</h4><ul>
+      <li><b>牛頓法 Newton's Method：</b>除了梯度，還用二階導數（海森矩陣）決定步伐。參數很多時，這個矩陣大到難以計算和儲存。</li>
+      <li><b>共軛梯度法 Conjugate Gradient：</b>比一般梯度下降聰明地選方向，常用在中小規模、需要精確解的問題；大資料分散式訓練較少直接使用。</li></ul></div>
+    <div class="def"><h4>GPU 平行運算</h4><ul>
+      <li><b>為什麼快：</b>GPU 有數千個小核心，擅長同時做大量相同的矩陣運算，而神經網路訓練的主要工作正是矩陣乘法。</li>
+      <li><b>和小批次的關係：</b>一小批資料剛好組成一個矩陣，一次送進 GPU 平行運算。</li></ul></div>
+  </div>
+  <figure><a href="img/l22402-high_card.png" target="_blank" rel="noopener"><img src="img/l22402-high_card.png" alt="高基數類別特徵：使用者 ID 有 1,000,000 種，獨熱編碼要開 1,000,000 欄，每列 0 佔 99.9999%；特徵雜湊用 262,144 個桶，平均每桶約 3.8 個 ID，會碰撞；嵌入把每個 ID 學成 32 個數字" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>高基數類別特徵 High Cardinality</h4><ul>
+      <li><b>是什麼：</b>類別型欄位的可能值非常多，例如使用者 ID、商品 ID、郵遞區號。</li>
+      <li><b>獨熱編碼的問題：</b>每個類別開一欄，<b>特徵維度急遽增加</b>，每列幾乎全是 0（<b>非常稀疏</b>），<b>計算和儲存負擔大</b>。上圖 1,000,000 種 ID 就要 1,000,000 欄，每列 0 佔 99.9999%。</li>
+      <li><b>獨熱編碼「不會」造成的事：</b>它不會損失類別資訊（每類都有自己的欄），也不會引入順序關係；類別數量也沒有固定上限。</li></ul></div>
+    <div class="def"><h4>高基數的替代做法</h4><ul>
+      <li><b>特徵雜湊 Feature Hashing：</b>用雜湊函數把類別丟進固定數量的桶（上圖 262,144 桶），欄數固定，但會有碰撞。</li>
+      <li><b>嵌入 Embedding：</b>讓模型把每個類別學成一小串數字（上圖 32 個），相似的類別數字也相近，深度學習推薦系統常用。</li>
+      <li><b>目標編碼、頻率編碼：</b>用「該類別的平均答案」或「出現次數」取代類別；目標編碼要小心不要把答案洩漏進特徵。</li>
+      <li><b>標籤編碼 Label Encoding（對照）：</b>紅＝1、綠＝2、藍＝3 這種直接編號，才會<b>引入不存在的順序關係</b>。</li></ul></div>
+  </div>
+
+  <h3>整合比較表</h3>
+  <div class="tbl"><table>
+    <tr><th>名詞</th><th>切什麼／做什麼</th><th>每台的模型</th><th>適合</th><th>看到這些關鍵字就想到它</th></tr>
+    <tr><td><b>資料平行</b></td><td>按筆數切資料</td><td><b>同一個模型</b></td><td>資料很多（最常見）</td><td>資料子集、相同模型</td></tr>
+    <tr><td><b>模型平行</b></td><td>切模型的層或部分</td><td>各放一部分</td><td>模型大到放不下</td><td>不同層分到不同節點</td></tr>
+    <tr><td><b>參數伺服器</b></td><td>Server 存參數、Worker 算梯度</td><td>Worker 下載最新參數</td><td>資料平行的分工方式</td><td>全域參數、彙總梯度</td></tr>
+    <tr><td><b>MapReduce 梯度</b></td><td>Map 算局部梯度、Reduce 匯總</td><td>同一個模型</td><td>批次式分散計算</td><td>Reduce＝加總平均</td></tr>
+  </table></div>
+  <div class="tbl"><table>
+    <tr><th>比較項目</th><th>批次 BGD</th><th>隨機 SGD</th><th>小批次 SGD</th><th>牛頓法</th></tr>
+    <tr><td><b>每步看多少資料</b></td><td>全部</td><td>1 筆</td><td>一小批</td><td>全部＋二階資訊</td></tr>
+    <tr><td><b>每步成本</b></td><td>高</td><td>很低</td><td>中</td><td><b>非常高</b></td></tr>
+    <tr><td><b>路線</b></td><td>平滑</td><td>亂跳</td><td>大致平滑</td><td>步伐大、步數少</td></tr>
+    <tr><td><b>平行化</b></td><td>要等全部算完</td><td>不易平行</td><td><b>容易分給多節點、GPU</b></td><td>矩陣太大難分散</td></tr>
+    <tr><td><b>大資料分散式</b></td><td>少用</td><td>少單獨用</td><td><b>最常用</b></td><td>少用</td></tr>
+  </table></div>
+  <div class="hook"><span class="tag">記憶鉤子</span><ul>
+    <li><b>資料平行＝拆資料、每台同一個模型；模型平行＝拆模型。</b></li>
+    <li><b>參數伺服器：Server 存參數、Worker 算梯度。MapReduce：Map 算局部梯度、Reduce 加總平均。</b></li>
+    <li><b>分散式大資料訓練 → 小批次 SGD。</b></li>
+    <li><b>類別少用獨熱，類別超多用雜湊或嵌入；引入假順序的是標籤編碼。</b></li>
+  </ul></div>
+  <div class="trap"><b>易錯提醒：</b>資料平行切的是「筆數（列）」，不是「特徵（欄）」；把模型的不同層分給不同節點是模型平行；在單一台主機用多核心加速是單機平行，不算分散式資料平行。高基數欄位做獨熱編碼的問題是維度爆炸、稀疏、負擔大，不是「損失類別資訊」；會引入錯誤順序的是標籤編碼，獨熱編碼正是用來避免這件事的。</div>
+</section>
+
+<!-- ================================================== 單元⑤ -->
+<section id="u5">
+  <h2><small>單元 ⑤</small>資料前處理與上線維運：圖像前處理、梯度消失、MLOps、聯邦學習、公平性</h2>
+  <p class="why"><b>為什麼需要它？</b> 模型要能用，前面要把資料整理好，後面要能長期穩定地跑。這個單元把「<b>進模型之前</b>」（圖像前處理）、「<b>訓練深網路時</b>」（梯度消失）和「<b>上線之後</b>」（MLOps、聯邦學習、公平性）的名詞放在一起。</p>
+  <h3>一步步搭起來</h3>
+  <ol>
+    <li><b>圖片先整理。</b>統一尺寸、把像素值縮到固定範圍、用翻轉旋轉增加樣本，才餵進 CNN 之類的分類模型。</li>
+    <li><b>網路很深時注意梯度。</b>誤差往回傳時，每過一層就乘一次導數，太小會消失、太大會爆炸。</li>
+    <li><b>部署後持續監控。</b>效能下降或資料漂移時重新訓練，整個流程自動化，這就是 MLOps。</li>
+    <li><b>資料不能集中時用聯邦學習；牽涉到人時檢查公平性。</b></li>
+  </ol>
+  <figure><a href="img/l22402-image_preproc.png" target="_blank" rel="noopener"><img src="img/l22402-image_preproc.png" alt="圖像分類前的前處理：原圖 640 乘 480 調整大小為 224 乘 224；歸一化把天空像素（150, 200, 235）除以 255 變成（0.588, 0.784, 0.922）；資料增強做左右翻轉、旋轉 15 度、隨機裁切；把圖片轉成文字描述是另一個任務，不屬於前處理；前處理後每張圖是 150,528 個 0 到 1 之間的數字" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+
+  <h3>名詞各自定義</h3>
+  <div class="defs">
+    <div class="def"><h4>調整圖像大小 Resizing</h4><ul>
+      <li><b>是什麼：</b>把不同大小的圖片統一成模型要求的輸入尺寸，例如 224 × 224。</li>
+      <li><b>為什麼：</b>很多 CNN 的輸入層尺寸是固定的，而且統一尺寸才能把一批圖片組成同一個矩陣一起運算。</li></ul></div>
+    <div class="def"><h4>圖像歸一化 Normalization</h4><ul>
+      <li><b>是什麼：</b>把像素值從 0～255 縮放到 0～1（除以 255），或減平均、除標準差做標準化。</li>
+      <li><b>例子：</b>上圖天空像素（150, 200, 235）÷ 255 ≈（0.588, 0.784, 0.922）。</li>
+      <li><b>為什麼：</b>數值範圍一致，訓練比較穩定、收斂比較快（和第 10 章的特徵縮放是同一個道理）。</li></ul></div>
+    <div class="def"><h4>資料增強 Data Augmentation</h4><ul>
+      <li><b>是什麼：</b>對訓練圖片做隨機旋轉、翻轉、裁切、調亮度等變化，產生更多樣的訓練樣本。</li>
+      <li><b>目的：</b>讓模型看過更多樣子、減少過度擬合；通常只用在訓練集。</li></ul></div>
+    <div class="def"><h4>圖像描述 Image Captioning（不是前處理）</h4><ul>
+      <li><b>是什麼：</b>輸入一張圖片、輸出一句描述文字的<b>任務</b>，例如「一間紅屋頂的小房子在草地上」。</li>
+      <li><b>為什麼不算前處理：</b>它本身就需要另外訓練一個模型，輸出是文字；圖像分類的前處理是「整理同一張圖」讓它好餵進模型，不會把圖換成文字。</li></ul></div>
+  </div>
+  <figure><a href="img/l22402-vanishing.png" target="_blank" rel="noopener"><img src="img/l22402-vanishing.png" alt="梯度消失：反向傳播時梯度要乘上每一層激活函數的導數，Sigmoid 每層最多乘 0.25，連乘 10 層只剩約百萬分之一（9.54 乘 10 的負 7 次方）；ReLU 正區每層乘 1，連乘仍是 1" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>梯度消失與梯度爆炸 Vanishing／Exploding Gradients</h4><ul>
+      <li><b>是什麼：</b>反向傳播時，梯度要乘上每一層的導數。Sigmoid 的導數最大只有 0.25，連乘 10 層只剩約 0.00000095，前面的層幾乎學不動（消失）；反過來，每層都乘大於 1 的數，梯度會越來越大（爆炸）。</li>
+      <li><b>對策：</b><b>ReLU</b> 類激活函數（正區導數為 1）、<b>殘差連接</b>（ResNet 的捷徑）、<b>批次正規化</b>（Batch Normalization）、合適的權重初始化；梯度爆炸可以用<b>梯度裁剪</b>。</li></ul></div>
+  </div>
+  <figure><a href="img/l22402-mlops_fed.png" target="_blank" rel="noopener"><img src="img/l22402-mlops_fed.png" alt="MLOps 與聯邦學習：MLOps 是收資料、訓練、驗證、部署、監控、重新訓練的循環；聯邦學習中醫院 A、B、C 各有 500、300、200 筆資料，本地參數 0.80、0.50、0.20，只上傳模型更新，伺服器依資料量加權平均得到 0.59；下方提醒公平性要檢查資料代表性、標註偏差並分群檢查錯誤率" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>MLOps（Machine Learning Operations）</h4><ul>
+      <li><b>是什麼：</b>把機器學習模型的<b>整個生命週期</b>（收資料、訓練、驗證、部署、監控、重新訓練）用自動化、版本控管的方式管理起來。</li>
+      <li><b>為什麼需要：</b>模型上線後會遇到資料漂移，效能會下降；需要持續監控和定期更新，而不是做完就放著。</li>
+      <li><b>和 DevOps 的關係：</b>概念延伸自軟體開發的 DevOps，多了資料版本、模型版本、模型監控這些機器學習特有的部分。</li></ul></div>
+    <div class="def"><h4>聯邦學習 Federated Learning</h4><ul>
+      <li><b>核心思想：</b><b>資料留在原地（手機、醫院、銀行），只把模型更新傳到中央伺服器</b>彙總，原始資料不集中。</li>
+      <li><b>例子：</b>上圖三家醫院各自訓練，伺服器依資料量加權平均：（500 × 0.80＋300 × 0.50＋200 × 0.20）÷ 1,000 ＝ 0.59。</li>
+      <li><b>優點與挑戰：</b>保護隱私、符合法規；但各地資料分布不同、通訊成本高，模型更新也可能被惡意干擾。</li></ul></div>
+    <div class="def"><h4>公平性 Fairness 與演算法偏見 Algorithmic Bias</h4><ul>
+      <li><b>是什麼：</b>模型對特定群體（性別、種族、地區）產生系統性不利的預測。</li>
+      <li><b>從哪裡來：</b>歷史資料本身帶有偏見、某些群體資料太少、標註有偏差、特徵間接代表敏感屬性（例如郵遞區號）。</li>
+      <li><b>要關注的環節：</b><b>資料收集與標註、特徵選擇、模型評估（分群檢查錯誤率）</b>都要檢查，不是只看整體準確率。</li>
+      <li><b>高風險應用：</b>犯罪預測、信用評分、招聘等，偏見可能被放大並影響真實的人，需要特別警惕。</li></ul></div>
+    <div class="def"><h4>其他上線時要考慮的事</h4><ul>
+      <li><b>可解釋性：</b>金融、醫療等領域要能說明「為什麼拒絕這筆貸款」，方便稽核、符合法規、建立信任（第 10 章的 SHAP）。</li>
+      <li><b>非功能性指標：</b>除了準確率、AUC，還要看預測速度（延遲）、每秒能處理多少筆（吞吐量）、成本、可擴充性。</li>
+      <li><b>即時性 Velocity：</b>詐欺偵測這類應用要在很短時間內完成預測，模型和資料管線都要夠快。</li></ul></div>
+  </div>
+
+  <h3>整合比較表</h3>
+  <div class="tbl"><table>
+    <tr><th>名詞</th><th>屬於哪個階段</th><th>做什麼</th><th>看到這些關鍵字就想到它</th><th>容易搞混</th></tr>
+    <tr><td><b>調整大小</b></td><td>前處理</td><td>統一圖片尺寸</td><td>Resizing、統一尺寸</td><td>裁切</td></tr>
+    <tr><td><b>歸一化</b></td><td>前處理</td><td>像素縮到 0～1</td><td>Normalization、[0, 1]</td><td>標準化</td></tr>
+    <tr><td><b>資料增強</b></td><td>前處理（訓練集）</td><td>旋轉翻轉裁切變出更多樣本</td><td>Augmentation</td><td>資料清理</td></tr>
+    <tr><td><b>圖像描述</b></td><td><b>另一個任務</b></td><td>圖片轉成一句話</td><td>Image Captioning</td><td>前處理</td></tr>
+    <tr><td><b>ReLU／殘差／批次正規化</b></td><td>模型設計</td><td>對付梯度消失</td><td>深層網路、梯度消失</td><td>Dropout</td></tr>
+    <tr><td><b>MLOps</b></td><td>上線維運</td><td>管理模型生命週期</td><td>部署、監控、自動化</td><td>DevOps</td></tr>
+    <tr><td><b>聯邦學習</b></td><td>訓練方式</td><td>資料不出門，只傳模型更新</td><td>隱私、分散資料</td><td>分散式訓練</td></tr>
+    <tr><td><b>公平性</b></td><td>全流程</td><td>避免對特定群體不公</td><td>偏見、歧視</td><td>準確率</td></tr>
+  </table></div>
+  <div class="hook"><span class="tag">記憶鉤子</span><ul>
+    <li><b>前處理＝縮尺寸、調數值、變花樣；轉文字描述是另一個任務。</b></li>
+    <li><b>梯度消失 → ReLU、殘差、批次正規化。</b></li>
+    <li><b>MLOps 管「一直跑」、聯邦學習管「資料不出門」、公平性管「不偏心」。</b></li>
+  </ul></div>
+  <div class="trap"><b>易錯提醒：</b>調整大小、歸一化、資料增強都是圖像分類最基本的前處理；「把圖片轉成文字描述」聽起來也在處理圖片，但它是另一個需要訓練模型的任務，輸出是文字。聯邦學習也是很多台一起訓練，但重點在「原始資料不集中」，和一般分散式訓練「把資料切給多台」不一樣。</div>
+</section>
+
+<!-- ================================================== 總整理 -->
+<section id="recap">
+  <h2><small>總整理</small>本章要記的十句話</h2>
+  <ol class="recap">
+    <li>鑑別式學 P(Y｜X)、畫界線；生成式學 P(X, Y)、畫輪廓、能造新資料。</li>
+    <li>非線性＋資料量龐大的分類＝深度神經網路 DNN；PCA 是降維，不是分類器。</li>
+    <li>SVM＝最大間隔＋核技巧，處理非線性很強，但資料量極大時訓練可能慢。</li>
+    <li>樸素貝氏＝貝氏定理＋條件獨立，計算簡單、速度快，假設常不成立。</li>
+    <li>訓練好、驗證差＝過度擬合；兩個都差＝欠擬合；上線後新資料變了＝資料漂移。</li>
+    <li>ROC：橫軸 FPR、縱軸 TPR；AUC 1 最好、0.5 是亂猜。</li>
+    <li>怕漏抓看召回率，怕誤報看精確率；類別不平衡時別只看準確率。</li>
+    <li>資料平行＝拆資料、每台同一個模型；參數伺服器：Server 存參數、Worker 算梯度。</li>
+    <li>分散式大資料訓練最常用小批次 SGD；高基數類別做獨熱編碼會維度爆炸、非常稀疏。</li>
+    <li>圖像前處理＝縮尺寸、歸一化、資料增強；轉文字描述是另一個任務。</li>
+  </ol>
+</section>
+
+<!-- ================================================== 總彙整表 -->
+<section id="glossary">
+  <h2><small>考前速查</small>全章名詞總彙整表</h2>
+  <p class="note">把五個單元的比較表濃縮成一張。複習時遮住右邊三欄，看名詞說得出定義，再對照。</p>
+  <div class="tbl"><table>
+    <tr><th>名詞</th><th>一句話定義</th><th>口訣</th><th>容易跟誰搞混</th></tr>
+    <tr class="grp"><td colspan="4">單元 ① 鑑別式 vs 生成式與分類模型</td></tr>
+    <tr><td><b>鑑別式模型</b></td><td>直接學 P(Y｜X)，畫決策邊界</td><td>畫界線</td><td>生成式模型</td></tr>
+    <tr><td><b>生成式模型</b></td><td>學 P(X, Y)，可產生新樣本</td><td>畫輪廓、造新的</td><td>鑑別式模型</td></tr>
+    <tr><td><b>決策邊界</b></td><td>把不同類別分開的線或曲面</td><td>一邊一類</td><td>超平面</td></tr>
+    <tr><td><b>邏輯迴歸</b></td><td>加權總和→Sigmoid→機率，直線界線</td><td>線性基準</td><td>線性迴歸</td></tr>
+    <tr><td><b>SVM</b></td><td>最大間隔界線，由支持向量決定</td><td>離兩邊最遠</td><td>邏輯迴歸</td></tr>
+    <tr><td><b>核技巧</b></td><td>不用真的轉座標，直接算高維相似度</td><td>升維切開</td><td>降維</td></tr>
+    <tr><td><b>樸素貝氏</b></td><td>貝氏定理＋特徵條件獨立</td><td>快但天真</td><td>SVM</td></tr>
+    <tr><td><b>決策樹／隨機森林／GBDT</b></td><td>規則切分／多樹投票／依序修正誤差</td><td>一棵／投票／接力</td><td>彼此</td></tr>
+    <tr><td><b>KNN</b></td><td>找最近的 K 個鄰居投票</td><td>看鄰居</td><td>K-means</td></tr>
+    <tr><td><b>DNN</b></td><td>多層非線性轉換，適合大資料</td><td>非線性＋大資料</td><td>PCA</td></tr>
+    <tr><td><b>PCA</b></td><td>線性降維，不是分類器</td><td>壓縮欄位</td><td>DNN、分類器</td></tr>
+    <tr class="grp"><td colspan="4">單元 ② 過度擬合與資料漂移</td></tr>
+    <tr><td><b>過度擬合</b></td><td>訓練好、驗證差，背下雜訊</td><td>背答案</td><td>資料漂移</td></tr>
+    <tr><td><b>欠擬合</b></td><td>訓練、驗證都差，模型太簡單</td><td>學太少</td><td>過度擬合</td></tr>
+    <tr><td><b>資料漂移</b></td><td>上線後新資料分布改變</td><td>世界變了</td><td>過度擬合</td></tr>
+    <tr><td><b>概念漂移</b></td><td>特徵和答案的關係改變</td><td>規則變了</td><td>資料漂移</td></tr>
+    <tr><td><b>模型收斂</b></td><td>損失不再明顯下降、趨於穩定</td><td>學完了</td><td>過度擬合</td></tr>
+    <tr><td><b>提早停止</b></td><td>驗證表現開始變差時停止訓練</td><td>見好就收</td><td>收斂</td></tr>
+    <tr class="grp"><td colspan="4">單元 ③ 評估指標</td></tr>
+    <tr><td><b>混淆矩陣</b></td><td>TP、FN、FP、TN 四格表</td><td>四格對照</td><td>相關係數矩陣</td></tr>
+    <tr><td><b>準確率</b></td><td>（TP＋TN）÷ 全部</td><td>整體猜對</td><td>精確率</td></tr>
+    <tr><td><b>精確率</b></td><td>TP ÷（TP＋FP）</td><td>怕誤報</td><td>召回率</td></tr>
+    <tr><td><b>召回率（TPR）</b></td><td>TP ÷（TP＋FN）</td><td>怕漏抓</td><td>精確率</td></tr>
+    <tr><td><b>特異度（TNR）／FPR</b></td><td>TN ÷（TN＋FP）／FP ÷（FP＋TN）</td><td>FPR＝1−特異度</td><td>FNR</td></tr>
+    <tr><td><b>F1</b></td><td>精確率與召回率的調和平均</td><td>兩者兼顧</td><td>準確率</td></tr>
+    <tr><td><b>ROC 曲線</b></td><td>橫軸 FPR、縱軸 TPR</td><td>左上角最好</td><td>PR 曲線</td></tr>
+    <tr><td><b>AUC</b></td><td>ROC 曲線下面積，0.5 是亂猜</td><td>越接近 1 越好</td><td>準確率</td></tr>
+    <tr><td><b>PR 曲線</b></td><td>橫軸召回率、縱軸精確率</td><td>不平衡時用</td><td>ROC 曲線</td></tr>
+    <tr class="grp"><td colspan="4">單元 ④ 分散式訓練與高基數</td></tr>
+    <tr><td><b>資料平行</b></td><td>切資料子集，每節點同一個模型</td><td>拆資料</td><td>模型平行</td></tr>
+    <tr><td><b>模型平行</b></td><td>模型不同層放不同節點</td><td>拆模型</td><td>資料平行</td></tr>
+    <tr><td><b>參數伺服器</b></td><td>Server 存全域參數、Worker 算梯度</td><td>Server 存、Worker 算</td><td>MapReduce</td></tr>
+    <tr><td><b>MapReduce 梯度</b></td><td>Map 算局部梯度、Reduce 加總平均</td><td>分頭算、再合起來</td><td>參數伺服器</td></tr>
+    <tr><td><b>批次／隨機／小批次 SGD</b></td><td>每步看全部／1 筆／一小批</td><td>小批次最常用</td><td>牛頓法</td></tr>
+    <tr><td><b>牛頓法</b></td><td>用二階導數，參數多時太重</td><td>步伐準但貴</td><td>梯度下降</td></tr>
+    <tr><td><b>GPU</b></td><td>數千核心平行做矩陣運算</td><td>矩陣加速</td><td>CPU</td></tr>
+    <tr><td><b>高基數獨熱編碼</b></td><td>維度爆炸、非常稀疏、負擔大</td><td>撐爆</td><td>標籤編碼</td></tr>
+    <tr><td><b>特徵雜湊／嵌入</b></td><td>固定桶數／學成一小串數字</td><td>類別超多用</td><td>獨熱編碼</td></tr>
+    <tr><td><b>標籤編碼</b></td><td>直接編號，會引入假順序</td><td>1、2、3</td><td>獨熱編碼</td></tr>
+    <tr class="grp"><td colspan="4">單元 ⑤ 前處理與上線維運</td></tr>
+    <tr><td><b>調整大小</b></td><td>統一圖片輸入尺寸</td><td>縮尺寸</td><td>裁切</td></tr>
+    <tr><td><b>歸一化</b></td><td>像素 0～255 縮到 0～1</td><td>調數值</td><td>標準化</td></tr>
+    <tr><td><b>資料增強</b></td><td>旋轉翻轉裁切，增加樣本</td><td>變花樣</td><td>資料清理</td></tr>
+    <tr><td><b>圖像描述</b></td><td>圖片轉文字的獨立任務，不是前處理</td><td>看圖說話</td><td>前處理</td></tr>
+    <tr><td><b>梯度消失</b></td><td>梯度往回傳越乘越小</td><td>訊號打折</td><td>梯度爆炸</td></tr>
+    <tr><td><b>ReLU／殘差／批次正規化</b></td><td>對付梯度消失的常見方法</td><td>抄捷徑</td><td>Dropout</td></tr>
+    <tr><td><b>MLOps</b></td><td>管理模型整個生命週期</td><td>一直跑</td><td>DevOps</td></tr>
+    <tr><td><b>聯邦學習</b></td><td>資料留原地，只傳模型更新</td><td>資料不出門</td><td>分散式訓練</td></tr>
+    <tr><td><b>演算法偏見</b></td><td>對特定群體系統性不利</td><td>不偏心</td><td>雜訊</td></tr>
+  </table></div>
+</section>
+
+<!-- ================================================== 否定題審題提醒 -->
+<section id="negative">
+  <h2><small>作答習慣</small>否定題審題提醒</h2>
+  <p>本章有些觀念其實會，卻容易在「問法」上丟分：問的是「不包含」，卻選了一個「包含」的。這不是觀念問題，是審題習慣，練一下就改得過來。</p>
+  <div class="trap"><b>四個小習慣：</b><ul>
+    <li><b>看到「不包含」「不是」「不屬於」「錯誤的是」「何者為非」，先把那幾個字圈起來</b>（或在心裡唸一次）。</li>
+    <li><b>換個問法：</b>改成「哪些『是』？」逐一打勾，剩下沒打勾的那個才是要找的。</li>
+    <li><b>如果四個裡有三個你都覺得「對」</b>，多半是否定的問法，回頭再看一次題幹。</li>
+    <li><b>先別急著選第一個看起來正確的</b>，全部看完再決定。</li>
+  </ul></div>
+</section>
+
+<!-- ================================================== 自我檢測 -->
+<section id="quiz">
+  <h2><small>動手練</small>自我檢測 10 題</h2>
+  <p class="note">自編情境練習，練的是「看情境選模型、選指標、選做法」。先自己想好答案，再點「看答案」。</p>
+  <ol class="quiz">
+    <li>某平台有 5,000 萬筆使用者點擊紀錄，要判斷每位使用者會不會買某商品，而且特徵之間的關係很複雜、明顯不是直線。邏輯迴歸、KNN、深度神經網路三個裡面，哪個比較合適？另外兩個各有什麼問題？
+      <details><summary>看答案</summary><p><b>深度神經網路比較合適：</b>非線性＋資料量龐大，正是 DNN 擅長的情況，可以用小批次＋GPU 訓練。邏輯迴歸的界線是直線，抓不到複雜關係；KNN 雖能處理非線性，但每次預測都要和 5,000 萬筆資料比距離，太慢、太吃記憶體。</p></details></li>
+    <li>同事說：「我用 PCA 把 200 個欄位壓成 10 個，這樣就完成分類了。」這句話哪裡有問題？
+      <details><summary>看答案</summary><p><b>PCA 是降維，不是分類器。</b>它只是把欄位壓縮成少數新欄位，壓完之後還要再接一個分類模型（例如邏輯迴歸、隨機森林）才算完成分類。</p></details></li>
+    <li>一個模型的特色是「找出離兩類資料都最遠的界線，還能用核函數處理彎曲的界線」，但資料到上千萬筆時訓練變得很慢。它是哪個模型？
+      <details><summary>看答案</summary><p><b>支持向量機 SVM。</b>最大間隔＋核技巧是它的招牌；核方法要比較大量資料兩兩之間的相似度，所以資料極大時訓練可能很慢。</p></details></li>
+    <li>要做垃圾信分類的第一版基準模型，希望訓練非常快，只需要數一數每個字在垃圾信和正常信出現的次數。適合哪個模型？它背後有什麼假設？
+      <details><summary>看答案</summary><p><b>樸素貝氏分類器。</b>它用貝氏定理計算機率，並假設各個字（特徵）在給定類別下彼此<b>條件獨立</b>，所以機率可以直接相乘；訓練只要數次數，非常快。</p></details></li>
+    <li>訓練一個模型時，前 20 輪訓練和驗證準確率一起上升；第 20 輪以後訓練準確率升到 99%，驗證準確率卻從 85% 掉到 78%。這是什麼現象？你會怎麼處理？如果改成「上線半年後準確率從 90% 掉到 75%」，又是什麼現象？
+      <details><summary>看答案</summary><p><b>前者是過度擬合：</b>訓練集持續變好、驗證集開始下降。可以在第 20 輪附近提早停止，或加正規化、Dropout、增加資料。<b>後者是資料漂移</b>（也可能是概念漂移）：上線後新資料和訓練時不同，要監控並重新訓練。</p></details></li>
+    <li>某篩檢模型在 2,000 人中：真正有病 100 人，模型抓到 70 人；健康的 1,900 人中，被誤報 95 人。請算出準確率、召回率、精確率和偽陽性率。
+      <details><summary>看答案</summary><p>TP＝70、FN＝30、FP＝95、TN＝1,805。<b>準確率</b>（70＋1,805）÷ 2,000 ≈ 93.8%；<b>召回率</b> 70 ÷ 100 ＝ 70%；<b>精確率</b> 70 ÷ 165 ≈ 42.4%；<b>偽陽性率</b> 95 ÷ 1,900 ＝ 5%。準確率看起來很高，但有 30% 的病人被漏掉。</p></details></li>
+    <li>畫 ROC 曲線時，橫軸和縱軸各要放什麼？如果模型 A 的 AUC 是 0.93、模型 B 是 0.51，B 大概是什麼程度？
+      <details><summary>看答案</summary><p><b>橫軸放偽陽性率 FPR，縱軸放真陽性率 TPR（召回率）。</b>AUC 0.51 幾乎等於 0.5，也就是<b>和亂猜差不多</b>，模型 B 幾乎沒有分辨能力。</p></details></li>
+    <li>公司有 800 萬筆訓練資料，模型本身不大，想用 8 台機器一起訓練。應該用資料平行還是模型平行？在參數伺服器架構中，伺服器節點和工作節點各負責什麼？
+      <details><summary>看答案</summary><p><b>資料平行。</b>資料多、模型不大，就把 800 萬筆切給 8 台（每台 100 萬筆），每台用同一個模型。<b>伺服器節點</b>保存並更新全域參數；<b>工作節點</b>用自己的資料計算梯度，上傳梯度、下載新參數。</p></details></li>
+    <li>資料裡有一個「商品編號」欄位，共 300 萬種。直接用獨熱編碼會發生什麼事？有哪些替代做法？如果改成「1 號商品＝1、2 號商品＝2…」直接編號，又可能有什麼問題？
+      <details><summary>看答案</summary><p><b>獨熱編碼會產生 300 萬欄，每列幾乎全是 0（非常稀疏），計算和儲存負擔很大。</b>替代做法：特徵雜湊、嵌入（Embedding）、頻率編碼或目標編碼。直接編號是<b>標籤編碼</b>，會讓模型誤以為 3 號比 1 號「大」，引入不存在的順序關係。</p></details></li>
+    <li>整理一批要拿去訓練圖像分類模型的照片時，同事列了四件事：把每張照片統一成 256 × 256、把像素值除以 255、隨機左右翻轉、請另一個模型幫每張照片寫一段說明文字。哪一件<b>不是</b>前處理？回答前，先說你圈了這句話的哪幾個字。
+      <details><summary>看答案</summary><p><b>先圈「不是」兩個字。</b>統一尺寸（調整大小）、除以 255（歸一化）、左右翻轉（資料增強）都是常見前處理；<b>寫說明文字（圖像描述）不是</b>，它是另一個獨立的任務。</p></details></li>
+  </ol>
+</section>
+</main>
+
+<p style="text-align:center;color:var(--muted);font-size:14px;margin:44px 0 0">其他章：<a href="index.html">L22 觀念複習總目錄</a>｜上一章：<a href="l22401.html">第 10 章 大數據與機器學習</a></p>
+<footer>🍀 Learn AI with Tarshar · iPAS 中級 L22 觀念複習<br>依 L22402 學習範圍整理的原創圖解，不含考古題原文。圖中數字皆為自編範例並以程式實際計算。</footer>
+</body>
+</html>
