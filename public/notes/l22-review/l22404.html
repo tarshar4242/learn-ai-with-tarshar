@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="iPAS 中級 L22404 大數據的隱私、安全與治理：個資法規與當事人權利、匿名化、差分隱私與協作式隱私技術、資安控制、數據治理與 AI 倫理的圖解觀念複習。">
+<title>L22404 隱私安全治理觀念複習｜🍀Learn AI with Tarshar</title>
+<style>
+:root{
+  --bg:#08101f;--bg2:#0d1830;--panel:#111f3b;--panel2:#152746;
+  --line:rgba(137,172,255,.18);--text:#eef4ff;--muted:#a7b7d8;--dim:#7183aa;
+  --cyan:#41dcff;--blue:#6690ff;--purple:#b57bff;--green:#4de1a1;--orange:#ffc45b;--red:#ff8a80
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;color:var(--text);line-height:1.85;background:
+radial-gradient(900px 500px at 10% -10%,rgba(65,220,255,.13),transparent 65%),
+radial-gradient(900px 520px at 95% 10%,rgba(181,123,255,.14),transparent 62%),var(--bg);min-height:100vh}
+a{color:var(--cyan)}.wrap{width:min(880px,calc(100% - 32px));margin:auto}
+.topbar{position:sticky;top:0;z-index:20;background:rgba(8,16,31,.84);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.topbar .wrap{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.back{text-decoration:none;color:var(--cyan);font-size:14px;font-weight:800}.brand{font-size:12px;color:var(--muted);letter-spacing:1.5px}
+.hero{padding:46px 0 18px}
+.eyebrow{display:inline-flex;padding:6px 13px;border:1px solid rgba(65,220,255,.35);border-radius:999px;color:var(--cyan);font-size:12px;letter-spacing:2px;background:rgba(65,220,255,.06)}
+h1{font-size:clamp(28px,5vw,46px);line-height:1.25;margin:16px 0 10px;letter-spacing:-.02em}
+.lead{color:var(--muted);font-size:16px;margin:0}
+.toc{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:26px 0 8px}
+.toc a{display:block;text-decoration:none;color:var(--text);border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:rgba(17,31,59,.72);font-size:14px;font-weight:700}
+.toc a span{color:var(--cyan);margin-right:6px}
+section{margin:38px 0}
+h2{font-size:24px;margin:0 0 12px;padding-top:8px;border-top:1px solid var(--line)}
+h2 small{display:block;color:var(--cyan);font-size:12px;letter-spacing:2px;margin-top:14px}
+h3{font-size:17px;color:var(--orange);margin:22px 0 6px}
+h4{font-size:15px;color:var(--cyan);margin:0 0 4px}
+p{margin:8px 0}
+.why{border-left:4px solid var(--cyan);background:rgba(65,220,255,.06);border-radius:0 14px 14px 0;padding:12px 16px;color:var(--muted)}
+.why b{color:var(--text)}
+figure{margin:16px 0;background:#fff;border-radius:16px;padding:8px;overflow:hidden}
+figure img{display:block;width:100%;height:auto}figcaption{color:#666;font-size:12px;text-align:right;padding:2px 6px 0}
+ol,ul{padding-left:22px;color:var(--muted)}li{margin:4px 0}li b{color:var(--text)}
+.defs{display:grid;gap:10px;margin:12px 0}
+.def{border:1px solid var(--line);border-radius:14px;background:rgba(17,31,59,.72);padding:12px 16px}
+.def ul{margin:2px 0 0;padding-left:20px;font-size:14.5px}
+.def li b{color:var(--orange)}
+.note{color:var(--muted);font-size:14px}
+.tbl{overflow-x:auto;margin:14px 0;border:1px solid var(--line);border-radius:14px}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:14px}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:var(--panel2);color:var(--cyan);font-weight:800}tr:last-child td{border-bottom:0}
+td b{color:var(--orange)}
+tr.grp td{background:rgba(181,123,255,.12);color:var(--purple);font-weight:800}
+.hook{border:1px solid rgba(255,196,91,.5);background:linear-gradient(135deg,rgba(255,196,91,.13),rgba(255,196,91,.04));border-radius:14px;padding:12px 16px 12px;margin:14px 0}
+.hook .tag{display:inline-block;font-size:12px;font-weight:900;letter-spacing:1.5px;color:#2a1a00;background:var(--orange);border-radius:999px;padding:2px 10px;margin-bottom:6px}
+.hook ul{margin:0;padding-left:20px;color:var(--text)}.hook li b{color:var(--orange)}
+.trap{border:1px solid rgba(255,138,128,.4);background:rgba(255,138,128,.07);border-radius:14px;padding:12px 16px;margin:14px 0}
+.trap b{color:var(--red)}
+.recap{counter-reset:n;list-style:none;padding:0}
+.recap li{counter-increment:n;position:relative;padding:12px 14px 12px 50px;border:1px solid var(--line);border-radius:14px;background:rgba(17,31,59,.72);margin:8px 0;color:var(--text)}
+.recap li::before{content:counter(n);position:absolute;left:14px;top:12px;width:26px;height:26px;border-radius:50%;background:var(--green);color:#062418;font-weight:900;text-align:center;line-height:26px;font-size:13px}
+.quiz{list-style:none;padding:0;counter-reset:q}
+.quiz li{counter-increment:q;border:1px solid var(--line);border-radius:14px;background:rgba(17,31,59,.72);padding:12px 16px;margin:10px 0;color:var(--text)}
+.quiz li::before{content:"練習 " counter(q);display:block;color:var(--cyan);font-size:12px;font-weight:900;letter-spacing:1.5px}
+details{margin-top:8px}summary{cursor:pointer;color:var(--green);font-weight:800;font-size:14px}
+details p{color:var(--muted);font-size:14.5px}details b{color:var(--orange)}
+footer{text-align:center;color:var(--dim);font-size:12px;line-height:1.9;border-top:1px solid var(--line);margin-top:50px;padding:30px 20px 44px}
+@media(max-width:600px){.wrap{width:calc(100% - 32px)}.brand{display:none}.toc{grid-template-columns:1fr}h2{font-size:21px}}
+code{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:.9em;color:var(--cyan);background:rgba(65,220,255,.08);border-radius:6px;padding:1px 6px;word-break:break-word}
+.cheat{border:2px solid var(--orange);background:linear-gradient(135deg,rgba(255,196,91,.16),rgba(255,196,91,.05));border-radius:16px;padding:14px 14px 6px;margin:18px 0}
+.cheat .tag{display:inline-block;font-size:12px;font-weight:900;letter-spacing:1.5px;color:#2a1a00;background:var(--orange);border-radius:999px;padding:2px 10px;margin-bottom:4px}
+.cheat h4{color:var(--orange);font-size:17px;margin:4px 0 2px}
+.cheat .tbl{background:rgba(8,16,31,.55)}
+.cheat td code{white-space:nowrap}
+</style>
+
+</head>
+<body>
+<nav class="topbar"><div class="wrap"><a class="back" href="../ipas-intermediate.html">← iPAS 中級總覽</a><span class="brand">🍀 LEARN AI WITH TARSHAR · L22 觀念複習</span></div></nav>
+
+<main class="wrap">
+<header class="hero">
+  <span class="eyebrow">iPAS 中級 · 科目二 · L22404</span>
+  <h1>大數據的隱私、安全與治理｜觀念圖解複習</h1>
+  <p class="lead">這一章問的都是同一件事：<b>大量資料裡有很多個人的資訊，怎麼用它又不傷害人？</b>從法律給當事人的權利、讓人認不出來的匿名化、加雜訊與「資料不出門一起算」的隱私技術，到資安控制、數據治理與 AI 倫理，一共五道關卡。容易卡住的地方是<b>英文縮寫多</b>、<b>k、l、ε 這些參數的意思</b>，以及<b>「下列何者不是」的否定題</b>。每個單元照「為什麼需要它 → 一步步搭起來 → 名詞各自定義 → 整合比較表 → 記憶鉤子 → 易錯提醒」排列。</p>
+  <div class="hook"><span class="tag">先背這張</span><ul>
+    <li><b>下面黃框的「工具與名詞速查表」</b>：GDPR、DPIA、SMPC、HE、TEE、MFA、ELK、DLP、SOC 2 各一行用途。</li>
+    <li><b>GDPR 七項權利</b>：查閱、更正、刪除、限制、可攜、反對、不受純自動化決策；沒有「永久保存權」（單元 ①）。</li>
+    <li><b>參數一句話</b>：k 是群組人數、l 是敏感值種類、ε 越小越隱私也越不準（單元 ②、③）。</li>
+  </ul></div>
+  <nav class="toc" aria-label="目錄">
+    <a href="#tools"><span>★</span>工具與名詞速查表</a>
+    <a href="#map"><span>◎</span>全章地圖：保護資料的五道關卡</a>
+    <a href="#u1"><span>①</span>法規與當事人權利</a>
+    <a href="#u2"><span>②</span>匿名化家族</a>
+    <a href="#u3"><span>③</span>差分隱私與協作式隱私</a>
+    <a href="#u4"><span>④</span>資安控制</a>
+    <a href="#u5"><span>⑤</span>數據治理與 AI 倫理</a>
+    <a href="#recap"><span>✓</span>十句話總整理</a>
+    <a href="#glossary"><span>☰</span>全章名詞總彙整表</a>
+    <a href="#quiz"><span>✎</span>自我檢測 10 題</a>
+  </nav>
+</header>
+
+<div class="cheat" id="tools">
+  <span class="tag">先背這張</span>
+  <h4>工具與名詞速查表</h4>
+  <p class="note">遮住第三欄，看工具名說得出用途；再遮住第一欄，看用途說得出工具名。</p>
+<div class="tbl"><table>
+  <tr><th>名稱</th><th>類別</th><th>一行用途（可背）</th><th>看到這些字就想到它</th></tr>
+  <tr class="grp"><td colspan="4">法規與評估</td></tr>
+  <tr><td><b>GDPR</b></td><td>歐盟法律</td><td>保護歐盟居民的個資，給當事人查、改、刪、帶走等權利</td><td>歐盟、當事人權利</td></tr>
+  <tr><td><b>CCPA／CPRA</b></td><td>美國加州法律</td><td>消費者有權知道被蒐集什麼、要求刪除、選擇退出出售</td><td>加州、知情、退出</td></tr>
+  <tr><td><b>個人資料保護法</b></td><td>台灣法律</td><td>蒐集前要告知目的、類別、期間等；當事人可查詢、刪除</td><td>台灣、告知義務</td></tr>
+  <tr><td><b>DPIA（資料保護影響評估）</b></td><td>評估流程</td><td>新專案處理個資前，先找出隱私風險並定好對策</td><td>上線前、風險評估</td></tr>
+  <tr><td><b>DPA（資料處理協議）</b></td><td>合約</td><td>規定服務商怎麼處理你交給它的個資</td><td>SaaS、委外</td></tr>
+  <tr class="grp"><td colspan="4">隱私保護技術</td></tr>
+  <tr><td><b>k-匿名／l-多樣性</b></td><td>匿名化</td><td>每筆躲進至少 k 筆的群組；群組內敏感值至少 l 種</td><td>等價類、準識別</td></tr>
+  <tr><td><b>差分隱私</b></td><td>加雜訊</td><td>結果加經過計算的雜訊，看不出某一個人在不在資料裡</td><td>ε、隱私預算</td></tr>
+  <tr><td><b>聯邦學習</b></td><td>分散訓練</td><td>資料留在本地訓練，只把模型更新送去彙整</td><td>資料不出門</td></tr>
+  <tr><td><b>SMPC（安全多方計算）</b></td><td>密碼學</td><td>多方各拿碎片一起算，誰都看不到別人的原始資料</td><td>聯合計算、秘密分享</td></tr>
+  <tr><td><b>HE（同態加密）</b></td><td>密碼學</td><td>資料加密著也能計算，解密後和明文算的一樣</td><td>加密狀態下運算</td></tr>
+  <tr><td><b>TEE（可信執行環境）</b></td><td>硬體</td><td>晶片裡隔出受保護的區域，在裡面解開資料來算</td><td>硬體隔離、使用中</td></tr>
+  <tr class="grp"><td colspan="4">資安控制與監控</td></tr>
+  <tr><td><b>IAM（身分與存取管理）</b></td><td>存取控制</td><td>集中管理帳號、角色、權限</td><td>帳號、角色、權限</td></tr>
+  <tr><td><b>MFA（多因素驗證）</b></td><td>身分驗證</td><td>密碼之外再加手機碼或生物特徵，至少兩種</td><td>登入、驗證碼</td></tr>
+  <tr><td><b>零信任</b></td><td>安全模型</td><td>不因在內網就相信，每次請求都重新確認</td><td>預設不信任</td></tr>
+  <tr><td><b>ELK（Elasticsearch、Logstash、Kibana）</b></td><td>日誌管理</td><td>收集、搜尋、視覺化大量日誌，找異常</td><td>日誌、監控、警報</td></tr>
+  <tr><td><b>Splunk</b></td><td>日誌管理</td><td>商用的日誌收集、搜尋、警報一站式工具</td><td>日誌分析</td></tr>
+  <tr><td><b>DLP（資料外洩防護）</b></td><td>防外流</td><td>用關鍵字、規則、指紋辨認敏感資料，擋下外寄</td><td>外寄、攔截</td></tr>
+  <tr><td><b>滲透測試</b></td><td>資安測試</td><td>請人扮演攻擊者實際試打，驗證防禦</td><td>模擬攻擊</td></tr>
+  <tr><td><b>TLS／HTTPS</b></td><td>加密協定</td><td>保護傳輸中的資料</td><td>網路傳送、傳輸中</td></tr>
+  <tr class="grp"><td colspan="4">認證與標準</td></tr>
+  <tr><td><b>SOC 2</b></td><td>稽核報告</td><td>第三方查核服務商的安全、可用性、保密等控制</td><td>服務商審查</td></tr>
+  <tr><td><b>ISO 27001</b></td><td>國際標準</td><td>資訊安全管理制度的認證，自願取得，不是法律</td><td>ISMS、認證</td></tr>
+</table></div>
+</div>
+
+<section id="map">
+  <h2><small>先看全貌</small>全章地圖：保護資料的五道關卡</h2>
+  <p>本章問的都是同一件事：<b>大量資料裡有很多個人的資訊，怎麼用它又不傷害人？</b>五個單元剛好是五道關卡，從「法律怎麼說」到「技術怎麼做」，再到「組織怎麼管」：</p>
+<div class="tbl"><table>
+  <tr><th>關卡</th><th>這一關在問什麼</th><th>本章的關鍵名詞</th></tr>
+  <tr><td><b>① 法規與權利</b></td><td>當事人有哪些權利？企業要先做什麼？</td><td>GDPR、CCPA／CPRA、台灣個資法、DPIA、資料駐留</td></tr>
+  <tr><td><b>② 匿名化</b></td><td>拿掉姓名夠不夠？怎麼讓人認不出來？</td><td>準識別、重新識別、k-匿名、l-多樣性、t-接近</td></tr>
+  <tr><td><b>③ 加雜訊與一起算</b></td><td>不看原始資料，也能分析、訓練嗎？</td><td>差分隱私、ε、聯邦學習、模型下毒、SMPC、HE、TEE</td></tr>
+  <tr><td><b>④ 資安控制</b></td><td>誰能進來？資料怎麼鎖？出事怎麼辦？</td><td>驗證與授權、最小權限、零信任、加密、責任共擔、DLP、備份</td></tr>
+  <tr><td><b>⑤ 治理與倫理</b></td><td>組織怎麼管資料？合法就夠了嗎？</td><td>分類、詮釋資料、血緣、最小化、設計即隱私、公平、過濾氣泡</td></tr>
+</table></div>
+</section>
+
+<section id="u1">
+  <h2><small>單元 ①</small>法規與當事人權利：GDPR、CCPA／CPRA、台灣個資法、資料駐留、DPIA</h2>
+  <p class="why"><b>為什麼需要它？</b> 資料是關於「人」的。各地的法律都在回答同一個問題：<b>這個人對自己的資料有什麼控制權？企業拿資料之前要做什麼？</b>考題常把真的權利和編出來的權利混在一起，再用「下列何者不是」來問。所以這個單元先把權利清單背熟，再練否定題的讀題方法。</p>
+  <h3>一步步搭起來</h3>
+  <ul>
+    <li><b>先認角色。</b>「當事人」（資料主體）是資料講的那個人；「控制者」是決定為什麼、怎麼處理資料的組織；「處理者」是受託處理的服務商。</li>
+    <li><b>處理要有理由。</b>GDPR 要求處理個資要有合法依據，例如當事人同意、履行契約、法律義務；敏感個資（健康、種族、宗教等）原則上不能處理，常見的例外是取得<b>明確同意</b>。</li>
+    <li><b>當事人能做什麼。</b>查閱、更正、刪除、限制處理、帶走（可攜）、反對，以及重大決定不只交給機器。</li>
+    <li><b>企業要先做功課。</b>新專案先做 DPIA 找風險；資料放在哪個國家要合法規（資料駐留）；用完、到期就刪除（儲存期限限制）。</li>
+    <li><b>讀題。</b>看到「不是」「不包括」「錯誤的」，先圈起來，再逐一判斷每個選項的真假。</li>
+  </ul>
+  <figure><a href="img/l22404-gdpr_rights.png" target="_blank" rel="noopener"><img src="img/l22404-gdpr_rights.png" alt="GDPR 當事人權利共 7 項：1 查閱權、2 更正權、3 刪除權（被遺忘權）、4 限制處理權、5 資料可攜權、6 反對權、7 不受純自動化決策；第 8 張是假的永久保存權，GDPR 沒有這項權利。方向相反的原則是儲存期限限制；時間軸示意 2019 年加入會員、2020 年 3 月最後一次交易、公司政策保存 5 年共 1,826 天後於 2025 年 3 月刪除；下方是否定題三步驟" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <h3>名詞各自定義</h3>
+  <div class="defs">
+    <div class="def"><h4>GDPR 的七項當事人權利</h4><ul>
+      <li><b>查閱權：</b>可以問組織有沒有在處理我的資料，並要一份副本。</li>
+      <li><b>更正權：</b>資料錯了或不完整，可以要求改正、補齊。</li>
+      <li><b>刪除權（被遺忘權）：</b>在特定條件下（例如目的已達成、撤回同意），可以要求刪除。不是任何時候都能刪，例如法律要求保存的紀錄。</li>
+      <li><b>限制處理權：</b>有爭議時先「凍結」：資料留著，但暫停使用。</li>
+      <li><b>資料可攜權：</b>用結構化、常用、機器讀得懂的格式拿回自己的資料，還可以要求直接轉給另一家。</li>
+      <li><b>反對權：</b>可以反對某些處理，例如直接行銷。</li>
+      <li><b>不受純自動化決策：</b>對自己有重大影響的決定（例如貸款審核），可以要求不要只由機器決定，要有人介入、能表達意見。</li></ul></div>
+    <div class="def"><h4>儲存期限限制（不是「永久保存權」）</h4><ul>
+      <li><b>是什麼：</b>GDPR 的處理原則之一：個資只保存到達成目的所需的時間，之後刪除或匿名化。</li>
+      <li><b>為什麼常考：</b>考題會編一個「永久保存權」混進權利清單。它的方向和 GDPR 剛好相反：法律要企業<b>少留、早刪</b>，不是幫當事人要求企業永久保存。</li>
+      <li><b>相關原則：</b>目的限制、資料最小化、正確性、完整性與保密性、合法公平透明、問責。</li></ul></div>
+    <div class="def"><h4>敏感個資與明確同意</h4><ul>
+      <li><b>敏感個資：</b>健康、基因、生物特徵、種族、宗教、政治立場、性傾向等，外洩或誤用的傷害特別大。</li>
+      <li><b>規則：</b>原則上禁止處理，有例外才行；最常見的例外是當事人<b>明確同意</b>（清楚、主動、針對特定目的），其他例外例如醫療、公共衛生、法律主張。</li></ul></div>
+  </div>
+  <figure><a href="img/l22404-law_compare.png" target="_blank" rel="noopener"><img src="img/l22404-law_compare.png" alt="三部個資法比較：GDPR 歐盟，適用處理歐盟居民個資的公司，權利有查閱、更正、刪除、限制處理、可攜、反對，敏感個資常需明確同意，罰則例營業額 20 億歐元乘 4% 上限 8,000 萬歐元；CCPA／CPRA 美國加州，重點是知道與喊停，有知情權、刪除權、更正權、限制敏感個資、選擇退出出售或分享；台灣個資法，蒐集前要告知誰在蒐集、目的、資料類別、利用期間地區對象方式與當事人權利，權利有查詢閱覽、給複本、補正、停止利用、刪除" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>CCPA／CPRA（美國加州消費者隱私法）</h4><ul>
+      <li><b>適用：</b>達到營收或資料量門檻、處理加州居民個資的企業。CPRA 是 2020 年通過的修正與擴充。</li>
+      <li><b>核心權利：</b><b>知情權</b>（知道蒐集了哪些個資、從哪裡來、為什麼、分享給誰）、<b>刪除權</b>、<b>更正權</b>（CPRA 加入）、<b>選擇退出</b>出售或分享個資、限制使用敏感個資，以及行使權利不受差別待遇。</li>
+      <li><b>和 GDPR 的差別：</b>CCPA 的重點放在讓消費者「知道」和「喊停」（選擇退出）；GDPR 是處理前就要有合法依據。</li></ul></div>
+    <div class="def"><h4>台灣個資法的告知義務</h4><ul>
+      <li><b>是什麼：</b>企業或機關蒐集個資時，要先告訴當事人：誰在蒐集、蒐集目的、資料類別、利用的期間、地區、對象與方式、當事人有哪些權利與怎麼行使、不提供會有什麼影響。</li>
+      <li><b>當事人權利：</b>查詢或請求閱覽、請求製給複製本、請求補充或更正、請求停止蒐集處理或利用、請求刪除。</li></ul></div>
+  </div>
+  <figure><a href="img/l22404-dpia_residency.png" target="_blank" rel="noopener"><img src="img/l22404-dpia_residency.png" alt="DPIA 五步驟：描述要蒐集什麼做什麼用、評估必要性能不能少拿、找風險、定對策、記錄並定期複查，時機是新專案處理個資之前；風險矩陣以可能性乘影響計分，對策前 4 乘 5 等於 20 分，對策後 2 乘 3 等於 6 分。資料駐留：法規要求資料存在境內，台灣使用者的個資選台灣區域，美國與歐盟區域不符合；備份與災難備援地點也要一起看" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>DPIA（資料保護影響評估）／PIA（隱私影響評估）</h4><ul>
+      <li><b>是什麼：</b>在<b>新專案、新系統處理個資之前</b>，有系統地找出隱私風險、評估嚴重程度、定好降低風險的做法，並留下紀錄。</li>
+      <li><b>什麼時候要特別想到它：</b>大規模處理敏感個資、大規模監控、用新技術做自動化決策這類高風險處理。</li>
+      <li><b>例子：</b>上圖風險分數＝可能性 × 影響，對策前 20 分，加上去識別、加密、權限控管後降到 6 分。</li></ul></div>
+    <div class="def"><h4>資料駐留與資料主權</h4><ul>
+      <li><b>資料駐留 Data Residency：</b>資料實際存放在哪個國家或區域。有些法規要求特定資料存在境內，雲端服務商提供「區域選擇」來配合。</li>
+      <li><b>資料主權 Data Sovereignty：</b>資料受到所在國家法律的管轄。存在哪裡，就可能要受哪裡的法律約束。</li>
+      <li><b>提醒：</b>備份、災難備援、委外處理的地點也算，不只主資料庫。</li></ul></div>
+    <div class="def"><h4>否定題審題法</h4><ul>
+      <li><b>第 1 步：</b>先圈出題目裡的「不」「非」「錯誤」「不包括」「不屬於」。</li>
+      <li><b>第 2 步：</b>每個選項各自標「真」或「假」，不要先找「看起來最熟」的那個。</li>
+      <li><b>第 3 步：</b>選唯一標「假」的那一項，並確認其他三項都是「真」。如果有兩個「假」，回頭再讀一次題目。</li></ul></div>
+  </div>
+  <h3>整合比較表（法規比較表）</h3>
+<div class="tbl"><table>
+  <tr><th>比較項目</th><th>GDPR（歐盟）</th><th>CCPA／CPRA（美國加州）</th><th>個人資料保護法（台灣）</th></tr>
+  <tr><td><b>保護誰</b></td><td>歐盟居民</td><td>加州居民（消費者）</td><td>在台灣被蒐集個資的人</td></tr>
+  <tr><td><b>企業的基本功</b></td><td>處理要有合法依據</td><td>揭露蒐集與分享情形</td><td>蒐集前告知</td></tr>
+  <tr><td><b>代表權利</b></td><td>查閱、更正、刪除、限制、可攜、反對、不受純自動化決策</td><td>知情、刪除、更正、選擇退出出售或分享、限制敏感個資</td><td>查詢閱覽、給複本、補正、停止利用、刪除</td></tr>
+  <tr><td><b>敏感個資</b></td><td>原則禁止，常見例外是明確同意</td><td>可要求限制使用</td><td>特種個資原則禁止，有例外</td></tr>
+  <tr><td><b>記法</b></td><td><b>查改刪停帶反</b></td><td><b>知道與喊停</b></td><td><b>先告知</b></td></tr>
+</table></div>
+  <div class="hook"><span class="tag">記憶鉤子</span><ul>
+    <li><b>GDPR 七項權利：查閱、更正、刪除（被遺忘）、限制、可攜、反對、不受純自動化決策。沒有「永久保存權」。</b></li>
+    <li><b>儲存期限限制：用完、到期就刪或匿名化；方向和「永久保存」相反。</b></li>
+    <li><b>敏感個資常需明確同意；CCPA 重知情與退出；台灣個資法先告知。</b></li>
+    <li><b>上線前做 DPIA；資料放在哪裡，就可能受哪裡的法律管。</b></li>
+    <li><b>否定題：圈「不」→ 逐項標真假 → 選唯一的假。</b></li>
+  </ul></div>
+  <div class="trap"><b>易錯提醒：</b>否定題最常見的失誤，是看到一個自己熟悉、而且是真的選項就選了。資料可攜權、被遺忘權都是真的權利，名字聽起來新，不代表是假的。另外，GDPR 的刪除權有條件，不是任何時候都能要求刪除。</div>
+</section>
+
+<section id="u2">
+  <h2><small>單元 ②</small>匿名化家族：直接識別與準識別、重新識別、k-匿名、l-多樣性、t-接近</h2>
+  <p class="why"><b>為什麼需要它？</b> 把姓名、身分證字號刪掉，資料就安全了嗎？不一定。郵遞區號、生日、性別這些欄位單獨看不出是誰，<b>組合起來</b>再拿去和別的資料比對，常常就能認出人。所以需要一套方法，讓每一筆資料「躲進人群裡」，而且躲進去之後，別人也猜不出他的敏感資訊。</p>
+  <h3>一步步搭起來</h3>
+  <ul>
+    <li><b>分清楚兩種欄位。</b>一個就認得出人的是<b>直接識別</b>（姓名、證號、電話）；單獨不行、組合可以的是<b>準識別</b>（郵遞區號、生日、性別）。</li>
+    <li><b>知道風險。</b>只刪直接識別欄位，別人仍可能用準識別欄位和外部名冊比對，認出人來（<b>重新識別</b>、連結攻擊）。</li>
+    <li><b>讓每筆躲進群組。</b>把準識別欄位<b>泛化</b>（36 歲 → 30–39）或<b>抑制</b>（遮掉），讓每個群組至少有 k 筆一模一樣：<b>k-匿名</b>。</li>
+    <li><b>群組裡的答案也要不同。</b>如果一組人全都是同一種病，躲進群組也沒用：所以要 <b>l-多樣性</b>；再進一步要求每組的比例接近全體：<b>t-接近</b>。</li>
+    <li><b>接受代價。</b>泛化越多越安全，資料也越粗，能分析的細節變少。</li>
+  </ul>
+  <figure><a href="img/l22404-reid_risk.png" target="_blank" rel="noopener"><img src="img/l22404-reid_risk.png" alt="直接識別欄位如姓名、身分證字號、手機號碼、電子郵件，一個就能認出是誰；準識別欄位如郵遞區號、生日、性別、職業，單獨不行組合起來可以。模擬 20,000 人、30 個郵遞區號、60 年內出生：郵遞區號加完整生日加性別有 98.5% 能被唯一認出，改成出生年月剩 63.1%，改成出生年剩 0.4%，區碼前三碼加年代加性別為 0.0%，越泛化越安全" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <h3>名詞各自定義</h3>
+  <div class="defs">
+    <div class="def"><h4>直接識別欄位與準識別欄位</h4><ul>
+      <li><b>直接識別：</b>單獨一個就能指出是誰：姓名、身分證字號、手機號碼、電子郵件。</li>
+      <li><b>準識別 Quasi-identifier：</b>單獨看不出是誰，和其他欄位或外部資料組合後就可能認出人：郵遞區號、生日、性別、職業、就醫日期。</li>
+      <li><b>例子：</b>上圖模擬 20,000 人，只留「郵遞區號＋完整生日＋性別」，就有 98.5% 的人能被唯一認出。</li></ul></div>
+    <div class="def"><h4>個人可識別資訊 PII</h4><ul>
+      <li><b>判斷方法：</b>問自己：這筆資訊<b>單獨或和其他資料組合後</b>，能不能認出特定的人？能，就是個資。</li>
+      <li><b>通常是：</b>姓名、證號、電話、地址、生日、IP 位址、裝置識別碼、病歷。</li>
+      <li><b>通常不是：</b>已彙總、看不出個人的統計數字，例如整個網站的平均停留時間。</li></ul></div>
+    <div class="def"><h4>重新識別與連結攻擊</h4><ul>
+      <li><b>重新識別：</b>把去識別後的資料，重新對回真實的人。</li>
+      <li><b>連結攻擊：</b>拿兩份資料共有的準識別欄位去比對，例如醫療資料和選民名冊都有郵遞區號、生日、性別（第 12 章也有圖例）。</li></ul></div>
+  </div>
+  <figure><a href="img/l22404-k_anon.png" target="_blank" rel="noopener"><img src="img/l22404-k_anon.png" alt="k-匿名示範：原始 9 筆資料每筆年齡加郵遞區號都不同，k 等於 1；泛化後年齡變 20–29、30–39、40–49，郵遞區號變 106**、220**、300**，分成 3 個等價類各 3 筆，k 等於 3，任何一筆至少和其他 k−1 等於 2 筆分不出來；泛化把精確值換成範圍，抑制把太特別的值遮掉" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>等價類 Equivalence Class</h4><ul>
+      <li><b>是什麼：</b>準識別欄位<b>完全相同</b>的一群紀錄。上圖泛化後，「20–29、106＊＊」這 3 筆就是一個等價類。</li></ul></div>
+    <div class="def"><h4>k-匿名 k-Anonymity</h4><ul>
+      <li><b>是什麼：</b>每個等價類<b>至少有 k 筆</b>紀錄。</li>
+      <li><b>換句話說：</b>任何一筆紀錄，都至少和<b>其他 k−1 筆</b>分不出來。因為群組有 k 筆，扣掉自己，剩下的就是 k−1 筆。</li>
+      <li><b>例子：</b>上圖每組 3 筆 → k＝3：每一筆都和其他 2 筆長得一樣，攻擊者最多猜到「是這 3 個人之一」。</li>
+      <li><b>怎麼做到：</b>泛化、抑制。</li></ul></div>
+    <div class="def"><h4>泛化與抑制</h4><ul>
+      <li><b>泛化 Generalization：</b>把精確的值換成<b>比較寬、比較不精確</b>的值：36 歲 → 30–39；22048 → 220＊＊；台北市大安區 → 台北市。</li>
+      <li><b>抑制 Suppression：</b>太特別、怎麼泛化都躲不進群組的值，直接遮掉或整筆不公開，例如 98 歲改成「*」。</li>
+      <li><b>遮罩與假名化：</b>遮罩是把敏感值改成看起來像真的假值或部分遮蔽（例如卡號只留後四碼）；假名化是用代號取代姓名，對照表要另外保管。</li></ul></div>
+  </div>
+  <figure><a href="img/l22404-l_div.png" target="_blank" rel="noopener"><img src="img/l22404-l_div.png" alt="l-多樣性：修正前 k 等於 3，但 30–39 歲、220** 這一組 3 筆全是糖尿病，l 等於 1，知道鄰居 35 歲住 220 區就能推知他有糖尿病，這叫同質性攻擊；修正後把兩組合併再泛化成 30–49、2**／3**，k 等於 3、l 等於 3。t-接近：全表糖尿病占 44%，修正前那一組是 100%，差太多；k 管群組大小、l 管答案種類、t 管分布像不像" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>l-多樣性 l-Diversity</h4><ul>
+      <li><b>為什麼需要：</b>k-匿名只保證「群組夠大」，沒管群組裡的<b>敏感欄位</b>。如果一組 3 個人全是糖尿病，攻擊者不必知道是哪一筆，也能確定他有糖尿病：這叫<b>同質性攻擊</b>。</li>
+      <li><b>是什麼：</b>每個等價類裡，敏感欄位至少有 <b>l 種「夠分散」（良好表示）的值</b>。</li>
+      <li><b>例子：</b>上圖修正前 l＝1，合併再泛化後每組至少 3 種病名，l＝3。</li>
+      <li><b>還擋不住：</b>背景知識攻擊（例如知道某人不可能得某種病，就能刪掉選項），以及各種病名比例差太多的情況。</li></ul></div>
+    <div class="def"><h4>t-接近 t-Closeness</h4><ul>
+      <li><b>是什麼：</b>每個等價類的敏感值<b>分布</b>，要和全表的分布接近，差距不超過 t。</li>
+      <li><b>例子：</b>全表糖尿病占 44%，修正前那一組是 100%，差太多，即使改成 2 種病名但比例仍懸殊，也會透露資訊。</li></ul></div>
+  </div>
+  <h3>整合比較表（匿名化家族）</h3>
+<div class="tbl"><table>
+  <tr><th>方法</th><th>要求什麼</th><th>擋得住什麼</th><th>擋不住什麼</th><th>記法</th></tr>
+  <tr><td><b>只刪直接識別</b></td><td>拿掉姓名、證號</td><td>一眼認出</td><td><b>連結攻擊</b></td><td>不夠</td></tr>
+  <tr><td><b>k-匿名</b></td><td>每組至少 k 筆</td><td>對號入座</td><td>同質性攻擊</td><td><b>k 是人數</b></td></tr>
+  <tr><td><b>l-多樣性</b></td><td>每組敏感值至少 l 種</td><td>同質性攻擊</td><td>比例懸殊、背景知識</td><td><b>l 是種類</b></td></tr>
+  <tr><td><b>t-接近</b></td><td>每組分布接近全表</td><td>比例懸殊</td><td>仍有殘餘風險，資料變粗</td><td><b>t 是比例</b></td></tr>
+  <tr><td><b>差分隱私（單元③）</b></td><td>結果加計算過的雜訊</td><td>推回某一個人</td><td>雜訊大時不準</td><td><b>ε 是預算</b></td></tr>
+</table></div>
+  <div class="hook"><span class="tag">記憶鉤子</span><ul>
+    <li><b>拿掉姓名≠匿名：準識別欄位一組合，還是認得出人。</b></li>
+    <li><b>k-匿名：躲進至少 k 筆的群組，和其他 k−1 筆長得一樣。</b></li>
+    <li><b>l-多樣性：群組裡的敏感值至少 l 種，擋同質性攻擊。</b></li>
+    <li><b>k 是人數、l 是種類、t 是比例；泛化越多越安全，資料也越粗。</b></li>
+  </ul></div>
+  <div class="trap"><b>易錯提醒：</b>k-匿名說的是「至少和其他 k−1 筆分不出」，不是「k 筆」：群組總共 k 筆，其中一筆是自己。l-多樣性的 l 和 k 是兩個不同的數字，一個管人數，一個管敏感值的種類，不要混在一起。</div>
+</section>
+
+<section id="u3">
+  <h2><small>單元 ③</small>差分隱私與協作式隱私技術：雜訊、ε、拉普拉斯與高斯、聯邦學習的挑戰與下毒、SMPC、HE、TEE</h2>
+  <p class="why"><b>為什麼需要它？</b> 匿名化是在「資料本身」動手腳，但只要資料要公開或交出去，就可能被比對。另一條路是：<b>不交出原始資料</b>，只交出加了雜訊的結果（差分隱私），或讓大家各自保管資料、一起計算（聯邦學習、安全多方計算、同態加密、可信執行環境）。每種方法都有代價：準確度、速度或通訊量。</p>
+  <h3>一步步搭起來</h3>
+  <ul>
+    <li><b>公布結果時加雜訊。</b>在統計結果或訓練過程中加入<b>經過計算的隨機雜訊</b>，讓人看不出某一個人在不在資料裡：差分隱私。</li>
+    <li><b>用 ε 控制雜訊大小。</b>ε（隱私預算）越小，雜訊越大、越隱私、越不準；每查一次都會花掉一些預算。</li>
+    <li><b>選雜訊的分布。</b>計數、加總這類查詢常用<b>拉普拉斯</b>；訓練模型時對梯度加雜訊常用<b>高斯</b>。</li>
+    <li><b>資料不出門，一起訓練。</b>聯邦學習讓資料留在本地，只傳模型更新；但要面對資料不一致、傳輸量大、裝置快慢不一，以及有人送「毒」更新。</li>
+    <li><b>其他一起算的方法。</b>安全多方計算拆碎片、同態加密鎖著算、可信執行環境關在硬體小房間裡算。</li>
+  </ul>
+  <figure><a href="img/l22404-dp_epsilon.png" target="_blank" rel="noopener"><img src="img/l22404-dp_epsilon.png" alt="隱私預算 ε 曲線：計數查詢的拉普拉斯雜訊，尺度等於 1 除以 ε；ε 等於 2 時 95% 的雜訊在正負 1.5 內，ε 等於 1 時正負 3.0，ε 等於 0.5 時正負 6.0，ε 越小曲線越矮越寬。預算像額度：總額 ε 等於 1，每次查詢花 0.25 可以查 4 次；想查 10 次每次分到 0.1，雜訊尺度變 10，更不準" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <h3>名詞各自定義</h3>
+  <div class="defs">
+    <div class="def"><h4>差分隱私 Differential Privacy</h4><ul>
+      <li><b>核心承諾：</b>資料裡<b>多你一個或少你一個</b>，公布的結果幾乎一樣，所以從結果推不回你。</li>
+      <li><b>怎麼做到：</b>在查詢結果或訓練過程加入<b>經過精心校準的隨機雜訊</b>。</li>
+      <li><b>可以用在：</b>統計發布（人口普查、使用量統計）、模型訓練（每一步對梯度加雜訊，例如 DP-SGD）。</li></ul></div>
+    <div class="def"><h4>隱私預算 ε（Epsilon）</h4><ul>
+      <li><b>是什麼：</b>控制隱私保護強度的參數。<b>ε 越小 → 雜訊越大 → 保護越強，但結果的效用（準確度）越低</b>；ε 越大則相反。</li>
+      <li><b>為什麼叫預算：</b>每回答一次查詢都會花掉一些 ε，花越多次，累積的洩漏越多。上圖總額 1，每次花 0.25 可以查 4 次。</li>
+      <li><b>敏感度：</b>多一個人或少一個人，查詢結果最多會變多少。計數查詢最多差 1，敏感度＝1。雜訊尺度＝敏感度 ÷ ε。</li></ul></div>
+  </div>
+  <figure><a href="img/l22404-laplace_gauss.png" target="_blank" rel="noopener"><img src="img/l22404-laplace_gauss.png" alt="兩種常用雜訊比較，變異數都設成 2：拉普拉斯是尖頂、尾巴較厚，高斯是圓頂鐘形；雜訊超過正負 4 的機率拉普拉斯 1.83%、高斯 0.47%。拉普拉斯常配純 ε 差分隱私，用在計數加總查詢；高斯常配 (ε, δ) 差分隱私，δ 是允許的極小失敗機率，也常用在訓練時對梯度加雜訊" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>拉普拉斯分布與高斯分布</h4><ul>
+      <li><b>拉普拉斯 Laplace：</b>中間尖、兩邊尾巴較厚。最常搭配「純 ε」差分隱私，用在計數、加總這類數值查詢，尺度＝敏感度 ÷ ε。</li>
+      <li><b>高斯 Gaussian（常態）：</b>圓頂鐘形。常搭配「(ε, δ)」差分隱私（δ 是允許的極小失敗機率），模型訓練時對梯度加雜訊多用它。</li>
+      <li><b>不是隨便加：</b>均勻分布這類「隨便亂加」的雜訊，沒有經過敏感度和 ε 的校準，就談不上差分隱私的保證。</li></ul></div>
+  </div>
+  <figure><a href="img/l22404-dp_size.png" target="_blank" rel="noopener"><img src="img/l22404-dp_size.png" alt="為什麼 ε 小或資料少時比較不準：計數查詢加雜訊後的平均誤差占答案的比例。ε 等於 0.1 平均差 10 人，真實答案 20 人時差 50%，100 人差 10%，1,000 人差 1%，10,000 人差 0.1%；ε 等於 1 平均差 1 人，依序是 5%、1%、0.1%、0.01%。雜訊的大小只看 ε 和敏感度，和資料筆數無關，所以答案越小，被雜訊淹沒得越多" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>差分隱私的缺點：準確度下降</h4><ul>
+      <li><b>原因一：ε 小：</b>ε 越小，加的雜訊越大，結果離真實值越遠。</li>
+      <li><b>原因二：資料少：</b>雜訊的大小<b>只由 ε 和敏感度決定，和資料有幾筆無關</b>。同樣差 1 人，20 人的答案差了 5%，一萬人的答案只差 0.01%。所以小群體、小樣本的統計最容易被雜訊淹沒。</li>
+      <li><b>其他挑戰：</b>預算怎麼分配給很多次查詢、參數不好設定、要說服使用者接受「有雜訊的數字」。</li></ul></div>
+  </div>
+  <figure><a href="img/l22404-fl_challenges.png" target="_blank" rel="noopener"><img src="img/l22404-fl_challenges.png" alt="聯邦學習三個挑戰：一是資料非獨立同分布，醫院甲兒科流感 70%、腸胃 20%、慢性病 10%，醫院乙各約三分之一，醫院丙老人慢性病 65%；二是通訊成本，模型 1 億個參數乘 4 位元組等於 400 MB，每回合 100 台下載加上傳 80 GB，200 回合 16 TB；三是系統差異，4 台裝置分別 12、15、18、95 秒，同步彙整要等最慢的 95 秒" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>聯邦學習 Federated Learning 與三個挑戰</h4><ul>
+      <li><b>核心想法：</b>模型在資料所在的地方（手機、醫院）訓練，只把<b>模型更新</b>（梯度或權重）送到伺服器彙整，原始資料不集中。</li>
+      <li><b>挑戰一：資料非獨立同分布 Non-IID：</b>各地資料長得不一樣（上圖兒科醫院以流感為主、老人醫院以慢性病為主），各自練出的模型差很多，平均起來不一定好。</li>
+      <li><b>挑戰二：通訊成本：</b>每一回合都要傳模型。上圖 400 MB 的模型、100 台、200 回合就要傳 16 TB。</li>
+      <li><b>挑戰三：系統差異：</b>裝置的運算力、網路、電量不同；同步彙整時，整回合要等最慢的那台。</li>
+      <li><b>仍有的隱私風險：</b>模型更新本身也可能透露部分資訊，常再搭配差分隱私或安全彙整。</li></ul></div>
+  </div>
+  <figure><a href="img/l22404-fl_poison.png" target="_blank" rel="noopener"><img src="img/l22404-fl_poison.png" alt="模型下毒：10 台裝置各送一個模型更新，誠實 8 台約為 1，惡意 2 台送負 12；直接平均被拉到負 1.57，方向整個反了；中位數 0.97、去掉最高最低各 2 個的修剪平均 0.98，接近誠實 8 台的平均 1.03。防禦是穩健彙整、偵測異常更新、限制每台的影響力，也可再加差分隱私" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>模型下毒與拜占庭攻擊</h4><ul>
+      <li><b>模型下毒 Model Poisoning：</b>惡意參與者送出精心設計的更新，讓整體模型變差，或偷偷植入<b>後門</b>（看到特定觸發條件就做出攻擊者想要的反應）。</li>
+      <li><b>拜占庭攻擊 Byzantine Attack：</b>名稱來自「拜占庭將軍問題」：一群合作者裡有人故意送錯誤或亂造的訊息。</li>
+      <li><b>為什麼直接平均危險：</b>平均很容易被極端值拉走。上圖 2 台惡意更新就把平均從約 1 拉到 −1.57。</li>
+      <li><b>防禦：</b><b>穩健彙整</b>（中位數、修剪平均、Krum 等）、偵測異常更新、裁切每台更新的大小、限制每台的影響力。</li></ul></div>
+  </div>
+  <figure><a href="img/l22404-collab_tech.png" target="_blank" rel="noopener"><img src="img/l22404-collab_tech.png" alt="三種協作式隱私技術：安全多方計算示範甲乙丙三人薪水各拆成 3 塊隨機碎片，每人把收到的碎片加總後再相加取餘數得到 160,000，平均 53,333，沒人看過別人的薪水；同態加密是加密的 3 加加密的 5 在雲端相加，只有你能解開得到 8；可信執行環境是晶片裡上鎖的小房間，資料在裡面解開來算，作業系統與雲端管理員都看不到。代價：SMPC 通訊量大、HE 運算慢、TEE 要信任晶片廠" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>安全多方計算 SMPC</h4><ul>
+      <li><b>是什麼：</b>多個參與方一起計算一個結果，<b>每一方都看不到別人的原始資料</b>。</li>
+      <li><b>例子：</b>上圖三人把薪水拆成隨機碎片互相交換，每人只看到一堆亂數，最後合起來得到總和 160,000。</li>
+      <li><b>代價：</b>參與方之間要大量來回通訊，計算慢。</li></ul></div>
+    <div class="def"><h4>同態加密 HE</h4><ul>
+      <li><b>是什麼：</b>資料保持<b>加密</b>的狀態直接計算，解密後的結果和用明文算的一樣。</li>
+      <li><b>用途：</b>把資料交給雲端算，雲端全程看不到內容。</li>
+      <li><b>代價：</b>運算量非常大、很慢。</li></ul></div>
+    <div class="def"><h4>可信執行環境 TEE</h4><ul>
+      <li><b>是什麼：</b>處理器裡隔出一塊受硬體保護的區域，資料只在裡面解開來算，作業系統和雲端管理員都看不到。</li>
+      <li><b>代價：</b>要信任晶片製造商；曾有針對硬體的旁路攻擊研究。</li>
+      <li><b>組合使用：</b>實務上常把 SMPC、HE、TEE 和聯邦學習、差分隱私混搭，取長補短。</li></ul></div>
+  </div>
+  <h3>整合比較表（協作式隱私技術比較表）</h3>
+<div class="tbl"><table>
+  <tr><th>技術</th><th>怎麼保護</th><th>原始資料誰看得到</th><th>主要代價</th><th>記法</th></tr>
+  <tr><td><b>差分隱私</b></td><td>結果或梯度加計算過的雜訊</td><td>收集方（公布的是加雜訊結果）</td><td>ε 小或資料少時不準</td><td><b>加雜訊</b></td></tr>
+  <tr><td><b>聯邦學習</b></td><td>資料留本地，只傳模型更新</td><td>只有本地</td><td>Non-IID、通訊量、快慢不一、下毒</td><td><b>資料不出門</b></td></tr>
+  <tr><td><b>SMPC</b></td><td>拆成碎片一起算</td><td>沒有任何一方看得到全部</td><td>大量通訊、慢</td><td><b>拆碎片</b></td></tr>
+  <tr><td><b>HE</b></td><td>加密狀態下直接計算</td><td>沒人看到明文</td><td>運算非常慢</td><td><b>鎖著算</b></td></tr>
+  <tr><td><b>TEE</b></td><td>硬體隔離區域裡解開來算</td><td>只有那塊硬體區域</td><td>要信任晶片廠</td><td><b>關在小房間</b></td></tr>
+</table></div>
+  <div class="hook"><span class="tag">記憶鉤子</span><ul>
+    <li><b>差分隱私＝加經過計算的雜訊；ε 是隱私預算，ε 小＝保護強、效用低。</b></li>
+    <li><b>雜訊用拉普拉斯（計數查詢）或高斯（訓練梯度）。</b></li>
+    <li><b>雜訊大小和資料筆數無關 → 資料越少，誤差占比越大 → 越不準。</b></li>
+    <li><b>聯邦學習的挑戰：資料不一致、傳很多、機器有快慢；怕下毒，別直接平均，改用穩健彙整。</b></li>
+    <li><b>SMPC 拆碎片、HE 鎖著算、TEE 關在小房間算。</b></li>
+  </ul></div>
+  <div class="trap"><b>易錯提醒：</b>ε 越小代表保護越強，不是越弱；它也不是查詢次數上限或運算效率指標，雖然預算用完確實會限制還能回答幾次。聯邦學習裡的「拜占庭攻擊」和「模型下毒」說的是參與者送壞更新，和釣魚郵件、灌爆流量的攻擊不是同一類。</div>
+</section>
+
+<section id="u4">
+  <h2><small>單元 ④</small>資安控制：驗證與授權、最小權限、零信任、加密三狀態、責任共擔、日誌與 DLP、備份與測試</h2>
+  <p class="why"><b>為什麼需要它？</b> 隱私技術再好，如果任何人都能登入、資料庫沒上鎖、外洩了也沒人發現，一切都白費。資安控制回答四個問題：<b>誰能進來？能做什麼？資料怎麼鎖？出事時看得到、救得回來嗎？</b>放到雲端時，還要分清楚哪些事是雲端業者負責、哪些是自己負責。</p>
+  <h3>一步步搭起來</h3>
+  <ul>
+    <li><b>先認人。</b>身分驗證確認「你是誰」，最好用多因素驗證（MFA）。</li>
+    <li><b>再給門。</b>授權決定「你能做什麼」；只給完成工作需要的權限（最小權限），不因在內網就相信（零信任）。</li>
+    <li><b>把資料鎖起來。</b>存著、傳送中、使用中三種狀態都要保護；要連雲端員工都看不到，就在自己這端先加密。</li>
+    <li><b>分清楚責任。</b>雲端業者顧好「雲本身」，客戶顧好「放在雲裡的東西」，資料和帳號權限都是客戶的事。</li>
+    <li><b>看得到、擋得住、救得回。</b>日誌監控找異常、DLP 擋外流、滲透測試找漏洞、備份防勒索。</li>
+  </ul>
+  <figure><a href="img/l22404-access_control.png" target="_blank" rel="noopener"><img src="img/l22404-access_control.png" alt="存取控制：使用者先經過身分驗證確認你是誰（密碼加手機驗證碼），再經過授權決定你能做什麼（依角色給權限），才能存取資料。最小權限原則示範：資料分析師、資料工程師、實習生三個角色乘讀去識別資料、讀含個資資料、修改資料表、刪除資料表四種權限共 12 項，只開必要的 4 項。下方說明多因素驗證、零信任、身分與存取管理、定期稽核" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <h3>名詞各自定義</h3>
+  <div class="defs">
+    <div class="def"><h4>身分驗證 Authentication 與授權 Authorization</h4><ul>
+      <li><b>身分驗證：</b>確認「<b>你是誰</b>」：密碼、手機驗證碼、指紋、憑證。</li>
+      <li><b>授權：</b>確認「<b>你能做什麼</b>」：可以讀哪些表、能不能修改或刪除。常依角色給權限（角色型存取控制）。</li>
+      <li><b>關係：</b>先驗證、再授權。兩者合起來是防止未經授權存取敏感資料最基本的控制。</li></ul></div>
+    <div class="def"><h4>最小權限原則 Principle of Least Privilege</h4><ul>
+      <li><b>是什麼：</b>每個人、每個服務帳號，只給完成工作<b>所需的最少權限</b>，用完就收回。</li>
+      <li><b>好處：</b>帳號被盜或有人出錯時，能造成的傷害比較小。上圖 12 項權限只開 4 項。</li></ul></div>
+    <div class="def"><h4>零信任 Zero Trust 與多因素驗證 MFA</h4><ul>
+      <li><b>零信任：</b><b>預設不信任</b>任何使用者或裝置，不管在公司內網還是外面；每次存取都重新確認身分、裝置狀態、權限與情境。口號是「永不預設信任，持續驗證」。</li>
+      <li><b>MFA：</b>結合兩種以上的驗證因素：你知道的（密碼）、你擁有的（手機、實體金鑰）、你本身的（指紋、臉）。密碼外洩，別人仍難以登入。</li>
+      <li><b>IAM：</b>身分與存取管理，集中管理帳號、角色、權限，並定期稽核。</li></ul></div>
+  </div>
+  <figure><a href="img/l22404-encrypt_states.png" target="_blank" rel="noopener"><img src="img/l22404-encrypt_states.png" alt="加密的三種狀態：靜態是存在硬碟、資料庫、資料湖、備份裡，用磁碟加密；傳輸中是網路傳送時，用 TLS／HTTPS；使用中是記憶體裡運算時，最難保護，用 TEE 或同態加密。伺服器端加密是明文傳到雲端後由雲端加密，金鑰在雲端服務商手上，雲端人員技術上可能看得到；用戶端加密是先在自己電腦加密再上傳，金鑰在自己手上，雲端只看到密文" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>加密的三種狀態</h4><ul>
+      <li><b>靜態加密 Encryption at Rest：</b>保護<b>存起來</b>的資料：硬碟、資料庫、資料湖、備份。</li>
+      <li><b>傳輸中加密 Encryption in Transit：</b>保護<b>在網路上傳送</b>的資料，例如 TLS／HTTPS。</li>
+      <li><b>使用中加密 Encryption in Use：</b>保護<b>正在記憶體裡運算</b>的資料，最難做，靠 TEE、同態加密等技術。</li></ul></div>
+    <div class="def"><h4>用戶端加密 vs 伺服器端加密</h4><ul>
+      <li><b>伺服器端加密：</b>資料以明文送到雲端，由雲端加密後儲存，<b>金鑰由雲端業者管理</b>，技術上雲端端仍有可能解開。</li>
+      <li><b>用戶端加密 Client-Side Encryption：</b>資料<b>在送出之前</b>就在自己這端加密，金鑰自己保管，雲端只拿到密文，<b>連雲端員工也讀不到</b>。</li>
+      <li><b>代價：</b>金鑰弄丟就救不回來；雲端也難幫你搜尋、分析這些資料。折衷做法是自帶金鑰或用金鑰管理服務。</li></ul></div>
+  </div>
+  <figure><a href="img/l22404-shared_resp.png" target="_blank" rel="noopener"><img src="img/l22404-shared_resp.png" alt="責任共擔模型：七層由上到下是資料、帳號與存取權限、應用程式、作業系統與執行環境、網路設定、虛擬化與主機、實體機房；自建機房客戶負責 7 層，IaaS 客戶 5 層，PaaS 客戶 3 層，SaaS 客戶 2 層；資料和帳號權限在每一種模式下都由客戶負責，雲端供應商負責雲本身的安全" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>責任共擔模型 Shared Responsibility Model</h4><ul>
+      <li><b>是什麼：</b>雲端業者負責「<b>雲本身</b>」的安全（機房、主機、網路基礎設施、虛擬化）；客戶負責「<b>放在雲裡的東西</b>」（資料、帳號權限、設定、自己的應用程式）。</li>
+      <li><b>越全包、客戶管越少：</b>上圖 IaaS 客戶管 5 層、PaaS 管 3 層、SaaS 管 2 層，但<b>資料和帳號權限在每一種模式都是客戶的責任</b>。</li>
+      <li><b>常見事故：</b>儲存空間權限設成公開、金鑰寫在程式碼裡外洩，多半發生在客戶這一側。</li>
+      <li><b>客戶的基本功：</b>強密碼與 MFA、嚴格管理 IAM、定期稽核設定、加密敏感資料。</li></ul></div>
+    <div class="def"><h4>多租戶風險 Multi-tenancy</h4><ul>
+      <li><b>是什麼：</b>很多客戶（租戶）共用同一套雲端平台或硬體。</li>
+      <li><b>風險：</b>一個租戶的漏洞或異常活動可能波及其他租戶：搶資源、設定錯誤導致資料互相看得到、跨租戶攻擊。</li>
+      <li><b>對策：</b>嚴格的租戶隔離、各自的加密金鑰、資源上限、監控。</li></ul></div>
+  </div>
+  <figure><a href="img/l22404-logs_dlp.png" target="_blank" rel="noopener"><img src="img/l22404-logs_dlp.png" alt="日誌管理：各系統紀錄經過 Logstash 收集、Elasticsearch 搜尋、Kibana 圖表，Splunk 是一套包辦的商用工具；登入失敗次數每 5 分鐘一格共 4 小時，前 2 小時平均 4.1、標準差 2.0，警報門檻 10.0，有 3 個時段超過門檻自動通知資安人員。資料外洩防護 DLP 盯住要離開公司的資料，例如外寄信件出現身分證格式，規則命中就擋下並通知；辨認方式有關鍵字、正規表示式、資料指紋、機器學習分類" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>日誌管理（ELK、Splunk）</h4><ul>
+      <li><b>是什麼：</b>把伺服器、資料庫、應用程式、防火牆產生的大量日誌<b>集中收集、儲存、搜尋、分析</b>，用來監控資安事件、偵測異常、事後調查與稽核。</li>
+      <li><b>ELK：</b>Logstash 收集整理、Elasticsearch 儲存與搜尋、Kibana 做圖表與儀表板。</li>
+      <li><b>Splunk：</b>商用的一站式日誌平台。</li>
+      <li><b>例子：</b>上圖用前 2 小時的「平均＋3 個標準差」當門檻，登入失敗暴增的 3 個時段觸發警報。</li></ul></div>
+    <div class="def"><h4>資料外洩防護 DLP</h4><ul>
+      <li><b>是什麼：</b>監控並阻止敏感資料未經授權地離開組織：電子郵件、隨身碟、雲端上傳、列印。</li>
+      <li><b>怎麼認出敏感資料：</b>關鍵字、<b>正規表示式</b>（例如身分證、信用卡號的格式）、<b>資料指紋</b>（比對已登記的敏感文件）、機器學習分類。</li></ul></div>
+  </div>
+  <figure><a href="img/l22404-backup_ransom.png" target="_blank" rel="noopener"><img src="img/l22404-backup_ransom.png" alt="防勒索備份情境：3 月 10 日 15:00 資料被加密；每天 02:00 備份可回到當天 02:00，損失 13 小時；每週日 02:00 備份回到 3 月 8 日，損失 61 小時約 2.5 天；備份放在同一台沒隔離會一起被加密而救不回來。3-2-1 備份原則：3 份資料、2 種不同媒體、1 份離線或異地；還要定期演練還原。弱點掃描比對已知漏洞、滲透測試模擬攻擊者；選 SaaS 看隱私政策、資料處理協議、SOC 2 與 ISO 27001 認證、存放地點與外洩通知" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>備份與防勒索軟體</h4><ul>
+      <li><b>關鍵：</b>定期備份，而且備份要<b>隔離</b>（離線或不同帳號、不同地點），並<b>定期演練還原</b>。</li>
+      <li><b>3-2-1 原則：</b>3 份資料、2 種不同媒體、1 份離線或異地。</li>
+      <li><b>例子：</b>上圖每天備份只損失 13 小時；每週備份損失 61 小時；備份沒隔離就一起被加密。</li></ul></div>
+    <div class="def"><h4>滲透測試與弱點掃描</h4><ul>
+      <li><b>滲透測試 Penetration Testing：</b>請專業人員<b>模擬攻擊者</b>，實際試著找出並利用漏洞，評估防禦到底擋不擋得住。</li>
+      <li><b>弱點掃描 Vulnerability Scanning：</b>用工具自動比對已知漏洞清單、設定錯誤，像定期健康檢查。</li></ul></div>
+    <div class="def"><h4>審查 SaaS 服務商</h4><ul>
+      <li><b>要看什麼：</b>隱私政策、安全措施、<b>資料處理協議（DPA）</b>、合規認證（<b>SOC 2</b> 報告、<b>ISO 27001</b>）、資料存放地點、外洩時怎麼通知。</li>
+      <li><b>SOC 2：</b>由會計師事務所依信任服務準則（安全、可用性、處理完整性、保密、隱私）查核後出具的報告。</li></ul></div>
+  </div>
+  <h3>整合比較表（資安控制速查表）</h3>
+<div class="tbl"><table>
+  <tr><th>控制</th><th>回答什麼問題</th><th>做法一句話</th><th>常見例子</th></tr>
+  <tr><td><b>身分驗證</b></td><td>你是誰？</td><td>確認身分，最好用多因素</td><td>密碼＋手機碼、MFA</td></tr>
+  <tr><td><b>授權</b></td><td>你能做什麼？</td><td>依角色給權限</td><td>角色型存取控制、IAM</td></tr>
+  <tr><td><b>最小權限</b></td><td>權限給太多了嗎？</td><td>只給工作需要的</td><td>實習生不能刪表</td></tr>
+  <tr><td><b>零信任</b></td><td>在內網就安全嗎？</td><td>每次請求都重新確認</td><td>持續驗證、分段隔離</td></tr>
+  <tr><td><b>靜態／傳輸中／使用中加密</b></td><td>資料在哪個狀態被保護？</td><td>存著、在路上、在算各自加密</td><td>磁碟加密、TLS、TEE</td></tr>
+  <tr><td><b>用戶端加密</b></td><td>雲端員工看得到嗎？</td><td>上傳前自己加密、自己握金鑰</td><td>敏感資料上雲</td></tr>
+  <tr><td><b>責任共擔</b></td><td>誰負責哪一層？</td><td>雲顧雲，客戶顧資料與帳號</td><td>IaaS、PaaS、SaaS</td></tr>
+  <tr><td><b>日誌管理</b></td><td>發生什麼事？</td><td>集中收集、搜尋、警報</td><td>ELK、Splunk</td></tr>
+  <tr><td><b>DLP</b></td><td>資料要外流了嗎？</td><td>辨認敏感資料、擋下外寄</td><td>身分證格式規則</td></tr>
+  <tr><td><b>滲透測試</b></td><td>真的擋得住攻擊嗎？</td><td>模擬攻擊者實際試打</td><td>年度資安測試</td></tr>
+  <tr><td><b>備份</b></td><td>被勒索還救得回來嗎？</td><td>3-2-1、隔離、演練還原</td><td>離線備份</td></tr>
+</table></div>
+  <div class="hook"><span class="tag">記憶鉤子</span><ul>
+    <li><b>驗證認人、授權給門；最小權限只給需要的；零信任每次都驗；MFA 至少兩種因素。</b></li>
+    <li><b>加密三狀態：存著、在路上、在算。要連雲端員工都看不到 → 用戶端加密。</b></li>
+    <li><b>責任共擔：雲顧好雲，你顧好你的資料和帳號。</b></li>
+    <li><b>ELK、Splunk 看日誌找異常；DLP 守門擋外流；備份要隔離、練過還原。</b></li>
+  </ul></div>
+  <div class="trap"><b>易錯提醒：</b>「靜態加密」保護的是存起來的資料，不是傳輸中的資料。用了雲端服務不代表安全都交給雲端：資料、帳號權限、設定錯誤都是客戶的責任。防毒軟體擋不了所有勒索軟體，隔離的備份和還原演練才是最後一道防線。</div>
+</section>
+
+<section id="u5">
+  <h2><small>單元 ⑤</small>數據治理與 AI 倫理：分類、詮釋資料、血緣、生命週期、最小化、設計即隱私、倫理原則、過濾氣泡</h2>
+  <p class="why"><b>為什麼需要它？</b> 技術和資安是工具，<b>治理</b>是讓整個組織長期、一致地用好這些工具：資料有沒有分等級、說明書寫清楚了沒、出錯能不能查到源頭、到期有沒有刪。最後還有一層：就算合法，這樣用資料<b>對人公平、對社會好嗎</b>？這就是 AI 倫理。</p>
+  <h3>一步步搭起來</h3>
+  <ul>
+    <li><b>先分類。</b>依敏感程度把資料分成公開、內部、機密、高度機密，等級決定保護方式。</li>
+    <li><b>寫說明書與履歷。</b>詮釋資料說明每個欄位是什麼；數據血緣記錄資料從哪來、經過哪些處理、流到哪去。</li>
+    <li><b>管生到死。</b>只收需要的（最小化），只留需要的時間（保存期限），到期刪除或匿名化。</li>
+    <li><b>從設計就想隱私。</b>設計即隱私：從專案最早的階段就放進保護，一路帶到上線。</li>
+    <li><b>問倫理。</b>公平嗎？說得清楚嗎？出事誰負責？使用者真的懂自己同意了什麼嗎？推薦系統會不會讓人越看越窄？</li>
+  </ul>
+  <figure><a href="img/l22404-governance.png" target="_blank" rel="noopener"><img src="img/l22404-governance.png" alt="數據治理三件工具：一是數據分類，高度機密如病歷、身分證字號要加密且最少人可看，機密如客戶名單、薪資限部門並留紀錄，內部如公告與流程文件員工可看，公開如官網新聞誰都可看；二是詮釋資料，例如月營收欄位的定義、單位元、來源會計系統、負責人財務部、每月 5 日更新；三是數據血緣，會計系統經過清洗、合併到月報表，報表數字怪就沿血緣往回查，例子是來源單位元被當成千元，月營收 12,500,000 元報表只顯示 12,500，差了 1,000 倍" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <h3>名詞各自定義</h3>
+  <div class="defs">
+    <div class="def"><h4>數據治理 Data Governance</h4><ul>
+      <li><b>是什麼：</b>一套規則、角色與流程，確保資料<b>品質好、安全、合規、用得有價值</b>。</li>
+      <li><b>不是：</b>「收越多越好」：不考慮目的、能收就收，反而違反最小化原則，也增加風險。</li>
+      <li><b>角色：</b>資料擁有者（負責決策）、資料管理員（負責日常品質與定義）。</li></ul></div>
+    <div class="def"><h4>數據分類 Data Classification</h4><ul>
+      <li><b>是什麼：</b>依資料的<b>敏感性、重要性、合規要求</b>，分成不同等級，例如公開、內部、機密、高度機密。</li>
+      <li><b>目的：</b>等級決定保護方式：誰能看、要不要加密、能不能帶出公司、保存多久。</li></ul></div>
+    <div class="def"><h4>詮釋資料（元數據）Metadata</h4><ul>
+      <li><b>是什麼：</b><b>關於資料的資料</b>：欄位定義、來源、格式、單位、擁有者、更新頻率、品質狀態。</li>
+      <li><b>比喻：</b>資料的說明書。沒有它，大家對同一個欄位的理解可能不一樣。</li></ul></div>
+    <div class="def"><h4>數據血緣 Data Lineage</h4><ul>
+      <li><b>是什麼：</b>記錄資料的<b>來源、經過哪些轉換處理、最後流向哪裡</b>。</li>
+      <li><b>用途：</b>理解資料、<b>追溯錯誤</b>（上圖單位錯誤造成 1,000 倍落差，沿血緣往回查就找到）、影響分析、證明合規（個資用在哪、刪除時要刪哪些副本）。</li></ul></div>
+  </div>
+  <figure><a href="img/l22404-retention_minimize.png" target="_blank" rel="noopener"><img src="img/l22404-retention_minimize.png" alt="資料生命週期：建立、儲存、使用、分享、封存、銷毀。保存期限示意（自編公司政策）：未錄取應徵者履歷 1 年、停用後會員資料 3 年、交易紀錄 7 年，到期刪除或匿名化。資料最小化：報名表原本要 15 欄，目的只需要 6 欄，少收 60%。設計即隱私：從專案最早的設計階段就放進隱私保護，一路帶到開發上線維運；預設就隱私、目的限制、銷毀也要處理備份與外包商副本" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>數據生命週期管理 DLM 與保存期限</h4><ul>
+      <li><b>生命週期：</b>建立 → 儲存 → 使用 → 分享 → 封存 → 銷毀。</li>
+      <li><b>保存期限 Retention Period：</b>依法規與業務需要，定好每類資料保存多久，<b>到期安全地刪除或匿名化</b>，包括備份與外包商手上的副本。</li></ul></div>
+    <div class="def"><h4>數據最小化與設計即隱私</h4><ul>
+      <li><b>數據最小化：</b>只蒐集、處理與<b>明確合法目的直接相關且必要</b>的個資。上圖 15 欄只需要 6 欄。</li>
+      <li><b>設計即隱私 Privacy by Design：</b><b>從專案最早的設計階段</b>就把隱私保護放進去，貫穿整個開發生命週期，而不是做完才補。</li>
+      <li><b>預設即隱私 Privacy by Default：</b>預設值選最保護隱私的設定，例如預設不公開。</li></ul></div>
+    <div class="def"><h4>AI 倫理原則</h4><ul>
+      <li><b>公平與非歧視：</b>模型從資料學到並放大社會偏見（性別、族群），對某些群體不公平。</li>
+      <li><b>透明與可解釋：</b>「黑盒子」難以說明為何這樣決定，就難以發現偏見、難以問責，也可能違反要求說明自動化決策的法規。</li>
+      <li><b>問責：</b>有明確機制決定責任歸屬（開發者、部署者、使用者），並提供救濟、解釋與補償。</li>
+      <li><b>告知後同意：</b>真正的「告知」很難：要用一般人看得懂的話，說清楚資料會怎麼用（例如拿去訓練 AI）、有什麼風險。</li>
+      <li><b>人類福祉：</b>AI 的目標是促進人的繁榮、尊嚴與權利，避免傷害個人或社會。</li>
+      <li><b>合法≠合倫理：</b>倫理的範圍比法律廣，合法的做法不一定符合社會期待，法律也常跟不上技術。</li></ul></div>
+  </div>
+  <figure><a href="img/l22404-filter_bubble.png" target="_blank" rel="noopener"><img src="img/l22404-filter_bubble.png" alt="過濾氣泡回饋迴圈：你點了 A 類、系統認定你愛 A、推更多 A 類、看到的幾乎都是 A，再回到點 A。模擬 5 個主題 30 回合，看到的主題有效種類從起點 4.7 種，只照喜好推降到 1.2 種、最大一類占到 98%，混入 30% 新主題則保持 3.0 種。倫理問題是接觸的資訊越來越窄、觀點被強化、少看到不同意見；對策是加入多樣性與新主題、讓使用者看懂並調整推薦原因" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>過濾氣泡與同溫層效應</h4><ul>
+      <li><b>過濾氣泡 Filter Bubble：</b>推薦系統依你過去的行為過濾內容，你只看到演算法認為你會喜歡的東西。</li>
+      <li><b>同溫層（迴聲室）Echo Chamber：</b>身邊的資訊和意見都和自己一樣，彼此附和，觀點越來越強化。</li>
+      <li><b>回饋迴圈：</b>你點 → 系統更確定你喜歡 → 推更多同類 → 你看到、點到的幾乎都是同類。上圖只照喜好推 30 回合，看到的主題從 4.7 種掉到 1.2 種。</li>
+      <li><b>倫理問題：</b><b>限制接觸資訊的廣度與多樣性</b>，固化觀點、減少接觸不同意見，影響個人視野與社會多元。</li>
+      <li><b>對策：</b>推薦裡加入多樣性與新主題、讓使用者知道並能調整推薦原因、評估指標不只看點擊率。</li></ul></div>
+  </div>
+  <h3>整合比較表（倫理原則對照表）</h3>
+<div class="tbl"><table>
+  <tr><th>原則</th><th>在問什麼</th><th>常見情境</th><th>怎麼落實</th></tr>
+  <tr><td><b>公平與非歧視</b></td><td>對不同群體公平嗎？</td><td>招募、信貸模型學到偏見</td><td>偏見檢測、資料平衡、分群評估</td></tr>
+  <tr><td><b>透明與可解釋</b></td><td>說得出為什麼嗎？</td><td>黑盒子拒絕貸款</td><td>可解釋方法、告知決策依據</td></tr>
+  <tr><td><b>問責</b></td><td>出事誰負責？</td><td>模型造成歧視結果</td><td>明確責任歸屬、申訴與救濟管道</td></tr>
+  <tr><td><b>隱私與告知後同意</b></td><td>對方真的懂、真的同意嗎？</td><td>資料拿去訓練 AI</td><td>白話說明、可撤回同意</td></tr>
+  <tr><td><b>人類福祉</b></td><td>對人與社會有益嗎？</td><td>成癮設計、操縱</td><td>以人的尊嚴與權利為目標</td></tr>
+  <tr><td><b>多元與自主</b></td><td>會不會越看越窄？</td><td><b>過濾氣泡、同溫層</b></td><td>推薦加入多樣性、讓人能調整</td></tr>
+  <tr><td><b>合法≠合倫理</b></td><td>合法就夠了嗎？</td><td>合法但讓人不舒服的資料用法</td><td>倫理審查、超出法規的自律</td></tr>
+</table></div>
+  <div class="hook"><span class="tag">記憶鉤子</span><ul>
+    <li><b>分類定保護、詮釋資料是說明書、血緣是履歷；治理不是收越多越好。</b></li>
+    <li><b>只收需要的、只留需要的時間、從設計就想隱私。</b></li>
+    <li><b>倫理六件事：公平、可解釋、問責、真同意、人類福祉、合法≠合倫理。</b></li>
+    <li><b>過濾氣泡：越推越像，越看越窄；是多元與自主的倫理問題，不是速度或成本問題。</b></li>
+  </ul></div>
+  <div class="trap"><b>易錯提醒：</b>「數據治理的目標」不包括「盡量多收資料」，那違反最小化原則。設計即隱私強調的是「最早的設計階段」，不是上線前或出事後才補。過濾氣泡問的是倫理（資訊多樣性），選項若講成本、速度、資料量，都不是它的重點。</div>
+</section>
+
+<section id="recap">
+  <h2><small>總整理</small>本章要記的十句話</h2>
+  <ol class="recap">
+    <li>GDPR 七項權利：查閱、更正、刪除、限制、可攜、反對、不受純自動化決策；沒有「永久保存權」，方向相反的是儲存期限限制。</li>
+    <li>否定題：先圈「不」，四個選項各標真假，選唯一的假。</li>
+    <li>CCPA 重知情與選擇退出；台灣個資法蒐集前要告知；新專案先做 DPIA；資料放哪裡就受哪裡的法律管。</li>
+    <li>拿掉姓名不等於匿名；準識別欄位一組合就可能認出人（重新識別）。</li>
+    <li>k-匿名：每筆至少和其他 k−1 筆分不出；l-多樣性：每組敏感值至少 l 種；t-接近：每組分布接近全表。</li>
+    <li>差分隱私加經過計算的雜訊；ε 越小越隱私、越不準；雜訊常用拉普拉斯或高斯。</li>
+    <li>雜訊大小和資料筆數無關，所以資料越少，誤差占比越大。</li>
+    <li>聯邦學習資料不出門，但有 Non-IID、通訊量、裝置快慢的挑戰；怕下毒，改用穩健彙整。SMPC 拆碎片、HE 鎖著算、TEE 關在小房間算。</li>
+    <li>驗證認人、授權給門、最小權限、零信任、MFA；加密分存著、在路上、在算；用戶端加密連雲端員工都看不到；資料和帳號權限是客戶的責任。</li>
+    <li>治理：分類、詮釋資料、血緣、最小化、保存期限、設計即隱私；倫理：公平、可解釋、問責、真同意、人類福祉；過濾氣泡讓人越看越窄。</li>
+  </ol>
+</section>
+
+<section id="glossary">
+  <h2><small>考前速查</small>全章名詞總彙整表</h2>
+  <p>把五個單元的比較表濃縮成一張。複習時遮住右邊三欄，看名詞說得出定義，再對照。</p>
+<div class="tbl"><table>
+  <tr><th>名詞</th><th>一句話定義</th><th>口訣</th><th>容易跟誰搞混</th></tr>
+  <tr class="grp"><td colspan="4">單元① 法規與當事人權利</td></tr>
+  <tr><td><b>當事人權利（GDPR）</b></td><td>查閱、更正、刪除、限制、可攜、反對、不受純自動化決策</td><td>查改刪停帶反</td><td>編出來的永久保存權</td></tr>
+  <tr><td><b>儲存期限限制</b></td><td>只保存到目的所需的時間</td><td>到期就刪</td><td>永久保存</td></tr>
+  <tr><td><b>明確同意</b></td><td>處理敏感個資的常見依據</td><td>清楚、主動、特定</td><td>默許、預設勾選</td></tr>
+  <tr><td><b>CCPA／CPRA</b></td><td>加州消費者的知情、刪除、更正、選擇退出</td><td>知道與喊停</td><td>GDPR</td></tr>
+  <tr><td><b>台灣個資法告知義務</b></td><td>蒐集前告知目的、類別、期間等</td><td>先告知</td><td>事後通知</td></tr>
+  <tr><td><b>DPIA／PIA</b></td><td>上線前評估並降低隱私風險</td><td>先評估再上線</td><td>事後稽核</td></tr>
+  <tr><td><b>資料駐留／主權</b></td><td>資料存在哪、受哪國法律管</td><td>放哪就受哪管</td><td>資料備份</td></tr>
+  <tr class="grp"><td colspan="4">單元② 匿名化家族</td></tr>
+  <tr><td><b>直接識別</b></td><td>一個就認得出人的欄位</td><td>姓名證號</td><td>準識別</td></tr>
+  <tr><td><b>準識別</b></td><td>組合起來才認得出人的欄位</td><td>郵遞區號生日性別</td><td>直接識別</td></tr>
+  <tr><td><b>PII</b></td><td>單獨或組合後能認出特定人的資訊</td><td>能不能認出人</td><td>總體統計</td></tr>
+  <tr><td><b>重新識別</b></td><td>把去識別資料對回真人</td><td>比對外部資料</td><td>解密</td></tr>
+  <tr><td><b>等價類</b></td><td>準識別欄位完全相同的一群</td><td>同一組</td><td>類別標籤</td></tr>
+  <tr><td><b>k-匿名</b></td><td>每組至少 k 筆，與其他 k−1 筆分不出</td><td>k 是人數</td><td>l-多樣性</td></tr>
+  <tr><td><b>泛化／抑制</b></td><td>換成範圍／直接遮掉</td><td>變粗／遮掉</td><td>加密</td></tr>
+  <tr><td><b>l-多樣性</b></td><td>每組敏感值至少 l 種</td><td>l 是種類</td><td>k-匿名</td></tr>
+  <tr><td><b>t-接近</b></td><td>每組分布接近全表</td><td>t 是比例</td><td>l-多樣性</td></tr>
+  <tr class="grp"><td colspan="4">單元③ 差分隱私與協作式隱私</td></tr>
+  <tr><td><b>差分隱私</b></td><td>加計算過的雜訊，看不出某個人</td><td>多你少你都一樣</td><td>匿名化</td></tr>
+  <tr><td><b>ε（隱私預算）</b></td><td>越小越隱私、越不準</td><td>ε 小保護強</td><td>查詢次數</td></tr>
+  <tr><td><b>敏感度</b></td><td>多一個人時結果最多變多少</td><td>計數＝1</td><td>準確度</td></tr>
+  <tr><td><b>拉普拉斯／高斯</b></td><td>差分隱私常用的兩種雜訊</td><td>尖頂／鐘形</td><td>均勻分布</td></tr>
+  <tr><td><b>聯邦學習</b></td><td>資料留本地，只傳模型更新</td><td>資料不出門</td><td>資料平行</td></tr>
+  <tr><td><b>Non-IID</b></td><td>各地資料分布不一樣</td><td>各地不同</td><td>資料漂移</td></tr>
+  <tr><td><b>模型下毒／拜占庭攻擊</b></td><td>送惡意更新讓模型變差或植入後門</td><td>毒更新</td><td>釣魚、阻斷服務</td></tr>
+  <tr><td><b>穩健彙整</b></td><td>用中位數、修剪平均取代直接平均</td><td>不怕極端值</td><td>直接平均</td></tr>
+  <tr><td><b>SMPC</b></td><td>多方拆碎片一起算</td><td>拆碎片</td><td>同態加密</td></tr>
+  <tr><td><b>同態加密</b></td><td>加密狀態下直接計算</td><td>鎖著算</td><td>一般加密</td></tr>
+  <tr><td><b>TEE</b></td><td>硬體隔離區域裡運算</td><td>上鎖的小房間</td><td>虛擬機</td></tr>
+  <tr class="grp"><td colspan="4">單元④ 資安控制</td></tr>
+  <tr><td><b>身分驗證／授權</b></td><td>你是誰／你能做什麼</td><td>認人／給門</td><td>彼此</td></tr>
+  <tr><td><b>最小權限</b></td><td>只給工作所需的權限</td><td>夠用就好</td><td>零信任</td></tr>
+  <tr><td><b>零信任</b></td><td>預設不信任，每次都驗</td><td>內網也要驗</td><td>防火牆</td></tr>
+  <tr><td><b>MFA</b></td><td>至少兩種驗證因素</td><td>密碼＋手機</td><td>強密碼</td></tr>
+  <tr><td><b>靜態／傳輸中／使用中加密</b></td><td>存著／在路上／在算</td><td>三種狀態</td><td>彼此</td></tr>
+  <tr><td><b>用戶端加密</b></td><td>上傳前自己加密、自己握金鑰</td><td>雲端看不到</td><td>伺服器端加密</td></tr>
+  <tr><td><b>責任共擔模型</b></td><td>雲顧雲，客戶顧資料與帳號</td><td>各顧各的</td><td>全交給雲端</td></tr>
+  <tr><td><b>多租戶風險</b></td><td>共用平台，一家出事波及別家</td><td>鄰居失火</td><td>單一租戶</td></tr>
+  <tr><td><b>ELK／Splunk</b></td><td>集中收集、搜尋、分析日誌</td><td>看日誌找異常</td><td>DLP</td></tr>
+  <tr><td><b>DLP</b></td><td>辨認並擋下敏感資料外流</td><td>出門前攔</td><td>防毒軟體</td></tr>
+  <tr><td><b>滲透測試／弱點掃描</b></td><td>模擬攻擊／比對已知漏洞</td><td>實打／健檢</td><td>彼此</td></tr>
+  <tr><td><b>3-2-1 備份</b></td><td>3 份、2 種媒體、1 份離線或異地</td><td>隔離＋還原演練</td><td>同機備份</td></tr>
+  <tr><td><b>SOC 2／ISO 27001</b></td><td>服務商稽核報告／資安管理認證</td><td>審查服務商</td><td>法律</td></tr>
+  <tr class="grp"><td colspan="4">單元⑤ 數據治理與 AI 倫理</td></tr>
+  <tr><td><b>數據治理</b></td><td>確保資料品質、安全、合規、有價值</td><td>管好不是收多</td><td>資料庫管理</td></tr>
+  <tr><td><b>數據分類</b></td><td>依敏感程度分等級</td><td>等級定保護</td><td>資料清洗</td></tr>
+  <tr><td><b>詮釋資料</b></td><td>關於資料的資料</td><td>說明書</td><td>資料本身</td></tr>
+  <tr><td><b>數據血緣</b></td><td>來源、處理步驟、流向</td><td>履歷</td><td>版本控管</td></tr>
+  <tr><td><b>數據最小化</b></td><td>只收與目的直接相關且必要的</td><td>只收需要的</td><td>資料壓縮</td></tr>
+  <tr><td><b>保存期限</b></td><td>到期刪除或匿名化</td><td>只留需要的時間</td><td>備份週期</td></tr>
+  <tr><td><b>設計即隱私</b></td><td>從最早設計階段放進隱私</td><td>一開始就想</td><td>上線後補</td></tr>
+  <tr><td><b>公平／可解釋／問責</b></td><td>不歧視／說得清楚／有人負責</td><td>公平透明可究責</td><td>準確率</td></tr>
+  <tr><td><b>告知後同意</b></td><td>用看得懂的話說清楚用途與風險</td><td>真的懂才算</td><td>勾選同意</td></tr>
+  <tr><td><b>過濾氣泡／同溫層</b></td><td>推薦讓資訊越來越窄</td><td>越推越像</td><td>資料不足</td></tr>
+</table></div>
+</section>
+
+<section id="quiz">
+  <h2><small>動手練</small>自我檢測 10 題</h2>
+  <p class="note">自編情境練習，練的是「看情境選工具、選方法、算數字」。先自己想好答案，再點「看答案」。</p>
+  <ol class="quiz">
+    <li>一位使用者寫信給健身房 App：「請刪除我的運動紀錄，並把我的會員資料用檔案給我，我要搬到另一家 App。」客服回覆：「依規定我們有權永久保存所有會員資料。」使用者在歐盟。請說出他用到哪兩項權利，以及客服的說法哪裡有問題。
+      <details><summary>看答案</summary><p><b>刪除權（被遺忘權）</b>和<b>資料可攜權</b>。客服的說法有問題：GDPR <b>沒有「永久保存」這種權利</b>，反而有<b>儲存期限限制</b>原則，資料應只保存到目的所需的時間；刪除權有條件，但「有權永久保存所有資料」和 GDPR 的方向相反。</p></details></li>
+    <li>一份去識別後的學生資料，依「年級、班級」分組後，四個等價類的人數分別是 5、3、7、4 人。這份資料的 k 是多少？每一筆至少和其他幾筆分不出來？
+      <details><summary>看答案</summary><p>k 取最小的一組：<b>k＝3</b>。每一筆至少和其他 <b>k−1＝2 筆</b>分不出來。</p></details></li>
+    <li>一份員工健康資料做到 k＝4，但其中一組 4 個人的「慢性病」欄位全都是高血壓。攻擊者知道同事屬於這一組，會發生什麼事？應該補上哪一種方法？
+      <details><summary>看答案</summary><p>攻擊者不必知道哪一筆是同事，也能確定<b>同事有高血壓</b>，這是<b>同質性攻擊</b>。k-匿名只管群組大小，要補上 <b>l-多樣性</b>（每組敏感值至少 l 種），必要時再用 t-接近讓每組分布接近全體。</p></details></li>
+    <li>兩個團隊公布同一個計數統計：甲隊 ε＝0.2，乙隊 ε＝2，敏感度都是 1，用拉普拉斯雜訊。哪一隊比較保護隱私？兩隊雜訊 95% 大約落在多少範圍內？
+      <details><summary>看答案</summary><p><b>甲隊（ε＝0.2）比較保護隱私</b>，雜訊較大。拉普拉斯尺度＝1 ÷ ε，95% 範圍約 ± 尺度 × ln20：甲隊約 <b>±15.0</b>，乙隊約 <b>±1.5</b>。甲隊比較隱私、但數字比較不準。</p></details></li>
+    <li>同樣用 ε＝0.5 公布「有幾人曾就醫」：一個村子實際 40 人，一個城市實際 400,000 人。平均誤差各占答案的幾 %？為什麼差這麼多？
+      <details><summary>看答案</summary><p>拉普拉斯雜訊的平均誤差＝尺度＝1 ÷ 0.5＝<b>2 人</b>。村子：2 ÷ 40＝<b>5%</b>；城市：2 ÷ 400,000＝<b>0.0005%</b>。雜訊大小只看 ε 和敏感度、和人數無關，所以<b>資料越少，誤差占比越大</b>。</p></details></li>
+    <li>聯邦學習有 5 台裝置，送來的更新分別是 0.9、1.1、1、1.2、-30。直接平均和取中位數各是多少？最後那台可能在做什麼？
+      <details><summary>看答案</summary><p>直接平均＝<b>-5.16</b>，中位數＝<b>1</b>。最後那台送了極端的值，可能是<b>模型下毒（拜占庭攻擊）</b>。直接平均被它拉成負的，改用中位數、修剪平均這類<b>穩健彙整</b>就不容易被拉走。</p></details></li>
+    <li>公司要把客戶合約放到雲端儲存，主管要求「連雲端業者的員工都不能看到內容」。應該用哪一種加密方式？另外，使用者用瀏覽器上傳檔案的那段路程，是哪一種狀態的加密在保護？
+      <details><summary>看答案</summary><p>用<b>用戶端加密</b>：在上傳前就在公司這端加密，金鑰自己保管，雲端只拿到密文。上傳那段路程由<b>傳輸中加密</b>（TLS／HTTPS）保護；存進雲端後是靜態加密的範圍。</p></details></li>
+    <li>公司用 SaaS 型的客戶管理系統。某員工把含客戶電話的報表分享連結設成「任何人可看」，結果外流。依責任共擔模型，這是誰的責任？另外，公司每 3 天備份一次、備份放在同一台檔案伺服器，16 日被勒索軟體加密，可能會發生什麼事？
+      <details><summary>看答案</summary><p><b>公司（客戶）的責任</b>：在 SaaS 模式下，資料和帳號、分享權限的設定都由客戶負責。備份放在同一台、沒有隔離，<b>很可能和正式資料一起被加密</b>，救不回來；應改成 3-2-1（至少一份離線或異地），並定期演練還原。</p></details></li>
+    <li>實習生的帳號可以刪除正式資料表；某天凌晨 3 點，這個帳號從平常沒出現過的國家登入。請用最小權限、零信任、多因素驗證三個觀念，各說一個可以改善的地方。
+      <details><summary>看答案</summary><p><b>最小權限</b>：實習生只需要讀資料，收回刪除權限。<b>零信任</b>：不因帳號密碼正確就放行，異常時間、陌生國家的登入要重新驗證或阻擋。<b>多因素驗證</b>：加上手機驗證碼或實體金鑰，密碼外洩也難登入。也可以把這類異常登入寫進日誌警報。</p></details></li>
+    <li>一個新聞 App 只依照點擊紀錄推薦文章，半年後使用者發現首頁幾乎都是同一種立場的文章。這是什麼現象？屬於哪一類問題？請提出兩個對策。
+      <details><summary>看答案</summary><p>這是<b>過濾氣泡（同溫層效應）</b>，屬於 <b>AI 倫理</b>中資訊多樣性、自主與社會多元的問題，不是技術效能問題。對策例如：推薦中刻意加入不同主題與觀點、讓使用者看到並能調整推薦原因、評估指標不只看點擊率。</p></details></li>
+  </ol>
+</section>
+
+</main>
+
+<p style="text-align:center;color:var(--muted);font-size:14px;margin:44px 0 0">其他章：<a href="index.html">L22 觀念複習總目錄</a>｜上一章：<a href="l22403.html">第 12 章 大數據在生成式 AI 的應用</a></p>
+<footer>🍀 Learn AI with Tarshar · iPAS 中級 L22 觀念複習<br>依 L22404 學習範圍整理的原創圖解，不含考古題原文。圖中數字皆為自編範例並以程式實際計算。</footer>
+</body>
+</html>
