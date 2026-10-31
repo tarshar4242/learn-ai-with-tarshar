@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07162f">
+<meta name="description" content="iPAS AI 應用規劃師中級 L22 九章互動課程島。">
+<title>L22 數據應用課程島｜Learn AI with Tarshar</title>
+<style>
+:root{
+  --ink:#f7fbff;--muted:#bad0e8;--navy:#07162f;--deep:#030a19;
+  --glass:rgba(10,30,59,.72);--line:rgba(190,224,255,.22);
+  --coral:#ff826f;--mint:#62dfbd;--yellow:#ffd264;--violet:#a999ff;
+  --shadow:0 24px 72px rgba(0,0,0,.38)
+}
+*{box-sizing:border-box}html,body{width:100%;max-width:100vw;height:100%;overflow:hidden}html{background:var(--deep)}
+body{margin:0;color:var(--ink);font-family:"PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;background:
+ radial-gradient(circle at 16% 18%,rgba(63,126,211,.24),transparent 27%),
+ radial-gradient(circle at 78% 24%,rgba(131,86,202,.2),transparent 28%),
+ radial-gradient(circle at 58% 85%,rgba(34,174,160,.13),transparent 28%),
+ linear-gradient(160deg,#081b39 0%,#06122a 52%,#020712 100%)}
+button,a{font:inherit}.stars,.stars:before,.stars:after{position:fixed;inset:0;pointer-events:none;content:"";background-repeat:repeat;opacity:.7}
+.stars{background-image:radial-gradient(#fff 1px,transparent 1.2px);background-size:92px 92px;animation:drift 45s linear infinite}
+.stars:before{background-image:radial-gradient(#79caff 1px,transparent 1.4px);background-size:137px 137px;transform:translate(31px,19px);animation:twinkle 4s ease-in-out infinite alternate}
+.stars:after{background-image:radial-gradient(#ffe5ad 1.2px,transparent 1.5px);background-size:181px 181px;transform:translate(77px,52px);animation:twinkle 6s 1s ease-in-out infinite alternate}
+@keyframes drift{to{transform:translate3d(-92px,92px,0)}}@keyframes twinkle{from{opacity:.25}to{opacity:.95}}
+.app{position:relative;height:100%;isolation:isolate}.topbar{position:absolute;z-index:30;left:0;right:0;top:0;display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:max(18px,env(safe-area-inset-top)) max(18px,env(safe-area-inset-right)) 12px max(18px,env(safe-area-inset-left));pointer-events:none}
+.identity{pointer-events:auto;max-width:min(620px,67vw)}.eyebrow{display:flex;align-items:center;gap:8px;color:#a9d9ff;font-size:11px;font-weight:900;letter-spacing:.16em;text-transform:uppercase}.eyebrow i{width:8px;height:8px;border-radius:50%;background:var(--mint);box-shadow:0 0 16px var(--mint)}
+h1{font-size:clamp(25px,3.8vw,48px);line-height:1.08;letter-spacing:-.045em;margin:8px 0 4px;text-wrap:balance}.sub{margin:0;color:var(--muted);font-size:clamp(12px,1.4vw,15px)}
+.controls{pointer-events:auto;display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.control{min-height:43px;border:1px solid var(--line);border-radius:999px;padding:9px 13px;background:var(--glass);backdrop-filter:blur(14px);color:var(--ink);font-weight:800;font-size:12px;cursor:pointer;box-shadow:0 8px 30px rgba(0,0,0,.18)}.control[aria-pressed="true"]{background:#eef8ff;color:#09203c}.control:hover{border-color:#fff}
+.viewport{position:absolute;inset:0;overflow:hidden;perspective:1200px;touch-action:none;cursor:grab}.viewport.dragging{cursor:grabbing}.world{position:absolute;left:50%;top:51%;width:1000px;height:650px;margin:-325px 0 0 -500px;transform-style:preserve-3d;transform:rotateX(-7deg) rotateY(-4deg) scale(.93);transition:transform .16s ease-out}
+.orbit{position:absolute;left:50%;top:50%;border:1px solid rgba(140,194,255,.12);border-radius:50%;transform:translate(-50%,-50%) rotateX(68deg);box-shadow:0 0 50px rgba(70,143,219,.07) inset}.o1{width:440px;height:440px}.o2{width:730px;height:730px}.o3{width:1020px;height:1020px}
+.sun{position:absolute;left:50%;top:50%;width:118px;height:118px;transform:translate(-50%,-50%) translateZ(45px);border-radius:50%;display:grid;place-items:center;text-align:center;background:radial-gradient(circle at 36% 30%,#fff7c7 0 5%,#ffd56a 19%,#f39a45 54%,#9a3c42 82%,#3b1730 100%);box-shadow:0 0 35px #ffbd55,0 0 95px rgba(255,169,66,.44),inset -18px -19px 26px rgba(81,21,40,.5);font-weight:1000;color:#3b1c25;font-size:18px;line-height:1.12;z-index:2}.sun small{display:block;font-size:10px;letter-spacing:.08em;margin-top:3px}
+.planet{--size:92px;--c1:#7bbcff;--c2:#365fa6;--x:0px;--y:0px;--z:0px;position:absolute;left:50%;top:50%;width:var(--size);height:var(--size);padding:0;border:0;border-radius:50%;transform-style:preserve-3d;transform:translate(-50%,-50%) translate3d(var(--x),var(--y),var(--z));background:radial-gradient(circle at 31% 25%,rgba(255,255,255,.95) 0 3%,var(--c1) 8%,var(--c2) 66%,#132442 100%);box-shadow:inset -18px -16px 24px rgba(2,8,22,.44),0 18px 38px rgba(0,0,0,.46),0 0 24px color-mix(in srgb,var(--c1) 40%,transparent);color:var(--ink);cursor:pointer;z-index:3;transition:filter .2s,box-shadow .2s}.planet:before,.planet:after{content:"";position:absolute;pointer-events:none}.planet:before{inset:12% 17% 48% 11%;border-radius:52% 48% 55% 45%;background:rgba(255,255,255,.12);transform:rotate(-17deg)}.planet:after{left:50%;top:50%;width:145%;height:29%;border:3px solid color-mix(in srgb,var(--c1) 55%,white);border-left-color:transparent;border-right-color:rgba(255,255,255,.18);border-radius:50%;transform:translate(-50%,-50%) rotate(-12deg);opacity:.55;z-index:-1}.planet:hover,.planet:focus-visible{filter:brightness(1.16);box-shadow:inset -18px -16px 24px rgba(2,8,22,.4),0 0 0 5px rgba(255,255,255,.18),0 24px 55px rgba(0,0,0,.54),0 0 38px var(--c1);outline:0}.planet .emoji{position:absolute;inset:0;display:grid;place-items:center;font-size:calc(var(--size) * .34);filter:drop-shadow(0 5px 7px rgba(0,0,0,.32))}.planet .label{position:absolute;left:50%;top:calc(100% + 13px);width:180px;transform:translateX(-50%);display:block;color:#fff;font-weight:900;font-size:13px;text-shadow:0 3px 9px #000;line-height:1.32}.planet .code{display:block;margin-top:3px;color:#b9d8ff;font-size:10px;letter-spacing:.12em}.planet.done .label:after{content:" ✓";color:var(--mint)}
+.p1{--x:-330px;--y:-165px;--z:30px;--size:104px;--c1:#ffb37f;--c2:#a74f63}.p2{--x:-105px;--y:-225px;--z:-30px;--size:83px;--c1:#77e2c4;--c2:#267c77}.p3{--x:165px;--y:-196px;--z:20px;--size:96px;--c1:#bc9dff;--c2:#604c9d}.p4{--x:350px;--y:-55px;--z:-15px;--size:77px;--c1:#8ad5ff;--c2:#3b70a3}.p5{--x:280px;--y:178px;--z:42px;--size:112px;--c1:#ffd978;--c2:#bb704a}.p6{--x:55px;--y:245px;--z:-30px;--size:86px;--c1:#ff98c8;--c2:#9c4e7d}.p7{--x:-200px;--y:211px;--z:20px;--size:98px;--c1:#8fdc8e;--c2:#407948}.p8{--x:-370px;--y:62px;--z:-20px;--size:78px;--c1:#72c5ff;--c2:#3855a3}.p9{--x:-80px;--y:25px;--z:70px;--size:75px;--c1:#ff8c75;--c2:#a6384d}
+.legend{position:absolute;z-index:20;left:max(18px,env(safe-area-inset-left));bottom:max(18px,env(safe-area-inset-bottom));max-width:min(580px,calc(100% - 36px));padding:12px 15px;border:1px solid var(--line);border-radius:18px;background:var(--glass);backdrop-filter:blur(14px);font-size:11px;color:var(--muted);box-shadow:var(--shadow)}.legend b{color:#fff}.legend span{display:inline-block;margin:3px 13px 3px 0}.legend .dot{width:7px;height:7px;border-radius:50%;margin-right:5px;background:var(--c);box-shadow:0 0 9px var(--c)}
+.hint{position:absolute;z-index:10;right:20px;bottom:22px;color:#90a8c6;font-size:11px;text-align:right}.hint strong{color:#d7e8fa}
+.intro{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:24px;background:radial-gradient(circle at 50% 35%,rgba(39,95,151,.54),transparent 35%),rgba(2,8,20,.9);backdrop-filter:blur(12px);transition:opacity .45s,visibility .45s}.intro.hidden{opacity:0;visibility:hidden}.intro-card{width:min(620px,100%);padding:clamp(26px,5vw,48px);border:1px solid rgba(255,255,255,.2);border-radius:32px;background:linear-gradient(155deg,rgba(16,43,81,.96),rgba(7,17,38,.96));box-shadow:0 40px 110px #000;text-align:center}.intro-orb{width:96px;height:96px;margin:auto;border-radius:50%;display:grid;place-items:center;font-size:40px;background:radial-gradient(circle at 35% 27%,#fff,#78d9ff 14%,#6654b1 56%,#15173a 76%);box-shadow:0 0 50px rgba(107,189,255,.5)}.intro h2{font-size:clamp(29px,6vw,47px);line-height:1.08;margin:22px 0 10px}.intro p{color:var(--muted);line-height:1.8;margin:0 auto 22px}.intro-actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}.enter{border:0;border-radius:999px;padding:14px 23px;background:linear-gradient(135deg,#ffe384,#ff8f72);color:#321728;font-weight:1000;cursor:pointer;box-shadow:0 12px 32px rgba(255,142,111,.25)}.quiet{border:1px solid var(--line);border-radius:999px;padding:13px 20px;background:transparent;color:#e8f4ff;font-weight:900;cursor:pointer}
+.modal{position:fixed;inset:0;z-index:80;display:grid;place-items:center;padding:20px;background:rgba(1,6,16,.67);backdrop-filter:blur(8px);opacity:0;visibility:hidden;transition:.25s}.modal.open{opacity:1;visibility:visible}.card{position:relative;width:min(650px,100%);max-height:min(78vh,720px);overflow:auto;border:1px solid var(--line);border-radius:28px;padding:clamp(22px,4vw,36px);background:linear-gradient(150deg,#122f55,#08182e 70%);box-shadow:0 40px 100px #000}.close{position:absolute;right:17px;top:17px;width:42px;height:42px;border:1px solid var(--line);border-radius:50%;background:rgba(0,0,0,.2);color:#fff;font-size:20px;cursor:pointer}.modal-code{color:#8edfff;font-size:12px;font-weight:900;letter-spacing:.13em}.card h2{font-size:clamp(27px,5vw,42px);line-height:1.14;margin:12px 44px 12px 0}.card .analogy{color:#d7e9fb;font-size:16px;line-height:1.8}.chips{display:flex;gap:7px;flex-wrap:wrap;margin:18px 0}.chips span{padding:7px 11px;border:1px solid var(--line);border-radius:999px;color:#b9d5ef;font-size:12px}.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:22px}.actions a,.actions button{min-height:51px;border-radius:15px;display:grid;place-items:center;text-decoration:none;font-weight:950;cursor:pointer}.study{border:0;background:linear-gradient(135deg,#72e1c0,#66b6ff);color:#08223d}.mark{border:1px solid var(--line);background:rgba(255,255,255,.05);color:#fff}.copyright{margin:16px 0 0;color:#7892b0;font-size:11px;line-height:1.6}
+.low-motion *{animation:none!important;transition:none!important}.low-motion .world{transform:scale(var(--island-scale,.93))!important}.low-motion .stars{display:none}.low-motion .planet:after{display:none}
+@media(max-width:760px){.topbar{display:block}.identity{max-width:100%}.identity .sub{max-width:75%}.controls{position:absolute;right:14px;top:max(17px,env(safe-area-inset-top));max-width:118px}.control{font-size:0;width:43px;padding:0}.control .ico{font-size:18px}.world{top:54%;transform:rotateX(-4deg) rotateY(-3deg) scale(.64)}.legend{bottom:max(12px,env(safe-area-inset-bottom));padding:9px 12px}.legend span{margin-right:8px}.hint{display:none}.planet .label{font-size:14px;width:170px}.actions{grid-template-columns:1fr}.card{max-height:82vh;border-radius:24px}}
+@media(max-width:430px){h1{font-size:25px}.sub{font-size:11px}.world{top:53%;transform:rotateX(-4deg) rotateY(-3deg) scale(.46)}.p1{--x:-290px}.p4{--x:290px}.p5{--x:270px}.p8{--x:-290px}.legend{font-size:10px}.legend .desktop-only{display:none}}
+@media(prefers-reduced-motion:reduce){.stars,.stars:before,.stars:after{animation:none}.world,.planet,.intro,.modal{transition:none}}
+</style>
+</head>
+<body>
+<div class="stars" aria-hidden="true"></div>
+<main class="app" id="app">
+  <header class="topbar">
+    <div class="identity">
+      <div class="eyebrow"><i></i>iPAS AI 應用規劃師中級</div>
+      <h1>L22 數據應用課程島</h1>
+      <p class="sub">拖曳星海探索九章，點一座島進入觀念圖解複習。</p>
+    </div>
+    <div class="controls">
+      <button class="control" id="musicBtn" aria-pressed="false" title="背景音樂"><span class="ico">♫</span> <span class="txt">音樂</span></button>
+      <button class="control" id="calmBtn" aria-pressed="false" title="低刺激模式"><span class="ico">☾</span> <span class="txt">低刺激</span></button>
+      <button class="control" id="resetBtn" title="重設視角"><span class="ico">⌂</span> <span class="txt">重設</span></button>
+    </div>
+  </header>
+
+  <section class="viewport" id="viewport" aria-label="可拖曳與縮放的 L22 課程島星圖">
+    <div class="world" id="world">
+      <div class="orbit o1"></div><div class="orbit o2"></div><div class="orbit o3"></div>
+      <div class="sun"><span>L22<small>數據應用</small></span></div>
+      <button class="planet p1" data-id="L22101"><span class="emoji">📊</span><span class="label">敘述性統計<span class="code">L22101</span></span></button>
+      <button class="planet p2" data-id="L22102"><span class="emoji">🎲</span><span class="label">機率分佈<span class="code">L22102</span></span></button>
+      <button class="planet p3" data-id="L22103"><span class="emoji">⚖️</span><span class="label">假設檢定<span class="code">L22103</span></span></button>
+      <button class="planet p4" data-id="L22201"><span class="emoji">🧹</span><span class="label">數據清理<span class="code">L22201</span></span></button>
+      <button class="planet p5" data-id="L22202"><span class="emoji">🗄️</span><span class="label">儲存與管理<span class="code">L22202</span></span></button>
+      <button class="planet p6" data-id="L22203"><span class="emoji">⚙️</span><span class="label">處理技術<span class="code">L22203</span></span></button>
+      <button class="planet p7" data-id="L22301"><span class="emoji">🔬</span><span class="label">統計應用<span class="code">L22301</span></span></button>
+      <button class="planet p8" data-id="L22302"><span class="emoji">🧭</span><span class="label">分析方法<span class="code">L22302</span></span></button>
+      <button class="planet p9" data-id="L22303"><span class="emoji">🎨</span><span class="label">數據可視化<span class="code">L22303</span></span></button>
+    </div>
+  </section>
+
+  <aside class="legend" aria-label="課程島圖例">
+    <b>三大群島：</b>
+    <span><i class="dot" style="--c:#ff9a78"></i>L221 機率統計</span>
+    <span><i class="dot" style="--c:#72d6ff"></i>L222 數據處理</span>
+    <span><i class="dot" style="--c:#82dd9c"></i>L223 分析與可視化</span>
+    <span class="desktop-only">完成章節會出現 ✓</span>
+  </aside>
+  <div class="hint"><strong>拖曳</strong>旋轉 · <strong>滾輪／雙指</strong>縮放</div>
+</main>
+
+<section class="intro" id="intro" aria-label="進入課程島">
+  <div class="intro-card">
+    <div class="intro-orb">🏝️</div>
+    <h2>準備登上 L22 課程島</h2>
+    <p>九座島對應九個複習章節。音樂需由你點一下才會播放，隨時都能關閉。</p>
+    <div class="intro-actions">
+      <button class="enter" id="enterMusic">進島＋播放音樂</button>
+      <button class="quiet" id="enterQuiet">靜音進島</button>
+    </div>
+  </div>
+</section>
+
+<section class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <article class="card">
+    <button class="close" id="closeModal" aria-label="關閉">×</button>
+    <div class="modal-code" id="modalCode"></div>
+    <h2 id="modalTitle"></h2>
+    <p class="analogy" id="modalAnalogy"></p>
+    <div class="chips" id="modalChips"></div>
+    <div class="actions">
+      <a class="study" id="studyLink" href="#">進入本章圖解複習 →</a>
+      <button class="mark" id="markDone">標記已複習 ✓</button>
+    </div>
+    <p class="copyright">學習入口整合既有 L22 教材；付費課程原題與個人作答紀錄不放入本頁。by Tarshar × 知臨 × 茜茜協作</p>
+  </article>
+</section>
+
+<script>
+const LESSONS={
+ L22101:{title:'敘述性統計與資料摘要',analogy:'像看全班成績單：平均數看整體水準，標準差看差距，箱形圖幫你找出異常。',chips:['平均數與中位數','標準差與 IQR','偏態與峰度','相關分析']},
+ L22102:{title:'機率分佈與資料分佈模型',analogy:'像看天氣機率：不是預言單一結果，而是描述每一種結果有多可能發生。',chips:['條件機率','貝氏定理','常見機率分佈','中央極限定理']},
+ L22103:{title:'假設檢定與統計推論',analogy:'像法庭判決：先假設沒有差異，再看證據是否足以推翻原本的假設。',chips:['H0 與 H1','p 值與 α','單尾與雙尾','信賴區間']},
+ L22201:{title:'數據收集與清理',analogy:'像煮菜前先洗菜挑菜：格式不一、缺失值、重複與錯字，都要先處理。',chips:['資料字典','缺失值','重複資料','資料洩漏']},
+ L22202:{title:'數據儲存與管理',analogy:'像整理大型倉庫：不同貨物需要不同貨架、編碼與取用方法。',chips:['區塊／檔案／物件','SQL 與 NoSQL','HDFS','備份與一致性']},
+ L22203:{title:'數據處理技術與工具',analogy:'像廚房分工：小份資料用單機，大量訂單就需要分散處理、批次與串流。',chips:['Pandas 與 SQL','ETL','Hadoop／Spark','縮放與 PCA']},
+ L22301:{title:'統計學在大數據中的應用',analogy:'像從一整片森林取樣：資料多不代表沒有偏誤，還是要靠統計做可靠判斷。',chips:['型一型二錯誤','檢定力','多重檢定','偏差與方差']},
+ L22302:{title:'常見的大數據分析方法',analogy:'像偵探依問題選工具：要找群體、找關聯、做預測或抓異常，用的方法都不同。',chips:['分類與迴歸','分群','關聯規則','模型評估']},
+ L22303:{title:'數據可視化工具',analogy:'像替資料安排舞台：選對圖與視覺編碼，觀眾才會一眼看見真正重點。',chips:['Python 繪圖','BI 工具','視覺編碼','圖表選擇']}
+};
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const viewport=$('#viewport'),world=$('#world'),modal=$('#modal');let current=null;
+const defaultScale=()=>innerWidth<430?.46:innerWidth<760?.64:.93;
+let view={rx:-7,ry:-4,scale:defaultScale()};
+let drag=null,pinch=null,moved=false;const pointers=new Map();
+const done=JSON.parse(localStorage.getItem('l22IslandDone')||'{}');
+function renderView(){world.style.setProperty('--island-scale',view.scale);world.style.transform=`rotateX(${view.rx}deg) rotateY(${view.ry}deg) scale(${view.scale})`}
+function resetView(){view={rx:-7,ry:-4,scale:defaultScale()};renderView()}
+function renderDone(){$$('.planet').forEach(p=>p.classList.toggle('done',!!done[p.dataset.id]))}
+function openLesson(id){const l=LESSONS[id];current=id;$('#modalCode').textContent=`${id} · L22 數據應用`;$('#modalTitle').textContent=l.title;$('#modalAnalogy').textContent=l.analogy;$('#modalChips').innerHTML=l.chips.map(x=>`<span>${x}</span>`).join('');$('#studyLink').href=`../l22-review/${id.toLowerCase()}.html`;$('#markDone').textContent=done[id]?'取消完成標記':'標記已複習 ✓';modal.classList.add('open');setTimeout(()=>$('#closeModal').focus(),50)}
+function closeLesson(){modal.classList.remove('open');current=null}
+$$('.planet').forEach(p=>p.addEventListener('click',()=>{if(!moved)openLesson(p.dataset.id)}));
+const pointerDistance=()=>{const [a,b]=[...pointers.values()];return a&&b?Math.hypot(a.x-b.x,a.y-b.y):0};
+viewport.addEventListener('pointerdown',e=>{pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});viewport.setPointerCapture(e.pointerId);moved=false;if(pointers.size===1){drag={x:e.clientX,y:e.clientY,rx:view.rx,ry:view.ry};viewport.classList.add('dragging')}else if(pointers.size===2){pinch={d:pointerDistance(),scale:view.scale};drag=null;viewport.classList.remove('dragging')}});
+viewport.addEventListener('pointermove',e=>{if(!pointers.has(e.pointerId))return;pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});if(pointers.size>=2&&pinch){const d=pointerDistance();if(d){moved=true;view.scale=Math.max(.42,Math.min(1.35,pinch.scale*d/pinch.d));renderView()}return}if(!drag)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(Math.abs(dx)+Math.abs(dy)>5)moved=true;view.ry=Math.max(-55,Math.min(55,drag.ry+dx*.12));view.rx=Math.max(-28,Math.min(18,drag.rx-dy*.09));renderView()});
+function endPointer(e){pointers.delete(e.pointerId);if(pointers.size===1){const p=[...pointers.values()][0];drag={x:p.x,y:p.y,rx:view.rx,ry:view.ry};pinch=null;viewport.classList.add('dragging')}else if(!pointers.size){drag=null;pinch=null;viewport.classList.remove('dragging');setTimeout(()=>moved=false,40)}}
+viewport.addEventListener('pointerup',endPointer);viewport.addEventListener('pointercancel',endPointer);
+viewport.addEventListener('wheel',e=>{e.preventDefault();view.scale=Math.max(.42,Math.min(1.35,view.scale-e.deltaY*.0007));renderView()},{passive:false});
+$('#closeModal').onclick=closeLesson;modal.addEventListener('click',e=>{if(e.target===modal)closeLesson()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLesson()});
+$('#markDone').onclick=()=>{if(!current)return;done[current]=!done[current];localStorage.setItem('l22IslandDone',JSON.stringify(done));renderDone();$('#markDone').textContent=done[current]?'取消完成標記':'標記已複習 ✓'};
+$('#resetBtn').onclick=resetView;
+let sizeBucket=innerWidth<430?0:innerWidth<760?1:2;addEventListener('resize',()=>{const next=innerWidth<430?0:innerWidth<760?1:2;if(next!==sizeBucket){sizeBucket=next;resetView()}});
+
+let audio=null,musicOn=false;
+function createMusic(){if(audio)return audio;const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return null;const ctx=new AC(),master=ctx.createGain(),filter=ctx.createBiquadFilter();master.gain.value=.055;filter.type='lowpass';filter.frequency.value=1250;filter.Q.value=.7;filter.connect(master);master.connect(ctx.destination);const roots=[110,146.83,164.81,130.81],osc=[];roots.forEach((f,i)=>{const o=ctx.createOscillator(),g=ctx.createGain(),l=ctx.createOscillator(),lg=ctx.createGain();o.type=i%2?'sine':'triangle';o.frequency.value=f;l.frequency.value=.035+i*.014;lg.gain.value=.018;l.connect(lg);lg.connect(g.gain);g.gain.value=.018;o.connect(g);g.connect(filter);o.start();l.start();osc.push(o,l)});const bell=()=>{if(!musicOn)return;const notes=[440,523.25,659.25,783.99],o=ctx.createOscillator(),g=ctx.createGain(),t=ctx.currentTime;o.type='sine';o.frequency.value=notes[Math.floor(Math.random()*notes.length)];g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.035,t+.05);g.gain.exponentialRampToValueAtTime(.0001,t+2.2);o.connect(g);g.connect(master);o.start(t);o.stop(t+2.3)};const timer=setInterval(bell,3400);audio={ctx,master,filter,osc,timer};return audio}
+async function setMusic(on){const a=createMusic();if(!a)return;musicOn=on;if(a.ctx.state==='suspended')await a.ctx.resume();a.master.gain.setTargetAtTime(on ? .055 : 0,a.ctx.currentTime,.25);$('#musicBtn').setAttribute('aria-pressed',String(on));$('#musicBtn .ico').textContent=on?'♫':'♩'}
+$('#musicBtn').onclick=()=>setMusic(!musicOn);
+$('#calmBtn').onclick=()=>{const on=!document.body.classList.contains('low-motion');document.body.classList.toggle('low-motion',on);$('#calmBtn').setAttribute('aria-pressed',String(on));if(on)setMusic(false);else renderView()};
+function enter(withMusic){$('#intro').classList.add('hidden');if(withMusic)setMusic(true)}
+$('#enterMusic').onclick=()=>enter(true);$('#enterQuiet').onclick=()=>enter(false);
+renderDone();renderView();
+</script>
+</body>
+</html>
