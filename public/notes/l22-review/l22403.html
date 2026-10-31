@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="iPAS 中級 L22403 大數據在生成式 AI 的應用：資料生命週期、分散式訓練與部署、RAG 與向量資料庫、隱私保護與法規、風險與治理的圖解觀念複習。">
+<title>L22403 生成式 AI 觀念複習｜🍀Learn AI with Tarshar</title>
+<style>
+:root{
+  --bg:#08101f;--bg2:#0d1830;--panel:#111f3b;--panel2:#152746;
+  --line:rgba(137,172,255,.18);--text:#eef4ff;--muted:#a7b7d8;--dim:#7183aa;
+  --cyan:#41dcff;--blue:#6690ff;--purple:#b57bff;--green:#4de1a1;--orange:#ffc45b;--red:#ff8a80
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;color:var(--text);line-height:1.85;background:
+radial-gradient(900px 500px at 10% -10%,rgba(65,220,255,.13),transparent 65%),
+radial-gradient(900px 520px at 95% 10%,rgba(181,123,255,.14),transparent 62%),var(--bg);min-height:100vh}
+a{color:var(--cyan)}.wrap{width:min(880px,calc(100% - 32px));margin:auto}
+.topbar{position:sticky;top:0;z-index:20;background:rgba(8,16,31,.84);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.topbar .wrap{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.back{text-decoration:none;color:var(--cyan);font-size:14px;font-weight:800}.brand{font-size:12px;color:var(--muted);letter-spacing:1.5px}
+.hero{padding:46px 0 18px}
+.eyebrow{display:inline-flex;padding:6px 13px;border:1px solid rgba(65,220,255,.35);border-radius:999px;color:var(--cyan);font-size:12px;letter-spacing:2px;background:rgba(65,220,255,.06)}
+h1{font-size:clamp(28px,5vw,46px);line-height:1.25;margin:16px 0 10px;letter-spacing:-.02em}
+.lead{color:var(--muted);font-size:16px;margin:0}
+.toc{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:26px 0 8px}
+.toc a{display:block;text-decoration:none;color:var(--text);border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:rgba(17,31,59,.72);font-size:14px;font-weight:700}
+.toc a span{color:var(--cyan);margin-right:6px}
+section{margin:38px 0}
+h2{font-size:24px;margin:0 0 12px;padding-top:8px;border-top:1px solid var(--line)}
+h2 small{display:block;color:var(--cyan);font-size:12px;letter-spacing:2px;margin-top:14px}
+h3{font-size:17px;color:var(--orange);margin:22px 0 6px}
+h4{font-size:15px;color:var(--cyan);margin:0 0 4px}
+p{margin:8px 0}
+.why{border-left:4px solid var(--cyan);background:rgba(65,220,255,.06);border-radius:0 14px 14px 0;padding:12px 16px;color:var(--muted)}
+.why b{color:var(--text)}
+figure{margin:16px 0;background:#fff;border-radius:16px;padding:8px;overflow:hidden}
+figure img{display:block;width:100%;height:auto}figcaption{color:#666;font-size:12px;text-align:right;padding:2px 6px 0}
+ol,ul{padding-left:22px;color:var(--muted)}li{margin:4px 0}li b{color:var(--text)}
+.defs{display:grid;gap:10px;margin:12px 0}
+.def{border:1px solid var(--line);border-radius:14px;background:rgba(17,31,59,.72);padding:12px 16px}
+.def ul{margin:2px 0 0;padding-left:20px;font-size:14.5px}
+.def li b{color:var(--orange)}
+.note{color:var(--muted);font-size:14px}
+.tbl{overflow-x:auto;margin:14px 0;border:1px solid var(--line);border-radius:14px}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:14px}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:var(--panel2);color:var(--cyan);font-weight:800}tr:last-child td{border-bottom:0}
+td b{color:var(--orange)}
+tr.grp td{background:rgba(181,123,255,.12);color:var(--purple);font-weight:800}
+.hook{border:1px solid rgba(255,196,91,.5);background:linear-gradient(135deg,rgba(255,196,91,.13),rgba(255,196,91,.04));border-radius:14px;padding:12px 16px 12px;margin:14px 0}
+.hook .tag{display:inline-block;font-size:12px;font-weight:900;letter-spacing:1.5px;color:#2a1a00;background:var(--orange);border-radius:999px;padding:2px 10px;margin-bottom:6px}
+.hook ul{margin:0;padding-left:20px;color:var(--text)}.hook li b{color:var(--orange)}
+.trap{border:1px solid rgba(255,138,128,.4);background:rgba(255,138,128,.07);border-radius:14px;padding:12px 16px;margin:14px 0}
+.trap b{color:var(--red)}
+.recap{counter-reset:n;list-style:none;padding:0}
+.recap li{counter-increment:n;position:relative;padding:12px 14px 12px 50px;border:1px solid var(--line);border-radius:14px;background:rgba(17,31,59,.72);margin:8px 0;color:var(--text)}
+.recap li::before{content:counter(n);position:absolute;left:14px;top:12px;width:26px;height:26px;border-radius:50%;background:var(--green);color:#062418;font-weight:900;text-align:center;line-height:26px;font-size:13px}
+.quiz{list-style:none;padding:0;counter-reset:q}
+.quiz li{counter-increment:q;border:1px solid var(--line);border-radius:14px;background:rgba(17,31,59,.72);padding:12px 16px;margin:10px 0;color:var(--text)}
+.quiz li::before{content:"練習 " counter(q);display:block;color:var(--cyan);font-size:12px;font-weight:900;letter-spacing:1.5px}
+details{margin-top:8px}summary{cursor:pointer;color:var(--green);font-weight:800;font-size:14px}
+details p{color:var(--muted);font-size:14.5px}details b{color:var(--orange)}
+footer{text-align:center;color:var(--dim);font-size:12px;line-height:1.9;border-top:1px solid var(--line);margin-top:50px;padding:30px 20px 44px}
+@media(max-width:600px){.wrap{width:calc(100% - 32px)}.brand{display:none}.toc{grid-template-columns:1fr}h2{font-size:21px}}
+code{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:.9em;color:var(--cyan);background:rgba(65,220,255,.08);border-radius:6px;padding:1px 6px;word-break:break-word}
+.cheat{border:2px solid var(--orange);background:linear-gradient(135deg,rgba(255,196,91,.16),rgba(255,196,91,.05));border-radius:16px;padding:14px 14px 6px;margin:18px 0}
+.cheat .tag{display:inline-block;font-size:12px;font-weight:900;letter-spacing:1.5px;color:#2a1a00;background:var(--orange);border-radius:999px;padding:2px 10px;margin-bottom:4px}
+.cheat h4{color:var(--orange);font-size:17px;margin:4px 0 2px}
+.cheat .tbl{background:rgba(8,16,31,.55)}
+.cheat td code{white-space:nowrap}
+</style>
+
+</head>
+<body>
+<nav class="topbar"><div class="wrap"><a class="back" href="../ipas-intermediate.html">← iPAS 中級總覽</a><span class="brand">🍀 LEARN AI WITH TARSHAR · L22 觀念複習</span></div></nav>
+
+<main class="wrap">
+<header class="hero">
+  <span class="eyebrow">iPAS 中級 · 科目二 · L22403</span>
+  <h1>大數據在生成式 AI 的應用｜觀念圖解複習</h1>
+  <p class="lead">這一章的主角是<b>生成式 AI</b>：大型語言模型、圖像生成模型這類會產生新內容的模型。它們吃的資料超級多，所以從收集清洗、分散式訓練、上線部署，到 RAG 檢索、隱私法規、風險治理，每一站都和大數據有關。容易卡住的地方是<b>工具名字和用途對不起來</b>，以及<b>法律和標準分不清</b>。每個單元照「為什麼需要它 → 一步步搭起來 → 名詞各自定義 → 整合比較表 → 記憶鉤子 → 易錯提醒」排列。</p>
+  <div class="hook"><span class="tag">先背這張</span><ul>
+    <li><b>下面黃框的「工具速查表」</b>：Spark、Dask、Flink、Ray、Kubernetes、向量資料庫各一行用途。</li>
+    <li><b>RAG 三步驟</b>：事先建好意思地圖 → 把問題也換成座標 → 找最近的幾段交給語言模型（單元 ③）。</li>
+    <li><b>法規一句話</b>：歐盟＋個資＝GDPR（法律）；ISO 27001 是自願認證的資安管理標準，不是法律（單元 ④）。</li>
+  </ul></div>
+  <nav class="toc" aria-label="目錄">
+    <a href="#tools"><span>★</span>工具速查表</a>
+    <a href="#map"><span>◎</span>全章地圖：生成式 AI 專案的五站</a>
+    <a href="#u1"><span>①</span>大數據生命週期與上線監控</a>
+    <a href="#u2"><span>②</span>分散式訓練與部署</a>
+    <a href="#u3"><span>③</span>RAG 與向量資料庫</a>
+    <a href="#u4"><span>④</span>隱私保護與法規</a>
+    <a href="#u5"><span>⑤</span>風險與治理</a>
+    <a href="#recap"><span>✓</span>十句話總整理</a>
+    <a href="#glossary"><span>☰</span>全章名詞總彙整表</a>
+    <a href="#quiz"><span>✎</span>自我檢測 10 題</a>
+  </nav>
+</header>
+
+<div class="cheat" id="tools">
+  <span class="tag">先背這張</span>
+  <h4>工具速查表</h4>
+  <p class="note">遮住第三欄，看工具名說得出用途；再遮住第一欄，看用途說得出工具名。</p>
+<div class="tbl"><table>
+  <tr><th>工具</th><th>類別</th><th>一行用途（可背）</th><th>看到這些字就想到它</th></tr>
+  <tr class="grp"><td colspan="4">儲存</td></tr>
+  <tr><td><b>HDFS</b></td><td>分散式檔案系統</td><td>把超大檔案切塊，分散存在很多台電腦上</td><td>PB 級、原始訓練資料</td></tr>
+  <tr><td><b>物件儲存（如 S3）</b></td><td>雲端儲存</td><td>雲端放大量檔案，容量可一直加、成本低</td><td>數據湖底層、圖片影片</td></tr>
+  <tr><td><b>向量資料庫</b></td><td>專用資料庫</td><td>存向量嵌入，快速找出「意思最接近」的資料</td><td>RAG、語意搜尋、相似度</td></tr>
+  <tr class="grp"><td colspan="4">批次運算（量大、可以等）</td></tr>
+  <tr><td><b>Hadoop MapReduce</b></td><td>批次運算</td><td>分散計算的老將，每一步都讀寫磁碟，較慢</td><td>Map、Reduce、磁碟</td></tr>
+  <tr><td><b>Apache Spark</b></td><td>批次運算</td><td>在記憶體裡分散運算，反覆計算比 MapReduce 快很多</td><td>記憶體運算、大規模前處理</td></tr>
+  <tr><td><b>Dask</b></td><td>批次運算</td><td>用熟悉的 Python（pandas、NumPy 寫法）做平行運算</td><td>TB 級文字清洗、單機太慢</td></tr>
+  <tr class="grp"><td colspan="4">串流處理（要即時）</td></tr>
+  <tr><td><b>Apache Kafka</b></td><td>訊息平台</td><td>資料流的輸送帶：接住大量即時事件、交給下游</td><td>即時事件、訊息佇列</td></tr>
+  <tr><td><b>Kafka Streams</b></td><td>串流處理</td><td>直接在 Kafka 的資料流上即時計算</td><td>即時、輕量</td></tr>
+  <tr><td><b>Apache Flink</b></td><td>串流處理</td><td>一筆一筆即時處理，延遲很低</td><td>低延遲、事件驅動</td></tr>
+  <tr><td><b>Spark Streaming</b></td><td>串流處理</td><td>Spark 的串流版，把資料切成很小的批次連續處理</td><td>微批次、即時</td></tr>
+  <tr class="grp"><td colspan="4">分散式 AI 框架：Ray</td></tr>
+  <tr><td><b>Ray Core</b></td><td>底層引擎</td><td>把 Python 工作分到很多台電腦、很多張 GPU</td><td>Tasks、Actors</td></tr>
+  <tr><td><b>Ray Data</b></td><td>資料處理</td><td>大量資料的載入與前處理</td><td>備料</td></tr>
+  <tr><td><b>Ray Train</b></td><td>訓練</td><td>分散式模型訓練</td><td>多 GPU、多節點訓練</td></tr>
+  <tr><td><b>Ray Tune</b></td><td>調參</td><td>大規模超參數搜尋，支援貝氏最佳化、PBT</td><td>超參數調整</td></tr>
+  <tr><td><b>Ray Serve</b></td><td>部署</td><td>可擴充的模型服務（上線推論）</td><td>模型服務、推論 API</td></tr>
+  <tr class="grp"><td colspan="4">部署與平台</td></tr>
+  <tr><td><b>Docker（容器化）</b></td><td>部署</td><td>把模型和執行環境打包成一致的「貨櫃」，到哪都能跑</td><td>容器、環境一致</td></tr>
+  <tr><td><b>Kubernetes</b></td><td>部署</td><td>管理大量容器：負載平衡、自動擴縮容、故障重啟</td><td>自動擴縮容、高併發</td></tr>
+  <tr><td><b>SageMaker／Vertex AI</b></td><td>雲端 ML 平台</td><td>AWS／Google 的訓練、部署、監控一條龍服務</td><td>雲端部署、託管推論</td></tr>
+  <tr><td><b>MLflow 等 MLOps 工具</b></td><td>治理</td><td>記錄實驗、資料與模型版本，方便重現與追溯</td><td>可重複性、可追溯性</td></tr>
+</table></div>
+</div>
+
+<section id="map">
+  <h2><small>先看全貌</small>全章地圖：一個生成式 AI 專案的五站</h2>
+  <p>本章的主角是「<b>生成式 AI</b>」：大型語言模型、圖像生成模型這類「會產生新內容」的模型。它們的特點是<b>吃的資料超級多</b>，所以每一站都和大數據有關。五個單元剛好是一個專案的順序：</p>
+<div class="tbl"><table>
+  <tr><th>站</th><th>這一站在問什麼</th><th>本章的關鍵名詞</th></tr>
+  <tr><td><b>① 資料從哪來、放哪裡</b></td><td>爬來的資料怎麼洗、存哪裡、怎麼處理？上線後看什麼？</td><td>去重、數據湖、Spark、串流、數據漂移、可用性</td></tr>
+  <tr><td><b>② 訓練與上線</b></td><td>很多台怎麼一起訓練？怎麼調參？怎麼撐住大量使用者？</td><td>資料平行、模型平行、Ray、貝氏最佳化、自動擴縮容、量化</td></tr>
+  <tr><td><b>③ 讓回答有憑有據</b></td><td>怎麼從大量文件找到相關段落？怎麼評分？</td><td>向量嵌入、向量資料庫、RAG、幻覺、ROUGE</td></tr>
+  <tr><td><b>④ 保護個人資料</b></td><td>怎麼用資料又不洩漏個人？要守哪些法規？</td><td>差分隱私、聯邦學習、匿名化、合成數據、GDPR</td></tr>
+  <tr><td><b>⑤ 風險與治理</b></td><td>會出什麼問題？怎麼管？</td><td>偏見、版權、數據記憶、深度偽造、RLHF、模型自噬</td></tr>
+</table></div>
+</section>
+
+<section id="u1">
+  <h2><small>單元 ①</small>生成式 AI 的大數據生命週期：收集清洗、儲存、前處理、上線監控</h2>
+  <p class="why"><b>為什麼需要它？</b> 生成式模型動輒用幾兆個字、幾十億張圖訓練。資料一多，四件事都變難：<b>爬來的資料很髒</b>（雜訊、重複、有害內容）、<b>一台電腦存不下</b>、<b>一台電腦算不完</b>、<b>上線後要一直盯著</b>。這個單元把資料從「爬下來」到「上線之後」走一遍，每一站對應幾個工具和名詞。</p>
+  <h3>一步步搭起來</h3>
+  <ul>
+    <li><b>收集。</b>從網路爬蟲、公開資料集、企業內部文件、使用者互動日誌取得大量資料。</li>
+    <li><b>清洗。</b>去掉 HTML 標籤、廣告等<b>雜訊</b>；去掉<b>重複</b>內容；過濾<b>有害、低品質、含個資</b>的內容。網路爬蟲資料最先遇到的就是這一關。</li>
+    <li><b>儲存。</b>原始資料先放進<b>數據湖</b>（底層用 HDFS 或物件儲存），整理好的結構化資料可以進資料倉儲。</li>
+    <li><b>前處理。</b>用 Spark、Dask 讓很多台一起做分詞、統一格式（<b>標準化</b>）、<b>數據增強</b>；要即時反應的資料用<b>串流處理</b>。</li>
+    <li><b>訓練、部署之後監控。</b>看服務的延遲、錯誤率、資源使用率，也看使用者的資料有沒有<b>漂移</b>，發現問題就回頭補資料、重新訓練。</li>
+  </ul>
+  <figure><a href="img/l22403-lifecycle.png" target="_blank" rel="noopener"><img src="img/l22403-lifecycle.png" alt="生成式 AI 的大數據生命週期：收集、清洗、儲存、前處理、訓練、部署、監控七站，監控再回饋到收集；清洗漏斗示範 1,000,000 筆網頁去掉完全重複 30% 剩 700,000，去掉近似重複 12% 剩 616,000，過濾有害與低品質 15% 剩 523,600，約 52.4%" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <h3>名詞各自定義</h3>
+  <div class="defs">
+    <div class="def"><h4>網路爬蟲資料的三大問題</h4><ul>
+      <li><b>雜訊：</b>HTML 標籤、選單、廣告、亂碼、特殊符號，和真正內容混在一起。</li>
+      <li><b>重複：</b>同一篇文章被轉載很多次。重複太多會讓模型<b>過度記住</b>某些內容、浪費運算。完全重複可用雜湊值比對；近似重複常用 MinHash 這類方法找出「幾乎一樣」的文件。</li>
+      <li><b>有害與低品質：</b>仇恨、暴力、色情、垃圾內容，以及個人資料。要過濾，否則模型會學進去、甚至吐出來。</li>
+      <li><b>例子：</b>上圖 1,000,000 筆網頁，三道清洗後約剩 52.4%（自編比例）。</li></ul></div>
+  </div>
+  <figure><a href="img/l22403-lake_vs_wh.png" target="_blank" rel="noopener"><img src="img/l22403-lake_vs_wh.png" alt="數據湖與資料倉儲對照：數據湖把文字、圖片、音檔、網頁、JSON、影片、紀錄檔七種格式原樣先放進來，讀取時才套格式；資料倉儲先經過清洗、轉換、對齊欄位，寫入前就定好欄位；1 PB 等於 1,000 TB 等於 1,000,000 GB" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>數據湖 Data Lake</h4><ul>
+      <li><b>是什麼：</b>把各種來源、各種格式（結構化、半結構化、非結構化）的<b>原始資料原樣</b>集中存放的地方。</li>
+      <li><b>Schema-on-Read（讀取時套格式）：</b>存的時候不規定欄位，<b>要用的時候</b>才依用途解析。好處是彈性大、什麼都能先收。</li>
+      <li><b>適合：</b>生成式 AI 的原始語料、圖片、音檔，還不確定之後怎麼用的資料。</li>
+      <li><b>風險：</b>沒有目錄和管理時會變成「資料沼澤」：東西很多，卻找不到、不敢用。</li></ul></div>
+    <div class="def"><h4>資料倉儲 Data Warehouse</h4><ul>
+      <li><b>是什麼：</b>存放<b>整理過、結構化</b>資料的地方，欄位和型別事先定好。</li>
+      <li><b>Schema-on-Write（寫入時套格式）：</b>資料進來前先經過 ETL（擷取、轉換、載入），格式不對的先修好才寫進去。</li>
+      <li><b>適合：</b>報表、商業分析、固定的查詢。</li></ul></div>
+    <div class="def"><h4>HDFS 與物件儲存</h4><ul>
+      <li><b>HDFS：</b>Hadoop 分散式檔案系統。把很大的檔案切成區塊，分散存在很多台電腦，還會存多份備份；容量靠加機器擴充到 PB 級。</li>
+      <li><b>物件儲存：</b>雲端的檔案倉庫（例如 Amazon S3），一個檔案就是一個「物件」，容量可以一直加、價格便宜，常當數據湖的底層。</li>
+      <li><b>對照：</b>關聯式資料庫適合整齊的交易資料，存放數百 TB 的原始文字、圖片並不划算。</li></ul></div>
+    <div class="def"><h4>Apache Spark 與 Dask</h4><ul>
+      <li><b>Spark：</b>分散式運算引擎，把中間結果放在<b>記憶體</b>，反覆計算時比每一步都讀寫磁碟的 MapReduce 快很多（第 10 章）。適合大規模資料清洗、前處理。</li>
+      <li><b>Dask：</b>Python 生態的平行運算工具，寫法很像 pandas、NumPy，可以從一台電腦擴充到一群電腦。TB 級文字資料在單機跑太慢時很好用。</li></ul></div>
+  </div>
+  <figure><a href="img/l22403-batch_stream.png" target="_blank" rel="noopener"><img src="img/l22403-batch_stream.png" alt="批次處理與串流處理對照：24 筆事件在 60 分鐘內陸續進來，批次處理等時間到才整批算，平均要等約 30 分鐘；串流處理每筆一進來就處理，約 2 秒內有結果；批次工具 Hadoop MapReduce、Spark，串流工具 Flink、Kafka Streams、Spark Streaming" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>批次處理 vs 串流處理</h4><ul>
+      <li><b>批次處理 Batch：</b>資料先累積，時間到了一起算。量大、可以等，例如每晚重算訓練資料。</li>
+      <li><b>串流處理 Streaming：</b>資料一進來就處理，幾秒內有結果，例如即時監控社群話題、偵測詐欺。</li>
+      <li><b>串流工具：</b><b>Flink</b>（一筆一筆、低延遲）、<b>Kafka Streams</b>（在 Kafka 資料流上直接計算）、<b>Spark Streaming</b>（把資料切成很小的批次連續處理）。</li></ul></div>
+    <div class="def"><h4>數據標準化與數據增強</h4><ul>
+      <li><b>標準化：</b>把資料整理成一致的樣子：圖片統一尺寸、像素歸一化；文字統一編碼、大小寫、標點。目的是讓模型<b>穩定地學</b>，不被格式差異干擾。</li>
+      <li><b>數據增強：</b>用現有資料變出更多樣的樣本：圖片翻轉、旋轉、調亮度；文字同義改寫、回譯（翻成別的語言再翻回來）。目的是<b>提高多樣性</b>、減少過度擬合。</li></ul></div>
+    <div class="def"><h4>A／B 測試</h4><ul>
+      <li><b>是什麼：</b>把使用者隨機分成兩組，一組用 A 版、一組用 B 版（例如兩種提示寫法），比較哪一版的滿意度、點擊率比較好。</li>
+      <li><b>和大數據的關係：</b>要收集<b>大量</b>互動資料，差異才有統計上的意義；這是第 7 章假設檢定的應用。</li></ul></div>
+  </div>
+  <figure><a href="img/l22403-drift_genai.png" target="_blank" rel="noopener"><img src="img/l22403-drift_genai.png" alt="數據漂移：客服聊天機器人各類提問比例，訓練時退貨 35%、物流 30%、優惠 25%、新功能 10%，上線三個月後變成 20%、25%、20%、35%；分布差異指標 PSI 約 0.42，大於 0.25 算明顯漂移" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>數據漂移 Data Drift</h4><ul>
+      <li><b>是什麼：</b>上線後真實資料的分布，慢慢偏離訓練時的資料分布。</li>
+      <li><b>在生成式 AI 會怎樣：</b>使用者問的主題、用語變了，模型沒學過，<b>回答品質下降</b>、甚至答非所問。上圖「新功能」提問從 10% 變成 35%。</li>
+      <li><b>怎麼發現與處理：</b>持續監控輸入分布（例如 PSI 指標）、使用者回饋，定期或觸發式用新資料再訓練（第 11 章的 MLOps）。</li></ul></div>
+  </div>
+  <figure><a href="img/l22403-monitor_ras.png" target="_blank" rel="noopener"><img src="img/l22403-monitor_ras.png" alt="服務監控三件事用一家店比喻：可用性是店有沒有開門，99.9% 每月約停 43 分鐘、99% 約停 7.2 小時；可靠性是點的東西有沒有做錯，100 萬次請求錯誤率 0.2% 等於 2,000 次失敗；效能是上菜快不快，一半的人等 0.8 秒內、95% 的人等 1.7 秒內；監控儀表板第 80 到 90 分鐘的 95% 延遲超過 3 秒門檻而警報" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <p><b>從零講：可靠性、可用性、效能。</b> 這三個詞是「系統維運」的基本詞，和模型聰不聰明無關，問的是「<b>這個服務穩不穩、快不快</b>」。用一家店來想最容易：</p>
+  <div class="defs">
+    <div class="def"><h4>可用性 Availability（店有沒有開門）</h4><ul>
+      <li><b>意思：</b>使用者想用的時候，服務<b>連得上、能用</b>。常用「正常運作時間的比例」表示。</li>
+      <li><b>數字感：</b>99.9% 聽起來很高，一個月（30 天）仍會停約 43 分鐘；99% 就是約 7.2 小時。</li>
+      <li><b>看什麼指標：</b>服務有沒有回應、正常運作時間、資源（CPU、GPU、記憶體）是不是快滿了、會不會塞爆而停擺。</li></ul></div>
+    <div class="def"><h4>可靠性 Reliability（點的東西有沒有做錯）</h4><ul>
+      <li><b>意思：</b>服務<b>持續正確地完成工作</b>，不常出錯、不常當機。</li>
+      <li><b>看什麼指標：</b><b>錯誤率</b>（失敗的請求占幾成）、多久出一次錯、出錯後多快恢復。上圖 100 萬次請求、錯誤率 0.2%，就是 2,000 次失敗。</li></ul></div>
+    <div class="def"><h4>效能 Performance（上菜快不快、接得了多少客）</h4><ul>
+      <li><b>意思：</b>服務回應得<b>夠快</b>，而且一次能處理夠多的請求。</li>
+      <li><b>看什麼指標：</b><b>延遲</b>（回應時間，常看一半的人和 95% 的人各等多久）、<b>每秒請求數 QPS</b>（吞吐量）、資源利用率。</li></ul></div>
+  </div>
+  <h3>整合比較表（生命週期的三組對照）</h3>
+<div class="tbl"><table>
+  <tr><th>比較項目</th><th>數據湖</th><th>資料倉儲</th></tr>
+  <tr><td><b>存什麼</b></td><td>各種格式的原始資料</td><td>整理好的結構化資料</td></tr>
+  <tr><td><b>格式何時決定</b></td><td><b>讀取時</b>（Schema-on-Read）</td><td><b>寫入時</b>（Schema-on-Write）</td></tr>
+  <tr><td><b>優點</b></td><td>彈性大、什麼都能先收</td><td>查詢快、報表穩定</td></tr>
+  <tr><td><b>適合</b></td><td>生成式 AI 原始語料、圖片、音檔</td><td>報表、商業分析</td></tr>
+  <tr><td><b>風險</b></td><td>沒管理會變資料沼澤</td><td>改欄位麻煩、不收非結構化資料</td></tr>
+</table></div>
+<div class="tbl"><table>
+  <tr><th>比較項目</th><th>批次處理</th><th>串流處理</th></tr>
+  <tr><td><b>什麼時候算</b></td><td>資料累積到一批、時間到才算</td><td>資料一進來就算</td></tr>
+  <tr><td><b>延遲</b></td><td>分鐘到小時</td><td>秒級以內</td></tr>
+  <tr><td><b>工具</b></td><td>Hadoop MapReduce、Spark、Dask</td><td>Flink、Kafka Streams、Spark Streaming</td></tr>
+  <tr><td><b>例子</b></td><td>每晚重算訓練資料、整批清洗語料</td><td>社群趨勢、詐欺即時警示</td></tr>
+</table></div>
+<div class="tbl"><table>
+  <tr><th></th><th>可用性</th><th>可靠性</th><th>效能</th></tr>
+  <tr><td><b>比喻</b></td><td>店有沒有開門</td><td>東西有沒有做錯</td><td>上菜快不快</td></tr>
+  <tr><td><b>在問</b></td><td>連得上、能用嗎？</td><td>做得對、不常壞嗎？</td><td>等多久、接得了多少？</td></tr>
+  <tr><td><b>看的指標</b></td><td>正常運作時間、資源快滿了沒</td><td>錯誤率、多久出一次錯</td><td>延遲、每秒請求數</td></tr>
+  <tr><td><b>出問題時</b></td><td>擴容、切換備援</td><td>修錯誤、重啟、回滾版本</td><td>擴容、加快取、量化</td></tr>
+</table></div>
+  <div class="hook"><span class="tag">記憶鉤子</span><ul>
+    <li><b>生命週期：收、洗、存、整、訓、上、看，看完再回頭。爬蟲資料先處理雜訊、重複、有害內容。</b></li>
+    <li><b>湖＝先存再說（讀時套格式）；倉＝先整理再存（寫時套格式）。</b></li>
+    <li><b>Spark 用記憶體、比 MapReduce 快；Dask 是 Python 版平行運算；要即時用 Flink、Kafka Streams、Spark Streaming。</b></li>
+    <li><b>看到延遲、錯誤率、資源使用率 → 想「服務穩不穩、快不快」→ 可用性、可靠性、效能。</b></li>
+  </ul></div>
+  <div class="trap"><b>易錯提醒：</b>監控「延遲、錯誤率、資源使用率」是在看服務本身穩不穩、快不快，不是在評內容有沒有創意、合不合倫理，也不是在看訓練資料多不多樣；那些要用別的方法評估。另外，數據增強是「變出更多樣的樣本」，數據標準化是「統一格式」，兩個目的不同。</div>
+</section>
+
+<section id="u2">
+  <h2><small>單元 ②</small>分散式訓練與部署：資料平行、模型平行、Ray、超參數搜尋、擴縮容與量化</h2>
+  <p class="why"><b>為什麼需要它？</b> 大型生成式模型有幾十億到上千億個參數，訓練資料以 TB、PB 計。<b>一台電腦算不完，也放不下</b>；訓練完還要同時服務大量使用者。這個單元回答四個問題：<b>怎麼分工一起訓練？用什麼框架？超參數怎麼找？上線後怎麼又快又省？</b></p>
+  <h3>一步步搭起來</h3>
+  <ul>
+    <li><b>分散式訓練的目標。</b>把訓練工作分給很多台電腦、很多張 GPU 一起做，<b>縮短訓練時間</b>，處理單機放不下的資料與模型。</li>
+    <li><b>決定拆什麼。</b>資料太多 → 拆資料（資料平行）；模型太大一張 GPU 放不下 → 拆模型（模型平行）。</li>
+    <li><b>用框架管分工。</b>Ray 這類框架負責把工作分派到各台電腦、收回結果，訓練、調參、上線服務都能用。</li>
+    <li><b>找好的超參數。</b>學習率、批次大小這些要事先設定的值，用聰明的搜尋方法，少試幾次就找到好組合。</li>
+    <li><b>上線後撐住流量。</b>容器化打包、負載平衡分流、自動擴縮容；再用量化、快取讓推論又快又省。</li>
+  </ul>
+  <figure><a href="img/l22403-parallel.png" target="_blank" rel="noopener"><img src="img/l22403-parallel.png" alt="資料平行與模型平行對照：資料平行把 1,000,000 筆資料分給 4 張 GPU，每張放整個模型、各處理 25 萬筆，各自算梯度再平均同步更新；模型平行是 700 億參數乘 2 位元組等於 140 GB，一張 GPU 只有 80 GB 放不下，至少要 2 張 GPU，第 1 到 40 層和第 41 到 80 層分開放" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <h3>名詞各自定義</h3>
+  <div class="defs">
+    <div class="def"><h4>資料平行 Data Parallelism</h4><ul>
+      <li><b>是什麼：</b>把訓練資料<b>切成多份</b>，每台機器（或每張 GPU）都放<b>一份完整的模型</b>，各自處理自己那份資料、算出梯度，再把梯度平均、同步更新所有模型。</li>
+      <li><b>適合：</b>資料很多、模型放得進單張 GPU 的情況，是最常見的做法（第 11 章參數伺服器、All-Reduce）。</li></ul></div>
+    <div class="def"><h4>模型平行 Model Parallelism</h4><ul>
+      <li><b>是什麼：</b>模型太大、一張 GPU 的記憶體放不下時，把<b>模型的不同層或不同部分</b>放到不同 GPU，資料依序流過。</li>
+      <li><b>例子：</b>上圖 700 億參數，每個參數用 2 位元組存，光參數就要 140 GB，一張 80 GB 的 GPU 放不下，至少拆成 2 段。實際還要放梯度與中間結果，需要的 GPU 通常更多。</li>
+      <li><b>延伸：</b><b>管線平行</b>（Pipeline Parallelism）是模型平行的一種，把層分段後讓多批資料像生產線一樣流動。大型語言模型常把資料平行和模型平行一起用。</li></ul></div>
+  </div>
+  <figure><a href="img/l22403-ray_stack.png" target="_blank" rel="noopener"><img src="img/l22403-ray_stack.png" alt="Ray 架構：底層 Ray Core 用 Tasks 和 Actors 把工作分到叢集，叢集 4 台乘 8 張 GPU 共 32 張；上層四個函式庫：Ray Data 資料載入與前處理、Ray Train 分散式訓練、Ray Tune 超參數調整、Ray Serve 模型服務上線推論" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>Ray</h4><ul>
+      <li><b>是什麼：</b>開源的<b>分散式運算框架</b>，讓用 Python 寫的 AI 程式能分到很多台電腦、很多張 GPU 一起跑。它不是資料庫，也不是做網頁或介面的工具。</li>
+      <li><b>Ray Core：</b>底層引擎，提供 <b>Tasks</b>（一件件可以平行的工作）和 <b>Actors</b>（會記住狀態的工作者）。</li>
+      <li><b>Ray Data：</b>大量資料的載入與前處理。</li>
+      <li><b>Ray Train：</b><b>分散式訓練</b>，把訓練分到多 GPU、多節點。</li>
+      <li><b>Ray Tune：</b><b>超參數調整</b>，可同時跑很多組實驗，支援貝氏最佳化、PBT 等策略。</li>
+      <li><b>Ray Serve：</b><b>模型服務</b>，把模型包成可以擴充的推論服務，處理大量上線請求。</li></ul></div>
+  </div>
+  <figure><a href="img/l22403-hpo_search.png" target="_blank" rel="noopener"><img src="img/l22403-hpo_search.png" alt="超參數搜尋比較：同樣只試 16 次，網格搜尋排整齊全試最好分數 0.63，隨機搜尋隨機抽點最好 0.77，貝氏最佳化參考前面結果挑下一點、點往高分區集中，最好 0.95；PBT 讓一群模型一起訓練、落後的複製領先者再微調，最終最好 0.83，不交流只有 0.63" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>超參數 Hyperparameter</h4><ul>
+      <li><b>是什麼：</b>訓練前要先設定、模型自己不會學的值，例如學習率、批次大小、層數、Dropout 比例。</li>
+      <li><b>難在哪：</b>組合很多，而大型生成式模型<b>訓練一次就很貴</b>，不能每種都試。</li></ul></div>
+    <div class="def"><h4>網格搜尋 Grid Search</h4><ul>
+      <li><b>怎麼做：</b>每個超參數列出幾個候選值，<b>所有組合全部試一次</b>。</li>
+      <li><b>問題：</b>組合數是相乘的：6 個超參數各 5 個值就是 5 的 6 次方 ＝ 15,625 次，訓練一次很貴時做不到；而且點排得很整齊，容易剛好錯過好的區域（上圖最好只有 0.63）。</li></ul></div>
+    <div class="def"><h4>隨機搜尋 Random Search</h4><ul>
+      <li><b>怎麼做：</b>在範圍內<b>隨機抽</b>組合來試。</li>
+      <li><b>比網格好在哪：</b>同樣的次數，每個超參數會試到更多不同的值，常比網格更快找到好區域（上圖 0.77）。但它<b>不會從過去的結果學習</b>，每次都是盲抽。</li></ul></div>
+    <div class="def"><h4>貝氏最佳化 Bayesian Optimization</h4><ul>
+      <li><b>怎麼做：</b>把已經試過的「超參數 → 分數」結果拿來建一個<b>代理模型</b>（Surrogate Model），預測哪裡可能更好、哪裡還不確定，再<b>挑最有希望的下一組</b>去試。</li>
+      <li><b>好處：</b>會參考過去實驗，<b>用比較少的次數找到接近最好的組合</b>，特別適合訓練一次很貴的情況（上圖 16 次就到 0.95，橘點往高分區集中）。</li></ul></div>
+    <div class="def"><h4>PBT（Population Based Training，以群體為基礎的訓練）</h4><ul>
+      <li><b>怎麼做：</b><b>同時訓練一群模型</b>，每隔一段時間，表現落後的成員<b>複製</b>領先者的模型，再把超參數<b>微調</b>一下繼續訓練。</li>
+      <li><b>好處：</b>邊訓練邊調整，超參數可以隨訓練進度改變，不必等全部練完才比較（上圖最終 0.83，不交流的同一群只有 0.63）。</li></ul></div>
+  </div>
+  <figure><a href="img/l22403-autoscale.png" target="_blank" rel="noopener"><img src="img/l22403-autoscale.png" alt="負載平衡與自動擴縮容：大量使用者請求經過負載平衡器分給多個相同模型的副本；一天 24 小時請求量不同，每個副本每小時可處理 600 個，尖峰需要 8 個副本；一直開 8 個要 192 GPU 小時，跟著量自動調只要 96 GPU 小時，省下約 50%" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>容器化與 Kubernetes</h4><ul>
+      <li><b>容器化（Docker）：</b>把模型、程式和需要的套件<b>打包成一個容器</b>，在開發機、測試機、雲端都跑出一樣的結果。</li>
+      <li><b>Kubernetes：</b>管理大量容器的平台：自動部署、<b>負載平衡</b>、<b>自動擴縮容</b>、壞了自動重啟。</li></ul></div>
+    <div class="def"><h4>負載平衡 Load Balancing</h4><ul>
+      <li><b>是什麼：</b>把大量請求<b>平均分給多個服務副本</b>，避免某一台塞爆、其他台閒著。</li>
+      <li><b>比喻：</b>銀行的叫號機，把客人分到不同櫃台。</li></ul></div>
+    <div class="def"><h4>自動擴縮容 Auto Scaling</h4><ul>
+      <li><b>是什麼：</b>依照請求量<b>自動增加或減少</b>服務副本數。人多開櫃台、人少收櫃台。</li>
+      <li><b>好處：</b>尖峰不塞車、離峰不浪費。上圖跟著流量調整，比一直開到尖峰的量省下約一半運算資源。分析過去的請求模式，還能預先在尖峰前擴容。</li></ul></div>
+    <div class="def"><h4>雲端 ML 平台 SageMaker、Vertex AI</h4><ul>
+      <li><b>是什麼：</b>AWS 的 SageMaker、Google 的 Vertex AI，提供訓練、部署、監控的一條龍託管服務。</li>
+      <li><b>好處：</b>不用自己管機器，內建自動擴縮容、負載平衡、模型監控，適合大規模部署。</li></ul></div>
+  </div>
+  <figure><a href="img/l22403-quant_cache.png" target="_blank" rel="noopener"><img src="img/l22403-quant_cache.png" alt="量化與快取：70 億參數的模型用 FP32 需要 28 GB，FP16 需要 14 GB，INT8 需要 7 GB，INT4 需要 3.5 GB，一張 24 GB 顯卡放得下 FP16 以下；快取命中 30% 時直接回傳 0.05 秒，沒命中 70% 要模型重新生成 2.0 秒，平均等待 1.41 秒" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>模型量化 Quantization</h4><ul>
+      <li><b>是什麼：</b>把模型參數從 32 位元浮點數，改用 16、8 甚至 4 位元來存，等於<b>把每個數字寫短一點</b>。</li>
+      <li><b>好處：</b>模型<b>變小、推論變快、記憶體和成本降低</b>。上圖 70 億參數從 28 GB 降到 7 GB（8 位元）。</li>
+      <li><b>代價：</b>精準度可能小幅下降，上線前要再評估。</li></ul></div>
+    <div class="def"><h4>快取與預先計算</h4><ul>
+      <li><b>快取 Cache：</b>把常見問題的答案、常用的中間結果先存起來，下次直接拿。上圖命中 30%，平均等待從 2.0 秒降到約 1.41 秒。</li>
+      <li><b>預先計算：</b>推論很慢時，可以先分析大量使用紀錄，把熱門的結果、常用的特徵<b>事先算好</b>，或先把輸入資料整理成模型好吃的格式，使用者等的時間就變短。</li></ul></div>
+  </div>
+  <h3>整合比較表（分散式訓練與部署）</h3>
+<div class="tbl"><table>
+  <tr><th>比較項目</th><th>資料平行</th><th>模型平行</th></tr>
+  <tr><td><b>拆什麼</b></td><td><b>資料筆數</b></td><td><b>模型的層或參數</b></td></tr>
+  <tr><td><b>每台放什麼</b></td><td>整個模型＋一部分資料</td><td>模型的一部分</td></tr>
+  <tr><td><b>什麼時候用</b></td><td>資料很多、模型放得下</td><td>模型太大、一張 GPU 放不下</td></tr>
+  <tr><td><b>溝通重點</b></td><td>梯度平均、同步更新</td><td>中間結果在 GPU 之間傳遞</td></tr>
+</table></div>
+  <h3>超參數搜尋比較表</h3>
+<div class="tbl"><table>
+  <tr><th>方法</th><th>怎麼挑下一組</th><th>會參考過去結果嗎</th><th>16 次的表現（上圖）</th><th>適合</th></tr>
+  <tr><td><b>網格搜尋</b></td><td>所有組合排整齊全試</td><td>不會</td><td>0.63</td><td>超參數少、訓練便宜</td></tr>
+  <tr><td><b>隨機搜尋</b></td><td>範圍內隨機抽</td><td>不會</td><td>0.77</td><td>當基準、比網格省</td></tr>
+  <tr><td><b>貝氏最佳化</b></td><td>代理模型預測哪裡可能更好</td><td><b>會</b></td><td><b>0.95</b></td><td><b>訓練很貴、組合很多</b></td></tr>
+  <tr><td><b>PBT</b></td><td>一群一起練，落後者複製領先者再微調</td><td><b>會</b>（邊練邊換）</td><td>0.83</td><td>大型模型、可同時跑多組</td></tr>
+</table></div>
+<div class="tbl"><table>
+  <tr><th>手法</th><th>解決什麼</th><th>做法一句話</th><th>比喻</th></tr>
+  <tr><td><b>容器化</b></td><td>環境不一致</td><td>模型＋環境打包成容器</td><td>標準貨櫃</td></tr>
+  <tr><td><b>負載平衡</b></td><td>某台塞爆</td><td>請求平均分給副本</td><td>叫號機</td></tr>
+  <tr><td><b>自動擴縮容</b></td><td>尖峰塞車、離峰浪費</td><td>依流量開關副本</td><td>人多開櫃台</td></tr>
+  <tr><td><b>量化</b></td><td>模型太大、太慢</td><td>參數用更少位元存</td><td>數字寫短一點</td></tr>
+  <tr><td><b>快取</b></td><td>重複問題重算</td><td>常見答案先存起來</td><td>現成便當</td></tr>
+</table></div>
+  <div class="hook"><span class="tag">記憶鉤子</span><ul>
+    <li><b>分散式訓練的目標：很多台一起算，縮短時間、處理更大的資料與模型。</b></li>
+    <li><b>資料太多→資料平行（每台整個模型）；模型太大放不下→模型平行（每台一部分）。</b></li>
+    <li><b>Ray 四兄弟：Data 備料、Train 訓練、Tune 調參、Serve 上菜。</b></li>
+    <li><b>網格全試、隨機亂試、貝氏看結果挑、PBT 一群邊練邊換；訓練很貴時選貝氏或 PBT。</b></li>
+  </ul></div>
+  <div class="trap"><b>易錯提醒：</b>「分散式訓練」的目標是加快訓練、處理更大的資料與模型，不是為了讓模型變小；讓模型變小的是量化。模型平行是「模型放不下」才拆，資料平行是「每台都放整個模型」，不要記反。貝氏最佳化的「貝氏」和樸素貝氏分類器是不同的東西：一個是找超參數的方法，一個是分類模型。</div>
+</section>
+
+<section id="u3">
+  <h2><small>單元 ③</small>RAG 與向量資料庫：向量嵌入、檢索三步驟、幻覺、多語分詞、評估</h2>
+  <p class="why"><b>為什麼需要它？</b> 大型語言模型有兩個老問題：<b>知識停在訓練那天</b>，而且會一本正經地講錯（<b>幻覺</b>）。要讓它根據公司文件、最新法規回答，最直接的做法是<b>先找出相關段落，再讓它看著回答</b>，這就是 RAG（檢索增強生成）。問題是：傳統搜尋是「<b>比對字</b>」，使用者的說法和文件的寫法常常對不上，就會漏找。所以要改成「<b>比對意思</b>」，這就需要向量嵌入和向量資料庫。</p>
+  <h3>一步步搭起來</h3>
+  <ul>
+    <li><b>只比對字，會漏找。</b>你打「失業給付」，系統只找得到有這四個字的文件；文件寫「失業補助」或「就業保險給付」就漏掉了。這叫<b>詞彙不匹配</b>。</li>
+    <li><b>把每段話放到一張「意思地圖」上。</b>向量嵌入是用一個 AI 模型，把一段文字換成一長串數字，這串數字可以想成這段話在「意思地圖」上的<b>座標</b>。意思相近的話，座標靠得很近；意思無關的話，離得很遠。</li>
+    <li><b>RAG 檢索三步驟。</b>① <b>事先建好地圖</b>：所有文件切成一段一段，每段算出座標，存進向量資料庫（建立索引，只要做一次）；② <b>把問題也換成座標</b>：用同一個模型算出問題的座標；③ <b>找最近的幾段</b>：在地圖上找離問題最近的幾段，交給語言模型當參考資料，再讓它根據這些段落回答。</li>
+    <li><b>一句話記住。</b>先依「意思」找出最相關的段落，再讓 AI 看著這些段落回答。這樣 AI 回答時有憑有據，比較不會憑空亂編。</li>
+    <li><b>評估要有一把尺。</b>要知道 AI 找得準不準、答得好不好，要先有一份由人訂好的標準答案。</li>
+  </ul>
+  <figure><a href="img/l22403-embedding_map.png" target="_blank" rel="noopener"><img src="img/l22403-embedding_map.png" alt="向量嵌入的意思地圖示意：失業給付、失業補助、就業保險給付靠在一起，加班費計算、年假天數、颱風假在另一區；問題「沒工作了能領什麼補助」離失業補助 0.58、就業保險給付 0.98、失業給付 1.04 最近；關鍵字搜尋只找到含補助兩字的 1 篇，向量檢索找到最近 3 篇" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <h3>名詞各自定義</h3>
+  <div class="defs">
+    <div class="def"><h4>向量嵌入 Vector Embedding</h4><ul>
+      <li><b>是什麼：</b>用模型把文字（或圖片、聲音）轉成一長串數字（向量）。真實的嵌入常有幾百到上千個數字。</li>
+      <li><b>關鍵性質：</b><b>意思相近 → 向量相近</b>。所以「找相似」可以變成「算距離」，例如算餘弦相似度。</li>
+      <li><b>例子：</b>上圖問題「沒工作了能領什麼補助」，字面上只和「失業補助」共用「補助」兩字；但在意思地圖上，「失業給付」「就業保險給付」也是鄰居，向量檢索都找得到。</li></ul></div>
+    <div class="def"><h4>向量資料庫 Vector Database</h4><ul>
+      <li><b>是什麼：</b>專門存放向量、並能<b>快速做相似度搜尋</b>的資料庫，例如 Milvus、Pinecone、Weaviate；FAISS 是常用的向量搜尋函式庫。</li>
+      <li><b>為什麼要專用的：</b>一般資料庫擅長「欄位等於多少」的查詢，不擅長「找最像的前幾名」。向量資料庫用近似最近鄰（ANN）索引，在上億筆向量裡也能很快找到最近的幾筆。</li>
+      <li><b>在 LLM 裡的角色：</b>存放知識庫文件段落的向量，供 RAG 檢索，增強模型的上下文。</li></ul></div>
+  </div>
+  <figure><a href="img/l22403-rag_steps.png" target="_blank" rel="noopener"><img src="img/l22403-rag_steps.png" alt="RAG 檢索三步驟：第一步事先建好地圖，文件切成段，例如 12,000 字的文件每段 500 字切成 24 段，每段算座標存進向量資料庫；第二步把使用者提問用同一個嵌入模型換成座標；第三步找最近 3 段，把問題和 3 段一起交給語言模型回答；有依據可以減少幻覺，但找不準時答案還是可能錯" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>切塊 Chunking</h4><ul>
+      <li><b>是什麼：</b>把長文件切成適當長度的段落再算向量。上圖 12,000 字、每段 500 字，切成 24 段。</li>
+      <li><b>為什麼：</b>整份文件一個向量太粗，找不到精確段落；切太碎又會失去上下文，所以段落長度要試。</li></ul></div>
+    <div class="def"><h4>檢索增強生成 RAG（Retrieval-Augmented Generation）</h4><ul>
+      <li><b>是什麼：</b>把<b>資訊檢索</b>和<b>語言生成</b>結合：先從外部文件找出相關段落，再把「問題＋段落」一起交給語言模型產生回答。</li>
+      <li><b>檢索步驟：</b>問題轉成向量 → 在向量資料庫裡做相似度搜尋 → 取出最相關的幾段。</li>
+      <li><b>好處：</b>回答有依據、可以附上來源；文件更新時只要更新向量資料庫，<b>不必重新訓練模型</b>；能用企業內部或最新資料。</li>
+      <li><b>限制：</b><b>檢索品質決定回答品質</b>：找錯段落，回答還是會錯。</li></ul></div>
+    <div class="def"><h4>幻覺 Hallucination</h4><ul>
+      <li><b>是什麼：</b>模型產生看似合理、實際上不正確或沒有根據的內容。</li>
+      <li><b>怎麼減輕：</b>RAG 提供可靠來源當依據；用高品質、經過查核的資料訓練或微調；要求模型附來源；用 RLHF 讓模型傾向誠實回答（單元⑤）。</li></ul></div>
+    <div class="def"><h4>分詞 Tokenization 與多語分詞器</h4><ul>
+      <li><b>是什麼：</b>把文字切成模型處理的最小單位（token）。這是處理文字大數據、訓練 LLM 的第一步。</li>
+      <li><b>多語的挑戰：</b>中文、日文沒有空格分詞，英文有空格；各語言的字元數量差很多。分詞器要<b>能有效涵蓋多種語言</b>，詞彙表大小要平衡，避免某些語言被切得很碎、浪費 token。</li>
+      <li><b>常見做法：</b>子詞（subword）分詞，例如 BPE、SentencePiece：常見詞整個保留，罕見詞拆成小片段。</li></ul></div>
+  </div>
+  <figure><a href="img/l22403-rouge_cost.png" target="_blank" rel="noopener"><img src="img/l22403-rouge_cost.png" alt="ROUGE 自動評分示範：人寫的參考摘要 10 個詞和 AI 產生的摘要 10 個詞有 7 個重疊，召回 0.70、精確 0.70、F1 0.70；離職意思接近失業但 ROUGE 只比字；準備 2,000 篇參考摘要每篇 12 分鐘等於 400 小時，一個人要做 50 個工作天" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>ROUGE 與自動評估指標</h4><ul>
+      <li><b>是什麼：</b>ROUGE 比對<b>模型產生的摘要</b>和<b>人寫的參考摘要</b>有多少字詞重疊，常用在文本摘要；BLEU 常用在機器翻譯，概念類似。</li>
+      <li><b>例子：</b>上圖 10 個參考詞有 7 個被 AI 摘要涵蓋，召回 0.70。</li>
+      <li><b>限制：</b>只比字、不懂意思：「離職」和「失業」意思接近，ROUGE 仍算沒對上。</li></ul></div>
+    <div class="def"><h4>參考答案（黃金標準）的成本</h4><ul>
+      <li><b>為什麼需要：</b>自動指標要有「標準答案」才能比。這把尺要有人做。</li>
+      <li><b>難在哪：</b>要<b>大量、高品質、由懂內容的人寫或審過</b>的參考答案，<b>花人力又花時間</b>。上圖 2,000 篇 × 12 分鐘＝400 小時，一個人要做 50 個工作天。</li>
+      <li><b>實務做法：</b>自動指標加上小範圍的人工評估一起用；重要的評估請第二位評分者，確認不是一個人說了算。</li></ul></div>
+  </div>
+  <h3>整合比較表（RAG 相關對照）</h3>
+<div class="tbl"><table>
+  <tr><th>比較項目</th><th>關鍵字搜尋（比對字）</th><th>向量檢索（比對意思）</th></tr>
+  <tr><td><b>比什麼</b></td><td>字有沒有一樣</td><td>座標近不近（意思像不像）</td></tr>
+  <tr><td><b>說法不同時</b></td><td><b>容易漏找</b>（詞彙不匹配）</td><td>意思接近就找得到</td></tr>
+  <tr><td><b>需要什麼</b></td><td>倒排索引</td><td>嵌入模型＋向量資料庫</td></tr>
+  <tr><td><b>弱點</b></td><td>同義詞、換句話說</td><td>專有名詞、編號有時反而不如比對字</td></tr>
+</table></div>
+<div class="tbl"><table>
+  <tr><th>做法</th><th>怎麼讓模型知道新知識</th><th>要重新訓練嗎</th><th>適合</th></tr>
+  <tr><td><b>RAG</b></td><td>回答前先檢索相關段落給它看</td><td>不用，更新資料庫即可</td><td>常更新的文件、要附來源</td></tr>
+  <tr><td><b>微調</b></td><td>用新資料再訓練一小段</td><td>要</td><td>固定的風格、專業用語</td></tr>
+  <tr><td><b>提示工程</b></td><td>在提示裡寫清楚規則、給範例</td><td>不用</td><td>格式、語氣控制</td></tr>
+</table></div>
+<div class="tbl"><table>
+  <tr><th>評估方法</th><th>怎麼評</th><th>優點</th><th>限制</th></tr>
+  <tr><td><b>ROUGE</b></td><td>和參考摘要比字詞重疊</td><td>快、便宜、可大量算</td><td>只比字、要參考答案</td></tr>
+  <tr><td><b>BLEU</b></td><td>和參考譯文比詞組重疊</td><td>翻譯常用、可大量算</td><td>同上</td></tr>
+  <tr><td><b>人工評估</b></td><td>人看內容打分或排序</td><td>最貼近真實感受</td><td><b>貴、慢、要多人一致</b></td></tr>
+</table></div>
+  <div class="hook"><span class="tag">記憶鉤子</span><ul>
+    <li><b>意思相近的話，在「意思地圖」上是鄰居；找資料改比「座標近不近」。</b></li>
+    <li><b>RAG 三步驟：事先建好地圖 → 把問題也換成座標 → 找最近的幾段交給語言模型。</b></li>
+    <li><b>一句話：先依「意思」找出最相關的段落，再讓 AI 看著這些段落回答。</b></li>
+    <li><b>自動評分要一把人做的尺；尺做得好，又貴又花時間。</b></li>
+  </ul></div>
+  <div class="trap"><b>易錯提醒：</b>RAG 的重點是「回答前先檢索」，不是重新訓練模型；也不是隨便下載文件或手動寫好所有答案。向量嵌入的相似是「意思」的相似，不是字面相同。ROUGE 分數本身好算，難的是準備大量高品質的人工參考答案。</div>
+</section>
+
+<section id="u4">
+  <h2><small>單元 ④</small>隱私保護與法規：差分隱私、聯邦學習、匿名化、同態加密、合成數據、GDPR</h2>
+  <p class="why"><b>為什麼需要它？</b> 生成式模型吃的資料裡常有<b>個人身分資訊</b>（PII：姓名、身分證字號、電話、地址、病歷）。模型可能把它記住，甚至在回答裡吐出來；處理不當還會違法。這個單元先講幾種「<b>用資料又保護個人</b>」的技術，各自保護的是什麼、代價是什麼；再整理幾個常考的<b>法規與標準</b>，分清楚哪些是法律、哪些是自願認證的標準。</p>
+  <h3>一步步搭起來</h3>
+  <ul>
+    <li><b>先少拿。</b>只收必要的資料（資料最小化），不需要的個資一開始就不要收。</li>
+    <li><b>拿到的先去識別。</b>拿掉或替換姓名、證號（匿名化、假名化）；但要小心「幾個欄位一組合就認得出人」。</li>
+    <li><b>用技術保護。</b>結果加雜訊（差分隱私）、資料不出門（聯邦學習）、加密狀態下計算（同態加密）、用假資料代替真資料（合成數據）。</li>
+    <li><b>守法規。</b>看資料是誰的、在哪裡、哪一類：歐盟個資看 GDPR、美國醫療看 HIPAA、美國上市公司財報看 SOX；ISO 27001 是自願取得的資安管理認證。</li>
+  </ul>
+  <figure><a href="img/l22403-dp_noise.png" target="_blank" rel="noopener"><img src="img/l22403-dp_noise.png" alt="差分隱私：真實答案 100 位，公布時加上拉普拉斯雜訊；隱私預算 ε 等於 0.1 時 95% 落在正負 30.0 內，雜訊大很隱私；ε 等於 1 時正負 3.0，折衷；ε 等於 10 時正負 0.3，雜訊小較準" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <h3>名詞各自定義</h3>
+  <div class="defs">
+    <div class="def"><h4>差分隱私 Differential Privacy</h4><ul>
+      <li><b>核心想法：</b>在統計結果或訓練過程中加入<b>經過計算的雜訊</b>，讓人<b>看不出某一個人的資料在不在裡面</b>：資料裡多你一個或少你一個，公布的結果幾乎一樣。</li>
+      <li><b>隱私預算 ε：</b>ε 越小，雜訊越大、越隱私，但結果越不準。上圖 ε＝0.1 時 95% 落在 ±30.0，ε＝10 時只有 ±0.3。</li>
+      <li><b>在 AI 的用法：</b>訓練時對梯度加雜訊（例如 DP-SGD），降低模型記住個別訓練資料的機會。</li></ul></div>
+    <div class="def"><h4>聯邦學習 Federated Learning</h4><ul>
+      <li><b>核心想法：</b><b>資料留在本地</b>（手機、醫院、銀行），各自訓練，只把<b>模型更新</b>送到中央伺服器彙總（第 11 章圖示）。</li>
+      <li><b>保護什麼：</b>原始資料不集中、不離開本地。</li>
+      <li><b>限制：</b>模型更新本身仍可能洩漏部分資訊，常再搭配差分隱私或安全彙總；各地資料分布不同、通訊成本高。</li></ul></div>
+  </div>
+  <figure><a href="img/l22403-anonymize_link.png" target="_blank" rel="noopener"><img src="img/l22403-anonymize_link.png" alt="連結攻擊示意：去掉姓名的就醫資料用郵遞區號、生日、性別，和自編的公開名冊比對，就認出王大明有糖尿病；模擬 10,000 人分在 5 個郵遞區號、60 年內出生，三個欄位組合有 219,000 種，95.7% 的人只靠這三欄就能被唯一認出" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>匿名化與去識別化 Anonymization</h4><ul>
+      <li><b>是什麼：</b>拿掉或改寫能直接認出個人的欄位（姓名、證號），讓資料不容易對回某個人。</li>
+      <li><b>限制一：連結攻擊：</b>郵遞區號、生日、性別這類<b>準識別欄位</b>單獨看不出是誰，和外部資料<b>一組合</b>就可能認出來。上圖模擬中，95.7% 的人靠這三欄就被唯一認出。</li>
+      <li><b>限制二：可用性下降：</b>去識別做得越徹底（泛化、刪欄位），資料能分析的細節越少。</li>
+      <li><b>限制三：模型記憶：</b>生成式模型可能從看似匿名的資料學到細節，再組合出可辨識的內容。</li>
+      <li><b>常見補強：</b>泛化（只留出生年、區碼前兩碼）、K-匿名（每種組合至少有 K 個人）、假名化（用代號取代姓名，但對照表要另外保管）。</li></ul></div>
+    <div class="def"><h4>同態加密 Homomorphic Encryption</h4><ul>
+      <li><b>核心想法：</b>資料<b>保持加密</b>的狀態下就能直接計算，算完解密的結果，和用明文計算一樣。</li>
+      <li><b>用途：</b>把資料交給雲端或第三方運算、訓練或推論，對方<b>全程看不到明文</b>。</li>
+      <li><b>限制：</b>計算量非常大、很慢，目前多用在特定、較小規模的計算。</li></ul></div>
+    <div class="def"><h4>合成數據 Synthetic Data</h4><ul>
+      <li><b>是什麼：</b>用生成式模型（例如 GAN）產生「統計特性像真資料、但不是真人真事」的資料，例如合成人臉、合成交易紀錄。</li>
+      <li><b>好處：</b><b>要多少、要什麼樣子都能補</b>：補足稀少類別、增加多樣性；不必直接使用真人資料，<b>降低隱私風險</b>；也能用來測試模型在少見情況下穩不穩。</li>
+      <li><b>限制：</b>生成模型本身要用真實資料訓練；<b>不保證沒有偏見</b>，真實資料的偏見可能被複製；太乾淨的合成資料可能和真實世界有落差；也可能不小心「記住」並重現真人資料。</li></ul></div>
+    <div class="def"><h4>資料最小化與存取控管</h4><ul>
+      <li><b>資料最小化：</b>只收集、只保留達成目的所需的資料（GDPR 原則之一）。</li>
+      <li><b>存取控管與加密：</b>誰能看哪些資料要分權限；儲存和傳輸時加密，留下存取紀錄。</li></ul></div>
+  </div>
+  <figure><a href="img/l22403-regulation.png" target="_blank" rel="noopener"><img src="img/l22403-regulation.png" alt="法規與標準速查：GDPR 是歐盟一般資料保護規則，法律，管個人資料的收集處理與保護；HIPAA 是美國健康保險可攜與責任法，法律，管醫療健康資訊；SOX 是美國沙賓法案，法律，管上市公司財務報告與內部控制；ISO 27001 是國際標準，自願取得的認證標準，管資訊安全管理制度；GDPR 罰款上限 2,000 萬歐元或全球年營業額 4% 取較高者，例如年營業額 10 億歐元上限 4,000 萬歐元" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>GDPR（歐盟一般資料保護規則）</h4><ul>
+      <li><b>性質與範圍：</b>歐盟的<b>法律</b>。只要處理<b>歐盟居民的個人資料</b>，不論公司設在哪個國家都要遵守。</li>
+      <li><b>處理原則：</b>合法公平透明、目的限制、資料最小化、正確性、儲存期限限制、完整性與保密性。</li>
+      <li><b>當事人權利：</b>查閱、更正、刪除（被遺忘權）、限制處理、資料可攜、反對處理等。</li>
+      <li><b>罰款：</b>最高 2,000 萬歐元或全球年營業額 4%，取較高者。</li></ul></div>
+    <div class="def"><h4>HIPAA、SOX、ISO 27001、台灣個資法</h4><ul>
+      <li><b>HIPAA：</b>美國的<b>法律</b>，保護<b>醫療健康資訊</b>的隱私與安全，適用醫院、保險、醫療相關業者。</li>
+      <li><b>SOX（沙賓法案）：</b>美國的<b>法律</b>，規範<b>上市公司財務報告</b>的正確性與內部控制，和個資保護不同主題。</li>
+      <li><b>ISO 27001：</b>國際<b>標準</b>，規定怎麼建立「資訊安全管理制度（ISMS）」。公司<b>自願</b>申請第三方驗證、取得認證，用來證明資安管理做得好；<b>它不是法律</b>，也不是專門管歐盟個資。</li>
+      <li><b>台灣個資法：</b>台灣的《個人資料保護法》，規範個人資料的蒐集、處理、利用，台灣考題常拿來對照。</li></ul></div>
+  </div>
+  <h3>整合比較表（取得與保護資料的方法）</h3>
+<div class="tbl"><table>
+  <tr><th>方法</th><th>做什麼</th><th>原始資料誰看得到</th><th>主要解決</th><th>限制</th></tr>
+  <tr><td><b>真實資料收集</b></td><td>爬蟲、公開資料集、使用者紀錄</td><td>收集方</td><td>量大、貼近真實</td><td>髒、偏見、隱私與版權風險</td></tr>
+  <tr><td><b>數據增強</b></td><td>把現有資料變形（翻轉、改寫）</td><td>收集方</td><td>增加多樣性</td><td>變不出原本沒有的類別</td></tr>
+  <tr><td><b>合成數據</b></td><td>生成模型造出逼真的新資料</td><td>訓練生成模型的人</td><td><b>補量、補多樣、降低隱私風險</b></td><td><b>不保證無偏見</b>；要真資料訓練</td></tr>
+  <tr><td><b>匿名化</b></td><td>拿掉或改寫可識別欄位</td><td>收集方</td><td>降低直接認出個人</td><td><b>連結攻擊</b>、可用性下降</td></tr>
+  <tr><td><b>差分隱私</b></td><td>結果或訓練加計算過的雜訊</td><td>收集方（公布的是加雜訊結果）</td><td>看不出某一個人</td><td>雜訊大時不準</td></tr>
+  <tr><td><b>聯邦學習</b></td><td>資料留本地，只傳模型更新</td><td><b>只有本地</b></td><td>原始資料不集中</td><td>通訊成本、更新仍可能洩漏</td></tr>
+  <tr><td><b>同態加密</b></td><td>加密狀態下直接計算</td><td><b>沒人看到明文</b></td><td>交給第三方算也安全</td><td><b>非常慢</b>、運算量大</td></tr>
+</table></div>
+  <h3>法規速查表</h3>
+<div class="tbl"><table>
+  <tr><th>名稱</th><th>地區</th><th>性質</th><th>管什麼</th><th>看到這些字就選它</th></tr>
+  <tr><td><b>GDPR</b></td><td>歐盟</td><td><b>法律（強制）</b></td><td>個人資料的收集、處理、保護</td><td><b>歐盟用戶＋個人資料</b></td></tr>
+  <tr><td><b>HIPAA</b></td><td>美國</td><td>法律（強制）</td><td>醫療健康資訊</td><td>病歷、醫療、健康保險</td></tr>
+  <tr><td><b>SOX</b></td><td>美國</td><td>法律（強制）</td><td>上市公司財務報告、內部控制</td><td>財報、稽核、上市公司</td></tr>
+  <tr><td><b>ISO 27001</b></td><td>國際</td><td><b>自願取得的認證標準</b></td><td>資訊安全管理制度</td><td>資安管理、認證、ISMS</td></tr>
+  <tr><td><b>個人資料保護法</b></td><td>台灣</td><td>法律（強制）</td><td>個人資料的蒐集、處理、利用</td><td>台灣、個資</td></tr>
+</table></div>
+  <div class="hook"><span class="tag">記憶鉤子</span><ul>
+    <li><b>差分隱私＝加雜訊、看不出個人；聯邦學習＝資料不出門；同態加密＝加密著算；合成數據＝用假的代替真的。</b></li>
+    <li><b>只拿掉姓名不夠：幾個欄位一組合就認得出人（連結攻擊）。</b></li>
+    <li><b>合成數據能補量、補多樣、降低隱私風險，但不保證沒有偏見。</b></li>
+    <li><b>歐盟＋個資＝GDPR；美國醫療＝HIPAA；美國財報＝SOX；ISO 27001 是自願認證的標準，不是法律。</b></li>
+  </ul></div>
+  <div class="trap"><b>易錯提醒：</b>選項裡出現「保證」「完全」「不需要任何」這類說得太滿的字，常常就是陷阱：合成數據不保證沒有偏見、生成模型也要用真實資料訓練、匿名化也不等於絕對安全。法規題先看「地區」和「資料種類」，再分清楚是法律還是標準。</div>
+</section>
+
+<section id="u5">
+  <h2><small>單元 ⑤</small>風險與治理：偏見、版權、數據記憶、深度偽造、綠色 AI、RLHF、MLOps、模型自噬</h2>
+  <p class="why"><b>為什麼需要它？</b> 生成式 AI 用的資料越多，風險也跟著放大：學到偏見、用到有版權的內容、背下個資、被拿去做深度偽造、耗電驚人，甚至未來網路上充滿 AI 生成的內容，又被拿回來訓練下一代。這個單元把常考的風險和<b>對應的治理做法</b>放在一起。</p>
+  <h3>一步步搭起來</h3>
+  <ul>
+    <li><b>資料進來前把關。</b>檢查來源、授權（版權）、有害內容與個資；使用者生成內容（UGC）要特別過濾惡意、違法內容。</li>
+    <li><b>訓練時對齊。</b>用 RLHF 讓模型的回答更符合人類偏好：更有幫助、更誠實、更不傷人。</li>
+    <li><b>上線後檢查。</b>用大量輸出做偏見檢測、數據記憶檢測；深度偽造要有偵測與標示。</li>
+    <li><b>全程留紀錄。</b>資料、程式、模型版本都記下來（MLOps 的可重複性、可追溯性），也追蹤能源消耗（綠色 AI）。</li>
+    <li><b>看長期。</b>AI 生成內容越來越多，要能標記、管理，避免下一代模型只吃 AI 生的資料。</li>
+  </ul>
+  <figure><a href="img/l22403-rlhf.png" target="_blank" rel="noopener"><img src="img/l22403-rlhf.png" alt="RLHF 四步驟：同一個提問模型給出 4 個回答，標註者排序甲大於丙大於乙大於丁，拆成兩兩比較共 6 組訓練獎勵模型，再用強化學習調整模型讓獎勵分數變高；10,000 個提問乘 6 組等於 60,000 組人類比較資料" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <h3>名詞各自定義</h3>
+  <div class="defs">
+    <div class="def"><h4>偏見檢測 Bias Detection</h4><ul>
+      <li><b>是什麼：</b>檢查模型對不同群體（性別、族群、年齡、地區）是否有系統性差別待遇或刻板印象。</li>
+      <li><b>大數據怎麼幫忙：</b>小樣本人工檢查不夠全面；可以<b>大量</b>產生不同群體的提問、收集大量輸出，用統計比較各群體的差異，找出有偏見的模式。</li></ul></div>
+    <div class="def"><h4>版權風險 Copyright</h4><ul>
+      <li><b>是什麼：</b>訓練資料含有受版權保護的書籍、音樂、程式碼、圖片，可能有<b>侵權</b>與倫理爭議；模型輸出也可能和原作太像。</li>
+      <li><b>治理：</b>確認資料來源與授權、尊重退出（opt-out）要求、過濾高度相似的輸出、保留資料來源紀錄。</li></ul></div>
+    <div class="def"><h4>數據記憶 Data Memorization</h4><ul>
+      <li><b>是什麼：</b>大型模型把訓練資料的片段<b>原封不動記住</b>，在輸出時洩漏個資、密碼、程式碼。這牴觸<b>隱私保護</b>與資料最小化原則。</li>
+      <li><b>怎麼檢測：</b>用訓練資料的開頭去提示模型，看它會不會接出原文；比對輸出和訓練資料的重複程度；做成員推論測試（判斷某筆資料是否在訓練集裡）。</li>
+      <li><b>怎麼降低：</b>訓練前去重、過濾個資；差分隱私訓練；輸出端過濾。</li></ul></div>
+    <div class="def"><h4>深度偽造 Deepfake</h4><ul>
+      <li><b>是什麼：</b>用生成式模型和大量人臉、聲音資料，做出以假亂真的換臉影片、合成聲音。</li>
+      <li><b>風險：</b>詐騙、假新聞、名譽傷害、未經同意使用肖像；也凸顯大量臉部資料被蒐集與濫用的倫理問題。</li>
+      <li><b>治理：</b>偵測模型、數位浮水印、內容來源標示、法規與平台規範。</li></ul></div>
+    <div class="def"><h4>綠色 AI Green AI</h4><ul>
+      <li><b>是什麼：</b>關注訓練與使用大型模型的<b>能源消耗與碳排放</b>，追求更有效率、更永續的 AI。</li>
+      <li><b>做法：</b>更有效率的模型架構、量化與蒸餾、減少重複實驗、選用再生能源的資料中心、報告能源與碳排數字。</li></ul></div>
+    <div class="def"><h4>RLHF（從人類回饋中強化學習）</h4><ul>
+      <li><b>怎麼做：</b>同一個提問讓模型產生多個回答 → 人類標註者排序 → 拆成兩兩比較訓練<b>獎勵模型</b> → 用強化學習調整語言模型，讓獎勵分數變高。</li>
+      <li><b>大數據挑戰：</b>需要<b>大量人類偏好資料</b>：上圖 4 個回答就有 6 組比較，10,000 個提問就是 60,000 組。要找很多標註者、成本高；標註標準要一致；標註者自己的偏見也會被學進去。</li></ul></div>
+    <div class="def"><h4>提示工程的資料分析</h4><ul>
+      <li><b>是什麼：</b>分析大量的（提問、回應、使用者評分）紀錄，找出哪種提示寫法效果最好，再整理成提示樣板。</li>
+      <li><b>和大數據的關係：</b>樣本夠多，才能用統計分辨「真的比較好」還是運氣。</li></ul></div>
+    <div class="def"><h4>MLOps 的可重複性與可追溯性</h4><ul>
+      <li><b>可重複性 Reproducibility：</b>同樣的資料、程式、設定，再跑一次能得到相同結果。</li>
+      <li><b>可追溯性 Traceability：</b>能查出「這個模型是用哪一版資料、哪一版程式訓練的」，出問題時找得到原因。</li>
+      <li><b>做法：</b><b>資料版本控管</b>、特徵儲存庫（Feature Store）、實驗追蹤、模型登錄（Model Registry），常見工具如 MLflow。</li></ul></div>
+    <div class="def"><h4>多模態大數據整合</h4><ul>
+      <li><b>是什麼：</b>把文字、圖片、聲音、影片、感測器資料放在一起訓練更通用的模型。</li>
+      <li><b>挑戰：</b>格式、時間、品質都不一致，要對齊與清洗；儲存與運算量極大；隱私與版權問題更複雜。</li></ul></div>
+  </div>
+  <figure><a href="img/l22403-model_collapse.png" target="_blank" rel="noopener"><img src="img/l22403-model_collapse.png" alt="模型自噬模擬：每一代只從上一代生出來的 10 筆資料學分布，重複 3,000 次取平均，資料的多樣性（標準差）從 1.00 降到第 5 代 0.67、第 10 代 0.45；原本 2 個標準差以外的罕見內容出現機率從 4.6% 降到約 0.001%" loading="lazy"></a><figcaption>點圖可放大</figcaption></figure>
+  <div class="defs">
+    <div class="def"><h4>模型自噬 Model Collapse 與 AI 生成內容的管理</h4><ul>
+      <li><b>是什麼：</b>AI 生成的內容越來越多，若下一代模型大量用 AI 生成的資料訓練，<b>多樣性會一代一代變少</b>，罕見、邊緣的內容先消失，品質下降。</li>
+      <li><b>例子：</b>上圖模擬：每代只從上一代生出的資料學，第 10 代的多樣性只剩約 45%。</li>
+      <li><b>治理：</b>保留真實人類資料、標記 AI 生成內容（浮水印、來源標示）、建立能索引與搜尋 AI 生成內容的管理機制、追蹤資料來源。</li></ul></div>
+  </div>
+  <h3>整合比較表（風險與對策）</h3>
+<div class="tbl"><table>
+  <tr><th>風險</th><th>發生在哪</th><th>一句話</th><th>對策</th></tr>
+  <tr><td><b>偏見</b></td><td>資料、模型輸出</td><td>對某些群體不公平</td><td>大量輸出統計檢測、資料平衡、分群評估</td></tr>
+  <tr><td><b>版權</b></td><td>訓練資料、輸出</td><td>用了受保護作品</td><td>確認授權、來源紀錄、過濾相似輸出</td></tr>
+  <tr><td><b>數據記憶</b></td><td>模型</td><td>背下並吐出訓練資料</td><td>去重、去個資、差分隱私、輸出檢測</td></tr>
+  <tr><td><b>深度偽造</b></td><td>應用端</td><td>以假亂真的臉與聲音</td><td>偵測、浮水印、來源標示、法規</td></tr>
+  <tr><td><b>能源消耗</b></td><td>訓練與推論</td><td>耗電、碳排高</td><td>綠色 AI：效率、量化、再生能源</td></tr>
+  <tr><td><b>不對齊</b></td><td>模型行為</td><td>回答不誠實、有害</td><td>RLHF、安全評估</td></tr>
+  <tr><td><b>無法追溯</b></td><td>整個流程</td><td>出事找不到原因</td><td>MLOps：資料與模型版本控管</td></tr>
+  <tr><td><b>模型自噬</b></td><td>未來的訓練資料</td><td>AI 吃 AI，越來越單調</td><td>保留真實資料、標記 AI 內容</td></tr>
+</table></div>
+  <div class="hook"><span class="tag">記憶鉤子</span><ul>
+    <li><b>偏見靠大量輸出做統計檢測；數據記憶是隱私問題；深度偽造靠偵測與標示。</b></li>
+    <li><b>RLHF＝人排名次 → 訓練獎勵模型 → 模型往高分調；需要大量人類偏好資料。</b></li>
+    <li><b>MLOps：可重複＝再跑一次一樣；可追溯＝查得到用哪一版資料與程式。</b></li>
+    <li><b>綠色 AI 管耗電與碳排；模型自噬＝AI 吃 AI，罕見的先不見。</b></li>
+  </ul></div>
+  <div class="trap"><b>易錯提醒：</b>數據記憶是「隱私與資料保護」的風險，不是模型「記性好」的優點。綠色 AI 關心的是能源與碳排，不是介面顏色或環保主題的內容。RLHF 的人類回饋是「偏好排序」，不是重新標註所有訓練資料。</div>
+</section>
+
+<section id="recap">
+  <h2><small>總整理</small>本章要記的十句話</h2>
+  <ol class="recap">
+    <li>生命週期：收、洗、存、整、訓、上、看；爬蟲資料先處理雜訊、重複、有害內容。</li>
+    <li>數據湖＝原樣先存、讀時套格式；資料倉儲＝先整理、寫時套格式；底層常用 HDFS 或物件儲存。</li>
+    <li>Spark 用記憶體、比 MapReduce 快；Dask 是 Python 平行運算；要即時用 Flink、Kafka Streams、Spark Streaming。</li>
+    <li>監控延遲、錯誤率、資源使用率，是為了服務的可用性（有沒有開）、可靠性（有沒有錯）、效能（快不快）。</li>
+    <li>資料太多→資料平行；模型太大放不下→模型平行；Ray 的 Train、Tune、Serve＝訓練、調參、服務。</li>
+    <li>訓練很貴、組合很多時，用會參考過去結果的貝氏最佳化或 PBT，比網格、隨機搜尋省。</li>
+    <li>負載平衡分流、自動擴縮容依人潮開關副本；量化讓模型變小變快；快取讓重複問題直接拿答案。</li>
+    <li>RAG：事先建好意思地圖 → 問題也換成座標 → 找最近的幾段交給語言模型；有依據，可減少幻覺。</li>
+    <li>差分隱私加雜訊、聯邦學習資料不出門、同態加密加密著算、合成數據補量補多樣；匿名化怕連結攻擊。</li>
+    <li>歐盟＋個資＝GDPR（法律）；ISO 27001 是自願認證的資安管理標準，不是法律。</li>
+  </ol>
+</section>
+
+<section id="glossary">
+  <h2><small>考前速查</small>全章名詞總彙整表</h2>
+  <p>把五個單元的比較表濃縮成一張。複習時遮住右邊三欄，看名詞說得出定義，再對照。</p>
+<div class="tbl"><table>
+  <tr><th>名詞</th><th>一句話定義</th><th>口訣</th><th>容易跟誰搞混</th></tr>
+  <tr class="grp"><td colspan="4">單元① 生成式 AI 的大數據生命週期</td></tr>
+  <tr><td><b>爬蟲資料三問題</b></td><td>雜訊、重複、有害或低品質</td><td>先洗再用</td><td>資料漂移</td></tr>
+  <tr><td><b>去重</b></td><td>完全重複用雜湊、近似重複用 MinHash</td><td>一篇留一份</td><td>抽樣</td></tr>
+  <tr><td><b>數據湖</b></td><td>原始資料原樣存，讀時套格式</td><td>先存再說</td><td>資料倉儲</td></tr>
+  <tr><td><b>資料倉儲</b></td><td>結構化資料，寫時套格式</td><td>先整理再存</td><td>數據湖</td></tr>
+  <tr><td><b>HDFS／物件儲存</b></td><td>分散式檔案系統／雲端檔案倉庫</td><td>PB 級也放得下</td><td>關聯式資料庫</td></tr>
+  <tr><td><b>Spark</b></td><td>記憶體分散運算</td><td>比 MapReduce 快</td><td>MapReduce</td></tr>
+  <tr><td><b>Dask</b></td><td>Python 平行運算</td><td>pandas 放大版</td><td>Spark</td></tr>
+  <tr><td><b>串流處理</b></td><td>資料一來就算：Flink、Kafka Streams、Spark Streaming</td><td>即時</td><td>批次處理</td></tr>
+  <tr><td><b>標準化／數據增強</b></td><td>統一格式／變出多樣樣本</td><td>整齊／多樣</td><td>彼此</td></tr>
+  <tr><td><b>A／B 測試</b></td><td>隨機分兩組比較版本</td><td>大量樣本才準</td><td>交叉驗證</td></tr>
+  <tr><td><b>數據漂移</b></td><td>上線後資料分布改變</td><td>世界變了</td><td>過度擬合</td></tr>
+  <tr><td><b>可用性／可靠性／效能</b></td><td>能不能用／會不會錯／快不快</td><td>開門／做對／上菜快</td><td>創造力、合規</td></tr>
+  <tr class="grp"><td colspan="4">單元② 分散式訓練與部署</td></tr>
+  <tr><td><b>分散式訓練</b></td><td>多台一起算，縮短時間、處理更大資料與模型</td><td>人多好辦事</td><td>量化</td></tr>
+  <tr><td><b>資料平行</b></td><td>拆資料，每台放整個模型</td><td>拆資料</td><td>模型平行</td></tr>
+  <tr><td><b>模型平行</b></td><td>拆模型，每台放一部分</td><td>放不下才拆</td><td>資料平行</td></tr>
+  <tr><td><b>Ray</b></td><td>分散式框架：Data、Train、Tune、Serve</td><td>備料訓練調參上菜</td><td>資料庫、網頁工具</td></tr>
+  <tr><td><b>網格／隨機搜尋</b></td><td>全組合全試／隨機抽</td><td>盲試</td><td>貝氏最佳化</td></tr>
+  <tr><td><b>貝氏最佳化</b></td><td>代理模型預測下一組</td><td>看結果挑</td><td>樸素貝氏</td></tr>
+  <tr><td><b>PBT</b></td><td>一群一起練，落後複製領先再微調</td><td>邊練邊換</td><td>網格搜尋</td></tr>
+  <tr><td><b>容器化／Kubernetes</b></td><td>打包環境／管理大量容器</td><td>貨櫃／碼頭調度</td><td>虛擬機</td></tr>
+  <tr><td><b>負載平衡</b></td><td>請求平均分給副本</td><td>叫號機</td><td>自動擴縮容</td></tr>
+  <tr><td><b>自動擴縮容</b></td><td>依流量增減副本</td><td>人多開櫃台</td><td>負載平衡</td></tr>
+  <tr><td><b>量化</b></td><td>參數用更少位元存</td><td>數字寫短</td><td>剪枝、蒸餾</td></tr>
+  <tr><td><b>快取／預先計算</b></td><td>常見結果先存／先算好</td><td>現成便當</td><td>量化</td></tr>
+  <tr class="grp"><td colspan="4">單元③ RAG 與向量資料庫</td></tr>
+  <tr><td><b>向量嵌入</b></td><td>文字轉成代表意思的一串數字</td><td>意思地圖上的座標</td><td>獨熱編碼</td></tr>
+  <tr><td><b>向量資料庫</b></td><td>存向量、做相似度搜尋</td><td>找最近的鄰居</td><td>關聯式資料庫</td></tr>
+  <tr><td><b>切塊</b></td><td>長文件切成段落再算向量</td><td>一段一個點</td><td>分詞</td></tr>
+  <tr><td><b>RAG</b></td><td>先檢索相關段落，再讓模型看著回答</td><td>先找再答</td><td>微調</td></tr>
+  <tr><td><b>幻覺</b></td><td>看似合理但不正確的內容</td><td>一本正經講錯</td><td>偏見</td></tr>
+  <tr><td><b>詞彙不匹配</b></td><td>說法和文件寫法不同而漏找</td><td>字不同、意思同</td><td>拼字錯誤</td></tr>
+  <tr><td><b>多語分詞器</b></td><td>子詞分詞，涵蓋多語、詞彙表平衡</td><td>切得剛剛好</td><td>斷句</td></tr>
+  <tr><td><b>ROUGE／BLEU</b></td><td>和參考答案比字詞重疊</td><td>要一把人做的尺</td><td>準確率</td></tr>
+  <tr><td><b>人工參考答案</b></td><td>人寫或審過的標準答案</td><td>又貴又花時間</td><td>模型輸出</td></tr>
+  <tr class="grp"><td colspan="4">單元④ 隱私保護與法規</td></tr>
+  <tr><td><b>PII</b></td><td>能認出個人的資訊</td><td>姓名證號病歷</td><td>一般統計資料</td></tr>
+  <tr><td><b>匿名化</b></td><td>拿掉或改寫可識別欄位</td><td>怕連結攻擊</td><td>加密</td></tr>
+  <tr><td><b>連結攻擊</b></td><td>多欄位組合對回真人</td><td>三欄就認得出</td><td>暴力破解</td></tr>
+  <tr><td><b>差分隱私</b></td><td>加計算過的雜訊，看不出個人</td><td>ε 小更隱私</td><td>匿名化</td></tr>
+  <tr><td><b>聯邦學習</b></td><td>資料留本地，只傳模型更新</td><td>資料不出門</td><td>資料平行</td></tr>
+  <tr><td><b>同態加密</b></td><td>加密狀態下直接計算</td><td>加密著算</td><td>一般加密</td></tr>
+  <tr><td><b>合成數據</b></td><td>生成逼真的假資料</td><td>補量補多樣、不保證無偏見</td><td>數據增強</td></tr>
+  <tr><td><b>GDPR</b></td><td>歐盟個資保護法律</td><td>歐盟＋個資</td><td>ISO 27001</td></tr>
+  <tr><td><b>HIPAA／SOX</b></td><td>美國醫療資訊／上市公司財報法律</td><td>醫療／財報</td><td>GDPR</td></tr>
+  <tr><td><b>ISO 27001</b></td><td>自願認證的資安管理標準</td><td>標準不是法律</td><td>GDPR</td></tr>
+  <tr class="grp"><td colspan="4">單元⑤ 風險與治理</td></tr>
+  <tr><td><b>偏見檢測</b></td><td>大量輸出做統計比較</td><td>分群看差異</td><td>準確率</td></tr>
+  <tr><td><b>版權風險</b></td><td>訓練資料含受保護作品</td><td>先問授權</td><td>隱私</td></tr>
+  <tr><td><b>數據記憶</b></td><td>模型背下並洩漏訓練資料</td><td>隱私風險</td><td>泛化能力</td></tr>
+  <tr><td><b>深度偽造</b></td><td>以假亂真的臉與聲音</td><td>偵測＋標示</td><td>合成數據</td></tr>
+  <tr><td><b>綠色 AI</b></td><td>關注能源消耗與碳排</td><td>省電的 AI</td><td>環保主題內容</td></tr>
+  <tr><td><b>RLHF</b></td><td>人類排序 → 獎勵模型 → 強化學習</td><td>人排名次</td><td>監督式微調</td></tr>
+  <tr><td><b>可重複／可追溯</b></td><td>再跑一樣／查得到版本</td><td>留紀錄</td><td>可解釋性</td></tr>
+  <tr><td><b>模型自噬</b></td><td>AI 吃 AI，多樣性變少</td><td>罕見的先不見</td><td>過度擬合</td></tr>
+</table></div>
+</section>
+
+<section id="quiz">
+  <h2><small>動手練</small>自我檢測 10 題</h2>
+  <p class="note">自編情境練習，練的是「看情境選工具、選方法、算數字」。先自己想好答案，再點「看答案」。</p>
+  <ol class="quiz">
+    <li>公司要用爬蟲收集 5 億個網頁來訓練語言模型。正式訓練前，清洗這一站最先要處理哪三類問題？
+      <details><summary>看答案</summary><p><b>雜訊、重複、有害或低品質內容</b>（也要過濾個人資料）。雜訊是 HTML 標籤、廣告、亂碼；重複會讓模型過度記住某些內容、浪費運算，可用雜湊、MinHash 去重；有害內容和個資要過濾，避免模型學進去或吐出來。</p></details></li>
+    <li>團隊有 800 TB 的原始文字、圖片和音檔，還沒決定之後要怎麼用。應該先放進數據湖還是資料倉儲？底層可以用什麼儲存？
+      <details><summary>看答案</summary><p><b>數據湖。</b> 用途還沒決定、格式又多樣，適合「先原樣存、要用時才套格式」的 Schema-on-Read。底層可以用 <b>HDFS</b> 或<b>物件儲存</b>（如 S3），容量能擴充到 PB 級。</p></details></li>
+    <li>一家電商要在每筆刷卡交易發生後 1 秒內判斷是否可疑。應該用批次處理還是串流處理？請舉兩個工具。
+      <details><summary>看答案</summary><p><b>串流處理。</b> 要在 1 秒內反應，等整批再算來不及。工具例如 <b>Apache Flink、Kafka Streams、Spark Streaming</b>（Kafka 負責把交易事件即時送進來）。</p></details></li>
+    <li>某 AI 客服服務這個月（30 天）總共停機 4 小時。它的可用性大約是多少？有沒有達到 99.9%？另外，「回應平均要等 6 秒」是哪一方面的問題？
+      <details><summary>看答案</summary><p>30 天＝43,200 分鐘，停機 240 分鐘，可用性＝1 − 240 ÷ 43,200 ≈ <b>99.44%</b>，<b>沒有</b>達到 99.9%（99.9% 代表一個月停機大約不超過 43 分鐘）。「回應平均要等 6 秒」是<b>效能</b>（延遲）的問題。</p></details></li>
+    <li>一個模型有 1,300 億個參數，每個參數用 2 位元組存，一張 GPU 有 80 GB 記憶體。只看參數，至少要幾張 GPU？應該用資料平行還是模型平行？
+      <details><summary>看答案</summary><p>參數需要 1,300 億 × 2 位元組 ＝ <b>260 GB</b>，260 ÷ 80 ＝ 3.25，所以至少要 <b>4 張</b> GPU（實際還要放梯度與中間結果，通常更多）。一張放不下，要用<b>模型平行</b>（大型模型常再加上資料平行）。</p></details></li>
+    <li>調參預算只夠訓練 20 次，但有 6 個超參數，每個想試 5 個值。網格搜尋要訓練幾次？你會改用哪一類方法？Ray 的哪個函式庫可以幫忙？
+      <details><summary>看答案</summary><p>網格搜尋要 5 的 6 次方 ＝ <b>15,625 次</b>，遠超過 20 次的預算。改用<b>會參考過去結果的方法</b>：<b>貝氏最佳化</b>或 <b>PBT</b>；<b>Ray Tune</b> 可以同時跑多組實驗並支援這些策略。</p></details></li>
+    <li>公司的勞動法規客服機器人常把舊規定講成新規定，而且法規每個月都會修正。你會建議用 RAG 還是每個月重新訓練模型？請用三步驟說明 RAG 怎麼找資料。
+      <details><summary>看答案</summary><p><b>RAG。</b> 法規常更新，只要更新向量資料庫就好，不必每月重訓。三步驟：① 事先把法規條文切段、算成向量存進向量資料庫；② 使用者提問時，用同一個模型把問題換成向量；③ 找出最接近的幾段條文，和問題一起交給語言模型，讓它看著條文回答，最好附上來源。</p></details></li>
+    <li>使用者問「太太生小孩，先生可以請什麼假」，文件裡寫的是「陪產檢及陪產假」。為什麼關鍵字搜尋可能找不到，向量檢索比較有機會找到？
+      <details><summary>看答案</summary><p>提問裡沒有「陪產」兩個字，<b>比對字</b>就可能漏找（詞彙不匹配）。<b>向量檢索</b>比的是意思：「太太生小孩、先生請假」和「陪產假」在意思地圖上很接近，所以比較有機會找到。</p></details></li>
+    <li>一家公司把資料交給外部研究單位前，只刪了姓名和身分證字號，留下郵遞區號、出生日期、性別。這樣有什麼風險？還可以搭配哪些做法？
+      <details><summary>看答案</summary><p><b>連結攻擊的風險</b>：郵遞區號、出生日期、性別一組合，再對照外部名冊，很多人都能被認出來。可以搭配<b>泛化</b>（只留出生年、區碼前兩碼）、<b>K-匿名</b>、<b>差分隱私</b>、改提供<b>合成數據</b>，並做資料最小化與存取控管。</p></details></li>
+    <li>一家台灣的線上教育公司開始招收歐盟學員，同時打算申請 ISO 27001。這兩件事各是什麼性質？哪一個是處理學員個資時必須遵守的？
+      <details><summary>看答案</summary><p>處理歐盟學員的個人資料，要遵守 <b>GDPR</b>，它是<b>法律</b>，公司設在台灣也適用（在台灣當然也要守個資法）。<b>ISO 27001</b> 是<b>自願申請的資安管理認證標準</b>，能證明資安管理做得好，但它不是法律，也不能取代 GDPR。</p></details></li>
+  </ol>
+</section>
+
+</main>
+
+<p style="text-align:center;color:var(--muted);font-size:14px;margin:44px 0 0">其他章：<a href="index.html">L22 觀念複習總目錄</a>｜上一章：<a href="l22402.html">第 11 章 大數據在鑑別式 AI 的應用</a></p>
+<footer>🍀 Learn AI with Tarshar · iPAS 中級 L22 觀念複習<br>依 L22403 學習範圍整理的原創圖解，不含考古題原文。圖中數字皆為自編範例並以程式實際計算。</footer>
+</body>
+</html>
