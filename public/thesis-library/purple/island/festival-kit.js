@@ -1,4 +1,4 @@
-// Tarshar 研究同樂會：草地園區的佈景、攤位與地標（純示意佈置，不代表任何研究進度或結果）
+// Tarshar 研究同樂島：草地園區的佈景、攤位與地標（純示意佈置，不代表任何研究進度或結果）
 import * as THREE from './vendor/three.module.js';
 
 export const FEST = {
@@ -268,7 +268,7 @@ function archTexture() {
   for (let i = 0; i < 30; i++) { g.beginPath(); g.arc(40 + i * 32.7, 14, 6, 0, 6.283); g.fill(); g.beginPath(); g.arc(40 + i * 32.7, 242, 6, 0, 6.283); g.fill(); }
   g.textAlign = 'center'; g.textBaseline = 'middle';
   g.fillStyle = '#fff8e8'; g.font = '900 118px "Avenir Next","Arial Black",system-ui,sans-serif'; g.fillText('TARSHAR', 512, 98);
-  g.fillStyle = '#ffe08a'; g.font = '700 50px "Avenir Next",system-ui,sans-serif'; g.fillText('RESEARCH FESTIVAL', 512, 195);
+  g.fillStyle = '#ffe08a'; g.font = '700 50px "Avenir Next",system-ui,sans-serif'; g.fillText('RESEARCH ISLAND', 512, 195);
   const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; return t;
 }
 

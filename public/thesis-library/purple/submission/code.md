@@ -1561,7 +1561,7 @@ def test_island_static_view_keeps_engine_and_private_policy_separate(monkeypatch
     monkeypatch.setattr(server, 'engine', forbidden)
     client = TestClient(server.app)
     response = client.get('/island/')
-    assert response.status_code == 200 and 'Tarshar 的研究同樂會' in response.text
+    assert response.status_code == 200 and 'Tarshar 的研究同樂島' in response.text
     policy = response.headers['content-security-policy']
     assert "script-src 'self';" in policy and "frame-ancestors 'none'" in policy
     data = client.get('/island/data.json').json()

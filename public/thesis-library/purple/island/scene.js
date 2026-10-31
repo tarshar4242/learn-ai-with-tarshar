@@ -1,4 +1,4 @@
-// Tarshar 研究同樂會：溫暖黏土微縮 3D 草地園區（Claude 實作，Codex 負責 HTML/CSS/資料）
+// Tarshar 研究同樂島：溫暖黏土微縮 3D 草地園區（Claude 實作，Codex 負責 HTML/CSS/資料）
 import * as THREE from './vendor/three.module.js';
 import {OrbitControls} from './vendor/OrbitControls.js';
 import {makeWalkNetwork, makeTour, sampleTour, makeRoute, sampleRoute, nearestBoothNode, ringPoint, WALK_Y} from './walk-network.js?v=guide-1026';
@@ -86,7 +86,7 @@ function B(list, own, base, item) {
   };
 }
 
-// ---------- 建物模型：腳印半徑約 0.6，正面朝 +z（同樂會中縮小成攤位展示物） ----------
+// ---------- 建物模型：腳印半徑約 0.6，正面朝 +z（同樂島中縮小成攤位展示物） ----------
 const MODELS = {
   lighthouse(b, rng, a) {
     b.cyl(0, 0, 0, 0.5, 0.12, C.stone);
@@ -192,7 +192,7 @@ export async function createIslandScene({container, data, onSelect, onSelectItem
   renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   const canvas = renderer.domElement;
   canvas.style.cssText = 'display:block;width:100%;height:100%;touch-action:none';
-  canvas.tabIndex = 0; canvas.setAttribute('aria-label', '研究同樂會 3D 園區，可用方向鍵旋轉視角');
+  canvas.tabIndex = 0; canvas.setAttribute('aria-label', '研究同樂島 3D 園區，可用方向鍵旋轉視角');
   if (getComputedStyle(container).position === 'static') container.style.position = 'relative';
   container.appendChild(canvas);
 

@@ -50,7 +50,7 @@ RQ1 與 RQ2 合看才回應研究者「用口語找回資料並得到答案」�
 
 ## 本次已取得的證據
 
-審查快照為程式 commit 62a37d9f213e4057929d31352d96f1bc4007f3fe。製作期間另一工作更新同樂會展示至 14a9118；本包維持上述固定快照，已核對 app 核心、static/app.js、語料與套件鎖檔沒有改變。這次只修正一個展示頁標題的過時測試斷言，未更改 A／B 引擎、提示詞、語料或模型。上一版本 8bb7bb7 重跑結果為 34 通過、1 失敗；修正後為 35 通過。測試以模擬供應端為主，不代表回答正確率。
+審查快照為程式 commit 62a37d9f213e4057929d31352d96f1bc4007f3fe。製作期間另一工作更新同樂島展示至 14a9118；本包維持上述固定快照，已核對 app 核心、static/app.js、語料與套件鎖檔沒有改變。這次只修正一個展示頁標題的過時測試斷言，未更改 A／B 引擎、提示詞、語料或模型。上一版本 8bb7bb7 重跑結果為 34 通過、1 失敗；修正後為 35 通過。測試以模擬供應端為主，不代表回答正確率。
 
 另直接呼叫現行 Engine 執行 3 次 A 查找與 6 次 B 開發探測，B 共使用 10 次真實模型呼叫。全部輸入、改寫、候選、實際證據、原始模型輸出及最終結果均附在 development-probes.json。這些問題由本輪整理者選取，且部分曾用於開發，不是盲測樣本，不能由此計算正式成效或宣稱通用安全性。
 
@@ -119,7 +119,7 @@ RQ1 與 RQ2 合看才回應研究者「用口語找回資料並得到答案」�
 
 @figure 共同文件庫與兩組查找流程
 
-架構圖表示共同語料、兩組處理與評估面向。研究同樂會是來源導覽與展示，不是模型內部結構、第三組或正式評估器。平台 server 提供同一資料與兩種 query；引擎負責查找，provider 負責 API，前端另決定前文內容。
+架構圖表示共同語料、兩組處理與評估面向。研究同樂島是來源導覽與展示，不是模型內部結構、第三組或正式評估器。平台 server 提供同一資料與兩種 query；引擎負責查找，provider 負責 API，前端另決定前文內容。
 
 @table 程式責任與入口
 | 檔案或函式 | 內容 |
@@ -2193,7 +2193,7 @@ def test_island_static_view_keeps_engine_and_private_policy_separate(monkeypatch
     monkeypatch.setattr(server, 'engine', forbidden)
     client = TestClient(server.app)
     response = client.get('/island/')
-    assert response.status_code == 200 and 'Tarshar 的研究同樂會' in response.text
+    assert response.status_code == 200 and 'Tarshar 的研究同樂島' in response.text
     policy = response.headers['content-security-policy']
     assert "script-src 'self';" in policy and "frame-ancestors 'none'" in policy
     data = client.get('/island/data.json').json()
