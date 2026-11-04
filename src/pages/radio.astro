@@ -3,10 +3,11 @@ import Layout from '../layouts/Layout.astro';
 import episodes from '../data/radio.json';
 import subscription from '../data/subscription.json';
 import ecf from '../data/ecf.json';
+import dahuiliu from '../data/dahuiliu.json';
 
 const base = import.meta.env.BASE_URL;
 const lead =
-  '直播學習成果集中在這裡，依內容分成「直播電台、訂閱制、ECF」三個系列。每張卡片都保留課堂筆記與互動地圖；受保護的會員內容只列索引，不在公開網站揭露。';
+  '直播與課程學習成果集中在這裡，依內容分成「直播電台、訂閱制、ECF、大匯流」四個系列。已完成的筆記與互動地圖可由卡片開啟；製作中的課程與受保護的會員內容先保留來源索引。';
 const radio = episodes.map((ep) => ({
   ...ep,
   links: [
@@ -17,7 +18,8 @@ const radio = episodes.map((ep) => ({
 const series = [
   { id: 'radio', name: '直播電台', icon: '📻', items: radio },
   { id: 'subscription', name: '訂閱制', icon: '📦', items: subscription },
-  { id: 'ecf', name: 'ECF 系列', icon: '🧭', items: ecf }
+  { id: 'ecf', name: 'ECF 系列', icon: '🧭', items: ecf },
+  { id: 'dahuiliu', name: '大匯流', icon: '🌊', items: dahuiliu }
 ];
 ---
 
@@ -25,7 +27,7 @@ const series = [
   <section class="page-section">
     <div class="head" data-reveal="1">
       <h1 class="page-title">直播<span class="accent">筆記</span></h1>
-      <div class="divider"><span class="line"></span>三個系列・集中整理<span class="line"></span></div>
+      <div class="divider"><span class="line"></span>四個系列・集中整理<span class="line"></span></div>
       <p class="lead">{lead}</p>
     </div>
 
@@ -39,7 +41,7 @@ const series = [
     </nav>
 
     <div class="back-row">
-      <span>共 {radio.length + subscription.length + ecf.length} 筆索引</span>
+      <span>共 {series.reduce((sum, group) => sum + group.items.length, 0)} 筆索引</span>
       <a class="back-link" href={`${base}courses/`}>‹ 回課程筆記館</a>
     </div>
 
@@ -71,7 +73,7 @@ const series = [
               </div>
               {ep.links.length > 0 && (
                 <div class="links">
-                  {ep.links.map((link) => <a href={`${base}notes/${link.href}`}>{link.label}</a>)}
+                  {ep.links.map((link) => <a href={link.external ? link.href : `${base}notes/${link.href}`} {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>{link.label}</a>)}
                 </div>
               )}
             </article>
@@ -90,7 +92,7 @@ const series = [
   .divider { display: flex; align-items: center; justify-content: center; gap: 16px; color: var(--c-accent); font-size: var(--fs-15); letter-spacing: .14em; }
   .divider .line { width: 44px; height: 1px; background: rgba(124, 168, 92, .5); }
   .lead { font-size: var(--fs-17); line-height: 2; color: var(--c-body); max-width: 40em; margin: 24px auto 0; }
-  .series-nav { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 0 auto 20px; }
+  .series-nav { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 0 auto 20px; }
   .series-nav a { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 15px 18px; background: #fff; border: 1px solid var(--c-border); border-radius: var(--radius-md); box-shadow: 0 2px 10px var(--c-shadow); color: var(--c-ink-strong); }
   .series-nav a:hover { border-color: var(--c-accent); transform: translateY(-2px); }
   .series-nav b { min-width: 2em; padding: 3px 8px; border-radius: var(--radius-pill); background: var(--c-accent-chip-bg); color: var(--c-brand); text-align: center; }
