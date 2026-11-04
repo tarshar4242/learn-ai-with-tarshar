@@ -68,7 +68,15 @@ footer{text-align:center;color:#4a4038;font-size:14px;margin:18px 0 4px;font-wei
 .sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 @media(max-width:360px){body{font-size:16px}.app{padding-left:10px;padding-right:10px}.top,.bottom{padding-left:10px;padding-right:10px}h1{font-size:27px}.two{grid-template-columns:1fr}.mascot{width:76px}.phase{grid-template-columns:62px 1fr}.hint,.shot{margin-left:0}.bottom-in{grid-template-columns:1fr 1.2fr 1fr}.nav-btn{font-size:15px;padding:7px 5px}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-@media(prefers-color-scheme:dark){:root{--paper:#18231c;--card:#223028;--ink:#eef3ed;--muted:#c4ccc4;--green:#8dbb70;--deep:#b9dda4;--line:#536758;--mint:#293f2d;--teal:#254246;--yellow:#51451f;--coral:#50332d;--purple:#40364a;--focus:#78cdd1;color-scheme:dark}.track,.tick,.seg,.bubble,.field,.choice,.stamp,details,.big-btn.secondary{background:#1d2922}.top{background:var(--paper)}.bottom{background:var(--card)}.hero{border-color:var(--line)}.shot{background:#202c24}.big-btn,.copy-btn,.nav-btn.primary{color:#142016}.seg button[aria-pressed="true"]{background:var(--green);color:#142016}.exact,.celebrate{border-color:var(--line)}footer{color:#e4e8e2}footer .tar{color:#8dbb70}}
+@media(prefers-color-scheme:dark){:root{--paper:#18231c;--card:#223028;--ink:#eef3ed;--muted:#c4ccc4;--green:#8dbb70;--deep:#b9dda4;--line:#536758;--mint:#293f2d;--teal:#254246;--yellow:#51451f;--coral:#50332d;--purple:#40364a;--focus:#78cdd1;color-scheme:dark}.track,.tick,.seg,.flip,.subtask,.bubble,.field,.choice,.stamp,details,.big-btn.secondary{background:#1d2922}.top{background:var(--paper)}.bottom{background:var(--card)}.hero{border-color:var(--line)}.shot{background:#202c24}.big-btn,.copy-btn,.nav-btn.primary{color:#142016}.seg button[aria-pressed="true"]{background:var(--green);color:#142016}.exact,.celebrate{border-color:var(--line)}footer{color:#e4e8e2}footer .tar{color:#8dbb70}}
+.when{display:inline-block;margin-left:6px;font-size:14px;font-weight:800;color:var(--focus);background:var(--teal);border-radius:999px;padding:2px 10px;vertical-align:middle}
+.rules{margin:10px 0 0;padding-left:1.3em}.rules li{margin:6px 0}
+.flips{display:grid;gap:9px;margin-top:12px}.flip{width:100%;min-height:52px;text-align:left;border:2px solid var(--line);border-radius:15px;background:#fff;padding:10px 13px;font-weight:800;color:var(--deep)}.flip[aria-expanded="true"]{background:var(--mint);border-color:var(--green)}.flip .back{display:block;font-weight:500;color:var(--ink);margin-top:5px;font-size:16px}.flip .back[hidden]{display:none}
+.road{list-style:none;padding:0;margin:12px 0 0}.road li{display:grid;grid-template-columns:42px 1fr;gap:8px;border-top:1px dashed var(--line);padding:8px 0}.road li:first-child{border:0}.road .no{font-weight:900;color:var(--focus);text-align:center}.road .get{display:block;font-size:14px;color:var(--muted)}.road li.now{background:var(--mint);border-radius:12px;border-top:0;padding:8px 6px}
+.ask{font-weight:800;margin-top:12px}.tip{background:var(--mint);border-radius:14px;padding:10px 12px;margin-top:12px;font-size:15px}
+.ex .field{margin-top:8px}
+.prompt.small{font-size:17px;padding:12px}.copy-btn.secondary{border:2px solid var(--green)}.bonus{display:inline-block;font-size:14px;font-weight:800;color:var(--ink);background:var(--yellow);border:2px solid #d5aa30;border-radius:999px;padding:1px 10px;margin-bottom:6px}
+.subtask{border:2px solid var(--line);border-radius:16px;padding:12px;margin-top:12px;background:#fff}.subtask h3{font-size:17px}.subtask .check{padding:8px 0}
 </style>
 </head>
 <body>
@@ -76,7 +84,7 @@ footer{text-align:center;color:#4a4038;font-size:14px;margin:18px 0 4px;font-wei
   <div class="top-in">
     <div class="lesson">第 1 堂</div>
     <div class="track" aria-hidden="true"><span id="trackFill"></span></div>
-    <div class="page-count" id="pageCount">1／8</div>
+    <div class="page-count" id="pageCount">1／11</div>
     <div class="milestones"><span>過關進度</span><span class="mini" id="mini"><i></i><i></i><i></i><i></i></span><span id="doneCount">0／4</span></div>
   </div>
 </header>
@@ -94,14 +102,73 @@ footer{text-align:center;color:#4a4038;font-size:14px;margin:18px 0 4px;font-wei
       <button class="big-btn" type="button" data-go="1">開始上課</button>
     </div>
     <div class="card">
-      <h2>先記住安全守則</h2>
-      <p>練習只用<strong>公開或虛構資料</strong>。病歷、藥袋、帳戶、證件等個資，不要放進任何 AI 工具。</p>
+      <h2>今天 90 分鐘怎麼走</h2>
+      <div class="rhythm"><div class="phase"><b>0–5 分</b><span>安全守則，老師快速介紹這學期地圖</span></div><div class="phase"><b>5–30 分</b><span>先懂兩種 AI、看兩家聊天 AI 怎麼答、名字與免費版</span></div><div class="phase"><b>30–70 分</b><span>跟著做：登入、帳號、首頁；等老師巡堂時玩小遊戲</span></div><div class="phase"><b>70–85 分</b><span>自己問聊天 AI，寫下一個方向</span></div><div class="phase"><b>85–90 分</b><span>App 移到第一頁、四項驗收</span></div></div>
+      <p class="lead">跟著老師的速度走，不用自己一口氣滑完。</p><div class="tip">看到 <span class="bonus">⭐ 加碼</span> 的地方是選做：先做完的人在課堂上玩，沒做到就回家再玩。沒標的是今天必做。時間不夠時，實際去問聊天 AI 可以回家做，但課堂上仍要先寫下一個方向，下課驗收也不省略。</div>
     </div>
   </section>
 
   <section class="screen" data-screen="1" aria-labelledby="title1" hidden>
     <div class="card">
-      <span class="eyebrow">先懂差別</span><h2 id="title1">兩種 AI，工作方式不同</h2>
+      <span class="eyebrow">暖身</span><span class="when">⏱ 0–5 分</span><h2 id="title1">課堂安全守則</h2>
+      <ol class="rules">
+        <li>不放病歷、藥袋、帳戶、證件等個資進任何 AI 工具。練習一律用公開資料或虛構資料。</li>
+        <li>截圖要傳給別人或問 AI 之前，先把姓名、電話、帳號塗掉或裁掉。</li>
+        <li>分享成果先用截圖。要用連結分享前，先看清楚權限，對方可能看得到整本筆記本。</li>
+        <li>健康、金錢這類重要的事，一定點引用回原文核對，必要時請教專業人員。</li>
+      </ol>
+      <div class="notice">講師不經手你的密碼和驗證碼，課堂上也不處理找回密碼。</div>
+    </div>
+    <div class="card quiz" data-quiz="safe">
+      <span class="bonus">⭐ 加碼</span><h3>小測驗：這個可以放進 AI 嗎？</h3><p class="lead">點你的判斷，答錯可以再選。</p>
+      <div class="q" data-answer="ok"><div class="q-title">① 社區公告上的垃圾車時間表</div><div class="answers"><button class="choice" type="button" data-pick="ok">👍 可以放</button><button class="choice" type="button" data-pick="no">✋ 不要放</button></div><div class="feedback" data-right="對！公開的公告可以拿來練習。" data-wrong="再想想：這是大家都看得到的公開資料。" hidden></div></div>
+      <div class="q" data-answer="no"><div class="q-title">② 自己的藥袋照片</div><div class="answers"><button class="choice" type="button" data-pick="ok">👍 可以放</button><button class="choice" type="button" data-pick="no">✋ 不要放</button></div><div class="feedback" data-right="對！藥袋有姓名和病情，不要放。" data-wrong="藥袋上有你的姓名和用藥，屬於個資。" hidden></div></div>
+      <div class="q" data-answer="ok"><div class="q-title">③ 講義裡的虛構冷氣說明書</div><div class="answers"><button class="choice" type="button" data-pick="ok">👍 可以放</button><button class="choice" type="button" data-pick="no">✋ 不要放</button></div><div class="feedback" data-right="對！虛構資料最適合練習。" data-wrong="這是編出來的練習資料，可以放心用。" hidden></div></div>
+      <div class="q" data-answer="no"><div class="q-title">④ 寫著身分證字號的報名表</div><div class="answers"><button class="choice" type="button" data-pick="ok">👍 可以放</button><button class="choice" type="button" data-pick="no">✋ 不要放</button></div><div class="feedback" data-right="對！有證件號碼的資料不要放。" data-wrong="身分證字號是證件資料，不要放進 AI。" hidden></div></div>
+      <div class="score" hidden></div>
+    </div>
+  </section>
+
+  <section class="screen" data-screen="2" aria-labelledby="title2" hidden>
+    <div class="card">
+      <span class="eyebrow">這學期地圖</span><span class="when">⏱ 老師快速帶過</span><h2 id="title2">一位幫你讀資料的私人秘書</h2>
+      <p>把 Gemini Notebook 想成一位<strong>以你那疊資料為主的私人秘書</strong>：你把說明書、公告、影片、錄音交給他，他主要照這疊資料回答，重要說法通常會翻給你看出處。</p>
+      <p class="ask">這個比喻會陪你走完 16 堂，點一下翻開：</p>
+      <div class="flips">
+        <button class="flip" type="button" aria-expanded="false">📦 筆記本＝？<span class="back" hidden>收納箱，一箱只放一個主題。</span></button>
+        <button class="flip" type="button" aria-expanded="false">🔢 引用小數字＝？<span class="back" hidden>秘書翻給你看的那一頁。</span></button>
+        <button class="flip" type="button" aria-expanded="false">🙅 「來源未提及」＝？<span class="back" hidden>秘書老實說「這疊資料裡沒寫」，你要再多給他一份資料。</span></button>
+        <button class="flip" type="button" aria-expanded="false">📝 記事＝？<span class="back" hidden>你在資料上貼的便利貼。</span></button>
+        <button class="flip" type="button" aria-expanded="false">🎨 工作室成品＝？<span class="back" hidden>請秘書把這疊資料做成海報、廣播、簡報。</span></button>
+      </div>
+    </div>
+    <div class="card">
+      <span class="bonus">⭐ 回家慢慢看</span><h2>16 堂一覽</h2>
+      <p class="lead">學期結束時，你的手機裡會有 3～5 本整理好的生活筆記本，還有一個「每週固定用一次」的習慣。</p>
+      <ol class="road">
+        <li class="now"><span class="no">1</span><span><strong>認識 Gemini Notebook（今天）</strong><span class="get">登入正確帳號，說得出它和聊天 AI 的差別</span></span></li>
+        <li><span class="no">2</span><span>我的第一本筆記本：貼上一個網址<span class="get">建立並命名第一本筆記本</span></span></li>
+        <li><span class="no">3</span><span>三個區塊認一認：來源、對話、工作室<span class="get">確認手機語言是繁體中文</span></span></li>
+        <li><span class="no">4</span><span>會問問題：建議問題與引用數字<span class="get">點開引用對照原文</span></span></li>
+        <li><span class="no">5</span><span>它會亂答嗎：誠實告知與挑選來源<span class="get">問來源沒有的事，補來源再問</span></span></li>
+        <li><span class="no">6</span><span>把好答案留下來：記事（瀏覽器版）<span class="get">存一則記事、手寫一則記事</span></span></li>
+        <li><span class="no">7</span><span>影片也能讀：YouTube 當來源<span class="get">把公開影片加進筆記本整理重點</span></span></li>
+        <li><span class="no">8</span><span>一眼看懂：整合摘要與資訊圖表<span class="get">產出摘要和一張資訊圖表</span></span></li>
+        <li><span class="no">9</span><span>用聽的學：語音摘要<span class="get">通勤時聽得完的語音摘要</span></span></li>
+        <li><span class="no">10</span><span>拍下來的紙本也能問<span class="get">把虛構公告照片轉成文字來源</span></span></li>
+        <li><span class="no">11</span><span>手機錄音變會議紀錄<span class="get">整理出總結與待辦</span></span></li>
+        <li><span class="no">12</span><span>先問聊天 AI 找官方資料，再建研究筆記本<span class="get">做一次跨來源比較</span></span></li>
+        <li><span class="no">13</span><span>資料太雜怎麼辦：分類、表格與指定來源<span class="get">準備好專題來源</span></span></li>
+        <li><span class="no">14</span><span>工作室成品：簡報與安全分享<span class="get">產出一份簡報，截圖分享</span></span></li>
+        <li><span class="no">15</span><span>我的生活小專題製作日<span class="get">完成主要成果，準備 3 分鐘分享</span></span></li>
+        <li><span class="no">16</span><span>成果發表會<span class="get">分組分享，帶走一個每週用法</span></span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="screen" data-screen="3" aria-labelledby="title3" hidden>
+    <div class="card">
+      <span class="eyebrow">先懂差別</span><span class="when">⏱ 5–30 分</span><h2 id="title3">兩種 AI，工作方式不同</h2>
       <div class="two">
         <article class="ai-card"><div class="icon" aria-hidden="true">💬</div><h3>聊天 AI</h3><ul><li>像什麼都能聊的朋友</li><li>從學過的資料回答，有些會上網查</li><li>適合想點子、聊天</li></ul></article>
         <article class="ai-card"><div class="icon" aria-hidden="true">📚</div><h3>AI 筆記本</h3><ul><li>像以你那疊資料為主的秘書</li><li>適合查自己的資料</li><li>重要說法通常標出處</li></ul></article>
@@ -115,59 +182,136 @@ footer{text-align:center;color:#4a4038;font-size:14px;margin:18px 0 4px;font-wei
       <div data-panel="nb" hidden><div class="bubble">按遙控器上的「模式」鍵，切換到水滴圖示就是除濕<button class="cite" type="button" data-cite="source1" aria-label="查看出處 1">1</button>。除濕時風速會自動調整<button class="cite" type="button" data-cite="source2" aria-label="查看出處 2">2</button>。</div><div class="source" id="source1" hidden>出處 1：虛構冷氣說明書第 12 頁「運轉模式」。</div><div class="source" id="source2" hidden>出處 2：虛構冷氣說明書第 13 頁「除濕運轉」。</div><div class="verdict">點小數字可以查看原文；看到出處，還是要核對。</div></div>
       <div class="fake">※ 這是虛構示意，不是真的 App 畫面。</div>
     </div>
-  </section>
-
-  <section class="screen" data-screen="2" aria-labelledby="title2" hidden>
     <div class="card">
-      <span class="eyebrow">名字與版本</span><h2 id="title2">新舊名字，都是同一個工具</h2>
-      <div class="timeline"><div class="time"><div class="date">2024 年 6 月</div><div>NotebookLM 正式在台灣推出</div></div><div class="time"><div class="date">2026 年 7 月 16 日</div><div>Google 改名為 <strong>Gemini Notebook</strong></div></div></div>
-      <div class="notice">這學期只用免費版，用個人 Google 帳號登入即可。畫面若出現付費方案，先不要點。</div>
-    </div>
-    <div class="card">
-      <h2>今天 90 分鐘怎麼走</h2>
-      <div class="rhythm"><div class="phase"><b>0–5 分</b><span>暖身與安全守則</span></div><div class="phase"><b>5–30 分</b><span>先懂兩種 AI 的差別</span></div><div class="phase"><b>30–70 分</b><span>跟著做：登入、帳號、首頁</span></div><div class="phase"><b>70–85 分</b><span>自己問聊天 AI、寫下方向</span></div><div class="phase"><b>85–90 分</b><span>四項驗收與回家任務</span></div></div>
-      <p class="lead">如果時間不夠，提問可回家做，但下課驗收不省略。</p>
-    </div>
-  </section>
-
-  <section class="screen" data-screen="3" aria-labelledby="title3" hidden>
-    <div class="card">
-      <span class="eyebrow">跟著做</span><h2 id="title3">五步準備好手機</h2><p class="lead">做完一步就點一下打勾。</p>
-      <div class="step"><div class="step-head"><button class="tick" type="button" data-step="1" aria-pressed="false" aria-label="完成第 1 步">✓</button><div class="step-title">確認 App 已安裝、看得到首頁</div></div><div class="hint">還沒登入就先看講師示範，回家再完成。講師不碰你的密碼或驗證碼。</div></div>
-      <div class="step"><div class="step-head"><button class="tick" type="button" data-step="2" aria-pressed="false" aria-label="完成第 2 步">✓</button><div class="step-title">點右上角頭像，確認登入帳號</div></div><div class="hint">和隔壁說自己用哪個帳號，不用唸完整 Gmail。</div><div class="shot">截圖待補：App 右上角頭像點開後的帳號畫面，紅框標出帳號名稱</div></div>
-      <div class="step"><div class="step-head"><button class="tick" type="button" data-step="3" aria-pressed="false" aria-label="完成第 3 步">✓</button><div class="step-title">找到筆記本列表與「新建」</div></div><div class="hint">今天先不要按「新建」，下一堂才使用。</div><div class="shot">截圖待補：App 首頁，紅框標出筆記本列表與「新建」按鈕</div></div>
-      <div class="step"><div class="step-head"><button class="tick" type="button" data-step="4" aria-pressed="false" aria-label="完成第 4 步">✓</button><div class="step-title">打開 Gemini 或 ChatGPT，準備提問</div></div></div>
-      <div class="step"><div class="step-head"><button class="tick" type="button" data-step="5" aria-pressed="false" aria-label="完成第 5 步">✓</button><div class="step-title">把 App 移到手機桌面第一頁</div></div><div class="shot">截圖待補：手機桌面第一頁，紅框標出 Gemini Notebook App 圖示</div></div>
-      <div class="celebrate" id="stepsDone" hidden>🎉 五步完成，可以往下走了！</div>
-      <div class="notice">不同手機上的「新建」文字與位置可能不同，以你的畫面為準。</div>
+      <label for="diff" style="margin-top:0">用你自己的話寫一句：它和聊天 AI 差在哪？</label>
+      <input class="field" id="diff" maxlength="60" placeholder="例如：它主要看我給的資料，還會標出處">
+      <div class="privacy">🔒 只存在你自己的手機。</div>
     </div>
   </section>
 
   <section class="screen" data-screen="4" aria-labelledby="title4" hidden>
     <div class="card">
-      <span class="eyebrow">自己試試看</span><h2 id="title4">可以直接抄的提問</h2><p class="lead">按「複製」，再貼到 Gemini 或 ChatGPT。</p>
-      <div class="prompt" id="promptText">AI 筆記本適合拿來整理哪些生活資料？請舉 5 個例子。</div>
-      <div class="copy-row"><button class="copy-btn" id="copyBtn" type="button">📋 複製這句</button><span class="copy-msg" id="copyMsg" aria-live="polite"></span></div>
-      <label for="direction">我這學期想整理的生活資料方向</label><input class="field" id="direction" maxlength="60" placeholder="例如：家電說明書、社區公告、旅遊行程">
-      <div class="privacy">🔒 你填的字只存在你自己的手機，不會上傳。</div>
+      <span class="eyebrow">用 AI 認識 AI</span><span class="when">⏱ 5–30 分</span><h2 id="title4">問問兩家聊天 AI</h2>
+      <p>老師會投影，在 Gemini 和 ChatGPT 問同一題。你也可以用自己的手機一起問：</p>
+      <div class="prompt small" id="pAsk">Gemini Notebook（原 NotebookLM）和 Gemini 聊天有什麼不同？</div>
+      <div class="copy-row"><button class="copy-btn" type="button" data-copy="pAsk">📋 複製這句</button><span class="copy-msg" aria-live="polite"></span></div>
     </div>
-    <div class="card"><h3>答案要自己核對</h3><p>聊天 AI 可能不知道工具已改名；講得順，不代表資料一定最新。找出差異，就是核對的起點。</p></div>
+    <div class="card obs">
+      <h3>看答案時，注意三件事</h3>
+      <p class="ask">① 它有提到「改名」這件事嗎？</p>
+      <div class="answers"><button class="choice" type="button" data-obs="rename" data-val="yes">有提到</button><button class="choice" type="button" data-obs="rename" data-val="no">沒提到</button></div>
+      <p class="ask">② 它有附出處或連結嗎？</p>
+      <div class="answers"><button class="choice" type="button" data-obs="source" data-val="yes">有附</button><button class="choice" type="button" data-obs="source" data-val="no">沒附</button></div>
+      <p class="ask">③ 兩家的說法有不一樣的地方嗎？</p>
+      <div class="answers"><button class="choice" type="button" data-obs="differ" data-val="yes">有不一樣</button><button class="choice" type="button" data-obs="differ" data-val="no">差不多</button></div>
+      <div class="tip" id="obsTip" hidden>沒提到改名、沒附出處，都很常見。聊天 AI 不一定知道最新消息，講得順不代表是最新的。兩家不一樣的地方，就是要自己核對的地方。</div>
+      <label for="compare">我看到兩家答案最不一樣的地方</label>
+      <input class="field" id="compare" maxlength="60" placeholder="例如：一家有提到改名，一家沒有">
+      <div class="privacy">有些聊天 AI 要先開啟「網頁搜尋」，才會附上資料來源。</div>
+    </div>
+    <div class="card">
+      <span class="bonus">⭐ 加碼</span><h3>先做完的人，再問兩題</h3>
+      <div class="prompt small" id="pBonus1">為什麼 Google 已經有 Gemini，還要推出 Gemini Notebook？</div>
+      <div class="copy-row"><button class="copy-btn secondary" type="button" data-copy="pBonus1">📋 複製</button><span class="copy-msg" aria-live="polite"></span></div>
+      <div class="prompt small" id="pBonus2">其他 AI 公司有沒有類似 Gemini Notebook 的軟體？</div>
+      <div class="copy-row"><button class="copy-btn secondary" type="button" data-copy="pBonus2">📋 複製</button><span class="copy-msg" aria-live="polite"></span></div>
+    </div>
   </section>
 
   <section class="screen" data-screen="5" aria-labelledby="title5" hidden>
     <div class="card">
-      <span class="eyebrow">互動小遊戲</span><h2 id="title5">這題交給誰？</h2><p class="lead">點你覺得比較適合的工具，答錯可以再選。</p>
+      <span class="eyebrow">名字與版本</span><span class="when">⏱ 5–30 分</span><h2 id="title5">新舊名字，都是同一個工具</h2>
+      <div class="timeline"><div class="time"><div class="date">2024 年 6 月</div><div>NotebookLM 正式在台灣推出</div></div><div class="time"><div class="date">2026 年 7 月 16 日</div><div>Google 改名為 <strong>Gemini Notebook</strong></div></div></div>
+      <p>網路上很多舊教學還用舊名，看到 NotebookLM 就知道是同一個東西。</p>
+      <div class="notice">這學期只用免費版，用個人 Google 帳號登入即可。畫面若出現付費方案，先不要點。</div>
+    </div>
+    <div class="card quiz" data-quiz="fact">
+      <span class="bonus">⭐ 加碼</span><h3>是非題：這句話對嗎？</h3>
+      <div class="q" data-answer="f"><div class="q-title">① NotebookLM 和 Gemini Notebook 是兩個不同的工具。</div><div class="answers"><button class="choice" type="button" data-pick="t">⭕ 對</button><button class="choice" type="button" data-pick="f">❌ 錯</button></div><div class="feedback" data-right="對！是同一個工具，2026 年 7 月 16 日改名。" data-wrong="其實是同一個工具，只是改了名字。" hidden></div></div>
+      <div class="q" data-answer="f"><div class="q-title">② 這學期上課要先買付費方案。</div><div class="answers"><button class="choice" type="button" data-pick="t">⭕ 對</button><button class="choice" type="button" data-pick="f">❌ 錯</button></div><div class="feedback" data-right="對！這學期只用免費版。" data-wrong="這學期只用免費版，不用付錢。" hidden></div></div>
+      <div class="q" data-answer="t"><div class="q-title">③ 用自己的個人 Google 帳號就能登入。</div><div class="answers"><button class="choice" type="button" data-pick="t">⭕ 對</button><button class="choice" type="button" data-pick="f">❌ 錯</button></div><div class="feedback" data-right="對！免費版用 Google 帳號就能登入。" data-wrong="其實用個人 Google 帳號就可以登入。" hidden></div></div>
+      <div class="q" data-answer="f"><div class="q-title">④ 聊天 AI 講得很順，就代表資料是最新的。</div><div class="answers"><button class="choice" type="button" data-pick="t">⭕ 對</button><button class="choice" type="button" data-pick="f">❌ 錯</button></div><div class="feedback" data-right="對！答得順，不等於答得對。" data-wrong="講得順不代表是最新的，要自己核對。" hidden></div></div>
+      <div class="score" hidden></div>
+    </div>
+  </section>
+
+  <section class="screen" data-screen="6" aria-labelledby="title6" hidden>
+    <div class="card">
+      <span class="eyebrow">跟著做</span><span class="when">⏱ 30–70 分</span><h2 id="title6">準備好手機</h2><p class="lead">跟著老師一步一步來，做完一步就點一下打勾。</p>
+      <div class="step"><div class="step-head"><button class="tick" type="button" data-step="1" aria-pressed="false" aria-label="完成第 1 步">✓</button><div class="step-title">確認 App 已安裝、看得到首頁<span class="when">30–40 分</span></div></div><div class="hint">老師會逐排確認。還沒登入就先看老師示範，回家再完成。老師不碰你的密碼或驗證碼。</div></div>
+      <div class="step"><div class="step-head"><button class="tick" type="button" data-step="2" aria-pressed="false" aria-label="完成第 2 步">✓</button><div class="step-title">點右上角頭像，確認登入帳號<span class="when">40–55 分</span></div></div><div class="shot">截圖待補：App 右上角頭像點開後的帳號畫面，紅框標出帳號名稱</div>
+        <div class="subtask"><h3>👥 和隔壁同學互相說</h3>
+          <div class="check"><button class="tick" type="button" data-pair="1" aria-pressed="false" aria-label="我說了">✓</button><p>我說了：「我用的是＿＿＿這個帳號」（不用唸完整地址）</p></div>
+          <div class="check"><button class="tick" type="button" data-pair="2" aria-pressed="false" aria-label="我聽了">✓</button><p>我聽了隔壁用的是哪個帳號</p></div>
+        </div>
+      </div>
+      <div class="step"><div class="step-head"><button class="tick" type="button" data-step="3" aria-pressed="false" aria-label="完成第 3 步">✓</button><div class="step-title">認識首頁<span class="when">55–70 分</span></div></div><div class="shot">截圖待補：App 首頁，紅框標出筆記本列表與「新建」按鈕</div>
+        <div class="subtask"><h3>🔍 首頁尋寶：找到就打勾，先不要按</h3>
+          <div class="check"><button class="tick" type="button" data-find="1" aria-pressed="false" aria-label="找到頭像">✓</button><p>右上角的頭像</p></div>
+          <div class="check"><button class="tick" type="button" data-find="2" aria-pressed="false" aria-label="找到筆記本列表">✓</button><p>筆記本列表（現在可能是空的）</p></div>
+          <div class="check"><button class="tick" type="button" data-find="3" aria-pressed="false" aria-label="找到新建按鈕">✓</button><p>「新建」按鈕：今天先不按，下一堂才用</p></div>
+        </div>
+      </div>
+      <div class="notice">不同手機上的「新建」文字與位置可能不同，以你的畫面為準。</div>
+      <div class="tip">先做完的人：幫隔壁同學找找看頭像和「新建」在哪裡，但不要幫他輸入密碼。</div>
+    </div>
+  </section>
+
+  <section class="screen" data-screen="7" aria-labelledby="title7" hidden>
+    <div class="card quiz" data-quiz="who">
+      <span class="eyebrow">互動小遊戲</span><span class="when">⏱ 等老師巡堂時玩</span><h2 id="title7">這題交給誰？</h2><p class="lead">前 4 題必做，點你覺得比較適合的工具，答錯可以再選。</p>
       <div class="q" data-answer="nb"><div class="q-title">① 洗衣機說明書裡，「快洗」要洗多久？</div><div class="answers"><button class="choice" type="button" data-pick="chat">💬 聊天 AI</button><button class="choice" type="button" data-pick="nb">📚 AI 筆記本</button></div><div class="feedback" data-right="對！要查指定說明書，交給 AI 筆記本。" data-wrong="再想想：你手上有指定的說明書。" hidden></div></div>
       <div class="q" data-answer="chat"><div class="q-title">② 幫我想五個母親節卡片的創意。</div><div class="answers"><button class="choice" type="button" data-pick="chat">💬 聊天 AI</button><button class="choice" type="button" data-pick="nb">📚 AI 筆記本</button></div><div class="feedback" data-right="對！自由想點子，聊天 AI 很適合。" data-wrong="這題沒有指定資料，聊天 AI 更合適。" hidden></div></div>
       <div class="q" data-answer="nb"><div class="q-title">③ 從社區公告找出垃圾車改時間的日期。</div><div class="answers"><button class="choice" type="button" data-pick="chat">💬 聊天 AI</button><button class="choice" type="button" data-pick="nb">📚 AI 筆記本</button></div><div class="feedback" data-right="對！要從指定公告找答案，交給 AI 筆記本。" data-wrong="公告是指定資料，再選一次看看。" hidden></div></div>
       <div class="q" data-answer="chat"><div class="q-title">④ 陪我練習一段日常英文對話。</div><div class="answers"><button class="choice" type="button" data-pick="chat">💬 聊天 AI</button><button class="choice" type="button" data-pick="nb">📚 AI 筆記本</button></div><div class="feedback" data-right="對！一般對話練習，聊天 AI 就能幫忙。" data-wrong="這題不需要查你的資料，再試一次。" hidden></div></div>
       <div class="score" id="score" hidden></div>
     </div>
+    <div class="card quiz" data-quiz="who2"><span class="bonus">⭐ 加碼</span><h3>再挑戰 4 題</h3><div class="q" data-answer="nb"><div class="q-title">⑤ 從學校通知單找出校外教學要帶什麼。</div><div class="answers"><button class="choice" type="button" data-pick="chat">💬 聊天 AI</button><button class="choice" type="button" data-pick="nb">📚 AI 筆記本</button></div><div class="feedback" data-right="對！答案在那張通知單裡，交給 AI 筆記本。" data-wrong="答案寫在指定的通知單上，再選一次。" hidden></div></div>
+      <div class="q" data-answer="chat"><div class="q-title">⑥ 推薦週末帶長輩散步的好去處。</div><div class="answers"><button class="choice" type="button" data-pick="chat">💬 聊天 AI</button><button class="choice" type="button" data-pick="nb">📚 AI 筆記本</button></div><div class="feedback" data-right="對！找點子，聊天 AI 適合。記得自己再查一下開放時間。" data-wrong="這題沒有指定資料，聊天 AI 比較合適。" hidden></div></div>
+      <div class="q" data-answer="nb"><div class="q-title">⑦ 從旅行社給的行程表，查第二天幾點集合。</div><div class="answers"><button class="choice" type="button" data-pick="chat">💬 聊天 AI</button><button class="choice" type="button" data-pick="nb">📚 AI 筆記本</button></div><div class="feedback" data-right="對！要照那份行程表回答，交給 AI 筆記本。" data-wrong="集合時間寫在指定行程表上，再選一次。" hidden></div></div>
+      <div class="q" data-answer="chat"><div class="q-title">⑧ 幫我想一句祝爸爸生日快樂的話。</div><div class="answers"><button class="choice" type="button" data-pick="chat">💬 聊天 AI</button><button class="choice" type="button" data-pick="nb">📚 AI 筆記本</button></div><div class="feedback" data-right="對！寫祝福話，聊天 AI 很拿手。" data-wrong="這題不用查資料，聊天 AI 就可以。" hidden></div></div>
+      <div class="score" hidden></div></div>
+    <div class="card"><h3>分辨的訣竅</h3><p>手上<strong>有一份指定的資料</strong>，要從裡面找答案 → AI 筆記本。<br>沒有指定資料，要<strong>想點子、聊天、寫祝福</strong> → 聊天 AI。</p></div>
   </section>
 
-  <section class="screen" data-screen="6" aria-labelledby="title6" hidden>
+  <section class="screen" data-screen="8" aria-labelledby="title8" hidden>
     <div class="card">
-      <span class="eyebrow">下課驗收</span><h2 id="title6">我做到了嗎？</h2><p class="lead">四個都打勾，就完成第 1 堂。</p>
+      <span class="eyebrow">自己問問看</span><span class="when">⏱ 70–85 分</span><h2 id="title8">可以直接抄的提問</h2>
+      <div class="step"><div class="step-head"><button class="tick" type="button" data-step="4" aria-pressed="false" aria-label="完成第 4 步">✓</button><div class="step-title">打開手機上的 Gemini 或 ChatGPT</div></div></div>
+      <p class="lead">按「複製」，再貼過去問：</p>
+      <div class="prompt" id="promptText">AI 筆記本適合拿來整理哪些生活資料？請舉 5 個例子。</div>
+      <div class="copy-row"><button class="copy-btn" id="copyBtn" type="button" data-copy="promptText">📋 複製這句</button><span class="copy-msg" id="copyMsg" aria-live="polite"></span></div>
+    </div>
+    <div class="card ex">
+      <label for="direction" style="margin-top:0">必做：選一個最喜歡的，寫下我這學期想整理的生活資料方向</label><input class="field" id="direction" maxlength="60" placeholder="例如：家電說明書、社區公告、旅遊行程">
+      <div style="height:16px"></div><span class="bonus">⭐ 加碼</span><h3>AI 給了我哪 5 個例子？</h3><p class="lead">有時間再抄，簡單幾個字就好。</p>
+      <input class="field" id="ex1" maxlength="30" aria-label="例子 1" placeholder="例子 1">
+      <input class="field" id="ex2" maxlength="30" aria-label="例子 2" placeholder="例子 2">
+      <input class="field" id="ex3" maxlength="30" aria-label="例子 3" placeholder="例子 3">
+      <input class="field" id="ex4" maxlength="30" aria-label="例子 4" placeholder="例子 4">
+      <input class="field" id="ex5" maxlength="30" aria-label="例子 5" placeholder="例子 5">
+      <div class="privacy">🔒 你填的字只存在你自己的手機，不會上傳。老師收尾時可能請幾位同學分享。</div>
+    </div>
+    <div class="card">
+      <h3>答案要自己核對</h3><p>聊天 AI 可能不知道工具已改名；講得順，不代表資料一定最新。找出差異，就是核對的起點。</p>
+    </div>
+    <div class="card">
+      <span class="bonus">⭐ 加碼</span><h3>讓聊天 AI 更懂你的兩句話</h3><p class="lead">［方括號］換成你自己的內容。</p>
+      <div class="prompt small" id="pKnow">我想要［整理家裡的家電說明書］，需要先提供什麼資訊給你？</div>
+      <div class="copy-row"><button class="copy-btn secondary" type="button" data-copy="pKnow">📋 複製</button><span class="copy-msg" aria-live="polite"></span></div>
+      <div class="prompt small" id="pTopic">關於「［家電說明書整理］」，請提供幾個主題名稱。</div>
+      <div class="copy-row"><button class="copy-btn secondary" type="button" data-copy="pTopic">📋 複製</button><span class="copy-msg" aria-live="polite"></span></div>
+    </div>
+  </section>
+
+  <section class="screen" data-screen="9" aria-labelledby="title9" hidden>
+    <div class="card">
+      <span class="eyebrow">收尾</span><span class="when">⏱ 85–90 分</span><h2 id="title9">最後一步＋下課驗收</h2>
+      <div class="step"><div class="step-head"><button class="tick" type="button" data-step="5" aria-pressed="false" aria-label="完成第 5 步">✓</button><div class="step-title">把 App 移到手機桌面第一頁</div></div><div class="hint">長按 App 圖示，拖到第一頁再放開。iPhone 和 Android 都可以這樣做，畫面可能略有不同。</div><div class="shot">截圖待補：手機桌面第一頁，紅框標出 Gemini Notebook App 圖示</div></div>
+      <div class="celebrate" id="stepsDone" hidden>🎉 今天的五個操作步驟都完成了！</div>
+    </div>
+    <div class="card">
+      <h2>我做到了嗎？</h2><p class="lead">四個都打勾，就完成第 1 堂。自己手機做出來才算，看老師示範不算。</p>
       <div class="check"><button class="tick" type="button" data-check="1" aria-pressed="false" aria-label="完成驗收 1">✓</button><p>手機桌面上看得到 Gemini Notebook App，而且打得開</p></div>
       <div class="check"><button class="tick" type="button" data-check="2" aria-pressed="false" aria-label="完成驗收 2">✓</button><p>說得出自己登入的是哪一個帳號</p></div>
       <div class="check"><button class="tick" type="button" data-check="3" aria-pressed="false" aria-label="完成驗收 3">✓</button><p>能對同組說：「主要根據你給的資料回答，重要說法通常標出處，仍要點進去核對。」</p></div>
@@ -177,9 +321,9 @@ footer{text-align:center;color:#4a4038;font-size:14px;margin:18px 0 4px;font-wei
     <div class="card gold"><h2>今天記住這一句</h2><p>主要根據你給的資料回答，<br>重要說法通常標出處，<br>仍要點進去核對。</p></div>
   </section>
 
-  <section class="screen" data-screen="7" aria-labelledby="title7" hidden>
+  <section class="screen" data-screen="10" aria-labelledby="title10" hidden>
     <div class="card">
-      <span class="eyebrow">需要幫忙</span><h2 id="title7">卡住了怎麼辦？</h2>
+      <span class="eyebrow">需要幫忙</span><h2 id="title10">卡住了怎麼辦？</h2>
       <details><summary>手機太舊，裝不了 App <span>▶</span></summary><div class="answer">改用手機瀏覽器開網頁版；還是不行，今天先和同學一起看。</div></details>
       <details><summary>公司或學校帳號被擋 <span>▶</span></summary><div class="answer">工作帳號可能被管理員關掉服務，課後改用個人 Gmail。</div></details>
       <details><summary>忘記密碼或收不到驗證碼 <span>▶</span></summary><div class="answer">課堂上不處理。密碼和驗證碼不要給任何人看，包括講師。課後用 Google 帳號救援。</div></details>
@@ -187,11 +331,11 @@ footer{text-align:center;color:#4a4038;font-size:14px;margin:18px 0 4px;font-wei
       <details><summary>其他看不懂的畫面 <span>▶</span></summary><div class="answer">舉手請講師或同組同學幫忙。</div></details>
     </div>
     <div class="card">
-      <h2>回家玩一玩</h2><p>找三樣「要用時常常翻不到」的生活資料，只寫名稱，不用拍照上傳。</p>
+      <h2>回家玩一玩</h2><p>打開手機相簿或 LINE，找三樣「要用時常常翻不到」的生活資料，只寫名稱，不用拍照上傳。</p>
       <div class="home-fields"><input class="field" id="home1" maxlength="40" aria-label="第一樣生活資料" placeholder="第一樣，例如：家電說明書"><input class="field" id="home2" maxlength="40" aria-label="第二樣生活資料" placeholder="第二樣，例如：社區公告"><input class="field" id="home3" maxlength="40" aria-label="第三樣生活資料" placeholder="第三樣，例如：學校通知"></div>
-      <div class="home-status" id="homeStatus">回家任務：0／3</div><div class="privacy">🔒 這些文字也只存在你自己的手機。</div>
+      <div class="home-status" id="homeStatus">回家任務：0／3</div><div class="privacy">🔒 這些文字也只存在你自己的手機。病歷、藥袋、帳戶、證件不要放進任何 AI 工具。</div>
     </div>
-    <div class="card next"><h3>下一堂</h3><p><strong>我的第一本筆記本：貼上一個網址</strong></p></div>
+    <div class="card next"><h3>下一堂</h3><p><strong>我的第一本筆記本：貼上一個網址</strong></p><p>今天寫下的三樣資料，下一堂就會用到。</p></div>
     <button class="reset" id="resetBtn" type="button">清除我在這頁的紀錄</button>
     <footer>🍀 Learn AI with <span class="tar">Tarshar</span>｜2026</footer>
   </section>
@@ -202,10 +346,11 @@ footer{text-align:center;color:#4a4038;font-size:14px;margin:18px 0 4px;font-wei
 <script>
 (function(){
   'use strict';
-  var KEY='tarshar-gemini-notebook-lesson01-v1';
-  var labels=['歡迎','先懂差別','名字與節奏','跟著做','自己試試看','小遊戲','下課驗收','卡關與回家'];
-  var state={steps:{},checks:{},quiz:{},text:{}};
-  function safeLoad(){try{var raw=localStorage.getItem(KEY);if(raw){var got=JSON.parse(raw);if(got&&typeof got==='object'){state=got;}}}catch(e){} state.steps=state.steps||{};state.checks=state.checks||{};state.quiz=state.quiz||{};state.text=state.text||{};}
+  var KEY='tarshar-gemini-notebook-lesson01-v2';
+  var labels=['歡迎','安全守則','學期地圖','先懂差別','用 AI 認識 AI','名字與免費版','跟著做','小遊戲','自己問問看','下課驗收','卡關與回家'];
+  function blank(){return {ticks:{},quiz:{},obs:{},text:{}};}
+  var state=blank();
+  function safeLoad(){try{var raw=localStorage.getItem(KEY);if(raw){var got=JSON.parse(raw);if(got&&typeof got==='object'){state=got;}}}catch(e){} var b=blank();for(var k in b){if(!state[k]||typeof state[k]!=='object'){state[k]={};}}}
   function safeSave(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
   function one(s,r){return (r||document).querySelector(s)}
   function all(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))}
@@ -219,7 +364,7 @@ footer{text-align:center;color:#4a4038;font-size:14px;margin:18px 0 4px;font-wei
     one('#trackFill').style.width=((current+1)/labels.length*100)+'%';
     one('#prevBtn').disabled=current===0;one('#nextBtn').disabled=current===labels.length-1;
     one('#sectionBtn').textContent=labels[current];
-    history.replaceState(null,'','#'+(current+1));
+    try{history.replaceState(null,'','#'+(current+1));}catch(e){}
     window.scrollTo(0,0);
   }
   all('[data-go]').forEach(function(b){b.addEventListener('click',function(){go(Number(b.getAttribute('data-go')));});});
@@ -229,31 +374,37 @@ footer{text-align:center;color:#4a4038;font-size:14px;margin:18px 0 4px;font-wei
 
   all('.seg button').forEach(function(b){b.addEventListener('click',function(){all('.seg button').forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false');});all('[data-panel]').forEach(function(p){p.hidden=p.getAttribute('data-panel')!==b.getAttribute('data-show');});});});
   all('.cite').forEach(function(b){b.addEventListener('click',function(){var el=document.getElementById(b.getAttribute('data-cite'));el.hidden=!el.hidden;});});
+  all('.flip').forEach(function(b){b.addEventListener('click',function(){var open=b.getAttribute('aria-expanded')!=='true';b.setAttribute('aria-expanded',open?'true':'false');one('.back',b).hidden=!open;});});
 
-  function bindTicks(selector,attr,storeName){all(selector).forEach(function(b){b.addEventListener('click',function(){var k=b.getAttribute(attr),store=state[storeName];store[k]=!store[k];safeSave();render();});});}
-  bindTicks('[data-step]','data-step','steps');bindTicks('[data-check]','data-check','checks');
+  var TICK_ATTRS=['data-step','data-check','data-pair','data-find'];
+  TICK_ATTRS.forEach(function(attr){all('['+attr+']').forEach(function(b){b.addEventListener('click',function(){var k=attr+b.getAttribute(attr);state.ticks[k]=!state.ticks[k];safeSave();render();});});});
 
-  ['direction','home1','home2','home3'].forEach(function(id){var el=document.getElementById(id);el.value=state.text[id]||'';el.addEventListener('input',function(){state.text[id]=el.value;safeSave();render();});});
+  all('.field').forEach(function(el){el.value=state.text[el.id]||'';el.addEventListener('input',function(){state.text[el.id]=el.value;safeSave();render();});});
 
-  all('.q').forEach(function(q,idx){all('.choice',q).forEach(function(b){b.addEventListener('click',function(){state.quiz[idx]=b.getAttribute('data-pick');safeSave();render();});});});
-  function renderQuiz(){var correct=0,answered=0;all('.q').forEach(function(q,idx){var pick=state.quiz[idx],answer=q.getAttribute('data-answer'),fb=one('.feedback',q);all('.choice',q).forEach(function(b){b.classList.remove('right','wrong');b.setAttribute('aria-pressed','false');if(pick===b.getAttribute('data-pick')){b.setAttribute('aria-pressed','true');b.classList.add(pick===answer?'right':'wrong');}});if(pick){answered++;if(pick===answer){correct++;fb.textContent='✅ '+fb.getAttribute('data-right');}else{fb.textContent='🤔 '+fb.getAttribute('data-wrong');}fb.hidden=false;}else{fb.hidden=true;}});var score=one('#score');score.hidden=answered!==4;score.textContent=correct===4?'🌟 四題全對！你分得出兩種 AI 了。':'答對 '+correct+' 題；答錯的可以再選一次。';return correct===4;}
+  all('.quiz').forEach(function(g){var key=g.getAttribute('data-quiz');all('.q',g).forEach(function(q,idx){all('.choice',q).forEach(function(b){b.addEventListener('click',function(){state.quiz[key+idx]=b.getAttribute('data-pick');safeSave();render();});});});});
+  all('[data-obs]').forEach(function(b){b.addEventListener('click',function(){state.obs[b.getAttribute('data-obs')]=b.getAttribute('data-val');safeSave();render();});});
 
-  one('#copyBtn').addEventListener('click',function(){var text=one('#promptText').textContent.trim(),msg=one('#copyMsg');function copied(){msg.textContent='已複製，去貼上吧！';}function fallback(){var range=document.createRange();range.selectNodeContents(one('#promptText'));var sel=window.getSelection();sel.removeAllRanges();sel.addRange(range);msg.textContent='已幫你選取，請長按文字複製。';}if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(copied,fallback);}else{fallback();}});
+  function renderQuiz(g){var key=g.getAttribute('data-quiz'),qs=all('.q',g),correct=0,answered=0;qs.forEach(function(q,idx){var pick=state.quiz[key+idx],answer=q.getAttribute('data-answer'),fb=one('.feedback',q);all('.choice',q).forEach(function(b){b.classList.remove('right','wrong');b.setAttribute('aria-pressed','false');if(pick===b.getAttribute('data-pick')){b.setAttribute('aria-pressed','true');b.classList.add(pick===answer?'right':'wrong');}});if(pick){answered++;if(pick===answer){correct++;fb.textContent='✅ '+fb.getAttribute('data-right');}else{fb.textContent='🤔 '+fb.getAttribute('data-wrong');}fb.hidden=false;}else{fb.hidden=true;}});var score=one('.score',g);score.hidden=answered!==qs.length;score.textContent=correct===qs.length?'🌟 '+qs.length+' 題全對！':'答對 '+correct+' 題；答錯的可以再選一次。';return correct===qs.length;}
+
+  function copyFrom(btn){var src=document.getElementById(btn.getAttribute('data-copy')),msg=btn.parentNode.querySelector('.copy-msg'),text=src.textContent.trim();function copied(){msg.textContent='已複製，去貼上吧！';}function fallback(){try{var range=document.createRange();range.selectNodeContents(src);var sel=window.getSelection();sel.removeAllRanges();sel.addRange(range);}catch(e){}msg.textContent='已幫你選取，請長按文字複製。';}try{if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(copied,fallback);}else{fallback();}}catch(e){fallback();}}
+  all('[data-copy]').forEach(function(b){b.addEventListener('click',function(){copyFrom(b);});});
 
   var resetTimer=0;
-  one('#resetBtn').addEventListener('click',function(){var b=this;if(b.getAttribute('data-confirm')!=='yes'){b.setAttribute('data-confirm','yes');b.textContent='再按一次，確認清除';window.clearTimeout(resetTimer);resetTimer=window.setTimeout(function(){b.removeAttribute('data-confirm');b.textContent='清除我在這頁的紀錄';},5000);return;}state={steps:{},checks:{},quiz:{},text:{}};safeSave();all('.field').forEach(function(el){el.value='';});b.removeAttribute('data-confirm');b.textContent='已清除全部紀錄';render();});
+  one('#resetBtn').addEventListener('click',function(){var b=this;if(b.getAttribute('data-confirm')!=='yes'){b.setAttribute('data-confirm','yes');b.textContent='再按一次，確認清除';window.clearTimeout(resetTimer);resetTimer=window.setTimeout(function(){b.removeAttribute('data-confirm');b.textContent='清除我在這頁的紀錄';},5000);return;}state=blank();safeSave();all('.field').forEach(function(el){el.value='';});all('.copy-msg').forEach(function(m){m.textContent='';});b.removeAttribute('data-confirm');b.textContent='已清除全部紀錄';render();});
 
   function render(){
     var stepDone=true,checkDone=true;
-    all('[data-step]').forEach(function(b){var on=!!state.steps[b.getAttribute('data-step')];b.setAttribute('aria-pressed',on?'true':'false');if(!on){stepDone=false;}});
-    all('[data-check]').forEach(function(b){var on=!!state.checks[b.getAttribute('data-check')];b.setAttribute('aria-pressed',on?'true':'false');if(!on){checkDone=false;}});
+    TICK_ATTRS.forEach(function(attr){all('['+attr+']').forEach(function(b){var on=!!state.ticks[attr+b.getAttribute(attr)];b.setAttribute('aria-pressed',on?'true':'false');if(!on){if(attr==='data-step'){stepDone=false;}if(attr==='data-check'){checkDone=false;}}});});
     one('#stepsDone').hidden=!stepDone;one('#stamp').hidden=!checkDone;
-    var quizDone=renderQuiz();var directionDone=!!((state.text.direction||'').trim());var flags=[stepDone,directionDone,quizDone,checkDone];var count=flags.filter(Boolean).length;
+    var quizDone=false;all('.quiz').forEach(function(g){var ok=renderQuiz(g);if(g.getAttribute('data-quiz')==='who'){quizDone=ok;}});
+    all('[data-obs]').forEach(function(b){var on=state.obs[b.getAttribute('data-obs')]===b.getAttribute('data-val');b.setAttribute('aria-pressed',on?'true':'false');b.classList.toggle('right',on);});
+    one('#obsTip').hidden=Object.keys(state.obs).length<3;
+    var directionDone=!!((state.text.direction||'').trim());var flags=[stepDone,directionDone,quizDone,checkDone];var count=flags.filter(Boolean).length;
     all('#mini i').forEach(function(dot,i){dot.classList.toggle('on',flags[i]);});one('#doneCount').textContent=count+'／4';
     var homes=['home1','home2','home3'].filter(function(k){return !!((state.text[k]||'').trim());}).length;one('#homeStatus').textContent='回家任務：'+homes+'／3'+(homes===3?'，完成！':'');
   }
   render();
-  var hash=Number(location.hash.replace('#',''));go(hash>=1&&hash<=8?hash-1:0);
+  var hash=Number(location.hash.replace('#',''));go(hash>=1&&hash<=labels.length?hash-1:0);
 })();
 </script>
 </body>
