@@ -77,20 +77,22 @@ footer{text-align:center;color:#4a4038;font-size:14px;margin:18px 0 4px;font-wei
 .ex .field{margin-top:8px}
 .prompt.small{font-size:17px;padding:12px}.copy-btn.secondary{border:2px solid var(--green)}.bonus{display:inline-block;font-size:14px;font-weight:800;color:var(--ink);background:var(--yellow);border:2px solid #d5aa30;border-radius:999px;padding:1px 10px;margin-bottom:6px}
 .subtask{border:2px solid var(--line);border-radius:16px;padding:12px;margin-top:12px;background:#fff}.subtask h3{font-size:17px}.subtask .check{padding:8px 0}
-</style>
+.page-head{padding:2px 4px 10px}.page-head h2{margin:8px 0 0;font-size:24px;line-height:1.35;color:var(--deep)}.page-head .when{margin:0 6px 0 0}.page-head .eyebrow{margin-top:6px}.page-tag{display:inline-block;background:var(--green);color:#fff;border-radius:999px;padding:2px 10px;font-size:14px;font-weight:900;margin:0 6px 8px 0}.page-tag.bonus{background:#755800}.lesson{background:var(--green);color:#fff;padding:3px 8px;border-radius:9px}.app{padding-top:calc(94px + env(safe-area-inset-top))}
+.when{color:var(--deep);background:var(--mint);border:1px solid var(--line)}</style>
 </head>
 <body>
 <header class="top" aria-label="課程進度">
   <div class="top-in">
     <div class="lesson">第 1 堂</div>
     <div class="track" aria-hidden="true"><span id="trackFill"></span></div>
-    <div class="page-count" id="pageCount">1／11</div>
+    <div class="page-count" id="pageCount">1／27</div>
     <div class="milestones"><span>過關進度</span><span class="mini" id="mini"><i></i><i></i><i></i><i></i></span><span id="doneCount">0／4</span></div>
   </div>
 </header>
 
 <main class="app" id="app">
   <section class="screen" data-screen="0" aria-labelledby="title0">
+    <span class="page-tag">今天必做</span><span class="when">⏱ 0–5 分</span>
     <div class="card hero">
       <span class="eyebrow">社大手機課．第 1 堂</span>
       <div class="hero-row">
@@ -101,16 +103,20 @@ footer{text-align:center;color:#4a4038;font-size:14px;margin:18px 0 4px;font-wei
       <div class="notice">🔒 你在這頁填的字只存在你自己的手機，不會上傳，也不會傳給老師。</div>
       <button class="big-btn" type="button" data-go="1">開始上課</button>
     </div>
+  </section>
+
+  <section class="screen" data-screen="1" aria-labelledby="title1" hidden>
+    <div class="page-head"><span class="page-tag">今天必做</span><span class="when">⏱ 0–5 分</span><span class="eyebrow">開課說明</span><h2 id="title1">今天 90 分鐘怎麼走</h2></div>
     <div class="card">
-      <h2>今天 90 分鐘怎麼走</h2>
+      
       <div class="rhythm"><div class="phase"><b>0–5 分</b><span>安全守則，老師快速介紹這學期地圖</span></div><div class="phase"><b>5–30 分</b><span>先懂兩種 AI、看兩家聊天 AI 怎麼答、名字與免費版</span></div><div class="phase"><b>30–70 分</b><span>跟著做：登入、帳號、首頁；等老師巡堂時玩小遊戲</span></div><div class="phase"><b>70–85 分</b><span>自己問聊天 AI，寫下一個方向</span></div><div class="phase"><b>85–90 分</b><span>App 移到第一頁、四項驗收</span></div></div>
       <p class="lead">跟著老師的速度走，不用自己一口氣滑完。</p><div class="tip">看到 <span class="bonus">⭐ 加碼</span> 的地方是選做：先做完的人在課堂上玩，沒做到就回家再玩。沒標的是今天必做。時間不夠時，實際去問聊天 AI 可以回家做，但課堂上仍要先寫下一個方向，下課驗收也不省略。</div>
     </div>
   </section>
 
-  <section class="screen" data-screen="1" aria-labelledby="title1" hidden>
+  <section class="screen" data-screen="2" aria-labelledby="title2" hidden>
+    <div class="page-head"><span class="page-tag">今天必做</span><span class="when">⏱ 0–5 分</span><span class="eyebrow">暖身</span><h2 id="title2">課堂安全守則</h2></div>
     <div class="card">
-      <span class="eyebrow">暖身</span><span class="when">⏱ 0–5 分</span><h2 id="title1">課堂安全守則</h2>
       <ol class="rules">
         <li>不放病歷、藥袋、帳戶、證件等個資進任何 AI 工具。練習一律用公開資料或虛構資料。</li>
         <li>截圖要傳給別人或問 AI 之前，先把姓名、電話、帳號塗掉或裁掉。</li>
@@ -119,8 +125,12 @@ footer{text-align:center;color:#4a4038;font-size:14px;margin:18px 0 4px;font-wei
       </ol>
       <div class="notice">講師不經手你的密碼和驗證碼，課堂上也不處理找回密碼。</div>
     </div>
+  </section>
+
+  <section class="screen" data-screen="3" aria-labelledby="title3" hidden>
+    <div class="page-head"><span class="page-tag bonus">⭐ 加碼</span><span class="when">⏱ 先做完的人玩</span><span class="eyebrow">暖身</span><h2 id="title3">小測驗：這個可以放進 AI 嗎？</h2></div>
     <div class="card quiz" data-quiz="safe">
-      <span class="bonus">⭐ 加碼</span><h3>小測驗：這個可以放進 AI 嗎？</h3><p class="lead">點你的判斷，答錯可以再選。</p>
+      <p class="lead">點你的判斷，答錯可以再選。</p>
       <div class="q" data-answer="ok"><div class="q-title">① 社區公告上的垃圾車時間表</div><div class="answers"><button class="choice" type="button" data-pick="ok">👍 可以放</button><button class="choice" type="button" data-pick="no">✋ 不要放</button></div><div class="feedback" data-right="對！公開的公告可以拿來練習。" data-wrong="再想想：這是大家都看得到的公開資料。" hidden></div></div>
       <div class="q" data-answer="no"><div class="q-title">② 自己的藥袋照片</div><div class="answers"><button class="choice" type="button" data-pick="ok">👍 可以放</button><button class="choice" type="button" data-pick="no">✋ 不要放</button></div><div class="feedback" data-right="對！藥袋有姓名和病情，不要放。" data-wrong="藥袋上有你的姓名和用藥，屬於個資。" hidden></div></div>
       <div class="q" data-answer="ok"><div class="q-title">③ 講義裡的虛構冷氣說明書</div><div class="answers"><button class="choice" type="button" data-pick="ok">👍 可以放</button><button class="choice" type="button" data-pick="no">✋ 不要放</button></div><div class="feedback" data-right="對！虛構資料最適合練習。" data-wrong="這是編出來的練習資料，可以放心用。" hidden></div></div>
@@ -129,9 +139,9 @@ footer{text-align:center;color:#4a4038;font-size:14px;margin:18px 0 4px;font-wei
     </div>
   </section>
 
-  <section class="screen" data-screen="2" aria-labelledby="title2" hidden>
+  <section class="screen" data-screen="4" aria-labelledby="title4" hidden>
+    <div class="page-head"><span class="page-tag">今天必做</span><span class="when">⏱ 老師快速帶過</span><span class="eyebrow">這學期地圖</span><h2 id="title4">一位幫你讀資料的私人秘書</h2></div>
     <div class="card">
-      <span class="eyebrow">這學期地圖</span><span class="when">⏱ 老師快速帶過</span><h2 id="title2">一位幫你讀資料的私人秘書</h2>
       <p>把 Gemini Notebook 想成一位<strong>以你那疊資料為主的私人秘書</strong>：你把說明書、公告、影片、錄音交給他，他主要照這疊資料回答，重要說法通常會翻給你看出處。</p>
       <p class="ask">這個比喻會陪你走完 16 堂，點一下翻開：</p>
       <div class="flips">
@@ -142,8 +152,11 @@ footer{text-align:center;color:#4a4038;font-size:14px;margin:18px 0 4px;font-wei
         <button class="flip" type="button" aria-expanded="false">🎨 工作室成品＝？<span class="back" hidden>請秘書把這疊資料做成海報、廣播、簡報。</span></button>
       </div>
     </div>
+  </section>
+
+  <section class="screen" data-screen="5" aria-labelledby="title5" hidden>
+    <div class="page-head"><span class="page-tag bonus">⭐ 加碼</span><span class="when">⏱ 回家慢慢看</span><span class="eyebrow">這學期地圖</span><h2 id="title5">16 堂一覽</h2></div>
     <div class="card">
-      <span class="bonus">⭐ 回家慢慢看</span><h2>16 堂一覽</h2>
       <p class="lead">學期結束時，你的手機裡會有 3～5 本整理好的生活筆記本，還有一個「每週固定用一次」的習慣。</p>
       <ol class="road">
         <li class="now"><span class="no">1</span><span><strong>認識 Gemini Notebook（今天）</strong><span class="get">登入正確帳號，說得出它和聊天 AI 的差別</span></span></li>
@@ -166,21 +179,38 @@ footer{text-align:center;color:#4a4038;font-size:14px;margin:18px 0 4px;font-wei
     </div>
   </section>
 
-  <section class="screen" data-screen="3" aria-labelledby="title3" hidden>
+  <section class="screen" data-screen="6" aria-labelledby="title6" hidden>
+    <div class="page-head"><span class="page-tag">今天必做</span><span class="when">⏱ 5–30 分</span><span class="eyebrow">先懂差別</span><h2 id="title6">兩種 AI，工作方式不同</h2></div>
     <div class="card">
-      <span class="eyebrow">先懂差別</span><span class="when">⏱ 5–30 分</span><h2 id="title3">兩種 AI，工作方式不同</h2>
       <div class="two">
         <article class="ai-card"><div class="icon" aria-hidden="true">💬</div><h3>聊天 AI</h3><ul><li>像什麼都能聊的朋友</li><li>從學過的資料回答，有些會上網查</li><li>適合想點子、聊天</li></ul></article>
         <article class="ai-card"><div class="icon" aria-hidden="true">📚</div><h3>AI 筆記本</h3><ul><li>像以你那疊資料為主的秘書</li><li>適合查自己的資料</li><li>重要說法通常標出處</li></ul></article>
       </div>
       <div class="exact">主要根據你給的資料回答，重要說法通常標出處，仍要點進去核對。</div>
     </div>
+  </section>
+
+  <section class="screen" data-screen="7" aria-labelledby="title7" hidden>
+    <div class="page-head"><span class="page-tag">今天必做</span><span class="when">⏱ 5–30 分</span><span class="eyebrow">先懂差別</span><h2 id="title7">同一題，兩種 AI 怎麼答？</h2></div>
     <div class="card">
-      <h3>同一題，兩種 AI 怎麼答？</h3><p class="lead">「家裡冷氣的除濕模式怎麼開？」</p>
+      <p class="lead">「家裡冷氣的除濕模式怎麼開？」</p>
       <div class="seg" role="group" aria-label="切換兩種 AI"><button type="button" data-show="chat" aria-pressed="true">💬 聊天 AI</button><button type="button" data-show="nb" aria-pressed="false">📚 AI 筆記本</button></div>
       <div data-panel="chat"><div class="bubble">一般冷氣的遙控器上會有「除濕」按鈕，通常圖示是一顆水滴。不同品牌可能略有不同。</div><div class="verdict">講得很順，但不一定是你家那台，也看不到出處。</div></div>
       <div data-panel="nb" hidden><div class="bubble">按遙控器上的「模式」鍵，切換到水滴圖示就是除濕<button class="cite" type="button" data-cite="source1" aria-label="查看出處 1">1</button>。除濕時風速會自動調整<button class="cite" type="button" data-cite="source2" aria-label="查看出處 2">2</button>。</div><div class="source" id="source1" hidden>出處 1：虛構冷氣說明書第 12 頁「運轉模式」。</div><div class="source" id="source2" hidden>出處 2：虛構冷氣說明書第 13 頁「除濕運轉」。</div><div class="verdict">點小數字可以查看原文；看到出處，還是要核對。</div></div>
       <div class="fake">※ 這是虛構示意，不是真的 App 畫面。</div>
+    </div>
+  </section>
+
+  <section class="screen" data-screen="8" aria-labelledby="title8" hidden>
+    <div class="page-head"><span class="page-tag">今天必做</span><span class="when">⏱ 5–30 分</span><span class="eyebrow">先懂差別</span><h2 id="title8">秘書能讀哪些資料？</h2></div>
+    <div class="card">
+      <p>秘書能讀的不只文字。這學期會一種一種教，點一下看看是第幾堂：</p>
+      <div class="flips">
+        <button class="flip" type="button" aria-expanded="false">🔗 網頁的網址<span class="back" hidden>第 2 堂：貼上一個網址，做出第一本筆記本。</span></button>
+        <button class="flip" type="button" aria-expanded="false">🎬 YouTube 公開影片<span class="back" hidden>第 7 堂：把影片加進筆記本，整理重點。</span></button>
+        <button class="flip" type="button" aria-expanded="false">📷 紙本轉成文字或 PDF<span class="back" hidden>第 10 堂：照片不能直接放進去，要先把照片上的字轉成文字或 PDF，再加成來源。</span></button>
+        <button class="flip" type="button" aria-expanded="false">🎙️ 手機錄音<span class="back" hidden>第 11 堂：錄音整理成總結與待辦。</span></button>
+      </div>
     </div>
     <div class="card">
       <label for="diff" style="margin-top:0">用你自己的話寫一句：它和聊天 AI 差在哪？</label>
@@ -189,15 +219,18 @@ footer{text-align:center;color:#4a4038;font-size:14px;margin:18px 0 4px;font-wei
     </div>
   </section>
 
-  <section class="screen" data-screen="4" aria-labelledby="title4" hidden>
+  <section class="screen" data-screen="9" aria-labelledby="title9" hidden>
+    <div class="page-head"><span class="page-tag">今天必做</span><span class="when">⏱ 5–30 分</span><span class="eyebrow">用 AI 認識 AI</span><h2 id="title9">問問兩家聊天 AI</h2></div>
     <div class="card">
-      <span class="eyebrow">用 AI 認識 AI</span><span class="when">⏱ 5–30 分</span><h2 id="title4">問問兩家聊天 AI</h2>
       <p>老師會投影，在 Gemini 和 ChatGPT 問同一題。你也可以用自己的手機一起問：</p>
       <div class="prompt small" id="pAsk">Gemini Notebook（原 NotebookLM）和 Gemini 聊天有什麼不同？</div>
       <div class="copy-row"><button class="copy-btn" type="button" data-copy="pAsk">📋 複製這句</button><span class="copy-msg" aria-live="polite"></span></div>
     </div>
+  </section>
+
+  <section class="screen" data-screen="10" aria-labelledby="title10" hidden>
+    <div class="page-head"><span class="page-tag">今天必做</span><span class="when">⏱ 5–30 分</span><span class="eyebrow">用 AI 認識 AI</span><h2 id="title10">看答案時，注意三件事</h2></div>
     <div class="card obs">
-      <h3>看答案時，注意三件事</h3>
       <p class="ask">① 它有提到「改名」這件事嗎？</p>
       <div class="answers"><button class="choice" type="button" data-obs="rename" data-val="yes">有提到</button><button class="choice" type="button" data-obs="rename" data-val="no">沒提到</button></div>
       <p class="ask">② 它有附出處或連結嗎？</p>
@@ -209,8 +242,11 @@ footer{text-align:center;color:#4a4038;font-size:14px;margin:18px 0 4px;font-wei
       <input class="field" id="compare" maxlength="60" placeholder="例如：一家有提到改名，一家沒有">
       <div class="privacy">有些聊天 AI 要先開啟「網頁搜尋」，才會附上資料來源。</div>
     </div>
+  </section>
+
+  <section class="screen" data-screen="11" aria-labelledby="title11" hidden>
+    <div class="page-head"><span class="page-tag bonus">⭐ 加碼</span><span class="when">⏱ 先做完的人玩</span><span class="eyebrow">用 AI 認識 AI</span><h2 id="title11">先做完的人，再問兩題</h2></div>
     <div class="card">
-      <span class="bonus">⭐ 加碼</span><h3>先做完的人，再問兩題</h3>
       <div class="prompt small" id="pBonus1">為什麼 Google 已經有 Gemini，還要推出 Gemini Notebook？</div>
       <div class="copy-row"><button class="copy-btn secondary" type="button" data-copy="pBonus1">📋 複製</button><span class="copy-msg" aria-live="polite"></span></div>
       <div class="prompt small" id="pBonus2">其他 AI 公司有沒有類似 Gemini Notebook 的軟體？</div>
@@ -218,15 +254,18 @@ footer{text-align:center;color:#4a4038;font-size:14px;margin:18px 0 4px;font-wei
     </div>
   </section>
 
-  <section class="screen" data-screen="5" aria-labelledby="title5" hidden>
+  <section class="screen" data-screen="12" aria-labelledby="title12" hidden>
+    <div class="page-head"><span class="page-tag">今天必做</span><span class="when">⏱ 5–30 分</span><span class="eyebrow">名字與版本</span><h2 id="title12">新舊名字，都是同一個工具</h2></div>
     <div class="card">
-      <span class="eyebrow">名字與版本</span><span class="when">⏱ 5–30 分</span><h2 id="title5">新舊名字，都是同一個工具</h2>
       <div class="timeline"><div class="time"><div class="date">2024 年 6 月</div><div>NotebookLM 正式在台灣推出</div></div><div class="time"><div class="date">2026 年 7 月 16 日</div><div>Google 改名為 <strong>Gemini Notebook</strong></div></div></div>
       <p>網路上很多舊教學還用舊名，看到 NotebookLM 就知道是同一個東西。</p>
       <div class="notice">這學期只用免費版，用個人 Google 帳號登入即可。畫面若出現付費方案，先不要點。</div>
     </div>
+  </section>
+
+  <section class="screen" data-screen="13" aria-labelledby="title13" hidden>
+    <div class="page-head"><span class="page-tag bonus">⭐ 加碼</span><span class="when">⏱ 先做完的人玩</span><span class="eyebrow">名字與版本</span><h2 id="title13">是非題：這句話對嗎？</h2></div>
     <div class="card quiz" data-quiz="fact">
-      <span class="bonus">⭐ 加碼</span><h3>是非題：這句話對嗎？</h3>
       <div class="q" data-answer="f"><div class="q-title">① NotebookLM 和 Gemini Notebook 是兩個不同的工具。</div><div class="answers"><button class="choice" type="button" data-pick="t">⭕ 對</button><button class="choice" type="button" data-pick="f">❌ 錯</button></div><div class="feedback" data-right="對！是同一個工具，2026 年 7 月 16 日改名。" data-wrong="其實是同一個工具，只是改了名字。" hidden></div></div>
       <div class="q" data-answer="f"><div class="q-title">② 這學期上課要先買付費方案。</div><div class="answers"><button class="choice" type="button" data-pick="t">⭕ 對</button><button class="choice" type="button" data-pick="f">❌ 錯</button></div><div class="feedback" data-right="對！這學期只用免費版。" data-wrong="這學期只用免費版，不用付錢。" hidden></div></div>
       <div class="q" data-answer="t"><div class="q-title">③ 用自己的個人 Google 帳號就能登入。</div><div class="answers"><button class="choice" type="button" data-pick="t">⭕ 對</button><button class="choice" type="button" data-pick="f">❌ 錯</button></div><div class="feedback" data-right="對！免費版用 Google 帳號就能登入。" data-wrong="其實用個人 Google 帳號就可以登入。" hidden></div></div>
@@ -235,16 +274,34 @@ footer{text-align:center;color:#4a4038;font-size:14px;margin:18px 0 4px;font-wei
     </div>
   </section>
 
-  <section class="screen" data-screen="6" aria-labelledby="title6" hidden>
+  <section class="screen" data-screen="14" aria-labelledby="title14" hidden>
+    <div class="page-head"><span class="page-tag">今天必做</span><span class="when">⏱ 30–40 分</span><span class="eyebrow">跟著做</span><h2 id="title14">第 1 步：打開 App</h2></div>
     <div class="card">
-      <span class="eyebrow">跟著做</span><span class="when">⏱ 30–70 分</span><h2 id="title6">準備好手機</h2><p class="lead">跟著老師一步一步來，做完一步就點一下打勾。</p>
+      <p class="lead">跟著老師一步一步來，做完一步就點一下打勾。</p>
       <div class="step"><div class="step-head"><button class="tick" type="button" data-step="1" aria-pressed="false" aria-label="完成第 1 步">✓</button><div class="step-title">確認 App 已安裝、看得到首頁<span class="when">30–40 分</span></div></div><div class="hint">老師會逐排確認。還沒登入就先看老師示範，回家再完成。老師不碰你的密碼或驗證碼。</div></div>
+    </div>
+  </section>
+
+  <section class="screen" data-screen="15" aria-labelledby="title15" hidden>
+    <div class="page-head"><span class="page-tag">今天必做</span><span class="when">⏱ 40–55 分</span><span class="eyebrow">跟著做</span><h2 id="title15">第 2 步：確認登入帳號</h2></div>
+    <div class="card">
       <div class="step"><div class="step-head"><button class="tick" type="button" data-step="2" aria-pressed="false" aria-label="完成第 2 步">✓</button><div class="step-title">點右上角頭像，確認登入帳號<span class="when">40–55 分</span></div></div><div class="shot">截圖待補：App 右上角頭像點開後的帳號畫面，紅框標出帳號名稱</div>
         <div class="subtask"><h3>👥 和隔壁同學互相說</h3>
           <div class="check"><button class="tick" type="button" data-pair="1" aria-pressed="false" aria-label="我說了">✓</button><p>我說了：「我用的是＿＿＿這個帳號」（不用唸完整地址）</p></div>
           <div class="check"><button class="tick" type="button" data-pair="2" aria-pressed="false" aria-label="我聽了">✓</button><p>我聽了隔壁用的是哪個帳號</p></div>
         </div>
       </div>
+    </div>
+    <div class="card">
+      <h3>帳號小常識</h3>
+      <p>這學期請用<strong>個人 Google 帳號</strong>（例如自己的 Gmail）。公司或學校給的帳號，可能被管理員關掉這項服務，打開會看到錯誤畫面。</p>
+      <p>手機上登入好幾個帳號的人最容易搞混：今天確認好，之後每堂都用同一個。</p>
+    </div>
+  </section>
+
+  <section class="screen" data-screen="16" aria-labelledby="title16" hidden>
+    <div class="page-head"><span class="page-tag">今天必做</span><span class="when">⏱ 55–70 分</span><span class="eyebrow">跟著做</span><h2 id="title16">第 3 步：認識首頁</h2></div>
+    <div class="card">
       <div class="step"><div class="step-head"><button class="tick" type="button" data-step="3" aria-pressed="false" aria-label="完成第 3 步">✓</button><div class="step-title">認識首頁<span class="when">55–70 分</span></div></div><div class="shot">截圖待補：App 首頁，紅框標出筆記本列表與「新建」按鈕</div>
         <div class="subtask"><h3>🔍 首頁尋寶：找到就打勾，先不要按</h3>
           <div class="check"><button class="tick" type="button" data-find="1" aria-pressed="false" aria-label="找到頭像">✓</button><p>右上角的頭像</p></div>
@@ -257,46 +314,65 @@ footer{text-align:center;color:#4a4038;font-size:14px;margin:18px 0 4px;font-wei
     </div>
   </section>
 
-  <section class="screen" data-screen="7" aria-labelledby="title7" hidden>
+  <section class="screen" data-screen="17" aria-labelledby="title17" hidden>
+    <div class="page-head"><span class="page-tag">今天必做</span><span class="when">⏱ 30–70 分，等老師巡堂時玩</span><span class="eyebrow">互動小遊戲</span><h2 id="title17">這題交給誰？</h2></div>
     <div class="card quiz" data-quiz="who">
-      <span class="eyebrow">互動小遊戲</span><span class="when">⏱ 等老師巡堂時玩</span><h2 id="title7">這題交給誰？</h2><p class="lead">前 4 題必做，點你覺得比較適合的工具，答錯可以再選。</p>
+      <p class="lead">前 4 題必做，點你覺得比較適合的工具，答錯可以再選。</p>
       <div class="q" data-answer="nb"><div class="q-title">① 洗衣機說明書裡，「快洗」要洗多久？</div><div class="answers"><button class="choice" type="button" data-pick="chat">💬 聊天 AI</button><button class="choice" type="button" data-pick="nb">📚 AI 筆記本</button></div><div class="feedback" data-right="對！要查指定說明書，交給 AI 筆記本。" data-wrong="再想想：你手上有指定的說明書。" hidden></div></div>
       <div class="q" data-answer="chat"><div class="q-title">② 幫我想五個母親節卡片的創意。</div><div class="answers"><button class="choice" type="button" data-pick="chat">💬 聊天 AI</button><button class="choice" type="button" data-pick="nb">📚 AI 筆記本</button></div><div class="feedback" data-right="對！自由想點子，聊天 AI 很適合。" data-wrong="這題沒有指定資料，聊天 AI 更合適。" hidden></div></div>
       <div class="q" data-answer="nb"><div class="q-title">③ 從社區公告找出垃圾車改時間的日期。</div><div class="answers"><button class="choice" type="button" data-pick="chat">💬 聊天 AI</button><button class="choice" type="button" data-pick="nb">📚 AI 筆記本</button></div><div class="feedback" data-right="對！要從指定公告找答案，交給 AI 筆記本。" data-wrong="公告是指定資料，再選一次看看。" hidden></div></div>
       <div class="q" data-answer="chat"><div class="q-title">④ 陪我練習一段日常英文對話。</div><div class="answers"><button class="choice" type="button" data-pick="chat">💬 聊天 AI</button><button class="choice" type="button" data-pick="nb">📚 AI 筆記本</button></div><div class="feedback" data-right="對！一般對話練習，聊天 AI 就能幫忙。" data-wrong="這題不需要查你的資料，再試一次。" hidden></div></div>
       <div class="score" id="score" hidden></div>
     </div>
-    <div class="card quiz" data-quiz="who2"><span class="bonus">⭐ 加碼</span><h3>再挑戰 4 題</h3><div class="q" data-answer="nb"><div class="q-title">⑤ 從學校通知單找出校外教學要帶什麼。</div><div class="answers"><button class="choice" type="button" data-pick="chat">💬 聊天 AI</button><button class="choice" type="button" data-pick="nb">📚 AI 筆記本</button></div><div class="feedback" data-right="對！答案在那張通知單裡，交給 AI 筆記本。" data-wrong="答案寫在指定的通知單上，再選一次。" hidden></div></div>
+    <div class="card"><h3>分辨的訣竅</h3><p>手上<strong>有一份指定的資料</strong>，要從裡面找答案 → AI 筆記本。<br>沒有指定資料，要<strong>想點子、聊天、寫祝福</strong> → 聊天 AI。</p></div>
+  </section>
+
+  <section class="screen" data-screen="18" aria-labelledby="title18" hidden>
+    <div class="page-head"><span class="page-tag bonus">⭐ 加碼</span><span class="when">⏱ 先做完的人玩</span><span class="eyebrow">互動小遊戲</span><h2 id="title18">再挑戰 4 題</h2></div>
+        <div class="card quiz" data-quiz="who2"><div class="q" data-answer="nb"><div class="q-title">⑤ 從學校通知單找出校外教學要帶什麼。</div><div class="answers"><button class="choice" type="button" data-pick="chat">💬 聊天 AI</button><button class="choice" type="button" data-pick="nb">📚 AI 筆記本</button></div><div class="feedback" data-right="對！答案在那張通知單裡，交給 AI 筆記本。" data-wrong="答案寫在指定的通知單上，再選一次。" hidden></div></div>
       <div class="q" data-answer="chat"><div class="q-title">⑥ 推薦週末帶長輩散步的好去處。</div><div class="answers"><button class="choice" type="button" data-pick="chat">💬 聊天 AI</button><button class="choice" type="button" data-pick="nb">📚 AI 筆記本</button></div><div class="feedback" data-right="對！找點子，聊天 AI 適合。記得自己再查一下開放時間。" data-wrong="這題沒有指定資料，聊天 AI 比較合適。" hidden></div></div>
       <div class="q" data-answer="nb"><div class="q-title">⑦ 從旅行社給的行程表，查第二天幾點集合。</div><div class="answers"><button class="choice" type="button" data-pick="chat">💬 聊天 AI</button><button class="choice" type="button" data-pick="nb">📚 AI 筆記本</button></div><div class="feedback" data-right="對！要照那份行程表回答，交給 AI 筆記本。" data-wrong="集合時間寫在指定行程表上，再選一次。" hidden></div></div>
       <div class="q" data-answer="chat"><div class="q-title">⑧ 幫我想一句祝爸爸生日快樂的話。</div><div class="answers"><button class="choice" type="button" data-pick="chat">💬 聊天 AI</button><button class="choice" type="button" data-pick="nb">📚 AI 筆記本</button></div><div class="feedback" data-right="對！寫祝福話，聊天 AI 很拿手。" data-wrong="這題不用查資料，聊天 AI 就可以。" hidden></div></div>
       <div class="score" hidden></div></div>
-    <div class="card"><h3>分辨的訣竅</h3><p>手上<strong>有一份指定的資料</strong>，要從裡面找答案 → AI 筆記本。<br>沒有指定資料，要<strong>想點子、聊天、寫祝福</strong> → 聊天 AI。</p></div>
   </section>
 
-  <section class="screen" data-screen="8" aria-labelledby="title8" hidden>
+  <section class="screen" data-screen="19" aria-labelledby="title19" hidden>
+    <div class="page-head"><span class="page-tag">今天必做</span><span class="when">⏱ 70–80 分</span><span class="eyebrow">自己問問看</span><h2 id="title19">可以直接抄的提問</h2></div>
     <div class="card">
-      <span class="eyebrow">自己問問看</span><span class="when">⏱ 70–85 分</span><h2 id="title8">可以直接抄的提問</h2>
       <div class="step"><div class="step-head"><button class="tick" type="button" data-step="4" aria-pressed="false" aria-label="完成第 4 步">✓</button><div class="step-title">打開手機上的 Gemini 或 ChatGPT</div></div></div>
       <p class="lead">按「複製」，再貼過去問：</p>
       <div class="prompt" id="promptText">AI 筆記本適合拿來整理哪些生活資料？請舉 5 個例子。</div>
       <div class="copy-row"><button class="copy-btn" id="copyBtn" type="button" data-copy="promptText">📋 複製這句</button><span class="copy-msg" id="copyMsg" aria-live="polite"></span></div>
     </div>
-    <div class="card ex">
-      <label for="direction" style="margin-top:0">必做：選一個最喜歡的，寫下我這學期想整理的生活資料方向</label><input class="field" id="direction" maxlength="60" placeholder="例如：家電說明書、社區公告、旅遊行程">
-      <div style="height:16px"></div><span class="bonus">⭐ 加碼</span><h3>AI 給了我哪 5 個例子？</h3><p class="lead">有時間再抄，簡單幾個字就好。</p>
-      <input class="field" id="ex1" maxlength="30" aria-label="例子 1" placeholder="例子 1">
-      <input class="field" id="ex2" maxlength="30" aria-label="例子 2" placeholder="例子 2">
-      <input class="field" id="ex3" maxlength="30" aria-label="例子 3" placeholder="例子 3">
-      <input class="field" id="ex4" maxlength="30" aria-label="例子 4" placeholder="例子 4">
-      <input class="field" id="ex5" maxlength="30" aria-label="例子 5" placeholder="例子 5">
+  </section>
+
+  <section class="screen" data-screen="20" aria-labelledby="title20" hidden>
+    <div class="page-head"><span class="page-tag">今天必做</span><span class="when">⏱ 80–85 分</span><span class="eyebrow">自己問問看</span><h2 id="title20">我這學期想整理什麼？</h2></div>
+    <div class="card">
+      <label for="direction" style="margin-top:0">選一個最喜歡的，寫下我這學期想整理的生活資料方向</label><input class="field" id="direction" maxlength="60" placeholder="例如：家電說明書、社區公告、旅遊行程">
       <div class="privacy">🔒 你填的字只存在你自己的手機，不會上傳。老師收尾時可能請幾位同學分享。</div>
     </div>
     <div class="card">
       <h3>答案要自己核對</h3><p>聊天 AI 可能不知道工具已改名；講得順，不代表資料一定最新。找出差異，就是核對的起點。</p>
     </div>
+  </section>
+
+  <section class="screen" data-screen="21" aria-labelledby="title21" hidden>
+    <div class="page-head"><span class="page-tag bonus">⭐ 加碼</span><span class="when">⏱ 先做完的人玩</span><span class="eyebrow">自己問問看</span><h2 id="title21">AI 給了我哪 5 個例子？</h2></div>
     <div class="card">
-      <span class="bonus">⭐ 加碼</span><h3>讓聊天 AI 更懂你的兩句話</h3><p class="lead">［方括號］換成你自己的內容。</p>
+      <p class="lead">有時間再抄，簡單幾個字就好。</p>
+      <input class="field" id="ex1" maxlength="30" aria-label="例子 1" placeholder="例子 1">
+      <input class="field" id="ex2" maxlength="30" aria-label="例子 2" placeholder="例子 2">
+      <input class="field" id="ex3" maxlength="30" aria-label="例子 3" placeholder="例子 3">
+      <input class="field" id="ex4" maxlength="30" aria-label="例子 4" placeholder="例子 4">
+      <input class="field" id="ex5" maxlength="30" aria-label="例子 5" placeholder="例子 5">
+    </div>
+  </section>
+
+  <section class="screen" data-screen="22" aria-labelledby="title22" hidden>
+    <div class="page-head"><span class="page-tag bonus">⭐ 加碼</span><span class="when">⏱ 先做完的人玩</span><span class="eyebrow">自己問問看</span><h2 id="title22">讓聊天 AI 更懂你的兩句話</h2></div>
+    <div class="card">
+      <p class="lead">［方括號］換成你自己的內容。</p>
       <div class="prompt small" id="pKnow">我想要［整理家裡的家電說明書］，需要先提供什麼資訊給你？</div>
       <div class="copy-row"><button class="copy-btn secondary" type="button" data-copy="pKnow">📋 複製</button><span class="copy-msg" aria-live="polite"></span></div>
       <div class="prompt small" id="pTopic">關於「［家電說明書整理］」，請提供幾個主題名稱。</div>
@@ -304,14 +380,18 @@ footer{text-align:center;color:#4a4038;font-size:14px;margin:18px 0 4px;font-wei
     </div>
   </section>
 
-  <section class="screen" data-screen="9" aria-labelledby="title9" hidden>
+  <section class="screen" data-screen="23" aria-labelledby="title23" hidden>
+    <div class="page-head"><span class="page-tag">今天必做</span><span class="when">⏱ 85–87 分</span><span class="eyebrow">收尾</span><h2 id="title23">第 5 步：App 移到第一頁</h2></div>
     <div class="card">
-      <span class="eyebrow">收尾</span><span class="when">⏱ 85–90 分</span><h2 id="title9">最後一步＋下課驗收</h2>
       <div class="step"><div class="step-head"><button class="tick" type="button" data-step="5" aria-pressed="false" aria-label="完成第 5 步">✓</button><div class="step-title">把 App 移到手機桌面第一頁</div></div><div class="hint">長按 App 圖示，拖到第一頁再放開。iPhone 和 Android 都可以這樣做，畫面可能略有不同。</div><div class="shot">截圖待補：手機桌面第一頁，紅框標出 Gemini Notebook App 圖示</div></div>
       <div class="celebrate" id="stepsDone" hidden>🎉 今天的五個操作步驟都完成了！</div>
     </div>
+  </section>
+
+  <section class="screen" data-screen="24" aria-labelledby="title24" hidden>
+    <div class="page-head"><span class="page-tag">今天必做</span><span class="when">⏱ 87–90 分</span><span class="eyebrow">收尾</span><h2 id="title24">我做到了嗎？</h2></div>
     <div class="card">
-      <h2>我做到了嗎？</h2><p class="lead">四個都打勾，就完成第 1 堂。自己手機做出來才算，看老師示範不算。</p>
+      <p class="lead">四個都打勾，就完成第 1 堂。自己手機做出來才算，看老師示範不算。</p>
       <div class="check"><button class="tick" type="button" data-check="1" aria-pressed="false" aria-label="完成驗收 1">✓</button><p>手機桌面上看得到 Gemini Notebook App，而且打得開</p></div>
       <div class="check"><button class="tick" type="button" data-check="2" aria-pressed="false" aria-label="完成驗收 2">✓</button><p>說得出自己登入的是哪一個帳號</p></div>
       <div class="check"><button class="tick" type="button" data-check="3" aria-pressed="false" aria-label="完成驗收 3">✓</button><p>能對同組說：「主要根據你給的資料回答，重要說法通常標出處，仍要點進去核對。」</p></div>
@@ -321,17 +401,21 @@ footer{text-align:center;color:#4a4038;font-size:14px;margin:18px 0 4px;font-wei
     <div class="card gold"><h2>今天記住這一句</h2><p>主要根據你給的資料回答，<br>重要說法通常標出處，<br>仍要點進去核對。</p></div>
   </section>
 
-  <section class="screen" data-screen="10" aria-labelledby="title10" hidden>
+  <section class="screen" data-screen="25" aria-labelledby="title25" hidden>
+    <div class="page-head"><span class="page-tag">今天必做</span><span class="when">⏱ 課堂遇到時查</span><span class="eyebrow">需要幫忙</span><h2 id="title25">卡住了怎麼辦？</h2></div>
     <div class="card">
-      <span class="eyebrow">需要幫忙</span><h2 id="title10">卡住了怎麼辦？</h2>
       <details><summary>手機太舊，裝不了 App <span>▶</span></summary><div class="answer">改用手機瀏覽器開網頁版；還是不行，今天先和同學一起看。</div></details>
       <details><summary>公司或學校帳號被擋 <span>▶</span></summary><div class="answer">工作帳號可能被管理員關掉服務，課後改用個人 Gmail。</div></details>
       <details><summary>忘記密碼或收不到驗證碼 <span>▶</span></summary><div class="answer">課堂上不處理。密碼和驗證碼不要給任何人看，包括講師。課後用 Google 帳號救援。</div></details>
       <details><summary>擔心要付錢 <span>▶</span></summary><div class="answer">這學期只用免費版，看到付費方案先不要點。</div></details>
       <details><summary>其他看不懂的畫面 <span>▶</span></summary><div class="answer">舉手請講師或同組同學幫忙。</div></details>
     </div>
+  </section>
+
+  <section class="screen" data-screen="26" aria-labelledby="title26" hidden>
+    <div class="page-head"><span class="page-tag">今天必做</span><span class="when">⏱ 回家做</span><span class="eyebrow">下課後</span><h2 id="title26">回家玩一玩</h2></div>
     <div class="card">
-      <h2>回家玩一玩</h2><p>打開手機相簿或 LINE，找三樣「要用時常常翻不到」的生活資料，只寫名稱，不用拍照上傳。</p>
+      <p>打開手機相簿或 LINE，找三樣「要用時常常翻不到」的生活資料，只寫名稱，不用拍照上傳。</p>
       <div class="home-fields"><input class="field" id="home1" maxlength="40" aria-label="第一樣生活資料" placeholder="第一樣，例如：家電說明書"><input class="field" id="home2" maxlength="40" aria-label="第二樣生活資料" placeholder="第二樣，例如：社區公告"><input class="field" id="home3" maxlength="40" aria-label="第三樣生活資料" placeholder="第三樣，例如：學校通知"></div>
       <div class="home-status" id="homeStatus">回家任務：0／3</div><div class="privacy">🔒 這些文字也只存在你自己的手機。病歷、藥袋、帳戶、證件不要放進任何 AI 工具。</div>
     </div>
@@ -339,6 +423,7 @@ footer{text-align:center;color:#4a4038;font-size:14px;margin:18px 0 4px;font-wei
     <button class="reset" id="resetBtn" type="button">清除我在這頁的紀錄</button>
     <footer>🍀 Learn AI with <span class="tar">Tarshar</span>｜2026</footer>
   </section>
+
 </main>
 
 <nav class="bottom" aria-label="分段導覽"><div class="bottom-in"><button class="nav-btn" id="prevBtn" type="button">← 上一段</button><button class="nav-btn primary nav-label" id="sectionBtn" type="button">開始上課</button><button class="nav-btn" id="nextBtn" type="button">下一段 →</button></div></nav>
@@ -347,7 +432,7 @@ footer{text-align:center;color:#4a4038;font-size:14px;margin:18px 0 4px;font-wei
 (function(){
   'use strict';
   var KEY='tarshar-gemini-notebook-lesson01-v2';
-  var labels=['歡迎','安全守則','學期地圖','先懂差別','用 AI 認識 AI','名字與免費版','跟著做','小遊戲','自己問問看','下課驗收','卡關與回家'];
+  var labels=['歡迎', '今天怎麼走', '安全守則', '⭐安全小測驗', '私人秘書', '⭐16 堂一覽', '兩種 AI', '同一題兩種答法', '秘書能讀什麼', '問兩家聊天 AI', '三個觀察', '⭐再問兩題', '新舊名字', '⭐是非題', '跟著做①', '跟著做②', '跟著做③', '小遊戲', '⭐再挑戰 4 題', '自己問問看', '寫下方向', '⭐五個例子', '⭐讓 AI 更懂你', '最後一步', '下課驗收', '卡關救援', '回家玩一玩'];
   function blank(){return {ticks:{},quiz:{},obs:{},text:{}};}
   var state=blank();
   function safeLoad(){try{var raw=localStorage.getItem(KEY);if(raw){var got=JSON.parse(raw);if(got&&typeof got==='object'){state=got;}}}catch(e){} var b=blank();for(var k in b){if(!state[k]||typeof state[k]!=='object'){state[k]={};}}}
