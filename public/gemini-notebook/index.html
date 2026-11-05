@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#f6f1e7" />
+    <title>Gemini Notebook｜社大手機課 16 堂</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      :root {
+        --ink: #26352f;
+        --paper: #f6f1e7;
+        --card: #fffdf8;
+        --line: #d8d0c0;
+        --brand: #366743;
+      }
+      body {
+        margin: 0;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 10% 0, #e0efe2 0 12%, transparent 34%),
+          var(--paper);
+        font:
+          17px/1.6 "PingFang TC",
+          "Microsoft JhengHei",
+          system-ui,
+          sans-serif;
+      }
+      main {
+        width: min(100% - 28px, 920px);
+        margin: auto;
+        padding: 26px 0 72px;
+      }
+      .hero {
+        background: var(--card);
+        border: 2px solid var(--line);
+        border-radius: 28px;
+        padding: 24px;
+        box-shadow: 0 10px 30px #5e523214;
+      }
+      .eyebrow {
+        color: var(--brand);
+        font-weight: 900;
+        letter-spacing: 0.08em;
+      }
+      h1 {
+        font-size: clamp(30px, 7vw, 50px);
+        line-height: 1.15;
+        margin: 0.25em 0;
+      }
+      .lead {
+        max-width: 680px;
+        margin: 0.5em 0 0;
+      }
+      .tools {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 18px;
+      }
+      .tools a {
+        min-height: 46px;
+        display: inline-flex;
+        align-items: center;
+        padding: 8px 14px;
+        border-radius: 14px;
+        background: var(--brand);
+        color: #fff;
+        font-weight: 900;
+        text-decoration: none;
+      }
+      .tools a.alt {
+        background: #fff;
+        color: var(--brand);
+        border: 2px solid var(--brand);
+      }
+      h2 {
+        margin: 30px 0 12px;
+        font-size: 25px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(235px, 1fr));
+        gap: 14px;
+      }
+      .lesson {
+        --accent: #366743;
+        --soft: #e0efe2;
+        display: block;
+        min-height: 190px;
+        padding: 18px;
+        color: var(--ink);
+        text-decoration: none;
+        background: linear-gradient(145deg, var(--soft), #fff 70%);
+        border: 2px solid color-mix(in srgb, var(--accent) 34%, #fff);
+        border-radius: 24px;
+        box-shadow: 0 7px 20px #3a2f2010;
+        transition:
+          0.18s transform,
+          0.18s box-shadow;
+      }
+      .lesson:hover,
+      .lesson:focus-visible {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 24px #3a2f2020;
+        outline: 3px solid var(--accent);
+        outline-offset: 2px;
+      }
+      .no {
+        display: inline-grid;
+        place-items: center;
+        min-width: 54px;
+        height: 32px;
+        padding: 0 9px;
+        border-radius: 999px;
+        color: #fff;
+        background: var(--accent);
+        font-weight: 900;
+      }
+      .lesson h3 {
+        color: var(--accent);
+        font-size: 21px;
+        line-height: 1.35;
+        margin: 14px 0 5px;
+      }
+      .lesson p {
+        margin: 0;
+        font-size: 15px;
+      }
+      .l1 {
+        --accent: #4a7a2e;
+        --soft: #e4f0df;
+      }
+      .l2 {
+        --accent: #2f6f9f;
+        --soft: #e1eef7;
+      }
+      .l3 {
+        --accent: #b5562a;
+        --soft: #f9e6dc;
+      }
+      .l4 {
+        --accent: #6b4c8a;
+        --soft: #eee7f5;
+      }
+      .l5 {
+        --accent: #3f7352;
+        --soft: #e2f0e6;
+      }
+      .l6 {
+        --accent: #8a4466;
+        --soft: #f4e3eb;
+      }
+      .l7 {
+        --accent: #8a5a12;
+        --soft: #f8ecd3;
+      }
+      .l8 {
+        --accent: #4f5ea8;
+        --soft: #e7eaf8;
+      }
+      .l9 {
+        --accent: #006b6b;
+        --soft: #d5f2ef;
+      }
+      .l10 {
+        --accent: #8a4b00;
+        --soft: #ffe5a3;
+      }
+      .l11 {
+        --accent: #2452a4;
+        --soft: #dce8ff;
+      }
+      .l12 {
+        --accent: #4b6b1b;
+        --soft: #e1efc8;
+      }
+      .l13 {
+        --accent: #7646a7;
+        --soft: #eadcff;
+      }
+      .l14 {
+        --accent: #a43e19;
+        --soft: #ffdcca;
+      }
+      .l15 {
+        --accent: #165f8f;
+        --soft: #d5ebfa;
+      }
+      .l16 {
+        --accent: #8b285c;
+        --soft: #f8d8e9;
+      }
+      footer {
+        margin-top: 30px;
+        text-align: center;
+        color: #5f625d;
+        font-size: 14px;
+      }
+      @media (max-width: 520px) {
+        main {
+          width: min(100% - 20px, 920px);
+          padding-top: 12px;
+        }
+        .hero {
+          padding: 20px 17px;
+        }
+        .grid {
+          grid-template-columns: 1fr;
+        }
+        .lesson {
+          min-height: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="hero">
+        <div class="eyebrow">🍀 Learn AI with Tarshar</div>
+        <h1>Gemini Notebook<br />社大手機課 16 堂</h1>
+        <p class="lead">
+          每堂 90
+          分鐘。從建立第一本筆記本，到完成生活小專題；每一堂都有自己的色系、操作路線、練習與驗收。
+        </p>
+        <div class="tools">
+          <a href="lesson01.html">從第 1 堂開始</a
+          ><a class="alt" href="materials.html">開啟課堂素材包</a>
+        </div>
+      </section>
+      <h2>基礎：先會放資料、會問、會核對</h2>
+      <div class="grid">
+        <a class="lesson l1" href="lesson01.html"
+          ><span class="no">第 1 堂</span>
+          <h3>認識 Gemini Notebook</h3>
+          <p>分清聊天 AI 與資料筆記本。</p></a
+        >
+        <a class="lesson l2" href="lesson02.html"
+          ><span class="no">第 2 堂</span>
+          <h3>我的第一本筆記本</h3>
+          <p>貼入公開網址，建立第一個主題。</p></a
+        >
+        <a class="lesson l3" href="lesson03.html"
+          ><span class="no">第 3 堂</span>
+          <h3>三個區塊認一認</h3>
+          <p>來源、對話、工作室各做什麼。</p></a
+        >
+        <a class="lesson l4" href="lesson04.html"
+          ><span class="no">第 4 堂</span>
+          <h3>會問問題</h3>
+          <p>用四要素把問題問清楚。</p></a
+        >
+        <a class="lesson l5" href="lesson05.html"
+          ><span class="no">第 5 堂</span>
+          <h3>它會亂答嗎？</h3>
+          <p>挑來源、看引用、不逼 AI 猜。</p></a
+        >
+        <a class="lesson l6" href="lesson06.html"
+          ><span class="no">第 6 堂</span>
+          <h3>把好答案留下來</h3>
+          <p>把重要回答整理成可再使用的內容。</p></a
+        >
+        <a class="lesson l7" href="lesson07.html"
+          ><span class="no">第 7 堂</span>
+          <h3>影片也能讀</h3>
+          <p>把公開 YouTube 影片當成來源。</p></a
+        >
+        <a class="lesson l8" href="lesson08.html"
+          ><span class="no">第 8 堂</span>
+          <h3>一眼看懂</h3>
+          <p>做整合摘要與資訊圖表。</p></a
+        >
+      </div>
+      <h2>應用：把生活資料變成可用成果</h2>
+      <div class="grid">
+        <a class="lesson l9" href="lesson09.html"
+          ><span class="no">第 9 堂</span>
+          <h3>用聽的學</h3>
+          <p>生成語音摘要，聽完回來源核對。</p></a
+        >
+        <a class="lesson l10" href="lesson10.html"
+          ><span class="no">第 10 堂</span>
+          <h3>紙本也能問</h3>
+          <p>照片辨識文字，核對後加入來源。</p></a
+        >
+        <a class="lesson l11" href="lesson11.html"
+          ><span class="no">第 11 堂</span>
+          <h3>錄音變會議紀錄</h3>
+          <p>直接錄音，整理待辦、負責人與期限。</p></a
+        >
+        <a class="lesson l12" href="lesson12.html"
+          ><span class="no">第 12 堂</span>
+          <h3>建立研究筆記本</h3>
+          <p>找官方來源，比較共識、差異與缺口。</p></a
+        >
+        <a class="lesson l13" href="lesson13.html"
+          ><span class="no">第 13 堂</span>
+          <h3>資料太雜怎麼辦</h3>
+          <p>分類、指定來源，讀懂問卷限制。</p></a
+        >
+        <a class="lesson l14" href="lesson14.html"
+          ><span class="no">第 14 堂</span>
+          <h3>工作室成品</h3>
+          <p>生成簡報、逐頁修改並安全分享。</p></a
+        >
+        <a class="lesson l15" href="lesson15.html"
+          ><span class="no">第 15 堂</span>
+          <h3>生活小專題製作日</h3>
+          <p>完成一本專題與 3 分鐘分享小抄。</p></a
+        >
+        <a class="lesson l16" href="lesson16.html"
+          ><span class="no">第 16 堂</span>
+          <h3>成果發表會</h3>
+          <p>分享成果，帶走一個可持續的習慣。</p></a
+        >
+      </div>
+      <footer>🍀 Learn AI with Tarshar｜2026</footer>
+    </main>
+  </body>
+</html>

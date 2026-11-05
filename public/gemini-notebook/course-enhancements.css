@@ -1,0 +1,108 @@
+body {
+  background:
+    radial-gradient(circle at 92% 4%, var(--mint) 0 9rem, transparent 9.1rem),
+    radial-gradient(circle at 3% 90%, var(--teal) 0 8rem, transparent 8.1rem),
+    var(--paper);
+}
+.top {
+  background: color-mix(in srgb, var(--paper) 92%, #fff);
+  backdrop-filter: blur(9px);
+}
+.lesson {
+  text-decoration: none;
+  box-shadow: 0 3px 0 color-mix(in srgb, var(--deep) 70%, #0000);
+}
+.lesson:hover,
+.lesson:focus-visible {
+  transform: translateY(-1px);
+}
+.card {
+  box-shadow: 0 8px 22px color-mix(in srgb, var(--deep) 10%, transparent);
+}
+.hero {
+  background: linear-gradient(145deg, var(--mint), var(--card) 72%);
+  border-color: var(--green);
+}
+.hero::before {
+  content: attr(data-symbol);
+  float: right;
+  font-size: 32px;
+  line-height: 1;
+  margin-left: 8px;
+}
+.take {
+  background: color-mix(in srgb, var(--card) 84%, var(--yellow));
+}
+.tip,
+.hint {
+  border-left: 5px solid var(--green);
+}
+.shot {
+  min-height: 0;
+  display: block;
+  text-align: left;
+  border: 2px solid var(--line);
+  border-radius: 18px;
+  background: linear-gradient(135deg, var(--mint), var(--card));
+  padding: 14px;
+  color: var(--ink);
+  font-size: 16px;
+}
+.shot strong {
+  display: block;
+  color: var(--deep);
+  font-size: 18px;
+  margin-bottom: 6px;
+}
+.shot .route {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+.shot .route span {
+  background: var(--card);
+  border: 2px solid var(--green);
+  color: var(--deep);
+  border-radius: 12px;
+  padding: 6px 9px;
+  font-weight: 900;
+}
+.shot .route b {
+  color: var(--green);
+}
+.material-link,
+.lesson-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 48px;
+  border: 2px solid var(--green);
+  border-radius: 14px;
+  padding: 9px 13px;
+  margin-top: 12px;
+  background: var(--card);
+  color: var(--deep);
+  text-decoration: none;
+  font-weight: 900;
+}
+.lesson-link.primary {
+  background: var(--green);
+  color: #fff;
+}
+.next-links {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+  margin-top: 12px;
+}
+@media (max-width: 380px) {
+  .next-links {
+    grid-template-columns: 1fr;
+  }
+  .hero::before {
+    font-size: 26px;
+  }
+}

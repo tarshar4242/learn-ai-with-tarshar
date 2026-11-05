@@ -40,12 +40,12 @@
 
 每個身分有自己的專屬網址，在後台「觀眾群」分頁可以直接複製：
 
-| 對象 | 網址結尾 |
-|---|---|
-| 一般訪客 | 不用加任何東西 |
-| 學員 | `?k=class2026` |
-| 同學 | `?k=nchu2026` |
-| 職場同事 | `?k=mis` |
+| 對象     | 網址結尾        |
+| -------- | --------------- |
+| 一般訪客 | 不用加任何東西  |
+| 學員     | `?k=class2026`  |
+| 同學     | `?k=nchu2026`   |
+| 職場同事 | `?k=mis`        |
 | 邀約單位 | `?k=invite2026` |
 
 把整串網址（例如 `https://tarshar4242.github.io/learn-ai-with-tarshar/?k=class2026`）發給對方，
@@ -73,6 +73,13 @@
 - 分眾邏輯在 `src/scripts/audience.js`，身分完全由網址 `?k=` 決定，不要加切換 UI（見 `content.json` 裡 `audiences` 欄位的注解）
 - 新增內容頁時，若有返回導覽的按鈕，記得用 `history.back()` 寫法，不要用固定網址，否則 `?k=` 身分會在換頁時遺失
 
+## Gemini Notebook 16 堂課
+
+- `public/gemini-notebook/index.html` — 16 堂課總入口，每堂以不同色系區隔。
+- `public/gemini-notebook/lesson01.html` 至 `lesson16.html` — 手機優先互動講義，進度存在學員自己的瀏覽器。
+- `public/gemini-notebook/materials.html` — 第 10、11、13–16 堂可直接複製的虛構練習素材。
+- 公開入口：https://tarshar4242.github.io/learn-ai-with-tarshar/gemini-notebook/
+
 ## 同仁 AI 開機日（Codex 版・公開實作教材）
 
 - `public/notes/ai-office-startup.html` — 兩小時教案、Spark 行事曆／母版套簡報兩個主實作與 11 組提示。
@@ -92,7 +99,6 @@
 - `public/notes/materials/ai-office-startup/course-materials.zip` — 完整課程 PDF 與可編輯練習教材包。
 - `output/ai-office-build/publish.py` — 正式網站 PDF 連結修正與教材包打包。
 - 公開課程：https://tarshar4242.github.io/learn-ai-with-tarshar/notes/ai-office-startup.html
-
 
 ## EP55 AI × GIS 城市資料視覺化
 
