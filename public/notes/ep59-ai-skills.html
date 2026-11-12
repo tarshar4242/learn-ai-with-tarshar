@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EP59 互動技能地圖｜Strata 地端 AI 實戰</title>
+<style>
+:root{--paper:#f7f6f3;--card:#fff;--ink:#191919;--muted:#62616c;--accent:#5B4BC4;--line:#e1dfeb}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.8 -apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC",sans-serif}a{color:var(--accent)}header,main,footer{max-width:1060px;margin:auto;padding:24px}header{padding-top:52px}h1{font-size:clamp(28px,5vw,44px);line-height:1.2;margin:12px 0}h1 span{color:var(--accent)}p{color:var(--muted)}.bar{position:sticky;top:0;z-index:5;background:#fffffff2;border-bottom:1px solid var(--line);padding:12px 24px;display:flex;justify-content:space-between;gap:20px;align-items:center}.bar a{text-decoration:none}.progress{background:#e5e2f3;height:10px;border-radius:10px;overflow:hidden}.progress div{height:100%;background:var(--accent);width:0;transition:width .2s}.tools{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button{font:inherit;border:1px solid var(--line);border-radius:9px;background:#fff;padding:8px 16px;cursor:pointer;color:var(--muted)}button[aria-pressed="true"]{background:var(--accent);color:white;border-color:var(--accent)}.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px}.kicker{font-size:13px;color:var(--accent);font-weight:700}.card h2{font-size:21px;line-height:1.45;margin:8px 0 16px}.card label{display:flex;gap:12px;align-items:flex-start;padding:11px 0;border-bottom:1px solid #efedf5;font-size:15px;cursor:pointer}.card input{accent-color:var(--accent);height:20px;width:20px;flex-shrink:0;margin-top:4px}.card label:has(input:checked){color:#4f409f}.insight{background:#f0eefb;border:1px solid #d7d0f3;padding:12px 15px;border-radius:9px;margin:15px 0;color:#4f409f;font-size:14px}details{margin:15px 0;font-size:14px}summary{cursor:pointer;color:var(--accent);font-weight:600}.jump{display:inline-block;font-size:14px;margin-top:8px}footer{font-size:13px;text-align:center;color:var(--muted)}.hidden{display:none}@media(max-width:720px){.grid{grid-template-columns:1fr}header,main{padding:20px}.bar{font-size:13px;padding:10px 16px}.card{padding:20px}}@media print{.bar,.tools{display:none}.grid{grid-template-columns:1fr}.card{break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="bar"><a href="ep59-notes.html">← 回課堂筆記</a><b>EP59 · 技能地圖</b></div>
+<header>
+  <div class="kicker">生成式 AI 應用電台 · EP59 · 竹貞整理</div>
+  <h1>從跑起第一個模型，到<span>接出可控的 Agent</span></h1>
+  <p>沿著課堂的六個任務練習。勾選你能獨立完成或清楚說明的項目，再從連結回到正式筆記複習。</p>
+  <p id="status" aria-live="polite"></p>
+  <div class="progress" role="progressbar" aria-label="學習完成比例" aria-valuemin="0" aria-valuemax="18" aria-valuenow="0"><div id="fill"></div></div>
+  <div class="tools"><button data-filter="all" aria-pressed="true">全部任務</button><button data-filter="todo" aria-pressed="false">只看待練習</button><button id="reset">重設勾選</button></div>
+  <p style="font-size:13px">勾選記錄只保存在目前瀏覽器，不會上傳，也不會自動跨裝置同步。</p>
+</header>
+<main>
+<div class="grid">
+  <section class="card" data-key="role">
+    <div class="kicker">01 · ［00:36–02:46］</div><h2>分清楚模型、執行環境與 Agent</h2>
+    <label><input type="checkbox" id="role-0"><span>能說出模型、Strata 與工作工具各自負責什麼</span></label>
+    <label><input type="checkbox" id="role-1"><span>知道本機推論與外部工具連線是兩件事</span></label>
+    <label><input type="checkbox" id="role-2"><span>能指出地端成本包含硬體、電力、等待與維護</span></label>
+    <div class="insight">Strata 不是模型本身，而是把模型載入、介面與本機服務接起來的環境。</div>
+    <details><summary>做一個小練習</summary><p>畫三個方塊：模型、Strata、Agent，寫下資料與指令如何流動。</p></details>
+    <a class="jump" href="ep59-notes.html#sec-role">回到課堂筆記這一章 →</a>
+  </section>
+  <section class="card" data-key="hardware">
+    <div class="kicker">02 · ［02:47–04:24］</div><h2>先盤點硬體，再選模型</h2>
+    <label><input type="checkbox" id="hardware-0"><span>會查看 GPU、VRAM、RAM 與可用 SSD 空間</span></label>
+    <label><input type="checkbox" id="hardware-1"><span>知道網站估算不能取代實際模型與量化測試</span></label>
+    <label><input type="checkbox" id="hardware-2"><span>能為自己的第一個任務選一個較小、可穩定啟動的模型</span></label>
+    <div class="insight">不是電腦好不好，而是任務、模型與配備有沒有配對。</div>
+    <details><summary>做一個小練習</summary><p>記下自己的 GPU、VRAM、RAM 與剩餘空間，再寫一個最小測試任務。</p></details>
+    <a class="jump" href="ep59-notes.html#sec-hardware">回到課堂筆記這一章 →</a>
+  </section>
+  <section class="card" data-key="install">
+    <div class="kicker">03 · ［04:25–07:58］</div><h2>完成一次可驗收的安裝</h2>
+    <label><input type="checkbox" id="install-0"><span>知道桌面版、終端機與 Docker 三條路的差別</span></label>
+    <label><input type="checkbox" id="install-1"><span>會先核對顯卡驅動、模型格式與儲存位置</span></label>
+    <label><input type="checkbox" id="install-2"><span>能用一小段有權使用的文字驗收繁中摘要</span></label>
+    <div class="insight">安裝完成不是驗收完成；模型要能載入並做好一個小任務。</div>
+    <details><summary>做一個小練習</summary><p>把模型、量化、上下文、硬體與儲存位置記成一張設定卡。</p></details>
+    <a class="jump" href="ep59-notes.html#sec-install">回到課堂筆記這一章 →</a>
+  </section>
+  <section class="card" data-key="governance">
+    <div class="kicker">04 · ［07:58–09:59］</div><h2>替資料與工具畫出安全邊界</h2>
+    <label><input type="checkbox" id="governance-0"><span>知道本機執行不等於自動符合組織規範</span></label>
+    <label><input type="checkbox" id="governance-1"><span>會檢查下載、更新、搜尋與外部工具是否連網</span></label>
+    <label><input type="checkbox" id="governance-2"><span>能為 Agent 設定最小必要的檔案與工具權限</span></label>
+    <div class="insight">資料留在本機，只解決「放在哪裡」；還要回答誰能讀、為何使用與留下什麼紀錄。</div>
+    <details><summary>做一個小練習</summary><p>列出一個任務需要讀的資料夾、可寫入的位置，以及不應開放的路徑。</p></details>
+    <a class="jump" href="ep59-notes.html#sec-governance">回到課堂筆記這一章 →</a>
+  </section>
+  <section class="card" data-key="troubleshoot">
+    <div class="kicker">05 · ［10:00–16:59］</div><h2>用證據除錯，不靠猜</h2>
+    <label><input type="checkbox" id="troubleshoot-0"><span>會先確認模型是否下載完成、格式是否被引擎支援</span></label>
+    <label><input type="checkbox" id="troubleshoot-1"><span>知道 Model ID 應依服務回報填寫，不從檔名猜</span></label>
+    <label><input type="checkbox" id="troubleshoot-2"><span>會保存 Logs、錯誤訊息與當下設定</span></label>
+    <div class="insight">下載很久、模型不支援與服務逾時，是三種不同問題，要分開處理。</div>
+    <details><summary>做一個小練習</summary><p>寫一張故障卡：現象、時間、模型、量化、上下文、錯誤訊息與下一步。</p></details>
+    <a class="jump" href="ep59-notes.html#sec-troubleshoot">回到課堂筆記這一章 →</a>
+  </section>
+  <section class="card" data-key="agent">
+    <div class="kicker">06 · ［17:00–20:05］</div><h2>把本機模型接成可控 Agent</h2>
+    <label><input type="checkbox" id="agent-0"><span>能取得本機服務位址與模型名稱，並填入工作工具</span></label>
+    <label><input type="checkbox" id="agent-1"><span>會先用不含敏感資料的小任務測試速度與穩定性</span></label>
+    <label><input type="checkbox" id="agent-2"><span>知道哪些任務適合用時間換成本與資料控制</span></label>
+    <div class="insight">先讓一個小任務穩定完成，再逐步開放檔案、工具與更大的模型。</div>
+    <details><summary>做一個小練習</summary><p>用本機 Agent 產生一段簡單程式或摘要，記錄時間、資源佔用與結果品質。</p></details>
+    <a class="jump" href="ep59-notes.html#sec-agent">回到課堂筆記這一章 →</a>
+  </section>
+</div>
+<p id="empty" class="hidden">全部勾選完成。挑一個自己的非敏感小任務，再跑一次完整流程吧。</p>
+</main>
+<footer>依 EP59 課堂錄影與 11 頁簡報整理 · 竹貞<br>本頁是學習檢核，不會連線到你的 Strata、讀取你的電腦或上傳任何資料。</footer>
+<script>
+const key='tarshar-ep59-skills-v1';let data={};try{data=JSON.parse(localStorage.getItem(key)||'{}')}catch(e){}const boxes=[...document.querySelectorAll('input[type=checkbox]')];let filter='all';boxes.forEach(b=>{b.checked=!!data[b.id];b.addEventListener('change',()=>{data[b.id]=b.checked;try{localStorage.setItem(key,JSON.stringify(data))}catch(e){}update()})});function update(){const n=boxes.filter(b=>b.checked).length;document.getElementById('status').textContent=`已完成 ${n}／${boxes.length} 項 · ${Math.round(n/boxes.length*100)}%`;document.getElementById('fill').style.width=(n/boxes.length*100)+'%';document.querySelector('[role=progressbar]').setAttribute('aria-valuenow',n);let visible=0;document.querySelectorAll('.card').forEach(c=>{let hide=filter==='todo'&&[...c.querySelectorAll('input')].every(x=>x.checked);c.classList.toggle('hidden',hide);if(!hide)visible++});document.getElementById('empty').classList.toggle('hidden',visible!==0)}document.querySelectorAll('[data-filter]').forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.filter;document.querySelectorAll('[data-filter]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));update()}));document.getElementById('reset').addEventListener('click',()=>{if(!confirm('要清除目前瀏覽器的 EP59 勾選記錄嗎？'))return;data={};boxes.forEach(b=>b.checked=false);try{localStorage.removeItem(key)}catch(e){}update()});update();
+</script>
+</body>
+</html>
