@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EP57 互動技能地圖｜AI 影片生成 10 大控制術</title>
+<style>
+:root{--paper:#f7f6f3;--card:#fff;--ink:#191919;--muted:#626b67;--accent:#6b5b95;--line:#e2ddea}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.8 -apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC",sans-serif}a{color:var(--accent)}header,main,footer{max-width:1060px;margin:auto;padding:24px}header{padding-top:52px}h1{font-size:clamp(28px,5vw,44px);line-height:1.2;margin:12px 0}h1 span{color:var(--accent)}p{color:var(--muted)}.bar{position:sticky;top:0;z-index:5;background:#fffffff2;border-bottom:1px solid var(--line);padding:12px 24px;display:flex;justify-content:space-between;gap:20px;align-items:center}.bar a{text-decoration:none}.progress{background:#e7e2ee;height:10px;border-radius:10px;overflow:hidden}.progress div{height:100%;background:var(--accent);width:0;transition:width .2s}.tools{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button{font:inherit;border:1px solid var(--line);border-radius:9px;background:#fff;padding:8px 16px;cursor:pointer;color:var(--muted)}button[aria-pressed="true"]{background:var(--accent);color:white;border-color:var(--accent)}.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px}.kicker{font-size:13px;color:var(--accent);font-weight:700}.card h2{font-size:21px;line-height:1.45;margin:8px 0 16px}.card label{display:flex;gap:12px;align-items:flex-start;padding:11px 0;border-bottom:1px solid #eeeaf2;font-size:15px;cursor:pointer}.card input{accent-color:var(--accent);height:20px;width:20px;flex-shrink:0;margin-top:4px}.card label:has(input:checked){color:#6b5b95}.insight{background:#f1edf7;border:1px solid #dcd3e8;padding:12px 15px;border-radius:9px;margin:15px 0;color:#564578;font-size:14px}details{margin:15px 0;font-size:14px}summary{cursor:pointer;color:var(--accent);font-weight:600}.jump{display:inline-block;font-size:14px;margin-top:8px}footer{font-size:13px;text-align:center;color:var(--muted)}.hidden{display:none}@media(max-width:720px){.grid{grid-template-columns:1fr}header,main{padding:20px}.bar{font-size:13px;padding:10px 16px}.card{padding:20px}}@media print{.bar,.tools{display:none}.grid{grid-template-columns:1fr}.card{break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="bar"><a href="ep57-notes.html">← 回課堂筆記</a><b>EP57 · 技能地圖</b></div>
+<header>
+  <div class="kicker">生成式 AI 應用電台 · EP57 · 竹貞整理</div>
+  <h1>從一句影片願望，到<span>一條可以驗收的製作流程</span></h1>
+  <p>沿著課堂的六個任務練習。勾選你已能獨立說明或完成的項目，再從連結回到課堂筆記對應章節。</p>
+  <p id="status" aria-live="polite"></p>
+  <div class="progress" role="progressbar" aria-label="學習完成比例" aria-valuemin="0" aria-valuemax="18" aria-valuenow="0"><div id="fill"></div></div>
+  <div class="tools"><button data-filter="all" aria-pressed="true">全部任務</button><button data-filter="todo" aria-pressed="false">只看待練習</button><button id="reset">重設勾選</button></div>
+  <p style="font-size:13px">勾選記錄保存在目前瀏覽器；不會上傳，也不會自動跨裝置同步。</p>
+</header>
+<main>
+<div class="grid">
+  <section class="card" data-key="input"><div class="kicker">01 · ［00:00–13:30］</div><h2>先把角色與輸出規格說清楚</h2>
+    <label><input type="checkbox" id="input-0"><span>能分辨文字發想與圖片鎖定畫面的用途</span></label>
+    <label><input type="checkbox" id="input-1"><span>會在送出前確認模型、解析度、比例與片長</span></label>
+    <label><input type="checkbox" id="input-2"><span>知道角色參考要包含足以辨識的身份特徵與角度</span></label>
+    <div class="insight">讓模型少猜一件事，就多一分可控制性。</div>
+    <details><summary>做一個小練習</summary><p>準備一張角色圖，另外補一個不同角度；寫下哪些特徵不能變。</p></details><a class="jump" href="ep57-notes.html#sec-input">回到課堂筆記這一章 →</a>
+  </section>
+  <section class="card" data-key="keyframes"><div class="kicker">02 · ［13:30–20:30］</div><h2>用首尾幀約束一個短動作</h2>
+    <label><input type="checkbox" id="keyframes-0"><span>能說出首幀、尾幀與中間提示各自控制什麼</span></label>
+    <label><input type="checkbox" id="keyframes-1"><span>會把 8～10 秒片段縮成一個主要事件</span></label>
+    <label><input type="checkbox" id="keyframes-2"><span>生成後會檢查臉、手、物件與移動路徑</span></label>
+    <div class="insight">首尾差異越小，中間越容易連得起來。</div>
+    <details><summary>做一個小練習</summary><p>找兩張構圖相近的圖片，只描述中間一次可觀察的動作。</p></details><a class="jump" href="ep57-notes.html#sec-keyframes">回到課堂筆記這一章 →</a>
+  </section>
+  <section class="card" data-key="edit"><div class="kicker">03 · ［20:30–28:30］</div><h2>把片段接成看得懂的時間線</h2>
+    <label><input type="checkbox" id="edit-0"><span>會檢查兩鏡之間的動作、方向與節奏連續性</span></label>
+    <label><input type="checkbox" id="edit-1"><span>知道何時該剪短、換接點或使用轉場</span></label>
+    <label><input type="checkbox" id="edit-2"><span>會把旁白、配樂與字幕留到畫面穩定後處理</span></label>
+    <div class="insight">兩段都生成成功，不等於接起來自然。</div>
+    <details><summary>做一個小練習</summary><p>把兩段短片接起來，分別試硬切與疊化，記錄哪一個接點比較順。</p></details><a class="jump" href="ep57-notes.html#sec-edit">回到課堂筆記這一章 →</a>
+  </section>
+  <section class="card" data-key="controls"><div class="kicker">04 · ［28:30–35:00］</div><h2>把十個控制面向變成檢查題</h2>
+    <label><input type="checkbox" id="controls-0"><span>能區分主體動作、鏡頭運動、景別與慢動作</span></label>
+    <label><input type="checkbox" id="controls-1"><span>知道首尾幀、角色、樣式與場景可分開設定</span></label>
+    <label><input type="checkbox" id="controls-2"><span>每次重跑只改一個主要變數，保留其他條件</span></label>
+    <div class="insight">十個控制術是十個可驗收問題，不是十句咒語。</div>
+    <details><summary>做一個小練習</summary><p>挑一個失敗片段，只改動作速度或一種運鏡，再比較兩版。</p></details><a class="jump" href="ep57-notes.html#sec-vibes">回到課堂筆記這一章 →</a>
+  </section>
+  <section class="card" data-key="project"><div class="kicker">05 · ［35:00–45:30］</div><h2>先做故事母版，再為工具翻譯</h2>
+    <label><input type="checkbox" id="project-0"><span>會先寫一句主題與觀眾最後要記住的結論</span></label>
+    <label><input type="checkbox" id="project-1"><span>能把 30 秒故事拆成鉤子、現象、解釋與結論</span></label>
+    <label><input type="checkbox" id="project-2"><span>會依工具片長與輸入方式改寫，不整段硬貼</span></label>
+    <div class="insight">一份母版維持主線，多種輸入服務不同工具。</div>
+    <details><summary>做一個小練習</summary><p>把 30 秒腳本改寫成三個各 8～10 秒的生成提示。</p></details><a class="jump" href="ep57-notes.html#sec-project">回到課堂筆記這一章 →</a>
+  </section>
+  <section class="card" data-key="route"><div class="kicker">06 · ［45:30–52:40］</div><h2>按任務選工具，發布前由人收尾</h2>
+    <label><input type="checkbox" id="route-0"><span>能替腳本、角色、單鏡、摘要與剪輯分配不同工具</span></label>
+    <label><input type="checkbox" id="route-1"><span>會確認帳號、隱私、肖像、浮水印與商用限制</span></label>
+    <label><input type="checkbox" id="route-2"><span>知道 AI 宣稱完成不等於逐鏡驗收完成</span></label>
+    <div class="insight">工具完成一段工作，導演負責判斷整支片能不能用。</div>
+    <details><summary>做一個小練習</summary><p>替自己的影片列一張分工表：哪個工具做什麼、你要驗收什麼。</p></details><a class="jump" href="ep57-notes.html#sec-route">回到課堂筆記這一章 →</a>
+  </section>
+</div>
+<p id="empty" class="hidden">全部勾選完成。選一個 10 秒動作，跑一次「定圖 → 生成 → 時間軸 → 驗收」吧。</p>
+</main>
+<footer>依 2026/11/07 課堂錄影與簡報校對整理 · 竹貞<br>本頁是學習檢核；不會上傳你的素材，也不取代工具官方說明。</footer>
+<script>
+const key='tarshar-ep57-skills-v1';let data={};try{data=JSON.parse(localStorage.getItem(key)||'{}')}catch(e){}const boxes=[...document.querySelectorAll('input[type=checkbox]')];let filter='all';boxes.forEach(b=>{b.checked=!!data[b.id];b.addEventListener('change',()=>{data[b.id]=b.checked;try{localStorage.setItem(key,JSON.stringify(data))}catch(e){}update()})});function update(){const n=boxes.filter(b=>b.checked).length;document.getElementById('status').textContent=`已完成 ${n}／${boxes.length} 項 · ${Math.round(n/boxes.length*100)}%`;document.getElementById('fill').style.width=(n/boxes.length*100)+'%';document.querySelector('[role=progressbar]').setAttribute('aria-valuenow',n);let visible=0;document.querySelectorAll('.card').forEach(c=>{let hide=filter==='todo'&&[...c.querySelectorAll('input')].every(x=>x.checked);c.classList.toggle('hidden',hide);if(!hide)visible++});document.getElementById('empty').classList.toggle('hidden',visible!==0)}document.querySelectorAll('[data-filter]').forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.filter;document.querySelectorAll('[data-filter]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));update()}));document.getElementById('reset').addEventListener('click',()=>{if(!confirm('要清除目前瀏覽器的 EP57 勾選記錄嗎？'))return;data={};boxes.forEach(b=>b.checked=false);try{localStorage.removeItem(key)}catch(e){}update()});update();
+</script>
+</body>
+</html>

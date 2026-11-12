@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>直播電台 EP57 課堂筆記｜把 AI 影片從一句 Prompt 變成可控制的製作流程</title>
+<meta name="description" content="生成式 AI 應用電台 EP57（2026/11/07，52 分 40 秒）課堂筆記。從 Google Vids、Flow、Meta AI Vibes 的現場示範，整理角色參考、首尾幀、短片段、剪接銜接、旁白字幕與 AI 專案分工。依 89 張關鍵畫面候選、599 段逐字稿與 82 頁簡報校對整理。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#6b5b95; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:760px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px;max-height:calc(100vh - 90px);overflow-y:auto}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:7px;border-left:none;font-size:13px}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.code{position:relative;background:var(--code);border:1px solid var(--line2);border-radius:10px;padding:13px 15px;margin:10px 0;font-size:13px;line-height:1.75;color:var(--ink);white-space:pre-wrap;font-family:"Cascadia Code",Consolas,monospace;overflow-x:auto}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.iframe-wrap{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000;margin:14px 0}
+.iframe-wrap iframe{display:block;width:100%;height:460px;border:0}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static;max-height:none} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} .iframe-wrap iframe{height:320px} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/?k=145#radio" style="border-color:#d5cfe3" onclick="if(history.length>1){history.back();return false}">← 回上一頁</a>
+  <b>📝 直播電台 EP57 課堂筆記</b>
+  <div class="right"><a class="btn" href="ep57-ai-skills.html">🗺️ 互動技能地圖</a></div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式 AI 應用電台 · 直播電台 · EP57</span>
+  <h1>不只寫一句 Prompt，<span>把影片拆成可以控制的決定</span></h1>
+  <p class="lead">這堂不是比誰背得出最多工具名稱，而是把 AI 影片拆成<b>角色、畫面、動作、鏡頭、片長與後製</b>，逐項控制。<br>課堂依序示範 Google Vids、Flow、Meta AI Vibes，再把同一個故事交給 Gemini、NotebookLM 等工具接力；主線是<b>先定畫面，再做短片段，最後回到時間軸組合</b>。<br>本頁依<b>錄影 89 張關鍵畫面候選＋599 段逐字稿，並以 82 頁簡報校對術語</b>整理，重點段落附影片時間戳。</p>
+  <div class="meta">
+    <span>📅 2026/11/07（六）上午直播</span>
+    <span>⏱️ 全長 52 分 40 秒</span>
+    <span>🎬 示範：Vids × Flow × Vibes</span>
+    <span>🧩 主題：角色一致 × 首尾幀 × 分鏡後製</span>
+    <span>🔰 入門實作向</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-overview">1. 一張圖看懂這堂</a>
+  <a href="#sec-input">2. 先決定輸入：文字發想，圖片鎖住畫面</a>
+  <a href="#sec-keyframes">3. 首尾幀不是魔法，中間只安排一件事</a>
+  <a href="#sec-edit">4. 生成只是片段，銜接要回到時間軸</a>
+  <a href="#sec-vibes">5. 把控制項拆開，比一句 Prompt 更清楚</a>
+  <a href="#sec-project">6. 先建故事母版，再轉成各工具吃得下的格式</a>
+  <a href="#sec-route">7. 工具不是越多越好，要按任務分工</a>
+  <a href="#sec-real">8. 這堂課真正在教的事</a>
+  <a href="#sec-quotes">9. 老師金句</a>
+  <a href="#sec-src">10. 資料來源與整理說明</a>
+</nav>
+
+<article>
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--cyan))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>EP57｜不只一句 Prompt！AI 影片生成 10 大控制術</td></tr>
+    <tr><th>直播日期</th><td>2026/11/07（六）上午，本段錄影全長 <b>52 分 40 秒</b></td></tr>
+    <tr><th>本堂主題</th><td>角色參考、圖片生影片、首尾幀、片段延長、時間軸銜接、旁白字幕，以及用 AI 專案先整理故事與分鏡</td></tr>
+    <tr><th>現場案例</th><td>臺灣黑熊去河邊野餐、淡水土耳其冰淇淋換角色，以及可樂加曼陀珠的 30 秒科學短片</td></tr>
+    <tr><th>要先準備</th><td>可登入的 Google 帳號；若要跟著做，先準備一張角色圖與一個 8～15 秒內能說完的動作</td></tr>
+  </table></div>
+  <h3>📁 本次來源</h3>
+  <p>來源資料夾包含一段錄影與一份 82 頁簡報。原始錄影與簡報不在公開頁提供下載；簡報只用來核對工具名稱、十個控制面向與操作限制，沒有另做簡報整合版。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:230px">教材</th><th>整理時的用途</th></tr>
+    <tr><td><code>EP57 課堂錄影</code></td><td>以現場操作與口述為主，記錄哪些功能真的打開、哪些流程成功、哪些地方仍需後製。</td></tr>
+    <tr><td><code>AI 影片生成 10 大控制術簡報</code></td><td>核對文生／圖生、首尾幀、七個影片零件、六個提示詞欄位、鏡頭語言與工具分工。</td></tr>
+  </table></div>
+  <h3>📥 帶走一份正式手冊</h3>
+  <p><a href="ep57-downloads/ep57-handbook.pdf">下載課堂筆記 PDF</a> · <a href="ep57-downloads/ep57-handbook.docx">下載可編輯 Word</a></p>
+  <div class="note gold">🔒 <div><b>公開截圖只保留課程內容區。</b>原始畫面中的會議參與者、帳號、網址列、書籤列、工作列與專案資訊都已裁除；本頁不公開原始錄影與簡報。</div></div>
+</section>
+
+<section class="chapter" id="sec-overview">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--purple))">OVERVIEW</span>
+  <h2 class="ct">1. 一張圖看懂這堂</h2>
+  <p class="cd">控制力不是把提示詞寫得更長，而是把製作拆成五個可檢查的決定。</p>
+  <div class="svgwrap">
+  <svg viewBox="0 0 980 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AI 影片從目標、角色、短鏡、生成到後製的流程圖">
+    <defs><marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#9B9B9B"/></marker></defs>
+    <rect x="14" y="96" width="164" height="94" rx="12" fill="#EEF4FB" stroke="#CFE0F1"/>
+    <text x="96" y="128" text-anchor="middle" font-size="15" font-weight="700" fill="#1d5e8f">先定目標</text><text x="96" y="152" text-anchor="middle" font-size="12.5" fill="#5f5f5f">觀眾要看懂什麼</text><text x="96" y="170" text-anchor="middle" font-size="12.5" fill="#5f5f5f">片長與比例多少</text>
+    <rect x="210" y="96" width="164" height="94" rx="12" fill="#FBF7EC" stroke="#EFE3C4"/>
+    <text x="292" y="128" text-anchor="middle" font-size="15" font-weight="700" fill="#7a5b12">鎖角色與畫面</text><text x="292" y="152" text-anchor="middle" font-size="12.5" fill="#5f5f5f">定稿圖、身份參考</text><text x="292" y="170" text-anchor="middle" font-size="12.5" fill="#5f5f5f">首幀與尾幀</text>
+    <rect x="406" y="96" width="164" height="94" rx="12" fill="#EDF7F1" stroke="#CBE6D5"/>
+    <text x="488" y="128" text-anchor="middle" font-size="15" font-weight="700" fill="#166a4c">拆成短鏡</text><text x="488" y="152" text-anchor="middle" font-size="12.5" fill="#5f5f5f">一鏡一個主要動作</text><text x="488" y="170" text-anchor="middle" font-size="12.5" fill="#5f5f5f">片長內做得完</text>
+    <rect x="602" y="96" width="164" height="94" rx="12" fill="#EEF2F5" stroke="#D2DFE7"/>
+    <text x="684" y="128" text-anchor="middle" font-size="15" font-weight="700" fill="#255066">交給適合工具</text><text x="684" y="152" text-anchor="middle" font-size="12.5" fill="#5f5f5f">圖片、影片、旁白</text><text x="684" y="170" text-anchor="middle" font-size="12.5" fill="#5f5f5f">各自生成與挑選</text>
+    <rect x="798" y="96" width="164" height="94" rx="12" fill="#F4F3F0" stroke="#DBD9D5"/>
+    <text x="880" y="128" text-anchor="middle" font-size="15" font-weight="700" fill="#6b5b95">回到時間軸</text><text x="880" y="152" text-anchor="middle" font-size="12.5" fill="#5f5f5f">剪接、轉場、字幕</text><text x="880" y="170" text-anchor="middle" font-size="12.5" fill="#5f5f5f">聲音與人工查核</text>
+    <line x1="178" y1="143" x2="202" y2="143" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/><line x1="374" y1="143" x2="398" y2="143" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/><line x1="570" y1="143" x2="594" y2="143" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/><line x1="766" y1="143" x2="790" y2="143" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+  </svg>
+  <figcaption>先控制輸入與短鏡，再選工具生成；成片的完整度要在時間軸上收回來。</figcaption>
+  </div>
+  <div class="note blue">💡 <div>如果只記得一句話，記這句：<b>一句 Prompt 只能描述願望；可控制的影片，需要一連串可驗收的製作決定。</b>［20:30］</div></div>
+</section>
+
+<section class="chapter" id="sec-input">
+  <span class="chip" style="background:linear-gradient(90deg,var(--cyan),var(--blue))">00:00–13:30</span>
+  <h2 class="ct">2. 先決定輸入：文字用來發想，圖片用來鎖住畫面</h2>
+  <p class="cd">前半段以 Google Vids 的臺灣黑熊案例示範：先選模型、解析度與比例，再用角色圖降低每一鏡重新猜角色的風險。</p>
+  <div class="shotgrid">
+    <figure class="shot"><img src="ep57-img/01-vids-settings.jpg" alt="Google Vids 的影片模型與解析度設定" loading="lazy"><figcaption>生成前先選影片模型、解析度與橫直比例。這些不是提示詞裡的形容詞，而是送出前可以直接檢查的規格。［02:31］</figcaption></figure>
+    <figure class="shot"><img src="ep57-img/02-character-reference.jpg" alt="用臺灣黑熊圖片作為角色參考" loading="lazy"><figcaption>先產出一張可辨識的臺灣黑熊角色圖，再把同一角色的正面、側面或背面資料交給影片工具；目標是跨鏡頭仍看得出是同一個角色。［04:01］</figcaption></figure>
+  </div>
+  <h3>角色一致性不是一句「保持一致」就夠</h3>
+  <ul class="pt">
+    <li><b>身份先固定：</b>臉型、毛色、服裝與配件要能從參考圖辨識。</li>
+    <li><b>角度要有資料：</b>只有正面圖，模型換成側面或背面時就要重新猜。</li>
+    <li><b>每次只改一件事：</b>角色不變，先換場景；場景不變，再測動作或鏡頭。</li>
+    <li><b>規格留在介面：</b>比例、解析度與片長用設定控制，不必全部塞進提示詞。</li>
+  </ul>
+  <div class="note steel">🔧 <div>錄影逐字稿多次把 Google Vids 辨識成「Google Fit／Feed」。本頁以畫面與簡報核對後統一使用 <b>Google Vids</b>；模型、額度與方案會變動，實作前仍要看登入後的當前介面。</div></div>
+</section>
+
+<section class="chapter" id="sec-keyframes">
+  <span class="chip" style="background:linear-gradient(90deg,var(--purple),var(--pink))">13:30–20:30</span>
+  <h2 class="ct">3. 首尾幀不是魔法，中間只安排一件做得完的事</h2>
+  <p class="cd">Flow 示範先給起點與終點，再用文字描述中間的 8 秒如何變化。兩端約束越清楚，中間越不必憑空猜。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">控制項</th><th>你要先決定</th><th>常見失敗</th></tr>
+    <tr><td>首幀</td><td>角色、構圖、鏡位與動作起點</td><td>起點已經把動作做完，後面沒有可發展的空間</td></tr>
+    <tr><td>尾幀</td><td>同一角色的結束狀態與目標畫面</td><td>人物、物件大小或鏡頭角度差太遠</td></tr>
+    <tr><td>中間提示</td><td>一次主要動作、方向、速度與必要的鏡頭語言</td><td>在 8 秒內塞進多個事件，造成跳接與變形</td></tr>
+  </table></div>
+  <ol class="st">
+    <li>先用兩張圖確認「誰、在哪裡、從什麼狀態到什麼狀態」。</li>
+    <li>把中間事件縮成一句可觀察的動作，例如角色與攤商交換位置。</li>
+    <li>生成後先看臉、手、物件與移動路徑，再判斷要不要拆成兩鏡。</li>
+  </ol>
+  <div class="golden"><div class="q">「因為它只有八秒，所以你不可能在這八秒塞了無限的動作。」</div><div class="a">［17:16］在示範首尾幀時提醒：片長本身就是故事複雜度的上限。</div></div>
+</section>
+
+<section class="chapter" id="sec-edit">
+  <span class="chip" style="background:linear-gradient(90deg,var(--orange),var(--amber))">20:30–28:30</span>
+  <h2 class="ct">4. 生成只是片段，銜接要回到時間軸</h2>
+  <p class="cd">兩段都能播放，不代表接在一起就自然。課堂直接在時間軸上剪短、換接點、試轉場，再補旁白、配樂與字幕。</p>
+  <figure class="shot"><img src="ep57-img/03-flow-timeline.jpg" alt="Flow 中的影片時間軸與接點" loading="lazy"><figcaption>生成片段已放進時間軸，播放頭停在約 2 秒的位置；看下方每一格與接點，問題不一定出在模型，而可能是上一鏡結尾和下一鏡開頭沒有對齊。［20:14］</figcaption></figure>
+  <h3>銜接時先看三個連續性</h3>
+  <ul class="pt">
+    <li><b>動作連續：</b>上一鏡角色正拿著物件，下一鏡不能無預警回到空手。</li>
+    <li><b>方向連續：</b>主體往畫面右側移動，下一鏡若反向，觀眾會覺得跳。</li>
+    <li><b>節奏連續：</b>剪掉多餘停頓，再決定要硬切、疊化或換一個更自然的接點。</li>
+  </ul>
+  <div class="twrap"><table>
+    <tr><th>後製零件</th><th>放到後面做的理由</th></tr>
+    <tr><td>旁白</td><td>先讓畫面長度穩定，才知道句子要說多快、在哪裡停。</td></tr>
+    <tr><td>配樂</td><td>最後依旁白與畫面節奏調音量，不讓音樂蓋過資訊。</td></tr>
+    <tr><td>字幕</td><td>生成畫面中的文字容易錯；正確字詞與閱讀時間由剪輯階段控制。</td></tr>
+  </table></div>
+  <div class="note gold">⚠️ <div>課堂示範的內建時間軸能做基本修剪，但更細的音量、疊合與節奏控制，仍可能要交給 CapCut、剪映、威力導演或其他剪輯工具。</div></div>
+</section>
+
+<section class="chapter" id="sec-vibes">
+  <span class="chip" style="background:linear-gradient(90deg,var(--teal),var(--green))">28:30–35:00</span>
+  <h2 class="ct">5. 把控制項拆開，比一句 Prompt 更清楚</h2>
+  <p class="cd">Meta AI 的一般聊天頁不是影片工作區；課堂改進入 Vibes，介面直接把首幀、尾幀、角色、樣式、場景與延伸拆成選項。</p>
+  <figure class="shot"><img src="ep57-img/04-vibes-controls.jpg" alt="Vibes 的首幀、尾幀與元素控制介面" loading="lazy"><figcaption>畫面下方把開始影格、結束影格與元素控制分開；上方顯示專案素材。把每個控制面向拆成欄位，比在一段長 Prompt 裡同時描述所有要求更容易查錯。［32:31］</figcaption></figure>
+  <div class="twrap"><table>
+    <tr><th>十個控制面向</th><th>實作時的問題</th></tr>
+    <tr><td>懂原理／選輸入</td><td>這一鏡要探索畫面，還是已經有定稿圖？</td></tr>
+    <tr><td>定起終／拆零件</td><td>首尾差多少？劇情、畫面、聲音、字幕與節奏要怎麼分工？</td></tr>
+    <tr><td>寫提示／先圖後影</td><td>畫面上能看見的主體、動作、場景、光線、風格與鏡頭是什麼？</td></tr>
+    <tr><td>接動作／鎖角色</td><td>中間只發生一件事嗎？身份參考是否沿用？</td></tr>
+    <tr><td>控鏡頭／選工具</td><td>景別、運鏡與慢動作是否混在一起？目前任務需要哪一類工具？</td></tr>
+  </table></div>
+  <div class="note blue">💡 <div>「十個控制術」不是十句萬用咒語，而是十個<b>送出前可以問、生成後可以驗</b>的問題。</div></div>
+</section>
+
+<section class="chapter" id="sec-project">
+  <span class="chip" style="background:linear-gradient(90deg,var(--blue),var(--purple))">35:00–45:30</span>
+  <h2 class="ct">6. 先建故事母版，再轉成各工具吃得下的格式</h2>
+  <p class="cd">可樂加曼陀珠案例先在 AI 專案裡完成 30 秒劇情、分鏡與畫面零件，再分支成 Google Vids 的短鏡提示、NotebookLM 的來源文字與其他工具的輸入。</p>
+  <div class="shotgrid">
+    <figure class="shot"><img src="ep57-img/05-gemini-storyboard.jpg" alt="Gemini 中的 30 秒科學短片分鏡需求" loading="lazy"><figcaption>先把「30 秒、可樂加曼陀珠、要有趣、要解釋科學原理」寫成母任務，再要求拆成劇本與分鏡；這裡還不是直接丟進影片模型的最終提示。［40:01］</figcaption></figure>
+    <figure class="shot"><img src="ep57-img/06-notebooklm-video.jpg" alt="NotebookLM 依來源產生影片摘要" loading="lazy"><figcaption>同一份來源進入 NotebookLM 後，可選影片摘要等輸出；右側工作室顯示正在建立短片。它適合快速整理來源，但視覺節奏與細節控制不如逐鏡製作。［44:31］</figcaption></figure>
+  </div>
+  <h3>一份母版，派生多種輸入</h3>
+  <ol class="st">
+    <li>先寫一句主題與觀眾最後要記住的結論。</li>
+    <li>把 30 秒拆成鉤子、現象、解釋與結論，再細分成短鏡。</li>
+    <li>為每一鏡列角色、畫面、動作、旁白與片長。</li>
+    <li>依工具限制改寫：10 秒工具只拿一鏡；來源型工具拿完整文字與圖片。</li>
+    <li>生成後回到同一份分鏡表驗收，不讓不同工具各自改寫主線。</li>
+  </ol>
+  <div class="note steel">🔧 <div>課堂現場也出現辨識錯誤與工具名稱混淆；本頁只保留可由畫面、簡報或上下文確認的功能。NotebookLM 的方案、API 與輸出能力會更新，應以官方當前介面為準。</div></div>
+</section>
+
+<section class="chapter" id="sec-route">
+  <span class="chip" style="background:linear-gradient(90deg,var(--pink),var(--rose))">45:30–52:40</span>
+  <h2 class="ct">7. 工具不是越多越好，要按任務分工</h2>
+  <p class="cd">後段快速帶過 Canva AI、Felo 與 Agent 型工作流；重點不是把每個網站都學完，而是知道什麼工作值得交給哪一類工具。</p>
+  <div class="twrap"><table>
+    <tr><th style="width:160px">任務</th><th>適合的工具類型</th><th>你仍要驗收</th></tr>
+    <tr><td>快速發想與腳本</td><td>ChatGPT、Gemini 等對話模型</td><td>主題、受眾、片長、事實與敘事節奏</td></tr>
+    <tr><td>角色與單鏡生成</td><td>Vids、Flow、Vibes 或專業影片模型</td><td>角色一致、物件完整、動作與鏡頭</td></tr>
+    <tr><td>來源型摘要影片</td><td>NotebookLM 等來源導向工具</td><td>來源是否正確、重點是否失真、畫面是否單調</td></tr>
+    <tr><td>精細產品與多角度展示</td><td>可調參數的 Agent／Skill／MCP 工作流</td><td>素材權利、每鏡規格、版本與輸出品質</td></tr>
+    <tr><td>成片與發布</td><td>時間軸剪輯、字幕與配音工具</td><td>錯字、音量、浮水印、比例與授權</td></tr>
+  </table></div>
+  <h3>公開前還有四條線</h3>
+  <ul class="pt">
+    <li><b>帳號與隱私：</b>不要上傳同學照片、個資或受限素材；不同地區與年齡的服務限制要先查。</li>
+    <li><b>肖像與聲音：</b>真人、歌手、聲音克隆與對嘴都需要權利基礎。</li>
+    <li><b>浮水印與商用：</b>免費方案能生成，不代表可以移除浮水印或拿去商用。</li>
+    <li><b>標示與查核：</b>需要時標示 AI 生成；科學原理、產品規格與字幕要由人確認。</li>
+  </ul>
+  <div class="golden"><div class="q">「你的故事跟劇情只要 OK 了，接下來就是交給它不同的工具，看你要用哪個工具來協助你完成。」</div><div class="a">［44:29］從 NotebookLM 的輸出切回工具分工時，點出母版先定、工具後選的順序。</div></div>
+</section>
+
+<section class="chapter" id="sec-real">
+  <span class="chip" style="background:linear-gradient(90deg,var(--green),var(--cyan))">00:00–52:40</span>
+  <h2 class="ct">8. 這堂課真正在教的事</h2>
+  <h3>一、提示詞不是唯一控制面板</h3><p>模型、比例、片長、首尾幀、身份參考與時間軸都是控制。能在介面直接指定的規格，不必用形容詞繞一圈。</p>
+  <h3>二、先降低每一鏡的自由度</h3><p>角色先定稿、動作只留一個、鏡頭先固定，模型需要猜的事情越少，結果越容易比較與修正。</p>
+  <h3>三、把長片拆成短鏡，失敗才有辦法定位</h3><p>一支 30～45 秒的片先拆成 5～8 鏡。哪一鏡變臉、哪一鏡跳接、哪一句旁白太長，都能各自處理。</p>
+  <h3>四、先有故事母版，再做工具轉譯</h3><p>同一份劇情可以派生為影片提示、角色圖、NotebookLM 來源或剪輯表；不要讓每個工具各講一個不同故事。</p>
+  <h3>五、生成完成只是進入後製</h3><p>接點、字幕、聲音、權利與事實都不是模型替你決定的。導演的工作，是逐鏡驗收與整體取捨。</p>
+</section>
+
+<section class="chapter" id="sec-quotes">
+  <span class="chip" style="background:linear-gradient(90deg,var(--amber),var(--rose))">QUOTES</span>
+  <h2 class="ct">9. 老師金句</h2>
+  <div class="golden"><div class="q">「我會介紹一下簡單的、現在用 AI 生成影片的一些方式邏輯，讓大家可以更清楚地去使用。」</div><div class="a">［00:09］開場先把重點放在製作邏輯，而不是單一網站教學。</div></div>
+  <div class="golden"><div class="q">「因為它只有八秒，所以你不可能在這八秒塞了無限的動作。」</div><div class="a">［17:16］首尾幀實作時，提醒片長與事件數量要一起設計。</div></div>
+  <div class="golden"><div class="q">「如果你已經給它圖，又給它文字，基本上它就是把它的圖解構出來。」</div><div class="a">［22:30］解釋為什麼畫面明確時，會優先用圖生影片而不是只靠文字。</div></div>
+  <div class="golden"><div class="q">「我不可能整個直接貼到 Google Vids，因為它限制只有十秒。」</div><div class="a">［41:28］把完整劇情轉成工具可用提示時，必須先按單鏡片長切分。</div></div>
+  <div class="golden"><div class="q">「你的故事跟劇情只要 OK 了，接下來就是交給它不同的工具。」</div><div class="a">［44:29］故事母版完成後，才進入工具選擇與輸出轉譯。</div></div>
+  <div class="golden"><div class="q">「你只要接 Agent，然後下指令，就幫你完成。」</div><div class="a">［52:00］收尾預告 Agent 型影片工作流；是否真的完成，仍要回到逐鏡驗收。</div></div>
+</section>
+
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,var(--ink3),var(--ink2))">SOURCE</span>
+  <h2 class="ct">10. 資料來源與整理說明</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:130px">來源</th><td>2026/11/07 課堂錄影單段，全長 52 分 40 秒；同課程簡報 82 頁。</td></tr>
+    <tr><th>整理方式</th><td>全程本機處理：89 張關鍵畫面候選、599 段逐字稿；正式頁人工精選並去識別 6 張截圖，再依主題重寫章節。</td></tr>
+    <tr><th>時間戳</th><td>章節 chip 與引文後方的［mm:ss］對應錄影播放器時間。</td></tr>
+    <tr><th>整理</th><td>竹貞（Tarshar 的逐幀筆記專員）</td></tr>
+  </table></div>
+  <h3>已知限制，請先看過再引用</h3>
+  <ul class="pt">
+    <li><b>逐字稿是機器產生的</b>，工具名與口語會聽錯。本頁以介面、簡報與上下文可確認的名稱校正；不確定的口述沒有補成事實。</li>
+    <li>影片中有靜音與重複辨識片段，整理時已壓縮或捨棄，不會出現在正式頁。</li>
+    <li>工具方案、點數、模型、年齡限制與可用地區會變動；本頁記錄的是課堂當下，不是價格承諾。</li>
+    <li>公開截圖已裁掉會議參與者、帳號、網址列、書籤列、工作列與非必要專案資訊。</li>
+    <li>原始錄影與簡報不公開；本頁不宣稱已取得原作者的公開授權。</li>
+    <li>教材與課堂畫面版權屬原作者。若原作者或課程方希望撤下，請透過<a href="../contact/">聯絡頁</a>告知，將即刻移除。</li>
+  </ul>
+</section>
+</article>
+</div>
+
+<footer>
+  <p>📝 直播電台 EP57 課堂筆記 · 生成式 AI 應用電台 · 竹貞整理</p>
+  <p>依錄影關鍵畫面、全程逐字稿與簡報校對整理 · <a href="ep57-ai-skills.html">🗺️ 互動技能地圖</a> · <a href="../radio/?k=145#radio">🏠 回筆記館入口</a></p>
+</footer>
+</body>
+</html>
