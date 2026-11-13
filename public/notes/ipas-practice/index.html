@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="iPAS AI 應用規劃師中級互動練習室：動手調數字、點開看算法，把考點練到會。">
+<title>iPAS 互動練習室｜🍀Learn AI with Tarshar</title>
+<style>
+:root{--bg:#08101f;--panel:#111f3b;--line:rgba(137,172,255,.18);--text:#eef4ff;--muted:#a7b7d8;--dim:#7183aa;--cyan:#41dcff;--purple:#b57bff;--green:#4de1a1;--orange:#ffc45b}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;color:var(--text);line-height:1.8;background:radial-gradient(900px 500px at 10% -10%,rgba(65,220,255,.13),transparent 65%),radial-gradient(900px 520px at 95% 10%,rgba(181,123,255,.14),transparent 62%),var(--bg);min-height:100vh}
+a{color:var(--cyan)}.wrap{width:min(880px,calc(100% - 32px));margin:auto}
+.topbar{position:sticky;top:0;z-index:20;background:rgba(8,16,31,.9);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.topbar .wrap{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.back{text-decoration:none;color:var(--cyan);font-size:14px;font-weight:800}.brand{font-size:12px;color:var(--muted);letter-spacing:1.5px}
+.hero{padding:44px 0 6px}
+.eyebrow{display:inline-flex;padding:6px 13px;border:1px solid rgba(65,220,255,.35);border-radius:999px;color:var(--cyan);font-size:12px;letter-spacing:2px;background:rgba(65,220,255,.06)}
+h1{font-size:clamp(28px,5vw,44px);line-height:1.25;margin:16px 0 10px}
+.lead{color:var(--muted);font-size:16px;margin:0}
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:22px 0 6px}
+.how div{border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:rgba(17,31,59,.6);font-size:14px;color:var(--muted)}
+.how b{display:block;color:var(--orange);font-size:15px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:26px 0 12px}
+.filters button{font:inherit;font-size:14px;font-weight:700;color:var(--text);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:rgba(17,31,59,.72);cursor:pointer}
+.filters button.on{background:var(--cyan);color:#08101f;border-color:var(--cyan)}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.card{display:flex;flex-direction:column;gap:6px;text-decoration:none;color:var(--text);border:1px solid var(--line);border-radius:18px;padding:18px 20px;background:rgba(17,31,59,.72);min-width:0}
+.card:hover,.card:focus-visible{border-color:var(--cyan);outline:none}
+.card .code{color:var(--cyan);font-size:12px;letter-spacing:1.5px;font-weight:800}
+.card b{font-size:20px}
+.card .k{color:var(--muted);font-size:14px}
+.card ul{margin:4px 0 0;padding-left:18px;font-size:13.5px;color:var(--text)}
+.card .go{margin-top:auto;color:var(--green);font-weight:800;font-size:14px}
+.soon{border-style:dashed;opacity:.7}
+footer{text-align:center;color:var(--dim);font-size:12px;line-height:1.9;border-top:1px solid var(--line);margin-top:50px;padding:30px 20px 44px}
+@media(max-width:640px){.brand{display:none}.grid,.how{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav class="topbar"><div class="wrap"><a class="back" href="../ipas-intermediate.html">← iPAS 中級總覽</a><a class="back" href="../l22-cram/">L22 考前衝刺包</a><span class="brand">🍀 LEARN AI WITH TARSHAR · 互動練習室</span></div></nav>
+<main class="wrap">
+<section class="hero">
+  <span class="eyebrow">INTERACTIVE PRACTICE</span>
+  <h1>iPAS 互動練習室</h1>
+  <p class="lead">不背公式，動手調數字。每一間練習室都有寫清楚的題目情境，看到虛線底線的數字都能點開，看公式、代入和結果。</p>
+  <div class="how">
+    <div><b>1. 先讀題目</b>每段開頭的藍框就是情境與條件。</div>
+    <div><b>2. 動手調</b>拉滑桿、切情境，看數字怎麼跟著變。</div>
+    <div><b>3. 點開算法</b>點虛線數字，一步一步對答案。</div>
+  </div>
+</section>
+<div class="filters" id="filters"></div>
+<div class="grid" id="grid"></div>
+</main>
+<footer>iPAS 互動練習室｜🍀Learn AI with Tarshar<br>練習題為自編觀念題；之後會持續新增練習室。</footer>
+<script>
+/* 新增練習室：在這個清單加一筆即可 */
+const PRACTICES=[
+ {file:'k5-cheat-room.html',unit:'K5 分類指標',chap:'L22',title:'抓作弊練習室',desc:'用抓作弊和不良品檢驗，看準確率陷阱、召回率、精確率怎麼變。',points:['偷懶與認真檢驗員的四格表','拖動門檻看誰被凍結','ROC 曲線與資料不平衡時的 PR 曲線','11 題觀念題']},
+ {file:'k4-test-chooser.html',unit:'K4・K1 檢定與相關',chap:'L22',title:'選檢定練習室',desc:'用兩個問題選出正確檢定，再看三種相關係數怎麼被離群值影響。',points:['兩個問題選檢定','三組為什麼不能兩兩比','雙比例 Z 檢定試算','皮爾森、斯皮爾曼、肯德爾比較']},
+ {file:'k6-association-rules.html',unit:'K6 關聯規則',chap:'L22',title:'發票關聯教室',desc:'用 100 張發票算支持度、信賴度、提升度，反轉箭頭看誰會變。',points:['四組購物情境','10×10 發票格子','反轉箭頭比較','觀念小測驗']},
+ {file:'k6-clustering.html',unit:'K6 監督與分群',chap:'L22',title:'怪獸分群教室',desc:'分清楚監督與非監督，動手看 K 平均一輪一輪怎麼分群、怎麼找 K。',points:['最近鄰居投票','K 平均分家與搬站','手肘法找 K','分類或迴歸判斷']}];
+let cur='全部';
+function render(){
+  const chaps=['全部',...new Set(PRACTICES.map(p=>p.chap))];
+  document.getElementById('filters').innerHTML=chaps.map(c=>`<button class="${c===cur?'on':''}" data-c="${c}">${c==='全部'?'全部練習室':c}（${c==='全部'?PRACTICES.length:PRACTICES.filter(p=>p.chap===c).length}）</button>`).join('');
+  document.querySelectorAll('#filters button').forEach(b=>b.onclick=()=>{cur=b.dataset.c;render();});
+  const list=PRACTICES.filter(p=>cur==='全部'||p.chap===cur);
+  document.getElementById('grid').innerHTML=list.map(p=>`<a class="card" href="${p.file}"><span class="code">${p.chap}｜${p.unit}</span><b>${p.title}</b><span class="k">${p.desc}</span><ul>${p.points.map(x=>`<li>${x}</li>`).join('')}</ul><span class="go">進入練習 →</span></a>`).join('')+
+   `<div class="card soon"><span class="code">即將新增</span><b>更多練習室</b><span class="k">其他章節的互動練習會陸續加進來。</span></div>`;}
+render();
+</script>
+</body>
+</html>
