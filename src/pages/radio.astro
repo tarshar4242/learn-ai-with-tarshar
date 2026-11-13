@@ -8,7 +8,19 @@ import dahuiliu from '../data/dahuiliu.json';
 const base = import.meta.env.BASE_URL;
 const lead =
   '直播與課程學習成果集中在這裡，依內容分成「直播電台、訂閱制、ECF、大匯流」四個系列。已完成的筆記與互動地圖可由卡片開啟；製作中的課程與受保護的會員內容先保留來源索引。';
-const radio = episodes.map((ep) => ({
+const orderedEpisodes = [...episodes].sort((a, b) => {
+  const numberOf = (label) => Number(label.match(/EP(\d+)/)?.[1] ?? -1);
+  const aNumber = numberOf(a.ep);
+  const bNumber = numberOf(b.ep);
+  const aInRequestedRun = aNumber >= 55 && aNumber <= 59;
+  const bInRequestedRun = bNumber >= 55 && bNumber <= 59;
+
+  if (aInRequestedRun && bInRequestedRun) return aNumber - bNumber;
+  if (aInRequestedRun) return -1;
+  if (bInRequestedRun) return 1;
+  return 0;
+});
+const radio = orderedEpisodes.map((ep) => ({
   ...ep,
   links: [
     { label: '📝 課堂筆記', href: ep.notes },
