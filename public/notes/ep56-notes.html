@@ -1,25 +1,346 @@
-<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>EP56 課堂筆記｜初見 Gemini 4 Argon 模型</title><style>
-:root{--paper:#f7f4ee;--ink:#28231f;--muted:#746c65;--card:#fff;--line:#ded8ce;--accent:#117d68;--accent2:#d97941;--soft:#e9f4f0;--warm:#fff0e5;--shadow:0 14px 38px rgba(48,39,31,.09)}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.8 -apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC",sans-serif}a{color:var(--accent)}
-.top{position:sticky;top:0;z-index:9;background:rgba(247,244,238,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}.topin{max-width:1080px;margin:auto;padding:11px 18px;display:flex;justify-content:space-between;gap:12px;align-items:center}.brand{font-weight:800}.btn{display:inline-flex;padding:8px 13px;border-radius:999px;text-decoration:none;background:var(--accent);color:#fff;font-weight:700}
-header,main,footer{max-width:1080px;margin:auto;padding-left:20px;padding-right:20px}.hero{padding-top:70px;padding-bottom:44px}.eyebrow{color:var(--accent);font-weight:800;letter-spacing:.12em}.hero h1{font-size:clamp(2.25rem,7vw,5rem);line-height:1.04;letter-spacing:-.05em;margin:.22em 0}.lead{font-size:1.15rem;max-width:780px;color:var(--muted)}.tags{display:flex;flex-wrap:wrap;gap:8px}.tag{background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 11px}
-.notice,.callout{border-radius:18px;padding:18px 20px;background:var(--soft);border:1px solid #cce4dc}.notice{margin:0 0 34px}.section{padding:38px 0;border-top:1px solid var(--line)}.section h2{font-size:clamp(1.55rem,4vw,2.4rem);line-height:1.25;margin:.15em 0 .7em}.kicker{color:var(--accent2);font-weight:800}.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:18px}.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:var(--shadow)}.span4{grid-column:span 4}.span6{grid-column:span 6}.span7{grid-column:span 7}.span5{grid-column:span 5}.span12{grid-column:span 12}.card h3{margin-top:0}.metric{font-size:2.6rem;font-weight:900;color:var(--accent);line-height:1}.screen{margin:20px 0}.screen img{width:100%;display:block;border-radius:18px;border:1px solid var(--line);box-shadow:var(--shadow)}.caption{color:var(--muted);font-size:.9rem}.time{font-variant-numeric:tabular-nums;color:var(--accent);font-weight:800}.prompt{white-space:pre-wrap;background:#211d1a;color:#f8f2e8;border-radius:16px;padding:18px;overflow:auto}.take{font-size:1.08rem}.quote{font-size:1.2rem;border-left:5px solid var(--accent2);padding-left:18px}.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}.step{background:#fff;border:1px solid var(--line);border-radius:16px;padding:15px;text-align:center}.num{display:block;font-size:1.5rem;font-weight:900;color:var(--accent)}footer{padding-top:35px;padding-bottom:70px;color:var(--muted)}
-@media(max-width:760px){.span4,.span5,.span6,.span7,.span12{grid-column:1/-1}.flow{grid-template-columns:1fr}.hero{padding-top:45px}.topin{align-items:flex-start}.btn{font-size:.86rem}.card{padding:17px}}
-@media print{.top{display:none}body{background:#fff}.card{box-shadow:none}.section{break-inside:avoid}.hero{padding-top:20px}}
-</style></head><body>
-<nav class="top"><div class="topin"><span class="brand">生成式 AI 應用電台｜EP56</span><a class="btn" href="ep56-ai-skills.html">開啟互動技能地圖 →</a></div></nav>
-<header class="hero"><div class="eyebrow">CLASS NOTES · 製作：竹貞</div><h1>初見 Gemini 4 Argon 模型</h1><p class="lead">把焦點從「回答得多聰明」移到「能不能規劃、執行、驗證並完成一件長任務」。這份筆記整合錄影與簡報，保留時間定位，也把示範中的能力邊界與安全接手點整理成可直接套用的工作方法。</p><div class="tags"><span class="tag">32:25 錄影</span><span class="tag">25 頁簡報校對</span><span class="tag">任務模式</span><span class="tag">3D／HTML Demo</span><span class="tag">隱私與驗證</span></div></header>
-<main><div class="notice"><strong>資料範圍</strong>：內容依 EP56 課堂錄影與課程簡報整理，不等同獨立產品查核。模型名稱、功能、價格、額度與介面可能隨時間變動；正式採用前請再核對官方說明。</div>
-<section class="section"><span class="kicker">一張圖先看懂</span><h2>長任務模型的價值，在於把五段工作接起來</h2><div class="flow"><div class="step"><span class="num">1</span>釐清目標</div><div class="step"><span class="num">2</span>列出計畫</div><div class="step"><span class="num">3</span>呼叫工具</div><div class="step"><span class="num">4</span>測試修正</div><div class="step"><span class="num">5</span>交付驗收</div></div><div class="grid" style="margin-top:18px"><div class="card span4"><div class="metric">1M</div><p>簡報所述的長上下文額度；輸入、思考與輸出共用。</p></div><div class="card span4"><div class="metric">3 檔</div><p>Low／Medium／High 思考程度，依延遲、成本與複雜度選擇。</p></div><div class="card span4"><div class="metric">15</div><p>簡報列出的同時任務上限；實際權限仍以帳戶介面為準。</p></div></div></section>
-<section class="section"><span class="kicker">課程時間軸</span><h2>五段內容，從模型定位走到可交辦工作流</h2>
-<article class="card" style="margin:14px 0"><div class="time">00:00–06:39</div><h3>先懂定位：不是只看一次回答，而是看能否完成長任務</h3><ul><li>課程把 Argon 定位成長時程、多步驟工作模型：可調整思考程度，並把規劃、產出、測試與修正串成一個任務。</li><li>簡報強調 1M token 是輸入、思考與輸出共用的額度；大窗口不等於每次都要塞滿，仍要先定義交付物與驗證方式。</li><li>Low／Medium／High 應依任務難度選擇：即時整理用低檔，專業工作用中檔，複雜研究或除錯才用高檔。</li></ul></article><article class="card" style="margin:14px 0"><div class="time">07:01–13:59</div><h3>介面更新：學習、筆記本、自訂技能與連接器開始收斂</h3><ul><li>直播展示學生／學習入口、沉浸式探索、筆記本與測驗等功能，重點是把原本分散的學習工具集中。</li><li>自訂區可管理寫作風格、專注工作等技能，也能接 Google Workspace、NotebookLM 與外部連接器／MCP。</li><li>讓模型讀雲端或郵件前要先判斷資料敏感度；需要登入、密碼、付款或對外傳送時，應由使用者接手。</li></ul></article><article class="card" style="margin:14px 0"><div class="time">14:00–21:59</div><h3>現場 Demo：從提示詞到 3D 示意與可操作成果</h3><ul><li>示範以任務模式拆解長影片，再把內容轉成 3D 示意、SVG 動畫或單檔 HTML。</li><li>好的交辦不只描述畫面，還要列互動、輸出格式、驗收條件，以及先做最小可運行版本。</li><li>展示用作品可以很吸睛，但模擬數據、物理細節與來源仍需人工驗證；課程也明確提醒部分數據是模型生成的示意。</li></ul></article><article class="card" style="margin:14px 0"><div class="time">22:00–26:59</div><h3>能力邊界：容量、真實世界判斷與轉錄品質都要實測</h3><ul><li>長任務與 3D 生成會快速消耗額度；示範中少量大型任務就觸及使用上限。</li><li>模型對影片的解說與結構化能力較強，但對真實互動、物理條件和精確模仿仍可能出錯。</li><li>音檔轉文字、文書與程式能力不能只看官方評測；要以自己的資料、錯誤日誌與驗證腳本比較。</li></ul></article><article class="card" style="margin:14px 0"><div class="time">27:00–32:25</div><h3>落地方式：把模型當任務夥伴，保留人工接手點</h3><ul><li>教學可用於工程圖、統計推導、逐步動畫和互動展示；研究則可協助搜尋、下載、整理與報告串接。</li><li>先列計畫、再執行；要求來源、測試、截圖或驗證腳本；敏感操作由人接手；完成後清理遠端資料。</li><li>真正的比較單位不是單次回答，而是整個工作流能否穩定跑完、留下可驗收成果。</li></ul></article></section>
-<section class="section"><span class="kicker">畫面校對</span><h2>三個最值得保留的實機節點</h2><div class="grid"><div class="span6"><figure class="screen"><img src="ep56-img/position.jpg" alt="Argon 長任務定位"><figcaption class="caption"><span class="time">02:31</span> 長推理、長輸出、長任務三個定位。</figcaption></figure></div><div class="span6"><figure class="screen"><img src="ep56-img/learning.jpg" alt="學習工具介面"><figcaption class="caption"><span class="time">07:01</span> 學習、筆記本與沉浸式探索入口。</figcaption></figure></div><div class="span12"><figure class="screen"><img src="ep56-img/demo.jpg" alt="3D 互動示範"><figcaption class="caption"><span class="time">15:48</span> 以互動展示驗證長任務的拆解與產出能力。</figcaption></figure></div></div></section>
-<section class="section"><span class="kicker">可直接套用</span><h2>交辦長任務的提示詞骨架</h2><pre class="prompt">目標：請完成【具體成果】。
-資料範圍：只使用【指定來源】，看不到的資料請明說。
-開始前：先列執行計畫、風險與需要我決定的問題。
-過程中：每完成一段就做【測試／來源核對／截圖／錯誤日誌】。
-敏感步驟：登入、密碼、付款、對外發布時暫停，交由我接手。
-交付：提供【檔案格式】、驗證清單、已知限制與下一步。</pre><p class="callout">課程的五個技巧可以濃縮成：對齊意圖、定義驗證、多模態參考、讓模型拆分子任務、最後把踩坑寫回工作規則。</p></section>
-<section class="section"><span class="kicker">帶走這五句</span><h2>真正有用的不是功能清單，而是決策原則</h2><div class="grid"><div class="card span6 take"><strong>1.</strong> 長上下文不是免整理；來源越多，越需要範圍與優先順序。</div><div class="card span6 take"><strong>2.</strong> 思考程度不是越高越好；先按風險與複雜度分級。</div><div class="card span6 take"><strong>3.</strong> 互動作品要驗收狀態、數據與操作，不只看畫面漂亮。</div><div class="card span6 take"><strong>4.</strong> 代理能操作帳戶，更要預先設置人工接手點。</div><div class="card span12 take"><strong>5.</strong> 比較模型時，測完整工作流：計畫、工具、驗證、修正、交付。</div></div></section>
-<section class="section"><p class="quote">「不是只讀得長，而是想得久、做得完。」— 依課程簡報意旨整理</p><p>延伸閱讀：<a href="ep56-integrated/">併入 25 頁簡報的整合筆記</a>、<a href="ep56-full/">每 15 秒完整版</a>。</p><p>下載：<a href="ep56-downloads/ep56-handbook.pdf">課堂筆記 PDF</a> · <a href="ep56-downloads/ep56-handbook.docx">課堂筆記 Word</a> · <a href="ep56-downloads/ep56-integrated.pdf">簡報整合 PDF</a> · <a href="ep56-downloads/ep56-integrated.docx">簡報整合 Word</a> · <a href="ep56-downloads/ep56-full-15sec.pdf">每 15 秒完整版 PDF</a> · <a href="ep56-downloads/ep56-notes-pack.zip">ZIP 筆記包</a></p></section></main>
-<footer>製作：竹貞｜2026-11-13<br>本頁為課堂內容整理；原始錄影與簡報不公開。公開截圖均已裁切或以說明卡替代。若內容涉及權利或隱私疑慮，請聯絡下架。</footer></body></html>
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>直播電台 EP56 課堂筆記｜初見 Gemini 4 Argon：從長任務到可重複技能</title>
+<meta name="description" content="生成式 AI 應用電台 EP56（2026/10/16，32 分 25 秒）課堂筆記。從 Argon 的長任務定位、1M token、思考程度，整理學習入口、筆記本、自訂技能、連接器、任務模式、3D 示範、人工接手與資料查核。依 44 張關鍵畫面、305 段逐字稿與 25 頁簡報校對整理。">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#ffffff; --ink:#191919; --ink2:#5f5f5f; --ink3:#9B9B9B;
+  --line:#E7E6E3; --line2:#DBD9D5; --accent:#7a4f2b; --accent2:color-mix(in srgb,var(--accent) 55%,#fff); --code:#F4F3F0;
+  --maxw:1080px;
+  --cyan:#2f7d92; --blue:#3b6bb0; --purple:#5645D4; --pink:#b25269; --green:#3f8560; --orange:#bf6a1e; --amber:#9c7b23; --teal:#0d8f80; --rose:#b5476a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;min-height:56px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+.topbar a.btn{font-size:13px;text-decoration:none;border:1px solid var(--line2)!important;border-radius:8px;padding:7px 13px;color:var(--ink2);background:#fff;white-space:nowrap;font-weight:500;transition:.15s}
+.topbar a.btn:hover{border-color:var(--ink3)!important;color:var(--ink)}
+.hero{max-width:var(--maxw);margin:0 auto;padding:46px 24px 8px;text-align:center}
+.hero .ep{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);border-radius:999px;padding:5px 14px;background:color-mix(in srgb,var(--accent) 8%,#fff);margin-bottom:18px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.4vw,42px);font-weight:800;line-height:1.14;letter-spacing:-.025em;color:var(--ink)}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.hero .lead{margin:16px auto 0;max-width:760px;font-size:16px;color:var(--ink2);line-height:1.7}
+.hero .lead b,.hero h1 b{color:var(--ink);font-weight:600}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-size:12.5px;color:var(--ink2)}
+.hero .meta span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px}
+.layout{max-width:var(--maxw);margin:26px auto 0;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:32px;align-items:start}
+nav.toc{position:sticky;top:72px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;font-size:13.5px;max-height:calc(100vh - 90px);overflow-y:auto}
+nav.toc .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:600}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:7px;border-left:none;font-size:13px}
+nav.toc a:hover{background:var(--paper);color:var(--accent)}
+article{min-width:0}
+section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 32px;margin-bottom:20px;scroll-margin-top:70px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px;margin-bottom:14px;text-transform:uppercase}
+h2.ct{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+p.cd{color:var(--ink2);font-size:14px;margin-bottom:8px}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;padding-left:12px;border-left:3px solid var(--accent);color:var(--ink)}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--ink2)}
+p b,li b{color:var(--ink);font-weight:600}
+ul.pt{list-style:none;margin:8px 0}
+ul.pt li{position:relative;padding:5px 0 5px 22px;font-size:14.5px;color:var(--ink2)}
+ul.pt li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+ol.st{margin:8px 0 8px 4px;counter-reset:n;list-style:none}
+ol.st li{counter-increment:n;position:relative;padding:6px 0 6px 34px;font-size:14.5px;color:var(--ink2)}
+ol.st li::before{content:counter(n);position:absolute;left:0;top:6px;width:23px;height:23px;border-radius:6px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.note{display:flex;gap:10px;border-radius:10px;padding:12px 15px;font-size:13.5px;margin:12px 0;line-height:1.8;border:1px solid var(--line);background:var(--paper);color:var(--ink2)}
+.note.gold{background:#FBF7EC;border-color:#EFE3C4;color:#7a5b12}
+.note.blue{background:#EEF4FB;border-color:#CFE0F1;color:#1d5e8f}
+.note.green{background:#EDF7F1;border-color:#CBE6D5;color:#166a4c}
+.note.steel{background:#EEF2F5;border-color:#D2DFE7;color:#255066}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th{background:var(--paper);padding:9px 12px;text-align:left;font-size:12.5px;border:1px solid var(--line);color:var(--ink);font-weight:600}
+td{padding:9px 12px;border:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.twrap{overflow-x:auto;border-radius:10px}
+.code{position:relative;background:var(--code);border:1px solid var(--line2);border-radius:10px;padding:13px 15px;margin:10px 0;font-size:13px;line-height:1.75;color:var(--ink);white-space:pre-wrap;font-family:"Cascadia Code",Consolas,monospace;overflow-x:auto}
+.svgwrap,.diagram{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.svgwrap svg,.diagram svg{display:block;width:100%;height:auto}
+.svgwrap .cap,.svgwrap figcaption,.diagram figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{font-size:12.5px;color:var(--ink3);padding:9px 14px;border-top:1px solid var(--line);background:var(--paper);line-height:1.7}
+.shotgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.shotgrid figure.shot{margin:0}
+.iframe-wrap{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000;margin:14px 0}
+.iframe-wrap iframe{display:block;width:100%;height:460px;border:0}
+.golden{background:color-mix(in srgb,var(--accent) 6%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:12px;padding:16px 20px;margin:16px 0}
+.golden .q{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.golden .a{font-size:13px;color:var(--ink2);margin-top:4px}
+footer{max-width:var(--maxw);margin:20px auto 0;padding:30px 24px 50px;text-align:center;color:var(--ink3);font-size:12.5px;line-height:1.9;border-top:1px solid var(--line)}
+footer a{color:var(--ink2)}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} nav.toc{position:static;max-height:none} section.chapter{padding:22px 18px} .shotgrid{grid-template-columns:1fr} .iframe-wrap iframe{height:320px} }
+@media print{ .topbar,nav.toc{display:none} .layout{grid-template-columns:1fr} body{background:#fff} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="btn" href="../radio/?k=145#radio" style="border-color:#dfd0c3" onclick="if(history.length>1){history.back();return false}">← 回上一頁</a>
+  <b>📝 直播電台 EP56 課堂筆記</b>
+  <div class="right"><a class="btn" href="ep56-integrated/">📑 簡報整合筆記</a><a class="btn" href="ep56-full/">⏱️ 每 15 秒完整版</a><a class="btn" href="ep56-ai-skills.html">🗺️ 互動技能地圖</a></div>
+</div>
+
+<header class="hero">
+  <span class="ep">生成式 AI 應用電台 · 直播電台 · EP56</span>
+  <h1>初見 Gemini 4 Argon，<span>重點不是炫技，而是能不能把長任務做完</span></h1>
+  <p class="lead">這堂從 Argon 的定位開始：不是只把上下文拉長，而是把<b>規劃、工具操作、驗證、修正與交付</b>串成一段長工作。<br>課堂接著走進學習入口、筆記本、自訂技能、連接器與任務模式，再以 3D 特斯拉互動頁示範：吸睛成果背後，仍要查核數據、物理細節、容量與權限。<br>本頁依<b>32 分 25 秒錄影、44 張關鍵畫面、305 段逐字稿，並以 25 頁簡報校對術語與操作順序</b>整理，重點段落附影片時間戳。</p>
+  <div class="meta">
+    <span>📅 2026/10/16（五）22:30 直播</span>
+    <span>👤 主持：黃政勛</span>
+    <span>⏱️ 全長 32 分 25 秒</span>
+    <span>🧩 主題：長任務 × 可重複技能 × 人工接手</span>
+    <span>🔰 入門導覽＋工作流觀念</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc">
+  <div class="t">目 錄</div>
+  <a href="#sec-info">0. 課程資訊與教材</a>
+  <a href="#sec-overview">1. 一張圖看懂這堂</a>
+  <a href="#sec-position">2. Argon 的定位不是更會聊天</a>
+  <a href="#sec-context">3. 1M token 與三段思考程度</a>
+  <a href="#sec-learning">4. 學習入口把分散工具收進同一條路</a>
+  <a href="#sec-custom">5. 技能與連接器讓流程可以重複</a>
+  <a href="#sec-demo">6. 3D Demo 很吸睛，查核才決定能不能用</a>
+  <a href="#sec-task">7. 任務模式的核心是可追蹤與可接手</a>
+  <a href="#sec-use">8. 教學研究的價值在整段工作流</a>
+  <a href="#sec-real">9. 這堂課真正在教的事</a>
+  <a href="#sec-quotes">10. 老師金句</a>
+  <a href="#sec-src">11. 資料來源與整理說明</a>
+</nav>
+
+<article>
+<section class="chapter" id="sec-info">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--cyan))">COURSE INFO</span>
+  <h2 class="ct">0. 課程資訊與教材</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">課程名稱</th><td>EP56｜初見 Gemini 4 Argon 模型</td></tr>
+    <tr><th>直播日期</th><td>2026/10/16（五）22:30，錄影全長 <b>32 分 25 秒</b></td></tr>
+    <tr><th>主持</th><td>黃政勛</td></tr>
+    <tr><th>本堂主題</th><td>長任務模型定位、1M token、Low／Medium／High 思考程度、學習入口、筆記本、自訂技能、連接器、任務模式與 3D 示範</td></tr>
+    <tr><th>課程定位</th><td>快速導覽新模型與新介面，重點放在「什麼值得用、哪裡會失手、怎麼把人工接手點留在流程裡」</td></tr>
+  </table></div>
+  <h3>📁 課程資料夾與教材</h3>
+  <p><a href="https://drive.google.com/drive/folders/1InQ14lNc2jJIsqBIyhg7Cd8JX9P_qw7l?usp=sharing" rel="noopener">🔗 開啟「EP56｜初見 Gemini 4 Argon 模型」來源資料夾 ›</a></p>
+  <div class="twrap"><table>
+    <tr><th style="width:230px">教材</th><th>整理時的用途</th></tr>
+    <tr><td><code>EP56 課堂錄影</code></td><td>以現場口述與操作為主，保留實際成功、等待、錯誤、用量耗盡與老師當場修正判斷的過程。</td></tr>
+    <tr><td><code>25 頁課程簡報</code></td><td>核對 Argon 定位、任務模式、筆記本、技能、連接器、提示詞與安全提醒；簡報中的規格與數字屬課程當時資料。</td></tr>
+    <tr><td><code>提示詞表與實作手冊</code></td><td>補足 3D 示意圖、單檔 HTML、研究簡報與長任務交辦的可直接複製範例。</td></tr>
+  </table></div>
+  <h3>📥 帶走完整筆記包</h3>
+  <p><a href="ep56-downloads/ep56-handbook.pdf">課堂筆記 PDF</a> · <a href="ep56-downloads/ep56-handbook.docx">課堂筆記 Word</a> · <a href="ep56-downloads/ep56-integrated.pdf">簡報整合 PDF</a> · <a href="ep56-downloads/ep56-integrated.docx">簡報整合 Word</a> · <a href="ep56-downloads/ep56-full-15sec.pdf">每 15 秒完整版 PDF</a> · <a href="ep56-downloads/ep56-notes-pack.zip">ZIP 筆記包</a></p>
+  <div class="note gold">🔒 <div><b>公開頁只使用已去識別的課堂畫面。</b>帳號、網址列、書籤、與會者與工作專案資訊均不公開；原始錄影與原始簡報仍以來源資料夾權限為準。</div></div>
+</section>
+
+<section class="chapter" id="sec-overview">
+  <span class="chip" style="background:linear-gradient(90deg,var(--accent),var(--purple))">OVERVIEW</span>
+  <h2 class="ct">1. 一張圖看懂這堂</h2>
+  <p class="cd">這堂不是把功能列成清單，而是回答：一個長任務模型，怎麼從目標一路走到可以驗收的成果？</p>
+  <div class="svgwrap">
+  <svg viewBox="0 0 980 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Argon 長任務從界定目標到人工驗收的流程圖">
+    <defs><marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#9B9B9B"/></marker></defs>
+    <rect x="18" y="82" width="164" height="104" rx="12" fill="#EEF4FB" stroke="#CFE0F1"/>
+    <text x="100" y="116" text-anchor="middle" font-size="15" font-weight="700" fill="#1d5e8f">界定成果</text><text x="100" y="143" text-anchor="middle" font-size="12.5" fill="#5f5f5f">目標、資料範圍</text><text x="100" y="164" text-anchor="middle" font-size="12.5" fill="#5f5f5f">格式與期限</text>
+    <rect x="214" y="82" width="164" height="104" rx="12" fill="#FBF7EC" stroke="#EFE3C4"/>
+    <text x="296" y="116" text-anchor="middle" font-size="15" font-weight="700" fill="#7a5b12">拆成計畫</text><text x="296" y="143" text-anchor="middle" font-size="12.5" fill="#5f5f5f">選思考程度</text><text x="296" y="164" text-anchor="middle" font-size="12.5" fill="#5f5f5f">安排技能與工具</text>
+    <rect x="410" y="82" width="164" height="104" rx="12" fill="#EDF7F1" stroke="#CBE6D5"/>
+    <text x="492" y="116" text-anchor="middle" font-size="15" font-weight="700" fill="#166a4c">執行長任務</text><text x="492" y="143" text-anchor="middle" font-size="12.5" fill="#5f5f5f">瀏覽器、程式碼</text><text x="492" y="164" text-anchor="middle" font-size="12.5" fill="#5f5f5f">研究與內容產出</text>
+    <rect x="606" y="82" width="164" height="104" rx="12" fill="#EEF2F5" stroke="#D2DFE7"/>
+    <text x="688" y="116" text-anchor="middle" font-size="15" font-weight="700" fill="#255066">驗證與修正</text><text x="688" y="143" text-anchor="middle" font-size="12.5" fill="#5f5f5f">來源、測試、日誌</text><text x="688" y="164" text-anchor="middle" font-size="12.5" fill="#5f5f5f">重跑失敗步驟</text>
+    <rect x="802" y="82" width="160" height="104" rx="12" fill="#F4F3F0" stroke="#DBD9D5"/>
+    <text x="882" y="116" text-anchor="middle" font-size="15" font-weight="700" fill="#7a4f2b">人工驗收</text><text x="882" y="143" text-anchor="middle" font-size="12.5" fill="#5f5f5f">敏感操作接手</text><text x="882" y="164" text-anchor="middle" font-size="12.5" fill="#5f5f5f">確認後再交付</text>
+    <line x1="182" y1="134" x2="206" y2="134" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/><line x1="378" y1="134" x2="402" y2="134" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/><line x1="574" y1="134" x2="598" y2="134" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/><line x1="770" y1="134" x2="794" y2="134" stroke="#9B9B9B" stroke-width="1.6" marker-end="url(#ar)"/>
+    <rect x="196" y="235" width="590" height="60" rx="12" fill="#FFF8F2" stroke="#E9D8CA"/>
+    <text x="491" y="260" text-anchor="middle" font-size="14.5" font-weight="700" fill="#7a4f2b">模型越能操作工具，人工邊界越要先寫清楚</text><text x="491" y="281" text-anchor="middle" font-size="12.5" fill="#5f5f5f">登入、付款、對外發布、真實數據與不可逆動作，不能交給漂亮畫面替代判斷</text>
+  </svg>
+  <figcaption>Argon 的價值不是一次回答很長，而是能不能把計畫、執行、驗證與人工接手串成完整工作流。</figcaption>
+  </div>
+  <div class="note blue">💡 <div>如果只記得一句話，記這句：<b>長任務不是放著讓 AI 跑，而是把每一段完成條件與人工接手點先設好。</b></div></div>
+</section>
+
+<section class="chapter" id="sec-position">
+  <span class="chip" style="background:linear-gradient(90deg,var(--cyan),var(--blue))">00:00–04:00</span>
+  <h2 class="ct">2. Argon 的定位不是更會聊天，而是願意在一件事上多走幾步</h2>
+  <p class="cd">老師先把「模型比較」從單次回答拉回工作完成度：長推理、長輸出與長任務是三個不同能力。</p>
+  <div class="twrap"><table>
+    <tr><th>定位</th><th>課堂怎麼解釋</th><th>真正要驗收什麼</th></tr>
+    <tr><td><b>長推理</b></td><td>思考程度可調，遇到複雜推理或除錯時願意花更多步驟。</td><td>推理鏈是否回到來源、限制與可重現的結果。</td></tr>
+    <tr><td><b>長輸出</b></td><td>可一次處理多檔程式、測試或長篇內容。</td><td>檔案是否齊全、格式可用、不是只交一段說明。</td></tr>
+    <tr><td><b>長任務</b></td><td>能規劃、呼叫工具、反覆測試，再修到目標成立。</td><td>中途錯誤是否被發現、修正，最終成果是否通過驗收。</td></tr>
+  </table></div>
+  <figure class="shot"><img src="ep56-img/position.jpg" alt="課堂簡報說明 Argon 的長推理、長輸出與長任務定位" loading="lazy"><figcaption>簡報把定位拆成長推理、長輸出與長任務三塊；課堂口述再補上一層：重點不是「讀得長」，而是能不能把事情做完。［02:31］</figcaption></figure>
+  <div class="golden"><div class="q">「不過我覺得大家可以再等一會啦。」</div><div class="a">［03:45］老師沒有把新模型直接講成必換工具，而是提醒先等權限、介面與實測穩定。</div></div>
+  <div class="note steel">🔧 <div>本頁沿用課程中的產品名稱與介面描述，記錄的是 <b>2026/10/16 當晚</b>的課堂狀態；後續名稱、權限、價格與入口若變動，應以當下官方介面為準。</div></div>
+</section>
+
+<section class="chapter" id="sec-context">
+  <span class="chip" style="background:linear-gradient(90deg,var(--blue),var(--purple))">04:00–06:59</span>
+  <h2 class="ct">3. 1M token 是共用額度；思考程度也不是越高越好</h2>
+  <p class="cd">大上下文讓資料與輸出空間變大，但輸入、思考與輸出仍在同一個額度裡競爭；任務越大，越需要先切範圍。</p>
+  <div class="twrap"><table>
+    <tr><th>選擇</th><th>適合情境</th><th>不要拿來做什麼</th></tr>
+    <tr><td><b>Low</b></td><td>即時整理、簡單轉換、需要低延遲的任務。</td><td>不要因為快，就省略來源與格式限制。</td></tr>
+    <tr><td><b>Medium</b></td><td>一般專業工作、內容製作、常見程式與 3D 原型。</td><td>不要預設所有工作都必須升到 High。</td></tr>
+    <tr><td><b>High</b></td><td>複雜研究、困難推理、多輪除錯與高風險比較。</td><td>不要用高思考掩蓋目標不清或驗收缺失。</td></tr>
+  </table></div>
+  <figure class="shot"><img src="ep56-img/timeline.jpg" alt="課程簡報中的 Argon 上線時間軸與 API 價格" loading="lazy"><figcaption>課程用上線時間軸提醒學員：模型、權限與價格是快速變動的外部條件。頁面保留它作為課堂當時的版本快照，不把數字寫成永久承諾。［04:01］</figcaption></figure>
+  <div class="golden"><div class="q">「正常來說，我不管做動畫或不管做 3D 的構圖，原則上不用開到 High。」</div><div class="a">［06:08］思考程度要按任務難度分級，不是把最高檔當成品質保證。</div></div>
+  <div class="golden"><div class="q">「不過它還是有一些實測的數據，不一定會贏過其他模型。」</div><div class="a">［06:31］官方評測只能當線索，真正採用前仍要拿自己的任務跑過一輪。</div></div>
+</section>
+
+<section class="chapter" id="sec-learning">
+  <span class="chip" style="background:linear-gradient(90deg,var(--green),var(--teal))">07:00–10:59</span>
+  <h2 class="ct">4. 學習入口的價值，是把筆記、探索、測驗與引導收進同一條路</h2>
+  <p class="cd">直播展示側邊欄的學生／學習入口：課程大綱、筆記本、沉浸式探索、小測驗與學習卡，不必再從不同產品各找一次。</p>
+  <figure class="shot"><img src="ep56-img/learning.jpg" alt="Gemini 學習入口中的筆記本、沉浸式探索與小測驗" loading="lazy"><figcaption>學習入口把課程大綱轉筆記本、沉浸式探索、小測驗與學習卡放在同一區；畫面重點不是多了一顆按鈕，而是學習素材能沿同一主題繼續加工。［07:01］</figcaption></figure>
+  <div class="twrap"><table>
+    <tr><th>功能</th><th>適合做什麼</th><th>使用前先問</th></tr>
+    <tr><td>筆記本</td><td>集中課程檔案、網站與雲端資料，讓回答盡量依來源進行。</td><td>來源是否真的完整？哪些內容不能離開原資料夾？</td></tr>
+    <tr><td>沉浸式探索</td><td>把抽象主題變成可點擊、可觀看的學習場景。</td><td>互動是否幫助理解，還是只增加視覺刺激？</td></tr>
+    <tr><td>小測驗／引導學習</td><td>把內容改成練習、提示與逐步理解。</td><td>題目是否真的依教材，而不是模型自行補題？</td></tr>
+    <tr><td>學習卡</td><td>快速複習術語、步驟與概念對照。</td><td>卡片有沒有把例外與限制刪掉？</td></tr>
+  </table></div>
+  <div class="golden"><div class="q">「大家都在一味地介紹那些模型的 3D 繪圖。」</div><div class="a">［07:25］老師刻意把鏡頭移回較少被介紹的學習整合，而不是只追逐最吸睛的展示。</div></div>
+  <div class="note steel">🔧 <div>沉浸式探索在現場一度載入失敗。課堂沒有把失敗剪掉，而是改用手機與既有畫面說明；這也提醒我們：<b>展示能不能重現</b>本身就是驗收項目。</div></div>
+</section>
+
+<section class="chapter" id="sec-custom">
+  <span class="chip" style="background:linear-gradient(90deg,var(--orange),var(--amber))">10:00–13:59</span>
+  <h2 class="ct">5. 技能與連接器讓流程可以重複，也讓權限問題變得更具體</h2>
+  <p class="cd">自訂區不只存一段提示詞；它開始承接寫作風格、專注工作、會議準備、Workspace、NotebookLM 與外部 MCP。</p>
+  <div class="twrap"><table>
+    <tr><th>元件</th><th>它回答的問題</th><th>治理重點</th></tr>
+    <tr><td><b>技能</b></td><td>這件事要用什麼固定步驟、背景與完成標準？</td><td>流程要可重複，不能只記住一次成功的提示詞。</td></tr>
+    <tr><td><b>連接器／MCP</b></td><td>任務需要讀哪個外部服務、能不能寫回去？</td><td>只開必要權限；讀取、寫入與對外傳送要分開。</td></tr>
+    <tr><td><b>筆記本</b></td><td>這次回答應依哪些來源，不應依哪些來源？</td><td>資料範圍與引用要能回查。</td></tr>
+    <tr><td><b>任務</b></td><td>何時執行、執行到哪裡、什麼時候需要人？</td><td>登入、付款、刪除與發布設人工接手點。</td></tr>
+  </table></div>
+  <div class="golden"><div class="q">「它就是寫了一個專門的 Skill，讓你在做事情的時候，你能夠 focus 在你的相關內容。」</div><div class="a">［12:58］技能的價值不只是快捷鍵，而是把注意力與工作方法一起固定下來。</div></div>
+  <div class="golden"><div class="q">「有些人不喜歡讓它去讀你的資料。你會覺得你的資料有點隱私，你不想讓它讀，就看你的需求。」</div><div class="a">［12:26］連接雲端與郵件不是預設正確；是否授權要由資料敏感度與任務需要決定。</div></div>
+  <div class="note gold">🔑 <div><b>連得上，不等於應該全部開放。</b>先列出完成任務必需的資料，再決定哪些只讀、哪些可寫；密碼、付款與高風險確認由本人在接手畫面輸入。</div></div>
+</section>
+
+<section class="chapter" id="sec-demo">
+  <span class="chip" style="background:linear-gradient(90deg,var(--pink),var(--rose))">14:00–20:59</span>
+  <h2 class="ct">6. 3D Demo 很吸睛，查核才決定它能不能拿去教學</h2>
+  <p class="cd">現場以 2026 Tesla Roadster 飛天車影片為材料，讓模型拆動作、做 3D 互動頁，再發布到 Google Sites。這段同時示範能力，也示範錯誤。</p>
+  <figure class="shot"><img src="ep56-img/demo.jpg" alt="Argon 產出的 Tesla Roadster 3D 互動示意頁" loading="lazy"><figcaption>3D 頁面把飛行階段、速度、節點與動畫放進同一個互動展示；讀者可以旋轉、縮放、調速度，但畫面上的物理數據仍是模型生成的示意，不等於真實車輛規格。［15:48］</figcaption></figure>
+  <h3>簡報提供的兩種 3D 提示詞骨架</h3>
+  <div class="code">B1｜三段思考程度 3D 軌道圖
+用 Three.js 做一個單一 HTML 檔的 3D 示意圖：中央是發光的「Gemini 4 Argon」核心，外圍三層軌道分別標示 Low、Medium、High 思考程度，可用滑鼠旋轉縮放；淺灰背景、黑色線條、繁體中文標籤。
+
+B2｜長任務 3D 螺旋時間軸
+用 Three.js 做單一 HTML 檔的 3D 長任務時間軸：螺旋軌道上依序排列「規劃 → 搜尋 → 寫程式 → 驗證 → 修正 → 交付」六個節點，點擊節點顯示說明，並有自動播放鏡頭。</div>
+  <div class="twrap"><table>
+    <tr><th>看起來做到了</th><th>交付前仍要驗</th></tr>
+    <tr><td>3D 物件能旋轉、縮放與自動播放</td><td>手機操作、載入速度、重置、無障礙與瀏覽器相容性。</td></tr>
+    <tr><td>影片被拆成多個飛行節點</td><td>節點順序是否忠於來源影片，是否漏掉重要動作。</td></tr>
+    <tr><td>畫面有速度、推力與階段說明</td><td>哪些是真實來源、哪些是模型補出的示意數字。</td></tr>
+    <tr><td>一鍵發布到網站</td><td>素材授權、公開範圍、個資與撤下機制。</td></tr>
+  </table></div>
+  <div class="golden"><div class="q">「這個數據都是假的，這個是它模擬出來的，這不是真實的數據。」</div><div class="a">［26:37］老師直接替漂亮 Demo 畫界線：畫得出來不代表數值可以當真。</div></div>
+  <div class="note blue">🎯 <div>適合教學的做法是把「示意」寫進畫面，並把真實來源另外列出。互動作品的亮點可以保留，但不能讓視覺完整度冒充證據完整度。</div></div>
+</section>
+
+<section class="chapter" id="sec-task">
+  <span class="chip" style="background:linear-gradient(90deg,var(--teal),var(--green))">20:00–23:59</span>
+  <h2 class="ct">7. 任務模式的核心不是無人值守，而是可追蹤、可停下、可接手</h2>
+  <p class="cd">課堂把任務模式與過去的 Spark 串在一起：本機瀏覽器、遠端瀏覽器與遠端程式碼執行能接續工作，但權限與容量都不是無限。</p>
+  <ol class="st">
+    <li><b>先寫成果：</b>具體說明要交什麼檔案、何時交、哪些來源可用。</li>
+    <li><b>先看計畫：</b>要求模型列步驟、風險、需要釐清的問題與驗收方式。</li>
+    <li><b>再放工具：</b>只開本次需要的瀏覽器、程式碼與連接器權限。</li>
+    <li><b>保留接手：</b>遇到登入、付款、傳送、刪除或公開發布時停止。</li>
+    <li><b>交付前查核：</b>看檔案、測試、來源、錯誤日誌與未完成事項。</li>
+  </ol>
+  <div class="twrap"><table>
+    <tr><th>情境</th><th>AI 可以繼續</th><th>人要接手</th></tr>
+    <tr><td>研究與整理</td><td>搜尋、分類、建立來源清單與草稿。</td><td>確認來源範圍、付費資料與結論採用。</td></tr>
+    <tr><td>瀏覽器操作</td><td>填寫一般欄位、下載公開資料、整理頁面。</td><td>登入、驗證碼、付款、個資與對外送出。</td></tr>
+    <tr><td>程式與檔案</td><td>產生、測試、修正與匯出檔案。</td><td>不可逆刪除、正式部署與權限變更。</td></tr>
+  </table></div>
+  <div class="golden"><div class="q">「如果你有新功能的時候，你要用的時候要非常地小心，因為它非常地耗費你的容量。」</div><div class="a">［22:00］長任務要同時管理品質與資源；示範中兩個大型任務就快速碰到用量上限。</div></div>
+  <div class="note gold">⚠️ <div>任務模式留下的 Cookie、遠端瀏覽器資料與程式碼執行檔要在工作結束後清理。關閉功能不代表所有對話與檔案會一起消失，應逐項確認介面提示。</div></div>
+</section>
+
+<section class="chapter" id="sec-use">
+  <span class="chip" style="background:linear-gradient(90deg,var(--purple),var(--blue))">24:00–30:30</span>
+  <h2 class="ct">8. 教學與研究真正可用的地方，是把多個步驟接成一條可查核的工作流</h2>
+  <p class="cd">課堂後段不再只看 3D，而是把應用拉到影片理解、程式、數學推演、文獻收集與 NotebookLM 整理。</p>
+  <div class="twrap"><table>
+    <tr><th>工作情境</th><th>可以交給模型的段落</th><th>人要保留的判斷</th></tr>
+    <tr><td>教學 Demo</td><td>把工程圖、統計推導或物理過程做成逐步動畫。</td><td>公式、數據與因果是否正確，互動是否真的幫助理解。</td></tr>
+    <tr><td>影片理解</td><td>描述畫面、拆節點、整理事件順序與建立示意頁。</td><td>真實互動與物理細節是否被模型誤判。</td></tr>
+    <tr><td>文獻收集</td><td>搜尋、下載、放入雲端與 NotebookLM，再整理報告。</td><td>資料庫登入、授權範圍、文獻完整性與引用是否正確。</td></tr>
+    <tr><td>程式開發</td><td>建立單檔原型、多檔程式、測試與錯誤修正。</td><td>安全、相容性、正式部署與真實使用者驗收。</td></tr>
+  </table></div>
+  <div class="golden"><div class="q">「它要去模仿出來有落差，但是它看著把影片講清楚，它可以做得很好。」</div><div class="a">［25:16］影片理解與影片重建是兩種能力；能描述來源，不代表能精準復刻真實物理。</div></div>
+  <div class="golden"><div class="q">「告訴 Argon 我要做這一整套的東西，它就幫你做出來。」</div><div class="a">［28:30］長任務的價值，是把過去需要逐頁點選的研究流程串成一段，但登入、授權與查核仍不能省。</div></div>
+  <div class="note steel">📖 <div>音檔轉文字在課堂測試裡仍不如專門工具；文書與程式也各有強弱。選模型時應拿<b>同一份真實工作</b>比較，不以單一榜單或展示影片下結論。</div></div>
+</section>
+
+<section class="chapter" id="sec-real">
+  <span class="chip" style="background:linear-gradient(90deg,var(--amber),var(--orange))">30:30–32:25</span>
+  <h2 class="ct">9. 這堂課真正在教的事</h2>
+  <h3>一、模型能力要用完整工作流衡量</h3>
+  <p>單次回答、榜單分數與漂亮 Demo 都只是片段。真正的問題是：它能否理解範圍、完成檔案、發現錯誤、重跑失敗步驟，最後留下可以驗收的成果。</p>
+  <h3>二、大上下文不等於不用整理</h3>
+  <p>輸入、思考與輸出共用額度；資料越多，越要先切來源、優先順序與完成定義，否則只是把混亂放進更大的窗口。</p>
+  <h3>三、技能是可重複方法，不是提示詞收藏</h3>
+  <p>技能應保存背景、步驟、權限與驗收；連接器只負責把工具接進來，不能取代治理。</p>
+  <h3>四、視覺吸睛與事實可信要分開</h3>
+  <p>3D、動畫與單檔 HTML 很適合教學原型，但模擬數據、物理細節與素材授權必須另外標示與驗證。</p>
+  <h3>五、越能代做，越要先設人工接手點</h3>
+  <p>登入、付款、刪除、公開發布與重要結論不應在任務尾端才想起來；它們要在交辦時就寫成停止條件。</p>
+  <div class="note green">✅ <div>可採用的最小流程：<b>先要計畫 → 開最小權限 → 分段驗證 → 敏感步驟接手 → 清理遠端資料 → 人工驗收後交付。</b></div></div>
+</section>
+
+<section class="chapter" id="sec-quotes">
+  <span class="chip" style="background:linear-gradient(90deg,var(--rose),var(--pink))">QUOTES</span>
+  <h2 class="ct">10. 老師金句</h2>
+  <div class="golden"><div class="q">「正常來說，我不管做動畫或不管做 3D 的構圖，原則上不用開到 High。」</div><div class="a">［06:08］思考程度按任務分級。</div></div>
+  <div class="golden"><div class="q">「大家都在一味地介紹那些模型的 3D 繪圖。」</div><div class="a">［07:25］把注意力拉回學習與工作流整合。</div></div>
+  <div class="golden"><div class="q">「有些人不喜歡讓它去讀你的資料。你會覺得你的資料有點隱私，你不想讓它讀，就看你的需求。」</div><div class="a">［12:26］資料連接由需求與敏感度決定。</div></div>
+  <div class="golden"><div class="q">「如果你有新功能的時候，你要用的時候要非常地小心，因為它非常地耗費你的容量。」</div><div class="a">［22:00］能力與用量成本要一起管理。</div></div>
+  <div class="golden"><div class="q">「它要去模仿出來有落差，但是它看著把影片講清楚，它可以做得很好。」</div><div class="a">［25:16］理解與復刻是不同能力。</div></div>
+  <div class="golden"><div class="q">「這個數據都是假的，這個是它模擬出來的，這不是真實的數據。」</div><div class="a">［26:37］模型生成的示意不能冒充真實資料。</div></div>
+  <div class="golden"><div class="q">「目前看起來它的整合能力是蠻順的，但是它的實際狀況怎麼落地到 Agent，我覺得還是在 Agent 這邊才能分出高下。」</div><div class="a">［29:08］最後仍要看真實工作是否跑得完。</div></div>
+</section>
+
+<section class="chapter" id="sec-src">
+  <span class="chip" style="background:linear-gradient(90deg,var(--ink3),var(--ink2))">SOURCE</span>
+  <h2 class="ct">11. 資料來源與整理說明</h2>
+  <div class="twrap"><table>
+    <tr><th style="width:110px">來源</th><td>2026/10/16 課堂錄影一段，全長 32 分 25 秒；25 頁課程簡報、提示詞表與實作手冊。</td></tr>
+    <tr><th>整理方式</th><td>全程本機處理：44 張關鍵畫面、305 段逐字稿，再用簡報核對術語、章節與操作順序；正式頁不是把逐字稿縮短，而是依主線重寫成章節、表格、步驟與金句。</td></tr>
+    <tr><th>時間戳</th><td>章節、截圖與引文後方的［mm:ss］對應課堂錄影播放器時間。</td></tr>
+    <tr><th>整理</th><td>竹貞（TAR 的逐幀筆記專員）；知臨負責正式頁重建、硬閘門、發布與回讀驗證。</td></tr>
+  </table></div>
+  <h3>已知限制，請先看過再引用</h3>
+  <ul class="pt">
+    <li>逐字稿由機器產生，工具名、英文名與口語重複可能辨識錯誤；本頁只修正可由簡報與畫面確認的部分。</li>
+    <li>課程中的模型名稱、權限、價格、額度與介面屬 2026/10/16 當時內容；正式採用前應再核對當下官方說明。</li>
+    <li>課堂引用的榜單、規格與上線時間由簡報彙整；本頁定位是忠實課堂筆記，不把它們改寫成獨立查核報告。</li>
+    <li>公開截圖已移除或避開帳號、網址、書籤、與會者與工作專案；原始錄影與原始簡報不在公開頁提供。</li>
+    <li>3D 頁面中的速度、推力與其他物理數據為模型示意，不能當作 Tesla Roadster 真實規格。</li>
+    <li>引用到教學、報告、程式或公開文章前，請回看錄影原始段落並核對最新官方文件。</li>
+  </ul>
+  <div class="note gold">📄 <div>教材與課堂畫面版權屬原作者；本頁只保留學習筆記必要的內容。若原作者或課程方希望調整或撤下，將配合處理。</div></div>
+</section>
+</article>
+</div>
+
+<footer>
+  <p>📝 直播電台 EP56 課堂筆記 · 生成式 AI 應用電台（黃政勛）</p>
+  <p>依 44 張關鍵畫面＋305 段逐字稿＋25 頁簡報整理 · <a href="ep56-ai-skills.html">🗺️ 互動技能地圖</a> · <a href="../radio/?k=145#radio">🏠 回筆記館入口</a></p>
+</footer>
+</body>
+</html>
