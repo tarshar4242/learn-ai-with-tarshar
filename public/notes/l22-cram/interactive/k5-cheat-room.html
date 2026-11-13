@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>抓作弊練習室</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&display=swap">
+<style>
+/* 版面：單欄的檢驗站練習本；紅＝作弊／不良，藍＝正常，琥珀＝門檻線 */
+:root{
+  --bg:#ECF0F2; --surface:#FFFFFF; --sunk:#F5F7F8; --fg:#1B2B33; --muted:#56666E; --line:#D3DCE1;
+  --red:#C9403B; --red-soft:#FBE4E2; --blue:#2F6FB5; --blue-soft:#E2ECF8; --green:#2B8259; --green-soft:#DFF1E7;
+  --amber:#B97A0C; --amber-soft:#FFF2D6;
+  --display:"LXGW WenKai TC","Noto Sans TC","PingFang TC",sans-serif;
+  --body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#12191D; --surface:#1B252B; --sunk:#151E23; --fg:#E4ECEF; --muted:#9AAAB2; --line:#2E3B42;
+  --red:#F07A72; --red-soft:#3A2222; --blue:#7EB0EA; --blue-soft:#1D2D40; --green:#6BC79A; --green-soft:#1A3328;
+  --amber:#E6B04A; --amber-soft:#3A2F17; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12191D; --surface:#1B252B; --sunk:#151E23; --fg:#E4ECEF; --muted:#9AAAB2; --line:#2E3B42;
+  --red:#F07A72; --red-soft:#3A2222; --blue:#7EB0EA; --blue-soft:#1D2D40; --green:#6BC79A; --green-soft:#1A3328;
+  --amber:#E6B04A; --amber-soft:#3A2F17; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.7}
+.wrap{max-width:780px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 60px;display:flex;flex-direction:column;gap:22px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.35;margin:0}
+h1{font-size:2rem}
+h2{font-size:1.45rem}
+h3{font-size:1.1rem}
+p{margin:0}
+.lead{color:var(--muted)}
+nav{display:flex;flex-wrap:wrap;gap:8px}
+nav a{color:var(--fg);text-decoration:none;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:4px 12px;font-size:.9rem}
+nav a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+section{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.tag{font-size:.8rem;color:var(--muted);letter-spacing:.06em}
+.story{background:var(--sunk);border-radius:10px;padding:12px 14px}
+.trap{background:var(--amber-soft);border-radius:10px;padding:12px 14px}
+.trap b{color:var(--amber)}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+button{font:inherit;cursor:pointer;border:1px solid var(--line);background:var(--sunk);color:var(--fg);border-radius:8px;padding:6px 14px}
+button.on{background:var(--fg);color:var(--surface);border-color:var(--fg)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.grid2>*{min-width:0}
+/* 混淆矩陣 */
+.cm{display:grid;grid-template-columns:auto 1fr 1fr;gap:4px;font-size:.92rem;max-width:420px}
+.cm div{padding:8px 6px;border-radius:6px;text-align:center}
+.cm .h{color:var(--muted);font-size:.82rem;align-self:center}
+.cm .c{font-variant-numeric:tabular-nums}
+.cm .c b{display:block;font-size:1.35rem}
+.tp{background:var(--green-soft)} .fn{background:var(--red-soft)} .fp{background:var(--amber-soft)} .tn{background:var(--sunk)}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px}
+.metric{background:var(--sunk);border-radius:8px;padding:8px 10px}
+.metric span{display:block;font-size:.8rem;color:var(--muted)}
+.metric b{font-size:1.25rem;font-variant-numeric:tabular-nums}
+.metric small{display:block;color:var(--muted);font-size:.78rem}
+.bad b{color:var(--red)} .good b{color:var(--green)}
+svg{display:block;width:100%;height:auto}
+svg text{font-family:var(--body);fill:var(--muted)}
+input[type=range]{width:100%;accent-color:var(--amber)}
+.slider{display:flex;flex-direction:column;gap:2px}
+.slider label{font-weight:700}
+.slider output{color:var(--amber);font-variant-numeric:tabular-nums}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:.88rem;color:var(--muted)}
+.dot{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:-1px;margin-right:4px}
+.shapes{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.shape{border:1px solid var(--line);border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:8px}
+.fb{font-size:.9rem;min-height:1.4em}
+.fb.ok{color:var(--green)} .fb.no{color:var(--red)}
+.q{border-top:1px solid var(--line);padding-top:14px;display:flex;flex-direction:column;gap:8px}
+.q:first-of-type{border-top:0;padding-top:0}
+.opts{display:flex;flex-direction:column;gap:6px}
+.opts button{text-align:left}
+.opts button.right{background:var(--green-soft);border-color:var(--green)}
+.opts button.wrong{background:var(--red-soft);border-color:var(--red)}
+.explain{font-size:.92rem;background:var(--sunk);border-radius:8px;padding:8px 12px}
+.score{font-weight:700}
+.tablebox{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.92rem;min-width:520px}
+th,td{border-bottom:1px solid var(--line);padding:8px;text-align:left;vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.hint{font-size:.85rem;color:var(--amber)}
+.story b.qt{color:var(--blue)}
+button.num{background:none;border:0;border-bottom:2px dashed var(--amber);border-radius:0;padding:0 2px;font-size:1.25rem;font-weight:700;color:var(--fg);font-variant-numeric:tabular-nums;text-align:left}
+button.num::after{content:" ▸";font-size:.75rem;color:var(--amber)}
+button.num[aria-expanded="true"]::after{content:" ▾"}
+.calc{background:var(--amber-soft);border-radius:8px;padding:10px 12px;font-size:.9rem;display:flex;flex-direction:column;gap:6px;min-width:0}
+.calc .f{font-weight:700}
+.calcs{display:flex;flex-direction:column;gap:8px}
+</style>
+</head>
+<body>
+<a href="../" style="display:block;position:sticky;top:0;z-index:99;padding:10px 16px;background:#08101f;color:#41dcff;font:700 14px/1.4 system-ui,sans-serif;text-decoration:none;border-bottom:1px solid #243a66">← 回考前衝刺包</a>
+
+
+<div class="wrap">
+<header style="display:flex;flex-direction:column;gap:8px">
+  <span class="tag">L22 第五單元｜分類指標</span>
+  <h1>抓作弊練習室</h1>
+  <p class="lead">從檢驗員、門檻一路練到 ROC 和 PR 曲線。每一段都可以動手調，看數字怎麼跟著變。</p>
+  <p class="hint">看到虛線底線的數字都可以點，會展開完整算法（公式、代入、結果）；再點一次收起。</p>
+  <nav>
+    <a href="#s1">一、準確率陷阱</a><a href="#s2">二、門檻</a><a href="#s3">三、ROC 曲線</a><a href="#s4">四、不平衡看 PR</a><a href="#s5">五、哪條不可能</a><a href="#s6">六、練習題</a><a href="#s7">七、總整理</a>
+  </nav>
+</header>
+
+<section id="s1">
+  <h2>一、準確率陷阱：偷懶的檢驗員</h2>
+  <div class="story"><b class="qt">題目：</b>工廠有 1000 個零件，其中只有 5 個是不良品。偷懶的檢驗員什麼都不看，全部蓋「良品」；認真的檢驗員抓到 4 個不良品，但也把 20 個好零件誤判成不良。請比較兩人的準確率、召回率、精確率：誰的準確率比較高？誰才真的有在抓不良品？</div>
+  <div class="row"><button id="lazy" class="on">偷懶的檢驗員</button><button id="careful">認真的檢驗員</button></div>
+  <div class="grid2">
+    <div id="cm1"></div>
+    <div class="metrics" id="m1"></div>
+  </div>
+  <div class="calcs" id="c1"></div>
+  <div class="trap"><b>陷阱：</b>資料極不平衡時，永遠猜「多數那一類」也能拿到很高的準確率。這時要看召回率：真的不良品，你抓到幾成。</div>
+</section>
+
+<section id="s2">
+  <h2>二、門檻：模型要多有把握才喊</h2>
+  <div class="story"><b class="qt">題目：</b>模型先替 11 位司機（3 位真的作弊、8 位正常）各打一個 0 到 1 的「可疑分數」，分數大於或等於門檻就喊「作弊」並凍結帳號。門檻設在 0.5、0.3、0.8 時，各抓到幾位作弊者？冤枉幾位正常司機？召回率和精確率是多少？拖動門檻看看。</div>
+  <div class="legend"><span><i class="dot" style="background:var(--red)"></i>真的作弊者（3 位）</span><span><i class="dot" style="background:var(--blue)"></i>正常司機（8 位）</span><span><i class="dot" style="background:var(--amber)"></i>門檻線</span></div>
+  <svg id="line2" viewBox="0 0 600 150" role="img" aria-label="司機可疑分數與門檻"></svg>
+  <div class="slider"><label for="th">門檻：<output id="thv">0.50</output></label><input id="th" type="range" min="0" max="1" step="0.01" value="0.5"></div>
+  <div class="row"><button data-th="0.5">原本 0.5</button><button data-th="0.3">調低到 0.3</button><button data-th="0.8">調高到 0.8</button></div>
+  <div class="grid2">
+    <div id="cm2"></div>
+    <div class="metrics" id="m2"></div>
+  </div>
+  <div class="calcs" id="c2"></div>
+  <div class="trap"><b>記這句：</b>門檻調低，喊的人變多，召回率上升，但冤枉也變多，精確率通常下降。門檻調高則相反。模型和分數都沒變，只是線移動了。</div>
+</section>
+
+<section id="s3">
+  <h2>三、ROC 曲線：把每一個門檻都畫成一個點</h2>
+  <div class="story">門檻從最嚴格（誰都不喊）慢慢轉到最寬鬆（每個人都喊）。每個門檻記下「作弊者抓到幾成」和「正常司機冤枉了幾成」，畫成一個點，連起來就是 ROC 曲線。上面的門檻拖到哪裡，下面的琥珀色點就在哪裡。</div>
+  <div class="grid2">
+    <div><h3>ROC 曲線</h3><svg id="roc3" viewBox="0 0 320 320" role="img" aria-label="ROC 曲線"></svg></div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div class="metrics" id="m3"></div>
+      <div class="calcs" id="c3"></div>
+      <p>縱軸：真陽率＝作弊者抓到幾成（就是召回率）</p>
+      <p>橫軸：假陽率＝正常司機冤枉了幾成</p>
+      <p>灰色斜線＝亂猜，面積 0.5。曲線越貼左上角越好，完美是 1。</p>
+    </div>
+  </div>
+  <div class="trap"><b>陷阱：</b>門檻越放越鬆，只會多喊人、不會少喊人，所以曲線<b>只往右、往上走，不可能往下掉</b>。</div>
+</section>
+
+<section id="s4">
+  <h2>四、資料越不平衡，越要看 PR 曲線</h2>
+  <div class="story"><b class="qt">題目：</b>作弊者還是那 3 位，但正常司機變成 10 倍、100 倍（分數分布不變）。ROC 曲線下面積和 PR 曲線下面積各會怎麼變？為什麼極不平衡時要改看 PR？<br>冤枉的人數也跟著變多，可是除以的正常司機總數變得更大，冤枉比例完全不變。拉拉看，ROC 曲線一動也不動，PR 曲線卻往下掉。</div>
+  <div class="slider"><label for="mult">正常司機人數：<output id="multv">8 位（1 倍）</output></label><input id="mult" type="range" min="0" max="2" step="1" value="0"></div>
+  <div class="grid2">
+    <div><h3>ROC 曲線</h3><svg id="roc4" viewBox="0 0 320 320" role="img" aria-label="不平衡時的 ROC 曲線"></svg><div class="metric" id="rocauc4"></div></div>
+    <div><h3>PR 曲線（縱軸精確率、橫軸召回率）</h3><svg id="pr4" viewBox="0 0 320 320" role="img" aria-label="不平衡時的 PR 曲線"></svg><div class="metric" id="prauc4"></div></div>
+  </div>
+  <div class="metrics" id="m4"></div>
+  <div class="calcs" id="c4"></div>
+  <div class="trap"><b>記這句：</b>不平衡時 ROC-AUC 容易<b>過度樂觀</b>，改看 PR-AUC 搭配召回率。但題目問「主要原因」時，先檢查流程有沒有更大的錯，例如先補資料再切測試集，造成資訊洩漏。</div>
+</section>
+
+<section id="s5">
+  <h2>五、哪一條不可能是 ROC 曲線？</h2>
+  <p class="lead">每一張都判斷：可能，還是不可能？</p>
+  <div class="shapes" id="shapes"></div>
+</section>
+
+<section id="s6">
+  <h2>六、練習題</h2>
+  <p class="score" id="score">答對 0／0 題</p>
+  <div id="quiz" style="display:flex;flex-direction:column;gap:14px"></div>
+  <button id="reset" style="align-self:flex-start">全部重做</button>
+</section>
+
+<section id="s7">
+  <h2>七、總整理</h2>
+  <div class="tablebox"><table>
+    <tr><th>名詞</th><th>白話</th><th>算法</th><th>考題關鍵字</th></tr>
+    <tr><td>準確率</td><td>全部判斷裡對了幾成</td><td>（抓到＋沒事）÷ 全部</td><td>不平衡時是陷阱</td></tr>
+    <tr><td>召回率（真陽率）</td><td>真的作弊者，抓到幾成</td><td>抓到 ÷（抓到＋放走）</td><td>不能放過任何一個</td></tr>
+    <tr><td>精確率</td><td>喊作弊的裡面，真的佔幾成</td><td>抓到 ÷（抓到＋冤枉）</td><td>不想被假警報淹沒</td></tr>
+    <tr><td>假陽率</td><td>正常的人，冤枉了幾成</td><td>冤枉 ÷（冤枉＋沒事）</td><td>ROC 的橫軸</td></tr>
+    <tr><td>門檻</td><td>分數多高才喊作弊</td><td>調低＝多喊；調高＝少喊</td><td>零容忍→調低門檻</td></tr>
+    <tr><td>ROC 曲線／AUC</td><td>所有門檻畫成的線、線下面積</td><td>亂猜 0.5，完美 1</td><td>不會往下掉</td></tr>
+    <tr><td>PR 曲線／PR-AUC</td><td>精確率對召回率的線</td><td>越不平衡越誠實</td><td>極不平衡時改用</td></tr>
+    <tr><td>混淆矩陣</td><td>抓到、放走、冤枉、沒事四格</td><td>列＝實際，欄＝預測</td><td>看程式判斷方向</td></tr>
+  </table></div>
+</section>
+</div>
+
+<script>
+const NORM=[0.05,0.12,0.19,0.26,0.33,0.44,0.55,0.68], CHEAT=[0.38,0.62,0.88], MULTS=[1,10,100];
+const pct=v=>v===null?'算不出來':(Math.round(v*1000)/10)+'%';
+const OPEN=new Set();
+function num(key,text){return `<button class="num" data-k="${key}" aria-expanded="${OPEN.has(key)}">${text}</button>`;}
+function calcBox(key,html){return `<div class="calc" data-c="${key}" ${OPEN.has(key)?'':'hidden'}>${html}</div>`;}
+document.addEventListener('click',e=>{const b=e.target.closest('button.num');if(!b)return;const k=b.dataset.k;
+  if(OPEN.has(k))OPEN.delete(k);else OPEN.add(k);
+  document.querySelectorAll(`button.num[data-k="${k}"]`).forEach(x=>x.setAttribute('aria-expanded',OPEN.has(k)));
+  document.querySelectorAll(`.calc[data-c="${k}"]`).forEach(x=>x.hidden=!OPEN.has(k));});
+function calcs(items){return items.filter(i=>i[4]).map(i=>calcBox(i[4],i[5])).join('');}
+/* 通用算法說明：c＝四格、P／N＝陽性／陰性的中文名 */
+function cAcc(c,P,N){const all=c.tp+c.fn+c.fp+c.tn;return `<p class="f">準確率 ＝（抓到 TP ＋ 沒事 TN）÷ 全部</p><p>＝（${c.tp} ＋ ${c.tn}）÷ ${all} ＝ ${c.tp+c.tn} ÷ ${all} ≈ ${pct((c.tp+c.tn)/all)}</p><p>白話：全部判斷裡，對了幾成。對角線那兩格加起來，除以全部。</p>`;}
+function cRec(c,P){return `<p class="f">召回率（真陽率）＝ 抓到 TP ÷（抓到 TP ＋ 放走 FN）</p><p>＝ ${c.tp} ÷（${c.tp} ＋ ${c.fn}）＝ ${c.tp} ÷ ${c.tp+c.fn} ≈ ${pct(c.tp/(c.tp+c.fn))}</p><p>白話：真的${P}有 ${c.tp+c.fn} 個，抓到 ${c.tp} 個。分母看「實際${P}」那一列。</p>`;}
+function cPre(c,P){const d=c.tp+c.fp;return d?`<p class="f">精確率 ＝ 抓到 TP ÷（抓到 TP ＋ 冤枉 FP）</p><p>＝ ${c.tp} ÷（${c.tp} ＋ ${c.fp}）＝ ${c.tp} ÷ ${d} ≈ ${pct(c.tp/d)}</p><p>白話：被喊「${P}」的有 ${d} 個，其中真的是 ${c.tp} 個。分母看「預測${P}」那一欄。</p>`:`<p class="f">精確率 ＝ 抓到 TP ÷（抓到 TP ＋ 冤枉 FP）</p><p>＝ 0 ÷（0 ＋ 0）＝ 0 ÷ 0</p><p>白話：一次都沒喊「${P}」，分母是 0，沒辦法算。</p>`;}
+function cFpr(c,N){return `<p class="f">假陽率 ＝ 冤枉 FP ÷（冤枉 FP ＋ 沒事 TN）</p><p>＝ ${c.fp} ÷（${c.fp} ＋ ${c.tn}）＝ ${c.fp} ÷ ${c.fp+c.tn} ≈ ${pct(c.fp/(c.fp+c.tn))}</p><p>白話：實際是${N}的有 ${c.fp+c.tn} 個，被冤枉 ${c.fp} 個。分母看「實際${N}」那一列。</p>`;}
+function counts(th,k){const tp=CHEAT.filter(s=>s>=th).length, fp=NORM.filter(s=>s>=th).length*k;
+  return {tp,fn:CHEAT.length-tp,fp,tn:NORM.length*k-fp};}
+function metr(c){const all=c.tp+c.fn+c.fp+c.tn;return {acc:(c.tp+c.tn)/all,rec:c.tp/(c.tp+c.fn),
+  prec:(c.tp+c.fp)?c.tp/(c.tp+c.fp):null,fpr:c.fp/(c.fp+c.tn)};}
+function cmHTML(c,pos,neg){return `<div class="cm">
+  <div></div><div class="h">預測：${pos}</div><div class="h">預測：${neg}</div>
+  <div class="h">實際：${pos}</div><div class="c tp">抓到<b>${c.tp}</b></div><div class="c fn">放走<b>${c.fn}</b></div>
+  <div class="h">實際：${neg}</div><div class="c fp">冤枉<b>${c.fp}</b></div><div class="c tn">沒事<b>${c.tn}</b></div></div>
+  <p class="tag" style="margin-top:6px">橫的列＝實際，直的欄＝預測</p>`;}
+function metricHTML(items){return items.map(([n,v,s,cls,key])=>`<div class="metric ${cls||''}"><span>${n}</span>${key?num(key,v):`<b>${v}</b>`}${s?`<small>${s}</small>`:''}</div>`).join('');}
+
+/* 一、檢驗員 */
+const INS={lazy:{tp:0,fn:5,fp:0,tn:995},careful:{tp:4,fn:1,fp:20,tn:975}};
+function drawInspector(key){const c=INS[key],m=metr(c);
+  document.getElementById('cm1').innerHTML=cmHTML(c,'不良','良品');
+  const it1=[
+    ['準確率',pct(m.acc),'看起來都很高','','acc1',cAcc(c,'不良','良品')],
+    ['召回率',pct(m.rec),'不良品抓到幾成',m.rec<0.5?'bad':'good','rec1',cRec(c,'不良品')],
+    ['精確率',pct(m.prec),m.prec===null?'他一次都沒喊不良':'喊不良的裡面真的佔幾成','','pre1',cPre(c,'不良')]];
+  document.getElementById('m1').innerHTML=metricHTML(it1);document.getElementById('c1').innerHTML=calcs(it1);
+  document.getElementById('lazy').classList.toggle('on',key==='lazy');
+  document.getElementById('careful').classList.toggle('on',key==='careful');}
+document.getElementById('lazy').onclick=()=>drawInspector('lazy');
+document.getElementById('careful').onclick=()=>drawInspector('careful');
+
+/* 曲線計算 */
+function rocPts(k){const ths=[1.01,...[...NORM,...CHEAT].sort((a,b)=>b-a)];
+  return ths.map(t=>{const m=metr(counts(t,k));return [m.fpr,m.rec];});}
+function prPts(k){return [...CHEAT].sort((a,b)=>b-a).map(t=>{const m=metr(counts(t,k));return [m.rec,m.prec];});}
+function rocAUC(k){const p=rocPts(k);let a=0;for(let i=1;i<p.length;i++)a+=(p[i][0]-p[i-1][0])*(p[i][1]+p[i-1][1])/2;return a;}
+function prAUC(k){const p=prPts(k);let a=0,r0=0;for(const [r,pr] of p){a+=(r-r0)*pr;r0=r;}return a;}
+
+const L=48,T=14,S=250;
+const sx=v=>L+v*S, sy=v=>T+(1-v)*S;
+function chartSVG(pts,cur,kind,step){
+  let g=`<rect x="${L}" y="${T}" width="${S}" height="${S}" fill="none" stroke="var(--line)"/>`;
+  g+=`<line x1="${sx(.5)}" y1="${T}" x2="${sx(.5)}" y2="${T+S}" stroke="var(--line)" stroke-dasharray="3 4"/><line x1="${L}" y1="${sy(.5)}" x2="${L+S}" y2="${sy(.5)}" stroke="var(--line)" stroke-dasharray="3 4"/>`;
+  for(const v of [0,.5,1]){g+=`<text x="${sx(v)}" y="${T+S+18}" text-anchor="middle" font-size="12">${v}</text><text x="${L-8}" y="${sy(v)+4}" text-anchor="end" font-size="12">${v}</text>`;}
+  const xl=kind==='roc'?'假陽率（冤枉幾成）':'召回率（抓到幾成）', yl=kind==='roc'?'真陽率（抓到幾成）':'精確率';
+  g+=`<text x="${L+S/2}" y="${T+S+38}" text-anchor="middle" font-size="13">${xl}</text>`;
+  g+=`<text transform="translate(14 ${T+S/2}) rotate(-90)" text-anchor="middle" font-size="13">${yl}</text>`;
+  if(kind==='roc')g+=`<line x1="${sx(0)}" y1="${sy(0)}" x2="${sx(1)}" y2="${sy(1)}" stroke="var(--muted)" stroke-dasharray="5 5" opacity=".6"/>`;
+  let d='';
+  if(kind==='pr'){d=`M${sx(0)},${sy(1)}`;for(const [x,y] of pts){d+=` H${sx(x)} V${sy(y)}`;}}
+  else{d=pts.map((p,i)=>(i?'L':'M')+sx(p[0])+','+sy(p[1])).join(' ');}
+  g+=`<path d="${d}" fill="none" stroke="${kind==='roc'?'var(--blue)':'var(--red)'}" stroke-width="3" stroke-linejoin="round"/>`;
+  if(cur)g+=`<circle cx="${sx(cur[0])}" cy="${sy(cur[1])}" r="7" fill="var(--amber)" stroke="var(--surface)" stroke-width="2"/>`;
+  return g;}
+
+/* 二、三、門檻＋ROC */
+function drawThreshold(th){
+  document.getElementById('th').value=th;document.getElementById('thv').textContent=Number(th).toFixed(2);
+  const X=v=>30+v*540;let g='';
+  g+=`<rect x="${X(th)}" y="8" width="${570-X(th)}" height="104" fill="var(--red-soft)"/>`;
+  g+=`<text x="${(X(th)+570)/2}" y="26" text-anchor="middle" font-size="14" style="fill:var(--red)">${th<0.97?'喊作弊（凍結）':''}</text>`;
+  g+=`<text x="${(30+X(th))/2}" y="26" text-anchor="middle" font-size="14" style="fill:var(--green)">${th>0.05?'放行':''}</text>`;
+  g+=`<line x1="30" y1="112" x2="570" y2="112" stroke="var(--fg)" stroke-width="2"/>`;
+  for(const s of NORM)g+=`<circle cx="${X(s)}" cy="95" r="11" fill="var(--blue)"/>`;
+  for(const s of CHEAT)g+=`<circle cx="${X(s)}" cy="62" r="11" fill="var(--red)"/>`;
+  g+=`<line x1="${X(th)}" y1="4" x2="${X(th)}" y2="120" stroke="var(--amber)" stroke-width="4"/>`;
+  g+=`<text x="30" y="136" font-size="13">0（看起來很正常）</text><text x="570" y="136" text-anchor="end" font-size="13">1（幾乎確定作弊）</text>`;
+  document.getElementById('line2').innerHTML=g;
+  const c=counts(th,1),m=metr(c);
+  document.getElementById('cm2').innerHTML=cmHTML(c,'作弊','正常');
+  const fl=NORM.filter(s=>s>=th), cl=CHEAT.filter(s=>s>=th);
+  const it2=[
+    ['召回率',pct(m.rec),`作弊者抓到 ${c.tp}／3`,m.rec===1?'good':(m.rec<0.7?'bad':''),'rec2',`<p>作弊者的分數是 ${CHEAT.join('、')}，大於或等於門檻 ${Number(th).toFixed(2)} 的有：${cl.join('、')||'沒有'}，共 ${c.tp} 位。</p>`+cRec(c,'作弊者')],
+    ['精確率',pct(m.prec),`喊了 ${c.tp+c.fp} 位，真的 ${c.tp} 位`,'','pre2',cPre(c,'作弊')],
+    ['冤枉幾位',c.fp+' 位',`正常司機共 8 位`,'','fp2',`<p class="f">冤枉 FP ＝ 正常司機中，分數 ≥ 門檻的人數</p><p>正常司機的分數是 ${NORM.join('、')}</p><p>大於或等於 ${Number(th).toFixed(2)} 的有：${fl.join('、')||'沒有'} → 共 ${c.fp} 位被冤枉</p>`],
+    ['準確率',pct(m.acc),'','','acc2',cAcc(c,'作弊','正常')] ];
+  document.getElementById('m2').innerHTML=metricHTML(it2);document.getElementById('c2').innerHTML=calcs(it2);
+  document.getElementById('roc3').innerHTML=chartSVG(rocPts(1),[m.fpr,m.rec],'roc');
+  const it3=[
+    ['目前這個點',`（${pct(m.fpr)}，${pct(m.rec)}）`,'（冤枉幾成，抓到幾成）','','pt3',`<p>這個點的橫座標是假陽率、縱座標是真陽率（召回率）。</p>`+cFpr(c,'正常司機')+cRec(c,'作弊者')],
+    ['曲線下面積（AUC）',rocAUC(1).toFixed(2),'整條線的成績，跟門檻無關','','auc3',aucCalc(1)]];
+  document.getElementById('m3').innerHTML=metricHTML(it3);document.getElementById('c3').innerHTML=calcs(it3);}
+function aucCalc(k){const rows=CHEAT.map(s=>[s,NORM.filter(v=>v<s).length*k]);const won=rows.reduce((a,r)=>a+r[1],0),all=CHEAT.length*NORM.length*k;
+  return `<p class="f">ROC 曲線下面積 ＝ 隨便挑一位作弊者和一位正常司機，作弊者分數比較高的機率</p><p>總共有 ${CHEAT.length} × ${NORM.length*k} ＝ ${all} 組配對。逐一看每位作弊者贏過幾位正常司機：</p><p>${rows.map(r=>`分數 ${r[0]} 的作弊者：贏過 ${r[1]} 位`).join('；')}</p><p>＝ ${won} ÷ ${all} ≈ ${(won/all).toFixed(3)}</p><p>白話：這和把曲線下的面積一塊一塊加起來，結果一樣。0.5＝亂猜，1＝作弊者全部排在正常司機前面。</p>`;}
+function apCalc(k){const ths=[...CHEAT].sort((a,b)=>b-a);let r0=0,sum=0;const lines=ths.map(t=>{const c=counts(t,k),m=metr(c),add=(m.rec-r0)*m.prec;sum+=add;const s=`門檻降到 ${t}：抓到 ${c.tp} 位、喊了 ${c.tp+c.fp} 位 → 精確率 ${c.tp}÷${c.tp+c.fp} ≈ ${pct(m.prec)}，召回率多了 1/3 → 加 1/3 × ${m.prec.toFixed(3)} ＝ ${add.toFixed(3)}`;r0=m.rec;return s;});
+  return `<p class="f">PR 曲線下面積（約）＝ 每多抓到一位作弊者，就加上「召回率增加的量 × 當時的精確率」</p>${lines.map(l=>`<p>${l}</p>`).join('')}<p>合計 ≈ ${sum.toFixed(3)}</p><p>白話：正常司機越多，喊出來的人裡冤枉的越多，精確率越低，面積就越小。</p>`;}
+document.getElementById('th').oninput=e=>drawThreshold(+e.target.value);
+document.querySelectorAll('[data-th]').forEach(b=>b.onclick=()=>drawThreshold(+b.dataset.th));
+
+/* 四、不平衡 */
+function drawImbalance(i){const k=MULTS[i];
+  document.getElementById('mult').value=i;
+  document.getElementById('multv').textContent=`${8*k} 位（${k} 倍），作弊者仍是 3 位`;
+  document.getElementById('roc4').innerHTML=chartSVG(rocPts(k),null,'roc');
+  document.getElementById('pr4').innerHTML=chartSVG(prPts(k),null,'pr');
+  document.getElementById('rocauc4').innerHTML=`<span>ROC-AUC</span>${num('auc4',rocAUC(k).toFixed(2))}<small>不管幾倍都一樣</small>`;
+  document.getElementById('prauc4').innerHTML=`<span>PR-AUC（約）</span>${num('ap4',prAUC(k).toFixed(2))}<small>正常司機越多，掉越多</small>`;
+  const c=counts(0.5,k),m=metr(c);
+  const it4=[
+    ['門檻 0.5 時冤枉',c.fp+' 位',`冤枉比例 ${pct(m.fpr)}`,'','fp4',`<p class="f">冤枉人數 ＝ 原本被冤枉的 2 位 × ${k} 倍 ＝ ${c.fp} 位</p>`+cFpr(c,'正常司機')+`<p>人數變 ${k} 倍、分母也變 ${k} 倍，所以冤枉比例不變，ROC 曲線不動。</p>`],
+    ['喊了幾位',(c.tp+c.fp)+' 位',`真的作弊只有 ${c.tp} 位`,'','call4',`<p class="f">喊了幾位 ＝ 抓到 TP ＋ 冤枉 FP ＝ ${c.tp} ＋ ${c.fp} ＝ ${c.tp+c.fp} 位</p>`],
+    ['精確率',pct(m.prec),'10 次警報有幾次是真的',m.prec<0.3?'bad':'','pre4',cPre(c,'作弊')],
+    ['準確率',pct(m.acc),'越不平衡越好看','','acc4',cAcc(c,'作弊','正常')]];
+  document.getElementById('m4').innerHTML=metricHTML(it4);
+  document.getElementById('c4').innerHTML=calcBox('auc4',aucCalc(k))+calcBox('ap4',apCalc(k))+calcs(it4);}
+document.getElementById('mult').oninput=e=>drawImbalance(+e.target.value);
+
+/* 五、形狀判斷 */
+const SHAPES=[
+  {n:'甲',d:'M0,1 L0,0 L1,0',ok:true,why:'可能。先抓光所有作弊者、完全沒冤枉人，再一路往右：完美模型，面積 1。'},
+  {n:'乙',d:'M0,1 C0.05,0.35 0.35,0.12 1,0',ok:true,why:'可能。往左上彎的一般好模型。'},
+  {n:'丙',d:'M0,1 L1,0',ok:true,why:'可能。對角線＝跟亂猜一樣，面積 0.5。'},
+  {n:'丁',d:'M0,1 C0.2,0.3 0.35,0.25 0.45,0.45 C0.55,0.7 0.75,0.8 1,0',ok:false,why:'不可能。中途往下掉，代表門檻放鬆後抓到的反而變少，這不會發生。'},
+  {n:'戊',d:'M0,1 C0.6,0.95 0.9,0.6 1,0',ok:true,why:'可能，只是比亂猜還差（在斜線下方）。把答案反過來用反而會變好。'}];
+const shapesEl=document.getElementById('shapes');
+SHAPES.forEach((s,i)=>{const el=document.createElement('div');el.className='shape';
+  el.innerHTML=`<b>曲線${s.n}</b><svg viewBox="-12 -8 124 124"><rect x="0" y="0" width="100" height="100" fill="none" stroke="var(--line)"/><line x1="0" y1="100" x2="100" y2="0" stroke="var(--muted)" stroke-dasharray="3 3" opacity=".5"/><path d="${s.d.replace(/(-?\d*\.?\d+),(-?\d*\.?\d+)/g,(m,a,b)=>(a*100)+','+(b*100))}" fill="none" stroke="var(--blue)" stroke-width="3"/></svg>
+  <div class="row"><button data-a="1">可能</button><button data-a="0">不可能</button></div><p class="fb"></p>`;
+  el.querySelectorAll('button').forEach(b=>b.onclick=()=>{const right=(b.dataset.a==='1')===s.ok;const fb=el.querySelector('.fb');
+    fb.className='fb '+(right?'ok':'no');fb.textContent=(right?'答對！':'再想想：')+s.why;});
+  shapesEl.appendChild(el);});
+
+/* 六、練習題（自編觀念題，非官方原題） */
+const QUIZ=[
+ {q:'1000 筆交易只有 10 筆是詐欺。模型把每一筆都判成「正常」，它的準確率和召回率是？',o:['準確率 99%，召回率 0%','準確率 1%，召回率 100%','準確率 99%，召回率 99%','準確率 50%，召回率 50%'],a:0,e:'990 筆判對，準確率 99%；10 筆詐欺一筆都沒抓到，召回率 0%。這就是準確率陷阱。'},
+ {q:'召回率的分母是什麼？',o:['模型喊「作弊」的人數','實際上真的是作弊的人數','全部的人數','正常的人數'],a:1,e:'召回率＝抓到 ÷ 真的作弊者（抓到＋放走）。'},
+ {q:'精確率的分母是什麼？',o:['實際上真的是作弊的人數','全部的人數','模型喊「作弊」的人數','被放走的人數'],a:2,e:'精確率＝抓到 ÷ 被喊作弊的人（抓到＋冤枉）。'},
+ {q:'門檻從 0.5 調高到 0.8，通常會怎樣？',o:['喊作弊的人變多，召回率上升','喊作弊的人變少，召回率下降或不變','模型要重新訓練','準確率一定變 100%'],a:1,e:'門檻調高＝要更有把握才喊，喊的人變少，可能放走更多作弊者。精確率通常上升。'},
+ {q:'老闆說：「寧可多抓幾個好人去人工確認，也絕對不能漏掉任何一個詐騙。」該怎麼做？',o:['追求精確率，門檻調高','追求召回率，門檻調低','門檻固定 0.5 不能動','只看準確率'],a:1,e:'「不能漏掉」＝召回率優先＝門檻調低，代價是冤枉變多。'},
+ {q:'客服說：「每次警報都要派專人處理，人力很貴，不想被一堆假警報淹沒。」比較該重視哪個？',o:['召回率','精確率','準確率','假陽率越高越好'],a:1,e:'怕假警報＝希望喊出來的大多是真的＝精確率優先，門檻往上調。'},
+ {q:'ROC 曲線的縱軸和橫軸分別是？',o:['縱軸精確率、橫軸召回率','縱軸真陽率（召回率）、橫軸假陽率','縱軸準確率、橫軸門檻','縱軸假陽率、橫軸真陽率'],a:1,e:'ROC：縱軸真陽率、橫軸假陽率。縱軸精確率、橫軸召回率的是 PR 曲線。'},
+ {q:'哪一種線不可能是 ROC 曲線？',o:['從左下一路貼到左上再到右上','左下到右上的斜直線','先上升、中途往下掉、再上升','在斜線下方的彎線'],a:2,e:'門檻放鬆只會多喊不會少喊，所以 ROC 曲線不會往下掉。'},
+ {q:'ROC 曲線下面積（AUC）等於 0.5 代表什麼？',o:['完美模型','跟亂猜差不多','模型壞掉不能用','召回率 50%'],a:1,e:'對角線的面積是 0.5，等於亂猜。完美是 1。'},
+ {q:'作弊者人數不變，正常樣本變成 100 倍。下列何者正確？',o:['ROC 曲線大幅下降，PR 曲線不變','ROC 曲線幾乎不變，PR 曲線明顯下降','兩條都不變','兩條都上升'],a:1,e:'假陽率是比例，分母一起變大所以 ROC 不動；但冤枉人數變多，精確率下降，PR 曲線就掉了。所以極不平衡時改看 PR-AUC。'},
+ {q:'在常見的機器學習套件印出的混淆矩陣裡，橫的「列」代表什麼？',o:['預測值','實際值','門檻','機率'],a:1,e:'列＝實際，欄＝預測。官方真題用「橫列表預測值」當錯誤選項。'}];
+const quizEl=document.getElementById('quiz');let answered={};
+function renderQuiz(){quizEl.innerHTML='';answered={};updScore();
+  QUIZ.forEach((it,i)=>{const el=document.createElement('div');el.className='q';
+    el.innerHTML=`<b>第 ${i+1} 題　${it.q}</b><div class="opts">${it.o.map((o,j)=>`<button data-j="${j}">(${'ABCD'[j]}) ${o}</button>`).join('')}</div><p class="explain" hidden></p>`;
+    el.querySelectorAll('.opts button').forEach(b=>b.onclick=()=>{if(i in answered)return;const j=+b.dataset.j;answered[i]=j===it.a;
+      b.classList.add(j===it.a?'right':'wrong');el.querySelector(`[data-j="${it.a}"]`).classList.add('right');
+      const ex=el.querySelector('.explain');ex.hidden=false;ex.textContent=(j===it.a?'答對！':'正確答案是 '+'ABCD'[it.a]+'。')+it.e;updScore();});
+    quizEl.appendChild(el);});}
+function updScore(){const v=Object.values(answered);document.getElementById('score').textContent=`答對 ${v.filter(Boolean).length}／${v.length} 題（共 ${QUIZ.length} 題）`;}
+document.getElementById('reset').onclick=renderQuiz;
+
+drawInspector('lazy');drawThreshold(0.5);drawImbalance(0);renderQuiz();
+</script>
+
+</body>
+</html>

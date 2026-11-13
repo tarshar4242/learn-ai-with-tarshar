@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>選檢定練習室</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&display=swap">
+<style>
+/* 版面：單欄練習本；藍＝資料點與主色，紅＝離群值與錯誤，綠＝答對，琥珀＝可點的計算 */
+:root{
+  --bg:#EEF1EC; --surface:#FFFFFF; --sunk:#F4F6F2; --fg:#1E2B26; --muted:#5A6862; --line:#D3DBD5;
+  --blue:#2F6FB5; --blue-soft:#E2ECF8; --red:#C9403B; --red-soft:#FBE4E2; --green:#2B8259; --green-soft:#DFF1E7;
+  --amber:#A86E08; --amber-soft:#FFF2D6;
+  --display:"LXGW WenKai TC","Noto Sans TC","PingFang TC",sans-serif;
+  --body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#131A17; --surface:#1C2521; --sunk:#16201C; --fg:#E3ECE7; --muted:#9CABA4; --line:#2F3B36;
+  --blue:#7EB0EA; --blue-soft:#1D2D40; --red:#F07A72; --red-soft:#3A2222; --green:#6BC79A; --green-soft:#1A3328;
+  --amber:#E6B04A; --amber-soft:#3A2F17; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#131A17; --surface:#1C2521; --sunk:#16201C; --fg:#E3ECE7; --muted:#9CABA4; --line:#2F3B36;
+  --blue:#7EB0EA; --blue-soft:#1D2D40; --red:#F07A72; --red-soft:#3A2222; --green:#6BC79A; --green-soft:#1A3328;
+  --amber:#E6B04A; --amber-soft:#3A2F17; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.7}
+.wrap{max-width:780px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 60px;display:flex;flex-direction:column;gap:22px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.35;margin:0}
+h1{font-size:2rem} h2{font-size:1.45rem} h3{font-size:1.1rem}
+p{margin:0}
+.lead{color:var(--muted)}
+nav{display:flex;flex-wrap:wrap;gap:8px}
+nav a{color:var(--fg);text-decoration:none;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:4px 12px;font-size:.9rem}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+section{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.tag{font-size:.8rem;color:var(--muted);letter-spacing:.06em}
+.problem{border:2px solid var(--blue);border-radius:10px;padding:12px 14px;background:var(--blue-soft)}
+.problem b{color:var(--blue)}
+.trap{background:var(--amber-soft);border-radius:10px;padding:12px 14px}
+.trap b{color:var(--amber)}
+.hint{font-size:.85rem;color:var(--amber)}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+button{font:inherit;cursor:pointer;border:1px solid var(--line);background:var(--sunk);color:var(--fg);border-radius:8px;padding:6px 14px}
+button.on{background:var(--fg);color:var(--surface);border-color:var(--fg)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.grid2>*{min-width:0}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.metric{background:var(--sunk);border-radius:8px;padding:8px 10px;min-width:0}
+.metric span{display:block;font-size:.8rem;color:var(--muted)}
+.metric small{display:block;color:var(--muted);font-size:.78rem}
+button.num{background:none;border:0;border-bottom:2px dashed var(--amber);border-radius:0;padding:0 2px;font-size:1.25rem;font-weight:700;color:var(--fg);font-variant-numeric:tabular-nums}
+button.num::after{content:" ▸";font-size:.75rem;color:var(--amber)}
+button.num[aria-expanded="true"]::after{content:" ▾"}
+.calc{background:var(--amber-soft);border-radius:8px;padding:10px 12px;font-size:.9rem;display:flex;flex-direction:column;gap:6px;min-width:0}
+.calc .f{font-weight:700}
+.calc .tbl{overflow-x:auto}
+.calc table{border-collapse:collapse;font-size:.85rem;font-variant-numeric:tabular-nums}
+.calc th,.calc td{border-bottom:1px solid var(--line);padding:3px 8px;text-align:right;white-space:nowrap}
+.calc th{color:var(--muted);font-weight:500}
+.result{border:2px solid var(--green);background:var(--green-soft);border-radius:10px;padding:12px 14px}
+.result h3{color:var(--green)}
+svg{display:block;width:100%;height:auto}
+svg text{font-family:var(--body);fill:var(--muted)}
+input[type=range]{width:100%;accent-color:var(--amber)}
+.slider{display:flex;flex-direction:column;gap:2px}
+.slider label{font-weight:700}
+.slider output{color:var(--amber);font-variant-numeric:tabular-nums}
+.q{border-top:1px solid var(--line);padding-top:14px;display:flex;flex-direction:column;gap:8px}
+.q:first-child{border-top:0;padding-top:0}
+.opts{display:flex;flex-direction:column;gap:6px}
+.opts button{text-align:left}
+.opts button.right{background:var(--green-soft);border-color:var(--green)}
+.opts button.wrong{background:var(--red-soft);border-color:var(--red)}
+.explain{font-size:.92rem;background:var(--sunk);border-radius:8px;padding:8px 12px}
+.score{font-weight:700}
+.tablebox{overflow-x:auto}
+table.sum{border-collapse:collapse;width:100%;font-size:.92rem;min-width:540px}
+table.sum th,table.sum td{border-bottom:1px solid var(--line);padding:8px;text-align:left;vertical-align:top}
+table.sum th{color:var(--muted);font-weight:500}
+</style>
+</head>
+<body>
+<a href="../" style="display:block;position:sticky;top:0;z-index:99;padding:10px 16px;background:#08101f;color:#41dcff;font:700 14px/1.4 system-ui,sans-serif;text-decoration:none;border-bottom:1px solid #243a66">← 回考前衝刺包</a>
+
+
+<div class="wrap">
+<header style="display:flex;flex-direction:column;gap:8px">
+  <span class="tag">L22 第四單元＋第一單元｜選檢定與相關係數</span>
+  <h1>選檢定練習室</h1>
+  <p class="lead">先學會用兩個問題選出檢定方法，再動手看三種相關係數怎麼被離群值影響。</p>
+  <p class="hint">看到虛線底線的數字都可以點，會展開完整算法；再點一次收起。</p>
+  <nav><a href="#s1">一、兩個問題選檢定</a><a href="#s2">二、為什麼三組不能兩兩比</a><a href="#s3">三、比例怎麼比</a><a href="#s4">四、三種相關係數</a><a href="#s5">五、練習題</a><a href="#s6">六、總整理</a></nav>
+</header>
+
+<section id="s1">
+  <h2>一、兩個問題選檢定</h2>
+  <p>看到題目，先問自己兩件事，依序點下去。</p>
+  <h3>問題 1：題目在比什麼？</h3>
+  <div class="row" id="q1"></div>
+  <h3>問題 2：幾組？是什麼關係？</h3>
+  <div class="row" id="q2"><span class="lead">先回答問題 1</span></div>
+  <div class="result" id="pick" hidden></div>
+</section>
+
+<section id="s2">
+  <h2>二、為什麼三組以上不能兩兩比？</h2>
+  <div class="problem"><b>題目：</b>想比較幾家飲料店的平均甜度。如果每兩家都做一次 t 檢定，每次都有 5% 的機會「其實沒差，卻誤判成有差」（顯著水準 α＝0.05）。比的店越多，至少誤判一次的機會是多少？</div>
+  <div class="slider"><label for="k">要比的店家數：<output id="kv">3 家</output></label><input id="k" type="range" min="2" max="8" step="1" value="3"></div>
+  <div class="metrics" id="m2"></div>
+  <div id="c2"></div>
+  <div class="trap"><b>結論：</b>三組以上比平均數，用<b>單因子變異數分析</b>一次比完，只承擔一次 5% 的風險。名字有「變異數」，比的卻是<b>平均數</b>。</div>
+</section>
+
+<section id="s3">
+  <h2>三、比例怎麼比：雙比例 Z 檢定</h2>
+  <div class="problem"><b>題目：</b>兩條產線各抽樣 <span id="nlabel">100</span> 件。舊產線良率 95%，新產線良率 97%。在顯著水準 0.05（雙尾，臨界值 1.96）下，兩條產線的良率是否有顯著差異？</div>
+  <div class="slider"><label for="n3">每條產線抽樣件數：<output id="n3v">100 件</output></label><input id="n3" type="range" min="100" max="2000" step="100" value="100"></div>
+  <div class="metrics" id="m3"></div>
+  <div id="c3"></div>
+  <div class="trap"><b>記這句：</b>比<b>百分比</b>（良率、點擊率、通過率）用 Z 檢定，不用 t 檢定。差距一樣是 2 個百分點，樣本越多越容易顯著。</div>
+</section>
+
+<section id="s4">
+  <h2>四、三種相關係數</h2>
+  <div class="problem"><b>題目：</b>下面是幾位學生的「每週讀書時數」和「考試分數」。切換三種情況，看皮爾森、斯皮爾曼、肯德爾三個相關係數各自怎麼變。哪一個最不怕離群值？</div>
+  <div class="row" id="presets"></div>
+  <div class="grid2">
+    <div><svg id="scatter" viewBox="0 0 340 300" role="img" aria-label="讀書時數與考試分數散佈圖"></svg></div>
+    <div class="metrics" id="m4" style="align-content:start"></div>
+  </div>
+  <div id="c4"></div>
+  <div class="trap"><b>記這句：</b>直線、沒有離群值 → 皮爾森。有離群值、評分等級、不一定是直線 → 看排名的斯皮爾曼或肯德爾。不怕離群值的程度：<b>肯德爾 ＞ 斯皮爾曼 ＞ 皮爾森</b>。三者範圍都是 −1 到 1。</div>
+</section>
+
+<section id="s5">
+  <h2>五、練習題</h2>
+  <p class="lead">題目都是自編的觀念題，不是官方原題。</p>
+  <p class="score" id="score"></p>
+  <div id="quiz"></div>
+  <button id="reset" style="align-self:flex-start">全部重做</button>
+</section>
+
+<section id="s6">
+  <h2>六、總整理</h2>
+  <div class="tablebox"><table class="sum">
+    <tr><th>比什麼</th><th>情況</th><th>用什麼</th><th>題目關鍵字</th></tr>
+    <tr><td>平均數</td><td>兩組，同一批人</td><td>成對樣本 t 檢定</td><td>前後、導入前後、配對</td></tr>
+    <tr><td>平均數</td><td>兩組，不同的人</td><td>獨立樣本 t 檢定</td><td>A 組 B 組、兩家門市</td></tr>
+    <tr><td>平均數</td><td>三組以上</td><td>單因子變異數分析</td><td>三種、避免兩兩比較</td></tr>
+    <tr><td>平均數</td><td>已知母體標準差</td><td>Z 檢定</td><td>母體標準差為…</td></tr>
+    <tr><td>比例</td><td>兩組</td><td>雙比例 Z 檢定</td><td>良率、點擊率、通過率</td></tr>
+    <tr><td>次數</td><td>兩個類別變數有沒有關聯</td><td>卡方獨立性檢定</td><td>交叉表、是否獨立</td></tr>
+    <tr><td>次數</td><td>分布符不符合預期</td><td>卡方適合度檢定</td><td>骰子、預期比例</td></tr>
+    <tr><td>關係強度</td><td>直線、沒有離群值</td><td>皮爾森相關係數</td><td>線性趨勢</td></tr>
+    <tr><td>關係強度</td><td>有離群值、等級資料</td><td>斯皮爾曼／肯德爾</td><td>1 到 5 分、排名</td></tr>
+  </table></div>
+</section>
+</div>
+
+<script>
+/* ---- 可點開的算法 ---- */
+const OPEN=new Set();
+function num(key,text){return `<button class="num" data-k="${key}" aria-expanded="${OPEN.has(key)}">${text}</button>`;}
+function calcBox(key,html){return `<div class="calc" data-c="${key}" ${OPEN.has(key)?'':'hidden'}>${html}</div>`;}
+document.addEventListener('click',e=>{const b=e.target.closest('button.num');if(!b)return;const k=b.dataset.k;
+  if(OPEN.has(k))OPEN.delete(k);else OPEN.add(k);
+  document.querySelectorAll(`button.num[data-k="${k}"]`).forEach(x=>x.setAttribute('aria-expanded',OPEN.has(k)));
+  document.querySelectorAll(`.calc[data-c="${k}"]`).forEach(x=>x.hidden=!OPEN.has(k));});
+const f2=v=>(Math.round(v*100)/100).toFixed(2), f3=v=>(Math.round(v*1000)/1000).toFixed(3), f4=v=>(Math.round(v*10000)/10000).toFixed(4);
+const pc=v=>(Math.round(v*1000)/10)+'%';
+
+/* ---- 一、選檢定 ---- */
+const TREE={
+  '平均數':[
+    ['兩組，同一批人（前後、配對）','成對樣本 t 檢定','同一批 40 位病人，用藥前後各量一次血壓'],
+    ['兩組，不同的人','獨立樣本 t 檢定','A 門市 30 位顧客和 B 門市 30 位顧客，比平均等待時間'],
+    ['三組以上','單因子變異數分析','三種學習率各訓練 10 次，比平均損失'],
+    ['題目給了母體標準差','Z 檢定','已知母體標準差 16 分鐘，抽 9 筆訂單檢定平均外送時間']],
+  '比例（百分比）':[
+    ['兩組','雙比例 Z 檢定','兩條產線各抽 100 件，良率 95% 和 97%']],
+  '次數、類別':[
+    ['兩個類別變數有沒有關聯','卡方獨立性檢定','年齡層和最常用的社群平台有沒有關聯'],
+    ['次數分布符不符合預期','卡方適合度檢定','擲骰子 600 次，每一面是不是各約 100 次']]};
+let pick1=null;
+function drawTree(){
+  document.getElementById('q1').innerHTML=Object.keys(TREE).map(k=>`<button data-a="${k}" class="${pick1===k?'on':''}">${k}</button>`).join('');
+  document.querySelectorAll('#q1 button').forEach(b=>b.onclick=()=>{pick1=b.dataset.a;document.getElementById('pick').hidden=true;drawTree();});
+  const q2=document.getElementById('q2');
+  if(!pick1){return;}
+  q2.innerHTML=TREE[pick1].map((r,i)=>`<button data-i="${i}">${r[0]}</button>`).join('');
+  q2.querySelectorAll('button').forEach(b=>b.onclick=()=>{q2.querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+    const r=TREE[pick1][+b.dataset.i];const el=document.getElementById('pick');el.hidden=false;
+    el.innerHTML=`<h3>用「${r[1]}」</h3><p>比的是${pick1}，${r[0]}。</p><p class="lead">例子：${r[2]}</p>`;});}
+drawTree();
+
+/* ---- 二、兩兩比較 ---- */
+function drawK(){const k=+document.getElementById('k').value;document.getElementById('kv').textContent=k+' 家';
+  const pairs=k*(k-1)/2, fw=1-Math.pow(0.95,pairs);
+  document.getElementById('m2').innerHTML=
+   `<div class="metric"><span>要比幾次</span>${num('pairs',pairs+' 次')}<small>每兩家比一次</small></div>`+
+   `<div class="metric"><span>至少誤判一次的機會</span>${num('fwer',pc(fw))}<small>變異數分析：只有 5%</small></div>`;
+  document.getElementById('c2').innerHTML=
+   calcBox('pairs',`<p class="f">比幾次 ＝ 家數 ×（家數 − 1）÷ 2</p><p>＝ ${k} × ${k-1} ÷ 2 ＝ ${pairs} 次</p><p>白話：從 ${k} 家裡挑 2 家配對，總共有 ${pairs} 種配法。</p>`)+
+   calcBox('fwer',`<p class="f">至少誤判一次 ＝ 1 −（每次都沒誤判的機率）^比幾次</p><p>每次沒誤判的機率 ＝ 1 − 0.05 ＝ 0.95</p><p>＝ 1 − 0.95^${pairs} ＝ 1 − ${f4(Math.pow(0.95,pairs))} ＝ ${f4(fw)} ≈ ${pc(fw)}</p><p>白話：比 ${pairs} 次，至少有一次「其實沒差卻說有差」的機會是 ${pc(fw)}，比原本設定的 5% 高很多。</p>`);}
+document.getElementById('k').oninput=drawK;
+
+/* ---- 三、雙比例 Z ---- */
+function drawZ(){const n=+document.getElementById('n3').value;document.getElementById('n3v').textContent=n+' 件';document.getElementById('nlabel').textContent=n;
+  const p1=0.95,p2=0.97,x1=Math.round(p1*n),x2=Math.round(p2*n),p=(x1+x2)/(2*n),se=Math.sqrt(p*(1-p)*(2/n)),z=(p2-p1)/se,sig=Math.abs(z)>1.96;
+  document.getElementById('m3').innerHTML=
+   `<div class="metric"><span>合併良率</span>${num('pool',pc(p))}<small>兩條產線放在一起算</small></div>`+
+   `<div class="metric"><span>標準誤</span>${num('se',f4(se))}<small>差距的正常晃動幅度</small></div>`+
+   `<div class="metric"><span>Z 值</span>${num('z',f2(z))}<small>${sig?'超過 1.96 → 顯著':'沒超過 1.96 → 不顯著'}</small></div>`;
+  document.getElementById('c3').innerHTML=
+   calcBox('pool',`<p class="f">合併良率 ＝（舊產線良品數 ＋ 新產線良品數）÷（兩邊總件數）</p><p>舊產線良品 ＝ ${n} × 95% ＝ ${x1} 件；新產線良品 ＝ ${n} × 97% ＝ ${x2} 件</p><p>＝（${x1} ＋ ${x2}）÷（${n} ＋ ${n}）＝ ${x1+x2} ÷ ${2*n} ＝ ${pc(p)}</p><p>白話：先假設兩條產線其實一樣好（虛無假設），所以把它們合起來估計共同的良率。</p>`)+
+   calcBox('se',`<p class="f">標準誤 ＝ √〔合併良率 ×（1 − 合併良率）×（1／舊產線件數 ＋ 1／新產線件數）〕</p><p>＝ √〔${f2(p)} × ${f2(1-p)} ×（1／${n} ＋ 1／${n}）〕</p><p>＝ √〔${f4(p*(1-p))} × ${f4(2/n)}〕＝ √${(p*(1-p)*2/n).toExponential(3).replace('e-','×10^-')} ≈ ${f4(se)}</p><p>白話：如果兩條產線其實一樣，光靠抽樣運氣，兩邊良率差距通常會晃動這麼多。</p>`)+
+   calcBox('z',`<p class="f">Z ＝（新產線良率 − 舊產線良率）÷ 標準誤</p><p>＝（0.97 − 0.95）÷ ${f4(se)} ＝ 0.02 ÷ ${f4(se)} ≈ ${f2(z)}</p><p>和臨界值比：${f2(z)} ${sig?'＞':'＜'} 1.96 → ${sig?'拒絕虛無假設，兩條產線良率有顯著差異':'不拒絕虛無假設，差 2 個百分點可能只是抽樣運氣'}。</p>`);}
+document.getElementById('n3').oninput=drawZ;
+
+/* ---- 四、相關係數 ---- */
+const SETS={
+  '直線趨勢':{x:[2,4,5,7,8,10],y:[55,62,66,70,78,85],out:-1,say:'點大致排成一條直線，三個係數都很高。'},
+  '加一個離群值':{x:[2,4,5,7,8,10,12],y:[55,62,66,70,78,85,20],out:6,say:'多了一位讀 12 小時卻只考 20 分的同學（紅點）。皮爾森掉最多，肯德爾最穩。'},
+  '彎曲但一路往上':{x:[1,2,3,4,5,6],y:[50,51,53,58,68,95],out:-1,say:'一路往上但不是直線。名次完全一致，所以斯皮爾曼、肯德爾都是 1，皮爾森卻小於 1。'}};
+let cur='直線趨勢';
+const mean=a=>a.reduce((s,v)=>s+v,0)/a.length;
+function pearsonParts(x,y){const mx=mean(x),my=mean(y);const rows=x.map((v,i)=>{const dx=v-mx,dy=y[i]-my;return {x:v,y:y[i],dx,dy,dxdy:dx*dy,dx2:dx*dx,dy2:dy*dy};});
+  const sxy=rows.reduce((s,r)=>s+r.dxdy,0),sxx=rows.reduce((s,r)=>s+r.dx2,0),syy=rows.reduce((s,r)=>s+r.dy2,0);
+  return {mx,my,rows,sxy,sxx,syy,r:sxy/Math.sqrt(sxx*syy)};}
+function ranks(a){const idx=a.map((v,i)=>i).sort((i,j)=>a[i]-a[j]);const r=new Array(a.length);
+  for(let k=0;k<idx.length;){let m=k;while(m+1<idx.length&&a[idx[m+1]]===a[idx[k]])m++;const avg=(k+m)/2+1;for(let t=k;t<=m;t++)r[idx[t]]=avg;k=m+1;}return r;}
+function kendallParts(x,y){const pairs=[];let C=0,D=0;for(let i=0;i<x.length;i++)for(let j=i+1;j<x.length;j++){
+  const s=Math.sign(x[j]-x[i])*Math.sign(y[j]-y[i]);if(s>0)C++;else if(s<0)D++;pairs.push([i,j,s]);}
+  const n=x.length,tot=n*(n-1)/2;return {pairs,C,D,tot,tau:(C-D)/tot};}
+function drawCorr(){const S=SETS[cur],x=S.x,y=S.y,n=x.length;
+  document.getElementById('presets').innerHTML=Object.keys(SETS).map(k=>`<button data-p="${k}" class="${k===cur?'on':''}">${k}</button>`).join('');
+  document.querySelectorAll('#presets button').forEach(b=>b.onclick=()=>{cur=b.dataset.p;drawCorr();});
+  // 散佈圖
+  const L=50,T=16,Wd=270,Ht=230,xmax=13,ymin=10,ymax=100,sx=v=>L+v/xmax*Wd,sy=v=>T+(ymax-v)/(ymax-ymin)*Ht;
+  let g=`<rect x="${L}" y="${T}" width="${Wd}" height="${Ht}" fill="none" stroke="var(--line)"/>`;
+  for(const v of [0,4,8,12])g+=`<text x="${sx(v)}" y="${T+Ht+18}" text-anchor="middle" font-size="12">${v}</text>`;
+  for(const v of [20,60,100])g+=`<text x="${L-8}" y="${sy(v)+4}" text-anchor="end" font-size="12">${v}</text>`;
+  g+=`<text x="${L+Wd/2}" y="${T+Ht+38}" text-anchor="middle" font-size="13">每週讀書時數</text><text transform="translate(14 ${T+Ht/2}) rotate(-90)" text-anchor="middle" font-size="13">考試分數</text>`;
+  x.forEach((v,i)=>{g+=`<circle cx="${sx(v)}" cy="${sy(y[i])}" r="7" fill="${i===S.out?'var(--red)':'var(--blue)'}"/>`;});
+  document.getElementById('scatter').innerHTML=g;
+  // 三個係數
+  const P=pearsonParts(x,y), rx=ranks(x), ry=ranks(y), SP=pearsonParts(rx,ry), K=kendallParts(x,y);
+  const d2=rx.map((v,i)=>(v-ry[i])**2), sd2=d2.reduce((s,v)=>s+v,0);
+  document.getElementById('m4').innerHTML=
+   `<p style="grid-column:1/-1">${S.say}</p>`+
+   `<div class="metric"><span>皮爾森（看原始數字）</span>${num('pr',f3(P.r))}</div>`+
+   `<div class="metric"><span>斯皮爾曼（看名次）</span>${num('sp',f3(SP.r))}</div>`+
+   `<div class="metric"><span>肯德爾（看每一對方向）</span>${num('kd',f3(K.tau))}</div>`;
+  const fmt=v=>Number.isInteger(v)?v:f2(v);
+  const pTable=`<div class="tbl"><table><tr><th>學生</th><th>時數</th><th>分數</th><th>時數−平均</th><th>分數−平均</th><th>兩者相乘</th><th>時數差²</th><th>分數差²</th></tr>${P.rows.map((r,i)=>`<tr><td>${i+1}</td><td>${r.x}</td><td>${r.y}</td><td>${f2(r.dx)}</td><td>${f2(r.dy)}</td><td>${f2(r.dxdy)}</td><td>${f2(r.dx2)}</td><td>${f2(r.dy2)}</td></tr>`).join('')}<tr><th colspan="5">加總</th><td>${f2(P.sxy)}</td><td>${f2(P.sxx)}</td><td>${f2(P.syy)}</td></tr></table></div>`;
+  const rTable=`<div class="tbl"><table><tr><th>學生</th><th>時數</th><th>時數名次</th><th>分數</th><th>分數名次</th><th>名次差 d</th><th>d²</th></tr>${x.map((v,i)=>`<tr><td>${i+1}</td><td>${v}</td><td>${fmt(rx[i])}</td><td>${y[i]}</td><td>${fmt(ry[i])}</td><td>${fmt(rx[i]-ry[i])}</td><td>${fmt(d2[i])}</td></tr>`).join('')}<tr><th colspan="6">d² 加總</th><td>${fmt(sd2)}</td></tr></table></div>`;
+  const kTable=`<div class="tbl"><table><tr><th>配對</th><th>時數變化</th><th>分數變化</th><th>方向</th></tr>${K.pairs.map(([i,j,s])=>`<tr><td>${i+1} 和 ${j+1}</td><td>${x[i]}→${x[j]}</td><td>${y[i]}→${y[j]}</td><td>${s>0?'一致':s<0?'相反':'平手'}</td></tr>`).join('')}</table></div>`;
+  document.getElementById('c4').innerHTML=
+   calcBox('pr',`<p class="f">皮爾森 ＝ Σ（時數差 × 分數差）÷ √〔Σ時數差² × Σ分數差²〕</p><p>時數平均 ＝ ${f2(P.mx)}，分數平均 ＝ ${f2(P.my)}（「差」＝每個人減掉平均）</p>${pTable}<p>＝ ${f2(P.sxy)} ÷ √（${f2(P.sxx)} × ${f2(P.syy)}）＝ ${f2(P.sxy)} ÷ ${f2(Math.sqrt(P.sxx*P.syy))} ≈ ${f3(P.r)}</p><p>白話：用原始數字算，離平均越遠的點影響越大，所以離群值很容易把它拉歪。</p>`)+
+   calcBox('sp',`<p class="f">斯皮爾曼 ＝ 1 − 6 × Σd² ÷〔n ×（n² − 1）〕（d＝兩個名次的差，n＝人數；沒有同分時適用）</p>${rTable}<p>＝ 1 − 6 × ${fmt(sd2)} ÷〔${n} ×（${n*n} − 1）〕＝ 1 − ${6*sd2} ÷ ${n*(n*n-1)} ≈ ${f3(1-6*sd2/(n*(n*n-1)))}</p><p>白話：先把數字換成名次（最小＝第 1），再看兩邊名次對不對得上。這和「把名次代進皮爾森公式」算出來一樣。</p>`)+
+   calcBox('kd',`<p class="f">肯德爾 ＝（方向一致的配對數 − 方向相反的配對數）÷ 總配對數</p><p>${n} 個人兩兩配對，總共 ${n} × ${n-1} ÷ 2 ＝ ${K.tot} 對。逐對檢查：時數增加時，分數也增加＝一致；分數反而減少＝相反。</p>${kTable}<p>一致 ${K.C} 對，相反 ${K.D} 對 → （${K.C} − ${K.D}）÷ ${K.tot} ≈ ${f3(K.tau)}</p><p>白話：只看每一對的方向，不看差多少，所以離群值再誇張也只算「一對相反」，最穩。</p>`);}
+
+/* ---- 五、練習題 ---- */
+const T6=['成對樣本 t 檢定','獨立樣本 t 檢定','單因子變異數分析','雙比例 Z 檢定','卡方獨立性檢定','卡方適合度檢定','Z 檢定（已知母體標準差）'];
+const QUIZ=[
+ {q:'某補習班找同一批 25 位學生，上課前考一次、上課後再考一次（滿分 100）。想知道這批學生的平均分數有沒有顯著進步，應選哪一種檢定？',o:[T6[1],T6[0],T6[2],T6[4]],a:1,e:'同一批人、前後各量一次，一個人對到一個人，是成對樣本 t 檢定。'},
+ {q:'A 門市隨機抽 30 位顧客、B 門市另外抽 30 位顧客（兩群是不同的人），想比較兩家門市的平均等待時間是否不同，應選哪一種檢定？',o:[T6[0],T6[2],T6[1],T6[3]],a:2,e:'兩組、不同的人、比平均數 → 獨立樣本 t 檢定。'},
+ {q:'研究 4 種肥料，每種各種 10 盆，想比較 4 組的平均株高是否有差異，並避免多次兩兩比較讓第一型錯誤變高，應選哪一種方法？',o:[T6[1],T6[2],T6[4],T6[0]],a:1,e:'三組以上比平均數，一次比完 → 單因子變異數分析。'},
+ {q:'新舊兩版網頁各有 2000 人瀏覽，舊版點擊率 3.1%、新版 3.8%。想檢定兩版點擊率的差異是否顯著，應選哪一種檢定？',o:[T6[1],T6[3],T6[2],T6[5]],a:1,e:'比兩組的百分比 → 雙比例 Z 檢定。看到「率」不要直覺選 t 檢定。'},
+ {q:'調查 500 人的「年齡層（青年、中年、老年）」與「最常用的社群平台（三種）」，想知道這兩個變數是否有關聯，應選哪一種檢定？',o:[T6[2],T6[5],T6[4],T6[1]],a:2,e:'兩個都是類別變數，看有沒有關聯 → 卡方獨立性檢定。'},
+ {q:'擲一顆骰子 600 次，記錄每一面出現的次數，想知道這顆骰子各面出現的次數是否符合「每面 1/6」的預期，應選哪一種檢定？',o:[T6[4],T6[5],T6[2],T6[3]],a:1,e:'實際次數分布符不符合預期分布 → 卡方適合度檢定。'},
+ {q:'已知全國外送時間的母體標準差是 16 分鐘。抽 9 筆訂單，想檢定平均外送時間是否大於宣稱的 36 分鐘，應選哪一種檢定？',o:[T6[6],T6[1],T6[2],T6[4]],a:0,e:'題目直接給了母體標準差 → Z 檢定。'},
+ {q:'「身高」與「體重」的散佈圖呈明顯直線趨勢，且沒有離群值。想衡量兩者線性關係的強度與方向，最適合用哪一個？',o:['皮爾森相關係數','卡方獨立性檢定','均方根誤差','單因子變異數分析'],a:0,e:'直線、沒有離群值、兩個連續數值 → 皮爾森相關係數。'},
+ {q:'「滿意度（1 到 5 分）」與「回購次數」之間有幾個極端值。想找最不容易被離群值影響的相關係數，應選哪一個？',o:['皮爾森相關係數','斯皮爾曼相關係數','肯德爾相關係數','共變異數'],a:2,e:'只看每一對的方向，不看差多少 → 肯德爾最穩健。順序：肯德爾 ＞ 斯皮爾曼 ＞ 皮爾森。'},
+ {q:'關於皮爾森、斯皮爾曼、肯德爾三種相關係數，下列敘述何者「錯誤」？',o:['三者的範圍都在 −1 到 1 之間','斯皮爾曼等於把數值換成名次後，再代入皮爾森公式','皮爾森對離群值最不敏感','相關係數等於 0，不代表兩者完全沒有關係'],a:2,e:'皮爾森用原始數字，對離群值「最」敏感。其他三句都正確（第 4 句：可能有彎曲的關係）。'},
+ {q:'單因子變異數分析比較的是各組的哪一個統計量？',o:['變異數','平均數','中位數','比例'],a:1,e:'名字有「變異數」，比的卻是平均數，這是常見陷阱。'}];
+let answered={};
+function renderQuiz(){const el=document.getElementById('quiz');el.innerHTML='';answered={};updScore();
+  QUIZ.forEach((it,i)=>{const d=document.createElement('div');d.className='q';
+    d.innerHTML=`<b>第 ${i+1} 題　${it.q}</b><div class="opts">${it.o.map((o,j)=>`<button data-j="${j}">(${'ABCD'[j]}) ${o}</button>`).join('')}</div><p class="explain" hidden></p>`;
+    d.querySelectorAll('.opts button').forEach(b=>b.onclick=()=>{if(i in answered)return;const j=+b.dataset.j;answered[i]=j===it.a;
+      b.classList.add(j===it.a?'right':'wrong');d.querySelector(`[data-j="${it.a}"]`).classList.add('right');
+      const ex=d.querySelector('.explain');ex.hidden=false;ex.textContent=(j===it.a?'答對！':'正確答案是 '+'ABCD'[it.a]+'。')+it.e;updScore();});
+    el.appendChild(d);});}
+function updScore(){const v=Object.values(answered);document.getElementById('score').textContent=`答對 ${v.filter(Boolean).length}／${v.length} 題（共 ${QUIZ.length} 題）`;}
+document.getElementById('reset').onclick=renderQuiz;
+
+drawK();drawZ();drawCorr();renderQuiz();
+</script>
+
+</body>
+</html>

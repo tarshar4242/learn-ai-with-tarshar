@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>發票關聯教室</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&display=swap">
+<style>
+/* 版面：一張收銀台。上方是 100 張熱感發票牆，下方是算式收據，往下是小考與確認題 */
+:root{
+  --bg:#EEF1EF; --paper:#FBFCFA; --ink:#1F2B2A; --muted:#5E6B69; --line:#CBD3D0;
+  --a:#2F6FB5; --a-soft:#DCE8F6; --b:#C2611F; --b-soft:#F7E3D3;
+  --both:#1E7A57; --both-soft:#D5EEE2; --dim:#E3E7E5; --bad:#B43A3A; --bad-soft:#F6DCDC;
+  --display:"LXGW WenKai TC","Noto Sans TC","PingFang TC",serif;
+  --body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141A19; --paper:#1C2423; --ink:#E6ECEA; --muted:#9AA8A5; --line:#33403E;
+  --a:#7FB0EA; --a-soft:#1F3450; --b:#F0A06A; --b-soft:#4A2C18;
+  --both:#5FCB9A; --both-soft:#173B2C; --dim:#232C2B; --bad:#F08A8A; --bad-soft:#4A2020; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141A19; --paper:#1C2423; --ink:#E6ECEA; --muted:#9AA8A5; --line:#33403E;
+  --a:#7FB0EA; --a-soft:#1F3450; --b:#F0A06A; --b-soft:#4A2C18;
+  --both:#5FCB9A; --both-soft:#173B2C; --dim:#232C2B; --bad:#F08A8A; --bad-soft:#4A2020; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.7}
+.wrap{max-width:760px;margin:0 auto;padding-block:24px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:28px}
+h1,h2{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.3}
+h1{font-size:2rem}
+h2{font-size:1.45rem}
+p{margin:0}
+.lead{color:var(--muted)}
+section{display:flex;flex-direction:column;gap:14px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.row{display:flex;flex-wrap:wrap;gap:8px}
+button{font-family:var(--body);font-size:.95rem;border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:999px;padding:7px 14px;cursor:pointer}
+button:hover{border-color:var(--muted)}
+button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--a);outline-offset:2px}
+button.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.tag{font-size:.8rem;color:var(--muted);letter-spacing:.06em}
+.rule{font-family:var(--display);font-size:1.5rem;text-align:center}
+.rule .ia{color:var(--a)} .rule .ib{color:var(--b)}
+.sliders{display:grid;grid-template-columns:1fr;gap:6px}
+.sl{display:grid;grid-template-columns:8.5em 1fr 3.2em;align-items:center;gap:10px}
+.sl label{font-size:.92rem}
+.sl output{font-variant-numeric:tabular-nums;text-align:right;font-weight:700}
+input[type=range]{width:100%;accent-color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(10,1fr);gap:4px}
+.r{aspect-ratio:3/4;border-radius:4px;border:1px solid var(--line);background:var(--paper);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;font-size:.68rem;line-height:1.15;transition:opacity .2s,background .2s}
+.r .ma{color:var(--a);font-weight:700} .r .mb{color:var(--b);font-weight:700}
+.r.dim{opacity:.22}
+.r.hit{background:var(--both-soft);border-color:var(--both);border-width:2px}
+.r.hitb{background:var(--b-soft);border-color:var(--b);border-width:2px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.85rem;color:var(--muted)}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:4px;border:2px solid}
+.calc{border-top:2px dashed var(--line);padding-top:12px;display:flex;flex-direction:column;gap:10px}
+.eq{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:1.05rem}
+.frac{display:inline-flex;flex-direction:column;align-items:center;font-variant-numeric:tabular-nums;line-height:1.25}
+.frac span:first-child{border-bottom:2px solid var(--ink);padding:0 4px}
+.big{font-family:var(--display);font-size:1.7rem;font-variant-numeric:tabular-nums}
+.say{background:var(--bg);border-radius:10px;padding:10px 12px}
+.chip{display:inline-block;border-radius:999px;padding:2px 10px;font-size:.85rem;font-weight:700}
+.chip.good{background:var(--both-soft);color:var(--both)} .chip.mid{background:var(--dim);color:var(--muted)} .chip.bad{background:var(--bad-soft);color:var(--bad)}
+.bars{display:flex;flex-direction:column;gap:8px}
+.bar{display:grid;grid-template-columns:9em 1fr 3.4em;align-items:center;gap:8px;font-size:.9rem}
+.track{height:16px;background:var(--dim);border-radius:8px;overflow:hidden}
+.fill{height:100%;border-radius:8px;transition:width .3s}
+.bar output{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+.three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.three div{background:var(--bg);border-radius:10px;padding:8px;text-align:center}
+.three b{display:block;font-family:var(--display);font-size:1.3rem;font-variant-numeric:tabular-nums}
+.three small{color:var(--muted)}
+.three div.changed{background:var(--bad-soft)}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:480px;font-size:.95rem}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:var(--bg)}
+.q{display:flex;flex-direction:column;gap:8px;border-bottom:1px solid var(--line);padding-bottom:14px}
+.q:last-child{border-bottom:0}
+.q .fb{font-size:.92rem;border-radius:8px;padding:8px 10px}
+.q .fb.ok{background:var(--both-soft)} .q .fb.no{background:var(--bad-soft)}
+.trap{border-left:4px solid var(--bad);padding-left:12px;display:flex;flex-direction:column;gap:6px}
+details{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+summary{cursor:pointer;font-weight:700}
+details p{margin-top:10px}
+.nb{font:inherit;font-weight:700;color:inherit;background:none;border:0;border-bottom:2px dashed var(--a);border-radius:0;padding:0 2px;cursor:pointer}
+.nb:hover,.nb[aria-expanded="true"]{background:var(--a-soft);border-color:var(--a)}
+.xps{display:flex;flex-direction:column;gap:8px}
+.xp{background:var(--bg);border:1px solid var(--line);border-left:4px solid var(--a);border-radius:10px;padding:10px 12px;font-size:.95rem;overflow-wrap:anywhere;display:flex;flex-direction:column;gap:6px}
+.xp ol{margin:0;padding-left:1.3em;display:flex;flex-direction:column;gap:4px}
+.xph{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.xc{font-size:.8rem;padding:2px 10px}
+.hint{font-size:.85rem;color:var(--muted)}
+@media (max-width:430px){.sl{grid-template-columns:7em 1fr 2.8em}.bar{grid-template-columns:7.5em 1fr 3em}.r{font-size:.6rem}.rule{font-size:1.25rem}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<a href="../" style="display:block;position:sticky;top:0;z-index:99;padding:10px 16px;background:#08101f;color:#41dcff;font:700 14px/1.4 system-ui,sans-serif;text-decoration:none;border-bottom:1px solid #243a66">← 回考前衝刺包</a>
+
+
+<div class="wrap">
+<header style="display:flex;flex-direction:column;gap:8px">
+  <span class="tag">K6 分析方法｜關聯規則</span>
+  <h1>店長的 100 張發票</h1>
+  <p class="lead">支持度、信賴度、提升度，三個數字都從同一疊發票數出來。換規則、拉滑桿、切換三個按鈕，看每個數字到底在數哪幾張。</p>
+</header>
+
+<section>
+  <h2>第一關：數發票</h2>
+  <div class="card">
+    <span class="tag">先選一條規則（店長想知道的事）</span>
+    <div class="row" id="presets"></div>
+    <div class="rule" id="ruleText"></div>
+    <div class="row" style="justify-content:center"><button id="flip">把箭頭反過來</button></div>
+    <div class="sliders">
+      <div class="sl"><label for="sA" id="lA"></label><input type="range" id="sA" min="0" max="100"><output id="oA"></output></div>
+      <div class="sl"><label for="sB" id="lB"></label><input type="range" id="sB" min="0" max="100"><output id="oB"></output></div>
+      <div class="sl"><label for="sK" id="lK"></label><input type="range" id="sK" min="0" max="100"><output id="oK"></output></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="tag">現在要算哪一個？</span>
+    <span class="hint">有虛線底線的數字都可以點，點開看怎麼算，再點一次收起。</span>
+    <div class="row" id="modes">
+      <button data-m="sup" class="on">支持度</button>
+      <button data-m="conf">信賴度</button>
+      <button data-m="lift">提升度</button>
+    </div>
+    <div class="legend" id="legend"></div>
+    <div class="grid" id="grid" aria-label="100 張發票"></div>
+    <div class="calc" id="calc"></div>
+    <div class="xps" id="xpC"></div>
+  </div>
+
+  <div class="card">
+    <span class="tag">三個數字一起看（反轉箭頭時，變了的那格會變紅）</span>
+    <div class="three">
+      <div id="tSup"><small>支持度</small><b></b></div>
+      <div id="tConf"><small>信賴度</small><b></b></div>
+      <div id="tLift"><small>提升度</small><b></b></div>
+    </div>
+    <span class="hint">這三個數字也可以點開看算法。</span>
+    <div class="xps" id="xpT"></div>
+  </div>
+</section>
+
+<section>
+  <h2>第二關：快問快答</h2>
+  <div class="card" id="quiz"></div>
+  <p class="lead" id="score"></p>
+  <div class="xps" id="xpQ"></div>
+</section>
+
+<section>
+  <h2>三兄弟一張表</h2>
+  <div class="tw"><table>
+    <tr><th>名詞</th><th>怎麼算</th><th>回答什麼問題</th><th>反轉箭頭</th></tr>
+    <tr><td>支持度</td><td>兩樣都買 ÷ 全部發票</td><td>這個組合常不常見？</td><td>不變</td></tr>
+    <tr><td>信賴度</td><td>兩樣都買 ÷ 有前項的發票</td><td>買了 A 的人，幾成也買 B？</td><td><b>會變</b></td></tr>
+    <tr><td>提升度</td><td>信賴度 ÷ 後項本身的比例</td><td>比平常多買了幾倍？</td><td>不變</td></tr>
+  </table></div>
+  <div class="card trap">
+    <b>陷阱</b>
+    <p>1. 三個公式的分子都是「兩樣都買」，差別只在分母。</p>
+    <p>2. 信賴度是「幾成」，算出來超過 100% 就是算錯了。</p>
+    <p>3. 信賴度很高不代表規則有用。後項本來就很多人買的話，提升度可能小於 1。</p>
+    <p>4. 提升度大於 1 表示正相關，等於 1 表示無關，小於 1 表示負相關。</p>
+    <p>5. 提升度大於 1 只能說明兩樣東西常一起出現，不能證明是 A 造成客人買 B。</p>
+    <p class="lead">比喻哪裡不準：真實的店有上千種商品，不是店長一張一張數，是電腦把所有組合算出來，再留下超過門檻的規則。</p>
+  </div>
+</section>
+
+<section>
+  <h2>確認題</h2>
+  <p class="lead">先自己算，再點開對答案。</p>
+  <details><summary>1. 100 張發票：珍奶 40 張、雞排 20 張、兩樣都有 16 張。「雞排 → 珍奶」的支持度、信賴度、提升度各是多少？</summary>
+    <p>支持度＝16 ÷ 100＝16%。信賴度＝16 ÷ 20（有雞排的）＝80%。提升度＝80% ÷ 40%（珍奶本來的比例）＝2，正相關，有用。可以把數字拉到上面的滑桿驗算，再點開數字看每一步。</p></details>
+  <details><summary>2. 同樣是 100 張發票（珍奶 40 張、雞排 20 張、兩樣都有 16 張），箭頭反過來變成「珍奶 → 雞排」，支持度、信賴度、提升度三個數字哪些會變？</summary>
+    <p>只有信賴度會變：16 ÷ 40＝40%。支持度還是 16%。提升度＝40% ÷ 20%＝2，跟原本一樣。</p></details>
+</section>
+</div>
+
+<script>
+(function(){
+  const P=[
+    {a:'咖啡',b:'蛋糕',A:20,B:25,K:10},
+    {a:'咖啡',b:'礦泉水',A:20,B:80,K:14},
+    {a:'尿布',b:'啤酒',A:20,B:10,K:6},
+    {a:'便當',b:'飲料',A:20,B:75,K:12}
+  ];
+  const N=100;
+  let s={...P[0]}, mode='sup', prev=null, pi=0;
+  const ans={}; let got=0,done=0;
+  const $=id=>document.getElementById(id);
+  const pct=v=>(Math.round(v*1000)/10)+'%';
+  const num=v=>(Math.round(v*1000)/1000).toString();
+  // 算法展開：OPEN 記著哪些數字被點開；每次畫面更新都用當下的 s 重新產生說明，所以會跟著變
+  const OPEN=new Set();
+  const raw=v=>String(+(+v).toPrecision(8));
+  const rawPct=v=>raw(v*100)+'%';
+  const nb=(id,text)=>'<button type="button" class="nb" data-x="'+id+'" aria-expanded="'+OPEN.has(id)+'">'+text+'</button>';
+  const rnd=(r,shown,where)=>r===shown?'剛好除得盡，不用四捨五入，顯示 '+shown+'。':'四捨五入到'+where+'：'+r+' → '+shown+'。';
+  const pnl=(id,title,f,sub,res,say)=>'<div class="xp" role="region" aria-label="'+title+'"><div class="xph"><b>'+title+'</b><button type="button" class="xc" data-x="'+id+'">收起</button></div><ol><li><b>公式</b>　'+f+'</li><li><b>代入目前的數字</b>　'+sub+'</li><li><b>算出結果</b>　'+res+'</li><li><b>白話意思</b>　'+say+'</li></ol></div>';
+  const X={
+    sup(id){const c=calc();return pnl(id,'支持度怎麼算','支持度＝兩樣都有的發票數 ÷ 全部發票數',
+      '兩樣都有（'+s.a+'和'+s.b+'）的發票＝'+s.K+' 張；全部發票＝'+N+' 張',
+      s.K+' ÷ '+N+' ＝ '+raw(c.sup)+'，換成百分比＝'+rawPct(c.sup)+'。'+rnd(rawPct(c.sup),pct(c.sup),'小數點後 1 位（百分比）'),
+      '100 張發票裡，有 '+pct(c.sup)+' 同時買了'+s.a+'和'+s.b+'，代表這個組合有多常見。');},
+    conf(id){const c=calc();const f='信賴度＝兩樣都有的發票數 ÷ 有前項（'+s.a+'）的發票數';
+      if(c.conf===null)return pnl(id,'信賴度怎麼算',f,'兩樣都有＝'+s.K+' 張；有'+s.a+'的發票＝'+s.A+' 張','分母是 0，不能除，所以算不出來。','沒有人買'+s.a+'，就沒辦法問「買了'+s.a+'的人有幾成也買'+s.b+'」。');
+      return pnl(id,'信賴度怎麼算',f,'兩樣都有＝'+s.K+' 張；有'+s.a+'的發票＝'+s.A+' 張',
+        s.K+' ÷ '+s.A+' ＝ '+raw(c.conf)+'，換成百分比＝'+rawPct(c.conf)+'。'+rnd(rawPct(c.conf),pct(c.conf),'小數點後 1 位（百分比）'),
+        '只看買了'+s.a+'的那 '+s.A+' 張，裡面有 '+pct(c.conf)+' 也買了'+s.b+'。');},
+    base(id){const c=calc();return pnl(id,s.b+'本身的比例怎麼算','後項本身的比例＝有後項（'+s.b+'）的發票數 ÷ 全部發票數',
+      '有'+s.b+'的發票＝'+s.B+' 張；全部發票＝'+N+' 張',
+      s.B+' ÷ '+N+' ＝ '+raw(c.base)+'，換成百分比＝'+rawPct(c.base)+'。'+rnd(rawPct(c.base),pct(c.base),'小數點後 1 位（百分比）'),
+      '不管有沒有買'+s.a+'，隨便抽一張發票，有 '+pct(c.base)+' 的機會買了'+s.b+'。這是拿來比較的基準。');},
+    lift(id){const c=calc();const f='提升度＝信賴度 ÷ 後項本身的比例（信賴度＝兩樣都有 ÷ 有前項；後項本身的比例＝有後項 ÷ 全部）';
+      if(c.lift===null)return pnl(id,'提升度怎麼算',f,'兩樣都有＝'+s.K+'；有'+s.a+'＝'+s.A+'；有'+s.b+'＝'+s.B+'；全部＝'+N,'信賴度或後項本身的比例其中一個是 0（分母為 0），算不出來。','要先有人買'+s.a+'、也有人買'+s.b+'，才有辦法比較。');
+      return pnl(id,'提升度怎麼算',f,
+        '信賴度＝'+s.K+' ÷ '+s.A+' ＝ '+rawPct(c.conf)+'；'+s.b+'本身的比例＝'+s.B+' ÷ '+N+' ＝ '+rawPct(c.base),
+        rawPct(c.conf)+' ÷ '+rawPct(c.base)+' ＝ '+raw(c.lift)+'。'+rnd(raw(c.lift),num(c.lift),'小數點後 3 位')+'　'+verdict(c.lift),
+        '買了'+s.a+'的人，買'+s.b+'的機會是平常的 '+num(c.lift)+' 倍。大於 1 才表示「買了前項會更容易買後項」。');},
+    score(id){return pnl(id,'已答與答對題數怎麼算','已答題數＝你按過答案的題數（每題只算第一次）；答對題數＝其中選到正確答案的題數',
+      '7 題裡，你按過 '+done+' 題；其中答對 '+got+' 題'+(done-got?'，答錯 '+(done-got)+' 題':''),
+      '已答 '+done+' 題，答對 '+got+' 題。'+(done?'答對比例＝'+got+' ÷ '+done+' ＝ '+pct(got/done)+'。':'還沒作答，所以還沒有比例。'),
+      '答對題數越多，表示你越清楚這三個數字在算什麼。');}
+  };
+  const LOC={c:()=>mode==='sup'?['sup']:mode==='conf'?['conf']:['lift','conf','base'],t:()=>['sup','conf','lift'],q:()=>['score']};
+  const BOX={c:'xpC',t:'xpT',q:'xpQ'};
+  function refreshX(){
+    Object.keys(LOC).forEach(l=>{$(BOX[l]).innerHTML=LOC[l]().filter(k=>OPEN.has(l+k)).map(k=>X[k](l+k)).join('');});
+    document.querySelectorAll('.nb').forEach(b=>b.setAttribute('aria-expanded',OPEN.has(b.dataset.x)));
+  }
+  document.addEventListener('click',e=>{const b=e.target.closest('[data-x]');if(!b)return;const id=b.dataset.x;
+    OPEN.has(id)?OPEN.delete(id):OPEN.add(id);refreshX();
+    if(b.classList.contains('xc')){const o=document.querySelector('.nb[data-x="'+id+'"]');if(o)o.focus({preventScroll:true});}});
+
+  // 固定亂序：讓發票位置穩定，不會每拉一次就全部跳動
+  const order=(()=>{let x=1109,arr=[...Array(N).keys()];for(let i=N-1;i>0;i--){x=(x*1664525+1013904223)>>>0;const j=x%(i+1);[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;})();
+
+  const pre=$('presets');
+  P.forEach((p,i)=>{const b=document.createElement('button');b.textContent=p.a+' → '+p.b;if(i===0)b.className='on';
+    b.onclick=()=>{pi=i;s={...p};prev=null;[...pre.children].forEach((c,j)=>c.classList.toggle('on',j===i));render();};pre.appendChild(b);});
+  document.querySelectorAll('#modes button').forEach(b=>b.onclick=()=>{mode=b.dataset.m;document.querySelectorAll('#modes button').forEach(c=>c.classList.toggle('on',c===b));render();});
+  $('flip').onclick=()=>{prev=calc();s={a:s.b,b:s.a,A:s.B,B:s.A,K:s.K};render(true);};
+  ['sA','sB','sK'].forEach(id=>$(id).addEventListener('input',e=>{const v=+e.target.value;
+    if(id==='sA')s.A=v; if(id==='sB')s.B=v; if(id==='sK')s.K=v; prev=null; clamp(id); render();}));
+
+  function clamp(src){
+    // 兩樣都有不能多於任一樣，也不能讓總張數超過 100
+    if(src!=='sK'){const lo=Math.max(0,s.A+s.B-N),hi=Math.min(s.A,s.B);s.K=Math.min(Math.max(s.K,lo),hi);}
+    else{if(s.K>Math.min(s.A,s.B))s.K=Math.min(s.A,s.B);if(s.A+s.B-s.K>N)s.K=s.A+s.B-N;}
+  }
+  function calc(){
+    const sup=s.K/N, conf=s.A?s.K/s.A:null, base=s.B/N, lift=(conf!==null&&base>0)?conf/base:null;
+    return {sup,conf,base,lift};
+  }
+  function verdict(l){
+    if(l===null)return '<span class="chip mid">算不出來</span>';
+    if(Math.abs(l-1)<0.005)return '<span class="chip mid">等於 1：兩者無關</span>';
+    return l>1?'<span class="chip good">大於 1：正相關，規則有用</span>':'<span class="chip bad">小於 1：負相關，買了反而少買</span>';
+  }
+  function frac(t,b){return '<span class="frac"><span>'+t+'</span><span>'+b+'</span></span>';}
+
+  function render(flipped){
+    $('ruleText').innerHTML='<span class="ia">'+s.a+'</span> → <span class="ib">'+s.b+'</span>';
+    $('lA').textContent='有'+s.a+'的發票'; $('lB').textContent='有'+s.b+'的發票'; $('lK').textContent='兩樣都有';
+    $('sA').value=s.A; $('sB').value=s.B; $('sK').value=s.K;
+    $('oA').textContent=s.A; $('oB').textContent=s.B; $('oK').textContent=s.K;
+
+    // 每張發票的內容
+    const kinds=new Array(N); let i=0;
+    for(let k=0;k<s.K;k++)kinds[order[i++]]='ab';
+    for(let k=0;k<s.A-s.K;k++)kinds[order[i++]]='a';
+    for(let k=0;k<s.B-s.K;k++)kinds[order[i++]]='b';
+    while(i<N)kinds[order[i++]]='';
+    const g=$('grid'); g.innerHTML='';
+    kinds.forEach(kd=>{const d=document.createElement('div');d.className='r';
+      if(kd.includes('a'))d.innerHTML+='<span class="ma">'+s.a[0]+'</span>';
+      if(kd.includes('b'))d.innerHTML+='<span class="mb">'+s.b[0]+'</span>';
+      if(mode==='sup'){if(kd==='ab')d.classList.add('hit');}
+      else if(mode==='conf'){if(!kd.includes('a'))d.classList.add('dim');else if(kd==='ab')d.classList.add('hit');}
+      else{if(kd.includes('b'))d.classList.add('hitb');}
+      g.appendChild(d);});
+
+    const c=calc(), L=$('legend'), C=$('calc');
+    if(mode==='sup'){
+      L.innerHTML='<span><i style="border-color:var(--both);background:var(--both-soft)"></i>兩樣都有（分子）</span><span>全部 100 張都算進分母</span>';
+      C.innerHTML='<div class="eq">支持度 ＝ '+frac('兩樣都有 '+s.K,'全部發票 '+N)+' ＝ <span class="big">'+nb('csup',pct(c.sup))+'</span></div>'+
+        '<p class="say">100 張發票裡，有 '+pct(c.sup)+' 同時買了'+s.a+'和'+s.b+'。這個組合有多常見，就看這個數字。</p>';
+    }else if(mode==='conf'){
+      L.innerHTML='<span><i style="border-color:var(--both);background:var(--both-soft)"></i>兩樣都有（分子）</span><span>變淡的是沒有'+s.a+'的發票，不算進分母</span>';
+      C.innerHTML=s.A?('<div class="eq">信賴度 ＝ '+frac('兩樣都有 '+s.K,'有'+s.a+'的 '+s.A)+' ＝ <span class="big">'+nb('cconf',pct(c.conf))+'</span></div>'+
+        '<p class="say">只看買了'+s.a+'的那 '+s.A+' 張，裡面有 '+pct(c.conf)+' 也買了'+s.b+'。分母縮小成「有前項的」，所以叫條件下的比例。</p>')
+        :'<p class="say">沒有人買'+s.a+'，分母是 0，信賴度算不出來。</p>';
+    }else{
+      L.innerHTML='<span><i style="border-color:var(--b);background:var(--b-soft)"></i>有'+s.b+'的發票</span>';
+      const w1=c.conf===null?0:c.conf*100, w2=c.base*100;
+      C.innerHTML='<div class="bars">'+
+        '<div class="bar"><span>買'+s.a+'的人中<br>有買'+s.b+'</span><div class="track"><div class="fill" style="width:'+w1+'%;background:var(--both)"></div></div><output>'+nb('cconf',c.conf===null?'－':pct(c.conf))+'</output></div>'+
+        '<div class="bar"><span>所有人中<br>有買'+s.b+'</span><div class="track"><div class="fill" style="width:'+w2+'%;background:var(--b)"></div></div><output>'+nb('cbase',pct(c.base))+'</output></div></div>'+
+        '<div class="eq">提升度 ＝ '+frac('信賴度 '+nb('cconf',c.conf===null?'－':pct(c.conf)),s.b+'本身的比例 '+nb('cbase',pct(c.base)))+' ＝ <span class="big">'+nb('clift',c.lift===null?'－':num(c.lift))+'</span></div>'+
+        '<p>'+verdict(c.lift)+'</p>'+
+        '<p class="say">上面那條比下面長，就是買了'+s.a+'之後更容易買'+s.b+'；兩條一樣長，就是買不買'+s.a+'都沒差。</p>';
+    }
+    const put=(id,v,old,key)=>{const el=$(id);el.querySelector('b').innerHTML=nb('t'+key,v);el.classList.toggle('changed',!!(flipped&&old!==undefined&&old!==v));};
+    const f=v=>v===null?'－':v;
+    put('tSup',pct(c.sup),prev&&pct(prev.sup),'sup');
+    put('tConf',f(c.conf===null?null:pct(c.conf)),prev&&f(prev.conf===null?null:pct(prev.conf)),'conf');
+    put('tLift',f(c.lift===null?null:num(c.lift)),prev&&f(prev.lift===null?null:num(prev.lift)),'lift');
+    refreshX();
+  }
+
+  // 快問快答
+  const Q=[
+    {q:'算某條規則的「支持度」時，分母是哪一個發票數？',o:['全部的發票','有前項的發票','有後項的發票'],a:0,why:'支持度問的是「這個組合在全部發票裡有多常見」，所以除以全部。'},
+    {q:'算某條規則「A → B」的「信賴度」時，分母是哪一個發票數？',o:['全部的發票','有前項（箭頭左邊）的發票','兩樣都有的發票'],a:1,why:'信賴度只看買了 A 的人，所以分母是有前項的發票。'},
+    {q:'把規則「A → B」反過來變成「B → A」，支持度、信賴度、提升度三個數字裡，哪一個會變？',o:['支持度','信賴度','提升度'],a:1,why:'只有信賴度的分母從「有 A 的」換成「有 B 的」。上面按「把箭頭反過來」就看得到。'},
+    {q:'某條規則算出來「信賴度＝133%」，這代表什麼？',o:['這條規則超強','一定算錯了','提升度也是 133%'],a:1,why:'信賴度是「幾成」，最多 100%。超過就是分子分母放反了。'},
+    {q:'某條規則的信賴度是 70%，而後項在全部發票裡本來就有 80% 的比例。這條規則的提升度與用處是？',o:['70% 很高，所以很有用','提升度＝70% ÷ 80%＝0.875，小於 1，不划算','缺資料，無法判斷'],a:1,why:'70% ÷ 80%＝0.875，比平常還少買。選「咖啡 → 礦泉水」那條就是這個例子。'},
+    {q:'某條規則的提升度剛好等於 1，代表前項與後項的關係是？',o:['兩者無關','完全一起出現','負相關'],a:0,why:'買了 A 跟沒買 A，買 B 的機會一樣，所以 A 對 B 沒影響。'},
+    {q:'某條規則的提升度是 3。可以據此說「買 A 造成客人買 B」嗎？',o:['可以，3 倍很明顯','不行，只能說常一起出現'],a:1,why:'關聯不等於因果。可能有第三個原因，例如同一個時段的客人都會買。'}
+  ];
+  const qz=$('quiz');
+  Q.forEach((it,qi)=>{const box=document.createElement('div');box.className='q';
+    box.innerHTML='<b>'+(qi+1)+'. '+it.q+'</b><div class="row"></div><div class="fb" hidden></div>';
+    const row=box.querySelector('.row'),fb=box.querySelector('.fb');
+    it.o.forEach((t,oi)=>{const b=document.createElement('button');b.textContent=t;b.onclick=()=>{
+      if(box.dataset.done)return;box.dataset.done=1;done++;
+      const ok=oi===it.a;if(ok)got++;b.classList.add('on');
+      fb.hidden=false;fb.className='fb '+(ok?'ok':'no');fb.textContent=(ok?'對！':'正確答案是「'+it.o[it.a]+'」。')+it.why;
+      $('score').innerHTML='已答 '+nb('qscore',done)+' 題，答對 '+nb('qscore',got)+' 題（點數字看怎麼算）';refreshX();};row.appendChild(b);});
+    qz.appendChild(box);});
+  $('score').textContent='共 '+Q.length+' 題，按了馬上知道對錯';
+
+  render();
+})();
+</script>
+
+</body>
+</html>

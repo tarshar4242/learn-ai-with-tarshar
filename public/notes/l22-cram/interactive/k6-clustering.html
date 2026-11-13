@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>怪獸分群教室</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&display=swap">
+<style>
+/* 版面：單欄學習講義，每段＝說明＋可以動手的畫布＋陷阱框 */
+:root{
+  --bg:#EEF3F1; --paper:#FFFFFF; --ink:#1D2B29; --muted:#5B6B68; --line:#CFDAD6;
+  --accent:#1F7A6E; --accent-soft:#D6EBE6;
+  --round:#E07B39; --spiky:#6A58D3; --unknown:#8A9A97;
+  --c1:#E07B39; --c2:#6A58D3; --c3:#1F9E7A; --c4:#D94F70; --c5:#2F78C4;
+  --good:#1F8A4C; --bad:#C0392B; --warn-bg:#FFF4DC; --warn-line:#E8B44A;
+  --display:"LXGW WenKai TC","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  --body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#121A19; --paper:#1B2524; --ink:#E6EEEC; --muted:#9FB0AC; --line:#2F3D3B;
+  --accent:#5CC4B3; --accent-soft:#1F3A36;
+  --round:#F09A5C; --spiky:#9D8FF0; --unknown:#7F8F8C;
+  --c1:#F09A5C; --c2:#9D8FF0; --c3:#4FCB9F; --c4:#F07A96; --c5:#6AA8EE;
+  --good:#52C47F; --bad:#F07467; --warn-bg:#2E2814; --warn-line:#B88A2A; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121A19; --paper:#1B2524; --ink:#E6EEEC; --muted:#9FB0AC; --line:#2F3D3B;
+  --accent:#5CC4B3; --accent-soft:#1F3A36;
+  --round:#F09A5C; --spiky:#9D8FF0; --unknown:#7F8F8C;
+  --c1:#F09A5C; --c2:#9D8FF0; --c3:#4FCB9F; --c4:#F07A96; --c5:#6AA8EE;
+  --good:#52C47F; --bad:#F07467; --warn-bg:#2E2814; --warn-line:#B88A2A; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.75;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 60px}
+.wrap{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.35;margin:0}
+h1{font-size:2rem}
+h2{font-size:1.5rem}
+h3{font-size:1.15rem}
+p{margin:0}
+.lead{color:var(--muted)}
+.sec{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:22px clamp(16px,4vw,28px);display:flex;flex-direction:column;gap:14px}
+.tag{font-size:.8rem;letter-spacing:.08em;color:var(--accent);font-weight:700}
+.canvas-box{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--bg)}
+canvas{display:block;width:100%;height:auto;touch-action:manipulation}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+button{font:inherit;font-size:.95rem;border:1.5px solid var(--accent);background:var(--paper);color:var(--accent);border-radius:999px;padding:6px 14px;cursor:pointer}
+button.on,button.primary{background:var(--accent);color:var(--paper)}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+button:disabled{opacity:.45;cursor:default}
+.msg{background:var(--accent-soft);border-radius:12px;padding:10px 14px;min-height:3.2em}
+.trap{background:var(--warn-bg);border-left:5px solid var(--warn-line);border-radius:10px;padding:10px 14px}
+.trap b{color:var(--ink)}
+.note{color:var(--muted);font-size:.92rem}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:.92rem;color:var(--muted)}
+.dot{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+.quiz{display:flex;flex-direction:column;gap:10px}
+.q{border:1px solid var(--line);border-radius:12px;padding:10px 14px;display:flex;flex-direction:column;gap:8px}
+.q .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
+.q .text{min-width:0;flex:1 1 260px}
+.q .fb{font-size:.93rem}
+.q .fb.ok{color:var(--good)} .q .fb.ng{color:var(--bad)}
+.score{font-weight:700;color:var(--accent)}
+.kpick{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.stat{display:flex;flex-wrap:wrap;gap:16px;font-variant-numeric:tabular-nums;font-size:.95rem}
+.stat b{color:var(--accent)}
+details{border:1px solid var(--line);border-radius:12px;padding:10px 14px}
+summary{cursor:pointer;font-weight:700}
+details p{margin-top:8px}
+button.nb{font:inherit;font-weight:700;color:inherit;background:none;border:0;border-bottom:2px dashed var(--accent);border-radius:0;padding:0 2px}
+button.nb:hover,button.nb[aria-expanded="true"]{background:var(--accent-soft)}
+.xps{display:flex;flex-direction:column;gap:8px}
+.xps:empty{display:none}
+.xp{background:var(--bg);border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:12px;padding:10px 14px;font-size:.95rem;line-height:1.7;overflow-wrap:anywhere;display:flex;flex-direction:column;gap:6px}
+.xp ol{margin:0;padding-left:1.3em;display:flex;flex-direction:column;gap:4px}
+.xph{display:flex;justify-content:space-between;align-items:center;gap:8px}
+button.xc{font-size:.8rem;padding:2px 10px}
+.hint{font-size:.85rem;color:var(--muted)}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<a href="../" style="display:block;position:sticky;top:0;z-index:99;padding:10px 16px;background:#08101f;color:#41dcff;font:700 14px/1.4 system-ui,sans-serif;text-decoration:none;border-bottom:1px solid #243a66">← 回考前衝刺包</a>
+
+
+<div class="wrap">
+  <header style="display:flex;flex-direction:column;gap:8px">
+    <span class="tag">L22・K6 分析方法（之一）</span>
+    <h1>怪獸分群教室</h1>
+    <p class="lead">三個問題，一次分清楚：老師有沒有給答案？要猜的是類別還是數字？沒有答案的時候，電腦怎麼自己分堆？每一段都可以動手按按看。</p>
+  </header>
+
+  <!-- 一：監督 vs 非監督 -->
+  <section class="sec" id="s1">
+    <span class="tag">第一關</span>
+    <h2>卡片背面有沒有寫答案？</h2>
+    <p>李宏毅講分類時，用的是寶可夢和數碼寶貝。我們這裡把牠們簡化成兩派：<b style="color:var(--round)">圓圓派</b>（圓滾滾、軟軟的）和 <b style="color:var(--spiky)">尖尖派</b>（很多尖角、金屬感重）。</p>
+    <p>每一隻怪獸，都用兩個特徵畫在圖上：<b>往右＝尖角越多</b>，<b>往上＝金屬感越重</b>。現在請你切換下面兩個按鈕，看看「有答案」和「沒答案」差在哪裡。</p>
+    <div class="btns" role="group" aria-label="切換有沒有答案">
+      <button id="s1Sup" class="on">背面有答案（監督式）</button>
+      <button id="s1Uns">背面沒答案（非監督式）</button>
+    </div>
+    <div class="canvas-box"><canvas id="c1" aria-label="怪獸散布圖"></canvas></div>
+    <div class="btns" id="s1Act"></div>
+    <div class="msg" id="s1Msg"></div>
+    <div class="xps" id="xpS1"></div>
+    <div class="trap"><b>陷阱：</b>非監督式分出來的群，<b>電腦不知道它叫什麼名字</b>。它只會說「這些彼此很像」。群代表什麼意思，要靠人去解讀。考題寫「沒有標籤」「沒有標準答案」「找出自然分組」，就是非監督式。</div>
+    <p class="note">比喻哪裡不準：真實資料不一定剛好分成「圓圓派、尖尖派」，電腦可能依照你沒想到的特徵去分。</p>
+  </section>
+
+  <!-- 二：分類 vs 迴歸 -->
+  <section class="sec" id="s2">
+    <span class="tag">第二關</span>
+    <h2>要猜的是「哪一類」還是「一個數字」？</h2>
+    <p>有答案的監督式，還要再分一次。看你要猜的東西長什麼樣：</p>
+    <p>猜「<b>牠是圓圓派還是尖尖派</b>」，答案只能從幾個選項裡挑一個，這是<b>分類</b>。猜「<b>牠的戰鬥力是 1234 還是 1250</b>」，答案是一個可以一直細分的數字，這是<b>迴歸</b>。</p>
+    <p>判斷只問一句：<b>答案是選項，還是數字？</b>下面七題，按按看。</p>
+    <div class="quiz" id="quiz"></div>
+    <p>得分：<span class="score" id="score">0 ／ 7</span>　<span class="hint">（點數字看怎麼算）</span></p>
+    <div class="xps" id="xpQ"></div>
+    <div class="trap"><b>陷阱：</b>「邏輯斯迴歸」名字裡有迴歸，但它輸出的是「會／不會」的機率，用來做<b>分類</b>。看到它，不要被名字騙。</div>
+  </section>
+
+  <!-- 三：K-means -->
+  <section class="sec" id="s3">
+    <span class="tag">第三關</span>
+    <h2>沒有答案時，電腦怎麼分堆？開 K 個補給站</h2>
+    <p>最常考的分群方法叫 <b>K-means</b>。把它想成寶可夢 GO：地圖上散著很多寶可夢，你要蓋 <b>K 個補給站</b>，讓每隻走到最近的站都很近。電腦的做法很笨，但很有效：</p>
+    <p><b>①亂蓋站</b> → <b>②分家</b>：每隻都去離自己最近的站報到 → <b>③搬站</b>：每個站搬到自己那群的正中間 → 回到②，一直重複，直到站不再移動。</p>
+    <p>請你照順序按按鈕，自己當一次電腦。</p>
+    <div class="kpick" role="group" aria-label="選擇補給站數量">
+      <span>補給站數量 K：</span>
+      <button data-k="2">2</button><button data-k="3" class="on">3</button><button data-k="4">4</button><button data-k="5">5</button>
+    </div>
+    <div class="canvas-box"><canvas id="c3" aria-label="K-means 地圖"></canvas></div>
+    <div class="btns">
+      <button id="kInit" class="primary">① 亂蓋站</button>
+      <button id="kAssign" disabled>② 分家</button>
+      <button id="kMove" disabled>③ 搬站</button>
+      <button id="kAuto" disabled>一路跑到停</button>
+    </div>
+    <div class="btns">
+      <button id="kOutlier">放一隻跑很遠的寶可夢</button>
+      <button id="kReset">換一張地圖</button>
+    </div>
+    <div class="stat"><span>第 <b id="kRound">0</b> 輪</span><span>大家走到站的總距離：<b id="kSse">—</b></span></div>
+    <span class="hint">有虛線底線的數字都可以點開看怎麼算，再點一次收起。</span>
+    <div class="msg" id="kMsg">先選 K，再按「① 亂蓋站」。</div>
+    <div class="xps" id="xpK"></div>
+
+    <h3>K 要選幾個？畫一張「手肘圖」</h3>
+    <p>K 是<b>你要先決定</b>的，電腦不會自己選，所以它是<b>超參數</b>。站越多，大家走的距離一定越短；但多到某個數字之後，再加站也省不了多少路。那個「突然變平」的轉彎點，就像手臂的手肘，就是好的 K。</p>
+    <div class="canvas-box"><canvas id="cElbow" aria-label="手肘圖"></canvas></div>
+    <div class="stat" id="elbowVals"></div>
+    <p class="note" id="elbowNote"></p>
+    <div class="xps" id="xpE"></div>
+
+    <div class="trap"><b>陷阱（每一條都可以在上面的地圖試出來）：</b><br>
+      1. <b>K 要先給</b>，不知道給多少就用手肘法。<br>
+      2. <b>怕離群值</b>：按「放一隻跑很遠的寶可夢」再重跑，會看到站被拉過去。<br>
+      3. <b>一開始亂蓋的位置不同，結果可能不同</b>：多按幾次「① 亂蓋站」比比看，所以實務上會多跑幾次挑最好的。<br>
+      4. <b>算的是距離</b>，所以單位要先統一（標準化）。年收入幾十萬、年齡幾十歲，不統一的話，距離全被收入決定。</div>
+    <p class="note">比喻哪裡不準：真實的「正中間」是把那群的位置取平均算出來的，不是去找地圖上能蓋站的地方。</p>
+  </section>
+
+  <!-- 確認問題 -->
+  <section class="sec" id="s4">
+    <span class="tag">確認一下</span>
+    <h2>兩題確認，先想再點開</h2>
+    <details><summary>1. 5,000 位學生的資料，沒有標記誰最後有報名，想看他們自然分成哪幾種類型。這是監督式還是非監督式？用 K-means 前要先決定什麼？</summary>
+      <p><b>非監督式</b>，因為沒有標籤（沒人告訴你誰有報名）。用 K-means 前要先決定 <b>K，要分幾群</b>；不知道就畫手肘圖。另外記得先把各欄<b>標準化</b>。</p></details>
+    <details><summary>2. 想預測「會不會報名」，同事說：「用邏輯斯迴歸，因為這是迴歸問題。」哪裡說錯？</summary>
+      <p>「會不會報名」的答案是<b>選項</b>（會／不會），所以是<b>分類</b>問題。用邏輯斯迴歸沒錯，但理由錯了：它名字有迴歸，其實是做<b>分類</b>的。</p></details>
+  </section>
+</div>
+
+<script>
+(function(){
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  function rng(seed){ let s = seed>>>0; return () => { s = (s*1664525 + 1013904223)>>>0; return s/4294967296; }; }
+  function gauss(r){ let u=0,v=0; while(!u)u=r(); while(!v)v=r(); return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v); }
+  function setup(cv, ratio){
+    const w = cv.parentElement.clientWidth, h = Math.round(w*ratio), d = window.devicePixelRatio||1;
+    cv.width = w*d; cv.height = h*d; cv.style.height = h+'px';
+    const g = cv.getContext('2d'); g.setTransform(d,0,0,d,0,0); return {g,w,h};
+  }
+  const FONT = '14px "Noto Sans TC", sans-serif';
+  const $ = id => document.getElementById(id);
+
+  /* ---------- 算法展開：OPEN 記著哪些數字被點開；每次畫面更新都用當下資料重新產生，所以會跟著變 ---------- */
+  const OPEN = new Set();
+  const nb = (id,text) => '<button type="button" class="nb" data-x="'+id+'" aria-expanded="'+OPEN.has(id)+'">'+text+'</button>';
+  const pnl = (id,title,f,sub,res,say) => '<div class="xp" role="region" aria-label="'+title+'"><div class="xph"><b>'+title+'</b><button type="button" class="xc" data-x="'+id+'">收起</button></div><ol><li><b>公式</b>　'+f+'</li><li><b>代入目前的數字</b>　'+sub+'</li><li><b>算出結果</b>　'+res+'</li><li><b>白話意思</b>　'+say+'</li></ol></div>';
+  const f2 = v => v.toFixed(2), f3 = v => v.toFixed(3), f4 = v => v.toFixed(4);
+  const pt = p => '（'+f3(p.x)+'，'+f3(p.y)+'）';
+  const POS = '座標就是地圖上的位置：左下角是（0，0），右上角是（1，1）。';
+  const NOWAIT = (id,title,why) => pnl(id,title,'（目前還沒有這個數字）','—',why,'照畫面上的提示按按鈕，數字出來後，這裡就會自動算給你看。');
+  let ED = null, s1 = null, st = null, pts = [];
+  const ans = {};
+  const X = {
+    s1(id){ const nbw = s1 && s1.newbie; if(!nbw || !nbw.d) return NOWAIT(id,'最近 5 隻怎麼數','按「丟一隻新怪獸進來，讓模型猜」之後才會有。');
+      const rows = nbw.d.map(([d,i],r)=>{const m=mons[i]; const dx=nbw.x-m.x, dy=nbw.y-m.y;
+        return '第 '+(r+1)+' 近：'+(m.t==='spiky'?'尖尖派':'圓圓派')+' '+pt(m)+'，距離＝√(('+f3(nbw.x)+'−'+f3(m.x)+')²＋('+f3(nbw.y)+'−'+f3(m.y)+')²)＝√'+f4(dx*dx+dy*dy)+'＝'+f3(d);}).join('<br>');
+      const sp = nbw.nn.filter(j=>mons[j].t==='spiky').length;
+      return pnl(id,'「最近 5 隻」裡各派幾隻，怎麼來的',
+        '新怪獸跟每一隻舊怪獸的距離＝√((x 差)²＋(y 差)²)；把 '+mons.length+' 隻舊怪獸依距離由近到遠排好，取最近的 5 隻，數數是哪一派的票數多，就猜哪一派。'+POS,
+        '新怪獸在 '+pt(nbw)+'。最近的 5 隻：<br>'+rows,
+        '尖尖派 '+sp+' 隻、圓圓派 '+(5-sp)+' 隻（'+sp+' ＋ '+(5-sp)+' ＝ 5）。尖尖派 '+(sp>=3?'達到':'沒達到')+' 3 隻（5 隻裡的過半），所以猜 '+(sp>=3?'尖尖派':'圓圓派')+'。',
+        '看新怪獸身邊最近的鄰居是哪一派居多，牠就很可能是那一派。');},
+    score(id){ const n=Object.values(ans).filter(Boolean).length, k=Object.keys(ans).length;
+      const list=Q.map((q,i)=>(i+1)+'：'+(i in ans?(ans[i]?'答對':'答錯'):'還沒答')).join('，');
+      return pnl(id,'得分怎麼算','得分＝你選到正確答案的題數 ／ 全部題數（每題可以重按，以最後一次按的為準）',
+        '全部 '+Q.length+' 題；已作答 '+k+' 題。各題：'+list,
+        '答對 '+n+' 題，全部 '+Q.length+' 題，所以顯示「'+n+' ／ '+Q.length+'」。',
+        k?'你目前答對 '+n+' 題，還有 '+(Q.length-k)+' 題沒答。':'還沒作答，所以是 0 題。');},
+    round(id){ const ph={idle:'還沒開始',init:'剛亂蓋好站，還沒分家',assigned:'剛分完家，還沒搬站',moved:'剛搬完站，還沒再分家',done:'站已經不再移動，分群完成'};
+      return pnl(id,'輪數怎麼算','輪數＝按過「② 分家」的次數。按「一路跑到停」時，電腦自動重複「分家＋搬站」，每重複一次算一輪',
+        '目前的狀態：'+(st?ph[st.phase]:'—')+'；分家已經做了 '+(st?st.round:0)+' 次',
+        '第 '+(st?st.round:0)+' 輪。（一路跑到停時，最後那一輪是「搬完站發現站沒有動」的那一輪，也算一輪。）',
+        '輪數越多，表示電腦來回調整了越多次，才找到穩定的分法。');},
+    sse(id){ const f='總距離＝每一隻寶可夢走到「自己那一站」的直線距離，全部加起來。單隻的距離＝√((x 差)²＋(y 差)²)。'+POS;
+      if(!(st&&st.cs&&st.as)) return NOWAIT(id,'總距離怎麼算','還沒分家，沒有「每隻屬於哪一站」，所以畫面顯示「—」。按「② 分家」後就會出現。');
+      const K2=st.cs.length, sums=new Array(K2).fill(0), cnt=new Array(K2).fill(0);
+      pts.forEach((p,i)=>{const c=st.cs[st.as[i]]; sums[st.as[i]]+=Math.hypot(p.x-c.x,p.y-c.y); cnt[st.as[i]]++;});
+      const total=sums.reduce((a,b)=>a+b,0), p0=pts[0], j0=st.as[0], c0=st.cs[j0], dx=p0.x-c0.x, dy=p0.y-c0.y;
+      const lines=sums.map((v,j)=>'第 '+(j+1)+' 站 '+pt(st.cs[j])+'：'+cnt[j]+' 隻，距離合計 '+f3(v)).join('<br>');
+      return pnl(id,'總距離怎麼算',f,
+        '共 '+pts.length+' 隻、'+K2+' 個站。舉例，第 1 隻在 '+pt(p0)+'，牠屬於第 '+(j0+1)+' 站 '+pt(c0)+'，距離＝√(('+f3(p0.x)+'−'+f3(c0.x)+')²＋('+f3(p0.y)+'−'+f3(c0.y)+')²)＝√'+f4(dx*dx+dy*dy)+'＝'+f3(Math.hypot(dx,dy))+'。每一站的合計：<br>'+lines,
+        sums.map(f3).join(' ＋ ')+' ＝ '+f4(total)+'，四捨五入到小數點後 2 位，顯示 '+f2(total)+'。（小數只列出前幾位，實際計算用完整數字。）',
+        '這個數字越小，表示大家離自己的站越近，分得越好。註：課本正式的「誤差平方和」是把每個距離先平方再加；這一頁為了好懂直接相加，「越小越好、看手肘找 K」的用法一樣。');},
+    move(id){ const L=st&&st.last; if(!L) return NOWAIT(id,'站移動了幾格怎麼算','還沒搬過站。按「③ 搬站」之後才會有。');
+      const lines=L.old.map((o,j)=>{const m=[];pts.forEach((p,i)=>{if(L.as[i]===j)m.push(p);});
+        if(!m.length)return '第 '+(j+1)+' 站：沒有寶可夢分到這一站，站不動，移動 0。';
+        const sx=m.reduce((a,p)=>a+p.x,0), sy=m.reduce((a,p)=>a+p.y,0), n=L.nw[j], d=Math.hypot(n.x-o.x,n.y-o.y);
+        return '第 '+(j+1)+' 站：舊位置 '+pt(o)+'，這一群有 '+m.length+' 隻，x 加總 '+f3(sx)+'、y 加總 '+f3(sy)+'；新位置＝（'+f3(sx)+'÷'+m.length+'，'+f3(sy)+'÷'+m.length+'）＝'+pt(n)+'；移動距離＝√(('+f3(n.x)+'−'+f3(o.x)+')²＋('+f3(n.y)+'−'+f3(o.y)+')²)＝'+f4(d);}).join('<br>');
+      return pnl(id,'站移動了幾格怎麼算','新位置＝這一群所有寶可夢的 x 取平均、y 取平均（加總 ÷ 隻數）；每站的移動距離＝√((新 x−舊 x)²＋(新 y−舊 y)²)；取最遠的那一站，再乘以 100 換成「格」。'+POS,
+        '上一次搬站的各站：<br>'+lines,
+        '最遠的一站移動了 '+L.mv.toFixed(4)+'，× 100 ＝ '+(L.mv*100).toFixed(4)+'，四捨五入到小數點後 1 位，顯示 '+(L.mv*100).toFixed(1)+' 格。',
+        '站是往自己那一群的正中間搬。搬得越少，表示越接近穩定；變成 0 格就是分群完成。');},
+    ek(id){ if(!ED) return NOWAIT(id,'手肘怎麼找','手肘圖還沒算好。');
+      const rows=[2,3,4,5].map(k=>{const a=ED.drops[k-2],b=ED.drops[k-1];return 'K＝'+k+'：從 K＝'+(k-1)+' 到 '+k+' 省下 '+f3(a)+'；從 K＝'+k+' 到 '+(k+1)+' 省下 '+f3(b)+'；比值＝'+f3(a)+' ÷ '+f3(b)+' ＝ '+f2(ED.ratios[k]);}).join('<br>');
+      return pnl(id,'手肘 K 怎麼找','手肘＝「再多蓋一站，省下的路突然變很少」的那個 K。這一頁的做法：對 K＝2 到 5，算 比值＝（前一步省下的距離）÷（後一步省下的距離），比值最大的 K 就是手肘。',
+        '各 K 的總距離：'+ED.vals.map((v,i)=>'K＝'+(i+1)+' 是 '+f3(v)).join('，')+'。<br>'+rows,
+        '比值最大的是 K＝'+ED.elbow+'（'+f2(ED.ratios[ED.elbow])+'），所以手肘在 K＝'+ED.elbow+'。',
+        'K 加到 '+ED.elbow+' 之前，每多蓋一站省很多路；之後再加，省下的路就很少，不太划算。這是簡化的找法，實務上也會用眼睛看圖。');},
+    v(id,k){ if(!ED) return NOWAIT(id,'K＝'+k+' 的總距離怎麼算','手肘圖還沒算好。');
+      const r=ED.runs[k-1], mn=Math.min(...r);
+      return pnl(id,'K＝'+k+' 的總距離怎麼算','K＝'+k+' 的總距離＝電腦用 12 種不同的亂蓋起點，各自一路跑到停，每次得到一個總距離（算法同上面的「大家走到站的總距離」），取最小的那一個。',
+        '這 12 次的總距離依序是：'+r.map(f3).join('、')+(k===1?'。（只有 1 個站，它一定搬到所有寶可夢的正中間，所以 12 次都一樣。）':''),
+        '最小的是 '+f4(mn)+'，四捨五入到小數點後 2 位，顯示 '+f2(mn)+'。（小數只列出前幾位。）',
+        '站數是 '+k+' 的時候，最好的分法讓大家總共走 '+f2(mn)+' 的路。');}
+  };
+  const BOX = {s1:'xpS1',score:'xpQ',round:'xpK',sse:'xpK',move:'xpK',ek:'xpE',v1:'xpE',v2:'xpE',v3:'xpE',v4:'xpE',v5:'xpE',v6:'xpE'};
+  function refreshX(){
+    const html={}; Object.values(BOX).forEach(b=>html[b]='');
+    Object.keys(BOX).forEach(k=>{ if(OPEN.has(k)) html[BOX[k]]+= k[0]==='v'&&k!=='v'&&/^v\d$/.test(k) ? X.v(k,+k[1]) : X[k](k); });
+    Object.keys(html).forEach(b=>{const el=$(b); if(el) el.innerHTML=html[b];});
+    document.querySelectorAll('.nb').forEach(b=>b.setAttribute('aria-expanded',OPEN.has(b.dataset.x)));
+  }
+  document.addEventListener('click',e=>{ const b=e.target.closest('[data-x]'); if(!b) return; const id=b.dataset.x;
+    OPEN.has(id)?OPEN.delete(id):OPEN.add(id); refreshX();
+    if(b.classList.contains('xc')){ const o=document.querySelector('.nb[data-x="'+id+'"]'); if(o) o.focus({preventScroll:true}); } });
+
+  /* ---------- 第一關 ---------- */
+  const r1 = rng(1109), mons = [];
+  for(let i=0;i<14;i++) mons.push({x:.3+gauss(r1)*.1, y:.32+gauss(r1)*.1, t:'round'});
+  for(let i=0;i<14;i++) mons.push({x:.7+gauss(r1)*.1, y:.68+gauss(r1)*.1, t:'spiky'});
+  mons.forEach(m=>{m.x=Math.min(.95,Math.max(.05,m.x)); m.y=Math.min(.95,Math.max(.05,m.y));});
+  s1 = {mode:'sup', newbie:null, groups:null};
+  const c1 = document.getElementById('c1');
+  function drawStar(g,x,y,r,col){ g.beginPath(); for(let i=0;i<10;i++){const a=-Math.PI/2+i*Math.PI/5, rr=i%2?r*.5:r; g.lineTo(x+rr*Math.cos(a), y+rr*Math.sin(a));} g.closePath(); g.fillStyle=col; g.fill(); }
+  function drawRound(g,x,y,r,col){ g.beginPath(); g.arc(x,y,r*.85,0,Math.PI*2); g.fillStyle=col; g.fill(); g.fillStyle=css('--paper'); g.beginPath(); g.arc(x-r*.3,y-r*.15,r*.14,0,7); g.arc(x+r*.3,y-r*.15,r*.14,0,7); g.fill(); }
+  function axes(g,w,h,pad,xl,yl){
+    g.strokeStyle=css('--line'); g.lineWidth=1; g.strokeRect(pad,pad/2,w-pad*1.5,h-pad*1.5);
+    g.fillStyle=css('--muted'); g.font=FONT; g.textAlign='right'; g.fillText(xl, w-pad/2, h-pad/2+18);
+    g.save(); g.translate(pad-10, pad/2+4); g.rotate(-Math.PI/2); g.textAlign='right'; g.fillText(yl,0,0); g.restore();
+  }
+  function draw1(){
+    const {g,w,h} = setup(c1,.72), pad=34, R=Math.max(9,w/48);
+    g.clearRect(0,0,w,h); axes(g,w,h,pad,'尖角越多 →','金屬感越重 →');
+    const P = m => [pad+m.x*(w-pad*1.5), pad/2+(1-m.y)*(h-pad*1.5)];
+    const gcol = [css('--c3'), css('--c4')];
+    mons.forEach((m,i)=>{ const [x,y]=P(m);
+      if(s1.mode==='sup'){ m.t==='round'?drawRound(g,x,y,R,css('--round')):drawStar(g,x,y,R,css('--spiky')); }
+      else { const col = s1.groups? gcol[s1.groups[i]] : css('--unknown'); g.beginPath(); g.arc(x,y,R*.7,0,7); g.fillStyle=col; g.fill(); }
+    });
+    if(s1.mode==='sup' && s1.newbie){ const nb=s1.newbie, [x,y]=P(nb);
+      g.strokeStyle=css('--muted'); g.setLineDash([4,4]);
+      nb.nn.forEach(j=>{const [a,b]=P(mons[j]); g.beginPath(); g.moveTo(x,y); g.lineTo(a,b); g.stroke();}); g.setLineDash([]);
+      g.beginPath(); g.arc(x,y,R*1.05,0,7); g.fillStyle=css('--paper'); g.fill(); g.lineWidth=3; g.strokeStyle=css('--ink'); g.stroke(); g.lineWidth=1;
+      g.fillStyle=css('--ink'); g.font='bold 16px "Noto Sans TC", sans-serif'; g.textAlign='center'; g.fillText('?',x,y+6);
+    }
+    if(s1.mode==='uns' && s1.groups){ g.font='bold 15px "Noto Sans TC", sans-serif'; g.textAlign='left';
+      g.fillStyle=gcol[0]; g.fillText('■ 第 1 堆', pad+8, pad/2+20); g.fillStyle=gcol[1]; g.fillText('■ 第 2 堆', pad+90, pad/2+20); }
+  }
+  const s1Act=document.getElementById('s1Act'), s1Msg=document.getElementById('s1Msg');
+  function renderS1(){ 
+    document.getElementById('s1Sup').classList.toggle('on', s1.mode==='sup');
+    document.getElementById('s1Uns').classList.toggle('on', s1.mode==='uns');
+    s1Act.innerHTML='';
+    if(s1.mode==='sup'){
+      const b=document.createElement('button'); b.className='primary'; b.textContent='丟一隻新怪獸進來，讓模型猜'; b.onclick=()=>{
+        const r=Math.random; const nw={x:.2+r()*.6, y:.2+r()*.6};
+        const d=mons.map((m,i)=>[Math.hypot(m.x-nw.x,m.y-nw.y),i]).sort((a,b)=>a[0]-b[0]).slice(0,5);
+        nw.nn=d.map(e=>e[1]); nw.d=d; const sp=nw.nn.filter(j=>mons[j].t==='spiky').length;
+        s1.newbie=nw; draw1();
+        s1Msg.innerHTML = `模型去看離牠最近的 ${nb('s1','5')} 隻：<b style="color:var(--spiky)">${nb('s1',sp)} 隻尖尖派</b>、<b style="color:var(--round)">${nb('s1',5-sp)} 隻圓圓派</b>，所以猜牠是 <b>${sp>=3?'尖尖派':'圓圓派'}</b>（點數字看怎麼數的）。<br>它敢這樣猜，是因為以前每一張卡片背面都有答案，它<b>學過</b>哪一派長什麼樣子。這就是<b>監督式學習</b>，背面的答案叫<b>標籤</b>。`;
+        refreshX();
+      }; s1Act.appendChild(b);
+      s1Msg.innerHTML='每一隻怪獸都看得出是哪一派，因為卡片背面<b>有寫答案</b>。按上面的按鈕，丟一隻新怪獸進來。';
+    } else {
+      const b=document.createElement('button'); b.className='primary'; b.textContent='讓電腦自己分成兩堆'; b.onclick=()=>{
+        const pts=mons.map(m=>({x:m.x,y:m.y})); const res=kmeansRun(pts,2,rng(7)); s1.groups=res.assign; draw1();
+        s1Msg.innerHTML='電腦把<b>長得像的</b>放在一起，分成了兩堆。可是請注意：它只會說「第 1 堆、第 2 堆」，<b>它不知道哪一堆叫圓圓派</b>。要不要叫它們圓圓派、尖尖派，是<b>人</b>看了以後才命名的。<br>沒有答案、自己找相似，這就是<b>非監督式學習</b>，最典型的就是<b>分群</b>。';
+      }; s1Act.appendChild(b);
+      s1Msg.innerHTML='現在卡片背面<b>全是空白</b>，沒有人告訴你誰是哪一派，所以全部變成灰色。電腦還能做什麼？按上面的按鈕試試。';
+    }
+    draw1(); refreshX();
+  }
+  document.getElementById('s1Sup').onclick=()=>{s1.mode='sup'; s1.groups=null; renderS1();};
+  document.getElementById('s1Uns').onclick=()=>{s1.mode='uns'; s1.newbie=null; s1.groups=null; renderS1();};
+
+  /* ---------- 第二關 ---------- */
+  const Q=[
+    ['要預測某位學生<b>會不會</b>報名課程。這是分類還是迴歸？','cls','答案只有「會／不會」兩個選項，是分類。'],
+    ['要預測明年<b>報名總人數</b>會有多少人。這是分類還是迴歸？','reg','答案是一個數字，可以是 812、813……，是迴歸。'],
+    ['要預測這一模次的產品是<b>良品還是不良品</b>。這是分類還是迴歸？','cls','二選一的選項，是分類。'],
+    ['要預測這一模次的<b>良率是幾 %</b>。這是分類還是迴歸？','reg','92.3%、92.4%……是數字，是迴歸。'],
+    ['用<b>邏輯斯迴歸</b>這個方法，預測顧客<b>會不會流失</b>。這個問題屬於分類還是迴歸？','cls','陷阱題！名字有「迴歸」，但答案是會／不會，是分類。'],
+    ['要判斷這封信<b>是不是垃圾信</b>。這是分類還是迴歸？','cls','是／不是，選項，是分類。'],
+    ['要預測這間房子<b>可以賣多少錢</b>。這是分類還是迴歸？','reg','金額是數字，是迴歸。']
+  ];
+  const quiz=document.getElementById('quiz');
+  Q.forEach((q,i)=>{
+    const el=document.createElement('div'); el.className='q';
+    el.innerHTML=`<div class="row"><span class="text">${i+1}. ${q[0]}</span><span class="btns"><button data-a="cls">分類</button><button data-a="reg">迴歸</button></span></div><div class="fb" hidden></div>`;
+    el.querySelectorAll('button').forEach(b=>b.onclick=()=>{
+      const ok=b.dataset.a===q[1]; ans[i]=ok;
+      el.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));
+      const fb=el.querySelector('.fb'); fb.hidden=false; fb.className='fb '+(ok?'ok':'ng');
+      fb.textContent=(ok?'答對！':'再想想：')+q[2];
+      scoreRender();
+    });
+    quiz.appendChild(el);
+  });
+
+  function scoreRender(){ $('score').innerHTML=nb('score',Object.values(ans).filter(Boolean).length)+' ／ '+Q.length; refreshX(); }
+  scoreRender();
+
+  /* ---------- 第三關：K-means ---------- */
+  function kmeansAssign(pts,cs){ return pts.map(p=>{let b=0,bd=1e9; cs.forEach((c,j)=>{const d=(p.x-c.x)**2+(p.y-c.y)**2; if(d<bd){bd=d;b=j;}}); return b;}); }
+  function kmeansMove(pts,cs,as){ let mv=0; const n=cs.map(c=>({x:c.x,y:c.y}));
+    cs.forEach((c,j)=>{const m=pts.filter((p,i)=>as[i]===j); if(m.length){const nx=m.reduce((s,p)=>s+p.x,0)/m.length, ny=m.reduce((s,p)=>s+p.y,0)/m.length; mv=Math.max(mv,Math.hypot(nx-c.x,ny-c.y)); n[j]={x:nx,y:ny};}});
+    return {cs:n,mv}; }
+  function sse(pts,cs,as){ return pts.reduce((s,p,i)=>s+Math.hypot(p.x-cs[as[i]].x,p.y-cs[as[i]].y),0); }
+  function initCenters(pts,k,r){ const idx=new Set(); while(idx.size<k) idx.add(Math.floor(r()*pts.length)); return [...idx].map(i=>({x:pts[i].x,y:pts[i].y})); }
+  function kmeansRun(pts,k,r){ let cs=initCenters(pts,k,r), as; for(let t=0;t<100;t++){ as=kmeansAssign(pts,cs); const o=kmeansMove(pts,cs,as); cs=o.cs; if(o.mv<1e-6)break; } as=kmeansAssign(pts,cs); return {cs,assign:as,sse:sse(pts,cs,as)}; }
+
+  let mapSeed=2026, K=3; st={cs:null,as:null,round:0,phase:'idle'};
+  function makeMap(){ const r=rng(mapSeed); pts=[];
+    [[.25,.3],[.72,.28],[.5,.75]].forEach(([cx,cy])=>{ for(let i=0;i<16;i++) pts.push({x:Math.min(.95,Math.max(.05,cx+gauss(r)*.075)), y:Math.min(.95,Math.max(.05,cy+gauss(r)*.075))}); });
+    st={cs:null,as:null,round:0,phase:'idle'}; }
+  makeMap();
+  const c3=document.getElementById('c3'), kMsg=document.getElementById('kMsg');
+  const ccol=()=>['--c1','--c2','--c3','--c4','--c5'].map(css);
+  function draw3(){
+    const {g,w,h}=setup(c3,.72), pad=14, R=Math.max(6,w/80);
+    g.clearRect(0,0,w,h);
+    const P=p=>[pad+p.x*(w-2*pad), pad+(1-p.y)*(h-2*pad)], cols=ccol();
+    if(st.as && st.cs){ g.globalAlpha=.25; pts.forEach((p,i)=>{const [x,y]=P(p),[a,b]=P(st.cs[st.as[i]]); g.strokeStyle=cols[st.as[i]]; g.beginPath(); g.moveTo(x,y); g.lineTo(a,b); g.stroke();}); g.globalAlpha=1; }
+    pts.forEach((p,i)=>{const [x,y]=P(p); g.beginPath(); g.arc(x,y,R,0,7); g.fillStyle=st.as?cols[st.as[i]]:css('--unknown'); g.fill();
+      if(p.out){ g.lineWidth=2.5; g.strokeStyle=css('--ink'); g.stroke(); g.lineWidth=1; }});
+    if(st.cs) st.cs.forEach((c,j)=>{const [x,y]=P(c), s=R*2.4;
+      g.fillStyle=css('--paper'); g.fillRect(x-s/2,y-s/2,s,s); g.lineWidth=3; g.strokeStyle=cols[j]; g.strokeRect(x-s/2,y-s/2,s,s); g.lineWidth=1;
+      g.fillStyle=cols[j]; g.font=`bold ${Math.round(s*.6)}px "Noto Sans TC", sans-serif`; g.textAlign='center'; g.fillText('站',x,y+s*.22); });
+    document.getElementById('kRound').innerHTML=nb('round',st.round);
+    document.getElementById('kSse').innerHTML=(st.cs&&st.as)?nb('sse',sse(pts,st.cs,st.as).toFixed(2)):'—';
+    document.getElementById('kAssign').disabled=!(st.cs) || st.phase==='assigned' || st.phase==='done';
+    document.getElementById('kMove').disabled=st.phase!=='assigned';
+    document.getElementById('kAuto').disabled=!st.cs || st.phase==='done';
+    refreshX();
+  }
+  document.getElementById('kInit').onclick=()=>{ st={cs:initCenters(pts,K,Math.random),as:null,round:0,phase:'init'}; draw3();
+    kMsg.innerHTML=`隨便蓋了 <b>${K}</b> 個站（方框）。現在寶可夢還不知道該去哪一站，所以都是灰色。按「② 分家」。`; };
+  document.getElementById('kAssign').onclick=()=>{ st.as=kmeansAssign(pts,st.cs); st.phase='assigned'; st.round++; draw3();
+    kMsg.innerHTML='每一隻寶可夢都去<b>離自己最近的站</b>報到，顏色就是牠的群。可是你看，站的位置是亂蓋的，不在每群的正中間。按「③ 搬站」。'; };
+  document.getElementById('kMove').onclick=()=>{ const old=st.cs.map(c=>({x:c.x,y:c.y})), asn=st.as.slice(); const o=kmeansMove(pts,st.cs,st.as); st.last={old,as:asn,nw:o.cs.map(c=>({x:c.x,y:c.y})),mv:o.mv}; st.cs=o.cs; st.phase=o.mv<1e-6?'done':'moved'; draw3();
+    kMsg.innerHTML = st.phase==='done' ? '站<b>沒有再移動</b>了，分群完成！這就是 K-means 的終點。' : `每個站搬到自己那群的<b>正中間</b>（最遠的一站移動了 ${nb('move',(o.mv*100).toFixed(1))} 格）。站一搬，有些寶可夢會發現別的站更近，所以再按「② 分家」，一直重複到站不動。`; };
+  document.getElementById('kAuto').onclick=()=>{ for(let t=0;t<100;t++){ st.as=kmeansAssign(pts,st.cs); st.round++; const old=st.cs.map(c=>({x:c.x,y:c.y})), asn=st.as.slice(); const o=kmeansMove(pts,st.cs,st.as); st.last={old,as:asn,nw:o.cs.map(c=>({x:c.x,y:c.y})),mv:o.mv}; st.cs=o.cs; if(o.mv<1e-6)break; } st.as=kmeansAssign(pts,st.cs); st.phase='done'; draw3();
+    kMsg.innerHTML=`跑了 <b>${nb('round',st.round)}</b> 輪，站不再移動，分群完成。想看「一開始亂蓋的位置不同，結果會不會不同」，就再按一次「① 亂蓋站」比比看總距離。`; };
+  document.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{ K=+b.dataset.k; document.querySelectorAll('[data-k]').forEach(x=>x.classList.toggle('on',x===b)); st={cs:null,as:null,round:0,phase:'idle'}; draw3(); kMsg.innerHTML=`K 改成 <b>${K}</b>。按「① 亂蓋站」重新開始。`; });
+  document.getElementById('kOutlier').onclick=()=>{ if(!pts.some(p=>p.out)){ pts.push({x:.97,y:.97,out:true},{x:.95,y:.93,out:true}); }
+    st={cs:null,as:null,round:0,phase:'idle'}; draw3(); drawElbow();
+    kMsg.innerHTML='右上角多了兩隻黑框的寶可夢，牠們離大家都很遠。現在按「① 亂蓋站」再「一路跑到停」，看看會不會有一個站被牠們拉過去，甚至整個站被牠們獨佔。這就是 K-means <b>怕離群值</b>。'; };
+  document.getElementById('kReset').onclick=()=>{ mapSeed++; makeMap(); draw3(); drawElbow(); kMsg.innerHTML='換了一張新地圖。先選 K，再按「① 亂蓋站」。'; };
+
+  /* ---------- 手肘圖 ---------- */
+  const cE=document.getElementById('cElbow');
+  function drawElbow(){
+    const vals=[], runs=[]; for(let k=1;k<=6;k++){ let best=1e9; const r=rng(500+k), rs=[]; for(let t=0;t<12;t++){ const v=kmeansRun(pts,k,r).sse; rs.push(v); best=Math.min(best,v); } vals.push(best); runs.push(rs); }
+    const {g,w,h}=setup(cE,.45), L=48, B=34, T=16, Rr=16, mx=vals[0]*1.05;
+    g.clearRect(0,0,w,h); g.strokeStyle=css('--line'); g.beginPath(); g.moveTo(L,T); g.lineTo(L,h-B); g.lineTo(w-Rr,h-B); g.stroke();
+    const X=k=>L+(k-1)/5*(w-L-Rr-20)+10, Y=v=>T+(1-v/mx)*(h-B-T);
+    // 找手肘：降幅最大轉折
+    const drops=vals.slice(1).map((v,i)=>vals[i]-v); let elbow=2; let bestRatio=0;
+    const ratios={}; for(let k=2;k<=5;k++){ const ratio=drops[k-2]/(drops[k-1]||1e-9); ratios[k]=ratio; if(ratio>bestRatio){bestRatio=ratio; elbow=k;} }
+    ED={vals,runs,drops,ratios,elbow};
+    g.strokeStyle=css('--accent'); g.lineWidth=3; g.beginPath(); vals.forEach((v,i)=>{const x=X(i+1),y=Y(v); i?g.lineTo(x,y):g.moveTo(x,y);}); g.stroke(); g.lineWidth=1;
+    vals.forEach((v,i)=>{const x=X(i+1),y=Y(v), e=(i+1)===elbow; g.beginPath(); g.arc(x,y,e?8:5,0,7); g.fillStyle=e?css('--c4'):css('--accent'); g.fill();
+      g.fillStyle=css('--muted'); g.font=FONT; g.textAlign='center'; g.fillText('K='+(i+1),x,h-B+20); });
+    g.save(); g.translate(16,(h-B+T)/2); g.rotate(-Math.PI/2); g.textAlign='center'; g.fillStyle=css('--muted'); g.font=FONT; g.fillText('總距離',0,0); g.restore();
+    const ex=X(elbow), ey=Y(vals[elbow-1]); g.fillStyle=css('--c4'); g.font='bold 15px "Noto Sans TC", sans-serif'; g.textAlign='left'; g.fillText('← 手肘',ex+12,ey-8);
+    $('elbowVals').innerHTML='<span>各 K 的總距離：</span>'+vals.map((v,i)=>'<span>K＝'+(i+1)+'　'+nb('v'+(i+1),f2(v))+'</span>').join('');
+    document.getElementById('elbowNote').innerHTML=`這張地圖算出來：K 從 1 加到 ${nb('ek',elbow)}，總距離掉很多；${nb('ek',elbow)} 以後再加站，省下的路就很少了。所以手肘在 K＝${nb('ek',elbow)}。（數字是頁面當場實算，按「放一隻跑很遠的寶可夢」或「換一張地圖」會重算；點虛線數字看怎麼算）`;
+    refreshX();
+  }
+
+  function all(){ renderS1(); draw3(); drawElbow(); }
+  let rt; window.addEventListener('resize',()=>{clearTimeout(rt); rt=setTimeout(all,150);});
+  if(window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',all);
+  new MutationObserver(all).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(all);
+  all();
+})();
+</script>
+
+</body>
+</html>
