@@ -1,0 +1,296 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>小D版手冊｜Paperclip AI 公司管理平台拆解</title><style>
+@font-face{font-family:Iansui;src:url('./Iansui-Regular.ttf') format('truetype');font-weight:400;font-style:normal}
+:root{--cream:#f7f1e5;--paper:#fffdf8;--sage:#819982;--dark:#26332d;--ink:#34413b;--mint:#dde8db;--gold:#cbaa68;--rose:#e8d1c6;--blue:#cedde0;--line:#b9c8ba}
+*{box-sizing:border-box}html{background:#d6d3cc;scroll-behavior:smooth}body{margin:0;color:var(--ink);font-family:Iansui,"PingFang TC",sans-serif;line-height:1.55}
+.page{width:210mm;min-height:297mm;margin:10mm auto;background:var(--cream);position:relative;padding:16mm 16mm 20mm;overflow:hidden;box-shadow:0 5px 30px #0002;page-break-after:always}
+.page main{height:258mm}.page footer{position:absolute;left:16mm;right:16mm;bottom:7mm;border-top:1px solid var(--line);padding-top:2.5mm;display:flex;justify-content:space-between;align-items:center;color:#64756d;font:12px/1.2 Iansui,sans-serif}
+h1,h2,h3,p{margin-top:0}h1{font-size:35pt;line-height:1.14;color:var(--dark);letter-spacing:.5px}h1 em{font-style:normal;color:var(--sage)}h2{font-size:25pt;line-height:1.25;color:var(--dark);margin-bottom:9mm}h3{font-size:16pt;color:var(--dark);margin-bottom:3mm}p,li,td,th{font-size:13.2pt}.small{font-size:10.6pt;color:#627169}.lead{font-size:16pt}.lede{font-size:16pt;max-width:150mm}.eyebrow{font-size:12pt;letter-spacing:2px;color:var(--sage);margin-bottom:3mm;text-transform:uppercase}.meta{font-size:11.5pt;color:#66766d;margin-top:8mm}
+.cover{padding:18mm 17mm 20mm}.cover main{height:255mm}.cover-copy{position:relative;z-index:3}.cover-art{position:absolute;left:0;bottom:0;width:100%;height:178mm;object-fit:cover;object-position:center 39%;opacity:.72;mask-image:linear-gradient(to bottom,transparent 0,#000 18%);-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 18%)}.brand-logo{position:absolute;z-index:4;bottom:17mm;left:50%;transform:translateX(-50%);height:10mm;width:auto}.cover footer{z-index:5;color:#42544b;border-color:#8da18f}.cover h1{margin-bottom:5mm}.cover .lede{max-width:160mm}
+.quote{font-size:17pt;line-height:1.65;color:var(--dark);border-left:5px solid var(--gold);background:#fff9ed;padding:7mm 8mm;margin:8mm 0}.two{display:grid;grid-template-columns:1fr 1fr;gap:7mm}.two.compact{gap:5mm;margin-top:4mm}.card{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:7mm}.card ul{padding-left:6mm}.card li{margin:2mm 0}.note{background:var(--mint);border-radius:16px;padding:6mm 7mm;margin-top:7mm;font-size:13pt}.takeaway{background:var(--dark);color:white;border-radius:18px;padding:7mm 8mm;margin:8mm 0;display:grid;gap:2mm}.takeaway span{color:#cbd8cc;font-size:10.5pt;letter-spacing:2px}.takeaway b{font-size:15pt;line-height:1.55}
+.toc{display:grid;gap:3.5mm}.toc a{display:grid;grid-template-columns:14mm 1fr 16mm;align-items:center;text-decoration:none;color:var(--ink);padding:4mm 2mm;border-bottom:1px solid var(--line)}.toc b{font-size:18pt;color:var(--sage)}.toc span{font-size:14pt}.toc small{text-align:right}.five{display:grid;grid-template-columns:repeat(5,1fr);gap:3mm;margin:8mm 0}.five div{min-height:44mm;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:4mm}.five b,.five span{display:block}.five b{font-size:15pt;color:var(--sage);margin-bottom:3mm}.five span{font-size:11pt}
+table{width:100%;border-collapse:separate;border-spacing:0;overflow:hidden;border:1px solid var(--line);border-radius:16px;background:var(--paper)}th{background:var(--sage);color:white;text-align:left}th,td{padding:4mm 4.5mm;border-bottom:1px solid #d8dfd6;vertical-align:top}tr:last-child td{border-bottom:0}td:first-child{font-weight:bold;color:var(--dark)}
+.layout-demo{display:grid;grid-template-columns:35mm 1fr 38mm;min-height:115mm;border:2px solid var(--sage);border-radius:18px;overflow:hidden;background:var(--paper)}.layout-demo>div{padding:6mm}.layout-demo b,.layout-demo span{display:block}.layout-demo .side{background:var(--dark);color:white}.layout-demo .side span{font-size:10.8pt;padding:2.5mm 0;border-bottom:1px solid #ffffff22}.workspace .metric-row{display:flex;gap:3mm;margin:7mm 0}.workspace i{display:block;height:18mm;flex:1;border-radius:8px;background:var(--mint)}.fake-table{height:18mm;border-radius:7px;background:#e7ebe5;margin:4mm 0}.fake-table.short{width:70%}.detail{background:var(--blue)}.detail span{font-size:11pt;margin-top:5mm}.three{display:grid;grid-template-columns:repeat(3,1fr);gap:4mm;margin-top:7mm}.three div{padding:5mm;border-radius:14px;background:var(--paper);border:1px solid var(--line)}.three b,.three span{display:block}.three b{color:var(--sage);font-size:15pt;margin-bottom:2mm}.three span{font-size:11pt}
+.number-grid{display:grid;grid-template-columns:1fr 1fr;gap:6mm}.number-grid div{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:7mm;min-height:52mm}.number-grid span{font-size:22pt;color:var(--gold)}.number-grid b{display:block;font-size:15pt;color:var(--dark);margin:2mm 0}.number-grid p{font-size:11.5pt}.quad{display:grid;grid-template-columns:1fr 1fr;gap:6mm}.quad div{min-height:77mm;border-radius:20px;padding:7mm;background:var(--paper);border:1px solid var(--line)}.quad div:nth-child(1){background:var(--mint)}.quad div:nth-child(2){background:var(--blue)}.quad div:nth-child(3){background:var(--rose)}.quad div:nth-child(4){background:#efe5c9}.quad span{font-size:10pt;letter-spacing:2px;color:#64756d}.quad p{font-size:12pt}
+.stack{display:grid;grid-template-columns:1fr 1fr;gap:6mm}.stack div{border-radius:18px;padding:8mm;background:var(--paper);border:1px solid var(--line);min-height:60mm}.stack b,.stack span{display:block}.stack b{font-size:17pt;color:var(--sage);margin-bottom:3mm}.stack span{font-size:13.5pt}.diagram{display:block;width:100%;height:auto;border-radius:14px;border:1px solid var(--line);background:var(--paper)}
+.object-map{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6mm;margin:7mm 0}.object-map div{min-height:52mm;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;border:2px solid var(--sage)}.object-map b{font-size:17pt;color:var(--dark)}.object-map span{font-size:11pt}.object-map .goal,.object-map .event{background:var(--mint)}.object-map .task,.object-map .artifact{background:var(--blue)}.object-map .agent,.object-map .run{background:var(--rose)}.big-list{padding-left:7mm}.big-list li{margin:5mm 0}
+.timeline{display:grid;grid-template-columns:1fr 12mm 1fr 12mm 1fr;align-items:center;margin:15mm 0}.timeline div{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:7mm;min-height:75mm}.timeline b,.timeline span{display:block}.timeline b{font-size:16pt;color:var(--sage);margin-bottom:4mm}.timeline span{font-size:11.5pt}.timeline i{height:3px;background:var(--sage);position:relative}.timeline i:after{content:'›';position:absolute;right:-2mm;top:-7mm;font-size:24pt;color:var(--sage)}
+.build-steps{list-style:none;counter-reset:s;margin:0;padding:0;display:grid;gap:4mm}.build-steps li{counter-increment:s;background:var(--paper);border:1px solid var(--line);border-radius:15px;padding:5mm 6mm 5mm 19mm;position:relative}.build-steps li:before{content:counter(s);position:absolute;left:5mm;top:5mm;width:9mm;height:9mm;border-radius:50%;background:var(--sage);color:white;text-align:center;line-height:9mm}.build-steps b,.build-steps span{display:block}.build-steps b{font-size:14pt;color:var(--dark)}.build-steps span{font-size:11.5pt}.wide-card{display:flex;gap:7mm;align-items:center;background:var(--rose);border-radius:18px;padding:7mm;margin-top:6mm}.wide-card>span{font-size:26pt;color:var(--sage)}.wide-card b{font-size:15pt}.wide-card p{font-size:11.5pt;margin:1mm 0}
+.control-layers{display:grid;grid-template-columns:repeat(3,1fr);gap:5mm}.control-layers div{min-height:70mm;border-radius:18px;padding:7mm;background:var(--paper);border:1px solid var(--line)}.control-layers div:nth-child(1){background:var(--mint)}.control-layers div:nth-child(2){background:#efe5c9}.control-layers div:nth-child(3){background:var(--rose)}.control-layers b,.control-layers span{display:block}.control-layers b{font-size:18pt;color:var(--dark);margin-bottom:4mm}.control-layers span{font-size:12pt}.section-title{margin-top:10mm}.check{list-style:'✓  ';padding-left:8mm}.check li{margin:3mm 0}.mistakes{padding:0;list-style:none;counter-reset:m;display:grid;gap:5mm}.mistakes li{counter-increment:m;position:relative;padding:5mm 6mm 5mm 19mm;background:var(--paper);border:1px solid var(--line);border-radius:14px}.mistakes li:before{content:counter(m);position:absolute;left:5mm;top:5mm;color:var(--gold);font-size:18pt}.mistakes b,.mistakes span{display:block}.mistakes b{font-size:14pt;color:var(--dark)}.mistakes span{font-size:11.5pt}.learning-cards{display:grid;grid-template-columns:1fr 1fr;gap:6mm}.learning-cards div{min-height:93mm;border-radius:20px;padding:8mm;background:var(--paper);border:1px solid var(--line);display:flex;flex-direction:column}.learning-cards div:nth-child(1),.learning-cards div:nth-child(4){background:var(--mint)}.learning-cards div:nth-child(2){background:var(--blue)}.learning-cards div:nth-child(3){background:var(--rose)}.learning-cards b{font-size:18pt;color:var(--dark)}.learning-cards span{font-size:12.5pt;margin:4mm 0}.learning-cards em{font-size:11pt;color:#5b7165;margin-top:auto}.sources{display:grid;gap:3mm}.sources a{color:var(--dark);font-size:12.5pt;text-decoration:none;border-bottom:1px solid var(--line);padding:2.3mm 0}.sources a:before{content:'↗ ';color:var(--sage)}.action{background:var(--dark);color:white;border-radius:18px;padding:7mm;margin-top:8mm}.action span,.action b{display:block}.action span{font-size:10pt;color:#cbd8cc;letter-spacing:2px;margin-bottom:2mm}.action b{font-size:14pt}
+code{font-family:ui-monospace,monospace;font-size:.9em;background:#eef0eb;padding:1px 4px;border-radius:4px}
+.web-actions{width:210mm;margin:10mm auto -4mm;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;font-family:Iansui,"PingFang TC",sans-serif}.web-actions a{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:9px 16px;border-radius:999px;background:var(--dark);color:#fff;text-decoration:none;font-size:15px;box-shadow:0 4px 14px #0002}.web-actions a.secondary{background:var(--paper);color:var(--dark);border:1px solid var(--line)}
+@media print{@page{size:A4;margin:0}html,body{background:white}.web-actions{display:none}.page{margin:0;box-shadow:none;width:210mm;height:297mm;min-height:297mm;page-break-after:always}}
+@media screen and (max-width:850px){html{background:var(--cream)}.web-actions{position:sticky;top:0;z-index:10;width:100%;margin:0;padding:10px;display:grid;grid-template-columns:1fr 1fr;background:#f7f1e5ee;backdrop-filter:blur(8px)}.web-actions a{min-height:38px;padding:7px 9px;font-size:13px}.page{width:100%;min-height:auto;margin:0;padding:24px 20px 58px;overflow:visible;box-shadow:none}.page main{height:auto}.page footer{left:20px;right:20px}.cover-art{position:relative;left:-20px;width:calc(100% + 40px);height:60vh;margin-top:20px}.brand-logo{display:none}.two,.quad,.number-grid,.stack,.learning-cards{grid-template-columns:1fr}.five{grid-template-columns:1fr 1fr}.layout-demo{grid-template-columns:80px 1fr}.layout-demo .detail{display:none}.three,.control-layers{grid-template-columns:1fr}.timeline{grid-template-columns:1fr}.timeline i{height:20px;width:3px;margin:auto}.object-map{grid-template-columns:1fr 1fr}.toc a{grid-template-columns:38px 1fr}.toc small{display:none}h1{font-size:28pt}h2{font-size:22pt}}
+</style></head><body><nav class="web-actions" aria-label="手冊與工具入口"><a href="https://tar-cowork.line-family-video-bot.workers.dev">開啟 TAR 共作所</a><a class="secondary" href="paperclip-ai-company-manual.pdf">下載 PDF</a><a class="secondary" href="paperclip-ai-company-manual.docx">下載 Word</a><a class="secondary" href="../tools/?k=145">回工具集</a></nav><section class="page cover" id="p1">
+      <main>
+  <div class="cover-copy">
+    <div class="eyebrow">AI 學習日誌｜產品拆解篇</div>
+    <h1>Paperclip<br><em>AI 公司管理平台</em>拆解</h1>
+    <p class="lede">從創意、介面、工具、資料流到小白製作路線：不是學它畫得多漂亮，而是看懂一群 AI 如何被真正管理。</p>
+    <div class="meta">v1.0 · 2026-11-15　TAR × 知臨</div>
+  </div>
+  <img class="cover-art" src="cover-visual.png" alt="AI 公司控制中心概念圖">
+  <img class="brand-logo" src="logo-tarshar.png" alt="Tarshar logo">
+</main>
+      <footer><span>小D版手冊</span><span>🍀 Learn AI with Tarshar | 2026</span><span>01｜封面</span></footer>
+    </section><section class="page " id="p2">
+      <main>
+  <div class="eyebrow">先讀這一頁</div><h2>這不是寫作紀錄，是產品拆解日誌</h2>
+  <div class="quote">我被吸引的是儀表板，但拆開後才知道：真正厲害的不是畫面，而是它先把 AI 重新想成「有職位、有主管、有工作單、有預算、會回報的員工」。</div>
+  <div class="two">
+    <div class="card"><h3>你會看懂</h3><ul><li>概念從哪裡來</li><li>為什麼介面像公司儀表板</li><li>用了什麼技術與資料物件</li><li>任務如何真正叫醒 AI</li><li>小白如何做最小版本</li></ul></div>
+    <div class="card"><h3>證據怎麼讀</h3><ul><li><b>官方確認：</b>官方文件、原始碼或版本紀錄可直接證實。</li><li><b>本冊歸納：</b>依多個官方線索整理出的解釋。</li><li><b>小白建議：</b>為初學者縮小範圍的實作方案，不假裝是官方作法。</li></ul></div>
+  </div>
+  <div class="note"><b>版本邊界：</b>查證快照為 2026-11-14 的 master commit <code>36101eb</code>。Paperclip 快速更新，功能名稱可能變動，但核心思路仍可學。</div>
+</main>
+      <footer><span>小D版手冊</span><span>🍀 Learn AI with Tarshar | 2026</span><span>02｜使用說明</span></footer>
+    </section><section class="page " id="p3">
+      <main>
+  <div class="eyebrow">CONTENTS</div><h2>用「公司怎麼運作」來學 AI 工具</h2>
+  <nav class="toc">
+    <a href="#p4"><b>01</b><span>創意起點：AI 是員工，Paperclip 是公司</span><small>04–05</small></a>
+    <a href="#p6"><b>02</b><span>介面設計：儀表板到底在回答什麼</span><small>06–07</small></a>
+    <a href="#p8"><b>03</b><span>功能與效果：四根支柱</span><small>08–09</small></a>
+    <a href="#p10"><b>04</b><span>技術與資料：實際用了哪些工具</span><small>10–12</small></a>
+    <a href="#p13"><b>05</b><span>運作流程：一張工作單怎麼跑起來</span><small>13–14</small></a>
+    <a href="#p15"><b>06</b><span>建造歷程：產品如何一步步長出來</span><small>15</small></a>
+    <a href="#p16"><b>07</b><span>小白實作：五表一循環與七階段</span><small>16–18</small></a>
+    <a href="#p19"><b>08</b><span>安全、驗收、常見錯誤與學習卡</span><small>19–21</small></a>
+  </nav>
+</main>
+      <footer><span>小D版手冊</span><span>🍀 Learn AI with Tarshar | 2026</span><span>03｜目錄</span></footer>
+    </section><section class="page " id="p4">
+      <main>
+  <div class="eyebrow">01｜概念創意</div><h2>它不是先想「畫一個漂亮看板」</h2>
+  <p class="lead">它先看見：當你同時使用多個 AI，問題不再是「AI 會不會回答」，而是「工作會不會失控」。</p>
+  <div class="five">
+    <div><b>看不見</b><span>不知道每個 AI 現在在做什麼</span></div>
+    <div><b>對不齊</b><span>任務與大目標沒有連結</span></div>
+    <div><b>接不上</b><span>重開後又從頭解釋</span></div>
+    <div><b>算不清</b><span>成本、執行時間與成果分散</span></div>
+    <div><b>管不住</b><span>高風險動作沒有權限與審批</span></div>
+  </div>
+  <div class="quote">重新定義問題：當整個工作團隊都是 AI，我們需要的不是更多聊天視窗，而是一個「AI 公司的控制平面」。</div>
+  <p><b>控制平面</b>像機場塔台：不替飛機飛，卻知道誰要起飛、誰在等待、跑道能不能用、哪個動作必須批准，以及出事時怎麼停。</p>
+</main>
+      <footer><span>小D版手冊</span><span>🍀 Learn AI with Tarshar | 2026</span><span>04｜創意起點</span></footer>
+    </section><section class="page " id="p5">
+      <main>
+  <div class="eyebrow">01｜概念創意</div><h2>五個人類公司隱喻，降低理解門檻</h2>
+  <table><thead><tr><th>人類公司</th><th>Paperclip</th><th>真正用途</th></tr></thead><tbody>
+    <tr><td>公司目標</td><td>Goal</td><td>保留「為什麼做」，讓任務能往上追</td></tr>
+    <tr><td>員工與主管</td><td>Agent / Org Chart</td><td>定義角色、專長、上下級與責任</td></tr>
+    <tr><td>工作單</td><td>Task / Issue</td><td>保存需求、上文、成果、阻礙與狀態</td></tr>
+    <tr><td>打卡開工</td><td>Heartbeat</td><td>用排程、分派、留言或手動方式叫醒 AI</td></tr>
+    <tr><td>財務與內控</td><td>Budget / Approval / Activity</td><td>限制成本、批准風險動作、留下紀錄</td></tr>
+  </tbody></table>
+  <div class="takeaway"><span>一句話</span><b>AI 是員工；Paperclip 是公司制度、派工台和監控中心。</b></div>
+  <p class="small">官方 README 的原始比喻是：「如果 OpenClaw 是員工，Paperclip 就是公司。」本冊把它延伸成小白可理解的公司模型。</p>
+</main>
+      <footer><span>小D版手冊</span><span>🍀 Learn AI with Tarshar | 2026</span><span>05｜公司隱喻</span></footer>
+    </section><section class="page " id="p6">
+      <main>
+  <div class="eyebrow">02｜UI / UX</div><h2>畫面分三層，不把所有資料擠成一面牆</h2>
+  <div class="layout-demo">
+    <div class="side"><b>固定導覽</b><span>Dashboard</span><span>Tasks</span><span>Projects</span><span>Routines</span><span>Agents</span><span>Skills</span><span>Activity</span></div>
+    <div class="workspace"><b>目前工作區</b><div class="metric-row"><i></i><i></i><i></i></div><div class="fake-table"></div><div class="fake-table short"></div><p>只呈現這一刻需要處理的狀態與工作</p></div>
+    <div class="detail"><b>需要時才展開</b><span>責任人</span><span>成本</span><span>執行紀錄</span><span>審批</span><span>成果</span></div>
+  </div>
+  <div class="three"><div><b>公司層</b><span>Dashboard<br>Goals · Activity · Budgets</span></div><div><b>團隊層</b><span>Agents · Org Chart<br>Projects · Routines</span></div><div><b>工作層</b><span>Task Thread<br>Runs · Artifacts · Approvals</span></div></div>
+</main>
+      <footer><span>小D版手冊</span><span>🍀 Learn AI with Tarshar | 2026</span><span>06｜介面骨架</span></footer>
+    </section><section class="page " id="p7">
+      <main>
+  <div class="eyebrow">02｜UI / UX</div><h2>首頁只要先回答四個問題</h2>
+  <div class="number-grid">
+    <div><span>01</span><b>現在有哪些工作正在進行？</b><p>讓人看到整體流量與進度。</p></div>
+    <div><span>02</span><b>哪個 AI 正在做哪一件事？</b><p>把責任人與任務直接綁在一起。</p></div>
+    <div><span>03</span><b>哪裡卡住、失敗或在等我？</b><p>例外應比正常狀態更醒目。</p></div>
+    <div><span>04</span><b>成本與成果仍在可接受範圍嗎？</b><p>用量、預算與驗收不能放在最後。</p></div>
+  </div>
+  <div class="note"><b>UI 的真正原則：</b>先給狀態，再給細節；用一套狀態語言貫穿全站；進階設定在需要時才出現；手機畫面仍能監看、批准、暫停與補指示。</div>
+  <p class="small">因此「儀表板感」不是卡片越多越好，而是狀態、責任、例外與下一步都在一眼可掃的位置。</p>
+</main>
+      <footer><span>小D版手冊</span><span>🍀 Learn AI with Tarshar | 2026</span><span>07｜儀表板</span></footer>
+    </section><section class="page " id="p8">
+      <main>
+  <div class="eyebrow">03｜功能系統</div><h2>官方的四根支柱：工作、組織、能力、基礎設施</h2>
+  <div class="quad">
+    <div><span>WORK</span><h3>代理式任務管理</h3><p>目標、任務、留言、成果、執行與審批在同一條工作線。</p></div>
+    <div><span>ORG</span><h3>AI 組織圖</h3><p>每個 AI 有職位、主管、專長、預算與責任範圍。</p></div>
+    <div><span>SKILL</span><h3>AI 員工訓練</h3><p>技能可安裝、版本化、測試、注入與回復，不只是一段提示詞。</p></div>
+    <div><span>OS</span><h3>代理式作業系統</h3><p>轉接器、心跳、Session、權限、事件與儲存把工作真正跑起來。</p></div>
+  </div>
+  <div class="takeaway"><span>設計判斷</span><b>功能不是彼此獨立；任務是主線，組織決定誰做，技能決定怎麼做，基礎設施確保能安全地做完。</b></div>
+</main>
+      <footer><span>小D版手冊</span><span>🍀 Learn AI with Tarshar | 2026</span><span>08｜四根支柱</span></footer>
+    </section><section class="page " id="p9">
+      <main>
+  <div class="eyebrow">03｜功能系統</div><h2>功能不是規格清單，要看它消除了什麼混亂</h2>
+  <table><thead><tr><th>功能</th><th>解決的混亂</th><th>達到的效果</th></tr></thead><tbody>
+    <tr><td>目標與任務階層</td><td>工作很多，卻不知道對什麼結果有用</td><td>每件事能往上追到策略目標</td></tr>
+    <tr><td>Agent 與組織圖</td><td>多個 AI 沒有責任邊界</td><td>知道誰做、向誰回報、能做什麼</td></tr>
+    <tr><td>Heartbeat / Run</td><td>AI 執行不可見、不可停、不可接續</td><td>每次工作都有起訖、日誌、狀態與結果</td></tr>
+    <tr><td>Budget / Usage</td><td>成本事後才發現</td><td>可觀察、限制或暫停超額工作</td></tr>
+    <tr><td>Approval / Activity</td><td>自主動作缺少人類控制與稽核</td><td>高風險動作先批准，所有變更可追蹤</td></tr>
+    <tr><td>Skill / Session</td><td>每次重教、每次從頭開始</td><td>能力可重用，工作現場可延續</td></tr>
+  </tbody></table>
+</main>
+      <footer><span>小D版手冊</span><span>🍀 Learn AI with Tarshar | 2026</span><span>09｜功能效果</span></footer>
+    </section><section class="page " id="p10">
+      <main>
+  <div class="eyebrow">04｜實際技術</div><h2>官方目前的技術組合</h2>
+  <div class="stack">
+    <div><b>前端</b><span>React 19 · TypeScript<br>Vite 8 · React Router 7<br>TanStack Query · Tailwind 4</span></div>
+    <div><b>後端</b><span>Node.js 24+ · Express 5<br>WebSocket · Zod<br>Better Auth · MCP / AI SDK</span></div>
+    <div><b>資料</b><span>PostgreSQL<br>Drizzle ORM<br>embedded-postgres</span></div>
+    <div><b>工程</b><span>pnpm monorepo<br>Docker · CLI<br>Vitest · Playwright · Storybook</span></div>
+  </div>
+  <div class="note"><b>白話翻譯：</b>React 負責畫面；Express 負責 API；PostgreSQL 保存公司與工作狀態；WebSocket 把 AI 的即時狀態推回畫面；Adapter 負責叫醒不同 AI；測試工具確保每次改版不把流程弄壞。</div>
+  <p class="small">證據狀態：官方原始碼中的 package manifests、routes、database schema 與 runtime 文件確認。</p>
+</main>
+      <footer><span>小D版手冊</span><span>🍀 Learn AI with Tarshar | 2026</span><span>10｜技術工具</span></footer>
+    </section><section class="page " id="p11">
+      <main>
+  <div class="eyebrow">04｜實際技術</div><h2>兩層核心：控制平面與執行服務</h2>
+  <img class="diagram" src="architecture.png" alt="Paperclip 系統架構圖">
+  <div class="two compact"><div class="card"><h3>控制平面</h3><p>管理公司、目標、任務、代理人、預算、心跳、Session、審批與紀錄。</p></div><div class="card"><h3>執行層</h3><p>Codex、Claude Code、Gemini CLI、HTTP 服務等在外部真正完成工作。</p></div></div>
+</main>
+      <footer><span>小D版手冊</span><span>🍀 Learn AI with Tarshar | 2026</span><span>11｜系統架構</span></footer>
+    </section><section class="page " id="p12">
+      <main>
+  <div class="eyebrow">04｜資料模型</div><h2>為什麼 Task、Agent、Run 必須分開保存</h2>
+  <div class="object-map">
+    <div class="goal"><b>Goal</b><span>為什麼做</span></div>
+    <div class="task"><b>Task</b><span>要做什麼、做到哪裡</span></div>
+    <div class="agent"><b>Agent</b><span>誰負責、有哪些能力</span></div>
+    <div class="run"><b>Run</b><span>某一次實際執行</span></div>
+    <div class="event"><b>Event</b><span>過程發生了什麼</span></div>
+    <div class="artifact"><b>Artifact</b><span>最後交出了什麼</span></div>
+  </div>
+  <ul class="big-list"><li><b>Task 不等於對話。</b>它是可被指派、阻塞、驗收、重跑的工作單。</li><li><b>Run 不等於 Task。</b>同一任務可能失敗後重跑三次，每次成本、日誌與結果都不同。</li><li><b>Event 是儀表板的真相來源。</b>畫面狀態應由真實事件推導，而不是假數字。</li></ul>
+</main>
+      <footer><span>小D版手冊</span><span>🍀 Learn AI with Tarshar | 2026</span><span>12｜資料物件</span></footer>
+    </section><section class="page " id="p13">
+      <main>
+  <div class="eyebrow">05｜運作流程</div><h2>一張工作單如何跑成一次 AI 工作</h2>
+  <img class="diagram" src="heartbeat-flow.png" alt="Heartbeat 工作資料流">
+  <div class="note"><b>Heartbeat 不是一般網站的健康檢查。</b>在 Paperclip 裡，它是一個有工作上文、有時間邊界、可取消、會回傳狀態並保存結果的執行回合。</div>
+</main>
+      <footer><span>小D版手冊</span><span>🍀 Learn AI with Tarshar | 2026</span><span>13｜資料流</span></footer>
+    </section><section class="page " id="p14">
+      <main>
+  <div class="eyebrow">05｜運作流程</div><h2>Session 是「下次接著做」的關鍵</h2>
+  <div class="timeline">
+    <div><b>第一次心跳</b><span>讀任務 → 啟動 AI → 產生 session id → 保存日誌與成果</span></div>
+    <i></i>
+    <div><b>任務有新留言</b><span>Paperclip 觸發下一次 heartbeat，找到原 session</span></div>
+    <i></i>
+    <div><b>第二次心跳</b><span>恢復原工作現場 → 接著做 → 只補充新指示</span></div>
+  </div>
+  <div class="two"><div class="card"><h3>沒有 Session</h3><p>每次都把全部歷史塞回提示詞；又慢、又貴，也容易漏掉狀態。</p></div><div class="card"><h3>保存 Session</h3><p>執行器可從原現場接續；控制平面仍保存獨立的任務與事件紀錄。</p></div></div>
+  <div class="takeaway"><span>核心</span><b>持續工作靠的不是「AI 記性很好」，而是系統有意識地保存與恢復工作現場。</b></div>
+</main>
+      <footer><span>小D版手冊</span><span>🍀 Learn AI with Tarshar | 2026</span><span>14｜Session</span></footer>
+    </section><section class="page " id="p15">
+      <main>
+  <div class="eyebrow">06｜產品怎麼長出來</div><h2>官方版本紀錄顯示：先骨架，再執行，最後平台化</h2>
+  <ol class="build-steps">
+    <li><b>先立產品觀念與工程骨架</b><span>產品文件、共享型別、資料庫、API Server、React UI。</span></li>
+    <li><b>先把最小公司模型做完整</b><span>Company、Task、Agent、Approval、Cost、Heartbeat、Dashboard。</span></li>
+    <li><b>讓 AI 真的能被叫醒</b><span>runtime schema、service、WebSocket、adapter、CLI 與 live output。</span></li>
+    <li><b>補治理與接續</b><span>chain of command、session、secret、storage、permission、mobile。</span></li>
+    <li><b>再從工具走向平台</b><span>plugin、skill、apps/connections、teams、routines、artifacts。</span></li>
+  </ol>
+  <div class="note"><b>小白最值得學的順序：</b>不是先蒐集所有想要的功能，而是先建立資料真相，再做一條真的能跑完的任務循環，最後才把例外聚合成儀表板。</div>
+  <p class="small">最早可查的骨架提交是 2026-02-16 的 <code>481b3a4</code>，提交訊息為「Add project scaffolding and infrastructure config」。</p>
+</main>
+      <footer><span>小D版手冊</span><span>🍀 Learn AI with Tarshar | 2026</span><span>15｜建造歷程</span></footer>
+    </section><section class="page " id="p16">
+      <main>
+  <div class="eyebrow">07｜照著做</div><h2>第一版只要回答五件事</h2>
+  <div class="number-grid">
+    <div><span>01</span><b>目標是什麼？</b><p>一個清楚結果，不先做多層策略。</p></div>
+    <div><span>02</span><b>目前有哪些任務？</b><p>待辦、進行、等待、完成、失敗。</p></div>
+    <div><span>03</span><b>哪個 AI 負責？</b><p>第一版只接一種 AI。</p></div>
+    <div><span>04</span><b>現在跑到哪裡？</b><p>Run 與 Event 保存真實狀態。</p></div>
+  </div>
+  <div class="wide-card"><span>05</span><div><b>人要在哪裡批准、停止或驗收？</b><p>只要自動化會碰檔案、帳號、付款、對外傳送或刪除，就必須設清楚的人類控制點。</p></div></div>
+  <div class="takeaway"><span>第一版範圍</span><b>一個目標、五張表、一種 AI、一條任務循環、一個手機儀表板。</b></div>
+</main>
+      <footer><span>小D版手冊</span><span>🍀 Learn AI with Tarshar | 2026</span><span>16｜小白 MVP</span></footer>
+    </section><section class="page " id="p17">
+      <main>
+  <div class="eyebrow">07｜照著做</div><h2>小白版工具選擇：先少、先熟、先跑通</h2>
+  <table><thead><tr><th>需要</th><th>建議工具</th><th>選它的理由</th></tr></thead><tbody>
+    <tr><td>畫面與 API</td><td>Next.js + TypeScript</td><td>同一個專案完成頁面和後端入口，部署容易</td></tr>
+    <tr><td>資料庫</td><td>Supabase / PostgreSQL</td><td>表格關係清楚，也有登入與即時能力</td></tr>
+    <tr><td>介面元件</td><td>Tailwind CSS + shadcn/ui</td><td>快速做出一致的卡片、表格與響應式版面</td></tr>
+    <tr><td>AI 執行</td><td>先接單一 CLI 或 API</td><td>先把一條資料流跑通，避免多轉接器除錯</td></tr>
+    <tr><td>即時狀態</td><td>先輪詢，穩定後再 WebSocket</td><td>第一版簡單優先；流量大再升級</td></tr>
+    <tr><td>部署</td><td>Vercel + Supabase</td><td>少維運、手機直接開網址測試</td></tr>
+  </tbody></table>
+  <div class="note"><b>注意：</b>這一頁是本冊的小白建議，不是 Paperclip 官方技術選型。官方目前是 React/Vite + Express + PostgreSQL 的大型 monorepo。</div>
+</main>
+      <footer><span>小D版手冊</span><span>🍀 Learn AI with Tarshar | 2026</span><span>17｜小白工具</span></footer>
+    </section><section class="page " id="p18">
+      <main>
+  <div class="eyebrow">07｜照著做</div><h2>七個製作階段：順序比功能數量重要</h2>
+  <img class="diagram" src="mvp-roadmap.png" alt="小白七階段製作路線">
+  <div class="two compact"><div class="card"><h3>最小五表</h3><p><code>goals</code>、<code>tasks</code>、<code>agents</code>、<code>runs</code>、<code>events</code></p></div><div class="card"><h3>最小 API</h3><p>建任務、分派、啟動 run、回報 event、完成或失敗、停止。</p></div></div>
+</main>
+      <footer><span>小D版手冊</span><span>🍀 Learn AI with Tarshar | 2026</span><span>18｜七階段</span></footer>
+    </section><section class="page " id="p19">
+      <main>
+  <div class="eyebrow">08｜安全與驗收</div><h2>自動化越強，停止、權限與驗證越不能省</h2>
+  <div class="control-layers">
+    <div><b>Allowed</b><span>低風險、可逆、範圍明確的讀取與處理</span></div>
+    <div><b>Ask first</b><span>對外傳送、付費、刪除、帳號權限、公開發布</span></div>
+    <div><b>Off</b><span>沒有明確必要、範圍過大或無法回復的能力</span></div>
+  </div>
+  <h3 class="section-title">驗收不要只看 AI 說「完成」</h3>
+  <ul class="check"><li>成果檔案是否真的存在、能打開？</li><li>執行日誌與事件是否對得上狀態？</li><li>成本、時間、錯誤與重跑是否都有紀錄？</li><li>高風險動作是否經過批准？</li><li>手機能否看見需要我處理的例外？</li></ul>
+  <div class="note"><b>最低安全線：</b>執行型 AI 不要直接拿整台電腦與所有密鑰；用工作目錄、最小權限、可取消程序與明確工具清單縮小影響範圍。</div>
+</main>
+      <footer><span>小D版手冊</span><span>🍀 Learn AI with Tarshar | 2026</span><span>19｜安全治理</span></footer>
+    </section><section class="page " id="p20">
+      <main>
+  <div class="eyebrow">08｜避免踩坑</div><h2>五種「看起來像，實際上不是」</h2>
+  <ol class="mistakes">
+    <li><b>只有漂亮儀表板</b><span>卡片數字沒有 Run / Event 支撐，只是裝飾。</span></li>
+    <li><b>把聊天紀錄當任務系統</b><span>無法查責任、狀態、阻礙、驗收與重跑。</span></li>
+    <li><b>第一天就做多代理人</b><span>錯誤來源倍增，卻沒有先證明單一循環。</span></li>
+    <li><b>讓 AI 直接拿整台電腦</b><span>沒有最小權限、工作目錄、審批與停止。</span></li>
+    <li><b>只用顏色表達狀態</b><span>手機、無障礙與截圖情境都容易誤判。</span></li>
+  </ol>
+  <div class="takeaway"><span>產品判準</span><b>好工具不是讓人覺得「AI 很忙」，而是讓人知道工作是否朝目標前進、何時需要介入，以及成果能否被驗證。</b></div>
+</main>
+      <footer><span>小D版手冊</span><span>🍀 Learn AI with Tarshar | 2026</span><span>20｜常見錯誤</span></footer>
+    </section><section class="page " id="p21">
+      <main>
+  <div class="eyebrow">08｜最後複習</div><h2>四張學習卡，記住整個工具</h2>
+  <div class="learning-cards">
+    <div><b>控制平面</b><span>像機場塔台。自己不飛，但管理規則、狀態、派工與權限。</span><em>記住：Paperclip 管工作的發生方式。</em></div>
+    <div><b>Adapter</b><span>像插座轉接頭，把統一工作單翻成各種 AI 的啟動方式。</span><em>記住：先定統一介面，再接不同 AI。</em></div>
+    <div><b>Heartbeat Run</b><span>像一次有上下班時間的工作回合，可追蹤、取消、保存結果。</span><em>記住：它不是無止盡輪詢。</em></div>
+    <div><b>Governance</b><span>像公司內控，用權限、預算、批准、紀錄與停止機制管理自主工作。</span><em>記住：自動化一定包含「不能做什麼」。</em></div>
+  </div>
+</main>
+      <footer><span>小D版手冊</span><span>🍀 Learn AI with Tarshar | 2026</span><span>21｜學習卡</span></footer>
+    </section><section class="page " id="p22">
+      <main>
+  <div class="eyebrow">SOURCES & NEXT</div><h2>官方來源與你的下一步</h2>
+  <div class="sources">
+    <a href="https://github.com/paperclipai/paperclip">官方儲存庫與 README</a>
+    <a href="https://github.com/paperclipai/paperclip/blob/master/doc/PRODUCT.md">PRODUCT｜產品定義與四根支柱</a>
+    <a href="https://github.com/paperclipai/paperclip/blob/master/doc/GOAL.md">GOAL｜控制平面與執行層</a>
+    <a href="https://github.com/paperclipai/paperclip/blob/master/DESIGN.md">DESIGN｜設計原則</a>
+    <a href="https://github.com/paperclipai/paperclip/blob/master/docs/agents-runtime.md">Agents Runtime｜心跳、Session、日誌</a>
+    <a href="https://github.com/paperclipai/paperclip/blob/master/ROADMAP.md">ROADMAP｜目前與未來功能</a>
+    <a href="https://github.com/paperclipai/paperclip/commit/481b3a46db404d039dbf1ea5f884600a8869b7bc">最早可查的專案骨架提交</a>
+    <a href="https://github.com/paperclipai/paperclip/releases">官方 Releases</a>
+  </div>
+  <div class="action"><span>現在可以做</span><b>拿一張紙，先畫出「誰下單 → AI 怎麼被叫醒 → 結果存在哪裡 → 誰驗收」。只要這條線說得清楚，你已經開始做真正的工具，而不是做儀表板外觀。</b></div>
+  <p class="small">完整技術細節、資料表與 API 草圖請見同資料夾的 Markdown／Word 版本。查證日期：2026-11-15。</p>
+</main>
+      <footer><span>小D版手冊</span><span>🍀 Learn AI with Tarshar | 2026</span><span>22｜來源與行動</span></footer>
+    </section></body></html>
