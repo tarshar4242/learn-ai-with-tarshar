@@ -120,3 +120,10 @@
 - `public/jinlong-greetings/` — 手機友善的純靜態問候圖提示詞工具，已加入工具集與生活應用。
 - 公開入口：https://tarshar4242.github.io/learn-ai-with-tarshar/jinlong-greetings/
 - 開發正本在私人 ray 專案；本目錄為網站發佈副本，勿分叉維護。
+
+## 荏眉小印 AI協作日誌｜小D版手冊
+
+- [公開閱讀入口](https://tarshar4242.github.io/learn-ai-with-tarshar/ai-collaboration-journal/renmei-seal/)：15頁小D版手冊、可編輯Word、PDF、約80秒有聲解說及4頁腳本。
+- 網站成品副本位於 `public/ai-collaboration-journal/renmei-seal/`；首頁最新文章及部落格由 `src/data/content.json` 的公開文章條目索引。
+- 私人ray日誌專案維護內容正本；只在網站入口調整公開閱讀文案。下載文件保持原稿內容，仍待本人確認。原篆刻平台持續私人使用，本次未發布其程式。
+- 解說為實際畫面快照與合成聲音的互動示範，非本人聲音／連續錄影；尚未輸出MP4，正式Skill尚未封裝。
