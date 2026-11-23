@@ -54,3 +54,11 @@
 ---
 
 *更新日期：2026-06-24*
+
+---
+
+## 2026-11-23 補齊
+
+- [研讀摘要 PDF](A05_summary_1123.pdf)｜[Word](A05_summary_1123.docx)：含「和經驗卡外化的關係」一節。
+- 完整中英對照（補齊摘要、第 4 節、結論、附註、參考文獻；SECI 用語統一為社會化、外化、組合化、內化）只放雲端，要登入：[PDF](https://drive.google.com/file/d/16MoTDBhamfv9s7Nol2leRrwarHHiX4RI/view)｜[Word](https://drive.google.com/file/d/1t9KhgHgF_fMQ2NOadcV9AyheMNQoM6IX/view)
+- 原文查無開放授權，新的全文翻譯不放網站。
