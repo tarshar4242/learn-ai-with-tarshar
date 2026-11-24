@@ -22,7 +22,6 @@
 
 | 檔案 | 說明 |
 |------|------|
-| `A11原文_Artificial_Knowledge_Generation_Cerchione2025.pdf` | 論文原文 PDF |
 
 > 📌 簡報與中英對照待補
 

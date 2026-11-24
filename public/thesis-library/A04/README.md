@@ -22,7 +22,6 @@
 
 | 檔案 | 說明 |
 |------|------|
-| `A04原文_SECI_and_ChatGPT_in_higher_education.pdf` | 原文 PDF（可直接在 GitHub 預覽） |
 | `A04論文研讀_簡報_20260617.pdf` | 研讀簡報（PDF 版，可直接在 GitHub 預覽） |
 | `A04論文研讀_簡報_20260613.pptx` | 研讀簡報（可編輯 PowerPoint 版） |
 | `A04論文_逐句中英對照_20260617.pdf` | 逐句中英對照（PDF 版，可直接在 GitHub 預覽） |

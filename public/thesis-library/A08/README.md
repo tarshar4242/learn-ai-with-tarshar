@@ -22,7 +22,6 @@
 
 | 檔案 | 說明 |
 |------|------|
-| `A08原文_AI-Enhanced_Competency_Transfer_Hubs.pdf` | 論文原文 PDF（可直接在 GitHub 預覽） |
 | `A08_簡報_路C版.pdf` | 研讀簡報（PDF 版，可直接在 GitHub 預覽） |
 | `A08_簡報_路C版.pptx` | 研讀簡報（可編輯 PowerPoint 版） |
 | `A08_中英對照_螢光筆版v2.pdf` | 段落中英對照（PDF 版，可直接在 GitHub 預覽） |

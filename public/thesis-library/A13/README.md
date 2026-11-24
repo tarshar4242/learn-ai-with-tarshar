@@ -88,7 +88,6 @@
 
 | 檔案 | 說明 |
 |------|------|
-| `A13_original_Vocabulary_Problem_Furnas1987.pdf` | 論文原文 PDF |
 | `A13_bilingual.docx` | 依既有研讀庫版型重建：英文原文後緊接藍框中文譯文、雙語章節帶、重點螢光標示與統一術語表 |
 | `A13_bilingual.pdf` | 手機與網站閱讀用中英對照 PDF（A4，16 頁） |
 | `A13_reading_summary.docx` | 口語研讀摘要 Word |

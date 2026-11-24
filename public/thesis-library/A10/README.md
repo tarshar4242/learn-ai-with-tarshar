@@ -22,7 +22,6 @@
 
 | 檔案 | 說明 |
 |------|------|
-| `A10原文_GenAI_Meets_KM_Kirchner2025.pdf` | 論文原文 PDF |
 | `A10研讀簡報.pdf` | 研讀簡報（PDF 版） |
 | `A10研讀簡報.pptx` | 研讀簡報（可編輯 PowerPoint 版） |
 | `A10中英對照.pdf` | 段落中英對照（PDF 版） |

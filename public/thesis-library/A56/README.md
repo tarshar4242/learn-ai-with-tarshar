@@ -36,7 +36,6 @@
 ## 檔案
 
 - [文獻卡](README.md)
-- [原文 PDF](A56_original_Kala2024.pdf)
 - [中英對照 PDF](A56_bilingual.pdf)
 - [中英對照 Word](A56_bilingual.docx)
 - [研讀摘要 PDF](A56_summary.pdf)

@@ -36,7 +36,6 @@
 ## 檔案
 
 - [文獻卡](README.md)
-- [原文 PDF](A39_original_Kim2023.pdf)
 - [中英對照 PDF](A39_bilingual.pdf)
 - [中英對照 Word](A39_bilingual.docx)
 - [研讀摘要 PDF](A39_summary.pdf)
