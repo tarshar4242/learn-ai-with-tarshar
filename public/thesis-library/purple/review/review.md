@@ -211,9 +211,9 @@ B 組須分別保存內部候選集合、實際傳入生成模型的截斷證據
 
 - [公開靜態圖](https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/purple/materials/full-thesis/architecture.png)
 
-- [47 頁全文 PDF](https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/purple/materials/thesis.pdf)
+- [47 頁全文 PDF](https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/purple/fulltext-moved/)
 
-- [47 頁全文 Word](https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/purple/materials/thesis.docx)
+- [47 頁全文 Word](https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/purple/fulltext-moved/)
 
 ## 核對範圍與協作整合
 

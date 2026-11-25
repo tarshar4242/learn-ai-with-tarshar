@@ -96,7 +96,7 @@ NotebookLM 是 Tarshar 發想與體驗的參照，尚未在同條件下實測，
 ## 七、可接續查核的入口
 
 - [紫區現行研究入口](https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/purple/)
-- [全文工作稿 PDF（現行版本；舊稿 47 頁見歷史紀錄）](https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/purple/materials/thesis.pdf)
+- [全文工作稿 PDF（現行版本；舊稿 47 頁見歷史紀錄）](https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/purple/fulltext-moved/)
 - [43 頁原 v1 提交報告與文獻 DOI](https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/purple/submission/)
 - [E1 至 E4 修正包及完整驗證證據](https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/purple/submission-v2/)
 - [Drive 修正資料夾](https://drive.google.com/drive/folders/1gFzeQDHRuoDO2y6k4qqFZ2croXnDp7DV)
@@ -121,7 +121,7 @@ Tarshar 同意依審查與討論修訂各章，但明確要求原論文題目不
 
 本輪由 Codex 整合並作獨立內容與逐頁版面複核；10/23 的 Claude 審查保留為歷史紀錄，不改標成本輪新審查。58 頁、57 個目錄與圖表頁碼目標核對通過。沒有啟動 E5–E12、沒有新增正式樣本，D 批剩餘的文獻深讀及其他事項仍待逐項驗收。
 
-- [現行全文 PDF](https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/purple/materials/thesis.pdf)
+- [現行全文 PDF](https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/purple/fulltext-moved/)
 - [Meeting 討論單](https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/purple/materials/meeting-1026.pdf)
 - [Drive 全文與討論單](https://drive.google.com/drive/folders/1e1c1oqhetrp6GGqgQ6ZvBDC_s9J5MASA)
 

@@ -7,7 +7,7 @@
 ## 本次寄送主文
 
 - [研究｜論文Meeting｜討論單老師排版寄送版_1026.pdf](meeting.pdf)：4 頁討論單，附決議欄；同名 Word 可編輯。
-- [研究｜紫區論文｜全文老師排版寄送版_1026.pdf](thesis.pdf)：59 頁全文，含目錄、五章、文獻、附錄；同名 Word 可編輯。
+- [研究｜紫區論文｜全文老師排版寄送版_1026.pdf](https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/purple/fulltext-moved/)：59 頁全文，含目錄、五章、文獻、附錄；同名 Word 可編輯。
 
 請以這兩份新版作為寄送主文。舊 58 頁全文、3 頁討論單與原 41 份材料包留存為歷史，不能因為是工作稿或 meeting 就免除老師排版要求。原始 AI 審查、程式與資料附件是證據原件，保留原樣，不冒稱已全部套用老師版。
 

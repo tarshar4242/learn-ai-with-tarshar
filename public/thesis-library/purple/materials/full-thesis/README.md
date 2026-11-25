@@ -10,7 +10,7 @@ summary: 58 頁五章修訂討論稿與 3 頁 meeting 討論單；原題完整�
 
 原題：AI 語意向量知識庫對隱性知識外化文件之檢索成效研究：與傳統關鍵字搜尋之比較
 
-- [Word 全文](../thesis.docx)／[PDF 全文](../thesis.pdf)／[Markdown 正本](../thesis.md)：58 頁，五章、中英文摘要、目錄、參考文獻與六份附錄；待補與待確認維持紅字。
+- [Word 全文](https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/purple/fulltext-moved/)／[PDF 全文](https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/purple/fulltext-moved/)／[Markdown 正本](https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/purple/fulltext-moved/)：58 頁，五章、中英文摘要、目錄、參考文獻與六份附錄；待補與待確認維持紅字。
 - [Meeting 討論單 Word](../meeting-1026.docx)／[PDF](../meeting-1026.pdf)／[文字稿](../meeting-1026.md)：3 頁，三個核心問題、五章調整、備案與老師決議欄。
 - [架構圖](architecture.png)：同一語料；RQ1 共同取回、RQ2 B 跨來源整合回答；SECI C 視角。
 - [文獻核對](sources.json)／[協作紀錄](collaboration.json)／[版面頁碼驗證](validation.json)／[四處同步清單](sync-manifest.json)。
@@ -29,7 +29,7 @@ summary: 58 頁五章修訂討論稿與 3 頁 meeting 討論單；原題完整�
 ## 直接開啟
 
 - [網站下載入口](https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/purple/#downloads)
-- [全文 PDF](https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/purple/materials/thesis.pdf)／[全文 Word](https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/purple/materials/thesis.docx)
+- [全文 PDF](https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/purple/fulltext-moved/)／[全文 Word](https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/purple/fulltext-moved/)
 - [Meeting PDF](https://tarshar4242.github.io/learn-ai-with-tarshar/thesis-library/purple/materials/meeting-1026.pdf)
 - [Drive 全文資料夾](https://drive.google.com/drive/folders/1e1c1oqhetrp6GGqgQ6ZvBDC_s9J5MASA)
 
